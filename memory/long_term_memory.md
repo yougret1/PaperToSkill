@@ -61,6 +61,8 @@ Initial target contribution categories:
   evaluator over full papers, notes, skills, summaries, and abstracts.
 - `scripts/build_human_fidelity_packets.py`: builds human-fidelity review
   packets and blank annotation template.
+- `scripts/summarize_human_fidelity_annotations.py`: summarizes and validates
+  human-fidelity annotation rows.
 - `tests/test_papertoskill_extract.py`: extractor smoke test.
 - `tests/test_evaluate_skill.py`: evaluator smoke test.
 - `generated_skills/`: retained generated examples with source maps.
@@ -113,7 +115,8 @@ Initial target contribution categories:
 - `results/tables/`: paper-ready main results, transfer ablation, compactness/
   source-grounding, context cost proxy, and combined summary tables.
 - `results/human_fidelity_packets/`: prepared review packets and blank
-  annotation template for human source-fidelity review.
+  annotation template plus pending annotation summary for human source-fidelity
+  review.
 - `paper/outline.md`: section plan, contribution bullets, evidence boundary,
   and figure/table plan.
 - `paper/draft.md`: first evidence-bounded paper draft.

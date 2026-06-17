@@ -340,3 +340,25 @@
 - Figure/table: `benchmarks/human_fidelity_review_v0.json`;
   `results/human_fidelity_packets/README.md`;
   `results/human_fidelity_packets/annotation_template.csv`.
+
+## Human-Fidelity Annotation Summary
+
+- Experiment: add a deterministic summarizer for the human-fidelity annotation
+  template.
+- Main result: `scripts/summarize_human_fidelity_annotations.py` reports
+  `annotation_status=pending`, 18 total rows, 0 scored rows, 18 pending rows,
+  and 0 validation errors for the current blank template.
+- Compared baselines: none; this is provenance and validation infrastructure for
+  future human annotations.
+- Practical significance: once independent reviewers fill the template, the same
+  script can summarize per-paper and per-criterion scores and catch missing
+  evidence notes or reviewer IDs.
+- Statistical evidence: none; no annotation has been completed.
+- Failure modes: the summary is only as valid as the human-filled CSV; it does
+  not judge fidelity by itself.
+- Limitations: current output supports only the claim that human annotation is
+  prepared and pending.
+- Claim impact: makes the human-fidelity evidence boundary machine-readable and
+  harder to accidentally overstate.
+- Figure/table: `results/human_fidelity_packets/annotation_summary.md`;
+  `results/human_fidelity_packets/annotation_summary.json`.

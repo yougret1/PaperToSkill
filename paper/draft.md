@@ -132,7 +132,9 @@ The metrics are deterministic:
 These metrics are reproducible gates. They do not replace live agent execution
 or completed human fidelity annotation. To support later human review, we also
 prepare a six-criterion fidelity protocol and paper-specific review packets, but
-those packets remain unscored until independent annotators fill them.
+those packets remain unscored until independent annotators fill them. The
+annotation summarizer currently reports 18 pending rows and no completed
+scores.
 
 ## 5. Results
 
@@ -189,10 +191,10 @@ curated notes rather than arbitrary PDFs. Second, the metrics are deterministic
 and partly lexical, so they can over-credit exact matches or under-credit valid
 paraphrases. Third, live cross-harness execution has not completed because the
 provided remote endpoint returned service errors during chat-completion tests.
-Fourth, human-fidelity packets and a blank annotation template are prepared, but
-no independent annotations have been completed. Fifth, compactness is measured
-by word count and deterministic input-token proxy, not by tokenizer-exact model
-price, provider billing, or live success per dollar.
+Fourth, human-fidelity packets, a blank annotation template, and a summary
+script are prepared, but no independent annotations have been completed. Fifth,
+compactness is measured by word count and deterministic input-token proxy, not
+by tokenizer-exact model price, provider billing, or live success per dollar.
 
 These limits shape the correct claim: PaperToSkill currently provides
 reproducible evidence for compact, source-grounded skill artifacts and offline
@@ -219,5 +221,7 @@ less naturally procedural.
 - Table aggregation: `scripts/aggregate_results_tables.py`
 - Context cost proxy: `scripts/evaluate_context_costs.py`
 - Human-fidelity packets: `scripts/build_human_fidelity_packets.py`
+- Human-fidelity annotation summary:
+  `scripts/summarize_human_fidelity_annotations.py`
 - Result tables: `results/tables/`
 - Live prompt packets: `results/live_transfer_prompts/`

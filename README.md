@@ -71,3 +71,5 @@ pending live-agent claims.
 - Generated skills: `generated_skills/ai_scientist_v2/`,
   `generated_skills/reflexion/`, and `generated_skills/aide/`.
 - Live transfer prompt packets: `results/live_transfer_prompts/`.
+- Human-fidelity review packets and pending annotation summary:
+  `results/human_fidelity_packets/`.

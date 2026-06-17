@@ -100,6 +100,7 @@
 | `scripts/aggregate_results_tables.py` | Aggregates existing evaluation JSON into paper-ready tables | Created |
 | `scripts/evaluate_context_costs.py` | Estimates context token/cost proxies and coverage per context budget | Created |
 | `scripts/build_human_fidelity_packets.py` | Builds human-fidelity review packets and annotation template | Created |
+| `scripts/summarize_human_fidelity_annotations.py` | Summarizes and validates human-fidelity annotation CSV rows | Created |
 | `tests/test_papertoskill_extract.py` | Smoke test for extractor CLI and source map | Created |
 | `tests/test_evaluate_skill.py` | Smoke test for evaluator CLI | Created |
 | `tests/test_evaluate_context_baselines.py` | Smoke test for context baseline evaluator | Created |
@@ -110,6 +111,7 @@
 | `tests/test_aggregate_results_tables.py` | Smoke test for paper-ready table aggregation | Created |
 | `tests/test_evaluate_context_costs.py` | Smoke test for context token/cost proxy evaluator | Created |
 | `tests/test_build_human_fidelity_packets.py` | Smoke test for human-fidelity packet builder | Created |
+| `tests/test_summarize_human_fidelity_annotations.py` | Smoke test for human-fidelity annotation summarizer | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |
 | `generated_skills/ai_scientist_v2/references/source_map.json` | Source-map evidence for AI Scientist-v2 generated skill | Created |
 | `generated_skills/reflexion/SKILL.md` | Retained generated skill from Reflexion note | Created |
@@ -148,6 +150,8 @@
 | `results/human_fidelity_packets/README.md` | Summary of prepared human-fidelity packets | Created |
 | `results/human_fidelity_packets/index.json` | Machine-readable packet index with pending annotation status | Created |
 | `results/human_fidelity_packets/annotation_template.csv` | Blank annotation rows for human reviewers | Created |
+| `results/human_fidelity_packets/annotation_summary.md` | Pending human-fidelity annotation summary | Created |
+| `results/human_fidelity_packets/annotation_summary.json` | Machine-readable pending annotation summary | Created |
 | `results/human_fidelity_packets/ai_scientist_v2_human_fidelity_packet.md` | AI Scientist-v2 fidelity review packet | Created |
 | `results/human_fidelity_packets/reflexion_human_fidelity_packet.md` | Reflexion fidelity review packet | Created |
 | `results/human_fidelity_packets/aide_human_fidelity_packet.md` | AIDE fidelity review packet | Created |

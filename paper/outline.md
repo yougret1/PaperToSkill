@@ -134,7 +134,8 @@ Current limitations:
 - metrics are deterministic and lexical/section based;
 - live cross-harness execution is blocked by remote provider availability;
 - no human fidelity annotation or inter-rater agreement yet;
-- human-fidelity review packets are prepared, but annotation remains pending;
+- human-fidelity review packets and a summarizer are prepared, but annotation
+  remains pending;
 - cost evidence is compactness-oriented and not yet a full token-price study;
 - benchmark is focused on agent-method papers.
 
@@ -155,4 +156,5 @@ that are less directly procedural.
 | Table 3: Source grounding | `results/tables/compactness_source_grounding.md` | Source support and compactness |
 | Table 4: Context cost proxy | `results/tables/context_cost_proxy.md` | Full paper vs skill context size and cost proxy |
 | Appendix: Human-fidelity packets | `results/human_fidelity_packets/` | Prepared review packets and blank annotation template |
+| Appendix: Human-fidelity summary | `results/human_fidelity_packets/annotation_summary.md` | Pending annotation status and validation summary |
 | Appendix: Prompt packets | `results/live_transfer_prompts/` | Inputs for later live transfer runs |

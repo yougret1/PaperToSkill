@@ -9,8 +9,8 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 13 human-fidelity review readiness is implemented and verified locally,
-awaiting commit/push. Current focus: commit/push Phase 13, then either re-test
+Phase 14 human-fidelity annotation summary is implemented and verified locally,
+awaiting commit/push. Current focus: commit/push Phase 14, then either re-test
 the remote LLM endpoint later or run/collect actual human fidelity annotations.
 
 ## Latest User Request
@@ -256,6 +256,24 @@ The user provided the PaperToSkill idea and asked to:
   - `python -m unittest discover -s tests -v`: passed, 12 tests OK.
   - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
   - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
+- Phase 13 was committed and pushed as `86f58d9` on `origin/main`.
+- Phase 14 added human-fidelity annotation summary tooling:
+  - `scripts/summarize_human_fidelity_annotations.py`
+  - `tests/test_summarize_human_fidelity_annotations.py`
+  - `results/human_fidelity_packets/annotation_summary.md`
+  - `results/human_fidelity_packets/annotation_summary.json`
+- Current annotation summary:
+  - annotation status: `pending`
+  - total rows: `18`
+  - scored rows: `0`
+  - pending rows: `18`
+  - validation errors: `0`
+- Phase 14 supports only annotation-readiness/provenance claims. It does not
+  support human-validated fidelity.
+- Phase 14 verification:
+  - `python -m unittest discover -s tests -v`: passed, 14 tests OK.
+  - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
+  - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
 
 ## Current Blockers / Pending Checks
 
@@ -275,7 +293,7 @@ The user provided the PaperToSkill idea and asked to:
 
 ## Next Actions
 
-1. Commit and push Phase 13.
+1. Commit and push Phase 14.
 2. Re-test the remote LLM endpoint when provider accounts are available.
 3. Execute live cross-harness runs using the prompt packets when the endpoint
    recovers.

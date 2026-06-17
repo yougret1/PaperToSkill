@@ -41,10 +41,12 @@ weaker.
 
 ### No Human Fidelity Study Yet
 
-Human-fidelity review packets and an annotation template have been prepared, but
-no independent annotators have scored them yet. Source-span validation reduces
-hallucination risk, and the packets make expert review easier to run, but the
-current benchmark still should not be described as human-validated.
+Human-fidelity review packets, an annotation template, and a summary script have
+been prepared, but no independent annotators have scored them yet. The current
+annotation summary reports 18 pending rows and 0 scored rows. Source-span
+validation reduces hallucination risk, and the packets make expert review
+easier to run, but the current benchmark still should not be described as
+human-validated.
 
 ### Cost Proxy Is Not Full Economic Cost
 

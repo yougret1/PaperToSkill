@@ -496,3 +496,36 @@ Verification:
 - `python -m unittest discover -s tests -v`: passed, 12 tests OK.
 - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
 - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
+
+## 2026-06-17 Phase 14
+
+Actions:
+
+- Added `scripts/summarize_human_fidelity_annotations.py`.
+- Added `tests/test_summarize_human_fidelity_annotations.py`.
+- Generated:
+  - `results/human_fidelity_packets/annotation_summary.md`
+  - `results/human_fidelity_packets/annotation_summary.json`
+- Updated README, paper draft package, artifact map, decision log, result cards,
+  stage log, and memory.
+
+Results:
+
+- Current annotation summary reports:
+  - annotation status: `pending`
+  - total rows: `18`
+  - scored rows: `0`
+  - pending rows: `18`
+  - validation errors: `0`
+
+Evidence boundary:
+
+- Blank score rows are pending, not negative evidence.
+- The summary is not human-validation evidence until independent reviewers fill
+  rows and the summary reports complete with no errors.
+
+Verification:
+
+- `python -m unittest discover -s tests -v`: passed, 14 tests OK.
+- `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
+- `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.

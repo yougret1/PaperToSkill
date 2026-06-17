@@ -72,3 +72,12 @@
   human review. Preparing the packets makes the missing study executable while
   avoiding false claims of completed human validation.
 - Status: accepted for Phase 13.
+
+## 2026-06-17: Summarize Human-Fidelity Annotations As Pending Until Scored
+
+- Decision: add a deterministic annotation summarizer that treats blank score
+  rows as pending rather than negative evidence.
+- Rationale: the paper needs a reproducible path from human annotations to
+  results, but the current template is intentionally blank. The summarizer makes
+  the pending boundary machine-readable and validates future filled rows.
+- Status: accepted for Phase 14.
