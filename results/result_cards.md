@@ -409,3 +409,23 @@
 - Figure/table: `scripts/check_reproducibility_package.py`;
   `results/reproducibility/package_report.md`;
   `results/reproducibility/package_report.json`.
+
+## Review And Rebuttal Package
+
+- Experiment: run an internal adversarial review and prepare an evidence-bounded
+  rebuttal bank for likely reviewer objections.
+- Main result: `research/review_report.md` identifies eight major risks, and
+  `research/rebuttal_bank.md` maps likely questions to evidence and prohibited
+  overclaims.
+- Compared baselines: no review package.
+- Practical significance: converts known weaknesses into explicit claim
+  boundaries and next experiments, especially around summarization, curated
+  notes, heuristic metrics, live transfer, human fidelity, cost, and failure
+  archive interpretation.
+- Statistical evidence: none; this is a review/readiness artifact.
+- Failure modes: the report depends on the current draft and artifact package;
+  it should be refreshed after live or human evidence changes.
+- Limitations: it does not add empirical evidence or remove the pending live
+  and human-validation gaps.
+- Claim impact: improves submission readiness and reduces overclaim risk.
+- Figure/table: `research/review_report.md`; `research/rebuttal_bank.md`.

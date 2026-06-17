@@ -34,6 +34,8 @@ continuing work.
 - `research/claim_evidence_matrix.md`
 - `research/experiment_design.md`
 - `research/experiment_queue.md`
+- `research/review_report.md`
+- `research/rebuttal_bank.md`
 - `research/runbook.md`
 - `research/stage_log.md`
 - `research/run_logs/`

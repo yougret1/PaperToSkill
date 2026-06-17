@@ -606,3 +606,33 @@ Verification:
 - `python -m unittest discover -s tests -v`: passed, 17 tests OK.
 - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
 - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
+
+## 2026-06-17 Phase 17
+
+Actions:
+
+- Added `research/review_report.md`.
+- Added `research/rebuttal_bank.md`.
+- Updated README, paper draft pointers, paper outline appendix plan, artifact
+  map, decision log, result cards, stage log, and memory.
+
+Results:
+
+- The review report identifies eight major risks around summarization,
+  deterministic metrics, curated notes, benchmark diversity, offline-only
+  transfer, pending human fidelity, cost proxy interpretation, and failure
+  archive interpretation.
+- The rebuttal bank maps likely reviewer questions to concrete evidence files
+  and explicitly lists unsupported phrases to avoid.
+
+Evidence boundary:
+
+- Phase 17 is an internal review/readiness phase.
+- It adds no new empirical result and does not complete live or human-fidelity
+  evidence.
+
+Verification:
+
+- `python -m unittest discover -s tests -v`: passed, 17 tests OK.
+- `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
+- `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.

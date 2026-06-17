@@ -100,3 +100,12 @@
   uncollected. A gate with `ready`, `pending`, and `fail` states prevents both
   hidden local breakage and overclaiming.
 - Status: accepted for Phase 16.
+
+## 2026-06-17: Prepare Rebuttals Without Strengthening Unsupported Claims
+
+- Decision: create an internal review report and rebuttal bank before adding
+  stronger paper language.
+- Rationale: the current package has enough deterministic/offline evidence to
+  be reviewable, but likely reviewer objections must be answered with evidence
+  boundaries intact.
+- Status: accepted for Phase 17.

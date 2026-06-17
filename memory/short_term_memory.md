@@ -9,10 +9,8 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 16 reproducibility package gate is implemented and verified locally.
-Phase 15 was committed and pushed as `61d5489`. After the Phase 16 save, the
-next research focus is live response collection after endpoint recovery or
-completed human-fidelity annotation.
+Phase 17 review/rebuttal package is implemented locally and moving through
+verification, commit, and push. Phase 16 was committed and pushed as `bea1952`.
 
 ## Latest User Request
 
@@ -320,6 +318,20 @@ The user provided the PaperToSkill idea and asked to:
   success-per-dollar claims.
 - Phase 16 verification:
   - `python -m unittest tests.test_check_reproducibility_package -v`: passed, 2 tests OK.
+  - `python -m unittest discover -s tests -v`: passed, 17 tests OK.
+  - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
+  - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
+- Phase 16 was committed and pushed as `bea1952` on `origin/main`.
+- Phase 17 added review/rebuttal readiness artifacts:
+  - `research/review_report.md`
+  - `research/rebuttal_bank.md`
+- Current Phase 17 review summary:
+  - eight major risks identified;
+  - eight likely reviewer questions mapped to evidence and prohibited
+    overclaims;
+  - evidence boundary remains unchanged: no completed live transfer, no
+    completed human-fidelity annotation, no provider-billing evidence.
+- Phase 17 verification:
   - `python -m unittest discover -s tests -v`: passed, 17 tests OK.
   - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
   - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.

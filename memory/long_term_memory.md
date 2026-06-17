@@ -127,6 +127,9 @@ Initial target contribution categories:
 - `results/reproducibility/`: reproducibility package report. Current status is
   ready with pending external evidence, 63 ready checks, 4 pending checks, and 0
   failed checks.
+- `research/review_report.md` and `research/rebuttal_bank.md`: internal
+  review/rebuttal readiness artifacts that map likely reviewer objections to
+  evidence and prohibited overclaims.
 - `paper/outline.md`: section plan, contribution bullets, evidence boundary,
   and figure/table plan.
 - `paper/draft.md`: first evidence-bounded paper draft.
@@ -151,6 +154,8 @@ Initial target contribution categories:
   independent annotation.
 - Reproducibility writing must distinguish local package readiness from
   completed external live responses or independent human validation.
+- Rebuttal writing must answer objections from current evidence and explicitly
+  avoid unsupported live, human-validation, and provider-billing claims.
 
 ## LLM/API Configuration
 

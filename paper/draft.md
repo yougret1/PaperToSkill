@@ -244,5 +244,7 @@ less naturally procedural.
 - Failure-case archive: `scripts/build_failure_case_archive.py`
 - Reproducibility package check:
   `scripts/check_reproducibility_package.py`
+- Review report and rebuttal bank: `research/review_report.md`;
+  `research/rebuttal_bank.md`
 - Result tables: `results/tables/`
 - Live prompt packets: `results/live_transfer_prompts/`

@@ -20,6 +20,8 @@
 | `research/claim_evidence_matrix.md` | Claims mapped to experiments/evidence | Created |
 | `research/experiment_design.md` | Planned evaluation and smoke tests | Created |
 | `research/experiment_queue.md` | Phase 1 and Phase 2 runnable queue | Created |
+| `research/review_report.md` | Internal adversarial review and submission-gate risks | Created |
+| `research/rebuttal_bank.md` | Evidence-bounded answers to likely reviewer objections | Created |
 | `research/runbook.md` | Reproducible local commands and endpoint notes | Created |
 | `research/stage_log.md` | Phase-level chronological progress | Created |
 | `research/run_logs/2026-06-17_phase0_smoke.md` | Smoke-test commands and outcomes | Created |
@@ -32,6 +34,7 @@
 | `research/run_logs/2026-06-17_phase14_annotation_summary.md` | Human-fidelity annotation summary commands and outcomes | Created |
 | `research/run_logs/2026-06-17_phase15_failure_case_archive.md` | Failure-case archive commands and outcomes | Created |
 | `research/run_logs/2026-06-17_phase16_reproducibility_package.md` | Endpoint retest and reproducibility package check outcomes | Created |
+| `research/run_logs/2026-06-17_phase17_review_rebuttal.md` | Review/rebuttal package commands and outcomes | Created |
 
 ## Paper Draft Package
 
