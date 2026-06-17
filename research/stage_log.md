@@ -457,3 +457,42 @@ Verification:
 - `python -m unittest discover -s tests -v`: passed, 11 tests OK.
 - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
 - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
+
+## 2026-06-17 Phase 13
+
+Actions:
+
+- Re-tested the OpenAI-compatible endpoint.
+- Added `benchmarks/human_fidelity_review_v0.json`, a six-criterion human-
+  fidelity review protocol.
+- Added `scripts/build_human_fidelity_packets.py`.
+- Added `tests/test_build_human_fidelity_packets.py`.
+- Generated human-fidelity packet artifacts under
+  `results/human_fidelity_packets/`.
+- Updated paper limitations, claim checklist, outline, draft, claim-evidence
+  matrix, artifact map, decision log, result cards, stage log, and memory.
+
+Results:
+
+- `/v1/models` worked and listed `claude-opus-4-8`.
+- `/v1/chat/completions` returned HTTP 503 with an empty body, so live transfer
+  remains blocked by the provider.
+- Prepared three human-fidelity review packets:
+  - `results/human_fidelity_packets/ai_scientist_v2_human_fidelity_packet.md`
+  - `results/human_fidelity_packets/reflexion_human_fidelity_packet.md`
+  - `results/human_fidelity_packets/aide_human_fidelity_packet.md`
+- Prepared `results/human_fidelity_packets/annotation_template.csv` with 18
+  blank annotation rows for 3 papers x 6 criteria.
+
+Evidence boundary:
+
+- Human-fidelity packets are prepared, but no independent annotation has been
+  completed.
+- The paper may claim "human-fidelity review protocol prepared" but not
+  "human-validated".
+
+Verification:
+
+- `python -m unittest discover -s tests -v`: passed, 12 tests OK.
+- `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
+- `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.

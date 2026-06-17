@@ -9,10 +9,9 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 12 context token/cost proxy is implemented and verified locally, awaiting
-commit/push. Current focus: commit/push Phase 12, then either re-test the remote
-LLM endpoint for live cross-harness execution or add missing paper evidence such
-as human fidelity annotation.
+Phase 13 human-fidelity review readiness is implemented and verified locally,
+awaiting commit/push. Current focus: commit/push Phase 13, then either re-test
+the remote LLM endpoint later or run/collect actual human fidelity annotations.
 
 ## Latest User Request
 
@@ -236,6 +235,27 @@ The user provided the PaperToSkill idea and asked to:
   - `python -m unittest discover -s tests -v`: passed, 11 tests OK.
   - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
   - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
+- Phase 12 was committed and pushed as `885233b` on `origin/main`.
+- Phase 13 re-tested the endpoint:
+  - `/v1/models`: reachable and listed `claude-opus-4-8`.
+  - `/v1/chat/completions`: HTTP 503 Service Unavailable with empty body.
+- Phase 13 added human-fidelity review readiness artifacts:
+  - `benchmarks/human_fidelity_review_v0.json`
+  - `scripts/build_human_fidelity_packets.py`
+  - `tests/test_build_human_fidelity_packets.py`
+  - `results/human_fidelity_packets/README.md`
+  - `results/human_fidelity_packets/index.json`
+  - `results/human_fidelity_packets/annotation_template.csv`
+  - `results/human_fidelity_packets/ai_scientist_v2_human_fidelity_packet.md`
+  - `results/human_fidelity_packets/reflexion_human_fidelity_packet.md`
+  - `results/human_fidelity_packets/aide_human_fidelity_packet.md`
+- Human-fidelity packets are prepared but annotation status remains `pending`.
+  The annotation template intentionally contains 18 blank score rows
+  (3 papers x 6 criteria).
+- Phase 13 verification:
+  - `python -m unittest discover -s tests -v`: passed, 12 tests OK.
+  - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
+  - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
 
 ## Current Blockers / Pending Checks
 
@@ -248,16 +268,16 @@ The user provided the PaperToSkill idea and asked to:
   the current global Anaconda environment now has package-version conflicts.
 - Need run actual LLM task execution once the remote endpoint works or another
   model backend is available.
-- Need human fidelity annotation or review protocol before claiming semantic
-  correctness beyond deterministic source-span support.
+- Need completed human fidelity annotation before claiming semantic correctness
+  beyond deterministic source-span support.
 - Need tokenizer-exact pricing, provider billing, or success-per-dollar evidence
   before making stronger economic/cost-saving claims.
 
 ## Next Actions
 
-1. Commit and push Phase 12.
+1. Commit and push Phase 13.
 2. Re-test the remote LLM endpoint when provider accounts are available.
 3. Execute live cross-harness runs using the prompt packets when the endpoint
    recovers.
-4. Add human fidelity annotations, tokenizer-exact pricing, or expand the
+4. Run human fidelity annotation, tokenizer-exact pricing, or expand the
    benchmark to more agent/LLM-method papers.

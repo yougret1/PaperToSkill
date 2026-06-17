@@ -315,3 +315,28 @@
   `results/tables/context_cost_proxy.csv`;
   `results/tables/coverage_cost_efficiency.csv`;
   `results/tables/context_cost_proxy.json`.
+
+## Human-Fidelity Review Readiness
+
+- Experiment: prepare human-fidelity review packets for the three generated
+  real-paper skills after re-testing the remote LLM endpoint.
+- Main result: `/v1/models` worked and listed `claude-opus-4-8`, but
+  `/v1/chat/completions` returned HTTP 503 with an empty body. Because live
+  transfer remains blocked, Phase 13 added `benchmarks/human_fidelity_review_v0.json`,
+  `scripts/build_human_fidelity_packets.py`, and review packets under
+  `results/human_fidelity_packets/`.
+- Compared baselines: no empirical baseline; packets include generated skill,
+  curated source note excerpt, source-span support rate, invalid ranges,
+  deterministic coverage score, and six review criteria.
+- Practical significance: human-fidelity review is now operationally ready
+  without overstating evidence. The annotation template has 18 blank rows
+  covering 3 papers x 6 criteria.
+- Statistical evidence: none; no annotation has been completed.
+- Failure modes: packet quality depends on curated notes and source-map
+  structure. Independent reviewers still need to fill the annotation template.
+- Limitations: this is review readiness, not human-validated skill fidelity.
+- Claim impact: upgrades the human-fidelity gap from an undefined future task
+  to a prepared protocol with pending annotations.
+- Figure/table: `benchmarks/human_fidelity_review_v0.json`;
+  `results/human_fidelity_packets/README.md`;
+  `results/human_fidelity_packets/annotation_template.csv`.

@@ -59,6 +59,8 @@ Initial target contribution categories:
   aggregation over existing deterministic/offline evaluation JSON.
 - `scripts/evaluate_context_costs.py`: deterministic context token/cost proxy
   evaluator over full papers, notes, skills, summaries, and abstracts.
+- `scripts/build_human_fidelity_packets.py`: builds human-fidelity review
+  packets and blank annotation template.
 - `tests/test_papertoskill_extract.py`: extractor smoke test.
 - `tests/test_evaluate_skill.py`: evaluator smoke test.
 - `generated_skills/`: retained generated examples with source maps.
@@ -110,6 +112,8 @@ Initial target contribution categories:
   Codex/Claude execution.
 - `results/tables/`: paper-ready main results, transfer ablation, compactness/
   source-grounding, context cost proxy, and combined summary tables.
+- `results/human_fidelity_packets/`: prepared review packets and blank
+  annotation template for human source-fidelity review.
 - `paper/outline.md`: section plan, contribution bullets, evidence boundary,
   and figure/table plan.
 - `paper/draft.md`: first evidence-bounded paper draft.
@@ -130,6 +134,8 @@ Initial target contribution categories:
   arbitrary-PDF automation, and offline readiness from live agent success.
 - Cost writing must distinguish deterministic token/cost proxy from provider
   billing, tokenizer-exact accounting, and success-per-dollar evidence.
+- Human-fidelity writing must distinguish prepared review packets from completed
+  independent annotation.
 
 ## LLM/API Configuration
 

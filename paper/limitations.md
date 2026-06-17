@@ -41,9 +41,10 @@ weaker.
 
 ### No Human Fidelity Study Yet
 
-No independent annotators have judged whether each generated skill preserves the
-paper's intended contribution. Source-span validation reduces hallucination
-risk, but it is not equivalent to expert fidelity review.
+Human-fidelity review packets and an annotation template have been prepared, but
+no independent annotators have scored them yet. Source-span validation reduces
+hallucination risk, and the packets make expert review easier to run, but the
+current benchmark still should not be described as human-validated.
 
 ### Cost Proxy Is Not Full Economic Cost
 
@@ -58,7 +59,8 @@ added.
 
 1. Execute live prompt packets once the remote endpoint is available, logging
    model, harness, prompt, response, intervention count, and task outcome.
-2. Add human source-fidelity annotation for generated skills and summaries.
+2. Run the prepared human source-fidelity packets with independent annotators
+   and report agreement or adjudication.
 3. Extend extraction from curated notes toward raw PDF ingestion with automatic
    section detection, table handling, and citation-aware source maps.
 4. Add tokenizer-exact model pricing and success-per-dollar accounting for

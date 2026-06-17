@@ -28,6 +28,7 @@
 | `research/run_logs/2026-06-17_phase10_aide_third_paper.md` | AIDE third-paper benchmark commands and outcomes | Created |
 | `research/run_logs/2026-06-17_phase11_paper_package.md` | Paper draft package commands and outcomes | Created |
 | `research/run_logs/2026-06-17_phase12_context_cost_proxy.md` | Context token/cost proxy commands and outcomes | Created |
+| `research/run_logs/2026-06-17_phase13_human_fidelity_readiness.md` | Endpoint retest and human-fidelity packet preparation | Created |
 
 ## Paper Draft Package
 
@@ -59,6 +60,7 @@
 | `benchmarks/rubric_v0.json` | Deterministic v0 scoring rubric for generated skills | Created |
 | `benchmarks/rubric_reflexion_v0.json` | Deterministic v0 scoring rubric for Reflexion generated skill | Created |
 | `benchmarks/rubric_aide_v0.json` | Deterministic v0 scoring rubric for AIDE generated skill | Created |
+| `benchmarks/human_fidelity_review_v0.json` | Human-fidelity review protocol and packet manifest | Created |
 | `benchmarks/tasks/ai_scientist_v2_research_run.json` | Downstream context-coverage task spec | Created |
 | `benchmarks/tasks/skill_source_audit.json` | Source-map-aware unsupported-instruction audit task | Created |
 | `benchmarks/tasks/ai_scientist_v2_harness_transfer.json` | Offline harness-transfer readiness task spec | Created |
@@ -97,6 +99,7 @@
 | `scripts/validate_source_spans.py` | Source-span validation for line-anchored claims | Created |
 | `scripts/aggregate_results_tables.py` | Aggregates existing evaluation JSON into paper-ready tables | Created |
 | `scripts/evaluate_context_costs.py` | Estimates context token/cost proxies and coverage per context budget | Created |
+| `scripts/build_human_fidelity_packets.py` | Builds human-fidelity review packets and annotation template | Created |
 | `tests/test_papertoskill_extract.py` | Smoke test for extractor CLI and source map | Created |
 | `tests/test_evaluate_skill.py` | Smoke test for evaluator CLI | Created |
 | `tests/test_evaluate_context_baselines.py` | Smoke test for context baseline evaluator | Created |
@@ -106,6 +109,7 @@
 | `tests/test_validate_source_spans.py` | Smoke test for source-span validator | Created |
 | `tests/test_aggregate_results_tables.py` | Smoke test for paper-ready table aggregation | Created |
 | `tests/test_evaluate_context_costs.py` | Smoke test for context token/cost proxy evaluator | Created |
+| `tests/test_build_human_fidelity_packets.py` | Smoke test for human-fidelity packet builder | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |
 | `generated_skills/ai_scientist_v2/references/source_map.json` | Source-map evidence for AI Scientist-v2 generated skill | Created |
 | `generated_skills/reflexion/SKILL.md` | Retained generated skill from Reflexion note | Created |
@@ -141,6 +145,12 @@
 | `results/tables/context_cost_proxy.csv` | CSV table for context size and estimated input-token proxy | Created |
 | `results/tables/coverage_cost_efficiency.csv` | CSV table for deterministic coverage per estimated token budget | Created |
 | `results/tables/context_cost_proxy.json` | Machine-readable context token/cost proxy report | Created |
+| `results/human_fidelity_packets/README.md` | Summary of prepared human-fidelity packets | Created |
+| `results/human_fidelity_packets/index.json` | Machine-readable packet index with pending annotation status | Created |
+| `results/human_fidelity_packets/annotation_template.csv` | Blank annotation rows for human reviewers | Created |
+| `results/human_fidelity_packets/ai_scientist_v2_human_fidelity_packet.md` | AI Scientist-v2 fidelity review packet | Created |
+| `results/human_fidelity_packets/reflexion_human_fidelity_packet.md` | Reflexion fidelity review packet | Created |
+| `results/human_fidelity_packets/aide_human_fidelity_packet.md` | AIDE fidelity review packet | Created |
 | `output/pdf/reflexion/page-01.png` | Rendered Reflexion PDF page 1 for visual check | Created |
 | `output/pdf/aide/page-01.png` | Rendered AIDE PDF page 1 for visual check | Created |
 | `results/result_cards.md` | Result interpretation cards | Created |

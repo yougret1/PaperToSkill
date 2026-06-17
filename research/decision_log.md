@@ -63,3 +63,12 @@
   proxy supports reproducible relative context-size claims without overstating
   real cost savings.
 - Status: accepted for Phase 12.
+
+## 2026-06-17: Prepare Human-Fidelity Packets Without Inventing Scores
+
+- Decision: create a human-fidelity review protocol, paper-specific packets, and
+  a blank annotation template, but keep annotation status as `pending`.
+- Rationale: source-span validation is useful but not equivalent to semantic
+  human review. Preparing the packets makes the missing study executable while
+  avoiding false claims of completed human validation.
+- Status: accepted for Phase 13.

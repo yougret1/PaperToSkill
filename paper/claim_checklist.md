@@ -11,6 +11,7 @@ exists.
 | Summary comparison | Generated skills preserve more deterministic task-relevant operational coverage than generic-summary and abstract-only baselines across three papers. | Skills improve live agent task success over summaries. | `results/evaluations/*_context_baselines_v0.json`; `results/tables/main_results.md` | Supported for deterministic coverage |
 | Compactness and cost proxy | Generated skills remain under a 1200-word compactness budget and use only 2.2%, 4.43%, and 9.54% of the full extracted papers' deterministic input-token proxy. | PaperToSkill is cheaper than every summary or guarantees lower provider bills for every model and task. | `results/tables/compactness_source_grounding.md`; `results/tables/context_cost_proxy.md`; `results/tables/context_cost_proxy.json` | Supported for word-count compactness and deterministic token/cost proxy |
 | Source grounding | Source-span validation finds zero invalid line ranges and support rates of 0.938, 1.0, and 1.0 across the three generated skills. | Every generated instruction is semantically verified by human annotators. | `results/evaluations/*_source_span_validation_v0.json`; `results/tables/compactness_source_grounding.md` | Supported by deterministic span audit |
+| Human fidelity readiness | Human-fidelity review protocol, three paper-specific review packets, and a blank annotation template are prepared. | Human fidelity annotation has been completed or the skills are expert-validated. | `benchmarks/human_fidelity_review_v0.json`; `results/human_fidelity_packets/` | Prepared, not completed |
 | Transfer notes | Removing `Transfer Notes` lowers offline transfer-readiness from 10/10 to 7.6/10 across all three paper cases. | Transfer notes have been proven to improve live Claude/Codex success rates. | `results/evaluations/*_harness_transfer_v0.json`; `results/tables/transfer_ablation.md` | Supported for offline readiness |
 | Live transfer | Prompt packets exist for later Codex-style and Claude-style live evaluation. | Live cross-harness execution has completed successfully. | `results/live_transfer_prompts/`; endpoint checks in `memory/short_term_memory.md` | Pending |
 | Failure branches | PaperToSkill records failure cases and source-audit risks as first-class artifacts. | Failure-branch recording has been shown to improve final user outcomes. | `results/result_cards.md`; `results/evaluations/skill_source_audit_v0.json` | Partially supported |
@@ -23,6 +24,8 @@ exists.
   available.
 - Say "source-span support" rather than "factual correctness" unless human
   verification is added.
+- Say "human-fidelity packets prepared" rather than "human-validated" until
+  annotation rows are filled by independent reviewers.
 - Say "deterministic token/cost proxy" rather than "provider billing" unless
   tokenizer-exact model prices and live invoices are added.
 
