@@ -1,0 +1,108 @@
+{
+  "schema_version": "0.1",
+  "id": "ai_scientist_v2_harness_transfer",
+  "created": "2026-06-17",
+  "purpose": "Offline Codex-to-Claude-style harness transfer readiness evaluation for the AI Scientist-v2 paper-derived skill.",
+  "evidence_boundary": "Offline deterministic readiness metric; not a live cross-harness agent run.",
+  "context_variants": [
+    {
+      "id": "full_skill",
+      "label": "PaperToSkill generated skill with transfer notes",
+      "path": "generated_skills/ai_scientist_v2/SKILL.md"
+    },
+    {
+      "id": "skill_without_transfer_notes",
+      "label": "Generated skill with Transfer Notes removed",
+      "path": "generated_skills/ai_scientist_v2/SKILL.md",
+      "drop_sections": [
+        "Transfer Notes"
+      ]
+    },
+    {
+      "id": "generic_summary",
+      "label": "Generic prose summary baseline",
+      "path": "baselines/ai_scientist_v2_generic_summary.md"
+    }
+  ],
+  "core_signal_groups": [
+    {
+      "id": "generalized_idea_generation",
+      "keywords": [
+        "generalized idea generation",
+        "literature-search",
+        "novelty"
+      ]
+    },
+    {
+      "id": "progress_manager",
+      "keywords": [
+        "Experiment Progress Manager",
+        "four stages",
+        "stopping criteria",
+        "best node"
+      ]
+    },
+    {
+      "id": "agentic_tree_search",
+      "keywords": [
+        "parallelized agentic tree search",
+        "experiment plan",
+        "execution trace",
+        "buggy/non-buggy",
+        "VLM feedback"
+      ]
+    },
+    {
+      "id": "validation_and_limits",
+      "keywords": [
+        "three complete manuscripts",
+        "6.33/10",
+        "top-tier",
+        "citation inaccuracies",
+        "IRB approval"
+      ]
+    }
+  ],
+  "target_harnesses": [
+    {
+      "id": "codex_skill",
+      "label": "Codex-style SKILL.md harness",
+      "required_sections": [
+        "Inputs",
+        "Workflow",
+        "Validation",
+        "Failure Cases",
+        "Transfer Notes"
+      ],
+      "transfer_checks": [
+        "target harness",
+        "framework-specific commands",
+        "local equivalents",
+        "source-backed steps",
+        "failed branch"
+      ],
+      "source_anchor_min": 8,
+      "max_words": 1000
+    },
+    {
+      "id": "claude_project_prompt",
+      "label": "Claude-style project prompt harness",
+      "required_sections": [
+        "Paper Snapshot",
+        "Workflow",
+        "Validation",
+        "Failure Cases",
+        "Transfer Notes"
+      ],
+      "transfer_checks": [
+        "target harness",
+        "local equivalents",
+        "source-backed steps",
+        "inferred adaptations",
+        "future revision history"
+      ],
+      "source_anchor_min": 8,
+      "max_words": 1100
+    }
+  ]
+}

@@ -71,3 +71,26 @@
   discriminate between a real paper-derived skill and an abstract-only seed on
   unsupported-instruction rate.
 - Figure/table: `results/evaluations/skill_source_audit_v0.json`.
+
+## AI Scientist-v2 Harness Transfer Readiness
+
+- Experiment: offline Codex/Claude-style transfer-readiness evaluation across
+  the full generated skill, the same skill with `Transfer Notes` removed, and a
+  generic summary baseline.
+- Main result: the full generated skill scored 10.0/10 average readiness, the
+  no-transfer-notes variant scored 7.6/10, and the generic summary scored
+  1.2/10.
+- Compared baselines: skill without transfer notes and generic prose summary.
+- Practical significance: transfer notes contribute measurable portability
+  signals beyond method coverage alone, including target-harness checks,
+  framework-command adaptation, source-backed/inferred separation, and failed
+  branch recording.
+- Statistical evidence: none yet; this is a deterministic offline gate for one
+  paper-derived skill.
+- Failure modes: the metric is keyword/section based and can over-credit text
+  that names transfer concepts without proving actual agent behavior.
+- Limitations: does not replace live Codex-to-Claude or Claude-to-Codex task
+  execution after the remote provider recovers.
+- Claim impact: partially supports the harness-transfer claim only at the
+  artifact-readiness level.
+- Figure/table: `results/evaluations/ai_scientist_v2_harness_transfer_v0.json`.

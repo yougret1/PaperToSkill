@@ -9,9 +9,9 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 4 source-map-aware unsupported-instruction audit is implemented locally.
-Current focus: validate, commit, and push Phase 4 artifacts, then move toward
-transfer evaluation and real LLM task execution when possible.
+Phase 5 offline harness-transfer readiness evaluation is implemented locally.
+Current focus: validate, commit, and push Phase 5 artifacts, then move toward
+live cross-harness task execution when the remote LLM endpoint recovers.
 
 ## Latest User Request
 
@@ -93,6 +93,16 @@ The user provided the PaperToSkill idea and asked to:
   - Abstract-only seed: 1.0
 - The first audit pass had a section-mapping bug that was fixed before the final
   result.
+- Phase 4 was committed and pushed as `7cfd582` on `origin/main`.
+- Phase 5 added offline harness-transfer readiness evaluation:
+  `benchmarks/tasks/ai_scientist_v2_harness_transfer.json`.
+- Phase 5 compared full generated skill, skill without `Transfer Notes`, and
+  generic summary across Codex-style and Claude-style harness targets:
+  - full skill: 10.0/10 average readiness
+  - no-transfer-notes variant: 7.6/10 average readiness
+  - generic summary: 1.2/10 average readiness
+- Phase 5 result supports only offline artifact readiness, not live
+  cross-harness agent success.
 
 ## Current Blockers / Pending Checks
 
@@ -109,7 +119,8 @@ The user provided the PaperToSkill idea and asked to:
 
 ## Next Actions
 
-1. Validate and commit Phase 4 artifacts.
-2. Push to `origin/main`.
-3. Start Phase 5: transfer evaluation between harness contexts.
-4. Re-test the remote LLM endpoint when provider accounts are available.
+1. Validate and commit Phase 5 artifacts.
+2. Push Phase 5 to `origin/main`.
+3. Re-test the remote LLM endpoint when provider accounts are available.
+4. Prepare live cross-harness task prompts for Codex-style and Claude-style
+   execution.

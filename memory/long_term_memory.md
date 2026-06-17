@@ -69,6 +69,10 @@ Initial target contribution categories:
   instruction audit task.
 - `results/evaluations/skill_source_audit_v0.json`: unsupported-rate ranking
   across real skill, paper-like case, and abstract-only seed.
+- `benchmarks/tasks/ai_scientist_v2_harness_transfer.json`: offline Codex/
+  Claude-style harness-transfer readiness task.
+- `results/evaluations/ai_scientist_v2_harness_transfer_v0.json`: readiness
+  ranking for full skill, skill without transfer notes, and generic summary.
 
 ## Current Assumptions
 

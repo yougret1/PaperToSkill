@@ -161,3 +161,29 @@ Verification:
 
 - `python scripts\audit_skill_source_map.py --task benchmarks\tasks\skill_source_audit.json --output results\evaluations\skill_source_audit_v0.json`
 - `python -m unittest discover -s tests -v`
+
+## 2026-06-17 Phase 5
+
+Actions:
+
+- Created an offline Codex/Claude-style harness-transfer task.
+- Implemented `scripts/evaluate_harness_transfer.py`.
+- Added `tests/test_evaluate_harness_transfer.py`.
+- Compared the full AI Scientist-v2 generated skill, the same skill with
+  `Transfer Notes` removed, and a generic summary baseline.
+
+Results:
+
+- Full generated skill average readiness score: 10.0/10.
+- Skill without transfer notes average readiness score: 7.6/10.
+- Generic summary average readiness score: 1.2/10.
+
+Evidence boundary:
+
+- This is an offline deterministic transfer-readiness metric, not a live
+  cross-harness agent task run.
+
+Verification:
+
+- `python scripts\evaluate_harness_transfer.py --task benchmarks\tasks\ai_scientist_v2_harness_transfer.json --output results\evaluations\ai_scientist_v2_harness_transfer_v0.json`
+- `python -m unittest discover -s tests -v`
