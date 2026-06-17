@@ -103,3 +103,30 @@ Verification:
 - `python scripts\papertoskill_extract.py --source papers\notes\ai_scientist_v2_note.md --output generated_skills\ai_scientist_v2 --name ai-scientist-v2-paper-skill`
 - `python scripts\evaluate_skill.py --skill generated_skills\ai_scientist_v2\SKILL.md --rubric benchmarks\rubric_v0.json --output results\evaluations\ai_scientist_v2_rubric_v0.json`
 - `python -m unittest discover -s tests -v`
+
+## 2026-06-17 Phase 3
+
+Actions:
+
+- Created `benchmarks/tasks/ai_scientist_v2_research_run.json`.
+- Created generic-summary and abstract-only baselines.
+- Implemented `scripts/evaluate_context_baselines.py`.
+- Added `tests/test_evaluate_context_baselines.py`.
+- Ran deterministic skill-vs-summary-vs-abstract context coverage evaluation.
+
+Results:
+
+- PaperToSkill generated skill: 7.867/9, 782 words.
+- Generic summary: 1.733/9, 154 words.
+- Abstract-only context: 1.2/9, 99 words.
+
+Evidence boundary:
+
+- This is a deterministic coverage baseline, not proof of downstream agent task
+  success. It is valid as an early reproducible signal that the generated skill
+  preserves more operational components than short summaries for one task.
+
+Verification:
+
+- `python scripts\evaluate_context_baselines.py --task benchmarks\tasks\ai_scientist_v2_research_run.json --output results\evaluations\ai_scientist_v2_context_baselines_v0.json`
+- `python -m unittest discover -s tests -v`

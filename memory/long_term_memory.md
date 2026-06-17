@@ -61,6 +61,10 @@ Initial target contribution categories:
 - `papers/notes/ai_scientist_v2_note.md`: first curated real-paper note.
 - `results/evaluations/ai_scientist_v2_rubric_v0.json`: first scored
   real-paper generated skill.
+- `benchmarks/tasks/ai_scientist_v2_research_run.json`: first downstream
+  context baseline task.
+- `results/evaluations/ai_scientist_v2_context_baselines_v0.json`: first
+  skill-vs-summary-vs-abstract deterministic comparison.
 
 ## Current Assumptions
 

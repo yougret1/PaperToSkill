@@ -9,9 +9,9 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 2 real-paper ingestion is implemented locally. Current focus: validate,
-commit, and push Phase 2 artifacts, then move toward downstream baseline tasks
-and summary-vs-skill comparisons.
+Phase 3 downstream context baseline is implemented locally. Current focus:
+validate, commit, and push Phase 3 artifacts, then move toward source-map-aware
+unsupported-instruction scoring and real LLM task execution when possible.
 
 ## Latest User Request
 
@@ -77,6 +77,14 @@ The user provided the PaperToSkill idea and asked to:
   - Rubric output: `results/evaluations/ai_scientist_v2_rubric_v0.json`
 - Rubric v0 scored the AI Scientist-v2 generated skill at 20/20, but this only
   covers structure, anchors, keyword coverage, failure coverage, and compactness.
+- Phase 3 added a deterministic context baseline task:
+  `benchmarks/tasks/ai_scientist_v2_research_run.json`.
+- Phase 3 compared generated skill vs generic summary vs abstract-only context:
+  - skill: 7.867/9
+  - generic summary: 1.733/9
+  - abstract-only: 1.2/9
+- The Phase 3 result supports only coverage/fidelity, not actual LLM downstream
+  task success.
 
 ## Current Blockers / Pending Checks
 
@@ -87,16 +95,14 @@ The user provided the PaperToSkill idea and asked to:
   server advertises.
 - For stable long-running work, create an isolated Python environment because
   the current global Anaconda environment now has package-version conflicts.
-- Need define downstream task prompts for skill-vs-summary comparison.
-- Need run at least one baseline comparison: generated skill vs generic summary
-  vs abstract-only context.
 - Need improve evaluator beyond keyword coverage, including unsupported
   instruction detection and workflow coverage against source maps.
+- Need run actual LLM task execution once the remote endpoint works or another
+  model backend is available.
 
 ## Next Actions
 
-1. Validate and commit Phase 2 artifacts.
+1. Validate and commit Phase 3 artifacts.
 2. Push to `origin/main`.
-3. Start Phase 3: create downstream task prompts and baselines for
-   AI Scientist-v2 skill-vs-summary evaluation.
+3. Start Phase 4: source-map-aware unsupported-instruction evaluator.
 4. Re-test the remote LLM endpoint when provider accounts are available.

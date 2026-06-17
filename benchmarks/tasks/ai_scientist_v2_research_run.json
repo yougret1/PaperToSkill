@@ -1,0 +1,70 @@
+{
+  "schema_version": "0.1",
+  "id": "ai_scientist_v2_research_run",
+  "paper_id": "ai_scientist_v2",
+  "created": "2026-06-17",
+  "task": "Plan a small automated research run inspired by AI Scientist-v2 for a new PaperToSkill idea while preserving core workflow constraints and limitations.",
+  "user_prompt": "Given a new research idea, produce an agent run plan that follows the AI Scientist-v2 method closely enough to be executable in a small local harness. The plan must include stages, node lifecycle, debug/refine policy, replication/aggregation, visual review, and limits/ethics.",
+  "context_variants": [
+    {
+      "id": "skill",
+      "path": "generated_skills/ai_scientist_v2/SKILL.md",
+      "label": "PaperToSkill generated skill"
+    },
+    {
+      "id": "generic_summary",
+      "path": "baselines/ai_scientist_v2_generic_summary.md",
+      "label": "Generic paper summary"
+    },
+    {
+      "id": "abstract_only",
+      "path": "baselines/ai_scientist_v2_abstract_only.md",
+      "label": "Abstract-only context"
+    }
+  ],
+  "required_capabilities": [
+    {
+      "id": "idea_generation",
+      "description": "Plan begins from generalized idea generation rather than a fixed code template.",
+      "keywords": ["generalized idea generation", "high-level research", "literature"]
+    },
+    {
+      "id": "stage_manager",
+      "description": "Plan includes the four experiment-manager stages.",
+      "keywords": ["preliminary investigation", "hyperparameter tuning", "research agenda", "ablation"]
+    },
+    {
+      "id": "tree_node_lifecycle",
+      "description": "Plan preserves node lifecycle with plan/code/run/error/metrics/feedback/status.",
+      "keywords": ["node", "experiment plan", "Python code", "error", "metrics", "buggy", "non-buggy"]
+    },
+    {
+      "id": "debug_refine_policy",
+      "description": "Plan distinguishes debugging buggy nodes from refining non-buggy nodes.",
+      "keywords": ["debug", "refine", "buggy", "non-buggy"]
+    },
+    {
+      "id": "replication_aggregation",
+      "description": "Plan includes replication and aggregation for robust results.",
+      "keywords": ["replication", "random seeds", "aggregation", "mean", "standard deviation"]
+    },
+    {
+      "id": "visual_review",
+      "description": "Plan includes figure generation and VLM or visual review of plots.",
+      "keywords": ["VLM", "figure", "plot", "labels", "legends"]
+    },
+    {
+      "id": "limitations_ethics",
+      "description": "Plan preserves limitations and ethical constraints from the paper.",
+      "keywords": ["workshop-level", "citation inaccuracies", "IRB", "withdraw", "disclosure", "top-tier conference"]
+    },
+    {
+      "id": "source_grounding",
+      "description": "Context includes source anchors or equivalent traceability.",
+      "keywords": ["Source anchors", "source map", "lines"]
+    }
+  ],
+  "compactness": {
+    "max_words": 1200
+  }
+}

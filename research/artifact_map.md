@@ -44,19 +44,25 @@
 | --- | --- | --- |
 | `benchmarks/paper_manifest.json` | Seed benchmark papers and task definitions | Created |
 | `benchmarks/rubric_v0.json` | Deterministic v0 scoring rubric for generated skills | Created |
+| `benchmarks/tasks/ai_scientist_v2_research_run.json` | Downstream context-coverage task spec | Created |
+| `baselines/ai_scientist_v2_generic_summary.md` | Generic summary baseline context | Created |
+| `baselines/ai_scientist_v2_abstract_only.md` | Abstract-only baseline context | Created |
 | `papers/raw/ai_scientist_v2.pdf` | Raw AI Scientist-v2 PDF | Created |
 | `papers/extracted/ai_scientist_v2.txt` | Extracted PDF text | Created |
 | `papers/notes/ai_scientist_v2_note.md` | Curated real-paper note for scaffold input | Created |
 | `examples/papertoskill_paper_note.md` | Paper-like source note for retained case | Created |
 | `scripts/papertoskill_extract.py` | Deterministic local paper-to-skill scaffold | Created |
 | `scripts/evaluate_skill.py` | Deterministic v0 evaluator for generated skills | Created |
+| `scripts/evaluate_context_baselines.py` | Deterministic evaluator for context baseline coverage | Created |
 | `tests/test_papertoskill_extract.py` | Smoke test for extractor CLI and source map | Created |
 | `tests/test_evaluate_skill.py` | Smoke test for evaluator CLI | Created |
+| `tests/test_evaluate_context_baselines.py` | Smoke test for context baseline evaluator | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |
 | `generated_skills/ai_scientist_v2/references/source_map.json` | Source-map evidence for AI Scientist-v2 generated skill | Created |
 | `generated_skills/papertoskill_paper_note/SKILL.md` | Retained generated skill from paper-like note | Created |
 | `generated_skills/papertoskill_paper_note/references/source_map.json` | Source-map evidence for retained generated skill | Created |
 | `results/evaluations/ai_scientist_v2_rubric_v0.json` | Scored rubric output for AI Scientist-v2 generated skill | Created |
+| `results/evaluations/ai_scientist_v2_context_baselines_v0.json` | Skill-vs-summary-vs-abstract context coverage scores | Created |
 | `results/result_cards.md` | Result interpretation cards | Created |
 
 ## Future Artifacts
