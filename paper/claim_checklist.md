@@ -14,7 +14,7 @@ exists.
 | Human fidelity readiness | Human-fidelity review protocol, three paper-specific review packets, a blank annotation template, and a pending annotation summary are prepared. | Human fidelity annotation has been completed or the skills are expert-validated. | `benchmarks/human_fidelity_review_v0.json`; `results/human_fidelity_packets/`; `results/human_fidelity_packets/annotation_summary.md` | Prepared, not completed |
 | Transfer notes | Removing `Transfer Notes` lowers offline transfer-readiness from 10/10 to 7.6/10 across all three paper cases. | Transfer notes have been proven to improve live Claude/Codex success rates. | `results/evaluations/*_harness_transfer_v0.json`; `results/tables/transfer_ablation.md` | Supported for offline readiness |
 | Live transfer | Prompt packets exist for later Codex-style and Claude-style live evaluation. | Live cross-harness execution has completed successfully. | `results/live_transfer_prompts/`; endpoint checks in `memory/short_term_memory.md` | Pending |
-| Failure branches | PaperToSkill records failure cases and source-audit risks as first-class artifacts. | Failure-branch recording has been shown to improve final user outcomes. | `results/result_cards.md`; `results/evaluations/skill_source_audit_v0.json` | Partially supported |
+| Failure branches | PaperToSkill records 20 paper-reported and project-level failure/limitation cases as a first-class archive. | Failure-branch recording has been shown to improve final user outcomes or live reproduction success. | `benchmarks/failure_case_archive_v0.json`; `results/failure_cases/failure_case_archive.md`; `results/failure_cases/failure_case_archive.json` | Supported as provenance archive, not outcome evidence |
 
 ## Required Downgrades In Drafting
 

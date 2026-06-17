@@ -10,9 +10,9 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 11: paper draft package over a three-paper deterministic/offline
-benchmark. Live cross-harness agent execution is still pending because the
-remote chat-completion endpoint has returned provider availability errors.
+Phase 15: failure-case archive over the three-paper deterministic/offline
+benchmark and project-level failure/fix records. Live cross-harness agent
+execution and completed human-fidelity annotation are still pending.
 
 ## Memory
 
@@ -73,3 +73,4 @@ pending live-agent claims.
 - Live transfer prompt packets: `results/live_transfer_prompts/`.
 - Human-fidelity review packets and pending annotation summary:
   `results/human_fidelity_packets/`.
+- Failure-case archive: `results/failure_cases/`.

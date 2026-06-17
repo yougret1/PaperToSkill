@@ -54,7 +54,8 @@ The current contributions are:
 4. deterministic/offline evaluations for structure, context coverage,
    compactness, source grounding, and transfer readiness;
 5. a claim discipline that separates validated evidence from pending live-agent
-   claims.
+   claims, including a first-class archive of paper-reported and project-level
+   failure cases.
 
 ## 2. Related Work
 
@@ -168,6 +169,12 @@ summaries score between 1.2/10 and 2.25/10. This supports the narrower claim
 that transfer notes encode artifact-readiness signals. It does not yet prove
 improved live cross-harness success.
 
+The failure-case archive records 20 cases: 14 paper-reported limitations or
+failure branches from the three source maps and 6 project-level failure/fix
+records from the PaperToSkill development process. This archive supports the
+claim that failed branches are preserved as inspectable provenance. It is not
+evidence that failure recording improves live task outcomes.
+
 ## 6. Discussion
 
 The main result is not that PaperToSkill "understands" papers in the broadest
@@ -177,12 +184,13 @@ steps, validation checks, failure cases, and source anchors, which are exactly
 the parts needed when a user wants an agent to apply a paper rather than merely
 explain it.
 
-The benchmark also reveals a useful failure mode. During the AIDE case, the
+The benchmark also reveals useful failure modes. During the AIDE case, the
 initial extractor capped workflow, validation, and failure candidates too
-aggressively, which dropped data-preview and LLM-cost content. The candidate
-limits were increased and a regression test was added. This is the type of
-failure branch PaperToSkill should preserve: not just final successes, but the
-ways extraction can lose important operational content.
+aggressively, which dropped data-preview and LLM-cost content. Earlier phases
+also exposed title parsing, source-audit mapping, and source-span line-counting
+bugs. These records are the type of failure branches PaperToSkill should
+preserve: not just final successes, but the ways extraction, evaluation, or
+external dependencies can lose important operational content.
 
 ## 7. Limitations
 
@@ -195,6 +203,8 @@ Fourth, human-fidelity packets, a blank annotation template, and a summary
 script are prepared, but no independent annotations have been completed. Fifth,
 compactness is measured by word count and deterministic input-token proxy, not
 by tokenizer-exact model price, provider billing, or live success per dollar.
+Sixth, the failure-case archive is an evidence and provenance artifact rather
+than a controlled outcome study.
 
 These limits shape the correct claim: PaperToSkill currently provides
 reproducible evidence for compact, source-grounded skill artifacts and offline
@@ -223,5 +233,6 @@ less naturally procedural.
 - Human-fidelity packets: `scripts/build_human_fidelity_packets.py`
 - Human-fidelity annotation summary:
   `scripts/summarize_human_fidelity_annotations.py`
+- Failure-case archive: `scripts/build_failure_case_archive.py`
 - Result tables: `results/tables/`
 - Live prompt packets: `results/live_transfer_prompts/`

@@ -9,9 +9,10 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 14 human-fidelity annotation summary is implemented and verified locally,
-awaiting commit/push. Current focus: commit/push Phase 14, then either re-test
-the remote LLM endpoint later or run/collect actual human fidelity annotations.
+Phase 15 failure-case archive is implemented and verified locally. Phase 14 was
+already committed and pushed as `ef2b792`. After the Phase 15 save, the next
+research focus is either re-testing the remote endpoint or collecting actual
+human fidelity annotations.
 
 ## Latest User Request
 
@@ -274,6 +275,30 @@ The user provided the PaperToSkill idea and asked to:
   - `python -m unittest discover -s tests -v`: passed, 14 tests OK.
   - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
   - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
+- Phase 14 was committed and pushed as `ef2b792` on `origin/main`.
+- Phase 15 added failure-case archive tooling:
+  - `benchmarks/failure_case_archive_v0.json`
+  - `scripts/build_failure_case_archive.py`
+  - `tests/test_build_failure_case_archive.py`
+  - `results/failure_cases/failure_case_archive.json`
+  - `results/failure_cases/failure_case_archive.md`
+  - `results/failure_cases/failure_case_archive.csv`
+- Current Phase 15 archive summary:
+  - total cases: `20`
+  - paper-reported cases: `14`
+  - project-level cases: `6`
+  - category coverage includes cost, ethics, evaluation validity, evaluator bug,
+    external dependency, extraction recall bug, extractor bug, memory limit,
+    missing evidence, paper limitation, quality limit, quality threshold, search
+    failure, and source-span bug.
+- Phase 15 evidence boundary: the archive supports provenance and claim
+  discipline only. It is not a live reproduction failure study and does not show
+  that failure recording improves final user outcomes.
+- Phase 15 verification:
+  - `python -m unittest tests.test_build_failure_case_archive -v`: passed, 1 test OK.
+  - `python -m unittest discover -s tests -v`: passed, 15 tests OK.
+  - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
+  - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
 
 ## Current Blockers / Pending Checks
 
@@ -293,9 +318,8 @@ The user provided the PaperToSkill idea and asked to:
 
 ## Next Actions
 
-1. Commit and push Phase 14.
-2. Re-test the remote LLM endpoint when provider accounts are available.
-3. Execute live cross-harness runs using the prompt packets when the endpoint
+1. Re-test the remote LLM endpoint when provider accounts are available.
+2. Execute live cross-harness runs using the prompt packets when the endpoint
    recovers.
-4. Run human fidelity annotation, tokenizer-exact pricing, or expand the
+3. Run human fidelity annotation, tokenizer-exact pricing, or expand the
    benchmark to more agent/LLM-method papers.

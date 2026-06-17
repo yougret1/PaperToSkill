@@ -529,3 +529,41 @@ Verification:
 - `python -m unittest discover -s tests -v`: passed, 14 tests OK.
 - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
 - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
+
+## 2026-06-17 Phase 15
+
+Actions:
+
+- Added `benchmarks/failure_case_archive_v0.json`.
+- Added `scripts/build_failure_case_archive.py`.
+- Added `tests/test_build_failure_case_archive.py`.
+- Generated:
+  - `results/failure_cases/failure_case_archive.json`
+  - `results/failure_cases/failure_case_archive.md`
+  - `results/failure_cases/failure_case_archive.csv`
+- Updated README, paper draft package, claim-evidence matrix, artifact map,
+  decision log, result cards, stage log, and memory.
+
+Results:
+
+- The archive records 20 cases:
+  - 14 paper-reported limitations or failure branches from the three source
+    maps;
+  - 6 project-level failure/fix records from PaperToSkill development.
+- Categories include cost, ethics, evaluation validity, evaluator bug, external
+  dependency, extraction recall bug, extractor bug, memory limit, missing
+  evidence, paper limitation, quality limit, quality threshold, search failure,
+  and source-span bug.
+
+Evidence boundary:
+
+- The failure archive is a provenance artifact and claim-discipline aid.
+- It is not a controlled outcome study and does not show that failure recording
+  improves final user outcomes or live reproduction success.
+
+Verification:
+
+- `python -m unittest tests.test_build_failure_case_archive -v`: passed, 1 test OK.
+- `python -m unittest discover -s tests -v`: passed, 15 tests OK.
+- `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
+- `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.

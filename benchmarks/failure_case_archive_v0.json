@@ -1,0 +1,79 @@
+{
+  "schema_version": "0.1",
+  "id": "failure_case_archive_v0",
+  "created": "2026-06-17",
+  "evidence_boundary": "Aggregates paper-reported failure cases and project-level failure/fix records. It is not a live reproduction failure study.",
+  "paper_sources": [
+    {
+      "paper_id": "ai_scientist_v2",
+      "paper": "AI Scientist-v2",
+      "source_map_path": "generated_skills/ai_scientist_v2/references/source_map.json"
+    },
+    {
+      "paper_id": "reflexion",
+      "paper": "Reflexion",
+      "source_map_path": "generated_skills/reflexion/references/source_map.json"
+    },
+    {
+      "paper_id": "aide",
+      "paper": "AIDE",
+      "source_map_path": "generated_skills/aide/references/source_map.json"
+    }
+  ],
+  "project_failures": [
+    {
+      "id": "extractor_multiline_title_bug",
+      "phase": "Phase 1",
+      "category": "extractor_bug",
+      "summary": "Initial extraction split multiline Markdown list items and inferred the title incorrectly as `Methods`.",
+      "impact": "Could fragment workflow steps and mislabel generated skills.",
+      "resolution": "Merged continuation lines and inferred title from the first H1 or LaTeX title.",
+      "evidence": "research/stage_log.md#Phase-1"
+    },
+    {
+      "id": "source_audit_section_mapping_bug",
+      "phase": "Phase 4",
+      "category": "evaluator_bug",
+      "summary": "The first source-map-aware audit mis-mapped section groups and incorrectly yielded unsupported rate 1.0 for all skills.",
+      "impact": "Would erase the distinction between source-backed skills and abstract-only seeds.",
+      "resolution": "Mapped skill sections onto source-note section groups before scoring.",
+      "evidence": "research/stage_log.md#Phase-4"
+    },
+    {
+      "id": "source_span_form_feed_shift",
+      "phase": "Phase 6",
+      "category": "source_span_bug",
+      "summary": "PDF form-feed characters shifted source-span anchors when Python `splitlines()` was used.",
+      "impact": "Could mark valid line anchors invalid or point reviewers to the wrong spans.",
+      "resolution": "Switched source-span counting to newline-delimited lines.",
+      "evidence": "research/stage_log.md#Phase-6"
+    },
+    {
+      "id": "aide_candidate_truncation",
+      "phase": "Phase 10",
+      "category": "extraction_recall_bug",
+      "summary": "AIDE exposed that workflow, validation, and failure candidate limits were too low and dropped data-preview plus LLM-cost content.",
+      "impact": "Important operational and economic limitations could be omitted from generated skills.",
+      "resolution": "Raised candidate limits from 6/5/5 to 8/7/6 and added a regression test.",
+      "evidence": "research/stage_log.md#Phase-10"
+    },
+    {
+      "id": "remote_endpoint_unavailable",
+      "phase": "Phases 0, 6, 10, 13",
+      "category": "external_dependency",
+      "summary": "The OpenAI-compatible endpoint listed models but chat completions repeatedly returned account-pool or HTTP 503 errors.",
+      "impact": "Live cross-harness transfer runs are prepared but cannot be executed yet.",
+      "resolution": "Recorded prompt packets and kept live claims downgraded to offline readiness until provider availability recovers.",
+      "evidence": "memory/short_term_memory.md; research/run_logs/2026-06-17_phase13_human_fidelity_readiness.md"
+    },
+    {
+      "id": "human_fidelity_pending",
+      "phase": "Phases 13-14",
+      "category": "missing_evidence",
+      "summary": "Human-fidelity review packets and annotation summary are prepared, but all 18 score rows remain pending.",
+      "impact": "The paper cannot claim expert-validated semantic fidelity.",
+      "resolution": "Prepared packets, blank annotation template, and summarizer; kept human-validation claims out of the draft.",
+      "evidence": "results/human_fidelity_packets/annotation_summary.md"
+    }
+  ]
+}

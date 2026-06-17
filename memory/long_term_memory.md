@@ -63,6 +63,8 @@ Initial target contribution categories:
   packets and blank annotation template.
 - `scripts/summarize_human_fidelity_annotations.py`: summarizes and validates
   human-fidelity annotation rows.
+- `scripts/build_failure_case_archive.py`: builds a failure-case archive from
+  paper source maps and project-level failure/fix records.
 - `tests/test_papertoskill_extract.py`: extractor smoke test.
 - `tests/test_evaluate_skill.py`: evaluator smoke test.
 - `generated_skills/`: retained generated examples with source maps.
@@ -117,6 +119,9 @@ Initial target contribution categories:
 - `results/human_fidelity_packets/`: prepared review packets and blank
   annotation template plus pending annotation summary for human source-fidelity
   review.
+- `results/failure_cases/`: failure-case archive with 20 cases, including 14
+  paper-reported limitations/failure branches and 6 project-level failure/fix
+  records.
 - `paper/outline.md`: section plan, contribution bullets, evidence boundary,
   and figure/table plan.
 - `paper/draft.md`: first evidence-bounded paper draft.

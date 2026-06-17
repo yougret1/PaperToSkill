@@ -57,6 +57,14 @@ prices, live invoices, or success-per-dollar. Cost claims should therefore
 remain framed as token/cost proxies until a model-specific pricing experiment is
 added.
 
+### Failure Archive Is Not An Outcome Study
+
+The failure-case archive records paper-reported limitations and project-level
+failure/fix records, including extractor, evaluator, source-span, endpoint, and
+missing-evidence issues. This improves provenance and claim discipline, but it
+does not prove that recording failures improves live task outcomes or
+reproduction success.
+
 ## Future Work
 
 1. Execute live prompt packets once the remote endpoint is available, logging

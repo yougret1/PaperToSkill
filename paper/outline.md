@@ -121,6 +121,8 @@ Main results from `results/tables/main_results.md`:
   input-token proxies;
 - full skills score 10/10 on offline transfer readiness, while removing
   transfer notes drops readiness to 7.6/10 in all three cases.
+- the failure-case archive records 20 cases: 14 paper-reported limitations or
+  failure branches and 6 project-level failure/fix records.
 
 Interpretation: PaperToSkill preserves operational paper details that short
 summaries omit. The result is an artifact-readiness and coverage result, not yet
@@ -137,6 +139,8 @@ Current limitations:
 - human-fidelity review packets and a summarizer are prepared, but annotation
   remains pending;
 - cost evidence is compactness-oriented and not yet a full token-price study;
+- the failure-case archive is provenance evidence, not an outcome study showing
+  that recording failures improves final task success;
 - benchmark is focused on agent-method papers.
 
 ### 7. Conclusion
@@ -157,4 +161,5 @@ that are less directly procedural.
 | Table 4: Context cost proxy | `results/tables/context_cost_proxy.md` | Full paper vs skill context size and cost proxy |
 | Appendix: Human-fidelity packets | `results/human_fidelity_packets/` | Prepared review packets and blank annotation template |
 | Appendix: Human-fidelity summary | `results/human_fidelity_packets/annotation_summary.md` | Pending annotation status and validation summary |
+| Appendix: Failure-case archive | `results/failure_cases/failure_case_archive.md` | Paper-reported and project-level failure/limitation cases |
 | Appendix: Prompt packets | `results/live_transfer_prompts/` | Inputs for later live transfer runs |

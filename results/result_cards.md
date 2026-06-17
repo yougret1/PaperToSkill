@@ -362,3 +362,26 @@
   harder to accidentally overstate.
 - Figure/table: `results/human_fidelity_packets/annotation_summary.md`;
   `results/human_fidelity_packets/annotation_summary.json`.
+
+## Failure-Case Archive
+
+- Experiment: aggregate paper-reported failure/limitation cases from the three
+  source maps and project-level failure/fix records from the PaperToSkill
+  development history.
+- Main result: `results/failure_cases/failure_case_archive.md` records 20
+  cases: 14 paper-reported cases and 6 project-level cases.
+- Compared baselines: no empirical baseline; this is a provenance artifact
+  against a success-only research narrative.
+- Practical significance: the archive makes failed branches inspectable and
+  keeps limitations, endpoint failures, evaluator bugs, extraction recall
+  issues, and missing evidence visible to the paper draft.
+- Statistical evidence: none; the counts are deterministic archive summaries.
+- Failure modes: archive quality depends on source-map failure coverage and
+  accurate project records.
+- Limitations: this is not a controlled study showing that failure recording
+  improves final user outcomes or live reproduction success.
+- Claim impact: supports the claim that PaperToSkill treats failed branches as
+  first-class provenance, while preserving the evidence boundary.
+- Figure/table: `benchmarks/failure_case_archive_v0.json`;
+  `results/failure_cases/failure_case_archive.md`;
+  `results/failure_cases/failure_case_archive.json`.

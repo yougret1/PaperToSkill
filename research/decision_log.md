@@ -81,3 +81,12 @@
   results, but the current template is intentionally blank. The summarizer makes
   the pending boundary machine-readable and validates future filled rows.
 - Status: accepted for Phase 14.
+
+## 2026-06-17: Treat Failure Branches As First-Class Evidence Artifacts
+
+- Decision: build a failure-case archive that aggregates paper-reported
+  limitations with project-level failure/fix records.
+- Rationale: the user's paper outlook explicitly values failed branches for
+  real deployable projects. Archiving them improves provenance and prevents the
+  draft from telling a success-only story.
+- Status: accepted for Phase 15.
