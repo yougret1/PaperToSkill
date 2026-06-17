@@ -262,3 +262,24 @@
 - Claim impact: partially supports the harness-transfer claim at the offline
   artifact-readiness level across three papers.
 - Figure/table: `results/evaluations/aide_harness_transfer_v0.json`.
+
+## Paper Draft Package
+
+- Experiment: convert the validated three-paper deterministic/offline evidence
+  into paper-facing artifacts.
+- Main result: created `paper/outline.md`, `paper/draft.md`,
+  `paper/claim_checklist.md`, and `paper/limitations.md`.
+- Compared baselines: none; this is a synthesis artifact over existing result
+  tables, claim evidence, and result cards.
+- Practical significance: gives the project a coherent paper narrative while
+  preventing overclaiming. The claim checklist explicitly separates supported
+  deterministic/offline statements from pending live-agent claims.
+- Statistical evidence: none; no new experiment was run for this card.
+- Failure modes: draft quality depends on the current benchmark scope and may
+  need revision after live cross-harness runs or human fidelity annotation.
+- Limitations: the draft is a working paper package, not a submission-ready
+  manuscript.
+- Claim impact: improves claim discipline and makes missing evidence visible
+  without strengthening the empirical claims.
+- Figure/table: `paper/outline.md`; `paper/claim_checklist.md`;
+  `paper/draft.md`; `paper/limitations.md`.

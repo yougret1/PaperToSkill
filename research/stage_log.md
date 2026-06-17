@@ -381,3 +381,40 @@ Verification:
 - `python scripts\validate_source_spans.py --task benchmarks\tasks\aide_source_span_validation.json --output results\evaluations\aide_source_span_validation_v0.json`
 - `python scripts\build_live_transfer_prompts.py --task benchmarks\tasks\aide_live_transfer.json --output-dir results\live_transfer_prompts\aide_v0`
 - `python scripts\aggregate_results_tables.py --output-dir results\tables`
+
+## 2026-06-17 Phase 11
+
+Actions:
+
+- Created a paper draft package under `paper/`.
+- Added an outline with contribution bullets, section plan, and figure/table
+  plan.
+- Added a claim checklist that separates supported deterministic/offline claims
+  from unsupported live-agent or full-automation claims.
+- Added a first evidence-bounded draft grounded in the three-paper benchmark.
+- Added a limitations file focused on curated inputs, heuristic metrics, blocked
+  live transfer, missing human fidelity annotation, benchmark diversity, and
+  cost accounting.
+- Updated README, artifact map, decision log, result cards, and memory.
+
+Results:
+
+- The paper narrative now matches the current evidence: PaperToSkill supports a
+  curated paper-note-to-skill conversion claim over three real agent-method
+  papers, with deterministic coverage, compactness, source-grounding, and
+  offline transfer-readiness results.
+- The draft explicitly avoids claiming live cross-harness success, fully
+  automatic arbitrary-PDF conversion, human-validated fidelity, or realized
+  economic savings.
+
+Evidence boundary:
+
+- Phase 11 is synthesis and writing, not a new empirical run.
+- Empirical claims still depend on the Phase 2-10 deterministic/offline
+  evaluations.
+
+Verification:
+
+- `python -m unittest discover -s tests -v`: passed, 10 tests OK.
+- `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
+- `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.

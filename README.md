@@ -10,8 +10,9 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 0: research contract, memory discipline, and AI-Scientist-v2 integration
-setup.
+Phase 11: paper draft package over a three-paper deterministic/offline
+benchmark. Live cross-harness agent execution is still pending because the
+remote chat-completion endpoint has returned provider availability errors.
 
 ## Memory
 
@@ -37,6 +38,16 @@ continuing work.
 - `research/stage_log.md`
 - `research/run_logs/`
 
+## Paper Draft Package
+
+- `paper/outline.md`
+- `paper/draft.md`
+- `paper/claim_checklist.md`
+- `paper/limitations.md`
+
+These files intentionally separate supported deterministic/offline claims from
+pending live-agent claims.
+
 ## AI-Scientist-v2 Inputs
 
 - `ai_scientist_inputs/papertoskill.md`
@@ -52,3 +63,11 @@ continuing work.
 - Extractor script: `scripts/papertoskill_extract.py`
 - Smoke tests: `tests/test_papertoskill_extract.py`
 - Retained generated case: `generated_skills/papertoskill_paper_note/SKILL.md`
+
+## Current Benchmark Snapshot
+
+- Real-paper cases: AI Scientist-v2, Reflexion, and AIDE.
+- Main result tables: `results/tables/`.
+- Generated skills: `generated_skills/ai_scientist_v2/`,
+  `generated_skills/reflexion/`, and `generated_skills/aide/`.
+- Live transfer prompt packets: `results/live_transfer_prompts/`.

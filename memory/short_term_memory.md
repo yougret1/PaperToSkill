@@ -9,9 +9,10 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 10 AIDE third-paper benchmark is implemented, committed, and pushed.
-Current focus: either re-test the remote LLM endpoint for live cross-harness
-execution or expand the benchmark with more agent/LLM-method papers.
+Phase 11 paper draft package is implemented and verified locally, awaiting
+commit/push. Current focus: commit/push this phase, then either re-test the
+remote LLM endpoint for live cross-harness execution or add missing paper
+evidence such as human fidelity and token/cost accounting.
 
 ## Latest User Request
 
@@ -195,6 +196,24 @@ The user provided the PaperToSkill idea and asked to:
 - Phase 10 regenerated `results/tables/`; main results now cover
   AI Scientist-v2, Reflexion, and AIDE.
 - Phase 10 was committed and pushed as `ec47147` on `origin/main`.
+- Phase 11 created a paper draft package:
+  - `paper/outline.md`
+  - `paper/draft.md`
+  - `paper/claim_checklist.md`
+  - `paper/limitations.md`
+- Phase 11 also updated README, artifact map, decision log, result cards, stage
+  log, and memory to reflect the paper-writing phase.
+- The Phase 11 draft explicitly supports only deterministic/offline claims:
+  curated paper-note-to-skill conversion, context coverage over summaries,
+  compactness under 1200 words, source-span support, and offline transfer-note
+  readiness.
+- The Phase 11 draft explicitly does not claim fully automatic arbitrary-PDF
+  conversion, live cross-harness success, human-validated semantic fidelity, or
+  realized economic savings.
+- Phase 11 verification:
+  - `python -m unittest discover -s tests -v`: passed, 10 tests OK.
+  - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
+  - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
 
 ## Current Blockers / Pending Checks
 
@@ -205,13 +224,17 @@ The user provided the PaperToSkill idea and asked to:
   server advertises.
 - For stable long-running work, create an isolated Python environment because
   the current global Anaconda environment now has package-version conflicts.
-- Need improve evaluator further toward human or source-span validation.
 - Need run actual LLM task execution once the remote endpoint works or another
   model backend is available.
+- Need human fidelity annotation or review protocol before claiming semantic
+  correctness beyond deterministic source-span support.
+- Need token and price accounting before making economic/cost-saving claims.
 
 ## Next Actions
 
-1. Re-test the remote LLM endpoint when provider accounts are available.
-2. Execute live cross-harness runs using the prompt packets when the endpoint
+1. Commit and push Phase 11.
+2. Re-test the remote LLM endpoint when provider accounts are available.
+3. Execute live cross-harness runs using the prompt packets when the endpoint
    recovers.
-3. Expand the benchmark to more agent/LLM-method papers.
+4. Add human fidelity and token/cost experiments or expand the benchmark to
+   more agent/LLM-method papers.

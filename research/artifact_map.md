@@ -26,6 +26,16 @@
 | `research/run_logs/2026-06-17_phase1_scaffold.md` | Extractor scaffold commands and outcomes | Created |
 | `research/run_logs/2026-06-17_phase9_aggregate_tables.md` | Result-table aggregation commands and outcomes | Created |
 | `research/run_logs/2026-06-17_phase10_aide_third_paper.md` | AIDE third-paper benchmark commands and outcomes | Created |
+| `research/run_logs/2026-06-17_phase11_paper_package.md` | Paper draft package commands and outcomes | Created |
+
+## Paper Draft Package
+
+| Artifact | Purpose | Status |
+| --- | --- | --- |
+| `paper/outline.md` | Section plan, contribution bullets, and figure/table plan | Created |
+| `paper/draft.md` | First evidence-bounded paper draft | Created |
+| `paper/claim_checklist.md` | Supported vs unsupported claim gate for drafting | Created |
+| `paper/limitations.md` | Limitation and future-work text aligned to current evidence | Created |
 
 ## AI-Scientist-v2 Inputs
 

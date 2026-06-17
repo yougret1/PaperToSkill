@@ -108,6 +108,12 @@ Initial target contribution categories:
   Codex/Claude execution.
 - `results/tables/`: paper-ready main results, transfer ablation, compactness/
   source-grounding, and combined summary tables.
+- `paper/outline.md`: section plan, contribution bullets, evidence boundary,
+  and figure/table plan.
+- `paper/draft.md`: first evidence-bounded paper draft.
+- `paper/claim_checklist.md`: supported-vs-unsupported claim gate for drafting.
+- `paper/limitations.md`: limitations and future-work text aligned to current
+  deterministic/offline evidence.
 
 ## Current Assumptions
 
@@ -118,6 +124,8 @@ Initial target contribution categories:
 - Failure traces are valuable and should be recorded rather than hidden.
 - Transfer evaluation should include moving skills between harnesses, especially
   Codex-to-Claude or another agent runtime.
+- Paper writing must distinguish curated note-to-skill conversion from full
+  arbitrary-PDF automation, and offline readiness from live agent success.
 
 ## LLM/API Configuration
 

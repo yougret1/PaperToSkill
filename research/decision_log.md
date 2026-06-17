@@ -44,3 +44,12 @@
 - Rationale: direct chat completion reached the server but failed with exhausted
   account-pool errors.
 - Status: accepted.
+
+## 2026-06-17: Draft Paper From Validated Offline Evidence First
+
+- Decision: create a paper draft package before adding more benchmark cases.
+- Rationale: three real-paper cases are enough to define the paper narrative,
+  supported claims, table plan, and evidence boundary. Writing now exposes
+  missing evidence, especially live cross-harness execution, human fidelity
+  annotation, and token-price accounting.
+- Status: accepted for Phase 11.
