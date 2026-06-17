@@ -11,6 +11,8 @@
 | E2.6 | Does the generated skill preserve more downstream task capabilities than summary baselines? | `python scripts\evaluate_context_baselines.py --task benchmarks\tasks\ai_scientist_v2_research_run.json --output results\evaluations\ai_scientist_v2_context_baselines_v0.json` | skill-vs-summary-vs-abstract coverage scores | Analysis |
 | E2.7 | Can source-map-aware audit separate real paper skills from abstract-only seeds? | `python scripts\audit_skill_source_map.py --task benchmarks\tasks\skill_source_audit.json --output results\evaluations\skill_source_audit_v0.json` | unsupported-rate ranking across real skill, retained paper-like case, and abstract-only seed | Analysis |
 | E2.8 | Do transfer notes improve offline Codex/Claude-style harness-transfer readiness? | `python scripts\evaluate_harness_transfer.py --task benchmarks\tasks\ai_scientist_v2_harness_transfer.json --output results\evaluations\ai_scientist_v2_harness_transfer_v0.json` | full skill vs no-transfer-notes vs generic-summary readiness scores | Analysis |
+| E2.9 | Are the source anchors in the AI Scientist-v2 skill actually supported by the extracted paper text? | `python scripts\validate_source_spans.py --task benchmarks\tasks\ai_scientist_v2_source_span_validation.json --output results\evaluations\ai_scientist_v2_source_span_validation_v0.json` | supported / weak / unsupported support-rate summary | Analysis |
+| E2.10 | Are live cross-harness prompt packets ready for a later remote run? | `python scripts\build_live_transfer_prompts.py --task benchmarks\tasks\ai_scientist_v2_live_transfer.json --output-dir results\live_transfer_prompts\ai_scientist_v2_v0` | per-harness prompt packets and response placeholders | Execution |
 
 ## Pending Remote LLM Recovery
 

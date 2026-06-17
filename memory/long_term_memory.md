@@ -73,6 +73,12 @@ Initial target contribution categories:
   Claude-style harness-transfer readiness task.
 - `results/evaluations/ai_scientist_v2_harness_transfer_v0.json`: readiness
   ranking for full skill, skill without transfer notes, and generic summary.
+- `benchmarks/tasks/ai_scientist_v2_live_transfer.json`: live prompt packet
+  spec for later Codex/Claude execution.
+- `benchmarks/tasks/ai_scientist_v2_source_span_validation.json`: source-span
+  audit task for line-anchored claims.
+- `results/evaluations/ai_scientist_v2_source_span_validation_v0.json`: source-
+  span support-rate summary for the AI Scientist-v2 skill.
 
 ## Current Assumptions
 

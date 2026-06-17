@@ -47,6 +47,8 @@
 | `benchmarks/tasks/ai_scientist_v2_research_run.json` | Downstream context-coverage task spec | Created |
 | `benchmarks/tasks/skill_source_audit.json` | Source-map-aware unsupported-instruction audit task | Created |
 | `benchmarks/tasks/ai_scientist_v2_harness_transfer.json` | Offline harness-transfer readiness task spec | Created |
+| `benchmarks/tasks/ai_scientist_v2_live_transfer.json` | Live harness-transfer prompt packet spec | Created |
+| `benchmarks/tasks/ai_scientist_v2_source_span_validation.json` | Source-span validation task spec | Created |
 | `baselines/ai_scientist_v2_generic_summary.md` | Generic summary baseline context | Created |
 | `baselines/ai_scientist_v2_abstract_only.md` | Abstract-only baseline context | Created |
 | `papers/raw/ai_scientist_v2.pdf` | Raw AI Scientist-v2 PDF | Created |
@@ -58,11 +60,15 @@
 | `scripts/evaluate_context_baselines.py` | Deterministic evaluator for context baseline coverage | Created |
 | `scripts/audit_skill_source_map.py` | Deterministic source-map-aware unsupported-instruction audit | Created |
 | `scripts/evaluate_harness_transfer.py` | Deterministic offline harness-transfer readiness evaluator | Created |
+| `scripts/build_live_transfer_prompts.py` | Live harness-transfer prompt packet builder | Created |
+| `scripts/validate_source_spans.py` | Source-span validation for line-anchored claims | Created |
 | `tests/test_papertoskill_extract.py` | Smoke test for extractor CLI and source map | Created |
 | `tests/test_evaluate_skill.py` | Smoke test for evaluator CLI | Created |
 | `tests/test_evaluate_context_baselines.py` | Smoke test for context baseline evaluator | Created |
 | `tests/test_audit_skill_source_map.py` | Smoke test for source-map-aware audit | Created |
 | `tests/test_evaluate_harness_transfer.py` | Smoke test for harness-transfer readiness evaluator | Created |
+| `tests/test_build_live_transfer_prompts.py` | Smoke test for live transfer prompt builder | Created |
+| `tests/test_validate_source_spans.py` | Smoke test for source-span validator | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |
 | `generated_skills/ai_scientist_v2/references/source_map.json` | Source-map evidence for AI Scientist-v2 generated skill | Created |
 | `generated_skills/papertoskill_paper_note/SKILL.md` | Retained generated skill from paper-like note | Created |
@@ -71,6 +77,8 @@
 | `results/evaluations/ai_scientist_v2_context_baselines_v0.json` | Skill-vs-summary-vs-abstract context coverage scores | Created |
 | `results/evaluations/skill_source_audit_v0.json` | Source-map-aware unsupported-instruction audit output | Created |
 | `results/evaluations/ai_scientist_v2_harness_transfer_v0.json` | Offline Codex/Claude-style transfer readiness scores | Created |
+| `results/evaluations/ai_scientist_v2_source_span_validation_v0.json` | Source-span validation output for AI Scientist-v2 skill | Created |
+| `results/live_transfer_prompts/ai_scientist_v2_v0/` | Live Codex/Claude prompt packets and index | Created |
 | `results/result_cards.md` | Result interpretation cards | Created |
 
 ## Future Artifacts

@@ -94,3 +94,22 @@
 - Claim impact: partially supports the harness-transfer claim only at the
   artifact-readiness level.
 - Figure/table: `results/evaluations/ai_scientist_v2_harness_transfer_v0.json`.
+
+## AI Scientist-v2 Source-Span Validation
+
+- Experiment: validate source anchors in the AI Scientist-v2 generated skill
+  against extracted paper text line spans.
+- Main result: 15 of 16 claims were supported and 1 was weak; no invalid line
+  ranges were found.
+- Compared baselines: none; this is an internal consistency audit.
+- Practical significance: confirms that the source anchors in the retained
+  skill mostly point to actual supporting spans, which makes later audit and
+  transfer work more trustworthy.
+- Statistical evidence: none; deterministic line-span audit only.
+- Failure modes: one claim about citation inaccuracies scored weak because the
+  extracted span was semantically supportive but lexically sparse.
+- Limitations: still not a human fact-check and still sensitive to paraphrase or
+  OCR noise.
+- Claim impact: strengthens the source-grounding claim for the generated
+  skill.
+- Figure/table: `results/evaluations/ai_scientist_v2_source_span_validation_v0.json`.

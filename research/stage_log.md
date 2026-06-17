@@ -187,3 +187,36 @@ Verification:
 
 - `python scripts\evaluate_harness_transfer.py --task benchmarks\tasks\ai_scientist_v2_harness_transfer.json --output results\evaluations\ai_scientist_v2_harness_transfer_v0.json`
 - `python -m unittest discover -s tests -v`
+
+## 2026-06-17 Phase 6
+
+Actions:
+
+- Re-tested the OpenAI-compatible endpoint.
+- Added live cross-harness prompt packet task and builder.
+- Added source-span validation task and validator.
+- Generated six prompt packets for Codex-style and Claude-style harnesses across
+  full skill, no-transfer-notes, and generic-summary contexts.
+- Fixed source-span line counting to use newline-delimited lines rather than
+  Python `splitlines()` because `pdftotext` form-feed characters shifted
+  anchors.
+
+Results:
+
+- `/v1/models` succeeded and listed `claude-opus-4-8`.
+- `/v1/chat/completions` still failed with HTTP 502:
+  `All available accounts exhausted`.
+- Source-span validation: 15 supported claims, 1 weak claim, 0 invalid ranges,
+  support rate 0.938.
+
+Evidence boundary:
+
+- Prompt packets are ready for later live execution but are not live agent run
+  results.
+- Source-span validation is lexical/line-based, not human factuality annotation.
+
+Verification:
+
+- `python scripts\build_live_transfer_prompts.py --task benchmarks\tasks\ai_scientist_v2_live_transfer.json --output-dir results\live_transfer_prompts\ai_scientist_v2_v0`
+- `python scripts\validate_source_spans.py --task benchmarks\tasks\ai_scientist_v2_source_span_validation.json --output results\evaluations\ai_scientist_v2_source_span_validation_v0.json`
+- `python -m unittest discover -s tests -v`

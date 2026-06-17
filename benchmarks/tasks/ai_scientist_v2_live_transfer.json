@@ -1,0 +1,55 @@
+{
+  "schema_version": "0.1",
+  "id": "ai_scientist_v2_live_transfer",
+  "created": "2026-06-17",
+  "purpose": "Prompt protocol for live Codex-style and Claude-style execution of the AI Scientist-v2 paper-derived skill.",
+  "evidence_boundary": "Prompt packet only; live agent responses must be collected separately after the remote LLM provider recovers.",
+  "user_prompt": "Given the PaperToSkill idea, produce a small local agent-run plan inspired by AI Scientist-v2. The plan must preserve generalized idea generation, the four-stage experiment manager, node lifecycle, debug/refine branching, replication and aggregation, visual review, limitations, ethics, and harness-transfer adaptations.",
+  "output_contract": [
+    "A concise run objective for the PaperToSkill experiment.",
+    "A four-stage table covering preliminary investigation, hyperparameter tuning, research agenda execution, and ablation studies.",
+    "A node lifecycle schema with plan, code/action, execution result or error, metrics, feedback, status, and next action.",
+    "A debug/refine policy that treats buggy and non-buggy nodes differently.",
+    "A replication and aggregation plan with random seeds and summarized metrics.",
+    "A visual or VLM-style review plan for figures/tables/logs.",
+    "Limitations, ethics, and disclosure notes copied or adapted from the source-backed skill.",
+    "A transfer-adaptation note explaining what changed for the target harness."
+  ],
+  "evaluation_notes": [
+    "Do not claim live experimental success unless an actual run was executed.",
+    "Preserve source-backed claims separately from harness-specific adaptations.",
+    "Record missing tools or unavailable execution privileges as limitations, not silent assumptions."
+  ],
+  "context_variants": [
+    {
+      "id": "full_skill",
+      "label": "PaperToSkill generated skill with transfer notes",
+      "path": "generated_skills/ai_scientist_v2/SKILL.md"
+    },
+    {
+      "id": "skill_without_transfer_notes",
+      "label": "Generated skill with Transfer Notes removed",
+      "path": "generated_skills/ai_scientist_v2/SKILL.md",
+      "drop_sections": [
+        "Transfer Notes"
+      ]
+    },
+    {
+      "id": "generic_summary",
+      "label": "Generic prose summary baseline",
+      "path": "baselines/ai_scientist_v2_generic_summary.md"
+    }
+  ],
+  "target_harnesses": [
+    {
+      "id": "codex_skill",
+      "label": "Codex-style coding-agent harness",
+      "instructions": "Act as a coding research agent using the provided context as a skill. Produce an executable local plan with file artifacts, commands, validation checks, and stop conditions. Be explicit about what is source-backed versus adapted for the local Codex workspace."
+    },
+    {
+      "id": "claude_project_prompt",
+      "label": "Claude-style project prompt harness",
+      "instructions": "Act as a project-level research assistant using the provided context as reusable project instructions. Produce a harness-neutral plan that a Claude-style agent could follow, including assumptions, unavailable tools, validation checks, and transfer-specific adaptations."
+    }
+  ]
+}

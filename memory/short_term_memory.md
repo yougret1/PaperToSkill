@@ -9,9 +9,9 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 5 offline harness-transfer readiness evaluation is implemented, committed,
-and pushed. Current focus: prepare live cross-harness task execution and re-test
-the remote LLM endpoint when provider accounts recover.
+Phase 6 live transfer prompt packets and source-span validation are implemented
+locally. Current focus: finalize their records, commit, and push, then prepare
+for live cross-harness execution when the remote LLM endpoint recovers.
 
 ## Latest User Request
 
@@ -104,6 +104,17 @@ The user provided the PaperToSkill idea and asked to:
 - Phase 5 result supports only offline artifact readiness, not live
   cross-harness agent success.
 - Phase 5 was committed and pushed as `9a393a7` on `origin/main`.
+- Phase 6 added live transfer prompt packets and source-span validation:
+  - `benchmarks/tasks/ai_scientist_v2_live_transfer.json`
+  - `benchmarks/tasks/ai_scientist_v2_source_span_validation.json`
+- Phase 6 live prompt packets were generated under
+  `results/live_transfer_prompts/ai_scientist_v2_v0/`.
+- Phase 6 source-span validation after fixing line-count semantics produced:
+  - 15 supported claims
+  - 1 weak claim
+  - 0 invalid ranges
+  - support rate `0.938`
+- The remote chat endpoint still returns `502 All available accounts exhausted`.
 
 ## Current Blockers / Pending Checks
 
@@ -120,9 +131,9 @@ The user provided the PaperToSkill idea and asked to:
 
 ## Next Actions
 
-1. Re-test the remote LLM endpoint when provider accounts are available.
-2. Prepare live cross-harness task prompts for Codex-style and Claude-style
-   execution.
-3. Add human/source-span validation for unsupported-instruction scoring.
+1. Commit and push Phase 6 artifacts.
+2. Re-test the remote LLM endpoint when provider accounts are available.
+3. Execute live cross-harness runs using the prompt packets when the endpoint
+   recovers.
 4. Expand the benchmark beyond AI Scientist-v2 to additional agent/LLM-method
    papers.
