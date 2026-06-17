@@ -44,16 +44,21 @@
 | --- | --- | --- |
 | `benchmarks/paper_manifest.json` | Seed benchmark papers and task definitions | Created |
 | `benchmarks/rubric_v0.json` | Deterministic v0 scoring rubric for generated skills | Created |
+| `benchmarks/rubric_reflexion_v0.json` | Deterministic v0 scoring rubric for Reflexion generated skill | Created |
 | `benchmarks/tasks/ai_scientist_v2_research_run.json` | Downstream context-coverage task spec | Created |
 | `benchmarks/tasks/skill_source_audit.json` | Source-map-aware unsupported-instruction audit task | Created |
 | `benchmarks/tasks/ai_scientist_v2_harness_transfer.json` | Offline harness-transfer readiness task spec | Created |
 | `benchmarks/tasks/ai_scientist_v2_live_transfer.json` | Live harness-transfer prompt packet spec | Created |
 | `benchmarks/tasks/ai_scientist_v2_source_span_validation.json` | Source-span validation task spec | Created |
+| `benchmarks/tasks/reflexion_source_span_validation.json` | Source-span validation task spec for Reflexion | Created |
 | `baselines/ai_scientist_v2_generic_summary.md` | Generic summary baseline context | Created |
 | `baselines/ai_scientist_v2_abstract_only.md` | Abstract-only baseline context | Created |
 | `papers/raw/ai_scientist_v2.pdf` | Raw AI Scientist-v2 PDF | Created |
+| `papers/raw/reflexion.pdf` | Raw Reflexion PDF | Created |
 | `papers/extracted/ai_scientist_v2.txt` | Extracted PDF text | Created |
+| `papers/extracted/reflexion.txt` | Extracted Reflexion PDF text | Created |
 | `papers/notes/ai_scientist_v2_note.md` | Curated real-paper note for scaffold input | Created |
+| `papers/notes/reflexion_note.md` | Curated Reflexion source-anchored note for scaffold input | Created |
 | `examples/papertoskill_paper_note.md` | Paper-like source note for retained case | Created |
 | `scripts/papertoskill_extract.py` | Deterministic local paper-to-skill scaffold | Created |
 | `scripts/evaluate_skill.py` | Deterministic v0 evaluator for generated skills | Created |
@@ -71,6 +76,8 @@
 | `tests/test_validate_source_spans.py` | Smoke test for source-span validator | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |
 | `generated_skills/ai_scientist_v2/references/source_map.json` | Source-map evidence for AI Scientist-v2 generated skill | Created |
+| `generated_skills/reflexion/SKILL.md` | Retained generated skill from Reflexion note | Created |
+| `generated_skills/reflexion/references/source_map.json` | Source-map evidence for Reflexion generated skill | Created |
 | `generated_skills/papertoskill_paper_note/SKILL.md` | Retained generated skill from paper-like note | Created |
 | `generated_skills/papertoskill_paper_note/references/source_map.json` | Source-map evidence for retained generated skill | Created |
 | `results/evaluations/ai_scientist_v2_rubric_v0.json` | Scored rubric output for AI Scientist-v2 generated skill | Created |
@@ -78,7 +85,10 @@
 | `results/evaluations/skill_source_audit_v0.json` | Source-map-aware unsupported-instruction audit output | Created |
 | `results/evaluations/ai_scientist_v2_harness_transfer_v0.json` | Offline Codex/Claude-style transfer readiness scores | Created |
 | `results/evaluations/ai_scientist_v2_source_span_validation_v0.json` | Source-span validation output for AI Scientist-v2 skill | Created |
+| `results/evaluations/reflexion_rubric_v0.json` | Reflexion skill rubric output | Created |
+| `results/evaluations/reflexion_source_span_validation_v0.json` | Reflexion source-span validation output | Created |
 | `results/live_transfer_prompts/ai_scientist_v2_v0/` | Live Codex/Claude prompt packets and index | Created |
+| `output/pdf/reflexion/page-01.png` | Rendered Reflexion PDF page 1 for visual check | Created |
 | `results/result_cards.md` | Result interpretation cards | Created |
 
 ## Future Artifacts

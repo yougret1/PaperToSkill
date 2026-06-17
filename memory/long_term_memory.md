@@ -79,6 +79,12 @@ Initial target contribution categories:
   audit task for line-anchored claims.
 - `results/evaluations/ai_scientist_v2_source_span_validation_v0.json`: source-
   span support-rate summary for the AI Scientist-v2 skill.
+- `papers/notes/reflexion_note.md`: second curated real-paper note.
+- `generated_skills/reflexion/SKILL.md`: second retained generated skill,
+  focused on verbal reinforcement, reflection loops, and memory.
+- `results/evaluations/reflexion_rubric_v0.json`: Reflexion skill rubric score.
+- `results/evaluations/reflexion_source_span_validation_v0.json`: Reflexion
+  source-span support-rate summary.
 
 ## Current Assumptions
 

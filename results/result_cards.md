@@ -113,3 +113,26 @@
 - Claim impact: strengthens the source-grounding claim for the generated
   skill.
 - Figure/table: `results/evaluations/ai_scientist_v2_source_span_validation_v0.json`.
+
+## Reflexion Paper-To-Skill Scaffold
+
+- Experiment: deterministic scaffold on `papers/notes/reflexion_note.md`.
+- Main result: generated `generated_skills/reflexion/SKILL.md` with source-
+  anchored workflow, validation, failure cases, and transfer notes.
+- Compared baselines: no summary baseline yet; this is the second retained
+  real-paper scaffold case.
+- Practical significance: extends PaperToSkill beyond AI Scientist-v2 to a
+  different agent-method paper centered on failure reflection, episodic memory,
+  and verbal reinforcement.
+- Deterministic rubric: `results/evaluations/reflexion_rubric_v0.json` scored
+  20/20.
+- Source-span validation: `results/evaluations/reflexion_source_span_validation_v0.json`
+  found 11/11 supported anchored claims with 0 invalid ranges.
+- Failure modes: relies on a curated note rather than full automatic PDF
+  extraction; rubric is paper-specific.
+- Limitations: still no downstream live agent run or summary baseline for
+  Reflexion.
+- Claim impact: supports the claim that PaperToSkill can convert more than one
+  real agent-method paper into a compact, source-grounded skill.
+- Figure/table: `results/evaluations/reflexion_rubric_v0.json`;
+  `results/evaluations/reflexion_source_span_validation_v0.json`.

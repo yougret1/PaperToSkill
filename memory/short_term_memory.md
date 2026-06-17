@@ -9,9 +9,8 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 6 live transfer prompt packets and source-span validation are implemented
-locally. Current focus: finalize their records, commit, and push, then prepare
-for live cross-harness execution when the remote LLM endpoint recovers.
+Phase 7 second-paper benchmark case is implemented locally. Current focus:
+finalize records, run verification, commit, and push.
 
 ## Latest User Request
 
@@ -115,6 +114,17 @@ The user provided the PaperToSkill idea and asked to:
   - 0 invalid ranges
   - support rate `0.938`
 - The remote chat endpoint still returns `502 All available accounts exhausted`.
+- Phase 6 was committed and pushed as `b72381c` on `origin/main`.
+- Phase 7 added Reflexion as the second real paper case:
+  - `papers/raw/reflexion.pdf`
+  - `papers/extracted/reflexion.txt`
+  - `papers/notes/reflexion_note.md`
+  - `generated_skills/reflexion/SKILL.md`
+  - `benchmarks/rubric_reflexion_v0.json`
+  - `benchmarks/tasks/reflexion_source_span_validation.json`
+- Reflexion generated skill scored `20/20` on the paper-specific rubric.
+- Reflexion source-span validation produced 11 supported claims, 0 invalid
+  ranges, support rate `1.0`.
 
 ## Current Blockers / Pending Checks
 
@@ -131,9 +141,9 @@ The user provided the PaperToSkill idea and asked to:
 
 ## Next Actions
 
-1. Commit and push Phase 6 artifacts.
-2. Re-test the remote LLM endpoint when provider accounts are available.
-3. Execute live cross-harness runs using the prompt packets when the endpoint
+1. Commit and push Phase 7 artifacts.
+2. Add Reflexion context-vs-summary and transfer-readiness tasks.
+3. Re-test the remote LLM endpoint when provider accounts are available.
+4. Execute live cross-harness runs using the prompt packets when the endpoint
    recovers.
-4. Expand the benchmark beyond AI Scientist-v2 to additional agent/LLM-method
-   papers.
+5. Expand the benchmark to more agent/LLM-method papers.

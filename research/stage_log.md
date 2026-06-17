@@ -220,3 +220,38 @@ Verification:
 - `python scripts\build_live_transfer_prompts.py --task benchmarks\tasks\ai_scientist_v2_live_transfer.json --output-dir results\live_transfer_prompts\ai_scientist_v2_v0`
 - `python scripts\validate_source_spans.py --task benchmarks\tasks\ai_scientist_v2_source_span_validation.json --output results\evaluations\ai_scientist_v2_source_span_validation_v0.json`
 - `python -m unittest discover -s tests -v`
+
+## 2026-06-17 Phase 7
+
+Actions:
+
+- Selected Reflexion as the second real paper benchmark because it directly
+  supports PaperToSkill's memory and failure-branch themes.
+- Downloaded the Reflexion PDF from arXiv.
+- Extracted text with `pdftotext -layout`.
+- Rendered page 1 with `pdftoppm`.
+- Created `papers/notes/reflexion_note.md`.
+- Generated `generated_skills/reflexion/SKILL.md`.
+- Added a Reflexion-specific rubric and source-span validation task.
+
+Results:
+
+- Reflexion generated skill scored 20/20 on
+  `benchmarks/rubric_reflexion_v0.json`.
+- Reflexion source-span validation found 11 supported anchored claims, 0 weak or
+  unsupported claims, 0 invalid ranges, and support rate 1.0.
+
+Evidence boundary:
+
+- This extends the benchmark to two curated real-paper notes, but does not yet
+  evaluate Reflexion against summary baselines or live agents.
+
+Verification:
+
+- `pdfinfo papers\raw\reflexion.pdf`
+- `pdftotext -layout papers\raw\reflexion.pdf papers\extracted\reflexion.txt`
+- `pdftoppm -f 1 -l 1 -png -r 120 papers\raw\reflexion.pdf output\pdf\reflexion\page`
+- `python scripts\papertoskill_extract.py --source papers\notes\reflexion_note.md --output generated_skills\reflexion --name reflexion-paper-skill`
+- `python scripts\evaluate_skill.py --skill generated_skills\reflexion\SKILL.md --rubric benchmarks\rubric_reflexion_v0.json --output results\evaluations\reflexion_rubric_v0.json`
+- `python scripts\validate_source_spans.py --task benchmarks\tasks\reflexion_source_span_validation.json --output results\evaluations\reflexion_source_span_validation_v0.json`
+- `python -m unittest discover -s tests -v`
