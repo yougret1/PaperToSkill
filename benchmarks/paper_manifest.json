@@ -1,0 +1,234 @@
+{
+  "schema_version": "0.1",
+  "created": "2026-06-17",
+  "purpose": "Seed benchmark for evaluating paper-to-skill conversion on agent and LLM-method papers with clear reusable workflows.",
+  "selection_criteria": [
+    "The paper contains an operational method that can plausibly become an agent skill.",
+    "The paper has identifiable inputs, workflow steps, validation signals, and limitations.",
+    "The paper supports at least one downstream task for skill-vs-summary evaluation.",
+    "The paper is publicly accessible from a stable primary source."
+  ],
+  "papers": [
+    {
+      "id": "ai_scientist_v2",
+      "title": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search",
+      "authors": [
+        "Yutaro Yamada",
+        "Robert Tjarko Lange",
+        "Cong Lu",
+        "Shengran Hu",
+        "Chris Lu",
+        "Jakob Foerster",
+        "Jeff Clune",
+        "David Ha"
+      ],
+      "year": 2025,
+      "source_url": "https://arxiv.org/abs/2504.08066",
+      "pdf_url": "https://arxiv.org/pdf/2504.08066",
+      "code_url": "https://github.com/SakanaAI/AI-Scientist-v2",
+      "conversion_focus": "Convert an end-to-end research automation workflow into a skill with phases for hypothesis generation, experiments, analysis, writing, and review.",
+      "benchmark_task": "Ask an agent to plan a small automated research run from a user idea using the generated skill.",
+      "baselines": [
+        "no paper context",
+        "abstract-only summary",
+        "generic LLM summary",
+        "full paper excerpt"
+      ],
+      "metrics": [
+        "workflow coverage",
+        "unsupported instruction count",
+        "task success",
+        "token cost"
+      ],
+      "initial_split": "core"
+    },
+    {
+      "id": "aide",
+      "title": "AIDE: AI-Driven Exploration in the Space of Code",
+      "authors": [
+        "Zhengyao Jiang",
+        "Dominik Schmidt",
+        "Dhruv Srikanth",
+        "Dixing Xu",
+        "Ian Kaplan",
+        "Deniss Jacenko",
+        "Yuxiang Wu"
+      ],
+      "year": 2025,
+      "source_url": "https://arxiv.org/abs/2502.13138",
+      "pdf_url": "https://arxiv.org/pdf/2502.13138",
+      "code_url": "https://github.com/WecoAI/aideml",
+      "conversion_focus": "Convert code-space tree search, debugging, and solution selection into a skill for iterative ML/code optimization.",
+      "benchmark_task": "Ask an agent to improve a simple ML baseline while logging search decisions and failed branches.",
+      "baselines": [
+        "generic coding-agent prompt",
+        "abstract-only summary",
+        "full method excerpt"
+      ],
+      "metrics": [
+        "search trace completeness",
+        "debug loop quality",
+        "best-solution selection rationale",
+        "token cost"
+      ],
+      "initial_split": "core"
+    },
+    {
+      "id": "agent_laboratory",
+      "title": "Agent Laboratory: Using LLM Agents as Research Assistants",
+      "authors": [
+        "Samuel Schmidgall",
+        "Yusheng Su",
+        "Ze Wang",
+        "Ximeng Sun",
+        "Jialian Wu",
+        "Xiaodong Yu",
+        "Jiang Liu",
+        "Zicheng Liu",
+        "Emad Barsoum"
+      ],
+      "year": 2025,
+      "source_url": "https://arxiv.org/abs/2501.04227",
+      "pdf_url": "https://arxiv.org/pdf/2501.04227",
+      "code_url": "https://github.com/SamuelSchmidgall/AgentLaboratory",
+      "conversion_focus": "Convert a multi-stage research assistant workflow into a skill with human feedback checkpoints.",
+      "benchmark_task": "Ask an agent to turn a small research idea into a literature-experiment-report plan with explicit user checkpoints.",
+      "baselines": [
+        "generic research assistant prompt",
+        "abstract-only summary",
+        "full paper excerpt"
+      ],
+      "metrics": [
+        "phase coverage",
+        "human-control checkpoint quality",
+        "artifact completeness",
+        "cost estimate"
+      ],
+      "initial_split": "core"
+    },
+    {
+      "id": "voyager",
+      "title": "Voyager: An Open-Ended Embodied Agent with Large Language Models",
+      "authors": [
+        "Guanzhi Wang",
+        "Yuqi Xie",
+        "Yunfan Jiang",
+        "Ajay Mandlekar",
+        "Chaowei Xiao",
+        "Yuke Zhu",
+        "Linxi Fan",
+        "Anima Anandkumar"
+      ],
+      "year": 2023,
+      "source_url": "https://arxiv.org/abs/2305.16291",
+      "pdf_url": "https://arxiv.org/pdf/2305.16291",
+      "code_url": "https://github.com/MineDojo/Voyager",
+      "conversion_focus": "Convert automatic curriculum, executable skill library, and iterative prompting into a reusable agent skill.",
+      "benchmark_task": "Ask an agent to design a reusable skill-library workflow for a toy environment.",
+      "baselines": [
+        "generic exploration prompt",
+        "abstract-only summary",
+        "full method excerpt"
+      ],
+      "metrics": [
+        "skill-library design quality",
+        "self-verification coverage",
+        "reuse plan quality",
+        "token cost"
+      ],
+      "initial_split": "core"
+    },
+    {
+      "id": "reflexion",
+      "title": "Reflexion: Language Agents with Verbal Reinforcement Learning",
+      "authors": [
+        "Noah Shinn",
+        "Federico Cassano",
+        "Edward Berman",
+        "Ashwin Gopinath",
+        "Karthik Narasimhan",
+        "Shunyu Yao"
+      ],
+      "year": 2023,
+      "source_url": "https://arxiv.org/abs/2303.11366",
+      "pdf_url": "https://arxiv.org/pdf/2303.11366",
+      "code_url": "https://github.com/noahshinn/reflexion",
+      "conversion_focus": "Convert verbal feedback, reflective memory, and retry loops into a skill for agents that learn from failed attempts.",
+      "benchmark_task": "Ask an agent to solve a small coding or reasoning task twice, using reflection after the first failure.",
+      "baselines": [
+        "retry without reflection",
+        "generic summary",
+        "full paper excerpt"
+      ],
+      "metrics": [
+        "reflection specificity",
+        "failure-to-fix linkage",
+        "second-attempt improvement",
+        "token cost"
+      ],
+      "initial_split": "core"
+    },
+    {
+      "id": "swe_agent",
+      "title": "SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering",
+      "authors": [
+        "John Yang",
+        "Carlos E. Jimenez",
+        "Alexander Wettig",
+        "Kilian Lieret",
+        "Shunyu Yao",
+        "Karthik Narasimhan",
+        "Ofir Press"
+      ],
+      "year": 2024,
+      "source_url": "https://arxiv.org/abs/2405.15793",
+      "pdf_url": "https://arxiv.org/pdf/2405.15793",
+      "code_url": "https://github.com/swe-agent/swe-agent",
+      "conversion_focus": "Convert agent-computer interface design principles into a skill for tool-facing coding agents.",
+      "benchmark_task": "Ask an agent to specify a minimal coding-agent interface for repository navigation, editing, and testing.",
+      "baselines": [
+        "generic software-agent prompt",
+        "abstract-only summary",
+        "full method excerpt"
+      ],
+      "metrics": [
+        "interface assumption coverage",
+        "tool contract clarity",
+        "test loop quality",
+        "transfer notes"
+      ],
+      "initial_split": "extended"
+    },
+    {
+      "id": "toolformer",
+      "title": "Toolformer: Language Models Can Teach Themselves to Use Tools",
+      "authors": [
+        "Timo Schick",
+        "Jane Dwivedi-Yu",
+        "Roberta Raileanu",
+        "Maria Lomeli",
+        "Luke Zettlemoyer",
+        "Nicola Cancedda",
+        "Thomas Scialom"
+      ],
+      "year": 2023,
+      "source_url": "https://arxiv.org/abs/2302.04761",
+      "pdf_url": "https://arxiv.org/pdf/2302.04761",
+      "code_url": null,
+      "conversion_focus": "Convert self-supervised tool-use data generation and API-call selection into a skill for tool-use extraction.",
+      "benchmark_task": "Ask an agent to design a small tool-use annotation and filtering workflow.",
+      "baselines": [
+        "generic tool-use prompt",
+        "abstract-only summary",
+        "full method excerpt"
+      ],
+      "metrics": [
+        "API-call decision coverage",
+        "filtering criterion clarity",
+        "validation plan",
+        "token cost"
+      ],
+      "initial_split": "extended"
+    }
+  ]
+}

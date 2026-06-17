@@ -1,0 +1,70 @@
+{
+  "source": "examples\\papertoskill_paper_note.md",
+  "output": "generated_skills\\papertoskill_paper_note",
+  "name": "papertoskill-paper-note",
+  "title": "PaperToSkill: Turning Research Papers into Reusable Agent Skills",
+  "central_contribution": "We propose PaperToSkill, a system for converting research papers into compact, human-editable agent skills.",
+  "workflow_steps": [
+    "Parse the source paper into sections and preserve source anchors for fragile claims.",
+    "Identify the central contribution and separate operational method steps from background motivation.",
+    "Translate source-backed method steps into an agent workflow with explicit inputs, outputs, tools, assumptions, and stop conditions.",
+    "Add validation checks that can detect unsupported instructions, missing assumptions, and failed reproduction branches.",
+    "Add compactness and transfer notes so the generated skill can move across Codex-like and Claude-like agent harnesses.",
+    "Store a source map and failure-case log so the skill can be audited and revised."
+  ],
+  "validation_checks": [
+    "Compare agents using PaperToSkill outputs against agents using no paper context, abstract-only summaries, generic LLM summaries, and full paper excerpts.",
+    "Measure downstream task success, workflow coverage, unsupported instruction rate, token cost, and success per 1k tokens.",
+    "Run ablations that remove source mapping, validation checks, failure-case extraction, and transfer notes.",
+    "Evaluate harness transfer by moving generated skills between Codex-style and Claude-style agent prompts."
+  ],
+  "failure_cases": [
+    "Stop when the paper lacks enough procedural detail to define a workflow.",
+    "Warn when the generated skill requires unavailable tools, datasets, licenses, or execution privileges.",
+    "Downgrade claims when validation results are missing, noisy, or only indirectly related to the intended skill behavior.",
+    "Record failed conversions and failed downstream task runs as first-class evidence rather than hiding them from the final paper."
+  ],
+  "source_map": {
+    "sections": [
+      {
+        "title": "Abstract",
+        "line": 3,
+        "level": 2,
+        "characters": 408
+      },
+      {
+        "title": "Methods",
+        "line": 12,
+        "level": 2,
+        "characters": 670
+      },
+      {
+        "title": "Experiments",
+        "line": 27,
+        "level": 2,
+        "characters": 503
+      },
+      {
+        "title": "Limitations",
+        "line": 39,
+        "level": 2,
+        "characters": 437
+      }
+    ],
+    "selected_groups": {
+      "abstract": [
+        "Abstract"
+      ],
+      "method": [
+        "Methods"
+      ],
+      "experiment": [
+        "Experiments"
+      ],
+      "limitation": [
+        "Limitations"
+      ],
+      "related": []
+    }
+  }
+}

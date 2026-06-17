@@ -49,6 +49,14 @@ Initial target contribution categories:
 - artifact: the PaperToSkill skill that can improve itself and process papers;
 - analysis: success and failure cases, including failed reproduction branches.
 
+## Current System Components
+
+- `skill/SKILL.md`: human-facing PaperToSkill skill prototype.
+- `benchmarks/paper_manifest.json`: seed benchmark paper set.
+- `scripts/papertoskill_extract.py`: deterministic non-LLM extraction scaffold.
+- `tests/test_papertoskill_extract.py`: extractor smoke test.
+- `generated_skills/`: retained generated examples with source maps.
+
 ## Current Assumptions
 
 - "Skill" means a natural-language operational guide for an agent, similar to
@@ -85,4 +93,3 @@ support for OpenAI-compatible backends and local-laptop BFTS settings.
 - Record active work and blockers in `memory/short_term_memory.md`.
 - If context was compacted, read this file and
   `memory/short_term_memory.md` first.
-

@@ -13,12 +13,17 @@
 | --- | --- | --- |
 | `research/research_contract.md` | Scope, audience, constraints, acceptance criteria | Created |
 | `research/decision_log.md` | Decisions and rationale | Created |
+| `research/literature_matrix.md` | Seed related-work matrix for benchmark papers | Created |
+| `research/related_work_gap_map.md` | Capability groups and reviewer objections | Created |
+| `research/claim_source_map.md` | Source-backed vs hypothetical claims | Created |
 | `research/idea_cards.md` | Candidate ideas and selection notes | Created |
 | `research/claim_evidence_matrix.md` | Claims mapped to experiments/evidence | Created |
 | `research/experiment_design.md` | Planned evaluation and smoke tests | Created |
+| `research/experiment_queue.md` | Phase 1 and Phase 2 runnable queue | Created |
 | `research/runbook.md` | Reproducible local commands and endpoint notes | Created |
 | `research/stage_log.md` | Phase-level chronological progress | Created |
 | `research/run_logs/2026-06-17_phase0_smoke.md` | Smoke-test commands and outcomes | Created |
+| `research/run_logs/2026-06-17_phase1_scaffold.md` | Extractor scaffold commands and outcomes | Created |
 
 ## AI-Scientist-v2 Inputs
 
@@ -33,10 +38,19 @@
 | --- | --- | --- |
 | `skill/SKILL.md` | First PaperToSkill extractor skill | Created |
 
+## Benchmark And Scaffold
+
+| Artifact | Purpose | Status |
+| --- | --- | --- |
+| `benchmarks/paper_manifest.json` | Seed benchmark papers and task definitions | Created |
+| `examples/papertoskill_paper_note.md` | Paper-like source note for retained case | Created |
+| `scripts/papertoskill_extract.py` | Deterministic local paper-to-skill scaffold | Created |
+| `tests/test_papertoskill_extract.py` | Smoke test for extractor CLI and source map | Created |
+| `generated_skills/papertoskill_paper_note/SKILL.md` | Retained generated skill from paper-like note | Created |
+| `generated_skills/papertoskill_paper_note/references/source_map.json` | Source-map evidence for retained generated skill | Created |
+
 ## Future Artifacts
 
 | Artifact | Purpose | Status |
 | --- | --- | --- |
-| `benchmarks/paper_manifest.json` | Paper set for evaluation | Planned |
-| `experiments/run_logs/` | Reproducible run logs | Planned |
 | `results/result_cards.md` | Interpreted experiment outcomes | Planned |

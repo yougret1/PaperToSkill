@@ -35,3 +35,37 @@ Risks:
   AI-Scientist-v2 requirements.
 - Long AI-Scientist-v2 experiments should wait until the remote endpoint works
   and an isolated environment exists.
+
+## 2026-06-17 Phase 1
+
+Actions:
+
+- Created a seed benchmark manifest with agent/LLM-method papers.
+- Created a seed literature matrix, related-work gap map, and claim source map.
+- Implemented `scripts/papertoskill_extract.py`, a deterministic local extractor
+  that produces `SKILL.md` plus `references/source_map.json`.
+- Added `tests/test_papertoskill_extract.py`.
+- Added `examples/papertoskill_paper_note.md` as a paper-like retained case.
+- Generated retained skills under `generated_skills/`.
+
+Findings:
+
+- The scaffold can progress without remote LLM availability.
+- Method, experiment, and limitation sections can be mapped into workflow,
+  validation, and failure-case sections.
+- An abstract-only input falls back to a generic scaffold, which is useful but
+  should not be treated as high-fidelity extraction.
+
+Failure found and fixed:
+
+- Initial extraction split multiline Markdown list items and inferred the title
+  incorrectly as `Methods`.
+- Fixed by merging continuation lines and inferring title from the first H1 or
+  LaTeX title.
+
+Verification:
+
+- `python -m json.tool benchmarks\paper_manifest.json`
+- `python -m unittest discover -s tests -v`
+- `python scripts\papertoskill_extract.py --source examples\papertoskill_paper_note.md --output generated_skills\papertoskill_paper_note --name papertoskill-paper-note`
+- `python scripts\papertoskill_extract.py --source ai_scientist_inputs\papertoskill.md --output generated_skills\papertoskill_seed --name papertoskill-seed --title "PaperToSkill Seed"`

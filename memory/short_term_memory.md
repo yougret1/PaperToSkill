@@ -9,8 +9,9 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 0 is implemented locally. Current focus: validate and commit Phase 0
-artifacts, then move to Phase 1 benchmark and extractor implementation.
+Phase 1 scaffold is implemented locally. Current focus: validate, commit, and
+push Phase 1 artifacts, then move toward benchmark paper ingestion and
+evaluation rubrics.
 
 ## Latest User Request
 
@@ -61,6 +62,13 @@ The user provided the PaperToSkill idea and asked to:
   `D:\a_work\gitee\ai-scientist-v2\experiments\2026-06-17_15-22-40_papertoskill_extractor_attempt_0`.
 - The generated run config uses `claude-opus-4-8`, `num_workers=1`, and small
   stage iteration counts, which is suitable for a later smoke run.
+- Phase 1 added a seed benchmark manifest at `benchmarks/paper_manifest.json`.
+- Phase 1 added a deterministic local extractor at
+  `scripts/papertoskill_extract.py`.
+- Phase 1 added smoke tests at `tests/test_papertoskill_extract.py`.
+- Phase 1 generated retained example skills under `generated_skills/`.
+- A parsing failure was found and fixed: multiline list items were initially
+  split into fragments and the document title was inferred as `Methods`.
 
 ## Current Blockers / Pending Checks
 
@@ -71,12 +79,16 @@ The user provided the PaperToSkill idea and asked to:
   server advertises.
 - For stable long-running work, create an isolated Python environment because
   the current global Anaconda environment now has package-version conflicts.
+- Need ingest real paper PDFs or extracted full-text notes for the core
+  benchmark papers.
+- Need define evaluator rubrics for unsupported instruction rate, workflow
+  coverage, compactness cost, and harness transfer.
 
 ## Next Actions
 
-1. Validate `skill/SKILL.md`.
-2. Commit Phase 0 artifacts in PaperToSkill.
-3. Push to `origin/main` if credentials allow.
-4. Start Phase 1: build the first paper benchmark manifest and a deterministic
-   PaperToSkill extraction scaffold.
+1. Validate and commit Phase 1 artifacts.
+2. Push to `origin/main`.
+3. Start Phase 2: ingest at least one real benchmark paper into a text note and
+   run the scaffold.
+4. Define first evaluator rubric and result-card format.
 5. Re-test the remote LLM endpoint when provider accounts are available.

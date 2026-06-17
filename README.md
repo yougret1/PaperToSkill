@@ -26,9 +26,13 @@ continuing work.
 - `research/research_contract.md`
 - `research/artifact_map.md`
 - `research/decision_log.md`
+- `research/literature_matrix.md`
+- `research/related_work_gap_map.md`
+- `research/claim_source_map.md`
 - `research/idea_cards.md`
 - `research/claim_evidence_matrix.md`
 - `research/experiment_design.md`
+- `research/experiment_queue.md`
 - `research/runbook.md`
 - `research/stage_log.md`
 - `research/run_logs/`
@@ -41,3 +45,10 @@ continuing work.
 ## Skill Prototype
 
 - `skill/SKILL.md`
+
+## Phase 1 Scaffold
+
+- Benchmark manifest: `benchmarks/paper_manifest.json`
+- Extractor script: `scripts/papertoskill_extract.py`
+- Smoke tests: `tests/test_papertoskill_extract.py`
+- Retained generated case: `generated_skills/papertoskill_paper_note/SKILL.md`
