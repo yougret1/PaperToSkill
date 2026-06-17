@@ -65,6 +65,10 @@ Initial target contribution categories:
   context baseline task.
 - `results/evaluations/ai_scientist_v2_context_baselines_v0.json`: first
   skill-vs-summary-vs-abstract deterministic comparison.
+- `benchmarks/tasks/skill_source_audit.json`: source-map-aware unsupported
+  instruction audit task.
+- `results/evaluations/skill_source_audit_v0.json`: unsupported-rate ranking
+  across real skill, paper-like case, and abstract-only seed.
 
 ## Current Assumptions
 

@@ -130,3 +130,34 @@ Verification:
 
 - `python scripts\evaluate_context_baselines.py --task benchmarks\tasks\ai_scientist_v2_research_run.json --output results\evaluations\ai_scientist_v2_context_baselines_v0.json`
 - `python -m unittest discover -s tests -v`
+
+## 2026-06-17 Phase 4
+
+Actions:
+
+- Created a source-map-aware unsupported-instruction audit task.
+- Implemented `scripts/audit_skill_source_map.py`.
+- Added `tests/test_audit_skill_source_map.py`.
+- Audited the real AI Scientist-v2 skill, the paper-like retained case, and the
+  abstract-only seed.
+
+Results:
+
+- AI Scientist-v2 real skill unsupported rate: 0.2
+- Paper-like retained case unsupported rate: 0.222
+- Abstract-only seed unsupported rate: 1.0
+
+Failure and fix:
+
+- The first audit run mis-mapped section groups and incorrectly yielded 1.0 for
+  all skills.
+- Fixed by mapping skill sections onto source-note section groups before scoring.
+
+Evidence boundary:
+
+- The audit is heuristic and source-map-aware, not a human annotation study.
+
+Verification:
+
+- `python scripts\audit_skill_source_map.py --task benchmarks\tasks\skill_source_audit.json --output results\evaluations\skill_source_audit_v0.json`
+- `python -m unittest discover -s tests -v`

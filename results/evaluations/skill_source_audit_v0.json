@@ -1,0 +1,1724 @@
+{
+  "task": "skill_source_audit",
+  "task_path": "benchmarks\\tasks\\skill_source_audit.json",
+  "results": [
+    {
+      "skill_dir": "generated_skills\\ai_scientist_v2",
+      "skill_path": "generated_skills\\ai_scientist_v2\\SKILL.md",
+      "source_note": "papers\\notes\\ai_scientist_v2_note.md",
+      "total_bullets": 20,
+      "supported": 16,
+      "weak": 0,
+      "unsupported": 4,
+      "unsupported_rate": 0.2,
+      "section_results": [
+        {
+          "section": "Workflow",
+          "source_section_present": true,
+          "bullets": [
+            {
+              "bullet": "Start with generalized idea generation rather than code-conditioned template modification. The system begins from high-level research directions and can use literature-search tools to check novelty and identify prior work. Source anchors: lines 187-204.",
+              "status": "supported",
+              "score": 1.0,
+              "anchor_present": true,
+              "overlap": [
+                "begins",
+                "check",
+                "code-conditioned",
+                "directions",
+                "generalized",
+                "generation",
+                "high-level",
+                "idea",
+                "identify",
+                "literature-search",
+                "modification",
+                "novelty",
+                "prior",
+                "rather",
+                "research",
+                "start",
+                "system",
+                "template",
+                "than",
+                "tools",
+                "work"
+              ],
+              "bullet_tokens": [
+                "begins",
+                "check",
+                "code-conditioned",
+                "directions",
+                "generalized",
+                "generation",
+                "high-level",
+                "idea",
+                "identify",
+                "literature-search",
+                "modification",
+                "novelty",
+                "prior",
+                "rather",
+                "research",
+                "start",
+                "system",
+                "template",
+                "than",
+                "tools",
+                "work"
+              ],
+              "source_token_count": 131
+            },
+            {
+              "bullet": "Remove template dependency by turning the generated idea into an experimental process that does not require a hand-authored baseline code template. Source anchors: lines 204-216.",
+              "status": "supported",
+              "score": 1.0,
+              "anchor_present": true,
+              "overlap": [
+                "baseline",
+                "code",
+                "dependency",
+                "does",
+                "experimental",
+                "generated",
+                "hand-authored",
+                "idea",
+                "not",
+                "process",
+                "remove",
+                "require",
+                "template",
+                "that",
+                "turning"
+              ],
+              "bullet_tokens": [
+                "baseline",
+                "code",
+                "dependency",
+                "does",
+                "experimental",
+                "generated",
+                "hand-authored",
+                "idea",
+                "not",
+                "process",
+                "remove",
+                "require",
+                "template",
+                "that",
+                "turning"
+              ],
+              "source_token_count": 131
+            },
+            {
+              "bullet": "Use an Experiment Progress Manager with four stages: preliminary investigation, hyperparameter tuning, research agenda execution, and ablation studies. Each stage has stopping criteria and passes the selected best node to the next stage. Source anchors: lines 211-244.",
+              "status": "supported",
+              "score": 1.0,
+              "anchor_present": true,
+              "overlap": [
+                "ablation",
+                "agenda",
+                "best",
+                "criteria",
+                "each",
+                "execution",
+                "experiment",
+                "four",
+                "has",
+                "hyperparameter",
+                "investigation",
+                "manager",
+                "next",
+                "node",
+                "passes",
+                "preliminary",
+                "progress",
+                "research",
+                "selected",
+                "stage",
+                "stages",
+                "stopping",
+                "studies",
+                "tuning"
+              ],
+              "bullet_tokens": [
+                "ablation",
+                "agenda",
+                "best",
+                "criteria",
+                "each",
+                "execution",
+                "experiment",
+                "four",
+                "has",
+                "hyperparameter",
+                "investigation",
+                "manager",
+                "next",
+                "node",
+                "passes",
+                "preliminary",
+                "progress",
+                "research",
+                "selected",
+                "stage",
+                "stages",
+                "stopping",
+                "studies",
+                "tuning"
+              ],
+              "source_token_count": 131
+            },
+            {
+              "bullet": "Run parallelized agentic tree search within each stage. Each node contains an experiment plan, generated Python code, execution trace or error, runtime, metrics, LLM feedback, visualization code, generated figures, VLM feedback, and buggy/non-buggy status. Source anchors: lines 244-356.",
+              "status": "supported",
+              "score": 1.0,
+              "anchor_present": true,
+              "overlap": [
+                "agentic",
+                "buggy",
+                "code",
+                "contains",
+                "each",
+                "error",
+                "execution",
+                "experiment",
+                "feedback",
+                "figures",
+                "generated",
+                "llm",
+                "metrics",
+                "node",
+                "non-buggy",
+                "parallelized",
+                "plan",
+                "python",
+                "run",
+                "runtime",
+                "search",
+                "stage",
+                "status",
+                "trace",
+                "tree",
+                "visualization",
+                "vlm"
+              ],
+              "bullet_tokens": [
+                "agentic",
+                "buggy",
+                "code",
+                "contains",
+                "each",
+                "error",
+                "execution",
+                "experiment",
+                "feedback",
+                "figures",
+                "generated",
+                "llm",
+                "metrics",
+                "node",
+                "non-buggy",
+                "parallelized",
+                "plan",
+                "python",
+                "run",
+                "runtime",
+                "search",
+                "stage",
+                "status",
+                "trace",
+                "tree",
+                "visualization",
+                "vlm"
+              ],
+              "source_token_count": 131
+            },
+            {
+              "bullet": "For buggy nodes, record the error and attempt debugging. For non-buggy nodes, refine the experiment. Select nodes using a best-first strategy guided by performance metrics, training dynamics, and plot quality. Source anchors: lines 323-354.",
+              "status": "supported",
+              "score": 1.0,
+              "anchor_present": true,
+              "overlap": [
+                "attempt",
+                "best-first",
+                "buggy",
+                "debugging",
+                "dynamics",
+                "error",
+                "experiment",
+                "guided",
+                "metrics",
+                "nodes",
+                "non-buggy",
+                "performance",
+                "plot",
+                "quality",
+                "record",
+                "refine",
+                "select",
+                "strategy",
+                "training"
+              ],
+              "bullet_tokens": [
+                "attempt",
+                "best-first",
+                "buggy",
+                "debugging",
+                "dynamics",
+                "error",
+                "experiment",
+                "guided",
+                "metrics",
+                "nodes",
+                "non-buggy",
+                "performance",
+                "plot",
+                "quality",
+                "record",
+                "refine",
+                "select",
+                "strategy",
+                "training"
+              ],
+              "source_token_count": 131
+            },
+            {
+              "bullet": "Use specialized node types for hyperparameter search, ablations, replications with multiple random seeds, and aggregation of replicated results. Source anchors: lines 333-356.",
+              "status": "supported",
+              "score": 1.0,
+              "anchor_present": true,
+              "overlap": [
+                "ablations",
+                "aggregation",
+                "hyperparameter",
+                "multiple",
+                "node",
+                "random",
+                "replicated",
+                "replications",
+                "results",
+                "search",
+                "seeds",
+                "specialized",
+                "types"
+              ],
+              "bullet_tokens": [
+                "ablations",
+                "aggregation",
+                "hyperparameter",
+                "multiple",
+                "node",
+                "random",
+                "replicated",
+                "replications",
+                "results",
+                "search",
+                "seeds",
+                "specialized",
+                "types"
+              ],
+              "source_token_count": 131
+            }
+          ]
+        },
+        {
+          "section": "Validation",
+          "source_section_present": true,
+          "bullets": [
+            {
+              "bullet": "The authors generated three complete manuscripts using only AI Scientist-v2 after initial broad topical prompts aligned with the ICBINB workshop scope. Source anchors: lines 420-424.",
+              "status": "supported",
+              "score": 1.0,
+              "anchor_present": true,
+              "overlap": [
+                "after",
+                "aligned",
+                "authors",
+                "broad",
+                "complete",
+                "generated",
+                "icbinb",
+                "initial",
+                "manuscripts",
+                "only",
+                "prompts",
+                "scientist-v2",
+                "scope",
+                "three",
+                "topical",
+                "workshop"
+              ],
+              "bullet_tokens": [
+                "after",
+                "aligned",
+                "authors",
+                "broad",
+                "complete",
+                "generated",
+                "icbinb",
+                "initial",
+                "manuscripts",
+                "only",
+                "prompts",
+                "scientist-v2",
+                "scope",
+                "three",
+                "topical",
+                "workshop"
+              ],
+              "source_token_count": 79
+            },
+            {
+              "bullet": "The manuscripts were included among 43 workshop submissions; reviewers knew some submissions might be AI-generated but not which ones. Source anchors: lines 425-428.",
+              "status": "supported",
+              "score": 1.0,
+              "anchor_present": true,
+              "overlap": [
+                "ai-generated",
+                "among",
+                "but",
+                "included",
+                "knew",
+                "manuscripts",
+                "might",
+                "not",
+                "ones",
+                "reviewers",
+                "some",
+                "submissions",
+                "were",
+                "which",
+                "workshop"
+              ],
+              "bullet_tokens": [
+                "ai-generated",
+                "among",
+                "but",
+                "included",
+                "knew",
+                "manuscripts",
+                "might",
+                "not",
+                "ones",
+                "reviewers",
+                "some",
+                "submissions",
+                "were",
+                "which",
+                "workshop"
+              ],
+              "source_token_count": 79
+            },
+            {
+              "bullet": "One of the three AI-generated manuscripts received scores 6, 6, and 7, averaging 6.33/10, and exceeded the workshop acceptance threshold. The other two were not accepted. Source anchors: lines 429-433.",
+              "status": "supported",
+              "score": 1.0,
+              "anchor_present": true,
+              "overlap": [
+                "acceptance",
+                "accepted",
+                "ai-generated",
+                "averaging",
+                "exceeded",
+                "manuscripts",
+                "not",
+                "one",
+                "other",
+                "received",
+                "scores",
+                "three",
+                "threshold",
+                "two",
+                "were",
+                "workshop"
+              ],
+              "bullet_tokens": [
+                "acceptance",
+                "accepted",
+                "ai-generated",
+                "averaging",
+                "exceeded",
+                "manuscripts",
+                "not",
+                "one",
+                "other",
+                "received",
+                "scores",
+                "three",
+                "threshold",
+                "two",
+                "were",
+                "workshop"
+              ],
+              "source_token_count": 79
+            },
+            {
+              "bullet": "The authors conducted internal review for experimental rigor, clarity, methodological soundness, and novelty, concluding that none met typical top-tier main-track standards. Source anchors: lines 438-446.",
+              "status": "supported",
+              "score": 1.0,
+              "anchor_present": true,
+              "overlap": [
+                "authors",
+                "clarity",
+                "concluding",
+                "conducted",
+                "experimental",
+                "internal",
+                "main-track",
+                "met",
+                "methodological",
+                "none",
+                "novelty",
+                "review",
+                "rigor",
+                "soundness",
+                "standards",
+                "that",
+                "top-tier",
+                "typical"
+              ],
+              "bullet_tokens": [
+                "authors",
+                "clarity",
+                "concluding",
+                "conducted",
+                "experimental",
+                "internal",
+                "main-track",
+                "met",
+                "methodological",
+                "none",
+                "novelty",
+                "review",
+                "rigor",
+                "soundness",
+                "standards",
+                "that",
+                "top-tier",
+                "typical"
+              ],
+              "source_token_count": 79
+            },
+            {
+              "bullet": "The accepted AI-generated paper reported negative results on compositional regularization, and reviewers valued the clear presentation of challenges and negative results while noting weaknesses such as insufficient justification, possible dataset overlap, and caption inaccuracies. Source anchors: lines 86-99 and 598-619.",
+              "status": "supported",
+              "score": 1.0,
+              "anchor_present": true,
+              "overlap": [
+                "accepted",
+                "ai-generated",
+                "caption",
+                "challenges",
+                "clear",
+                "compositional",
+                "dataset",
+                "inaccuracies",
+                "insufficient",
+                "justification",
+                "negative",
+                "noting",
+                "overlap",
+                "paper",
+                "possible",
+                "presentation",
+                "regularization",
+                "reported",
+                "results",
+                "reviewers",
+                "such",
+                "valued",
+                "weaknesses"
+              ],
+              "bullet_tokens": [
+                "accepted",
+                "ai-generated",
+                "caption",
+                "challenges",
+                "clear",
+                "compositional",
+                "dataset",
+                "inaccuracies",
+                "insufficient",
+                "justification",
+                "negative",
+                "noting",
+                "overlap",
+                "paper",
+                "possible",
+                "presentation",
+                "regularization",
+                "reported",
+                "results",
+                "reviewers",
+                "such",
+                "valued",
+                "weaknesses"
+              ],
+              "source_token_count": 79
+            }
+          ]
+        },
+        {
+          "section": "Failure Cases",
+          "source_section_present": true,
+          "bullets": [
+            {
+              "bullet": "The acceptance was workshop-level rather than main-conference-level, and only one of three AI-generated submissions was accepted. Source anchors: lines 694-704.",
+              "status": "supported",
+              "score": 1.0,
+              "anchor_present": true,
+              "overlap": [
+                "acceptance",
+                "accepted",
+                "ai-generated",
+                "main-conference-level",
+                "one",
+                "only",
+                "rather",
+                "submissions",
+                "than",
+                "three",
+                "was",
+                "workshop-level"
+              ],
+              "bullet_tokens": [
+                "acceptance",
+                "accepted",
+                "ai-generated",
+                "main-conference-level",
+                "one",
+                "only",
+                "rather",
+                "submissions",
+                "than",
+                "three",
+                "was",
+                "workshop-level"
+              ],
+              "source_token_count": 74
+            },
+            {
+              "bullet": "The system does not consistently reach workshop-level quality and is not yet at top-tier conference standards. Source anchors: lines 696-704.",
+              "status": "supported",
+              "score": 1.0,
+              "anchor_present": true,
+              "overlap": [
+                "conference",
+                "consistently",
+                "does",
+                "not",
+                "quality",
+                "reach",
+                "standards",
+                "system",
+                "top-tier",
+                "workshop-level",
+                "yet"
+              ],
+              "bullet_tokens": [
+                "conference",
+                "consistently",
+                "does",
+                "not",
+                "quality",
+                "reach",
+                "standards",
+                "system",
+                "top-tier",
+                "workshop-level",
+                "yet"
+              ],
+              "source_token_count": 74
+            },
+            {
+              "bullet": "The paper identifies remaining challenges in producing genuinely novel, high-impact hypotheses, designing innovative experiments, and rigorously justifying choices with deep domain expertise. Source anchors: lines 704-708.",
+              "status": "supported",
+              "score": 1.0,
+              "anchor_present": true,
+              "overlap": [
+                "challenges",
+                "choices",
+                "deep",
+                "designing",
+                "domain",
+                "experiments",
+                "expertise",
+                "genuinely",
+                "high-impact",
+                "hypotheses",
+                "identifies",
+                "innovative",
+                "justifying",
+                "novel",
+                "paper",
+                "producing",
+                "remaining",
+                "rigorously"
+              ],
+              "bullet_tokens": [
+                "challenges",
+                "choices",
+                "deep",
+                "designing",
+                "domain",
+                "experiments",
+                "expertise",
+                "genuinely",
+                "high-impact",
+                "hypotheses",
+                "identifies",
+                "innovative",
+                "justifying",
+                "novel",
+                "paper",
+                "producing",
+                "remaining",
+                "rigorously"
+              ],
+              "source_token_count": 74
+            },
+            {
+              "bullet": "The authors observed citation inaccuracies and insufficient methodological rigor in generated manuscripts. Source anchors: lines 448-452.",
+              "status": "supported",
+              "score": 1.0,
+              "anchor_present": true,
+              "overlap": [
+                "authors",
+                "citation",
+                "generated",
+                "inaccuracies",
+                "insufficient",
+                "manuscripts",
+                "methodological",
+                "observed",
+                "rigor"
+              ],
+              "bullet_tokens": [
+                "authors",
+                "citation",
+                "generated",
+                "inaccuracies",
+                "insufficient",
+                "manuscripts",
+                "methodological",
+                "observed",
+                "rigor"
+              ],
+              "source_token_count": 74
+            },
+            {
+              "bullet": "Ethical handling required IRB approval, reviewer disclosure, organizer coordination, and withdrawal of the accepted AI-generated paper before publication. Source anchors: lines 457-466, 714-721.",
+              "status": "supported",
+              "score": 1.0,
+              "anchor_present": true,
+              "overlap": [
+                "accepted",
+                "ai-generated",
+                "approval",
+                "coordination",
+                "disclosure",
+                "ethical",
+                "handling",
+                "irb",
+                "organizer",
+                "paper",
+                "publication",
+                "required",
+                "reviewer",
+                "withdrawal"
+              ],
+              "bullet_tokens": [
+                "accepted",
+                "ai-generated",
+                "approval",
+                "coordination",
+                "disclosure",
+                "ethical",
+                "handling",
+                "irb",
+                "organizer",
+                "paper",
+                "publication",
+                "required",
+                "reviewer",
+                "withdrawal"
+              ],
+              "source_token_count": 74
+            }
+          ]
+        },
+        {
+          "section": "Transfer Notes",
+          "source_section_present": true,
+          "bullets": [
+            {
+              "bullet": "Check whether the target harness supports the tools assumed by the paper.",
+              "status": "unsupported",
+              "score": 0.225,
+              "anchor_present": false,
+              "overlap": [
+                "check",
+                "paper",
+                "tools"
+              ],
+              "bullet_tokens": [
+                "assumed",
+                "check",
+                "harness",
+                "paper",
+                "supports",
+                "target",
+                "tools",
+                "whether"
+              ],
+              "source_token_count": 191
+            },
+            {
+              "bullet": "Replace framework-specific commands with local equivalents before execution.",
+              "status": "unsupported",
+              "score": 0.1,
+              "anchor_present": false,
+              "overlap": [
+                "execution"
+              ],
+              "bullet_tokens": [
+                "commands",
+                "equivalents",
+                "execution",
+                "framework-specific",
+                "local",
+                "replace"
+              ],
+              "source_token_count": 191
+            },
+            {
+              "bullet": "Keep source-backed steps separate from inferred adaptations.",
+              "status": "unsupported",
+              "score": 0.0,
+              "anchor_present": false,
+              "overlap": [],
+              "bullet_tokens": [
+                "adaptations",
+                "inferred",
+                "keep",
+                "separate",
+                "source-backed",
+                "steps"
+              ],
+              "source_token_count": 191
+            },
+            {
+              "bullet": "Record any failed branch as part of the skill's future revision history.",
+              "status": "unsupported",
+              "score": 0.067,
+              "anchor_present": false,
+              "overlap": [
+                "record"
+              ],
+              "bullet_tokens": [
+                "any",
+                "branch",
+                "failed",
+                "future",
+                "history",
+                "part",
+                "record",
+                "revision",
+                "skill"
+              ],
+              "source_token_count": 191
+            }
+          ]
+        }
+      ],
+      "id": "ai_scientist_v2"
+    },
+    {
+      "skill_dir": "generated_skills\\papertoskill_paper_note",
+      "skill_path": "generated_skills\\papertoskill_paper_note\\SKILL.md",
+      "source_note": "examples\\papertoskill_paper_note.md",
+      "total_bullets": 18,
+      "supported": 0,
+      "weak": 14,
+      "unsupported": 4,
+      "unsupported_rate": 0.222,
+      "section_results": [
+        {
+          "section": "Workflow",
+          "source_section_present": true,
+          "bullets": [
+            {
+              "bullet": "Parse the source paper into sections and preserve source anchors for fragile claims.",
+              "status": "weak",
+              "score": 0.6,
+              "anchor_present": false,
+              "overlap": [
+                "anchors",
+                "claims",
+                "fragile",
+                "paper",
+                "parse",
+                "preserve",
+                "sections",
+                "source"
+              ],
+              "bullet_tokens": [
+                "anchors",
+                "claims",
+                "fragile",
+                "paper",
+                "parse",
+                "preserve",
+                "sections",
+                "source"
+              ],
+              "source_token_count": 55
+            },
+            {
+              "bullet": "Identify the central contribution and separate operational method steps from background motivation.",
+              "status": "weak",
+              "score": 0.6,
+              "anchor_present": false,
+              "overlap": [
+                "background",
+                "central",
+                "contribution",
+                "identify",
+                "method",
+                "motivation",
+                "operational",
+                "separate",
+                "steps"
+              ],
+              "bullet_tokens": [
+                "background",
+                "central",
+                "contribution",
+                "identify",
+                "method",
+                "motivation",
+                "operational",
+                "separate",
+                "steps"
+              ],
+              "source_token_count": 55
+            },
+            {
+              "bullet": "Translate source-backed method steps into an agent workflow with explicit inputs, outputs, tools, assumptions, and stop conditions.",
+              "status": "weak",
+              "score": 0.6,
+              "anchor_present": false,
+              "overlap": [
+                "agent",
+                "assumptions",
+                "conditions",
+                "explicit",
+                "inputs",
+                "method",
+                "outputs",
+                "source-backed",
+                "steps",
+                "stop",
+                "tools",
+                "translate",
+                "workflow"
+              ],
+              "bullet_tokens": [
+                "agent",
+                "assumptions",
+                "conditions",
+                "explicit",
+                "inputs",
+                "method",
+                "outputs",
+                "source-backed",
+                "steps",
+                "stop",
+                "tools",
+                "translate",
+                "workflow"
+              ],
+              "source_token_count": 55
+            },
+            {
+              "bullet": "Add validation checks that can detect unsupported instructions, missing assumptions, and failed reproduction branches.",
+              "status": "weak",
+              "score": 0.6,
+              "anchor_present": false,
+              "overlap": [
+                "add",
+                "assumptions",
+                "branches",
+                "checks",
+                "detect",
+                "failed",
+                "instructions",
+                "missing",
+                "reproduction",
+                "that",
+                "unsupported",
+                "validation"
+              ],
+              "bullet_tokens": [
+                "add",
+                "assumptions",
+                "branches",
+                "checks",
+                "detect",
+                "failed",
+                "instructions",
+                "missing",
+                "reproduction",
+                "that",
+                "unsupported",
+                "validation"
+              ],
+              "source_token_count": 55
+            },
+            {
+              "bullet": "Add compactness and transfer notes so the generated skill can move across Codex-like and Claude-like agent harnesses.",
+              "status": "weak",
+              "score": 0.6,
+              "anchor_present": false,
+              "overlap": [
+                "across",
+                "add",
+                "agent",
+                "claude-like",
+                "codex-like",
+                "compactness",
+                "generated",
+                "harnesses",
+                "move",
+                "notes",
+                "skill",
+                "transfer"
+              ],
+              "bullet_tokens": [
+                "across",
+                "add",
+                "agent",
+                "claude-like",
+                "codex-like",
+                "compactness",
+                "generated",
+                "harnesses",
+                "move",
+                "notes",
+                "skill",
+                "transfer"
+              ],
+              "source_token_count": 55
+            },
+            {
+              "bullet": "Store a source map and failure-case log so the skill can be audited and revised.",
+              "status": "weak",
+              "score": 0.6,
+              "anchor_present": false,
+              "overlap": [
+                "audited",
+                "failure-case",
+                "log",
+                "map",
+                "revised",
+                "skill",
+                "source",
+                "store"
+              ],
+              "bullet_tokens": [
+                "audited",
+                "failure-case",
+                "log",
+                "map",
+                "revised",
+                "skill",
+                "source",
+                "store"
+              ],
+              "source_token_count": 55
+            }
+          ]
+        },
+        {
+          "section": "Validation",
+          "source_section_present": true,
+          "bullets": [
+            {
+              "bullet": "Compare agents using PaperToSkill outputs against agents using no paper context, abstract-only summaries, generic LLM summaries, and full paper excerpts.",
+              "status": "weak",
+              "score": 0.6,
+              "anchor_present": false,
+              "overlap": [
+                "abstract-only",
+                "against",
+                "agents",
+                "compare",
+                "context",
+                "excerpts",
+                "full",
+                "generic",
+                "llm",
+                "outputs",
+                "paper",
+                "papertoskill",
+                "summaries"
+              ],
+              "bullet_tokens": [
+                "abstract-only",
+                "against",
+                "agents",
+                "compare",
+                "context",
+                "excerpts",
+                "full",
+                "generic",
+                "llm",
+                "outputs",
+                "paper",
+                "papertoskill",
+                "summaries"
+              ],
+              "source_token_count": 48
+            },
+            {
+              "bullet": "Measure downstream task success, workflow coverage, unsupported instruction rate, token cost, and success per 1k tokens.",
+              "status": "weak",
+              "score": 0.6,
+              "anchor_present": false,
+              "overlap": [
+                "cost",
+                "coverage",
+                "downstream",
+                "instruction",
+                "measure",
+                "per",
+                "rate",
+                "success",
+                "task",
+                "token",
+                "tokens",
+                "unsupported",
+                "workflow"
+              ],
+              "bullet_tokens": [
+                "cost",
+                "coverage",
+                "downstream",
+                "instruction",
+                "measure",
+                "per",
+                "rate",
+                "success",
+                "task",
+                "token",
+                "tokens",
+                "unsupported",
+                "workflow"
+              ],
+              "source_token_count": 48
+            },
+            {
+              "bullet": "Run ablations that remove source mapping, validation checks, failure-case extraction, and transfer notes.",
+              "status": "weak",
+              "score": 0.6,
+              "anchor_present": false,
+              "overlap": [
+                "ablations",
+                "checks",
+                "extraction",
+                "failure-case",
+                "mapping",
+                "notes",
+                "remove",
+                "run",
+                "source",
+                "that",
+                "transfer",
+                "validation"
+              ],
+              "bullet_tokens": [
+                "ablations",
+                "checks",
+                "extraction",
+                "failure-case",
+                "mapping",
+                "notes",
+                "remove",
+                "run",
+                "source",
+                "that",
+                "transfer",
+                "validation"
+              ],
+              "source_token_count": 48
+            },
+            {
+              "bullet": "Evaluate harness transfer by moving generated skills between Codex-style and Claude-style agent prompts.",
+              "status": "weak",
+              "score": 0.6,
+              "anchor_present": false,
+              "overlap": [
+                "agent",
+                "between",
+                "claude-style",
+                "codex-style",
+                "evaluate",
+                "generated",
+                "harness",
+                "moving",
+                "prompts",
+                "skills",
+                "transfer"
+              ],
+              "bullet_tokens": [
+                "agent",
+                "between",
+                "claude-style",
+                "codex-style",
+                "evaluate",
+                "generated",
+                "harness",
+                "moving",
+                "prompts",
+                "skills",
+                "transfer"
+              ],
+              "source_token_count": 48
+            }
+          ]
+        },
+        {
+          "section": "Failure Cases",
+          "source_section_present": true,
+          "bullets": [
+            {
+              "bullet": "Stop when the paper lacks enough procedural detail to define a workflow.",
+              "status": "weak",
+              "score": 0.6,
+              "anchor_present": false,
+              "overlap": [
+                "define",
+                "detail",
+                "enough",
+                "lacks",
+                "paper",
+                "procedural",
+                "stop",
+                "workflow"
+              ],
+              "bullet_tokens": [
+                "define",
+                "detail",
+                "enough",
+                "lacks",
+                "paper",
+                "procedural",
+                "stop",
+                "workflow"
+              ],
+              "source_token_count": 42
+            },
+            {
+              "bullet": "Warn when the generated skill requires unavailable tools, datasets, licenses, or execution privileges.",
+              "status": "weak",
+              "score": 0.6,
+              "anchor_present": false,
+              "overlap": [
+                "datasets",
+                "execution",
+                "generated",
+                "licenses",
+                "privileges",
+                "requires",
+                "skill",
+                "tools",
+                "unavailable",
+                "warn"
+              ],
+              "bullet_tokens": [
+                "datasets",
+                "execution",
+                "generated",
+                "licenses",
+                "privileges",
+                "requires",
+                "skill",
+                "tools",
+                "unavailable",
+                "warn"
+              ],
+              "source_token_count": 42
+            },
+            {
+              "bullet": "Downgrade claims when validation results are missing, noisy, or only indirectly related to the intended skill behavior.",
+              "status": "weak",
+              "score": 0.6,
+              "anchor_present": false,
+              "overlap": [
+                "behavior",
+                "claims",
+                "downgrade",
+                "indirectly",
+                "intended",
+                "missing",
+                "noisy",
+                "only",
+                "related",
+                "results",
+                "skill",
+                "validation"
+              ],
+              "bullet_tokens": [
+                "behavior",
+                "claims",
+                "downgrade",
+                "indirectly",
+                "intended",
+                "missing",
+                "noisy",
+                "only",
+                "related",
+                "results",
+                "skill",
+                "validation"
+              ],
+              "source_token_count": 42
+            },
+            {
+              "bullet": "Record failed conversions and failed downstream task runs as first-class evidence rather than hiding them from the final paper.",
+              "status": "weak",
+              "score": 0.6,
+              "anchor_present": false,
+              "overlap": [
+                "conversions",
+                "downstream",
+                "evidence",
+                "failed",
+                "final",
+                "first-class",
+                "hiding",
+                "paper",
+                "rather",
+                "record",
+                "runs",
+                "task",
+                "than",
+                "them"
+              ],
+              "bullet_tokens": [
+                "conversions",
+                "downstream",
+                "evidence",
+                "failed",
+                "final",
+                "first-class",
+                "hiding",
+                "paper",
+                "rather",
+                "record",
+                "runs",
+                "task",
+                "than",
+                "them"
+              ],
+              "source_token_count": 42
+            }
+          ]
+        },
+        {
+          "section": "Transfer Notes",
+          "source_section_present": true,
+          "bullets": [
+            {
+              "bullet": "Check whether the target harness supports the tools assumed by the paper.",
+              "status": "unsupported",
+              "score": 0.15,
+              "anchor_present": false,
+              "overlap": [
+                "paper",
+                "tools"
+              ],
+              "bullet_tokens": [
+                "assumed",
+                "check",
+                "harness",
+                "paper",
+                "supports",
+                "target",
+                "tools",
+                "whether"
+              ],
+              "source_token_count": 87
+            },
+            {
+              "bullet": "Replace framework-specific commands with local equivalents before execution.",
+              "status": "unsupported",
+              "score": 0.1,
+              "anchor_present": false,
+              "overlap": [
+                "execution"
+              ],
+              "bullet_tokens": [
+                "commands",
+                "equivalents",
+                "execution",
+                "framework-specific",
+                "local",
+                "replace"
+              ],
+              "source_token_count": 87
+            },
+            {
+              "bullet": "Keep source-backed steps separate from inferred adaptations.",
+              "status": "unsupported",
+              "score": 0.3,
+              "anchor_present": false,
+              "overlap": [
+                "separate",
+                "source-backed",
+                "steps"
+              ],
+              "bullet_tokens": [
+                "adaptations",
+                "inferred",
+                "keep",
+                "separate",
+                "source-backed",
+                "steps"
+              ],
+              "source_token_count": 87
+            },
+            {
+              "bullet": "Record any failed branch as part of the skill's future revision history.",
+              "status": "unsupported",
+              "score": 0.2,
+              "anchor_present": false,
+              "overlap": [
+                "failed",
+                "record",
+                "skill"
+              ],
+              "bullet_tokens": [
+                "any",
+                "branch",
+                "failed",
+                "future",
+                "history",
+                "part",
+                "record",
+                "revision",
+                "skill"
+              ],
+              "source_token_count": 87
+            }
+          ]
+        }
+      ],
+      "id": "papertoskill_paper_note"
+    },
+    {
+      "skill_dir": "generated_skills\\papertoskill_seed",
+      "skill_path": "generated_skills\\papertoskill_seed\\SKILL.md",
+      "source_note": "ai_scientist_inputs\\papertoskill.md",
+      "total_bullets": 14,
+      "supported": 0,
+      "weak": 0,
+      "unsupported": 14,
+      "unsupported_rate": 1.0,
+      "section_results": [
+        {
+          "section": "Workflow",
+          "source_section_present": false,
+          "bullets": [
+            {
+              "bullet": "Read the source paper and identify the operational method behind: We propose PaperToSkill, a system that converts research papers into reusable agent skills.",
+              "status": "unsupported",
+              "score": 0.0,
+              "anchor_present": false,
+              "overlap": [],
+              "bullet_tokens": [
+                "agent",
+                "behind",
+                "converts",
+                "identify",
+                "method",
+                "operational",
+                "paper",
+                "papers",
+                "papertoskill",
+                "propose",
+                "read",
+                "research",
+                "reusable",
+                "skills",
+                "source",
+                "system",
+                "that"
+              ],
+              "source_token_count": 0
+            },
+            {
+              "bullet": "Separate source-backed method steps from inferred implementation details.",
+              "status": "unsupported",
+              "score": 0.0,
+              "anchor_present": false,
+              "overlap": [],
+              "bullet_tokens": [
+                "details",
+                "implementation",
+                "inferred",
+                "method",
+                "separate",
+                "source-backed",
+                "steps"
+              ],
+              "source_token_count": 0
+            },
+            {
+              "bullet": "Translate each method step into an agent action with required inputs and outputs.",
+              "status": "unsupported",
+              "score": 0.0,
+              "anchor_present": false,
+              "overlap": [],
+              "bullet_tokens": [
+                "action",
+                "agent",
+                "each",
+                "inputs",
+                "method",
+                "outputs",
+                "required",
+                "step",
+                "translate"
+              ],
+              "source_token_count": 0
+            },
+            {
+              "bullet": "Add validation checks and stop conditions before using the skill on a real task.",
+              "status": "unsupported",
+              "score": 0.0,
+              "anchor_present": false,
+              "overlap": [],
+              "bullet_tokens": [
+                "add",
+                "checks",
+                "conditions",
+                "real",
+                "skill",
+                "stop",
+                "task",
+                "validation"
+              ],
+              "source_token_count": 0
+            }
+          ]
+        },
+        {
+          "section": "Validation",
+          "source_section_present": false,
+          "bullets": [
+            {
+              "bullet": "Check that every workflow step maps to a source section or is marked as an inference.",
+              "status": "unsupported",
+              "score": 0.0,
+              "anchor_present": false,
+              "overlap": [],
+              "bullet_tokens": [
+                "check",
+                "every",
+                "inference",
+                "maps",
+                "marked",
+                "section",
+                "source",
+                "step",
+                "that",
+                "workflow"
+              ],
+              "source_token_count": 0
+            },
+            {
+              "bullet": "Run the skill on a small task before claiming it captures the paper's method.",
+              "status": "unsupported",
+              "score": 0.0,
+              "anchor_present": false,
+              "overlap": [],
+              "bullet_tokens": [
+                "captures",
+                "claiming",
+                "method",
+                "paper",
+                "run",
+                "skill",
+                "small",
+                "task"
+              ],
+              "source_token_count": 0
+            },
+            {
+              "bullet": "Record task outcome, missing assumptions, and unsupported instructions.",
+              "status": "unsupported",
+              "score": 0.0,
+              "anchor_present": false,
+              "overlap": [],
+              "bullet_tokens": [
+                "assumptions",
+                "instructions",
+                "missing",
+                "outcome",
+                "record",
+                "task",
+                "unsupported"
+              ],
+              "source_token_count": 0
+            }
+          ]
+        },
+        {
+          "section": "Failure Cases",
+          "source_section_present": false,
+          "bullets": [
+            {
+              "bullet": "Stop if the paper does not provide enough procedural detail to define an agent workflow.",
+              "status": "unsupported",
+              "score": 0.0,
+              "anchor_present": false,
+              "overlap": [],
+              "bullet_tokens": [
+                "agent",
+                "define",
+                "detail",
+                "does",
+                "enough",
+                "not",
+                "paper",
+                "procedural",
+                "provide",
+                "stop",
+                "workflow"
+              ],
+              "source_token_count": 0
+            },
+            {
+              "bullet": "Warn if the generated skill requires tools, data, or environment access not available to the current harness.",
+              "status": "unsupported",
+              "score": 0.0,
+              "anchor_present": false,
+              "overlap": [],
+              "bullet_tokens": [
+                "access",
+                "available",
+                "current",
+                "data",
+                "environment",
+                "generated",
+                "harness",
+                "not",
+                "requires",
+                "skill",
+                "tools",
+                "warn"
+              ],
+              "source_token_count": 0
+            },
+            {
+              "bullet": "Downgrade claims when validation evidence is absent or only indirectly related.",
+              "status": "unsupported",
+              "score": 0.0,
+              "anchor_present": false,
+              "overlap": [],
+              "bullet_tokens": [
+                "absent",
+                "claims",
+                "downgrade",
+                "evidence",
+                "indirectly",
+                "only",
+                "related",
+                "validation"
+              ],
+              "source_token_count": 0
+            }
+          ]
+        },
+        {
+          "section": "Transfer Notes",
+          "source_section_present": false,
+          "bullets": [
+            {
+              "bullet": "Check whether the target harness supports the tools assumed by the paper.",
+              "status": "unsupported",
+              "score": 0.0,
+              "anchor_present": false,
+              "overlap": [],
+              "bullet_tokens": [
+                "assumed",
+                "check",
+                "harness",
+                "paper",
+                "supports",
+                "target",
+                "tools",
+                "whether"
+              ],
+              "source_token_count": 0
+            },
+            {
+              "bullet": "Replace framework-specific commands with local equivalents before execution.",
+              "status": "unsupported",
+              "score": 0.0,
+              "anchor_present": false,
+              "overlap": [],
+              "bullet_tokens": [
+                "commands",
+                "equivalents",
+                "execution",
+                "framework-specific",
+                "local",
+                "replace"
+              ],
+              "source_token_count": 0
+            },
+            {
+              "bullet": "Keep source-backed steps separate from inferred adaptations.",
+              "status": "unsupported",
+              "score": 0.0,
+              "anchor_present": false,
+              "overlap": [],
+              "bullet_tokens": [
+                "adaptations",
+                "inferred",
+                "keep",
+                "separate",
+                "source-backed",
+                "steps"
+              ],
+              "source_token_count": 0
+            },
+            {
+              "bullet": "Record any failed branch as part of the skill's future revision history.",
+              "status": "unsupported",
+              "score": 0.0,
+              "anchor_present": false,
+              "overlap": [],
+              "bullet_tokens": [
+                "any",
+                "branch",
+                "failed",
+                "future",
+                "history",
+                "part",
+                "record",
+                "revision",
+                "skill"
+              ],
+              "source_token_count": 0
+            }
+          ]
+        }
+      ],
+      "id": "papertoskill_seed"
+    }
+  ]
+}

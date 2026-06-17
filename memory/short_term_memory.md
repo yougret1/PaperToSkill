@@ -9,9 +9,9 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 3 downstream context baseline is implemented locally. Current focus:
-validate, commit, and push Phase 3 artifacts, then move toward source-map-aware
-unsupported-instruction scoring and real LLM task execution when possible.
+Phase 4 source-map-aware unsupported-instruction audit is implemented locally.
+Current focus: validate, commit, and push Phase 4 artifacts, then move toward
+transfer evaluation and real LLM task execution when possible.
 
 ## Latest User Request
 
@@ -85,6 +85,14 @@ The user provided the PaperToSkill idea and asked to:
   - abstract-only: 1.2/9
 - The Phase 3 result supports only coverage/fidelity, not actual LLM downstream
   task success.
+- Phase 4 added a source-map-aware unsupported-instruction audit task:
+  `benchmarks/tasks/skill_source_audit.json`.
+- Phase 4 audit ranked unsupported rates:
+  - AI Scientist-v2 real skill: 0.2
+  - Paper-like retained case: 0.222
+  - Abstract-only seed: 1.0
+- The first audit pass had a section-mapping bug that was fixed before the final
+  result.
 
 ## Current Blockers / Pending Checks
 
@@ -95,14 +103,13 @@ The user provided the PaperToSkill idea and asked to:
   server advertises.
 - For stable long-running work, create an isolated Python environment because
   the current global Anaconda environment now has package-version conflicts.
-- Need improve evaluator beyond keyword coverage, including unsupported
-  instruction detection and workflow coverage against source maps.
+- Need improve evaluator further toward human or source-span validation.
 - Need run actual LLM task execution once the remote endpoint works or another
   model backend is available.
 
 ## Next Actions
 
-1. Validate and commit Phase 3 artifacts.
+1. Validate and commit Phase 4 artifacts.
 2. Push to `origin/main`.
-3. Start Phase 4: source-map-aware unsupported-instruction evaluator.
+3. Start Phase 5: transfer evaluation between harness contexts.
 4. Re-test the remote LLM endpoint when provider accounts are available.

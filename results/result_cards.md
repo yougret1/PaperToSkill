@@ -47,3 +47,27 @@
   source-grounded task rubric, the generated skill preserves more operational
   capabilities than summaries while staying under the compactness budget.
 - Figure/table: `results/evaluations/ai_scientist_v2_context_baselines_v0.json`.
+
+## AI Scientist-v2 Source-Map Audit
+
+- Experiment: source-map-aware unsupported-instruction audit across
+  `generated_skills/ai_scientist_v2`, `generated_skills/papertoskill_paper_note`,
+  and `generated_skills/papertoskill_seed`.
+- Main result: unsupported rate ranked the real AI Scientist-v2 skill lowest at
+  0.2, the paper-like retained case at 0.222, and the abstract-only seed at 1.0.
+- Compared baselines: the same two retained generated skills plus the
+  abstract-only seed.
+- Practical significance: the real paper-derived skill preserves most
+  source-supported workflow/validation/failure content, while the abstract-only
+  seed collapses under source-map audit. This is stronger evidence than keyword
+  coverage alone that source mapping matters.
+- Statistical evidence: none yet; this is a deterministic audit of three skills.
+- Failure modes: the audit still uses token overlap and section mapping, so it
+  can under-credit paraphrase-heavy yet valid instructions.
+- Limitations: transfer-note bullets are still the hardest to score because they
+  are often intentionally generic and may be supported by broader paper
+  limitations rather than one exact section.
+- Claim impact: supports the claim that source-map-aware auditing can
+  discriminate between a real paper-derived skill and an abstract-only seed on
+  unsupported-instruction rate.
+- Figure/table: `results/evaluations/skill_source_audit_v0.json`.
