@@ -9,6 +9,7 @@ Evidence boundary: these tables aggregate existing deterministic/offline evaluat
 | AI Scientist-v2 | 20/20 | 7.867/9 | 1.733/9 | 1.2/9 | 6.134 | 6.667 | 10/10 | 0.938 | 782 |
 | Reflexion | 20/20 | 8.267/9 | 3.483/9 | 2.533/9 | 4.784 | 5.734 | 10/10 | 1 | 479 |
 | AIDE | 20/20 | 9.1/10 | 1.916/10 | 1.333/10 | 7.184 | 7.767 | 10/10 | 1 | 927 |
+| Toolformer | 20/20 | 8.9/10 | 2.5/10 | 1.534/10 | 6.4 | 7.366 | 10/10 | 1 | 943 |
 
 ## Transfer Ablation
 
@@ -23,6 +24,9 @@ Evidence boundary: these tables aggregate existing deterministic/offline evaluat
 | AIDE | Full skill | 10/10 | 10/10 | 10/10 | 927 | none |
 | AIDE | No transfer notes | 7.6/10 | 7.6/10 | 7.6/10 | 883 | Transfer Notes |
 | AIDE | Generic summary | 1.5/10 | 1.5/10 | 1.5/10 | 89 | none |
+| Toolformer | Full skill | 10/10 | 10/10 | 10/10 | 943 | none |
+| Toolformer | No transfer notes | 7.6/10 | 7.6/10 | 7.6/10 | 899 | Transfer Notes |
+| Toolformer | Generic summary | 1.45/10 | 1.45/10 | 1.45/10 | 78 | none |
 
 ## Compactness And Source Grounding
 
@@ -31,15 +35,4 @@ Evidence boundary: these tables aggregate existing deterministic/offline evaluat
 | AI Scientist-v2 | 782 | 1200 | 2/2 | 16 | 15 | 1 | 0 | 0 | 0.938 | 0.2 |
 | Reflexion | 479 | 1200 | 2/2 | 12 | 11 | 0 | 0 | 0 | 1 | n/a |
 | AIDE | 927 | 1200 | 2/2 | 22 | 21 | 0 | 0 | 0 | 1 | n/a |
-
-## Context Cost Proxy
-
-Token counts are deterministic proxies, estimated as `ceil(characters / 4)`.
-Estimated cost uses a configurable `$1.00 / 1M` input-token proxy. These are not
-provider bills or tokenizer-exact measurements.
-
-| Paper | Generated skill tokens | Full extracted paper tokens | Token reduction vs full paper | Generated skill cost proxy |
-| --- | --- | --- | --- | --- |
-| AI Scientist-v2 | 1366 | 62041 | 0.978 | 0.001366 |
-| Reflexion | 823 | 18559 | 0.9557 | 0.000823 |
-| AIDE | 1517 | 15894 | 0.9046 | 0.001517 |
+| Toolformer | 943 | 1200 | 2/2 | 23 | 22 | 0 | 0 | 0 | 1 | n/a |

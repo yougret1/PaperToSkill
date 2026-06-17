@@ -38,6 +38,15 @@ PAPER_CONFIGS = [
         "rubric": "aide_rubric_v0.json",
         "source_audit_id": None,
     },
+    {
+        "id": "toolformer",
+        "paper": "Toolformer",
+        "context": "toolformer_context_baselines_v0.json",
+        "transfer": "toolformer_harness_transfer_v0.json",
+        "source_spans": "toolformer_source_span_validation_v0.json",
+        "rubric": "toolformer_rubric_v0.json",
+        "source_audit_id": None,
+    },
 ]
 
 TABLE_FILENAMES = {

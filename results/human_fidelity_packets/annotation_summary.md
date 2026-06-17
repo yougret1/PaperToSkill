@@ -3,9 +3,9 @@
 Evidence boundary: blank score rows are pending, not negative evidence. Do not claim human validation unless `annotation_status` is `complete` and errors are empty.
 
 - Annotation status: pending
-- Total rows: 18
+- Total rows: 24
 - Scored rows: 0
-- Pending rows: 18
+- Pending rows: 24
 - Errors: 0
 
 ## By Paper
@@ -15,6 +15,7 @@ Evidence boundary: blank score rows are pending, not negative evidence. Do not c
 | AI Scientist-v2 | 0 | n/a | pending |
 | Reflexion | 0 | n/a | pending |
 | AIDE | 0 | n/a | pending |
+| Toolformer | 0 | n/a | pending |
 
 ## By Criterion
 

@@ -33,17 +33,17 @@ scores, not live success rates.
 
 ### Limited Benchmark Diversity
 
-The current three-paper benchmark focuses on agent and ML-engineering methods:
-AI Scientist-v2, Reflexion, and AIDE. These papers are naturally procedural,
-which is favorable for skill extraction. Future work should include tool-use
-papers, interface papers, and theory-heavy papers where procedural structure is
-weaker.
+The current four-paper benchmark focuses on agent, ML-engineering, and
+tool-use methods: AI Scientist-v2, Reflexion, AIDE, and Toolformer. These
+papers are still naturally procedural, which is favorable for skill extraction.
+Future work should include interface papers and theory-heavy papers where
+procedural structure is weaker.
 
 ### No Human Fidelity Study Yet
 
 Human-fidelity review packets, an annotation template, and a summary script have
 been prepared, but no independent annotators have scored them yet. The current
-annotation summary reports 18 pending rows and 0 scored rows. Source-span
+annotation summary reports 24 pending rows and 0 scored rows. Source-span
 validation reduces hallucination risk, and the packets make expert review
 easier to run, but the current benchmark still should not be described as
 human-validated.

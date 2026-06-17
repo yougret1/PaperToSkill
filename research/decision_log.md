@@ -109,3 +109,11 @@
   be reviewable, but likely reviewer objections must be answered with evidence
   boundaries intact.
 - Status: accepted for Phase 17.
+
+## 2026-06-17: Add Toolformer As A Tool-Use Stress Case
+
+- Decision: add Toolformer as the fourth curated real-paper benchmark case.
+- Rationale: prior evidence focused on agent/research/ML-engineering workflows.
+  Toolformer adds a tool-use and API-contract paper, reducing but not removing
+  the benchmark-diversity risk.
+- Status: accepted for Phase 18.

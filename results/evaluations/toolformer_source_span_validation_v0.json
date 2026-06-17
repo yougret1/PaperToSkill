@@ -1,0 +1,669 @@
+{
+  "task": "toolformer_source_span_validation",
+  "task_path": "benchmarks\\tasks\\toolformer_source_span_validation.json",
+  "evidence_boundary": "Checks line-anchor validity and lexical overlap; not a human factuality annotation.",
+  "results": [
+    {
+      "id": "toolformer",
+      "skill_path": "D:\\a_work\\gitee\\PaperToSkill\\generated_skills\\toolformer\\SKILL.md",
+      "source_text": "D:\\a_work\\gitee\\PaperToSkill\\papers\\extracted\\toolformer.txt",
+      "total_claims": 22,
+      "status_counts": {
+        "supported": 22
+      },
+      "support_rate": 1.0,
+      "invalid_ranges": 0,
+      "claims": [
+        {
+          "claim": "Represent every API call as text with a tool name, input, and optional result so calls can be inserted into normal language-model sequences without a new interface. Source anchors: lines 86-104.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 86,
+              "end": 104,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "api",
+            "call",
+            "calls",
+            "can",
+            "input",
+            "inserted",
+            "name",
+            "represent",
+            "result",
+            "sequences",
+            "text",
+            "tool"
+          ],
+          "claim_token_count": 19,
+          "source_token_count": 114,
+          "section": "Workflow"
+        },
+        {
+          "claim": "Convert a plain LM dataset into an augmented dataset by using the model to sample potential API calls, executing them, filtering for calls that reduce future-token loss, and interleaving the retained calls with the original text. Source anchors: lines 105-115, 155-173.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 105,
+              "end": 115,
+              "valid": true
+            },
+            {
+              "start": 155,
+              "end": 173,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "api",
+            "augmented",
+            "calls",
+            "convert",
+            "dataset",
+            "filtering",
+            "loss",
+            "model",
+            "plain",
+            "potential",
+            "sample",
+            "that"
+          ],
+          "claim_token_count": 21,
+          "source_token_count": 157,
+          "section": "Workflow"
+        },
+        {
+          "claim": "For each API, write a small prompt with a few demonstrations that encourages the model to annotate text with candidate API calls. Source anchors: lines 123-152, 157-165.",
+          "status": "supported",
+          "score": 0.833,
+          "ranges": [
+            {
+              "start": 123,
+              "end": 152,
+              "valid": true
+            },
+            {
+              "start": 157,
+              "end": 165,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "api",
+            "calls",
+            "candidate",
+            "each",
+            "encourages",
+            "model",
+            "prompt",
+            "text",
+            "that",
+            "write"
+          ],
+          "claim_token_count": 14,
+          "source_token_count": 147,
+          "section": "Workflow"
+        },
+        {
+          "claim": "Execute each proposed API call using the actual backend for that tool, such as a neural model, Python script, or retrieval system, and require a single text response. Source anchors: lines 123-132.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 123,
+              "end": 132,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "api",
+            "call",
+            "each",
+            "execute",
+            "neural",
+            "python",
+            "response",
+            "retrieval",
+            "script",
+            "single",
+            "system",
+            "text",
+            "using"
+          ],
+          "claim_token_count": 21,
+          "source_token_count": 70,
+          "section": "Workflow"
+        },
+        {
+          "claim": "Keep an API call only when providing both the call and result reduces the weighted loss on future tokens by at least a filtering threshold compared with no call or a call without a result. Source anchors: lines 134-171.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 134,
+              "end": 171,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "api",
+            "both",
+            "call",
+            "compared",
+            "filtering",
+            "future",
+            "keep",
+            "least",
+            "loss",
+            "only",
+            "providing",
+            "reduces",
+            "result",
+            "threshold",
+            "tokens",
+            "weighted"
+          ],
+          "claim_token_count": 18,
+          "source_token_count": 119,
+          "section": "Workflow"
+        },
+        {
+          "claim": "Fine-tune the language model on the augmented dataset while keeping the original text content unchanged apart from inserted API calls and results. Source anchors: lines 172-204.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 172,
+              "end": 204,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "apart",
+            "api",
+            "augmented",
+            "calls",
+            "content",
+            "dataset",
+            "inserted",
+            "language",
+            "model",
+            "original",
+            "results",
+            "text",
+            "while"
+          ],
+          "claim_token_count": 16,
+          "source_token_count": 185,
+          "section": "Workflow"
+        },
+        {
+          "claim": "At inference time, decode normally until the model emits the API-call token, interrupt decoding, execute the selected API, insert the response and closing token, and continue generation. Source anchors: lines 204-208.",
+          "status": "supported",
+          "score": 0.417,
+          "ranges": [
+            {
+              "start": 204,
+              "end": 208,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "api",
+            "decoding",
+            "interrupt",
+            "response",
+            "token"
+          ],
+          "claim_token_count": 19,
+          "source_token_count": 39,
+          "section": "Workflow"
+        },
+        {
+          "claim": "Treat tools as text-to-text APIs with only two requirements: inputs and outputs can be represented as text, and a few demonstrations of intended use are available. Source anchors: lines 211-221.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 211,
+              "end": 221,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "apis",
+            "available",
+            "can",
+            "demonstrations",
+            "few",
+            "inputs",
+            "intended",
+            "only",
+            "outputs",
+            "represented",
+            "text",
+            "tools",
+            "use"
+          ],
+          "claim_token_count": 17,
+          "source_token_count": 91,
+          "section": "Workflow"
+        },
+        {
+          "claim": "The paper investigates whether a model can learn to call tools without further supervision and decide when and how to call available tools in zero-shot settings. Source anchors: lines 211-221, 274-284.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 211,
+              "end": 221,
+              "valid": true
+            },
+            {
+              "start": 274,
+              "end": 284,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "available",
+            "call",
+            "can",
+            "decide",
+            "further",
+            "how",
+            "model",
+            "settings",
+            "supervision",
+            "tools",
+            "when",
+            "whether",
+            "without",
+            "zero-shot"
+          ],
+          "claim_token_count": 17,
+          "source_token_count": 163,
+          "section": "Validation"
+        },
+        {
+          "claim": "Toolformer uses five tools: question answering, calculator, Wikipedia search, machine translation, and calendar. Source anchors: lines 211-221, 232-249.",
+          "status": "supported",
+          "score": 0.833,
+          "ranges": [
+            {
+              "start": 211,
+              "end": 221,
+              "valid": true
+            },
+            {
+              "start": 232,
+              "end": 249,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "answering",
+            "calculator",
+            "calendar",
+            "five",
+            "machine",
+            "question",
+            "search",
+            "tools",
+            "translation",
+            "wikipedia"
+          ],
+          "claim_token_count": 12,
+          "source_token_count": 175,
+          "section": "Validation"
+        },
+        {
+          "claim": "The authors report that Toolformer with API calls improves over GPT-J and its disabled-tool variant on LAMA subsets, and is competitive with GPT-3 on the tabled results. Source anchors: lines 302-311, 335-340.",
+          "status": "supported",
+          "score": 0.833,
+          "ranges": [
+            {
+              "start": 302,
+              "end": 311,
+              "valid": true
+            },
+            {
+              "start": 335,
+              "end": 340,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "api",
+            "calls",
+            "competitive",
+            "gpt-3",
+            "gpt-j",
+            "lama",
+            "results",
+            "subsets",
+            "that",
+            "toolformer"
+          ],
+          "claim_token_count": 17,
+          "source_token_count": 95,
+          "section": "Validation"
+        },
+        {
+          "claim": "Toolformer more than doubles performance on mathematical reasoning tasks when API calls are enabled and often uses the calculator tool. Source anchors: lines 316-340.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 316,
+              "end": 340,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "api",
+            "calculator",
+            "calls",
+            "doubles",
+            "mathematical",
+            "more",
+            "performance",
+            "reasoning",
+            "tasks",
+            "than",
+            "tool",
+            "toolformer",
+            "when"
+          ],
+          "claim_token_count": 16,
+          "source_token_count": 145,
+          "section": "Validation"
+        },
+        {
+          "claim": "On question-answering datasets, Toolformer improves over same-size baselines but still lags behind Atlas, and the authors note limitations of interacting with the Wikipedia search API. Source anchors: lines 362-388.",
+          "status": "supported",
+          "score": 0.75,
+          "ranges": [
+            {
+              "start": 362,
+              "end": 388,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "api",
+            "baselines",
+            "behind",
+            "but",
+            "lags",
+            "search",
+            "still",
+            "toolformer",
+            "wikipedia"
+          ],
+          "claim_token_count": 19,
+          "source_token_count": 139,
+          "section": "Validation"
+        },
+        {
+          "claim": "On temporal datasets, Toolformer outperforms baselines and uses the calendar API heavily, but some improvement is not fully attributable to the calendar tool. Source anchors: lines 417-450.",
+          "status": "supported",
+          "score": 0.917,
+          "ranges": [
+            {
+              "start": 417,
+              "end": 450,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "api",
+            "baselines",
+            "but",
+            "calendar",
+            "datasets",
+            "fully",
+            "improvement",
+            "outperforms",
+            "temporal",
+            "tool",
+            "toolformer"
+          ],
+          "claim_token_count": 15,
+          "source_token_count": 187,
+          "section": "Validation"
+        },
+        {
+          "claim": "The authors check that fine-tuning on API-augmented data does not degrade core language modeling compared with fine-tuning on the same corpus without API calls when API calls are disabled. Source anchors: lines 453-470.",
+          "status": "supported",
+          "score": 0.75,
+          "ranges": [
+            {
+              "start": 453,
+              "end": 470,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "api",
+            "calls",
+            "degrade",
+            "does",
+            "language",
+            "modeling",
+            "same",
+            "that",
+            "without"
+          ],
+          "claim_token_count": 19,
+          "source_token_count": 95,
+          "section": "Validation"
+        },
+        {
+          "claim": "Existing tool-use approaches often rely on large human annotations or task-specific settings; Toolformer targets broader self-supervised tool use but still depends on a few demonstrations for each API. Source anchors: lines 48-63, 98-104.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 48,
+              "end": 63,
+              "valid": true
+            },
+            {
+              "start": 98,
+              "end": 104,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "annotations",
+            "api",
+            "existing",
+            "human",
+            "large",
+            "rely",
+            "self-supervised",
+            "settings",
+            "task-specific",
+            "tool",
+            "toolformer",
+            "use"
+          ],
+          "claim_token_count": 23,
+          "source_token_count": 156,
+          "section": "Failure Cases"
+        },
+        {
+          "claim": "Toolformer only supports tools whose inputs and outputs can be represented as text sequences, and tool execution depends on the external backend. Source anchors: lines 86-104, 123-132, 211-221.",
+          "status": "supported",
+          "score": 0.833,
+          "ranges": [
+            {
+              "start": 86,
+              "end": 104,
+              "valid": true
+            },
+            {
+              "start": 123,
+              "end": 132,
+              "valid": true
+            },
+            {
+              "start": 211,
+              "end": 221,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "can",
+            "depends",
+            "inputs",
+            "only",
+            "outputs",
+            "represented",
+            "sequences",
+            "text",
+            "tool",
+            "tools"
+          ],
+          "claim_token_count": 16,
+          "source_token_count": 223,
+          "section": "Failure Cases"
+        },
+        {
+          "claim": "The paper uses heuristics to reduce computational cost when annotating the corpus with API calls. Source anchors: lines 232-237.",
+          "status": "supported",
+          "score": 0.636,
+          "ranges": [
+            {
+              "start": 232,
+              "end": 237,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "annotating",
+            "api",
+            "calls",
+            "computational",
+            "cost",
+            "heuristics",
+            "reduce"
+          ],
+          "claim_token_count": 11,
+          "source_token_count": 55,
+          "section": "Failure Cases"
+        },
+        {
+          "claim": "For question answering, Toolformer still lags behind Atlas and is limited by simple interaction with the Wikipedia search API; it cannot reformulate queries or browse multiple top results in the reported setup. Source anchors: lines 374-388.",
+          "status": "supported",
+          "score": 0.833,
+          "ranges": [
+            {
+              "start": 374,
+              "end": 388,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "api",
+            "behind",
+            "lags",
+            "multiple",
+            "results",
+            "search",
+            "still",
+            "toolformer",
+            "top",
+            "wikipedia"
+          ],
+          "claim_token_count": 22,
+          "source_token_count": 106,
+          "section": "Failure Cases"
+        },
+        {
+          "claim": "Some temporal improvements cannot be fully attributed to the calendar API, because other effects also contribute. Source anchors: lines 429-450.",
+          "status": "supported",
+          "score": 0.667,
+          "ranges": [
+            {
+              "start": 429,
+              "end": 450,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "also",
+            "api",
+            "attributed",
+            "because",
+            "calendar",
+            "fully",
+            "improvements",
+            "other"
+          ],
+          "claim_token_count": 13,
+          "source_token_count": 155,
+          "section": "Failure Cases"
+        },
+        {
+          "claim": "The authors do not evaluate perplexity with API calls enabled because computing token probabilities would require marginalizing over possible API calls. Source anchors: lines 467-470.",
+          "status": "supported",
+          "score": 0.917,
+          "ranges": [
+            {
+              "start": 467,
+              "end": 470,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "api",
+            "calls",
+            "computing",
+            "enabled",
+            "evaluate",
+            "marginalizing",
+            "over",
+            "perplexity",
+            "require",
+            "token",
+            "would"
+          ],
+          "claim_token_count": 15,
+          "source_token_count": 28,
+          "section": "Failure Cases"
+        },
+        {
+          "claim": "Tool use emerges with model scale; smaller models benefit less from the provided APIs. Source anchors: lines 433-496.",
+          "status": "supported",
+          "score": 0.636,
+          "ranges": [
+            {
+              "start": 433,
+              "end": 496,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "emerges",
+            "model",
+            "models",
+            "provided",
+            "smaller",
+            "tool",
+            "use"
+          ],
+          "claim_token_count": 11,
+          "source_token_count": 232,
+          "section": "Failure Cases"
+        }
+      ]
+    }
+  ]
+}

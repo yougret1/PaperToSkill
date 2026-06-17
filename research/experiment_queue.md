@@ -19,6 +19,7 @@
 | E2.14 | Can existing deterministic/offline evaluations be converted into paper-ready tables? | `python scripts\aggregate_results_tables.py --output-dir results\tables` | main results, transfer ablation, and compactness/source-grounding Markdown/CSV tables | Analysis |
 | E2.15 | Can AIDE serve as a third real-paper benchmark case? | `python scripts\papertoskill_extract.py --source papers\notes\aide_note.md --output generated_skills\aide --name aide-paper-skill` plus AIDE rubric/context/transfer/source-span/prompt commands | AIDE skill, baselines, evaluations, prompt packets, and updated tables | Analysis |
 | E2.16 | Is the local artifact package reproducible enough for review while separating pending external evidence? | `python scripts\check_reproducibility_package.py --output-json results\reproducibility\package_report.json --output-md results\reproducibility\package_report.md --strict` | package report with ready/pending/fail counts | Analysis |
+| E2.17 | Can Toolformer serve as a fourth tool-use stress case? | Toolformer rubric/context/transfer/source-span/prompt commands plus table, packet, failure archive, and package regeneration | Toolformer skill, baselines, evaluations, prompt packets, updated tables, 24-row human packet template, 27-case failure archive, and package report | Analysis |
 
 ## Pending Remote LLM Recovery
 

@@ -37,6 +37,14 @@ PAPER_CONFIGS = [
         "task": "benchmarks/tasks/aide_research_run.json",
         "context": "results/evaluations/aide_context_baselines_v0.json",
     },
+    {
+        "id": "toolformer",
+        "paper": "Toolformer",
+        "full_paper": "papers/extracted/toolformer.txt",
+        "note": "papers/notes/toolformer_note.md",
+        "task": "benchmarks/tasks/toolformer_research_run.json",
+        "context": "results/evaluations/toolformer_context_baselines_v0.json",
+    },
 ]
 
 TOKEN_PROXY_CHARS = 4

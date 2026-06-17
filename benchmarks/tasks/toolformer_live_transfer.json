@@ -1,0 +1,52 @@
+{
+  "schema_version": "0.1",
+  "id": "toolformer_live_transfer",
+  "created": "2026-06-17",
+  "purpose": "Prompt packet spec for later live Codex/Claude-style transfer runs on the Toolformer paper-derived skill.",
+  "evidence_boundary": "Prompt packet only; live agent responses must be collected separately after the remote LLM provider recovers.",
+  "user_prompt": "Use the provided context to plan a Toolformer-style tool-use experiment in a local agent harness. Produce a concise but executable plan that preserves API-call representation, candidate call generation, execution, loss-based filtering, augmented dataset construction, fine-tuning, inference-time tool execution, validation domains, and limitations.",
+  "output_contract": [
+    "State whether the context is sufficient for a Toolformer-style run.",
+    "List required local tools or simulated APIs.",
+    "Give a step-by-step run plan.",
+    "Identify validation checks and stop conditions.",
+    "Mark source-backed steps separately from inferred adaptations.",
+    "Record at least one likely failed branch."
+  ],
+  "evaluation_notes": [
+    "This packet is for later live evaluation only.",
+    "Do not score as live transfer until response files are collected."
+  ],
+  "context_variants": [
+    {
+      "id": "full_skill",
+      "label": "PaperToSkill generated skill with transfer notes",
+      "path": "generated_skills/toolformer/SKILL.md"
+    },
+    {
+      "id": "skill_without_transfer_notes",
+      "label": "Generated skill with Transfer Notes removed",
+      "path": "generated_skills/toolformer/SKILL.md",
+      "drop_sections": [
+        "Transfer Notes"
+      ]
+    },
+    {
+      "id": "generic_summary",
+      "label": "Generic prose summary baseline",
+      "path": "baselines/toolformer_generic_summary.md"
+    }
+  ],
+  "target_harnesses": [
+    {
+      "id": "codex_skill",
+      "label": "Codex-style SKILL.md harness",
+      "instructions": "Respond as if the context were loaded as a SKILL.md file in a coding-agent workspace. Prefer concrete files, commands, and validation gates."
+    },
+    {
+      "id": "claude_project_prompt",
+      "label": "Claude-style project prompt harness",
+      "instructions": "Respond as if the context were pasted into a project-level prompt for a general assistant. Make assumptions explicit and separate source-backed steps from inferred adaptations."
+    }
+  ]
+}

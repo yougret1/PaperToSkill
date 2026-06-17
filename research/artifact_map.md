@@ -35,6 +35,7 @@
 | `research/run_logs/2026-06-17_phase15_failure_case_archive.md` | Failure-case archive commands and outcomes | Created |
 | `research/run_logs/2026-06-17_phase16_reproducibility_package.md` | Endpoint retest and reproducibility package check outcomes | Created |
 | `research/run_logs/2026-06-17_phase17_review_rebuttal.md` | Review/rebuttal package commands and outcomes | Created |
+| `research/run_logs/2026-06-17_phase18_toolformer_stress_case.md` | Toolformer fourth-paper stress-case commands and outcomes | Created |
 
 ## Paper Draft Package
 
@@ -66,6 +67,7 @@
 | `benchmarks/rubric_v0.json` | Deterministic v0 scoring rubric for generated skills | Created |
 | `benchmarks/rubric_reflexion_v0.json` | Deterministic v0 scoring rubric for Reflexion generated skill | Created |
 | `benchmarks/rubric_aide_v0.json` | Deterministic v0 scoring rubric for AIDE generated skill | Created |
+| `benchmarks/rubric_toolformer_v0.json` | Deterministic v0 scoring rubric for Toolformer generated skill | Created |
 | `benchmarks/human_fidelity_review_v0.json` | Human-fidelity review protocol and packet manifest | Created |
 | `benchmarks/failure_case_archive_v0.json` | Failure-case archive config and project-level records | Created |
 | `benchmarks/tasks/ai_scientist_v2_research_run.json` | Downstream context-coverage task spec | Created |
@@ -81,21 +83,30 @@
 | `benchmarks/tasks/aide_harness_transfer.json` | AIDE offline harness-transfer readiness task spec | Created |
 | `benchmarks/tasks/aide_live_transfer.json` | AIDE live harness-transfer prompt packet spec | Created |
 | `benchmarks/tasks/aide_source_span_validation.json` | AIDE source-span validation task spec | Created |
+| `benchmarks/tasks/toolformer_research_run.json` | Toolformer downstream context-coverage task spec | Created |
+| `benchmarks/tasks/toolformer_harness_transfer.json` | Toolformer offline harness-transfer readiness task spec | Created |
+| `benchmarks/tasks/toolformer_live_transfer.json` | Toolformer live harness-transfer prompt packet spec | Created |
+| `benchmarks/tasks/toolformer_source_span_validation.json` | Toolformer source-span validation task spec | Created |
 | `baselines/ai_scientist_v2_generic_summary.md` | Generic summary baseline context | Created |
 | `baselines/ai_scientist_v2_abstract_only.md` | Abstract-only baseline context | Created |
 | `baselines/reflexion_generic_summary.md` | Generic summary baseline context for Reflexion | Created |
 | `baselines/reflexion_abstract_only.md` | Abstract-only baseline context for Reflexion | Created |
 | `baselines/aide_generic_summary.md` | Generic summary baseline context for AIDE | Created |
 | `baselines/aide_abstract_only.md` | Abstract-only baseline context for AIDE | Created |
+| `baselines/toolformer_generic_summary.md` | Generic summary baseline context for Toolformer | Created |
+| `baselines/toolformer_abstract_only.md` | Abstract-only baseline context for Toolformer | Created |
 | `papers/raw/ai_scientist_v2.pdf` | Raw AI Scientist-v2 PDF | Created |
 | `papers/raw/reflexion.pdf` | Raw Reflexion PDF | Created |
 | `papers/raw/aide.pdf` | Raw AIDE PDF | Created |
+| `papers/raw/toolformer.pdf` | Raw Toolformer PDF | Created |
 | `papers/extracted/ai_scientist_v2.txt` | Extracted PDF text | Created |
 | `papers/extracted/reflexion.txt` | Extracted Reflexion PDF text | Created |
 | `papers/extracted/aide.txt` | Extracted AIDE PDF text | Created |
+| `papers/extracted/toolformer.txt` | Extracted Toolformer PDF text | Created |
 | `papers/notes/ai_scientist_v2_note.md` | Curated real-paper note for scaffold input | Created |
 | `papers/notes/reflexion_note.md` | Curated Reflexion source-anchored note for scaffold input | Created |
 | `papers/notes/aide_note.md` | Curated AIDE source-anchored note for scaffold input | Created |
+| `papers/notes/toolformer_note.md` | Curated Toolformer source-anchored note for scaffold input | Created |
 | `examples/papertoskill_paper_note.md` | Paper-like source note for retained case | Created |
 | `scripts/papertoskill_extract.py` | Deterministic local paper-to-skill scaffold | Created |
 | `scripts/evaluate_skill.py` | Deterministic v0 evaluator for generated skills | Created |
@@ -129,6 +140,8 @@
 | `generated_skills/reflexion/references/source_map.json` | Source-map evidence for Reflexion generated skill | Created |
 | `generated_skills/aide/SKILL.md` | Retained generated skill from AIDE note | Created |
 | `generated_skills/aide/references/source_map.json` | Source-map evidence for AIDE generated skill | Created |
+| `generated_skills/toolformer/SKILL.md` | Retained generated skill from Toolformer note | Created |
+| `generated_skills/toolformer/references/source_map.json` | Source-map evidence for Toolformer generated skill | Created |
 | `generated_skills/papertoskill_paper_note/SKILL.md` | Retained generated skill from paper-like note | Created |
 | `generated_skills/papertoskill_paper_note/references/source_map.json` | Source-map evidence for retained generated skill | Created |
 | `results/evaluations/ai_scientist_v2_rubric_v0.json` | Scored rubric output for AI Scientist-v2 generated skill | Created |
@@ -144,9 +157,14 @@
 | `results/evaluations/aide_source_span_validation_v0.json` | AIDE source-span validation output | Created |
 | `results/evaluations/aide_context_baselines_v0.json` | AIDE skill-vs-summary-vs-abstract context coverage scores | Created |
 | `results/evaluations/aide_harness_transfer_v0.json` | AIDE offline Codex/Claude-style transfer readiness scores | Created |
+| `results/evaluations/toolformer_rubric_v0.json` | Toolformer skill rubric output | Created |
+| `results/evaluations/toolformer_source_span_validation_v0.json` | Toolformer source-span validation output | Created |
+| `results/evaluations/toolformer_context_baselines_v0.json` | Toolformer skill-vs-summary-vs-abstract context coverage scores | Created |
+| `results/evaluations/toolformer_harness_transfer_v0.json` | Toolformer offline Codex/Claude-style transfer readiness scores | Created |
 | `results/live_transfer_prompts/ai_scientist_v2_v0/` | Live Codex/Claude prompt packets and index | Created |
 | `results/live_transfer_prompts/reflexion_v0/` | Reflexion live Codex/Claude prompt packets and index | Created |
 | `results/live_transfer_prompts/aide_v0/` | AIDE live Codex/Claude prompt packets and index | Created |
+| `results/live_transfer_prompts/toolformer_v0/` | Toolformer live Codex/Claude prompt packets and index | Created |
 | `results/tables/main_results.md` | Paper-ready main results table | Created |
 | `results/tables/main_results.csv` | CSV copy of main results table | Created |
 | `results/tables/transfer_ablation.md` | Paper-ready transfer ablation table | Created |
@@ -166,6 +184,7 @@
 | `results/human_fidelity_packets/ai_scientist_v2_human_fidelity_packet.md` | AI Scientist-v2 fidelity review packet | Created |
 | `results/human_fidelity_packets/reflexion_human_fidelity_packet.md` | Reflexion fidelity review packet | Created |
 | `results/human_fidelity_packets/aide_human_fidelity_packet.md` | AIDE fidelity review packet | Created |
+| `results/human_fidelity_packets/toolformer_human_fidelity_packet.md` | Toolformer fidelity review packet | Created |
 | `results/failure_cases/failure_case_archive.md` | Human-readable failure-case archive | Created |
 | `results/failure_cases/failure_case_archive.json` | Machine-readable failure-case archive | Created |
 | `results/failure_cases/failure_case_archive.csv` | CSV failure-case archive | Created |
@@ -173,6 +192,7 @@
 | `results/reproducibility/package_report.json` | Machine-readable reproducibility package report | Created |
 | `output/pdf/reflexion/page-01.png` | Rendered Reflexion PDF page 1 for visual check | Created |
 | `output/pdf/aide/page-01.png` | Rendered AIDE PDF page 1 for visual check | Created |
+| `output/pdf/toolformer/page-01.png` | Rendered Toolformer PDF page 1 for visual check | Created |
 | `results/result_cards.md` | Result interpretation cards | Created |
 
 ## Future Artifacts

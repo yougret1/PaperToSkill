@@ -31,13 +31,14 @@ class BuildHumanFidelityPacketsTest(unittest.TestCase):
             )
 
             index = json.loads((output_dir / "index.json").read_text(encoding="utf-8"))
-            self.assertEqual(3, len(index["packets"]))
+            self.assertEqual(4, len(index["packets"]))
             packet_names = [Path(row["packet_path"]).name for row in index["packets"]]
             self.assertEqual(
                 [
                     "ai_scientist_v2_human_fidelity_packet.md",
                     "reflexion_human_fidelity_packet.md",
                     "aide_human_fidelity_packet.md",
+                    "toolformer_human_fidelity_packet.md",
                 ],
                 packet_names,
             )
@@ -49,7 +50,7 @@ class BuildHumanFidelityPacketsTest(unittest.TestCase):
 
             with (output_dir / "annotation_template.csv").open(encoding="utf-8", newline="") as handle:
                 rows = list(csv.DictReader(handle))
-            self.assertEqual(18, len(rows))
+            self.assertEqual(24, len(rows))
             self.assertEqual("", rows[0]["score_0_to_3"])
             self.assertEqual("central_contribution", rows[0]["criterion_id"])
 

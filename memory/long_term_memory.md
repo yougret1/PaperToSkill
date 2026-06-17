@@ -116,16 +116,32 @@ Initial target contribution categories:
   ranking for full skill, skill without transfer notes, and generic summary.
 - `results/live_transfer_prompts/aide_v0/`: AIDE live prompt packets for later
   Codex/Claude execution.
+- `papers/notes/toolformer_note.md`: fourth curated real-paper note, focused on
+  self-supervised tool use and API-call selection.
+- `generated_skills/toolformer/SKILL.md`: fourth retained generated skill,
+  focused on text-to-text API calls, sample/execute/filter data generation,
+  fine-tuning, inference-time tool execution, and tool-use limitations.
+- `results/evaluations/toolformer_rubric_v0.json`: Toolformer skill rubric
+  score.
+- `results/evaluations/toolformer_source_span_validation_v0.json`: Toolformer
+  source-span support-rate summary.
+- `results/evaluations/toolformer_context_baselines_v0.json`: Toolformer
+  skill-vs-summary-vs-abstract deterministic comparison.
+- `results/evaluations/toolformer_harness_transfer_v0.json`: Toolformer
+  transfer-readiness ranking for full skill, skill without transfer notes, and
+  generic summary.
+- `results/live_transfer_prompts/toolformer_v0/`: Toolformer live prompt
+  packets for later Codex/Claude execution.
 - `results/tables/`: paper-ready main results, transfer ablation, compactness/
   source-grounding, context cost proxy, and combined summary tables.
 - `results/human_fidelity_packets/`: prepared review packets and blank
   annotation template plus pending annotation summary for human source-fidelity
   review.
-- `results/failure_cases/`: failure-case archive with 20 cases, including 14
+- `results/failure_cases/`: failure-case archive with 27 cases, including 21
   paper-reported limitations/failure branches and 6 project-level failure/fix
   records.
 - `results/reproducibility/`: reproducibility package report. Current status is
-  ready with pending external evidence, 63 ready checks, 4 pending checks, and 0
+  ready with pending external evidence, 75 ready checks, 5 pending checks, and 0
   failed checks.
 - `research/review_report.md` and `research/rebuttal_bank.md`: internal
   review/rebuttal readiness artifacts that map likely reviewer objections to

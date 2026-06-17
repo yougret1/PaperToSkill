@@ -21,6 +21,11 @@ Evidence boundary: token counts are deterministic proxies, estimated as `ceil(ch
 | AIDE | Generated skill | 927 | 1517 | 0.0954 | 0.9046 | 0.001517 |
 | AIDE | Generic summary | 89 | 152 | 0.0096 | 0.9904 | 0.000152 |
 | AIDE | Abstract-only | 51 | 83 | 0.0052 | 0.9948 | 0.000083 |
+| Toolformer | Full extracted paper | 12355 | 24097 | 1 | 0 | 0.024097 |
+| Toolformer | Curated source note | 894 | 1464 | 0.0608 | 0.9392 | 0.001464 |
+| Toolformer | Generated skill | 943 | 1526 | 0.0633 | 0.9367 | 0.001526 |
+| Toolformer | Generic summary | 78 | 128 | 0.0053 | 0.9947 | 0.000128 |
+| Toolformer | Abstract-only | 40 | 66 | 0.0027 | 0.9973 | 0.000066 |
 
 ## Coverage Per Context Budget
 
@@ -37,3 +42,6 @@ Coverage scores are the existing deterministic context-coverage scores. Rows are
 | AIDE | Generated skill | 9.1/10 | 0.91 | 1517 | 5.999 | 0.6 |
 | AIDE | Generic summary | 1.916/10 | 0.1916 | 152 | 12.605 | 1.261 |
 | AIDE | Abstract-only | 1.333/10 | 0.1333 | 83 | 16.06 | 1.606 |
+| Toolformer | Generated skill | 8.9/10 | 0.89 | 1526 | 5.832 | 0.583 |
+| Toolformer | Generic summary | 2.5/10 | 0.25 | 128 | 19.531 | 1.953 |
+| Toolformer | Abstract-only | 1.534/10 | 0.1534 | 66 | 23.242 | 2.324 |

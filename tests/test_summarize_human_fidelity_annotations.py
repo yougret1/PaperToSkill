@@ -35,9 +35,9 @@ class SummarizeHumanFidelityAnnotationsTest(unittest.TestCase):
 
             summary = json.loads(output_json.read_text(encoding="utf-8"))
             self.assertEqual("pending", summary["annotation_status"])
-            self.assertEqual(18, summary["total_rows"])
+            self.assertEqual(24, summary["total_rows"])
             self.assertEqual(0, summary["scored_rows"])
-            self.assertEqual(18, summary["pending_rows"])
+            self.assertEqual(24, summary["pending_rows"])
             self.assertEqual([], summary["errors"])
             self.assertIn("Annotation status: pending", output_md.read_text(encoding="utf-8"))
 

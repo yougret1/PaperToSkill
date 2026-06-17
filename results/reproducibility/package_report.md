@@ -3,8 +3,8 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 63
-- Pending checks: 4
+- Ready checks: 75
+- Pending checks: 5
 - Failed checks: 0
 
 ## Checks
@@ -66,15 +66,28 @@ Evidence boundary: this report checks local package completeness and separates p
 | aide_source_span_support | ready | support_rate=1; invalid_ranges=0 | results/evaluations/aide_source_span_validation_v0.json |
 | aide_live_prompt_packets | ready | prompt_packets=6; missing_prompts=0 | results/live_transfer_prompts/aide_v0/index.json |
 | aide_live_responses | pending | missing_response_files=6 | results/live_transfer_prompts/aide_v0/index.json |
+| toolformer_skill | ready | present | generated_skills/toolformer/SKILL.md |
+| toolformer_source_map | ready | present | generated_skills/toolformer/references/source_map.json |
+| toolformer_rubric | ready | present | results/evaluations/toolformer_rubric_v0.json |
+| toolformer_context | ready | present | results/evaluations/toolformer_context_baselines_v0.json |
+| toolformer_transfer | ready | present | results/evaluations/toolformer_harness_transfer_v0.json |
+| toolformer_source_span | ready | present | results/evaluations/toolformer_source_span_validation_v0.json |
+| toolformer_live_prompt_index | ready | present | results/live_transfer_prompts/toolformer_v0/index.json |
+| toolformer_rubric_score | ready | 20/20 | results/evaluations/toolformer_rubric_v0.json |
+| toolformer_context_baseline_order | ready | skill=8.9; generic=2.5; abstract=1.534 | results/evaluations/toolformer_context_baselines_v0.json |
+| toolformer_transfer_ablation_order | ready | full=10.0; no_transfer=7.6 | results/evaluations/toolformer_harness_transfer_v0.json |
+| toolformer_source_span_support | ready | support_rate=1; invalid_ranges=0 | results/evaluations/toolformer_source_span_validation_v0.json |
+| toolformer_live_prompt_packets | ready | prompt_packets=6; missing_prompts=0 | results/live_transfer_prompts/toolformer_v0/index.json |
+| toolformer_live_responses | pending | missing_response_files=6 | results/live_transfer_prompts/toolformer_v0/index.json |
 | human_fidelity_protocol | ready | present | benchmarks/human_fidelity_review_v0.json |
 | human_fidelity_template | ready | present | results/human_fidelity_packets/annotation_template.csv |
 | human_fidelity_summary_json | ready | present | results/human_fidelity_packets/annotation_summary.json |
 | human_fidelity_summary_md | ready | present | results/human_fidelity_packets/annotation_summary.md |
 | human_fidelity_summary_valid | ready | errors=0 | results\human_fidelity_packets\annotation_summary.json |
-| human_fidelity_annotation_complete | pending | status=pending; scored_rows=0; pending_rows=18 | results\human_fidelity_packets\annotation_summary.json |
+| human_fidelity_annotation_complete | pending | status=pending; scored_rows=0; pending_rows=24 | results\human_fidelity_packets\annotation_summary.json |
 | failure_archive_config | ready | present | benchmarks/failure_case_archive_v0.json |
 | failure_archive_json | ready | present | results/failure_cases/failure_case_archive.json |
 | failure_archive_md | ready | present | results/failure_cases/failure_case_archive.md |
 | failure_archive_csv | ready | present | results/failure_cases/failure_case_archive.csv |
-| failure_archive_counts | ready | total=20; paper=14; project=6 | results\failure_cases\failure_case_archive.json |
+| failure_archive_counts | ready | total=27; paper=21; project=6 | results\failure_cases\failure_case_archive.json |
 | secret_scan | ready | no raw API-key-like strings found | repository text files |

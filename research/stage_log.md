@@ -636,3 +636,56 @@ Verification:
 - `python -m unittest discover -s tests -v`: passed, 17 tests OK.
 - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
 - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
+
+## 2026-06-17 Phase 18
+
+Actions:
+
+- Added Toolformer as a fourth curated real-paper stress case focused on
+  self-supervised tool-use data generation, API-call filtering, and
+  inference-time tool execution.
+- Added Toolformer baselines, paper-specific rubric, context-coverage task,
+  harness-transfer task, source-span validation task, and live prompt-packet
+  task.
+- Regenerated Toolformer deterministic evaluations and live prompt packets.
+- Extended paper-ready result aggregation, context-cost proxy, human-fidelity
+  packets, failure-case archive, and reproducibility package checks to cover
+  Toolformer.
+- Updated paper draft package, claim checklist, limitations, review/rebuttal
+  artifacts, artifact map, decision log, result cards, experiment queue, stage
+  log, and memory.
+
+Results:
+
+- Toolformer skill rubric: `20/20`.
+- Toolformer context baseline:
+  - generated skill: `8.9/10`
+  - generic summary: `2.5/10`
+  - abstract-only context: `1.534/10`
+- Toolformer harness-transfer readiness:
+  - full skill: `10.0/10`
+  - skill without transfer notes: `7.6/10`
+  - generic summary: `1.45/10`
+- Toolformer source-span validation found 22 supported anchored claims, 0 weak
+  or unsupported claims, 0 invalid ranges, and support rate `1.0`.
+- Toolformer context cost proxy: generated skill `1,526` estimated input tokens
+  versus `24,097` for full extracted paper text, a `93.67%` token-proxy
+  reduction.
+- Human-fidelity review packets now cover four papers and the blank annotation
+  template contains 24 rows.
+- Failure-case archive now records 27 cases: 21 paper-reported limitations or
+  failure branches and 6 project-level failure/fix records.
+- Reproducibility package report now shows `ready_with_pending_external_evidence`
+  with 75 ready checks, 5 pending checks, and 0 failed checks.
+
+Evidence boundary:
+
+- Phase 18 adds deterministic/offline evidence for a fourth curated paper note.
+- It does not complete live cross-harness execution, human-fidelity annotation,
+  tokenizer-exact pricing, provider billing, or success-per-dollar evidence.
+
+Verification:
+
+- `python -m unittest discover -s tests -v`: passed, 17 tests OK.
+- `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
+- `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.

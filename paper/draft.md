@@ -10,13 +10,14 @@ to apply the method. We introduce PaperToSkill, a paper-to-skill conversion
 workflow that turns source-anchored paper notes into compact, human-editable
 agent skills. Each skill records the paper's contribution, use conditions,
 workflow, validation checks, failure cases, transfer notes, and source anchors.
-In a three-paper benchmark over AI Scientist-v2, Reflexion, and AIDE,
+In a four-paper benchmark over AI Scientist-v2, Reflexion, AIDE, and Toolformer,
 PaperToSkill generates skills that score 20/20 on deterministic structural
 rubrics, preserve more deterministic operational coverage than generic-summary
 and abstract-only baselines, remain under a 1200-word compactness budget, and
-use only 2.2%, 4.43%, and 9.54% of the full extracted papers' deterministic
-input-token proxy. The generated skills also achieve high source-span support
-with zero invalid line ranges. Removing transfer notes consistently lowers
+use only 2.2%, 4.43%, 9.54%, and 6.33% of the full extracted papers'
+deterministic input-token proxy. The generated skills also achieve high
+source-span support with zero invalid line ranges. Removing transfer notes
+consistently lowers
 offline transfer-readiness from 10/10 to 7.6/10. These results support
 PaperToSkill as a reproducible conversion layer from curated paper notes to
 portable skills, while live cross-harness agent execution and human fidelity
@@ -50,7 +51,8 @@ The current contributions are:
 
 1. a paper-to-skill schema for operationalizing research contributions;
 2. a deterministic extraction scaffold that emits `SKILL.md` plus source maps;
-3. a three-paper benchmark using AI Scientist-v2, Reflexion, and AIDE;
+3. a four-paper benchmark using AI Scientist-v2, Reflexion, AIDE, and
+   Toolformer;
 4. deterministic/offline evaluations for structure, context coverage,
    compactness, source grounding, and transfer readiness;
 5. a claim discipline that separates validated evidence from pending live-agent
@@ -102,12 +104,14 @@ section supports each generated instruction.
 
 ## 4. Experimental Setup
 
-We evaluate three real agent-method papers:
+We evaluate four real agent-method papers:
 
 - AI Scientist-v2, representing an automated research workflow with agentic tree
   search and multi-stage experiment management;
 - Reflexion, representing verbal reflection, retry policy, and episodic memory;
-- AIDE, representing code-space tree search for ML engineering.
+- AIDE, representing code-space tree search for ML engineering;
+- Toolformer, representing self-supervised tool-use data generation, API-call
+  filtering, and inference-time tool execution.
 
 For each paper, we create a curated source-anchored note from the extracted paper
 text, generate a PaperToSkill skill, and compare it against two context
@@ -134,50 +138,52 @@ These metrics are reproducible gates. They do not replace live agent execution
 or completed human fidelity annotation. To support later human review, we also
 prepare a six-criterion fidelity protocol and paper-specific review packets, but
 those packets remain unscored until independent annotators fill them. The
-annotation summarizer currently reports 18 pending rows and no completed
+annotation summarizer currently reports 24 pending rows and no completed
 scores.
 
 ## 5. Results
 
 Table 1 in `results/tables/main_results.md` summarizes the current benchmark.
-All three generated skills score 20/20 on the deterministic skill rubrics. On
+All four generated skills score 20/20 on the deterministic skill rubrics. On
 context coverage, the generated skills score 7.867/9 for AI Scientist-v2,
-8.267/9 for Reflexion, and 9.1/10 for AIDE. The generic-summary baselines score
-1.733/9, 3.483/9, and 1.916/10 respectively; abstract-only baselines score
-1.2/9, 2.533/9, and 1.333/10.
+8.267/9 for Reflexion, 9.1/10 for AIDE, and 8.9/10 for Toolformer. The
+generic-summary baselines score 1.733/9, 3.483/9, 1.916/10, and 2.5/10
+respectively; abstract-only baselines score 1.2/9, 2.533/9, 1.333/10, and
+1.534/10.
 
 The generated skills remain compact: 782 words for AI Scientist-v2, 479 words
-for Reflexion, and 927 words for AIDE, all under the 1200-word budget. Source
-validation finds support rates of 0.938, 1.0, and 1.0 with zero invalid line
-ranges. The one weak AI Scientist-v2 span is recorded as a boundary case rather
-than treated as fully verified.
+for Reflexion, 927 words for AIDE, and 943 words for Toolformer, all under the
+1200-word budget. Source validation finds support rates of 0.938, 1.0, 1.0,
+and 1.0 with zero invalid line ranges. The one weak AI Scientist-v2 span is
+recorded as a boundary case rather than treated as fully verified.
 
 The context cost proxy shows the same compactness pattern relative to full paper
 contexts. Generated skills use 1,366 estimated input tokens for AI Scientist-v2
 compared with 62,041 for the full extracted paper, 823 versus 18,559 for
-Reflexion, and 1,517 versus 15,894 for AIDE. This corresponds to token-proxy
-reductions of 97.8%, 95.57%, and 90.46% relative to full extracted paper text.
-The summary and abstract baselines are smaller, but their deterministic coverage
-scores are much lower. We therefore interpret PaperToSkill's economic signal as
-a coverage-preserving compression relative to full-paper context, not as a claim
+Reflexion, 1,517 versus 15,894 for AIDE, and 1,526 versus 24,097 for
+Toolformer. This corresponds to token-proxy reductions of 97.8%, 95.57%,
+90.46%, and 93.67% relative to full extracted paper text. The summary and
+abstract baselines are smaller, but their deterministic coverage scores are
+much lower. We therefore interpret PaperToSkill's economic signal as a
+coverage-preserving compression relative to full-paper context, not as a claim
 that skills are the shortest possible context.
 
 Transfer-note ablations show a consistent offline readiness pattern. Full skills
-score 10/10 on the readiness metric across all three papers. Removing
-`Transfer Notes` lowers readiness to 7.6/10 in all three cases, while generic
+score 10/10 on the readiness metric across all four papers. Removing
+`Transfer Notes` lowers readiness to 7.6/10 in all four cases, while generic
 summaries score between 1.2/10 and 2.25/10. This supports the narrower claim
 that transfer notes encode artifact-readiness signals. It does not yet prove
 improved live cross-harness success.
 
-The failure-case archive records 20 cases: 14 paper-reported limitations or
-failure branches from the three source maps and 6 project-level failure/fix
+The failure-case archive records 27 cases: 21 paper-reported limitations or
+failure branches from the four source maps and 6 project-level failure/fix
 records from the PaperToSkill development process. This archive supports the
 claim that failed branches are preserved as inspectable provenance. It is not
 evidence that failure recording improves live task outcomes.
 
-The reproducibility package checker reports 63 ready checks, 4 pending
+The reproducibility package checker reports 75 ready checks, 5 pending
 external-evidence checks, and 0 failed checks. The pending checks correspond to
-the three live response sets and the human-fidelity annotation status. This
+the four live response sets and the human-fidelity annotation status. This
 supports a local artifact-readiness claim, not a claim of completed live or
 human evaluation.
 
@@ -222,7 +228,7 @@ success.
 ## 8. Conclusion
 
 PaperToSkill turns paper-derived procedural knowledge into portable,
-human-editable skills. In a three-paper benchmark, generated skills are compact,
+human-editable skills. In a four-paper benchmark, generated skills are compact,
 source-grounded, structurally valid, and more operationally complete than short
 summary baselines under deterministic evaluation. The next stage is to execute
 the prepared live prompt packets across agent harnesses, add human fidelity

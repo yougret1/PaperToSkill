@@ -31,16 +31,17 @@ class BuildFailureCaseArchiveTest(unittest.TestCase):
             )
 
             archive = json.loads((output_dir / "failure_case_archive.json").read_text(encoding="utf-8"))
-            self.assertEqual(20, archive["total_cases"])
-            self.assertEqual(14, archive["scope_counts"]["paper"])
+            self.assertEqual(27, archive["total_cases"])
+            self.assertEqual(21, archive["scope_counts"]["paper"])
             self.assertEqual(6, archive["scope_counts"]["project"])
             self.assertIn("external_dependency", archive["category_counts"])
             self.assertIn("aide_candidate_truncation", {case["id"] for case in archive["cases"]})
 
             with (output_dir / "failure_case_archive.csv").open(encoding="utf-8", newline="") as handle:
                 rows = list(csv.DictReader(handle))
-            self.assertEqual(20, len(rows))
+            self.assertEqual(27, len(rows))
             self.assertTrue(any(row["paper"] == "Reflexion" for row in rows))
+            self.assertTrue(any(row["paper"] == "Toolformer" for row in rows))
             self.assertTrue((output_dir / "failure_case_archive.md").exists())
 
 

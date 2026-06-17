@@ -13,3 +13,6 @@ The no-transfer-notes variant removes only the `Transfer Notes` section from the
 | AIDE | Full skill | 10/10 | 10/10 | 10/10 | 927 | none |
 | AIDE | No transfer notes | 7.6/10 | 7.6/10 | 7.6/10 | 883 | Transfer Notes |
 | AIDE | Generic summary | 1.5/10 | 1.5/10 | 1.5/10 | 89 | none |
+| Toolformer | Full skill | 10/10 | 10/10 | 10/10 | 943 | none |
+| Toolformer | No transfer notes | 7.6/10 | 7.6/10 | 7.6/10 | 899 | Transfer Notes |
+| Toolformer | Generic summary | 1.45/10 | 1.45/10 | 1.45/10 | 78 | none |

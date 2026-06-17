@@ -13,11 +13,11 @@ Evidence to cite:
 
 - `results/tables/main_results.md`: generated skills outperform generic-summary
   and abstract-only baselines on deterministic operational coverage across AI
-  Scientist-v2, Reflexion, and AIDE.
+  Scientist-v2, Reflexion, AIDE, and Toolformer.
 - `generated_skills/*/SKILL.md`: generated artifacts include workflow,
   validation, failure cases, transfer notes, and source anchors.
 - `results/tables/transfer_ablation.md`: removing `Transfer Notes` lowers
-  offline readiness from 10/10 to 7.6/10 across all three cases.
+  offline readiness from 10/10 to 7.6/10 across all four cases.
 
 Do not say:
 
@@ -33,7 +33,7 @@ Evidence to cite:
 
 - `generated_skills/*/references/source_map.json`
 - `results/tables/compactness_source_grounding.md`
-- Source-span support rates: 0.938, 1.0, and 1.0 with zero invalid ranges.
+- Source-span support rates: 0.938, 1.0, 1.0, and 1.0 with zero invalid ranges.
 - `results/human_fidelity_packets/annotation_summary.md`: human annotation is
   prepared but pending.
 
@@ -104,6 +104,7 @@ Evidence to cite:
 - AI Scientist-v2: 1,366 estimated tokens vs 62,041 for full extracted paper.
 - Reflexion: 823 vs 18,559.
 - AIDE: 1,517 vs 15,894.
+- Toolformer: 1,526 vs 24,097.
 
 Do not say:
 
@@ -117,7 +118,7 @@ records as provenance so the paper does not become a success-only narrative.
 
 Evidence to cite:
 
-- `results/failure_cases/failure_case_archive.md`: 20 cases, 14 paper-reported
+- `results/failure_cases/failure_case_archive.md`: 27 cases, 21 paper-reported
   and 6 project-level.
 - `paper/limitations.md`: failure archive is not an outcome study.
 
@@ -132,7 +133,7 @@ annotation, and either a less-procedural stress case or stronger PDF automation.
 
 Evidence to cite:
 
-- `results/reproducibility/package_report.md`: 4 pending external-evidence
+- `results/reproducibility/package_report.md`: 5 pending external-evidence
   checks and 0 failed local checks.
 - `research/review_report.md`: submission gate status.
 

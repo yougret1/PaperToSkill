@@ -45,6 +45,17 @@ PAPERS = [
         "source_span": "results/evaluations/aide_source_span_validation_v0.json",
         "live": "results/live_transfer_prompts/aide_v0/index.json",
     },
+    {
+        "id": "toolformer",
+        "name": "Toolformer",
+        "skill": "generated_skills/toolformer/SKILL.md",
+        "source_map": "generated_skills/toolformer/references/source_map.json",
+        "rubric": "results/evaluations/toolformer_rubric_v0.json",
+        "context": "results/evaluations/toolformer_context_baselines_v0.json",
+        "transfer": "results/evaluations/toolformer_harness_transfer_v0.json",
+        "source_span": "results/evaluations/toolformer_source_span_validation_v0.json",
+        "live": "results/live_transfer_prompts/toolformer_v0/index.json",
+    },
 ]
 
 CORE_FILES = {
@@ -270,7 +281,7 @@ def failure_archive_checks(root: Path) -> list[Check]:
         scope_counts = archive.get("scope_counts", {})
         status = (
             "ready"
-            if archive.get("total_cases") == 20 and scope_counts.get("paper") == 14 and scope_counts.get("project") == 6
+            if archive.get("total_cases") == 27 and scope_counts.get("paper") == 21 and scope_counts.get("project") == 6
             else "fail"
         )
         detail = (

@@ -10,7 +10,7 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 16: reproducibility package gate over the three-paper deterministic/
+Phase 18: Toolformer fourth-paper stress case added to the deterministic/
 offline benchmark. The local package is ready with pending external evidence:
 live cross-harness responses and completed human-fidelity annotation.
 
@@ -68,10 +68,11 @@ pending live-agent claims.
 
 ## Current Benchmark Snapshot
 
-- Real-paper cases: AI Scientist-v2, Reflexion, and AIDE.
+- Real-paper cases: AI Scientist-v2, Reflexion, AIDE, and Toolformer.
 - Main result tables: `results/tables/`.
 - Generated skills: `generated_skills/ai_scientist_v2/`,
-  `generated_skills/reflexion/`, and `generated_skills/aide/`.
+  `generated_skills/reflexion/`, `generated_skills/aide/`, and
+  `generated_skills/toolformer/`.
 - Live transfer prompt packets: `results/live_transfer_prompts/`.
 - Human-fidelity review packets and pending annotation summary:
   `results/human_fidelity_packets/`.

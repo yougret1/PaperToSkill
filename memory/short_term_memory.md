@@ -9,8 +9,9 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 17 review/rebuttal package is implemented locally and moving through
-verification, commit, and push. Phase 16 was committed and pushed as `bea1952`.
+Phase 18 Toolformer fourth-paper stress case is implemented locally and moving
+through verification, commit, and push. Phase 17 was committed and pushed as
+`7a3bc3c`.
 
 ## Latest User Request
 
@@ -335,6 +336,44 @@ The user provided the PaperToSkill idea and asked to:
   - `python -m unittest discover -s tests -v`: passed, 17 tests OK.
   - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
   - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
+- Phase 17 was committed and pushed as `7a3bc3c` on `origin/main`.
+- Phase 18 added Toolformer as the fourth curated real-paper stress case:
+  - `papers/raw/toolformer.pdf`
+  - `papers/extracted/toolformer.txt`
+  - `papers/notes/toolformer_note.md`
+  - `generated_skills/toolformer/SKILL.md`
+  - `benchmarks/rubric_toolformer_v0.json`
+  - `benchmarks/tasks/toolformer_research_run.json`
+  - `benchmarks/tasks/toolformer_harness_transfer.json`
+  - `benchmarks/tasks/toolformer_live_transfer.json`
+  - `benchmarks/tasks/toolformer_source_span_validation.json`
+  - `baselines/toolformer_generic_summary.md`
+  - `baselines/toolformer_abstract_only.md`
+- Toolformer results:
+  - rubric score: `20/20`
+  - context baseline: skill `8.9/10`, generic summary `2.5/10`,
+    abstract-only `1.534/10`
+  - harness-transfer readiness: full skill `10.0/10`, no-transfer-notes
+    `7.6/10`, generic summary `1.45/10`
+  - source-span validation: 22 supported claims, 0 weak/unsupported, 0 invalid
+    ranges, support rate `1.0`
+  - context cost proxy: skill `1,526` estimated input tokens vs `24,097` for
+    full extracted text, reduction `93.67%`
+- Phase 18 regenerated result tables, context-cost proxy, human-fidelity
+  packets, annotation summary, failure-case archive, and reproducibility report
+  for four papers.
+- Human-fidelity packets now cover four papers; annotation template summary is
+  `pending`, 24 total rows, 0 scored rows, 24 pending rows, 0 errors.
+- Failure-case archive now records 27 total cases: 21 paper-reported and 6
+  project-level.
+- Reproducibility package report now shows
+  `ready_with_pending_external_evidence`, 75 ready checks, 5 pending checks, and
+  0 failed checks.
+- Phase 18 verification:
+  - `python -m unittest discover -s tests -v`: passed, 17 tests OK.
+  - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
+  - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
+- Phase 18 was committed locally on `main`; push is pending.
 
 ## Current Blockers / Pending Checks
 
@@ -351,6 +390,7 @@ The user provided the PaperToSkill idea and asked to:
   beyond deterministic source-span support.
 - Need tokenizer-exact pricing, provider billing, or success-per-dollar evidence
   before making stronger economic/cost-saving claims.
+- Need Phase 18 final verification, commit, and push.
 
 ## Next Actions
 
@@ -358,4 +398,4 @@ The user provided the PaperToSkill idea and asked to:
 2. Execute live cross-harness runs using the prompt packets when the endpoint
    recovers.
 3. Run human fidelity annotation, tokenizer-exact pricing, or expand the
-   benchmark to more agent/LLM-method papers.
+   benchmark to less procedural/interface/theory-heavy papers.

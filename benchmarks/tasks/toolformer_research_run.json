@@ -1,0 +1,75 @@
+{
+  "schema_version": "0.1",
+  "id": "toolformer_research_run",
+  "paper_id": "toolformer",
+  "created": "2026-06-17",
+  "task": "Plan a Toolformer-style tool-use data-generation and fine-tuning run for a local language-model harness.",
+  "user_prompt": "Given a language-model harness and a set of text-to-text tools, produce a Toolformer-style run plan. The plan must include API-call representation, tool demonstrations, candidate call sampling, execution, loss-based filtering, augmented dataset construction, fine-tuning, inference-time tool execution, validation tasks, and limitations.",
+  "context_variants": [
+    {
+      "id": "skill",
+      "path": "generated_skills/toolformer/SKILL.md",
+      "label": "PaperToSkill generated skill"
+    },
+    {
+      "id": "generic_summary",
+      "path": "baselines/toolformer_generic_summary.md",
+      "label": "Generic paper summary"
+    },
+    {
+      "id": "abstract_only",
+      "path": "baselines/toolformer_abstract_only.md",
+      "label": "Abstract-only context"
+    }
+  ],
+  "required_capabilities": [
+    {
+      "id": "api_contract",
+      "description": "Plan defines API calls as text-to-text calls with names, inputs, optional results, and delimiters.",
+      "keywords": ["API call", "text-to-text", "tool name", "input", "result", "delimiter"]
+    },
+    {
+      "id": "demonstrations",
+      "description": "Plan uses a few demonstrations per API rather than large human annotation.",
+      "keywords": ["few demonstrations", "handful", "prompt", "examples", "self-supervised"]
+    },
+    {
+      "id": "sampling_execution_filtering",
+      "description": "Plan samples, executes, and filters candidate calls using loss improvement.",
+      "keywords": ["sample", "execute", "filter", "future-token loss", "threshold", "reduces"]
+    },
+    {
+      "id": "augmented_dataset",
+      "description": "Plan builds an augmented dataset while preserving original text content.",
+      "keywords": ["augmented dataset", "interleave", "original text", "fine-tune", "language modeling objective"]
+    },
+    {
+      "id": "inference_protocol",
+      "description": "Plan interrupts generation, executes the selected API, inserts response text, and continues.",
+      "keywords": ["inference", "interrupt", "execute", "insert", "response", "continue"]
+    },
+    {
+      "id": "tool_set",
+      "description": "Plan preserves the evaluated Toolformer tools.",
+      "keywords": ["question answering", "calculator", "Wikipedia search", "machine translation", "calendar"]
+    },
+    {
+      "id": "validation_domains",
+      "description": "Plan remembers the zero-shot evaluation domains and language-modeling check.",
+      "keywords": ["LAMA", "mathematical reasoning", "question answering", "temporal", "zero-shot", "perplexity"]
+    },
+    {
+      "id": "limitations",
+      "description": "Plan preserves key limitations and tool-interaction caveats.",
+      "keywords": ["external backend", "heuristics", "Atlas", "calendar API", "model scale", "perplexity"]
+    },
+    {
+      "id": "source_grounding",
+      "description": "Context includes source anchors or equivalent traceability.",
+      "keywords": ["Source anchors", "source map", "lines"]
+    }
+  ],
+  "compactness": {
+    "max_words": 1200
+  }
+}

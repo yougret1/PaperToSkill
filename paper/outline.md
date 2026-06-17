@@ -1,7 +1,7 @@
 # PaperToSkill Paper Outline
 
 Evidence boundary: this outline is grounded in deterministic/offline artifacts
-from three curated real-paper notes. It should not be read as evidence of live
+from four curated real-paper notes. It should not be read as evidence of live
 cross-harness agent task success until the prepared prompt packets are executed.
 
 ## Working Title
@@ -14,7 +14,7 @@ Research papers often contain reusable agent workflows, but those workflows are
 hard for non-expert users to operationalize. PaperToSkill studies whether a
 paper can be converted into a compact, human-editable skill that preserves
 procedural knowledge, source grounding, validation checks, failure branches, and
-transfer notes. On three curated agent-method papers, generated skills pass
+transfer notes. On four curated agent-method papers, generated skills pass
 deterministic structural rubrics, preserve more task-relevant operational
 coverage than summary baselines, remain under a 1200-word compactness budget,
 and show stronger offline transfer readiness when transfer notes are retained.
@@ -26,8 +26,8 @@ and show stronger offline transfer readiness when transfer notes are retained.
    source anchors, and transfer notes.
 2. A deterministic extraction scaffold that converts curated paper notes into
    `SKILL.md` artifacts plus source maps.
-3. A benchmark package over three real agent-method papers: AI Scientist-v2,
-   Reflexion, and AIDE.
+3. A benchmark package over four real agent-method papers: AI Scientist-v2,
+   Reflexion, AIDE, and Toolformer.
 4. An evaluation suite for structural validity, context-coverage against
    summaries, source-span support, compactness, and offline transfer readiness.
 5. A provenance discipline for separating validated claims, inferred transfer
@@ -91,6 +91,7 @@ Papers:
 - AI Scientist-v2: automated research workflow and agentic tree search.
 - Reflexion: verbal reflection, episodic memory, retry policy.
 - AIDE: code-space tree search for ML engineering.
+- Toolformer: self-supervised tool-use data generation and API-call filtering.
 
 Baselines and ablations:
 
@@ -112,18 +113,19 @@ Metrics:
 
 Main results from `results/tables/main_results.md`:
 
-- all three generated skills score 20/20 on the deterministic skill rubric;
+- all four generated skills score 20/20 on the deterministic skill rubric;
 - generated skills outperform generic-summary and abstract-only baselines on
-  deterministic context coverage across all three papers;
-- source support rates are 0.938, 1.0, and 1.0 with zero invalid line ranges;
+  deterministic context coverage across all four papers;
+- source support rates are 0.938, 1.0, 1.0, and 1.0 with zero invalid line
+  ranges;
 - skills remain under 1200 words;
-- generated skills use 2.2%, 4.43%, and 9.54% of full extracted paper
+- generated skills use 2.2%, 4.43%, 9.54%, and 6.33% of full extracted paper
   input-token proxies;
 - full skills score 10/10 on offline transfer readiness, while removing
-  transfer notes drops readiness to 7.6/10 in all three cases.
-- the failure-case archive records 20 cases: 14 paper-reported limitations or
+  transfer notes drops readiness to 7.6/10 in all four cases.
+- the failure-case archive records 27 cases: 21 paper-reported limitations or
   failure branches and 6 project-level failure/fix records.
-- the reproducibility package checker reports 63 ready checks, 4 pending
+- the reproducibility package checker reports 75 ready checks, 5 pending
   external-evidence checks, and 0 failed checks.
 
 Interpretation: PaperToSkill preserves operational paper details that short

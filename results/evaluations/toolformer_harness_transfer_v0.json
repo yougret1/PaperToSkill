@@ -1,0 +1,609 @@
+{
+  "task": "toolformer_harness_transfer",
+  "task_path": "benchmarks\\tasks\\toolformer_harness_transfer.json",
+  "evidence_boundary": "Offline deterministic readiness metric; not a live cross-harness agent run.",
+  "results": [
+    {
+      "id": "full_skill",
+      "label": "PaperToSkill generated skill with transfer notes",
+      "path": "generated_skills/toolformer/SKILL.md",
+      "drop_sections": [],
+      "word_count": 943,
+      "average_normalized_score": 10.0,
+      "harnesses": [
+        {
+          "id": "codex_skill",
+          "label": "Codex-style SKILL.md harness",
+          "score": 10.0,
+          "max_score": 10.0,
+          "normalized_score": 10.0,
+          "sections": {
+            "points": 2.0,
+            "max_points": 2.0,
+            "present": [
+              "Inputs",
+              "Workflow",
+              "Validation",
+              "Failure Cases",
+              "Transfer Notes"
+            ],
+            "missing": []
+          },
+          "signals": [
+            {
+              "id": "api_contract",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "API call",
+                "text-to-text",
+                "tool name",
+                "result"
+              ],
+              "missing": []
+            },
+            {
+              "id": "self_supervised_pipeline",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "sample",
+                "execute",
+                "filter",
+                "future-token loss"
+              ],
+              "missing": []
+            },
+            {
+              "id": "training_and_inference",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "augmented dataset",
+                "fine-tune",
+                "inference",
+                "insert the response"
+              ],
+              "missing": []
+            },
+            {
+              "id": "validation_and_limits",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "zero-shot",
+                "LAMA",
+                "Atlas",
+                "calendar API",
+                "model scale"
+              ],
+              "missing": []
+            }
+          ],
+          "transfer_checks": {
+            "points": 2.0,
+            "max_points": 2.0,
+            "hits": [
+              "target harness",
+              "framework-specific commands",
+              "local equivalents",
+              "source-backed steps",
+              "failed branch"
+            ],
+            "missing": []
+          },
+          "source_anchors": {
+            "points": 1.0,
+            "max_points": 1.0,
+            "anchor_count": 23,
+            "required_min": 8
+          },
+          "compactness": {
+            "points": 1.0,
+            "max_points": 1.0,
+            "word_count": 943,
+            "max_words": 1000
+          }
+        },
+        {
+          "id": "claude_project_prompt",
+          "label": "Claude-style project prompt harness",
+          "score": 10.0,
+          "max_score": 10.0,
+          "normalized_score": 10.0,
+          "sections": {
+            "points": 2.0,
+            "max_points": 2.0,
+            "present": [
+              "Paper Snapshot",
+              "Workflow",
+              "Validation",
+              "Failure Cases",
+              "Transfer Notes"
+            ],
+            "missing": []
+          },
+          "signals": [
+            {
+              "id": "api_contract",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "API call",
+                "text-to-text",
+                "tool name",
+                "result"
+              ],
+              "missing": []
+            },
+            {
+              "id": "self_supervised_pipeline",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "sample",
+                "execute",
+                "filter",
+                "future-token loss"
+              ],
+              "missing": []
+            },
+            {
+              "id": "training_and_inference",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "augmented dataset",
+                "fine-tune",
+                "inference",
+                "insert the response"
+              ],
+              "missing": []
+            },
+            {
+              "id": "validation_and_limits",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "zero-shot",
+                "LAMA",
+                "Atlas",
+                "calendar API",
+                "model scale"
+              ],
+              "missing": []
+            }
+          ],
+          "transfer_checks": {
+            "points": 2.0,
+            "max_points": 2.0,
+            "hits": [
+              "target harness",
+              "local equivalents",
+              "source-backed steps",
+              "inferred adaptations",
+              "future revision history"
+            ],
+            "missing": []
+          },
+          "source_anchors": {
+            "points": 1.0,
+            "max_points": 1.0,
+            "anchor_count": 23,
+            "required_min": 8
+          },
+          "compactness": {
+            "points": 1.0,
+            "max_points": 1.0,
+            "word_count": 943,
+            "max_words": 1100
+          }
+        }
+      ]
+    },
+    {
+      "id": "skill_without_transfer_notes",
+      "label": "Generated skill with Transfer Notes removed",
+      "path": "generated_skills/toolformer/SKILL.md",
+      "drop_sections": [
+        "Transfer Notes"
+      ],
+      "word_count": 899,
+      "average_normalized_score": 7.6,
+      "harnesses": [
+        {
+          "id": "codex_skill",
+          "label": "Codex-style SKILL.md harness",
+          "score": 7.6,
+          "max_score": 10.0,
+          "normalized_score": 7.6,
+          "sections": {
+            "points": 1.6,
+            "max_points": 2.0,
+            "present": [
+              "Inputs",
+              "Workflow",
+              "Validation",
+              "Failure Cases"
+            ],
+            "missing": [
+              "Transfer Notes"
+            ]
+          },
+          "signals": [
+            {
+              "id": "api_contract",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "API call",
+                "text-to-text",
+                "tool name",
+                "result"
+              ],
+              "missing": []
+            },
+            {
+              "id": "self_supervised_pipeline",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "sample",
+                "execute",
+                "filter",
+                "future-token loss"
+              ],
+              "missing": []
+            },
+            {
+              "id": "training_and_inference",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "augmented dataset",
+                "fine-tune",
+                "inference",
+                "insert the response"
+              ],
+              "missing": []
+            },
+            {
+              "id": "validation_and_limits",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "zero-shot",
+                "LAMA",
+                "Atlas",
+                "calendar API",
+                "model scale"
+              ],
+              "missing": []
+            }
+          ],
+          "transfer_checks": {
+            "points": 0.0,
+            "max_points": 2.0,
+            "hits": [],
+            "missing": [
+              "target harness",
+              "framework-specific commands",
+              "local equivalents",
+              "source-backed steps",
+              "failed branch"
+            ]
+          },
+          "source_anchors": {
+            "points": 1.0,
+            "max_points": 1.0,
+            "anchor_count": 23,
+            "required_min": 8
+          },
+          "compactness": {
+            "points": 1.0,
+            "max_points": 1.0,
+            "word_count": 899,
+            "max_words": 1000
+          }
+        },
+        {
+          "id": "claude_project_prompt",
+          "label": "Claude-style project prompt harness",
+          "score": 7.6,
+          "max_score": 10.0,
+          "normalized_score": 7.6,
+          "sections": {
+            "points": 1.6,
+            "max_points": 2.0,
+            "present": [
+              "Paper Snapshot",
+              "Workflow",
+              "Validation",
+              "Failure Cases"
+            ],
+            "missing": [
+              "Transfer Notes"
+            ]
+          },
+          "signals": [
+            {
+              "id": "api_contract",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "API call",
+                "text-to-text",
+                "tool name",
+                "result"
+              ],
+              "missing": []
+            },
+            {
+              "id": "self_supervised_pipeline",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "sample",
+                "execute",
+                "filter",
+                "future-token loss"
+              ],
+              "missing": []
+            },
+            {
+              "id": "training_and_inference",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "augmented dataset",
+                "fine-tune",
+                "inference",
+                "insert the response"
+              ],
+              "missing": []
+            },
+            {
+              "id": "validation_and_limits",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "zero-shot",
+                "LAMA",
+                "Atlas",
+                "calendar API",
+                "model scale"
+              ],
+              "missing": []
+            }
+          ],
+          "transfer_checks": {
+            "points": 0.0,
+            "max_points": 2.0,
+            "hits": [],
+            "missing": [
+              "target harness",
+              "local equivalents",
+              "source-backed steps",
+              "inferred adaptations",
+              "future revision history"
+            ]
+          },
+          "source_anchors": {
+            "points": 1.0,
+            "max_points": 1.0,
+            "anchor_count": 23,
+            "required_min": 8
+          },
+          "compactness": {
+            "points": 1.0,
+            "max_points": 1.0,
+            "word_count": 899,
+            "max_words": 1100
+          }
+        }
+      ]
+    },
+    {
+      "id": "generic_summary",
+      "label": "Generic prose summary baseline",
+      "path": "baselines/toolformer_generic_summary.md",
+      "drop_sections": [],
+      "word_count": 78,
+      "average_normalized_score": 1.45,
+      "harnesses": [
+        {
+          "id": "codex_skill",
+          "label": "Codex-style SKILL.md harness",
+          "score": 1.45,
+          "max_score": 10.0,
+          "normalized_score": 1.45,
+          "sections": {
+            "points": 0.0,
+            "max_points": 2.0,
+            "present": [],
+            "missing": [
+              "Inputs",
+              "Workflow",
+              "Validation",
+              "Failure Cases",
+              "Transfer Notes"
+            ]
+          },
+          "signals": [
+            {
+              "id": "api_contract",
+              "points": 0.25,
+              "max_points": 1.0,
+              "hits": [
+                "result"
+              ],
+              "missing": [
+                "API call",
+                "text-to-text",
+                "tool name"
+              ]
+            },
+            {
+              "id": "self_supervised_pipeline",
+              "points": 0.0,
+              "max_points": 1.0,
+              "hits": [],
+              "missing": [
+                "sample",
+                "execute",
+                "filter",
+                "future-token loss"
+              ]
+            },
+            {
+              "id": "training_and_inference",
+              "points": 0.0,
+              "max_points": 1.0,
+              "hits": [],
+              "missing": [
+                "augmented dataset",
+                "fine-tune",
+                "inference",
+                "insert the response"
+              ]
+            },
+            {
+              "id": "validation_and_limits",
+              "points": 0.2,
+              "max_points": 1.0,
+              "hits": [
+                "zero-shot"
+              ],
+              "missing": [
+                "LAMA",
+                "Atlas",
+                "calendar API",
+                "model scale"
+              ]
+            }
+          ],
+          "transfer_checks": {
+            "points": 0.0,
+            "max_points": 2.0,
+            "hits": [],
+            "missing": [
+              "target harness",
+              "framework-specific commands",
+              "local equivalents",
+              "source-backed steps",
+              "failed branch"
+            ]
+          },
+          "source_anchors": {
+            "points": 0.0,
+            "max_points": 1.0,
+            "anchor_count": 0,
+            "required_min": 8
+          },
+          "compactness": {
+            "points": 1.0,
+            "max_points": 1.0,
+            "word_count": 78,
+            "max_words": 1000
+          }
+        },
+        {
+          "id": "claude_project_prompt",
+          "label": "Claude-style project prompt harness",
+          "score": 1.45,
+          "max_score": 10.0,
+          "normalized_score": 1.45,
+          "sections": {
+            "points": 0.0,
+            "max_points": 2.0,
+            "present": [],
+            "missing": [
+              "Paper Snapshot",
+              "Workflow",
+              "Validation",
+              "Failure Cases",
+              "Transfer Notes"
+            ]
+          },
+          "signals": [
+            {
+              "id": "api_contract",
+              "points": 0.25,
+              "max_points": 1.0,
+              "hits": [
+                "result"
+              ],
+              "missing": [
+                "API call",
+                "text-to-text",
+                "tool name"
+              ]
+            },
+            {
+              "id": "self_supervised_pipeline",
+              "points": 0.0,
+              "max_points": 1.0,
+              "hits": [],
+              "missing": [
+                "sample",
+                "execute",
+                "filter",
+                "future-token loss"
+              ]
+            },
+            {
+              "id": "training_and_inference",
+              "points": 0.0,
+              "max_points": 1.0,
+              "hits": [],
+              "missing": [
+                "augmented dataset",
+                "fine-tune",
+                "inference",
+                "insert the response"
+              ]
+            },
+            {
+              "id": "validation_and_limits",
+              "points": 0.2,
+              "max_points": 1.0,
+              "hits": [
+                "zero-shot"
+              ],
+              "missing": [
+                "LAMA",
+                "Atlas",
+                "calendar API",
+                "model scale"
+              ]
+            }
+          ],
+          "transfer_checks": {
+            "points": 0.0,
+            "max_points": 2.0,
+            "hits": [],
+            "missing": [
+              "target harness",
+              "local equivalents",
+              "source-backed steps",
+              "inferred adaptations",
+              "future revision history"
+            ]
+          },
+          "source_anchors": {
+            "points": 0.0,
+            "max_points": 1.0,
+            "anchor_count": 0,
+            "required_min": 8
+          },
+          "compactness": {
+            "points": 1.0,
+            "max_points": 1.0,
+            "word_count": 78,
+            "max_words": 1100
+          }
+        }
+      ]
+    }
+  ]
+}

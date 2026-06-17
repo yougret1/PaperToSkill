@@ -49,6 +49,7 @@ class CheckReproducibilityPackageTest(unittest.TestCase):
             pending_ids = {check["id"] for check in report["checks"] if check["status"] == "pending"}
             self.assertIn("human_fidelity_annotation_complete", pending_ids)
             self.assertIn("ai_scientist_v2_live_responses", pending_ids)
+            self.assertIn("toolformer_live_responses", pending_ids)
             self.assertTrue(output_md.exists())
 
 

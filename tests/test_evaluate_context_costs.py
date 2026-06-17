@@ -43,7 +43,7 @@ class EvaluateContextCostsTest(unittest.TestCase):
                 self.assertTrue((output_dir / name).exists(), name)
 
             size_rows = read_csv(output_dir / "context_cost_proxy.csv")
-            self.assertEqual(15, len(size_rows))
+            self.assertEqual(20, len(size_rows))
             by_key = {(row["Paper"], row["Variant"]): row for row in size_rows}
             ai_full = by_key[("AI Scientist-v2", "Full extracted paper")]
             ai_skill = by_key[("AI Scientist-v2", "Generated skill")]
@@ -54,7 +54,7 @@ class EvaluateContextCostsTest(unittest.TestCase):
             self.assertLess(float(ai_skill["Tokens vs full paper"]), 0.05)
 
             efficiency_rows = read_csv(output_dir / "coverage_cost_efficiency.csv")
-            self.assertEqual(9, len(efficiency_rows))
+            self.assertEqual(12, len(efficiency_rows))
             efficiency = {(row["Paper"], row["Variant"]): row for row in efficiency_rows}
             aide_skill = efficiency[("AIDE", "Generated skill")]
             aide_summary = efficiency[("AIDE", "Generic summary")]
@@ -63,6 +63,8 @@ class EvaluateContextCostsTest(unittest.TestCase):
                 float(aide_skill["Normalized coverage"]),
                 float(aide_summary["Normalized coverage"]),
             )
+            toolformer_skill = efficiency[("Toolformer", "Generated skill")]
+            self.assertEqual("8.9/10", toolformer_skill["Coverage score"])
 
 
 if __name__ == "__main__":

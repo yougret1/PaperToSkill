@@ -240,8 +240,8 @@
 - Failure modes: keyword scoring can under-credit equivalent paraphrases and
   does not evaluate actual coding-agent behavior.
 - Limitations: not live agent task success.
-- Claim impact: strengthens the deterministic multi-paper coverage claim across
-  three real paper cases.
+- Claim impact: strengthened the deterministic multi-paper coverage claim
+  before the Toolformer extension.
 - Figure/table: `results/evaluations/aide_context_baselines_v0.json`.
 
 ## AIDE Harness Transfer Readiness
@@ -259,14 +259,77 @@
 - Failure modes: still artifact-readiness rather than live transfer success.
 - Limitations: live prompt packets are ready but remote chat completion returned
   HTTP 503.
-- Claim impact: partially supports the harness-transfer claim at the offline
-  artifact-readiness level across three papers.
+- Claim impact: partially supported the harness-transfer claim at the offline
+  artifact-readiness level before the Toolformer extension.
 - Figure/table: `results/evaluations/aide_harness_transfer_v0.json`.
+
+## Toolformer Paper-To-Skill Scaffold
+
+- Experiment: deterministic scaffold on `papers/notes/toolformer_note.md`.
+- Main result: generated `generated_skills/toolformer/SKILL.md` with source-
+  anchored workflow, validation, failure cases, and transfer notes for
+  self-supervised tool-use data generation.
+- Compared baselines: no separate scaffold baseline; downstream baselines are
+  covered in the Toolformer context baseline card.
+- Practical significance: extends PaperToSkill beyond research, reflection, and
+  coding workflows to a tool-use/API-contract paper.
+- Deterministic rubric: `results/evaluations/toolformer_rubric_v0.json` scored
+  20/20.
+- Source-span validation: `results/evaluations/toolformer_source_span_validation_v0.json`
+  found 22/22 supported anchored claims with 0 invalid ranges.
+- Failure modes: still depends on a curated paper note and deterministic
+  lexical checks; Toolformer is procedural, so it does not resolve the
+  theory-heavy benchmark gap.
+- Limitations: not live tool execution and not a human fidelity annotation.
+- Claim impact: strengthens benchmark diversity by adding a tool-use stress
+  case while preserving the curated-note/offline evidence boundary.
+- Figure/table: `results/evaluations/toolformer_rubric_v0.json`;
+  `results/evaluations/toolformer_source_span_validation_v0.json`.
+
+## Toolformer Context Baseline Coverage
+
+- Experiment: deterministic context coverage evaluation for
+  `benchmarks/tasks/toolformer_research_run.json`.
+- Main result: the PaperToSkill-generated Toolformer skill scored 8.9/10,
+  compared with 2.5/10 for a generic summary and 1.534/10 for abstract-only
+  context.
+- Compared baselines: `baselines/toolformer_generic_summary.md` and
+  `baselines/toolformer_abstract_only.md`.
+- Practical significance: the generated skill preserves API-call
+  representation, few-demonstration prompting, sample/execute/filter data
+  construction, fine-tuning, inference-time execution, tool-suite coverage, and
+  limitations better than short summaries.
+- Statistical evidence: none; deterministic task only.
+- Failure modes: keyword scoring can under-credit equivalent paraphrases and
+  does not evaluate actual tool execution.
+- Limitations: not live agent task success.
+- Claim impact: strengthens the deterministic multi-paper coverage claim across
+  four real paper cases.
+- Figure/table: `results/evaluations/toolformer_context_baselines_v0.json`.
+
+## Toolformer Harness Transfer Readiness
+
+- Experiment: offline Codex/Claude-style transfer-readiness evaluation across
+  the full Toolformer skill, the same skill with `Transfer Notes` removed, and
+  a generic summary baseline.
+- Main result: the full generated skill scored 10.0/10 average readiness, the
+  no-transfer-notes variant scored 7.6/10, and the generic summary scored
+  1.45/10.
+- Compared baselines: skill without transfer notes and generic prose summary.
+- Practical significance: the transfer-note ablation pattern now also holds for
+  a tool-use paper with explicit API contracts.
+- Statistical evidence: none; deterministic offline gate only.
+- Failure modes: still artifact-readiness rather than live transfer success.
+- Limitations: live prompt packets are ready but remote chat completion remains
+  unavailable.
+- Claim impact: partially supports the harness-transfer claim at the offline
+  artifact-readiness level across four papers.
+- Figure/table: `results/evaluations/toolformer_harness_transfer_v0.json`.
 
 ## Paper Draft Package
 
-- Experiment: convert the validated three-paper deterministic/offline evidence
-  into paper-facing artifacts.
+- Experiment: convert the validated deterministic/offline evidence into
+  paper-facing artifacts.
 - Main result: created `paper/outline.md`, `paper/draft.md`,
   `paper/claim_checklist.md`, and `paper/limitations.md`.
 - Compared baselines: none; this is a synthesis artifact over existing result
@@ -288,17 +351,17 @@
 
 - Experiment: deterministic context-size and cost-proxy analysis over full
   extracted paper text, curated paper notes, generated skills, generic summaries,
-  and abstract-only baselines for the three real-paper cases.
+  and abstract-only baselines for the real-paper cases.
 - Main result: generated skills use 1,366 estimated input tokens vs 62,041 for
   the full AI Scientist-v2 extracted paper, 823 vs 18,559 for Reflexion, and
-  1,517 vs 15,894 for AIDE.
+  1,517 vs 15,894 for AIDE, and 1,526 vs 24,097 for Toolformer.
 - Compared baselines: full extracted paper, curated note, generated skill,
   generic summary, and abstract-only context. Coverage-per-budget rows are
   limited to the already evaluated skill, generic summary, and abstract-only
   contexts.
 - Practical significance: generated skills compress full extracted paper text by
-  97.8%, 95.57%, and 90.46% under the deterministic input-token proxy while
-  preserving much higher deterministic coverage than generic summaries or
+  97.8%, 95.57%, 90.46%, and 93.67% under the deterministic input-token proxy
+  while preserving much higher deterministic coverage than generic summaries or
   abstract-only contexts.
 - Statistical evidence: none; this is deterministic accounting.
 - Failure modes: proxy tokens are estimated as `ceil(characters / 4)`, so they
@@ -318,7 +381,7 @@
 
 ## Human-Fidelity Review Readiness
 
-- Experiment: prepare human-fidelity review packets for the three generated
+- Experiment: prepare human-fidelity review packets for the generated
   real-paper skills after re-testing the remote LLM endpoint.
 - Main result: `/v1/models` worked and listed `claude-opus-4-8`, but
   `/v1/chat/completions` returned HTTP 503 with an empty body. Because live
@@ -329,8 +392,8 @@
   curated source note excerpt, source-span support rate, invalid ranges,
   deterministic coverage score, and six review criteria.
 - Practical significance: human-fidelity review is now operationally ready
-  without overstating evidence. The annotation template has 18 blank rows
-  covering 3 papers x 6 criteria.
+  without overstating evidence. The annotation template has 24 blank rows
+  covering 4 papers x 6 criteria.
 - Statistical evidence: none; no annotation has been completed.
 - Failure modes: packet quality depends on curated notes and source-map
   structure. Independent reviewers still need to fill the annotation template.
@@ -346,7 +409,7 @@
 - Experiment: add a deterministic summarizer for the human-fidelity annotation
   template.
 - Main result: `scripts/summarize_human_fidelity_annotations.py` reports
-  `annotation_status=pending`, 18 total rows, 0 scored rows, 18 pending rows,
+  `annotation_status=pending`, 24 total rows, 0 scored rows, 24 pending rows,
   and 0 validation errors for the current blank template.
 - Compared baselines: none; this is provenance and validation infrastructure for
   future human annotations.
@@ -365,11 +428,11 @@
 
 ## Failure-Case Archive
 
-- Experiment: aggregate paper-reported failure/limitation cases from the three
+- Experiment: aggregate paper-reported failure/limitation cases from the four
   source maps and project-level failure/fix records from the PaperToSkill
   development history.
-- Main result: `results/failure_cases/failure_case_archive.md` records 20
-  cases: 14 paper-reported cases and 6 project-level cases.
+- Main result: `results/failure_cases/failure_case_archive.md` records 27
+  cases: 21 paper-reported cases and 6 project-level cases.
 - Compared baselines: no empirical baseline; this is a provenance artifact
   against a success-only research narrative.
 - Practical significance: the archive makes failed branches inspectable and
@@ -393,11 +456,11 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 63 ready checks, 4
+  `overall_status=ready_with_pending_external_evidence`, 75 ready checks, 5
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
-  remaining external gaps explicit: live response files for three prompt-packet
+  remaining external gaps explicit: live response files for four prompt-packet
   sets and completed human-fidelity annotation.
 - Statistical evidence: none; this is a deterministic reproducibility gate.
 - Failure modes: the checker verifies package presence and key consistency
