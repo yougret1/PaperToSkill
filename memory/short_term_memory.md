@@ -9,9 +9,10 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 8 Reflexion context baseline, transfer-readiness, and live prompt packets
-are implemented locally. Current focus: finalize records, verify, commit, and
-push.
+Phase 9 paper-ready result table aggregation is implemented. Current focus:
+verify, commit, and push Phase 9, then either re-test the remote LLM endpoint
+for live cross-harness execution or expand the benchmark with more
+agent/LLM-method papers.
 
 ## Latest User Request
 
@@ -141,6 +142,29 @@ The user provided the PaperToSkill idea and asked to:
   - generic summary: `2.25/10`
 - Reflexion live prompt packets were generated under
   `results/live_transfer_prompts/reflexion_v0/`.
+- Phase 8 was committed and pushed as `279e555` on `origin/main`.
+- Phase 9 added `scripts/aggregate_results_tables.py` and
+  `tests/test_aggregate_results_tables.py`.
+- Phase 9 generated:
+  - `results/tables/main_results.md`
+  - `results/tables/main_results.csv`
+  - `results/tables/transfer_ablation.md`
+  - `results/tables/transfer_ablation.csv`
+  - `results/tables/compactness_source_grounding.md`
+  - `results/tables/compactness_source_grounding.csv`
+  - `results/tables/paper_ready_summary.md`
+- Phase 9 main result table covers AI Scientist-v2 and Reflexion:
+  - both generated skills score `20/20` on the deterministic rubric;
+  - context coverage scores are `7.867/9` and `8.267/9`;
+  - generic summary baselines score `1.733/9` and `3.483/9`;
+  - abstract-only baselines score `1.2/9` and `2.533/9`;
+  - full skills score `10/10` offline transfer readiness;
+  - source support rates are `0.938` and `1.0`.
+- Phase 9 transfer ablation shows removing `Transfer Notes` drops offline
+  readiness from `10/10` to `7.6/10` on both real-paper cases.
+- Phase 9 compactness/source-grounding table records 782-word and 479-word
+  skills, both under the 1200-word compactness budget with 0 invalid source-span
+  ranges.
 
 ## Current Blockers / Pending Checks
 
@@ -157,7 +181,7 @@ The user provided the PaperToSkill idea and asked to:
 
 ## Next Actions
 
-1. Commit and push Phase 8 artifacts.
+1. Commit and push Phase 9 after verification.
 2. Re-test the remote LLM endpoint when provider accounts are available.
 3. Execute live cross-harness runs using the prompt packets when the endpoint
    recovers.

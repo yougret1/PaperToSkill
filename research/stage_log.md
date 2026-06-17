@@ -290,3 +290,39 @@ Verification:
 - `python scripts\evaluate_harness_transfer.py --task benchmarks\tasks\reflexion_harness_transfer.json --output results\evaluations\reflexion_harness_transfer_v0.json`
 - `python scripts\build_live_transfer_prompts.py --task benchmarks\tasks\reflexion_live_transfer.json --output-dir results\live_transfer_prompts\reflexion_v0`
 - `python -m unittest discover -s tests -v`
+
+## 2026-06-17 Phase 9
+
+Actions:
+
+- Implemented `scripts/aggregate_results_tables.py` to aggregate existing
+  deterministic/offline evaluation JSON into paper-ready Markdown and CSV
+  tables.
+- Added `tests/test_aggregate_results_tables.py`.
+- Generated main results, transfer ablation, compactness/source-grounding, and
+  combined summary tables under `results/tables/`.
+
+Results:
+
+- `results/tables/main_results.md` summarizes two real-paper cases:
+  AI Scientist-v2 and Reflexion both score 20/20 on the deterministic skill
+  rubric; generated skills score 7.867/9 and 8.267/9 on context coverage,
+  respectively.
+- `results/tables/transfer_ablation.md` shows the full skill at 10/10 offline
+  readiness for both papers, dropping to 7.6/10 when `Transfer Notes` are
+  removed.
+- `results/tables/compactness_source_grounding.md` records 782 and 479 word
+  skills, 2/2 compactness scores, support rates of 0.938 and 1.0, and no
+  invalid source-span ranges.
+
+Evidence boundary:
+
+- The tables aggregate existing deterministic/offline evaluations. They do not
+  add live cross-harness agent-task evidence.
+- Reflexion does not yet have a source-map unsupported-instruction audit row, so
+  that table cell is explicitly `n/a`.
+
+Verification:
+
+- `python scripts\aggregate_results_tables.py --output-dir results\tables`
+- `python -m unittest tests.test_aggregate_results_tables -v`

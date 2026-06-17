@@ -175,3 +175,26 @@
 - Claim impact: partially supports the harness-transfer claim at the offline
   artifact-readiness level across two papers.
 - Figure/table: `results/evaluations/reflexion_harness_transfer_v0.json`.
+
+## Paper-Ready Result Table Aggregation
+
+- Experiment: aggregate existing deterministic/offline JSON evaluations into
+  Markdown and CSV tables for paper drafting.
+- Main result: generated `results/tables/main_results.md`,
+  `results/tables/transfer_ablation.md`,
+  `results/tables/compactness_source_grounding.md`, and
+  `results/tables/paper_ready_summary.md`.
+- Compared baselines: none; this is an analysis artifact over previously run
+  baselines and ablations.
+- Practical significance: gives the paper draft stable result tables for main
+  coverage, transfer-note ablation, compactness, and source-grounding claims
+  without manual number copying.
+- Statistical evidence: none; all source metrics are deterministic/offline.
+- Failure modes: table quality depends on the upstream JSON schemas and current
+  benchmark coverage. Reflexion lacks the older source-map unsupported-
+  instruction audit, so that cell is `n/a`.
+- Limitations: does not add live cross-harness execution evidence or human
+  fidelity annotation.
+- Claim impact: improves traceability from claims to results but does not
+  strengthen the empirical claims beyond existing evidence.
+- Figure/table: `results/tables/paper_ready_summary.md`.

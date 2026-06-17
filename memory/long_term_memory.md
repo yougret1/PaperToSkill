@@ -55,6 +55,8 @@ Initial target contribution categories:
 - `benchmarks/paper_manifest.json`: seed benchmark paper set.
 - `scripts/papertoskill_extract.py`: deterministic non-LLM extraction scaffold.
 - `scripts/evaluate_skill.py`: deterministic v0 evaluator for generated skills.
+- `scripts/aggregate_results_tables.py`: paper-ready Markdown/CSV table
+  aggregation over existing deterministic/offline evaluation JSON.
 - `tests/test_papertoskill_extract.py`: extractor smoke test.
 - `tests/test_evaluate_skill.py`: evaluator smoke test.
 - `generated_skills/`: retained generated examples with source maps.
@@ -92,6 +94,8 @@ Initial target contribution categories:
   generic summary.
 - `results/live_transfer_prompts/reflexion_v0/`: Reflexion live prompt packets
   for later Codex/Claude execution.
+- `results/tables/`: paper-ready main results, transfer ablation, compactness/
+  source-grounding, and combined summary tables.
 
 ## Current Assumptions
 

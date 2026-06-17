@@ -24,6 +24,7 @@
 | `research/stage_log.md` | Phase-level chronological progress | Created |
 | `research/run_logs/2026-06-17_phase0_smoke.md` | Smoke-test commands and outcomes | Created |
 | `research/run_logs/2026-06-17_phase1_scaffold.md` | Extractor scaffold commands and outcomes | Created |
+| `research/run_logs/2026-06-17_phase9_aggregate_tables.md` | Result-table aggregation commands and outcomes | Created |
 
 ## AI-Scientist-v2 Inputs
 
@@ -72,6 +73,7 @@
 | `scripts/evaluate_harness_transfer.py` | Deterministic offline harness-transfer readiness evaluator | Created |
 | `scripts/build_live_transfer_prompts.py` | Live harness-transfer prompt packet builder | Created |
 | `scripts/validate_source_spans.py` | Source-span validation for line-anchored claims | Created |
+| `scripts/aggregate_results_tables.py` | Aggregates existing evaluation JSON into paper-ready tables | Created |
 | `tests/test_papertoskill_extract.py` | Smoke test for extractor CLI and source map | Created |
 | `tests/test_evaluate_skill.py` | Smoke test for evaluator CLI | Created |
 | `tests/test_evaluate_context_baselines.py` | Smoke test for context baseline evaluator | Created |
@@ -79,6 +81,7 @@
 | `tests/test_evaluate_harness_transfer.py` | Smoke test for harness-transfer readiness evaluator | Created |
 | `tests/test_build_live_transfer_prompts.py` | Smoke test for live transfer prompt builder | Created |
 | `tests/test_validate_source_spans.py` | Smoke test for source-span validator | Created |
+| `tests/test_aggregate_results_tables.py` | Smoke test for paper-ready table aggregation | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |
 | `generated_skills/ai_scientist_v2/references/source_map.json` | Source-map evidence for AI Scientist-v2 generated skill | Created |
 | `generated_skills/reflexion/SKILL.md` | Retained generated skill from Reflexion note | Created |
@@ -96,6 +99,13 @@
 | `results/evaluations/reflexion_harness_transfer_v0.json` | Reflexion offline Codex/Claude-style transfer readiness scores | Created |
 | `results/live_transfer_prompts/ai_scientist_v2_v0/` | Live Codex/Claude prompt packets and index | Created |
 | `results/live_transfer_prompts/reflexion_v0/` | Reflexion live Codex/Claude prompt packets and index | Created |
+| `results/tables/main_results.md` | Paper-ready main results table | Created |
+| `results/tables/main_results.csv` | CSV copy of main results table | Created |
+| `results/tables/transfer_ablation.md` | Paper-ready transfer ablation table | Created |
+| `results/tables/transfer_ablation.csv` | CSV copy of transfer ablation table | Created |
+| `results/tables/compactness_source_grounding.md` | Paper-ready compactness/source-grounding table | Created |
+| `results/tables/compactness_source_grounding.csv` | CSV copy of compactness/source-grounding table | Created |
+| `results/tables/paper_ready_summary.md` | Combined result-table summary for paper drafting | Created |
 | `output/pdf/reflexion/page-01.png` | Rendered Reflexion PDF page 1 for visual check | Created |
 | `results/result_cards.md` | Result interpretation cards | Created |
 
@@ -103,4 +113,4 @@
 
 | Artifact | Purpose | Status |
 | --- | --- | --- |
-| `results/result_cards.md` | Interpreted experiment outcomes | Planned |
+| Live cross-harness response logs | Codex/Claude-style transfer execution results after provider recovery | Planned |

@@ -1,0 +1,8 @@
+# Compactness And Source Grounding
+
+Source-span validation checks line-anchor validity and lexical overlap, not human factuality.
+
+| Paper | Skill words | Compactness budget | Compactness score | Source anchors | Supported spans | Weak spans | Unsupported spans | Invalid ranges | Source support rate | Unsupported instruction rate |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| AI Scientist-v2 | 782 | 1200 | 2/2 | 16 | 15 | 1 | 0 | 0 | 0.938 | 0.2 |
+| Reflexion | 479 | 1200 | 2/2 | 12 | 11 | 0 | 0 | 0 | 1 | n/a |

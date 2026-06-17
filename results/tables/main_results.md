@@ -1,0 +1,8 @@
+# Main Results
+
+Coverage scores are deterministic task-rubric scores; transfer readiness is an offline artifact-readiness metric.
+
+| Paper | Skill rubric | Skill coverage | Generic summary coverage | Abstract-only coverage | Skill vs generic delta | Skill vs abstract delta | Transfer readiness | Source support rate | Skill words |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| AI Scientist-v2 | 20/20 | 7.867/9 | 1.733/9 | 1.2/9 | 6.134 | 6.667 | 10/10 | 0.938 | 782 |
+| Reflexion | 20/20 | 8.267/9 | 3.483/9 | 2.533/9 | 4.784 | 5.734 | 10/10 | 1 | 479 |
