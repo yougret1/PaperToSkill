@@ -9,10 +9,10 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 9 paper-ready result table aggregation is implemented. Current focus:
-verify, commit, and push Phase 9, then either re-test the remote LLM endpoint
-for live cross-harness execution or expand the benchmark with more
-agent/LLM-method papers.
+Phase 9 paper-ready result table aggregation is implemented, committed, and
+pushed. Current focus: either re-test the remote LLM endpoint for live
+cross-harness execution or expand the benchmark with more agent/LLM-method
+papers.
 
 ## Latest User Request
 
@@ -165,6 +165,7 @@ The user provided the PaperToSkill idea and asked to:
 - Phase 9 compactness/source-grounding table records 782-word and 479-word
   skills, both under the 1200-word compactness budget with 0 invalid source-span
   ranges.
+- Phase 9 was committed and pushed as `7ff9fe5` on `origin/main`.
 
 ## Current Blockers / Pending Checks
 
@@ -181,8 +182,7 @@ The user provided the PaperToSkill idea and asked to:
 
 ## Next Actions
 
-1. Commit and push Phase 9 after verification.
-2. Re-test the remote LLM endpoint when provider accounts are available.
-3. Execute live cross-harness runs using the prompt packets when the endpoint
+1. Re-test the remote LLM endpoint when provider accounts are available.
+2. Execute live cross-harness runs using the prompt packets when the endpoint
    recovers.
-4. Expand the benchmark to more agent/LLM-method papers.
+3. Expand the benchmark to more agent/LLM-method papers.
