@@ -17,6 +17,7 @@
 | E2.12 | Do Reflexion transfer notes improve offline Codex/Claude-style harness-transfer readiness? | `python scripts\evaluate_harness_transfer.py --task benchmarks\tasks\reflexion_harness_transfer.json --output results\evaluations\reflexion_harness_transfer_v0.json` | full skill vs no-transfer-notes vs generic-summary readiness scores | Analysis |
 | E2.13 | Are Reflexion live cross-harness prompt packets ready for a later remote run? | `python scripts\build_live_transfer_prompts.py --task benchmarks\tasks\reflexion_live_transfer.json --output-dir results\live_transfer_prompts\reflexion_v0` | per-harness prompt packets and response placeholders | Execution |
 | E2.14 | Can existing deterministic/offline evaluations be converted into paper-ready tables? | `python scripts\aggregate_results_tables.py --output-dir results\tables` | main results, transfer ablation, and compactness/source-grounding Markdown/CSV tables | Analysis |
+| E2.15 | Can AIDE serve as a third real-paper benchmark case? | `python scripts\papertoskill_extract.py --source papers\notes\aide_note.md --output generated_skills\aide --name aide-paper-skill` plus AIDE rubric/context/transfer/source-span/prompt commands | AIDE skill, baselines, evaluations, prompt packets, and updated tables | Analysis |
 
 ## Pending Remote LLM Recovery
 

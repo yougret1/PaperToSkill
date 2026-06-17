@@ -6,3 +6,4 @@ Source-span validation checks line-anchor validity and lexical overlap, not huma
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | AI Scientist-v2 | 782 | 1200 | 2/2 | 16 | 15 | 1 | 0 | 0 | 0.938 | 0.2 |
 | Reflexion | 479 | 1200 | 2/2 | 12 | 11 | 0 | 0 | 0 | 1 | n/a |
+| AIDE | 927 | 1200 | 2/2 | 22 | 21 | 0 | 0 | 0 | 1 | n/a |

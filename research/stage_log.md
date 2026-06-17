@@ -326,3 +326,58 @@ Verification:
 
 - `python scripts\aggregate_results_tables.py --output-dir results\tables`
 - `python -m unittest tests.test_aggregate_results_tables -v`
+
+## 2026-06-17 Phase 10
+
+Actions:
+
+- Re-tested the OpenAI-compatible endpoint. `/v1/models` worked and listed
+  `claude-opus-4-8`; `/v1/chat/completions` returned HTTP 503 with an empty
+  body.
+- Added AIDE as the third real-paper case:
+  - raw PDF, extracted text, and rendered page 1;
+  - source-anchored note;
+  - generated skill and source map;
+  - generic-summary and abstract-only baselines;
+  - rubric, context-coverage, harness-transfer, source-span, and live prompt
+    packet tasks.
+- Fixed an extractor truncation issue exposed by AIDE by increasing candidate
+  limits from 6/5/5 to 8/7/6 for workflow/validation/failure bullets and adding
+  a regression test.
+- Regenerated paper-ready result tables.
+
+Results:
+
+- AIDE generated skill scored 20/20 on `benchmarks/rubric_aide_v0.json`.
+- AIDE context baseline:
+  - generated skill: 9.1/10
+  - generic summary: 1.916/10
+  - abstract-only context: 1.333/10
+- AIDE harness-transfer readiness:
+  - full skill: 10.0/10
+  - skill without transfer notes: 7.6/10
+  - generic summary: 1.5/10
+- AIDE source-span validation found 21 supported anchored claims, 0 weak or
+  unsupported claims, 0 invalid ranges, and support rate 1.0.
+- `results/tables/main_results.md` now covers AI Scientist-v2, Reflexion, and
+  AIDE.
+
+Evidence boundary:
+
+- These are deterministic/offline evaluations, not live cross-harness agent task
+  success.
+- The remote LLM endpoint remains unsuitable for live runs because chat
+  completion returned HTTP 503.
+
+Verification:
+
+- `pdfinfo papers\raw\aide.pdf`
+- `pdftotext -layout papers\raw\aide.pdf papers\extracted\aide.txt`
+- `pdftoppm -f 1 -l 1 -png -r 120 papers\raw\aide.pdf output\pdf\aide\page`
+- `python scripts\papertoskill_extract.py --source papers\notes\aide_note.md --output generated_skills\aide --name aide-paper-skill`
+- `python scripts\evaluate_skill.py --skill generated_skills\aide\SKILL.md --rubric benchmarks\rubric_aide_v0.json --output results\evaluations\aide_rubric_v0.json`
+- `python scripts\evaluate_context_baselines.py --task benchmarks\tasks\aide_research_run.json --output results\evaluations\aide_context_baselines_v0.json`
+- `python scripts\evaluate_harness_transfer.py --task benchmarks\tasks\aide_harness_transfer.json --output results\evaluations\aide_harness_transfer_v0.json`
+- `python scripts\validate_source_spans.py --task benchmarks\tasks\aide_source_span_validation.json --output results\evaluations\aide_source_span_validation_v0.json`
+- `python scripts\build_live_transfer_prompts.py --task benchmarks\tasks\aide_live_transfer.json --output-dir results\live_transfer_prompts\aide_v0`
+- `python scripts\aggregate_results_tables.py --output-dir results\tables`

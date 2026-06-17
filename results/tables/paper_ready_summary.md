@@ -8,6 +8,7 @@ Evidence boundary: these tables aggregate existing deterministic/offline evaluat
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | AI Scientist-v2 | 20/20 | 7.867/9 | 1.733/9 | 1.2/9 | 6.134 | 6.667 | 10/10 | 0.938 | 782 |
 | Reflexion | 20/20 | 8.267/9 | 3.483/9 | 2.533/9 | 4.784 | 5.734 | 10/10 | 1 | 479 |
+| AIDE | 20/20 | 9.1/10 | 1.916/10 | 1.333/10 | 7.184 | 7.767 | 10/10 | 1 | 927 |
 
 ## Transfer Ablation
 
@@ -19,6 +20,9 @@ Evidence boundary: these tables aggregate existing deterministic/offline evaluat
 | Reflexion | Full skill | 10/10 | 10/10 | 10/10 | 479 | none |
 | Reflexion | No transfer notes | 7.6/10 | 7.6/10 | 7.6/10 | 435 | Transfer Notes |
 | Reflexion | Generic summary | 2.25/10 | 2.25/10 | 2.25/10 | 111 | none |
+| AIDE | Full skill | 10/10 | 10/10 | 10/10 | 927 | none |
+| AIDE | No transfer notes | 7.6/10 | 7.6/10 | 7.6/10 | 883 | Transfer Notes |
+| AIDE | Generic summary | 1.5/10 | 1.5/10 | 1.5/10 | 89 | none |
 
 ## Compactness And Source Grounding
 
@@ -26,3 +30,4 @@ Evidence boundary: these tables aggregate existing deterministic/offline evaluat
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | AI Scientist-v2 | 782 | 1200 | 2/2 | 16 | 15 | 1 | 0 | 0 | 0.938 | 0.2 |
 | Reflexion | 479 | 1200 | 2/2 | 12 | 11 | 0 | 0 | 0 | 1 | n/a |
+| AIDE | 927 | 1200 | 2/2 | 22 | 21 | 0 | 0 | 0 | 1 | n/a |

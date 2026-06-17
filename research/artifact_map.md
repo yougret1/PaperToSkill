@@ -25,6 +25,7 @@
 | `research/run_logs/2026-06-17_phase0_smoke.md` | Smoke-test commands and outcomes | Created |
 | `research/run_logs/2026-06-17_phase1_scaffold.md` | Extractor scaffold commands and outcomes | Created |
 | `research/run_logs/2026-06-17_phase9_aggregate_tables.md` | Result-table aggregation commands and outcomes | Created |
+| `research/run_logs/2026-06-17_phase10_aide_third_paper.md` | AIDE third-paper benchmark commands and outcomes | Created |
 
 ## AI-Scientist-v2 Inputs
 
@@ -46,6 +47,7 @@
 | `benchmarks/paper_manifest.json` | Seed benchmark papers and task definitions | Created |
 | `benchmarks/rubric_v0.json` | Deterministic v0 scoring rubric for generated skills | Created |
 | `benchmarks/rubric_reflexion_v0.json` | Deterministic v0 scoring rubric for Reflexion generated skill | Created |
+| `benchmarks/rubric_aide_v0.json` | Deterministic v0 scoring rubric for AIDE generated skill | Created |
 | `benchmarks/tasks/ai_scientist_v2_research_run.json` | Downstream context-coverage task spec | Created |
 | `benchmarks/tasks/skill_source_audit.json` | Source-map-aware unsupported-instruction audit task | Created |
 | `benchmarks/tasks/ai_scientist_v2_harness_transfer.json` | Offline harness-transfer readiness task spec | Created |
@@ -55,16 +57,25 @@
 | `benchmarks/tasks/reflexion_research_run.json` | Reflexion downstream context-coverage task spec | Created |
 | `benchmarks/tasks/reflexion_harness_transfer.json` | Reflexion offline harness-transfer readiness task spec | Created |
 | `benchmarks/tasks/reflexion_live_transfer.json` | Reflexion live harness-transfer prompt packet spec | Created |
+| `benchmarks/tasks/aide_research_run.json` | AIDE downstream context-coverage task spec | Created |
+| `benchmarks/tasks/aide_harness_transfer.json` | AIDE offline harness-transfer readiness task spec | Created |
+| `benchmarks/tasks/aide_live_transfer.json` | AIDE live harness-transfer prompt packet spec | Created |
+| `benchmarks/tasks/aide_source_span_validation.json` | AIDE source-span validation task spec | Created |
 | `baselines/ai_scientist_v2_generic_summary.md` | Generic summary baseline context | Created |
 | `baselines/ai_scientist_v2_abstract_only.md` | Abstract-only baseline context | Created |
 | `baselines/reflexion_generic_summary.md` | Generic summary baseline context for Reflexion | Created |
 | `baselines/reflexion_abstract_only.md` | Abstract-only baseline context for Reflexion | Created |
+| `baselines/aide_generic_summary.md` | Generic summary baseline context for AIDE | Created |
+| `baselines/aide_abstract_only.md` | Abstract-only baseline context for AIDE | Created |
 | `papers/raw/ai_scientist_v2.pdf` | Raw AI Scientist-v2 PDF | Created |
 | `papers/raw/reflexion.pdf` | Raw Reflexion PDF | Created |
+| `papers/raw/aide.pdf` | Raw AIDE PDF | Created |
 | `papers/extracted/ai_scientist_v2.txt` | Extracted PDF text | Created |
 | `papers/extracted/reflexion.txt` | Extracted Reflexion PDF text | Created |
+| `papers/extracted/aide.txt` | Extracted AIDE PDF text | Created |
 | `papers/notes/ai_scientist_v2_note.md` | Curated real-paper note for scaffold input | Created |
 | `papers/notes/reflexion_note.md` | Curated Reflexion source-anchored note for scaffold input | Created |
+| `papers/notes/aide_note.md` | Curated AIDE source-anchored note for scaffold input | Created |
 | `examples/papertoskill_paper_note.md` | Paper-like source note for retained case | Created |
 | `scripts/papertoskill_extract.py` | Deterministic local paper-to-skill scaffold | Created |
 | `scripts/evaluate_skill.py` | Deterministic v0 evaluator for generated skills | Created |
@@ -86,6 +97,8 @@
 | `generated_skills/ai_scientist_v2/references/source_map.json` | Source-map evidence for AI Scientist-v2 generated skill | Created |
 | `generated_skills/reflexion/SKILL.md` | Retained generated skill from Reflexion note | Created |
 | `generated_skills/reflexion/references/source_map.json` | Source-map evidence for Reflexion generated skill | Created |
+| `generated_skills/aide/SKILL.md` | Retained generated skill from AIDE note | Created |
+| `generated_skills/aide/references/source_map.json` | Source-map evidence for AIDE generated skill | Created |
 | `generated_skills/papertoskill_paper_note/SKILL.md` | Retained generated skill from paper-like note | Created |
 | `generated_skills/papertoskill_paper_note/references/source_map.json` | Source-map evidence for retained generated skill | Created |
 | `results/evaluations/ai_scientist_v2_rubric_v0.json` | Scored rubric output for AI Scientist-v2 generated skill | Created |
@@ -97,8 +110,13 @@
 | `results/evaluations/reflexion_source_span_validation_v0.json` | Reflexion source-span validation output | Created |
 | `results/evaluations/reflexion_context_baselines_v0.json` | Reflexion skill-vs-summary-vs-abstract context coverage scores | Created |
 | `results/evaluations/reflexion_harness_transfer_v0.json` | Reflexion offline Codex/Claude-style transfer readiness scores | Created |
+| `results/evaluations/aide_rubric_v0.json` | AIDE skill rubric output | Created |
+| `results/evaluations/aide_source_span_validation_v0.json` | AIDE source-span validation output | Created |
+| `results/evaluations/aide_context_baselines_v0.json` | AIDE skill-vs-summary-vs-abstract context coverage scores | Created |
+| `results/evaluations/aide_harness_transfer_v0.json` | AIDE offline Codex/Claude-style transfer readiness scores | Created |
 | `results/live_transfer_prompts/ai_scientist_v2_v0/` | Live Codex/Claude prompt packets and index | Created |
 | `results/live_transfer_prompts/reflexion_v0/` | Reflexion live Codex/Claude prompt packets and index | Created |
+| `results/live_transfer_prompts/aide_v0/` | AIDE live Codex/Claude prompt packets and index | Created |
 | `results/tables/main_results.md` | Paper-ready main results table | Created |
 | `results/tables/main_results.csv` | CSV copy of main results table | Created |
 | `results/tables/transfer_ablation.md` | Paper-ready transfer ablation table | Created |
@@ -107,6 +125,7 @@
 | `results/tables/compactness_source_grounding.csv` | CSV copy of compactness/source-grounding table | Created |
 | `results/tables/paper_ready_summary.md` | Combined result-table summary for paper drafting | Created |
 | `output/pdf/reflexion/page-01.png` | Rendered Reflexion PDF page 1 for visual check | Created |
+| `output/pdf/aide/page-01.png` | Rendered AIDE PDF page 1 for visual check | Created |
 | `results/result_cards.md` | Result interpretation cards | Created |
 
 ## Future Artifacts

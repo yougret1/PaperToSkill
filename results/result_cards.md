@@ -198,3 +198,67 @@
 - Claim impact: improves traceability from claims to results but does not
   strengthen the empirical claims beyond existing evidence.
 - Figure/table: `results/tables/paper_ready_summary.md`.
+
+## AIDE Paper-To-Skill Scaffold
+
+- Experiment: deterministic scaffold on `papers/notes/aide_note.md`.
+- Main result: generated `generated_skills/aide/SKILL.md` with source-anchored
+  workflow, validation, failure cases, and transfer notes.
+- Compared baselines: no separate scaffold baseline; downstream baselines are
+  covered in the AIDE context baseline card.
+- Practical significance: extends PaperToSkill to a code-space tree-search
+  paper centered on solution trees, draft/debug/improve actions, performance
+  records, context summarization, data previews, and cost/contamination limits.
+- Deterministic rubric: `results/evaluations/aide_rubric_v0.json` scored
+  20/20.
+- Source-span validation: `results/evaluations/aide_source_span_validation_v0.json`
+  found 21/21 supported anchored claims with 0 invalid ranges.
+- Failure modes: the initial extraction capped method/failure bullets too low
+  and dropped `data preview` plus LLM-cost content. The extractor limit was
+  increased and a regression test was added.
+- Limitations: still depends on a curated paper note and deterministic lexical
+  checks.
+- Claim impact: supports the claim that PaperToSkill can convert a third,
+  structurally different agent-method paper into a compact source-grounded
+  skill.
+- Figure/table: `results/evaluations/aide_rubric_v0.json`;
+  `results/evaluations/aide_source_span_validation_v0.json`.
+
+## AIDE Context Baseline Coverage
+
+- Experiment: deterministic context coverage evaluation for
+  `benchmarks/tasks/aide_research_run.json`.
+- Main result: the PaperToSkill-generated AIDE skill scored 9.1/10, compared
+  with 1.916/10 for a generic summary and 1.333/10 for abstract-only context.
+- Compared baselines: `baselines/aide_generic_summary.md` and
+  `baselines/aide_abstract_only.md`.
+- Practical significance: the generated skill preserves solution-tree search,
+  objective-function framing, draft/debug/improve policy, summarization, data
+  preview, benchmark evidence, limitations, and source grounding better than
+  short summaries.
+- Statistical evidence: none; deterministic task only.
+- Failure modes: keyword scoring can under-credit equivalent paraphrases and
+  does not evaluate actual coding-agent behavior.
+- Limitations: not live agent task success.
+- Claim impact: strengthens the deterministic multi-paper coverage claim across
+  three real paper cases.
+- Figure/table: `results/evaluations/aide_context_baselines_v0.json`.
+
+## AIDE Harness Transfer Readiness
+
+- Experiment: offline Codex/Claude-style transfer-readiness evaluation across
+  the full AIDE skill, the same skill with `Transfer Notes` removed, and a
+  generic summary baseline.
+- Main result: the full generated skill scored 10.0/10 average readiness, the
+  no-transfer-notes variant scored 7.6/10, and the generic summary scored
+  1.5/10.
+- Compared baselines: skill without transfer notes and generic prose summary.
+- Practical significance: the same transfer-note ablation pattern now holds for
+  a third paper and a coding/ML-engineering workflow.
+- Statistical evidence: none; deterministic offline gate only.
+- Failure modes: still artifact-readiness rather than live transfer success.
+- Limitations: live prompt packets are ready but remote chat completion returned
+  HTTP 503.
+- Claim impact: partially supports the harness-transfer claim at the offline
+  artifact-readiness level across three papers.
+- Figure/table: `results/evaluations/aide_harness_transfer_v0.json`.

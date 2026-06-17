@@ -10,3 +10,6 @@ The no-transfer-notes variant removes only the `Transfer Notes` section from the
 | Reflexion | Full skill | 10/10 | 10/10 | 10/10 | 479 | none |
 | Reflexion | No transfer notes | 7.6/10 | 7.6/10 | 7.6/10 | 435 | Transfer Notes |
 | Reflexion | Generic summary | 2.25/10 | 2.25/10 | 2.25/10 | 111 | none |
+| AIDE | Full skill | 10/10 | 10/10 | 10/10 | 927 | none |
+| AIDE | No transfer notes | 7.6/10 | 7.6/10 | 7.6/10 | 883 | Transfer Notes |
+| AIDE | Generic summary | 1.5/10 | 1.5/10 | 1.5/10 | 89 | none |

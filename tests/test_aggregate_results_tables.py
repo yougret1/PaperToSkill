@@ -47,14 +47,17 @@ class AggregateResultsTablesTest(unittest.TestCase):
                 self.assertTrue((output_dir / name).exists(), name)
 
             main_rows = read_csv(output_dir / "main_results.csv")
-            self.assertEqual(["AI Scientist-v2", "Reflexion"], [row["Paper"] for row in main_rows])
+            self.assertEqual(["AI Scientist-v2", "Reflexion", "AIDE"], [row["Paper"] for row in main_rows])
             ai_row = main_rows[0]
             self.assertEqual("20/20", ai_row["Skill rubric"])
             self.assertEqual("7.867/9", ai_row["Skill coverage"])
             self.assertEqual("6.134", ai_row["Skill vs generic delta"])
+            aide_row = main_rows[2]
+            self.assertEqual("20/20", aide_row["Skill rubric"])
+            self.assertEqual("9.1/10", aide_row["Skill coverage"])
 
             transfer_rows = read_csv(output_dir / "transfer_ablation.csv")
-            self.assertEqual(6, len(transfer_rows))
+            self.assertEqual(9, len(transfer_rows))
             reflexion = {
                 row["Variant"]: row
                 for row in transfer_rows
@@ -67,6 +70,7 @@ class AggregateResultsTablesTest(unittest.TestCase):
             grounding = {row["Paper"]: row for row in grounding_rows}
             self.assertEqual("0.938", grounding["AI Scientist-v2"]["Source support rate"])
             self.assertEqual("n/a", grounding["Reflexion"]["Unsupported instruction rate"])
+            self.assertEqual("927", grounding["AIDE"]["Skill words"])
 
 
 if __name__ == "__main__":

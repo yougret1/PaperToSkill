@@ -9,10 +9,10 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 9 paper-ready result table aggregation is implemented, committed, and
-pushed. Current focus: either re-test the remote LLM endpoint for live
-cross-harness execution or expand the benchmark with more agent/LLM-method
-papers.
+Phase 10 AIDE third-paper benchmark is implemented locally. Current focus:
+verify, commit, and push Phase 10, then either re-test the remote LLM endpoint
+for live cross-harness execution or expand the benchmark with more
+agent/LLM-method papers.
 
 ## Latest User Request
 
@@ -166,6 +166,35 @@ The user provided the PaperToSkill idea and asked to:
   skills, both under the 1200-word compactness budget with 0 invalid source-span
   ranges.
 - Phase 9 was committed and pushed as `7ff9fe5` on `origin/main`.
+- Phase 10 re-tested the remote endpoint:
+  - `/v1/models` worked and listed `claude-opus-4-8`;
+  - `/v1/chat/completions` returned HTTP 503 Service Unavailable with an empty
+    body.
+- Phase 10 added AIDE as the third real-paper case:
+  - `papers/raw/aide.pdf`
+  - `papers/extracted/aide.txt`
+  - `papers/notes/aide_note.md`
+  - `generated_skills/aide/SKILL.md`
+  - `benchmarks/rubric_aide_v0.json`
+  - `benchmarks/tasks/aide_research_run.json`
+  - `benchmarks/tasks/aide_harness_transfer.json`
+  - `benchmarks/tasks/aide_live_transfer.json`
+  - `benchmarks/tasks/aide_source_span_validation.json`
+  - `baselines/aide_generic_summary.md`
+  - `baselines/aide_abstract_only.md`
+- Phase 10 fixed an extractor truncation issue exposed by AIDE by increasing
+  workflow/validation/failure bullet candidate limits from `6/5/5` to `8/7/6`
+  and adding a regression test.
+- AIDE results:
+  - rubric score: `20/20`;
+  - context baseline: skill `9.1/10`, generic summary `1.916/10`, abstract-only
+    `1.333/10`;
+  - transfer readiness: full skill `10.0/10`, no-transfer-notes `7.6/10`,
+    generic summary `1.5/10`;
+  - source-span validation: 21 supported claims, 0 weak, 0 invalid ranges,
+    support rate `1.0`.
+- Phase 10 regenerated `results/tables/`; main results now cover
+  AI Scientist-v2, Reflexion, and AIDE.
 
 ## Current Blockers / Pending Checks
 
@@ -182,7 +211,8 @@ The user provided the PaperToSkill idea and asked to:
 
 ## Next Actions
 
-1. Re-test the remote LLM endpoint when provider accounts are available.
-2. Execute live cross-harness runs using the prompt packets when the endpoint
+1. Commit and push Phase 10 after verification.
+2. Re-test the remote LLM endpoint when provider accounts are available.
+3. Execute live cross-harness runs using the prompt packets when the endpoint
    recovers.
-3. Expand the benchmark to more agent/LLM-method papers.
+4. Expand the benchmark to more agent/LLM-method papers.

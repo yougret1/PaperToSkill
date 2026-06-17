@@ -29,6 +29,15 @@ PAPER_CONFIGS = [
         "rubric": "reflexion_rubric_v0.json",
         "source_audit_id": None,
     },
+    {
+        "id": "aide",
+        "paper": "AIDE",
+        "context": "aide_context_baselines_v0.json",
+        "transfer": "aide_harness_transfer_v0.json",
+        "source_spans": "aide_source_span_validation_v0.json",
+        "rubric": "aide_rubric_v0.json",
+        "source_audit_id": None,
+    },
 ]
 
 TABLE_FILENAMES = {

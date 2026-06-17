@@ -94,6 +94,18 @@ Initial target contribution categories:
   generic summary.
 - `results/live_transfer_prompts/reflexion_v0/`: Reflexion live prompt packets
   for later Codex/Claude execution.
+- `papers/notes/aide_note.md`: third curated real-paper note.
+- `generated_skills/aide/SKILL.md`: third retained generated skill, focused on
+  code-space tree search, draft/debug/improve actions, and solution selection.
+- `results/evaluations/aide_rubric_v0.json`: AIDE skill rubric score.
+- `results/evaluations/aide_source_span_validation_v0.json`: AIDE source-span
+  support-rate summary.
+- `results/evaluations/aide_context_baselines_v0.json`: AIDE
+  skill-vs-summary-vs-abstract deterministic comparison.
+- `results/evaluations/aide_harness_transfer_v0.json`: AIDE transfer-readiness
+  ranking for full skill, skill without transfer notes, and generic summary.
+- `results/live_transfer_prompts/aide_v0/`: AIDE live prompt packets for later
+  Codex/Claude execution.
 - `results/tables/`: paper-ready main results, transfer ablation, compactness/
   source-grounding, and combined summary tables.
 

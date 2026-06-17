@@ -71,6 +71,56 @@ validated reusable repair steps.
             self.assertEqual(source_map["name"], "example-flow")
             self.assertIn("Methods", source_map["source_map"]["selected_groups"]["method"])
 
+    def test_cli_keeps_richer_method_bullets(self):
+        source_text = """# Rich Paper
+
+## Abstract
+
+We introduce a rich workflow.
+
+## Methods
+
+1. Step one.
+2. Step two.
+3. Step three.
+4. Step four.
+5. Step five.
+6. Step six.
+7. Include data preview in prompts.
+8. Select the best solution.
+
+## Experiments
+
+- Validate the method.
+
+## Limitations
+
+- Record LLM inference cost.
+"""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            source = tmp_path / "rich.md"
+            output = tmp_path / "generated"
+            source.write_text(source_text, encoding="utf-8")
+
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--source",
+                    str(source),
+                    "--output",
+                    str(output),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            skill = (output / "SKILL.md").read_text(encoding="utf-8")
+            self.assertIn("Include data preview in prompts", skill)
+            self.assertIn("Select the best solution", skill)
+
 
 if __name__ == "__main__":
     unittest.main()

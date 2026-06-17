@@ -202,7 +202,7 @@ def bullet_candidates(text: str, limit: int = 8) -> list[str]:
 
 def infer_workflow(sections: list[Section], contribution: str) -> list[str]:
     method_text = "\n".join(section.body for section in find_sections(sections, "method"))
-    candidates = bullet_candidates(method_text, limit=6)
+    candidates = bullet_candidates(method_text, limit=8)
     if candidates:
         return candidates
     return [
@@ -215,7 +215,7 @@ def infer_workflow(sections: list[Section], contribution: str) -> list[str]:
 
 def infer_validation(sections: list[Section]) -> list[str]:
     experiment_text = "\n".join(section.body for section in find_sections(sections, "experiment"))
-    candidates = bullet_candidates(experiment_text, limit=5)
+    candidates = bullet_candidates(experiment_text, limit=7)
     if candidates:
         return candidates
     return [
@@ -227,7 +227,7 @@ def infer_validation(sections: list[Section]) -> list[str]:
 
 def infer_failure_cases(sections: list[Section]) -> list[str]:
     limitation_text = "\n".join(section.body for section in find_sections(sections, "limitation"))
-    candidates = bullet_candidates(limitation_text, limit=5)
+    candidates = bullet_candidates(limitation_text, limit=6)
     if candidates:
         return candidates
     return [
