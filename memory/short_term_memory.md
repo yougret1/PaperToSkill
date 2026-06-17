@@ -9,10 +9,9 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 10 AIDE third-paper benchmark is implemented locally. Current focus:
-verify, commit, and push Phase 10, then either re-test the remote LLM endpoint
-for live cross-harness execution or expand the benchmark with more
-agent/LLM-method papers.
+Phase 10 AIDE third-paper benchmark is implemented, committed, and pushed.
+Current focus: either re-test the remote LLM endpoint for live cross-harness
+execution or expand the benchmark with more agent/LLM-method papers.
 
 ## Latest User Request
 
@@ -195,6 +194,7 @@ The user provided the PaperToSkill idea and asked to:
     support rate `1.0`.
 - Phase 10 regenerated `results/tables/`; main results now cover
   AI Scientist-v2, Reflexion, and AIDE.
+- Phase 10 was committed and pushed as `ec47147` on `origin/main`.
 
 ## Current Blockers / Pending Checks
 
@@ -211,8 +211,7 @@ The user provided the PaperToSkill idea and asked to:
 
 ## Next Actions
 
-1. Commit and push Phase 10 after verification.
-2. Re-test the remote LLM endpoint when provider accounts are available.
-3. Execute live cross-harness runs using the prompt packets when the endpoint
+1. Re-test the remote LLM endpoint when provider accounts are available.
+2. Execute live cross-harness runs using the prompt packets when the endpoint
    recovers.
-4. Expand the benchmark to more agent/LLM-method papers.
+3. Expand the benchmark to more agent/LLM-method papers.
