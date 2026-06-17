@@ -9,9 +9,9 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 1 scaffold is implemented locally. Current focus: validate, commit, and
-push Phase 1 artifacts, then move toward benchmark paper ingestion and
-evaluation rubrics.
+Phase 2 real-paper ingestion is implemented locally. Current focus: validate,
+commit, and push Phase 2 artifacts, then move toward downstream baseline tasks
+and summary-vs-skill comparisons.
 
 ## Latest User Request
 
@@ -69,6 +69,14 @@ The user provided the PaperToSkill idea and asked to:
 - Phase 1 generated retained example skills under `generated_skills/`.
 - A parsing failure was found and fixed: multiline list items were initially
   split into fragments and the document title was inferred as `Methods`.
+- Phase 2 ingested the real AI Scientist-v2 paper:
+  - PDF: `papers/raw/ai_scientist_v2.pdf`
+  - Extracted text: `papers/extracted/ai_scientist_v2.txt`
+  - Curated note: `papers/notes/ai_scientist_v2_note.md`
+  - Generated skill: `generated_skills/ai_scientist_v2/SKILL.md`
+  - Rubric output: `results/evaluations/ai_scientist_v2_rubric_v0.json`
+- Rubric v0 scored the AI Scientist-v2 generated skill at 20/20, but this only
+  covers structure, anchors, keyword coverage, failure coverage, and compactness.
 
 ## Current Blockers / Pending Checks
 
@@ -79,16 +87,16 @@ The user provided the PaperToSkill idea and asked to:
   server advertises.
 - For stable long-running work, create an isolated Python environment because
   the current global Anaconda environment now has package-version conflicts.
-- Need ingest real paper PDFs or extracted full-text notes for the core
-  benchmark papers.
-- Need define evaluator rubrics for unsupported instruction rate, workflow
-  coverage, compactness cost, and harness transfer.
+- Need define downstream task prompts for skill-vs-summary comparison.
+- Need run at least one baseline comparison: generated skill vs generic summary
+  vs abstract-only context.
+- Need improve evaluator beyond keyword coverage, including unsupported
+  instruction detection and workflow coverage against source maps.
 
 ## Next Actions
 
-1. Validate and commit Phase 1 artifacts.
+1. Validate and commit Phase 2 artifacts.
 2. Push to `origin/main`.
-3. Start Phase 2: ingest at least one real benchmark paper into a text note and
-   run the scaffold.
-4. Define first evaluator rubric and result-card format.
-5. Re-test the remote LLM endpoint when provider accounts are available.
+3. Start Phase 3: create downstream task prompts and baselines for
+   AI Scientist-v2 skill-vs-summary evaluation.
+4. Re-test the remote LLM endpoint when provider accounts are available.

@@ -54,8 +54,13 @@ Initial target contribution categories:
 - `skill/SKILL.md`: human-facing PaperToSkill skill prototype.
 - `benchmarks/paper_manifest.json`: seed benchmark paper set.
 - `scripts/papertoskill_extract.py`: deterministic non-LLM extraction scaffold.
+- `scripts/evaluate_skill.py`: deterministic v0 evaluator for generated skills.
 - `tests/test_papertoskill_extract.py`: extractor smoke test.
+- `tests/test_evaluate_skill.py`: evaluator smoke test.
 - `generated_skills/`: retained generated examples with source maps.
+- `papers/notes/ai_scientist_v2_note.md`: first curated real-paper note.
+- `results/evaluations/ai_scientist_v2_rubric_v0.json`: first scored
+  real-paper generated skill.
 
 ## Current Assumptions
 

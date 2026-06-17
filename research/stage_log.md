@@ -69,3 +69,37 @@ Verification:
 - `python -m unittest discover -s tests -v`
 - `python scripts\papertoskill_extract.py --source examples\papertoskill_paper_note.md --output generated_skills\papertoskill_paper_note --name papertoskill-paper-note`
 - `python scripts\papertoskill_extract.py --source ai_scientist_inputs\papertoskill.md --output generated_skills\papertoskill_seed --name papertoskill-seed --title "PaperToSkill Seed"`
+
+## 2026-06-17 Phase 2
+
+Actions:
+
+- Downloaded the AI Scientist-v2 PDF from arXiv.
+- Extracted PDF text with `pdftotext -layout`.
+- Rendered page 1 with `pdftoppm` and visually inspected readability.
+- Created `papers/notes/ai_scientist_v2_note.md`, a curated source-anchored
+  note with abstract, methods, experiments, limitations, and transfer notes.
+- Generated `generated_skills/ai_scientist_v2/SKILL.md`.
+- Added `benchmarks/rubric_v0.json` and `scripts/evaluate_skill.py`.
+- Added evaluator tests and saved rubric output under `results/evaluations/`.
+
+Findings:
+
+- The real-paper note preserves AI Scientist-v2's four-stage experiment manager,
+  parallelized agentic tree search, debug/refine branching, specialized node
+  types, replication/aggregation, VLM critique, and ethical limitations.
+- The generated skill scored 20/20 on rubric v0.
+
+Evidence boundary:
+
+- Rubric v0 is deterministic and useful for smoke validation, but it is not
+  evidence of downstream task improvement over summaries.
+
+Verification:
+
+- `pdfinfo papers\raw\ai_scientist_v2.pdf`
+- `pdftotext -layout papers\raw\ai_scientist_v2.pdf papers\extracted\ai_scientist_v2.txt`
+- `pdftoppm -f 1 -l 1 -png -r 120 papers\raw\ai_scientist_v2.pdf output\pdf\ai_scientist_v2\page`
+- `python scripts\papertoskill_extract.py --source papers\notes\ai_scientist_v2_note.md --output generated_skills\ai_scientist_v2 --name ai-scientist-v2-paper-skill`
+- `python scripts\evaluate_skill.py --skill generated_skills\ai_scientist_v2\SKILL.md --rubric benchmarks\rubric_v0.json --output results\evaluations\ai_scientist_v2_rubric_v0.json`
+- `python -m unittest discover -s tests -v`
