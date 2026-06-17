@@ -456,7 +456,7 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 89 ready checks, 5
+  `overall_status=ready_with_pending_external_evidence`, 105 ready checks, 5
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
@@ -495,28 +495,34 @@
 
 ## Deterministic Auto-Note Scaffold
 
-- Experiment: convert `papers/extracted/toolformer.txt` directly into a
-  source-anchored Markdown note, then convert that auto-note into a retained
-  Toolformer skill.
-- Main result: generated `papers/auto_notes/toolformer_auto_note.md` and
-  `generated_skills/toolformer_auto/SKILL.md`.
-- Compared baselines: curated Toolformer note-derived skill, generic summary,
-  and abstract-only context.
+- Experiment: convert `papers/extracted/toolformer.txt` and
+  `papers/extracted/aide.txt` directly into source-anchored Markdown notes, then
+  convert those auto-notes into retained skills.
+- Main result: generated `papers/auto_notes/toolformer_auto_note.md`,
+  `generated_skills/toolformer_auto/SKILL.md`,
+  `papers/auto_notes/aide_auto_note.md`, and
+  `generated_skills/aide_auto/SKILL.md`.
+- Compared baselines: curated Toolformer/AIDE note-derived skills, generic
+  summaries, and abstract-only contexts.
 - Practical significance: reduces the curated-note bottleneck by producing an
   auditable text-to-note scaffold with line anchors before skill extraction.
-- Deterministic rubric: `results/evaluations/toolformer_auto_rubric_v0.json`
-  scored 20/20.
-- Context baseline: auto-note-derived skill scored 9.3/10, compared with 2.5/10
-  for generic summary and 1.534/10 for abstract-only context.
-- Transfer readiness: full auto-note-derived skill scored 10/10; removing
-  `Transfer Notes` dropped readiness to 7.6/10.
-- Source-span validation: `results/evaluations/toolformer_auto_source_span_validation_v0.json`
-  found 20/20 supported anchored claims with 0 invalid ranges.
+- Deterministic rubric: both `results/evaluations/toolformer_auto_rubric_v0.json`
+  and `results/evaluations/aide_auto_rubric_v0.json` scored 20/20.
+- Context baseline: Toolformer auto-note-derived skill scored 9.3/10, compared
+  with 2.5/10 for generic summary and 1.534/10 for abstract-only context; AIDE
+  auto-note-derived skill scored 8.467/10, compared with 1.916/10 and
+  1.333/10.
+- Transfer readiness: Toolformer full auto-note-derived skill scored 10/10 and
+  dropped to 7.6/10 without `Transfer Notes`; AIDE scored 9.5/10 and dropped to
+  7.1/10.
+- Source-span validation: Toolformer found 20/20 supported anchored claims and
+  AIDE found 17/17, both with 0 invalid ranges.
 - Failure modes: initial snippets mixed two-column PDF text and references; the
   selector now preserves raw spacing, chooses keyword-bearing columns, shortens
   snippets, and prefers stronger anchors for targeted limitations.
-- Limitations: this is deterministic scaffold evidence for one extracted-text
-  paper, not reliable arbitrary-PDF automation or human semantic validation.
+- Limitations: this is deterministic scaffold evidence for two extracted-text
+  papers and two profiles, not reliable arbitrary-PDF automation or human
+  semantic validation.
 - Claim impact: supports the new bounded claim that extracted paper text can be
   transformed into an auditable note scaffold that feeds the existing
   PaperToSkill extraction pipeline.

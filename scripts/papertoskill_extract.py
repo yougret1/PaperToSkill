@@ -177,7 +177,7 @@ def bullet_candidates(text: str, limit: int = 8) -> list[str]:
         if not line:
             push_current()
             continue
-        bullet_match = re.match(r"^(?:[-*+]\s+|\d+[.)]\s+)(.+)$", line)
+        bullet_match = re.match(r"^(?:[-*+]\s+|\d+[.)]\s+)(.+)$", raw_line)
         if bullet_match:
             push_current()
             current = bullet_match.group(1).strip()

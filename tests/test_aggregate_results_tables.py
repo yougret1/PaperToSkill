@@ -88,12 +88,21 @@ class AggregateResultsTablesTest(unittest.TestCase):
 
             auto_rows = read_csv(output_dir / "auto_note_comparison.csv")
             self.assertEqual(
-                ["Curated source-anchored note", "Automatic extracted-text note scaffold"],
+                [
+                    "Curated source-anchored note",
+                    "Automatic extracted-text note scaffold",
+                    "Curated source-anchored note",
+                    "Automatic extracted-text note scaffold",
+                ],
                 [row["Input"] for row in auto_rows],
             )
+            self.assertEqual(["Toolformer", "Toolformer", "AIDE", "AIDE"], [row["Paper"] for row in auto_rows])
             self.assertEqual("Toolformer", auto_rows[1]["Paper"])
             self.assertEqual("20/20", auto_rows[1]["Skill rubric"])
             self.assertEqual("1", auto_rows[1]["Source support rate"])
+            self.assertEqual("8.467/10", auto_rows[3]["Skill coverage"])
+            self.assertEqual("9.5/10", auto_rows[3]["Transfer readiness"])
+            self.assertEqual("998", auto_rows[3]["Skill words"])
 
 
 if __name__ == "__main__":

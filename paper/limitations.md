@@ -16,10 +16,10 @@ Raw PDFs are downloaded and extracted, but the paper notes are still manually
 curated. This means the current benchmark validates the paper-note-to-skill
 conversion layer more strongly than the full PDF-to-skill pipeline.
 
-Phase 19 adds a deterministic extracted-text-to-note scaffold and validates it
-on Toolformer, but that evidence covers one paper and one extracted-text layout.
-It should be described as an auditable scaffold, not as reliable arbitrary-PDF
-automation.
+Phases 19-20 add deterministic extracted-text-to-note scaffolds and validate
+them on Toolformer and AIDE, but that evidence covers two papers and two
+extracted-text profiles. They should be described as auditable scaffolds, not as
+reliable arbitrary-PDF automation.
 
 ### Heuristic Metrics
 

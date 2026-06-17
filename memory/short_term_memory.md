@@ -9,9 +9,11 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 19 deterministic extracted-text-to-note scaffold is implemented locally
-and moving through final verification, commit, and push. Phase 18 was committed
-and pushed as `e6c79f3`.
+Phase 19 deterministic extracted-text-to-note scaffold was committed and pushed
+as `ed8a8f0`. Phase 20 is implemented locally and moving through final
+verification, commit, and push: AIDE now has an auto-note profile, auto-note,
+auto-note-derived skill, formal tasks, evaluation JSON, comparison-table rows,
+and reproducibility checks.
 
 ## Latest User Request
 
@@ -403,6 +405,37 @@ The user provided the PaperToSkill idea and asked to:
   scaffold and retained auto-note-derived Toolformer skill. It does not support
   reliable arbitrary-PDF automation, live agent success, provider billing, or
   human semantic validation.
+- Phase 20 extended the deterministic auto-note scaffold beyond Toolformer to
+  AIDE:
+  - added `--profile aide` source-selection specs in
+    `scripts/papertoskill_note_from_text.py`;
+  - fixed target-section-first candidate selection and added overlap support
+    for AIDE's shared data-contamination/live-competition paragraph;
+  - fixed `scripts/papertoskill_extract.py` so indented numbered continuations
+    inside wrapped bullets do not split into new bullets;
+  - added `benchmarks/tasks/aide_auto_research_run.json`,
+    `benchmarks/tasks/aide_auto_harness_transfer.json`, and
+    `benchmarks/tasks/aide_auto_source_span_validation.json`;
+  - generated `papers/auto_notes/aide_auto_note.md` and
+    `generated_skills/aide_auto/SKILL.md`.
+- AIDE auto-note-derived results:
+  - rubric score: `20/20`;
+  - context baseline: auto-note-derived skill `8.467/10`, generic summary
+    `1.916/10`, abstract-only `1.333/10`;
+  - harness-transfer readiness: full skill `9.5/10`,
+    no-transfer-notes `7.1/10`, generic summary `1.5/10`;
+  - source-span validation: 17 supported claims, 0 weak/unsupported, 0 invalid
+    ranges, support rate `1.0`;
+  - word count: 998, under the 1,200-word budget.
+- Phase 20 regenerated `results/tables/auto_note_comparison.md/.csv` to include
+  Toolformer and AIDE curated-vs-auto rows.
+- Phase 20 regenerated the reproducibility package report:
+  `ready_with_pending_external_evidence`, 105 ready checks, 5 pending checks,
+  and 0 failed checks.
+- Phase 20 evidence boundary: supports deterministic extracted-text-to-note
+  scaffolds for two papers/profiles, Toolformer and AIDE. It does not support
+  reliable arbitrary-PDF automation, live agent success, provider billing, or
+  human semantic validation.
 
 ## Current Blockers / Pending Checks
 
@@ -419,16 +452,13 @@ The user provided the PaperToSkill idea and asked to:
   beyond deterministic source-span support.
 - Need tokenizer-exact pricing, provider billing, or success-per-dollar evidence
   before making stronger economic/cost-saving claims.
-- Need Phase 19 final verification, commit, and push.
+- Need Phase 20 final verification, commit, and push.
 
 ## Next Actions
 
-1. Run Phase 19 final verification, secret scan, commit, and push.
+1. Run Phase 20 final verification, secret scan, commit, and push.
 2. Re-test the remote LLM endpoint when provider accounts are available.
 3. Execute live cross-harness runs using the prompt packets when the endpoint
    recovers.
 4. Run human fidelity annotation, tokenizer-exact pricing, or expand the
    benchmark to less procedural/interface/theory-heavy papers.
-5. Extend the auto-note scaffold beyond Toolformer to at least one less
-   procedural or differently formatted paper before making stronger automation
-   claims.

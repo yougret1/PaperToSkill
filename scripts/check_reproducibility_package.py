@@ -82,17 +82,46 @@ TABLE_FILES = {
     "paper_ready_summary": "results/tables/paper_ready_summary.md",
 }
 
-AUTO_NOTE_FILES = {
-    "toolformer_auto_note_script": "scripts/papertoskill_note_from_text.py",
-    "toolformer_auto_note": "papers/auto_notes/toolformer_auto_note.md",
-    "toolformer_auto_skill": "generated_skills/toolformer_auto/SKILL.md",
-    "toolformer_auto_source_map": "generated_skills/toolformer_auto/references/source_map.json",
-    "toolformer_auto_note_report": "results/evaluations/toolformer_auto_note_scaffold_v0.json",
-    "toolformer_auto_rubric": "results/evaluations/toolformer_auto_rubric_v0.json",
-    "toolformer_auto_context": "results/evaluations/toolformer_auto_context_baselines_v0.json",
-    "toolformer_auto_transfer": "results/evaluations/toolformer_auto_harness_transfer_v0.json",
-    "toolformer_auto_source_span": "results/evaluations/toolformer_auto_source_span_validation_v0.json",
-}
+AUTO_NOTE_CASES = [
+    {
+        "id": "toolformer_auto",
+        "files": {
+            "toolformer_auto_note_script": "scripts/papertoskill_note_from_text.py",
+            "toolformer_auto_note": "papers/auto_notes/toolformer_auto_note.md",
+            "toolformer_auto_skill": "generated_skills/toolformer_auto/SKILL.md",
+            "toolformer_auto_source_map": "generated_skills/toolformer_auto/references/source_map.json",
+            "toolformer_auto_note_report": "results/evaluations/toolformer_auto_note_scaffold_v0.json",
+            "toolformer_auto_rubric": "results/evaluations/toolformer_auto_rubric_v0.json",
+            "toolformer_auto_context": "results/evaluations/toolformer_auto_context_baselines_v0.json",
+            "toolformer_auto_transfer": "results/evaluations/toolformer_auto_harness_transfer_v0.json",
+            "toolformer_auto_source_span": "results/evaluations/toolformer_auto_source_span_validation_v0.json",
+        },
+        "rubric": "results/evaluations/toolformer_auto_rubric_v0.json",
+        "context": "results/evaluations/toolformer_auto_context_baselines_v0.json",
+        "transfer": "results/evaluations/toolformer_auto_harness_transfer_v0.json",
+        "source_span": "results/evaluations/toolformer_auto_source_span_validation_v0.json",
+    },
+    {
+        "id": "aide_auto",
+        "files": {
+            "aide_auto_note": "papers/auto_notes/aide_auto_note.md",
+            "aide_auto_skill": "generated_skills/aide_auto/SKILL.md",
+            "aide_auto_source_map": "generated_skills/aide_auto/references/source_map.json",
+            "aide_auto_note_report": "results/evaluations/aide_auto_note_scaffold_v0.json",
+            "aide_auto_rubric": "results/evaluations/aide_auto_rubric_v0.json",
+            "aide_auto_context": "results/evaluations/aide_auto_context_baselines_v0.json",
+            "aide_auto_transfer": "results/evaluations/aide_auto_harness_transfer_v0.json",
+            "aide_auto_source_span": "results/evaluations/aide_auto_source_span_validation_v0.json",
+            "aide_auto_context_task": "benchmarks/tasks/aide_auto_research_run.json",
+            "aide_auto_transfer_task": "benchmarks/tasks/aide_auto_harness_transfer.json",
+            "aide_auto_source_span_task": "benchmarks/tasks/aide_auto_source_span_validation.json",
+        },
+        "rubric": "results/evaluations/aide_auto_rubric_v0.json",
+        "context": "results/evaluations/aide_auto_context_baselines_v0.json",
+        "transfer": "results/evaluations/aide_auto_harness_transfer_v0.json",
+        "source_span": "results/evaluations/aide_auto_source_span_validation_v0.json",
+    },
+]
 
 TEXT_SUFFIXES = {
     ".csv",
@@ -307,38 +336,55 @@ def failure_archive_checks(root: Path) -> list[Check]:
 
 
 def auto_note_checks(root: Path) -> list[Check]:
-    checks = required_file_checks(root, AUTO_NOTE_FILES)
-    rubric_path = root / "results/evaluations/toolformer_auto_rubric_v0.json"
-    if rubric_path.exists():
-        rubric = load_json(rubric_path)
-        score = float(rubric.get("score", 0))
-        max_score = float(rubric.get("max_score", 20))
-        status = "ready" if score == max_score else "fail"
-        checks.append(Check("toolformer_auto_rubric_score", status, f"{score:g}/{max_score:g}", str(rubric_path.relative_to(root))))
+    checks: list[Check] = []
+    for case in AUTO_NOTE_CASES:
+        prefix = case["id"]
+        checks.extend(required_file_checks(root, case["files"]))
 
-    context_path = root / "results/evaluations/toolformer_auto_context_baselines_v0.json"
-    if context_path.exists():
-        context = load_json(context_path)
-        try:
-            skill = score_by_id(context["results"], "skill")
-            generic = score_by_id(context["results"], "generic_summary")
-            abstract = score_by_id(context["results"], "abstract_only")
-            status = "ready" if skill["score"] > generic["score"] and skill["score"] > abstract["score"] else "fail"
-            detail = f"skill={skill['score']}; generic={generic['score']}; abstract={abstract['score']}"
-        except (KeyError, TypeError):
-            status = "fail"
-            detail = "missing expected skill/generic_summary/abstract_only rows"
-        checks.append(Check("toolformer_auto_context_baseline_order", status, detail, str(context_path.relative_to(root))))
+        rubric_path = root / case["rubric"]
+        if rubric_path.exists():
+            rubric = load_json(rubric_path)
+            score = float(rubric.get("score", 0))
+            max_score = float(rubric.get("max_score", 20))
+            status = "ready" if score == max_score else "fail"
+            checks.append(Check(f"{prefix}_rubric_score", status, f"{score:g}/{max_score:g}", str(rubric_path.relative_to(root))))
 
-    source_span_path = root / "results/evaluations/toolformer_auto_source_span_validation_v0.json"
-    if source_span_path.exists():
-        source_span = load_json(source_span_path)
-        result = source_span.get("results", [{}])[0]
-        support_rate = float(result.get("support_rate", 0))
-        invalid_ranges = int(result.get("invalid_ranges", 0))
-        status = "ready" if support_rate >= 0.9 and invalid_ranges == 0 else "fail"
-        detail = f"support_rate={support_rate:g}; invalid_ranges={invalid_ranges}"
-        checks.append(Check("toolformer_auto_source_span_support", status, detail, str(source_span_path.relative_to(root))))
+        context_path = root / case["context"]
+        if context_path.exists():
+            context = load_json(context_path)
+            try:
+                skill = score_by_id(context["results"], "skill")
+                generic = score_by_id(context["results"], "generic_summary")
+                abstract = score_by_id(context["results"], "abstract_only")
+                status = "ready" if skill["score"] > generic["score"] and skill["score"] > abstract["score"] else "fail"
+                detail = f"skill={skill['score']}; generic={generic['score']}; abstract={abstract['score']}"
+            except (KeyError, TypeError):
+                status = "fail"
+                detail = "missing expected skill/generic_summary/abstract_only rows"
+            checks.append(Check(f"{prefix}_context_baseline_order", status, detail, str(context_path.relative_to(root))))
+
+        transfer_path = root / case["transfer"]
+        if transfer_path.exists():
+            transfer = load_json(transfer_path)
+            try:
+                full = score_by_id(transfer["results"], "full_skill")
+                without = score_by_id(transfer["results"], "skill_without_transfer_notes")
+                status = "ready" if full["average_normalized_score"] > without["average_normalized_score"] else "fail"
+                detail = f"full={full['average_normalized_score']}; no_transfer={without['average_normalized_score']}"
+            except (KeyError, TypeError):
+                status = "fail"
+                detail = "missing expected full_skill/skill_without_transfer_notes rows"
+            checks.append(Check(f"{prefix}_transfer_ablation_order", status, detail, str(transfer_path.relative_to(root))))
+
+        source_span_path = root / case["source_span"]
+        if source_span_path.exists():
+            source_span = load_json(source_span_path)
+            result = source_span.get("results", [{}])[0]
+            support_rate = float(result.get("support_rate", 0))
+            invalid_ranges = int(result.get("invalid_ranges", 0))
+            status = "ready" if support_rate >= 0.9 and invalid_ranges == 0 else "fail"
+            detail = f"support_rate={support_rate:g}; invalid_ranges={invalid_ranges}"
+            checks.append(Check(f"{prefix}_source_span_support", status, detail, str(source_span_path.relative_to(root))))
     return checks
 
 

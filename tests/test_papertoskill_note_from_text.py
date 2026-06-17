@@ -128,6 +128,52 @@ Smaller models do not always benefit; the method depends on model size.
 
             report_payload = json.loads(report.read_text(encoding="utf-8"))
             self.assertEqual(report_payload["paper_id"], "toolformer_auto")
+            self.assertEqual(report_payload["profile"], "toolformer")
+            self.assertGreaterEqual(len(report_payload["selected"]["methods"]), 5)
+            self.assertGreaterEqual(len(report_payload["selected"]["experiments"]), 3)
+            self.assertGreaterEqual(len(report_payload["selected"]["limitations"]), 3)
+
+    def test_aide_profile_produces_code_search_scaffold(self):
+        if not (ROOT / "papers" / "extracted" / "aide.txt").exists():
+            self.skipTest("AIDE extracted text is not available")
+
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / "aide_auto_note.md"
+            report = Path(tmp) / "aide_auto_note_report.json"
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--source",
+                    str(ROOT / "papers" / "extracted" / "aide.txt"),
+                    "--output",
+                    str(output),
+                    "--paper-id",
+                    "aide_auto",
+                    "--title",
+                    "AIDE: AI-Driven Exploration in the Space of Code",
+                    "--profile",
+                    "aide",
+                    "--report",
+                    str(report),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            note = output.read_text(encoding="utf-8")
+            self.assertIn("## Methods", note)
+            self.assertIn("solution tree", note)
+            self.assertIn("search policy", note)
+            self.assertIn("data preview", note)
+            self.assertIn("Weco-Kaggle", note)
+            self.assertIn("LLM inference cost", note)
+            self.assertIn("Source anchors: lines", note)
+
+            report_payload = json.loads(report.read_text(encoding="utf-8"))
+            self.assertEqual(report_payload["paper_id"], "aide_auto")
+            self.assertEqual(report_payload["profile"], "aide")
             self.assertGreaterEqual(len(report_payload["selected"]["methods"]), 5)
             self.assertGreaterEqual(len(report_payload["selected"]["experiments"]), 3)
             self.assertGreaterEqual(len(report_payload["selected"]["limitations"]), 3)

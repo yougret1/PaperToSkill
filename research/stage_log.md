@@ -747,3 +747,73 @@ Verification:
 - `python -m unittest discover -s tests -p test_papertoskill_note_from_text.py -v`: passed, 2 tests OK.
 - Toolformer auto-note generation, extraction, rubric, context, transfer, and
   source-span commands all completed.
+
+## 2026-06-17 Phase 20
+
+Actions:
+
+- Extended `scripts/papertoskill_note_from_text.py` with source-selection
+  profiles. The default `toolformer` profile is preserved and a new `aide`
+  profile targets code/ML-engineering concepts such as solution space,
+  solution trees, search policy, coding actions, summarization, data preview,
+  Weco-Kaggle, MLE-Bench, RE-Bench, data contamination, local optima, larger
+  codebases, and LLM inference cost.
+- Fixed selection order so target-section matches are preferred before
+  full-document fallback.
+- Added an overlap exception for the AIDE live-competition caveat because it
+  shares a source paragraph with data-contamination evidence.
+- Fixed `scripts/papertoskill_extract.py` so indented numbered continuations
+  inside wrapped bullets do not become separate Markdown bullets.
+- Added regression tests for the AIDE auto-note profile and indented numbered
+  continuation handling.
+- Generated `papers/auto_notes/aide_auto_note.md` and
+  `generated_skills/aide_auto/SKILL.md`.
+- Added AIDE auto-note context, transfer, and source-span task specs.
+- Generated deterministic AIDE auto-note evaluations and updated
+  `results/tables/auto_note_comparison.md` to compare curated-vs-auto rows for
+  both Toolformer and AIDE.
+- Extended the reproducibility package checker to include AIDE auto-note
+  artifacts and auto-note transfer-ablation gates.
+
+Results:
+
+- AIDE auto-note-derived skill rubric: `20/20`.
+- AIDE auto-note context baseline:
+  - auto-note-derived skill: `8.467/10`
+  - generic summary: `1.916/10`
+  - abstract-only context: `1.333/10`
+- AIDE auto-note harness-transfer readiness:
+  - full skill: `9.5/10`
+  - no-transfer-notes variant: `7.1/10`
+  - generic summary: `1.5/10`
+- AIDE auto-note source-span validation found 17 supported claims, 0 weak or
+  unsupported claims, 0 invalid ranges, and support rate `1.0`.
+- The auto-note-derived AIDE skill is 998 words, under the 1,200-word
+  compactness budget.
+- Reproducibility package report now shows
+  `ready_with_pending_external_evidence`, 105 ready checks, 5 pending checks,
+  and 0 failed checks.
+
+Failure and fix:
+
+- A direct Toolformer-profile run on AIDE was semantically poor and scored only
+  `11.62/20` before the AIDE profile was added.
+- Early AIDE profile output pulled weak snippets from figure captions, related
+  work, or baseline passages. The profile now uses tighter AIDE-specific
+  keywords and target-section-first selection.
+- Source-span validation caught a malformed validation bullet after
+  `papertoskill_extract.py` split an indented `2. AutoGPT.` continuation into a
+  separate bullet. The extractor now only treats unindented Markdown list
+  markers as new bullets.
+
+Evidence boundary:
+
+- Phase 20 supports deterministic extracted-text-to-note scaffold evidence for
+  two papers/profiles: Toolformer and AIDE.
+- It does not prove reliable arbitrary-PDF automation, human semantic fidelity,
+  live agent success, provider billing, or success-per-dollar.
+
+Verification:
+
+- `python -m unittest tests.test_papertoskill_extract tests.test_papertoskill_note_from_text -v`: passed, 7 tests OK.
+- `python -m unittest tests.test_aggregate_results_tables tests.test_check_reproducibility_package -v`: passed, 3 tests OK.

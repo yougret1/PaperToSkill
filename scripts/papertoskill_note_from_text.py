@@ -35,6 +35,7 @@ class CandidateSpec:
     keywords: tuple[str, ...]
     group: str
     prefer_later: bool = False
+    allow_overlap: bool = False
 
 
 @dataclass(frozen=True)
@@ -46,7 +47,7 @@ class Candidate:
     score: int
 
 
-METHOD_SPECS = [
+TOOLFORMER_METHOD_SPECS = [
     CandidateSpec(
         "Represent the text-to-text API-call contract with tool name, input, result, and delimiter",
         ("api call", "input", "output", "text sequence", "special token"),
@@ -89,7 +90,7 @@ METHOD_SPECS = [
     ),
 ]
 
-EXPERIMENT_SPECS = [
+TOOLFORMER_EXPERIMENT_SPECS = [
     CandidateSpec(
         "Evaluate whether the system works without further supervision in zero-shot settings",
         ("zero-shot", "without", "supervision", "downstream", "tasks"),
@@ -117,7 +118,7 @@ EXPERIMENT_SPECS = [
     ),
 ]
 
-LIMITATION_SPECS = [
+TOOLFORMER_LIMITATION_SPECS = [
     CandidateSpec(
         "Avoid claiming that the method removes the need for large human annotations or task-specific setup",
         ("large amounts of human", "human annotations", "task-specific", "settings"),
@@ -157,10 +158,123 @@ LIMITATION_SPECS = [
     ),
 ]
 
+AIDE_METHOD_SPECS = [
+    CandidateSpec(
+        "Frame ML engineering as a search over Python-script solution space with an objective function",
+        ("solution space", "python scripts", "objective function", "validation accuracy", "loss"),
+        "method",
+    ),
+    CandidateSpec(
+        "Represent the run as a solution tree with nodes, edges, scores, and best-solution selection",
+        ("solution tree", "nodes", "edges", "score", "best-scoring solution"),
+        "method",
+    ),
+    CandidateSpec(
+        "Use a search policy that chooses drafting, debugging, and improving actions",
+        ("search policy", "drafting", "debugging", "improving", "debug-depth"),
+        "method",
+    ),
+    CandidateSpec(
+        "Keep coding actions atomic and grounded in executable feedback such as error logs or tracebacks",
+        ("single-file python", "error logs", "tracebacks", "atomic", "measurable change"),
+        "method",
+    ),
+    CandidateSpec(
+        "Use a summarization operator to preserve performance metrics, hyperparameters, and debugging hints",
+        ("summarization operator", "performance metrics", "hyperparameters", "debugging hints"),
+        "method",
+    ),
+    CandidateSpec(
+        "Provide a static data preview with dataset size, column names, and data splits before coding",
+        ("data preview", "dataset size", "column names", "data splits"),
+        "method",
+    ),
+]
+
+AIDE_EXPERIMENT_SPECS = [
+    CandidateSpec(
+        "Evaluate on Weco-Kaggle, MLE-Bench, and RE-Bench when reproducing the paper's benchmark story",
+        ("weco-kaggle", "mle-bench", "re-bench"),
+        "experiment",
+    ),
+    CandidateSpec(
+        "Record Weco-Kaggle Lite 51.38 Exceeds % of humans and baseline comparison",
+        ("weco-kaggle", "51.38", "kaggle medals", "improves"),
+        "experiment",
+    ),
+    CandidateSpec(
+        "Record MLE-Bench pass@1 evidence, including 16.9% Any Medal",
+        ("16.9", "medal", "competitions", "openhands"),
+        "all",
+    ),
+    CandidateSpec(
+        "Record MLE-Bench Lite 92.4% valid-submission lift",
+        ("92.4", "valid submission", "mle-bench lite"),
+        "all",
+    ),
+    CandidateSpec(
+        "Record RE-Bench performance and six-hour automation limits",
+        ("re-bench", "six-hour time limit", "human scientists", "ai r&d"),
+        "all",
+        True,
+    ),
+    CandidateSpec(
+        "Compare against baselines and ablations that isolate the search system's contribution",
+        ("baseline", "ablation", "openai", "agent", "search"),
+        "experiment",
+    ),
+]
+
+AIDE_LIMITATION_SPECS = [
+    CandidateSpec(
+        "Treat data contamination as a risk when benchmark data may overlap with training corpora",
+        ("data contamination", "training data", "benchmark", "leakage"),
+        "limitation",
+        True,
+    ),
+    CandidateSpec(
+        "Do not claim live competition submissions when the paper only identifies them as the contamination-control ideal",
+        ("data contamination", "submit", "live competitions", "only way"),
+        "limitation",
+        False,
+        True,
+    ),
+    CandidateSpec(
+        "Treat greedy policy and local optima as search limitations",
+        ("simple greedy policy", "local optima", "challenging r&d"),
+        "limitation",
+    ),
+    CandidateSpec(
+        "Check whether the method transfers to larger codebases before claiming broad software-engineering scope",
+        ("larger codebases", "software engineering", "scope", "limitations"),
+        "limitation",
+        True,
+    ),
+    CandidateSpec(
+        "Track LLM inference cost as part of the run budget",
+        ("llm inference cost", "per-task", "$2.50", "$1.50", "pricing data"),
+        "all",
+        True,
+    ),
+]
+
+PROFILE_SPECS = {
+    "toolformer": {
+        "method": TOOLFORMER_METHOD_SPECS,
+        "experiment": TOOLFORMER_EXPERIMENT_SPECS,
+        "limitation": TOOLFORMER_LIMITATION_SPECS,
+    },
+    "aide": {
+        "method": AIDE_METHOD_SPECS,
+        "experiment": AIDE_EXPERIMENT_SPECS,
+        "limitation": AIDE_LIMITATION_SPECS,
+    },
+}
+
 HEADING_PATTERNS = {
     "abstract": (r"\bAbstract\b",),
     "introduction": (r"\b1\s+Introduction\b", r"\bIntroduction\b"),
-    "method": (r"\b2\s+Approach\b", r"\bMethods?\b", r"\bApproach\b"),
+    "method": (r"\b2\s+Approach\b", r"\b3\s+Methodology\b", r"\bMethods?\b", r"\bApproach\b", r"\bMethodology\b"),
     "tools": (r"\b3\s+Tools\b", r"\bTools\b"),
     "experiment": (r"\b4\s+Experiments\b", r"\bExperiments\b", r"\bEvaluation\b"),
     "analysis": (r"\b5\s+Analysis\b", r"\bAnalysis\b"),
@@ -334,12 +448,13 @@ def select_candidates(
         search_ranges = [ranges.get(spec.group), ranges.get("all")]
         best: Candidate | None = None
         for section in [item for item in search_ranges if item is not None]:
+            section_best: Candidate | None = None
             for entry in entries_in_range(entries, section):
                 if not entry.text:
                     continue
                 start = max(1, entry.number - radius)
                 end = min(max_line, entry.number + radius)
-                if overlaps_used(start, end, used):
+                if not spec.allow_overlap and overlaps_used(start, end, used):
                     continue
                 text = relevant_window_text(entries, start, end, spec.keywords)
                 score = score_window(text, spec.keywords)
@@ -352,13 +467,16 @@ def select_candidates(
                     end=end,
                     score=score,
                 )
-                if best is None:
-                    best = candidate
+                if section_best is None:
+                    section_best = candidate
                 elif spec.prefer_later:
-                    if (candidate.score, candidate.start) > (best.score, best.start):
-                        best = candidate
-                elif (candidate.score, -candidate.start) > (best.score, -best.start):
-                    best = candidate
+                    if (candidate.score, candidate.start) > (section_best.score, section_best.start):
+                        section_best = candidate
+                elif (candidate.score, -candidate.start) > (section_best.score, -section_best.start):
+                    section_best = candidate
+            if section_best is not None:
+                best = section_best
+                break
         if best is not None:
             selected.append(best)
             used.append((best.start, best.end))
@@ -401,15 +519,15 @@ def fallback_candidates(entries: list[LineEntry], section: SectionRange, *, limi
     return candidates[:limit]
 
 
-def candidates_for_group(entries: list[LineEntry], ranges: dict[str, SectionRange], group: str) -> list[Candidate]:
+def candidates_for_group(entries: list[LineEntry], ranges: dict[str, SectionRange], group: str, specs_by_group: dict[str, list[CandidateSpec]]) -> list[Candidate]:
     if group == "method":
-        candidates = select_candidates(entries, ranges, METHOD_SPECS, limit=8)
+        candidates = select_candidates(entries, ranges, specs_by_group["method"], limit=8)
         return candidates or fallback_candidates(entries, ranges["method"], limit=4)
     if group == "experiment":
-        candidates = select_candidates(entries, ranges, EXPERIMENT_SPECS, limit=7)
+        candidates = select_candidates(entries, ranges, specs_by_group["experiment"], limit=7)
         return candidates or fallback_candidates(entries, ranges["experiment"], limit=3)
     if group == "limitation":
-        candidates = select_candidates(entries, ranges, LIMITATION_SPECS, limit=7)
+        candidates = select_candidates(entries, ranges, specs_by_group["limitation"], limit=7)
         return candidates or fallback_candidates(entries, ranges["limitation"], limit=3)
     raise ValueError(f"Unknown candidate group: {group}")
 
@@ -455,12 +573,13 @@ def candidate_list(candidates: list[Candidate], *, ordered: bool) -> str:
     return "\n".join(lines)
 
 
-def build_note(source: Path, paper_id: str, title: str, entries: list[LineEntry]) -> tuple[str, dict]:
+def build_note(source: Path, paper_id: str, title: str, entries: list[LineEntry], profile: str) -> tuple[str, dict]:
     ranges = section_ranges(entries)
+    specs_by_group = PROFILE_SPECS[profile]
     abstract, abstract_start, abstract_end = abstract_snippet(entries, ranges)
-    methods = candidates_for_group(entries, ranges, "method")
-    experiments = candidates_for_group(entries, ranges, "experiment")
-    limitations = candidates_for_group(entries, ranges, "limitation")
+    methods = candidates_for_group(entries, ranges, "method", specs_by_group)
+    experiments = candidates_for_group(entries, ranges, "experiment", specs_by_group)
+    limitations = candidates_for_group(entries, ranges, "limitation", specs_by_group)
 
     note = f"""# {title}
 
@@ -505,6 +624,7 @@ Source anchors: lines {abstract_start}-{abstract_end}.
         "source": str(source),
         "paper_id": paper_id,
         "title": title,
+        "profile": profile,
         "line_count": entries[-1].number if entries else 0,
         "ranges": {name: {"start": value.start, "end": value.end} for name, value in ranges.items()},
         "selected": {
@@ -521,12 +641,12 @@ Source anchors: lines {abstract_start}-{abstract_end}.
     return note, report
 
 
-def write_outputs(source: Path, output: Path, paper_id: str | None, title: str | None, report_path: Path | None) -> dict:
+def write_outputs(source: Path, output: Path, paper_id: str | None, title: str | None, report_path: Path | None, profile: str) -> dict:
     text = source.read_text(encoding="utf-8", errors="replace")
     entries = line_entries(text)
     inferred_paper_id = paper_id or source.stem
     inferred_title = infer_title(entries, source, title)
-    note, report = build_note(source, inferred_paper_id, inferred_title, entries)
+    note, report = build_note(source, inferred_paper_id, inferred_title, entries, profile)
 
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(note, encoding="utf-8")
@@ -543,12 +663,18 @@ def main() -> int:
     parser.add_argument("--paper-id", help="Optional paper identifier. Defaults to source stem.")
     parser.add_argument("--title", help="Optional paper title. Defaults to the first plausible title line.")
     parser.add_argument("--report", type=Path, help="Optional JSON report of selected line windows.")
+    parser.add_argument(
+        "--profile",
+        choices=sorted(PROFILE_SPECS),
+        default="toolformer",
+        help="Source-selection profile. Defaults to the original Toolformer/tool-use profile.",
+    )
     args = parser.parse_args()
 
     if not args.source.exists():
         parser.error(f"Source file not found: {args.source}")
 
-    report = write_outputs(args.source, args.output, args.paper_id, args.title, args.report)
+    report = write_outputs(args.source, args.output, args.paper_id, args.title, args.report, args.profile)
     print(json.dumps({"note": str(args.output), "paper_id": report["paper_id"], "title": report["title"]}, indent=2))
     return 0
 

@@ -169,6 +169,51 @@ We introduce a limitation-rich workflow.
             skill = (output / "SKILL.md").read_text(encoding="utf-8")
             self.assertIn("Seventh limitation preserves model scale caveat", skill)
 
+    def test_cli_keeps_indented_numbered_continuation_inside_bullet(self):
+        source_text = """# Wrapped Bullet Paper
+
+## Abstract
+
+We introduce a wrapped bullet workflow.
+
+## Methods
+
+1. Run the method.
+
+## Experiments
+
+- Compare against baselines: one baseline is described first.
+  2. The second baseline name appears inside the wrapped sentence and should
+  not become a separate validation bullet. Source anchors: lines 10-12.
+
+## Limitations
+
+- Record failure cases.
+"""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            source = tmp_path / "wrapped.md"
+            output = tmp_path / "generated"
+            source.write_text(source_text, encoding="utf-8")
+
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--source",
+                    str(source),
+                    "--output",
+                    str(output),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            skill = (output / "SKILL.md").read_text(encoding="utf-8")
+            self.assertIn("2. The second baseline name appears inside", skill)
+            self.assertNotIn("- not become a separate validation bullet", skill)
+
 
 if __name__ == "__main__":
     unittest.main()

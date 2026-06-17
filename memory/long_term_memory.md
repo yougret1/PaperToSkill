@@ -150,8 +150,23 @@ Initial target contribution categories:
   auto-note-derived transfer-readiness ranking.
 - `results/evaluations/toolformer_auto_source_span_validation_v0.json`:
   Toolformer auto-note-derived source-span validation summary.
-- `results/tables/auto_note_comparison.md`: curated-vs-auto Toolformer note
-  comparison table.
+- `papers/auto_notes/aide_auto_note.md`: second deterministic automatic note
+  scaffold from extracted paper text, using the AIDE profile.
+- `generated_skills/aide_auto/SKILL.md`: second retained auto-note-derived
+  skill, generated from `papers/extracted/aide.txt` via the automatic note
+  scaffold.
+- `results/evaluations/aide_auto_note_scaffold_v0.json`: line-window selection
+  report for the AIDE automatic note scaffold.
+- `results/evaluations/aide_auto_rubric_v0.json`: AIDE auto-note-derived skill
+  rubric score.
+- `results/evaluations/aide_auto_context_baselines_v0.json`: AIDE
+  auto-note-derived skill-vs-summary-vs-abstract deterministic comparison.
+- `results/evaluations/aide_auto_harness_transfer_v0.json`: AIDE
+  auto-note-derived transfer-readiness ranking.
+- `results/evaluations/aide_auto_source_span_validation_v0.json`: AIDE
+  auto-note-derived source-span validation summary.
+- `results/tables/auto_note_comparison.md`: curated-vs-auto Toolformer and AIDE
+  note comparison table.
 - `results/tables/`: paper-ready main results, transfer ablation, compactness/
   source-grounding, context cost proxy, and combined summary tables.
 - `results/human_fidelity_packets/`: prepared review packets and blank
@@ -161,8 +176,8 @@ Initial target contribution categories:
   paper-reported limitations/failure branches and 6 project-level failure/fix
   records.
 - `results/reproducibility/`: reproducibility package report. Current status is
-  ready with pending external evidence, 89 ready checks, 5 pending checks, and 0
-  failed checks.
+  ready with pending external evidence, 105 ready checks, 5 pending checks, and
+  0 failed checks.
 - `research/review_report.md` and `research/rebuttal_bank.md`: internal
   review/rebuttal readiness artifacts that map likely reviewer objections to
   evidence and prohibited overclaims.

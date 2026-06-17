@@ -1,0 +1,75 @@
+{
+  "schema_version": "0.1",
+  "id": "aide_auto_research_run",
+  "paper_id": "aide_auto",
+  "created": "2026-06-17",
+  "task": "Plan a small AIDE-style code optimization run from an automatically scaffolded note.",
+  "user_prompt": "Given a small ML engineering task with executable Python code and a validation metric, produce an AIDE-style run plan that is executable in a local harness. The plan must include a solution tree, objective function, search policy, draft/debug/improve actions, context summarization, data preview, validation protocol, final solution selection, and known limitations.",
+  "context_variants": [
+    {
+      "id": "skill",
+      "path": "generated_skills/aide_auto/SKILL.md",
+      "label": "PaperToSkill auto-note-derived skill"
+    },
+    {
+      "id": "generic_summary",
+      "path": "baselines/aide_generic_summary.md",
+      "label": "Generic paper summary"
+    },
+    {
+      "id": "abstract_only",
+      "path": "baselines/aide_abstract_only.md",
+      "label": "Abstract-only context"
+    }
+  ],
+  "required_capabilities": [
+    {
+      "id": "optimization_frame",
+      "description": "Plan frames ML engineering as code-solution optimization with a stateless objective.",
+      "keywords": ["solution space", "Python scripts", "objective function", "validation accuracy", "loss"]
+    },
+    {
+      "id": "solution_tree",
+      "description": "Plan preserves tree nodes, edges, scores, and final best solution selection.",
+      "keywords": ["solution tree", "nodes", "edges", "score", "best-scoring solution"]
+    },
+    {
+      "id": "search_policy",
+      "description": "Plan includes draft/debug/improve policy with debug-depth constraints.",
+      "keywords": ["search policy", "drafting", "debugging", "improving", "debug-depth"]
+    },
+    {
+      "id": "coding_operator",
+      "description": "Plan includes specialized coding actions and atomic measurable changes.",
+      "keywords": ["single-file Python", "error logs", "tracebacks", "atomic", "measurable change"]
+    },
+    {
+      "id": "summarization",
+      "description": "Plan keeps prompts concise with historical summaries.",
+      "keywords": ["summarization operator", "performance metrics", "hyperparameters", "debugging hints"]
+    },
+    {
+      "id": "data_preview",
+      "description": "Plan includes static task data preview for code decisions.",
+      "keywords": ["data preview", "dataset size", "column names", "data splits"]
+    },
+    {
+      "id": "validation_domains",
+      "description": "Plan remembers evaluated benchmarks and reported metrics.",
+      "keywords": ["Weco-Kaggle", "MLE-Bench", "RE-Bench", "51.38", "16.9", "92.4"]
+    },
+    {
+      "id": "limitations",
+      "description": "Plan preserves limitation and stop-condition evidence.",
+      "keywords": ["data contamination", "local optima", "larger codebases", "LLM inference cost"]
+    },
+    {
+      "id": "source_grounding",
+      "description": "Context includes source anchors or equivalent traceability.",
+      "keywords": ["Source anchors", "source map", "lines"]
+    }
+  ],
+  "compactness": {
+    "max_words": 1200
+  }
+}

@@ -71,6 +71,27 @@ AUTO_NOTE_CONFIGS = [
             },
         ],
     },
+    {
+        "paper": "AIDE",
+        "rows": [
+            {
+                "input": "Curated source-anchored note",
+                "rubric": "aide_rubric_v0.json",
+                "context": "aide_context_baselines_v0.json",
+                "transfer": "aide_harness_transfer_v0.json",
+                "source_spans": "aide_source_span_validation_v0.json",
+                "evidence_boundary": "Curated note-to-skill case",
+            },
+            {
+                "input": "Automatic extracted-text note scaffold",
+                "rubric": "aide_auto_rubric_v0.json",
+                "context": "aide_auto_context_baselines_v0.json",
+                "transfer": "aide_auto_harness_transfer_v0.json",
+                "source_spans": "aide_auto_source_span_validation_v0.json",
+                "evidence_boundary": "Deterministic scaffold; must be audited",
+            },
+        ],
+    },
 ]
 
 TABLE_FILENAMES = {
@@ -367,7 +388,7 @@ def generate_tables(results_dir: Path, output_dir: Path) -> dict[str, Path]:
         "Main Results": "Coverage scores are deterministic task-rubric scores; transfer readiness is an offline artifact-readiness metric.",
         "Transfer Ablation": "The no-transfer-notes variant removes only the `Transfer Notes` section from the generated skill.",
         "Compactness And Source Grounding": "Source-span validation checks line-anchor validity and lexical overlap, not human factuality.",
-        "Auto Note Comparison": "Compares a curated Toolformer note with a deterministic extracted-text note scaffold. This is not a completed arbitrary-PDF automation claim.",
+        "Auto Note Comparison": "Compares curated notes with deterministic extracted-text note scaffolds for Toolformer and AIDE. This is not a completed arbitrary-PDF automation claim.",
     }
 
     written: dict[str, Path] = {}

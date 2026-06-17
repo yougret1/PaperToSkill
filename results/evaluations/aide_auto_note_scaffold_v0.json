@@ -1,0 +1,161 @@
+{
+  "source": "papers\\extracted\\aide.txt",
+  "paper_id": "aide_auto",
+  "title": "AIDE: AI-Driven Exploration in the Space of Code",
+  "profile": "aide",
+  "line_count": 973,
+  "ranges": {
+    "abstract": {
+      "start": 12,
+      "end": 34
+    },
+    "method": {
+      "start": 104,
+      "end": 228
+    },
+    "experiment": {
+      "start": 229,
+      "end": 395
+    },
+    "limitation": {
+      "start": 396,
+      "end": 536
+    },
+    "all": {
+      "start": 1,
+      "end": 973
+    }
+  },
+  "selected": {
+    "abstract": {
+      "start": 12,
+      "end": 34
+    },
+    "methods": [
+      {
+        "prefix": "Frame ML engineering as a search over Python-script solution space with an objective function",
+        "snippet": "... in place, AIDE can systematically explore the code solution space, as shown",
+        "start": 139,
+        "end": 143,
+        "score": 1
+      },
+      {
+        "prefix": "Represent the run as a solution tree with nodes, edges, scores, and best-solution selection",
+        "snippet": "... h : S R, evaluates the code and provides a scalar score. All discovered solutions are stored in a solution tree, T , whose nodes correspond to scripts and edges represent an ...",
+        "start": 130,
+        "end": 134,
+        "score": 4
+      },
+      {
+        "prefix": "Use a search policy that chooses drafting, debugging, and improving actions",
+        "snippet": "... instantiation for machine learning uses (i) a search policy to select which solution to refine next, (ii) a coding operator f for generating code by drafting, debugging, or improving solutions, and (iii) ...",
+        "start": 219,
+        "end": 223,
+        "score": 4
+      },
+      {
+        "prefix": "Keep coding actions atomic and grounded in executable feedback such as error logs or tracebacks",
+        "snippet": "... or feature-engineering idea), then emits a single-file Python program imple- menting that plan. Debugging, which focuses on repairing buggy solutions. By inspecting error logs ...",
+        "start": 167,
+        "end": 171,
+        "score": 2
+      },
+      {
+        "prefix": "Use a summarization operator to preserve performance metrics, hyperparameters, and debugging hints",
+        "snippet": "Summarization Operator ((T )). Despite the flexibility to generate arbitrarily large numbers of solutions, we avoid saturating the LLMs prompt by applying a context summarization operator, (T ). Instead of ...",
+        "start": 201,
+        "end": 205,
+        "score": 2
+      },
+      {
+        "prefix": "Provide a static data preview with dataset size, column names, and data splits before coding",
+        "snippet": "Data Preview in Coding Prompts. In addition to dynamic updates from (T ), AIDE for machine learning includes a small static data preview in each prompt, giving the LLM basic knowledge of dataset size or ...",
+        "start": 212,
+        "end": 216,
+        "score": 4
+      }
+    ],
+    "experiments": [
+      {
+        "prefix": "Evaluate on Weco-Kaggle, MLE-Bench, and RE-Bench when reproducing the paper's benchmark story",
+        "snippet": "... to build Wecos internal Kaggle benchmark, called Weco-Kaggle, for evaluating AIDEs performance in machine learning. This set consists of 63 competitions of varied complexity and data size, spanning domains ...",
+        "start": 241,
+        "end": 245,
+        "score": 1
+      },
+      {
+        "prefix": "Record Weco-Kaggle Lite 51.38 Exceeds % of humans and baseline comparison",
+        "snippet": "... Results on Weco-Kaggle Lite. Table 1 compares AIDE against multiple baselines, in- cluding H2O AutoML, AutoGPT, and a human competitor utilizing ChatGPT, averaged over the 16 tabular Kaggle tasks of ...",
+        "start": 336,
+        "end": 340,
+        "score": 2
+      },
+      {
+        "prefix": "Record MLE-Bench pass@1 evidence, including 16.9% Any Medal",
+        "snippet": "... rates and ultimately more competition medals. Table 3 highlights key results of AIDE compared to other agents. The reported Any Medal (%) column shows the fraction of competitions on which the ...",
+        "start": 413,
+        "end": 417,
+        "score": 4
+      },
+      {
+        "prefix": "Record MLE-Bench Lite 92.4% valid-submission lift",
+        "snippet": "... evident when comparing performance on the MLE-bench Lite subset, as shown in Figure 3. Using o1-preview with AIDE significantly improved performance across all metrics compared to using o1-preview ...",
+        "start": 461,
+        "end": 465,
+        "score": 3
+      },
+      {
+        "prefix": "Record RE-Bench performance and six-hour automation limits",
+        "snippet": "... average performance over time across the seven RE-Bench environ- ments. Since LLMs can implement solutions much faster, allowing for more iteration cycles, AIDE managed to outperform humans within the ...",
+        "start": 494,
+        "end": 498,
+        "score": 2
+      },
+      {
+        "prefix": "Compare against baselines and ablations that isolate the search system's contribution",
+        "snippet": "... are encouraged to read and cite the papers from OpenAI (Chan et al., 2024) and METR (2024) ...",
+        "start": 235,
+        "end": 239,
+        "score": 1
+      }
+    ],
+    "limitations": [
+      {
+        "prefix": "Treat data contamination as a risk when benchmark data may overlap with training corpora",
+        "snippet": "... recency, the only way to fully ensure no data contamination would be to submit the agents solutions to live competitions. ...",
+        "start": 400,
+        "end": 404,
+        "score": 1
+      },
+      {
+        "prefix": "Do not claim live competition submissions when the paper only identifies them as the contamination-control ideal",
+        "snippet": "... agent performance and competition recency, the only way to fully ensure no data contamination would be to submit the agents solutions to live ...",
+        "start": 398,
+        "end": 402,
+        "score": 4
+      },
+      {
+        "prefix": "Treat greedy policy and local optima as search limitations",
+        "snippet": "... scientists eventually caught up, as AIDE adopts a simple greedy policy that may lead to local optima on challenging R&D ...",
+        "start": 487,
+        "end": 491,
+        "score": 3
+      },
+      {
+        "prefix": "Check whether the method transfers to larger codebases before claiming broad software-engineering scope",
+        "snippet": "... larger codebases or where a single improvement involved multiple steps of interaction. For example, in Agent for Rust CodeContests, AIDE was prone to repeating local patches instead of discovering new ...",
+        "start": 499,
+        "end": 503,
+        "score": 1
+      },
+      {
+        "prefix": "Track LLM inference cost as part of the run budget",
+        "snippet": "... 7 illustrates the per-task LLM inference cost for AIDE across the Weco-Kaggle benchmark, using GPT-4 Turbo (gpt-4-0125-preview) with pricing data from early 2024. Although certain tasks incur higher ...",
+        "start": 744,
+        "end": 748,
+        "score": 5
+      }
+    ]
+  },
+  "evidence_boundary": "Deterministic line-window scaffold. It identifies auditable source spans but does not prove semantic completeness or human fidelity."
+}

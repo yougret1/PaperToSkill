@@ -47,17 +47,18 @@ curated, source-anchored paper notes into skills and source maps. This narrow
 scope is intentional: it lets us evaluate whether the conversion layer preserves
 operational knowledge before claiming end-to-end PDF automation.
 
-We also introduce a first deterministic extracted-text-to-note scaffold. This
-scaffold selects source-anchored line windows from extracted paper text and
-emits an auditable Markdown note before skill extraction. We evaluate it
-separately from the curated-note main benchmark so it reduces the curation gap
+We also introduce deterministic extracted-text-to-note scaffolds. These
+scaffolds select source-anchored line windows from extracted paper text and
+emit auditable Markdown notes before skill extraction. We evaluate them
+separately from the curated-note main benchmark so they reduce the curation gap
 without becoming an unsupported arbitrary-PDF automation claim.
 
 The current contributions are:
 
 1. a paper-to-skill schema for operationalizing research contributions;
 2. a deterministic extraction scaffold that emits `SKILL.md` plus source maps;
-3. a deterministic extracted-text-to-note scaffold evaluated on Toolformer;
+3. deterministic extracted-text-to-note scaffolds evaluated on Toolformer and
+   AIDE;
 4. a four-paper benchmark using AI Scientist-v2, Reflexion, AIDE, and
    Toolformer;
 5. deterministic/offline evaluations for structure, context coverage,
@@ -195,20 +196,22 @@ records from the PaperToSkill development process. This archive supports the
 claim that failed branches are preserved as inspectable provenance. It is not
 evidence that failure recording improves live task outcomes.
 
-The reproducibility package checker reports 89 ready checks, 5 pending
+The reproducibility package checker reports 105 ready checks, 5 pending
 external-evidence checks, and 0 failed checks. The pending checks correspond to
 the four live response sets and the human-fidelity annotation status. This
 supports a local artifact-readiness claim, not a claim of completed live or
 human evaluation.
 
-Phase 19 evaluates the automatic note scaffold separately on Toolformer. The
-auto-note-derived skill scores 20/20 on the Toolformer deterministic rubric,
-9.3/10 on context coverage, 10/10 on offline transfer readiness, and 1.0
-source-span support with zero invalid ranges. This is slightly longer than the
-curated Toolformer skill, at 1,179 words versus 943 words, but remains under the
-1,200-word compactness budget. The result supports the narrower claim that
-extracted text can seed an auditable note scaffold; it does not establish robust
-arbitrary-PDF automation.
+Phases 19-20 evaluate the automatic note scaffold separately on Toolformer and
+AIDE. The Toolformer auto-note-derived skill scores 20/20 on the deterministic
+rubric, 9.3/10 on context coverage, 10/10 on offline transfer readiness, and
+1.0 source-span support with zero invalid ranges. The AIDE auto-note-derived
+skill scores 20/20, 8.467/10 on context coverage, 9.5/10 on offline transfer
+readiness, and 1.0 source-span support with zero invalid ranges. These skills
+are 1,179 and 998 words respectively, both under the 1,200-word compactness
+budget. The result supports the narrower claim that extracted text can seed
+auditable note scaffolds; it does not establish robust arbitrary-PDF
+automation.
 
 ## 6. Discussion
 
@@ -235,8 +238,8 @@ evidence that must be reviewed before live use.
 ## 7. Limitations
 
 The current work has several important limits. First, the main benchmark
-converts curated notes rather than arbitrary PDFs; the automatic note scaffold
-has only been retained on Toolformer extracted text. Second, the metrics are
+converts curated notes rather than arbitrary PDFs; automatic note scaffolds have
+only been retained on Toolformer and AIDE extracted text. Second, the metrics are
 deterministic and partly lexical, so they can over-credit exact matches or
 under-credit valid paraphrases. Third, live cross-harness execution has not
 completed because the

@@ -128,3 +128,15 @@
   evidence boundary that automatic notes must be audited and are not yet a
   reliable arbitrary-PDF conversion claim.
 - Status: accepted for Phase 19.
+
+## 2026-06-17: Extend Auto-Note Scaffold With AIDE Profile
+
+- Decision: add an AIDE-specific selection profile for the deterministic
+  extracted-text-to-note scaffold and evaluate the AIDE auto-note-derived skill
+  separately from the curated-note main benchmark.
+- Rationale: Toolformer is a tool/API-contract paper; AIDE stresses a different
+  code and ML-engineering workflow with solution-tree search, coding actions,
+  benchmark metrics, data-contamination limits, greedy/local-optima caveats, and
+  LLM cost analysis. A second profile tests whether the scaffold can be adapted
+  beyond the first Toolformer case while preserving the audit-scaffold boundary.
+- Status: accepted for Phase 20.

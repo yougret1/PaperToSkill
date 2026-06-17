@@ -37,6 +37,7 @@
 | `research/run_logs/2026-06-17_phase17_review_rebuttal.md` | Review/rebuttal package commands and outcomes | Created |
 | `research/run_logs/2026-06-17_phase18_toolformer_stress_case.md` | Toolformer fourth-paper stress-case commands and outcomes | Created |
 | `research/run_logs/2026-06-17_phase19_auto_note_scaffold.md` | Deterministic extracted-text-to-note scaffold commands and outcomes | Created |
+| `research/run_logs/2026-06-17_phase20_aide_auto_note_profile.md` | AIDE auto-note profile commands, bug fix, and outcomes | Created |
 
 ## Paper Draft Package
 
@@ -91,6 +92,9 @@
 | `benchmarks/tasks/toolformer_auto_research_run.json` | Context-coverage task spec for Toolformer auto-note-derived skill | Created |
 | `benchmarks/tasks/toolformer_auto_harness_transfer.json` | Offline transfer-readiness task for Toolformer auto-note-derived skill | Created |
 | `benchmarks/tasks/toolformer_auto_source_span_validation.json` | Source-span validation task for Toolformer auto-note-derived skill | Created |
+| `benchmarks/tasks/aide_auto_research_run.json` | Context-coverage task spec for AIDE auto-note-derived skill | Created |
+| `benchmarks/tasks/aide_auto_harness_transfer.json` | Offline transfer-readiness task for AIDE auto-note-derived skill | Created |
+| `benchmarks/tasks/aide_auto_source_span_validation.json` | Source-span validation task for AIDE auto-note-derived skill | Created |
 | `baselines/ai_scientist_v2_generic_summary.md` | Generic summary baseline context | Created |
 | `baselines/ai_scientist_v2_abstract_only.md` | Abstract-only baseline context | Created |
 | `baselines/reflexion_generic_summary.md` | Generic summary baseline context for Reflexion | Created |
@@ -112,6 +116,7 @@
 | `papers/notes/aide_note.md` | Curated AIDE source-anchored note for scaffold input | Created |
 | `papers/notes/toolformer_note.md` | Curated Toolformer source-anchored note for scaffold input | Created |
 | `papers/auto_notes/toolformer_auto_note.md` | Deterministic automatic note scaffold from Toolformer extracted text | Created |
+| `papers/auto_notes/aide_auto_note.md` | Deterministic automatic note scaffold from AIDE extracted text | Created |
 | `examples/papertoskill_paper_note.md` | Paper-like source note for retained case | Created |
 | `scripts/papertoskill_extract.py` | Deterministic local paper-to-skill scaffold | Created |
 | `scripts/papertoskill_note_from_text.py` | Deterministic extracted-text-to-note scaffold with line anchors | Created |
@@ -151,6 +156,8 @@
 | `generated_skills/toolformer/references/source_map.json` | Source-map evidence for Toolformer generated skill | Created |
 | `generated_skills/toolformer_auto/SKILL.md` | Retained generated skill from deterministic Toolformer auto-note scaffold | Created |
 | `generated_skills/toolformer_auto/references/source_map.json` | Source-map evidence for Toolformer auto-note-derived skill | Created |
+| `generated_skills/aide_auto/SKILL.md` | Retained generated skill from deterministic AIDE auto-note scaffold | Created |
+| `generated_skills/aide_auto/references/source_map.json` | Source-map evidence for AIDE auto-note-derived skill | Created |
 | `generated_skills/papertoskill_paper_note/SKILL.md` | Retained generated skill from paper-like note | Created |
 | `generated_skills/papertoskill_paper_note/references/source_map.json` | Source-map evidence for retained generated skill | Created |
 | `results/evaluations/ai_scientist_v2_rubric_v0.json` | Scored rubric output for AI Scientist-v2 generated skill | Created |
@@ -175,6 +182,11 @@
 | `results/evaluations/toolformer_auto_context_baselines_v0.json` | Toolformer auto-note-derived skill context coverage scores | Created |
 | `results/evaluations/toolformer_auto_harness_transfer_v0.json` | Toolformer auto-note-derived skill transfer-readiness scores | Created |
 | `results/evaluations/toolformer_auto_source_span_validation_v0.json` | Toolformer auto-note-derived skill source-span validation output | Created |
+| `results/evaluations/aide_auto_note_scaffold_v0.json` | Selection report for deterministic AIDE auto-note scaffold | Created |
+| `results/evaluations/aide_auto_rubric_v0.json` | AIDE auto-note-derived skill rubric output | Created |
+| `results/evaluations/aide_auto_context_baselines_v0.json` | AIDE auto-note-derived skill context coverage scores | Created |
+| `results/evaluations/aide_auto_harness_transfer_v0.json` | AIDE auto-note-derived skill transfer-readiness scores | Created |
+| `results/evaluations/aide_auto_source_span_validation_v0.json` | AIDE auto-note-derived skill source-span validation output | Created |
 | `results/live_transfer_prompts/ai_scientist_v2_v0/` | Live Codex/Claude prompt packets and index | Created |
 | `results/live_transfer_prompts/reflexion_v0/` | Reflexion live Codex/Claude prompt packets and index | Created |
 | `results/live_transfer_prompts/aide_v0/` | AIDE live Codex/Claude prompt packets and index | Created |
@@ -190,8 +202,8 @@
 | `results/tables/context_cost_proxy.csv` | CSV table for context size and estimated input-token proxy | Created |
 | `results/tables/coverage_cost_efficiency.csv` | CSV table for deterministic coverage per estimated token budget | Created |
 | `results/tables/context_cost_proxy.json` | Machine-readable context token/cost proxy report | Created |
-| `results/tables/auto_note_comparison.md` | Curated-vs-auto Toolformer note comparison table | Created |
-| `results/tables/auto_note_comparison.csv` | CSV copy of curated-vs-auto Toolformer note comparison | Created |
+| `results/tables/auto_note_comparison.md` | Curated-vs-auto Toolformer/AIDE note comparison table | Created |
+| `results/tables/auto_note_comparison.csv` | CSV copy of curated-vs-auto Toolformer/AIDE note comparison | Created |
 | `results/human_fidelity_packets/README.md` | Summary of prepared human-fidelity packets | Created |
 | `results/human_fidelity_packets/index.json` | Machine-readable packet index with pending annotation status | Created |
 | `results/human_fidelity_packets/annotation_template.csv` | Blank annotation rows for human reviewers | Created |

@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 89
+- Ready checks: 105
 - Pending checks: 5
 - Failed checks: 0
 
@@ -103,5 +103,21 @@ Evidence boundary: this report checks local package completeness and separates p
 | toolformer_auto_source_span | ready | present | results/evaluations/toolformer_auto_source_span_validation_v0.json |
 | toolformer_auto_rubric_score | ready | 20/20 | results\evaluations\toolformer_auto_rubric_v0.json |
 | toolformer_auto_context_baseline_order | ready | skill=9.3; generic=2.5; abstract=1.534 | results\evaluations\toolformer_auto_context_baselines_v0.json |
+| toolformer_auto_transfer_ablation_order | ready | full=10.0; no_transfer=7.6 | results\evaluations\toolformer_auto_harness_transfer_v0.json |
 | toolformer_auto_source_span_support | ready | support_rate=1; invalid_ranges=0 | results\evaluations\toolformer_auto_source_span_validation_v0.json |
+| aide_auto_note | ready | present | papers/auto_notes/aide_auto_note.md |
+| aide_auto_skill | ready | present | generated_skills/aide_auto/SKILL.md |
+| aide_auto_source_map | ready | present | generated_skills/aide_auto/references/source_map.json |
+| aide_auto_note_report | ready | present | results/evaluations/aide_auto_note_scaffold_v0.json |
+| aide_auto_rubric | ready | present | results/evaluations/aide_auto_rubric_v0.json |
+| aide_auto_context | ready | present | results/evaluations/aide_auto_context_baselines_v0.json |
+| aide_auto_transfer | ready | present | results/evaluations/aide_auto_harness_transfer_v0.json |
+| aide_auto_source_span | ready | present | results/evaluations/aide_auto_source_span_validation_v0.json |
+| aide_auto_context_task | ready | present | benchmarks/tasks/aide_auto_research_run.json |
+| aide_auto_transfer_task | ready | present | benchmarks/tasks/aide_auto_harness_transfer.json |
+| aide_auto_source_span_task | ready | present | benchmarks/tasks/aide_auto_source_span_validation.json |
+| aide_auto_rubric_score | ready | 20/20 | results\evaluations\aide_auto_rubric_v0.json |
+| aide_auto_context_baseline_order | ready | skill=8.467; generic=1.916; abstract=1.333 | results\evaluations\aide_auto_context_baselines_v0.json |
+| aide_auto_transfer_ablation_order | ready | full=9.5; no_transfer=7.1 | results\evaluations\aide_auto_harness_transfer_v0.json |
+| aide_auto_source_span_support | ready | support_rate=1; invalid_ranges=0 | results\evaluations\aide_auto_source_span_validation_v0.json |
 | secret_scan | ready | no raw API-key-like strings found | repository text files |

@@ -10,9 +10,10 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 19: deterministic extracted-text-to-note scaffold added. Toolformer now
-has an automatic note scaffold and auto-note-derived skill evaluated separately
-from the curated-note main benchmark.
+Phase 20: deterministic extracted-text-to-note scaffold extended beyond
+Toolformer. Toolformer and AIDE now have automatic note scaffolds and
+auto-note-derived skills evaluated separately from the curated-note main
+benchmark.
 
 ## Memory
 
