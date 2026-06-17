@@ -49,6 +49,30 @@ PAPER_CONFIGS = [
     },
 ]
 
+AUTO_NOTE_CONFIGS = [
+    {
+        "paper": "Toolformer",
+        "rows": [
+            {
+                "input": "Curated source-anchored note",
+                "rubric": "toolformer_rubric_v0.json",
+                "context": "toolformer_context_baselines_v0.json",
+                "transfer": "toolformer_harness_transfer_v0.json",
+                "source_spans": "toolformer_source_span_validation_v0.json",
+                "evidence_boundary": "Curated note-to-skill case",
+            },
+            {
+                "input": "Automatic extracted-text note scaffold",
+                "rubric": "toolformer_auto_rubric_v0.json",
+                "context": "toolformer_auto_context_baselines_v0.json",
+                "transfer": "toolformer_auto_harness_transfer_v0.json",
+                "source_spans": "toolformer_auto_source_span_validation_v0.json",
+                "evidence_boundary": "Deterministic scaffold; must be audited",
+            },
+        ],
+    },
+]
+
 TABLE_FILENAMES = {
     "main_results": ("main_results.md", "main_results.csv"),
     "transfer_ablation": ("transfer_ablation.md", "transfer_ablation.csv"),
@@ -56,6 +80,7 @@ TABLE_FILENAMES = {
         "compactness_source_grounding.md",
         "compactness_source_grounding.csv",
     ),
+    "auto_note_comparison": ("auto_note_comparison.md", "auto_note_comparison.csv"),
 }
 
 
@@ -231,6 +256,32 @@ def build_compactness_source_grounding(results_dir: Path) -> list[dict[str, Any]
     return rows
 
 
+def build_auto_note_comparison(results_dir: Path) -> list[dict[str, Any]]:
+    rows = []
+    for config in AUTO_NOTE_CONFIGS:
+        for row_config in config["rows"]:
+            rubric = load_json(results_dir / row_config["rubric"])
+            context = context_scores(load_json(results_dir / row_config["context"]))
+            transfer = transfer_scores(load_json(results_dir / row_config["transfer"]))
+            spans = first_result(load_json(results_dir / row_config["source_spans"]))
+            skill = context["skill"]
+            full_transfer = transfer["full_skill"]
+            rows.append(
+                {
+                    "Paper": config["paper"],
+                    "Input": row_config["input"],
+                    "Skill rubric": format_score(rubric["score"], rubric["max_score"]),
+                    "Skill coverage": format_score(skill["score"], skill["max_score"]),
+                    "Transfer readiness": format_score(full_transfer["average_normalized_score"], 10),
+                    "Source support rate": format_rate(spans["support_rate"]),
+                    "Invalid ranges": spans.get("invalid_ranges", "n/a"),
+                    "Skill words": skill["word_count"],
+                    "Evidence boundary": row_config["evidence_boundary"],
+                }
+            )
+    return rows
+
+
 def write_markdown_table(path: Path, title: str, rows: list[dict[str, Any]], columns: list[str], note: str) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     body = f"# {title}\n\n{note}\n\n{markdown_table(rows, columns)}"
@@ -296,12 +347,27 @@ def generate_tables(results_dir: Path, output_dir: Path) -> dict[str, Path]:
                 "Unsupported instruction rate",
             ],
         ),
+        "Auto Note Comparison": (
+            build_auto_note_comparison(results_dir),
+            [
+                "Paper",
+                "Input",
+                "Skill rubric",
+                "Skill coverage",
+                "Transfer readiness",
+                "Source support rate",
+                "Invalid ranges",
+                "Skill words",
+                "Evidence boundary",
+            ],
+        ),
     }
 
     notes = {
         "Main Results": "Coverage scores are deterministic task-rubric scores; transfer readiness is an offline artifact-readiness metric.",
         "Transfer Ablation": "The no-transfer-notes variant removes only the `Transfer Notes` section from the generated skill.",
         "Compactness And Source Grounding": "Source-span validation checks line-anchor validity and lexical overlap, not human factuality.",
+        "Auto Note Comparison": "Compares a curated Toolformer note with a deterministic extracted-text note scaffold. This is not a completed arbitrary-PDF automation claim.",
     }
 
     written: dict[str, Path] = {}
@@ -310,6 +376,7 @@ def generate_tables(results_dir: Path, output_dir: Path) -> dict[str, Path]:
             "main_results": "Main Results",
             "transfer_ablation": "Transfer Ablation",
             "compactness_source_grounding": "Compactness And Source Grounding",
+            "auto_note_comparison": "Auto Note Comparison",
         }[key]
         rows, columns = tables[title]
         md_path = output_dir / md_name

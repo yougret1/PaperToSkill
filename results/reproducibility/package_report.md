@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 75
+- Ready checks: 89
 - Pending checks: 5
 - Failed checks: 0
 
@@ -26,6 +26,8 @@ Evidence boundary: this report checks local package completeness and separates p
 | transfer_ablation_md | ready | present | results/tables/transfer_ablation.md |
 | context_cost_proxy_md | ready | present | results/tables/context_cost_proxy.md |
 | context_cost_proxy_json | ready | present | results/tables/context_cost_proxy.json |
+| auto_note_comparison_md | ready | present | results/tables/auto_note_comparison.md |
+| auto_note_comparison_csv | ready | present | results/tables/auto_note_comparison.csv |
 | paper_ready_summary | ready | present | results/tables/paper_ready_summary.md |
 | ai_scientist_v2_skill | ready | present | generated_skills/ai_scientist_v2/SKILL.md |
 | ai_scientist_v2_source_map | ready | present | generated_skills/ai_scientist_v2/references/source_map.json |
@@ -90,4 +92,16 @@ Evidence boundary: this report checks local package completeness and separates p
 | failure_archive_md | ready | present | results/failure_cases/failure_case_archive.md |
 | failure_archive_csv | ready | present | results/failure_cases/failure_case_archive.csv |
 | failure_archive_counts | ready | total=27; paper=21; project=6 | results\failure_cases\failure_case_archive.json |
+| toolformer_auto_note_script | ready | present | scripts/papertoskill_note_from_text.py |
+| toolformer_auto_note | ready | present | papers/auto_notes/toolformer_auto_note.md |
+| toolformer_auto_skill | ready | present | generated_skills/toolformer_auto/SKILL.md |
+| toolformer_auto_source_map | ready | present | generated_skills/toolformer_auto/references/source_map.json |
+| toolformer_auto_note_report | ready | present | results/evaluations/toolformer_auto_note_scaffold_v0.json |
+| toolformer_auto_rubric | ready | present | results/evaluations/toolformer_auto_rubric_v0.json |
+| toolformer_auto_context | ready | present | results/evaluations/toolformer_auto_context_baselines_v0.json |
+| toolformer_auto_transfer | ready | present | results/evaluations/toolformer_auto_harness_transfer_v0.json |
+| toolformer_auto_source_span | ready | present | results/evaluations/toolformer_auto_source_span_validation_v0.json |
+| toolformer_auto_rubric_score | ready | 20/20 | results\evaluations\toolformer_auto_rubric_v0.json |
+| toolformer_auto_context_baseline_order | ready | skill=9.3; generic=2.5; abstract=1.534 | results\evaluations\toolformer_auto_context_baselines_v0.json |
+| toolformer_auto_source_span_support | ready | support_rate=1; invalid_ranges=0 | results\evaluations\toolformer_auto_source_span_validation_v0.json |
 | secret_scan | ready | no raw API-key-like strings found | repository text files |

@@ -1,0 +1,108 @@
+{
+  "schema_version": "0.1",
+  "id": "toolformer_auto_harness_transfer",
+  "created": "2026-06-17",
+  "purpose": "Offline harness-transfer readiness evaluation for the auto-note-derived Toolformer skill.",
+  "evidence_boundary": "Offline deterministic readiness metric for an automatic note scaffold; not a live cross-harness agent run.",
+  "context_variants": [
+    {
+      "id": "full_skill",
+      "label": "Auto-note-derived skill with transfer notes",
+      "path": "generated_skills/toolformer_auto/SKILL.md"
+    },
+    {
+      "id": "skill_without_transfer_notes",
+      "label": "Auto-note-derived skill with Transfer Notes removed",
+      "path": "generated_skills/toolformer_auto/SKILL.md",
+      "drop_sections": [
+        "Transfer Notes"
+      ]
+    },
+    {
+      "id": "generic_summary",
+      "label": "Generic prose summary baseline",
+      "path": "baselines/toolformer_generic_summary.md"
+    }
+  ],
+  "core_signal_groups": [
+    {
+      "id": "api_contract",
+      "keywords": [
+        "API call",
+        "text-to-text",
+        "tool name",
+        "result"
+      ]
+    },
+    {
+      "id": "self_supervised_pipeline",
+      "keywords": [
+        "sample",
+        "execute",
+        "filter",
+        "future-token loss"
+      ]
+    },
+    {
+      "id": "training_and_inference",
+      "keywords": [
+        "augmented dataset",
+        "fine-tune",
+        "inference",
+        "insert the response"
+      ]
+    },
+    {
+      "id": "validation_and_limits",
+      "keywords": [
+        "zero-shot",
+        "LAMA",
+        "Atlas",
+        "calendar API",
+        "model scale"
+      ]
+    }
+  ],
+  "target_harnesses": [
+    {
+      "id": "codex_skill",
+      "label": "Codex-style SKILL.md harness",
+      "required_sections": [
+        "Inputs",
+        "Workflow",
+        "Validation",
+        "Failure Cases",
+        "Transfer Notes"
+      ],
+      "transfer_checks": [
+        "target harness",
+        "framework-specific commands",
+        "local equivalents",
+        "source-backed steps",
+        "failed branch"
+      ],
+      "source_anchor_min": 8,
+      "max_words": 1200
+    },
+    {
+      "id": "claude_project_prompt",
+      "label": "Claude-style project prompt harness",
+      "required_sections": [
+        "Paper Snapshot",
+        "Workflow",
+        "Validation",
+        "Failure Cases",
+        "Transfer Notes"
+      ],
+      "transfer_checks": [
+        "target harness",
+        "local equivalents",
+        "source-backed steps",
+        "inferred adaptations",
+        "future revision history"
+      ],
+      "source_anchor_min": 8,
+      "max_words": 1200
+    }
+  ]
+}

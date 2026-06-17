@@ -36,3 +36,10 @@ Evidence boundary: these tables aggregate existing deterministic/offline evaluat
 | Reflexion | 479 | 1200 | 2/2 | 12 | 11 | 0 | 0 | 0 | 1 | n/a |
 | AIDE | 927 | 1200 | 2/2 | 22 | 21 | 0 | 0 | 0 | 1 | n/a |
 | Toolformer | 943 | 1200 | 2/2 | 23 | 22 | 0 | 0 | 0 | 1 | n/a |
+
+## Auto Note Comparison
+
+| Paper | Input | Skill rubric | Skill coverage | Transfer readiness | Source support rate | Invalid ranges | Skill words | Evidence boundary |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Toolformer | Curated source-anchored note | 20/20 | 8.9/10 | 10/10 | 1 | 0 | 943 | Curated note-to-skill case |
+| Toolformer | Automatic extracted-text note scaffold | 20/20 | 9.3/10 | 10/10 | 1 | 0 | 1179 | Deterministic scaffold; must be audited |

@@ -46,17 +46,23 @@ Do not say:
 
 Short answer: This paper isolates the paper-note-to-skill conversion layer first
 so fidelity, compactness, and transfer readiness can be measured before claiming
-full PDF automation.
+full PDF automation. Phase 19 adds a deterministic extracted-text-to-note
+scaffold for Toolformer, but it remains an auditable scaffold rather than a
+general arbitrary-PDF solution.
 
 Evidence to cite:
 
 - `papers/raw/` and `papers/extracted/` show PDFs were collected and extracted.
 - `papers/notes/` contains curated source-anchored notes used as scaffold input.
+- `scripts/papertoskill_note_from_text.py` and
+  `results/tables/auto_note_comparison.md` show the first Toolformer
+  extracted-text scaffold result.
 - `paper/limitations.md` explicitly states the curated-note boundary.
 
 Do not say:
 
 - "PaperToSkill fully automatically converts arbitrary PDFs."
+- "The Toolformer auto-note result proves robust PDF automation."
 
 ## Q4: Are the metrics too heuristic?
 

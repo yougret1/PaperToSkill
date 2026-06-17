@@ -117,3 +117,14 @@
   Toolformer adds a tool-use and API-contract paper, reducing but not removing
   the benchmark-diversity risk.
 - Status: accepted for Phase 18.
+
+## 2026-06-17: Add Deterministic Text-To-Note Scaffold Before Claiming PDF Automation
+
+- Decision: add `scripts/papertoskill_note_from_text.py`, a deterministic
+  extracted-text-to-note scaffold, and evaluate the Toolformer auto-note-derived
+  skill separately from the curated-note main benchmark.
+- Rationale: the largest current automation gap is the manually curated note
+  step. A source-anchored scaffold reduces that gap while preserving the
+  evidence boundary that automatic notes must be audited and are not yet a
+  reliable arbitrary-PDF conversion claim.
+- Status: accepted for Phase 19.

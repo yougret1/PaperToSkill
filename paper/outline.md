@@ -3,6 +3,8 @@
 Evidence boundary: this outline is grounded in deterministic/offline artifacts
 from four curated real-paper notes. It should not be read as evidence of live
 cross-harness agent task success until the prepared prompt packets are executed.
+Phase 19 additionally includes a one-paper deterministic extracted-text-to-note
+scaffold for Toolformer; this is separate from the curated-note main benchmark.
 
 ## Working Title
 
@@ -25,7 +27,8 @@ and show stronger offline transfer readiness when transfer notes are retained.
    agent instructions with workflow steps, validation checks, failure branches,
    source anchors, and transfer notes.
 2. A deterministic extraction scaffold that converts curated paper notes into
-   `SKILL.md` artifacts plus source maps.
+   `SKILL.md` artifacts plus source maps, plus a first extracted-text-to-note
+   scaffold for auditable pre-processing.
 3. A benchmark package over four real agent-method papers: AI Scientist-v2,
    Reflexion, AIDE, and Toolformer.
 4. An evaluation suite for structural validity, context-coverage against
@@ -77,6 +80,8 @@ Describe the PaperToSkill schema:
 
 Describe extraction:
 
+- generate an automatic note scaffold from extracted text for Toolformer using
+  line-window selection and source anchors;
 - normalize source note sections;
 - collect candidate bullets from abstract, methods, experiments, limitations,
   and transfer sections;
@@ -125,8 +130,12 @@ Main results from `results/tables/main_results.md`:
   transfer notes drops readiness to 7.6/10 in all four cases.
 - the failure-case archive records 27 cases: 21 paper-reported limitations or
   failure branches and 6 project-level failure/fix records.
-- the reproducibility package checker reports 75 ready checks, 5 pending
-  external-evidence checks, and 0 failed checks.
+- the reproducibility package checker reports 89 ready checks, 5 pending
+   external-evidence checks, and 0 failed checks.
+- in a separate Toolformer auto-note comparison, the extracted-text scaffold
+  produces a 1,179-word skill scoring 20/20 on the deterministic rubric,
+  9.3/10 on context coverage, 10/10 transfer readiness, and 1.0 source support
+  rate.
 
 Interpretation: PaperToSkill preserves operational paper details that short
 summaries omit. The result is an artifact-readiness and coverage result, not yet
@@ -136,7 +145,8 @@ a live agent success-rate result.
 
 Current limitations:
 
-- inputs are curated paper notes, not fully automatic PDF extraction;
+- main benchmark inputs are curated paper notes; the automatic note scaffold is
+  validated only on Toolformer extracted text;
 - metrics are deterministic and lexical/section based;
 - live cross-harness execution is blocked by remote provider availability;
 - no human fidelity annotation or inter-rater agreement yet;
@@ -165,6 +175,7 @@ that are less directly procedural.
 | Table 2: Transfer ablation | `results/tables/transfer_ablation.md` | Effect of transfer notes |
 | Table 3: Source grounding | `results/tables/compactness_source_grounding.md` | Source support and compactness |
 | Table 4: Context cost proxy | `results/tables/context_cost_proxy.md` | Full paper vs skill context size and cost proxy |
+| Table 5: Auto-note comparison | `results/tables/auto_note_comparison.md` | Curated vs extracted-text Toolformer note scaffold |
 | Appendix: Human-fidelity packets | `results/human_fidelity_packets/` | Prepared review packets and blank annotation template |
 | Appendix: Human-fidelity summary | `results/human_fidelity_packets/annotation_summary.md` | Pending annotation status and validation summary |
 | Appendix: Failure-case archive | `results/failure_cases/failure_case_archive.md` | Paper-reported and project-level failure/limitation cases |

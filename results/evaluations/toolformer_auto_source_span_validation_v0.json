@@ -1,0 +1,721 @@
+{
+  "task": "toolformer_auto_source_span_validation",
+  "task_path": "benchmarks\\tasks\\toolformer_auto_source_span_validation.json",
+  "evidence_boundary": "Checks line-anchor validity and lexical overlap for the deterministic auto-note scaffold; not a human factuality annotation.",
+  "results": [
+    {
+      "id": "toolformer_auto",
+      "skill_path": "D:\\a_work\\gitee\\PaperToSkill\\generated_skills\\toolformer_auto\\SKILL.md",
+      "source_text": "D:\\a_work\\gitee\\PaperToSkill\\papers\\extracted\\toolformer.txt",
+      "total_claims": 20,
+      "status_counts": {
+        "supported": 20
+      },
+      "support_rate": 1.0,
+      "invalid_ranges": 0,
+      "claims": [
+        {
+          "claim": "Represent the text-to-text API-call contract with tool name, input, result, and delimiter: ... to use different tools by means of API calls. We require that inputs and outputs for each API can be represented as text sequences. This allows seamless insertion of API calls into any given text .... Source anchors: lines 86-90.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 86,
+              "end": 90,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "allows",
+            "any",
+            "api",
+            "calls",
+            "can",
+            "different",
+            "each",
+            "given",
+            "inputs",
+            "insertion",
+            "means",
+            "outputs",
+            "represented",
+            "require",
+            "seamless",
+            "sequences",
+            "text",
+            "that",
+            "tool",
+            "tools",
+            "use"
+          ],
+          "claim_token_count": 29,
+          "source_token_count": 45,
+          "section": "Workflow"
+        },
+        {
+          "claim": "Use few demonstrations or prompts to propose candidate actions: ... answering tool: Given an input text x, we first sample a position i and corresponding API call candidates c1i , c2i , . . . , cki . We then execute these API calls and filter out all calls which do not .... Source anchors: lines 74-78.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 74,
+              "end": 78,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "all",
+            "answering",
+            "api",
+            "c1i",
+            "c2i",
+            "call",
+            "calls",
+            "candidates",
+            "cki",
+            "corresponding",
+            "execute",
+            "filter",
+            "first",
+            "given",
+            "input",
+            "out",
+            "position",
+            "sample",
+            "text",
+            "then",
+            "these",
+            "tool",
+            "which"
+          ],
+          "claim_token_count": 30,
+          "source_token_count": 37,
+          "section": "Workflow"
+        },
+        {
+          "claim": "Execute proposed calls or actions with the required backend: ... ability of M to sample a large number of potential API calls. We then execute these API calls and finally check whether the ob- tained responses are helpful for predicting .... Source anchors: lines 108-112.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 108,
+              "end": 112,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "ability",
+            "api",
+            "calls",
+            "check",
+            "execute",
+            "finally",
+            "helpful",
+            "large",
+            "number",
+            "ob-",
+            "potential",
+            "predicting",
+            "responses",
+            "sample",
+            "tained",
+            "then",
+            "these",
+            "whether"
+          ],
+          "claim_token_count": 22,
+          "source_token_count": 50,
+          "section": "Workflow"
+        },
+        {
+          "claim": "Filter candidates by future-token loss or another source-defined utility threshold: ... this call makes it easier for the model to predict future tokens, compared to not receiving the API call at all, or receiving only its input. Given a filtering threshold f , we .... Source anchors: lines 159-163.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 159,
+              "end": 163,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "all",
+            "api",
+            "call",
+            "compared",
+            "easier",
+            "filtering",
+            "future",
+            "given",
+            "input",
+            "makes",
+            "model",
+            "only",
+            "predict",
+            "receiving",
+            "threshold",
+            "tokens"
+          ],
+          "claim_token_count": 23,
+          "source_token_count": 39,
+          "section": "Workflow"
+        },
+        {
+          "claim": "Interleave retained calls to build the augmented dataset while preserving the original text: ... results in the new dataset C augmented with API calls. We use this new dataset to finetune M , using a standard language modeling objective. Crucially, apart from inserted API calls the augmented dataset C .... Source anchors: lines 188-192.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 188,
+              "end": 192,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "apart",
+            "api",
+            "augmented",
+            "calls",
+            "crucially",
+            "dataset",
+            "finetune",
+            "inserted",
+            "language",
+            "modeling",
+            "new",
+            "objective",
+            "original",
+            "results",
+            "standard",
+            "use",
+            "using"
+          ],
+          "claim_token_count": 23,
+          "source_token_count": 46,
+          "section": "Workflow"
+        },
+        {
+          "claim": "Fine-tune or train on retained source-backed examples: ... huge language modeling dataset with potential API calls. We then use a self-supervised loss to determine which of these API calls actually help the model in predicting future tokens. Finally, we finetune the .... Source anchors: lines 100-104.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 100,
+              "end": 104,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "actually",
+            "api",
+            "calls",
+            "dataset",
+            "determine",
+            "examples",
+            "finally",
+            "finetune",
+            "future",
+            "help",
+            "huge",
+            "language",
+            "loss",
+            "model",
+            "modeling",
+            "potential",
+            "predicting",
+            "self-supervised",
+            "then",
+            "these",
+            "tokens",
+            "use",
+            "which"
+          ],
+          "claim_token_count": 27,
+          "source_token_count": 35,
+          "section": "Workflow"
+        },
+        {
+          "claim": "At inference time, interrupt generation, insert the response, and continue: Inference When generating text with M after finetuning with our approach, we perform regular decoding until M produces the token, indicat- ing that it next expects the response for an API call. At this point .... Source anchors: lines 201-205.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 201,
+              "end": 205,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "after",
+            "api",
+            "approach",
+            "call",
+            "decoding",
+            "expects",
+            "finetuning",
+            "generating",
+            "indicat-",
+            "inference",
+            "ing",
+            "interrupt",
+            "next",
+            "our",
+            "perform",
+            "point",
+            "produces",
+            "regular",
+            "response",
+            "text",
+            "that",
+            "token",
+            "until",
+            "when"
+          ],
+          "claim_token_count": 28,
+          "source_token_count": 42,
+          "section": "Workflow"
+        },
+        {
+          "claim": "Record the tool set, constraints, and required demonstrations: ... use. Concretely, we explore the fol- lowing five tools: a question answering system, a Wikipedia search engine, a calculator, a calendar, and a machine translation system. Some .... Source anchors: lines 216-220.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 216,
+              "end": 220,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "answering",
+            "calculator",
+            "calendar",
+            "concretely",
+            "demonstrations",
+            "engine",
+            "explore",
+            "five",
+            "fol-",
+            "lowing",
+            "machine",
+            "question",
+            "search",
+            "some",
+            "system",
+            "tools",
+            "translation",
+            "use",
+            "wikipedia"
+          ],
+          "claim_token_count": 24,
+          "source_token_count": 50,
+          "section": "Workflow"
+        },
+        {
+          "claim": "Evaluate whether the system works without further supervision in zero-shot settings: ... Toolformer achieves substan- tially improved zero-shot performance across a variety of downstream tasks, often competi- tive with much larger models, without .... Source anchors: lines 40-44.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 40,
+              "end": 44,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "achieves",
+            "across",
+            "competi-",
+            "downstream",
+            "improved",
+            "larger",
+            "models",
+            "much",
+            "often",
+            "performance",
+            "substan-",
+            "system",
+            "tasks",
+            "tially",
+            "tive",
+            "toolformer",
+            "variety",
+            "without",
+            "zero-shot"
+          ],
+          "claim_token_count": 25,
+          "source_token_count": 39,
+          "section": "Validation"
+        },
+        {
+          "claim": "Compare against same-size and larger baselines: ... these baseline models, improving upon the best baseline by 11.7, 5.2 and 18.6 points, respec- tively. It also clearly outperforms OPT (66B) and GPT-3 (175B), despite both models being much larger. This .... Source anchors: lines 338-342.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 338,
+              "end": 342,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "also",
+            "baseline",
+            "being",
+            "best",
+            "both",
+            "clearly",
+            "despite",
+            "gpt-3",
+            "improving",
+            "larger",
+            "models",
+            "much",
+            "opt",
+            "outperforms",
+            "points",
+            "respec-",
+            "these",
+            "tively",
+            "upon"
+          ],
+          "claim_token_count": 23,
+          "source_token_count": 33,
+          "section": "Validation"
+        },
+        {
+          "claim": "Track benchmark domains such as LAMA, mathematical reasoning, question answering, and temporal datasets: multilingual aspect of the task. 4.2.5 Temporal Datasets To investigate the calendar APIs utility, we eval- uate all models on T EMP LAMA (Dhingra et al.,. Source anchors: lines 398-402.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 398,
+              "end": 402,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "all",
+            "aspect",
+            "calendar",
+            "datasets",
+            "dhingra",
+            "emp",
+            "eval-",
+            "investigate",
+            "lama",
+            "models",
+            "multilingual",
+            "question",
+            "task",
+            "temporal",
+            "uate",
+            "utility"
+          ],
+          "claim_token_count": 24,
+          "source_token_count": 38,
+          "section": "Validation"
+        },
+        {
+          "claim": "Check whether the added mechanism preserves core language-modeling quality: ... on CCNet leads to We do not evaluate the perplexity of Toolformer with. Source anchors: lines 463-467.",
+          "status": "supported",
+          "score": 0.417,
+          "ranges": [
+            {
+              "start": 463,
+              "end": 467,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "ccnet",
+            "evaluate",
+            "leads",
+            "perplexity",
+            "toolformer"
+          ],
+          "claim_token_count": 13,
+          "source_token_count": 25,
+          "section": "Validation"
+        },
+        {
+          "claim": "Run scale or sensitivity analysis when the paper reports model-size effects: ... model (Wang and Komat- suzaki, 2021) with 6.7B parameters, achieves much the existing LMs vocabulary. For reasons of readability, we stronger zero-shot results, clearly outperforming a much larger GPT-3 .... Source anchors: lines 118-122.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 118,
+              "end": 122,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "achieves",
+            "clearly",
+            "existing",
+            "gpt-3",
+            "komat-",
+            "larger",
+            "model",
+            "much",
+            "outperforming",
+            "parameters",
+            "readability",
+            "reasons",
+            "results",
+            "stronger",
+            "suzaki",
+            "vocabulary",
+            "wang",
+            "zero-shot"
+          ],
+          "claim_token_count": 28,
+          "source_token_count": 37,
+          "section": "Validation"
+        },
+        {
+          "claim": "Avoid claiming that the method removes the need for large human annotations or task-specific setup: ... However, existing ap- proaches either rely on large amounts of human annotations (Komeili et al., 2022; Thoppilan et al., 2022) or limit tool use to task-specific settings .... Source anchors: lines 50-54.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 50,
+              "end": 54,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "amounts",
+            "annotations",
+            "ap-",
+            "either",
+            "existing",
+            "however",
+            "human",
+            "komeili",
+            "large",
+            "limit",
+            "proaches",
+            "rely",
+            "settings",
+            "task-specific",
+            "that",
+            "thoppilan",
+            "tool",
+            "use"
+          ],
+          "claim_token_count": 24,
+          "source_token_count": 50,
+          "section": "Failure Cases"
+        },
+        {
+          "claim": "Check whether external backend execution is required before transfer: Executing API Calls As a next step, we execute all API calls generated by M to obtain the corre- on the API itself for example, it can involve call- ing another neural network, executing a Python. Source anchors: lines 123-127.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 123,
+              "end": 127,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "all",
+            "another",
+            "api",
+            "call-",
+            "calls",
+            "can",
+            "corre-",
+            "example",
+            "execute",
+            "executing",
+            "generated",
+            "ing",
+            "involve",
+            "itself",
+            "network",
+            "neural",
+            "next",
+            "obtain",
+            "python",
+            "required",
+            "step"
+          ],
+          "claim_token_count": 28,
+          "source_token_count": 49,
+          "section": "Failure Cases"
+        },
+        {
+          "claim": "Treat heuristics and sample efficiency as explicit costs: ... 2021) as our language model M . To reduce the computational cost of annotating C with API calls, we define .... Source anchors: lines 229-233.",
+          "status": "supported",
+          "score": 0.917,
+          "ranges": [
+            {
+              "start": 229,
+              "end": 233,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "annotating",
+            "api",
+            "calls",
+            "computational",
+            "cost",
+            "define",
+            "heuristics",
+            "language",
+            "model",
+            "our",
+            "reduce"
+          ],
+          "claim_token_count": 16,
+          "source_token_count": 37,
+          "section": "Failure Cases"
+        },
+        {
+          "claim": "Do not overstate question-answering performance when Atlas or search limitations remain: ... However, Toolformer still lags behind the much larger GPT-3 (175B) model. This is likely due to both the simplicity of our search engine (in many cases, it returns results that are clearly not a .... Source anchors: lines 381-385.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 381,
+              "end": 385,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "behind",
+            "both",
+            "cases",
+            "clearly",
+            "due",
+            "engine",
+            "gpt-3",
+            "however",
+            "lags",
+            "larger",
+            "likely",
+            "many",
+            "model",
+            "much",
+            "our",
+            "performance",
+            "results",
+            "returns",
+            "search",
+            "simplicity",
+            "still",
+            "that",
+            "toolformer"
+          ],
+          "claim_token_count": 29,
+          "source_token_count": 51,
+          "section": "Failure Cases"
+        },
+        {
+          "claim": "Audit calendar API or temporal gains before attributing all improvement to the tool: ... on T EMP LAMA can not be attributed to the calendar tool, which is only used for 0.2% of all examples, but mostly .... Source anchors: lines 430-434.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 430,
+              "end": 434,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "all",
+            "api",
+            "attributed",
+            "but",
+            "calendar",
+            "can",
+            "emp",
+            "examples",
+            "lama",
+            "mostly",
+            "only",
+            "tool",
+            "used",
+            "which"
+          ],
+          "claim_token_count": 20,
+          "source_token_count": 44,
+          "section": "Failure Cases"
+        },
+        {
+          "claim": "Do not claim perplexity with live tool calls when the paper says it is not evaluated: ... do not evaluate the perplexity of Toolformer with slightly improved performance on a different CC- x1 , . . . , xt1 ) of token xt given x1 , . . . , xt1 would require Net subset, but it slightly .... Source anchors: lines 467-471.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 467,
+              "end": 471,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "but",
+            "calls",
+            "cc-",
+            "different",
+            "evaluate",
+            "given",
+            "improved",
+            "net",
+            "performance",
+            "perplexity",
+            "require",
+            "slightly",
+            "subset",
+            "token",
+            "toolformer",
+            "would"
+          ],
+          "claim_token_count": 24,
+          "source_token_count": 37,
+          "section": "Failure Cases"
+        },
+        {
+          "claim": "Treat model scale or model size as a condition for the method to emerge: ... API calls are not helpful to the smallest models, larger models learn how to make good use of them. Even for bigger models, the gap between model predictions with and without API calls remains .... Source anchors: lines 494-498.",
+          "status": "supported",
+          "score": 1.0,
+          "ranges": [
+            {
+              "start": 494,
+              "end": 498,
+              "valid": true
+            }
+          ],
+          "overlap": [
+            "api",
+            "between",
+            "bigger",
+            "calls",
+            "even",
+            "gap",
+            "good",
+            "helpful",
+            "how",
+            "larger",
+            "learn",
+            "make",
+            "model",
+            "models",
+            "predictions",
+            "remains",
+            "smallest",
+            "them",
+            "use",
+            "without"
+          ],
+          "claim_token_count": 26,
+          "source_token_count": 29,
+          "section": "Failure Cases"
+        }
+      ]
+    }
+  ]
+}

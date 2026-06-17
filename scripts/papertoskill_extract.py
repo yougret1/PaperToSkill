@@ -227,7 +227,7 @@ def infer_validation(sections: list[Section]) -> list[str]:
 
 def infer_failure_cases(sections: list[Section]) -> list[str]:
     limitation_text = "\n".join(section.body for section in find_sections(sections, "limitation"))
-    candidates = bullet_candidates(limitation_text, limit=6)
+    candidates = bullet_candidates(limitation_text, limit=7)
     if candidates:
         return candidates
     return [

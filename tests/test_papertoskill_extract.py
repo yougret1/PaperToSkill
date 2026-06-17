@@ -121,6 +121,54 @@ We introduce a rich workflow.
             self.assertIn("Include data preview in prompts", skill)
             self.assertIn("Select the best solution", skill)
 
+    def test_cli_keeps_seventh_limitation_bullet(self):
+        source_text = """# Limitation-Rich Paper
+
+## Abstract
+
+We introduce a limitation-rich workflow.
+
+## Methods
+
+1. Run the method.
+
+## Experiments
+
+- Validate the method.
+
+## Limitations
+
+- First limitation.
+- Second limitation.
+- Third limitation.
+- Fourth limitation.
+- Fifth limitation.
+- Sixth limitation.
+- Seventh limitation preserves model scale caveat.
+"""
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            source = tmp_path / "limitations.md"
+            output = tmp_path / "generated"
+            source.write_text(source_text, encoding="utf-8")
+
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--source",
+                    str(source),
+                    "--output",
+                    str(output),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            skill = (output / "SKILL.md").read_text(encoding="utf-8")
+            self.assertIn("Seventh limitation preserves model scale caveat", skill)
+
 
 if __name__ == "__main__":
     unittest.main()

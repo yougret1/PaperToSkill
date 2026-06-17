@@ -10,7 +10,8 @@ PaperToSkill draft and artifact package. It does not add new empirical results.
 PaperToSkill has a coherent system-paper shape: a clear conversion artifact,
 four real agent/tool-method cases, deterministic/offline comparisons, source
 grounding, compactness/cost proxy, failure archive, human-fidelity readiness,
-and a reproducibility package gate.
+an automatic Toolformer extracted-text note scaffold, and a reproducibility
+package gate.
 
 The draft should not be positioned as a completed live-agent or fully automatic
 PDF-to-skill system yet. The strongest current framing is:
@@ -19,13 +20,17 @@ PDF-to-skill system yet. The strongest current framing is:
 > source-grounded skills and shows deterministic/offline evidence that these
 > skills preserve more operational detail than summary baselines.
 
+Phase 19 adds a bounded automation result: extracted Toolformer text can be
+converted into an auditable note scaffold and auto-note-derived skill, but this
+should not be generalized to arbitrary PDFs yet.
+
 ## Major Risks
 
 | ID | Risk | Severity | Current Evidence | Required Response |
 | --- | --- | --- | --- | --- |
 | R1 | Reviewers may call PaperToSkill "just summarization." | High | Generated skills beat generic-summary and abstract-only baselines on deterministic operational coverage across four papers. | Emphasize workflow, validation, failure cases, source maps, and transfer notes; avoid claiming live task improvement until response logs exist. |
 | R2 | Reviewers may reject deterministic metrics as too lexical. | High | Source-span validation, context coverage, and transfer readiness are reproducible but lexical/section-based. | Present metrics as early gates; keep human-fidelity annotation and live execution as future work or pending evidence. |
-| R3 | Curated notes weaken the automation claim. | High | The draft explicitly says curated source-anchored notes; raw PDFs are extracted but notes are manually curated. | Keep "curated paper-note-to-skill" in title/abstract claims unless automatic PDF sectioning is added. |
+| R3 | Curated notes weaken the automation claim. | High | The draft explicitly says curated source-anchored notes; Phase 19 adds one Toolformer extracted-text-to-note scaffold. | Keep "curated paper-note-to-skill" for the main benchmark and "deterministic extracted-text note scaffold" for Phase 19; do not claim reliable arbitrary-PDF automation. |
 | R4 | Four papers may still be too narrow and all are naturally procedural. | Medium | Benchmark includes AI Scientist-v2, Reflexion, AIDE, and Toolformer, covering agent, ML-engineering, and tool-use methods. | Describe this as a focused first benchmark; plan stress cases on interface-heavy and theory-heavy papers. |
 | R5 | Cross-harness transfer is only offline readiness. | High | Live prompt packets exist, but endpoint still returns HTTP 503. | Use "offline transfer readiness"; do not claim live Codex-to-Claude success. |
 | R6 | Human fidelity is prepared but unscored. | High | Annotation template has 24 rows, 0 scored, 24 pending, 0 errors. | Say "human-fidelity protocol prepared" and "annotation pending"; never say "human-validated." |
@@ -59,8 +64,8 @@ PDF-to-skill system yet. The strongest current framing is:
    completions.
 2. Fill the 24-row human-fidelity annotation template with independent reviewer
    scores and evidence notes.
-3. Add one less-procedural or theory-heavy stress case to test whether the extractor fails
-   gracefully.
+3. Add one less-procedural or theory-heavy stress case and run the auto-note
+   scaffold to test whether extraction fails gracefully.
 4. Add tokenizer-exact or provider-specific cost accounting only after choosing
    the target model family and pricing source.
 

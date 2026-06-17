@@ -41,6 +41,8 @@ class AggregateResultsTablesTest(unittest.TestCase):
                 "transfer_ablation.csv",
                 "compactness_source_grounding.md",
                 "compactness_source_grounding.csv",
+                "auto_note_comparison.md",
+                "auto_note_comparison.csv",
                 "paper_ready_summary.md",
             ]
             for name in expected:
@@ -83,6 +85,15 @@ class AggregateResultsTablesTest(unittest.TestCase):
             self.assertEqual("n/a", grounding["Reflexion"]["Unsupported instruction rate"])
             self.assertEqual("927", grounding["AIDE"]["Skill words"])
             self.assertEqual("1", grounding["Toolformer"]["Source support rate"])
+
+            auto_rows = read_csv(output_dir / "auto_note_comparison.csv")
+            self.assertEqual(
+                ["Curated source-anchored note", "Automatic extracted-text note scaffold"],
+                [row["Input"] for row in auto_rows],
+            )
+            self.assertEqual("Toolformer", auto_rows[1]["Paper"])
+            self.assertEqual("20/20", auto_rows[1]["Skill rubric"])
+            self.assertEqual("1", auto_rows[1]["Source support rate"])
 
 
 if __name__ == "__main__":

@@ -456,7 +456,7 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 75 ready checks, 5
+  `overall_status=ready_with_pending_external_evidence`, 89 ready checks, 5
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
@@ -492,3 +492,33 @@
   and human-validation gaps.
 - Claim impact: improves submission readiness and reduces overclaim risk.
 - Figure/table: `research/review_report.md`; `research/rebuttal_bank.md`.
+
+## Deterministic Auto-Note Scaffold
+
+- Experiment: convert `papers/extracted/toolformer.txt` directly into a
+  source-anchored Markdown note, then convert that auto-note into a retained
+  Toolformer skill.
+- Main result: generated `papers/auto_notes/toolformer_auto_note.md` and
+  `generated_skills/toolformer_auto/SKILL.md`.
+- Compared baselines: curated Toolformer note-derived skill, generic summary,
+  and abstract-only context.
+- Practical significance: reduces the curated-note bottleneck by producing an
+  auditable text-to-note scaffold with line anchors before skill extraction.
+- Deterministic rubric: `results/evaluations/toolformer_auto_rubric_v0.json`
+  scored 20/20.
+- Context baseline: auto-note-derived skill scored 9.3/10, compared with 2.5/10
+  for generic summary and 1.534/10 for abstract-only context.
+- Transfer readiness: full auto-note-derived skill scored 10/10; removing
+  `Transfer Notes` dropped readiness to 7.6/10.
+- Source-span validation: `results/evaluations/toolformer_auto_source_span_validation_v0.json`
+  found 20/20 supported anchored claims with 0 invalid ranges.
+- Failure modes: initial snippets mixed two-column PDF text and references; the
+  selector now preserves raw spacing, chooses keyword-bearing columns, shortens
+  snippets, and prefers stronger anchors for targeted limitations.
+- Limitations: this is deterministic scaffold evidence for one extracted-text
+  paper, not reliable arbitrary-PDF automation or human semantic validation.
+- Claim impact: supports the new bounded claim that extracted paper text can be
+  transformed into an auditable note scaffold that feeds the existing
+  PaperToSkill extraction pipeline.
+- Figure/table: `results/tables/auto_note_comparison.md`;
+  `results/evaluations/toolformer_auto_note_scaffold_v0.json`.

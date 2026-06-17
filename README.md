@@ -10,9 +10,9 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 18: Toolformer fourth-paper stress case added to the deterministic/
-offline benchmark. The local package is ready with pending external evidence:
-live cross-harness responses and completed human-fidelity annotation.
+Phase 19: deterministic extracted-text-to-note scaffold added. Toolformer now
+has an automatic note scaffold and auto-note-derived skill evaluated separately
+from the curated-note main benchmark.
 
 ## Memory
 
@@ -78,3 +78,4 @@ pending live-agent claims.
   `results/human_fidelity_packets/`.
 - Failure-case archive: `results/failure_cases/`.
 - Reproducibility package report: `results/reproducibility/`.
+- Auto-note comparison: `results/tables/auto_note_comparison.md`.

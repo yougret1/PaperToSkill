@@ -689,3 +689,61 @@ Verification:
 - `python -m unittest discover -s tests -v`: passed, 17 tests OK.
 - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
 - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
+
+## 2026-06-17 Phase 19
+
+Actions:
+
+- Added `scripts/papertoskill_note_from_text.py`, a deterministic scaffold that
+  converts extracted paper text into a source-anchored Markdown note.
+- Added `tests/test_papertoskill_note_from_text.py` with both synthetic and
+  Toolformer extracted-text coverage.
+- Updated `scripts/papertoskill_extract.py` to preserve a seventh limitation
+  bullet, then added a regression test.
+- Generated `papers/auto_notes/toolformer_auto_note.md` and
+  `generated_skills/toolformer_auto/SKILL.md`.
+- Added Toolformer auto-note context, transfer, and source-span task specs.
+- Generated deterministic auto-note evaluations and an
+  `results/tables/auto_note_comparison.md` table.
+
+Results:
+
+- Toolformer auto-note-derived skill rubric: `20/20`.
+- Toolformer auto-note context baseline:
+  - auto-note-derived skill: `9.3/10`
+  - generic summary: `2.5/10`
+  - abstract-only context: `1.534/10`
+- Toolformer auto-note harness-transfer readiness:
+  - full skill: `10.0/10`
+  - no-transfer-notes variant: `7.6/10`
+  - generic summary: `1.45/10`
+- Toolformer auto-note source-span validation found 20 supported claims, 0 weak
+  or unsupported claims, 0 invalid ranges, and support rate `1.0`.
+- The auto-note-derived skill is 1,179 words, under the 1,200-word compactness
+  budget.
+
+Failure and fix:
+
+- The first auto-note scaffold mixed two-column PDF text and references into
+  selected snippets. The script was updated to preserve raw line spacing, split
+  likely columns, and select the keyword-bearing column while keeping the
+  original newline line anchors.
+- The first auto-note skill exceeded the compactness budget and missed several
+  exact rubric signals. The script shortened snippets and made source-backed
+  prefixes more explicit without hand-editing the generated auto-note.
+- Two limitation anchors were too weak despite passing lexical validation. The
+  selector now prefers stronger exact phrases and later analysis sections for
+  targeted limitation specs.
+
+Evidence boundary:
+
+- Phase 19 supports a deterministic extracted-text-to-note scaffold and a first
+  retained auto-note-derived Toolformer skill.
+- It does not prove reliable arbitrary-PDF-to-skill automation, human semantic
+  fidelity, live agent success, or robustness across diverse PDF layouts.
+
+Verification:
+
+- `python -m unittest discover -s tests -p test_papertoskill_note_from_text.py -v`: passed, 2 tests OK.
+- Toolformer auto-note generation, extraction, rubric, context, transfer, and
+  source-span commands all completed.

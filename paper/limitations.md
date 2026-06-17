@@ -16,6 +16,11 @@ Raw PDFs are downloaded and extracted, but the paper notes are still manually
 curated. This means the current benchmark validates the paper-note-to-skill
 conversion layer more strongly than the full PDF-to-skill pipeline.
 
+Phase 19 adds a deterministic extracted-text-to-note scaffold and validates it
+on Toolformer, but that evidence covers one paper and one extracted-text layout.
+It should be described as an auditable scaffold, not as reliable arbitrary-PDF
+automation.
+
 ### Heuristic Metrics
 
 The rubrics, context coverage, source-span support, and transfer-readiness
@@ -79,8 +84,9 @@ The package should therefore be described as locally ready, not submission-final
    model, harness, prompt, response, intervention count, and task outcome.
 2. Run the prepared human source-fidelity packets with independent annotators
    and report agreement or adjudication.
-3. Extend extraction from curated notes toward raw PDF ingestion with automatic
-   section detection, table handling, and citation-aware source maps.
+3. Extend extraction from curated notes toward raw PDF ingestion with stronger
+   section detection, table handling, citation-aware source maps, and
+   multi-paper auto-note validation.
 4. Add tokenizer-exact model pricing and success-per-dollar accounting for
    full-paper, summary, and skill contexts.
 5. Expand the benchmark with less procedural papers to test failure modes.

@@ -54,6 +54,9 @@ Initial target contribution categories:
 - `skill/SKILL.md`: human-facing PaperToSkill skill prototype.
 - `benchmarks/paper_manifest.json`: seed benchmark paper set.
 - `scripts/papertoskill_extract.py`: deterministic non-LLM extraction scaffold.
+- `scripts/papertoskill_note_from_text.py`: deterministic extracted-text-to-note
+  scaffold that selects line-window evidence from `pdftotext` output and emits
+  source-anchored Markdown notes.
 - `scripts/evaluate_skill.py`: deterministic v0 evaluator for generated skills.
 - `scripts/aggregate_results_tables.py`: paper-ready Markdown/CSV table
   aggregation over existing deterministic/offline evaluation JSON.
@@ -132,6 +135,23 @@ Initial target contribution categories:
   generic summary.
 - `results/live_transfer_prompts/toolformer_v0/`: Toolformer live prompt
   packets for later Codex/Claude execution.
+- `papers/auto_notes/toolformer_auto_note.md`: first deterministic automatic
+  note scaffold from extracted paper text.
+- `generated_skills/toolformer_auto/SKILL.md`: first retained auto-note-derived
+  skill, generated from `papers/extracted/toolformer.txt` via the automatic
+  note scaffold.
+- `results/evaluations/toolformer_auto_note_scaffold_v0.json`: line-window
+  selection report for the Toolformer automatic note scaffold.
+- `results/evaluations/toolformer_auto_rubric_v0.json`: Toolformer
+  auto-note-derived skill rubric score.
+- `results/evaluations/toolformer_auto_context_baselines_v0.json`: Toolformer
+  auto-note-derived skill-vs-summary-vs-abstract deterministic comparison.
+- `results/evaluations/toolformer_auto_harness_transfer_v0.json`: Toolformer
+  auto-note-derived transfer-readiness ranking.
+- `results/evaluations/toolformer_auto_source_span_validation_v0.json`:
+  Toolformer auto-note-derived source-span validation summary.
+- `results/tables/auto_note_comparison.md`: curated-vs-auto Toolformer note
+  comparison table.
 - `results/tables/`: paper-ready main results, transfer ablation, compactness/
   source-grounding, context cost proxy, and combined summary tables.
 - `results/human_fidelity_packets/`: prepared review packets and blank
@@ -141,7 +161,7 @@ Initial target contribution categories:
   paper-reported limitations/failure branches and 6 project-level failure/fix
   records.
 - `results/reproducibility/`: reproducibility package report. Current status is
-  ready with pending external evidence, 75 ready checks, 5 pending checks, and 0
+  ready with pending external evidence, 89 ready checks, 5 pending checks, and 0
   failed checks.
 - `research/review_report.md` and `research/rebuttal_bank.md`: internal
   review/rebuttal readiness artifacts that map likely reviewer objections to
@@ -164,6 +184,8 @@ Initial target contribution categories:
   Codex-to-Claude or another agent runtime.
 - Paper writing must distinguish curated note-to-skill conversion from full
   arbitrary-PDF automation, and offline readiness from live agent success.
+- Automatic note-scaffold writing must distinguish deterministic extracted-text
+  line-window scaffolding from reliable arbitrary-PDF-to-skill automation.
 - Cost writing must distinguish deterministic token/cost proxy from provider
   billing, tokenizer-exact accounting, and success-per-dollar evidence.
 - Human-fidelity writing must distinguish prepared review packets from completed

@@ -9,9 +9,9 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 18 Toolformer fourth-paper stress case is implemented locally and moving
-through verification, commit, and push. Phase 17 was committed and pushed as
-`7a3bc3c`.
+Phase 19 deterministic extracted-text-to-note scaffold is implemented locally
+and moving through final verification, commit, and push. Phase 18 was committed
+and pushed as `e6c79f3`.
 
 ## Latest User Request
 
@@ -373,7 +373,36 @@ The user provided the PaperToSkill idea and asked to:
   - `python -m unittest discover -s tests -v`: passed, 17 tests OK.
   - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
   - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
-- Phase 18 was committed locally on `main`; push is pending.
+- Phase 18 was committed and pushed as `e6c79f3` on `origin/main`.
+- Phase 19 added a deterministic extracted-text-to-note scaffold:
+  - `scripts/papertoskill_note_from_text.py`
+  - `tests/test_papertoskill_note_from_text.py`
+  - `papers/auto_notes/toolformer_auto_note.md`
+  - `generated_skills/toolformer_auto/SKILL.md`
+  - `results/evaluations/toolformer_auto_note_scaffold_v0.json`
+  - `benchmarks/tasks/toolformer_auto_research_run.json`
+  - `benchmarks/tasks/toolformer_auto_harness_transfer.json`
+  - `benchmarks/tasks/toolformer_auto_source_span_validation.json`
+- Phase 19 also updated `scripts/papertoskill_extract.py` to keep a seventh
+  limitation bullet and added a regression test in
+  `tests/test_papertoskill_extract.py`.
+- Toolformer auto-note-derived results:
+  - rubric score: `20/20`
+  - context baseline: auto-note-derived skill `9.3/10`, generic summary
+    `2.5/10`, abstract-only `1.534/10`
+  - harness-transfer readiness: full skill `10.0/10`, no-transfer-notes
+    `7.6/10`, generic summary `1.45/10`
+  - source-span validation: 20 supported claims, 0 weak/unsupported, 0 invalid
+    ranges, support rate `1.0`
+  - word count: 1,179, under the 1,200-word budget
+- Phase 19 generated `results/tables/auto_note_comparison.md` and `.csv`.
+- Phase 19 regenerated the reproducibility package report:
+  `ready_with_pending_external_evidence`, 89 ready checks, 5 pending checks, and
+  0 failed checks.
+- Phase 19 evidence boundary: supports one deterministic extracted-text-to-note
+  scaffold and retained auto-note-derived Toolformer skill. It does not support
+  reliable arbitrary-PDF automation, live agent success, provider billing, or
+  human semantic validation.
 
 ## Current Blockers / Pending Checks
 
@@ -390,12 +419,16 @@ The user provided the PaperToSkill idea and asked to:
   beyond deterministic source-span support.
 - Need tokenizer-exact pricing, provider billing, or success-per-dollar evidence
   before making stronger economic/cost-saving claims.
-- Need Phase 18 final verification, commit, and push.
+- Need Phase 19 final verification, commit, and push.
 
 ## Next Actions
 
-1. Re-test the remote LLM endpoint when provider accounts are available.
-2. Execute live cross-harness runs using the prompt packets when the endpoint
+1. Run Phase 19 final verification, secret scan, commit, and push.
+2. Re-test the remote LLM endpoint when provider accounts are available.
+3. Execute live cross-harness runs using the prompt packets when the endpoint
    recovers.
-3. Run human fidelity annotation, tokenizer-exact pricing, or expand the
+4. Run human fidelity annotation, tokenizer-exact pricing, or expand the
    benchmark to less procedural/interface/theory-heavy papers.
+5. Extend the auto-note scaffold beyond Toolformer to at least one less
+   procedural or differently formatted paper before making stronger automation
+   claims.

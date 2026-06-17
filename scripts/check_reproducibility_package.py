@@ -77,7 +77,21 @@ TABLE_FILES = {
     "transfer_ablation_md": "results/tables/transfer_ablation.md",
     "context_cost_proxy_md": "results/tables/context_cost_proxy.md",
     "context_cost_proxy_json": "results/tables/context_cost_proxy.json",
+    "auto_note_comparison_md": "results/tables/auto_note_comparison.md",
+    "auto_note_comparison_csv": "results/tables/auto_note_comparison.csv",
     "paper_ready_summary": "results/tables/paper_ready_summary.md",
+}
+
+AUTO_NOTE_FILES = {
+    "toolformer_auto_note_script": "scripts/papertoskill_note_from_text.py",
+    "toolformer_auto_note": "papers/auto_notes/toolformer_auto_note.md",
+    "toolformer_auto_skill": "generated_skills/toolformer_auto/SKILL.md",
+    "toolformer_auto_source_map": "generated_skills/toolformer_auto/references/source_map.json",
+    "toolformer_auto_note_report": "results/evaluations/toolformer_auto_note_scaffold_v0.json",
+    "toolformer_auto_rubric": "results/evaluations/toolformer_auto_rubric_v0.json",
+    "toolformer_auto_context": "results/evaluations/toolformer_auto_context_baselines_v0.json",
+    "toolformer_auto_transfer": "results/evaluations/toolformer_auto_harness_transfer_v0.json",
+    "toolformer_auto_source_span": "results/evaluations/toolformer_auto_source_span_validation_v0.json",
 }
 
 TEXT_SUFFIXES = {
@@ -292,6 +306,42 @@ def failure_archive_checks(root: Path) -> list[Check]:
     return checks
 
 
+def auto_note_checks(root: Path) -> list[Check]:
+    checks = required_file_checks(root, AUTO_NOTE_FILES)
+    rubric_path = root / "results/evaluations/toolformer_auto_rubric_v0.json"
+    if rubric_path.exists():
+        rubric = load_json(rubric_path)
+        score = float(rubric.get("score", 0))
+        max_score = float(rubric.get("max_score", 20))
+        status = "ready" if score == max_score else "fail"
+        checks.append(Check("toolformer_auto_rubric_score", status, f"{score:g}/{max_score:g}", str(rubric_path.relative_to(root))))
+
+    context_path = root / "results/evaluations/toolformer_auto_context_baselines_v0.json"
+    if context_path.exists():
+        context = load_json(context_path)
+        try:
+            skill = score_by_id(context["results"], "skill")
+            generic = score_by_id(context["results"], "generic_summary")
+            abstract = score_by_id(context["results"], "abstract_only")
+            status = "ready" if skill["score"] > generic["score"] and skill["score"] > abstract["score"] else "fail"
+            detail = f"skill={skill['score']}; generic={generic['score']}; abstract={abstract['score']}"
+        except (KeyError, TypeError):
+            status = "fail"
+            detail = "missing expected skill/generic_summary/abstract_only rows"
+        checks.append(Check("toolformer_auto_context_baseline_order", status, detail, str(context_path.relative_to(root))))
+
+    source_span_path = root / "results/evaluations/toolformer_auto_source_span_validation_v0.json"
+    if source_span_path.exists():
+        source_span = load_json(source_span_path)
+        result = source_span.get("results", [{}])[0]
+        support_rate = float(result.get("support_rate", 0))
+        invalid_ranges = int(result.get("invalid_ranges", 0))
+        status = "ready" if support_rate >= 0.9 and invalid_ranges == 0 else "fail"
+        detail = f"support_rate={support_rate:g}; invalid_ranges={invalid_ranges}"
+        checks.append(Check("toolformer_auto_source_span_support", status, detail, str(source_span_path.relative_to(root))))
+    return checks
+
+
 def secret_scan_check(root: Path) -> Check:
     matches = []
     for path in root.rglob("*"):
@@ -313,6 +363,7 @@ def build_report(root: Path) -> dict[str, Any]:
     checks.extend(paper_checks(root))
     checks.extend(human_fidelity_checks(root))
     checks.extend(failure_archive_checks(root))
+    checks.extend(auto_note_checks(root))
     checks.append(secret_scan_check(root))
 
     status_counts = {"ready": 0, "pending": 0, "fail": 0}
