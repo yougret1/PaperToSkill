@@ -1,0 +1,24 @@
+[
+  {
+    "Name": "papertoskill_extractor",
+    "Title": "PaperToSkill: Converting Research Papers into Compact Reusable Agent Skills",
+    "Short Hypothesis": "A structured paper-to-skill extraction workflow can preserve actionable procedural knowledge from research papers more effectively than generic summaries, while using less context than full paper excerpts.",
+    "Related Work": "The project is related to paper summarization, research agents, prompt/skill engineering, reproducibility checklists, and automated scientific discovery systems such as AI-Scientist-v2. It differs from summarization by targeting operational transfer: the output is a skill with triggers, workflow steps, tool assumptions, validation checks, limitations, and failure branches that an agent can directly use.",
+    "Abstract": "Research papers often contain methods that could improve LLM-agent workflows, but their contributions are difficult for ordinary users to operationalize. We propose PaperToSkill, a system that converts papers into compact, human-editable agent skills. PaperToSkill extracts a paper's central contribution, operational procedure, assumptions, required inputs, tool contracts, validation checks, and known failure cases, then packages them into a reusable skill artifact. We hypothesize that paper-derived skills improve downstream reproduction and adaptation tasks compared with generic summaries while requiring fewer tokens than full paper excerpts. We evaluate PaperToSkill on a small benchmark of agent and LLM-method papers, comparing skill-based context against abstract-only summaries, generic summaries, no context, and full paper excerpts. Metrics include task success, extraction fidelity, unsupported instruction rate, token cost, and transfer success between agent harnesses. We also study ablations that remove source mapping, validation checks, failure cases, or transfer notes. This work aims to make frontier research easier to reuse while preserving honest limitations and failed branches.",
+    "Experiments": [
+      "Create a benchmark of 3-5 agent or LLM-method papers and define downstream tasks that require applying each paper's method.",
+      "Implement a structured extraction pipeline that produces SKILL.md-style artifacts with triggers, workflow, inputs, outputs, validation checks, source map, limitations, and failure cases.",
+      "Compare agents using PaperToSkill outputs against agents using no paper context, abstract-only summaries, generic LLM summaries, and full paper excerpts.",
+      "Measure task success, rubric-based method fidelity, unsupported instruction rate, input/output token cost, and success per 1k tokens.",
+      "Run ablations removing validation checks, failure-case sections, source mapping, and cross-harness transfer notes.",
+      "Evaluate transfer by using generated skills across at least two agent harnesses or simulated harness prompt formats."
+    ],
+    "Risk Factors and Limitations": [
+      "Evaluation may be subjective unless task rubrics and source maps are carefully defined.",
+      "Small paper sets may overfit to agent-method papers and not generalize across scientific domains.",
+      "LLM-generated skills may hallucinate unsupported method steps without a strong fidelity judge.",
+      "Cross-harness transfer may be noisy because tool availability and runtime policies differ.",
+      "The system may work better for procedural papers than for theory-heavy papers."
+    ]
+  }
+]
