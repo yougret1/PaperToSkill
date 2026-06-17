@@ -9,9 +9,9 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 5 offline harness-transfer readiness evaluation is implemented locally.
-Current focus: validate, commit, and push Phase 5 artifacts, then move toward
-live cross-harness task execution when the remote LLM endpoint recovers.
+Phase 5 offline harness-transfer readiness evaluation is implemented, committed,
+and pushed. Current focus: prepare live cross-harness task execution and re-test
+the remote LLM endpoint when provider accounts recover.
 
 ## Latest User Request
 
@@ -103,6 +103,7 @@ The user provided the PaperToSkill idea and asked to:
   - generic summary: 1.2/10 average readiness
 - Phase 5 result supports only offline artifact readiness, not live
   cross-harness agent success.
+- Phase 5 was committed and pushed as `9a393a7` on `origin/main`.
 
 ## Current Blockers / Pending Checks
 
@@ -119,8 +120,9 @@ The user provided the PaperToSkill idea and asked to:
 
 ## Next Actions
 
-1. Validate and commit Phase 5 artifacts.
-2. Push Phase 5 to `origin/main`.
-3. Re-test the remote LLM endpoint when provider accounts are available.
-4. Prepare live cross-harness task prompts for Codex-style and Claude-style
+1. Re-test the remote LLM endpoint when provider accounts are available.
+2. Prepare live cross-harness task prompts for Codex-style and Claude-style
    execution.
+3. Add human/source-span validation for unsupported-instruction scoring.
+4. Expand the benchmark beyond AI Scientist-v2 to additional agent/LLM-method
+   papers.
