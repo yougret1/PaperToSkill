@@ -136,3 +136,42 @@
   real agent-method paper into a compact, source-grounded skill.
 - Figure/table: `results/evaluations/reflexion_rubric_v0.json`;
   `results/evaluations/reflexion_source_span_validation_v0.json`.
+
+## Reflexion Context Baseline Coverage
+
+- Experiment: deterministic context coverage evaluation for
+  `benchmarks/tasks/reflexion_research_run.json`.
+- Main result: the PaperToSkill-generated Reflexion skill scored 8.267/9,
+  compared with 3.483/9 for a generic summary and 2.533/9 for abstract-only
+  context.
+- Compared baselines: `baselines/reflexion_generic_summary.md` and
+  `baselines/reflexion_abstract_only.md`.
+- Practical significance: the generated skill preserves the actor/evaluator/
+  self-reflection role split, memory split, feedback sources, validation
+  domains, limitations, and source grounding better than short summaries.
+- Statistical evidence: none; this is a deterministic task for one paper.
+- Failure modes: keyword scoring can still over-credit exact phrasing and
+  under-credit paraphrases.
+- Limitations: not live agent task success.
+- Claim impact: strengthens the deterministic multi-paper coverage claim.
+- Figure/table: `results/evaluations/reflexion_context_baselines_v0.json`.
+
+## Reflexion Harness Transfer Readiness
+
+- Experiment: offline Codex/Claude-style transfer-readiness evaluation across
+  the full Reflexion skill, the same skill with `Transfer Notes` removed, and a
+  generic summary baseline.
+- Main result: the full generated skill scored 10.0/10 average readiness, the
+  no-transfer-notes variant scored 7.6/10, and the generic summary scored
+  2.25/10.
+- Compared baselines: skill without transfer notes and generic prose summary.
+- Practical significance: the same transfer-note ablation pattern seen on
+  AI Scientist-v2 also appears for Reflexion, suggesting the portability signal
+  is not limited to one paper.
+- Statistical evidence: none; deterministic offline gate only.
+- Failure modes: does not prove live Codex-to-Claude or Claude-to-Codex success.
+- Limitations: prompt packets are ready, but live responses are still blocked by
+  remote provider availability.
+- Claim impact: partially supports the harness-transfer claim at the offline
+  artifact-readiness level across two papers.
+- Figure/table: `results/evaluations/reflexion_harness_transfer_v0.json`.

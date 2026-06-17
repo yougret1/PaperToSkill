@@ -255,3 +255,38 @@ Verification:
 - `python scripts\evaluate_skill.py --skill generated_skills\reflexion\SKILL.md --rubric benchmarks\rubric_reflexion_v0.json --output results\evaluations\reflexion_rubric_v0.json`
 - `python scripts\validate_source_spans.py --task benchmarks\tasks\reflexion_source_span_validation.json --output results\evaluations\reflexion_source_span_validation_v0.json`
 - `python -m unittest discover -s tests -v`
+
+## 2026-06-17 Phase 8
+
+Actions:
+
+- Added Reflexion generic-summary and abstract-only baselines.
+- Added Reflexion downstream context-coverage task.
+- Added Reflexion offline harness-transfer readiness task.
+- Added Reflexion live transfer prompt packet task.
+- Generated Reflexion live prompt packets for Codex-style and Claude-style
+  harnesses.
+
+Results:
+
+- Reflexion context baseline:
+  - generated skill: 8.267/9
+  - generic summary: 3.483/9
+  - abstract-only context: 2.533/9
+- Reflexion harness-transfer readiness:
+  - full skill: 10.0/10
+  - skill without transfer notes: 7.6/10
+  - generic summary: 2.25/10
+
+Evidence boundary:
+
+- These are deterministic/offline evaluations, not live agent task success.
+- Live prompt packets are execution-ready inputs but still need later model
+  responses.
+
+Verification:
+
+- `python scripts\evaluate_context_baselines.py --task benchmarks\tasks\reflexion_research_run.json --output results\evaluations\reflexion_context_baselines_v0.json`
+- `python scripts\evaluate_harness_transfer.py --task benchmarks\tasks\reflexion_harness_transfer.json --output results\evaluations\reflexion_harness_transfer_v0.json`
+- `python scripts\build_live_transfer_prompts.py --task benchmarks\tasks\reflexion_live_transfer.json --output-dir results\live_transfer_prompts\reflexion_v0`
+- `python -m unittest discover -s tests -v`

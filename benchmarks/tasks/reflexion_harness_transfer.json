@@ -1,0 +1,108 @@
+{
+  "schema_version": "0.1",
+  "id": "reflexion_harness_transfer",
+  "created": "2026-06-17",
+  "purpose": "Offline Codex-to-Claude-style harness transfer readiness evaluation for the Reflexion paper-derived skill.",
+  "evidence_boundary": "Offline deterministic readiness metric; not a live cross-harness agent run.",
+  "context_variants": [
+    {
+      "id": "full_skill",
+      "label": "PaperToSkill generated skill with transfer notes",
+      "path": "generated_skills/reflexion/SKILL.md"
+    },
+    {
+      "id": "skill_without_transfer_notes",
+      "label": "Generated skill with Transfer Notes removed",
+      "path": "generated_skills/reflexion/SKILL.md",
+      "drop_sections": [
+        "Transfer Notes"
+      ]
+    },
+    {
+      "id": "generic_summary",
+      "label": "Generic prose summary baseline",
+      "path": "baselines/reflexion_generic_summary.md"
+    }
+  ],
+  "core_signal_groups": [
+    {
+      "id": "role_decomposition",
+      "keywords": [
+        "Actor",
+        "Evaluator",
+        "Self-Reflection"
+      ]
+    },
+    {
+      "id": "memory_loop",
+      "keywords": [
+        "verbal self-reflections",
+        "short-term memory",
+        "long-term memory",
+        "memory buffer"
+      ]
+    },
+    {
+      "id": "feedback_and_retry",
+      "keywords": [
+        "environment feedback",
+        "heuristics",
+        "self-generated unit tests",
+        "trials"
+      ]
+    },
+    {
+      "id": "validation_and_limits",
+      "keywords": [
+        "ALFWorld",
+        "HotPotQA",
+        "HumanEval",
+        "local minima",
+        "no formal guarantee",
+        "sliding window"
+      ]
+    }
+  ],
+  "target_harnesses": [
+    {
+      "id": "codex_skill",
+      "label": "Codex-style SKILL.md harness",
+      "required_sections": [
+        "Inputs",
+        "Workflow",
+        "Validation",
+        "Failure Cases",
+        "Transfer Notes"
+      ],
+      "transfer_checks": [
+        "target harness",
+        "framework-specific commands",
+        "local equivalents",
+        "source-backed steps",
+        "failed branch"
+      ],
+      "source_anchor_min": 8,
+      "max_words": 1000
+    },
+    {
+      "id": "claude_project_prompt",
+      "label": "Claude-style project prompt harness",
+      "required_sections": [
+        "Paper Snapshot",
+        "Workflow",
+        "Validation",
+        "Failure Cases",
+        "Transfer Notes"
+      ],
+      "transfer_checks": [
+        "target harness",
+        "local equivalents",
+        "source-backed steps",
+        "inferred adaptations",
+        "future revision history"
+      ],
+      "source_anchor_min": 8,
+      "max_words": 1100
+    }
+  ]
+}

@@ -85,6 +85,13 @@ Initial target contribution categories:
 - `results/evaluations/reflexion_rubric_v0.json`: Reflexion skill rubric score.
 - `results/evaluations/reflexion_source_span_validation_v0.json`: Reflexion
   source-span support-rate summary.
+- `results/evaluations/reflexion_context_baselines_v0.json`: Reflexion
+  skill-vs-summary-vs-abstract deterministic comparison.
+- `results/evaluations/reflexion_harness_transfer_v0.json`: Reflexion
+  transfer-readiness ranking for full skill, skill without transfer notes, and
+  generic summary.
+- `results/live_transfer_prompts/reflexion_v0/`: Reflexion live prompt packets
+  for later Codex/Claude execution.
 
 ## Current Assumptions
 

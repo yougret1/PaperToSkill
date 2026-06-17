@@ -1,0 +1,70 @@
+{
+  "schema_version": "0.1",
+  "id": "reflexion_research_run",
+  "paper_id": "reflexion",
+  "created": "2026-06-17",
+  "task": "Plan a small retry-and-reflection agent run inspired by Reflexion for a new PaperToSkill task while preserving memory and failure-learning constraints.",
+  "user_prompt": "Given a small task where an agent may fail on the first attempt, produce an agent run plan that follows the Reflexion method closely enough to be executable in a local harness. The plan must include actor/evaluator/self-reflection roles, short-term trajectory memory, long-term reflection memory, feedback sources, retry policy, validation metrics, and limitations.",
+  "context_variants": [
+    {
+      "id": "skill",
+      "path": "generated_skills/reflexion/SKILL.md",
+      "label": "PaperToSkill generated skill"
+    },
+    {
+      "id": "generic_summary",
+      "path": "baselines/reflexion_generic_summary.md",
+      "label": "Generic paper summary"
+    },
+    {
+      "id": "abstract_only",
+      "path": "baselines/reflexion_abstract_only.md",
+      "label": "Abstract-only context"
+    }
+  ],
+  "required_capabilities": [
+    {
+      "id": "role_decomposition",
+      "description": "Plan preserves Actor, Evaluator, and Self-Reflection roles.",
+      "keywords": ["Actor", "Evaluator", "Self-Reflection"]
+    },
+    {
+      "id": "verbal_reinforcement",
+      "description": "Plan converts feedback into verbal self-reflection rather than weight updates.",
+      "keywords": ["verbal", "self-reflections", "feedback", "weight updates"]
+    },
+    {
+      "id": "memory_split",
+      "description": "Plan distinguishes short-term trajectory memory from long-term reflection memory.",
+      "keywords": ["short-term memory", "trajectory", "long-term memory", "memory buffer"]
+    },
+    {
+      "id": "retry_loop",
+      "description": "Plan includes iterative trials until an evaluator marks success or a stop rule triggers.",
+      "keywords": ["trials", "evaluator", "correct", "retry", "max trials"]
+    },
+    {
+      "id": "feedback_sources",
+      "description": "Plan supports multiple feedback sources.",
+      "keywords": ["environment feedback", "heuristics", "self-generated unit tests", "scoring"]
+    },
+    {
+      "id": "validation_domains",
+      "description": "Plan remembers the evaluated task families and reported improvements.",
+      "keywords": ["ALFWorld", "HotPotQA", "HumanEval", "22%", "20%", "91%"]
+    },
+    {
+      "id": "limitations",
+      "description": "Plan preserves limitations and stop conditions.",
+      "keywords": ["local minima", "no formal guarantee", "sliding window", "creative behavior"]
+    },
+    {
+      "id": "source_grounding",
+      "description": "Context includes source anchors or equivalent traceability.",
+      "keywords": ["Source anchors", "source map", "lines"]
+    }
+  ],
+  "compactness": {
+    "max_words": 1200
+  }
+}

@@ -51,8 +51,13 @@
 | `benchmarks/tasks/ai_scientist_v2_live_transfer.json` | Live harness-transfer prompt packet spec | Created |
 | `benchmarks/tasks/ai_scientist_v2_source_span_validation.json` | Source-span validation task spec | Created |
 | `benchmarks/tasks/reflexion_source_span_validation.json` | Source-span validation task spec for Reflexion | Created |
+| `benchmarks/tasks/reflexion_research_run.json` | Reflexion downstream context-coverage task spec | Created |
+| `benchmarks/tasks/reflexion_harness_transfer.json` | Reflexion offline harness-transfer readiness task spec | Created |
+| `benchmarks/tasks/reflexion_live_transfer.json` | Reflexion live harness-transfer prompt packet spec | Created |
 | `baselines/ai_scientist_v2_generic_summary.md` | Generic summary baseline context | Created |
 | `baselines/ai_scientist_v2_abstract_only.md` | Abstract-only baseline context | Created |
+| `baselines/reflexion_generic_summary.md` | Generic summary baseline context for Reflexion | Created |
+| `baselines/reflexion_abstract_only.md` | Abstract-only baseline context for Reflexion | Created |
 | `papers/raw/ai_scientist_v2.pdf` | Raw AI Scientist-v2 PDF | Created |
 | `papers/raw/reflexion.pdf` | Raw Reflexion PDF | Created |
 | `papers/extracted/ai_scientist_v2.txt` | Extracted PDF text | Created |
@@ -87,7 +92,10 @@
 | `results/evaluations/ai_scientist_v2_source_span_validation_v0.json` | Source-span validation output for AI Scientist-v2 skill | Created |
 | `results/evaluations/reflexion_rubric_v0.json` | Reflexion skill rubric output | Created |
 | `results/evaluations/reflexion_source_span_validation_v0.json` | Reflexion source-span validation output | Created |
+| `results/evaluations/reflexion_context_baselines_v0.json` | Reflexion skill-vs-summary-vs-abstract context coverage scores | Created |
+| `results/evaluations/reflexion_harness_transfer_v0.json` | Reflexion offline Codex/Claude-style transfer readiness scores | Created |
 | `results/live_transfer_prompts/ai_scientist_v2_v0/` | Live Codex/Claude prompt packets and index | Created |
+| `results/live_transfer_prompts/reflexion_v0/` | Reflexion live Codex/Claude prompt packets and index | Created |
 | `output/pdf/reflexion/page-01.png` | Rendered Reflexion PDF page 1 for visual check | Created |
 | `results/result_cards.md` | Result interpretation cards | Created |
 

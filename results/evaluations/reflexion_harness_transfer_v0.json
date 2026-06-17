@@ -1,0 +1,607 @@
+{
+  "task": "reflexion_harness_transfer",
+  "task_path": "benchmarks\\tasks\\reflexion_harness_transfer.json",
+  "evidence_boundary": "Offline deterministic readiness metric; not a live cross-harness agent run.",
+  "results": [
+    {
+      "id": "full_skill",
+      "label": "PaperToSkill generated skill with transfer notes",
+      "path": "generated_skills/reflexion/SKILL.md",
+      "drop_sections": [],
+      "word_count": 479,
+      "average_normalized_score": 10.0,
+      "harnesses": [
+        {
+          "id": "codex_skill",
+          "label": "Codex-style SKILL.md harness",
+          "score": 10.0,
+          "max_score": 10.0,
+          "normalized_score": 10.0,
+          "sections": {
+            "points": 2.0,
+            "max_points": 2.0,
+            "present": [
+              "Inputs",
+              "Workflow",
+              "Validation",
+              "Failure Cases",
+              "Transfer Notes"
+            ],
+            "missing": []
+          },
+          "signals": [
+            {
+              "id": "role_decomposition",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "Actor",
+                "Evaluator",
+                "Self-Reflection"
+              ],
+              "missing": []
+            },
+            {
+              "id": "memory_loop",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "verbal self-reflections",
+                "short-term memory",
+                "long-term memory",
+                "memory buffer"
+              ],
+              "missing": []
+            },
+            {
+              "id": "feedback_and_retry",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "environment feedback",
+                "heuristics",
+                "self-generated unit tests",
+                "trials"
+              ],
+              "missing": []
+            },
+            {
+              "id": "validation_and_limits",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "ALFWorld",
+                "HotPotQA",
+                "HumanEval",
+                "local minima",
+                "no formal guarantee",
+                "sliding window"
+              ],
+              "missing": []
+            }
+          ],
+          "transfer_checks": {
+            "points": 2.0,
+            "max_points": 2.0,
+            "hits": [
+              "target harness",
+              "framework-specific commands",
+              "local equivalents",
+              "source-backed steps",
+              "failed branch"
+            ],
+            "missing": []
+          },
+          "source_anchors": {
+            "points": 1.0,
+            "max_points": 1.0,
+            "anchor_count": 12,
+            "required_min": 8
+          },
+          "compactness": {
+            "points": 1.0,
+            "max_points": 1.0,
+            "word_count": 479,
+            "max_words": 1000
+          }
+        },
+        {
+          "id": "claude_project_prompt",
+          "label": "Claude-style project prompt harness",
+          "score": 10.0,
+          "max_score": 10.0,
+          "normalized_score": 10.0,
+          "sections": {
+            "points": 2.0,
+            "max_points": 2.0,
+            "present": [
+              "Paper Snapshot",
+              "Workflow",
+              "Validation",
+              "Failure Cases",
+              "Transfer Notes"
+            ],
+            "missing": []
+          },
+          "signals": [
+            {
+              "id": "role_decomposition",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "Actor",
+                "Evaluator",
+                "Self-Reflection"
+              ],
+              "missing": []
+            },
+            {
+              "id": "memory_loop",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "verbal self-reflections",
+                "short-term memory",
+                "long-term memory",
+                "memory buffer"
+              ],
+              "missing": []
+            },
+            {
+              "id": "feedback_and_retry",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "environment feedback",
+                "heuristics",
+                "self-generated unit tests",
+                "trials"
+              ],
+              "missing": []
+            },
+            {
+              "id": "validation_and_limits",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "ALFWorld",
+                "HotPotQA",
+                "HumanEval",
+                "local minima",
+                "no formal guarantee",
+                "sliding window"
+              ],
+              "missing": []
+            }
+          ],
+          "transfer_checks": {
+            "points": 2.0,
+            "max_points": 2.0,
+            "hits": [
+              "target harness",
+              "local equivalents",
+              "source-backed steps",
+              "inferred adaptations",
+              "future revision history"
+            ],
+            "missing": []
+          },
+          "source_anchors": {
+            "points": 1.0,
+            "max_points": 1.0,
+            "anchor_count": 12,
+            "required_min": 8
+          },
+          "compactness": {
+            "points": 1.0,
+            "max_points": 1.0,
+            "word_count": 479,
+            "max_words": 1100
+          }
+        }
+      ]
+    },
+    {
+      "id": "skill_without_transfer_notes",
+      "label": "Generated skill with Transfer Notes removed",
+      "path": "generated_skills/reflexion/SKILL.md",
+      "drop_sections": [
+        "Transfer Notes"
+      ],
+      "word_count": 435,
+      "average_normalized_score": 7.6,
+      "harnesses": [
+        {
+          "id": "codex_skill",
+          "label": "Codex-style SKILL.md harness",
+          "score": 7.6,
+          "max_score": 10.0,
+          "normalized_score": 7.6,
+          "sections": {
+            "points": 1.6,
+            "max_points": 2.0,
+            "present": [
+              "Inputs",
+              "Workflow",
+              "Validation",
+              "Failure Cases"
+            ],
+            "missing": [
+              "Transfer Notes"
+            ]
+          },
+          "signals": [
+            {
+              "id": "role_decomposition",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "Actor",
+                "Evaluator",
+                "Self-Reflection"
+              ],
+              "missing": []
+            },
+            {
+              "id": "memory_loop",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "verbal self-reflections",
+                "short-term memory",
+                "long-term memory",
+                "memory buffer"
+              ],
+              "missing": []
+            },
+            {
+              "id": "feedback_and_retry",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "environment feedback",
+                "heuristics",
+                "self-generated unit tests",
+                "trials"
+              ],
+              "missing": []
+            },
+            {
+              "id": "validation_and_limits",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "ALFWorld",
+                "HotPotQA",
+                "HumanEval",
+                "local minima",
+                "no formal guarantee",
+                "sliding window"
+              ],
+              "missing": []
+            }
+          ],
+          "transfer_checks": {
+            "points": 0.0,
+            "max_points": 2.0,
+            "hits": [],
+            "missing": [
+              "target harness",
+              "framework-specific commands",
+              "local equivalents",
+              "source-backed steps",
+              "failed branch"
+            ]
+          },
+          "source_anchors": {
+            "points": 1.0,
+            "max_points": 1.0,
+            "anchor_count": 12,
+            "required_min": 8
+          },
+          "compactness": {
+            "points": 1.0,
+            "max_points": 1.0,
+            "word_count": 435,
+            "max_words": 1000
+          }
+        },
+        {
+          "id": "claude_project_prompt",
+          "label": "Claude-style project prompt harness",
+          "score": 7.6,
+          "max_score": 10.0,
+          "normalized_score": 7.6,
+          "sections": {
+            "points": 1.6,
+            "max_points": 2.0,
+            "present": [
+              "Paper Snapshot",
+              "Workflow",
+              "Validation",
+              "Failure Cases"
+            ],
+            "missing": [
+              "Transfer Notes"
+            ]
+          },
+          "signals": [
+            {
+              "id": "role_decomposition",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "Actor",
+                "Evaluator",
+                "Self-Reflection"
+              ],
+              "missing": []
+            },
+            {
+              "id": "memory_loop",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "verbal self-reflections",
+                "short-term memory",
+                "long-term memory",
+                "memory buffer"
+              ],
+              "missing": []
+            },
+            {
+              "id": "feedback_and_retry",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "environment feedback",
+                "heuristics",
+                "self-generated unit tests",
+                "trials"
+              ],
+              "missing": []
+            },
+            {
+              "id": "validation_and_limits",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "ALFWorld",
+                "HotPotQA",
+                "HumanEval",
+                "local minima",
+                "no formal guarantee",
+                "sliding window"
+              ],
+              "missing": []
+            }
+          ],
+          "transfer_checks": {
+            "points": 0.0,
+            "max_points": 2.0,
+            "hits": [],
+            "missing": [
+              "target harness",
+              "local equivalents",
+              "source-backed steps",
+              "inferred adaptations",
+              "future revision history"
+            ]
+          },
+          "source_anchors": {
+            "points": 1.0,
+            "max_points": 1.0,
+            "anchor_count": 12,
+            "required_min": 8
+          },
+          "compactness": {
+            "points": 1.0,
+            "max_points": 1.0,
+            "word_count": 435,
+            "max_words": 1100
+          }
+        }
+      ]
+    },
+    {
+      "id": "generic_summary",
+      "label": "Generic prose summary baseline",
+      "path": "baselines/reflexion_generic_summary.md",
+      "drop_sections": [],
+      "word_count": 111,
+      "average_normalized_score": 2.25,
+      "harnesses": [
+        {
+          "id": "codex_skill",
+          "label": "Codex-style SKILL.md harness",
+          "score": 2.25,
+          "max_score": 10.0,
+          "normalized_score": 2.25,
+          "sections": {
+            "points": 0.0,
+            "max_points": 2.0,
+            "present": [],
+            "missing": [
+              "Inputs",
+              "Workflow",
+              "Validation",
+              "Failure Cases",
+              "Transfer Notes"
+            ]
+          },
+          "signals": [
+            {
+              "id": "role_decomposition",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "Actor",
+                "Evaluator",
+                "Self-Reflection"
+              ],
+              "missing": []
+            },
+            {
+              "id": "memory_loop",
+              "points": 0.0,
+              "max_points": 1.0,
+              "hits": [],
+              "missing": [
+                "verbal self-reflections",
+                "short-term memory",
+                "long-term memory",
+                "memory buffer"
+              ]
+            },
+            {
+              "id": "feedback_and_retry",
+              "points": 0.25,
+              "max_points": 1.0,
+              "hits": [
+                "trials"
+              ],
+              "missing": [
+                "environment feedback",
+                "heuristics",
+                "self-generated unit tests"
+              ]
+            },
+            {
+              "id": "validation_and_limits",
+              "points": 0.0,
+              "max_points": 1.0,
+              "hits": [],
+              "missing": [
+                "ALFWorld",
+                "HotPotQA",
+                "HumanEval",
+                "local minima",
+                "no formal guarantee",
+                "sliding window"
+              ]
+            }
+          ],
+          "transfer_checks": {
+            "points": 0.0,
+            "max_points": 2.0,
+            "hits": [],
+            "missing": [
+              "target harness",
+              "framework-specific commands",
+              "local equivalents",
+              "source-backed steps",
+              "failed branch"
+            ]
+          },
+          "source_anchors": {
+            "points": 0.0,
+            "max_points": 1.0,
+            "anchor_count": 0,
+            "required_min": 8
+          },
+          "compactness": {
+            "points": 1.0,
+            "max_points": 1.0,
+            "word_count": 111,
+            "max_words": 1000
+          }
+        },
+        {
+          "id": "claude_project_prompt",
+          "label": "Claude-style project prompt harness",
+          "score": 2.25,
+          "max_score": 10.0,
+          "normalized_score": 2.25,
+          "sections": {
+            "points": 0.0,
+            "max_points": 2.0,
+            "present": [],
+            "missing": [
+              "Paper Snapshot",
+              "Workflow",
+              "Validation",
+              "Failure Cases",
+              "Transfer Notes"
+            ]
+          },
+          "signals": [
+            {
+              "id": "role_decomposition",
+              "points": 1.0,
+              "max_points": 1.0,
+              "hits": [
+                "Actor",
+                "Evaluator",
+                "Self-Reflection"
+              ],
+              "missing": []
+            },
+            {
+              "id": "memory_loop",
+              "points": 0.0,
+              "max_points": 1.0,
+              "hits": [],
+              "missing": [
+                "verbal self-reflections",
+                "short-term memory",
+                "long-term memory",
+                "memory buffer"
+              ]
+            },
+            {
+              "id": "feedback_and_retry",
+              "points": 0.25,
+              "max_points": 1.0,
+              "hits": [
+                "trials"
+              ],
+              "missing": [
+                "environment feedback",
+                "heuristics",
+                "self-generated unit tests"
+              ]
+            },
+            {
+              "id": "validation_and_limits",
+              "points": 0.0,
+              "max_points": 1.0,
+              "hits": [],
+              "missing": [
+                "ALFWorld",
+                "HotPotQA",
+                "HumanEval",
+                "local minima",
+                "no formal guarantee",
+                "sliding window"
+              ]
+            }
+          ],
+          "transfer_checks": {
+            "points": 0.0,
+            "max_points": 2.0,
+            "hits": [],
+            "missing": [
+              "target harness",
+              "local equivalents",
+              "source-backed steps",
+              "inferred adaptations",
+              "future revision history"
+            ]
+          },
+          "source_anchors": {
+            "points": 0.0,
+            "max_points": 1.0,
+            "anchor_count": 0,
+            "required_min": 8
+          },
+          "compactness": {
+            "points": 1.0,
+            "max_points": 1.0,
+            "word_count": 111,
+            "max_words": 1100
+          }
+        }
+      ]
+    }
+  ]
+}

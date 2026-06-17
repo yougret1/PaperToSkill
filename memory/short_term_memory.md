@@ -9,8 +9,9 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 7 second-paper benchmark case is implemented locally. Current focus:
-finalize records, run verification, commit, and push.
+Phase 8 Reflexion context baseline, transfer-readiness, and live prompt packets
+are implemented locally. Current focus: finalize records, verify, commit, and
+push.
 
 ## Latest User Request
 
@@ -125,6 +126,21 @@ The user provided the PaperToSkill idea and asked to:
 - Reflexion generated skill scored `20/20` on the paper-specific rubric.
 - Reflexion source-span validation produced 11 supported claims, 0 invalid
   ranges, support rate `1.0`.
+- Phase 7 was committed and pushed as `04c397e` on `origin/main`.
+- Phase 8 added Reflexion context-vs-summary and transfer-readiness tasks:
+  - `benchmarks/tasks/reflexion_research_run.json`
+  - `benchmarks/tasks/reflexion_harness_transfer.json`
+  - `benchmarks/tasks/reflexion_live_transfer.json`
+- Reflexion context baseline scores:
+  - skill: `8.267/9`
+  - generic summary: `3.483/9`
+  - abstract-only: `2.533/9`
+- Reflexion harness-transfer readiness scores:
+  - full skill: `10.0/10`
+  - no-transfer-notes variant: `7.6/10`
+  - generic summary: `2.25/10`
+- Reflexion live prompt packets were generated under
+  `results/live_transfer_prompts/reflexion_v0/`.
 
 ## Current Blockers / Pending Checks
 
@@ -141,9 +157,8 @@ The user provided the PaperToSkill idea and asked to:
 
 ## Next Actions
 
-1. Commit and push Phase 7 artifacts.
-2. Add Reflexion context-vs-summary and transfer-readiness tasks.
-3. Re-test the remote LLM endpoint when provider accounts are available.
-4. Execute live cross-harness runs using the prompt packets when the endpoint
+1. Commit and push Phase 8 artifacts.
+2. Re-test the remote LLM endpoint when provider accounts are available.
+3. Execute live cross-harness runs using the prompt packets when the endpoint
    recovers.
-5. Expand the benchmark to more agent/LLM-method papers.
+4. Expand the benchmark to more agent/LLM-method papers.
