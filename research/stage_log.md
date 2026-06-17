@@ -567,3 +567,42 @@ Verification:
 - `python -m unittest discover -s tests -v`: passed, 15 tests OK.
 - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
 - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
+
+## 2026-06-17 Phase 16
+
+Actions:
+
+- Re-tested the OpenAI-compatible endpoint.
+- Added `scripts/check_reproducibility_package.py`.
+- Added `tests/test_check_reproducibility_package.py`.
+- Generated:
+  - `results/reproducibility/package_report.json`
+  - `results/reproducibility/package_report.md`
+- Updated the failure-case archive with the Phase 16 endpoint retest.
+- Updated README, paper draft package, claim-evidence matrix, artifact map,
+  decision log, result cards, stage log, experiment queue, and memory.
+
+Results:
+
+- `/v1/models` worked and listed `claude-opus-4-8`.
+- `/v1/chat/completions` returned HTTP 503 with an empty body.
+- Reproducibility package report:
+  - overall status: `ready_with_pending_external_evidence`
+  - ready checks: `63`
+  - pending checks: `4`
+  - failed checks: `0`
+- Pending checks correspond to the three live response sets and completed
+  human-fidelity annotation.
+
+Evidence boundary:
+
+- The package is locally reviewable and has no failed local checks.
+- It still does not support completed live cross-harness, human-validated, or
+  provider-billing claims.
+
+Verification:
+
+- `python -m unittest tests.test_check_reproducibility_package -v`: passed, 2 tests OK.
+- `python -m unittest discover -s tests -v`: passed, 17 tests OK.
+- `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
+- `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.

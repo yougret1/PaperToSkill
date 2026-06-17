@@ -10,9 +10,9 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 15: failure-case archive over the three-paper deterministic/offline
-benchmark and project-level failure/fix records. Live cross-harness agent
-execution and completed human-fidelity annotation are still pending.
+Phase 16: reproducibility package gate over the three-paper deterministic/
+offline benchmark. The local package is ready with pending external evidence:
+live cross-harness responses and completed human-fidelity annotation.
 
 ## Memory
 
@@ -74,3 +74,4 @@ pending live-agent claims.
 - Human-fidelity review packets and pending annotation summary:
   `results/human_fidelity_packets/`.
 - Failure-case archive: `results/failure_cases/`.
+- Reproducibility package report: `results/reproducibility/`.

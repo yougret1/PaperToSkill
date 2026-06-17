@@ -15,6 +15,7 @@ exists.
 | Transfer notes | Removing `Transfer Notes` lowers offline transfer-readiness from 10/10 to 7.6/10 across all three paper cases. | Transfer notes have been proven to improve live Claude/Codex success rates. | `results/evaluations/*_harness_transfer_v0.json`; `results/tables/transfer_ablation.md` | Supported for offline readiness |
 | Live transfer | Prompt packets exist for later Codex-style and Claude-style live evaluation. | Live cross-harness execution has completed successfully. | `results/live_transfer_prompts/`; endpoint checks in `memory/short_term_memory.md` | Pending |
 | Failure branches | PaperToSkill records 20 paper-reported and project-level failure/limitation cases as a first-class archive. | Failure-branch recording has been shown to improve final user outcomes or live reproduction success. | `benchmarks/failure_case_archive_v0.json`; `results/failure_cases/failure_case_archive.md`; `results/failure_cases/failure_case_archive.json` | Supported as provenance archive, not outcome evidence |
+| Reproducibility package | A local package checker reports 63 ready checks, 4 pending external-evidence checks, and 0 failed checks. | The package is submission-complete or all live/human evidence has been collected. | `scripts/check_reproducibility_package.py`; `results/reproducibility/package_report.md`; `results/reproducibility/package_report.json` | Ready with pending external evidence |
 
 ## Required Downgrades In Drafting
 

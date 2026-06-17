@@ -31,6 +31,7 @@
 | `research/run_logs/2026-06-17_phase13_human_fidelity_readiness.md` | Endpoint retest and human-fidelity packet preparation | Created |
 | `research/run_logs/2026-06-17_phase14_annotation_summary.md` | Human-fidelity annotation summary commands and outcomes | Created |
 | `research/run_logs/2026-06-17_phase15_failure_case_archive.md` | Failure-case archive commands and outcomes | Created |
+| `research/run_logs/2026-06-17_phase16_reproducibility_package.md` | Endpoint retest and reproducibility package check outcomes | Created |
 
 ## Paper Draft Package
 
@@ -105,6 +106,7 @@
 | `scripts/build_human_fidelity_packets.py` | Builds human-fidelity review packets and annotation template | Created |
 | `scripts/summarize_human_fidelity_annotations.py` | Summarizes and validates human-fidelity annotation CSV rows | Created |
 | `scripts/build_failure_case_archive.py` | Builds failure-case archive JSON, Markdown, and CSV outputs | Created |
+| `scripts/check_reproducibility_package.py` | Checks local reproducibility package readiness and pending external evidence | Created |
 | `tests/test_papertoskill_extract.py` | Smoke test for extractor CLI and source map | Created |
 | `tests/test_evaluate_skill.py` | Smoke test for evaluator CLI | Created |
 | `tests/test_evaluate_context_baselines.py` | Smoke test for context baseline evaluator | Created |
@@ -117,6 +119,7 @@
 | `tests/test_build_human_fidelity_packets.py` | Smoke test for human-fidelity packet builder | Created |
 | `tests/test_summarize_human_fidelity_annotations.py` | Smoke test for human-fidelity annotation summarizer | Created |
 | `tests/test_build_failure_case_archive.py` | Smoke test for failure-case archive builder | Created |
+| `tests/test_check_reproducibility_package.py` | Smoke test for reproducibility package checker | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |
 | `generated_skills/ai_scientist_v2/references/source_map.json` | Source-map evidence for AI Scientist-v2 generated skill | Created |
 | `generated_skills/reflexion/SKILL.md` | Retained generated skill from Reflexion note | Created |
@@ -163,6 +166,8 @@
 | `results/failure_cases/failure_case_archive.md` | Human-readable failure-case archive | Created |
 | `results/failure_cases/failure_case_archive.json` | Machine-readable failure-case archive | Created |
 | `results/failure_cases/failure_case_archive.csv` | CSV failure-case archive | Created |
+| `results/reproducibility/package_report.md` | Human-readable reproducibility package report | Created |
+| `results/reproducibility/package_report.json` | Machine-readable reproducibility package report | Created |
 | `output/pdf/reflexion/page-01.png` | Rendered Reflexion PDF page 1 for visual check | Created |
 | `output/pdf/aide/page-01.png` | Rendered AIDE PDF page 1 for visual check | Created |
 | `results/result_cards.md` | Result interpretation cards | Created |

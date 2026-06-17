@@ -65,6 +65,14 @@ missing-evidence issues. This improves provenance and claim discipline, but it
 does not prove that recording failures improves live task outcomes or
 reproduction success.
 
+### Reproducibility Package Still Has External Pending Evidence
+
+The reproducibility checker reports that local artifacts, deterministic results,
+prompt packets, failure archive, human-fidelity protocol, and secret scan are
+ready with zero failed checks. However, the same report still marks live
+responses and completed human-fidelity annotation as pending external evidence.
+The package should therefore be described as locally ready, not submission-final.
+
 ## Future Work
 
 1. Execute live prompt packets once the remote endpoint is available, logging

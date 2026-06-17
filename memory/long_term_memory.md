@@ -65,6 +65,8 @@ Initial target contribution categories:
   human-fidelity annotation rows.
 - `scripts/build_failure_case_archive.py`: builds a failure-case archive from
   paper source maps and project-level failure/fix records.
+- `scripts/check_reproducibility_package.py`: checks local reproducibility
+  package readiness and separates pending external evidence from local failures.
 - `tests/test_papertoskill_extract.py`: extractor smoke test.
 - `tests/test_evaluate_skill.py`: evaluator smoke test.
 - `generated_skills/`: retained generated examples with source maps.
@@ -122,6 +124,9 @@ Initial target contribution categories:
 - `results/failure_cases/`: failure-case archive with 20 cases, including 14
   paper-reported limitations/failure branches and 6 project-level failure/fix
   records.
+- `results/reproducibility/`: reproducibility package report. Current status is
+  ready with pending external evidence, 63 ready checks, 4 pending checks, and 0
+  failed checks.
 - `paper/outline.md`: section plan, contribution bullets, evidence boundary,
   and figure/table plan.
 - `paper/draft.md`: first evidence-bounded paper draft.
@@ -144,6 +149,8 @@ Initial target contribution categories:
   billing, tokenizer-exact accounting, and success-per-dollar evidence.
 - Human-fidelity writing must distinguish prepared review packets from completed
   independent annotation.
+- Reproducibility writing must distinguish local package readiness from
+  completed external live responses or independent human validation.
 
 ## LLM/API Configuration
 

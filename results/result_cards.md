@@ -385,3 +385,27 @@
 - Figure/table: `benchmarks/failure_case_archive_v0.json`;
   `results/failure_cases/failure_case_archive.md`;
   `results/failure_cases/failure_case_archive.json`.
+
+## Reproducibility Package Gate
+
+- Experiment: check local artifact package readiness across memory, paper
+  draft files, result tables, generated skills, source maps, deterministic
+  evaluations, prompt packets, human-fidelity packet status, failure archive,
+  and secret scan.
+- Main result: `results/reproducibility/package_report.md` reports
+  `overall_status=ready_with_pending_external_evidence`, 63 ready checks, 4
+  pending checks, and 0 failed checks.
+- Compared baselines: unchecked artifact bundle.
+- Practical significance: the package is locally reviewable while making the
+  remaining external gaps explicit: live response files for three prompt-packet
+  sets and completed human-fidelity annotation.
+- Statistical evidence: none; this is a deterministic reproducibility gate.
+- Failure modes: the checker verifies package presence and key consistency
+  gates, but it does not replace running live agents or collecting independent
+  human scores.
+- Limitations: readiness does not mean submission-final evidence.
+- Claim impact: supports local reproducibility readiness while preserving the
+  live/human evidence boundary.
+- Figure/table: `scripts/check_reproducibility_package.py`;
+  `results/reproducibility/package_report.md`;
+  `results/reproducibility/package_report.json`.

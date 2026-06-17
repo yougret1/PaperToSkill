@@ -123,6 +123,8 @@ Main results from `results/tables/main_results.md`:
   transfer notes drops readiness to 7.6/10 in all three cases.
 - the failure-case archive records 20 cases: 14 paper-reported limitations or
   failure branches and 6 project-level failure/fix records.
+- the reproducibility package checker reports 63 ready checks, 4 pending
+  external-evidence checks, and 0 failed checks.
 
 Interpretation: PaperToSkill preserves operational paper details that short
 summaries omit. The result is an artifact-readiness and coverage result, not yet
@@ -141,6 +143,8 @@ Current limitations:
 - cost evidence is compactness-oriented and not yet a full token-price study;
 - the failure-case archive is provenance evidence, not an outcome study showing
   that recording failures improves final task success;
+- the reproducibility package is ready locally but still lacks live response
+  logs and completed human annotations;
 - benchmark is focused on agent-method papers.
 
 ### 7. Conclusion
@@ -162,4 +166,5 @@ that are less directly procedural.
 | Appendix: Human-fidelity packets | `results/human_fidelity_packets/` | Prepared review packets and blank annotation template |
 | Appendix: Human-fidelity summary | `results/human_fidelity_packets/annotation_summary.md` | Pending annotation status and validation summary |
 | Appendix: Failure-case archive | `results/failure_cases/failure_case_archive.md` | Paper-reported and project-level failure/limitation cases |
+| Appendix: Reproducibility package | `results/reproducibility/package_report.md` | Local package readiness and pending external evidence |
 | Appendix: Prompt packets | `results/live_transfer_prompts/` | Inputs for later live transfer runs |

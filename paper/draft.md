@@ -175,6 +175,12 @@ records from the PaperToSkill development process. This archive supports the
 claim that failed branches are preserved as inspectable provenance. It is not
 evidence that failure recording improves live task outcomes.
 
+The reproducibility package checker reports 63 ready checks, 4 pending
+external-evidence checks, and 0 failed checks. The pending checks correspond to
+the three live response sets and the human-fidelity annotation status. This
+supports a local artifact-readiness claim, not a claim of completed live or
+human evaluation.
+
 ## 6. Discussion
 
 The main result is not that PaperToSkill "understands" papers in the broadest
@@ -204,7 +210,9 @@ script are prepared, but no independent annotations have been completed. Fifth,
 compactness is measured by word count and deterministic input-token proxy, not
 by tokenizer-exact model price, provider billing, or live success per dollar.
 Sixth, the failure-case archive is an evidence and provenance artifact rather
-than a controlled outcome study.
+than a controlled outcome study. Seventh, the reproducibility package is locally
+ready but still has pending external evidence for live responses and human
+annotations.
 
 These limits shape the correct claim: PaperToSkill currently provides
 reproducible evidence for compact, source-grounded skill artifacts and offline
@@ -234,5 +242,7 @@ less naturally procedural.
 - Human-fidelity annotation summary:
   `scripts/summarize_human_fidelity_annotations.py`
 - Failure-case archive: `scripts/build_failure_case_archive.py`
+- Reproducibility package check:
+  `scripts/check_reproducibility_package.py`
 - Result tables: `results/tables/`
 - Live prompt packets: `results/live_transfer_prompts/`

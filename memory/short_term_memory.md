@@ -9,10 +9,10 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 15 failure-case archive is implemented and verified locally. Phase 14 was
-already committed and pushed as `ef2b792`. After the Phase 15 save, the next
-research focus is either re-testing the remote endpoint or collecting actual
-human fidelity annotations.
+Phase 16 reproducibility package gate is implemented and verified locally.
+Phase 15 was committed and pushed as `61d5489`. After the Phase 16 save, the
+next research focus is live response collection after endpoint recovery or
+completed human-fidelity annotation.
 
 ## Latest User Request
 
@@ -297,6 +297,30 @@ The user provided the PaperToSkill idea and asked to:
 - Phase 15 verification:
   - `python -m unittest tests.test_build_failure_case_archive -v`: passed, 1 test OK.
   - `python -m unittest discover -s tests -v`: passed, 15 tests OK.
+  - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
+  - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
+- Phase 15 was committed and pushed as `61d5489` on `origin/main`.
+- Phase 16 re-tested the endpoint:
+  - `/v1/models`: reachable and lists `claude-opus-4-8`.
+  - `/v1/chat/completions`: HTTP 503 with an empty body.
+- Phase 16 added reproducibility package tooling:
+  - `scripts/check_reproducibility_package.py`
+  - `tests/test_check_reproducibility_package.py`
+  - `results/reproducibility/package_report.json`
+  - `results/reproducibility/package_report.md`
+- Current Phase 16 reproducibility package summary:
+  - overall status: `ready_with_pending_external_evidence`
+  - ready checks: `63`
+  - pending checks: `4`
+  - failed checks: `0`
+  - pending checks are the three live response sets and completed
+    human-fidelity annotation.
+- Phase 16 evidence boundary: local package readiness only. It does not support
+  completed live cross-harness, human-validated, provider-billing, or
+  success-per-dollar claims.
+- Phase 16 verification:
+  - `python -m unittest tests.test_check_reproducibility_package -v`: passed, 2 tests OK.
+  - `python -m unittest discover -s tests -v`: passed, 17 tests OK.
   - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
   - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
 

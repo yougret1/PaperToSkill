@@ -90,3 +90,13 @@
   real deployable projects. Archiving them improves provenance and prevents the
   draft from telling a success-only story.
 - Status: accepted for Phase 15.
+
+## 2026-06-17: Separate Local Reproducibility From External Evidence
+
+- Decision: add a reproducibility package checker that reports local package
+  readiness separately from pending live responses and human annotations.
+- Rationale: the project has many deterministic/offline artifacts that are ready
+  for review, but live LLM calls and independent human scoring remain blocked or
+  uncollected. A gate with `ready`, `pending`, and `fail` states prevents both
+  hidden local breakage and overclaiming.
+- Status: accepted for Phase 16.
