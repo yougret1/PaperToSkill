@@ -117,6 +117,8 @@ Main results from `results/tables/main_results.md`:
   deterministic context coverage across all three papers;
 - source support rates are 0.938, 1.0, and 1.0 with zero invalid line ranges;
 - skills remain under 1200 words;
+- generated skills use 2.2%, 4.43%, and 9.54% of full extracted paper
+  input-token proxies;
 - full skills score 10/10 on offline transfer readiness, while removing
   transfer notes drops readiness to 7.6/10 in all three cases.
 
@@ -150,4 +152,5 @@ that are less directly procedural.
 | Table 1: Main results | `results/tables/main_results.md` | Coverage, source support, compactness |
 | Table 2: Transfer ablation | `results/tables/transfer_ablation.md` | Effect of transfer notes |
 | Table 3: Source grounding | `results/tables/compactness_source_grounding.md` | Source support and compactness |
+| Table 4: Context cost proxy | `results/tables/context_cost_proxy.md` | Full paper vs skill context size and cost proxy |
 | Appendix: Prompt packets | `results/live_transfer_prompts/` | Inputs for later live transfer runs |

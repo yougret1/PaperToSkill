@@ -27,6 +27,7 @@
 | `research/run_logs/2026-06-17_phase9_aggregate_tables.md` | Result-table aggregation commands and outcomes | Created |
 | `research/run_logs/2026-06-17_phase10_aide_third_paper.md` | AIDE third-paper benchmark commands and outcomes | Created |
 | `research/run_logs/2026-06-17_phase11_paper_package.md` | Paper draft package commands and outcomes | Created |
+| `research/run_logs/2026-06-17_phase12_context_cost_proxy.md` | Context token/cost proxy commands and outcomes | Created |
 
 ## Paper Draft Package
 
@@ -95,6 +96,7 @@
 | `scripts/build_live_transfer_prompts.py` | Live harness-transfer prompt packet builder | Created |
 | `scripts/validate_source_spans.py` | Source-span validation for line-anchored claims | Created |
 | `scripts/aggregate_results_tables.py` | Aggregates existing evaluation JSON into paper-ready tables | Created |
+| `scripts/evaluate_context_costs.py` | Estimates context token/cost proxies and coverage per context budget | Created |
 | `tests/test_papertoskill_extract.py` | Smoke test for extractor CLI and source map | Created |
 | `tests/test_evaluate_skill.py` | Smoke test for evaluator CLI | Created |
 | `tests/test_evaluate_context_baselines.py` | Smoke test for context baseline evaluator | Created |
@@ -103,6 +105,7 @@
 | `tests/test_build_live_transfer_prompts.py` | Smoke test for live transfer prompt builder | Created |
 | `tests/test_validate_source_spans.py` | Smoke test for source-span validator | Created |
 | `tests/test_aggregate_results_tables.py` | Smoke test for paper-ready table aggregation | Created |
+| `tests/test_evaluate_context_costs.py` | Smoke test for context token/cost proxy evaluator | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |
 | `generated_skills/ai_scientist_v2/references/source_map.json` | Source-map evidence for AI Scientist-v2 generated skill | Created |
 | `generated_skills/reflexion/SKILL.md` | Retained generated skill from Reflexion note | Created |
@@ -134,6 +137,10 @@
 | `results/tables/compactness_source_grounding.md` | Paper-ready compactness/source-grounding table | Created |
 | `results/tables/compactness_source_grounding.csv` | CSV copy of compactness/source-grounding table | Created |
 | `results/tables/paper_ready_summary.md` | Combined result-table summary for paper drafting | Created |
+| `results/tables/context_cost_proxy.md` | Paper-ready context token/cost proxy report | Created |
+| `results/tables/context_cost_proxy.csv` | CSV table for context size and estimated input-token proxy | Created |
+| `results/tables/coverage_cost_efficiency.csv` | CSV table for deterministic coverage per estimated token budget | Created |
+| `results/tables/context_cost_proxy.json` | Machine-readable context token/cost proxy report | Created |
 | `output/pdf/reflexion/page-01.png` | Rendered Reflexion PDF page 1 for visual check | Created |
 | `output/pdf/aide/page-01.png` | Rendered AIDE PDF page 1 for visual check | Created |
 | `results/result_cards.md` | Result interpretation cards | Created |

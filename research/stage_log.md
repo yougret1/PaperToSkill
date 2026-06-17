@@ -418,3 +418,42 @@ Verification:
 - `python -m unittest discover -s tests -v`: passed, 10 tests OK.
 - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
 - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
+
+## 2026-06-17 Phase 12
+
+Actions:
+
+- Implemented `scripts/evaluate_context_costs.py`.
+- Added `tests/test_evaluate_context_costs.py`.
+- Generated context-size and coverage-efficiency proxy artifacts:
+  - `results/tables/context_cost_proxy.md`
+  - `results/tables/context_cost_proxy.csv`
+  - `results/tables/coverage_cost_efficiency.csv`
+  - `results/tables/context_cost_proxy.json`
+- Updated `results/tables/paper_ready_summary.md`.
+- Updated `paper/outline.md`, `paper/draft.md`, `paper/claim_checklist.md`,
+  and `paper/limitations.md` with the token/cost proxy evidence boundary.
+- Updated artifact map, decision log, result cards, and memory.
+
+Results:
+
+- Generated skills use 1,366 estimated input tokens vs 62,041 for the full
+  extracted AI Scientist-v2 paper, 823 vs 18,559 for Reflexion, and 1,517 vs
+  15,894 for AIDE.
+- This corresponds to deterministic input-token proxy reductions of 97.8%,
+  95.57%, and 90.46% relative to full extracted paper text.
+- Summary and abstract contexts are smaller, but their deterministic coverage
+  scores remain substantially lower than the generated skills.
+
+Evidence boundary:
+
+- Token counts are estimated as `ceil(characters / 4)`.
+- Cost uses a configurable `$1.00 / 1M` input-token proxy.
+- Results are not provider bills, tokenizer-exact measurements, or
+  success-per-dollar evidence.
+
+Verification:
+
+- `python -m unittest discover -s tests -v`: passed, 11 tests OK.
+- `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
+- `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.

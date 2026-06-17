@@ -57,6 +57,8 @@ Initial target contribution categories:
 - `scripts/evaluate_skill.py`: deterministic v0 evaluator for generated skills.
 - `scripts/aggregate_results_tables.py`: paper-ready Markdown/CSV table
   aggregation over existing deterministic/offline evaluation JSON.
+- `scripts/evaluate_context_costs.py`: deterministic context token/cost proxy
+  evaluator over full papers, notes, skills, summaries, and abstracts.
 - `tests/test_papertoskill_extract.py`: extractor smoke test.
 - `tests/test_evaluate_skill.py`: evaluator smoke test.
 - `generated_skills/`: retained generated examples with source maps.
@@ -107,7 +109,7 @@ Initial target contribution categories:
 - `results/live_transfer_prompts/aide_v0/`: AIDE live prompt packets for later
   Codex/Claude execution.
 - `results/tables/`: paper-ready main results, transfer ablation, compactness/
-  source-grounding, and combined summary tables.
+  source-grounding, context cost proxy, and combined summary tables.
 - `paper/outline.md`: section plan, contribution bullets, evidence boundary,
   and figure/table plan.
 - `paper/draft.md`: first evidence-bounded paper draft.
@@ -126,6 +128,8 @@ Initial target contribution categories:
   Codex-to-Claude or another agent runtime.
 - Paper writing must distinguish curated note-to-skill conversion from full
   arbitrary-PDF automation, and offline readiness from live agent success.
+- Cost writing must distinguish deterministic token/cost proxy from provider
+  billing, tokenizer-exact accounting, and success-per-dollar evidence.
 
 ## LLM/API Configuration
 

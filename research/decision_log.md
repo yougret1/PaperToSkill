@@ -53,3 +53,13 @@
   missing evidence, especially live cross-harness execution, human fidelity
   annotation, and token-price accounting.
 - Status: accepted for Phase 11.
+
+## 2026-06-17: Treat Cost As A Deterministic Proxy Until Live Pricing Exists
+
+- Decision: add a local token/cost proxy experiment using
+  `ceil(characters / 4)` and a configurable price per million input-token proxy.
+- Rationale: the paper needs an economic/compactness result, but live provider
+  billing and tokenizer-exact model prices are not yet available. A deterministic
+  proxy supports reproducible relative context-size claims without overstating
+  real cost savings.
+- Status: accepted for Phase 12.

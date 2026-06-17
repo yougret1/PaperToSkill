@@ -283,3 +283,35 @@
   without strengthening the empirical claims.
 - Figure/table: `paper/outline.md`; `paper/claim_checklist.md`;
   `paper/draft.md`; `paper/limitations.md`.
+
+## Context Cost Proxy
+
+- Experiment: deterministic context-size and cost-proxy analysis over full
+  extracted paper text, curated paper notes, generated skills, generic summaries,
+  and abstract-only baselines for the three real-paper cases.
+- Main result: generated skills use 1,366 estimated input tokens vs 62,041 for
+  the full AI Scientist-v2 extracted paper, 823 vs 18,559 for Reflexion, and
+  1,517 vs 15,894 for AIDE.
+- Compared baselines: full extracted paper, curated note, generated skill,
+  generic summary, and abstract-only context. Coverage-per-budget rows are
+  limited to the already evaluated skill, generic summary, and abstract-only
+  contexts.
+- Practical significance: generated skills compress full extracted paper text by
+  97.8%, 95.57%, and 90.46% under the deterministic input-token proxy while
+  preserving much higher deterministic coverage than generic summaries or
+  abstract-only contexts.
+- Statistical evidence: none; this is deterministic accounting.
+- Failure modes: proxy tokens are estimated as `ceil(characters / 4)`, so they
+  are not tokenizer-exact for any provider. The configurable cost number is a
+  scaling proxy, not a real invoice.
+- Limitations: summary and abstract contexts are smaller than generated skills
+  but lose substantial deterministic coverage, so the supported claim is
+  coverage-preserving compression relative to full paper context rather than
+  shortest context overall.
+- Claim impact: upgrades compactness from word-count-only evidence to
+  deterministic token/cost proxy evidence while preserving the no-real-billing
+  boundary.
+- Figure/table: `results/tables/context_cost_proxy.md`;
+  `results/tables/context_cost_proxy.csv`;
+  `results/tables/coverage_cost_efficiency.csv`;
+  `results/tables/context_cost_proxy.json`.

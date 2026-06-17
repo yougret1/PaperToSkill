@@ -45,12 +45,14 @@ No independent annotators have judged whether each generated skill preserves the
 paper's intended contribution. Source-span validation reduces hallucination
 risk, but it is not equivalent to expert fidelity review.
 
-### Compactness Is Not Full Economic Cost
+### Cost Proxy Is Not Full Economic Cost
 
-Generated skills are under a 1200-word budget, but the project has not yet
-computed token-level cost, model-specific pricing, or success-per-dollar. Cost
-claims should therefore remain framed as compactness claims until a pricing
-experiment is added.
+Generated skills are under a 1200-word budget and have a deterministic
+input-token proxy that is much smaller than full extracted paper text. However,
+the project has not yet computed tokenizer-exact model costs, provider-specific
+prices, live invoices, or success-per-dollar. Cost claims should therefore
+remain framed as token/cost proxies until a model-specific pricing experiment is
+added.
 
 ## Future Work
 
@@ -59,7 +61,8 @@ experiment is added.
 2. Add human source-fidelity annotation for generated skills and summaries.
 3. Extend extraction from curated notes toward raw PDF ingestion with automatic
    section detection, table handling, and citation-aware source maps.
-4. Add token and price accounting for full-paper, summary, and skill contexts.
+4. Add tokenizer-exact model pricing and success-per-dollar accounting for
+   full-paper, summary, and skill contexts.
 5. Expand the benchmark with less procedural papers to test failure modes.
 6. Preserve negative and failed branches as paper evidence rather than filtering
    them out of the research story.

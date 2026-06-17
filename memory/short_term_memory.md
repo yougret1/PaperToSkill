@@ -9,10 +9,10 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 11 paper draft package is implemented and verified locally, awaiting
-commit/push. Current focus: commit/push this phase, then either re-test the
-remote LLM endpoint for live cross-harness execution or add missing paper
-evidence such as human fidelity and token/cost accounting.
+Phase 12 context token/cost proxy is implemented and verified locally, awaiting
+commit/push. Current focus: commit/push Phase 12, then either re-test the remote
+LLM endpoint for live cross-harness execution or add missing paper evidence such
+as human fidelity annotation.
 
 ## Latest User Request
 
@@ -214,6 +214,28 @@ The user provided the PaperToSkill idea and asked to:
   - `python -m unittest discover -s tests -v`: passed, 10 tests OK.
   - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
   - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
+- Phase 11 was committed and pushed as `5aadf2f` on `origin/main`.
+- Phase 12 added deterministic context token/cost proxy artifacts:
+  - `scripts/evaluate_context_costs.py`
+  - `tests/test_evaluate_context_costs.py`
+  - `results/tables/context_cost_proxy.md`
+  - `results/tables/context_cost_proxy.csv`
+  - `results/tables/coverage_cost_efficiency.csv`
+  - `results/tables/context_cost_proxy.json`
+- Phase 12 token proxy method: `ceil(characters / 4)`.
+- Phase 12 cost proxy method: configurable `$1.00 / 1M` input-token proxy by
+  default.
+- Generated skill token-proxy reductions relative to full extracted paper text:
+  - AI Scientist-v2: `1366` vs `62041`, reduction `97.8%`.
+  - Reflexion: `823` vs `18559`, reduction `95.57%`.
+  - AIDE: `1517` vs `15894`, reduction `90.46%`.
+- Phase 12 supports deterministic context-size and cost-proxy claims. It does
+  not support provider billing, tokenizer-exact accounting, live task success,
+  or success-per-dollar claims.
+- Phase 12 verification:
+  - `python -m unittest discover -s tests -v`: passed, 11 tests OK.
+  - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
+  - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
 
 ## Current Blockers / Pending Checks
 
@@ -228,13 +250,14 @@ The user provided the PaperToSkill idea and asked to:
   model backend is available.
 - Need human fidelity annotation or review protocol before claiming semantic
   correctness beyond deterministic source-span support.
-- Need token and price accounting before making economic/cost-saving claims.
+- Need tokenizer-exact pricing, provider billing, or success-per-dollar evidence
+  before making stronger economic/cost-saving claims.
 
 ## Next Actions
 
-1. Commit and push Phase 11.
+1. Commit and push Phase 12.
 2. Re-test the remote LLM endpoint when provider accounts are available.
 3. Execute live cross-harness runs using the prompt packets when the endpoint
    recovers.
-4. Add human fidelity and token/cost experiments or expand the benchmark to
-   more agent/LLM-method papers.
+4. Add human fidelity annotations, tokenizer-exact pricing, or expand the
+   benchmark to more agent/LLM-method papers.

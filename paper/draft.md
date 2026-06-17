@@ -14,11 +14,13 @@ In a three-paper benchmark over AI Scientist-v2, Reflexion, and AIDE,
 PaperToSkill generates skills that score 20/20 on deterministic structural
 rubrics, preserve more deterministic operational coverage than generic-summary
 and abstract-only baselines, remain under a 1200-word compactness budget, and
-achieve high source-span support with zero invalid line ranges. Removing
-transfer notes consistently lowers offline transfer-readiness from 10/10 to
-7.6/10. These results support PaperToSkill as a reproducible conversion layer
-from curated paper notes to portable skills, while live cross-harness agent
-execution and human fidelity studies remain future work.
+use only 2.2%, 4.43%, and 9.54% of the full extracted papers' deterministic
+input-token proxy. The generated skills also achieve high source-span support
+with zero invalid line ranges. Removing transfer notes consistently lowers
+offline transfer-readiness from 10/10 to 7.6/10. These results support
+PaperToSkill as a reproducible conversion layer from curated paper notes to
+portable skills, while live cross-harness agent execution and human fidelity
+studies remain future work.
 
 ## 1. Introduction
 
@@ -123,7 +125,9 @@ The metrics are deterministic:
 - offline transfer-readiness, checking whether a context contains harness
   adaptation, source/inference separation, validation, and failure-recording
   signals;
-- word count under a 1200-word compactness budget.
+- word count under a 1200-word compactness budget;
+- deterministic input-token and cost proxy, estimated as `ceil(characters / 4)`
+  and reported with a configurable price per million input-token proxy.
 
 These metrics are reproducible gates. They do not replace live agent execution
 or human fidelity annotation.
@@ -142,6 +146,16 @@ for Reflexion, and 927 words for AIDE, all under the 1200-word budget. Source
 validation finds support rates of 0.938, 1.0, and 1.0 with zero invalid line
 ranges. The one weak AI Scientist-v2 span is recorded as a boundary case rather
 than treated as fully verified.
+
+The context cost proxy shows the same compactness pattern relative to full paper
+contexts. Generated skills use 1,366 estimated input tokens for AI Scientist-v2
+compared with 62,041 for the full extracted paper, 823 versus 18,559 for
+Reflexion, and 1,517 versus 15,894 for AIDE. This corresponds to token-proxy
+reductions of 97.8%, 95.57%, and 90.46% relative to full extracted paper text.
+The summary and abstract baselines are smaller, but their deterministic coverage
+scores are much lower. We therefore interpret PaperToSkill's economic signal as
+a coverage-preserving compression relative to full-paper context, not as a claim
+that skills are the shortest possible context.
 
 Transfer-note ablations show a consistent offline readiness pattern. Full skills
 score 10/10 on the readiness metric across all three papers. Removing
@@ -174,7 +188,8 @@ and partly lexical, so they can over-credit exact matches or under-credit valid
 paraphrases. Third, live cross-harness execution has not completed because the
 provided remote endpoint returned service errors during chat-completion tests.
 Fourth, there is no human fidelity annotation yet. Fifth, compactness is
-measured by word count, not by model-specific token price or success per dollar.
+measured by word count and deterministic input-token proxy, not by
+tokenizer-exact model price, provider billing, or live success per dollar.
 
 These limits shape the correct claim: PaperToSkill currently provides
 reproducible evidence for compact, source-grounded skill artifacts and offline
@@ -199,5 +214,6 @@ less naturally procedural.
 - Transfer readiness: `scripts/evaluate_harness_transfer.py`
 - Source-span validation: `scripts/validate_source_spans.py`
 - Table aggregation: `scripts/aggregate_results_tables.py`
+- Context cost proxy: `scripts/evaluate_context_costs.py`
 - Result tables: `results/tables/`
 - Live prompt packets: `results/live_transfer_prompts/`

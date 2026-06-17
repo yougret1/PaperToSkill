@@ -31,3 +31,15 @@ Evidence boundary: these tables aggregate existing deterministic/offline evaluat
 | AI Scientist-v2 | 782 | 1200 | 2/2 | 16 | 15 | 1 | 0 | 0 | 0.938 | 0.2 |
 | Reflexion | 479 | 1200 | 2/2 | 12 | 11 | 0 | 0 | 0 | 1 | n/a |
 | AIDE | 927 | 1200 | 2/2 | 22 | 21 | 0 | 0 | 0 | 1 | n/a |
+
+## Context Cost Proxy
+
+Token counts are deterministic proxies, estimated as `ceil(characters / 4)`.
+Estimated cost uses a configurable `$1.00 / 1M` input-token proxy. These are not
+provider bills or tokenizer-exact measurements.
+
+| Paper | Generated skill tokens | Full extracted paper tokens | Token reduction vs full paper | Generated skill cost proxy |
+| --- | --- | --- | --- | --- |
+| AI Scientist-v2 | 1366 | 62041 | 0.978 | 0.001366 |
+| Reflexion | 823 | 18559 | 0.9557 | 0.000823 |
+| AIDE | 1517 | 15894 | 0.9046 | 0.001517 |
