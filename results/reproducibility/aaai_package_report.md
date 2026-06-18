@@ -24,6 +24,6 @@ Evidence boundary: this report checks the local AAAI LaTeX package and build art
 | aaai_tex_declares_style | ready | uses aaai2027 package | paper/aaai/papertoskill_aaai2027.tex |
 | aaai_log_loads_style | ready | aaai2027 loaded | paper/aaai/papertoskill_aaai2027.log |
 | aaai_log_no_unresolved_items | ready | no unresolved citation/reference/build markers | paper/aaai/papertoskill_aaai2027.log |
-| aaai_log_reports_pdf_output | ready | pages=4; bytes=133252 | paper/aaai/papertoskill_aaai2027.log |
+| aaai_log_reports_pdf_output | ready | pages=4; bytes=133632 | paper/aaai/papertoskill_aaai2027.log |
 | aaai_pdf_is_fresh | ready | pdf/log newer than tex inputs | paper/aaai/papertoskill_aaai2027.pdf |
 | aaai_bbl_is_fresh | ready | bbl newer than bibliography | paper/aaai/papertoskill_aaai2027.bbl |

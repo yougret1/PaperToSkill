@@ -162,10 +162,11 @@ scores.
 We also prepare model-ablation prompt packets, a runner, and a response
 evaluator for Claude Opus 4.8, a GPT-family slot requested as GPT 5.5, and a
 DeepSeek follow-up slot. The latest live recheck produced saved Claude Opus 4.8
-responses for both current prompt rows, while the separate GPT credential
-profile still lists `gpt-5.5`, `gpt-5.4`, and other GPT-family aliases but
-returns HTTP 502 upstream access errors for both `gpt-5.5` and `gpt-5.4`.
-DeepSeek remains pending user configuration.
+responses for both current prompt rows. A later GPT-family retry with the
+separate GPT credential profile also produced saved responses for both current
+prompt rows: the Toolformer row timed out on `gpt-5.5` and then succeeded with
+`gpt-5.4`, while the AIDE row succeeded with `gpt-5.5`. DeepSeek remains
+pending user configuration.
 
 ## 5. Results
 
@@ -208,21 +209,23 @@ records from the PaperToSkill development process. This archive supports the
 claim that failed branches are preserved as inspectable provenance. It is not
 evidence that failure recording improves live task outcomes.
 
-The reproducibility package checker reports 171 ready checks, 7 pending
+The reproducibility package checker reports 174 ready checks, 7 pending
 external-evidence checks, and 0 failed checks. The pending checks correspond to
-the four live transfer response sets, human-fidelity annotation status,
-model-ablation response files, and completed model-ablation evaluation. This
-supports a local artifact-readiness claim, not a claim of completed live, model,
-or human evaluation.
+the four live transfer response sets, human-fidelity annotation status, and
+DeepSeek model-ablation response files plus the not-yet-complete overall
+model-ablation evaluation. This supports a local artifact-readiness claim, not
+a claim of completed live transfer, DeepSeek, or human evaluation.
 
 The model-ablation runner/evaluator is now partially scored. Claude Opus 4.8
 completed both current prompt rows, saved response files, and scored 6/6 on
-both rows under the saved-response rubric. GPT-family aliases `gpt-5.5` and
-`gpt-5.4` still return HTTP 502 upstream access errors, and DeepSeek remains a
-placeholder follow-up slot. The response evaluation therefore reports 6 total
-rows, 2 scored rows, 4 pending rows, and an average normalized score of 1.0
-over scored rows. GPT/DeepSeek pending rows should not be interpreted as
-negative model-quality evidence.
+both rows under the saved-response rubric. The GPT-family retry completed both
+current prompt rows as saved response files: `gpt-5.5` timed out on the
+Toolformer row and the runner fell back to `gpt-5.4`, while `gpt-5.5`
+completed the AIDE row. Both GPT-family rows also scored 6/6. DeepSeek remains
+a placeholder follow-up slot. The response evaluation therefore reports 6 total
+rows, 4 scored rows, 2 pending rows, and an average normalized score of 1.0
+over scored rows. DeepSeek pending rows should not be interpreted as negative
+model-quality evidence.
 
 Phases 19-20 evaluate the automatic note scaffold separately on Toolformer and
 AIDE. The Toolformer auto-note-derived skill scores 20/20 on the deterministic
@@ -269,9 +272,10 @@ only been retained on Toolformer and AIDE extracted text. Second, the metrics ar
 deterministic and partly lexical, so they can over-credit exact matches or
 under-credit valid paraphrases. Third, live cross-harness execution has not
 completed because the provided remote endpoint returned service errors during
-chat-completion tests. Fourth, model ablations were attempted but not completed
-because Claude account capacity was unavailable and GPT upstream access was
-forbidden. Fifth, human-fidelity packets, a blank annotation template,
+chat-completion tests. Fourth, the current model-ablation protocol is only
+partially complete: Claude Opus 4.8 and GPT-family rows have saved and scored
+responses, but DeepSeek remains pending user configuration. Fifth,
+human-fidelity packets, a blank annotation template,
 and a summary script are prepared, but no independent annotations have been
 completed. Sixth, compactness is measured by word count, deterministic
 character proxy, and local tokenizer-aware input-token proxy, not by
@@ -291,11 +295,10 @@ success.
 PaperToSkill turns paper-derived procedural knowledge into portable,
 human-editable skills. In a four-paper benchmark, generated skills are compact,
 source-grounded, structurally valid, and more operationally complete than short
-summary baselines under deterministic evaluation. The next stage is to re-run
-the prepared live prompt packets when provider capacity and GPT upstream access
-are available, add the user's DeepSeek slot, run human fidelity review, compute
-provider-specific price costs, and test papers whose contributions are less naturally
-procedural.
+summary baselines under deterministic evaluation. The next stage is to run the
+prepared live transfer prompt packets when provider capacity is available, add
+the user's DeepSeek slot, run human fidelity review, compute provider-specific
+price costs, and test papers whose contributions are less naturally procedural.
 
 ## Reproducibility Pointers
 

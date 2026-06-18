@@ -46,12 +46,12 @@ Current supported claims:
   executability, AAAI package readiness, table consistency, paper claim
   discipline, and active-goal completion auditing.
 - Failure-case archive with paper-reported and project-level cases.
-- Claude Opus 4.8 model-ablation prompt rows are saved and scored for the
-  current two-case protocol.
+- Claude Opus 4.8 and GPT-family model-ablation prompt rows are saved and
+  scored for the current two-case protocol.
 
 Current unsupported claims:
 
-- Completed live GPT/DeepSeek model ablations.
+- Completed live DeepSeek model ablations.
 - Completed live cross-harness success.
 - Human-validated semantic fidelity.
 - Provider billing, output-token accounting, or success-per-dollar.
@@ -86,11 +86,11 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 171 ready checks, 7 pending
+  reports `ready_with_pending_external_evidence`, 174 ready checks, 7 pending
   checks, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
-  reports `not_complete_pending_external_evidence`, 36 ready checks, 9 pending
+  reports `not_complete_pending_external_evidence`, 37 ready checks, 8 pending
   checks, and 0 failed checks.
 - AAAI package:
   `results/reproducibility/aaai_package_report.md`
@@ -100,8 +100,8 @@ Use these as entry points instead of searching the whole repo first:
   reports ready, 42 ready checks, 0 failed checks.
 - Model ablation response evaluation:
   `results/model_ablation_prompts/v0/evaluation.md`
-  reports 6 total rows, 2 scored Claude rows, 4 pending rows, and 1.0 average
-  normalized score over scored rows.
+  reports 6 total rows, 4 scored Claude/GPT-family rows, 2 pending DeepSeek
+  rows, and 1.0 average normalized score over scored rows.
 - Paper tables:
   `results/reproducibility/paper_table_report.md`
   reports ready, 76 ready checks, 0 failed checks.
@@ -132,10 +132,11 @@ GPT-family profile:
 - Key source: local environment variable, e.g.
   `PAPERTOSKILL_GPT_OPENAI_API_KEY`.
 - Latest catalog evidence with the separate GPT key lists `gpt-5.5`,
-  `gpt-5.4`, and other GPT-family models; alias-retry chat attempts for
-  `gpt-5.5` and `gpt-5.4` still fail with HTTP 502/upstream access forbidden.
-  Do not claim completed GPT ablations until response files are saved and
-  scored.
+  `gpt-5.4`, and other GPT-family models.
+- Phase 37 GPT-family retry completed both current prompt rows:
+  Toolformer timed out on `gpt-5.5` then succeeded with `gpt-5.4`; AIDE
+  succeeded with `gpt-5.5`; both saved responses score 6/6.
+- Describe this as a GPT-family result, not a pure `gpt-5.5` result.
 
 DeepSeek:
 
@@ -164,6 +165,7 @@ DeepSeek:
 | Paper tables | LaTeX table values could drift from CSV results. | `scripts/check_paper_tables.py` compares `paper/aaai/papertoskill_tables.tex` with generated CSVs. |
 | Paper claims | Draft/AAAI text could overclaim pending evidence. | `scripts/check_paper_claims.py` checks unsupported positive claims and required boundary statements. |
 | Goal completion | Narrative completion audit could stale. | `scripts/check_goal_completion.py` makes the active-goal status machine-checkable. |
+| Model evidence state | GPT retry evidence was saved separately from the older Phase 36 failure report. | `scripts/check_goal_completion.py` reads both `run_report.json` and `gpt_retry_run_report.json` so historical GPT 502 evidence and current GPT-family success both remain visible. |
 
 ## Persistent Rules
 

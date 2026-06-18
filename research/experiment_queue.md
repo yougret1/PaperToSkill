@@ -25,6 +25,7 @@
 | E2.20 | Can the paper be packaged in official AAAI LaTeX format with usage examples and model-ablation prompts? | `python scripts\build_model_ablation_prompts.py --task benchmarks\model_ablation_v0.json --output-dir results\model_ablation_prompts\v0` plus reproducibility check | AAAI author-kit provenance, AAAI `.tex` draft, usage examples, model-ablation prompt grid, and updated package report | Writing/Analysis |
 | E2.21 | Can the current extracted-text-to-skill path run as one local command? | `python scripts\papertoskill_pipeline.py --source papers\extracted\aide.txt --output-dir results\pipeline_examples\aide_auto --paper-id aide_auto --title "AIDE: AI-Driven Exploration in the Space of Code" --profile aide --skill-name aide-auto-paper-skill --rubric benchmarks\rubric_aide_v0.json` | manifest, note, source map, skill, and rubric report from one command | Execution |
 | E2.22 | Can the local pipeline accept a PDF source as a smoke-tested input path? | `python scripts\papertoskill_pipeline.py --source paper\aaai\papertoskill_aaai2027.pdf --output-dir results\pipeline_examples\papertoskill_pdf --paper-id papertoskill_pdf --title "PaperToSkill" --skill-name papertoskill-pdf-pipeline` | manifest with PDF source metadata, extracted text path, note, source map, skill, and rubric report | Execution |
+| E4.1 | Do Claude Opus and a verified GPT-family model differ on PaperToSkill usage tasks? | Claude/GPT-family runner commands plus `python scripts\evaluate_model_ablation_responses.py --index results\model_ablation_prompts\v0\index.json --output-json results\model_ablation_prompts\v0\evaluation.json --output-md results\model_ablation_prompts\v0\evaluation.md` | 4 scored Claude/GPT-family rows and 2 pending DeepSeek rows | Analysis |
 
 ## Pending Remote LLM Recovery
 
@@ -32,7 +33,6 @@
 | --- | --- | --- | --- | --- |
 | E3 | Can AI-Scientist-v2 run a tiny PaperToSkill agentic search? | `python launch_scientist_bfts.py --load_ideas D:\a_work\gitee\PaperToSkill\ai_scientist_inputs\papertoskill_seed_ideas.json --idea_idx 0 --skip_writeup --skip_review` | experiment logs under `ai-scientist-v2/experiments` | Remote provider account pool exhausted |
 | E4 | Can an LLM-assisted extractor improve method-step fidelity over the deterministic scaffold? | TBD after endpoint works | paired deterministic vs LLM-assisted generated skills | Remote provider account pool exhausted |
-| E4.1 | Do Claude Opus and a verified GPT-family model differ on PaperToSkill usage tasks? | `python scripts\run_model_ablation_prompts.py --task benchmarks\model_ablation_v0.json --index results\model_ablation_prompts\v0\index.json --output-json results\model_ablation_prompts\v0\run_report.json --output-md results\model_ablation_prompts\v0\run_report.md --model-id claude_opus_4_8 --model-id gpt_5_5_or_gpt_family`, then score saved responses with `scripts\evaluate_model_ablation_responses.py` | scored response table across Toolformer curated-skill usage and AIDE auto-skill usage | Claude Opus 4.8 now has two saved/scored rows at 6/6; GPT aliases `gpt-5.5` and `gpt-5.4` still return HTTP 502 upstream access forbidden |
 
 ## Next Design Work
 

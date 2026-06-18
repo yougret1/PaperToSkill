@@ -101,11 +101,19 @@ def csv_row_count(root: Path, raw_path: str) -> int:
 def memory_checks(root: Path) -> list[Check]:
     long_text = read_text(root / "memory/long_term_memory.md")
     short_text = read_text(root / "memory/short_term_memory.md")
+    lowered_short = short_text.lower()
     blockers_ready = (
-        "gpt-5.5" in short_text
-        and "Upstream access forbidden" in short_text
-        and "DeepSeek" in short_text
-        and ("pending" in short_text or "blocked" in short_text)
+        "deepseek" in lowered_short
+        and "pending" in lowered_short
+        and "provider billing" in lowered_short
+        and "human-fidelity" in lowered_short
+        and "gpt-5.4" in short_text
+        and "gpt-5.5" in short_text
+    )
+    current_model_status_ready = (
+        "gpt-family rows are now saved and scored" in lowered_short
+        and "deepseek" in lowered_short
+        and "pending" in lowered_short
     )
     checks = [
         Check(
@@ -116,7 +124,7 @@ def memory_checks(root: Path) -> list[Check]:
         ),
         Check(
             "memory_current_blockers_recorded",
-            "ready" if blockers_ready else "fail",
+            "ready" if blockers_ready and current_model_status_ready else "fail",
             "current model-availability blockers recorded",
             "memory/short_term_memory.md",
         ),
@@ -218,13 +226,18 @@ def paper_package_checks(root: Path) -> list[Check]:
 
 def model_ablation_checks(root: Path) -> list[Check]:
     index = load_json(root / "results/model_ablation_prompts/v0/index.json")
-    run_report = load_json(root / "results/model_ablation_prompts/v0/run_report.json")
+    run_report_paths = [
+        root / "results/model_ablation_prompts/v0/run_report.json",
+        root / "results/model_ablation_prompts/v0/gpt_retry_run_report.json",
+    ]
+    run_reports = [load_json(path) for path in run_report_paths if path.exists()]
+    run_evidence = "; ".join(str(path.relative_to(root)) for path in run_report_paths if path.exists())
     evaluation = load_json(root / "results/model_ablation_prompts/v0/evaluation.json")
     prompts = index.get("prompts", [])
     model_ids = {item.get("model_id") for item in prompts}
     expected_model_ids = {"claude_opus_4_8", "gpt_5_5_or_gpt_family", "deepseek_followup_slot"}
-    run_rows = run_report.get("results", [])
-    model_catalogs = run_report.get("model_catalogs", [])
+    run_rows = [row for report in run_reports for row in report.get("results", [])]
+    model_catalogs = [catalog for report in run_reports for catalog in report.get("model_catalogs", [])]
     claude_rows = [row for row in run_rows if row.get("model_id") == "claude_opus_4_8"]
     gpt_rows = [row for row in run_rows if row.get("model_id") == "gpt_5_5_or_gpt_family"]
     gpt_catalog_models = [
@@ -257,6 +270,7 @@ def model_ablation_checks(root: Path) -> list[Check]:
     deepseek_aliases = {item.get("model_alias") for item in prompts if item.get("model_id") == "deepseek_followup_slot"}
     deepseek_placeholder = "deepseek-to-be-filled" in deepseek_aliases
     claude_attempted = attempted_aliases(claude_rows)
+    gpt_complete = model_complete("gpt_5_5_or_gpt_family")
     return [
         Check(
             "model_ablation_protocol_ready",
@@ -284,12 +298,14 @@ def model_ablation_checks(root: Path) -> list[Check]:
             "gpt_family_ablation_availability_checked",
             "ready" if gpt_rows and gpt_catalog_models else "fail",
             f"rows={len(gpt_rows)}; statuses={','.join(sorted({str(row.get('status')) for row in gpt_rows}))}; catalog_gpt_models={len(gpt_catalog_models)}",
-            "results/model_ablation_prompts/v0/run_report.json",
+            run_evidence or "results/model_ablation_prompts/v0/run_report.json",
         ),
         Check(
             "gpt_family_ablation_complete",
-            "ready" if model_complete("gpt_5_5_or_gpt_family") else "pending",
-            "GPT-family catalog is available, but chat completions did not produce saved/scored responses",
+            "ready" if gpt_complete else "pending",
+            "saved and scored GPT-family responses exist for the current prompt protocol"
+            if gpt_complete
+            else "GPT-family catalog is available, but chat completions did not produce saved/scored responses",
             "results/model_ablation_prompts/v0/evaluation.json",
         ),
         Check(

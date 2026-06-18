@@ -461,7 +461,7 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 171 ready checks, 7
+  `overall_status=ready_with_pending_external_evidence`, 174 ready checks, 7
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
@@ -652,11 +652,11 @@
 - Statistical evidence: none; prompt packets and usage examples are not scored
   model responses.
 - Failure modes: local LaTeX rendering depends on whether a TeX distribution is
-  available; GPT-family and DeepSeek model ablations remain blocked until
-  response files are collected.
-- Limitations: Claude is complete only for the current two-row prompt protocol;
-  no completed GPT/DeepSeek ablation, no provider billing, no output-token
-  accounting, and no success-per-dollar evidence.
+  available; DeepSeek model ablations remain blocked until the user provides a
+  concrete alias and endpoint profile.
+- Limitations: Claude and GPT-family are complete only for the current two-row
+  prompt protocol; no completed DeepSeek ablation, no provider billing, no
+  output-token accounting, and no success-per-dollar evidence.
 - Claim impact: supports the claim that AAAI packaging and model-ablation
   protocols are prepared, while preserving the evidence boundary that live model
   results remain pending.
@@ -679,33 +679,36 @@
   `PAPERTOSKILL_GPT_OPENAI_API_KEY` and listed 17 models, including
   `gpt-5.5`, `gpt-5.4`, `gpt-5.4-mini`, GPT 5.2 variants, and GPT 5.3 Codex
   variants.
-- GPT-family result: `gpt-5.5` and `gpt-5.4` were both attempted for both
-  prompt rows, but chat completions still failed with HTTP 502,
-  `Upstream access forbidden, please contact administrator`.
+- GPT-family result: the Phase 36 attempt failed with HTTP 502 for
+  `gpt-5.5`/`gpt-5.4`, but the Phase 37 retry completed both current prompt
+  rows. The Toolformer row timed out on `gpt-5.5` and then succeeded with
+  `gpt-5.4`; the AIDE row succeeded with `gpt-5.5`.
 - DeepSeek result: not attempted; the follow-up slot remains ready for the
   user's later configuration.
 - Response evaluation: `results/model_ablation_prompts/v0/evaluation.md`
-  reports 6 total rows, 2 scored rows, 4 pending rows, and 1.0 average
+  reports 6 total rows, 4 scored rows, 2 pending rows, and 1.0 average
   normalized score over scored rows.
-- Latest recheck: Phase 36 reran Claude/GPT-family slots with separate
-  credential profiles and produced the current partial outcome.
+- Latest recheck: Phase 37 reran the GPT-family slot with the separate GPT
+  credential profile and produced the current GPT-family saved responses.
 - Practical significance: the project now has a reusable runner/evaluator path
   for Claude/GPT/DeepSeek model ablations, records provider availability
-  without committing raw credentials, and has first saved/scored live model
-  response evidence for Claude.
-- Statistical evidence: two Claude rows scored by a deterministic rubric; not a
-  broad model comparison because GPT and DeepSeek rows remain pending.
+  without committing raw credentials, and has saved/scored live model response
+  evidence for Claude and GPT-family rows.
+- Statistical evidence: four Claude/GPT-family rows scored by a deterministic
+  rubric; not a broad model comparison because DeepSeek rows remain pending.
 - Failure modes: provider account pool and model catalog availability can block
   a live run independently of PaperToSkill prompt quality.
-- Limitations: this completes only the Claude Opus 4.8 portion of the current
-  two-case protocol; it is not a completed GPT/DeepSeek comparison.
-- Claim impact: supports saying Claude Opus 4.8 completed the current
-  PaperToSkill usage prompt protocol, while preserving the boundary that
-  GPT-family and DeepSeek results remain pending.
+- Limitations: this completes only the Claude Opus 4.8 and GPT-family portions
+  of the current two-case protocol; it is not a completed DeepSeek comparison.
+- Claim impact: supports saying Claude Opus 4.8 and GPT-family completed the
+  current PaperToSkill usage prompt protocol, while preserving the boundary
+  that DeepSeek results remain pending.
 - Figure/table: `scripts/run_model_ablation_prompts.py`;
   `scripts/evaluate_model_ablation_responses.py`;
   `research/run_logs/2026-06-19_phase36_claude_ablation_success_gpt_blocked.md`;
+  `research/run_logs/2026-06-19_phase37_gpt_family_ablation_success.md`;
   `results/model_ablation_prompts/v0/run_report.md`;
+  `results/model_ablation_prompts/v0/gpt_retry_run_report.md`;
   `results/model_ablation_prompts/v0/evaluation.md`.
 
 ## DeepSeek Follow-Up Readiness
@@ -716,9 +719,8 @@
   alias remains `deepseek-to-be-filled`; once a concrete alias and environment
   variables are configured, it follows the same availability, response-save, and
   scoring path as Claude/GPT-family rows.
-- Latest endpoint recheck: Claude Opus 4.8 now completes the current prompt
-  rows, while GPT-family aliases such as `gpt-5.5`/`gpt-5.4` remain blocked by
-  upstream access.
+- Latest endpoint recheck: Claude Opus 4.8 and GPT-family rows now complete
+  the current prompt protocol; DeepSeek remains pending user configuration.
 - Compared baselines: previous runner behavior required the placeholder include
   flag for the DeepSeek slot even after future configuration.
 - Practical significance: the user can add DeepSeek later by editing
@@ -729,7 +731,7 @@
   evidence, not model output evidence.
 - Failure modes: a configured DeepSeek run can still be blocked by credentials,
   endpoint availability, or model catalog mismatch.
-- Limitations: no DeepSeek or GPT-family response rows are completed.
+- Limitations: no DeepSeek response rows are completed.
 - Claim impact: supports saying the DeepSeek follow-up path is ready and
   tested, but not that model ablations are complete.
 - Figure/table: `research/run_logs/2026-06-18_phase23_deepseek_followup_readiness.md`;
@@ -743,11 +745,11 @@
   phase-level GitHub saving, deterministic/offline PaperToSkill development,
   AAAI package preparation, usage examples, failure-branch provenance, and local
   reproducibility readiness as satisfied for the current artifact package.
-- Remaining blockers: GPT-family response files and scoring are not complete,
-  DeepSeek response collection is pending user configuration, human-fidelity
-  annotation is unscored, and provider-billing/success-per-dollar evidence is
-  not collected. Local tokenizer-aware proxy evidence is now available, but
-  real provider economics remain pending.
+- Remaining blockers: DeepSeek response collection is pending user
+  configuration, human-fidelity annotation is unscored, and
+  provider-billing/success-per-dollar evidence is not collected. Local
+  tokenizer-aware proxy evidence is now available, but real provider economics
+  remain pending.
 - Practical significance: prevents the project from accidentally declaring
   success simply because the local deterministic package is extensive and green.
 - Statistical evidence: none; this is a requirements and evidence audit.
@@ -764,7 +766,7 @@
 
 - Experiment: make the active-goal completion audit machine-checkable.
 - Main result: `results/reproducibility/goal_completion_report.md` reports
-  `overall_status=not_complete_pending_external_evidence`, 36 ready checks, 9
+  `overall_status=not_complete_pending_external_evidence`, 37 ready checks, 8
   pending checks, and 0 failed checks.
 - Checks: durable memory, AI-Scientist-v2 dry-run evidence, PaperToSkill
   prototype and benchmark readiness, AAAI/usage/table/claim gates,

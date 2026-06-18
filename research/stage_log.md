@@ -1339,3 +1339,39 @@ Evidence boundary:
   ablation. It does not complete the GPT-family ablation, DeepSeek follow-up,
   live cross-harness execution, human fidelity annotation, provider billing, or
   success-per-dollar evidence.
+
+## 2026-06-19 Phase 37
+
+Actions:
+
+- Reran `scripts/run_model_ablation_prompts.py` for
+  `gpt_5_5_or_gpt_family` only, using the separate GPT credential profile via
+  shell-only environment variables.
+- Wrote the retry report to
+  `results/model_ablation_prompts/v0/gpt_retry_run_report.json` and `.md`.
+- Reran `scripts/evaluate_model_ablation_responses.py` over the full prompt
+  index.
+- Updated paper-facing claim boundaries, result cards, runbook, goal audit,
+  and memory.
+
+Results:
+
+- GPT catalog succeeded and listed 17 models, including `gpt-5.5`, `gpt-5.4`,
+  `gpt-5.4-mini`, GPT 5.2 variants, and GPT 5.3 Codex variants.
+- `toolformer_curated_skill_usage`: `gpt-5.5` timed out, then `gpt-5.4`
+  succeeded with HTTP 200 and saved a response file.
+- `aide_auto_skill_usage`: `gpt-5.5` succeeded with HTTP 200 and saved a
+  response file.
+- The saved-response evaluator now reports 6 total rows, 4 scored rows,
+  2 pending rows, and average normalized score 1.0 over scored rows.
+- Both GPT-family rows score 6/6 under the deterministic response rubric.
+- DeepSeek remains pending user configuration.
+
+Evidence boundary:
+
+- Phase 37 completes the GPT-family portion of the current two-case model
+  ablation protocol. It should be described as GPT-family evidence, not pure
+  `gpt-5.5` evidence, because one row used `gpt-5.4` after a `gpt-5.5`
+  timeout. It does not complete DeepSeek, live cross-harness execution, human
+  fidelity annotation, provider billing, output-token accounting, or
+  success-per-dollar evidence.

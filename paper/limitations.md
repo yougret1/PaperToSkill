@@ -40,13 +40,14 @@ scores, not live success rates.
 
 Claude/GPT-family/DeepSeek model-ablation prompt packets, a runner, and a
 response evaluator are prepared. The latest live recheck completed both Claude
-Opus 4.8 prompt rows, saved response files, and scored both rows 6/6. The
-separate GPT credential profile listed `gpt-5.5`, `gpt-5.4`, and other
-GPT-family aliases, but both `gpt-5.5` and `gpt-5.4` prompt calls failed with
-HTTP 502 because upstream access was forbidden. DeepSeek remains an unattempted
-follow-up slot. The Claude rows are model-response evidence for the current
-two-case prompt protocol; the GPT failures are provider availability evidence,
-not GPT model-quality evidence.
+Opus 4.8 prompt rows, saved response files, and scored both rows 6/6. A later
+GPT-family retry with the separate GPT credential profile also saved both
+current GPT-family rows: the Toolformer row timed out on `gpt-5.5` and then
+succeeded with `gpt-5.4`, while the AIDE row succeeded with `gpt-5.5`. Both
+GPT-family rows scored 6/6. DeepSeek remains an unattempted follow-up slot.
+The Claude and GPT-family rows are model-response evidence for the current
+two-case prompt protocol; the earlier GPT 502 failures are provider
+availability history, not GPT model-quality evidence.
 
 ### Limited Benchmark Diversity
 
@@ -94,9 +95,8 @@ The package should therefore be described as locally ready, not submission-final
 
 1. Execute live prompt packets once the remote endpoint is available, logging
    model, harness, prompt, response, intervention count, and task outcome.
-2. Re-run the GPT-family model-ablation protocol after GPT upstream access is
-   available, then score saved response files with the same evaluator before
-   adding DeepSeek.
+2. Add the user's concrete DeepSeek model alias and endpoint profile, then run
+   and score the same prompt grid.
 3. Run the prepared human source-fidelity packets with independent annotators
    and report agreement or adjudication.
 4. Extend extraction from curated notes toward raw PDF ingestion with stronger

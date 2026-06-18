@@ -5,9 +5,10 @@ from four curated real-paper notes. It should not be read as evidence of live
 cross-harness agent task success until the prepared prompt packets are executed.
 Phases 19-20 additionally include deterministic extracted-text-to-note
 scaffolds for Toolformer and AIDE; these are separate from the curated-note main
-benchmark. Phase 21 adds an AAAI-27 LaTeX package and usage examples. Phase 22
-adds a model-ablation runner/evaluator and a live-attempt report, but the
-current endpoint is blocked by provider/model availability.
+benchmark. Phase 21 adds an AAAI-27 LaTeX package and usage examples. Phases
+22, 36, and 37 add model-ablation runner/evaluator evidence: Claude Opus 4.8
+and GPT-family rows are saved and scored for the current two-case protocol,
+while DeepSeek remains pending user configuration.
 
 ## Working Title
 
@@ -134,12 +135,13 @@ Main results from `results/tables/main_results.md`:
 - the failure-case archive records 27 cases: 21 paper-reported limitations or
   failure branches and 6 project-level failure/fix records.
 - the reproducibility package checker reports local package readiness with
-  pending live-response, model-ablation-response, and human-annotation evidence
-  separated from local failures: 171 ready checks, 7 pending checks, and 0
+  pending live-response, DeepSeek-response, and human-annotation evidence
+  separated from local failures: 174 ready checks, 7 pending checks, and 0
   failed checks.
-- the model-ablation live attempt records that Claude Opus 4.8 completed both
-  current prompt rows and scored 6/6, while GPT-family aliases such as
-  `gpt-5.5`/`gpt-5.4` remain blocked by upstream access.
+- the model-ablation live attempts record that Claude Opus 4.8 and GPT-family
+  each completed both current prompt rows and scored 6/6; the GPT-family
+  Toolformer row used `gpt-5.4` after a `gpt-5.5` timeout, while the AIDE row
+  used `gpt-5.5`.
 - in a separate auto-note comparison, the Toolformer extracted-text scaffold
   produces a 1,179-word skill scoring 20/20 on the deterministic rubric,
   9.3/10 on context coverage, 10/10 transfer readiness, and 1.0 source support
@@ -159,9 +161,9 @@ Current limitations:
   are validated only on Toolformer and AIDE extracted text;
 - metrics are deterministic and lexical/section based;
 - live cross-harness execution is blocked by remote provider availability;
-- Claude/GPT-family/DeepSeek model ablation prompts are prepared and the live
-  runner/evaluator exists, but the current attempt is chat-blocked and response
-  rows remain unscored;
+- Claude/GPT-family/DeepSeek model ablation prompts are prepared, and Claude
+  Opus 4.8 plus GPT-family rows are saved and scored for the current prompt
+  protocol, but DeepSeek rows remain unattempted;
 - no human fidelity annotation or inter-rater agreement yet;
 - human-fidelity review packets and a summarizer are prepared, but annotation
   remains pending;
@@ -195,5 +197,5 @@ that are less directly procedural.
 | Appendix: Reproducibility package | `results/reproducibility/package_report.md` | Local package readiness and pending external evidence |
 | Appendix: Review/rebuttal package | `research/review_report.md`; `research/rebuttal_bank.md` | Adversarial risks and evidence-bounded responses |
 | Appendix: Prompt packets | `results/live_transfer_prompts/` | Inputs for later live transfer runs |
-| Appendix: Model ablation prompts | `results/model_ablation_prompts/v0/` | Claude/GPT-family/DeepSeek prompt grid, live-attempt report, and pending response evaluation |
+| Appendix: Model ablation prompts | `results/model_ablation_prompts/v0/` | Claude/GPT-family/DeepSeek prompt grid, live-attempt reports, scored Claude/GPT-family responses, and pending DeepSeek rows |
 | Appendix: AAAI package | `paper/aaai/` | Official AAAI-27 template provenance and LaTeX draft |

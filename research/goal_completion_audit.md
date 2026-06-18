@@ -9,18 +9,18 @@ the full goal is complete.
 ## Summary
 
 Current status: substantial local research and artifact package is complete, and
-Claude Opus 4.8 model-ablation rows are now saved and scored. The full goal is
-not yet complete because GPT-family model-ablation responses, DeepSeek follow-up
-responses, human-fidelity annotation, and stronger provider-billing or
-success-per-dollar evidence remain pending external or follow-up work.
+Claude Opus 4.8 plus GPT-family model-ablation rows are now saved and scored.
+The full goal is not yet complete because DeepSeek follow-up responses,
+human-fidelity annotation, and stronger provider-billing or success-per-dollar
+evidence remain pending external or follow-up work.
 
 Local package status: `results/reproducibility/package_report.md` reports
-`ready_with_pending_external_evidence`, 171 ready checks, 7 pending checks, and
+`ready_with_pending_external_evidence`, 174 ready checks, 7 pending checks, and
 0 failed checks.
 
 Machine-checkable goal status:
 `results/reproducibility/goal_completion_report.md` reports
-`not_complete_pending_external_evidence`, 36 ready checks, 9 pending checks,
+`not_complete_pending_external_evidence`, 37 ready checks, 8 pending checks,
 and 0 failed checks.
 
 ## Requirement Audit
@@ -33,7 +33,7 @@ and 0 failed checks.
 | Use official AAAI TeX template for final paper. | `paper/aaai/AuthorKit27.zip`; `paper/aaai/aaai2027.sty`; `paper/aaai/aaai2027.bst`; `paper/aaai/README.md`; `paper/aaai/papertoskill_aaai2027.tex`; `paper/aaai/papertoskill_aaai2027.pdf`; `scripts/check_aaai_package.py`; `results/reproducibility/aaai_package_report.md`; `scripts/check_paper_tables.py`; `results/reproducibility/paper_table_report.md`; `scripts/check_paper_claims.py`; `results/reproducibility/paper_claim_report.md`. | Prepared and locally verified, not submission-final | Keep the AAAI draft synchronized with new evidence. Submission-final requires final claims, figures, metadata, and any venue-specific updates. |
 | Provide experiment usage examples. | `examples/usage/README.md`; `examples/usage/codex_skill_usage.md`; `examples/usage/auto_note_scaffold_usage.md`; `examples/usage/model_ablation_usage.md`; `scripts/check_usage_examples.py`; `results/reproducibility/usage_example_report.md`; `research/runbook.md`. | Complete and locally verified | Keep examples synchronized if task specs or runner commands change. |
 | Run or prepare Claude Opus 4.8 ablation. | `benchmarks/model_ablation_v0.json`; prompt packets under `results/model_ablation_prompts/v0/`; runner/evaluator scripts; latest run report shows `claude-opus-4-8` completed both current prompt rows; `results/model_ablation_prompts/v0/evaluation.md` scores both Claude rows 6/6. | Complete for current prompt protocol | Keep the same scorer if the prompt grid expands. Do not generalize beyond the two current prompt rows. |
-| Run or prepare GPT 5.5 / GPT-family ablation. | Same model-ablation artifacts; latest run report with the separate GPT key lists `gpt-5.5`, `gpt-5.4`, and other GPT-family aliases; the runner tried `gpt-5.5` and `gpt-5.4`, and both failed HTTP 502 `Upstream access forbidden`. | Attempted, blocked at chat completion | Re-run when GPT upstream access is enabled. Record actual alias used. |
+| Run or prepare GPT 5.5 / GPT-family ablation. | Same model-ablation artifacts; the Phase 37 retry with the separate GPT key saved both current GPT-family prompt responses. The Toolformer row timed out on `gpt-5.5` and succeeded with `gpt-5.4`; the AIDE row succeeded with `gpt-5.5`; both rows score 6/6. | Complete for current prompt protocol | Keep the actual alias evidence with the response files; do not call this a pure `gpt-5.5` result because one row used `gpt-5.4`. |
 | Provide DeepSeek-follow-up process for the user. | `deepseek_followup_slot` in `benchmarks/model_ablation_v0.json`; runner now skips only placeholder alias; tests cover placeholder vs configured DeepSeek behavior; usage docs and runbook include DeepSeek steps. | Process ready; model response pending | User fills concrete DeepSeek alias/env vars, rebuilds prompts, runs `--model-id deepseek_followup_slot`, then scores saved responses. |
 | Develop PaperToSkill extraction system. | `scripts/papertoskill_extract.py`; `scripts/papertoskill_note_from_text.py`; `scripts/papertoskill_pipeline.py`; generated skills for four curated papers; source maps; deterministic auto-note scaffold for Toolformer/AIDE; one-command temporary AIDE pipeline example; local PDF-input smoke path using `pdftotext -layout`; tests. | Complete for current scoped prototype | Broader reliable arbitrary-PDF automation remains unsupported and should not be claimed. |
 | Experiments: main results. | `results/tables/main_results.md`; four-paper deterministic results; generated skills outperform generic and abstract baselines on operational coverage. | Complete for deterministic/offline benchmark | Live task success remains pending. |
@@ -46,18 +46,23 @@ and 0 failed checks.
 ## Current Blocking Evidence
 
 - `results/model_ablation_prompts/v0/run_report.md`: Claude Opus 4.8 rows
-  completed successfully with HTTP 200 and saved response files. GPT-family
-  rows tried `gpt-5.5` and `gpt-5.4`; both still failed HTTP 502 with
-  `Upstream access forbidden`.
-- `results/model_ablation_prompts/v0/evaluation.md`: 6 total rows, 2 scored
-  rows, 4 pending rows; both Claude rows score 6/6.
+  completed successfully with HTTP 200 and saved response files. This historical
+  report also records a GPT-family HTTP 502 blocker from Phase 36.
+- `results/model_ablation_prompts/v0/gpt_retry_run_report.md`: GPT-family
+  Phase 37 retry completed both rows; Toolformer used `gpt-5.4` after a
+  `gpt-5.5` timeout, and AIDE used `gpt-5.5`.
+- `results/model_ablation_prompts/v0/evaluation.md`: 6 total rows, 4 scored
+  rows, 2 pending rows; Claude and GPT-family rows all score 6/6.
 - `research/run_logs/2026-06-19_phase36_claude_ablation_success_gpt_blocked.md`:
-  latest endpoint recheck records completed Claude rows and the remaining GPT
+  endpoint recheck records completed Claude rows and the previous GPT
   upstream-access blocker for `gpt-5.5`/`gpt-5.4`.
+- `research/run_logs/2026-06-19_phase37_gpt_family_ablation_success.md`:
+  latest GPT-family retry records completed GPT-family rows and saved/scored
+  responses.
 - `results/human_fidelity_packets/annotation_summary.md`: human annotation is
   pending.
 - `results/reproducibility/package_report.md`: 7 pending checks remain.
-- `results/reproducibility/goal_completion_report.md`: 10 active-goal
+- `results/reproducibility/goal_completion_report.md`: 8 active-goal
   requirements are pending and `active_goal_complete` remains pending.
 - `results/reproducibility/aaai_package_report.md`: AAAI package gate is ready
   with 17 ready checks and 0 failed checks; this removes a local package
@@ -77,20 +82,18 @@ and 0 failed checks.
 
 Do not mark the active goal complete yet. The current repository satisfies the
 local memory, scaffold, deterministic/offline experiment, AAAI-package, usage
-example, Claude Opus 4.8 ablation, and reproducibility-readiness requirements.
-It does not yet satisfy completed GPT-family ablation, DeepSeek response
-collection, human semantic validation, or real provider-billing/economic
-evidence. Local
+example, Claude Opus 4.8 ablation, GPT-family ablation, and
+reproducibility-readiness requirements. It does not yet satisfy DeepSeek
+response collection, human semantic validation, or real
+provider-billing/economic evidence. Local
 tokenizer-aware proxy evidence is present, and the machine-checkable
 goal-completion gate agrees that the active goal is not complete.
 
 ## Recommended Next Closure Path
 
-1. Re-run GPT-family model ablations when GPT upstream access is available.
-2. After GPT response files exist, score them and update paper claims.
-3. Let the user fill DeepSeek alias/env vars, then run and score the same prompt
+1. Let the user fill DeepSeek alias/env vars, then run and score the same prompt
    grid.
-4. Decide whether the final AAAI paper will remain an explicitly
+2. Decide whether the final AAAI paper will remain an explicitly
    deterministic/offline system paper or wait for live/human/model evidence.
-5. If waiting, collect human-fidelity annotations and provider-specific cost
+3. If waiting, collect human-fidelity annotations and provider-specific cost
    evidence before marking the full goal complete.

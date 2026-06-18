@@ -154,9 +154,11 @@ python scripts\evaluate_model_ablation_responses.py `
   --output-md results\model_ablation_prompts\v0\evaluation.md
 ```
 
-Current Phase 36 status: the two Claude Opus 4.8 rows are saved and scored
-6/6. The GPT-family rows still list `gpt-5.5` and `gpt-5.4`, but both aliases
-return HTTP 502 upstream-access errors during chat completion.
+Current Phase 37 status: the two Claude Opus 4.8 rows and the two GPT-family
+rows are saved and scored 6/6 for the current prompt protocol. In the latest
+GPT-family retry, the Toolformer row timed out on `gpt-5.5` and succeeded with
+`gpt-5.4`; the AIDE row succeeded with `gpt-5.5`. Record this as a
+GPT-family result, not a pure `gpt-5.5` result.
 
 For DeepSeek follow-up, edit `deepseek_followup_slot` in
 `benchmarks/model_ablation_v0.json`, replacing `deepseek-to-be-filled` with the

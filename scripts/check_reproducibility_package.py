@@ -109,6 +109,7 @@ CORE_FILES = {
     "phase34_pipeline_command_run_log": "research/run_logs/2026-06-19_phase34_pipeline_command.md",
     "phase35_pdf_pipeline_input_run_log": "research/run_logs/2026-06-19_phase35_pdf_pipeline_input.md",
     "phase36_claude_ablation_success_gpt_blocked_run_log": "research/run_logs/2026-06-19_phase36_claude_ablation_success_gpt_blocked.md",
+    "phase37_gpt_family_ablation_success_run_log": "research/run_logs/2026-06-19_phase37_gpt_family_ablation_success.md",
     "result_cards": "results/result_cards.md",
 }
 
@@ -175,6 +176,8 @@ MODEL_ABLATION_FILES = {
     "model_ablation_prompt_index": "results/model_ablation_prompts/v0/index.json",
     "model_ablation_run_report_json": "results/model_ablation_prompts/v0/run_report.json",
     "model_ablation_run_report_md": "results/model_ablation_prompts/v0/run_report.md",
+    "model_ablation_gpt_retry_run_report_json": "results/model_ablation_prompts/v0/gpt_retry_run_report.json",
+    "model_ablation_gpt_retry_run_report_md": "results/model_ablation_prompts/v0/gpt_retry_run_report.md",
     "model_ablation_evaluation_json": "results/model_ablation_prompts/v0/evaluation.json",
     "model_ablation_evaluation_md": "results/model_ablation_prompts/v0/evaluation.md",
 }
@@ -498,7 +501,7 @@ def goal_completion_checks(root: Path) -> list[Check]:
         "usage_example_gate_ready": "ready",
         "claude_opus_4_8_ablation_attempted": "ready",
         "claude_opus_4_8_ablation_complete": "ready",
-        "gpt_family_ablation_complete": "pending",
+        "gpt_family_ablation_complete": "ready",
         "deepseek_followup_process_ready": "ready",
         "deepseek_followup_response_complete": "pending",
         "human_fidelity_annotation_complete": "pending",

@@ -3,8 +3,8 @@
 Evidence boundary: this report audits the active user goal against local repository evidence. Pending checks are remaining requirements, not negative evidence and not local package failures.
 
 - Overall status: not_complete_pending_external_evidence
-- Ready checks: 36
-- Pending checks: 9
+- Ready checks: 37
+- Pending checks: 8
 - Failed checks: 0
 
 ## Checks
@@ -48,11 +48,11 @@ Evidence boundary: this report audits the active user goal against local reposit
 | model_ablation_protocol_ready | ready | prompt_packets=6; models=claude_opus_4_8,deepseek_followup_slot,gpt_5_5_or_gpt_family | results/model_ablation_prompts/v0/index.json |
 | claude_opus_4_8_ablation_attempted | ready | rows=2; statuses=success; attempted_aliases=claude-opus-4-8 | results/model_ablation_prompts/v0/run_report.json |
 | claude_opus_4_8_ablation_complete | ready | saved and scored responses are required before claiming completion | results/model_ablation_prompts/v0/evaluation.json |
-| gpt_family_ablation_availability_checked | ready | rows=2; statuses=error; catalog_gpt_models=16 | results/model_ablation_prompts/v0/run_report.json |
-| gpt_family_ablation_complete | pending | GPT-family catalog is available, but chat completions did not produce saved/scored responses | results/model_ablation_prompts/v0/evaluation.json |
+| gpt_family_ablation_availability_checked | ready | rows=4; statuses=error,success; catalog_gpt_models=32 | results\model_ablation_prompts\v0\run_report.json; results\model_ablation_prompts\v0\gpt_retry_run_report.json |
+| gpt_family_ablation_complete | ready | saved and scored GPT-family responses exist for the current prompt protocol | results/model_ablation_prompts/v0/evaluation.json |
 | deepseek_followup_process_ready | ready | DeepSeek slot is present and runner supports configured aliases | benchmarks/model_ablation_v0.json; examples/usage/model_ablation_usage.md |
 | deepseek_followup_response_complete | pending | placeholder alias still pending user-provided DeepSeek configuration | results/model_ablation_prompts/v0/evaluation.json |
-| model_ablation_evaluation_complete | pending | scored_rows=2; pending_rows=4 | results/model_ablation_prompts/v0/evaluation.json |
+| model_ablation_evaluation_complete | pending | scored_rows=4; pending_rows=2 | results/model_ablation_prompts/v0/evaluation.json |
 | live_cross_harness_responses_complete | pending | pending_live_response_sets=4 | results/reproducibility/package_report.json |
 | human_fidelity_annotation_complete | pending | status=pending; scored_rows=0; pending_rows=24 | results/human_fidelity_packets/annotation_summary.json |
-| active_goal_complete | pending | pending_requirements=ai_scientist_v2_live_llm_run_complete,provider_billing_evidence_complete,aaai_final_submission_ready,gpt_family_ablation_complete,deepseek_followup_response_complete,model_ablation_evaluation_complete,live_cross_harness_responses_complete,human_fidelity_annotation_complete | all goal checks |
+| active_goal_complete | pending | pending_requirements=ai_scientist_v2_live_llm_run_complete,provider_billing_evidence_complete,aaai_final_submission_ready,deepseek_followup_response_complete,model_ablation_evaluation_complete,live_cross_harness_responses_complete,human_fidelity_annotation_complete | all goal checks |

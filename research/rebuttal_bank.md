@@ -143,9 +143,8 @@ Evidence to cite:
 
 - `results/reproducibility/package_report.md`: 7 pending external-evidence
   checks and 0 failed local checks.
-- `results/model_ablation_prompts/v0/run_report.md`: current Claude/GPT-family
-  attempt is blocked by provider account availability and GPT upstream access,
-  not completed model evidence.
+- `results/model_ablation_prompts/v0/evaluation.md`: Claude/GPT-family rows
+  are saved and scored for the current protocol; DeepSeek remains pending.
 - `research/review_report.md`: submission gate status.
 
 Do not say:

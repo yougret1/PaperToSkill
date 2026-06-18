@@ -195,13 +195,13 @@ model-ablation prompts. The
 model-ablation protocol produces a prompt grid for Claude Opus 4.8, a
 GPT-family slot requested as GPT 5.5, and a DeepSeek follow-up slot. The
 latest live recheck completed both Claude Opus 4.8 prompt rows, saved response
-files, and scored both rows 6/6 under the response rubric. The separate GPT
-credential profile advertised \texttt{gpt-5.5}, \texttt{gpt-5.4}, and other
-GPT-family aliases, but both \texttt{gpt-5.5} and \texttt{gpt-5.4} prompt calls
-failed with HTTP 502 because upstream access was forbidden. Therefore, the
-paper treats the Claude portion as completed for the current prompt protocol,
-while GPT-family and DeepSeek rows remain pending rather than negative
-model-quality evidence.
+files, and scored both rows 6/6 under the response rubric. A later GPT-family
+retry with the separate GPT credential profile saved both current GPT-family
+rows: the Toolformer row timed out on \texttt{gpt-5.5} and then succeeded with
+\texttt{gpt-5.4}, while the AIDE row succeeded with \texttt{gpt-5.5}. Both
+GPT-family rows scored 6/6. Therefore, the paper treats Claude Opus 4.8 and
+GPT-family rows as completed for the current prompt protocol, while DeepSeek
+rows remain pending rather than negative model-quality evidence.
 
 \section{Discussion}
 

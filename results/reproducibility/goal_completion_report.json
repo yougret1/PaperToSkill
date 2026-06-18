@@ -3,8 +3,8 @@
   "evidence_boundary": "Audits the active user goal against local repository evidence. Pending checks are explicit remaining requirements, not negative evidence and not local package failures.",
   "overall_status": "not_complete_pending_external_evidence",
   "status_counts": {
-    "ready": 36,
-    "pending": 9,
+    "ready": 37,
+    "pending": 8,
     "fail": 0
   },
   "checks": [
@@ -233,13 +233,13 @@
     {
       "id": "gpt_family_ablation_availability_checked",
       "status": "ready",
-      "detail": "rows=2; statuses=error; catalog_gpt_models=16",
-      "evidence": "results/model_ablation_prompts/v0/run_report.json"
+      "detail": "rows=4; statuses=error,success; catalog_gpt_models=32",
+      "evidence": "results\\model_ablation_prompts\\v0\\run_report.json; results\\model_ablation_prompts\\v0\\gpt_retry_run_report.json"
     },
     {
       "id": "gpt_family_ablation_complete",
-      "status": "pending",
-      "detail": "GPT-family catalog is available, but chat completions did not produce saved/scored responses",
+      "status": "ready",
+      "detail": "saved and scored GPT-family responses exist for the current prompt protocol",
       "evidence": "results/model_ablation_prompts/v0/evaluation.json"
     },
     {
@@ -257,7 +257,7 @@
     {
       "id": "model_ablation_evaluation_complete",
       "status": "pending",
-      "detail": "scored_rows=2; pending_rows=4",
+      "detail": "scored_rows=4; pending_rows=2",
       "evidence": "results/model_ablation_prompts/v0/evaluation.json"
     },
     {
@@ -275,7 +275,7 @@
     {
       "id": "active_goal_complete",
       "status": "pending",
-      "detail": "pending_requirements=ai_scientist_v2_live_llm_run_complete,provider_billing_evidence_complete,aaai_final_submission_ready,gpt_family_ablation_complete,deepseek_followup_response_complete,model_ablation_evaluation_complete,live_cross_harness_responses_complete,human_fidelity_annotation_complete",
+      "detail": "pending_requirements=ai_scientist_v2_live_llm_run_complete,provider_billing_evidence_complete,aaai_final_submission_ready,deepseek_followup_response_complete,model_ablation_evaluation_complete,live_cross_harness_responses_complete,human_fidelity_annotation_complete",
       "evidence": "all goal checks"
     }
   ]

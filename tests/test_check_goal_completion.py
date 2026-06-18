@@ -53,7 +53,7 @@ class CheckGoalCompletionTest(unittest.TestCase):
             self.assertEqual("ready", statuses["usage_example_gate_ready"])
             self.assertEqual("ready", statuses["claude_opus_4_8_ablation_attempted"])
             self.assertEqual("ready", statuses["claude_opus_4_8_ablation_complete"])
-            self.assertEqual("pending", statuses["gpt_family_ablation_complete"])
+            self.assertEqual("ready", statuses["gpt_family_ablation_complete"])
             self.assertEqual("ready", statuses["deepseek_followup_process_ready"])
             self.assertEqual("pending", statuses["deepseek_followup_response_complete"])
             self.assertEqual("pending", statuses["human_fidelity_annotation_complete"])

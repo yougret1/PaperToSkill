@@ -70,8 +70,8 @@ FORBIDDEN_PATTERNS = [
     },
     {
         "id": "completed_model_ablation",
-        "pattern": r"\b(Claude/GPT/DeepSeek ablations have completed|completed (Claude|GPT|DeepSeek)[^.\n]{0,80}ablation|GPT 5\.5 is confirmed)\b",
-        "detail": "Do not claim completed Claude/GPT/DeepSeek ablations.",
+        "pattern": r"\b(Claude/GPT/DeepSeek ablations have completed|all[^.\n]{0,80}model[- ]ablation[^.\n]{0,80}(complete|scored)|completed DeepSeek[^.\n]{0,80}ablation|GPT 5\.5 is confirmed)\b",
+        "detail": "Do not claim completed all-model or DeepSeek ablations.",
     },
     {
         "id": "submission_final",
@@ -108,8 +108,8 @@ REQUIRED_BOUNDARIES = [
     },
     {
         "id": "model_ablation_partial_boundary",
-        "pattern": r"(Claude[^.\n]{0,80}(saved|scored|completed)[^.\n]{0,80}(GPT|DeepSeek)[^.\n]{0,120}pending|GPT[^.\n]{0,80}DeepSeek[^.\n]{0,80}(pending|remain))",
-        "detail": "Paper text should classify model ablations as partially completed with GPT/DeepSeek still pending.",
+        "pattern": r"(Claude[^.]{0,160}(saved|scored|completed)[^.]{0,240}GPT-family[^.]{0,160}(saved|scored|completed)[^.]{0,240}DeepSeek[^.]{0,160}(pending|remain)|GPT-family[^.]{0,160}(saved|scored|completed)[^.]{0,160}DeepSeek[^.]{0,120}(pending|remain)|Claude Opus 4\.8 and GPT-family rows have saved and scored\s+responses[^.]{0,160}DeepSeek remains pending)",
+        "detail": "Paper text should classify model ablations as partially completed with DeepSeek still pending.",
     },
 ]
 
