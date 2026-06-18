@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 132
+- Ready checks: 134
 - Pending checks: 7
 - Failed checks: 0
 
@@ -41,6 +41,8 @@ Evidence boundary: this report checks local package completeness and separates p
 | transfer_ablation_md | ready | present | results/tables/transfer_ablation.md |
 | context_cost_proxy_md | ready | present | results/tables/context_cost_proxy.md |
 | context_cost_proxy_json | ready | present | results/tables/context_cost_proxy.json |
+| context_cost_proxy_tokenizer_md | ready | present | results/tables/context_cost_proxy_tokenizer.md |
+| context_cost_proxy_tokenizer_json | ready | present | results/tables/context_cost_proxy_tokenizer.json |
 | auto_note_comparison_md | ready | present | results/tables/auto_note_comparison.md |
 | auto_note_comparison_csv | ready | present | results/tables/auto_note_comparison.csv |
 | paper_ready_summary | ready | present | results/tables/paper_ready_summary.md |

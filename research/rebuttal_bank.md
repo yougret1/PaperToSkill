@@ -100,16 +100,18 @@ Do not say:
 
 ## Q6: What is the economic claim?
 
-Short answer: Generated skills compress full extracted paper context under a
-deterministic token/cost proxy while preserving more operational coverage than
-short summaries.
+Short answer: Generated skills compress full extracted paper context under both
+a deterministic character proxy and a local `o200k_base` tokenizer-aware proxy
+while preserving more operational coverage than short summaries.
 
 Evidence to cite:
 
 - `results/tables/context_cost_proxy.md`
-- AI Scientist-v2: 1,366 estimated tokens vs 62,041 for full extracted paper.
-- Reflexion: 823 vs 18,559.
-- AIDE: 1,517 vs 15,894.
+- `results/tables/context_cost_proxy_tokenizer.md`
+- AI Scientist-v2: 1,079 `o200k_base` tokens vs 45,212 for full extracted paper.
+- Reflexion: 703 vs 16,414.
+- AIDE: 1,285 vs 13,312.
+- Toolformer: 1,255 vs 20,365.
 - Toolformer: 1,526 vs 24,097.
 
 Do not say:

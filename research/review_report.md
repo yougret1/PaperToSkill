@@ -34,7 +34,7 @@ this should not be generalized to arbitrary PDFs yet.
 | R4 | Four papers may still be too narrow and all are naturally procedural. | Medium | Benchmark includes AI Scientist-v2, Reflexion, AIDE, and Toolformer, covering agent, ML-engineering, and tool-use methods. | Describe this as a focused first benchmark; plan stress cases on interface-heavy and theory-heavy papers. |
 | R5 | Cross-harness transfer is only offline readiness. | High | Live prompt packets exist, but endpoint still returns HTTP 503. | Use "offline transfer readiness"; do not claim live Codex-to-Claude success. |
 | R6 | Human fidelity is prepared but unscored. | High | Annotation template has 24 rows, 0 scored, 24 pending, 0 errors. | Say "human-fidelity protocol prepared" and "annotation pending"; never say "human-validated." |
-| R7 | Cost/economic claims can be overread. | Medium | Cost uses `ceil(characters / 4)` and a configurable price proxy, not provider billing. | Call it deterministic context-size/cost proxy; avoid real savings or success-per-dollar claims. |
+| R7 | Cost/economic claims can be overread. | Medium | Cost uses both `ceil(characters / 4)` and local `o200k_base` tokenizer-aware proxies, not provider billing. | Call it local context-size/cost proxy; avoid real savings, invoices, or success-per-dollar claims. |
 | R8 | Failure archive could sound like an outcome study. | Medium | Archive records 27 cases but does not test user outcomes. | Frame as provenance and claim discipline, not as proof of better final results. |
 
 ## Claim Tightening Recommendations
@@ -55,7 +55,7 @@ this should not be generalized to arbitrary PDFs yet.
 | Reproducibility package | Pass locally, external evidence pending | `results/reproducibility/package_report.md` |
 | Live cross-harness execution | Pending | `results/live_transfer_prompts/`; endpoint HTTP 503 |
 | Human fidelity | Pending | `results/human_fidelity_packets/annotation_summary.md` |
-| Cost accounting | Partial | `results/tables/context_cost_proxy.md` |
+| Cost accounting | Partial | `results/tables/context_cost_proxy.md`; `results/tables/context_cost_proxy_tokenizer.md` |
 | Benchmark diversity | Partial | Four agent/tool-method papers only |
 
 ## Recommended Next Experiments
@@ -66,8 +66,8 @@ this should not be generalized to arbitrary PDFs yet.
    scores and evidence notes.
 3. Add one less-procedural or theory-heavy stress case and run the auto-note
    scaffold to test whether extraction fails gracefully.
-4. Add tokenizer-exact or provider-specific cost accounting only after choosing
-   the target model family and pricing source.
+4. Add provider-specific pricing, output-token costs, and live invoice
+   accounting only after choosing the target model family and pricing source.
 
 ## Decision
 

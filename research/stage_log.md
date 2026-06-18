@@ -953,3 +953,38 @@ Evidence boundary:
 
 - Phase 24 is a completion audit and planning gate. It adds no new empirical
   model responses.
+
+## 2026-06-18 Phase 25
+
+Actions:
+
+- Updated `scripts/evaluate_context_costs.py` so the Phase 12
+  `ceil(characters / 4)` proxy remains available while local `tiktoken`
+  tokenizer-aware outputs are generated when possible.
+- Added `o200k_base` tokenizer-aware context-size and coverage-efficiency
+  artifacts under `results/tables/`.
+- Updated `tests/test_evaluate_context_costs.py` to verify tokenizer-aware
+  outputs and the explicit tokenizer-skip path.
+- Extended the reproducibility checker to require the tokenizer-aware Markdown
+  and JSON reports.
+- Updated the AAAI table, paper draft, claim checklist, limitations, README,
+  artifact map, decision log, run log, and memory to distinguish local
+  tokenizer-aware proxy evidence from provider billing.
+
+Results:
+
+- Under `o200k_base`, generated skills use:
+  - AI Scientist-v2: `1,079` tokens vs `45,212` for full extracted paper text,
+    a `97.61%` reduction.
+  - Reflexion: `703` tokens vs `16,414`, a `95.72%` reduction.
+  - AIDE: `1,285` tokens vs `13,312`, a `90.35%` reduction.
+  - Toolformer: `1,255` tokens vs `20,365`, a `93.84%` reduction.
+- The character proxy remains available as a sensitivity check in the original
+  `context_cost_proxy.*` files.
+
+Evidence boundary:
+
+- Phase 25 supports local tokenizer-aware compactness and input-cost proxy
+  claims.
+- It does not support provider-specific prices, live invoices, output-token
+  accounting, model-quality conclusions, or success-per-dollar claims.

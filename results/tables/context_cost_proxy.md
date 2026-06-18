@@ -1,6 +1,8 @@
 # Context Cost Proxy
 
-Evidence boundary: token counts are deterministic proxies, estimated as `ceil(characters / 4)`. Cost uses a configurable `1.0` dollars per million input-token proxy. These are not provider bills or tokenizer-exact measurements.
+Evidence boundary: Token counts are deterministic character proxies. Cost uses a configurable `1.0` dollars per million input-token proxy. These are not provider bills, output-token costs, or success-per-dollar measurements.
+
+Token count method: character proxy, ceil(characters / 4).
 
 ## Context Size Proxy
 

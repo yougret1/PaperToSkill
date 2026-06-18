@@ -14,8 +14,8 @@ In a four-paper benchmark over AI Scientist-v2, Reflexion, AIDE, and Toolformer,
 PaperToSkill generates skills that score 20/20 on deterministic structural
 rubrics, preserve more deterministic operational coverage than generic-summary
 and abstract-only baselines, remain under a 1200-word compactness budget, and
-use only 2.2%, 4.43%, 9.54%, and 6.33% of the full extracted papers'
-deterministic input-token proxy. The generated skills also achieve high
+use only 2.39%, 4.28%, 9.65%, and 6.16% of the full extracted papers'
+`o200k_base` tokenizer-aware input-token proxy. The generated skills also achieve high
 source-span support with zero invalid line ranges. Removing transfer notes
 consistently lowers
 offline transfer-readiness from 10/10 to 7.6/10. These results support
@@ -146,11 +146,14 @@ The metrics are deterministic:
   adaptation, source/inference separation, validation, and failure-recording
   signals;
 - word count under a 1200-word compactness budget;
-- deterministic input-token and cost proxy, estimated as `ceil(characters / 4)`
-  and reported with a configurable price per million input-token proxy.
+- deterministic character-based token/cost proxy, estimated as
+  `ceil(characters / 4)`;
+- local tokenizer-aware input-token and cost proxy using `o200k_base`, reported
+  with a configurable price per million input-token proxy.
 
-These metrics are reproducible gates. They do not replace live agent execution
-or completed human fidelity annotation. To support later human review, we also
+These metrics are reproducible gates. They do not replace live agent execution,
+provider billing, success-per-dollar accounting, or completed human fidelity
+annotation. To support later human review, we also
 prepare a six-criterion fidelity protocol and paper-specific review packets, but
 those packets remain unscored until independent annotators fill them. The
 annotation summarizer currently reports 24 pending rows and no completed
@@ -179,16 +182,17 @@ for Reflexion, 927 words for AIDE, and 943 words for Toolformer, all under the
 and 1.0 with zero invalid line ranges. The one weak AI Scientist-v2 span is
 recorded as a boundary case rather than treated as fully verified.
 
-The context cost proxy shows the same compactness pattern relative to full paper
-contexts. Generated skills use 1,366 estimated input tokens for AI Scientist-v2
-compared with 62,041 for the full extracted paper, 823 versus 18,559 for
-Reflexion, 1,517 versus 15,894 for AIDE, and 1,526 versus 24,097 for
-Toolformer. This corresponds to token-proxy reductions of 97.8%, 95.57%,
-90.46%, and 93.67% relative to full extracted paper text. The summary and
-abstract baselines are smaller, but their deterministic coverage scores are
-much lower. We therefore interpret PaperToSkill's economic signal as a
-coverage-preserving compression relative to full-paper context, not as a claim
-that skills are the shortest possible context.
+The tokenizer-aware context proxy shows the same compactness pattern relative to
+full paper contexts. Under `o200k_base`, generated skills use 1,079 input tokens
+for AI Scientist-v2 compared with 45,212 for the full extracted paper, 703
+versus 16,414 for Reflexion, 1,285 versus 13,312 for AIDE, and 1,255 versus
+20,365 for Toolformer. This corresponds to token-proxy reductions of 97.61%,
+95.72%, 90.35%, and 93.84% relative to full extracted paper text. The earlier
+character proxy remains available as a reproducible sensitivity check. The
+summary and abstract baselines are smaller, but their deterministic coverage
+scores are much lower. We therefore interpret PaperToSkill's economic signal as
+coverage-preserving compression relative to full-paper context, not as provider
+billing evidence or a claim that skills are the shortest possible context.
 
 Transfer-note ablations show a consistent offline readiness pattern. Full skills
 score 10/10 on the readiness metric across all four papers. Removing
@@ -203,7 +207,7 @@ records from the PaperToSkill development process. This archive supports the
 claim that failed branches are preserved as inspectable provenance. It is not
 evidence that failure recording improves live task outcomes.
 
-The reproducibility package checker reports 132 ready checks, 7 pending
+The reproducibility package checker reports 134 ready checks, 7 pending
 external-evidence checks, and 0 failed checks. The pending checks correspond to
 the four live transfer response sets, human-fidelity annotation status,
 model-ablation response files, and completed model-ablation evaluation. This
@@ -262,9 +266,10 @@ chat-completion tests. Fourth, model ablations were attempted but not completed
 because Claude account capacity was unavailable and the endpoint did not list a
 GPT-family model. Fifth, human-fidelity packets, a blank annotation template,
 and a summary script are prepared, but no independent annotations have been
-completed. Sixth, compactness is measured by word count and deterministic
-input-token proxy, not by tokenizer-exact model price, provider billing, or live
-success per dollar. Seventh, the failure-case archive is an evidence and
+completed. Sixth, compactness is measured by word count, deterministic
+character proxy, and local tokenizer-aware input-token proxy, not by
+provider-specific prices, live invoices, or live success per dollar. Seventh,
+the failure-case archive is an evidence and
 provenance artifact rather than a controlled outcome study. Eighth, the
 reproducibility package is locally ready but still has pending external evidence
 for live responses, model responses, and human annotations.
@@ -282,7 +287,7 @@ source-grounded, structurally valid, and more operationally complete than short
 summary baselines under deterministic evaluation. The next stage is to re-run
 the prepared live prompt packets when provider capacity and GPT-family aliases
 are available, add the user's DeepSeek slot, run human fidelity review, compute
-token and price costs, and test papers whose contributions are less naturally
+provider-specific price costs, and test papers whose contributions are less naturally
 procedural.
 
 ## Reproducibility Pointers

@@ -10,11 +10,12 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 24: goal-completion audit and closure planning. The AAAI-27 paper package,
-usage examples, deterministic/offline experiments, model-ablation runner, and
-DeepSeek follow-up path are prepared. The active goal is not yet complete
-because live Claude/GPT-family responses, DeepSeek responses, human-fidelity
-annotation, and stronger provider-billing evidence remain pending.
+Phase 25: tokenizer-aware compactness/cost proxy upgrade. The AAAI-27 paper
+package, usage examples, deterministic/offline experiments, model-ablation
+runner, DeepSeek follow-up path, and local `o200k_base` cost-proxy tables are
+prepared. The active goal is not yet complete because live Claude/GPT-family
+responses, DeepSeek responses, human-fidelity annotation, and provider-specific
+billing or success-per-dollar evidence remain pending.
 
 ## Memory
 

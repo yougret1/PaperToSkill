@@ -11,10 +11,11 @@ the full goal is complete.
 Current status: substantial local research and artifact package is complete, but
 the full goal is not yet complete because live Claude/GPT-family model-ablation
 responses, DeepSeek follow-up responses, human-fidelity annotation, and stronger
-economic/provider-billing evidence remain pending external or follow-up work.
+provider-billing or success-per-dollar evidence remain pending external or
+follow-up work.
 
 Local package status: `results/reproducibility/package_report.md` reports
-`ready_with_pending_external_evidence`, 132 ready checks, 7 pending checks, and
+`ready_with_pending_external_evidence`, 134 ready checks, 7 pending checks, and
 0 failed checks.
 
 ## Requirement Audit
@@ -32,7 +33,7 @@ Local package status: `results/reproducibility/package_report.md` reports
 | Develop PaperToSkill extraction system. | `scripts/papertoskill_extract.py`; generated skills for four curated papers; source maps; deterministic auto-note scaffold for Toolformer/AIDE; tests. | Complete for current scoped prototype | Broader arbitrary-PDF automation remains unsupported and should not be claimed. |
 | Experiments: main results. | `results/tables/main_results.md`; four-paper deterministic results; generated skills outperform generic and abstract baselines on operational coverage. | Complete for deterministic/offline benchmark | Live task success remains pending. |
 | Experiments: harness-transfer ablation. | `results/tables/transfer_ablation.md`; offline transfer-readiness drops when `Transfer Notes` are removed. | Complete for offline readiness | Live Codex/Claude transfer remains pending. |
-| Experiments: compactness/cost/examples. | `results/tables/context_cost_proxy.md`; `results/tables/compactness_source_grounding.md`; examples under `examples/usage/`. | Complete for deterministic proxy and examples | Provider billing, tokenizer-exact pricing, and success-per-dollar remain pending. |
+| Experiments: compactness/cost/examples. | `results/tables/context_cost_proxy.md`; `results/tables/context_cost_proxy_tokenizer.md`; `results/tables/compactness_source_grounding.md`; examples under `examples/usage/`. | Complete for character proxy, local tokenizer-aware proxy, and examples | Provider billing, output-token accounting, and success-per-dollar remain pending. |
 | Include failure branches and negative outcomes. | `results/failure_cases/failure_case_archive.md`; model-ablation run reports; limitations; result cards; stage logs. | Complete as provenance archive | Outcome impact of failure recording is not tested. |
 | Final paper narrative. | `paper/draft.md`; `paper/outline.md`; `paper/claim_checklist.md`; `paper/limitations.md`; AAAI `.tex` draft. | Prepared, not final | Final paper requires live/human/model evidence decisions or explicit decision to submit as deterministic/offline system paper. |
 
@@ -53,7 +54,8 @@ Do not mark the active goal complete yet. The current repository satisfies the
 local memory, scaffold, deterministic/offline experiment, AAAI-package, usage
 example, and reproducibility-readiness requirements. It does not yet satisfy
 completed live Claude/GPT-family ablation, DeepSeek response collection, human
-semantic validation, or real provider-billing/economic evidence.
+semantic validation, or real provider-billing/economic evidence. Local
+tokenizer-aware proxy evidence is present, but not real provider economics.
 
 ## Recommended Next Closure Path
 
@@ -64,5 +66,5 @@ semantic validation, or real provider-billing/economic evidence.
    grid.
 4. Decide whether the final AAAI paper will remain an explicitly
    deterministic/offline system paper or wait for live/human/model evidence.
-5. If waiting, collect human-fidelity annotations and tokenizer-exact/provider
-   cost evidence before marking the full goal complete.
+5. If waiting, collect human-fidelity annotations and provider-specific cost
+   evidence before marking the full goal complete.

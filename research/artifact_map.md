@@ -42,6 +42,7 @@
 | `research/run_logs/2026-06-18_phase21_aaai_usage_model_ablation.md` | AAAI template package, usage examples, and model-ablation prompt protocol | Created |
 | `research/run_logs/2026-06-18_phase22_model_ablation_live_attempt.md` | Model-ablation runner/evaluator, live endpoint attempt, and provider/model availability evidence | Created |
 | `research/run_logs/2026-06-18_phase23_deepseek_followup_readiness.md` | DeepSeek follow-up readiness, runner behavior hardening, and endpoint recheck | Created |
+| `research/run_logs/2026-06-18_phase25_tokenizer_cost_proxy.md` | Tokenizer-aware compactness/cost proxy commands and outcomes | Created |
 
 ## Paper Draft Package
 
@@ -219,6 +220,10 @@
 | `results/tables/context_cost_proxy.csv` | CSV table for context size and estimated input-token proxy | Created |
 | `results/tables/coverage_cost_efficiency.csv` | CSV table for deterministic coverage per estimated token budget | Created |
 | `results/tables/context_cost_proxy.json` | Machine-readable context token/cost proxy report | Created |
+| `results/tables/context_cost_proxy_tokenizer.md` | Paper-ready `o200k_base` tokenizer-aware context token/cost proxy report | Created |
+| `results/tables/context_cost_proxy_tokenizer.csv` | CSV table for tokenizer-aware context size and estimated input-token proxy | Created |
+| `results/tables/coverage_cost_efficiency_tokenizer.csv` | CSV table for deterministic coverage per tokenizer-aware token budget | Created |
+| `results/tables/context_cost_proxy_tokenizer.json` | Machine-readable tokenizer-aware context token/cost proxy report | Created |
 | `results/tables/auto_note_comparison.md` | Curated-vs-auto Toolformer/AIDE note comparison table | Created |
 | `results/tables/auto_note_comparison.csv` | CSV copy of curated-vs-auto Toolformer/AIDE note comparison | Created |
 | `results/human_fidelity_packets/README.md` | Summary of prepared human-fidelity packets | Created |

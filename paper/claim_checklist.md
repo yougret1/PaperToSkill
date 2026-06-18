@@ -10,7 +10,7 @@ exists.
 | Automatic note scaffold | PaperToSkill can generate deterministic, source-anchored note scaffolds from extracted Toolformer and AIDE text and convert them into auditable skills that pass offline gates. | PaperToSkill now reliably converts arbitrary PDFs into final skills without audit. | `scripts/papertoskill_note_from_text.py`; `papers/auto_notes/toolformer_auto_note.md`; `papers/auto_notes/aide_auto_note.md`; `generated_skills/toolformer_auto/SKILL.md`; `generated_skills/aide_auto/SKILL.md`; `results/tables/auto_note_comparison.md` | Supported for two extracted-text scaffolds |
 | Structural quality | All four generated skills score 20/20 on deterministic paper-specific rubrics. | The generated skills are human-validated as complete reproductions of the papers. | `results/evaluations/*_rubric_v0.json`; `results/tables/main_results.md` | Supported |
 | Summary comparison | Generated skills preserve more deterministic task-relevant operational coverage than generic-summary and abstract-only baselines across four papers. | Skills improve live agent task success over summaries. | `results/evaluations/*_context_baselines_v0.json`; `results/tables/main_results.md` | Supported for deterministic coverage |
-| Compactness and cost proxy | Generated skills remain under a 1200-word compactness budget and use only 2.2%, 4.43%, 9.54%, and 6.33% of the full extracted papers' deterministic input-token proxy. | PaperToSkill is cheaper than every summary or guarantees lower provider bills for every model and task. | `results/tables/compactness_source_grounding.md`; `results/tables/context_cost_proxy.md`; `results/tables/context_cost_proxy.json` | Supported for word-count compactness and deterministic token/cost proxy |
+| Compactness and cost proxy | Generated skills remain under a 1200-word compactness budget and use only 2.39%, 4.28%, 9.65%, and 6.16% of the full extracted papers' `o200k_base` tokenizer-aware input-token proxy. The earlier character proxy remains available as a sensitivity check. | PaperToSkill is cheaper than every summary or guarantees lower provider bills for every model and task. | `results/tables/compactness_source_grounding.md`; `results/tables/context_cost_proxy.md`; `results/tables/context_cost_proxy.json`; `results/tables/context_cost_proxy_tokenizer.md`; `results/tables/context_cost_proxy_tokenizer.json` | Supported for word-count compactness and local token/cost proxies |
 | Source grounding | Source-span validation finds zero invalid line ranges and support rates of 0.938, 1.0, 1.0, and 1.0 across the four generated skills. | Every generated instruction is semantically verified by human annotators. | `results/evaluations/*_source_span_validation_v0.json`; `results/tables/compactness_source_grounding.md` | Supported by deterministic span audit |
 | Human fidelity readiness | Human-fidelity review protocol, four paper-specific review packets, a blank annotation template, and a pending annotation summary are prepared. | Human fidelity annotation has been completed or the skills are expert-validated. | `benchmarks/human_fidelity_review_v0.json`; `results/human_fidelity_packets/`; `results/human_fidelity_packets/annotation_summary.md` | Prepared, not completed |
 | Transfer notes | Removing `Transfer Notes` lowers offline transfer-readiness from 10/10 to 7.6/10 across all four paper cases. | Transfer notes have been proven to improve live Claude/Codex success rates. | `results/evaluations/*_harness_transfer_v0.json`; `results/tables/transfer_ablation.md` | Supported for offline readiness |
@@ -33,8 +33,9 @@ exists.
 - Say "human-fidelity packets prepared" rather than "human-validated" until
   annotation rows are filled by independent reviewers and the summary reports
   complete with no errors.
-- Say "deterministic token/cost proxy" rather than "provider billing" unless
-  tokenizer-exact model prices and live invoices are added.
+- Say "local token/cost proxy" or "`o200k_base` tokenizer-aware proxy" rather
+  than "provider billing" unless provider-specific prices and live invoices are
+  added.
 - Say "model-ablation protocol prepared and live attempt blocked by
   provider/model availability" rather than "Claude/GPT/DeepSeek ablations
   completed" until response files are collected and scored.
@@ -51,7 +52,7 @@ exists.
    contexts.
 3. Source anchors are mostly or fully supported by extracted paper spans, with no
    invalid ranges in the current benchmark.
-4. Generated skills are compact relative to full extracted papers under both
-   word-count and deterministic input-token proxy measurements.
+4. Generated skills are compact relative to full extracted papers under word
+   count, character-proxy, and local tokenizer-aware measurements.
 5. Transfer notes improve offline transfer-readiness in a consistent ablation,
    while live cross-harness execution remains future work.

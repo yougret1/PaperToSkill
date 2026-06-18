@@ -92,6 +92,8 @@ TABLE_FILES = {
     "transfer_ablation_md": "results/tables/transfer_ablation.md",
     "context_cost_proxy_md": "results/tables/context_cost_proxy.md",
     "context_cost_proxy_json": "results/tables/context_cost_proxy.json",
+    "context_cost_proxy_tokenizer_md": "results/tables/context_cost_proxy_tokenizer.md",
+    "context_cost_proxy_tokenizer_json": "results/tables/context_cost_proxy_tokenizer.json",
     "auto_note_comparison_md": "results/tables/auto_note_comparison.md",
     "auto_note_comparison_csv": "results/tables/auto_note_comparison.csv",
     "paper_ready_summary": "results/tables/paper_ready_summary.md",

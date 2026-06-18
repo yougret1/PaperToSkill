@@ -127,15 +127,15 @@ Main results from `results/tables/main_results.md`:
 - source support rates are 0.938, 1.0, 1.0, and 1.0 with zero invalid line
   ranges;
 - skills remain under 1200 words;
-- generated skills use 2.2%, 4.43%, 9.54%, and 6.33% of full extracted paper
-  input-token proxies;
+- generated skills use 2.39%, 4.28%, 9.65%, and 6.16% of full extracted
+  paper `o200k_base` tokenizer-aware input-token proxies;
 - full skills score 10/10 on offline transfer readiness, while removing
   transfer notes drops readiness to 7.6/10 in all four cases.
 - the failure-case archive records 27 cases: 21 paper-reported limitations or
   failure branches and 6 project-level failure/fix records.
 - the reproducibility package checker reports local package readiness with
   pending live-response, model-ablation-response, and human-annotation evidence
-  separated from local failures: 132 ready checks, 7 pending checks, and 0
+  separated from local failures: 134 ready checks, 7 pending checks, and 0
   failed checks.
 - the model-ablation live attempt records that `claude-opus-4-8` is listed but
   blocked by provider account availability, and that no GPT-family alias is

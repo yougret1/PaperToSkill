@@ -61,7 +61,9 @@ Initial target contribution categories:
 - `scripts/aggregate_results_tables.py`: paper-ready Markdown/CSV table
   aggregation over existing deterministic/offline evaluation JSON.
 - `scripts/evaluate_context_costs.py`: deterministic context token/cost proxy
-  evaluator over full papers, notes, skills, summaries, and abstracts.
+  evaluator over full papers, notes, skills, summaries, and abstracts. It
+  preserves the character proxy and can emit local `tiktoken` tokenizer-aware
+  proxy outputs.
 - `scripts/build_human_fidelity_packets.py`: builds human-fidelity review
   packets and blank annotation template.
 - `scripts/summarize_human_fidelity_annotations.py`: summarizes and validates
@@ -168,7 +170,8 @@ Initial target contribution categories:
 - `results/tables/auto_note_comparison.md`: curated-vs-auto Toolformer and AIDE
   note comparison table.
 - `results/tables/`: paper-ready main results, transfer ablation, compactness/
-  source-grounding, context cost proxy, and combined summary tables.
+  source-grounding, character-proxy and tokenizer-aware context cost proxy, and
+  combined summary tables.
 - `results/human_fidelity_packets/`: prepared review packets and blank
   annotation template plus pending annotation summary for human source-fidelity
   review.
@@ -176,7 +179,7 @@ Initial target contribution categories:
   paper-reported limitations/failure branches and 6 project-level failure/fix
   records.
 - `results/reproducibility/`: reproducibility package report. Current status is
-  ready with pending external evidence, 132 ready checks, 7 pending checks, and
+  ready with pending external evidence, 134 ready checks, 7 pending checks, and
   0 failed checks.
 - `research/review_report.md` and `research/rebuttal_bank.md`: internal
   review/rebuttal readiness artifacts that map likely reviewer objections to
@@ -209,6 +212,10 @@ Initial target contribution categories:
 - `results/model_ablation_prompts/v0/`: generated model-ablation prompts for
   Claude Opus 4.8, GPT-family, and DeepSeek follow-up slots over Toolformer and
   AIDE auto-skill usage examples, plus run/evaluation reports.
+- `results/tables/context_cost_proxy_tokenizer.*`: local `o200k_base`
+  tokenizer-aware compactness/cost proxy reports. Generated skills use 1,079 vs
+  45,212 tokens for AI Scientist-v2, 703 vs 16,414 for Reflexion, 1,285 vs
+  13,312 for AIDE, and 1,255 vs 20,365 for Toolformer.
 
 ## Current Assumptions
 
@@ -223,8 +230,9 @@ Initial target contribution categories:
   arbitrary-PDF automation, and offline readiness from live agent success.
 - Automatic note-scaffold writing must distinguish deterministic extracted-text
   line-window scaffolding from reliable arbitrary-PDF-to-skill automation.
-- Cost writing must distinguish deterministic token/cost proxy from provider
-  billing, tokenizer-exact accounting, and success-per-dollar evidence.
+- Cost writing must distinguish local character/tokenizer-aware token/cost
+  proxies from provider billing, output-token accounting, live invoices, and
+  success-per-dollar evidence.
 - Human-fidelity writing must distinguish prepared review packets from completed
   independent annotation.
 - Reproducibility writing must distinguish local package readiness from

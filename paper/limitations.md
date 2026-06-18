@@ -65,12 +65,12 @@ human-validated.
 
 ### Cost Proxy Is Not Full Economic Cost
 
-Generated skills are under a 1200-word budget and have a deterministic
-input-token proxy that is much smaller than full extracted paper text. However,
-the project has not yet computed tokenizer-exact model costs, provider-specific
-prices, live invoices, or success-per-dollar. Cost claims should therefore
-remain framed as token/cost proxies until a model-specific pricing experiment is
-added.
+Generated skills are under a 1200-word budget and have both a deterministic
+character-based input-token proxy and a local `o200k_base` tokenizer-aware proxy
+that are much smaller than full extracted paper text. However, the project has
+not yet computed provider-specific prices, live invoices, output-token costs, or
+success-per-dollar. Cost claims should therefore remain framed as local
+token/cost proxies until a provider-specific pricing experiment is added.
 
 ### Failure Archive Is Not An Outcome Study
 
@@ -100,8 +100,8 @@ The package should therefore be described as locally ready, not submission-final
 4. Extend extraction from curated notes toward raw PDF ingestion with stronger
    section detection, table handling, citation-aware source maps, and
    multi-paper auto-note validation.
-5. Add tokenizer-exact model pricing and success-per-dollar accounting for
-   full-paper, summary, and skill contexts.
+5. Add provider-specific pricing, output-token costs, live invoices, and
+   success-per-dollar accounting for full-paper, summary, and skill contexts.
 6. Expand the benchmark with less procedural papers to test failure modes.
 7. Preserve negative and failed branches as paper evidence rather than filtering
    them out of the research story.

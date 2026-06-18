@@ -349,35 +349,40 @@
 
 ## Context Cost Proxy
 
-- Experiment: deterministic context-size and cost-proxy analysis over full
-  extracted paper text, curated paper notes, generated skills, generic summaries,
-  and abstract-only baselines for the real-paper cases.
-- Main result: generated skills use 1,366 estimated input tokens vs 62,041 for
-  the full AI Scientist-v2 extracted paper, 823 vs 18,559 for Reflexion, and
-  1,517 vs 15,894 for AIDE, and 1,526 vs 24,097 for Toolformer.
+- Experiment: context-size and cost-proxy analysis over full extracted paper
+  text, curated paper notes, generated skills, generic summaries, and
+  abstract-only baselines for the real-paper cases.
+- Main result: under `o200k_base`, generated skills use 1,079 input tokens vs
+  45,212 for the full AI Scientist-v2 extracted paper, 703 vs 16,414 for
+  Reflexion, 1,285 vs 13,312 for AIDE, and 1,255 vs 20,365 for Toolformer.
 - Compared baselines: full extracted paper, curated note, generated skill,
   generic summary, and abstract-only context. Coverage-per-budget rows are
   limited to the already evaluated skill, generic summary, and abstract-only
   contexts.
 - Practical significance: generated skills compress full extracted paper text by
-  97.8%, 95.57%, 90.46%, and 93.67% under the deterministic input-token proxy
-  while preserving much higher deterministic coverage than generic summaries or
-  abstract-only contexts.
+  97.61%, 95.72%, 90.35%, and 93.84% under the tokenizer-aware proxy while
+  preserving much higher deterministic coverage than generic summaries or
+  abstract-only contexts. The original `ceil(characters / 4)` proxy remains as a
+  reproducible sensitivity check.
 - Statistical evidence: none; this is deterministic accounting.
-- Failure modes: proxy tokens are estimated as `ceil(characters / 4)`, so they
-  are not tokenizer-exact for any provider. The configurable cost number is a
-  scaling proxy, not a real invoice.
+- Failure modes: the tokenizer-aware proxy is exact for the local `o200k_base`
+  tokenizer, but the configurable cost number is still a scaling proxy, not a
+  provider invoice, output-token account, or success-per-dollar measurement.
 - Limitations: summary and abstract contexts are smaller than generated skills
   but lose substantial deterministic coverage, so the supported claim is
   coverage-preserving compression relative to full paper context rather than
   shortest context overall.
 - Claim impact: upgrades compactness from word-count-only evidence to
-  deterministic token/cost proxy evidence while preserving the no-real-billing
-  boundary.
+  character-proxy and tokenizer-aware token/cost proxy evidence while preserving
+  the no-real-billing boundary.
 - Figure/table: `results/tables/context_cost_proxy.md`;
   `results/tables/context_cost_proxy.csv`;
   `results/tables/coverage_cost_efficiency.csv`;
-  `results/tables/context_cost_proxy.json`.
+  `results/tables/context_cost_proxy.json`;
+  `results/tables/context_cost_proxy_tokenizer.md`;
+  `results/tables/context_cost_proxy_tokenizer.csv`;
+  `results/tables/coverage_cost_efficiency_tokenizer.csv`;
+  `results/tables/context_cost_proxy_tokenizer.json`.
 
 ## Human-Fidelity Review Readiness
 
@@ -456,7 +461,7 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 132 ready checks, 7
+  `overall_status=ready_with_pending_external_evidence`, 134 ready checks, 7
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
@@ -553,7 +558,7 @@
   available; model ablations remain blocked until provider model aliases and
   response files are collected.
 - Limitations: no completed Claude/GPT/DeepSeek ablation, no provider billing,
-  and no tokenizer-exact model pricing evidence.
+  no output-token accounting, and no success-per-dollar evidence.
 - Claim impact: supports the claim that AAAI packaging and model-ablation
   protocols are prepared, while preserving the evidence boundary that live model
   results remain pending.
@@ -630,7 +635,8 @@
 - Remaining blockers: live Claude/GPT-family response files and scoring are not
   complete, DeepSeek response collection is pending user configuration,
   human-fidelity annotation is unscored, and provider-billing/success-per-dollar
-  evidence is not collected.
+  evidence is not collected. Local tokenizer-aware proxy evidence is now
+  available, but real provider economics remain pending.
 - Practical significance: prevents the project from accidentally declaring
   success simply because the local deterministic package is extensive and green.
 - Statistical evidence: none; this is a requirements and evidence audit.

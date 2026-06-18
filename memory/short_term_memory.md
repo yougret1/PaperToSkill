@@ -9,17 +9,15 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 23 was committed and pushed as `4e62194` on `origin/main`: rechecked the
-Claude/GPT-family endpoint, confirmed the same provider/model availability
-blocker, and hardened the DeepSeek follow-up path so a concrete DeepSeek alias
-will run through the same runner and evaluator without special placeholder
-flags.
+Phase 24 was committed and pushed as `0ffc744` on `origin/main`: added the
+goal-completion audit and exposed which user requirements are satisfied by
+current evidence versus still pending.
 
-Phase 24 is active locally: goal-completion audit and closure planning. The
-audit records which user requirements are satisfied by current evidence and why
-the active goal should remain open until live model responses, DeepSeek
-follow-up responses, human-fidelity annotation, and stronger economic evidence
-are resolved or explicitly scoped out.
+Phase 25 is active locally: tokenizer-aware compactness/cost proxy upgrade. The
+phase adds local `o200k_base` token counts while preserving the Phase 12
+`ceil(characters / 4)` proxy. Evidence must still be framed as local
+token/cost proxy, not provider billing, output-token accounting, live invoices,
+or success-per-dollar.
 
 ## Latest User Request
 
@@ -442,6 +440,26 @@ The user provided the PaperToSkill idea and asked to:
   scaffolds for two papers/profiles, Toolformer and AIDE. It does not support
   reliable arbitrary-PDF automation, live agent success, provider billing, or
   human semantic validation.
+- Phase 24 was committed and pushed as `0ffc744` on `origin/main`.
+- Phase 25 added tokenizer-aware compactness/cost proxy artifacts:
+  - `results/tables/context_cost_proxy_tokenizer.md`
+  - `results/tables/context_cost_proxy_tokenizer.csv`
+  - `results/tables/coverage_cost_efficiency_tokenizer.csv`
+  - `results/tables/context_cost_proxy_tokenizer.json`
+- Phase 25 local tokenizer method: `tiktoken` encoding `o200k_base`.
+- Phase 25 tokenizer-aware generated-skill reductions relative to full
+  extracted paper text:
+  - AI Scientist-v2: `1,079` vs `45,212`, reduction `97.61%`.
+  - Reflexion: `703` vs `16,414`, reduction `95.72%`.
+  - AIDE: `1,285` vs `13,312`, reduction `90.35%`.
+  - Toolformer: `1,255` vs `20,365`, reduction `93.84%`.
+- Phase 25 updates the AAAI table, draft, claim checklist, limitations,
+  artifact map, decision log, result cards, goal audit, reproducibility checker,
+  stage log, and memory so tokenizer-aware proxy evidence is distinguished from
+  real provider economics.
+- Current reproducibility package report after Phase 25 regeneration:
+  `ready_with_pending_external_evidence`, 134 ready checks, 7 pending checks,
+  and 0 failed checks.
 
 ## Current Blockers / Pending Checks
 
@@ -458,9 +476,6 @@ The user provided the PaperToSkill idea and asked to:
   - `gpt-5.5` was unavailable and no GPT-family fallback models were listed.
   - DeepSeek follow-up slot was not attempted and remains for the user to add.
   - Response evaluation has 6 total rows, 0 scored rows, and 6 pending rows.
-- Current reproducibility package report after Phase 24 regeneration:
-  `ready_with_pending_external_evidence`, 132 ready checks, 7 pending checks,
-  and 0 failed checks.
 - For stable long-running AI-Scientist-v2 work, create an isolated Python
   environment because the current global Anaconda environment has package-version
   conflicts.
@@ -468,19 +483,19 @@ The user provided the PaperToSkill idea and asked to:
   backend is available.
 - Need completed human fidelity annotation before claiming semantic correctness
   beyond deterministic source-span support.
-- Need tokenizer-exact pricing, provider billing, or success-per-dollar evidence
-  before making stronger economic/cost-saving claims.
-- Need Phase 22 final verification, commit, and push.
+- Need provider-specific prices, output-token accounting, live invoices, or
+  success-per-dollar evidence before making stronger economic/cost-saving
+  claims beyond local token/cost proxy.
 
 ## Next Actions
 
-1. Regenerate the reproducibility package report after adding the Phase 24 audit.
-2. Run full unit tests, `git diff --check`, and raw-key secret scan.
-3. Commit and push Phase 24 if verification is clean.
-4. When provider capacity or a GPT-family endpoint is available, rerun the same
+1. Run full unit tests, `git diff --check`, raw-key secret scan, and optional
+   AAAI LaTeX build after Phase 25 edits.
+2. Commit and push Phase 25 if verification is clean.
+3. When provider capacity or a GPT-family endpoint is available, rerun the same
    model-ablation runner and then score saved responses.
-5. To add DeepSeek, fill `deepseek_followup_slot` with a real alias/env vars,
+4. To add DeepSeek, fill `deepseek_followup_slot` with a real alias/env vars,
    rebuild prompts, run `--model-id deepseek_followup_slot`, and score with the
    same evaluator.
-6. Run human fidelity annotation, tokenizer-exact pricing, or expand the
+5. Run human fidelity annotation, provider-specific pricing, or expand the
    benchmark to less procedural/interface/theory-heavy papers.

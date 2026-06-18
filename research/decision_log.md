@@ -173,3 +173,12 @@
   and no GPT-family model alias is listed. Treating these as completed or
   negative-quality model results would overclaim.
 - Status: accepted for Phase 22.
+
+## 2026-06-18: Add Tokenizer-Aware Cost Proxy Without Provider-Billing Claims
+
+- Decision: keep the Phase 12 character proxy and add a local `o200k_base`
+  tokenizer-aware context/cost proxy table.
+- Rationale: the paper's compactness and economic evidence benefits from a
+  tokenizer-aware sensitivity check, but this still is not provider billing,
+  output-token cost, or success-per-dollar evidence.
+- Status: accepted for Phase 25.

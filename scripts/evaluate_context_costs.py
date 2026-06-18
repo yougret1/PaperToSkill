@@ -9,7 +9,7 @@ import json
 import math
 import re
 from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 
 PAPER_CONFIGS = [
@@ -48,6 +48,9 @@ PAPER_CONFIGS = [
 ]
 
 TOKEN_PROXY_CHARS = 4
+DEFAULT_TOKENIZER = "o200k_base"
+
+TokenCounter = Callable[[str], int]
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -62,6 +65,30 @@ def estimate_tokens(text: str, chars_per_token: int = TOKEN_PROXY_CHARS) -> int:
     if chars_per_token <= 0:
         raise ValueError("chars_per_token must be positive")
     return max(1, math.ceil(len(text) / chars_per_token))
+
+
+def character_proxy_counter(chars_per_token: int) -> TokenCounter:
+    def count(text: str) -> int:
+        return estimate_tokens(text, chars_per_token)
+
+    return count
+
+
+def tokenizer_counter(tokenizer_name: str) -> tuple[TokenCounter | None, str | None]:
+    try:
+        import tiktoken  # type: ignore[import-not-found]
+    except ImportError:
+        return None, "tiktoken is not installed"
+
+    try:
+        encoding = tiktoken.get_encoding(tokenizer_name)
+    except Exception as exc:  # pragma: no cover - depends on installed tiktoken data.
+        return None, f"could not load tokenizer {tokenizer_name}: {exc}"
+
+    def count(text: str) -> int:
+        return max(1, len(encoding.encode(text)))
+
+    return count, None
 
 
 def estimate_cost(tokens: int, price_per_million_tokens: float) -> float:
@@ -127,7 +154,7 @@ def variant_labels() -> dict[str, str]:
 
 def build_context_size_rows(
     root: Path,
-    chars_per_token: int,
+    count_tokens: TokenCounter,
     price_per_million_tokens: float,
 ) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
@@ -135,11 +162,11 @@ def build_context_size_rows(
     for config in PAPER_CONFIGS:
         paths = variant_paths(root, config)
         full_text = (root / config["full_paper"]).read_text(encoding="utf-8", errors="ignore")
-        full_tokens = estimate_tokens(full_text, chars_per_token)
+        full_tokens = count_tokens(full_text)
         for variant_id in ["full_paper", "curated_note", "skill", "generic_summary", "abstract_only"]:
             path = root / paths[variant_id]
             text = path.read_text(encoding="utf-8", errors="ignore")
-            tokens = estimate_tokens(text, chars_per_token)
+            tokens = count_tokens(text)
             reduction = 1 - (tokens / full_tokens)
             rows.append(
                 {
@@ -159,7 +186,7 @@ def build_context_size_rows(
 
 def build_efficiency_rows(
     root: Path,
-    chars_per_token: int,
+    count_tokens: TokenCounter,
     price_per_million_tokens: float,
 ) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
@@ -171,7 +198,7 @@ def build_efficiency_rows(
             result = context[variant_id]
             path = root / paths[variant_id]
             text = path.read_text(encoding="utf-8", errors="ignore")
-            tokens = estimate_tokens(text, chars_per_token)
+            tokens = count_tokens(text)
             normalized = float(result["score"]) / float(result["max_score"])
             rows.append(
                 {
@@ -193,7 +220,8 @@ def write_markdown_report(
     size_rows: list[dict[str, Any]],
     efficiency_rows: list[dict[str, Any]],
     price_per_million_tokens: float,
-    chars_per_token: int,
+    method_label: str,
+    evidence_boundary: str,
 ) -> None:
     size_columns = [
         "Paper",
@@ -216,10 +244,11 @@ def write_markdown_report(
     lines = [
         "# Context Cost Proxy",
         "",
-        "Evidence boundary: token counts are deterministic proxies, estimated as "
-        f"`ceil(characters / {chars_per_token})`. Cost uses a configurable "
+        f"Evidence boundary: {evidence_boundary} Cost uses a configurable "
         f"`{price_per_million_tokens}` dollars per million input-token proxy. "
-        "These are not provider bills or tokenizer-exact measurements.",
+        "These are not provider bills, output-token costs, or success-per-dollar measurements.",
+        "",
+        f"Token count method: {method_label}.",
         "",
         "## Context Size Proxy",
         "",
@@ -242,10 +271,12 @@ def generate_cost_artifacts(
     output_dir: Path,
     price_per_million_tokens: float,
     chars_per_token: int = TOKEN_PROXY_CHARS,
+    tokenizer_name: str | None = DEFAULT_TOKENIZER,
 ) -> dict[str, Path]:
     output_dir.mkdir(parents=True, exist_ok=True)
-    size_rows = build_context_size_rows(root, chars_per_token, price_per_million_tokens)
-    efficiency_rows = build_efficiency_rows(root, chars_per_token, price_per_million_tokens)
+    count_tokens = character_proxy_counter(chars_per_token)
+    size_rows = build_context_size_rows(root, count_tokens, price_per_million_tokens)
+    efficiency_rows = build_efficiency_rows(root, count_tokens, price_per_million_tokens)
 
     size_columns = [
         "Paper",
@@ -276,12 +307,20 @@ def generate_cost_artifacts(
 
     write_csv(size_csv, size_rows, size_columns)
     write_csv(efficiency_csv, efficiency_rows, efficiency_columns)
-    write_markdown_report(report_md, size_rows, efficiency_rows, price_per_million_tokens, chars_per_token)
+    write_markdown_report(
+        report_md,
+        size_rows,
+        efficiency_rows,
+        price_per_million_tokens,
+        f"character proxy, ceil(characters / {chars_per_token})",
+        "Token counts are deterministic character proxies.",
+    )
     report_json.write_text(
         json.dumps(
             {
                 "schema_version": "0.1",
-                "evidence_boundary": "Deterministic token/cost proxy, not provider billing or tokenizer-exact accounting.",
+                "evidence_boundary": "Deterministic character-based token/cost proxy, not provider billing or tokenizer-exact accounting.",
+                "token_count_method": "character_proxy",
                 "chars_per_token": chars_per_token,
                 "price_per_million_input_token_proxy": price_per_million_tokens,
                 "context_size": size_rows,
@@ -292,13 +331,66 @@ def generate_cost_artifacts(
         + "\n",
         encoding="utf-8",
     )
-
-    return {
+    written = {
         "context_cost_proxy_csv": size_csv,
         "coverage_cost_efficiency_csv": efficiency_csv,
         "context_cost_proxy_md": report_md,
         "context_cost_proxy_json": report_json,
     }
+
+    if tokenizer_name:
+        tokenizer_count_tokens, tokenizer_error = tokenizer_counter(tokenizer_name)
+        if tokenizer_count_tokens:
+            tokenizer_size_rows = build_context_size_rows(root, tokenizer_count_tokens, price_per_million_tokens)
+            tokenizer_efficiency_rows = build_efficiency_rows(root, tokenizer_count_tokens, price_per_million_tokens)
+            tokenizer_size_csv = output_dir / "context_cost_proxy_tokenizer.csv"
+            tokenizer_efficiency_csv = output_dir / "coverage_cost_efficiency_tokenizer.csv"
+            tokenizer_report_md = output_dir / "context_cost_proxy_tokenizer.md"
+            tokenizer_report_json = output_dir / "context_cost_proxy_tokenizer.json"
+
+            write_csv(tokenizer_size_csv, tokenizer_size_rows, size_columns)
+            write_csv(tokenizer_efficiency_csv, tokenizer_efficiency_rows, efficiency_columns)
+            write_markdown_report(
+                tokenizer_report_md,
+                tokenizer_size_rows,
+                tokenizer_efficiency_rows,
+                price_per_million_tokens,
+                f"tiktoken encoding {tokenizer_name}",
+                f"Token counts are local tokenizer-aware counts using `{tokenizer_name}`.",
+            )
+            tokenizer_report_json.write_text(
+                json.dumps(
+                    {
+                        "schema_version": "0.1",
+                        "evidence_boundary": (
+                            "Local tokenizer-aware token/cost proxy, exact for the configured tokenizer but "
+                            "not provider billing, output-token costs, or live success-per-dollar evidence."
+                        ),
+                        "token_count_method": "tokenizer",
+                        "tokenizer_name": tokenizer_name,
+                        "price_per_million_input_token_proxy": price_per_million_tokens,
+                        "context_size": tokenizer_size_rows,
+                        "coverage_efficiency": tokenizer_efficiency_rows,
+                    },
+                    indent=2,
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            written.update(
+                {
+                    "context_cost_proxy_tokenizer_csv": tokenizer_size_csv,
+                    "coverage_cost_efficiency_tokenizer_csv": tokenizer_efficiency_csv,
+                    "context_cost_proxy_tokenizer_md": tokenizer_report_md,
+                    "context_cost_proxy_tokenizer_json": tokenizer_report_json,
+                }
+            )
+        else:
+            warning_path = output_dir / "context_cost_proxy_tokenizer_unavailable.txt"
+            warning_path.write_text(f"Tokenizer report skipped: {tokenizer_error}\n", encoding="utf-8")
+            written["context_cost_proxy_tokenizer_unavailable"] = warning_path
+
+    return written
 
 
 def main() -> int:
@@ -308,6 +400,11 @@ def main() -> int:
     parser.add_argument("--output-dir", type=Path, default=root / "results" / "tables")
     parser.add_argument("--chars-per-token", type=int, default=TOKEN_PROXY_CHARS)
     parser.add_argument("--price-per-million-input-tokens", type=float, default=1.0)
+    parser.add_argument(
+        "--tokenizer",
+        default=DEFAULT_TOKENIZER,
+        help="Optional tiktoken encoding for tokenizer-aware proxy outputs. Use '' to skip.",
+    )
     args = parser.parse_args()
 
     written = generate_cost_artifacts(
@@ -315,6 +412,7 @@ def main() -> int:
         args.output_dir,
         args.price_per_million_input_tokens,
         args.chars_per_token,
+        args.tokenizer or None,
     )
     for path in written.values():
         print(path)
