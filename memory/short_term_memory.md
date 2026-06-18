@@ -9,14 +9,14 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 21 was committed and pushed as `14232f7` on `origin/main`: official
-AAAI-27 template package, AAAI-formatted paper draft, usage examples, and
-Claude/GPT-family/DeepSeek model-ablation prompt packets.
+Phase 22 was committed and pushed as `dea3a7c` on `origin/main`: live
+model-ablation runner/evaluator, redacted run report, pending response
+evaluation, and paper/research/memory updates.
 
-Phase 22 is active locally: live model-ablation runner/evaluator, redacted run
-report, pending response evaluation, and paper/research/memory updates. The
-latest endpoint attempt found `claude-opus-4-8` listed but blocked by provider
-account availability, and no GPT-family model alias listed.
+Phase 23 is active locally: rechecked the Claude/GPT-family endpoint, confirmed
+the same provider/model availability blocker, and hardened the DeepSeek
+follow-up path so a concrete DeepSeek alias will run through the same runner and
+evaluator without special placeholder flags.
 
 ## Latest User Request
 
@@ -455,8 +455,8 @@ The user provided the PaperToSkill idea and asked to:
   - `gpt-5.5` was unavailable and no GPT-family fallback models were listed.
   - DeepSeek follow-up slot was not attempted and remains for the user to add.
   - Response evaluation has 6 total rows, 0 scored rows, and 6 pending rows.
-- Current reproducibility package report after Phase 22 regeneration:
-  `ready_with_pending_external_evidence`, 128 ready checks, 7 pending checks,
+- Current reproducibility package report after Phase 23 regeneration:
+  `ready_with_pending_external_evidence`, 131 ready checks, 7 pending checks,
   and 0 failed checks.
 - For stable long-running AI-Scientist-v2 work, create an isolated Python
   environment because the current global Anaconda environment has package-version
@@ -471,13 +471,14 @@ The user provided the PaperToSkill idea and asked to:
 
 ## Next Actions
 
-1. Regenerate model-ablation evaluation and reproducibility package reports.
+1. Regenerate model-ablation evaluation and reproducibility package reports after
+   the Phase 23 runner/doc updates.
 2. Run full unit tests, `git diff --check`, and raw-key secret scan.
-3. Commit and push Phase 22 if verification is clean.
+3. Commit and push Phase 23 if verification is clean.
 4. When provider capacity or a GPT-family endpoint is available, rerun the same
    model-ablation runner and then score saved responses.
-5. After Claude/GPT rows are available, let the user add DeepSeek by filling the
-   `deepseek_followup_slot`, regenerating prompts if needed, running the same
-   runner, and scoring with the same evaluator.
+5. To add DeepSeek, fill `deepseek_followup_slot` with a real alias/env vars,
+   rebuild prompts, run `--model-id deepseek_followup_slot`, and score with the
+   same evaluator.
 6. Run human fidelity annotation, tokenizer-exact pricing, or expand the
    benchmark to less procedural/interface/theory-heavy papers.

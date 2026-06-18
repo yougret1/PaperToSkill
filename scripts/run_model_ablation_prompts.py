@@ -170,7 +170,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         if selected_model_ids and model_id not in selected_model_ids:
             continue
         slot = model_slots[model_id]
-        if model_id == "deepseek_followup_slot" and not args.include_placeholder_models:
+        is_placeholder_model = str(slot.get("model_alias", "")) == "deepseek-to-be-filled"
+        if is_placeholder_model and not args.include_placeholder_models:
             results.append(
                 {
                     "model_id": model_id,

@@ -897,3 +897,32 @@ Evidence boundary:
 - Phase 22 records a live attempt and provider/model availability evidence.
 - It does not complete Claude/GPT/DeepSeek model ablations because no response
   files were saved and no rows were scored.
+
+## 2026-06-18 Phase 23
+
+Actions:
+
+- Re-ran the model-ablation runner against the provided endpoint for Claude
+  Opus 4.8 and the GPT-family slot.
+- Updated `scripts/run_model_ablation_prompts.py` so the DeepSeek slot is
+  skipped only while its alias remains `deepseek-to-be-filled`.
+- Added tests for placeholder-vs-configured DeepSeek slot behavior.
+- Updated `examples/usage/model_ablation_usage.md` and `research/runbook.md`
+  with runner/scorer commands and concrete DeepSeek follow-up steps.
+
+Results:
+
+- `/v1/models` still succeeded and listed eight Claude-family model IDs,
+  including `claude-opus-4-8`.
+- Both Claude rows again failed with HTTP `503`,
+  `No available accounts: no available accounts`.
+- The endpoint still did not list `gpt-5.5` or any GPT-family fallback model.
+- No response files were saved; response evaluation remains pending.
+- DeepSeek follow-up is mechanically ready: once the placeholder alias is
+  replaced with a concrete model ID and environment variables are set, the
+  runner will attempt it without requiring `--include-placeholder-models`.
+
+Evidence boundary:
+
+- Phase 23 improves execution readiness and records another availability check.
+- It does not complete any model-quality ablation.

@@ -176,7 +176,7 @@ Initial target contribution categories:
   paper-reported limitations/failure branches and 6 project-level failure/fix
   records.
 - `results/reproducibility/`: reproducibility package report. Current status is
-  ready with pending external evidence, 128 ready checks, 7 pending checks, and
+  ready with pending external evidence, 131 ready checks, 7 pending checks, and
   0 failed checks.
 - `research/review_report.md` and `research/rebuttal_bank.md`: internal
   review/rebuttal readiness artifacts that map likely reviewer objections to
@@ -198,7 +198,9 @@ Initial target contribution categories:
 - `scripts/run_model_ablation_prompts.py`: OpenAI-compatible live runner for
   model-ablation prompt packets. It reads credentials from environment
   variables or CLI overrides, writes redacted run reports, and saves successful
-  responses only to expected response paths.
+  responses only to expected response paths. It skips `deepseek_followup_slot`
+  only while the alias remains the placeholder `deepseek-to-be-filled`; a
+  configured DeepSeek alias follows the normal runner path.
 - `scripts/evaluate_model_ablation_responses.py`: deterministic scorer for
   saved model-ablation response files. Missing response files are pending, not
   negative model-quality evidence.

@@ -456,7 +456,7 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 128 ready checks, 7
+  `overall_status=ready_with_pending_external_evidence`, 131 ready checks, 7
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
@@ -592,3 +592,29 @@
   `scripts/evaluate_model_ablation_responses.py`;
   `results/model_ablation_prompts/v0/run_report.md`;
   `results/model_ablation_prompts/v0/evaluation.md`.
+
+## DeepSeek Follow-Up Readiness
+
+- Experiment: harden the model-ablation runner and usage docs so the user can
+  add DeepSeek by filling the existing follow-up slot.
+- Main result: the runner now skips `deepseek_followup_slot` only while its
+  alias remains `deepseek-to-be-filled`; once a concrete alias and environment
+  variables are configured, it follows the same availability, response-save, and
+  scoring path as Claude/GPT-family rows.
+- Latest endpoint recheck: Claude still listed `claude-opus-4-8` but failed
+  with HTTP 503 provider-account errors; no GPT-family aliases were listed.
+- Compared baselines: previous runner behavior required the placeholder include
+  flag for the DeepSeek slot even after future configuration.
+- Practical significance: the user can add DeepSeek later by editing
+  `benchmarks/model_ablation_v0.json`, rebuilding prompts, setting local env
+  vars, running `--model-id deepseek_followup_slot`, and scoring saved
+  responses with the same evaluator.
+- Statistical evidence: none; this is execution readiness and regression-test
+  evidence, not model output evidence.
+- Failure modes: a configured DeepSeek run can still be blocked by credentials,
+  endpoint availability, or model catalog mismatch.
+- Limitations: no DeepSeek, Claude, or GPT-family response rows are completed.
+- Claim impact: supports saying the DeepSeek follow-up path is ready and
+  tested, but not that model ablations are complete.
+- Figure/table: `research/run_logs/2026-06-18_phase23_deepseek_followup_readiness.md`;
+  `examples/usage/model_ablation_usage.md`; `research/runbook.md`.

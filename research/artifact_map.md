@@ -40,6 +40,7 @@
 | `research/run_logs/2026-06-17_phase20_aide_auto_note_profile.md` | AIDE auto-note profile commands, bug fix, and outcomes | Created |
 | `research/run_logs/2026-06-18_phase21_aaai_usage_model_ablation.md` | AAAI template package, usage examples, and model-ablation prompt protocol | Created |
 | `research/run_logs/2026-06-18_phase22_model_ablation_live_attempt.md` | Model-ablation runner/evaluator, live endpoint attempt, and provider/model availability evidence | Created |
+| `research/run_logs/2026-06-18_phase23_deepseek_followup_readiness.md` | DeepSeek follow-up readiness, runner behavior hardening, and endpoint recheck | Created |
 
 ## Paper Draft Package
 

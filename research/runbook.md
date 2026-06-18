@@ -95,6 +95,34 @@ The current prompt grid includes:
 Save live responses only under the `expected_response_path` fields in
 `results/model_ablation_prompts/v0/index.json`. Do not commit raw API keys.
 
+Run Claude/GPT-family availability and response collection:
+
+```powershell
+python scripts\run_model_ablation_prompts.py `
+  --task benchmarks\model_ablation_v0.json `
+  --index results\model_ablation_prompts\v0\index.json `
+  --output-json results\model_ablation_prompts\v0\run_report.json `
+  --output-md results\model_ablation_prompts\v0\run_report.md `
+  --model-id claude_opus_4_8 `
+  --model-id gpt_5_5_or_gpt_family
+```
+
+Score any saved responses:
+
+```powershell
+python scripts\evaluate_model_ablation_responses.py `
+  --index results\model_ablation_prompts\v0\index.json `
+  --output-json results\model_ablation_prompts\v0\evaluation.json `
+  --output-md results\model_ablation_prompts\v0\evaluation.md
+```
+
+For DeepSeek follow-up, edit `deepseek_followup_slot` in
+`benchmarks/model_ablation_v0.json`, replacing `deepseek-to-be-filled` with the
+real model alias and setting concrete `auth_env` / `base_url_env` names. Rebuild
+the prompt packets, set those environment variables locally, and run the same
+runner with `--model-id deepseek_followup_slot`. The runner skips DeepSeek only
+while the placeholder alias remains unchanged.
+
 ## AAAI Paper Package
 
 The official AAAI-27 author kit is stored under `paper/aaai/`.

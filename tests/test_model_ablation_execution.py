@@ -168,6 +168,130 @@ Failure branch:
             self.assertEqual("pending", report["overall_status"])
             self.assertEqual("skipped", report["results"][0]["status"])
 
+    def test_runner_attempts_configured_deepseek_slot_when_env_missing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            prompt = tmp_path / "prompt.md"
+            prompt.write_text("Prompt", encoding="utf-8")
+            task = tmp_path / "task.json"
+            task.write_text(
+                json.dumps(
+                    {
+                        "id": "test_task",
+                        "model_slots": [
+                            {
+                                "id": "deepseek_followup_slot",
+                                "model_alias": "deepseek-reasoner",
+                                "auth_env": "MISSING_DEEPSEEK_KEY",
+                                "base_url_env": "MISSING_DEEPSEEK_BASE",
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            index = tmp_path / "index.json"
+            index.write_text(
+                json.dumps(
+                    {
+                        "task": "test_task",
+                        "prompts": [
+                            {
+                                "model_id": "deepseek_followup_slot",
+                                "case_id": "case_one",
+                                "prompt_path": str(prompt),
+                                "expected_response_path": str(tmp_path / "response.md"),
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            output_json = tmp_path / "run.json"
+            output_md = tmp_path / "run.md"
+
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(RUNNER),
+                    "--task",
+                    str(task),
+                    "--index",
+                    str(index),
+                    "--output-json",
+                    str(output_json),
+                    "--output-md",
+                    str(output_md),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            report = json.loads(output_json.read_text(encoding="utf-8"))
+            self.assertEqual("missing_base_url_or_api_key_env", report["results"][0]["selection_reason"])
+
+    def test_runner_skips_placeholder_deepseek_slot_by_default(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            prompt = tmp_path / "prompt.md"
+            prompt.write_text("Prompt", encoding="utf-8")
+            task = tmp_path / "task.json"
+            task.write_text(
+                json.dumps(
+                    {
+                        "id": "test_task",
+                        "model_slots": [
+                            {
+                                "id": "deepseek_followup_slot",
+                                "model_alias": "deepseek-to-be-filled",
+                                "auth_env": "MISSING_DEEPSEEK_KEY",
+                                "base_url_env": "MISSING_DEEPSEEK_BASE",
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            index = tmp_path / "index.json"
+            index.write_text(
+                json.dumps(
+                    {
+                        "task": "test_task",
+                        "prompts": [
+                            {
+                                "model_id": "deepseek_followup_slot",
+                                "case_id": "case_one",
+                                "prompt_path": str(prompt),
+                                "expected_response_path": str(tmp_path / "response.md"),
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            output_json = tmp_path / "run.json"
+            output_md = tmp_path / "run.md"
+
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(RUNNER),
+                    "--task",
+                    str(task),
+                    "--index",
+                    str(index),
+                    "--output-json",
+                    str(output_json),
+                    "--output-md",
+                    str(output_md),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            report = json.loads(output_json.read_text(encoding="utf-8"))
+            self.assertEqual("placeholder_model_slot", report["results"][0]["selection_reason"])
+
 
 if __name__ == "__main__":
     unittest.main()
