@@ -7,70 +7,84 @@ Current date: 2026-06-19.
 
 ## Current Phase
 
-Phase 39 is in progress: Toolformer live-transfer responses were collected,
-scored, integrated into local gates/docs, and are being verified before commit.
+Phase 40 is in progress: AI Scientist-v2, Reflexion, and AIDE live-transfer
+saved responses were collected, all four paper packets were rescored, and the
+project is being integrated/verified before commit.
 
-Latest pushed commit before this phase: `99e4434 Add model response cost proxy`.
+Latest pushed commit before this phase: `6a52e66 Add Toolformer live transfer
+responses`.
 
-Current uncommitted Phase 39 work includes:
+Current uncommitted Phase 40 work includes:
 
-- `scripts/run_live_transfer_prompts.py`
-- `scripts/evaluate_live_transfer_responses.py`
-- `tests/test_live_transfer_execution.py`
-- `results/live_transfer_prompts/evaluation.{json,md}`
-- `results/live_transfer_prompts/toolformer_v0/run_report.{json,md}`
-- `results/live_transfer_prompts/toolformer_v0/responses/*.md`
-- updated package/usage/goal checkers and reports
-- updated runbook, artifact map, result cards, goal audit, stage log, paper
-  claim docs, AAAI/Markdown drafts, README, and memory
-- new run log:
-  `research/run_logs/2026-06-19_phase39_toolformer_live_transfer.md`
+- new saved responses and run reports under:
+  - `results/live_transfer_prompts/ai_scientist_v2_v0/`
+  - `results/live_transfer_prompts/reflexion_v0/`
+  - `results/live_transfer_prompts/aide_v0/`
+- updated aggregate live-transfer evaluation:
+  `results/live_transfer_prompts/evaluation.{json,md}`
+- updated package and goal reports:
+  `results/reproducibility/package_report.{json,md}` and
+  `results/reproducibility/goal_completion_report.{json,md}`
+- updated gates/tests:
+  `scripts/check_reproducibility_package.py`,
+  `scripts/check_goal_completion.py`, `scripts/check_paper_claims.py`,
+  `tests/test_check_reproducibility_package.py`,
+  `tests/test_check_goal_completion.py`, and
+  `tests/test_check_paper_claims.py`
+- updated docs/paper/memory/run logs, including:
+  `research/run_logs/2026-06-19_phase40_all_live_transfer_responses.md`
 
 ## Current Evidence
 
-- Toolformer live-transfer run report:
-  `results/live_transfer_prompts/toolformer_v0/run_report.md`
-  reports `overall_status=complete`, 6 successes, 0 errors, 0 skipped rows,
-  catalog status `success`, 14 models, and alias `claude-opus-4-8`.
-- Live-transfer response evaluation:
-  `results/live_transfer_prompts/evaluation.md`
-  reports 24 total rows, 6 scored Toolformer rows, 18 pending rows, and 1.0
-  average normalized score over scored rows.
-- All six Toolformer rows score 9/9.
-- Remaining live-transfer response sets are pending:
-  AI Scientist-v2, Reflexion, and AIDE.
-- GPT-family rows are now saved and scored for the current two-case
-  model-ablation protocol: Toolformer timed out on `gpt-5.5` then succeeded
-  with `gpt-5.4`, while AIDE succeeded with `gpt-5.5`.
+- AI Scientist-v2 live-transfer run report:
+  `results/live_transfer_prompts/ai_scientist_v2_v0/run_report.md`
+  reports `overall_status=complete`, 6 successes, and alias
+  `claude-opus-4-8` for all rows.
+- Reflexion live-transfer run report:
+  `results/live_transfer_prompts/reflexion_v0/run_report.md`
+  reports `overall_status=complete`, 6 successes, and alias
+  `claude-opus-4-8` for all rows.
+- AIDE live-transfer run report:
+  `results/live_transfer_prompts/aide_v0/run_report.md`
+  reports `overall_status=complete`, 6 successes, and one provider fallback:
+  `claude-opus-4-8` remote connection closure followed by
+  `claude-opus-4-7` success on the first row.
+- Toolformer live-transfer run report from Phase 39 remains complete:
+  6 successes with `claude-opus-4-8`.
+- Aggregate live-transfer response evaluation:
+  `results/live_transfer_prompts/evaluation.md` reports 24 total rows,
+  24 scored rows, 0 pending rows, and average normalized score 1.0.
+  AI Scientist-v2, Reflexion, and AIDE rows score 11/11; Toolformer rows
+  score 9/9.
+- gpt-family rows are now saved and scored for the current two-case
+  model-ablation
+  protocol: Toolformer timed out on `gpt-5.5` then succeeded with `gpt-5.4`,
+  while AIDE succeeded with `gpt-5.5`.
 - AI-Scientist-v2 dry-run succeeded with the PaperToSkill seed idea at
   `D:\a_work\gitee\ai-scientist-v2\experiments\2026-06-17_15-22-40_papertoskill_extractor_attempt_0`.
-- Latest generated reports after Phase 39 integration:
-  - Usage examples: ready, 47 ready, 0 failed.
-  - Reproducibility package: `ready_with_pending_external_evidence`, 191 ready,
-    7 pending, 0 failed.
-  - Active-goal completion: `not_complete_pending_external_evidence`, 44 ready,
-    8 pending, 0 failed.
 
 ## Boundaries To Preserve
 
 Do not claim:
 
 - DeepSeek completed.
-- All live cross-harness response sets completed.
-- Human semantic fidelity.
+- Human semantic fidelity or expert validation completed.
 - Provider billing, live invoices, realized output-token bills, or
   success-per-dollar evidence.
 - Reliable arbitrary-PDF automation.
+- Saved-response output-contract scoring proves real live task success.
 - Submission-final or accepted AAAI paper.
 
-Supported after Phase 39 if verification passes:
+Supported after Phase 40 if verification passes:
 
-- Toolformer live-transfer response set completed with Claude Opus 4.8 for both
-  harness prompt styles and all three context variants.
-- Live-transfer infrastructure exists: runner, saved-response evaluator,
-  aggregate report, run report, tests, and docs.
-- Full live-transfer goal remains pending because AI Scientist-v2, Reflexion,
-  and AIDE response sets are missing.
+- All four live-transfer saved-response sets are complete for the current
+  prompt-packet protocol and deterministically scored.
+- Claude-family live-transfer coverage spans AI Scientist-v2, Reflexion, AIDE,
+  and Toolformer across Codex-style and Claude-style harness prompts and three
+  context variants.
+- AIDE has one provider fallback row from `claude-opus-4-8` to
+  `claude-opus-4-7`; record this as provider/alias evidence, not model-quality
+  failure evidence.
 
 ## Verification Still Needed Before Commit
 
@@ -89,15 +103,21 @@ rg -n "sk-[A-Za-z0-9]{20,}" .
 ```
 
 Because `paper/aaai/papertoskill_aaai2027.tex` changed, rebuild the AAAI PDF
-before the AAAI package gate if `check_aaai_package.py --strict` reports stale
-PDF/log artifacts.
+before the AAAI package gate:
+
+```powershell
+cd paper\aaai
+pdflatex papertoskill_aaai2027.tex
+bibtex papertoskill_aaai2027
+pdflatex papertoskill_aaai2027.tex
+pdflatex papertoskill_aaai2027.tex
+```
 
 ## Persistent Blockers
 
 - DeepSeek follow-up remains pending user-provided alias/env profile.
-- AI Scientist-v2 live LLM run remains pending.
-- AI Scientist-v2, Reflexion, and AIDE live-transfer response sets remain
-  pending.
+- AI Scientist-v2 full live LLM run remains pending; this is separate from the
+  completed AI Scientist-v2 live-transfer saved-response packet.
 - Human-fidelity annotation remains pending.
 - Provider billing and success-per-dollar evidence remain pending.
 - Final AAAI submission readiness remains pending.

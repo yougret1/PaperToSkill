@@ -1456,3 +1456,39 @@ Evidence boundary:
 - It does not complete the remaining live-transfer response sets, DeepSeek,
   human-fidelity annotation, provider billing, live invoices, realized
   success-per-dollar evidence, or final AAAI submission readiness.
+
+## 2026-06-19 Phase 40
+
+Actions:
+
+- Ran the remaining AI Scientist-v2, Reflexion, and AIDE live-transfer prompt
+  packets with the Claude-family endpoint using shell-only credentials.
+- Saved six response files for each paper under
+  `results/live_transfer_prompts/<paper>_v0/responses/`.
+- Generated per-paper run reports for AI Scientist-v2, Reflexion, and AIDE.
+- Reran the aggregate live-transfer saved-response evaluator across all four
+  paper packets.
+- Updated package and goal gates to check all four live-transfer run reports
+  and all four scored saved-response sets.
+
+Results:
+
+- AI Scientist-v2: run report `overall_status=complete`, 6 successes, 0 errors,
+  and all rows used `claude-opus-4-8`.
+- Reflexion: run report `overall_status=complete`, 6 successes, 0 errors, and
+  all rows used `claude-opus-4-8`.
+- AIDE: run report `overall_status=complete`, 6 successes, 0 errors. The first
+  row fell back from `claude-opus-4-8` after a remote connection closure to
+  `claude-opus-4-7`; the remaining rows used `claude-opus-4-8`.
+- Aggregate live-transfer evaluation now reports 24 total rows, 24 scored rows,
+  0 pending rows, and 1.0 average normalized score.
+- AI Scientist-v2, Reflexion, and AIDE rows score 11/11 each; Toolformer rows
+  remain 9/9 each.
+
+Evidence boundary:
+
+- Phase 40 completes saved live-transfer response coverage for the current
+  prompt-packet protocol.
+- It does not establish human semantic fidelity, real live task success,
+  DeepSeek completion, provider billing, success-per-dollar evidence, or final
+  AAAI submission readiness.

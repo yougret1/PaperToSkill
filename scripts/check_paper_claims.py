@@ -55,8 +55,8 @@ FORBIDDEN_PATTERNS = [
     },
     {
         "id": "live_transfer_success",
-        "pattern": r"\blive\b[^.]{0,120}\b(cross-harness|transfer|agent)\b[^.]{0,120}\b(completed|successful|success|improves?|proven)\b",
-        "detail": "Do not claim completed or successful live transfer.",
+        "pattern": r"\blive\s+(cross-harness|agent|task)\b[^.]{0,120}\b(completed|successful|success|improves?|proven)\b",
+        "detail": "Do not claim completed or successful live agent/task transfer.",
     },
     {
         "id": "human_validated",
@@ -92,9 +92,9 @@ REQUIRED_BOUNDARIES = [
         "detail": "Paper text should distinguish the current system from robust arbitrary-PDF automation.",
     },
     {
-        "id": "live_transfer_pending",
-        "pattern": r"(live cross-harness[^.]{0,80}future\s+work|live cross-harness[^.]{0,80}has\s+not\s+completed|live agent execution[^.]{0,80}not)",
-        "detail": "Paper text should keep live cross-harness execution pending.",
+        "id": "live_transfer_saved_response_boundary",
+        "pattern": r"(saved live-transfer response files[^.]{0,160}(not|does not|do not)[^.]{0,120}(human|semantic|live task|task success|agent-task)|saved-response[^.]{0,160}(not|does not|do not)[^.]{0,120}(human|semantic|live task|task success|agent-task)|live-transfer response sets[^.]{0,120}saved and scored[^.]{0,160}(not|does not|do not))",
+        "detail": "Paper text should distinguish saved-response scoring from live task success or human semantic fidelity.",
     },
     {
         "id": "human_fidelity_pending",

@@ -182,13 +182,35 @@ Existing live-transfer prompt packets live under
 `results/live_transfer_prompts/*_v0/index.json`. Save responses only under each
 row's `expected_response_path`. Do not commit raw API keys.
 
-Run the Toolformer live-transfer packet with the Claude-family profile:
+Run one live-transfer packet with the Claude-family profile:
 
 ```powershell
 python scripts\run_live_transfer_prompts.py `
   --index results\live_transfer_prompts\toolformer_v0\index.json `
   --output-json results\live_transfer_prompts\toolformer_v0\run_report.json `
   --output-md results\live_transfer_prompts\toolformer_v0\run_report.md `
+  --max-tokens 900
+```
+
+Repeat the same command for the other paper packet indexes and output paths:
+
+```powershell
+python scripts\run_live_transfer_prompts.py `
+  --index results\live_transfer_prompts\ai_scientist_v2_v0\index.json `
+  --output-json results\live_transfer_prompts\ai_scientist_v2_v0\run_report.json `
+  --output-md results\live_transfer_prompts\ai_scientist_v2_v0\run_report.md `
+  --max-tokens 900
+
+python scripts\run_live_transfer_prompts.py `
+  --index results\live_transfer_prompts\reflexion_v0\index.json `
+  --output-json results\live_transfer_prompts\reflexion_v0\run_report.json `
+  --output-md results\live_transfer_prompts\reflexion_v0\run_report.md `
+  --max-tokens 900
+
+python scripts\run_live_transfer_prompts.py `
+  --index results\live_transfer_prompts\aide_v0\index.json `
+  --output-json results\live_transfer_prompts\aide_v0\run_report.json `
+  --output-md results\live_transfer_prompts\aide_v0\run_report.md `
   --max-tokens 900
 ```
 
@@ -204,13 +226,15 @@ python scripts\evaluate_live_transfer_responses.py `
   --output-md results\live_transfer_prompts\evaluation.md
 ```
 
-Current Phase 39 status: the Toolformer live-transfer response set has 6 saved
-Claude Opus 4.8 responses across both harness prompt styles and all three
-context variants, and all 6 rows score 9/9 in
-`results/live_transfer_prompts/evaluation.md`. AI Scientist-v2, Reflexion, and
-AIDE remain pending with 18 missing response rows total. This is deterministic
-output-contract scoring, not human semantic fidelity or full live cross-harness
-completion.
+Current Phase 40 status: all four live-transfer response sets have saved
+responses across both harness prompt styles and all three context variants.
+`results/live_transfer_prompts/evaluation.md` reports 24 total rows, 24 scored
+rows, 0 pending rows, and average normalized score 1.0 under deterministic
+output-contract scoring. AI Scientist-v2, Reflexion, and AIDE rows score 11/11;
+Toolformer rows score 9/9. AIDE has one provider fallback row:
+`claude-opus-4-8` closed the connection, then `claude-opus-4-7` succeeded. This
+is saved-response evidence, not human semantic fidelity, real live task success,
+provider billing, or DeepSeek completion.
 
 ## Usage Example Gate
 
@@ -225,8 +249,9 @@ python scripts\check_usage_examples.py `
 ```
 
 This checker validates the Codex-style skill usage files, the scored Toolformer
-Codex-style response slot, the model-ablation prompt grid and response slots, an
-offline AIDE extracted-text-to-note-to-skill chain, and a PDF-input pipeline
+Codex-style response slot, the full live-transfer response evaluation, the
+model-ablation prompt grid and response slots, an offline AIDE
+extracted-text-to-note-to-skill chain, and a PDF-input pipeline
 smoke run in a temporary directory. It does not execute additional
 Claude/GPT/DeepSeek calls.
 
@@ -302,10 +327,9 @@ python scripts\check_goal_completion.py `
 ```
 
 This checker is expected to report
-`not_complete_pending_external_evidence` until the remaining live cross-harness
-response sets, the DeepSeek follow-up response rows, human-fidelity annotation,
-provider-billing or success-per-dollar evidence, and final AAAI submission
-decisions are complete.
+`not_complete_pending_external_evidence` until the DeepSeek follow-up response
+rows, human-fidelity annotation, provider-billing or success-per-dollar
+evidence, and final AAAI submission decisions are complete.
 Passing `--strict` only fails on local requirement
 failures; pending external evidence remains pending rather than a package
 failure.

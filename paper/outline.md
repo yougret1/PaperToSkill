@@ -10,9 +10,9 @@ benchmark. Phase 21 adds an AAAI-27 LaTeX package and usage examples. Phases
 and GPT-family rows are saved and scored for the current two-case protocol,
 while DeepSeek remains pending user configuration. Phase 38 adds a local
 output-token proxy over the saved Claude/GPT-family model responses; it is not
-provider billing evidence. Phase 39 adds saved and scored Toolformer
-live-transfer responses while the other three paper response sets remain
-pending.
+provider billing evidence. Phase 40 completes saved and scored live-transfer
+responses for all four paper packets under the deterministic output-contract
+evaluator.
 
 ## Working Title
 
@@ -142,13 +142,13 @@ Main results from `results/tables/main_results.md`:
 - the failure-case archive records 27 cases: 21 paper-reported limitations or
   failure branches and 6 project-level failure/fix records.
 - the reproducibility package checker reports local package readiness with
-  pending live-response, DeepSeek-response, and human-annotation evidence
-  separated from local failures: 191 ready checks, 7 pending checks, and 0
-  failed checks.
-- the Toolformer live-transfer response set has 6 saved Claude Opus 4.8
-  responses across Codex-style and Claude-style harness prompts, all scoring
-  9/9 under the saved-response output-contract evaluator; the remaining three
-  paper response sets are pending.
+  pending DeepSeek-response and human-annotation evidence separated from local
+  failures.
+- all four live-transfer response sets have saved Claude-family responses across
+  Codex-style and Claude-style harness prompts and all three context variants;
+  the aggregate evaluator reports 24/24 scored rows, 0 pending rows, and 1.0
+  average normalized score. AI Scientist-v2, Reflexion, and AIDE rows score
+  11/11; Toolformer rows score 9/9.
 - the model-ablation live attempts record that Claude Opus 4.8 and GPT-family
   each completed both current prompt rows and scored 6/6; the GPT-family
   Toolformer row used `gpt-5.4` after a `gpt-5.5` timeout, while the AIDE row
@@ -171,8 +171,9 @@ Current limitations:
 - main benchmark inputs are curated paper notes; the automatic note scaffolds
   are validated only on Toolformer and AIDE extracted text;
 - metrics are deterministic and lexical/section based;
-- live cross-harness execution is partially collected: Toolformer is complete,
-  while AI Scientist-v2, Reflexion, and AIDE response sets remain pending;
+- live-transfer saved-response coverage is complete for the current prompt
+  packets, but the scorer is a deterministic output-contract check rather than
+  human semantic fidelity or real live task success;
 - Claude/GPT-family/DeepSeek model ablation prompts are prepared, and Claude
   Opus 4.8 plus GPT-family rows are saved and scored for the current prompt
   protocol, but DeepSeek rows remain unattempted;
@@ -183,8 +184,9 @@ Current limitations:
   or a full token-price study;
 - the failure-case archive is provenance evidence, not an outcome study showing
   that recording failures improves final task success;
-- the reproducibility package is ready locally but still lacks three live
-  response sets and completed human annotations;
+- the reproducibility package is ready locally but still lacks completed human
+  annotations, DeepSeek responses, provider billing, and final submission
+  decisions;
 - benchmark is focused on agent-method papers.
 
 ### 7. Conclusion
@@ -209,7 +211,7 @@ that are less directly procedural.
 | Appendix: Failure-case archive | `results/failure_cases/failure_case_archive.md` | Paper-reported and project-level failure/limitation cases |
 | Appendix: Reproducibility package | `results/reproducibility/package_report.md` | Local package readiness and pending external evidence |
 | Appendix: Review/rebuttal package | `research/review_report.md`; `research/rebuttal_bank.md` | Adversarial risks and evidence-bounded responses |
-| Appendix: Prompt packets | `results/live_transfer_prompts/` | Live prompt packets, saved Toolformer responses, and pending remaining response sets |
+| Appendix: Prompt packets | `results/live_transfer_prompts/` | Live prompt packets, run reports, saved responses, and deterministic output-contract scoring |
 | Appendix: Model ablation prompts | `results/model_ablation_prompts/v0/` | Claude/GPT-family/DeepSeek prompt grid, live-attempt reports, scored Claude/GPT-family responses, and pending DeepSeek rows |
 | Appendix: Model response cost proxy | `results/tables/model_response_cost_proxy.md` | Local output-token proxy for saved Claude/GPT-family model-ablation responses |
 | Appendix: AAAI package | `paper/aaai/` | Official AAAI-27 template provenance and LaTeX draft |

@@ -112,6 +112,7 @@ CORE_FILES = {
     "phase37_gpt_family_ablation_success_run_log": "research/run_logs/2026-06-19_phase37_gpt_family_ablation_success.md",
     "phase38_model_response_cost_proxy_run_log": "research/run_logs/2026-06-19_phase38_model_response_cost_proxy.md",
     "phase39_toolformer_live_transfer_run_log": "research/run_logs/2026-06-19_phase39_toolformer_live_transfer.md",
+    "phase40_all_live_transfer_run_log": "research/run_logs/2026-06-19_phase40_all_live_transfer_responses.md",
     "result_cards": "results/result_cards.md",
 }
 
@@ -193,9 +194,38 @@ LIVE_TRANSFER_FILES = {
     "live_transfer_response_evaluator": "scripts/evaluate_live_transfer_responses.py",
     "live_transfer_evaluation_json": "results/live_transfer_prompts/evaluation.json",
     "live_transfer_evaluation_md": "results/live_transfer_prompts/evaluation.md",
+    "ai_scientist_v2_live_run_report_json": "results/live_transfer_prompts/ai_scientist_v2_v0/run_report.json",
+    "ai_scientist_v2_live_run_report_md": "results/live_transfer_prompts/ai_scientist_v2_v0/run_report.md",
+    "reflexion_live_run_report_json": "results/live_transfer_prompts/reflexion_v0/run_report.json",
+    "reflexion_live_run_report_md": "results/live_transfer_prompts/reflexion_v0/run_report.md",
+    "aide_live_run_report_json": "results/live_transfer_prompts/aide_v0/run_report.json",
+    "aide_live_run_report_md": "results/live_transfer_prompts/aide_v0/run_report.md",
     "toolformer_live_run_report_json": "results/live_transfer_prompts/toolformer_v0/run_report.json",
     "toolformer_live_run_report_md": "results/live_transfer_prompts/toolformer_v0/run_report.md",
 }
+
+LIVE_TRANSFER_CASES = [
+    {
+        "id": "ai_scientist_v2",
+        "task": "ai_scientist_v2_live_transfer",
+        "run_report": "results/live_transfer_prompts/ai_scientist_v2_v0/run_report.json",
+    },
+    {
+        "id": "reflexion",
+        "task": "reflexion_live_transfer",
+        "run_report": "results/live_transfer_prompts/reflexion_v0/run_report.json",
+    },
+    {
+        "id": "aide",
+        "task": "aide_live_transfer",
+        "run_report": "results/live_transfer_prompts/aide_v0/run_report.json",
+    },
+    {
+        "id": "toolformer",
+        "task": "toolformer_live_transfer",
+        "run_report": "results/live_transfer_prompts/toolformer_v0/run_report.json",
+    },
+]
 
 TEXT_SUFFIXES = {
     ".csv",
@@ -484,7 +514,7 @@ def paper_claim_checks(root: Path) -> list[Check]:
     required_ready = {
         "paper_claim_boundary_curated_scope",
         "paper_claim_boundary_not_pdf_automation",
-        "paper_claim_boundary_live_transfer_pending",
+        "paper_claim_boundary_live_transfer_saved_response_boundary",
         "paper_claim_boundary_model_ablation_partial_boundary",
     }
     missing = sorted(required_ready - ready_ids)
@@ -712,19 +742,20 @@ def live_transfer_checks(root: Path) -> list[Check]:
             )
         )
 
-        toolformer_rows = [row for row in results if row.get("task") == "toolformer_live_transfer"]
-        toolformer_scored = [row for row in toolformer_rows if row.get("status") == "scored"]
-        toolformer_ready = len(toolformer_rows) == 6 and len(toolformer_scored) == 6 and all(
-            float(row.get("normalized_score", 0)) >= 1.0 for row in toolformer_scored
-        )
-        checks.append(
-            Check(
-                "toolformer_live_transfer_responses_scored",
-                "ready" if toolformer_ready else "pending",
-                f"scored_rows={len(toolformer_scored)}/6",
-                str(evaluation_path.relative_to(root)),
+        for case in LIVE_TRANSFER_CASES:
+            rows = [row for row in results if row.get("task") == case["task"]]
+            scored_rows = [row for row in rows if row.get("status") == "scored"]
+            ready = len(rows) == 6 and len(scored_rows) == 6 and all(
+                float(row.get("normalized_score", 0)) >= 1.0 for row in scored_rows
             )
-        )
+            checks.append(
+                Check(
+                    f"{case['id']}_live_transfer_responses_scored",
+                    "ready" if ready else "pending",
+                    f"scored_rows={len(scored_rows)}/6",
+                    str(evaluation_path.relative_to(root)),
+                )
+            )
         checks.append(
             Check(
                 "live_transfer_all_responses_scored",
@@ -734,13 +765,15 @@ def live_transfer_checks(root: Path) -> list[Check]:
             )
         )
 
-    run_report_path = root / "results/live_transfer_prompts/toolformer_v0/run_report.json"
-    if run_report_path.exists():
+    for case in LIVE_TRANSFER_CASES:
+        run_report_path = root / case["run_report"]
+        if not run_report_path.exists():
+            continue
         run_report = load_json(run_report_path)
         counts = run_report.get("status_counts", {})
         status = "ready" if run_report.get("overall_status") == "complete" and counts.get("success") == 6 else "fail"
         detail = f"overall={run_report.get('overall_status')}; counts={counts}; alias_count={len(run_report.get('model_aliases', []))}"
-        checks.append(Check("toolformer_live_run_report_complete", status, detail, str(run_report_path.relative_to(root))))
+        checks.append(Check(f"{case['id']}_live_run_report_complete", status, detail, str(run_report_path.relative_to(root))))
     return checks
 
 

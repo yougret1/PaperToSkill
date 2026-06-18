@@ -57,6 +57,7 @@
 | `research/run_logs/2026-06-19_phase37_gpt_family_ablation_success.md` | GPT-family saved/scored model-ablation responses | Created |
 | `research/run_logs/2026-06-19_phase38_model_response_cost_proxy.md` | Local output-token proxy for saved model-ablation responses | Created |
 | `research/run_logs/2026-06-19_phase39_toolformer_live_transfer.md` | Toolformer live-transfer response collection, scoring, and evidence boundary | Created |
+| `research/run_logs/2026-06-19_phase40_all_live_transfer_responses.md` | AI Scientist-v2, Reflexion, and AIDE live-transfer saved-response collection plus all-packet rescoring | Created |
 
 ## Paper Draft Package
 
@@ -233,11 +234,11 @@
 | `results/evaluations/aide_auto_context_baselines_v0.json` | AIDE auto-note-derived skill context coverage scores | Created |
 | `results/evaluations/aide_auto_harness_transfer_v0.json` | AIDE auto-note-derived skill transfer-readiness scores | Created |
 | `results/evaluations/aide_auto_source_span_validation_v0.json` | AIDE auto-note-derived skill source-span validation output | Created |
-| `results/live_transfer_prompts/ai_scientist_v2_v0/` | Live Codex/Claude prompt packets and index | Created |
-| `results/live_transfer_prompts/reflexion_v0/` | Reflexion live Codex/Claude prompt packets and index | Created |
-| `results/live_transfer_prompts/aide_v0/` | AIDE live Codex/Claude prompt packets and index | Created |
+| `results/live_transfer_prompts/ai_scientist_v2_v0/` | AI Scientist-v2 live Codex/Claude prompt packets, saved responses, and run report | Created |
+| `results/live_transfer_prompts/reflexion_v0/` | Reflexion live Codex/Claude prompt packets, saved responses, and run report | Created |
+| `results/live_transfer_prompts/aide_v0/` | AIDE live Codex/Claude prompt packets, saved responses, and run report | Created |
 | `results/live_transfer_prompts/toolformer_v0/` | Toolformer live Codex/Claude prompt packets, saved responses, and run report | Created |
-| `results/live_transfer_prompts/evaluation.md` | Saved live-transfer response evaluation across four paper packets; Toolformer scored, other paper sets pending | Created |
+| `results/live_transfer_prompts/evaluation.md` | Saved live-transfer response evaluation across four paper packets; all 24 rows scored under the deterministic output-contract evaluator | Created |
 | `results/live_transfer_prompts/evaluation.json` | Machine-readable saved live-transfer response evaluation | Created |
 | `results/tables/main_results.md` | Paper-ready main results table | Created |
 | `results/tables/main_results.csv` | CSV copy of main results table | Created |
@@ -304,5 +305,4 @@
 
 | Artifact | Purpose | Status |
 | --- | --- | --- |
-| Remaining live cross-harness response logs | AI Scientist-v2, Reflexion, and AIDE live-transfer response sets | Planned |
 | Model-ablation response logs | Claude/GPT-family/DeepSeek response files and scores after endpoint/model availability | Planned |

@@ -336,29 +336,58 @@
 - Main result: `results/live_transfer_prompts/toolformer_v0/run_report.md`
   reports `overall_status=complete`, 6 successes, 0 errors, catalog status
   `success`, 14 listed models, and exact alias `claude-opus-4-8`.
-- Response evaluation: `results/live_transfer_prompts/evaluation.md` reports
-  24 total rows, 6 scored Toolformer rows, 18 pending rows, and average
-  normalized score 1.0 over scored rows. All six Toolformer rows score 9/9.
+- Response evaluation: all six Toolformer rows score 9/9 in
+  `results/live_transfer_prompts/evaluation.md`.
 - Compared baselines: full skill, skill without `Transfer Notes`, and generic
   summary contexts are all present in the current Toolformer live response set;
   this phase does not yet aggregate a live success-rate comparison.
-- Practical significance: the project now has reusable live-transfer execution
-  and saved-response scoring infrastructure, plus one complete paper response
-  set for transfer-prompt evidence.
+- Practical significance: this was the first complete paper response set and
+  established reusable live-transfer execution and saved-response scoring
+  infrastructure.
 - Statistical evidence: none; deterministic output-contract scoring over six
   saved responses.
 - Failure modes: keyword-style output-contract scoring can over-credit text
   that names required concepts without independently proving task execution
   quality.
-- Limitations: AI Scientist-v2, Reflexion, and AIDE live-transfer response sets
-  remain pending; this is not human semantic fidelity, provider billing, or full
-  live cross-harness completion.
+- Limitations: this is not human semantic fidelity, provider billing, or live
+  task-success evidence.
 - Claim impact: supports saying the Toolformer live-transfer response set is
-  saved and scored, while preserving the boundary that the full live
-  cross-harness evidence set remains pending.
+  saved and scored under the deterministic output-contract evaluator.
 - Figure/table: `scripts/run_live_transfer_prompts.py`;
   `scripts/evaluate_live_transfer_responses.py`;
   `research/run_logs/2026-06-19_phase39_toolformer_live_transfer.md`;
+  `results/live_transfer_prompts/toolformer_v0/run_report.md`;
+  `results/live_transfer_prompts/evaluation.md`.
+
+## All Paper Live-Transfer Saved Responses
+
+- Experiment: run the AI Scientist-v2, Reflexion, and AIDE live-transfer prompt
+  packets after the earlier Toolformer run, then rescore all four paper packets.
+- Main result: `results/live_transfer_prompts/evaluation.md` reports 24 total
+  rows, 24 scored rows, 0 pending rows, and average normalized score 1.0.
+- Per-paper results: AI Scientist-v2, Reflexion, and AIDE rows score 11/11
+  each; Toolformer rows score 9/9 each.
+- Run reports: AI Scientist-v2 and Reflexion each completed 6/6 rows with
+  `claude-opus-4-8`; AIDE completed 6/6 rows with one fallback from
+  `claude-opus-4-8` to `claude-opus-4-7` after a remote connection closure.
+- Practical significance: the project now has complete saved-response coverage
+  for the current live-transfer prompt-packet protocol across both harness
+  prompt styles and all three context variants.
+- Statistical evidence: deterministic output-contract scoring over 24 saved
+  responses; no human semantic annotation or success-rate estimate.
+- Failure modes: provider alias availability can affect the alias used for a
+  saved response; the AIDE fallback is provider evidence, not model-quality
+  failure evidence.
+- Limitations: saved-response output-contract scoring is not human semantic
+  fidelity, real live task success, provider billing, DeepSeek evidence, or
+  final submission readiness.
+- Claim impact: supports saying all four current live-transfer response sets
+  are saved and scored, while preserving the boundary that stronger live task
+  and human-fidelity evidence remain pending.
+- Figure/table: `research/run_logs/2026-06-19_phase40_all_live_transfer_responses.md`;
+  `results/live_transfer_prompts/ai_scientist_v2_v0/run_report.md`;
+  `results/live_transfer_prompts/reflexion_v0/run_report.md`;
+  `results/live_transfer_prompts/aide_v0/run_report.md`;
   `results/live_transfer_prompts/toolformer_v0/run_report.md`;
   `results/live_transfer_prompts/evaluation.md`.
 
@@ -499,7 +528,7 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 191 ready checks, 7
+  `overall_status=ready_with_pending_external_evidence`, 208 ready checks, 3
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
@@ -524,8 +553,9 @@
   `overall_status=ready`, 47 ready checks, and 0 failed checks.
 - Checks: usage docs, Codex-style Toolformer skill inputs, model-ablation prompt
   grid, model slots, response slots, a scored Toolformer Codex-style
-  live-transfer response slot, an offline AIDE extracted-text-to-note-to-skill
-  chain, a one-command AIDE pipeline run, and a direct-PDF pipeline smoke run.
+  live-transfer response slot, the aggregate live-transfer saved-response
+  evaluation, an offline AIDE extracted-text-to-note-to-skill chain, a
+  one-command AIDE pipeline run, and a direct-PDF pipeline smoke run.
 - Offline example: the temporary AIDE chain selected 6 method windows, 6
   experiment windows, and 5 limitation windows, then produced a generated skill
   scoring 20/20 on the AIDE deterministic rubric.
@@ -540,8 +570,8 @@
   against the saved live-transfer response evaluation.
 - Failure modes: the checker does not make additional Claude/GPT/DeepSeek calls
   and does not prove model-response quality or human usability.
-- Limitations: remaining live response sets and user-facing qualitative
-  evaluation remain pending.
+- Limitations: user-facing qualitative evaluation, human semantic fidelity,
+  DeepSeek, and provider billing remain pending.
 - Claim impact: strengthens the local usage-example readiness claim while
   preserving the live-model and arbitrary-PDF automation evidence boundaries.
 - Figure/table: `scripts/check_usage_examples.py`;
@@ -837,13 +867,13 @@
 
 - Experiment: make the active-goal completion audit machine-checkable.
 - Main result: `results/reproducibility/goal_completion_report.md` reports
-  `overall_status=not_complete_pending_external_evidence`, 44 ready checks, 8
+  `overall_status=not_complete_pending_external_evidence`, 48 ready checks, 7
   pending checks, and 0 failed checks.
 - Checks: durable memory, AI-Scientist-v2 dry-run evidence, PaperToSkill
   prototype and benchmark readiness, AAAI/usage/table/claim gates,
   Claude/GPT-family ablation attempts and completion status, DeepSeek follow-up
-  readiness, Toolformer live-transfer response completion, remaining live
-  transfer responses, human-fidelity annotation, and provider billing evidence.
+  readiness, all four live-transfer saved-response sets, human-fidelity
+  annotation, and provider billing evidence.
 - Practical significance: the project now has a reusable gate that prevents
   accidentally marking the full user goal complete while external evidence is
   still missing.

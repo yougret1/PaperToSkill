@@ -3,8 +3,8 @@
 Evidence boundary: this report audits the active user goal against local repository evidence. Pending checks are remaining requirements, not negative evidence and not local package failures.
 
 - Overall status: not_complete_pending_external_evidence
-- Ready checks: 44
-- Pending checks: 8
+- Ready checks: 48
+- Pending checks: 7
 - Failed checks: 0
 
 ## Checks
@@ -59,7 +59,10 @@ Evidence boundary: this report audits the active user goal against local reposit
 | deepseek_followup_process_ready | ready | DeepSeek slot is present and runner supports configured aliases | benchmarks/model_ablation_v0.json; examples/usage/model_ablation_usage.md |
 | deepseek_followup_response_complete | pending | placeholder alias still pending user-provided DeepSeek configuration | results/model_ablation_prompts/v0/evaluation.json |
 | model_ablation_evaluation_complete | pending | scored_rows=4; pending_rows=2 | results/model_ablation_prompts/v0/evaluation.json |
+| ai_scientist_v2_live_transfer_responses_complete | ready | scored_rows=6/6 | results/live_transfer_prompts/evaluation.json; results/live_transfer_prompts/ai_scientist_v2_v0/run_report.json |
+| reflexion_live_transfer_responses_complete | ready | scored_rows=6/6 | results/live_transfer_prompts/evaluation.json; results/live_transfer_prompts/reflexion_v0/run_report.json |
+| aide_live_transfer_responses_complete | ready | scored_rows=6/6 | results/live_transfer_prompts/evaluation.json; results/live_transfer_prompts/aide_v0/run_report.json |
 | toolformer_live_transfer_responses_complete | ready | scored_rows=6/6 | results/live_transfer_prompts/evaluation.json; results/live_transfer_prompts/toolformer_v0/run_report.json |
-| live_cross_harness_responses_complete | pending | scored_rows=6; pending_rows=18; pending_tasks=ai_scientist_v2_live_transfer,aide_live_transfer,reflexion_live_transfer | results/live_transfer_prompts/evaluation.json |
+| live_cross_harness_responses_complete | ready | scored_rows=24; pending_rows=0; pending_tasks= | results/live_transfer_prompts/evaluation.json |
 | human_fidelity_annotation_complete | pending | status=pending; scored_rows=0; pending_rows=24 | results/human_fidelity_packets/annotation_summary.json |
-| active_goal_complete | pending | pending_requirements=ai_scientist_v2_live_llm_run_complete,provider_billing_evidence_complete,aaai_final_submission_ready,deepseek_followup_response_complete,model_ablation_evaluation_complete,live_cross_harness_responses_complete,human_fidelity_annotation_complete | all goal checks |
+| active_goal_complete | pending | pending_requirements=ai_scientist_v2_live_llm_run_complete,provider_billing_evidence_complete,aaai_final_submission_ready,deepseek_followup_response_complete,model_ablation_evaluation_complete,human_fidelity_annotation_complete | all goal checks |

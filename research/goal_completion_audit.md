@@ -1,6 +1,6 @@
 # Goal Completion Audit
 
-Date: 2026-06-18
+Date: 2026-06-19
 
 Purpose: audit the active user goal against current repository evidence before
 claiming completion. This is a requirement-by-requirement gate, not a claim that
@@ -10,20 +10,21 @@ the full goal is complete.
 
 Current status: substantial local research and artifact package is complete,
 Claude Opus 4.8 plus GPT-family model-ablation rows are saved and scored, and
-the Toolformer live-transfer response set is saved and scored. The full goal is
-not yet complete because the remaining live-transfer response sets, DeepSeek
-follow-up responses, human-fidelity annotation, and stronger provider-billing
-or success-per-dollar evidence remain pending external or follow-up work. Phase
-38 adds local output-token proxy accounting for saved model-ablation responses,
-but this is not realized provider billing.
+all four live-transfer saved-response sets are collected and scored under the
+current prompt-packet protocol. The full goal is not yet complete because
+DeepSeek follow-up responses, human-fidelity annotation, stronger
+provider-billing or success-per-dollar evidence, and final submission decisions
+remain pending external or follow-up work. Phase 38 adds local output-token
+proxy accounting for saved model-ablation responses, but this is not realized
+provider billing.
 
 Local package status: `results/reproducibility/package_report.md` reports
-`ready_with_pending_external_evidence`, 191 ready checks, 7 pending checks, and
+`ready_with_pending_external_evidence`, 208 ready checks, 3 pending checks, and
 0 failed checks.
 
 Machine-checkable goal status:
 `results/reproducibility/goal_completion_report.md` reports
-`not_complete_pending_external_evidence`, 44 ready checks, 8 pending checks,
+`not_complete_pending_external_evidence`, 48 ready checks, 7 pending checks,
 and 0 failed checks.
 
 ## Requirement Audit
@@ -40,7 +41,7 @@ and 0 failed checks.
 | Provide DeepSeek-follow-up process for the user. | `deepseek_followup_slot` in `benchmarks/model_ablation_v0.json`; runner now skips only placeholder alias; tests cover placeholder vs configured DeepSeek behavior; usage docs and runbook include DeepSeek steps. | Process ready; model response pending | User fills concrete DeepSeek alias/env vars, rebuilds prompts, runs `--model-id deepseek_followup_slot`, then scores saved responses. |
 | Develop PaperToSkill extraction system. | `scripts/papertoskill_extract.py`; `scripts/papertoskill_note_from_text.py`; `scripts/papertoskill_pipeline.py`; generated skills for four curated papers; source maps; deterministic auto-note scaffold for Toolformer/AIDE; one-command temporary AIDE pipeline example; local PDF-input smoke path using `pdftotext -layout`; tests. | Complete for current scoped prototype | Broader reliable arbitrary-PDF automation remains unsupported and should not be claimed. |
 | Experiments: main results. | `results/tables/main_results.md`; four-paper deterministic results; generated skills outperform generic and abstract baselines on operational coverage. | Complete for deterministic/offline benchmark | Live task success remains pending. |
-| Experiments: harness-transfer ablation. | `results/tables/transfer_ablation.md`; offline transfer-readiness drops when `Transfer Notes` are removed; `results/live_transfer_prompts/evaluation.md` now scores the Toolformer live-transfer response set. | Complete for offline readiness; Toolformer live-transfer response set complete | AI Scientist-v2, Reflexion, and AIDE live-transfer response sets remain pending. |
+| Experiments: harness-transfer ablation. | `results/tables/transfer_ablation.md`; offline transfer-readiness drops when `Transfer Notes` are removed; `results/live_transfer_prompts/evaluation.md` now scores all 24 live-transfer saved-response rows across four paper packets. | Complete for offline readiness and saved-response coverage | Do not interpret saved-response output-contract scoring as human semantic fidelity or real live task success. |
 | Experiments: compactness/cost/examples. | `results/tables/context_cost_proxy.md`; `results/tables/context_cost_proxy_tokenizer.md`; `results/tables/model_response_cost_proxy.md`; `results/tables/compactness_source_grounding.md`; examples under `examples/usage/`. | Complete for character proxy, local tokenizer-aware input proxy, saved-response output-token proxy, and examples | Provider billing, realized output bills, and success-per-dollar remain pending. |
 | Include failure branches and negative outcomes. | `results/failure_cases/failure_case_archive.md`; model-ablation run reports; limitations; result cards; stage logs. | Complete as provenance archive | Outcome impact of failure recording is not tested. |
 | Final paper narrative. | `paper/draft.md`; `paper/outline.md`; `paper/claim_checklist.md`; `paper/limitations.md`; AAAI `.tex` draft. | Prepared, not final | Final paper requires live/human/model evidence decisions or explicit decision to submit as deterministic/offline system paper. |
@@ -59,12 +60,16 @@ and 0 failed checks.
 - `results/tables/model_response_cost_proxy.md`: local output-token proxy over
   saved model-ablation responses; 4 measured rows, 2 pending DeepSeek rows, and
   8,710 `o200k_base` output tokens. This is not provider billing evidence.
-- `results/live_transfer_prompts/toolformer_v0/run_report.md`: Toolformer
-  live-transfer run completed 6/6 rows with exact alias `claude-opus-4-8` and
-  saved response files under `results/live_transfer_prompts/toolformer_v0/responses/`.
+- `results/live_transfer_prompts/ai_scientist_v2_v0/run_report.md`,
+  `results/live_transfer_prompts/reflexion_v0/run_report.md`,
+  `results/live_transfer_prompts/aide_v0/run_report.md`, and
+  `results/live_transfer_prompts/toolformer_v0/run_report.md`: each
+  live-transfer run completed 6/6 rows and saved response files. AIDE includes
+  one provider fallback row from `claude-opus-4-8` to `claude-opus-4-7` after a
+  remote connection closure.
 - `results/live_transfer_prompts/evaluation.md`: 24 total live-transfer rows,
-  6 scored Toolformer rows, 18 pending rows for AI Scientist-v2, Reflexion, and
-  AIDE, and 1.0 average normalized score over scored rows.
+  24 scored rows, 0 pending rows, and 1.0 average normalized score over scored
+  rows.
 - `research/run_logs/2026-06-19_phase36_claude_ablation_success_gpt_blocked.md`:
   endpoint recheck records completed Claude rows and the previous GPT
   upstream-access blocker for `gpt-5.5`/`gpt-5.4`.
@@ -73,8 +78,9 @@ and 0 failed checks.
   responses.
 - `results/human_fidelity_packets/annotation_summary.md`: human annotation is
   pending.
-- `results/reproducibility/package_report.md`: 7 pending checks remain.
-- `results/reproducibility/goal_completion_report.md`: 8 active-goal
+- `results/reproducibility/package_report.md`: pending checks remain for
+  external evidence such as human fidelity and model-ablation completion.
+- `results/reproducibility/goal_completion_report.md`: active-goal
   requirements are pending and `active_goal_complete` remains pending.
 - `results/reproducibility/aaai_package_report.md`: AAAI package gate is ready
   with 17 ready checks and 0 failed checks; this removes a local package
@@ -96,9 +102,9 @@ and 0 failed checks.
 Do not mark the active goal complete yet. The current repository satisfies the
 local memory, scaffold, deterministic/offline experiment, AAAI-package, usage
 example, Claude Opus 4.8 ablation, GPT-family ablation, and
-Toolformer live-transfer response requirements. It does not yet satisfy the
-remaining live-transfer response sets, DeepSeek response collection, human
-semantic validation, or real provider-billing/economic evidence. Local
+saved live-transfer response requirements. It does not yet satisfy DeepSeek
+response collection, human semantic validation, or real provider-billing/
+economic evidence. Local
 tokenizer-aware input and saved-response output proxy evidence are present, and
 the machine-checkable goal-completion gate agrees that the active goal is not
 complete.
@@ -107,9 +113,7 @@ complete.
 
 1. Let the user fill DeepSeek alias/env vars, then run and score the same prompt
    grid.
-2. Run and score the remaining AI Scientist-v2, Reflexion, and AIDE
-   live-transfer prompt packets.
-3. Decide whether the final AAAI paper will remain an explicitly
+2. Decide whether the final AAAI paper will remain an explicitly
    deterministic/offline system paper or wait for live/human/model evidence.
-4. If waiting, collect human-fidelity annotations and provider-specific cost
+3. If waiting, collect human-fidelity annotations and provider-specific cost
    evidence before marking the full goal complete.

@@ -3,8 +3,8 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 191
-- Pending checks: 7
+- Ready checks: 208
+- Pending checks: 3
 - Failed checks: 0
 
 ## Checks
@@ -64,6 +64,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | phase37_gpt_family_ablation_success_run_log | ready | present | research/run_logs/2026-06-19_phase37_gpt_family_ablation_success.md |
 | phase38_model_response_cost_proxy_run_log | ready | present | research/run_logs/2026-06-19_phase38_model_response_cost_proxy.md |
 | phase39_toolformer_live_transfer_run_log | ready | present | research/run_logs/2026-06-19_phase39_toolformer_live_transfer.md |
+| phase40_all_live_transfer_run_log | ready | present | research/run_logs/2026-06-19_phase40_all_live_transfer_responses.md |
 | result_cards | ready | present | results/result_cards.md |
 | main_results_md | ready | present | results/tables/main_results.md |
 | main_results_csv | ready | present | results/tables/main_results.csv |
@@ -90,7 +91,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | ai_scientist_v2_transfer_ablation_order | ready | full=10.0; no_transfer=7.6 | results/evaluations/ai_scientist_v2_harness_transfer_v0.json |
 | ai_scientist_v2_source_span_support | ready | support_rate=0.938; invalid_ranges=0 | results/evaluations/ai_scientist_v2_source_span_validation_v0.json |
 | ai_scientist_v2_live_prompt_packets | ready | prompt_packets=6; missing_prompts=0 | results/live_transfer_prompts/ai_scientist_v2_v0/index.json |
-| ai_scientist_v2_live_responses | pending | missing_response_files=6 | results/live_transfer_prompts/ai_scientist_v2_v0/index.json |
+| ai_scientist_v2_live_responses | ready | missing_response_files=0 | results/live_transfer_prompts/ai_scientist_v2_v0/index.json |
 | reflexion_skill | ready | present | generated_skills/reflexion/SKILL.md |
 | reflexion_source_map | ready | present | generated_skills/reflexion/references/source_map.json |
 | reflexion_rubric | ready | present | results/evaluations/reflexion_rubric_v0.json |
@@ -103,7 +104,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | reflexion_transfer_ablation_order | ready | full=10.0; no_transfer=7.6 | results/evaluations/reflexion_harness_transfer_v0.json |
 | reflexion_source_span_support | ready | support_rate=1; invalid_ranges=0 | results/evaluations/reflexion_source_span_validation_v0.json |
 | reflexion_live_prompt_packets | ready | prompt_packets=6; missing_prompts=0 | results/live_transfer_prompts/reflexion_v0/index.json |
-| reflexion_live_responses | pending | missing_response_files=6 | results/live_transfer_prompts/reflexion_v0/index.json |
+| reflexion_live_responses | ready | missing_response_files=0 | results/live_transfer_prompts/reflexion_v0/index.json |
 | aide_skill | ready | present | generated_skills/aide/SKILL.md |
 | aide_source_map | ready | present | generated_skills/aide/references/source_map.json |
 | aide_rubric | ready | present | results/evaluations/aide_rubric_v0.json |
@@ -116,7 +117,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | aide_transfer_ablation_order | ready | full=10.0; no_transfer=7.6 | results/evaluations/aide_harness_transfer_v0.json |
 | aide_source_span_support | ready | support_rate=1; invalid_ranges=0 | results/evaluations/aide_source_span_validation_v0.json |
 | aide_live_prompt_packets | ready | prompt_packets=6; missing_prompts=0 | results/live_transfer_prompts/aide_v0/index.json |
-| aide_live_responses | pending | missing_response_files=6 | results/live_transfer_prompts/aide_v0/index.json |
+| aide_live_responses | ready | missing_response_files=0 | results/live_transfer_prompts/aide_v0/index.json |
 | toolformer_skill | ready | present | generated_skills/toolformer/SKILL.md |
 | toolformer_source_map | ready | present | generated_skills/toolformer/references/source_map.json |
 | toolformer_rubric | ready | present | results/evaluations/toolformer_rubric_v0.json |
@@ -147,7 +148,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | paper_table_core_checks_ready | ready | core checks ready | results\reproducibility\paper_table_report.json |
 | paper_claim_report_ready | ready | overall=ready; counts={'ready': 20, 'fail': 0} | results\reproducibility\paper_claim_report.json |
 | paper_claim_core_checks_ready | ready | core checks ready | results\reproducibility\paper_claim_report.json |
-| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 44, 'pending': 8, 'fail': 0} | results\reproducibility\goal_completion_report.json |
+| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 48, 'pending': 7, 'fail': 0} | results\reproducibility\goal_completion_report.json |
 | goal_completion_core_checks_ready | ready | core completion boundaries ready | results\reproducibility\goal_completion_report.json |
 | usage_example_report_ready | ready | overall=ready; counts={'ready': 47, 'fail': 0} | results\reproducibility\usage_example_report.json |
 | usage_example_core_checks_ready | ready | core checks ready | results\reproducibility\usage_example_report.json |
@@ -202,10 +203,22 @@ Evidence boundary: this report checks local package completeness and separates p
 | live_transfer_response_evaluator | ready | present | scripts/evaluate_live_transfer_responses.py |
 | live_transfer_evaluation_json | ready | present | results/live_transfer_prompts/evaluation.json |
 | live_transfer_evaluation_md | ready | present | results/live_transfer_prompts/evaluation.md |
+| ai_scientist_v2_live_run_report_json | ready | present | results/live_transfer_prompts/ai_scientist_v2_v0/run_report.json |
+| ai_scientist_v2_live_run_report_md | ready | present | results/live_transfer_prompts/ai_scientist_v2_v0/run_report.md |
+| reflexion_live_run_report_json | ready | present | results/live_transfer_prompts/reflexion_v0/run_report.json |
+| reflexion_live_run_report_md | ready | present | results/live_transfer_prompts/reflexion_v0/run_report.md |
+| aide_live_run_report_json | ready | present | results/live_transfer_prompts/aide_v0/run_report.json |
+| aide_live_run_report_md | ready | present | results/live_transfer_prompts/aide_v0/run_report.md |
 | toolformer_live_run_report_json | ready | present | results/live_transfer_prompts/toolformer_v0/run_report.json |
 | toolformer_live_run_report_md | ready | present | results/live_transfer_prompts/toolformer_v0/run_report.md |
-| live_transfer_evaluation_valid | ready | total_rows=24; scored_rows=6; pending_rows=18 | results\live_transfer_prompts\evaluation.json |
+| live_transfer_evaluation_valid | ready | total_rows=24; scored_rows=24; pending_rows=0 | results\live_transfer_prompts\evaluation.json |
+| ai_scientist_v2_live_transfer_responses_scored | ready | scored_rows=6/6 | results\live_transfer_prompts\evaluation.json |
+| reflexion_live_transfer_responses_scored | ready | scored_rows=6/6 | results\live_transfer_prompts\evaluation.json |
+| aide_live_transfer_responses_scored | ready | scored_rows=6/6 | results\live_transfer_prompts\evaluation.json |
 | toolformer_live_transfer_responses_scored | ready | scored_rows=6/6 | results\live_transfer_prompts\evaluation.json |
-| live_transfer_all_responses_scored | pending | scored_rows=6; pending_rows=18 | results\live_transfer_prompts\evaluation.json |
+| live_transfer_all_responses_scored | ready | scored_rows=24; pending_rows=0 | results\live_transfer_prompts\evaluation.json |
+| ai_scientist_v2_live_run_report_complete | ready | overall=complete; counts={'success': 6}; alias_count=4 | results\live_transfer_prompts\ai_scientist_v2_v0\run_report.json |
+| reflexion_live_run_report_complete | ready | overall=complete; counts={'success': 6}; alias_count=4 | results\live_transfer_prompts\reflexion_v0\run_report.json |
+| aide_live_run_report_complete | ready | overall=complete; counts={'success': 6}; alias_count=4 | results\live_transfer_prompts\aide_v0\run_report.json |
 | toolformer_live_run_report_complete | ready | overall=complete; counts={'success': 6}; alias_count=4 | results\live_transfer_prompts\toolformer_v0\run_report.json |
 | secret_scan | ready | no raw API-key-like strings found | repository text files |

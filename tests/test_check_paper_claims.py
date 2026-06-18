@@ -42,6 +42,7 @@ class CheckPaperClaimsTest(unittest.TestCase):
             self.assertEqual(0, report["status_counts"]["fail"])
             ready_ids = {check["id"] for check in report["checks"] if check["status"] == "ready"}
             self.assertIn("paper_claim_boundary_curated_scope", ready_ids)
+            self.assertIn("paper_claim_boundary_live_transfer_saved_response_boundary", ready_ids)
             self.assertIn("paper_claim_boundary_model_ablation_partial_boundary", ready_ids)
             self.assertTrue(output_md.exists())
 

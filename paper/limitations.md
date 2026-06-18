@@ -4,10 +4,10 @@
 
 The current PaperToSkill evidence is deterministic and offline. It supports
 claims about artifact structure, source-span support, compactness, context
-coverage, and transfer readiness. It includes one saved and scored Toolformer
-live-transfer response set, but does not yet support claims about complete live
-agent task success across all papers, human-rated fidelity, or realized cost
-savings.
+coverage, and transfer readiness. It includes saved and scored live-transfer
+responses for all four paper packets under a deterministic output-contract
+evaluator, but does not yet support claims about live agent task success,
+human-rated fidelity, or realized cost savings.
 
 ## Limitations
 
@@ -31,13 +31,14 @@ sensitive to lexical overlap, section naming, and rubric design. They should be
 treated as early gates rather than a substitute for human or live-agent
 evaluation.
 
-### Live Cross-Harness Runs Are Partial
+### Saved Live-Transfer Responses Are Not Task Success
 
 Prompt packets have been generated for Codex-style and Claude-style harnesses.
-The Toolformer response set is saved and scored across both harness prompt
-styles and all three context variants. AI Scientist-v2, Reflexion, and AIDE
-response sets remain pending, so full live cross-harness completion and live
-success-rate claims remain unsupported.
+All four paper response sets are saved and scored across both harness prompt
+styles and all three context variants. This completes saved-response coverage
+for the current prompt-packet protocol. However, the scorer is deterministic and
+contract-based, so live task success-rate claims and human semantic-fidelity
+claims remain unsupported.
 
 ### Model Ablations Partially Completed
 
@@ -91,27 +92,24 @@ reproduction success.
 ### Reproducibility Package Still Has External Pending Evidence
 
 The reproducibility checker reports that local artifacts, deterministic results,
-prompt packets, failure archive, human-fidelity protocol, and secret scan are
-ready with zero failed checks. However, the same report still marks the
-remaining live responses and completed human-fidelity annotation as pending
-external evidence. The package should therefore be described as locally ready,
-not submission-final.
+prompt packets, saved live-transfer responses, failure archive, human-fidelity
+protocol, and secret scan are ready with zero failed checks. However, the same
+report still marks completed human-fidelity annotation and DeepSeek/model
+completion evidence as pending external evidence. The package should therefore
+be described as locally ready, not submission-final.
 
 ## Future Work
 
-1. Execute the remaining AI Scientist-v2, Reflexion, and AIDE live prompt
-   packets, logging model, harness, prompt, response, intervention count, and
-   task outcome.
-2. Add the user's concrete DeepSeek model alias and endpoint profile, then run
+1. Add the user's concrete DeepSeek model alias and endpoint profile, then run
    and score the same prompt grid.
-3. Run the prepared human source-fidelity packets with independent annotators
+2. Run the prepared human source-fidelity packets with independent annotators
    and report agreement or adjudication.
-4. Extend extraction from curated notes toward raw PDF ingestion with stronger
+3. Extend extraction from curated notes toward raw PDF ingestion with stronger
    section detection, table handling, citation-aware source maps, and
    multi-paper auto-note validation.
-5. Add provider-specific pricing, live invoices, realized output-token bills,
+4. Add provider-specific pricing, live invoices, realized output-token bills,
    and success-per-dollar accounting for full-paper, summary, skill, and saved
    response contexts.
-6. Expand the benchmark with less procedural papers to test failure modes.
-7. Preserve negative and failed branches as paper evidence rather than filtering
+5. Expand the benchmark with less procedural papers to test failure modes.
+6. Preserve negative and failed branches as paper evidence rather than filtering
    them out of the research story.

@@ -352,35 +352,48 @@ def live_and_human_checks(root: Path) -> list[Check]:
     total = int(summary.get("total_rows", 0))
     scored = int(summary.get("scored_rows", 0))
     pending = int(summary.get("pending_rows", 0))
-    toolformer_rows = [row for row in results if row.get("task") == "toolformer_live_transfer"]
-    toolformer_scored = [row for row in toolformer_rows if row.get("status") == "scored"]
+    live_cases = [
+        ("ai_scientist_v2", "ai_scientist_v2_live_transfer"),
+        ("reflexion", "reflexion_live_transfer"),
+        ("aide", "aide_live_transfer"),
+        ("toolformer", "toolformer_live_transfer"),
+    ]
     remaining_tasks = sorted({row.get("task", "") for row in results if row.get("status") == "pending"})
     human = load_json(root / "results/human_fidelity_packets/annotation_summary.json")
     human_complete = human.get("annotation_status") == "complete"
-    return [
-        Check(
-            "toolformer_live_transfer_responses_complete",
-            "ready"
-            if len(toolformer_rows) == 6
-            and len(toolformer_scored) == 6
-            and all(float(row.get("normalized_score", 0)) >= 1.0 for row in toolformer_scored)
-            else "pending",
-            f"scored_rows={len(toolformer_scored)}/6",
-            "results/live_transfer_prompts/evaluation.json; results/live_transfer_prompts/toolformer_v0/run_report.json",
-        ),
-        Check(
-            "live_cross_harness_responses_complete",
-            "ready" if total > 0 and pending == 0 and scored == total else "pending",
-            f"scored_rows={scored}; pending_rows={pending}; pending_tasks={','.join(remaining_tasks)}",
-            "results/live_transfer_prompts/evaluation.json",
-        ),
-        Check(
-            "human_fidelity_annotation_complete",
-            "ready" if human_complete else "pending",
-            f"status={human.get('annotation_status')}; scored_rows={human.get('scored_rows')}; pending_rows={human.get('pending_rows')}",
-            "results/human_fidelity_packets/annotation_summary.json",
-        ),
-    ]
+    checks = []
+    for case_id, task in live_cases:
+        rows = [row for row in results if row.get("task") == task]
+        scored_rows = [row for row in rows if row.get("status") == "scored"]
+        checks.append(
+            Check(
+                f"{case_id}_live_transfer_responses_complete",
+                "ready"
+                if len(rows) == 6
+                and len(scored_rows) == 6
+                and all(float(row.get("normalized_score", 0)) >= 1.0 for row in scored_rows)
+                else "pending",
+                f"scored_rows={len(scored_rows)}/6",
+                f"results/live_transfer_prompts/evaluation.json; results/live_transfer_prompts/{case_id}_v0/run_report.json",
+            )
+        )
+    checks.extend(
+        [
+            Check(
+                "live_cross_harness_responses_complete",
+                "ready" if total > 0 and pending == 0 and scored == total else "pending",
+                f"scored_rows={scored}; pending_rows={pending}; pending_tasks={','.join(remaining_tasks)}",
+                "results/live_transfer_prompts/evaluation.json",
+            ),
+            Check(
+                "human_fidelity_annotation_complete",
+                "ready" if human_complete else "pending",
+                f"status={human.get('annotation_status')}; scored_rows={human.get('scored_rows')}; pending_rows={human.get('pending_rows')}",
+                "results/human_fidelity_packets/annotation_summary.json",
+            ),
+        ]
+    )
+    return checks
 
 
 def completion_check(checks: list[Check]) -> Check:

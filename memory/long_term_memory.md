@@ -50,14 +50,15 @@ Current supported claims:
   scored for the current two-case protocol.
 - Local output-token proxy over saved Claude/GPT-family model-ablation responses:
   4 measured rows, 2 pending DeepSeek rows, 8,710 `o200k_base` output tokens.
-- Toolformer live-transfer response set is saved and scored for both harness
-  prompt styles and all three context variants using Claude Opus 4.8; all 6
+- All four live-transfer response sets are saved and scored for both harness
+  prompt styles and all three context variants under the current prompt-packet
+  protocol. AI Scientist-v2, Reflexion, and AIDE rows score 11/11; Toolformer
   rows score 9/9 in the saved-response output-contract evaluator.
 
 Current unsupported claims:
 
 - Completed live DeepSeek model ablations.
-- Completed live cross-harness success across all four paper cases.
+- Saved-response output-contract scoring as proof of real live task success.
 - Human-validated semantic fidelity.
 - Provider billing, realized output-token bills, live invoices, or
   success-per-dollar.
@@ -96,11 +97,11 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 191 ready checks, 7 pending
+  reports `ready_with_pending_external_evidence`, 208 ready checks, 3 pending
   checks, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
-  reports `not_complete_pending_external_evidence`, 44 ready checks, 8 pending
+  reports `not_complete_pending_external_evidence`, 48 ready checks, 7 pending
   checks, and 0 failed checks.
 - AAAI package:
   `results/reproducibility/aaai_package_report.md`
@@ -118,8 +119,9 @@ Use these as entry points instead of searching the whole repo first:
   output tokens, and 8,710 `o200k_base` output tokens.
 - Live-transfer response evaluation:
   `results/live_transfer_prompts/evaluation.md`
-  reports 24 total rows, 6 scored Toolformer rows, 18 pending rows, and 1.0
-  average normalized score over scored rows.
+  reports 24 total rows, 24 scored rows, 0 pending rows, and 1.0 average
+  normalized score. AI Scientist-v2, Reflexion, and AIDE rows score 11/11;
+  Toolformer rows score 9/9.
 - Paper tables:
   `results/reproducibility/paper_table_report.md`
   reports ready, 76 ready checks, 0 failed checks.
