@@ -3,7 +3,7 @@
   "evidence_boundary": "Audits the active user goal against local repository evidence. Pending checks are explicit remaining requirements, not negative evidence and not local package failures.",
   "overall_status": "not_complete_pending_external_evidence",
   "status_counts": {
-    "ready": 37,
+    "ready": 40,
     "pending": 8,
     "fail": 0
   },
@@ -93,6 +93,12 @@
       "evidence": "scripts/evaluate_model_ablation_responses.py"
     },
     {
+      "id": "model_response_cost_evaluator",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "scripts/evaluate_model_response_costs.py"
+    },
+    {
       "id": "deepseek_usage",
       "status": "ready",
       "detail": "present",
@@ -115,6 +121,12 @@
       "status": "ready",
       "detail": "present",
       "evidence": "results/tables/context_cost_proxy_tokenizer.json"
+    },
+    {
+      "id": "model_response_cost_proxy",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/tables/model_response_cost_proxy.json"
     },
     {
       "id": "goal_completion_audit",
@@ -173,8 +185,14 @@
     {
       "id": "provider_billing_evidence_complete",
       "status": "pending",
-      "detail": "local token proxies exist; provider billing and success-per-dollar evidence remain uncollected",
-      "evidence": "results/tables/context_cost_proxy_tokenizer.json"
+      "detail": "local input/output token proxies exist; provider billing and success-per-dollar evidence remain uncollected",
+      "evidence": "results/tables/context_cost_proxy_tokenizer.json; results/tables/model_response_cost_proxy.json"
+    },
+    {
+      "id": "model_response_output_token_proxy_ready",
+      "status": "ready",
+      "detail": "measured_rows=4; pending_rows=2; tokenizer_output_tokens=8710",
+      "evidence": "results/tables/model_response_cost_proxy.json"
     },
     {
       "id": "failure_branch_archive_ready",

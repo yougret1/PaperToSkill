@@ -66,7 +66,7 @@ this should not be generalized to arbitrary PDFs yet.
    scores and evidence notes.
 3. Add one less-procedural or theory-heavy stress case and run the auto-note
    scaffold to test whether extraction fails gracefully.
-4. Add provider-specific pricing, output-token costs, and live invoice
+4. Add provider-specific pricing, realized output-token bills, and live invoice
    accounting only after choosing the target model family and pricing source.
 
 ## Decision

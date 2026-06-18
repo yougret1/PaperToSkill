@@ -133,14 +133,17 @@ transfer ablation, we compare the full skill against the same skill with
 The metrics are deterministic: skill rubric score, context coverage,
 source-span validation, offline transfer-readiness, word count under a
 1200-word compactness budget, character-based token/cost proxy, and a local
-tokenizer-aware proxy using \texttt{o200k\_base}. These metrics are
-reproducible gates. They do not replace live agent execution, provider billing,
-success-per-dollar accounting, or completed human fidelity annotation. We also
+tokenizer-aware input proxy using \texttt{o200k\_base}. For saved
+model-ablation responses, we additionally compute a local output-token proxy.
+These metrics are reproducible gates. They do not replace live agent execution,
+provider billing, live invoices, success-per-dollar accounting, or completed
+human fidelity annotation. We also
 prepare model-ablation prompt packets for Claude
 Opus 4.8, a GPT-family slot requested as GPT 5.5, and a later DeepSeek slot,
-and include a runner and response evaluator. These packets are recorded as
-pending until response files and scores are collected; provider/model
-availability failures are logged separately from model-quality results.
+and include a runner and response evaluator. Claude Opus 4.8 and GPT-family
+rows now have saved and scored responses for the current two-case protocol;
+DeepSeek remains pending user configuration. Provider/model availability
+failures are logged separately from model-quality results.
 
 \input{papertoskill_tables}
 
@@ -201,7 +204,12 @@ rows: the Toolformer row timed out on \texttt{gpt-5.5} and then succeeded with
 \texttt{gpt-5.4}, while the AIDE row succeeded with \texttt{gpt-5.5}. Both
 GPT-family rows scored 6/6. Therefore, the paper treats Claude Opus 4.8 and
 GPT-family rows as completed for the current prompt protocol, while DeepSeek
-rows remain pending rather than negative model-quality evidence.
+rows remain pending rather than negative model-quality evidence. A local
+output-token proxy over the four saved Claude/GPT-family responses counts 8,710
+\texttt{o200k\_base} output tokens: 2,272 for Claude Toolformer, 2,108 for
+Claude AIDE, 1,447 for GPT-family Toolformer, and 2,883 for GPT-family AIDE.
+This proxy is not provider billing, live-invoice, or success-per-dollar
+evidence.
 
 \section{Discussion}
 
@@ -231,8 +239,9 @@ completed because the provided remote endpoint returned service errors during
 chat-completion tests. Fourth, human-fidelity packets, a blank annotation
 template, and a summary script are prepared, but no independent annotations have
 been completed. Fifth, compactness is measured by word count, deterministic
-character proxy, and local tokenizer-aware input-token proxy, not by
-provider-specific prices, live invoices, or live success per dollar.
+character proxy, local tokenizer-aware input-token proxy, and local output-token
+proxy for saved model responses, not by provider-specific prices, live
+invoices, or live success per dollar.
 
 \section{Conclusion}
 
@@ -241,8 +250,8 @@ human-editable skills. In a four-paper benchmark, generated skills are compact,
 source-grounded, structurally valid, and more operationally complete than short
 summary baselines under deterministic evaluation. The next stage is to execute
 the prepared live prompt packets across agent harnesses and model families,
-add human fidelity review, compute provider-specific billing costs, and test
-papers whose contributions are less naturally procedural.
+add human fidelity review, collect provider-specific billing or invoice
+evidence, and test papers whose contributions are less naturally procedural.
 
 \bibliography{papertoskill_refs}
 

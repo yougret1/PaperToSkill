@@ -51,8 +51,11 @@
 | `research/run_logs/2026-06-18_phase31_goal_completion_gate.md` | Machine-checkable active-goal completion audit and reproducibility-gate integration | Created |
 | `research/run_logs/2026-06-18_phase32_model_profile_recheck.md` | Separate Claude/GPT credential-profile recheck and model-ablation blocker update | Created |
 | `research/run_logs/2026-06-19_phase33_alias_retry_model_recheck.md` | Alias-retry runner update and full Claude/GPT candidate availability recheck | Created |
+| `research/run_logs/2026-06-19_phase34_pipeline_command.md` | One-command extracted-text-to-note-to-skill local pipeline | Created |
 | `research/run_logs/2026-06-19_phase35_pdf_pipeline_input.md` | PDF-input smoke path for the local PaperToSkill pipeline | Created |
 | `research/run_logs/2026-06-19_phase36_claude_ablation_success_gpt_blocked.md` | Claude Opus 4.8 saved/scored model-ablation responses and GPT-family blocker update | Created |
+| `research/run_logs/2026-06-19_phase37_gpt_family_ablation_success.md` | GPT-family saved/scored model-ablation responses | Created |
+| `research/run_logs/2026-06-19_phase38_model_response_cost_proxy.md` | Local output-token proxy for saved model-ablation responses | Created |
 
 ## Paper Draft Package
 
@@ -164,6 +167,7 @@
 | `scripts/build_model_ablation_prompts.py` | Builds Claude/GPT-family/DeepSeek model-ablation prompt packets | Created |
 | `scripts/run_model_ablation_prompts.py` | Runs model-ablation prompt packets against OpenAI-compatible APIs with redacted reports | Created |
 | `scripts/evaluate_model_ablation_responses.py` | Scores saved model-ablation response files and keeps missing rows pending | Created |
+| `scripts/evaluate_model_response_costs.py` | Estimates local output-token proxies for saved model-ablation response files | Created |
 | `tests/test_papertoskill_extract.py` | Smoke test for extractor CLI and source map | Created |
 | `tests/test_papertoskill_note_from_text.py` | Smoke test for automatic text-to-note scaffold | Created |
 | `tests/test_papertoskill_pipeline.py` | Smoke test for one-command local text/PDF-to-skill pipeline | Created |
@@ -182,6 +186,7 @@
 | `tests/test_check_usage_examples.py` | Smoke test for usage-example checker and offline example chain | Created |
 | `tests/test_build_model_ablation_prompts.py` | Smoke test for model-ablation prompt builder | Created |
 | `tests/test_model_ablation_execution.py` | Smoke tests for model-ablation runner alias selection, evaluator scoring, and skip behavior | Created |
+| `tests/test_evaluate_model_response_costs.py` | Smoke test for saved-response output-token proxy evaluator | Created |
 | `tests/test_check_goal_completion.py` | Smoke tests for active-goal completion checker and pending-evidence boundaries | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |
 | `generated_skills/ai_scientist_v2/references/source_map.json` | Source-map evidence for AI Scientist-v2 generated skill | Created |
@@ -243,6 +248,9 @@
 | `results/tables/context_cost_proxy_tokenizer.csv` | CSV table for tokenizer-aware context size and estimated input-token proxy | Created |
 | `results/tables/coverage_cost_efficiency_tokenizer.csv` | CSV table for deterministic coverage per tokenizer-aware token budget | Created |
 | `results/tables/context_cost_proxy_tokenizer.json` | Machine-readable tokenizer-aware context token/cost proxy report | Created |
+| `results/tables/model_response_cost_proxy.md` | Paper-ready local output-token proxy for saved model-ablation responses | Created |
+| `results/tables/model_response_cost_proxy.csv` | CSV local output-token proxy for saved model-ablation responses | Created |
+| `results/tables/model_response_cost_proxy.json` | Machine-readable local output-token proxy for saved model-ablation responses | Created |
 | `results/tables/auto_note_comparison.md` | Curated-vs-auto Toolformer/AIDE note comparison table | Created |
 | `results/tables/auto_note_comparison.csv` | CSV copy of curated-vs-auto Toolformer/AIDE note comparison | Created |
 | `results/human_fidelity_packets/README.md` | Summary of prepared human-fidelity packets | Created |
@@ -273,6 +281,8 @@
 | `results/model_ablation_prompts/v0/*.md` | Six model-ablation prompt packets across Claude, GPT-family, and DeepSeek slots | Created |
 | `results/model_ablation_prompts/v0/run_report.md` | Redacted live-attempt report showing provider/model availability status | Created |
 | `results/model_ablation_prompts/v0/run_report.json` | Machine-readable live-attempt report for model ablations | Created |
+| `results/model_ablation_prompts/v0/gpt_retry_run_report.md` | Redacted GPT-family retry report with saved-response alias evidence | Created |
+| `results/model_ablation_prompts/v0/gpt_retry_run_report.json` | Machine-readable GPT-family retry report | Created |
 | `results/model_ablation_prompts/v0/evaluation.md` | Pending/scored summary for saved model-ablation responses | Created |
 | `results/model_ablation_prompts/v0/evaluation.json` | Machine-readable model-ablation response evaluation summary | Created |
 | `examples/usage/README.md` | Usage-example index and evidence boundary | Created |

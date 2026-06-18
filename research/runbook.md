@@ -154,11 +154,20 @@ python scripts\evaluate_model_ablation_responses.py `
   --output-md results\model_ablation_prompts\v0\evaluation.md
 ```
 
+Estimate local output-token proxies for saved model responses:
+
+```powershell
+python scripts\evaluate_model_response_costs.py
+```
+
 Current Phase 37 status: the two Claude Opus 4.8 rows and the two GPT-family
 rows are saved and scored 6/6 for the current prompt protocol. In the latest
 GPT-family retry, the Toolformer row timed out on `gpt-5.5` and succeeded with
 `gpt-5.4`; the AIDE row succeeded with `gpt-5.5`. Record this as a
-GPT-family result, not a pure `gpt-5.5` result.
+GPT-family result, not a pure `gpt-5.5` result. Phase 38 adds local output-token
+proxy accounting over these four saved Claude/GPT-family responses: 8,710
+`o200k_base` output tokens, with two DeepSeek rows still pending. This report is
+not provider billing or success-per-dollar evidence.
 
 For DeepSeek follow-up, edit `deepseek_followup_slot` in
 `benchmarks/model_ablation_v0.json`, replacing `deepseek-to-be-filled` with the
@@ -256,10 +265,10 @@ python scripts\check_goal_completion.py `
 ```
 
 This checker is expected to report
-`not_complete_pending_external_evidence` until live Claude/GPT-family
-responses, the DeepSeek follow-up response rows, human-fidelity annotation,
-provider-billing or success-per-dollar evidence, and final AAAI submission
-decisions are complete. Passing `--strict` only fails on local requirement
+`not_complete_pending_external_evidence` until live cross-harness responses, the
+DeepSeek follow-up response rows, human-fidelity annotation, provider-billing or
+success-per-dollar evidence, and final AAAI submission decisions are complete.
+Passing `--strict` only fails on local requirement
 failures; pending external evidence remains pending rather than a package
 failure.
 

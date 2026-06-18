@@ -10,16 +10,15 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 36: Claude ablation scored, GPT still blocked. The AAAI-27 paper package, usage
-examples, deterministic/offline experiments, model-ablation runner, DeepSeek
-follow-up path, local `o200k_base` cost proxy, one-command extracted-text-to-
-skill pipeline, local `pdftotext -layout` PDF smoke input path, result tables,
-and machine-checkable package/goal gates are prepared. The latest live model
-recheck completed two Claude Opus 4.8 prompt rows and scored both 6/6.
-GPT-family aliases such as `gpt-5.5`/`gpt-5.4` are listed under the separate
-credential profile but still fail chat completion with upstream access errors.
-The active goal is not yet complete because GPT-family responses, DeepSeek
-responses, human-fidelity annotation, and provider-specific billing or
+Phase 38: Claude Opus 4.8 and GPT-family ablation rows are saved and scored for
+the current two-case protocol, and saved model responses now have a local
+output-token proxy report. The AAAI-27 paper package, usage examples,
+deterministic/offline experiments, model-ablation runner, DeepSeek follow-up
+path, local `o200k_base` input/output token proxies, one-command
+extracted-text-to-skill pipeline, local `pdftotext -layout` PDF smoke input
+path, result tables, and machine-checkable package/goal gates are prepared. The
+active goal is not yet complete because DeepSeek responses, human-fidelity
+annotation, live cross-harness responses, and provider-specific billing or
 success-per-dollar evidence remain pending.
 
 ## Memory
@@ -98,3 +97,5 @@ pending live-agent claims.
 - Model-ablation run/evaluation reports:
   `results/model_ablation_prompts/v0/run_report.md` and
   `results/model_ablation_prompts/v0/evaluation.md`.
+- Model-response output-token proxy:
+  `results/tables/model_response_cost_proxy.md`.

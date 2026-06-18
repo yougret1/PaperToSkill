@@ -48,13 +48,16 @@ Current supported claims:
 - Failure-case archive with paper-reported and project-level cases.
 - Claude Opus 4.8 and GPT-family model-ablation prompt rows are saved and
   scored for the current two-case protocol.
+- Local output-token proxy over saved Claude/GPT-family model-ablation responses:
+  4 measured rows, 2 pending DeepSeek rows, 8,710 `o200k_base` output tokens.
 
 Current unsupported claims:
 
 - Completed live DeepSeek model ablations.
 - Completed live cross-harness success.
 - Human-validated semantic fidelity.
-- Provider billing, output-token accounting, or success-per-dollar.
+- Provider billing, realized output-token bills, live invoices, or
+  success-per-dollar.
 - Reliable arbitrary-PDF-to-skill automation.
 - Submission-final or accepted AAAI paper.
 
@@ -69,6 +72,7 @@ Use these as entry points instead of searching the whole repo first:
   pipeline manifest command.
 - `scripts/run_model_ablation_prompts.py`: OpenAI-compatible live model runner.
 - `scripts/evaluate_model_ablation_responses.py`: saved-response scorer.
+- `scripts/evaluate_model_response_costs.py`: saved-response output-token proxy.
 - `scripts/check_reproducibility_package.py`: aggregate local package gate.
 - `scripts/check_aaai_package.py`: AAAI package/build gate.
 - `scripts/check_usage_examples.py`: usage-example gate.
@@ -86,11 +90,11 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 174 ready checks, 7 pending
+  reports `ready_with_pending_external_evidence`, 180 ready checks, 7 pending
   checks, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
-  reports `not_complete_pending_external_evidence`, 37 ready checks, 8 pending
+  reports `not_complete_pending_external_evidence`, 40 ready checks, 8 pending
   checks, and 0 failed checks.
 - AAAI package:
   `results/reproducibility/aaai_package_report.md`
@@ -102,6 +106,10 @@ Use these as entry points instead of searching the whole repo first:
   `results/model_ablation_prompts/v0/evaluation.md`
   reports 6 total rows, 4 scored Claude/GPT-family rows, 2 pending DeepSeek
   rows, and 1.0 average normalized score over scored rows.
+- Model response output-token proxy:
+  `results/tables/model_response_cost_proxy.md`
+  reports 6 total rows, 4 measured rows, 2 pending rows, 9,420 character-proxy
+  output tokens, and 8,710 `o200k_base` output tokens.
 - Paper tables:
   `results/reproducibility/paper_table_report.md`
   reports ready, 76 ready checks, 0 failed checks.
@@ -166,6 +174,7 @@ DeepSeek:
 | Paper claims | Draft/AAAI text could overclaim pending evidence. | `scripts/check_paper_claims.py` checks unsupported positive claims and required boundary statements. |
 | Goal completion | Narrative completion audit could stale. | `scripts/check_goal_completion.py` makes the active-goal status machine-checkable. |
 | Model evidence state | GPT retry evidence was saved separately from the older Phase 36 failure report. | `scripts/check_goal_completion.py` reads both `run_report.json` and `gpt_retry_run_report.json` so historical GPT 502 evidence and current GPT-family success both remain visible. |
+| Output-token accounting | Cost section had input-token proxies but no saved-response output-token accounting. | `scripts/evaluate_model_response_costs.py` reports local output-token proxies for saved Claude/GPT-family responses while preserving the no-provider-billing boundary. |
 
 ## Persistent Rules
 

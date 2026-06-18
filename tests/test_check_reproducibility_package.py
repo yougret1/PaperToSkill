@@ -65,6 +65,7 @@ class CheckReproducibilityPackageTest(unittest.TestCase):
             self.assertIn("goal_completion_core_checks_ready", ready_ids)
             self.assertIn("usage_example_report_ready", ready_ids)
             self.assertIn("usage_example_core_checks_ready", ready_ids)
+            self.assertIn("model_response_output_token_proxy", ready_ids)
             self.assertTrue(output_md.exists())
 
 

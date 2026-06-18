@@ -8,7 +8,9 @@ scaffolds for Toolformer and AIDE; these are separate from the curated-note main
 benchmark. Phase 21 adds an AAAI-27 LaTeX package and usage examples. Phases
 22, 36, and 37 add model-ablation runner/evaluator evidence: Claude Opus 4.8
 and GPT-family rows are saved and scored for the current two-case protocol,
-while DeepSeek remains pending user configuration.
+while DeepSeek remains pending user configuration. Phase 38 adds a local
+output-token proxy over the saved Claude/GPT-family model responses; it is not
+provider billing evidence.
 
 ## Working Title
 
@@ -130,6 +132,9 @@ Main results from `results/tables/main_results.md`:
 - skills remain under 1200 words;
 - generated skills use 2.39%, 4.28%, 9.65%, and 6.16% of full extracted
   paper `o200k_base` tokenizer-aware input-token proxies;
+- saved Claude/GPT-family model-ablation responses total 8,710 local
+  `o200k_base` output tokens across four measured rows, with DeepSeek rows
+  pending;
 - full skills score 10/10 on offline transfer readiness, while removing
   transfer notes drops readiness to 7.6/10 in all four cases.
 - the failure-case archive records 27 cases: 21 paper-reported limitations or
@@ -167,7 +172,8 @@ Current limitations:
 - no human fidelity annotation or inter-rater agreement yet;
 - human-fidelity review packets and a summarizer are prepared, but annotation
   remains pending;
-- cost evidence is compactness-oriented and not yet a full token-price study;
+- cost evidence includes local input/output token proxies, not provider bills
+  or a full token-price study;
 - the failure-case archive is provenance evidence, not an outcome study showing
   that recording failures improves final task success;
 - the reproducibility package is ready locally but still lacks live response
@@ -189,7 +195,7 @@ that are less directly procedural.
 | Table 1: Main results | `results/tables/main_results.md` | Coverage, source support, compactness |
 | Table 2: Transfer ablation | `results/tables/transfer_ablation.md` | Effect of transfer notes |
 | Table 3: Source grounding | `results/tables/compactness_source_grounding.md` | Source support and compactness |
-| Table 4: Context cost proxy | `results/tables/context_cost_proxy.md` | Full paper vs skill context size and cost proxy |
+| Table 4: Context cost proxy | `results/tables/context_cost_proxy.md`; `results/tables/model_response_cost_proxy.md` | Full paper vs skill context size plus saved-response output-token proxy |
 | Table 5: Auto-note comparison | `results/tables/auto_note_comparison.md` | Curated vs extracted-text Toolformer and AIDE note scaffolds |
 | Appendix: Human-fidelity packets | `results/human_fidelity_packets/` | Prepared review packets and blank annotation template |
 | Appendix: Human-fidelity summary | `results/human_fidelity_packets/annotation_summary.md` | Pending annotation status and validation summary |
@@ -198,4 +204,5 @@ that are less directly procedural.
 | Appendix: Review/rebuttal package | `research/review_report.md`; `research/rebuttal_bank.md` | Adversarial risks and evidence-bounded responses |
 | Appendix: Prompt packets | `results/live_transfer_prompts/` | Inputs for later live transfer runs |
 | Appendix: Model ablation prompts | `results/model_ablation_prompts/v0/` | Claude/GPT-family/DeepSeek prompt grid, live-attempt reports, scored Claude/GPT-family responses, and pending DeepSeek rows |
+| Appendix: Model response cost proxy | `results/tables/model_response_cost_proxy.md` | Local output-token proxy for saved Claude/GPT-family model-ablation responses |
 | Appendix: AAAI package | `paper/aaai/` | Official AAAI-27 template provenance and LaTeX draft |

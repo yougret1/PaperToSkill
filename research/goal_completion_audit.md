@@ -12,7 +12,9 @@ Current status: substantial local research and artifact package is complete, and
 Claude Opus 4.8 plus GPT-family model-ablation rows are now saved and scored.
 The full goal is not yet complete because DeepSeek follow-up responses,
 human-fidelity annotation, and stronger provider-billing or success-per-dollar
-evidence remain pending external or follow-up work.
+evidence remain pending external or follow-up work. Phase 38 adds local
+output-token proxy accounting for saved model-ablation responses, but this is
+not realized provider billing.
 
 Local package status: `results/reproducibility/package_report.md` reports
 `ready_with_pending_external_evidence`, 174 ready checks, 7 pending checks, and
@@ -38,7 +40,7 @@ and 0 failed checks.
 | Develop PaperToSkill extraction system. | `scripts/papertoskill_extract.py`; `scripts/papertoskill_note_from_text.py`; `scripts/papertoskill_pipeline.py`; generated skills for four curated papers; source maps; deterministic auto-note scaffold for Toolformer/AIDE; one-command temporary AIDE pipeline example; local PDF-input smoke path using `pdftotext -layout`; tests. | Complete for current scoped prototype | Broader reliable arbitrary-PDF automation remains unsupported and should not be claimed. |
 | Experiments: main results. | `results/tables/main_results.md`; four-paper deterministic results; generated skills outperform generic and abstract baselines on operational coverage. | Complete for deterministic/offline benchmark | Live task success remains pending. |
 | Experiments: harness-transfer ablation. | `results/tables/transfer_ablation.md`; offline transfer-readiness drops when `Transfer Notes` are removed. | Complete for offline readiness | Live Codex/Claude transfer remains pending. |
-| Experiments: compactness/cost/examples. | `results/tables/context_cost_proxy.md`; `results/tables/context_cost_proxy_tokenizer.md`; `results/tables/compactness_source_grounding.md`; examples under `examples/usage/`. | Complete for character proxy, local tokenizer-aware proxy, and examples | Provider billing, output-token accounting, and success-per-dollar remain pending. |
+| Experiments: compactness/cost/examples. | `results/tables/context_cost_proxy.md`; `results/tables/context_cost_proxy_tokenizer.md`; `results/tables/model_response_cost_proxy.md`; `results/tables/compactness_source_grounding.md`; examples under `examples/usage/`. | Complete for character proxy, local tokenizer-aware input proxy, saved-response output-token proxy, and examples | Provider billing, realized output bills, and success-per-dollar remain pending. |
 | Include failure branches and negative outcomes. | `results/failure_cases/failure_case_archive.md`; model-ablation run reports; limitations; result cards; stage logs. | Complete as provenance archive | Outcome impact of failure recording is not tested. |
 | Final paper narrative. | `paper/draft.md`; `paper/outline.md`; `paper/claim_checklist.md`; `paper/limitations.md`; AAAI `.tex` draft. | Prepared, not final | Final paper requires live/human/model evidence decisions or explicit decision to submit as deterministic/offline system paper. |
 | Machine-checkable completion gate. | `scripts/check_goal_completion.py`; `results/reproducibility/goal_completion_report.md`; reproducibility checks `goal_completion_report_ready` and `goal_completion_core_checks_ready` are ready. | Complete as a gate; full goal still pending | Re-run the gate after any model, human-fidelity, provider-billing, or final-paper evidence changes. |
@@ -53,6 +55,9 @@ and 0 failed checks.
   `gpt-5.5` timeout, and AIDE used `gpt-5.5`.
 - `results/model_ablation_prompts/v0/evaluation.md`: 6 total rows, 4 scored
   rows, 2 pending rows; Claude and GPT-family rows all score 6/6.
+- `results/tables/model_response_cost_proxy.md`: local output-token proxy over
+  saved model-ablation responses; 4 measured rows, 2 pending DeepSeek rows, and
+  8,710 `o200k_base` output tokens. This is not provider billing evidence.
 - `research/run_logs/2026-06-19_phase36_claude_ablation_success_gpt_blocked.md`:
   endpoint recheck records completed Claude rows and the previous GPT
   upstream-access blocker for `gpt-5.5`/`gpt-5.4`.
@@ -85,8 +90,8 @@ local memory, scaffold, deterministic/offline experiment, AAAI-package, usage
 example, Claude Opus 4.8 ablation, GPT-family ablation, and
 reproducibility-readiness requirements. It does not yet satisfy DeepSeek
 response collection, human semantic validation, or real
-provider-billing/economic evidence. Local
-tokenizer-aware proxy evidence is present, and the machine-checkable
+provider-billing/economic evidence. Local tokenizer-aware input and
+saved-response output proxy evidence are present, and the machine-checkable
 goal-completion gate agrees that the active goal is not complete.
 
 ## Recommended Next Closure Path

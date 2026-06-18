@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 174
+- Ready checks: 180
 - Pending checks: 7
 - Failed checks: 0
 
@@ -62,6 +62,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | phase35_pdf_pipeline_input_run_log | ready | present | research/run_logs/2026-06-19_phase35_pdf_pipeline_input.md |
 | phase36_claude_ablation_success_gpt_blocked_run_log | ready | present | research/run_logs/2026-06-19_phase36_claude_ablation_success_gpt_blocked.md |
 | phase37_gpt_family_ablation_success_run_log | ready | present | research/run_logs/2026-06-19_phase37_gpt_family_ablation_success.md |
+| phase38_model_response_cost_proxy_run_log | ready | present | research/run_logs/2026-06-19_phase38_model_response_cost_proxy.md |
 | result_cards | ready | present | results/result_cards.md |
 | main_results_md | ready | present | results/tables/main_results.md |
 | main_results_csv | ready | present | results/tables/main_results.csv |
@@ -70,6 +71,9 @@ Evidence boundary: this report checks local package completeness and separates p
 | context_cost_proxy_json | ready | present | results/tables/context_cost_proxy.json |
 | context_cost_proxy_tokenizer_md | ready | present | results/tables/context_cost_proxy_tokenizer.md |
 | context_cost_proxy_tokenizer_json | ready | present | results/tables/context_cost_proxy_tokenizer.json |
+| model_response_cost_proxy_md | ready | present | results/tables/model_response_cost_proxy.md |
+| model_response_cost_proxy_json | ready | present | results/tables/model_response_cost_proxy.json |
+| model_response_cost_proxy_csv | ready | present | results/tables/model_response_cost_proxy.csv |
 | auto_note_comparison_md | ready | present | results/tables/auto_note_comparison.md |
 | auto_note_comparison_csv | ready | present | results/tables/auto_note_comparison.csv |
 | paper_ready_summary | ready | present | results/tables/paper_ready_summary.md |
@@ -142,7 +146,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | paper_table_core_checks_ready | ready | core checks ready | results\reproducibility\paper_table_report.json |
 | paper_claim_report_ready | ready | overall=ready; counts={'ready': 20, 'fail': 0} | results\reproducibility\paper_claim_report.json |
 | paper_claim_core_checks_ready | ready | core checks ready | results\reproducibility\paper_claim_report.json |
-| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 37, 'pending': 8, 'fail': 0} | results\reproducibility\goal_completion_report.json |
+| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 40, 'pending': 8, 'fail': 0} | results\reproducibility\goal_completion_report.json |
 | goal_completion_core_checks_ready | ready | core completion boundaries ready | results\reproducibility\goal_completion_report.json |
 | usage_example_report_ready | ready | overall=ready; counts={'ready': 42, 'fail': 0} | results\reproducibility\usage_example_report.json |
 | usage_example_core_checks_ready | ready | core checks ready | results\reproducibility\usage_example_report.json |
@@ -179,6 +183,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | model_ablation_builder | ready | present | scripts/build_model_ablation_prompts.py |
 | model_ablation_runner | ready | present | scripts/run_model_ablation_prompts.py |
 | model_ablation_response_evaluator | ready | present | scripts/evaluate_model_ablation_responses.py |
+| model_response_cost_evaluator | ready | present | scripts/evaluate_model_response_costs.py |
 | model_ablation_prompt_index | ready | present | results/model_ablation_prompts/v0/index.json |
 | model_ablation_run_report_json | ready | present | results/model_ablation_prompts/v0/run_report.json |
 | model_ablation_run_report_md | ready | present | results/model_ablation_prompts/v0/run_report.md |
@@ -191,4 +196,5 @@ Evidence boundary: this report checks local package completeness and separates p
 | model_ablation_responses | pending | missing_response_files=2 | results\model_ablation_prompts\v0\index.json |
 | model_ablation_run_report_valid | ready | overall=partial; counts={'success': 2, 'error': 2} | results\model_ablation_prompts\v0\run_report.json |
 | model_ablation_evaluation_complete | pending | scored_rows=4; pending_rows=2 | results\model_ablation_prompts\v0\evaluation.json |
+| model_response_output_token_proxy | ready | measured_rows=4; pending_rows=2; tokenizer_output_tokens=8710 | results\tables\model_response_cost_proxy.json |
 | secret_scan | ready | no raw API-key-like strings found | repository text files |

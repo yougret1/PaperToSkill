@@ -1375,3 +1375,36 @@ Evidence boundary:
   timeout. It does not complete DeepSeek, live cross-harness execution, human
   fidelity annotation, provider billing, output-token accounting, or
   success-per-dollar evidence.
+
+## 2026-06-19 Phase 38
+
+Actions:
+
+- Added `scripts/evaluate_model_response_costs.py` to estimate local
+  output-token proxies over saved model-ablation response files.
+- Added `tests/test_evaluate_model_response_costs.py`.
+- Generated `results/tables/model_response_cost_proxy.md`, `.csv`, and
+  `.json`.
+- Integrated the new report into the reproducibility package and active-goal
+  completion gates.
+- Updated paper-facing text, claim boundaries, runbook, artifact map, result
+  cards, goal audit, and memory to distinguish local output-token proxy
+  evidence from provider billing.
+
+Results:
+
+- The report covers 6 model-ablation prompt rows: 4 measured saved
+  Claude/GPT-family responses and 2 pending DeepSeek rows.
+- Character proxy output tokens total 9,420 across measured rows.
+- Local `o200k_base` output tokens total 8,710 across measured rows:
+  - Claude Toolformer: 2,272.
+  - Claude AIDE: 2,108.
+  - GPT-family Toolformer: 1,447.
+  - GPT-family AIDE: 2,883.
+
+Evidence boundary:
+
+- Phase 38 supports local saved-response output-token proxy accounting.
+- It does not support provider billing, live invoices, realized output-token
+  bills, success-per-dollar evidence, DeepSeek completion, live cross-harness
+  execution, or human-fidelity annotation.

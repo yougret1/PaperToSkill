@@ -26,10 +26,12 @@ REQUIRED_FILES = {
     "model_ablation_task": "benchmarks/model_ablation_v0.json",
     "model_ablation_runner": "scripts/run_model_ablation_prompts.py",
     "model_ablation_evaluator": "scripts/evaluate_model_ablation_responses.py",
+    "model_response_cost_evaluator": "scripts/evaluate_model_response_costs.py",
     "deepseek_usage": "examples/usage/model_ablation_usage.md",
     "failure_archive": "results/failure_cases/failure_case_archive.json",
     "human_fidelity_summary": "results/human_fidelity_packets/annotation_summary.json",
     "tokenizer_cost_proxy": "results/tables/context_cost_proxy_tokenizer.json",
+    "model_response_cost_proxy": "results/tables/model_response_cost_proxy.json",
     "goal_completion_audit": "research/goal_completion_audit.md",
 }
 
@@ -161,6 +163,11 @@ def system_and_experiment_checks(root: Path) -> list[Check]:
     tokenizer = load_json(root / "results/tables/context_cost_proxy_tokenizer.json")
     tokenizer_rows = len(tokenizer.get("context_size", []))
     efficiency_rows = len(tokenizer.get("coverage_efficiency", []))
+    response_cost = load_json(root / "results/tables/model_response_cost_proxy.json")
+    response_summary = response_cost.get("summary", {})
+    response_measured = int(response_summary.get("measured_rows", 0))
+    response_pending = int(response_summary.get("pending_rows", 0))
+    response_tokens = response_summary.get("total_tokenizer_output_tokens")
     return [
         Check(
             "papertoskill_curated_benchmark_ready",
@@ -189,8 +196,14 @@ def system_and_experiment_checks(root: Path) -> list[Check]:
         Check(
             "provider_billing_evidence_complete",
             "pending",
-            "local token proxies exist; provider billing and success-per-dollar evidence remain uncollected",
-            "results/tables/context_cost_proxy_tokenizer.json",
+            "local input/output token proxies exist; provider billing and success-per-dollar evidence remain uncollected",
+            "results/tables/context_cost_proxy_tokenizer.json; results/tables/model_response_cost_proxy.json",
+        ),
+        Check(
+            "model_response_output_token_proxy_ready",
+            "ready" if response_measured >= 4 and response_pending == 2 and response_tokens else "fail",
+            f"measured_rows={response_measured}; pending_rows={response_pending}; tokenizer_output_tokens={response_tokens}",
+            "results/tables/model_response_cost_proxy.json",
         ),
         Check(
             "failure_branch_archive_ready",

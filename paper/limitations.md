@@ -70,10 +70,12 @@ human-validated.
 
 Generated skills are under a 1200-word budget and have both a deterministic
 character-based input-token proxy and a local `o200k_base` tokenizer-aware proxy
-that are much smaller than full extracted paper text. However, the project has
-not yet computed provider-specific prices, live invoices, output-token costs, or
-success-per-dollar. Cost claims should therefore remain framed as local
-token/cost proxies until a provider-specific pricing experiment is added.
+that are much smaller than full extracted paper text. Phase 38 also adds a local
+output-token proxy over saved Claude/GPT-family model-ablation responses.
+However, the project has not yet computed provider-specific prices, live
+invoices, realized provider output bills, or success-per-dollar. Cost claims
+should therefore remain framed as local input/output token proxies until a
+provider-specific pricing experiment is added.
 
 ### Failure Archive Is Not An Outcome Study
 
@@ -102,8 +104,9 @@ The package should therefore be described as locally ready, not submission-final
 4. Extend extraction from curated notes toward raw PDF ingestion with stronger
    section detection, table handling, citation-aware source maps, and
    multi-paper auto-note validation.
-5. Add provider-specific pricing, output-token costs, live invoices, and
-   success-per-dollar accounting for full-paper, summary, and skill contexts.
+5. Add provider-specific pricing, live invoices, realized output-token bills,
+   and success-per-dollar accounting for full-paper, summary, skill, and saved
+   response contexts.
 6. Expand the benchmark with less procedural papers to test failure modes.
 7. Preserve negative and failed branches as paper evidence rather than filtering
    them out of the research story.

@@ -110,6 +110,7 @@ CORE_FILES = {
     "phase35_pdf_pipeline_input_run_log": "research/run_logs/2026-06-19_phase35_pdf_pipeline_input.md",
     "phase36_claude_ablation_success_gpt_blocked_run_log": "research/run_logs/2026-06-19_phase36_claude_ablation_success_gpt_blocked.md",
     "phase37_gpt_family_ablation_success_run_log": "research/run_logs/2026-06-19_phase37_gpt_family_ablation_success.md",
+    "phase38_model_response_cost_proxy_run_log": "research/run_logs/2026-06-19_phase38_model_response_cost_proxy.md",
     "result_cards": "results/result_cards.md",
 }
 
@@ -121,6 +122,9 @@ TABLE_FILES = {
     "context_cost_proxy_json": "results/tables/context_cost_proxy.json",
     "context_cost_proxy_tokenizer_md": "results/tables/context_cost_proxy_tokenizer.md",
     "context_cost_proxy_tokenizer_json": "results/tables/context_cost_proxy_tokenizer.json",
+    "model_response_cost_proxy_md": "results/tables/model_response_cost_proxy.md",
+    "model_response_cost_proxy_json": "results/tables/model_response_cost_proxy.json",
+    "model_response_cost_proxy_csv": "results/tables/model_response_cost_proxy.csv",
     "auto_note_comparison_md": "results/tables/auto_note_comparison.md",
     "auto_note_comparison_csv": "results/tables/auto_note_comparison.csv",
     "paper_ready_summary": "results/tables/paper_ready_summary.md",
@@ -173,6 +177,7 @@ MODEL_ABLATION_FILES = {
     "model_ablation_builder": "scripts/build_model_ablation_prompts.py",
     "model_ablation_runner": "scripts/run_model_ablation_prompts.py",
     "model_ablation_response_evaluator": "scripts/evaluate_model_ablation_responses.py",
+    "model_response_cost_evaluator": "scripts/evaluate_model_response_costs.py",
     "model_ablation_prompt_index": "results/model_ablation_prompts/v0/index.json",
     "model_ablation_run_report_json": "results/model_ablation_prompts/v0/run_report.json",
     "model_ablation_run_report_md": "results/model_ablation_prompts/v0/run_report.md",
@@ -662,6 +667,16 @@ def model_ablation_checks(root: Path) -> list[Check]:
         status = "ready" if pending == 0 and scored > 0 else "pending"
         detail = f"scored_rows={scored}; pending_rows={pending}"
         checks.append(Check("model_ablation_evaluation_complete", status, detail, str(evaluation_path.relative_to(root))))
+    response_cost_path = root / "results/tables/model_response_cost_proxy.json"
+    if response_cost_path.exists():
+        response_cost = load_json(response_cost_path)
+        summary = response_cost.get("summary", {})
+        measured = int(summary.get("measured_rows", 0))
+        pending = int(summary.get("pending_rows", 0))
+        tokenizer_tokens = summary.get("total_tokenizer_output_tokens")
+        status = "ready" if measured >= 4 and pending == 2 and tokenizer_tokens else "fail"
+        detail = f"measured_rows={measured}; pending_rows={pending}; tokenizer_output_tokens={tokenizer_tokens}"
+        checks.append(Check("model_response_output_token_proxy", status, detail, str(response_cost_path.relative_to(root))))
     return checks
 
 

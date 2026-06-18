@@ -23,9 +23,9 @@ Do not commit raw keys. Use shell environment variables for live checks.
 
 ## Current Worktree State
 
-Phase 36 Claude-ablation evidence work is in progress. On resume, check `git status` and
-`git log -1 --oneline` to see whether the verified changes are already saved to
-`origin/main`.
+Phase 38 model-response output-token proxy work is in progress. On resume,
+check `git status` and `git log -1 --oneline` to see whether the verified
+changes are already saved to `origin/main`.
 
 Implemented locally:
 
@@ -53,24 +53,33 @@ Implemented locally:
 - Phase 36 reran Claude/GPT-family model ablations. Claude Opus 4.8 has two
   saved response files scored 6/6. Phase 37 reran GPT-family only; both
   GPT-family rows are now saved and scored 6/6.
+- Phase 38 adds `scripts/evaluate_model_response_costs.py`, a local output-token
+  proxy over saved model-ablation responses, plus
+  `results/tables/model_response_cost_proxy.*`.
 
 Current generated report status:
 
 - AAAI package:
   ready, 17 ready, 0 failed.
 - Goal-completion report:
-  `not_complete_pending_external_evidence`, 37 ready, 8 pending, 0 failed.
+  `not_complete_pending_external_evidence`, 40 ready, 8 pending, 0 failed.
 - Reproducibility package:
-  `ready_with_pending_external_evidence`, 174 ready, 7 pending, 0 failed.
+  `ready_with_pending_external_evidence`, 180 ready, 7 pending, 0 failed.
 - Usage examples:
   ready, 42 ready, 0 failed.
 - Paper claims and tables:
   ready, 20/76 ready respectively, 0 failed.
+- Model-response output-token proxy:
+  6 total rows, 4 measured, 2 pending DeepSeek rows, 9,420 character-proxy
+  output tokens, and 8,710 `o200k_base` output tokens.
 
 Latest verification before commit:
 
-- `python -m unittest discover -s tests -v`: 47 tests passed after Phase 36.
-- `python scripts\check_aaai_package.py --strict`: passed.
+- `python scripts\evaluate_model_response_costs.py`: passed.
+- `python -m unittest tests.test_evaluate_model_response_costs -v`: passed.
+- `python -m unittest discover -s tests -v`: 48 tests passed after Phase 38.
+- `python scripts\check_aaai_package.py --strict`: passed after rebuilding the
+  AAAI PDF.
 - `python scripts\check_goal_completion.py --strict`: passed.
 - `python scripts\check_reproducibility_package.py --strict`: passed.
 - `python scripts\check_paper_claims.py --strict`: passed.
@@ -104,15 +113,15 @@ Stable evidence retained from earlier phases:
     saved and scored 6/6.
   - Response evaluation is now 6 total rows, 4 scored rows, and 2 pending rows.
 - Human-fidelity annotation remains pending.
-- Provider billing, output-token accounting, live invoices, and
-  success-per-dollar evidence remain pending.
+- Local saved-response output-token proxy exists. Provider billing, realized
+  output-token bills, live invoices, and success-per-dollar evidence remain
+  pending.
 - Final AAAI submission readiness remains pending until evidence decisions are
   made.
 
 ## Next Actions
 
-1. Check whether Phase 36 is already committed/pushed; if not, commit and
-   push the verified changes.
+1. Commit and push Phase 38 to `origin/main`.
 2. After the user supplies a concrete DeepSeek alias/env profile, follow the
    same catalog, live-run, saved-response, scoring, and claim-boundary process.
 
@@ -126,6 +135,7 @@ Stable evidence retained from earlier phases:
 - Model ablation: `benchmarks/model_ablation_v0.json`,
   `scripts/run_model_ablation_prompts.py`,
   `scripts/evaluate_model_ablation_responses.py`,
+  `scripts/evaluate_model_response_costs.py`,
   `examples/usage/model_ablation_usage.md`.
 - AAAI paper: `paper/aaai/papertoskill_aaai2027.tex`,
   `paper/aaai/papertoskill_tables.tex`,

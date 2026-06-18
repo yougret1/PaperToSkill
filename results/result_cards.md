@@ -367,7 +367,9 @@
 - Statistical evidence: none; this is deterministic accounting.
 - Failure modes: the tokenizer-aware proxy is exact for the local `o200k_base`
   tokenizer, but the configurable cost number is still a scaling proxy, not a
-  provider invoice, output-token account, or success-per-dollar measurement.
+  provider invoice or success-per-dollar measurement. Output-token accounting
+  for saved model responses is tracked separately in
+  `results/tables/model_response_cost_proxy.md`.
 - Limitations: summary and abstract contexts are smaller than generated skills
   but lose substantial deterministic coverage, so the supported claim is
   coverage-preserving compression relative to full paper context rather than
@@ -655,8 +657,8 @@
   available; DeepSeek model ablations remain blocked until the user provides a
   concrete alias and endpoint profile.
 - Limitations: Claude and GPT-family are complete only for the current two-row
-  prompt protocol; no completed DeepSeek ablation, no provider billing, no
-  output-token accounting, and no success-per-dollar evidence.
+  prompt protocol; no completed DeepSeek ablation, no provider billing or
+  success-per-dollar evidence.
 - Claim impact: supports the claim that AAAI packaging and model-ablation
   protocols are prepared, while preserving the evidence boundary that live model
   results remain pending.
@@ -688,6 +690,9 @@
 - Response evaluation: `results/model_ablation_prompts/v0/evaluation.md`
   reports 6 total rows, 4 scored rows, 2 pending rows, and 1.0 average
   normalized score over scored rows.
+- Output-token proxy: `results/tables/model_response_cost_proxy.md` reports
+  four measured saved responses, two pending DeepSeek rows, and 8,710
+  `o200k_base` output tokens across the measured Claude/GPT-family rows.
 - Latest recheck: Phase 37 reran the GPT-family slot with the separate GPT
   credential profile and produced the current GPT-family saved responses.
 - Practical significance: the project now has a reusable runner/evaluator path
@@ -705,11 +710,40 @@
   that DeepSeek results remain pending.
 - Figure/table: `scripts/run_model_ablation_prompts.py`;
   `scripts/evaluate_model_ablation_responses.py`;
+  `scripts/evaluate_model_response_costs.py`;
   `research/run_logs/2026-06-19_phase36_claude_ablation_success_gpt_blocked.md`;
   `research/run_logs/2026-06-19_phase37_gpt_family_ablation_success.md`;
+  `research/run_logs/2026-06-19_phase38_model_response_cost_proxy.md`;
   `results/model_ablation_prompts/v0/run_report.md`;
   `results/model_ablation_prompts/v0/gpt_retry_run_report.md`;
-  `results/model_ablation_prompts/v0/evaluation.md`.
+  `results/model_ablation_prompts/v0/evaluation.md`;
+  `results/tables/model_response_cost_proxy.md`.
+
+## Model-Response Output-Token Proxy
+
+- Experiment: estimate local output-token proxies for saved model-ablation
+  response files without claiming provider billing.
+- Main result: `results/tables/model_response_cost_proxy.md` reports 6 prompt
+  rows, 4 measured saved responses, 2 pending DeepSeek rows, 9,420
+  character-proxy output tokens, and 8,710 `o200k_base` output tokens.
+- Per-row tokenizer counts: Claude Toolformer 2,272, Claude AIDE 2,108,
+  GPT-family Toolformer 1,447, and GPT-family AIDE 2,883.
+- Compared baselines: none; this is accounting over saved response files.
+- Practical significance: the project now has both local input-context and
+  saved-response output-token proxy reports, which is enough to discuss
+  compactness and response-size accounting without inventing provider bills.
+- Statistical evidence: none; deterministic local token counting only.
+- Failure modes: pending DeepSeek rows have no response files and should not be
+  treated as negative model-quality or cost evidence.
+- Limitations: the price proxy uses a configurable `$1 / 1M output tokens`
+  scale and is not a provider invoice, live bill, or success-per-dollar result.
+- Claim impact: upgrades the economic section from input-context proxies only
+  to local input/output token proxies while preserving the no-real-billing
+  boundary.
+- Figure/table: `scripts/evaluate_model_response_costs.py`;
+  `results/tables/model_response_cost_proxy.md`;
+  `results/tables/model_response_cost_proxy.csv`;
+  `results/tables/model_response_cost_proxy.json`.
 
 ## DeepSeek Follow-Up Readiness
 
@@ -748,8 +782,8 @@
 - Remaining blockers: DeepSeek response collection is pending user
   configuration, human-fidelity annotation is unscored, and
   provider-billing/success-per-dollar evidence is not collected. Local
-  tokenizer-aware proxy evidence is now available, but real provider economics
-  remain pending.
+  tokenizer-aware input proxy and saved-response output-token proxy evidence are
+  now available, but real provider economics remain pending.
 - Practical significance: prevents the project from accidentally declaring
   success simply because the local deterministic package is extensive and green.
 - Statistical evidence: none; this is a requirements and evidence audit.

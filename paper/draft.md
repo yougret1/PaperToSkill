@@ -150,10 +150,12 @@ The metrics are deterministic:
   `ceil(characters / 4)`;
 - local tokenizer-aware input-token and cost proxy using `o200k_base`, reported
   with a configurable price per million input-token proxy.
+- local output-token proxy for saved model-ablation responses, also using
+  `o200k_base` when available and the same character proxy as a fallback.
 
 These metrics are reproducible gates. They do not replace live agent execution,
-provider billing, success-per-dollar accounting, or completed human fidelity
-annotation. To support later human review, we also
+provider billing, live invoices, success-per-dollar accounting, or completed
+human fidelity annotation. To support later human review, we also
 prepare a six-criterion fidelity protocol and paper-specific review packets, but
 those packets remain unscored until independent annotators fill them. The
 annotation summarizer currently reports 24 pending rows and no completed
@@ -225,7 +227,11 @@ completed the AIDE row. Both GPT-family rows also scored 6/6. DeepSeek remains
 a placeholder follow-up slot. The response evaluation therefore reports 6 total
 rows, 4 scored rows, 2 pending rows, and an average normalized score of 1.0
 over scored rows. DeepSeek pending rows should not be interpreted as negative
-model-quality evidence.
+model-quality evidence. A separate local output-token proxy over the saved
+Claude/GPT-family responses reports 8,710 `o200k_base` output tokens across the
+four measured rows, with 2,272 for Claude Toolformer, 2,108 for Claude AIDE,
+1,447 for GPT-family Toolformer, and 2,883 for GPT-family AIDE. This is local
+saved-response accounting, not provider billing or success-per-dollar evidence.
 
 Phases 19-20 evaluate the automatic note scaffold separately on Toolformer and
 AIDE. The Toolformer auto-note-derived skill scores 20/20 on the deterministic
@@ -278,8 +284,9 @@ responses, but DeepSeek remains pending user configuration. Fifth,
 human-fidelity packets, a blank annotation template,
 and a summary script are prepared, but no independent annotations have been
 completed. Sixth, compactness is measured by word count, deterministic
-character proxy, and local tokenizer-aware input-token proxy, not by
-provider-specific prices, live invoices, or live success per dollar. Seventh,
+character proxy, local tokenizer-aware input-token proxy, and local output-token
+proxy for saved model responses, not by provider-specific prices, live
+invoices, or live success per dollar. Seventh,
 the failure-case archive is an evidence and
 provenance artifact rather than a controlled outcome study. Eighth, the
 reproducibility package is locally ready but still has pending external evidence
@@ -297,8 +304,9 @@ human-editable skills. In a four-paper benchmark, generated skills are compact,
 source-grounded, structurally valid, and more operationally complete than short
 summary baselines under deterministic evaluation. The next stage is to run the
 prepared live transfer prompt packets when provider capacity is available, add
-the user's DeepSeek slot, run human fidelity review, compute provider-specific
-price costs, and test papers whose contributions are less naturally procedural.
+the user's DeepSeek slot, run human fidelity review, collect provider-specific
+billing or invoice evidence, and test papers whose contributions are less
+naturally procedural.
 
 ## Reproducibility Pointers
 
@@ -309,6 +317,7 @@ price costs, and test papers whose contributions are less naturally procedural.
 - Source-span validation: `scripts/validate_source_spans.py`
 - Table aggregation: `scripts/aggregate_results_tables.py`
 - Context cost proxy: `scripts/evaluate_context_costs.py`
+- Model-response output-token proxy: `scripts/evaluate_model_response_costs.py`
 - Human-fidelity packets: `scripts/build_human_fidelity_packets.py`
 - Human-fidelity annotation summary:
   `scripts/summarize_human_fidelity_annotations.py`

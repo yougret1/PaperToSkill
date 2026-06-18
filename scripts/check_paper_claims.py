@@ -103,7 +103,7 @@ REQUIRED_BOUNDARIES = [
     },
     {
         "id": "cost_proxy_boundary",
-        "pattern": r"(not as provider billing evidence|not by provider-specific prices|not provider bills)",
+        "pattern": r"(not as provider billing evidence|not by provider-specific prices|not provider bills|output-token[^.\n]{0,80}prox)",
         "detail": "Paper text should frame cost evidence as local proxy evidence.",
     },
     {
