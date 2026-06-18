@@ -3,8 +3,8 @@
 Evidence boundary: this report audits the active user goal against local repository evidence. Pending checks are remaining requirements, not negative evidence and not local package failures.
 
 - Overall status: not_complete_pending_external_evidence
-- Ready checks: 35
-- Pending checks: 10
+- Ready checks: 36
+- Pending checks: 9
 - Failed checks: 0
 
 ## Checks
@@ -33,7 +33,7 @@ Evidence boundary: this report audits the active user goal against local reposit
 | memory_resume_rule_present | ready | long-term and short-term resume rules present | memory/long_term_memory.md; memory/short_term_memory.md |
 | memory_current_blockers_recorded | ready | current model-availability blockers recorded | memory/short_term_memory.md |
 | ai_scientist_v2_local_dry_run_recorded | ready | dry-run recorded in memory | memory/short_term_memory.md |
-| ai_scientist_v2_live_llm_run_complete | pending | blocked by provider account availability | memory/short_term_memory.md |
+| ai_scientist_v2_live_llm_run_complete | pending | live AI-Scientist-v2 run remains pending | memory/short_term_memory.md |
 | papertoskill_curated_benchmark_ready | ready | main_result_rows=4 | results/tables/main_results.csv |
 | offline_harness_transfer_ablation_ready | ready | transfer_rows=12 | results/tables/transfer_ablation.csv |
 | auto_note_examples_ready | ready | auto_note_rows=4 | results/tables/auto_note_comparison.csv |
@@ -46,13 +46,13 @@ Evidence boundary: this report audits the active user goal against local reposit
 | paper_claim_gate_ready | ready | overall_status=ready | results/reproducibility/paper_claim_report.json |
 | aaai_final_submission_ready | pending | AAAI package is locally verified, but final live/model/human/cost evidence decisions remain pending | paper/aaai/; results/reproducibility/ |
 | model_ablation_protocol_ready | ready | prompt_packets=6; models=claude_opus_4_8,deepseek_followup_slot,gpt_5_5_or_gpt_family | results/model_ablation_prompts/v0/index.json |
-| claude_opus_4_8_ablation_attempted | ready | rows=2; statuses=error; attempted_aliases=claude-opus-4-6,claude-opus-4-7,claude-opus-4-8 | results/model_ablation_prompts/v0/run_report.json |
-| claude_opus_4_8_ablation_complete | pending | saved and scored responses are required before claiming completion | results/model_ablation_prompts/v0/evaluation.json |
+| claude_opus_4_8_ablation_attempted | ready | rows=2; statuses=success; attempted_aliases=claude-opus-4-8 | results/model_ablation_prompts/v0/run_report.json |
+| claude_opus_4_8_ablation_complete | ready | saved and scored responses are required before claiming completion | results/model_ablation_prompts/v0/evaluation.json |
 | gpt_family_ablation_availability_checked | ready | rows=2; statuses=error; catalog_gpt_models=16 | results/model_ablation_prompts/v0/run_report.json |
 | gpt_family_ablation_complete | pending | GPT-family catalog is available, but chat completions did not produce saved/scored responses | results/model_ablation_prompts/v0/evaluation.json |
 | deepseek_followup_process_ready | ready | DeepSeek slot is present and runner supports configured aliases | benchmarks/model_ablation_v0.json; examples/usage/model_ablation_usage.md |
 | deepseek_followup_response_complete | pending | placeholder alias still pending user-provided DeepSeek configuration | results/model_ablation_prompts/v0/evaluation.json |
-| model_ablation_evaluation_complete | pending | scored_rows=0; pending_rows=6 | results/model_ablation_prompts/v0/evaluation.json |
+| model_ablation_evaluation_complete | pending | scored_rows=2; pending_rows=4 | results/model_ablation_prompts/v0/evaluation.json |
 | live_cross_harness_responses_complete | pending | pending_live_response_sets=4 | results/reproducibility/package_report.json |
 | human_fidelity_annotation_complete | pending | status=pending; scored_rows=0; pending_rows=24 | results/human_fidelity_packets/annotation_summary.json |
-| active_goal_complete | pending | pending_requirements=ai_scientist_v2_live_llm_run_complete,provider_billing_evidence_complete,aaai_final_submission_ready,claude_opus_4_8_ablation_complete,gpt_family_ablation_complete,deepseek_followup_response_complete,model_ablation_evaluation_complete,live_cross_harness_responses_complete,human_fidelity_annotation_complete | all goal checks |
+| active_goal_complete | pending | pending_requirements=ai_scientist_v2_live_llm_run_complete,provider_billing_evidence_complete,aaai_final_submission_ready,gpt_family_ablation_complete,deepseek_followup_response_complete,model_ablation_evaluation_complete,live_cross_harness_responses_complete,human_fidelity_annotation_complete | all goal checks |

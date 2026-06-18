@@ -161,13 +161,11 @@ scores.
 
 We also prepare model-ablation prompt packets, a runner, and a response
 evaluator for Claude Opus 4.8, a GPT-family slot requested as GPT 5.5, and a
-DeepSeek follow-up slot. The latest live recheck records provider/model
-availability rather than model quality: the Claude credential profile lists
-`claude-opus-4-8`, `claude-opus-4-7`, and `claude-opus-4-6`, but Claude prompt
-calls returned HTTP 503 because no provider accounts were available. The
-separate GPT credential profile lists `gpt-5.5`, `gpt-5.4`, and other
-GPT-family aliases, but `gpt-5.5` prompt calls returned HTTP 502 because
-upstream access was forbidden.
+DeepSeek follow-up slot. The latest live recheck produced saved Claude Opus 4.8
+responses for both current prompt rows, while the separate GPT credential
+profile still lists `gpt-5.5`, `gpt-5.4`, and other GPT-family aliases but
+returns HTTP 502 upstream access errors for both `gpt-5.5` and `gpt-5.4`.
+DeepSeek remains pending user configuration.
 
 ## 5. Results
 
@@ -210,19 +208,21 @@ records from the PaperToSkill development process. This archive supports the
 claim that failed branches are preserved as inspectable provenance. It is not
 evidence that failure recording improves live task outcomes.
 
-The reproducibility package checker reports 170 ready checks, 7 pending
+The reproducibility package checker reports 171 ready checks, 7 pending
 external-evidence checks, and 0 failed checks. The pending checks correspond to
 the four live transfer response sets, human-fidelity annotation status,
 model-ablation response files, and completed model-ablation evaluation. This
 supports a local artifact-readiness claim, not a claim of completed live, model,
 or human evaluation.
 
-The model-ablation runner/evaluator is executable, but the current evidence is
-blocked rather than scored. The latest run report records Claude errors across
-`claude-opus-4-8`, `claude-opus-4-7`, and `claude-opus-4-6`, GPT-family errors
-across `gpt-5.5` and `gpt-5.4`, zero saved response files, and six pending
-evaluation rows across Claude, GPT-family, and DeepSeek slots. These rows
-should not be interpreted as negative quality evidence for any model.
+The model-ablation runner/evaluator is now partially scored. Claude Opus 4.8
+completed both current prompt rows, saved response files, and scored 6/6 on
+both rows under the saved-response rubric. GPT-family aliases `gpt-5.5` and
+`gpt-5.4` still return HTTP 502 upstream access errors, and DeepSeek remains a
+placeholder follow-up slot. The response evaluation therefore reports 6 total
+rows, 2 scored rows, 4 pending rows, and an average normalized score of 1.0
+over scored rows. GPT/DeepSeek pending rows should not be interpreted as
+negative model-quality evidence.
 
 Phases 19-20 evaluate the automatic note scaffold separately on Toolformer and
 AIDE. The Toolformer auto-note-derived skill scores 20/20 on the deterministic

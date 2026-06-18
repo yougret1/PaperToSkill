@@ -52,6 +52,7 @@
 | `research/run_logs/2026-06-18_phase32_model_profile_recheck.md` | Separate Claude/GPT credential-profile recheck and model-ablation blocker update | Created |
 | `research/run_logs/2026-06-19_phase33_alias_retry_model_recheck.md` | Alias-retry runner update and full Claude/GPT candidate availability recheck | Created |
 | `research/run_logs/2026-06-19_phase35_pdf_pipeline_input.md` | PDF-input smoke path for the local PaperToSkill pipeline | Created |
+| `research/run_logs/2026-06-19_phase36_claude_ablation_success_gpt_blocked.md` | Claude Opus 4.8 saved/scored model-ablation responses and GPT-family blocker update | Created |
 
 ## Paper Draft Package
 

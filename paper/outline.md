@@ -135,12 +135,11 @@ Main results from `results/tables/main_results.md`:
   failure branches and 6 project-level failure/fix records.
 - the reproducibility package checker reports local package readiness with
   pending live-response, model-ablation-response, and human-annotation evidence
-  separated from local failures: 135 ready checks, 7 pending checks, and 0
+  separated from local failures: 171 ready checks, 7 pending checks, and 0
   failed checks.
-- the model-ablation live attempt records that Claude 4.8/4.7/4.6 aliases and
-  GPT-family aliases such as `gpt-5.5`/`gpt-5.4` are listed under separate
-  credential profiles, but chat completions remain blocked by provider account
-  availability or upstream access.
+- the model-ablation live attempt records that Claude Opus 4.8 completed both
+  current prompt rows and scored 6/6, while GPT-family aliases such as
+  `gpt-5.5`/`gpt-5.4` remain blocked by upstream access.
 - in a separate auto-note comparison, the Toolformer extracted-text scaffold
   produces a 1,179-word skill scoring 20/20 on the deterministic rubric,
   9.3/10 on context coverage, 10/10 transfer readiness, and 1.0 source support

@@ -108,6 +108,7 @@ CORE_FILES = {
     "phase33_alias_retry_model_recheck_run_log": "research/run_logs/2026-06-19_phase33_alias_retry_model_recheck.md",
     "phase34_pipeline_command_run_log": "research/run_logs/2026-06-19_phase34_pipeline_command.md",
     "phase35_pdf_pipeline_input_run_log": "research/run_logs/2026-06-19_phase35_pdf_pipeline_input.md",
+    "phase36_claude_ablation_success_gpt_blocked_run_log": "research/run_logs/2026-06-19_phase36_claude_ablation_success_gpt_blocked.md",
     "result_cards": "results/result_cards.md",
 }
 
@@ -466,7 +467,7 @@ def paper_claim_checks(root: Path) -> list[Check]:
         "paper_claim_boundary_curated_scope",
         "paper_claim_boundary_not_pdf_automation",
         "paper_claim_boundary_live_transfer_pending",
-        "paper_claim_boundary_model_ablation_blocked",
+        "paper_claim_boundary_model_ablation_partial_boundary",
     }
     missing = sorted(required_ready - ready_ids)
     checks.append(
@@ -496,7 +497,7 @@ def goal_completion_checks(root: Path) -> list[Check]:
         "aaai_package_gate_ready": "ready",
         "usage_example_gate_ready": "ready",
         "claude_opus_4_8_ablation_attempted": "ready",
-        "claude_opus_4_8_ablation_complete": "pending",
+        "claude_opus_4_8_ablation_complete": "ready",
         "gpt_family_ablation_complete": "pending",
         "deepseek_followup_process_ready": "ready",
         "deepseek_followup_response_complete": "pending",

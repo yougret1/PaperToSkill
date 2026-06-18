@@ -46,10 +46,12 @@ Current supported claims:
   executability, AAAI package readiness, table consistency, paper claim
   discipline, and active-goal completion auditing.
 - Failure-case archive with paper-reported and project-level cases.
+- Claude Opus 4.8 model-ablation prompt rows are saved and scored for the
+  current two-case protocol.
 
 Current unsupported claims:
 
-- Completed live Claude/GPT/DeepSeek model ablations.
+- Completed live GPT/DeepSeek model ablations.
 - Completed live cross-harness success.
 - Human-validated semantic fidelity.
 - Provider billing, output-token accounting, or success-per-dollar.
@@ -84,11 +86,11 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 170 ready checks, 7 pending
+  reports `ready_with_pending_external_evidence`, 171 ready checks, 7 pending
   checks, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
-  reports `not_complete_pending_external_evidence`, 35 ready checks, 10 pending
+  reports `not_complete_pending_external_evidence`, 36 ready checks, 9 pending
   checks, and 0 failed checks.
 - AAAI package:
   `results/reproducibility/aaai_package_report.md`
@@ -96,6 +98,10 @@ Use these as entry points instead of searching the whole repo first:
 - Usage examples:
   `results/reproducibility/usage_example_report.md`
   reports ready, 42 ready checks, 0 failed checks.
+- Model ablation response evaluation:
+  `results/model_ablation_prompts/v0/evaluation.md`
+  reports 6 total rows, 2 scored Claude rows, 4 pending rows, and 1.0 average
+  normalized score over scored rows.
 - Paper tables:
   `results/reproducibility/paper_table_report.md`
   reports ready, 76 ready checks, 0 failed checks.
@@ -115,9 +121,10 @@ Claude-family profile:
   `AI_SCIENTIST_OPENAI_API_KEY`.
 - User-requested aliases: `claude-opus-4.8`, `claude-opus-4-6`,
   `claude-opus-4-7`.
-- Latest catalog evidence lists `claude-opus-4-8`, `claude-opus-4-7`, and
-  `claude-opus-4-6`; alias-retry chat attempts for all three still fail with
-  HTTP 503/no available accounts.
+- Latest Phase 36 catalog evidence lists 14 Claude-family models, including
+  `claude-opus-4-8`, `claude-opus-4-7`, and `claude-opus-4-6`.
+- `claude-opus-4-8` completed both current model-ablation prompt rows with
+  HTTP 200; the saved-response scorer reports 2/2 Claude rows scored at 6/6.
 
 GPT-family profile:
 
@@ -126,8 +133,9 @@ GPT-family profile:
   `PAPERTOSKILL_GPT_OPENAI_API_KEY`.
 - Latest catalog evidence with the separate GPT key lists `gpt-5.5`,
   `gpt-5.4`, and other GPT-family models; alias-retry chat attempts for
-  `gpt-5.5` and `gpt-5.4` fail with HTTP 502/upstream access forbidden. Do not
-  claim completed GPT ablations until response files are saved and scored.
+  `gpt-5.5` and `gpt-5.4` still fail with HTTP 502/upstream access forbidden.
+  Do not claim completed GPT ablations until response files are saved and
+  scored.
 
 DeepSeek:
 

@@ -10,17 +10,17 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 35: local PDF-input pipeline smoke path. The AAAI-27 paper package, usage
+Phase 36: Claude ablation scored, GPT still blocked. The AAAI-27 paper package, usage
 examples, deterministic/offline experiments, model-ablation runner, DeepSeek
 follow-up path, local `o200k_base` cost proxy, one-command extracted-text-to-
 skill pipeline, local `pdftotext -layout` PDF smoke input path, result tables,
 and machine-checkable package/goal gates are prepared. The latest live model
-recheck lists Claude 4.8/4.7/4.6 aliases and GPT-family aliases such as
-`gpt-5.5`/`gpt-5.4` under separate credential profiles, but chat completions
-remain blocked by provider account availability or upstream access. The active
-goal is not yet complete because live model responses, DeepSeek responses,
-human-fidelity annotation, and provider-specific billing or success-per-dollar
-evidence remain pending.
+recheck completed two Claude Opus 4.8 prompt rows and scored both 6/6.
+GPT-family aliases such as `gpt-5.5`/`gpt-5.4` are listed under the separate
+credential profile but still fail chat completion with upstream access errors.
+The active goal is not yet complete because GPT-family responses, DeepSeek
+responses, human-fidelity annotation, and provider-specific billing or
+success-per-dollar evidence remain pending.
 
 ## Memory
 

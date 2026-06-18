@@ -1310,3 +1310,32 @@ Evidence boundary:
 - Phase 35 supports local direct-PDF pipeline smoke execution only. It does not
   prove reliable arbitrary-PDF automation, human semantic fidelity, live
   harness success, provider billing, or completed model ablations.
+
+## 2026-06-19 Phase 36
+
+Actions:
+
+- Reran `scripts/run_model_ablation_prompts.py` for `claude_opus_4_8` and
+  `gpt_5_5_or_gpt_family` with shell-only environment variables.
+- Reran `scripts/evaluate_model_ablation_responses.py` over the prompt index.
+- Added a Phase 36 run log and updated package/goal checks, claim boundaries,
+  result cards, goal audit, and memory.
+
+Results:
+
+- Claude catalog succeeded and listed 14 Claude-family models.
+- Both Claude Opus 4.8 prompt rows completed with HTTP 200 and saved response
+  files under `results/model_ablation_prompts/v0/responses/`.
+- The saved-response evaluator scored both Claude rows 6/6, producing
+  2 scored rows, 4 pending rows, and average normalized score 1.0 over scored
+  rows.
+- GPT catalog still lists `gpt-5.5` and `gpt-5.4`, but both aliases still fail
+  chat completion with HTTP 502 `Upstream access forbidden`.
+- DeepSeek remains pending user configuration.
+
+Evidence boundary:
+
+- Phase 36 completes the Claude Opus 4.8 portion of the prepared model
+  ablation. It does not complete the GPT-family ablation, DeepSeek follow-up,
+  live cross-harness execution, human fidelity annotation, provider billing, or
+  success-per-dollar evidence.

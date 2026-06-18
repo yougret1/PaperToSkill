@@ -101,6 +101,12 @@ def csv_row_count(root: Path, raw_path: str) -> int:
 def memory_checks(root: Path) -> list[Check]:
     long_text = read_text(root / "memory/long_term_memory.md")
     short_text = read_text(root / "memory/short_term_memory.md")
+    blockers_ready = (
+        "gpt-5.5" in short_text
+        and "Upstream access forbidden" in short_text
+        and "DeepSeek" in short_text
+        and ("pending" in short_text or "blocked" in short_text)
+    )
     checks = [
         Check(
             "memory_resume_rule_present",
@@ -110,7 +116,7 @@ def memory_checks(root: Path) -> list[Check]:
         ),
         Check(
             "memory_current_blockers_recorded",
-            "ready" if "No available accounts" in short_text and "gpt-5.5" in short_text and "Upstream access forbidden" in short_text else "fail",
+            "ready" if blockers_ready else "fail",
             "current model-availability blockers recorded",
             "memory/short_term_memory.md",
         ),
@@ -121,7 +127,7 @@ def memory_checks(root: Path) -> list[Check]:
 def ai_scientist_checks(root: Path) -> list[Check]:
     short_text = read_text(root / "memory/short_term_memory.md")
     dry_run_ready = "AI-Scientist-v2 dry-run succeeded" in short_text
-    provider_blocked = "No available accounts" in short_text or "provider account" in short_text
+    live_complete = "AI-Scientist-v2 live" in short_text and "complete" in short_text
     return [
         Check(
             "ai_scientist_v2_local_dry_run_recorded",
@@ -131,8 +137,8 @@ def ai_scientist_checks(root: Path) -> list[Check]:
         ),
         Check(
             "ai_scientist_v2_live_llm_run_complete",
-            "pending" if provider_blocked else "ready",
-            "blocked by provider account availability" if provider_blocked else "no provider blocker recorded",
+            "ready" if live_complete else "pending",
+            "live AI-Scientist-v2 run evidence found" if live_complete else "live AI-Scientist-v2 run remains pending",
             "memory/short_term_memory.md",
         ),
     ]

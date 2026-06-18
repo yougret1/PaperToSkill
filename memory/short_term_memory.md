@@ -23,7 +23,7 @@ Do not commit raw keys. Use shell environment variables for live checks.
 
 ## Current Worktree State
 
-Phase 35 local pipeline work is in progress. On resume, check `git status` and
+Phase 36 Claude-ablation evidence work is in progress. On resume, check `git status` and
 `git log -1 --oneline` to see whether the verified changes are already saved to
 `origin/main`.
 
@@ -50,15 +50,18 @@ Implemented locally:
 - Phase 35 extends the pipeline to accept a local PDF source when
   `pdftotext -layout` is available, writes extracted text under the output
   directory, and records PDF source metadata in the manifest.
+- Phase 36 reran Claude/GPT-family model ablations. Claude Opus 4.8 now has
+  two saved response files scored 6/6; GPT-family aliases remain blocked by
+  HTTP 502 upstream access.
 
 Current generated report status:
 
 - AAAI package:
   ready, 17 ready, 0 failed.
 - Goal-completion report:
-  `not_complete_pending_external_evidence`, 35 ready, 10 pending, 0 failed.
+  `not_complete_pending_external_evidence`, 36 ready, 9 pending, 0 failed.
 - Reproducibility package:
-  `ready_with_pending_external_evidence`, 170 ready, 7 pending, 0 failed.
+  `ready_with_pending_external_evidence`, 171 ready, 7 pending, 0 failed.
 - Usage examples:
   ready, 42 ready, 0 failed.
 - Paper claims and tables:
@@ -66,13 +69,14 @@ Current generated report status:
 
 Latest verification before commit:
 
-- `python -m unittest discover -s tests -v`: 47 tests passed after Phase 35.
+- `python -m unittest discover -s tests -v`: 47 tests passed after Phase 36.
 - `python scripts\check_aaai_package.py --strict`: passed.
 - `python scripts\check_goal_completion.py --strict`: passed.
 - `python scripts\check_reproducibility_package.py --strict`: passed.
 - `python scripts\check_paper_claims.py --strict`: passed.
 - `python scripts\check_paper_tables.py --strict`: passed.
 - `python scripts\check_usage_examples.py --strict`: passed.
+- `python scripts\evaluate_model_ablation_responses.py --index results\model_ablation_prompts\v0\index.json --output-json results\model_ablation_prompts\v0\evaluation.json --output-md results\model_ablation_prompts\v0\evaluation.md`: passed with 2 scored Claude rows and 4 pending rows.
 - `git diff --check`: passed with only Windows LF/CRLF warnings.
 - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
 
@@ -83,21 +87,21 @@ Stable evidence retained from earlier phases:
 
 ## Current Blockers
 
-- Claude/GPT/DeepSeek model ablations are not complete until response files are
-  saved and scored.
+- GPT/DeepSeek model ablations are not complete until response files are saved
+  and scored.
+- Claude Opus 4.8 now has saved and scored responses for both current
+  model-ablation prompt rows.
 - Latest local live attempt with separate Claude/GPT credentials:
-  - Claude catalog via `AI_SCIENTIST_OPENAI_API_KEY` listed 8 Claude-family
+  - Claude catalog via `AI_SCIENTIST_OPENAI_API_KEY` listed 14 Claude-family
     models, including `claude-opus-4-8`, `claude-opus-4-7`, and
-    `claude-opus-4-6`; the alias-retry runner tried all three aliases for both
-    Claude prompt rows, and all failed HTTP 503
-    `No available accounts: no available accounts`.
+    `claude-opus-4-6`; `claude-opus-4-8` completed both current prompt rows
+    with HTTP 200 and the scorer reports 2 scored rows at 6/6.
   - GPT catalog via `PAPERTOSKILL_GPT_OPENAI_API_KEY` listed 17 models,
     including `gpt-5.5`, `gpt-5.4`, `gpt-5.4-mini`, and GPT 5.2/5.3 variants;
     the alias-retry runner tried `gpt-5.5` and `gpt-5.4` for both GPT prompt
     rows, and both aliases failed HTTP 502
     `Upstream access forbidden, please contact administrator`.
-  - No response files were saved; response evaluation remains 6 total rows, 0
-    scored rows, and 6 pending rows.
+  - Response evaluation is now 6 total rows, 2 scored rows, and 4 pending rows.
 - Human-fidelity annotation remains pending.
 - Provider billing, output-token accounting, live invoices, and
   success-per-dollar evidence remain pending.
@@ -106,12 +110,13 @@ Stable evidence retained from earlier phases:
 
 ## Next Actions
 
-1. Check whether Phase 35 is already committed/pushed; if not, commit and
+1. Check whether Phase 36 is already committed/pushed; if not, commit and
    push the verified changes.
-2. If Claude/GPT chat completions later work, run the prepared model-ablation prompts,
-   save responses, score them, and update paper/reports.
-3. If live calls still fail, record the exact provider/model availability
-   result in run logs and keep model-quality claims pending.
+2. If GPT chat completions later work, run the prepared GPT-family
+   model-ablation prompts, save responses, score them, and update
+   paper/reports.
+3. If live GPT calls still fail, record the exact provider/model availability
+   result in run logs and keep GPT-quality claims pending.
 4. After the user supplies a concrete DeepSeek alias/env profile, follow the
    same catalog, live-run, saved-response, scoring, and claim-boundary process.
 

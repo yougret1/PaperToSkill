@@ -107,9 +107,9 @@ REQUIRED_BOUNDARIES = [
         "detail": "Paper text should frame cost evidence as local proxy evidence.",
     },
     {
-        "id": "model_ablation_blocked",
-        "pattern": r"(blocked by provider/model availability|provider/model availability rather than model quality|HTTP 503)",
-        "detail": "Paper text should classify model ablations as blocked, not completed.",
+        "id": "model_ablation_partial_boundary",
+        "pattern": r"(Claude[^.\n]{0,80}(saved|scored|completed)[^.\n]{0,80}(GPT|DeepSeek)[^.\n]{0,120}pending|GPT[^.\n]{0,80}DeepSeek[^.\n]{0,80}(pending|remain))",
+        "detail": "Paper text should classify model ablations as partially completed with GPT/DeepSeek still pending.",
     },
 ]
 

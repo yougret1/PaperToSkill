@@ -29,4 +29,4 @@ Evidence boundary: this report checks paper-facing text for unsupported overclai
 | paper_claim_boundary_live_transfer_pending | ready | present | paper/aaai/papertoskill_aaai2027.tex, paper/draft.md |
 | paper_claim_boundary_human_fidelity_pending | ready | present | paper/aaai/papertoskill_aaai2027.tex, paper/draft.md |
 | paper_claim_boundary_cost_proxy_boundary | ready | present | paper/aaai/papertoskill_aaai2027.tex, paper/draft.md |
-| paper_claim_boundary_model_ablation_blocked | ready | present | paper/aaai/papertoskill_aaai2027.tex, paper/draft.md |
+| paper_claim_boundary_model_ablation_partial_boundary | ready | present | paper/aaai/papertoskill_aaai2027.tex, paper/draft.md |
