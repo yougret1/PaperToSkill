@@ -65,6 +65,17 @@ CORE_FILES = {
     "paper_outline": "paper/outline.md",
     "claim_checklist": "paper/claim_checklist.md",
     "limitations": "paper/limitations.md",
+    "aaai_package_readme": "paper/aaai/README.md",
+    "aaai_papertoskill_tex": "paper/aaai/papertoskill_aaai2027.tex",
+    "aaai_papertoskill_tables": "paper/aaai/papertoskill_tables.tex",
+    "aaai_papertoskill_refs": "paper/aaai/papertoskill_refs.bib",
+    "aaai_build_style": "paper/aaai/aaai2027.sty",
+    "aaai_build_bst": "paper/aaai/aaai2027.bst",
+    "aaai_author_kit_zip": "paper/aaai/AuthorKit27.zip",
+    "usage_examples_readme": "examples/usage/README.md",
+    "usage_example_codex_skill": "examples/usage/codex_skill_usage.md",
+    "usage_example_auto_note": "examples/usage/auto_note_scaffold_usage.md",
+    "usage_example_model_ablation": "examples/usage/model_ablation_usage.md",
     "artifact_map": "research/artifact_map.md",
     "claim_evidence_matrix": "research/claim_evidence_matrix.md",
     "stage_log": "research/stage_log.md",
@@ -122,6 +133,12 @@ AUTO_NOTE_CASES = [
         "source_span": "results/evaluations/aide_auto_source_span_validation_v0.json",
     },
 ]
+
+MODEL_ABLATION_FILES = {
+    "model_ablation_task": "benchmarks/model_ablation_v0.json",
+    "model_ablation_builder": "scripts/build_model_ablation_prompts.py",
+    "model_ablation_prompt_index": "results/model_ablation_prompts/v0/index.json",
+}
 
 TEXT_SUFFIXES = {
     ".csv",
@@ -388,6 +405,44 @@ def auto_note_checks(root: Path) -> list[Check]:
     return checks
 
 
+def model_ablation_checks(root: Path) -> list[Check]:
+    checks = required_file_checks(root, MODEL_ABLATION_FILES)
+    index_path = root / "results/model_ablation_prompts/v0/index.json"
+    if index_path.exists():
+        index = load_json(index_path)
+        prompts = index.get("prompts", [])
+        prompt_missing = [
+            item.get("prompt_path", "")
+            for item in prompts
+            if not resolve_path(root, item.get("prompt_path", "")).exists()
+        ]
+        status = "ready" if len(prompts) == 6 and not prompt_missing else "fail"
+        detail = f"prompt_packets={len(prompts)}; missing_prompts={len(prompt_missing)}"
+        checks.append(Check("model_ablation_prompt_packets", status, detail, str(index_path.relative_to(root))))
+
+        model_ids = {item.get("model_id", "") for item in prompts}
+        expected_model_ids = {"claude_opus_4_8", "gpt_5_5_or_gpt_family", "deepseek_followup_slot"}
+        status = "ready" if expected_model_ids <= model_ids else "fail"
+        detail = "models=" + ",".join(sorted(model_ids))
+        checks.append(Check("model_ablation_model_slots", status, detail, str(index_path.relative_to(root))))
+
+        missing_responses = [
+            item.get("expected_response_path", "")
+            for item in prompts
+            if not resolve_path(root, item.get("expected_response_path", "")).exists()
+        ]
+        response_status = "ready" if not missing_responses else "pending"
+        checks.append(
+            Check(
+                "model_ablation_responses",
+                response_status,
+                f"missing_response_files={len(missing_responses)}",
+                str(index_path.relative_to(root)),
+            )
+        )
+    return checks
+
+
 def secret_scan_check(root: Path) -> Check:
     matches = []
     for path in root.rglob("*"):
@@ -410,6 +465,7 @@ def build_report(root: Path) -> dict[str, Any]:
     checks.extend(human_fidelity_checks(root))
     checks.extend(failure_archive_checks(root))
     checks.extend(auto_note_checks(root))
+    checks.extend(model_ablation_checks(root))
     checks.append(secret_scan_check(root))
 
     status_counts = {"ready": 0, "pending": 0, "fail": 0}

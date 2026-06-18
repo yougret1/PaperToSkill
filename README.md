@@ -10,10 +10,10 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 20: deterministic extracted-text-to-note scaffold extended beyond
-Toolformer. Toolformer and AIDE now have automatic note scaffolds and
-auto-note-derived skills evaluated separately from the curated-note main
-benchmark.
+Phase 21: AAAI paper package, usage examples, and model-ablation prompt
+protocol. The official AAAI-27 author kit is downloaded under `paper/aaai/`,
+and Claude/GPT-family/DeepSeek model-ablation prompts are prepared as pending
+external evidence.
 
 ## Memory
 
@@ -47,6 +47,8 @@ continuing work.
 - `paper/draft.md`
 - `paper/claim_checklist.md`
 - `paper/limitations.md`
+- `paper/aaai/papertoskill_aaai2027.tex`
+- `paper/aaai/papertoskill_tables.tex`
 
 These files intentionally separate supported deterministic/offline claims from
 pending live-agent claims.
@@ -80,3 +82,5 @@ pending live-agent claims.
 - Failure-case archive: `results/failure_cases/`.
 - Reproducibility package report: `results/reproducibility/`.
 - Auto-note comparison: `results/tables/auto_note_comparison.md`.
+- Usage examples: `examples/usage/`.
+- Model-ablation prompt packets: `results/model_ablation_prompts/v0/`.

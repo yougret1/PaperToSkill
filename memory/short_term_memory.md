@@ -5,15 +5,15 @@ the active task state changes.
 
 ## Current Date
 
-2026-06-17.
+2026-06-18.
 
 ## Active Phase
 
-Phase 19 deterministic extracted-text-to-note scaffold was committed and pushed
-as `ed8a8f0`. Phase 20 is implemented locally and moving through final
-verification, commit, and push: AIDE now has an auto-note profile, auto-note,
-auto-note-derived skill, formal tasks, evaluation JSON, comparison-table rows,
-and reproducibility checks.
+Phase 20 deterministic AIDE auto-note profile was committed and pushed as
+`0ebacef`. Phase 21 is active locally: official AAAI-27 template package
+(original zip plus build-local `aaai2027.sty/.bst`), AAAI-formatted paper draft,
+usage examples, and Claude/GPT-family/DeepSeek model-ablation prompt packets
+have been added and are moving through verification, commit, and push.
 
 ## Latest User Request
 
@@ -452,13 +452,13 @@ The user provided the PaperToSkill idea and asked to:
   beyond deterministic source-span support.
 - Need tokenizer-exact pricing, provider billing, or success-per-dollar evidence
   before making stronger economic/cost-saving claims.
-- Need Phase 20 final verification, commit, and push.
+- Need Phase 21 final verification, commit, and push.
 
 ## Next Actions
 
-1. Run Phase 20 final verification, secret scan, commit, and push.
+1. Run Phase 21 final verification, secret scan, commit, and push.
 2. Re-test the remote LLM endpoint when provider accounts are available.
-3. Execute live cross-harness runs using the prompt packets when the endpoint
+3. Execute live cross-harness and model-ablation runs using the prompt packets when the endpoint
    recovers.
 4. Run human fidelity annotation, tokenizer-exact pricing, or expand the
    benchmark to less procedural/interface/theory-heavy papers.

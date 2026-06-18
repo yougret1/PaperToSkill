@@ -22,6 +22,7 @@
 | E2.17 | Can Toolformer serve as a fourth tool-use stress case? | Toolformer rubric/context/transfer/source-span/prompt commands plus table, packet, failure archive, and package regeneration | Toolformer skill, baselines, evaluations, prompt packets, updated tables, 24-row human packet template, 27-case failure archive, and package report | Analysis |
 | E2.18 | Can extracted paper text be converted into an auditable note scaffold before skill extraction? | `python scripts\papertoskill_note_from_text.py --source papers\extracted\toolformer.txt --output papers\auto_notes\toolformer_auto_note.md --paper-id toolformer_auto --title "Toolformer: Language Models Can Teach Themselves to Use Tools" --report results\evaluations\toolformer_auto_note_scaffold_v0.json` plus Toolformer auto-note extraction/evaluation commands | auto-note scaffold, auto-note-derived skill, comparison table, and deterministic rubric/context/transfer/source-span results | Analysis |
 | E2.19 | Does the auto-note scaffold generalize to a code/ML-engineering paper profile? | `python scripts\papertoskill_note_from_text.py --source papers\extracted\aide.txt --output papers\auto_notes\aide_auto_note.md --paper-id aide_auto --title "AIDE: AI-Driven Exploration in the Space of Code" --profile aide --report results\evaluations\aide_auto_note_scaffold_v0.json` plus AIDE auto-note extraction/evaluation commands | AIDE auto-note scaffold, auto-note-derived skill, comparison-table rows, and deterministic rubric/context/transfer/source-span results | Analysis |
+| E2.20 | Can the paper be packaged in official AAAI LaTeX format with usage examples and model-ablation prompts? | `python scripts\build_model_ablation_prompts.py --task benchmarks\model_ablation_v0.json --output-dir results\model_ablation_prompts\v0` plus reproducibility check | AAAI author-kit provenance, AAAI `.tex` draft, usage examples, model-ablation prompt grid, and updated package report | Writing/Analysis |
 
 ## Pending Remote LLM Recovery
 
@@ -29,6 +30,7 @@
 | --- | --- | --- | --- | --- |
 | E3 | Can AI-Scientist-v2 run a tiny PaperToSkill agentic search? | `python launch_scientist_bfts.py --load_ideas D:\a_work\gitee\PaperToSkill\ai_scientist_inputs\papertoskill_seed_ideas.json --idea_idx 0 --skip_writeup --skip_review` | experiment logs under `ai-scientist-v2/experiments` | Remote provider account pool exhausted |
 | E4 | Can an LLM-assisted extractor improve method-step fidelity over the deterministic scaffold? | TBD after endpoint works | paired deterministic vs LLM-assisted generated skills | Remote provider account pool exhausted |
+| E4.1 | Do Claude Opus 4.8 and a verified GPT-family model differ on PaperToSkill usage tasks? | Send prompts from `results\model_ablation_prompts\v0\index.json` to each verified model slot and save responses to expected paths | scored response table across Toolformer curated-skill usage and AIDE auto-skill usage | Claude endpoint capacity and GPT-family alias verification |
 
 ## Next Design Work
 
@@ -37,3 +39,4 @@
 | E5 | Which benchmark papers should enter the first manual evaluation? | paper PDFs or extracted notes for core split |
 | E6 | How should unsupported instruction rate be scored? | source-map-aware evaluator script and audit task |
 | E7 | How should live harness transfer be evaluated after remote LLM recovery? | paired Codex-style and Claude-style task prompts with execution logs |
+| E8 | How should DeepSeek be added after Claude/GPT ablations? | fill `deepseek_followup_slot` in `benchmarks/model_ablation_v0.json`, regenerate prompts, collect responses, and score with the same rubric |

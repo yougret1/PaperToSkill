@@ -5,7 +5,8 @@ from four curated real-paper notes. It should not be read as evidence of live
 cross-harness agent task success until the prepared prompt packets are executed.
 Phases 19-20 additionally include deterministic extracted-text-to-note
 scaffolds for Toolformer and AIDE; these are separate from the curated-note main
-benchmark.
+benchmark. Phase 21 adds an AAAI-27 LaTeX package, usage examples, and pending
+model-ablation prompt packets.
 
 ## Working Title
 
@@ -132,7 +133,9 @@ Main results from `results/tables/main_results.md`:
 - the failure-case archive records 27 cases: 21 paper-reported limitations or
   failure branches and 6 project-level failure/fix records.
 - the reproducibility package checker reports 105 ready checks, 5 pending
-   external-evidence checks, and 0 failed checks.
+- the reproducibility package checker reports local package readiness with
+  pending live-response, model-ablation-response, and human-annotation evidence
+  separated from local failures.
 - in a separate auto-note comparison, the Toolformer extracted-text scaffold
   produces a 1,179-word skill scoring 20/20 on the deterministic rubric,
   9.3/10 on context coverage, 10/10 transfer readiness, and 1.0 source support
@@ -152,6 +155,8 @@ Current limitations:
   are validated only on Toolformer and AIDE extracted text;
 - metrics are deterministic and lexical/section based;
 - live cross-harness execution is blocked by remote provider availability;
+- Claude/GPT-family/DeepSeek model ablation prompts are prepared but unscored,
+  and the requested GPT 5.5 alias must be verified before use;
 - no human fidelity annotation or inter-rater agreement yet;
 - human-fidelity review packets and a summarizer are prepared, but annotation
   remains pending;
@@ -185,3 +190,5 @@ that are less directly procedural.
 | Appendix: Reproducibility package | `results/reproducibility/package_report.md` | Local package readiness and pending external evidence |
 | Appendix: Review/rebuttal package | `research/review_report.md`; `research/rebuttal_bank.md` | Adversarial risks and evidence-bounded responses |
 | Appendix: Prompt packets | `results/live_transfer_prompts/` | Inputs for later live transfer runs |
+| Appendix: Model ablation prompts | `results/model_ablation_prompts/v0/` | Claude/GPT-family/DeepSeek usage-example prompt grid |
+| Appendix: AAAI package | `paper/aaai/` | Official AAAI-27 template provenance and LaTeX draft |

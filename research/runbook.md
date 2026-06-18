@@ -73,6 +73,45 @@ Invoke-RestMethod `
 As of 2026-06-17, chat completion reached the server but failed due to exhausted
 provider accounts.
 
+## Model-Ablation Prompt Packets
+
+From `D:\a_work\gitee\PaperToSkill`:
+
+```powershell
+python scripts\build_model_ablation_prompts.py `
+  --task benchmarks\model_ablation_v0.json `
+  --output-dir results\model_ablation_prompts\v0
+```
+
+The current prompt grid includes:
+
+- `claude_opus_4_8`, using `claude-opus-4-8` if the provider still advertises
+  the dashed alias;
+- `gpt_5_5_or_gpt_family`, which must verify the exact GPT-family alias before
+  running;
+- `deepseek_followup_slot`, intentionally left for the user's later DeepSeek
+  endpoint/model configuration.
+
+Save live responses only under the `expected_response_path` fields in
+`results/model_ablation_prompts/v0/index.json`. Do not commit raw API keys.
+
+## AAAI Paper Package
+
+The official AAAI-27 author kit is stored under `paper/aaai/`.
+
+Main draft:
+
+```powershell
+cd D:\a_work\gitee\PaperToSkill\paper\aaai
+pdflatex papertoskill_aaai2027.tex
+bibtex papertoskill_aaai2027
+pdflatex papertoskill_aaai2027.tex
+pdflatex papertoskill_aaai2027.tex
+```
+
+If `pdflatex` is unavailable in the local environment, treat the `.tex` package
+as prepared but not rendered.
+
 ## AI-Scientist-v2 Dry Run
 
 From `D:\a_work\gitee\ai-scientist-v2`:
@@ -88,4 +127,3 @@ python launch_scientist_bfts.py `
 
 This should create an `experiments/<timestamp>_papertoskill_extractor_attempt_0`
 folder and exit before running the expensive agentic search.
-

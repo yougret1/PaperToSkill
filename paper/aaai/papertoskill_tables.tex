@@ -1,0 +1,63 @@
+\begin{table*}[t]
+\centering
+\caption{Main deterministic/offline PaperToSkill results. Coverage scores are task-rubric scores; transfer readiness is an offline artifact-readiness metric.}
+\label{tab:main-results}
+\begin{tabular}{lrrrrrrrr}
+\toprule
+Paper & Rubric & Skill & Summary & Abstract & $\Delta$Sum. & Transfer & Support & Words \\
+\midrule
+AI Scientist-v2 & 20/20 & 7.867/9 & 1.733/9 & 1.2/9 & 6.134 & 10/10 & 0.938 & 782 \\
+Reflexion & 20/20 & 8.267/9 & 3.483/9 & 2.533/9 & 4.784 & 10/10 & 1.000 & 479 \\
+AIDE & 20/20 & 9.1/10 & 1.916/10 & 1.333/10 & 7.184 & 10/10 & 1.000 & 927 \\
+Toolformer & 20/20 & 8.9/10 & 2.5/10 & 1.534/10 & 6.400 & 10/10 & 1.000 & 943 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table}[t]
+\centering
+\caption{Transfer-note ablation. Removing only \texttt{Transfer Notes} lowers offline readiness across all curated skills.}
+\label{tab:transfer-ablation}
+\begin{tabular}{lrr}
+\toprule
+Paper & Full & No Transfer \\
+\midrule
+AI Scientist-v2 & 10/10 & 7.6/10 \\
+Reflexion & 10/10 & 7.6/10 \\
+AIDE & 10/10 & 7.6/10 \\
+Toolformer & 10/10 & 7.6/10 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table*}[t]
+\centering
+\caption{Deterministic context-size proxy. Tokens are estimated as $\lceil\mathrm{characters}/4\rceil$ and are not provider bills or tokenizer-exact counts.}
+\label{tab:cost-proxy}
+\begin{tabular}{lrrrr}
+\toprule
+Paper & Full Paper Tokens & Skill Tokens & Skill/Full & Reduction \\
+\midrule
+AI Scientist-v2 & 62041 & 1366 & 0.0220 & 97.80\% \\
+Reflexion & 18559 & 823 & 0.0443 & 95.57\% \\
+AIDE & 15894 & 1517 & 0.0954 & 90.46\% \\
+Toolformer & 24097 & 1526 & 0.0633 & 93.67\% \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\begin{table*}[t]
+\centering
+\caption{Automatic extracted-text note scaffolds are evaluated separately from curated-note cases.}
+\label{tab:auto-note}
+\begin{tabular}{llrrrrr}
+\toprule
+Paper & Input & Rubric & Coverage & Transfer & Support & Words \\
+\midrule
+Toolformer & Curated note & 20/20 & 8.9/10 & 10/10 & 1.000 & 943 \\
+Toolformer & Auto note scaffold & 20/20 & 9.3/10 & 10/10 & 1.000 & 1179 \\
+AIDE & Curated note & 20/20 & 9.1/10 & 10/10 & 1.000 & 927 \\
+AIDE & Auto note scaffold & 20/20 & 8.467/10 & 9.5/10 & 1.000 & 998 \\
+\bottomrule
+\end{tabular}
+\end{table*}

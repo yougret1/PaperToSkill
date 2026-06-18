@@ -1,0 +1,79 @@
+{
+  "schema_version": "0.1",
+  "id": "papertoskill_model_ablation_v0",
+  "created": "2026-06-18",
+  "purpose": "Prompt packet spec for later Claude/GPT/DeepSeek model ablations on PaperToSkill usage tasks.",
+  "evidence_boundary": "Prompt packet only; model availability, response files, scoring, and provider billing must be collected separately before claiming completed model ablations.",
+  "user_prompt": "Use the provided PaperToSkill context to produce a concise but executable usage plan. The plan should show whether the skill is sufficient, how the target harness should use it, what artifacts or commands are needed, which checks validate success, which steps are source-backed versus inferred adaptations, and at least one likely failure branch.",
+  "output_contract": [
+    "State whether the context is sufficient for the requested usage task.",
+    "List required local files, commands, tools, or simulated APIs.",
+    "Give a step-by-step usage or run plan.",
+    "Separate source-backed instructions from inferred adaptations.",
+    "Identify validation checks and stop conditions.",
+    "Record at least one likely failed branch and how it should be logged.",
+    "Do not invent completed live results, human scores, provider bills, or unavailable model aliases."
+  ],
+  "evaluation_notes": [
+    "Use these prompts for later live model responses only.",
+    "A response is not a completed ablation until it is saved under the expected response path and scored by the same rubric across model slots.",
+    "The GPT 5.5 alias must be verified against the provider model list before a live run is claimed.",
+    "The DeepSeek slot is included so the user can add it by following the same process after Claude and GPT-family runs."
+  ],
+  "context_cases": [
+    {
+      "id": "toolformer_curated_skill_usage",
+      "paper": "Toolformer",
+      "context_path": "generated_skills/toolformer/SKILL.md",
+      "usage_focus": "Use a curated-note-derived Toolformer skill to plan a tool-use data-generation experiment."
+    },
+    {
+      "id": "aide_auto_skill_usage",
+      "paper": "AIDE auto-note",
+      "context_path": "generated_skills/aide_auto/SKILL.md",
+      "usage_focus": "Use an automatic-note-derived AIDE skill to plan a code-space search run."
+    }
+  ],
+  "model_slots": [
+    {
+      "id": "claude_opus_4_8",
+      "model_alias": "claude-opus-4-8",
+      "requested_alias": "claude-opus-4.8",
+      "provider_status": "server_previously_advertised_dashed_alias_but_chat_completion_blocked_by_provider_capacity",
+      "response_status": "pending",
+      "auth_env": "AI_SCIENTIST_OPENAI_API_KEY",
+      "base_url_env": "AI_SCIENTIST_OPENAI_BASE_URL",
+      "run_notes": [
+        "Use base URL https://coderxiaoc.com/v1 through an OpenAI-compatible client.",
+        "Use the dashed alias if the provider model list still advertises claude-opus-4-8.",
+        "Do not commit the raw API key or response logs containing credentials."
+      ]
+    },
+    {
+      "id": "gpt_5_5_or_gpt_family",
+      "model_alias": "gpt-5.5",
+      "provider_status": "pending_model_list_verification",
+      "response_status": "pending",
+      "auth_env": "AI_SCIENTIST_OPENAI_API_KEY",
+      "base_url_env": "AI_SCIENTIST_OPENAI_BASE_URL",
+      "run_notes": [
+        "Verify the exact GPT-family alias at /v1/models before running.",
+        "If GPT 5.5 is unavailable, record the actual GPT-family model alias used and keep it in the response metadata.",
+        "Use the same prompt files, output contract, and scorer as the Claude slot."
+      ]
+    },
+    {
+      "id": "deepseek_followup_slot",
+      "model_alias": "deepseek-to-be-filled",
+      "provider_status": "placeholder_for_user_followup",
+      "response_status": "pending",
+      "auth_env": "DEEPSEEK_API_KEY",
+      "base_url_env": "DEEPSEEK_BASE_URL",
+      "run_notes": [
+        "This slot is intentionally present for the user's later DeepSeek addition.",
+        "Replace model_alias, auth_env, and base_url_env with the concrete DeepSeek endpoint before running.",
+        "Keep the same prompt grid and scoring protocol to make results comparable."
+      ]
+    }
+  ]
+}

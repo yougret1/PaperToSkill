@@ -528,3 +528,33 @@
   PaperToSkill extraction pipeline.
 - Figure/table: `results/tables/auto_note_comparison.md`;
   `results/evaluations/toolformer_auto_note_scaffold_v0.json`.
+
+## AAAI Paper Package And Usage Examples
+
+- Experiment: prepare the paper in official AAAI LaTeX format and add
+  executable usage examples for the experiments section.
+- Main result: downloaded the official AAAI-27 author kit, recorded provenance
+  and SHA256, and added `paper/aaai/papertoskill_aaai2027.tex` plus LaTeX table
+  and bibliography files.
+- Usage examples: added Codex-style skill usage, extracted-text auto-note usage,
+  and model-ablation usage docs under `examples/usage/`.
+- Model-ablation protocol: added `benchmarks/model_ablation_v0.json`,
+  `scripts/build_model_ablation_prompts.py`, and six prompt packets under
+  `results/model_ablation_prompts/v0/`.
+- Compared baselines: no new empirical baseline; this phase prepares paper and
+  live-ablation infrastructure.
+- Practical significance: the paper can now be revised in the requested AAAI
+  template, and the user's later DeepSeek addition can follow the same prompt
+  and response-slot protocol as Claude and GPT-family models.
+- Statistical evidence: none; prompt packets and usage examples are not scored
+  model responses.
+- Failure modes: local LaTeX rendering depends on whether a TeX distribution is
+  available; model ablations remain blocked until provider model aliases and
+  response files are collected.
+- Limitations: no completed Claude/GPT/DeepSeek ablation, no provider billing,
+  and no tokenizer-exact model pricing evidence.
+- Claim impact: supports the claim that AAAI packaging and model-ablation
+  protocols are prepared, while preserving the evidence boundary that live model
+  results remain pending.
+- Figure/table: `paper/aaai/papertoskill_aaai2027.tex`;
+  `examples/usage/`; `results/model_ablation_prompts/v0/index.json`.

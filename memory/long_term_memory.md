@@ -187,6 +187,17 @@ Initial target contribution categories:
 - `paper/claim_checklist.md`: supported-vs-unsupported claim gate for drafting.
 - `paper/limitations.md`: limitations and future-work text aligned to current
   deterministic/offline evidence.
+- `paper/aaai/`: official AAAI-27 author kit, template provenance, and
+  AAAI-formatted PaperToSkill LaTeX draft.
+- `examples/usage/`: usage examples for Codex-style skill loading,
+  extracted-text auto-note-to-skill conversion, and model-ablation execution.
+- `benchmarks/model_ablation_v0.json`: Claude/GPT-family/DeepSeek model
+  ablation prompt spec with response slots marked pending.
+- `scripts/build_model_ablation_prompts.py`: prompt-grid builder for model
+  ablations.
+- `results/model_ablation_prompts/v0/`: generated model-ablation prompts for
+  Claude Opus 4.8, GPT-family, and DeepSeek follow-up slots over Toolformer and
+  AIDE auto-skill usage examples.
 
 ## Current Assumptions
 
@@ -209,6 +220,12 @@ Initial target contribution categories:
   completed external live responses or independent human validation.
 - Rebuttal writing must answer objections from current evidence and explicitly
   avoid unsupported live, human-validation, and provider-billing claims.
+- AAAI paper writing should use the `paper/aaai/` LaTeX package. The current
+  official template is AAAI-27 because the author-kit endpoint available on
+  2026-06-18 provides `aaai2027.sty`.
+- Model-ablation writing must distinguish prompt packets from completed
+  Claude/GPT/DeepSeek responses. GPT 5.5 is a requested GPT-family slot and
+  must be verified at run time before claimed as available.
 
 ## LLM/API Configuration
 

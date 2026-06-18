@@ -3,8 +3,8 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 105
-- Pending checks: 5
+- Ready checks: 121
+- Pending checks: 6
 - Failed checks: 0
 
 ## Checks
@@ -17,6 +17,17 @@ Evidence boundary: this report checks local package completeness and separates p
 | paper_outline | ready | present | paper/outline.md |
 | claim_checklist | ready | present | paper/claim_checklist.md |
 | limitations | ready | present | paper/limitations.md |
+| aaai_package_readme | ready | present | paper/aaai/README.md |
+| aaai_papertoskill_tex | ready | present | paper/aaai/papertoskill_aaai2027.tex |
+| aaai_papertoskill_tables | ready | present | paper/aaai/papertoskill_tables.tex |
+| aaai_papertoskill_refs | ready | present | paper/aaai/papertoskill_refs.bib |
+| aaai_build_style | ready | present | paper/aaai/aaai2027.sty |
+| aaai_build_bst | ready | present | paper/aaai/aaai2027.bst |
+| aaai_author_kit_zip | ready | present | paper/aaai/AuthorKit27.zip |
+| usage_examples_readme | ready | present | examples/usage/README.md |
+| usage_example_codex_skill | ready | present | examples/usage/codex_skill_usage.md |
+| usage_example_auto_note | ready | present | examples/usage/auto_note_scaffold_usage.md |
+| usage_example_model_ablation | ready | present | examples/usage/model_ablation_usage.md |
 | artifact_map | ready | present | research/artifact_map.md |
 | claim_evidence_matrix | ready | present | research/claim_evidence_matrix.md |
 | stage_log | ready | present | research/stage_log.md |
@@ -120,4 +131,10 @@ Evidence boundary: this report checks local package completeness and separates p
 | aide_auto_context_baseline_order | ready | skill=8.467; generic=1.916; abstract=1.333 | results\evaluations\aide_auto_context_baselines_v0.json |
 | aide_auto_transfer_ablation_order | ready | full=9.5; no_transfer=7.1 | results\evaluations\aide_auto_harness_transfer_v0.json |
 | aide_auto_source_span_support | ready | support_rate=1; invalid_ranges=0 | results\evaluations\aide_auto_source_span_validation_v0.json |
+| model_ablation_task | ready | present | benchmarks/model_ablation_v0.json |
+| model_ablation_builder | ready | present | scripts/build_model_ablation_prompts.py |
+| model_ablation_prompt_index | ready | present | results/model_ablation_prompts/v0/index.json |
+| model_ablation_prompt_packets | ready | prompt_packets=6; missing_prompts=0 | results\model_ablation_prompts\v0\index.json |
+| model_ablation_model_slots | ready | models=claude_opus_4_8,deepseek_followup_slot,gpt_5_5_or_gpt_family | results\model_ablation_prompts\v0\index.json |
+| model_ablation_responses | pending | missing_response_files=6 | results\model_ablation_prompts\v0\index.json |
 | secret_scan | ready | no raw API-key-like strings found | repository text files |

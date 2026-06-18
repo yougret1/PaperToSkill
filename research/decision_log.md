@@ -140,3 +140,23 @@
   LLM cost analysis. A second profile tests whether the scaffold can be adapted
   beyond the first Toolformer case while preserving the audit-scaffold boundary.
 - Status: accepted for Phase 20.
+
+## 2026-06-18: Use Official AAAI-27 LaTeX Template For Paper Package
+
+- Decision: download the official AAAI-27 author kit from
+  `https://aaai.org/authorkit27/`, keep the template provenance in
+  `paper/aaai/README.md`, and create an AAAI-formatted PaperToSkill draft.
+- Rationale: the user requested that the final paper use the AAAI TeX template;
+  as of 2026-06-18 the official AAAI author-kit endpoint provides the AAAI-27
+  package with `aaai2027.sty`.
+- Status: accepted for Phase 21.
+
+## 2026-06-18: Treat Claude/GPT/DeepSeek Ablations As Prepared Until Responses Exist
+
+- Decision: create model-ablation prompt packets for Claude Opus 4.8,
+  a GPT-family slot requested as GPT 5.5, and a DeepSeek follow-up slot, but
+  mark response files and scoring as pending external evidence.
+- Rationale: model aliases and provider availability are unstable. The Claude
+  endpoint has previously advertised `claude-opus-4-8`, while chat completion
+  has failed due to provider capacity; GPT 5.5 must be verified at run time.
+- Status: accepted for Phase 21.

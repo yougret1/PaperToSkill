@@ -817,3 +817,43 @@ Verification:
 
 - `python -m unittest tests.test_papertoskill_extract tests.test_papertoskill_note_from_text -v`: passed, 7 tests OK.
 - `python -m unittest tests.test_aggregate_results_tables tests.test_check_reproducibility_package -v`: passed, 3 tests OK.
+
+## 2026-06-18 Phase 21
+
+Actions:
+
+- Downloaded the official AAAI-27 author kit from `https://aaai.org/authorkit27/`.
+- Extracted the template under `paper/aaai/AuthorKit27/` and recorded
+  provenance in `paper/aaai/README.md`.
+- Added `paper/aaai/papertoskill_aaai2027.tex`,
+  `paper/aaai/papertoskill_tables.tex`, and
+  `paper/aaai/papertoskill_refs.bib`.
+- Added usage examples under `examples/usage/` for Codex-style skill use,
+  auto-note-to-skill conversion, and Claude/GPT-family/DeepSeek model
+  ablations.
+- Added `benchmarks/model_ablation_v0.json` and
+  `scripts/build_model_ablation_prompts.py`.
+- Generated six model-ablation prompt packets under
+  `results/model_ablation_prompts/v0/`.
+- Extended the reproducibility checker to include AAAI package files, usage
+  examples, model-ablation prompt packets, model slots, and pending response
+  files.
+
+Results:
+
+- AAAI author kit SHA256:
+  `E28C6AC9BC6EB3B4E2D849547D2CEFB5162610EE39D0A12E0DC62D1126B44A7D`.
+- Model slots:
+  - `claude_opus_4_8`, using `claude-opus-4-8` if still advertised;
+  - `gpt_5_5_or_gpt_family`, requiring live alias verification;
+  - `deepseek_followup_slot`, reserved for the user's later DeepSeek addition.
+- Prompt grid covers two context cases:
+  Toolformer curated-skill usage and AIDE auto-note-derived skill usage.
+
+Evidence boundary:
+
+- The AAAI package is prepared but not submission-final.
+- Usage examples and model-ablation prompts are execution protocols, not
+  completed live results.
+- GPT 5.5 remains a requested GPT-family alias until verified at `/v1/models`.
+- DeepSeek remains a follow-up slot.

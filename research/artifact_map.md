@@ -38,6 +38,7 @@
 | `research/run_logs/2026-06-17_phase18_toolformer_stress_case.md` | Toolformer fourth-paper stress-case commands and outcomes | Created |
 | `research/run_logs/2026-06-17_phase19_auto_note_scaffold.md` | Deterministic extracted-text-to-note scaffold commands and outcomes | Created |
 | `research/run_logs/2026-06-17_phase20_aide_auto_note_profile.md` | AIDE auto-note profile commands, bug fix, and outcomes | Created |
+| `research/run_logs/2026-06-18_phase21_aaai_usage_model_ablation.md` | AAAI template package, usage examples, and model-ablation prompt protocol | Created |
 
 ## Paper Draft Package
 
@@ -47,6 +48,13 @@
 | `paper/draft.md` | First evidence-bounded paper draft | Created |
 | `paper/claim_checklist.md` | Supported vs unsupported claim gate for drafting | Created |
 | `paper/limitations.md` | Limitation and future-work text aligned to current evidence | Created |
+| `paper/aaai/AuthorKit27.zip` | Official AAAI-27 author kit downloaded from `https://aaai.org/authorkit27/` | Created |
+| `paper/aaai/aaai2027.sty` | Official AAAI-27 LaTeX style file copied from the author kit | Created |
+| `paper/aaai/aaai2027.bst` | Official AAAI-27 BibTeX style copied from the author kit | Created |
+| `paper/aaai/README.md` | AAAI template provenance, SHA256, and evidence boundary | Created |
+| `paper/aaai/papertoskill_aaai2027.tex` | AAAI-formatted PaperToSkill LaTeX draft | Created |
+| `paper/aaai/papertoskill_tables.tex` | LaTeX table fragments derived from current result tables | Created |
+| `paper/aaai/papertoskill_refs.bib` | Bibliography file for the AAAI draft | Created |
 
 ## AI-Scientist-v2 Inputs
 
@@ -72,6 +80,7 @@
 | `benchmarks/rubric_toolformer_v0.json` | Deterministic v0 scoring rubric for Toolformer generated skill | Created |
 | `benchmarks/human_fidelity_review_v0.json` | Human-fidelity review protocol and packet manifest | Created |
 | `benchmarks/failure_case_archive_v0.json` | Failure-case archive config and project-level records | Created |
+| `benchmarks/model_ablation_v0.json` | Claude/GPT-family/DeepSeek model-ablation prompt packet spec | Created |
 | `benchmarks/tasks/ai_scientist_v2_research_run.json` | Downstream context-coverage task spec | Created |
 | `benchmarks/tasks/skill_source_audit.json` | Source-map-aware unsupported-instruction audit task | Created |
 | `benchmarks/tasks/ai_scientist_v2_harness_transfer.json` | Offline harness-transfer readiness task spec | Created |
@@ -132,6 +141,7 @@
 | `scripts/summarize_human_fidelity_annotations.py` | Summarizes and validates human-fidelity annotation CSV rows | Created |
 | `scripts/build_failure_case_archive.py` | Builds failure-case archive JSON, Markdown, and CSV outputs | Created |
 | `scripts/check_reproducibility_package.py` | Checks local reproducibility package readiness and pending external evidence | Created |
+| `scripts/build_model_ablation_prompts.py` | Builds Claude/GPT-family/DeepSeek model-ablation prompt packets | Created |
 | `tests/test_papertoskill_extract.py` | Smoke test for extractor CLI and source map | Created |
 | `tests/test_papertoskill_note_from_text.py` | Smoke test for automatic text-to-note scaffold | Created |
 | `tests/test_evaluate_skill.py` | Smoke test for evaluator CLI | Created |
@@ -146,6 +156,7 @@
 | `tests/test_summarize_human_fidelity_annotations.py` | Smoke test for human-fidelity annotation summarizer | Created |
 | `tests/test_build_failure_case_archive.py` | Smoke test for failure-case archive builder | Created |
 | `tests/test_check_reproducibility_package.py` | Smoke test for reproducibility package checker | Created |
+| `tests/test_build_model_ablation_prompts.py` | Smoke test for model-ablation prompt builder | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |
 | `generated_skills/ai_scientist_v2/references/source_map.json` | Source-map evidence for AI Scientist-v2 generated skill | Created |
 | `generated_skills/reflexion/SKILL.md` | Retained generated skill from Reflexion note | Created |
@@ -218,6 +229,12 @@
 | `results/failure_cases/failure_case_archive.csv` | CSV failure-case archive | Created |
 | `results/reproducibility/package_report.md` | Human-readable reproducibility package report | Created |
 | `results/reproducibility/package_report.json` | Machine-readable reproducibility package report | Created |
+| `results/model_ablation_prompts/v0/index.json` | Model-ablation prompt packet index with pending response slots | Created |
+| `results/model_ablation_prompts/v0/*.md` | Six model-ablation prompt packets across Claude, GPT-family, and DeepSeek slots | Created |
+| `examples/usage/README.md` | Usage-example index and evidence boundary | Created |
+| `examples/usage/codex_skill_usage.md` | Codex-style generated-skill usage example | Created |
+| `examples/usage/auto_note_scaffold_usage.md` | Extracted-text auto-note-to-skill usage example | Created |
+| `examples/usage/model_ablation_usage.md` | Claude/GPT-family/DeepSeek ablation usage protocol | Created |
 | `output/pdf/reflexion/page-01.png` | Rendered Reflexion PDF page 1 for visual check | Created |
 | `output/pdf/aide/page-01.png` | Rendered AIDE PDF page 1 for visual check | Created |
 | `output/pdf/toolformer/page-01.png` | Rendered Toolformer PDF page 1 for visual check | Created |
@@ -228,3 +245,4 @@
 | Artifact | Purpose | Status |
 | --- | --- | --- |
 | Live cross-harness response logs | Codex/Claude-style transfer execution results after provider recovery | Planned |
+| Model-ablation response logs | Claude/GPT-family/DeepSeek response files and scores after endpoint/model availability | Planned |
