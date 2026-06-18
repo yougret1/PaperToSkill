@@ -31,16 +31,21 @@ Use environment variables rather than tracked config files:
 $env:AI_SCIENTIST_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
 $env:AI_SCIENTIST_OPENAI_API_KEY = "<set locally>"
 $env:AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE = "1"
+
+$env:PAPERTOSKILL_GPT_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
+$env:PAPERTOSKILL_GPT_OPENAI_API_KEY = "<set locally>"
 ```
 
-Advertised model ID from `/v1/models`:
+Previously advertised Claude model ID from `/v1/models`:
 
 ```text
 claude-opus-4-8
 ```
 
-The dotted spelling `claude-opus-4.8` was requested by the user, but the server
-currently advertises the dashed spelling.
+The user also requested `claude-opus-4.8`, `claude-opus-4-7`, and
+`claude-opus-4-6`. The GPT-family profile should be checked with the separate
+`PAPERTOSKILL_GPT_*` environment variables and is expected by the user to list
+aliases such as `gpt-5.5` and `gpt-5.4`.
 
 ## Connectivity Smoke Test
 
@@ -70,8 +75,9 @@ Invoke-RestMethod `
   -Body $body
 ```
 
-As of 2026-06-17, chat completion reached the server but failed due to exhausted
-provider accounts.
+Earlier chat completion checks reached the server but failed due to exhausted
+provider accounts. Recheck with the current env profile before making any
+availability claim.
 
 ## Model-Ablation Prompt Packets
 
@@ -85,10 +91,10 @@ python scripts\build_model_ablation_prompts.py `
 
 The current prompt grid includes:
 
-- `claude_opus_4_8`, using `claude-opus-4-8` if the provider still advertises
-  the dashed alias;
-- `gpt_5_5_or_gpt_family`, which must verify the exact GPT-family alias before
-  running;
+- `claude_opus_4_8`, trying candidate aliases `claude-opus-4-8`,
+  `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6`;
+- `gpt_5_5_or_gpt_family`, using the separate GPT credential profile and
+  preferring `gpt-5.5` then `gpt-5.4` when listed;
 - `deepseek_followup_slot`, intentionally left for the user's later DeepSeek
   endpoint/model configuration.
 
@@ -198,6 +204,26 @@ python scripts\check_paper_claims.py `
 This checker scans the AAAI manuscript and Markdown draft, but not
 `paper/claim_checklist.md` because that file intentionally stores unsupported
 phrases as negative examples.
+
+## Goal Completion Gate
+
+Verify the active user goal against current local evidence before deciding
+whether to close the goal:
+
+```powershell
+python scripts\check_goal_completion.py `
+  --output-json results\reproducibility\goal_completion_report.json `
+  --output-md results\reproducibility\goal_completion_report.md `
+  --strict
+```
+
+This checker is expected to report
+`not_complete_pending_external_evidence` until live Claude/GPT-family
+responses, the DeepSeek follow-up response rows, human-fidelity annotation,
+provider-billing or success-per-dollar evidence, and final AAAI submission
+decisions are complete. Passing `--strict` only fails on local requirement
+failures; pending external evidence remains pending rather than a package
+failure.
 
 ## AI-Scientist-v2 Dry Run
 

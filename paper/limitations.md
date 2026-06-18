@@ -39,12 +39,14 @@ scores, not live success rates.
 ### Model Ablations Attempted But Not Completed
 
 Claude/GPT-family/DeepSeek model-ablation prompt packets, a runner, and a
-response evaluator are prepared. The Phase 26 live recheck found that the endpoint
-listed `claude-opus-4-8`, but both Claude prompt calls failed with HTTP 503
-because no provider accounts were available. The same model catalog did not list
-`gpt-5.5` or any GPT-family fallback model, so GPT-family rows were skipped as
-unavailable. DeepSeek remains an unattempted follow-up slot. These results are
-provider/model availability evidence, not model-quality evidence.
+response evaluator are prepared. The latest live recheck found that the Claude
+credential profile listed `claude-opus-4-8`, `claude-opus-4-7`, and
+`claude-opus-4-6`, but both Claude prompt calls failed with HTTP 503 because no
+provider accounts were available. The separate GPT credential profile listed
+`gpt-5.5`, `gpt-5.4`, and other GPT-family aliases, but both `gpt-5.5` prompt
+calls failed with HTTP 502 because upstream access was forbidden. DeepSeek
+remains an unattempted follow-up slot. These results are provider/model
+availability evidence, not model-quality evidence.
 
 ### Limited Benchmark Diversity
 
@@ -92,9 +94,9 @@ The package should therefore be described as locally ready, not submission-final
 
 1. Execute live prompt packets once the remote endpoint is available, logging
    model, harness, prompt, response, intervention count, and task outcome.
-2. Re-run the model-ablation protocol after Claude account capacity recovers or
-   a GPT-family endpoint is available, then score saved response files with the
-   same evaluator before adding DeepSeek.
+2. Re-run the model-ablation protocol after Claude account capacity and GPT
+   upstream access are available, then score saved response files with the same
+   evaluator before adding DeepSeek.
 3. Run the prepared human source-fidelity packets with independent annotators
    and report agreement or adjudication.
 4. Extend extraction from curated notes toward raw PDF ingestion with stronger

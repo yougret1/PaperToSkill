@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local usage-example files and runs an offline auto-note-to-skill example chain. It does not execute live model calls or score model responses.
 
 - Overall status: ready
-- Ready checks: 34
+- Ready checks: 36
 - Failed checks: 0
 
 ## Checks
@@ -38,6 +38,8 @@ Evidence boundary: this report checks local usage-example files and runs an offl
 | usage_model_ablation_cases | ready | cases=aide_auto_skill_usage,toolformer_curated_skill_usage | results/model_ablation_prompts/v0/index.json |
 | usage_model_ablation_prompts_exist | ready | missing_prompts=0 | results/model_ablation_prompts/v0/index.json |
 | usage_model_ablation_response_slots | ready | response_slots=6 | results/model_ablation_prompts/v0/index.json |
+| usage_model_ablation_gpt_profile | ready | auth_env=PAPERTOSKILL_GPT_OPENAI_API_KEY; aliases=gpt-5.4,gpt-5.5 | benchmarks/model_ablation_v0.json |
+| usage_model_ablation_claude_alias_candidates | ready | aliases=claude-opus-4-6,claude-opus-4-7,claude-opus-4-8,claude-opus-4.8 | benchmarks/model_ablation_v0.json |
 | usage_auto_note_example_note_created | ready | created in temporary directory | temporary/aide_auto_note.md |
 | usage_auto_note_example_report_created | ready | created in temporary directory | temporary/aide_auto_note_report.json |
 | usage_auto_note_example_skill_created | ready | created in temporary directory | temporary/aide_auto_skill/SKILL.md |

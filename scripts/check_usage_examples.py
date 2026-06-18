@@ -128,6 +128,13 @@ def model_ablation_prompt_grid_checks(root: Path) -> list[Check]:
         if not resolve_path(root, item.get("prompt_path", "")).exists()
     ]
     response_paths = [item.get("expected_response_path", "") for item in prompts]
+    task_path = root / "benchmarks/model_ablation_v0.json"
+    task = load_json(task_path) if task_path.exists() else {}
+    slots = {slot.get("id"): slot for slot in task.get("model_slots", [])}
+    gpt_slot = slots.get("gpt_5_5_or_gpt_family", {})
+    claude_slot = slots.get("claude_opus_4_8", {})
+    gpt_aliases = set(gpt_slot.get("model_aliases", []))
+    claude_aliases = set(claude_slot.get("model_aliases", []))
 
     checks = [
         Check(
@@ -159,6 +166,23 @@ def model_ablation_prompt_grid_checks(root: Path) -> list[Check]:
             "ready" if len(response_paths) == 6 and all(response_paths) else "fail",
             f"response_slots={sum(1 for item in response_paths if item)}",
             evidence_path(root, index_path),
+        ),
+        Check(
+            "usage_model_ablation_gpt_profile",
+            "ready"
+            if gpt_slot.get("auth_env") == "PAPERTOSKILL_GPT_OPENAI_API_KEY"
+            and {"gpt-5.5", "gpt-5.4"} <= gpt_aliases
+            else "fail",
+            f"auth_env={gpt_slot.get('auth_env')}; aliases={','.join(sorted(gpt_aliases))}",
+            evidence_path(root, task_path),
+        ),
+        Check(
+            "usage_model_ablation_claude_alias_candidates",
+            "ready"
+            if {"claude-opus-4-8", "claude-opus-4-7", "claude-opus-4-6"} <= claude_aliases
+            else "fail",
+            "aliases=" + ",".join(sorted(claude_aliases)),
+            evidence_path(root, task_path),
         ),
     ]
     return checks

@@ -75,7 +75,9 @@ def gpt_fallback(available: list[str]) -> str | None:
     lowered = {model.lower(): model for model in available}
     exact_preferences = [
         "gpt-5.5",
+        "gpt-5.4",
         "gpt-5.5-chat",
+        "gpt-5.4-chat",
         "gpt-5.1",
         "gpt-5",
         "gpt-4.1",
@@ -88,17 +90,27 @@ def gpt_fallback(available: list[str]) -> str | None:
     return sorted(gpt_models, reverse=True)[0] if gpt_models else None
 
 
-def select_model_alias(model_slot: dict[str, Any], available: list[str]) -> tuple[str | None, str]:
+def alias_candidates(model_slot: dict[str, Any]) -> list[str]:
+    raw_aliases = model_slot.get("model_aliases") or [model_slot["model_alias"]]
+    aliases = [str(alias) for alias in raw_aliases if str(alias)]
     configured = str(model_slot["model_alias"])
-    if configured in available:
-        return configured, "exact"
+    if configured not in aliases:
+        aliases.insert(0, configured)
+    return aliases
+
+
+def select_model_alias(model_slot: dict[str, Any], available: list[str]) -> tuple[str | None, str]:
+    candidates = alias_candidates(model_slot)
+    for candidate in candidates:
+        if candidate in available:
+            return candidate, "exact"
     if model_slot["id"] == "gpt_5_5_or_gpt_family":
         fallback = gpt_fallback(available)
         if fallback:
-            return fallback, f"fallback_from_{configured}"
-    if not available and configured != "deepseek-to-be-filled":
-        return configured, "unverified_no_model_list"
-    return None, f"unavailable_{configured}"
+            return fallback, f"fallback_from_{candidates[0]}"
+    if not available and candidates[0] != "deepseek-to-be-filled":
+        return candidates[0], "unverified_no_model_list"
+    return None, f"unavailable_{candidates[0]}"
 
 
 def extract_content(response: dict[str, Any]) -> str:
@@ -163,7 +175,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     started = int(time.time())
     results: list[dict[str, Any]] = []
     model_cache: dict[tuple[str, str], list[str]] = {}
-    model_catalogs: dict[str, dict[str, Any]] = {}
+    model_catalogs: dict[tuple[str, str], dict[str, Any]] = {}
 
     for prompt in index["prompts"]:
         model_id = prompt["model_id"]
@@ -197,24 +209,25 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             )
             continue
 
-        cache_key = (base_url, slot.get("auth_env", ""))
+        auth_env = slot.get("auth_env", "")
+        cache_key = (base_url, auth_env)
         available = model_cache.get(cache_key)
         if available is None:
             try:
                 _, model_response = request_json(endpoint(base_url, "models"), api_key)
                 available = model_ids_from_response(model_response)
-                model_catalogs[base_url] = {
+                model_catalogs[cache_key] = {
                     "base_url": base_url,
-                    "auth_env": slot.get("auth_env", ""),
+                    "auth_env": auth_env,
                     "status": "success",
                     "model_count": len(available),
                     "model_ids": available,
                 }
             except RuntimeError as exc:
                 available = []
-                model_catalogs[base_url] = {
+                model_catalogs[cache_key] = {
                     "base_url": base_url,
-                    "auth_env": slot.get("auth_env", ""),
+                    "auth_env": auth_env,
                     "status": "error",
                     "error_message": str(exc),
                     "model_count": 0,

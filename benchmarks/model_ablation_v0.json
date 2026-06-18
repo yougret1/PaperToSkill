@@ -38,27 +38,38 @@
     {
       "id": "claude_opus_4_8",
       "model_alias": "claude-opus-4-8",
+      "model_aliases": [
+        "claude-opus-4-8",
+        "claude-opus-4.8",
+        "claude-opus-4-7",
+        "claude-opus-4-6"
+      ],
       "requested_alias": "claude-opus-4.8",
-      "provider_status": "server_previously_advertised_dashed_alias_but_chat_completion_blocked_by_provider_capacity",
+      "provider_status": "server_previously_advertised_claude_opus_4_8_but_chat_completion_blocked_by_provider_capacity; user_now_also_requested_claude_opus_4_6_and_4_7",
       "response_status": "pending",
       "auth_env": "AI_SCIENTIST_OPENAI_API_KEY",
       "base_url_env": "AI_SCIENTIST_OPENAI_BASE_URL",
       "run_notes": [
         "Use base URL https://coderxiaoc.com/v1 through an OpenAI-compatible client.",
-        "Use the dashed alias if the provider model list still advertises claude-opus-4-8.",
+        "Try advertised/user-requested Claude aliases in order: claude-opus-4-8, claude-opus-4.8, claude-opus-4-7, claude-opus-4-6.",
         "Do not commit the raw API key or response logs containing credentials."
       ]
     },
     {
       "id": "gpt_5_5_or_gpt_family",
       "model_alias": "gpt-5.5",
+      "model_aliases": [
+        "gpt-5.5",
+        "gpt-5.4"
+      ],
       "provider_status": "pending_model_list_verification",
       "response_status": "pending",
-      "auth_env": "AI_SCIENTIST_OPENAI_API_KEY",
-      "base_url_env": "AI_SCIENTIST_OPENAI_BASE_URL",
+      "auth_env": "PAPERTOSKILL_GPT_OPENAI_API_KEY",
+      "base_url_env": "PAPERTOSKILL_GPT_OPENAI_BASE_URL",
       "run_notes": [
-        "Verify the exact GPT-family alias at /v1/models before running.",
-        "If GPT 5.5 is unavailable, record the actual GPT-family model alias used and keep it in the response metadata.",
+        "Use the separate GPT-family credential profile provided by the user.",
+        "Verify the exact GPT-family alias at /v1/models before running; expected candidates include gpt-5.5 and gpt-5.4.",
+        "If GPT 5.5 is unavailable but another GPT-family model is listed, record the actual GPT-family model alias used and keep it in the response metadata.",
         "Use the same prompt files, output contract, and scorer as the Claude slot."
       ]
     },

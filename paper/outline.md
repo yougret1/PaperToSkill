@@ -137,9 +137,10 @@ Main results from `results/tables/main_results.md`:
   pending live-response, model-ablation-response, and human-annotation evidence
   separated from local failures: 135 ready checks, 7 pending checks, and 0
   failed checks.
-- the model-ablation live attempt records that `claude-opus-4-8` is listed but
-  blocked by provider account availability, and that no GPT-family alias is
-  listed on the current endpoint.
+- the model-ablation live attempt records that Claude 4.8/4.7/4.6 aliases and
+  GPT-family aliases such as `gpt-5.5`/`gpt-5.4` are listed under separate
+  credential profiles, but chat completions remain blocked by provider account
+  availability or upstream access.
 - in a separate auto-note comparison, the Toolformer extracted-text scaffold
   produces a 1,179-word skill scoring 20/20 on the deterministic rubric,
   9.3/10 on context coverage, 10/10 transfer readiness, and 1.0 source support
@@ -160,8 +161,8 @@ Current limitations:
 - metrics are deterministic and lexical/section based;
 - live cross-harness execution is blocked by remote provider availability;
 - Claude/GPT-family/DeepSeek model ablation prompts are prepared and the live
-  runner/evaluator exists, but the current attempt is blocked/unavailable and
-  response rows remain unscored;
+  runner/evaluator exists, but the current attempt is chat-blocked and response
+  rows remain unscored;
 - no human fidelity annotation or inter-rater agreement yet;
 - human-fidelity review packets and a summarizer are prepared, but annotation
   remains pending;

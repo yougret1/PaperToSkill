@@ -4,13 +4,17 @@
 
 - Model ID: `gpt_5_5_or_gpt_family`
 - Requested or advertised alias: `gpt-5.5`
+- Alias candidates:
+- `gpt-5.5`
+- `gpt-5.4`
 - Provider status: pending_model_list_verification
 - Response status: pending
 
 ## Model-Specific Notes
 
-- Verify the exact GPT-family alias at /v1/models before running.
-- If GPT 5.5 is unavailable, record the actual GPT-family model alias used and keep it in the response metadata.
+- Use the separate GPT-family credential profile provided by the user.
+- Verify the exact GPT-family alias at /v1/models before running; expected candidates include gpt-5.5 and gpt-5.4.
+- If GPT 5.5 is unavailable but another GPT-family model is listed, record the actual GPT-family model alias used and keep it in the response metadata.
 - Use the same prompt files, output contract, and scorer as the Claude slot.
 
 ## Context Case

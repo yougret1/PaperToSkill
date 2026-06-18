@@ -1,302 +1,166 @@
 # PaperToSkill Long-Term Memory
 
 Read this file after any context compaction or session resume before taking new
-project actions.
+project actions. Also read `memory/short_term_memory.md`.
+
+This file is intentionally compact. Detailed chronological history lives in
+`research/stage_log.md`, `research/run_logs/`, and `results/result_cards.md`.
 
 ## Project Identity
 
-- Project name: PaperToSkill.
-- Core idea: turn papers into reusable agent skills.
-- Target outcome: a research-backed system and paper draft that show how paper
-  contributions can be extracted, operationalized, compacted, evaluated, and
-  transferred across agent harnesses.
-- Local project repo: `D:\a_work\gitee\PaperToSkill`.
+- Project: PaperToSkill.
+- Goal: turn research papers into compact, human-editable agent skills that
+  preserve the paper's reusable method, validation workflow, limitations,
+  failure branches, and transfer notes.
+- Local repo: `D:\a_work\gitee\PaperToSkill`.
 - Remote repo: `https://github.com/yougret1/PaperToSkill.git`.
-- AI-Scientist-v2 workspace: `D:\a_work\gitee\ai-scientist-v2`.
+- Supporting workspace: `D:\a_work\gitee\ai-scientist-v2`.
+- Active branch convention: save phase-level progress to `origin/main` unless
+  the user asks for a different branch.
 
-## User Intent
+## Persistent User Requirements
 
-- The user wants durable local memory so context compaction does not erase
-  project state.
-- Memory must include at least two files: long-term memory and short-term memory.
-- Use `ai-scientist-v2` to refine the idea, run or prepare research automation,
-  and convert the idea toward implementation.
-- Save phase-level progress to the PaperToSkill GitHub repo when appropriate.
+- Maintain at least two memory files:
+  - `memory/long_term_memory.md` for stable project facts.
+  - `memory/short_term_memory.md` for current task state and blockers.
+- Keep memory useful and short. Move old phase narration into stage logs and
+  reports; preserve only facts needed for future action.
+- Use `ai-scientist-v2` to refine and develop the idea where useful.
+- Final paper artifacts must use an official AAAI TeX template downloaded from
+  the web. Current package is AAAI-27 under `paper/aaai/`.
+- Experiments must include usage examples.
+- Claude Opus and GPT-family model ablations should be run before the user adds
+  DeepSeek following the same process.
+- Do not silently treat unavailable model endpoints as model-quality failures.
+  Report provider/model availability problems.
 
-## Working Definition
+## Evidence Boundary
 
-PaperToSkill is a paper extractor and translation workflow. It reads a target
-paper and produces a `SKILL.md`-style artifact that preserves:
+Current supported claims:
 
-- the paper's central contribution and assumptions;
-- the reusable method or workflow;
-- concrete procedures an agent can execute;
-- required inputs, outputs, tools, and validation checks;
-- negative cases, limitations, and failure branches;
-- compactness constraints and transfer notes for other harnesses.
+- Curated note-to-skill conversion over four papers: AI Scientist-v2,
+  Reflexion, AIDE, and Toolformer.
+- Deterministic extracted-text-to-note scaffolds for Toolformer and AIDE.
+- Offline deterministic evaluations: rubric, context coverage, source-span
+  validation, harness-transfer readiness, compactness/token proxy, usage-example
+  executability, AAAI package readiness, table consistency, paper claim
+  discipline, and active-goal completion auditing.
+- Failure-case archive with paper-reported and project-level cases.
 
-## Research Direction
+Current unsupported claims:
 
-Primary research question:
+- Completed live Claude/GPT/DeepSeek model ablations.
+- Completed live cross-harness success.
+- Human-validated semantic fidelity.
+- Provider billing, output-token accounting, or success-per-dollar.
+- Reliable arbitrary-PDF-to-skill automation.
+- Submission-final or accepted AAAI paper.
 
-Can papers be converted into compact, human-editable agent skills that preserve
-enough procedural knowledge to reproduce or reuse the paper's main contribution?
+## Main Artifact Map
 
-Initial target contribution categories:
+Use these as entry points instead of searching the whole repo first:
 
-- system: a paper-to-skill extraction pipeline;
-- evaluation: compactness, fidelity, usability, transferability, and cost;
-- artifact: the PaperToSkill skill that can improve itself and process papers;
-- analysis: success and failure cases, including failed reproduction branches.
+- `skill/SKILL.md`: PaperToSkill skill prototype.
+- `scripts/papertoskill_extract.py`: source-note-to-skill extractor.
+- `scripts/papertoskill_note_from_text.py`: extracted-text-to-note scaffold.
+- `scripts/run_model_ablation_prompts.py`: OpenAI-compatible live model runner.
+- `scripts/evaluate_model_ablation_responses.py`: saved-response scorer.
+- `scripts/check_reproducibility_package.py`: aggregate local package gate.
+- `scripts/check_aaai_package.py`: AAAI package/build gate.
+- `scripts/check_usage_examples.py`: usage-example gate.
+- `scripts/check_paper_tables.py`: AAAI result-table consistency gate.
+- `scripts/check_paper_claims.py`: paper overclaim/boundary gate.
+- `scripts/check_goal_completion.py`: active-goal completion gate.
+- `benchmarks/model_ablation_v0.json`: Claude/GPT-family/DeepSeek prompt spec.
+- `examples/usage/`: usage examples for skill use, auto-note, and ablations.
+- `paper/aaai/`: official AAAI-27 author kit and LaTeX draft.
+- `results/reproducibility/`: machine-readable and Markdown readiness reports.
+- `research/goal_completion_audit.md`: human-readable requirement audit.
+- `research/runbook.md`: reproducible commands.
 
-## Current System Components
+## Current Reports
 
-- `skill/SKILL.md`: human-facing PaperToSkill skill prototype.
-- `benchmarks/paper_manifest.json`: seed benchmark paper set.
-- `scripts/papertoskill_extract.py`: deterministic non-LLM extraction scaffold.
-- `scripts/papertoskill_note_from_text.py`: deterministic extracted-text-to-note
-  scaffold that selects line-window evidence from `pdftotext` output and emits
-  source-anchored Markdown notes.
-- `scripts/evaluate_skill.py`: deterministic v0 evaluator for generated skills.
-- `scripts/aggregate_results_tables.py`: paper-ready Markdown/CSV table
-  aggregation over existing deterministic/offline evaluation JSON.
-- `scripts/evaluate_context_costs.py`: deterministic context token/cost proxy
-  evaluator over full papers, notes, skills, summaries, and abstracts. It
-  preserves the character proxy and can emit local `tiktoken` tokenizer-aware
-  proxy outputs.
-- `scripts/build_human_fidelity_packets.py`: builds human-fidelity review
-  packets and blank annotation template.
-- `scripts/summarize_human_fidelity_annotations.py`: summarizes and validates
-  human-fidelity annotation rows.
-- `scripts/build_failure_case_archive.py`: builds a failure-case archive from
-  paper source maps and project-level failure/fix records.
-- `scripts/check_reproducibility_package.py`: checks local reproducibility
-  package readiness and separates pending external evidence from local failures.
-- `scripts/check_aaai_package.py`: verifies the local AAAI package files,
-  official author-kit SHA256, `aaai2027` style declaration/load marker, fresh
-  PDF/log/BibTeX artifacts, and unresolved citation/reference/build markers.
-- `scripts/check_usage_examples.py`: verifies usage-example files, prompt/
-  response slots, and an offline AIDE extracted-text-to-note-to-skill example
-  chain.
-- `scripts/check_paper_tables.py`: verifies that the AAAI LaTeX result-table
-  values in `paper/aaai/papertoskill_tables.tex` match generated CSV sources
-  for main results, transfer ablation, tokenizer-aware context proxy, and
-  auto-note comparison.
-- `scripts/check_paper_claims.py`: verifies that paper-facing text avoids
-  unsupported overclaims and includes required evidence-boundary statements for
-  curated scope, PDF automation, live transfer, human fidelity, cost proxy, and
-  model-ablation availability.
-- `tests/test_papertoskill_extract.py`: extractor smoke test.
-- `tests/test_evaluate_skill.py`: evaluator smoke test.
-- `generated_skills/`: retained generated examples with source maps.
-- `papers/notes/ai_scientist_v2_note.md`: first curated real-paper note.
-- `results/evaluations/ai_scientist_v2_rubric_v0.json`: first scored
-  real-paper generated skill.
-- `benchmarks/tasks/ai_scientist_v2_research_run.json`: first downstream
-  context baseline task.
-- `results/evaluations/ai_scientist_v2_context_baselines_v0.json`: first
-  skill-vs-summary-vs-abstract deterministic comparison.
-- `benchmarks/tasks/skill_source_audit.json`: source-map-aware unsupported
-  instruction audit task.
-- `results/evaluations/skill_source_audit_v0.json`: unsupported-rate ranking
-  across real skill, paper-like case, and abstract-only seed.
-- `benchmarks/tasks/ai_scientist_v2_harness_transfer.json`: offline Codex/
-  Claude-style harness-transfer readiness task.
-- `results/evaluations/ai_scientist_v2_harness_transfer_v0.json`: readiness
-  ranking for full skill, skill without transfer notes, and generic summary.
-- `benchmarks/tasks/ai_scientist_v2_live_transfer.json`: live prompt packet
-  spec for later Codex/Claude execution.
-- `benchmarks/tasks/ai_scientist_v2_source_span_validation.json`: source-span
-  audit task for line-anchored claims.
-- `results/evaluations/ai_scientist_v2_source_span_validation_v0.json`: source-
-  span support-rate summary for the AI Scientist-v2 skill.
-- `papers/notes/reflexion_note.md`: second curated real-paper note.
-- `generated_skills/reflexion/SKILL.md`: second retained generated skill,
-  focused on verbal reinforcement, reflection loops, and memory.
-- `results/evaluations/reflexion_rubric_v0.json`: Reflexion skill rubric score.
-- `results/evaluations/reflexion_source_span_validation_v0.json`: Reflexion
-  source-span support-rate summary.
-- `results/evaluations/reflexion_context_baselines_v0.json`: Reflexion
-  skill-vs-summary-vs-abstract deterministic comparison.
-- `results/evaluations/reflexion_harness_transfer_v0.json`: Reflexion
-  transfer-readiness ranking for full skill, skill without transfer notes, and
-  generic summary.
-- `results/live_transfer_prompts/reflexion_v0/`: Reflexion live prompt packets
-  for later Codex/Claude execution.
-- `papers/notes/aide_note.md`: third curated real-paper note.
-- `generated_skills/aide/SKILL.md`: third retained generated skill, focused on
-  code-space tree search, draft/debug/improve actions, and solution selection.
-- `results/evaluations/aide_rubric_v0.json`: AIDE skill rubric score.
-- `results/evaluations/aide_source_span_validation_v0.json`: AIDE source-span
-  support-rate summary.
-- `results/evaluations/aide_context_baselines_v0.json`: AIDE
-  skill-vs-summary-vs-abstract deterministic comparison.
-- `results/evaluations/aide_harness_transfer_v0.json`: AIDE transfer-readiness
-  ranking for full skill, skill without transfer notes, and generic summary.
-- `results/live_transfer_prompts/aide_v0/`: AIDE live prompt packets for later
-  Codex/Claude execution.
-- `papers/notes/toolformer_note.md`: fourth curated real-paper note, focused on
-  self-supervised tool use and API-call selection.
-- `generated_skills/toolformer/SKILL.md`: fourth retained generated skill,
-  focused on text-to-text API calls, sample/execute/filter data generation,
-  fine-tuning, inference-time tool execution, and tool-use limitations.
-- `results/evaluations/toolformer_rubric_v0.json`: Toolformer skill rubric
-  score.
-- `results/evaluations/toolformer_source_span_validation_v0.json`: Toolformer
-  source-span support-rate summary.
-- `results/evaluations/toolformer_context_baselines_v0.json`: Toolformer
-  skill-vs-summary-vs-abstract deterministic comparison.
-- `results/evaluations/toolformer_harness_transfer_v0.json`: Toolformer
-  transfer-readiness ranking for full skill, skill without transfer notes, and
-  generic summary.
-- `results/live_transfer_prompts/toolformer_v0/`: Toolformer live prompt
-  packets for later Codex/Claude execution.
-- `papers/auto_notes/toolformer_auto_note.md`: first deterministic automatic
-  note scaffold from extracted paper text.
-- `generated_skills/toolformer_auto/SKILL.md`: first retained auto-note-derived
-  skill, generated from `papers/extracted/toolformer.txt` via the automatic
-  note scaffold.
-- `results/evaluations/toolformer_auto_note_scaffold_v0.json`: line-window
-  selection report for the Toolformer automatic note scaffold.
-- `results/evaluations/toolformer_auto_rubric_v0.json`: Toolformer
-  auto-note-derived skill rubric score.
-- `results/evaluations/toolformer_auto_context_baselines_v0.json`: Toolformer
-  auto-note-derived skill-vs-summary-vs-abstract deterministic comparison.
-- `results/evaluations/toolformer_auto_harness_transfer_v0.json`: Toolformer
-  auto-note-derived transfer-readiness ranking.
-- `results/evaluations/toolformer_auto_source_span_validation_v0.json`:
-  Toolformer auto-note-derived source-span validation summary.
-- `papers/auto_notes/aide_auto_note.md`: second deterministic automatic note
-  scaffold from extracted paper text, using the AIDE profile.
-- `generated_skills/aide_auto/SKILL.md`: second retained auto-note-derived
-  skill, generated from `papers/extracted/aide.txt` via the automatic note
-  scaffold.
-- `results/evaluations/aide_auto_note_scaffold_v0.json`: line-window selection
-  report for the AIDE automatic note scaffold.
-- `results/evaluations/aide_auto_rubric_v0.json`: AIDE auto-note-derived skill
-  rubric score.
-- `results/evaluations/aide_auto_context_baselines_v0.json`: AIDE
-  auto-note-derived skill-vs-summary-vs-abstract deterministic comparison.
-- `results/evaluations/aide_auto_harness_transfer_v0.json`: AIDE
-  auto-note-derived transfer-readiness ranking.
-- `results/evaluations/aide_auto_source_span_validation_v0.json`: AIDE
-  auto-note-derived source-span validation summary.
-- `results/tables/auto_note_comparison.md`: curated-vs-auto Toolformer and AIDE
-  note comparison table.
-- `results/tables/`: paper-ready main results, transfer ablation, compactness/
-  source-grounding, character-proxy and tokenizer-aware context cost proxy, and
-  combined summary tables.
-- `results/human_fidelity_packets/`: prepared review packets and blank
-  annotation template plus pending annotation summary for human source-fidelity
-  review.
-- `results/failure_cases/`: failure-case archive with 27 cases, including 21
-  paper-reported limitations/failure branches and 6 project-level failure/fix
-  records.
-- `results/reproducibility/`: reproducibility package report. Current status is
-  ready with pending external evidence, 159 ready checks, 7 pending checks, and
-  0 failed checks.
-- `research/review_report.md` and `research/rebuttal_bank.md`: internal
-  review/rebuttal readiness artifacts that map likely reviewer objections to
-  evidence and prohibited overclaims.
-- `research/goal_completion_audit.md`: requirement-by-requirement audit of the
-  active user goal, current evidence, blockers, and closure path.
-- `paper/outline.md`: section plan, contribution bullets, evidence boundary,
-  and figure/table plan.
-- `paper/draft.md`: first evidence-bounded paper draft.
-- `paper/claim_checklist.md`: supported-vs-unsupported claim gate for drafting.
-- `paper/limitations.md`: limitations and future-work text aligned to current
-  deterministic/offline evidence.
-- `paper/aaai/`: official AAAI-27 author kit, template provenance, and
-  AAAI-formatted PaperToSkill LaTeX draft. The local AAAI package report is
-  ready with 17 ready checks and 0 failed checks.
-- `results/reproducibility/paper_table_report.md/json`: local AAAI
-  paper-table consistency report. Current status is ready with 76 ready checks
-  and 0 failed checks.
-- `results/reproducibility/paper_claim_report.md/json`: local paper
-  claim-discipline report. Current status is ready with 20 ready checks and 0
-  failed checks.
-- `examples/usage/`: usage examples for Codex-style skill loading,
-  extracted-text auto-note-to-skill conversion, and model-ablation execution.
-  The local usage-example report is ready with 34 ready checks and 0 failed
-  checks.
-- `benchmarks/model_ablation_v0.json`: Claude/GPT-family/DeepSeek model
-  ablation prompt spec with response slots marked pending.
-- `scripts/build_model_ablation_prompts.py`: prompt-grid builder for model
-  ablations.
-- `scripts/run_model_ablation_prompts.py`: OpenAI-compatible live runner for
-  model-ablation prompt packets. It reads credentials from environment
-  variables or CLI overrides, writes redacted run reports, and saves successful
-  responses only to expected response paths. It skips `deepseek_followup_slot`
-  only while the alias remains the placeholder `deepseek-to-be-filled`; a
-  configured DeepSeek alias follows the normal runner path.
-- `scripts/evaluate_model_ablation_responses.py`: deterministic scorer for
-  saved model-ablation response files. Missing response files are pending, not
-  negative model-quality evidence.
-- `results/model_ablation_prompts/v0/`: generated model-ablation prompts for
-  Claude Opus 4.8, GPT-family, and DeepSeek follow-up slots over Toolformer and
-  AIDE auto-skill usage examples, plus run/evaluation reports. The latest
-  Phase 26 recheck still finds `claude-opus-4-8` listed but blocked at chat
-  completion with HTTP 503/no accounts, and no GPT-family alias in the catalog.
-- `results/tables/context_cost_proxy_tokenizer.*`: local `o200k_base`
-  tokenizer-aware compactness/cost proxy reports. Generated skills use 1,079 vs
-  45,212 tokens for AI Scientist-v2, 703 vs 16,414 for Reflexion, 1,285 vs
-  13,312 for AIDE, and 1,255 vs 20,365 for Toolformer.
+- Reproducibility package:
+  `results/reproducibility/package_report.md`
+  reports `ready_with_pending_external_evidence`, 164 ready checks, 7 pending
+  checks, and 0 failed checks.
+- Active-goal completion:
+  `results/reproducibility/goal_completion_report.md`
+  reports `not_complete_pending_external_evidence`, 34 ready checks, 10 pending
+  checks, and 0 failed checks.
+- AAAI package:
+  `results/reproducibility/aaai_package_report.md`
+  reports ready, 17 ready checks, 0 failed checks.
+- Usage examples:
+  `results/reproducibility/usage_example_report.md`
+  reports ready, 36 ready checks, 0 failed checks.
+- Paper tables:
+  `results/reproducibility/paper_table_report.md`
+  reports ready, 76 ready checks, 0 failed checks.
+- Paper claims:
+  `results/reproducibility/paper_claim_report.md`
+  reports ready, 20 ready checks, 0 failed checks.
 
-## Current Assumptions
+## Model/API Configuration
 
-- "Skill" means a natural-language operational guide for an agent, similar to
-  Codex skills with a `SKILL.md` entry point and optional bundled resources.
-- The paper should emphasize practical conversion, not only successful final
-  outputs.
-- Failure traces are valuable and should be recorded rather than hidden.
-- Transfer evaluation should include moving skills between harnesses, especially
-  Codex-to-Claude or another agent runtime.
-- Paper writing must distinguish curated note-to-skill conversion from full
-  arbitrary-PDF automation, and offline readiness from live agent success.
-- Automatic note-scaffold writing must distinguish deterministic extracted-text
-  line-window scaffolding from reliable arbitrary-PDF-to-skill automation.
-- Cost writing must distinguish local character/tokenizer-aware token/cost
-  proxies from provider billing, output-token accounting, live invoices, and
-  success-per-dollar evidence.
-- Human-fidelity writing must distinguish prepared review packets from completed
-  independent annotation.
-- Reproducibility writing must distinguish local package readiness from
-  completed external live responses or independent human validation.
-- Rebuttal writing must answer objections from current evidence and explicitly
-  avoid unsupported live, human-validation, and provider-billing claims.
-- AAAI paper writing should use the `paper/aaai/` LaTeX package. The current
-  official template is AAAI-27 because the author-kit endpoint available on
-  2026-06-18 provides `aaai2027.sty`.
-- Model-ablation writing must distinguish prompt packets from completed
-  Claude/GPT/DeepSeek responses. The latest Phase 26 live recheck found
-  `claude-opus-4-8` listed but unavailable for chat completion due to provider
-  accounts, and no GPT-family model alias listed on the endpoint. GPT 5.5 is a
-  requested GPT-family slot and must be verified at run time before claimed as
-  available.
+Never commit raw API keys to tracked files. Use environment variables or local
+shell-only values.
 
-## LLM/API Configuration
+Claude-family profile:
 
-The user provided an OpenAI-compatible server and model for agent/LLM use:
+- Base URL: `https://coderxiaoc.com/v1`.
+- Key source: local environment variable, e.g.
+  `AI_SCIENTIST_OPENAI_API_KEY`.
+- User-requested aliases: `claude-opus-4.8`, `claude-opus-4-6`,
+  `claude-opus-4-7`.
+- Latest catalog evidence lists `claude-opus-4-8`, `claude-opus-4-7`, and
+  `claude-opus-4-6`; chat completions still fail with HTTP 503/no available
+  accounts.
 
-- Server: `https://coderxiaoc.com`
-- Requested model: `claude-opus-4.8`
+GPT-family profile:
 
-Do not commit raw API keys to tracked repository files. Prefer environment
-variables:
+- Base URL: `https://coderxiaoc.com/v1`.
+- Key source: local environment variable, e.g.
+  `PAPERTOSKILL_GPT_OPENAI_API_KEY`.
+- Latest catalog evidence with the separate GPT key lists `gpt-5.5`,
+  `gpt-5.4`, and other GPT-family models; `gpt-5.5` chat completions fail with
+  HTTP 502/upstream access forbidden. Do not claim completed GPT ablations until
+  response files are saved and scored.
 
-- `AI_SCIENTIST_OPENAI_BASE_URL`
-- `AI_SCIENTIST_OPENAI_API_KEY`
-- `AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE=1`
+DeepSeek:
 
-The current `ai-scientist-v2` working tree already appears to include local
-support for OpenAI-compatible backends and local-laptop BFTS settings.
+- Leave `deepseek_followup_slot` pending until the user supplies a concrete
+  alias/env vars.
+- The runner skips the slot only while its alias remains
+  `deepseek-to-be-filled`.
+
+## Engineering/Fix History To Preserve
+
+| Area | Problem Found | Fix / Current Location |
+| --- | --- | --- |
+| Extractor parsing | Multiline list items split into fragments; title inferred as `Methods`. | Merge continuation lines and infer title from H1/LaTeX title in `scripts/papertoskill_extract.py`; covered by `tests/test_papertoskill_extract.py`. |
+| Extractor recall | AIDE exposed truncation of workflow/validation/failure bullets. | Increased candidate limits in `scripts/papertoskill_extract.py`; regression test keeps richer bullets. |
+| Numbered continuations | Indented numbered continuations inside wrapped bullets became new bullets. | Treat only unindented list markers as new bullets in `scripts/papertoskill_extract.py`. |
+| Source-span anchors | `pdftotext` form-feed characters shifted line anchors. | Use newline-delimited counting in `scripts/validate_source_spans.py`; covered by tests. |
+| Source-map audit | First source-map audit mis-mapped section groups and scored all cases badly. | Map skill sections to source-note section groups in `scripts/audit_skill_source_map.py`. |
+| Auto-note scaffold | Toolformer auto-note initially mixed two-column PDF text/references and exceeded compactness. | Preserve raw line spacing, split likely columns, prefer keyword-bearing column, shorten snippets in `scripts/papertoskill_note_from_text.py`. |
+| AIDE auto-note | Toolformer profile was semantically poor on AIDE; figure captions and related-work snippets leaked in. | Added `--profile aide`, target-section-first selection, overlap exception for shared AIDE caveat. |
+| Human fidelity | Blank annotation rows could be mistaken for negative scores. | `scripts/summarize_human_fidelity_annotations.py` marks blanks as pending. |
+| Reproducibility | Local package readiness was conflated with external live/human evidence. | `scripts/check_reproducibility_package.py` uses ready/pending/fail statuses. |
+| AAAI package | File presence was weaker than checking the actual author kit/build state. | `scripts/check_aaai_package.py` checks SHA256, style use, fresh PDF/log/BibTeX, unresolved markers. |
+| Usage examples | Markdown examples could drift from executable paths. | `scripts/check_usage_examples.py` validates files, prompt slots, and offline AIDE example chain. |
+| Paper tables | LaTeX table values could drift from CSV results. | `scripts/check_paper_tables.py` compares `paper/aaai/papertoskill_tables.tex` with generated CSVs. |
+| Paper claims | Draft/AAAI text could overclaim pending evidence. | `scripts/check_paper_claims.py` checks unsupported positive claims and required boundary statements. |
+| Goal completion | Narrative completion audit could stale. | `scripts/check_goal_completion.py` makes the active-goal status machine-checkable. |
 
 ## Persistent Rules
 
-- Keep exploratory ideas, active work, and validated claims separate.
-- Promote an item to validated memory only when backed by source evidence,
-  code, experiment logs, or explicit user decision.
-- Record decisions in `research/decision_log.md`.
-- Record active work and blockers in `memory/short_term_memory.md`.
-- If context was compacted, read this file and
-  `memory/short_term_memory.md` first.
+- On resume, read both memory files first.
+- Use `rg`/`rg --files` for search.
+- Use `apply_patch` for manual edits.
+- Do not revert user/local changes, especially in `ai-scientist-v2`.
+- Keep exploratory notes, active work, and validated claims separate.
+- Promote claims only when backed by files, tests, logs, or explicit user
+  decisions.
+- Before phase saving, run relevant tests/checkers, `git diff --check`, and a
+  raw-key scan.

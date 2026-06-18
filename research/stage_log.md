@@ -1147,3 +1147,78 @@ Evidence boundary:
 - It does not complete live Claude/GPT/DeepSeek model ablations, live
   cross-harness transfer, human-fidelity annotation, or provider-billing
   evidence.
+
+## 2026-06-18 Phase 31
+
+Actions:
+
+- Added `scripts/check_goal_completion.py`, a machine-checkable audit for the
+  active user goal.
+- Added `tests/test_check_goal_completion.py`.
+- Generated `results/reproducibility/goal_completion_report.json` and
+  `results/reproducibility/goal_completion_report.md`.
+- Integrated the goal-completion report into
+  `scripts/check_reproducibility_package.py`.
+- Updated runbook, artifact map, decision log, result cards, stage log, goal
+  audit, and memory.
+
+Results:
+
+- Goal-completion report status:
+  `not_complete_pending_external_evidence`.
+- Goal-completion report counts: 34 ready checks, 10 pending checks, and 0
+  failed checks.
+- The report keeps `active_goal_complete` pending and exposes the remaining
+  requirements: AI-Scientist-v2 live LLM run, provider billing/success-per-
+  dollar evidence, final AAAI submission readiness, Claude/GPT-family saved and
+  scored ablation responses, DeepSeek responses after user configuration, full
+  model-ablation evaluation, live cross-harness responses, and human-fidelity
+  annotation.
+- The reproducibility package report now shows
+  `ready_with_pending_external_evidence`, 164 ready checks, 7 pending checks,
+  and 0 failed checks.
+
+Evidence boundary:
+
+- Phase 31 makes the active-goal completion decision auditable and
+  machine-readable.
+- It does not add live model responses, human annotations, provider-billing
+  evidence, or submission-final paper evidence.
+
+## 2026-06-18 Phase 32
+
+Actions:
+
+- Compacted long-term and short-term memory into shorter action-oriented files
+  that preserve stable project facts, fix history, current blockers, and next
+  actions.
+- Updated `benchmarks/model_ablation_v0.json` so the Claude slot records
+  candidates `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and
+  `claude-opus-4-6`.
+- Updated the GPT-family slot to use separate `PAPERTOSKILL_GPT_OPENAI_*`
+  environment variables and candidates `gpt-5.5` and `gpt-5.4`.
+- Updated prompt builder and runner behavior so prompt packets include alias
+  candidates and run reports preserve model catalogs per credential profile,
+  even when profiles share the same base URL.
+- Reran the Claude/GPT-family model-ablation live runner and response
+  evaluator.
+
+Results:
+
+- Claude catalog via `AI_SCIENTIST_OPENAI_API_KEY` lists 8 Claude-family models,
+  including `claude-opus-4-8`, `claude-opus-4-7`, and `claude-opus-4-6`.
+- Claude prompt rows selected `claude-opus-4-8` and both failed HTTP 503:
+  `No available accounts: no available accounts`.
+- GPT catalog via `PAPERTOSKILL_GPT_OPENAI_API_KEY` lists 17 models, including
+  `gpt-5.5`, `gpt-5.4`, `gpt-5.4-mini`, GPT 5.2 variants, and GPT 5.3 Codex
+  variants.
+- GPT prompt rows selected `gpt-5.5` and both failed HTTP 502:
+  `Upstream access forbidden, please contact administrator`.
+- Response evaluation remains 6 total rows, 0 scored rows, and 6 pending rows.
+
+Evidence boundary:
+
+- Phase 32 improves model-profile accuracy and records a fresh availability
+  attempt with the user's updated credentials.
+- It does not complete model-quality ablations because no response files were
+  saved or scored.

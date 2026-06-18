@@ -1,9 +1,11 @@
 import json
+import os
 import subprocess
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -11,6 +13,7 @@ RUNNER = ROOT / "scripts" / "run_model_ablation_prompts.py"
 EVALUATOR = ROOT / "scripts" / "evaluate_model_ablation_responses.py"
 sys.path.insert(0, str(ROOT / "scripts"))
 
+import run_model_ablation_prompts as runner_module  # noqa: E402
 from run_model_ablation_prompts import model_ids_from_response, select_model_alias  # noqa: E402
 
 
@@ -30,6 +33,30 @@ class ModelAblationExecutionTest(unittest.TestCase):
         )
         self.assertEqual("gpt-5", alias)
         self.assertEqual("fallback_from_gpt-5.5", reason)
+
+    def test_alias_candidates_select_available_claude_variant(self):
+        alias, reason = select_model_alias(
+            {
+                "id": "claude_opus_4_8",
+                "model_alias": "claude-opus-4-8",
+                "model_aliases": ["claude-opus-4-8", "claude-opus-4.8", "claude-opus-4-7"],
+            },
+            ["claude-opus-4-7"],
+        )
+        self.assertEqual("claude-opus-4-7", alias)
+        self.assertEqual("exact", reason)
+
+    def test_gpt_slot_prefers_gpt_5_4_when_5_5_missing(self):
+        alias, reason = select_model_alias(
+            {
+                "id": "gpt_5_5_or_gpt_family",
+                "model_alias": "gpt-5.5",
+                "model_aliases": ["gpt-5.5", "gpt-5.4"],
+            },
+            ["gpt-5.4", "gpt-5"],
+        )
+        self.assertEqual("gpt-5.4", alias)
+        self.assertEqual("exact", reason)
 
     def test_evaluator_scores_saved_response_and_marks_missing_pending(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -167,6 +194,104 @@ Failure branch:
             report = json.loads(output_json.read_text(encoding="utf-8"))
             self.assertEqual("pending", report["overall_status"])
             self.assertEqual("skipped", report["results"][0]["status"])
+
+    def test_runner_keeps_catalogs_for_same_base_url_different_auth_envs(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            prompt = tmp_path / "prompt.md"
+            prompt.write_text("Prompt", encoding="utf-8")
+            task = tmp_path / "task.json"
+            task.write_text(
+                json.dumps(
+                    {
+                        "id": "test_task",
+                        "model_slots": [
+                            {
+                                "id": "claude_opus_4_8",
+                                "model_alias": "claude-opus-4-8",
+                                "auth_env": "TEST_CLAUDE_KEY",
+                                "base_url_env": "TEST_SHARED_BASE",
+                            },
+                            {
+                                "id": "gpt_5_5_or_gpt_family",
+                                "model_alias": "gpt-5.5",
+                                "model_aliases": ["gpt-5.5", "gpt-5.4"],
+                                "auth_env": "TEST_GPT_KEY",
+                                "base_url_env": "TEST_SHARED_BASE",
+                            },
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            index = tmp_path / "index.json"
+            index.write_text(
+                json.dumps(
+                    {
+                        "task": "test_task",
+                        "prompts": [
+                            {
+                                "model_id": "claude_opus_4_8",
+                                "case_id": "case_one",
+                                "prompt_path": str(prompt),
+                                "expected_response_path": str(tmp_path / "claude.md"),
+                            },
+                            {
+                                "model_id": "gpt_5_5_or_gpt_family",
+                                "case_id": "case_one",
+                                "prompt_path": str(prompt),
+                                "expected_response_path": str(tmp_path / "gpt.md"),
+                            },
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            original_request_json = runner_module.request_json
+            original_env = {
+                "TEST_SHARED_BASE": os.environ.get("TEST_SHARED_BASE"),
+                "TEST_CLAUDE_KEY": os.environ.get("TEST_CLAUDE_KEY"),
+                "TEST_GPT_KEY": os.environ.get("TEST_GPT_KEY"),
+            }
+
+            def fake_request_json(url, api_key, method="GET", body=None):
+                if url.endswith("/models"):
+                    if api_key == "claude-key":
+                        return 200, {"data": [{"id": "claude-opus-4-8"}]}
+                    if api_key == "gpt-key":
+                        return 200, {"data": [{"id": "gpt-5.5"}]}
+                raise RuntimeError("simulated chat failure")
+
+            try:
+                os.environ["TEST_SHARED_BASE"] = "https://example.test/v1"
+                os.environ["TEST_CLAUDE_KEY"] = "claude-key"
+                os.environ["TEST_GPT_KEY"] = "gpt-key"
+                runner_module.request_json = fake_request_json
+                report = runner_module.run(
+                    SimpleNamespace(
+                        task=task,
+                        index=index,
+                        model_id=None,
+                        base_url=None,
+                        api_key=None,
+                        max_tokens=20,
+                        include_placeholder_models=False,
+                    )
+                )
+            finally:
+                runner_module.request_json = original_request_json
+                for key, value in original_env.items():
+                    if value is None:
+                        os.environ.pop(key, None)
+                    else:
+                        os.environ[key] = value
+
+            catalogs = {(item["base_url"], item["auth_env"]): item for item in report["model_catalogs"]}
+            self.assertIn(("https://example.test/v1", "TEST_CLAUDE_KEY"), catalogs)
+            self.assertIn(("https://example.test/v1", "TEST_GPT_KEY"), catalogs)
+            self.assertEqual(["claude-opus-4-8"], catalogs[("https://example.test/v1", "TEST_CLAUDE_KEY")]["model_ids"])
+            self.assertEqual(["gpt-5.5"], catalogs[("https://example.test/v1", "TEST_GPT_KEY")]["model_ids"])
 
     def test_runner_attempts_configured_deepseek_slot_when_env_missing(self):
         with tempfile.TemporaryDirectory() as tmp:

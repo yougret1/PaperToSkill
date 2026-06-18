@@ -4,6 +4,8 @@
 
 - Model ID: `deepseek_followup_slot`
 - Requested or advertised alias: `deepseek-to-be-filled`
+- Alias candidates:
+- `deepseek-to-be-filled`
 - Provider status: placeholder_for_user_followup
 - Response status: pending
 

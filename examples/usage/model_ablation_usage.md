@@ -16,6 +16,9 @@ Use environment variables rather than tracked files:
 $env:AI_SCIENTIST_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
 $env:AI_SCIENTIST_OPENAI_API_KEY = "<set locally>"
 $env:AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE = "1"
+
+$env:PAPERTOSKILL_GPT_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
+$env:PAPERTOSKILL_GPT_OPENAI_API_KEY = "<set locally>"
 ```
 
 For each prompt listed in `results/model_ablation_prompts/v0/index.json`, send
@@ -41,10 +44,12 @@ python scripts\evaluate_model_ablation_responses.py `
 
 ## Current Model Slots
 
-- `claude_opus_4_8`: use `claude-opus-4-8` if the provider still advertises the
-  dashed alias.
-- `gpt_5_5_or_gpt_family`: verify the exact GPT-family alias at `/v1/models`
-  before running; record the actual alias used.
+- `claude_opus_4_8`: try the configured Claude alias candidates in order:
+  `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and
+  `claude-opus-4-6`.
+- `gpt_5_5_or_gpt_family`: use the separate GPT credential profile, verify the
+  exact GPT-family alias at `/v1/models`, and prefer `gpt-5.5` then `gpt-5.4`
+  when available; record the actual alias used.
 - `deepseek_followup_slot`: replace the placeholder alias and endpoint with the
   user's DeepSeek configuration, then run the same prompt grid.
 

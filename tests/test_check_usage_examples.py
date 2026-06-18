@@ -23,6 +23,8 @@ class CheckUsageExamplesTest(unittest.TestCase):
         self.assertIn("codex_toolformer_prompt", ready_ids)
         self.assertIn("usage_model_ablation_prompt_grid", ready_ids)
         self.assertIn("usage_model_ablation_response_slots", ready_ids)
+        self.assertIn("usage_model_ablation_gpt_profile", ready_ids)
+        self.assertIn("usage_model_ablation_claude_alias_candidates", ready_ids)
         self.assertIn("usage_auto_note_example_rubric_score", ready_ids)
         sample = report["auto_note_example_sample"]
         self.assertEqual("aide", sample["note_report"]["profile"])
@@ -52,6 +54,7 @@ class CheckUsageExamplesTest(unittest.TestCase):
             self.assertEqual("ready", report["overall_status"])
             ready_ids = {check["id"] for check in report["checks"] if check["status"] == "ready"}
             self.assertIn("usage_model_ablation_model_slots", ready_ids)
+            self.assertIn("usage_model_ablation_gpt_profile", ready_ids)
             self.assertIsNone(report["auto_note_example_sample"])
             self.assertTrue(output_md.exists())
 

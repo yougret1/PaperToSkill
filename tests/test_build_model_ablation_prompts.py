@@ -36,6 +36,7 @@ class BuildModelAblationPromptsTest(unittest.TestCase):
                             {
                                 "id": "claude_slot",
                                 "model_alias": "claude-opus-4-8",
+                                "model_aliases": ["claude-opus-4-8", "claude-opus-4-7"],
                                 "provider_status": "pending",
                             },
                             {
@@ -61,8 +62,10 @@ class BuildModelAblationPromptsTest(unittest.TestCase):
             self.assertEqual(2, len(index["prompts"]))
             self.assertTrue((output_dir / "claude_slot__case_one.md").exists())
             self.assertTrue((output_dir / "gpt_slot__case_one.md").exists())
+            self.assertEqual(["claude-opus-4-8", "claude-opus-4-7"], index["prompts"][0]["model_aliases"])
             prompt = (output_dir / "gpt_slot__case_one.md").read_text(encoding="utf-8")
             self.assertIn("gpt-5.5", prompt)
+            self.assertIn("Alias candidates", prompt)
             self.assertIn("Keep source-backed steps", prompt)
 
 

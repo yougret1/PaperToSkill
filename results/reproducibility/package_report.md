@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 159
+- Ready checks: 164
 - Pending checks: 7
 - Failed checks: 0
 
@@ -33,6 +33,9 @@ Evidence boundary: this report checks local package completeness and separates p
 | paper_claim_checker | ready | present | scripts/check_paper_claims.py |
 | paper_claim_report_json | ready | present | results/reproducibility/paper_claim_report.json |
 | paper_claim_report_md | ready | present | results/reproducibility/paper_claim_report.md |
+| goal_completion_checker | ready | present | scripts/check_goal_completion.py |
+| goal_completion_report_json | ready | present | results/reproducibility/goal_completion_report.json |
+| goal_completion_report_md | ready | present | results/reproducibility/goal_completion_report.md |
 | usage_examples_readme | ready | present | examples/usage/README.md |
 | usage_example_codex_skill | ready | present | examples/usage/codex_skill_usage.md |
 | usage_example_auto_note | ready | present | examples/usage/auto_note_scaffold_usage.md |
@@ -132,7 +135,9 @@ Evidence boundary: this report checks local package completeness and separates p
 | paper_table_core_checks_ready | ready | core checks ready | results\reproducibility\paper_table_report.json |
 | paper_claim_report_ready | ready | overall=ready; counts={'ready': 20, 'fail': 0} | results\reproducibility\paper_claim_report.json |
 | paper_claim_core_checks_ready | ready | core checks ready | results\reproducibility\paper_claim_report.json |
-| usage_example_report_ready | ready | overall=ready; counts={'ready': 34, 'fail': 0} | results\reproducibility\usage_example_report.json |
+| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 34, 'pending': 10, 'fail': 0} | results\reproducibility\goal_completion_report.json |
+| goal_completion_core_checks_ready | ready | core completion boundaries ready | results\reproducibility\goal_completion_report.json |
+| usage_example_report_ready | ready | overall=ready; counts={'ready': 36, 'fail': 0} | results\reproducibility\usage_example_report.json |
 | usage_example_core_checks_ready | ready | core checks ready | results\reproducibility\usage_example_report.json |
 | toolformer_auto_note_script | ready | present | scripts/papertoskill_note_from_text.py |
 | toolformer_auto_note | ready | present | papers/auto_notes/toolformer_auto_note.md |
@@ -174,6 +179,6 @@ Evidence boundary: this report checks local package completeness and separates p
 | model_ablation_prompt_packets | ready | prompt_packets=6; missing_prompts=0 | results\model_ablation_prompts\v0\index.json |
 | model_ablation_model_slots | ready | models=claude_opus_4_8,deepseek_followup_slot,gpt_5_5_or_gpt_family | results\model_ablation_prompts\v0\index.json |
 | model_ablation_responses | pending | missing_response_files=6 | results\model_ablation_prompts\v0\index.json |
-| model_ablation_run_report_valid | ready | overall=blocked_by_provider_or_model_availability; counts={'error': 2, 'skipped': 2} | results\model_ablation_prompts\v0\run_report.json |
+| model_ablation_run_report_valid | ready | overall=blocked_by_provider_or_model_availability; counts={'error': 4} | results\model_ablation_prompts\v0\run_report.json |
 | model_ablation_evaluation_complete | pending | scored_rows=0; pending_rows=6 | results\model_ablation_prompts\v0\evaluation.json |
 | secret_scan | ready | no raw API-key-like strings found | repository text files |

@@ -4,13 +4,18 @@
 
 - Model ID: `claude_opus_4_8`
 - Requested or advertised alias: `claude-opus-4-8`
-- Provider status: server_previously_advertised_dashed_alias_but_chat_completion_blocked_by_provider_capacity
+- Alias candidates:
+- `claude-opus-4-8`
+- `claude-opus-4.8`
+- `claude-opus-4-7`
+- `claude-opus-4-6`
+- Provider status: server_previously_advertised_claude_opus_4_8_but_chat_completion_blocked_by_provider_capacity; user_now_also_requested_claude_opus_4_6_and_4_7
 - Response status: pending
 
 ## Model-Specific Notes
 
 - Use base URL https://coderxiaoc.com/v1 through an OpenAI-compatible client.
-- Use the dashed alias if the provider model list still advertises claude-opus-4-8.
+- Try advertised/user-requested Claude aliases in order: claude-opus-4-8, claude-opus-4.8, claude-opus-4-7, claude-opus-4-6.
 - Do not commit the raw API key or response logs containing credentials.
 
 ## Context Case

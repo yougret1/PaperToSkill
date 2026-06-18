@@ -10,13 +10,14 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 28: usage-example verification gate. The AAAI-27 paper package, usage
-examples, deterministic/offline experiments, model-ablation runner, DeepSeek
-follow-up path, local `o200k_base` cost-proxy tables, automated AAAI build
-artifact checks, and a machine-checkable usage-example report are prepared. The
-latest live model recheck still finds `claude-opus-4-8` listed but blocked by
-provider account availability, with no GPT-family alias listed. The active goal
-is not yet complete because live model responses, DeepSeek responses,
+Phase 32: memory compaction and Claude/GPT credential-profile recheck. The
+AAAI-27 paper package, usage examples, deterministic/offline experiments,
+model-ablation runner, DeepSeek follow-up path, local `o200k_base` cost-proxy
+tables, and machine-checkable package/goal gates are prepared. The latest live
+model recheck lists Claude 4.8/4.7/4.6 aliases and GPT-family aliases such as
+`gpt-5.5`/`gpt-5.4` under separate credential profiles, but chat completions
+remain blocked by provider account availability or upstream access. The active
+goal is not yet complete because live model responses, DeepSeek responses,
 human-fidelity annotation, and provider-specific billing or success-per-dollar
 evidence remain pending.
 

@@ -461,7 +461,7 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 159 ready checks, 7
+  `overall_status=ready_with_pending_external_evidence`, 164 ready checks, 7
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
@@ -483,7 +483,7 @@
 
 - Experiment: add a machine-checkable gate for paper-facing usage examples.
 - Main result: `results/reproducibility/usage_example_report.md` reports
-  `overall_status=ready`, 34 ready checks, and 0 failed checks.
+  `overall_status=ready`, 36 ready checks, and 0 failed checks.
 - Checks: usage docs, Codex-style Toolformer skill inputs, model-ablation prompt
   grid, model slots, response slots, and an offline AIDE extracted-text-to-note-
   to-skill chain.
@@ -662,19 +662,27 @@
   and score any saved responses.
 - Main result: `results/model_ablation_prompts/v0/run_report.md` reports
   `overall_status=blocked_by_provider_or_model_availability`, with 2 Claude
-  errors, 2 GPT-family skips, and 0 successful response files.
-- Model catalog: `/v1/models` succeeded for `https://coderxiaoc.com/v1` and
-  listed eight Claude-family IDs, including `claude-opus-4-8`.
+  errors, 2 GPT-family errors, and 0 successful response files.
+- Claude model catalog: `/v1/models` succeeded for
+  `https://coderxiaoc.com/v1` with `AI_SCIENTIST_OPENAI_API_KEY` and listed
+  eight Claude-family IDs, including `claude-opus-4-8`,
+  `claude-opus-4-7`, and `claude-opus-4-6`.
 - Claude result: both selected `claude-opus-4-8` exactly, but chat completions
   failed with HTTP 503, `No available accounts: no available accounts`.
-- GPT-family result: `gpt-5.5` was not listed and no GPT-family fallback model
-  was available, so GPT-family rows were skipped.
+- GPT-family model catalog: `/v1/models` succeeded with
+  `PAPERTOSKILL_GPT_OPENAI_API_KEY` and listed 17 models, including
+  `gpt-5.5`, `gpt-5.4`, `gpt-5.4-mini`, GPT 5.2 variants, and GPT 5.3 Codex
+  variants.
+- GPT-family result: both selected `gpt-5.5` exactly, but chat completions
+  failed with HTTP 502, `Upstream access forbidden, please contact
+  administrator`.
 - DeepSeek result: not attempted; the follow-up slot remains ready for the
   user's later configuration.
 - Response evaluation: `results/model_ablation_prompts/v0/evaluation.md`
   reports 6 total rows, 0 scored rows, and 6 pending rows.
-- Latest recheck: Phase 26 reran the same Claude/GPT-family slots and produced
-  the same provider/model availability outcome.
+- Latest recheck: Phase 32 reran Claude/GPT-family slots with separate
+  credential profiles and produced the current provider/model availability
+  outcome.
 - Practical significance: the project now has a reusable runner/evaluator path
   for Claude/GPT/DeepSeek model ablations and records provider availability
   without committing raw credentials.
@@ -688,7 +696,7 @@
   remain pending.
 - Figure/table: `scripts/run_model_ablation_prompts.py`;
   `scripts/evaluate_model_ablation_responses.py`;
-  `research/run_logs/2026-06-18_phase26_model_ablation_recheck.md`;
+  `research/run_logs/2026-06-18_phase32_model_profile_recheck.md`;
   `results/model_ablation_prompts/v0/run_report.md`;
   `results/model_ablation_prompts/v0/evaluation.md`.
 
@@ -700,8 +708,10 @@
   alias remains `deepseek-to-be-filled`; once a concrete alias and environment
   variables are configured, it follows the same availability, response-save, and
   scoring path as Claude/GPT-family rows.
-- Latest endpoint recheck: Claude still listed `claude-opus-4-8` but failed
-  with HTTP 503 provider-account errors; no GPT-family aliases were listed.
+- Latest endpoint recheck: Claude 4.8/4.7/4.6 aliases and GPT-family aliases
+  such as `gpt-5.5`/`gpt-5.4` are listed under separate credential profiles,
+  but chat completions remain blocked by provider account availability or
+  upstream access.
 - Compared baselines: previous runner behavior required the placeholder include
   flag for the DeepSeek slot even after future configuration.
 - Practical significance: the user can add DeepSeek later by editing
@@ -742,3 +752,28 @@
 - Claim impact: supports keeping the active goal open while showing exactly
   what evidence is still missing.
 - Figure/table: `research/goal_completion_audit.md`.
+
+## Goal Completion Gate
+
+- Experiment: make the active-goal completion audit machine-checkable.
+- Main result: `results/reproducibility/goal_completion_report.md` reports
+  `overall_status=not_complete_pending_external_evidence`, 34 ready checks, 10
+  pending checks, and 0 failed checks.
+- Checks: durable memory, AI-Scientist-v2 dry-run evidence, PaperToSkill
+  prototype and benchmark readiness, AAAI/usage/table/claim gates,
+  Claude/GPT-family ablation attempts and completion status, DeepSeek follow-up
+  readiness, live transfer responses, human-fidelity annotation, and provider
+  billing evidence.
+- Practical significance: the project now has a reusable gate that prevents
+  accidentally marking the full user goal complete while external evidence is
+  still missing.
+- Failure modes: the gate must be updated if the user changes the definition of
+  completion, adds a new required model, or decides to submit an explicitly
+  deterministic/offline paper without waiting for live/human/cost evidence.
+- Limitations: the gate does not collect live model responses, human scores, or
+  provider bills.
+- Claim impact: strengthens completion discipline and keeps the current goal
+  open with explicit pending requirements.
+- Figure/table: `scripts/check_goal_completion.py`;
+  `results/reproducibility/goal_completion_report.md`;
+  `results/reproducibility/goal_completion_report.json`.

@@ -38,6 +38,8 @@ def render_prompt(task: dict[str, Any], model: dict[str, Any], case: dict[str, A
     run_notes = "\n".join(f"- {item}" for item in model.get("run_notes", []))
     if not run_notes:
         run_notes = "- No model-specific run notes."
+    aliases = model.get("model_aliases") or [model["model_alias"]]
+    alias_notes = "\n".join(f"- `{alias}`" for alias in aliases)
 
     return f"""# PaperToSkill Model-Ablation Prompt
 
@@ -45,6 +47,8 @@ def render_prompt(task: dict[str, Any], model: dict[str, Any], case: dict[str, A
 
 - Model ID: `{model["id"]}`
 - Requested or advertised alias: `{model["model_alias"]}`
+- Alias candidates:
+{alias_notes}
 - Provider status: {model.get("provider_status", "pending")}
 - Response status: {model.get("response_status", "pending")}
 
@@ -95,6 +99,7 @@ def build_prompts(task_path: Path, output_dir: Path) -> dict[str, Any]:
                 {
                     "model_id": model["id"],
                     "model_alias": model["model_alias"],
+                    "model_aliases": model.get("model_aliases") or [model["model_alias"]],
                     "provider_status": model.get("provider_status", "pending"),
                     "response_status": model.get("response_status", "pending"),
                     "case_id": case["id"],

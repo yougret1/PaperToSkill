@@ -161,10 +161,13 @@ scores.
 
 We also prepare model-ablation prompt packets, a runner, and a response
 evaluator for Claude Opus 4.8, a GPT-family slot requested as GPT 5.5, and a
-DeepSeek follow-up slot. The Phase 26 live recheck records provider/model
-availability rather than model quality: the endpoint lists `claude-opus-4-8`,
-but Claude prompt calls returned HTTP 503 because no provider accounts were
-available, and no GPT-family alias was listed.
+DeepSeek follow-up slot. The latest live recheck records provider/model
+availability rather than model quality: the Claude credential profile lists
+`claude-opus-4-8`, `claude-opus-4-7`, and `claude-opus-4-6`, but Claude prompt
+calls returned HTTP 503 because no provider accounts were available. The
+separate GPT credential profile lists `gpt-5.5`, `gpt-5.4`, and other
+GPT-family aliases, but `gpt-5.5` prompt calls returned HTTP 502 because
+upstream access was forbidden.
 
 ## 5. Results
 
@@ -207,7 +210,7 @@ records from the PaperToSkill development process. This archive supports the
 claim that failed branches are preserved as inspectable provenance. It is not
 evidence that failure recording improves live task outcomes.
 
-The reproducibility package checker reports 159 ready checks, 7 pending
+The reproducibility package checker reports 164 ready checks, 7 pending
 external-evidence checks, and 0 failed checks. The pending checks correspond to
 the four live transfer response sets, human-fidelity annotation status,
 model-ablation response files, and completed model-ablation evaluation. This
@@ -216,10 +219,10 @@ or human evaluation.
 
 The model-ablation runner/evaluator is executable, but the current evidence is
 blocked rather than scored. The latest run report records two Claude errors
-with `claude-opus-4-8`, two skipped GPT-family rows because no GPT aliases were
-available, zero saved response files, and six pending evaluation rows across
-Claude, GPT-family, and DeepSeek slots. These rows should not be interpreted as
-negative quality evidence for any model.
+with `claude-opus-4-8`, two GPT-family errors with `gpt-5.5`, zero saved
+response files, and six pending evaluation rows across Claude, GPT-family, and
+DeepSeek slots. These rows should not be interpreted as negative quality
+evidence for any model.
 
 Phases 19-20 evaluate the automatic note scaffold separately on Toolformer and
 AIDE. The Toolformer auto-note-derived skill scores 20/20 on the deterministic
@@ -263,8 +266,8 @@ deterministic and partly lexical, so they can over-credit exact matches or
 under-credit valid paraphrases. Third, live cross-harness execution has not
 completed because the provided remote endpoint returned service errors during
 chat-completion tests. Fourth, model ablations were attempted but not completed
-because Claude account capacity was unavailable and the endpoint did not list a
-GPT-family model. Fifth, human-fidelity packets, a blank annotation template,
+because Claude account capacity was unavailable and GPT upstream access was
+forbidden. Fifth, human-fidelity packets, a blank annotation template,
 and a summary script are prepared, but no independent annotations have been
 completed. Sixth, compactness is measured by word count, deterministic
 character proxy, and local tokenizer-aware input-token proxy, not by
@@ -285,7 +288,7 @@ PaperToSkill turns paper-derived procedural knowledge into portable,
 human-editable skills. In a four-paper benchmark, generated skills are compact,
 source-grounded, structurally valid, and more operationally complete than short
 summary baselines under deterministic evaluation. The next stage is to re-run
-the prepared live prompt packets when provider capacity and GPT-family aliases
+the prepared live prompt packets when provider capacity and GPT upstream access
 are available, add the user's DeepSeek slot, run human fidelity review, compute
 provider-specific price costs, and test papers whose contributions are less naturally
 procedural.

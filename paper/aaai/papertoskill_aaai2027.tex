@@ -191,12 +191,14 @@ loading a generated skill in a Codex-style harness, generating an automatic
 note scaffold from extracted text, and building model-ablation prompts. The
 model-ablation protocol produces a prompt grid for Claude Opus 4.8, a
 GPT-family slot requested as GPT 5.5, and a DeepSeek follow-up slot. The
-Phase 26 live recheck found that the provided endpoint advertised the dashed
-Claude alias \texttt{claude-opus-4-8}, but both Claude prompt calls failed with
-HTTP 503 because no provider accounts were available. The same model catalog
-did not list \texttt{gpt-5.5} or any GPT-family fallback model, so GPT-family
-rows were skipped as unavailable. Therefore, the paper treats model ablations
-as attempted but blocked by provider/model availability rather than completed
+latest live recheck found that the Claude credential profile advertised
+\texttt{claude-opus-4-8}, \texttt{claude-opus-4-7}, and
+\texttt{claude-opus-4-6}, but both Claude prompt calls failed with HTTP 503
+because no provider accounts were available. The separate GPT credential
+profile advertised \texttt{gpt-5.5}, \texttt{gpt-5.4}, and other GPT-family
+aliases, but both \texttt{gpt-5.5} prompt calls failed with HTTP 502 because
+upstream access was forbidden. Therefore, the paper treats model ablations as
+attempted but blocked by provider/model availability rather than completed
 evidence.
 
 \section{Discussion}

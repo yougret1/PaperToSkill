@@ -81,6 +81,9 @@ CORE_FILES = {
     "paper_claim_checker": "scripts/check_paper_claims.py",
     "paper_claim_report_json": "results/reproducibility/paper_claim_report.json",
     "paper_claim_report_md": "results/reproducibility/paper_claim_report.md",
+    "goal_completion_checker": "scripts/check_goal_completion.py",
+    "goal_completion_report_json": "results/reproducibility/goal_completion_report.json",
+    "goal_completion_report_md": "results/reproducibility/goal_completion_report.md",
     "usage_examples_readme": "examples/usage/README.md",
     "usage_example_codex_skill": "examples/usage/codex_skill_usage.md",
     "usage_example_auto_note": "examples/usage/auto_note_scaffold_usage.md",
@@ -471,6 +474,45 @@ def paper_claim_checks(root: Path) -> list[Check]:
     return checks
 
 
+def goal_completion_checks(root: Path) -> list[Check]:
+    checks: list[Check] = []
+    report_path = root / "results/reproducibility/goal_completion_report.json"
+    if not report_path.exists():
+        return checks
+    report = load_json(report_path)
+    status = "ready" if report.get("overall_status") == "not_complete_pending_external_evidence" else "fail"
+    counts = report.get("status_counts", {})
+    detail = f"overall={report.get('overall_status')}; counts={counts}"
+    checks.append(Check("goal_completion_report_ready", status, detail, str(report_path.relative_to(root))))
+    check_statuses = {check.get("id"): check.get("status") for check in report.get("checks", [])}
+    required_statuses = {
+        "active_goal_complete": "pending",
+        "aaai_package_gate_ready": "ready",
+        "usage_example_gate_ready": "ready",
+        "claude_opus_4_8_ablation_attempted": "ready",
+        "claude_opus_4_8_ablation_complete": "pending",
+        "gpt_family_ablation_complete": "pending",
+        "deepseek_followup_process_ready": "ready",
+        "deepseek_followup_response_complete": "pending",
+        "human_fidelity_annotation_complete": "pending",
+        "provider_billing_evidence_complete": "pending",
+    }
+    mismatches = [
+        f"{check_id}={check_statuses.get(check_id)}"
+        for check_id, expected_status in required_statuses.items()
+        if check_statuses.get(check_id) != expected_status
+    ]
+    checks.append(
+        Check(
+            "goal_completion_core_checks_ready",
+            "ready" if not mismatches else "fail",
+            "core completion boundaries ready" if not mismatches else "mismatches=" + ",".join(mismatches),
+            str(report_path.relative_to(root)),
+        )
+    )
+    return checks
+
+
 def usage_example_checks(root: Path) -> list[Check]:
     checks: list[Check] = []
     report_path = root / "results/reproducibility/usage_example_report.json"
@@ -486,6 +528,8 @@ def usage_example_checks(root: Path) -> list[Check]:
         "codex_toolformer_prompt",
         "usage_model_ablation_prompt_grid",
         "usage_model_ablation_response_slots",
+        "usage_model_ablation_gpt_profile",
+        "usage_model_ablation_claude_alias_candidates",
         "usage_auto_note_example_rubric_score",
         "usage_auto_note_example_selected_windows",
     }
@@ -633,6 +677,7 @@ def build_report(root: Path) -> dict[str, Any]:
     checks.extend(aaai_package_checks(root))
     checks.extend(paper_table_checks(root))
     checks.extend(paper_claim_checks(root))
+    checks.extend(goal_completion_checks(root))
     checks.extend(usage_example_checks(root))
     checks.extend(auto_note_checks(root))
     checks.extend(model_ablation_checks(root))

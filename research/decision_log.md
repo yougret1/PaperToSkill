@@ -224,3 +224,25 @@
   positive claims in the AAAI manuscript and draft before they reach a
   submission package.
 - Status: accepted for Phase 30.
+
+## 2026-06-18: Make Active-Goal Completion Machine-Checkable
+
+- Decision: add `scripts/check_goal_completion.py`, generate a goal-completion
+  report, and require that report from the reproducibility package checker.
+- Rationale: the active user goal spans memory, AI-Scientist-v2 usage, AAAI
+  packaging, usage examples, Claude/GPT/DeepSeek ablations, failure branches,
+  and cost evidence. A narrative audit is useful but easy to stale; a reusable
+  gate can prove which requirements are locally ready and which remain pending
+  external evidence before the project is marked complete.
+- Status: accepted for Phase 31.
+
+## 2026-06-18: Separate Claude And GPT Credential Profiles
+
+- Decision: keep the Claude-family slot on `AI_SCIENTIST_OPENAI_*` variables
+  and move the GPT-family slot to `PAPERTOSKILL_GPT_OPENAI_*` variables, with
+  explicit alias candidates recorded in the prompt index.
+- Rationale: the user supplied a separate GPT-family credential profile after
+  earlier checks used the Claude/shared profile and saw no GPT aliases. The
+  runner must preserve model catalogs per credential profile even when the base
+  URL is the same, otherwise evidence for one profile can overwrite the other.
+- Status: accepted for Phase 32.
