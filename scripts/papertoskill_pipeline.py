@@ -10,6 +10,8 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
+import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -20,11 +22,36 @@ import papertoskill_note_from_text
 
 def default_paths(output_dir: Path, paper_id: str) -> dict[str, Path]:
     return {
+        "extracted_text": output_dir / "extracted_text" / f"{paper_id}.txt",
         "note": output_dir / "notes" / f"{paper_id}_auto_note.md",
         "note_report": output_dir / "reports" / f"{paper_id}_note_scaffold.json",
         "skill_dir": output_dir / "skills" / paper_id,
         "evaluation": output_dir / "reports" / f"{paper_id}_rubric.json",
         "manifest": output_dir / "manifest.json",
+    }
+
+
+def prepare_source(source: Path, paths: dict[str, Path]) -> tuple[Path, dict[str, Any]]:
+    if source.suffix.lower() != ".pdf":
+        return source, {"input_type": "text", "original_source": str(source), "text_source": str(source)}
+
+    pdftotext = shutil.which("pdftotext")
+    if not pdftotext:
+        raise RuntimeError("pdftotext is required for PDF input but was not found on PATH")
+
+    text_path = paths["extracted_text"]
+    text_path.parent.mkdir(parents=True, exist_ok=True)
+    subprocess.run(
+        [pdftotext, "-layout", str(source), str(text_path)],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return text_path, {
+        "input_type": "pdf",
+        "original_source": str(source),
+        "text_source": str(text_path),
+        "text_extractor": "pdftotext -layout",
     }
 
 
@@ -40,9 +67,10 @@ def run_pipeline(
 ) -> dict[str, Any]:
     inferred_paper_id = paper_id or source.stem
     paths = default_paths(output_dir, inferred_paper_id)
+    text_source, source_info = prepare_source(source, paths)
 
     note_report = papertoskill_note_from_text.write_outputs(
-        source,
+        text_source,
         paths["note"],
         inferred_paper_id,
         title,
@@ -62,11 +90,13 @@ def run_pipeline(
     manifest = {
         "schema_version": "0.1",
         "source": str(source),
+        "source_info": source_info,
         "paper_id": inferred_paper_id,
         "title": note_report["title"],
         "profile": profile,
         "rubric": str(rubric),
         "outputs": {
+            "extracted_text": str(paths["extracted_text"]) if source_info["input_type"] == "pdf" else None,
             "note": str(paths["note"]),
             "note_report": str(paths["note_report"]),
             "skill": str(paths["skill_dir"] / "SKILL.md"),
@@ -103,7 +133,7 @@ def run_pipeline(
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run the local PaperToSkill text-to-skill pipeline.")
-    parser.add_argument("--source", required=True, type=Path, help="Extracted paper text path.")
+    parser.add_argument("--source", required=True, type=Path, help="Extracted paper text path, or a PDF when pdftotext is available.")
     parser.add_argument("--output-dir", required=True, type=Path, help="Directory for note, skill, reports, and manifest.")
     parser.add_argument("--paper-id", help="Optional paper identifier. Defaults to source stem.")
     parser.add_argument("--title", help="Optional paper title.")
@@ -122,15 +152,18 @@ def main() -> int:
     if not args.rubric.exists():
         parser.error(f"Rubric file not found: {args.rubric}")
 
-    manifest = run_pipeline(
-        source=args.source,
-        output_dir=args.output_dir,
-        paper_id=args.paper_id,
-        title=args.title,
-        profile=args.profile,
-        skill_name=args.skill_name,
-        rubric=args.rubric,
-    )
+    try:
+        manifest = run_pipeline(
+            source=args.source,
+            output_dir=args.output_dir,
+            paper_id=args.paper_id,
+            title=args.title,
+            profile=args.profile,
+            skill_name=args.skill_name,
+            rubric=args.rubric,
+        )
+    except (RuntimeError, subprocess.CalledProcessError) as exc:
+        parser.error(str(exc))
     print(json.dumps(manifest, indent=2, ensure_ascii=False))
     return 0
 

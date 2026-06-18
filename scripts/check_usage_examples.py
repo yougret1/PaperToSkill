@@ -28,6 +28,7 @@ CODEX_USAGE_INPUTS = {
 
 AUTO_NOTE_USAGE_INPUTS = {
     "auto_note_source_text": "papers/extracted/aide.txt",
+    "pipeline_pdf_source": "paper/aaai/papertoskill_aaai2027.pdf",
     "auto_note_rubric": "benchmarks/rubric_aide_v0.json",
     "auto_note_script": "scripts/papertoskill_note_from_text.py",
     "extract_script": "scripts/papertoskill_extract.py",
@@ -257,6 +258,24 @@ def run_auto_note_example(root: Path) -> tuple[list[Check], dict[str, Any]]:
                 str(rubric_path),
             ],
         ]
+        pdf_source = root / "paper/aaai/papertoskill_aaai2027.pdf"
+        if pdf_source.exists():
+            commands.append(
+                [
+                    sys.executable,
+                    "scripts/papertoskill_pipeline.py",
+                    "--source",
+                    "paper/aaai/papertoskill_aaai2027.pdf",
+                    "--output-dir",
+                    str(tmp_path / "pdf_pipeline"),
+                    "--paper-id",
+                    "papertoskill_pdf_usage_pipeline",
+                    "--title",
+                    "PaperToSkill",
+                    "--skill-name",
+                    "papertoskill-pdf-usage-pipeline",
+                ]
+            )
         for command in commands:
             run_command(command, root)
 
@@ -265,7 +284,9 @@ def run_auto_note_example(root: Path) -> tuple[list[Check], dict[str, Any]]:
         skill_path = skill_dir / "SKILL.md"
         source_map_path = skill_dir / "references/source_map.json"
         pipeline_manifest_path = tmp_path / "pipeline" / "manifest.json"
+        pdf_pipeline_manifest_path = tmp_path / "pdf_pipeline" / "manifest.json"
         pipeline_manifest = load_json(pipeline_manifest_path)
+        pdf_pipeline_manifest = load_json(pdf_pipeline_manifest_path) if pdf_pipeline_manifest_path.exists() else {}
         score = float(rubric.get("score", 0))
         max_score = float(rubric.get("max_score", 20))
         selected = note_report.get("selected", {})
@@ -322,6 +343,18 @@ def run_auto_note_example(root: Path) -> tuple[list[Check], dict[str, Any]]:
                 f"{pipeline_manifest.get('score', {}).get('value')}/{pipeline_manifest.get('score', {}).get('max_score')}",
                 "temporary/pipeline/manifest.json",
             ),
+            Check(
+                "usage_pdf_pipeline_example_manifest_created",
+                "ready" if pdf_pipeline_manifest_path.exists() else "fail",
+                "created in temporary directory",
+                "temporary/pdf_pipeline/manifest.json",
+            ),
+            Check(
+                "usage_pdf_pipeline_example_text_extracted",
+                "ready" if pdf_pipeline_manifest.get("source_info", {}).get("input_type") == "pdf" and pdf_pipeline_manifest.get("outputs", {}).get("extracted_text") else "fail",
+                pdf_pipeline_manifest.get("source_info", {}).get("text_extractor", "missing"),
+                "temporary/pdf_pipeline/manifest.json",
+            ),
         ]
         sample = {
             "note_report": {
@@ -340,6 +373,11 @@ def run_auto_note_example(root: Path) -> tuple[list[Check], dict[str, Any]]:
                 "manifest": "temporary/pipeline/manifest.json",
                 "score": pipeline_manifest.get("score", {}).get("value"),
                 "max_score": pipeline_manifest.get("score", {}).get("max_score"),
+            },
+            "pdf_pipeline": {
+                "manifest": "temporary/pdf_pipeline/manifest.json",
+                "input_type": pdf_pipeline_manifest.get("source_info", {}).get("input_type"),
+                "text_extractor": pdf_pipeline_manifest.get("source_info", {}).get("text_extractor"),
             },
         }
         return checks, sample
@@ -366,8 +404,9 @@ def build_report(root: Path, *, run_examples: bool = True) -> dict[str, Any]:
     return {
         "schema_version": "0.1",
         "evidence_boundary": (
-            "Checks local usage-example files, input artifacts, prompt/response slots, and an offline "
-            "auto-note-to-skill example chain. It does not execute live model calls or score model responses."
+            "Checks local usage-example files, input artifacts, prompt/response slots, an offline "
+            "auto-note-to-skill example chain, and a local PDF-input pipeline smoke run. It does not "
+            "execute live model calls or score model responses."
         ),
         "overall_status": overall,
         "status_counts": status_counts,
@@ -394,8 +433,9 @@ def write_markdown(path: Path, report: dict[str, Any]) -> None:
         "# Usage Example Report",
         "",
         "Evidence boundary: this report checks local usage-example files and runs "
-        "an offline auto-note-to-skill example chain. It does not execute live "
-        "model calls or score model responses.",
+        "an offline auto-note-to-skill example chain plus a local PDF-input "
+        "pipeline smoke run. It does not execute live model calls or score model "
+        "responses.",
         "",
         f"- Overall status: {report['overall_status']}",
         f"- Ready checks: {counts.get('ready', 0)}",

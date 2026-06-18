@@ -1,9 +1,9 @@
 # Usage Example Report
 
-Evidence boundary: this report checks local usage-example files and runs an offline auto-note-to-skill example chain. It does not execute live model calls or score model responses.
+Evidence boundary: this report checks local usage-example files and runs an offline auto-note-to-skill example chain plus a local PDF-input pipeline smoke run. It does not execute live model calls or score model responses.
 
 - Overall status: ready
-- Ready checks: 39
+- Ready checks: 42
 - Failed checks: 0
 
 ## Checks
@@ -18,6 +18,7 @@ Evidence boundary: this report checks local usage-example files and runs an offl
 | codex_toolformer_source_map | ready | present | generated_skills/toolformer/references/source_map.json |
 | codex_toolformer_prompt | ready | present | results/live_transfer_prompts/toolformer_v0/codex_skill__full_skill.md |
 | auto_note_source_text | ready | present | papers/extracted/aide.txt |
+| pipeline_pdf_source | ready | present | paper/aaai/papertoskill_aaai2027.pdf |
 | auto_note_rubric | ready | present | benchmarks/rubric_aide_v0.json |
 | auto_note_script | ready | present | scripts/papertoskill_note_from_text.py |
 | extract_script | ready | present | scripts/papertoskill_extract.py |
@@ -49,6 +50,8 @@ Evidence boundary: this report checks local usage-example files and runs an offl
 | usage_auto_note_example_rubric_score | ready | 20/20 | temporary/aide_auto_rubric.json |
 | usage_pipeline_example_manifest_created | ready | created in temporary directory | temporary/pipeline/manifest.json |
 | usage_pipeline_example_rubric_score | ready | 20.0/20 | temporary/pipeline/manifest.json |
+| usage_pdf_pipeline_example_manifest_created | ready | created in temporary directory | temporary/pdf_pipeline/manifest.json |
+| usage_pdf_pipeline_example_text_extracted | ready | pdftotext -layout | temporary/pdf_pipeline/manifest.json |
 
 ## Offline Example Sample
 

@@ -107,6 +107,7 @@ CORE_FILES = {
     "phase32_model_profile_recheck_run_log": "research/run_logs/2026-06-18_phase32_model_profile_recheck.md",
     "phase33_alias_retry_model_recheck_run_log": "research/run_logs/2026-06-19_phase33_alias_retry_model_recheck.md",
     "phase34_pipeline_command_run_log": "research/run_logs/2026-06-19_phase34_pipeline_command.md",
+    "phase35_pdf_pipeline_input_run_log": "research/run_logs/2026-06-19_phase35_pdf_pipeline_input.md",
     "result_cards": "results/result_cards.md",
 }
 
@@ -537,6 +538,8 @@ def usage_example_checks(root: Path) -> list[Check]:
         "usage_model_ablation_claude_alias_candidates",
         "usage_auto_note_example_rubric_score",
         "usage_auto_note_example_selected_windows",
+        "usage_pdf_pipeline_example_manifest_created",
+        "usage_pdf_pipeline_example_text_extracted",
     }
     missing = sorted(required_ready - ready_ids)
     checks.append(

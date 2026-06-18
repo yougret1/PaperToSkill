@@ -461,7 +461,7 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 169 ready checks, 7
+  `overall_status=ready_with_pending_external_evidence`, 170 ready checks, 7
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
@@ -483,15 +483,19 @@
 
 - Experiment: add a machine-checkable gate for paper-facing usage examples.
 - Main result: `results/reproducibility/usage_example_report.md` reports
-  `overall_status=ready`, 39 ready checks, and 0 failed checks.
+  `overall_status=ready`, 42 ready checks, and 0 failed checks.
 - Checks: usage docs, Codex-style Toolformer skill inputs, model-ablation prompt
   grid, model slots, response slots, an offline AIDE extracted-text-to-note-to-
-  skill chain, and a one-command AIDE pipeline run.
+  skill chain, a one-command AIDE pipeline run, and a direct-PDF pipeline smoke
+  run.
 - Offline example: the temporary AIDE chain selected 6 method windows, 6
   experiment windows, and 5 limitation windows, then produced a generated skill
   scoring 20/20 on the AIDE deterministic rubric.
 - Pipeline example: the temporary one-command AIDE pipeline manifest produced a
   note, source map, skill, and rubric report, also scoring 20/20.
+- PDF pipeline smoke example: the temporary PDF pipeline run extracts text from
+  `paper/aaai/papertoskill_aaai2027.pdf` with `pdftotext -layout` and records
+  the extracted text path in the manifest.
 - Practical significance: the experiments section now has examples that are not
   only described in Markdown but also locally checked for runnable inputs and
   output slots.
@@ -500,7 +504,7 @@
 - Limitations: live response files, response scoring, and user-facing
   qualitative evaluation remain pending.
 - Claim impact: strengthens the local usage-example readiness claim while
-  preserving the live-model evidence boundary.
+  preserving the live-model and arbitrary-PDF automation evidence boundaries.
 - Figure/table: `scripts/check_usage_examples.py`;
   `results/reproducibility/usage_example_report.md`;
   `results/reproducibility/usage_example_report.json`.

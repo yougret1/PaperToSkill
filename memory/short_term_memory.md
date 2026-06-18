@@ -23,7 +23,7 @@ Do not commit raw keys. Use shell environment variables for live checks.
 
 ## Current Worktree State
 
-Phase 34 local pipeline work is in progress. On resume, check `git status` and
+Phase 35 local pipeline work is in progress. On resume, check `git status` and
 `git log -1 --oneline` to see whether the verified changes are already saved to
 `origin/main`.
 
@@ -47,6 +47,9 @@ Implemented locally:
 - Phase 34 added `scripts/papertoskill_pipeline.py`, a one-command local
   extracted-text-to-note-to-skill-to-evaluation pipeline, plus a usage-gate
   temporary AIDE pipeline example.
+- Phase 35 extends the pipeline to accept a local PDF source when
+  `pdftotext -layout` is available, writes extracted text under the output
+  directory, and records PDF source metadata in the manifest.
 
 Current generated report status:
 
@@ -55,15 +58,15 @@ Current generated report status:
 - Goal-completion report:
   `not_complete_pending_external_evidence`, 35 ready, 10 pending, 0 failed.
 - Reproducibility package:
-  `ready_with_pending_external_evidence`, 169 ready, 7 pending, 0 failed.
+  `ready_with_pending_external_evidence`, 170 ready, 7 pending, 0 failed.
 - Usage examples:
-  ready, 39 ready, 0 failed.
+  ready, 42 ready, 0 failed.
 - Paper claims and tables:
   ready, 20/76 ready respectively, 0 failed.
 
 Latest verification before commit:
 
-- `python -m unittest discover -s tests -v`: 46 tests passed after Phase 34.
+- `python -m unittest discover -s tests -v`: 47 tests passed after Phase 35.
 - `python scripts\check_aaai_package.py --strict`: passed.
 - `python scripts\check_goal_completion.py --strict`: passed.
 - `python scripts\check_reproducibility_package.py --strict`: passed.
@@ -103,7 +106,7 @@ Stable evidence retained from earlier phases:
 
 ## Next Actions
 
-1. Check whether Phase 34 is already committed/pushed; if not, commit and
+1. Check whether Phase 35 is already committed/pushed; if not, commit and
    push the verified changes.
 2. If Claude/GPT chat completions later work, run the prepared model-ablation prompts,
    save responses, score them, and update paper/reports.

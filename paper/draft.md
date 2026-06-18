@@ -210,7 +210,7 @@ records from the PaperToSkill development process. This archive supports the
 claim that failed branches are preserved as inspectable provenance. It is not
 evidence that failure recording improves live task outcomes.
 
-The reproducibility package checker reports 169 ready checks, 7 pending
+The reproducibility package checker reports 170 ready checks, 7 pending
 external-evidence checks, and 0 failed checks. The pending checks correspond to
 the four live transfer response sets, human-fidelity annotation status,
 model-ablation response files, and completed model-ablation evaluation. This
@@ -233,10 +233,11 @@ readiness, and 1.0 source-span support with zero invalid ranges. These skills
 are 1,179 and 998 words respectively, both under the 1,200-word compactness
 budget. Phase 34 packages this extracted-text path as a local one-command
 pipeline that writes a manifest, note, source map, skill, and rubric report;
-the temporary AIDE pipeline usage example scores 20/20. The result supports the
-narrower claim that extracted text can seed auditable note scaffolds; it does
-not establish robust arbitrary-PDF
-automation.
+the temporary AIDE pipeline usage example scores 20/20. Phase 35 adds a local
+direct-PDF smoke path through `pdftotext -layout` and records the extracted
+text file in the manifest. The result supports the narrower claim that
+extracted text, and smoke-tested local PDF extraction, can seed auditable note
+scaffolds; it does not establish robust arbitrary-PDF automation.
 
 ## 6. Discussion
 

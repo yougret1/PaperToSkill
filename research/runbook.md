@@ -29,6 +29,18 @@ Evidence boundary: this command composes deterministic local scaffold steps. It
 does not prove human semantic fidelity, live harness success, or reliable
 arbitrary-PDF automation.
 
+PDF input is supported when `pdftotext` is available on `PATH`; the manifest
+records the generated extracted-text file:
+
+```powershell
+python scripts\papertoskill_pipeline.py `
+  --source paper\aaai\papertoskill_aaai2027.pdf `
+  --output-dir results\pipeline_examples\papertoskill_pdf `
+  --paper-id papertoskill_pdf `
+  --title "PaperToSkill" `
+  --skill-name papertoskill-pdf-pipeline
+```
+
 ## AI-Scientist-v2 Environment
 
 Recommended for stable runs:
@@ -162,9 +174,9 @@ python scripts\check_usage_examples.py `
 ```
 
 This checker validates the Codex-style skill usage files, the model-ablation
-prompt grid and response slots, and an offline AIDE extracted-text-to-note-to-
-skill chain in a temporary directory. It does not execute Claude/GPT/DeepSeek
-calls or score model responses.
+prompt grid and response slots, an offline AIDE extracted-text-to-note-to-skill
+chain, and a PDF-input pipeline smoke run in a temporary directory. It does not
+execute Claude/GPT/DeepSeek calls or score model responses.
 
 ## AAAI Paper Package
 

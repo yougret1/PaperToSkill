@@ -1280,3 +1280,33 @@ Evidence boundary:
 - Phase 34 improves the local user-facing conversion workflow.
 - It does not prove human semantic fidelity, live harness success, or reliable
   arbitrary-PDF automation.
+
+## 2026-06-19 Phase 35
+
+Actions:
+
+- Extended `scripts/papertoskill_pipeline.py` so the local pipeline accepts a
+  `.pdf` source when `pdftotext -layout` is available.
+- Added manifest source metadata for PDF runs: original source, generated text
+  source, and text extractor.
+- Added PDF-source coverage to `tests/test_papertoskill_pipeline.py` using the
+  local AAAI PDF package when available.
+- Updated `scripts/check_usage_examples.py` so the usage gate runs a temporary
+  PDF pipeline smoke example and checks manifest/text-extraction evidence.
+- Updated the auto-note usage example, runbook, artifact map, claim boundary
+  docs, result cards, and memory.
+
+Results:
+
+- The PDF smoke path extracts text from
+  `paper/aaai/papertoskill_aaai2027.pdf`, records `pdftotext -layout` in the
+  manifest, and creates the expected pipeline artifacts.
+- Usage-example report status remains `ready`, now with 42 ready checks and 0
+  failed checks.
+- The full unittest suite now has 47 tests.
+
+Evidence boundary:
+
+- Phase 35 supports local direct-PDF pipeline smoke execution only. It does not
+  prove reliable arbitrary-PDF automation, human semantic fidelity, live
+  harness success, provider billing, or completed model ablations.

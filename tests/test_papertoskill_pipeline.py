@@ -1,4 +1,5 @@
 import json
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -79,6 +80,8 @@ Smaller models do not always benefit; the method depends on model size.
             self.assertIn("not prove human semantic fidelity", manifest["evidence_boundary"])
 
             for output_path in manifest["outputs"].values():
+                if output_path is None:
+                    continue
                 self.assertTrue(Path(output_path).exists(), output_path)
 
             skill = Path(manifest["outputs"]["skill"]).read_text(encoding="utf-8")
@@ -87,6 +90,43 @@ Smaller models do not always benefit; the method depends on model size.
 
             note_report = json.loads(Path(manifest["outputs"]["note_report"]).read_text(encoding="utf-8"))
             self.assertGreaterEqual(len(note_report["selected"]["methods"]), 4)
+
+    def test_cli_accepts_pdf_source_when_pdftotext_is_available(self):
+        if not shutil.which("pdftotext"):
+            self.skipTest("pdftotext is not available")
+        source = ROOT / "paper" / "aaai" / "papertoskill_aaai2027.pdf"
+        if not source.exists():
+            self.skipTest("AAAI PDF is not available")
+
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            output_dir = tmp_path / "pipeline"
+
+            result = subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--source",
+                    str(source),
+                    "--output-dir",
+                    str(output_dir),
+                    "--paper-id",
+                    "papertoskill_pdf",
+                    "--skill-name",
+                    "papertoskill-pdf-pipeline",
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            manifest = json.loads(result.stdout)
+            self.assertEqual("pdf", manifest["source_info"]["input_type"])
+            self.assertEqual("pdftotext -layout", manifest["source_info"]["text_extractor"])
+            extracted_text = Path(manifest["outputs"]["extracted_text"])
+            self.assertTrue(extracted_text.exists())
+            self.assertIn("PaperToSkill", extracted_text.read_text(encoding="utf-8"))
+            self.assertGreaterEqual(manifest["score"]["value"], 6)
 
 
 if __name__ == "__main__":

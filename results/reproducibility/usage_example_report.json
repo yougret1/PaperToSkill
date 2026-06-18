@@ -1,9 +1,9 @@
 {
   "schema_version": "0.1",
-  "evidence_boundary": "Checks local usage-example files, input artifacts, prompt/response slots, and an offline auto-note-to-skill example chain. It does not execute live model calls or score model responses.",
+  "evidence_boundary": "Checks local usage-example files, input artifacts, prompt/response slots, an offline auto-note-to-skill example chain, and a local PDF-input pipeline smoke run. It does not execute live model calls or score model responses.",
   "overall_status": "ready",
   "status_counts": {
-    "ready": 39,
+    "ready": 42,
     "fail": 0
   },
   "checks": [
@@ -54,6 +54,12 @@
       "status": "ready",
       "detail": "present",
       "evidence": "papers/extracted/aide.txt"
+    },
+    {
+      "id": "pipeline_pdf_source",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "paper/aaai/papertoskill_aaai2027.pdf"
     },
     {
       "id": "auto_note_rubric",
@@ -240,6 +246,18 @@
       "status": "ready",
       "detail": "20.0/20",
       "evidence": "temporary/pipeline/manifest.json"
+    },
+    {
+      "id": "usage_pdf_pipeline_example_manifest_created",
+      "status": "ready",
+      "detail": "created in temporary directory",
+      "evidence": "temporary/pdf_pipeline/manifest.json"
+    },
+    {
+      "id": "usage_pdf_pipeline_example_text_extracted",
+      "status": "ready",
+      "detail": "pdftotext -layout",
+      "evidence": "temporary/pdf_pipeline/manifest.json"
     }
   ],
   "auto_note_example_sample": {
@@ -259,6 +277,11 @@
       "manifest": "temporary/pipeline/manifest.json",
       "score": 20.0,
       "max_score": 20
+    },
+    "pdf_pipeline": {
+      "manifest": "temporary/pdf_pipeline/manifest.json",
+      "input_type": "pdf",
+      "text_extractor": "pdftotext -layout"
     }
   }
 }

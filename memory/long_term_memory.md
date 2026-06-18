@@ -84,7 +84,7 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 169 ready checks, 7 pending
+  reports `ready_with_pending_external_evidence`, 170 ready checks, 7 pending
   checks, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
@@ -95,7 +95,7 @@ Use these as entry points instead of searching the whole repo first:
   reports ready, 17 ready checks, 0 failed checks.
 - Usage examples:
   `results/reproducibility/usage_example_report.md`
-  reports ready, 39 ready checks, 0 failed checks.
+  reports ready, 42 ready checks, 0 failed checks.
 - Paper tables:
   `results/reproducibility/paper_table_report.md`
   reports ready, 76 ready checks, 0 failed checks.
@@ -148,6 +148,7 @@ DeepSeek:
 | Auto-note scaffold | Toolformer auto-note initially mixed two-column PDF text/references and exceeded compactness. | Preserve raw line spacing, split likely columns, prefer keyword-bearing column, shorten snippets in `scripts/papertoskill_note_from_text.py`. |
 | AIDE auto-note | Toolformer profile was semantically poor on AIDE; figure captions and related-work snippets leaked in. | Added `--profile aide`, target-section-first selection, overlap exception for shared AIDE caveat. |
 | Pipeline ergonomics | The extracted-text-to-note-to-skill workflow required three manual commands. | Added `scripts/papertoskill_pipeline.py` to write note, skill, source map, rubric report, and manifest in one local command. |
+| PDF pipeline input | Users needed a smoke-tested direct PDF entry point without claiming robust PDF understanding. | `scripts/papertoskill_pipeline.py` accepts `.pdf` sources through `pdftotext -layout`, records extracted text in the manifest, and remains bounded as local smoke support. |
 | Human fidelity | Blank annotation rows could be mistaken for negative scores. | `scripts/summarize_human_fidelity_annotations.py` marks blanks as pending. |
 | Reproducibility | Local package readiness was conflated with external live/human evidence. | `scripts/check_reproducibility_package.py` uses ready/pending/fail statuses. |
 | AAAI package | File presence was weaker than checking the actual author kit/build state. | `scripts/check_aaai_package.py` checks SHA256, style use, fresh PDF/log/BibTeX, unresolved markers. |

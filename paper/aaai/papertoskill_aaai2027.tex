@@ -181,14 +181,17 @@ source-span support with zero invalid ranges. The AIDE auto-note-derived skill
 scores 20/20, 8.467/10 on context coverage, 9.5/10 on offline transfer
 readiness, and 1.0 source-span support with zero invalid ranges
 (Table~\ref{tab:auto-note}). These results support the narrower claim that
-extracted text can seed auditable note scaffolds; they do not establish robust
+extracted text can seed auditable note scaffolds. The local pipeline also
+includes a direct-PDF smoke path through \texttt{pdftotext -layout} that records
+the generated text source in the manifest, but this does not establish robust
 arbitrary-PDF automation.
 
 \section{Usage Examples and Pending Model Ablations}
 
 The repository includes usage examples for three practical workflows:
 loading a generated skill in a Codex-style harness, generating an automatic
-note scaffold from extracted text, and building model-ablation prompts. The
+note scaffold from extracted text or a smoke-tested PDF source, and building
+model-ablation prompts. The
 model-ablation protocol produces a prompt grid for Claude Opus 4.8, a
 GPT-family slot requested as GPT 5.5, and a DeepSeek follow-up slot. The
 latest live recheck found that the Claude credential profile advertised

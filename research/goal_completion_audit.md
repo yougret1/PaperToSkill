@@ -15,7 +15,7 @@ provider-billing or success-per-dollar evidence remain pending external or
 follow-up work.
 
 Local package status: `results/reproducibility/package_report.md` reports
-`ready_with_pending_external_evidence`, 169 ready checks, 7 pending checks, and
+`ready_with_pending_external_evidence`, 170 ready checks, 7 pending checks, and
 0 failed checks.
 
 Machine-checkable goal status:
@@ -35,7 +35,7 @@ and 0 failed checks.
 | Run or prepare Claude Opus 4.8 ablation. | `benchmarks/model_ablation_v0.json`; prompt packets under `results/model_ablation_prompts/v0/`; runner/evaluator scripts; latest run report shows the runner tried `claude-opus-4-8`, `claude-opus-4-7`, and `claude-opus-4-6`, and all chat completions failed HTTP 503 `No available accounts`. | Attempted, blocked | Re-run `scripts/run_model_ablation_prompts.py` when provider account capacity is available. |
 | Run or prepare GPT 5.5 / GPT-family ablation. | Same model-ablation artifacts; latest run report with the separate GPT key lists `gpt-5.5`, `gpt-5.4`, and other GPT-family aliases; the runner tried `gpt-5.5` and `gpt-5.4`, and both failed HTTP 502 `Upstream access forbidden`. | Attempted, blocked at chat completion | Re-run when GPT upstream access is enabled. Record actual alias used. |
 | Provide DeepSeek-follow-up process for the user. | `deepseek_followup_slot` in `benchmarks/model_ablation_v0.json`; runner now skips only placeholder alias; tests cover placeholder vs configured DeepSeek behavior; usage docs and runbook include DeepSeek steps. | Process ready; model response pending | User fills concrete DeepSeek alias/env vars, rebuilds prompts, runs `--model-id deepseek_followup_slot`, then scores saved responses. |
-| Develop PaperToSkill extraction system. | `scripts/papertoskill_extract.py`; `scripts/papertoskill_note_from_text.py`; `scripts/papertoskill_pipeline.py`; generated skills for four curated papers; source maps; deterministic auto-note scaffold for Toolformer/AIDE; one-command temporary AIDE pipeline example; tests. | Complete for current scoped prototype | Broader arbitrary-PDF automation remains unsupported and should not be claimed. |
+| Develop PaperToSkill extraction system. | `scripts/papertoskill_extract.py`; `scripts/papertoskill_note_from_text.py`; `scripts/papertoskill_pipeline.py`; generated skills for four curated papers; source maps; deterministic auto-note scaffold for Toolformer/AIDE; one-command temporary AIDE pipeline example; local PDF-input smoke path using `pdftotext -layout`; tests. | Complete for current scoped prototype | Broader reliable arbitrary-PDF automation remains unsupported and should not be claimed. |
 | Experiments: main results. | `results/tables/main_results.md`; four-paper deterministic results; generated skills outperform generic and abstract baselines on operational coverage. | Complete for deterministic/offline benchmark | Live task success remains pending. |
 | Experiments: harness-transfer ablation. | `results/tables/transfer_ablation.md`; offline transfer-readiness drops when `Transfer Notes` are removed. | Complete for offline readiness | Live Codex/Claude transfer remains pending. |
 | Experiments: compactness/cost/examples. | `results/tables/context_cost_proxy.md`; `results/tables/context_cost_proxy_tokenizer.md`; `results/tables/compactness_source_grounding.md`; examples under `examples/usage/`. | Complete for character proxy, local tokenizer-aware proxy, and examples | Provider billing, output-token accounting, and success-per-dollar remain pending. |
@@ -65,9 +65,9 @@ and 0 failed checks.
   with 17 ready checks and 0 failed checks; this removes a local package
   uncertainty but not the external model/human/cost evidence blockers.
 - `results/reproducibility/usage_example_report.md`: usage-example gate is
-  ready with 39 ready checks and 0 failed checks; it verifies local examples
-  and a temporary one-command AIDE pipeline run but does not execute live model
-  calls.
+  ready with 42 ready checks and 0 failed checks; it verifies local examples,
+  a temporary one-command AIDE pipeline run, and a direct-PDF pipeline smoke
+  run but does not execute live model calls.
 - `results/reproducibility/paper_table_report.md`: AAAI paper-table gate is
   ready with 76 ready checks and 0 failed checks; it verifies manuscript-table
   consistency but does not add new empirical evidence.

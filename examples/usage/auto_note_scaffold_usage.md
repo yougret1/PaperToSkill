@@ -41,6 +41,19 @@ python scripts\evaluate_skill.py `
   --output results\evaluations\aide_auto_rubric_v0.json
 ```
 
+For a local PDF smoke run, pass a PDF directly. The pipeline uses
+`pdftotext -layout` when available and records the extracted text path in the
+manifest:
+
+```powershell
+python scripts\papertoskill_pipeline.py `
+  --source paper\aaai\papertoskill_aaai2027.pdf `
+  --output-dir results\pipeline_examples\papertoskill_pdf `
+  --paper-id papertoskill_pdf `
+  --title "PaperToSkill" `
+  --skill-name papertoskill-pdf-pipeline
+```
+
 ## Audit Checklist
 
 - Confirm selected line windows point to the intended paper regions.

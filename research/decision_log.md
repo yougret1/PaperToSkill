@@ -246,3 +246,14 @@
   runner must preserve model catalogs per credential profile even when the base
   URL is the same, otherwise evidence for one profile can overwrite the other.
 - Status: accepted for Phase 32.
+
+## 2026-06-19: Add PDF Input Only As A Smoke-Tested Pipeline Path
+
+- Decision: let `scripts/papertoskill_pipeline.py` accept `.pdf` sources by
+  running `pdftotext -layout`, writing the extracted text under the output
+  directory, and recording source metadata in the manifest.
+- Rationale: users naturally try a paper PDF first. This local path improves
+  ergonomics and provenance while preserving the claim boundary that automatic
+  PDF extraction still needs audit and is not reliable arbitrary-PDF
+  understanding.
+- Status: accepted for Phase 35.
