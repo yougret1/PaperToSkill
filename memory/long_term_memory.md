@@ -82,6 +82,10 @@ Initial target contribution categories:
   values in `paper/aaai/papertoskill_tables.tex` match generated CSV sources
   for main results, transfer ablation, tokenizer-aware context proxy, and
   auto-note comparison.
+- `scripts/check_paper_claims.py`: verifies that paper-facing text avoids
+  unsupported overclaims and includes required evidence-boundary statements for
+  curated scope, PDF automation, live transfer, human fidelity, cost proxy, and
+  model-ablation availability.
 - `tests/test_papertoskill_extract.py`: extractor smoke test.
 - `tests/test_evaluate_skill.py`: evaluator smoke test.
 - `generated_skills/`: retained generated examples with source maps.
@@ -189,7 +193,7 @@ Initial target contribution categories:
   paper-reported limitations/failure branches and 6 project-level failure/fix
   records.
 - `results/reproducibility/`: reproducibility package report. Current status is
-  ready with pending external evidence, 153 ready checks, 7 pending checks, and
+  ready with pending external evidence, 159 ready checks, 7 pending checks, and
   0 failed checks.
 - `research/review_report.md` and `research/rebuttal_bank.md`: internal
   review/rebuttal readiness artifacts that map likely reviewer objections to
@@ -208,6 +212,9 @@ Initial target contribution categories:
 - `results/reproducibility/paper_table_report.md/json`: local AAAI
   paper-table consistency report. Current status is ready with 76 ready checks
   and 0 failed checks.
+- `results/reproducibility/paper_claim_report.md/json`: local paper
+  claim-discipline report. Current status is ready with 20 ready checks and 0
+  failed checks.
 - `examples/usage/`: usage examples for Codex-style skill loading,
   extracted-text auto-note-to-skill conversion, and model-ablation execution.
   The local usage-example report is ready with 34 ready checks and 0 failed

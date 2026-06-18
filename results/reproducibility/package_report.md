@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 153
+- Ready checks: 159
 - Pending checks: 7
 - Failed checks: 0
 
@@ -30,6 +30,9 @@ Evidence boundary: this report checks local package completeness and separates p
 | paper_table_checker | ready | present | scripts/check_paper_tables.py |
 | paper_table_report_json | ready | present | results/reproducibility/paper_table_report.json |
 | paper_table_report_md | ready | present | results/reproducibility/paper_table_report.md |
+| paper_claim_checker | ready | present | scripts/check_paper_claims.py |
+| paper_claim_report_json | ready | present | results/reproducibility/paper_claim_report.json |
+| paper_claim_report_md | ready | present | results/reproducibility/paper_claim_report.md |
 | usage_examples_readme | ready | present | examples/usage/README.md |
 | usage_example_codex_skill | ready | present | examples/usage/codex_skill_usage.md |
 | usage_example_auto_note | ready | present | examples/usage/auto_note_scaffold_usage.md |
@@ -48,6 +51,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | phase27_aaai_package_gate_run_log | ready | present | research/run_logs/2026-06-18_phase27_aaai_package_gate.md |
 | phase28_usage_example_gate_run_log | ready | present | research/run_logs/2026-06-18_phase28_usage_example_gate.md |
 | phase29_paper_table_gate_run_log | ready | present | research/run_logs/2026-06-18_phase29_paper_table_gate.md |
+| phase30_paper_claim_gate_run_log | ready | present | research/run_logs/2026-06-18_phase30_paper_claim_gate.md |
 | result_cards | ready | present | results/result_cards.md |
 | main_results_md | ready | present | results/tables/main_results.md |
 | main_results_csv | ready | present | results/tables/main_results.csv |
@@ -126,6 +130,8 @@ Evidence boundary: this report checks local package completeness and separates p
 | aaai_package_core_checks_ready | ready | core checks ready | results\reproducibility\aaai_package_report.json |
 | paper_table_report_ready | ready | overall=ready; counts={'ready': 76, 'fail': 0} | results\reproducibility\paper_table_report.json |
 | paper_table_core_checks_ready | ready | core checks ready | results\reproducibility\paper_table_report.json |
+| paper_claim_report_ready | ready | overall=ready; counts={'ready': 20, 'fail': 0} | results\reproducibility\paper_claim_report.json |
+| paper_claim_core_checks_ready | ready | core checks ready | results\reproducibility\paper_claim_report.json |
 | usage_example_report_ready | ready | overall=ready; counts={'ready': 34, 'fail': 0} | results\reproducibility\usage_example_report.json |
 | usage_example_core_checks_ready | ready | core checks ready | results\reproducibility\usage_example_report.json |
 | toolformer_auto_note_script | ready | present | scripts/papertoskill_note_from_text.py |

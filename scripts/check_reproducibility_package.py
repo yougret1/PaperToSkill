@@ -78,6 +78,9 @@ CORE_FILES = {
     "paper_table_checker": "scripts/check_paper_tables.py",
     "paper_table_report_json": "results/reproducibility/paper_table_report.json",
     "paper_table_report_md": "results/reproducibility/paper_table_report.md",
+    "paper_claim_checker": "scripts/check_paper_claims.py",
+    "paper_claim_report_json": "results/reproducibility/paper_claim_report.json",
+    "paper_claim_report_md": "results/reproducibility/paper_claim_report.md",
     "usage_examples_readme": "examples/usage/README.md",
     "usage_example_codex_skill": "examples/usage/codex_skill_usage.md",
     "usage_example_auto_note": "examples/usage/auto_note_scaffold_usage.md",
@@ -96,6 +99,7 @@ CORE_FILES = {
     "phase27_aaai_package_gate_run_log": "research/run_logs/2026-06-18_phase27_aaai_package_gate.md",
     "phase28_usage_example_gate_run_log": "research/run_logs/2026-06-18_phase28_usage_example_gate.md",
     "phase29_paper_table_gate_run_log": "research/run_logs/2026-06-18_phase29_paper_table_gate.md",
+    "phase30_paper_claim_gate_run_log": "research/run_logs/2026-06-18_phase30_paper_claim_gate.md",
     "result_cards": "results/result_cards.md",
 }
 
@@ -438,6 +442,35 @@ def paper_table_checks(root: Path) -> list[Check]:
     return checks
 
 
+def paper_claim_checks(root: Path) -> list[Check]:
+    checks: list[Check] = []
+    report_path = root / "results/reproducibility/paper_claim_report.json"
+    if not report_path.exists():
+        return checks
+    report = load_json(report_path)
+    status = "ready" if report.get("overall_status") == "ready" else "fail"
+    counts = report.get("status_counts", {})
+    detail = f"overall={report.get('overall_status')}; counts={counts}"
+    checks.append(Check("paper_claim_report_ready", status, detail, str(report_path.relative_to(root))))
+    ready_ids = {check.get("id") for check in report.get("checks", []) if check.get("status") == "ready"}
+    required_ready = {
+        "paper_claim_boundary_curated_scope",
+        "paper_claim_boundary_not_pdf_automation",
+        "paper_claim_boundary_live_transfer_pending",
+        "paper_claim_boundary_model_ablation_blocked",
+    }
+    missing = sorted(required_ready - ready_ids)
+    checks.append(
+        Check(
+            "paper_claim_core_checks_ready",
+            "ready" if not missing else "fail",
+            "core checks ready" if not missing else "missing=" + ",".join(missing),
+            str(report_path.relative_to(root)),
+        )
+    )
+    return checks
+
+
 def usage_example_checks(root: Path) -> list[Check]:
     checks: list[Check] = []
     report_path = root / "results/reproducibility/usage_example_report.json"
@@ -599,6 +632,7 @@ def build_report(root: Path) -> dict[str, Any]:
     checks.extend(failure_archive_checks(root))
     checks.extend(aaai_package_checks(root))
     checks.extend(paper_table_checks(root))
+    checks.extend(paper_claim_checks(root))
     checks.extend(usage_example_checks(root))
     checks.extend(auto_note_checks(root))
     checks.extend(model_ablation_checks(root))

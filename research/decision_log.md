@@ -213,3 +213,14 @@
   copied numbers from drifting away from `results/tables/*.csv` while making
   clear that this is a verification artifact, not new empirical evidence.
 - Status: accepted for Phase 29.
+
+## 2026-06-18: Make Paper Claim Boundaries Machine-Checkable
+
+- Decision: add `scripts/check_paper_claims.py`, generate a claim-discipline
+  report, and require that report from the reproducibility package checker.
+- Rationale: the paper now has multiple pending evidence boundaries: live
+  transfer, human fidelity, provider billing, arbitrary-PDF automation, and
+  Claude/GPT/DeepSeek model ablations. A local text gate can catch unsupported
+  positive claims in the AAAI manuscript and draft before they reach a
+  submission package.
+- Status: accepted for Phase 30.

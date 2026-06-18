@@ -461,7 +461,7 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 147 ready checks, 7
+  `overall_status=ready_with_pending_external_evidence`, 159 ready checks, 7
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
@@ -545,6 +545,30 @@
 - Figure/table: `scripts/check_paper_tables.py`;
   `results/reproducibility/paper_table_report.md`;
   `results/reproducibility/paper_table_report.json`.
+
+## Paper Claim Discipline Gate
+
+- Experiment: add an automated local gate that scans paper-facing text for
+  unsupported overclaims and required evidence-boundary statements.
+- Main result: `results/reproducibility/paper_claim_report.md` reports
+  `overall_status=ready`, 20 ready checks, and 0 failed checks.
+- Checks: absence of unsupported positive claims about arbitrary-PDF
+  automation, live transfer success, human validation, provider billing,
+  completed model ablations, and submission-final status; presence of required
+  boundaries for curated scope, PDF automation, live transfer, human fidelity,
+  cost proxy, and model-ablation availability.
+- Practical significance: the AAAI manuscript and Markdown draft can now fail a
+  local gate if future edits accidentally claim evidence that has not been
+  collected.
+- Failure modes: this is pattern-based text checking and should be updated if
+  the paper adopts new terminology for the same evidence boundaries.
+- Limitations: this does not evaluate paper quality and does not add live
+  model, human-fidelity, provider-billing, or arbitrary-PDF evidence.
+- Claim impact: strengthens claim discipline while preserving all current
+  empirical boundaries.
+- Figure/table: `scripts/check_paper_claims.py`;
+  `results/reproducibility/paper_claim_report.md`;
+  `results/reproducibility/paper_claim_report.json`.
 
 ## Review And Rebuttal Package
 

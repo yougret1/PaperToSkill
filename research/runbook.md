@@ -185,6 +185,20 @@ This checker compares `paper/aaai/papertoskill_tables.tex` against
 `context_cost_proxy_tokenizer.csv`, and `auto_note_comparison.csv`. Passing it
 prevents manuscript-table drift, but does not add new empirical evidence.
 
+Verify that paper-facing text avoids unsupported overclaims and includes the
+required evidence-boundary statements:
+
+```powershell
+python scripts\check_paper_claims.py `
+  --output-json results\reproducibility\paper_claim_report.json `
+  --output-md results\reproducibility\paper_claim_report.md `
+  --strict
+```
+
+This checker scans the AAAI manuscript and Markdown draft, but not
+`paper/claim_checklist.md` because that file intentionally stores unsupported
+phrases as negative examples.
+
 ## AI-Scientist-v2 Dry Run
 
 From `D:\a_work\gitee\ai-scientist-v2`:

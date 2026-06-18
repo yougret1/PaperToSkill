@@ -28,9 +28,14 @@ requested AAAI TeX paper package locally checkable beyond file presence.
 Phase 28 added the usage-example verification gate. The goal was to make the
 experiment usage examples machine-checkable without live model calls.
 
-Phase 29 is the latest local phase: paper-table consistency gate. The goal is
-to make the AAAI manuscript result tables machine-checkable against generated
-CSV result sources.
+Phase 29 added the paper-table consistency gate. The goal was to make the AAAI
+manuscript result tables machine-checkable against generated CSV result
+sources.
+
+Phase 30 adds the paper-claim discipline gate plus endpoint recheck. The goal
+is to keep paper-facing text from overclaiming pending live, human, model,
+provider-billing, or arbitrary-PDF evidence, and it is the next phase-level save
+point after Phase 29.
 
 ## Latest User Request
 
@@ -532,6 +537,27 @@ The user provided the PaperToSkill idea and asked to:
     `context_cost_proxy_tokenizer.csv`, and `auto_note_comparison.csv`.
 - Current reproducibility package report after Phase 29 regeneration:
   `ready_with_pending_external_evidence`, 153 ready checks, 7 pending checks,
+  and 0 failed checks.
+- Phase 30 reran the model-ablation live runner:
+  - `/v1/models` still lists 8 Claude-family model IDs including
+    `claude-opus-4-8`.
+  - Claude rows selected `claude-opus-4-8` exactly but both failed HTTP 503:
+    `No available accounts: no available accounts`.
+  - `gpt-5.5` remains unavailable and no GPT-family fallback models were
+    listed.
+  - No response files were saved; response evaluation remains pending.
+- Phase 30 added `scripts/check_paper_claims.py`,
+  `tests/test_check_paper_claims.py`,
+  `results/reproducibility/paper_claim_report.json`, and
+  `results/reproducibility/paper_claim_report.md`.
+- Phase 30 paper-claim report status:
+  - `overall_status=ready`
+  - 20 ready checks
+  - 0 failed checks
+  - checks scan `paper/aaai/papertoskill_aaai2027.tex` and `paper/draft.md`
+    for unsupported overclaims and required evidence-boundary statements.
+- Current reproducibility package report after Phase 30 regeneration:
+  `ready_with_pending_external_evidence`, 159 ready checks, 7 pending checks,
   and 0 failed checks.
 
 ## Current Blockers / Pending Checks

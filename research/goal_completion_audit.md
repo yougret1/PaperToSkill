@@ -15,7 +15,7 @@ provider-billing or success-per-dollar evidence remain pending external or
 follow-up work.
 
 Local package status: `results/reproducibility/package_report.md` reports
-`ready_with_pending_external_evidence`, 153 ready checks, 7 pending checks, and
+`ready_with_pending_external_evidence`, 159 ready checks, 7 pending checks, and
 0 failed checks.
 
 ## Requirement Audit
@@ -24,8 +24,8 @@ Local package status: `results/reproducibility/package_report.md` reports
 | --- | --- | --- | --- |
 | Maintain durable local memory with at least long-term and short-term files. | `memory/long_term_memory.md`; `memory/short_term_memory.md`; reproducibility checks `memory_long_term` and `memory_short_term` are ready. | Complete locally | Continue reading both memory files after every resume/compaction and update short-term memory after phase changes. |
 | Use `ai-scientist-v2` to refine and develop PaperToSkill. | `ai_scientist_inputs/papertoskill.md`; `ai_scientist_inputs/papertoskill_seed_ideas.json`; AI-Scientist-v2 dry-run recorded in memory and run logs; PaperToSkill repo keeps AI-Scientist-v2 as execution context. | Partially complete | A live AI-Scientist-v2 run remains blocked by the same remote provider account availability. Re-run once the endpoint can serve chat completions or another backend is available. |
-| Save phase-level progress to `yougret1/PaperToSkill.git`. | Recent pushed commits include `0ffc744`, `a2a426e`, and `710bdcd`; local repo was clean after Phase 26. | Complete through current pushed phase | Keep committing/pushing phase-level increments. |
-| Use official AAAI TeX template for final paper. | `paper/aaai/AuthorKit27.zip`; `paper/aaai/aaai2027.sty`; `paper/aaai/aaai2027.bst`; `paper/aaai/README.md`; `paper/aaai/papertoskill_aaai2027.tex`; `paper/aaai/papertoskill_aaai2027.pdf`; `scripts/check_aaai_package.py`; `results/reproducibility/aaai_package_report.md`; `scripts/check_paper_tables.py`; `results/reproducibility/paper_table_report.md`. | Prepared and locally verified, not submission-final | Keep the AAAI draft synchronized with new evidence. Submission-final requires final claims, figures, metadata, and any venue-specific updates. |
+| Save phase-level progress to `yougret1/PaperToSkill.git`. | Phase-level commits are pushed to `origin/main`; latest saved phases include AAAI package, usage-example, paper-table, and paper-claim gates. | Complete through current pushed phase | Keep committing/pushing phase-level increments. |
+| Use official AAAI TeX template for final paper. | `paper/aaai/AuthorKit27.zip`; `paper/aaai/aaai2027.sty`; `paper/aaai/aaai2027.bst`; `paper/aaai/README.md`; `paper/aaai/papertoskill_aaai2027.tex`; `paper/aaai/papertoskill_aaai2027.pdf`; `scripts/check_aaai_package.py`; `results/reproducibility/aaai_package_report.md`; `scripts/check_paper_tables.py`; `results/reproducibility/paper_table_report.md`; `scripts/check_paper_claims.py`; `results/reproducibility/paper_claim_report.md`. | Prepared and locally verified, not submission-final | Keep the AAAI draft synchronized with new evidence. Submission-final requires final claims, figures, metadata, and any venue-specific updates. |
 | Provide experiment usage examples. | `examples/usage/README.md`; `examples/usage/codex_skill_usage.md`; `examples/usage/auto_note_scaffold_usage.md`; `examples/usage/model_ablation_usage.md`; `scripts/check_usage_examples.py`; `results/reproducibility/usage_example_report.md`; `research/runbook.md`. | Complete and locally verified | Keep examples synchronized if task specs or runner commands change. |
 | Run or prepare Claude Opus 4.8 ablation. | `benchmarks/model_ablation_v0.json`; prompt packets under `results/model_ablation_prompts/v0/`; runner/evaluator scripts; Phase 26 run report shows `claude-opus-4-8` listed but chat completions fail HTTP 503 `No available accounts`. | Attempted, blocked | Re-run `scripts/run_model_ablation_prompts.py` when provider account capacity is available. |
 | Run or prepare GPT 5.5 / GPT-family ablation. | Same model-ablation artifacts; Phase 26 run report shows `gpt-5.5` unavailable and no GPT-family fallback models listed. | Attempted, unavailable on current endpoint | Re-run when a GPT-family endpoint or model alias is available. Record actual alias used. |
@@ -44,7 +44,7 @@ Local package status: `results/reproducibility/package_report.md` reports
   GPT-family rows skipped because no GPT-family model was listed.
 - `results/model_ablation_prompts/v0/evaluation.md`: 6 total rows, 0 scored
   rows, 6 pending rows.
-- `research/run_logs/2026-06-18_phase26_model_ablation_recheck.md`: latest
+- `research/run_logs/2026-06-18_phase30_paper_claim_gate.md`: latest
   endpoint recheck confirms the same Claude account-pool blocker and GPT-family
   model-catalog gap.
 - `results/human_fidelity_packets/annotation_summary.md`: human annotation is
@@ -59,6 +59,9 @@ Local package status: `results/reproducibility/package_report.md` reports
 - `results/reproducibility/paper_table_report.md`: AAAI paper-table gate is
   ready with 76 ready checks and 0 failed checks; it verifies manuscript-table
   consistency but does not add new empirical evidence.
+- `results/reproducibility/paper_claim_report.md`: paper claim-discipline gate
+  is ready with 20 ready checks and 0 failed checks; it verifies unsupported
+  overclaims remain absent but does not add new empirical evidence.
 
 ## Completion Decision
 

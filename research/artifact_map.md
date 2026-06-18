@@ -47,6 +47,7 @@
 | `research/run_logs/2026-06-18_phase27_aaai_package_gate.md` | AAAI package checker, report, and reproducibility-gate integration | Created |
 | `research/run_logs/2026-06-18_phase28_usage_example_gate.md` | Usage-example checker, offline example-chain run, and reproducibility-gate integration | Created |
 | `research/run_logs/2026-06-18_phase29_paper_table_gate.md` | AAAI paper-table consistency checker, report, and reproducibility-gate integration | Created |
+| `research/run_logs/2026-06-18_phase30_paper_claim_gate.md` | Paper claim-discipline checker, endpoint recheck, and reproducibility-gate integration | Created |
 
 ## Paper Draft Package
 
@@ -152,6 +153,7 @@
 | `scripts/check_reproducibility_package.py` | Checks local reproducibility package readiness and pending external evidence | Created |
 | `scripts/check_usage_examples.py` | Verifies usage-example files, prompt/response slots, and an offline auto-note-to-skill example chain | Created |
 | `scripts/check_paper_tables.py` | Verifies AAAI LaTeX result-table values against generated CSV result tables | Created |
+| `scripts/check_paper_claims.py` | Verifies paper-facing text avoids unsupported overclaims and includes required evidence boundaries | Created |
 | `scripts/build_model_ablation_prompts.py` | Builds Claude/GPT-family/DeepSeek model-ablation prompt packets | Created |
 | `scripts/run_model_ablation_prompts.py` | Runs model-ablation prompt packets against OpenAI-compatible APIs with redacted reports | Created |
 | `scripts/evaluate_model_ablation_responses.py` | Scores saved model-ablation response files and keeps missing rows pending | Created |
@@ -254,6 +256,8 @@
 | `results/reproducibility/usage_example_report.json` | Machine-readable usage-example verification report | Created |
 | `results/reproducibility/paper_table_report.md` | Human-readable AAAI paper-table consistency report | Created |
 | `results/reproducibility/paper_table_report.json` | Machine-readable AAAI paper-table consistency report | Created |
+| `results/reproducibility/paper_claim_report.md` | Human-readable paper claim-discipline report | Created |
+| `results/reproducibility/paper_claim_report.json` | Machine-readable paper claim-discipline report | Created |
 | `results/model_ablation_prompts/v0/index.json` | Model-ablation prompt packet index with pending response slots | Created |
 | `results/model_ablation_prompts/v0/*.md` | Six model-ablation prompt packets across Claude, GPT-family, and DeepSeek slots | Created |
 | `results/model_ablation_prompts/v0/run_report.md` | Redacted live-attempt report showing provider/model availability status | Created |

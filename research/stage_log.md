@@ -1111,3 +1111,39 @@ Evidence boundary:
 - Phase 29 prevents AAAI manuscript-table drift.
 - It does not add new empirical evidence and does not complete pending live
   model, human-fidelity, or provider-billing evidence.
+
+## 2026-06-18 Phase 30
+
+Actions:
+
+- Reran the model-ablation live runner for `claude_opus_4_8` and
+  `gpt_5_5_or_gpt_family` against the provided endpoint.
+- Added `scripts/check_paper_claims.py`, a local claim-discipline gate for the
+  AAAI manuscript and Markdown draft.
+- Added `tests/test_check_paper_claims.py`.
+- Generated `results/reproducibility/paper_claim_report.json` and
+  `results/reproducibility/paper_claim_report.md`.
+- Integrated the claim report into
+  `scripts/check_reproducibility_package.py`.
+- Updated runbook, artifact map, decision log, result cards, stage log, run
+  log, goal audit, and memory.
+
+Results:
+
+- Endpoint recheck still shows `claude-opus-4-8` in `/v1/models`, but both
+  Claude rows fail with HTTP 503, `No available accounts: no available
+  accounts`.
+- The same catalog still does not list `gpt-5.5` or a GPT-family fallback
+  model, so GPT-family rows remain skipped.
+- The paper-claim report is `ready` with 20 ready checks and 0 failed checks.
+- The reproducibility package report now shows
+  `ready_with_pending_external_evidence`, 159 ready checks, 7 pending checks,
+  and 0 failed checks.
+
+Evidence boundary:
+
+- Phase 30 records another provider/model availability recheck and prevents
+  unsupported paper overclaims.
+- It does not complete live Claude/GPT/DeepSeek model ablations, live
+  cross-harness transfer, human-fidelity annotation, or provider-billing
+  evidence.
