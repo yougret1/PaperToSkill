@@ -50,8 +50,12 @@ class CheckReproducibilityPackageTest(unittest.TestCase):
             pending_ids = {check["id"] for check in report["checks"] if check["status"] == "pending"}
             self.assertIn("human_fidelity_annotation_complete", pending_ids)
             self.assertIn("ai_scientist_v2_live_responses", pending_ids)
-            self.assertIn("toolformer_live_responses", pending_ids)
+            self.assertIn("live_transfer_all_responses_scored", pending_ids)
             ready_ids = {check["id"] for check in report["checks"] if check["status"] == "ready"}
+            self.assertIn("toolformer_live_responses", ready_ids)
+            self.assertIn("toolformer_live_transfer_responses_scored", ready_ids)
+            self.assertIn("toolformer_live_run_report_complete", ready_ids)
+            self.assertIn("live_transfer_evaluation_valid", ready_ids)
             self.assertIn("aide_auto_context_baseline_order", ready_ids)
             self.assertIn("aide_auto_transfer_ablation_order", ready_ids)
             self.assertIn("aide_auto_source_span_support", ready_ids)

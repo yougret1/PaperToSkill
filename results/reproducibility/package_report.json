@@ -3,7 +3,7 @@
   "evidence_boundary": "Checks local reproducibility artifacts and evidence gates. Pending live responses or human annotations are reported as pending external evidence, not local package failures.",
   "overall_status": "ready_with_pending_external_evidence",
   "status_counts": {
-    "ready": 180,
+    "ready": 191,
     "pending": 7,
     "fail": 0
   },
@@ -319,6 +319,12 @@
       "status": "ready",
       "detail": "present",
       "evidence": "research/run_logs/2026-06-19_phase38_model_response_cost_proxy.md"
+    },
+    {
+      "id": "phase39_toolformer_live_transfer_run_log",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "research/run_logs/2026-06-19_phase39_toolformer_live_transfer.md"
     },
     {
       "id": "result_cards",
@@ -712,8 +718,8 @@
     },
     {
       "id": "toolformer_live_responses",
-      "status": "pending",
-      "detail": "missing_response_files=6",
+      "status": "ready",
+      "detail": "missing_response_files=0",
       "evidence": "results/live_transfer_prompts/toolformer_v0/index.json"
     },
     {
@@ -821,7 +827,7 @@
     {
       "id": "goal_completion_report_ready",
       "status": "ready",
-      "detail": "overall=not_complete_pending_external_evidence; counts={'ready': 40, 'pending': 8, 'fail': 0}",
+      "detail": "overall=not_complete_pending_external_evidence; counts={'ready': 44, 'pending': 8, 'fail': 0}",
       "evidence": "results\\reproducibility\\goal_completion_report.json"
     },
     {
@@ -833,7 +839,7 @@
     {
       "id": "usage_example_report_ready",
       "status": "ready",
-      "detail": "overall=ready; counts={'ready': 42, 'fail': 0}",
+      "detail": "overall=ready; counts={'ready': 47, 'fail': 0}",
       "evidence": "results\\reproducibility\\usage_example_report.json"
     },
     {
@@ -1123,6 +1129,66 @@
       "status": "ready",
       "detail": "measured_rows=4; pending_rows=2; tokenizer_output_tokens=8710",
       "evidence": "results\\tables\\model_response_cost_proxy.json"
+    },
+    {
+      "id": "live_transfer_runner",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "scripts/run_live_transfer_prompts.py"
+    },
+    {
+      "id": "live_transfer_response_evaluator",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "scripts/evaluate_live_transfer_responses.py"
+    },
+    {
+      "id": "live_transfer_evaluation_json",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/live_transfer_prompts/evaluation.json"
+    },
+    {
+      "id": "live_transfer_evaluation_md",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/live_transfer_prompts/evaluation.md"
+    },
+    {
+      "id": "toolformer_live_run_report_json",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/live_transfer_prompts/toolformer_v0/run_report.json"
+    },
+    {
+      "id": "toolformer_live_run_report_md",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/live_transfer_prompts/toolformer_v0/run_report.md"
+    },
+    {
+      "id": "live_transfer_evaluation_valid",
+      "status": "ready",
+      "detail": "total_rows=24; scored_rows=6; pending_rows=18",
+      "evidence": "results\\live_transfer_prompts\\evaluation.json"
+    },
+    {
+      "id": "toolformer_live_transfer_responses_scored",
+      "status": "ready",
+      "detail": "scored_rows=6/6",
+      "evidence": "results\\live_transfer_prompts\\evaluation.json"
+    },
+    {
+      "id": "live_transfer_all_responses_scored",
+      "status": "pending",
+      "detail": "scored_rows=6; pending_rows=18",
+      "evidence": "results\\live_transfer_prompts\\evaluation.json"
+    },
+    {
+      "id": "toolformer_live_run_report_complete",
+      "status": "ready",
+      "detail": "overall=complete; counts={'success': 6}; alias_count=4",
+      "evidence": "results\\live_transfer_prompts\\toolformer_v0\\run_report.json"
     },
     {
       "id": "secret_scan",

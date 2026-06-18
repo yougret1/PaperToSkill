@@ -10,16 +10,17 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 38: Claude Opus 4.8 and GPT-family ablation rows are saved and scored for
-the current two-case protocol, and saved model responses now have a local
-output-token proxy report. The AAAI-27 paper package, usage examples,
-deterministic/offline experiments, model-ablation runner, DeepSeek follow-up
-path, local `o200k_base` input/output token proxies, one-command
-extracted-text-to-skill pipeline, local `pdftotext -layout` PDF smoke input
-path, result tables, and machine-checkable package/goal gates are prepared. The
-active goal is not yet complete because DeepSeek responses, human-fidelity
-annotation, live cross-harness responses, and provider-specific billing or
-success-per-dollar evidence remain pending.
+Phase 39: Claude Opus 4.8 and GPT-family ablation rows are saved and scored for
+the current two-case protocol, saved model responses have a local output-token
+proxy report, and the Toolformer live-transfer response set is saved and scored.
+The AAAI-27 paper package, usage examples, deterministic/offline experiments,
+model-ablation runner, DeepSeek follow-up path, local `o200k_base` input/output
+token proxies, one-command extracted-text-to-skill pipeline, local
+`pdftotext -layout` PDF smoke input path, result tables, and
+machine-checkable package/goal gates are prepared. The active goal is not yet
+complete because DeepSeek responses, human-fidelity annotation, the remaining
+AI Scientist-v2/Reflexion/AIDE live-transfer response sets, and
+provider-specific billing or success-per-dollar evidence remain pending.
 
 ## Memory
 
@@ -84,7 +85,8 @@ pending live-agent claims.
 - Generated skills: `generated_skills/ai_scientist_v2/`,
   `generated_skills/reflexion/`, `generated_skills/aide/`, and
   `generated_skills/toolformer/`.
-- Live transfer prompt packets: `results/live_transfer_prompts/`.
+- Live transfer prompt packets and saved Toolformer responses:
+  `results/live_transfer_prompts/`.
 - Human-fidelity review packets and pending annotation summary:
   `results/human_fidelity_packets/`.
 - Failure-case archive: `results/failure_cases/`.

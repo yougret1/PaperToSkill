@@ -19,8 +19,14 @@ Use the Toolformer PaperToSkill artifact to plan a local tool-use experiment.
    adaptations.
 4. Save the response to:
    `results/live_transfer_prompts/toolformer_v0/responses/codex_skill__full_skill.md`
-5. Score the response with the same transfer and output-contract rubric used for
-   the other model slots.
+5. Score the response with the live-transfer response evaluator:
+
+   ```powershell
+   python scripts\evaluate_live_transfer_responses.py `
+     --index results\live_transfer_prompts\toolformer_v0\index.json `
+     --output-json results\live_transfer_prompts\toolformer_v0\evaluation.json `
+     --output-md results\live_transfer_prompts\toolformer_v0\evaluation.md
+   ```
 
 ## Expected Output Shape
 
@@ -33,5 +39,7 @@ Use the Toolformer PaperToSkill artifact to plan a local tool-use experiment.
 
 ## Evidence Boundary
 
-This example demonstrates how to run the usage task. It is not evidence of live
-success until the response file exists and is scored.
+This example demonstrates how to run the usage task. The current Toolformer
+Codex-style full-skill response exists and is scored in
+`results/live_transfer_prompts/evaluation.md`; the other paper response sets
+remain separate pending evidence.

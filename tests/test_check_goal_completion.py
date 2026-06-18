@@ -55,8 +55,10 @@ class CheckGoalCompletionTest(unittest.TestCase):
             self.assertEqual("ready", statuses["claude_opus_4_8_ablation_complete"])
             self.assertEqual("ready", statuses["gpt_family_ablation_complete"])
             self.assertEqual("ready", statuses["model_response_output_token_proxy_ready"])
+            self.assertEqual("ready", statuses["toolformer_live_transfer_responses_complete"])
             self.assertEqual("ready", statuses["deepseek_followup_process_ready"])
             self.assertEqual("pending", statuses["deepseek_followup_response_complete"])
+            self.assertEqual("pending", statuses["live_cross_harness_responses_complete"])
             self.assertEqual("pending", statuses["human_fidelity_annotation_complete"])
             self.assertTrue(output_md.exists())
 
@@ -67,6 +69,8 @@ class CheckGoalCompletionTest(unittest.TestCase):
         self.assertEqual("pending", checks["provider_billing_evidence_complete"]["status"])
         self.assertIn("live_cross_harness_responses_complete", checks)
         self.assertEqual("pending", checks["live_cross_harness_responses_complete"]["status"])
+        self.assertIn("toolformer_live_transfer_responses_complete", checks)
+        self.assertEqual("ready", checks["toolformer_live_transfer_responses_complete"]["status"])
 
 
 if __name__ == "__main__":

@@ -27,6 +27,9 @@ REQUIRED_FILES = {
     "model_ablation_runner": "scripts/run_model_ablation_prompts.py",
     "model_ablation_evaluator": "scripts/evaluate_model_ablation_responses.py",
     "model_response_cost_evaluator": "scripts/evaluate_model_response_costs.py",
+    "live_transfer_runner": "scripts/run_live_transfer_prompts.py",
+    "live_transfer_evaluator": "scripts/evaluate_live_transfer_responses.py",
+    "live_transfer_evaluation": "results/live_transfer_prompts/evaluation.json",
     "deepseek_usage": "examples/usage/model_ablation_usage.md",
     "failure_archive": "results/failure_cases/failure_case_archive.json",
     "human_fidelity_summary": "results/human_fidelity_packets/annotation_summary.json",
@@ -343,21 +346,33 @@ def model_ablation_checks(root: Path) -> list[Check]:
 
 
 def live_and_human_checks(root: Path) -> list[Check]:
-    package = load_json(root / "results/reproducibility/package_report.json")
-    checks = package.get("checks", [])
-    pending_live = [
-        check
-        for check in checks
-        if check.get("id", "").endswith("_live_responses") and check.get("status") == "pending"
-    ]
+    evaluation = load_json(root / "results/live_transfer_prompts/evaluation.json")
+    summary = evaluation.get("summary", {})
+    results = evaluation.get("results", [])
+    total = int(summary.get("total_rows", 0))
+    scored = int(summary.get("scored_rows", 0))
+    pending = int(summary.get("pending_rows", 0))
+    toolformer_rows = [row for row in results if row.get("task") == "toolformer_live_transfer"]
+    toolformer_scored = [row for row in toolformer_rows if row.get("status") == "scored"]
+    remaining_tasks = sorted({row.get("task", "") for row in results if row.get("status") == "pending"})
     human = load_json(root / "results/human_fidelity_packets/annotation_summary.json")
     human_complete = human.get("annotation_status") == "complete"
     return [
         Check(
+            "toolformer_live_transfer_responses_complete",
+            "ready"
+            if len(toolformer_rows) == 6
+            and len(toolformer_scored) == 6
+            and all(float(row.get("normalized_score", 0)) >= 1.0 for row in toolformer_scored)
+            else "pending",
+            f"scored_rows={len(toolformer_scored)}/6",
+            "results/live_transfer_prompts/evaluation.json; results/live_transfer_prompts/toolformer_v0/run_report.json",
+        ),
+        Check(
             "live_cross_harness_responses_complete",
-            "ready" if not pending_live else "pending",
-            f"pending_live_response_sets={len(pending_live)}",
-            "results/reproducibility/package_report.json",
+            "ready" if total > 0 and pending == 0 and scored == total else "pending",
+            f"scored_rows={scored}; pending_rows={pending}; pending_tasks={','.join(remaining_tasks)}",
+            "results/live_transfer_prompts/evaluation.json",
         ),
         Check(
             "human_fidelity_annotation_complete",

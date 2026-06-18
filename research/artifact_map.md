@@ -56,6 +56,7 @@
 | `research/run_logs/2026-06-19_phase36_claude_ablation_success_gpt_blocked.md` | Claude Opus 4.8 saved/scored model-ablation responses and GPT-family blocker update | Created |
 | `research/run_logs/2026-06-19_phase37_gpt_family_ablation_success.md` | GPT-family saved/scored model-ablation responses | Created |
 | `research/run_logs/2026-06-19_phase38_model_response_cost_proxy.md` | Local output-token proxy for saved model-ablation responses | Created |
+| `research/run_logs/2026-06-19_phase39_toolformer_live_transfer.md` | Toolformer live-transfer response collection, scoring, and evidence boundary | Created |
 
 ## Paper Draft Package
 
@@ -153,6 +154,8 @@
 | `scripts/audit_skill_source_map.py` | Deterministic source-map-aware unsupported-instruction audit | Created |
 | `scripts/evaluate_harness_transfer.py` | Deterministic offline harness-transfer readiness evaluator | Created |
 | `scripts/build_live_transfer_prompts.py` | Live harness-transfer prompt packet builder | Created |
+| `scripts/run_live_transfer_prompts.py` | Runs saved live-transfer prompt packets against an OpenAI-compatible API and writes response files | Created |
+| `scripts/evaluate_live_transfer_responses.py` | Scores saved live-transfer response files and keeps missing rows pending | Created |
 | `scripts/validate_source_spans.py` | Source-span validation for line-anchored claims | Created |
 | `scripts/aggregate_results_tables.py` | Aggregates existing evaluation JSON into paper-ready tables | Created |
 | `scripts/evaluate_context_costs.py` | Estimates context token/cost proxies and coverage per context budget | Created |
@@ -187,6 +190,7 @@
 | `tests/test_build_model_ablation_prompts.py` | Smoke test for model-ablation prompt builder | Created |
 | `tests/test_model_ablation_execution.py` | Smoke tests for model-ablation runner alias selection, evaluator scoring, and skip behavior | Created |
 | `tests/test_evaluate_model_response_costs.py` | Smoke test for saved-response output-token proxy evaluator | Created |
+| `tests/test_live_transfer_execution.py` | Smoke tests for live-transfer runner skip behavior and saved-response scoring | Created |
 | `tests/test_check_goal_completion.py` | Smoke tests for active-goal completion checker and pending-evidence boundaries | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |
 | `generated_skills/ai_scientist_v2/references/source_map.json` | Source-map evidence for AI Scientist-v2 generated skill | Created |
@@ -232,7 +236,9 @@
 | `results/live_transfer_prompts/ai_scientist_v2_v0/` | Live Codex/Claude prompt packets and index | Created |
 | `results/live_transfer_prompts/reflexion_v0/` | Reflexion live Codex/Claude prompt packets and index | Created |
 | `results/live_transfer_prompts/aide_v0/` | AIDE live Codex/Claude prompt packets and index | Created |
-| `results/live_transfer_prompts/toolformer_v0/` | Toolformer live Codex/Claude prompt packets and index | Created |
+| `results/live_transfer_prompts/toolformer_v0/` | Toolformer live Codex/Claude prompt packets, saved responses, and run report | Created |
+| `results/live_transfer_prompts/evaluation.md` | Saved live-transfer response evaluation across four paper packets; Toolformer scored, other paper sets pending | Created |
+| `results/live_transfer_prompts/evaluation.json` | Machine-readable saved live-transfer response evaluation | Created |
 | `results/tables/main_results.md` | Paper-ready main results table | Created |
 | `results/tables/main_results.csv` | CSV copy of main results table | Created |
 | `results/tables/transfer_ablation.md` | Paper-ready transfer ablation table | Created |
@@ -298,5 +304,5 @@
 
 | Artifact | Purpose | Status |
 | --- | --- | --- |
-| Live cross-harness response logs | Codex/Claude-style transfer execution results after provider recovery | Planned |
+| Remaining live cross-harness response logs | AI Scientist-v2, Reflexion, and AIDE live-transfer response sets | Planned |
 | Model-ablation response logs | Claude/GPT-family/DeepSeek response files and scores after endpoint/model availability | Planned |

@@ -111,6 +111,7 @@ CORE_FILES = {
     "phase36_claude_ablation_success_gpt_blocked_run_log": "research/run_logs/2026-06-19_phase36_claude_ablation_success_gpt_blocked.md",
     "phase37_gpt_family_ablation_success_run_log": "research/run_logs/2026-06-19_phase37_gpt_family_ablation_success.md",
     "phase38_model_response_cost_proxy_run_log": "research/run_logs/2026-06-19_phase38_model_response_cost_proxy.md",
+    "phase39_toolformer_live_transfer_run_log": "research/run_logs/2026-06-19_phase39_toolformer_live_transfer.md",
     "result_cards": "results/result_cards.md",
 }
 
@@ -185,6 +186,15 @@ MODEL_ABLATION_FILES = {
     "model_ablation_gpt_retry_run_report_md": "results/model_ablation_prompts/v0/gpt_retry_run_report.md",
     "model_ablation_evaluation_json": "results/model_ablation_prompts/v0/evaluation.json",
     "model_ablation_evaluation_md": "results/model_ablation_prompts/v0/evaluation.md",
+}
+
+LIVE_TRANSFER_FILES = {
+    "live_transfer_runner": "scripts/run_live_transfer_prompts.py",
+    "live_transfer_response_evaluator": "scripts/evaluate_live_transfer_responses.py",
+    "live_transfer_evaluation_json": "results/live_transfer_prompts/evaluation.json",
+    "live_transfer_evaluation_md": "results/live_transfer_prompts/evaluation.md",
+    "toolformer_live_run_report_json": "results/live_transfer_prompts/toolformer_v0/run_report.json",
+    "toolformer_live_run_report_md": "results/live_transfer_prompts/toolformer_v0/run_report.md",
 }
 
 TEXT_SUFFIXES = {
@@ -680,6 +690,60 @@ def model_ablation_checks(root: Path) -> list[Check]:
     return checks
 
 
+def live_transfer_checks(root: Path) -> list[Check]:
+    checks = required_file_checks(root, LIVE_TRANSFER_FILES)
+    evaluation_path = root / "results/live_transfer_prompts/evaluation.json"
+    if evaluation_path.exists():
+        evaluation = load_json(evaluation_path)
+        summary = evaluation.get("summary", {})
+        results = evaluation.get("results", [])
+        total = int(summary.get("total_rows", 0))
+        scored = int(summary.get("scored_rows", 0))
+        pending = int(summary.get("pending_rows", 0))
+        counted_scored = sum(1 for row in results if row.get("status") == "scored")
+        counted_pending = sum(1 for row in results if row.get("status") == "pending")
+        valid = total == len(results) == 24 and scored == counted_scored and pending == counted_pending
+        checks.append(
+            Check(
+                "live_transfer_evaluation_valid",
+                "ready" if valid else "fail",
+                f"total_rows={total}; scored_rows={scored}; pending_rows={pending}",
+                str(evaluation_path.relative_to(root)),
+            )
+        )
+
+        toolformer_rows = [row for row in results if row.get("task") == "toolformer_live_transfer"]
+        toolformer_scored = [row for row in toolformer_rows if row.get("status") == "scored"]
+        toolformer_ready = len(toolformer_rows) == 6 and len(toolformer_scored) == 6 and all(
+            float(row.get("normalized_score", 0)) >= 1.0 for row in toolformer_scored
+        )
+        checks.append(
+            Check(
+                "toolformer_live_transfer_responses_scored",
+                "ready" if toolformer_ready else "pending",
+                f"scored_rows={len(toolformer_scored)}/6",
+                str(evaluation_path.relative_to(root)),
+            )
+        )
+        checks.append(
+            Check(
+                "live_transfer_all_responses_scored",
+                "ready" if pending == 0 and scored == total and total > 0 else "pending",
+                f"scored_rows={scored}; pending_rows={pending}",
+                str(evaluation_path.relative_to(root)),
+            )
+        )
+
+    run_report_path = root / "results/live_transfer_prompts/toolformer_v0/run_report.json"
+    if run_report_path.exists():
+        run_report = load_json(run_report_path)
+        counts = run_report.get("status_counts", {})
+        status = "ready" if run_report.get("overall_status") == "complete" and counts.get("success") == 6 else "fail"
+        detail = f"overall={run_report.get('overall_status')}; counts={counts}; alias_count={len(run_report.get('model_aliases', []))}"
+        checks.append(Check("toolformer_live_run_report_complete", status, detail, str(run_report_path.relative_to(root))))
+    return checks
+
+
 def secret_scan_check(root: Path) -> Check:
     matches = []
     for path in root.rglob("*"):
@@ -708,6 +772,7 @@ def build_report(root: Path) -> dict[str, Any]:
     checks.extend(usage_example_checks(root))
     checks.extend(auto_note_checks(root))
     checks.extend(model_ablation_checks(root))
+    checks.extend(live_transfer_checks(root))
     checks.append(secret_scan_check(root))
 
     status_counts = {"ready": 0, "pending": 0, "fail": 0}

@@ -56,8 +56,8 @@ class CheckPaperClaimsTest(unittest.TestCase):
 
             text = tmp_aaai.read_text(encoding="utf-8")
             text = text.replace(
-                "live cross-harness execution has not\ncompleted",
-                "live cross-harness execution has completed",
+                r"\begin{abstract}",
+                "\\begin{abstract}\nLive cross-harness execution has completed successfully.",
                 1,
             )
             tmp_aaai.write_text(text, encoding="utf-8")

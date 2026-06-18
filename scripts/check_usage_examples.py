@@ -24,6 +24,8 @@ CODEX_USAGE_INPUTS = {
     "codex_toolformer_skill": "generated_skills/toolformer/SKILL.md",
     "codex_toolformer_source_map": "generated_skills/toolformer/references/source_map.json",
     "codex_toolformer_prompt": "results/live_transfer_prompts/toolformer_v0/codex_skill__full_skill.md",
+    "codex_toolformer_response": "results/live_transfer_prompts/toolformer_v0/responses/codex_skill__full_skill.md",
+    "live_transfer_evaluation": "results/live_transfer_prompts/evaluation.json",
 }
 
 AUTO_NOTE_USAGE_INPUTS = {
@@ -99,6 +101,10 @@ def markdown_mentions_checks(root: Path) -> list[Check]:
         "codex_usage_mentions_prompt": (
             "examples/usage/codex_skill_usage.md",
             "results/live_transfer_prompts/toolformer_v0/codex_skill__full_skill.md",
+        ),
+        "codex_usage_mentions_response": (
+            "examples/usage/codex_skill_usage.md",
+            "results/live_transfer_prompts/toolformer_v0/responses/codex_skill__full_skill.md",
         ),
         "auto_note_usage_mentions_profile": ("examples/usage/auto_note_scaffold_usage.md", "--profile aide"),
         "model_ablation_usage_mentions_deepseek": ("examples/usage/model_ablation_usage.md", "deepseek_followup_slot"),
@@ -187,6 +193,52 @@ def model_ablation_prompt_grid_checks(root: Path) -> list[Check]:
             evidence_path(root, task_path),
         ),
     ]
+    return checks
+
+
+def live_transfer_usage_checks(root: Path) -> list[Check]:
+    evaluation_path = root / "results/live_transfer_prompts/evaluation.json"
+    if not evaluation_path.exists():
+        return [Check("usage_live_transfer_evaluation", "fail", "missing evaluation report", evidence_path(root, evaluation_path))]
+
+    evaluation = load_json(evaluation_path)
+    results = evaluation.get("results", [])
+    row = next(
+        (
+            item
+            for item in results
+            if item.get("task") == "toolformer_live_transfer"
+            and item.get("harness_id") == "codex_skill"
+            and item.get("variant_id") == "full_skill"
+        ),
+        None,
+    )
+    checks = [
+        Check(
+            "usage_live_transfer_evaluation",
+            "ready" if evaluation.get("summary", {}).get("total_rows") == 24 else "fail",
+            f"total_rows={evaluation.get('summary', {}).get('total_rows')}",
+            evidence_path(root, evaluation_path),
+        )
+    ]
+    if row is None:
+        checks.append(
+            Check(
+                "usage_codex_toolformer_response_scored",
+                "fail",
+                "missing toolformer codex full-skill row",
+                evidence_path(root, evaluation_path),
+            )
+        )
+    else:
+        checks.append(
+            Check(
+                "usage_codex_toolformer_response_scored",
+                "ready" if row.get("status") == "scored" and float(row.get("normalized_score", 0)) >= 1.0 else "fail",
+                f"status={row.get('status')}; normalized_score={row.get('normalized_score')}",
+                evidence_path(root, evaluation_path),
+            )
+        )
     return checks
 
 
@@ -392,6 +444,7 @@ def build_report(root: Path, *, run_examples: bool = True) -> dict[str, Any]:
     checks.extend(required_file_checks(root, MODEL_ABLATION_INPUTS))
     checks.extend(markdown_mentions_checks(root))
     checks.extend(model_ablation_prompt_grid_checks(root))
+    checks.extend(live_transfer_usage_checks(root))
     auto_note_sample: dict[str, Any] | None = None
     if run_examples:
         auto_note_checks, auto_note_sample = run_auto_note_example(root)

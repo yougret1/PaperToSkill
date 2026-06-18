@@ -50,11 +50,14 @@ Current supported claims:
   scored for the current two-case protocol.
 - Local output-token proxy over saved Claude/GPT-family model-ablation responses:
   4 measured rows, 2 pending DeepSeek rows, 8,710 `o200k_base` output tokens.
+- Toolformer live-transfer response set is saved and scored for both harness
+  prompt styles and all three context variants using Claude Opus 4.8; all 6
+  rows score 9/9 in the saved-response output-contract evaluator.
 
 Current unsupported claims:
 
 - Completed live DeepSeek model ablations.
-- Completed live cross-harness success.
+- Completed live cross-harness success across all four paper cases.
 - Human-validated semantic fidelity.
 - Provider billing, realized output-token bills, live invoices, or
   success-per-dollar.
@@ -73,6 +76,9 @@ Use these as entry points instead of searching the whole repo first:
 - `scripts/run_model_ablation_prompts.py`: OpenAI-compatible live model runner.
 - `scripts/evaluate_model_ablation_responses.py`: saved-response scorer.
 - `scripts/evaluate_model_response_costs.py`: saved-response output-token proxy.
+- `scripts/run_live_transfer_prompts.py`: OpenAI-compatible live-transfer runner.
+- `scripts/evaluate_live_transfer_responses.py`: saved live-transfer response
+  scorer.
 - `scripts/check_reproducibility_package.py`: aggregate local package gate.
 - `scripts/check_aaai_package.py`: AAAI package/build gate.
 - `scripts/check_usage_examples.py`: usage-example gate.
@@ -90,18 +96,18 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 180 ready checks, 7 pending
+  reports `ready_with_pending_external_evidence`, 191 ready checks, 7 pending
   checks, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
-  reports `not_complete_pending_external_evidence`, 40 ready checks, 8 pending
+  reports `not_complete_pending_external_evidence`, 44 ready checks, 8 pending
   checks, and 0 failed checks.
 - AAAI package:
   `results/reproducibility/aaai_package_report.md`
   reports ready, 17 ready checks, 0 failed checks.
 - Usage examples:
   `results/reproducibility/usage_example_report.md`
-  reports ready, 42 ready checks, 0 failed checks.
+  reports ready, 47 ready checks, 0 failed checks.
 - Model ablation response evaluation:
   `results/model_ablation_prompts/v0/evaluation.md`
   reports 6 total rows, 4 scored Claude/GPT-family rows, 2 pending DeepSeek
@@ -110,6 +116,10 @@ Use these as entry points instead of searching the whole repo first:
   `results/tables/model_response_cost_proxy.md`
   reports 6 total rows, 4 measured rows, 2 pending rows, 9,420 character-proxy
   output tokens, and 8,710 `o200k_base` output tokens.
+- Live-transfer response evaluation:
+  `results/live_transfer_prompts/evaluation.md`
+  reports 24 total rows, 6 scored Toolformer rows, 18 pending rows, and 1.0
+  average normalized score over scored rows.
 - Paper tables:
   `results/reproducibility/paper_table_report.md`
   reports ready, 76 ready checks, 0 failed checks.

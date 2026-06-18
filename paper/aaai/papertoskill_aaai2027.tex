@@ -41,7 +41,8 @@ structural rubrics, preserve more deterministic operational coverage than
 generic-summary and abstract-only baselines, remain under a 1200-word
 compactness budget, and substantially reduce deterministic input-token proxy
 size relative to full extracted papers. These results support PaperToSkill as a
-reproducible conversion layer from curated paper notes to portable skills, while
+reproducible conversion layer from curated paper notes to portable skills. A
+first Toolformer live-transfer response set is saved and scored, while broader
 live cross-harness agent execution and human fidelity studies remain future
 work.
 \end{abstract}
@@ -234,14 +235,15 @@ The current work has several important limits. First, the main benchmark
 converts curated notes rather than arbitrary PDFs; automatic note scaffolds have
 only been retained on Toolformer and AIDE extracted text. Second, the metrics
 are deterministic and partly lexical, so they can over-credit exact matches or
-under-credit valid paraphrases. Third, live cross-harness execution has not
-completed because the provided remote endpoint returned service errors during
-chat-completion tests. Fourth, human-fidelity packets, a blank annotation
-template, and a summary script are prepared, but no independent annotations have
-been completed. Fifth, compactness is measured by word count, deterministic
-character proxy, local tokenizer-aware input-token proxy, and local output-token
-proxy for saved model responses, not by provider-specific prices, live
-invoices, or live success per dollar.
+under-credit valid paraphrases. Third, live cross-harness execution is only
+partially collected: Toolformer responses are saved and scored, while
+AI Scientist-v2, Reflexion, and AIDE response sets remain pending. Fourth,
+human-fidelity packets, a blank annotation template, and a summary script are
+prepared, but no independent annotations have been completed. Fifth,
+compactness is measured by word count, deterministic character proxy, local
+tokenizer-aware input-token proxy, and local output-token proxy for saved model
+responses, not by provider-specific prices, live invoices, or live success per
+dollar.
 
 \section{Conclusion}
 
@@ -249,9 +251,10 @@ PaperToSkill turns paper-derived procedural knowledge into portable,
 human-editable skills. In a four-paper benchmark, generated skills are compact,
 source-grounded, structurally valid, and more operationally complete than short
 summary baselines under deterministic evaluation. The next stage is to execute
-the prepared live prompt packets across agent harnesses and model families,
-add human fidelity review, collect provider-specific billing or invoice
-evidence, and test papers whose contributions are less naturally procedural.
+the remaining prepared live prompt packets across agent harnesses and model
+families, add human fidelity review, collect provider-specific billing or
+invoice evidence, and test papers whose contributions are less naturally
+procedural.
 
 \bibliography{papertoskill_refs}
 

@@ -3,7 +3,7 @@
   "evidence_boundary": "Checks local usage-example files, input artifacts, prompt/response slots, an offline auto-note-to-skill example chain, and a local PDF-input pipeline smoke run. It does not execute live model calls or score model responses.",
   "overall_status": "ready",
   "status_counts": {
-    "ready": 42,
+    "ready": 47,
     "fail": 0
   },
   "checks": [
@@ -48,6 +48,18 @@
       "status": "ready",
       "detail": "present",
       "evidence": "results/live_transfer_prompts/toolformer_v0/codex_skill__full_skill.md"
+    },
+    {
+      "id": "codex_toolformer_response",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/live_transfer_prompts/toolformer_v0/responses/codex_skill__full_skill.md"
+    },
+    {
+      "id": "live_transfer_evaluation",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/live_transfer_prompts/evaluation.json"
     },
     {
       "id": "auto_note_source_text",
@@ -146,6 +158,12 @@
       "evidence": "examples/usage/codex_skill_usage.md"
     },
     {
+      "id": "codex_usage_mentions_response",
+      "status": "ready",
+      "detail": "mentions results/live_transfer_prompts/toolformer_v0/responses/codex_skill__full_skill.md",
+      "evidence": "examples/usage/codex_skill_usage.md"
+    },
+    {
       "id": "auto_note_usage_mentions_profile",
       "status": "ready",
       "detail": "mentions --profile aide",
@@ -198,6 +216,18 @@
       "status": "ready",
       "detail": "aliases=claude-opus-4-6,claude-opus-4-7,claude-opus-4-8,claude-opus-4.8",
       "evidence": "benchmarks/model_ablation_v0.json"
+    },
+    {
+      "id": "usage_live_transfer_evaluation",
+      "status": "ready",
+      "detail": "total_rows=24",
+      "evidence": "results/live_transfer_prompts/evaluation.json"
+    },
+    {
+      "id": "usage_codex_toolformer_response_scored",
+      "status": "ready",
+      "detail": "status=scored; normalized_score=1.0",
+      "evidence": "results/live_transfer_prompts/evaluation.json"
     },
     {
       "id": "usage_auto_note_example_note_created",

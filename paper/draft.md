@@ -20,7 +20,8 @@ source-span support with zero invalid line ranges. Removing transfer notes
 consistently lowers
 offline transfer-readiness from 10/10 to 7.6/10. These results support
 PaperToSkill as a reproducible conversion layer from curated paper notes to
-portable skills, while live cross-harness agent execution and human fidelity
+portable skills. A first Toolformer live-transfer response set is saved and
+scored, while broader live cross-harness agent execution and human fidelity
 studies remain future work.
 
 ## 1. Introduction
@@ -211,12 +212,13 @@ records from the PaperToSkill development process. This archive supports the
 claim that failed branches are preserved as inspectable provenance. It is not
 evidence that failure recording improves live task outcomes.
 
-The reproducibility package checker reports 174 ready checks, 7 pending
+The reproducibility package checker reports 191 ready checks, 7 pending
 external-evidence checks, and 0 failed checks. The pending checks correspond to
-the four live transfer response sets, human-fidelity annotation status, and
-DeepSeek model-ablation response files plus the not-yet-complete overall
-model-ablation evaluation. This supports a local artifact-readiness claim, not
-a claim of completed live transfer, DeepSeek, or human evaluation.
+the remaining three live transfer response sets, human-fidelity annotation
+status, and DeepSeek model-ablation response files plus the not-yet-complete
+overall model-ablation evaluation. This supports a local artifact-readiness
+claim and one completed Toolformer response set, not a claim of completed full
+live transfer, DeepSeek, or human evaluation.
 
 The model-ablation runner/evaluator is now partially scored. Claude Opus 4.8
 completed both current prompt rows, saved response files, and scored 6/6 on
@@ -276,11 +278,12 @@ The current work has several important limits. First, the main benchmark
 converts curated notes rather than arbitrary PDFs; automatic note scaffolds have
 only been retained on Toolformer and AIDE extracted text. Second, the metrics are
 deterministic and partly lexical, so they can over-credit exact matches or
-under-credit valid paraphrases. Third, live cross-harness execution has not
-completed because the provided remote endpoint returned service errors during
-chat-completion tests. Fourth, the current model-ablation protocol is only
-partially complete: Claude Opus 4.8 and GPT-family rows have saved and scored
-responses, but DeepSeek remains pending user configuration. Fifth,
+under-credit valid paraphrases. Third, live cross-harness execution is only
+partially collected: Toolformer responses are saved and scored, while
+AI Scientist-v2, Reflexion, and AIDE response sets remain pending. Fourth, the
+current model-ablation protocol is only partially complete: Claude Opus 4.8 and
+GPT-family rows have saved and scored responses, but DeepSeek remains pending
+user configuration. Fifth,
 human-fidelity packets, a blank annotation template,
 and a summary script are prepared, but no independent annotations have been
 completed. Sixth, compactness is measured by word count, deterministic
@@ -303,10 +306,9 @@ PaperToSkill turns paper-derived procedural knowledge into portable,
 human-editable skills. In a four-paper benchmark, generated skills are compact,
 source-grounded, structurally valid, and more operationally complete than short
 summary baselines under deterministic evaluation. The next stage is to run the
-prepared live transfer prompt packets when provider capacity is available, add
-the user's DeepSeek slot, run human fidelity review, collect provider-specific
-billing or invoice evidence, and test papers whose contributions are less
-naturally procedural.
+remaining prepared live transfer prompt packets, add the user's DeepSeek slot,
+run human fidelity review, collect provider-specific billing or invoice
+evidence, and test papers whose contributions are less naturally procedural.
 
 ## Reproducibility Pointers
 

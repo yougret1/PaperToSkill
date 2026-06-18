@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 180
+- Ready checks: 191
 - Pending checks: 7
 - Failed checks: 0
 
@@ -63,6 +63,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | phase36_claude_ablation_success_gpt_blocked_run_log | ready | present | research/run_logs/2026-06-19_phase36_claude_ablation_success_gpt_blocked.md |
 | phase37_gpt_family_ablation_success_run_log | ready | present | research/run_logs/2026-06-19_phase37_gpt_family_ablation_success.md |
 | phase38_model_response_cost_proxy_run_log | ready | present | research/run_logs/2026-06-19_phase38_model_response_cost_proxy.md |
+| phase39_toolformer_live_transfer_run_log | ready | present | research/run_logs/2026-06-19_phase39_toolformer_live_transfer.md |
 | result_cards | ready | present | results/result_cards.md |
 | main_results_md | ready | present | results/tables/main_results.md |
 | main_results_csv | ready | present | results/tables/main_results.csv |
@@ -128,7 +129,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | toolformer_transfer_ablation_order | ready | full=10.0; no_transfer=7.6 | results/evaluations/toolformer_harness_transfer_v0.json |
 | toolformer_source_span_support | ready | support_rate=1; invalid_ranges=0 | results/evaluations/toolformer_source_span_validation_v0.json |
 | toolformer_live_prompt_packets | ready | prompt_packets=6; missing_prompts=0 | results/live_transfer_prompts/toolformer_v0/index.json |
-| toolformer_live_responses | pending | missing_response_files=6 | results/live_transfer_prompts/toolformer_v0/index.json |
+| toolformer_live_responses | ready | missing_response_files=0 | results/live_transfer_prompts/toolformer_v0/index.json |
 | human_fidelity_protocol | ready | present | benchmarks/human_fidelity_review_v0.json |
 | human_fidelity_template | ready | present | results/human_fidelity_packets/annotation_template.csv |
 | human_fidelity_summary_json | ready | present | results/human_fidelity_packets/annotation_summary.json |
@@ -146,9 +147,9 @@ Evidence boundary: this report checks local package completeness and separates p
 | paper_table_core_checks_ready | ready | core checks ready | results\reproducibility\paper_table_report.json |
 | paper_claim_report_ready | ready | overall=ready; counts={'ready': 20, 'fail': 0} | results\reproducibility\paper_claim_report.json |
 | paper_claim_core_checks_ready | ready | core checks ready | results\reproducibility\paper_claim_report.json |
-| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 40, 'pending': 8, 'fail': 0} | results\reproducibility\goal_completion_report.json |
+| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 44, 'pending': 8, 'fail': 0} | results\reproducibility\goal_completion_report.json |
 | goal_completion_core_checks_ready | ready | core completion boundaries ready | results\reproducibility\goal_completion_report.json |
-| usage_example_report_ready | ready | overall=ready; counts={'ready': 42, 'fail': 0} | results\reproducibility\usage_example_report.json |
+| usage_example_report_ready | ready | overall=ready; counts={'ready': 47, 'fail': 0} | results\reproducibility\usage_example_report.json |
 | usage_example_core_checks_ready | ready | core checks ready | results\reproducibility\usage_example_report.json |
 | toolformer_auto_note_script | ready | present | scripts/papertoskill_note_from_text.py |
 | toolformer_auto_pipeline_script | ready | present | scripts/papertoskill_pipeline.py |
@@ -197,4 +198,14 @@ Evidence boundary: this report checks local package completeness and separates p
 | model_ablation_run_report_valid | ready | overall=partial; counts={'success': 2, 'error': 2} | results\model_ablation_prompts\v0\run_report.json |
 | model_ablation_evaluation_complete | pending | scored_rows=4; pending_rows=2 | results\model_ablation_prompts\v0\evaluation.json |
 | model_response_output_token_proxy | ready | measured_rows=4; pending_rows=2; tokenizer_output_tokens=8710 | results\tables\model_response_cost_proxy.json |
+| live_transfer_runner | ready | present | scripts/run_live_transfer_prompts.py |
+| live_transfer_response_evaluator | ready | present | scripts/evaluate_live_transfer_responses.py |
+| live_transfer_evaluation_json | ready | present | results/live_transfer_prompts/evaluation.json |
+| live_transfer_evaluation_md | ready | present | results/live_transfer_prompts/evaluation.md |
+| toolformer_live_run_report_json | ready | present | results/live_transfer_prompts/toolformer_v0/run_report.json |
+| toolformer_live_run_report_md | ready | present | results/live_transfer_prompts/toolformer_v0/run_report.md |
+| live_transfer_evaluation_valid | ready | total_rows=24; scored_rows=6; pending_rows=18 | results\live_transfer_prompts\evaluation.json |
+| toolformer_live_transfer_responses_scored | ready | scored_rows=6/6 | results\live_transfer_prompts\evaluation.json |
+| live_transfer_all_responses_scored | pending | scored_rows=6; pending_rows=18 | results\live_transfer_prompts\evaluation.json |
+| toolformer_live_run_report_complete | ready | overall=complete; counts={'success': 6}; alias_count=4 | results\live_transfer_prompts\toolformer_v0\run_report.json |
 | secret_scan | ready | no raw API-key-like strings found | repository text files |

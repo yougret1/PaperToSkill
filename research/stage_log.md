@@ -1408,3 +1408,51 @@ Evidence boundary:
 - It does not support provider billing, live invoices, realized output-token
   bills, success-per-dollar evidence, DeepSeek completion, live cross-harness
   execution, or human-fidelity annotation.
+
+## 2026-06-19 Phase 39
+
+Actions:
+
+- Added `scripts/run_live_transfer_prompts.py`, a live runner for existing
+  Codex-style and Claude-style live-transfer prompt packets.
+- Added `scripts/evaluate_live_transfer_responses.py`, a saved-response scorer
+  for live-transfer outputs.
+- Added `tests/test_live_transfer_execution.py`.
+- Ran the Toolformer live-transfer packet with the Claude-family endpoint using
+  shell-only credentials.
+- Saved six Toolformer response files under
+  `results/live_transfer_prompts/toolformer_v0/responses/`.
+- Generated `results/live_transfer_prompts/toolformer_v0/run_report.json` and
+  `.md`.
+- Reran the aggregate live-transfer response evaluator across AI Scientist-v2,
+  Reflexion, AIDE, and Toolformer.
+- Integrated live-transfer infrastructure and Toolformer response evidence into
+  the reproducibility package, usage-example, and active-goal gates.
+- Updated runbook, artifact map, result cards, goal audit, claim checklist,
+  paper draft, AAAI TeX draft, limitations, README, and memory.
+
+Results:
+
+- The Toolformer run report is `overall_status=complete` with 6 successes, 0
+  errors, 0 skipped rows, catalog status `success`, 14 listed models, and exact
+  alias `claude-opus-4-8`.
+- The aggregate live-transfer evaluation reports 24 total rows, 6 scored rows,
+  18 pending rows, and 1.0 average normalized score over scored rows.
+- All six Toolformer rows score 9/9.
+- AI Scientist-v2, Reflexion, and AIDE live-transfer response sets remain
+  pending.
+- Usage-example report now shows `ready`, 47 ready checks, and 0 failed checks.
+- Reproducibility package report now shows
+  `ready_with_pending_external_evidence`, 191 ready checks, 7 pending checks,
+  and 0 failed checks.
+- Goal-completion report now shows
+  `not_complete_pending_external_evidence`, 44 ready checks, 8 pending checks,
+  and 0 failed checks.
+
+Evidence boundary:
+
+- Phase 39 completes only the Toolformer live-transfer response set for the
+  current prompt protocol.
+- It does not complete the remaining live-transfer response sets, DeepSeek,
+  human-fidelity annotation, provider billing, live invoices, realized
+  success-per-dollar evidence, or final AAAI submission readiness.

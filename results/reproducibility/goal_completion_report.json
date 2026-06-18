@@ -3,7 +3,7 @@
   "evidence_boundary": "Audits the active user goal against local repository evidence. Pending checks are explicit remaining requirements, not negative evidence and not local package failures.",
   "overall_status": "not_complete_pending_external_evidence",
   "status_counts": {
-    "ready": 40,
+    "ready": 44,
     "pending": 8,
     "fail": 0
   },
@@ -97,6 +97,24 @@
       "status": "ready",
       "detail": "present",
       "evidence": "scripts/evaluate_model_response_costs.py"
+    },
+    {
+      "id": "live_transfer_runner",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "scripts/run_live_transfer_prompts.py"
+    },
+    {
+      "id": "live_transfer_evaluator",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "scripts/evaluate_live_transfer_responses.py"
+    },
+    {
+      "id": "live_transfer_evaluation",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/live_transfer_prompts/evaluation.json"
     },
     {
       "id": "deepseek_usage",
@@ -279,10 +297,16 @@
       "evidence": "results/model_ablation_prompts/v0/evaluation.json"
     },
     {
+      "id": "toolformer_live_transfer_responses_complete",
+      "status": "ready",
+      "detail": "scored_rows=6/6",
+      "evidence": "results/live_transfer_prompts/evaluation.json; results/live_transfer_prompts/toolformer_v0/run_report.json"
+    },
+    {
       "id": "live_cross_harness_responses_complete",
       "status": "pending",
-      "detail": "pending_live_response_sets=4",
-      "evidence": "results/reproducibility/package_report.json"
+      "detail": "scored_rows=6; pending_rows=18; pending_tasks=ai_scientist_v2_live_transfer,aide_live_transfer,reflexion_live_transfer",
+      "evidence": "results/live_transfer_prompts/evaluation.json"
     },
     {
       "id": "human_fidelity_annotation_complete",

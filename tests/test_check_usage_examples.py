@@ -21,6 +21,9 @@ class CheckUsageExamplesTest(unittest.TestCase):
         self.assertEqual(0, report["status_counts"]["fail"])
         ready_ids = {check["id"] for check in report["checks"] if check["status"] == "ready"}
         self.assertIn("codex_toolformer_prompt", ready_ids)
+        self.assertIn("codex_toolformer_response", ready_ids)
+        self.assertIn("usage_codex_toolformer_response_scored", ready_ids)
+        self.assertIn("usage_live_transfer_evaluation", ready_ids)
         self.assertIn("usage_model_ablation_prompt_grid", ready_ids)
         self.assertIn("usage_model_ablation_response_slots", ready_ids)
         self.assertIn("usage_model_ablation_gpt_profile", ready_ids)

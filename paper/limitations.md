@@ -4,8 +4,10 @@
 
 The current PaperToSkill evidence is deterministic and offline. It supports
 claims about artifact structure, source-span support, compactness, context
-coverage, and transfer readiness. It does not yet support claims about live
-agent task success, human-rated fidelity, or realized cost savings.
+coverage, and transfer readiness. It includes one saved and scored Toolformer
+live-transfer response set, but does not yet support claims about complete live
+agent task success across all papers, human-rated fidelity, or realized cost
+savings.
 
 ## Limitations
 
@@ -29,12 +31,13 @@ sensitive to lexical overlap, section naming, and rubric design. They should be
 treated as early gates rather than a substitute for human or live-agent
 evaluation.
 
-### No Completed Live Cross-Harness Runs
+### Live Cross-Harness Runs Are Partial
 
-Prompt packets have been generated for Codex-style and Claude-style harnesses,
-but the remote chat-completion endpoint returned service errors during the
-latest checks. As a result, transfer results are currently offline readiness
-scores, not live success rates.
+Prompt packets have been generated for Codex-style and Claude-style harnesses.
+The Toolformer response set is saved and scored across both harness prompt
+styles and all three context variants. AI Scientist-v2, Reflexion, and AIDE
+response sets remain pending, so full live cross-harness completion and live
+success-rate claims remain unsupported.
 
 ### Model Ablations Partially Completed
 
@@ -89,14 +92,16 @@ reproduction success.
 
 The reproducibility checker reports that local artifacts, deterministic results,
 prompt packets, failure archive, human-fidelity protocol, and secret scan are
-ready with zero failed checks. However, the same report still marks live
-responses and completed human-fidelity annotation as pending external evidence.
-The package should therefore be described as locally ready, not submission-final.
+ready with zero failed checks. However, the same report still marks the
+remaining live responses and completed human-fidelity annotation as pending
+external evidence. The package should therefore be described as locally ready,
+not submission-final.
 
 ## Future Work
 
-1. Execute live prompt packets once the remote endpoint is available, logging
-   model, harness, prompt, response, intervention count, and task outcome.
+1. Execute the remaining AI Scientist-v2, Reflexion, and AIDE live prompt
+   packets, logging model, harness, prompt, response, intervention count, and
+   task outcome.
 2. Add the user's concrete DeepSeek model alias and endpoint profile, then run
    and score the same prompt grid.
 3. Run the prepared human source-fidelity packets with independent annotators

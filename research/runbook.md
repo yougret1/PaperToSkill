@@ -176,10 +176,46 @@ the prompt packets, set those environment variables locally, and run the same
 runner with `--model-id deepseek_followup_slot`. The runner skips DeepSeek only
 while the placeholder alias remains unchanged.
 
+## Live-Transfer Response Collection
+
+Existing live-transfer prompt packets live under
+`results/live_transfer_prompts/*_v0/index.json`. Save responses only under each
+row's `expected_response_path`. Do not commit raw API keys.
+
+Run the Toolformer live-transfer packet with the Claude-family profile:
+
+```powershell
+python scripts\run_live_transfer_prompts.py `
+  --index results\live_transfer_prompts\toolformer_v0\index.json `
+  --output-json results\live_transfer_prompts\toolformer_v0\run_report.json `
+  --output-md results\live_transfer_prompts\toolformer_v0\run_report.md `
+  --max-tokens 900
+```
+
+Score saved live-transfer responses across all four paper packets:
+
+```powershell
+python scripts\evaluate_live_transfer_responses.py `
+  --index results\live_transfer_prompts\ai_scientist_v2_v0\index.json `
+  --index results\live_transfer_prompts\reflexion_v0\index.json `
+  --index results\live_transfer_prompts\aide_v0\index.json `
+  --index results\live_transfer_prompts\toolformer_v0\index.json `
+  --output-json results\live_transfer_prompts\evaluation.json `
+  --output-md results\live_transfer_prompts\evaluation.md
+```
+
+Current Phase 39 status: the Toolformer live-transfer response set has 6 saved
+Claude Opus 4.8 responses across both harness prompt styles and all three
+context variants, and all 6 rows score 9/9 in
+`results/live_transfer_prompts/evaluation.md`. AI Scientist-v2, Reflexion, and
+AIDE remain pending with 18 missing response rows total. This is deterministic
+output-contract scoring, not human semantic fidelity or full live cross-harness
+completion.
+
 ## Usage Example Gate
 
 Verify that paper-facing usage examples are locally executable where they do
-not require live model calls:
+not require additional live model calls:
 
 ```powershell
 python scripts\check_usage_examples.py `
@@ -188,10 +224,11 @@ python scripts\check_usage_examples.py `
   --strict
 ```
 
-This checker validates the Codex-style skill usage files, the model-ablation
-prompt grid and response slots, an offline AIDE extracted-text-to-note-to-skill
-chain, and a PDF-input pipeline smoke run in a temporary directory. It does not
-execute Claude/GPT/DeepSeek calls or score model responses.
+This checker validates the Codex-style skill usage files, the scored Toolformer
+Codex-style response slot, the model-ablation prompt grid and response slots, an
+offline AIDE extracted-text-to-note-to-skill chain, and a PDF-input pipeline
+smoke run in a temporary directory. It does not execute additional
+Claude/GPT/DeepSeek calls.
 
 ## AAAI Paper Package
 
@@ -265,9 +302,10 @@ python scripts\check_goal_completion.py `
 ```
 
 This checker is expected to report
-`not_complete_pending_external_evidence` until live cross-harness responses, the
-DeepSeek follow-up response rows, human-fidelity annotation, provider-billing or
-success-per-dollar evidence, and final AAAI submission decisions are complete.
+`not_complete_pending_external_evidence` until the remaining live cross-harness
+response sets, the DeepSeek follow-up response rows, human-fidelity annotation,
+provider-billing or success-per-dollar evidence, and final AAAI submission
+decisions are complete.
 Passing `--strict` only fails on local requirement
 failures; pending external evidence remains pending rather than a package
 failure.
