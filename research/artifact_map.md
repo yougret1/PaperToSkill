@@ -50,6 +50,7 @@
 | `research/run_logs/2026-06-18_phase30_paper_claim_gate.md` | Paper claim-discipline checker, endpoint recheck, and reproducibility-gate integration | Created |
 | `research/run_logs/2026-06-18_phase31_goal_completion_gate.md` | Machine-checkable active-goal completion audit and reproducibility-gate integration | Created |
 | `research/run_logs/2026-06-18_phase32_model_profile_recheck.md` | Separate Claude/GPT credential-profile recheck and model-ablation blocker update | Created |
+| `research/run_logs/2026-06-19_phase33_alias_retry_model_recheck.md` | Alias-retry runner update and full Claude/GPT candidate availability recheck | Created |
 
 ## Paper Draft Package
 

@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 164
+- Ready checks: 167
 - Pending checks: 7
 - Failed checks: 0
 
@@ -55,6 +55,9 @@ Evidence boundary: this report checks local package completeness and separates p
 | phase28_usage_example_gate_run_log | ready | present | research/run_logs/2026-06-18_phase28_usage_example_gate.md |
 | phase29_paper_table_gate_run_log | ready | present | research/run_logs/2026-06-18_phase29_paper_table_gate.md |
 | phase30_paper_claim_gate_run_log | ready | present | research/run_logs/2026-06-18_phase30_paper_claim_gate.md |
+| phase31_goal_completion_run_log | ready | present | research/run_logs/2026-06-18_phase31_goal_completion_gate.md |
+| phase32_model_profile_recheck_run_log | ready | present | research/run_logs/2026-06-18_phase32_model_profile_recheck.md |
+| phase33_alias_retry_model_recheck_run_log | ready | present | research/run_logs/2026-06-19_phase33_alias_retry_model_recheck.md |
 | result_cards | ready | present | results/result_cards.md |
 | main_results_md | ready | present | results/tables/main_results.md |
 | main_results_csv | ready | present | results/tables/main_results.csv |

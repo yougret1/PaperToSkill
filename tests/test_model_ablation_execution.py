@@ -293,6 +293,96 @@ Failure branch:
             self.assertEqual(["claude-opus-4-8"], catalogs[("https://example.test/v1", "TEST_CLAUDE_KEY")]["model_ids"])
             self.assertEqual(["gpt-5.5"], catalogs[("https://example.test/v1", "TEST_GPT_KEY")]["model_ids"])
 
+    def test_runner_retries_next_alias_when_chat_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            prompt = tmp_path / "prompt.md"
+            prompt.write_text("Prompt", encoding="utf-8")
+            response_path = tmp_path / "response.md"
+            task = tmp_path / "task.json"
+            task.write_text(
+                json.dumps(
+                    {
+                        "id": "test_task",
+                        "model_slots": [
+                            {
+                                "id": "claude_opus_4_8",
+                                "model_alias": "claude-opus-4-8",
+                                "model_aliases": ["claude-opus-4-8", "claude-opus-4-7"],
+                                "auth_env": "TEST_CLAUDE_KEY",
+                                "base_url_env": "TEST_SHARED_BASE",
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+            index = tmp_path / "index.json"
+            index.write_text(
+                json.dumps(
+                    {
+                        "task": "test_task",
+                        "prompts": [
+                            {
+                                "model_id": "claude_opus_4_8",
+                                "case_id": "case_one",
+                                "prompt_path": str(prompt),
+                                "expected_response_path": str(response_path),
+                            }
+                        ],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            original_request_json = runner_module.request_json
+            original_env = {
+                "TEST_SHARED_BASE": os.environ.get("TEST_SHARED_BASE"),
+                "TEST_CLAUDE_KEY": os.environ.get("TEST_CLAUDE_KEY"),
+            }
+
+            def fake_request_json(url, api_key, method="GET", body=None):
+                if url.endswith("/models"):
+                    return 200, {
+                        "data": [
+                            {"id": "claude-opus-4-8"},
+                            {"id": "claude-opus-4-7"},
+                        ]
+                    }
+                if body["model"] == "claude-opus-4-8":
+                    raise RuntimeError("simulated capacity failure")
+                return 200, {"choices": [{"message": {"content": "fallback response"}}]}
+
+            try:
+                os.environ["TEST_SHARED_BASE"] = "https://example.test/v1"
+                os.environ["TEST_CLAUDE_KEY"] = "claude-key"
+                runner_module.request_json = fake_request_json
+                report = runner_module.run(
+                    SimpleNamespace(
+                        task=task,
+                        index=index,
+                        model_id=None,
+                        base_url=None,
+                        api_key=None,
+                        max_tokens=20,
+                        include_placeholder_models=False,
+                    )
+                )
+            finally:
+                runner_module.request_json = original_request_json
+                for key, value in original_env.items():
+                    if value is None:
+                        os.environ.pop(key, None)
+                    else:
+                        os.environ[key] = value
+
+            result = report["results"][0]
+            self.assertEqual("complete", report["overall_status"])
+            self.assertEqual("success", result["status"])
+            self.assertEqual("claude-opus-4-7", result["alias_used"])
+            self.assertEqual(["error", "success"], [item["status"] for item in result["attempted_aliases"]])
+            self.assertEqual("fallback response\n", response_path.read_text(encoding="utf-8"))
+
     def test_runner_attempts_configured_deepseek_slot_when_env_missing(self):
         with tempfile.TemporaryDirectory() as tmp:
             tmp_path = Path(tmp)

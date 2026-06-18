@@ -3,7 +3,7 @@
 Read this file after any context compaction or session resume. Also read
 `memory/long_term_memory.md` before taking project actions.
 
-Current date: 2026-06-18.
+Current date: 2026-06-19.
 
 ## Current User Update
 
@@ -82,11 +82,13 @@ Stable evidence retained from earlier phases:
 - Latest local live attempt with separate Claude/GPT credentials:
   - Claude catalog via `AI_SCIENTIST_OPENAI_API_KEY` listed 8 Claude-family
     models, including `claude-opus-4-8`, `claude-opus-4-7`, and
-    `claude-opus-4-6`; both Claude prompt rows selected `claude-opus-4-8` and
-    failed HTTP 503 `No available accounts: no available accounts`.
+    `claude-opus-4-6`; the alias-retry runner tried all three aliases for both
+    Claude prompt rows, and all failed HTTP 503
+    `No available accounts: no available accounts`.
   - GPT catalog via `PAPERTOSKILL_GPT_OPENAI_API_KEY` listed 17 models,
     including `gpt-5.5`, `gpt-5.4`, `gpt-5.4-mini`, and GPT 5.2/5.3 variants;
-    both GPT prompt rows selected `gpt-5.5` and failed HTTP 502
+    the alias-retry runner tried `gpt-5.5` and `gpt-5.4` for both GPT prompt
+    rows, and both aliases failed HTTP 502
     `Upstream access forbidden, please contact administrator`.
   - No response files were saved; response evaluation remains 6 total rows, 0
     scored rows, and 6 pending rows.

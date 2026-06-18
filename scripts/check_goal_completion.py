@@ -237,8 +237,19 @@ def model_ablation_checks(root: Path) -> list[Check]:
         rows = by_model.get(model_id, [])
         return bool(rows) and all(row.get("status") == "scored" for row in rows)
 
+    def attempted_aliases(rows: list[dict[str, Any]]) -> set[str]:
+        aliases = set()
+        for row in rows:
+            if row.get("alias_used"):
+                aliases.add(str(row["alias_used"]))
+            for attempt in row.get("attempted_aliases", []):
+                if attempt.get("alias"):
+                    aliases.add(str(attempt["alias"]))
+        return aliases
+
     deepseek_aliases = {item.get("model_alias") for item in prompts if item.get("model_id") == "deepseek_followup_slot"}
     deepseek_placeholder = "deepseek-to-be-filled" in deepseek_aliases
+    claude_attempted = attempted_aliases(claude_rows)
     return [
         Check(
             "model_ablation_protocol_ready",
@@ -248,8 +259,12 @@ def model_ablation_checks(root: Path) -> list[Check]:
         ),
         Check(
             "claude_opus_4_8_ablation_attempted",
-            "ready" if claude_rows and all(row.get("alias_used") == "claude-opus-4-8" for row in claude_rows) else "fail",
-            f"rows={len(claude_rows)}; statuses={','.join(sorted({str(row.get('status')) for row in claude_rows}))}",
+            "ready" if claude_rows and any(alias.startswith("claude-opus-4") for alias in claude_attempted) else "fail",
+            (
+                f"rows={len(claude_rows)}; "
+                f"statuses={','.join(sorted({str(row.get('status')) for row in claude_rows}))}; "
+                f"attempted_aliases={','.join(sorted(claude_attempted))}"
+            ),
             "results/model_ablation_prompts/v0/run_report.json",
         ),
         Check(

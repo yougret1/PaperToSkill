@@ -45,7 +45,7 @@ Evidence boundary: this report audits the active user goal against local reposit
 | paper_claim_gate_ready | ready | overall_status=ready | results/reproducibility/paper_claim_report.json |
 | aaai_final_submission_ready | pending | AAAI package is locally verified, but final live/model/human/cost evidence decisions remain pending | paper/aaai/; results/reproducibility/ |
 | model_ablation_protocol_ready | ready | prompt_packets=6; models=claude_opus_4_8,deepseek_followup_slot,gpt_5_5_or_gpt_family | results/model_ablation_prompts/v0/index.json |
-| claude_opus_4_8_ablation_attempted | ready | rows=2; statuses=error | results/model_ablation_prompts/v0/run_report.json |
+| claude_opus_4_8_ablation_attempted | ready | rows=2; statuses=error; attempted_aliases=claude-opus-4-6,claude-opus-4-7,claude-opus-4-8 | results/model_ablation_prompts/v0/run_report.json |
 | claude_opus_4_8_ablation_complete | pending | saved and scored responses are required before claiming completion | results/model_ablation_prompts/v0/evaluation.json |
 | gpt_family_ablation_availability_checked | ready | rows=2; statuses=error; catalog_gpt_models=16 | results/model_ablation_prompts/v0/run_report.json |
 | gpt_family_ablation_complete | pending | GPT-family catalog is available, but chat completions did not produce saved/scored responses | results/model_ablation_prompts/v0/evaluation.json |

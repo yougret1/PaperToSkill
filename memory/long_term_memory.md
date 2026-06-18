@@ -114,8 +114,8 @@ Claude-family profile:
 - User-requested aliases: `claude-opus-4.8`, `claude-opus-4-6`,
   `claude-opus-4-7`.
 - Latest catalog evidence lists `claude-opus-4-8`, `claude-opus-4-7`, and
-  `claude-opus-4-6`; chat completions still fail with HTTP 503/no available
-  accounts.
+  `claude-opus-4-6`; alias-retry chat attempts for all three still fail with
+  HTTP 503/no available accounts.
 
 GPT-family profile:
 
@@ -123,9 +123,9 @@ GPT-family profile:
 - Key source: local environment variable, e.g.
   `PAPERTOSKILL_GPT_OPENAI_API_KEY`.
 - Latest catalog evidence with the separate GPT key lists `gpt-5.5`,
-  `gpt-5.4`, and other GPT-family models; `gpt-5.5` chat completions fail with
-  HTTP 502/upstream access forbidden. Do not claim completed GPT ablations until
-  response files are saved and scored.
+  `gpt-5.4`, and other GPT-family models; alias-retry chat attempts for
+  `gpt-5.5` and `gpt-5.4` fail with HTTP 502/upstream access forbidden. Do not
+  claim completed GPT ablations until response files are saved and scored.
 
 DeepSeek:
 

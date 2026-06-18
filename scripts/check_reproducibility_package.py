@@ -103,6 +103,9 @@ CORE_FILES = {
     "phase28_usage_example_gate_run_log": "research/run_logs/2026-06-18_phase28_usage_example_gate.md",
     "phase29_paper_table_gate_run_log": "research/run_logs/2026-06-18_phase29_paper_table_gate.md",
     "phase30_paper_claim_gate_run_log": "research/run_logs/2026-06-18_phase30_paper_claim_gate.md",
+    "phase31_goal_completion_run_log": "research/run_logs/2026-06-18_phase31_goal_completion_gate.md",
+    "phase32_model_profile_recheck_run_log": "research/run_logs/2026-06-18_phase32_model_profile_recheck.md",
+    "phase33_alias_retry_model_recheck_run_log": "research/run_logs/2026-06-19_phase33_alias_retry_model_recheck.md",
     "result_cards": "results/result_cards.md",
 }
 

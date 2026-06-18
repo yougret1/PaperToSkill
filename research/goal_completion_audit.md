@@ -32,8 +32,8 @@ and 0 failed checks.
 | Save phase-level progress to `yougret1/PaperToSkill.git`. | Phase-level commits are pushed to `origin/main`; latest saved phases include AAAI package, usage-example, paper-table, and paper-claim gates. | Complete through current pushed phase | Keep committing/pushing phase-level increments. |
 | Use official AAAI TeX template for final paper. | `paper/aaai/AuthorKit27.zip`; `paper/aaai/aaai2027.sty`; `paper/aaai/aaai2027.bst`; `paper/aaai/README.md`; `paper/aaai/papertoskill_aaai2027.tex`; `paper/aaai/papertoskill_aaai2027.pdf`; `scripts/check_aaai_package.py`; `results/reproducibility/aaai_package_report.md`; `scripts/check_paper_tables.py`; `results/reproducibility/paper_table_report.md`; `scripts/check_paper_claims.py`; `results/reproducibility/paper_claim_report.md`. | Prepared and locally verified, not submission-final | Keep the AAAI draft synchronized with new evidence. Submission-final requires final claims, figures, metadata, and any venue-specific updates. |
 | Provide experiment usage examples. | `examples/usage/README.md`; `examples/usage/codex_skill_usage.md`; `examples/usage/auto_note_scaffold_usage.md`; `examples/usage/model_ablation_usage.md`; `scripts/check_usage_examples.py`; `results/reproducibility/usage_example_report.md`; `research/runbook.md`. | Complete and locally verified | Keep examples synchronized if task specs or runner commands change. |
-| Run or prepare Claude Opus 4.8 ablation. | `benchmarks/model_ablation_v0.json`; prompt packets under `results/model_ablation_prompts/v0/`; runner/evaluator scripts; latest run report shows Claude 4.8/4.7/4.6 aliases listed but `claude-opus-4-8` chat completions fail HTTP 503 `No available accounts`. | Attempted, blocked | Re-run `scripts/run_model_ablation_prompts.py` when provider account capacity is available. |
-| Run or prepare GPT 5.5 / GPT-family ablation. | Same model-ablation artifacts; latest run report with the separate GPT key lists `gpt-5.5`, `gpt-5.4`, and other GPT-family aliases, but `gpt-5.5` chat completions fail HTTP 502 `Upstream access forbidden`. | Attempted, blocked at chat completion | Re-run when GPT upstream access is enabled or use another listed GPT-family alias if appropriate. Record actual alias used. |
+| Run or prepare Claude Opus 4.8 ablation. | `benchmarks/model_ablation_v0.json`; prompt packets under `results/model_ablation_prompts/v0/`; runner/evaluator scripts; latest run report shows the runner tried `claude-opus-4-8`, `claude-opus-4-7`, and `claude-opus-4-6`, and all chat completions failed HTTP 503 `No available accounts`. | Attempted, blocked | Re-run `scripts/run_model_ablation_prompts.py` when provider account capacity is available. |
+| Run or prepare GPT 5.5 / GPT-family ablation. | Same model-ablation artifacts; latest run report with the separate GPT key lists `gpt-5.5`, `gpt-5.4`, and other GPT-family aliases; the runner tried `gpt-5.5` and `gpt-5.4`, and both failed HTTP 502 `Upstream access forbidden`. | Attempted, blocked at chat completion | Re-run when GPT upstream access is enabled. Record actual alias used. |
 | Provide DeepSeek-follow-up process for the user. | `deepseek_followup_slot` in `benchmarks/model_ablation_v0.json`; runner now skips only placeholder alias; tests cover placeholder vs configured DeepSeek behavior; usage docs and runbook include DeepSeek steps. | Process ready; model response pending | User fills concrete DeepSeek alias/env vars, rebuilds prompts, runs `--model-id deepseek_followup_slot`, then scores saved responses. |
 | Develop PaperToSkill extraction system. | `scripts/papertoskill_extract.py`; generated skills for four curated papers; source maps; deterministic auto-note scaffold for Toolformer/AIDE; tests. | Complete for current scoped prototype | Broader arbitrary-PDF automation remains unsupported and should not be claimed. |
 | Experiments: main results. | `results/tables/main_results.md`; four-paper deterministic results; generated skills outperform generic and abstract baselines on operational coverage. | Complete for deterministic/offline benchmark | Live task success remains pending. |
@@ -45,16 +45,17 @@ and 0 failed checks.
 
 ## Current Blocking Evidence
 
-- `results/model_ablation_prompts/v0/run_report.md`: Claude rows selected
-  `claude-opus-4-8` exactly but failed HTTP 503 with `No available accounts`;
-  GPT-family rows selected `gpt-5.5` exactly but failed HTTP 502 with
-  `Upstream access forbidden`.
+- `results/model_ablation_prompts/v0/run_report.md`: Claude rows tried
+  `claude-opus-4-8`, `claude-opus-4-7`, and `claude-opus-4-6`; all failed HTTP
+  503 with `No available accounts`. GPT-family rows tried `gpt-5.5` and
+  `gpt-5.4`; both failed HTTP 502 with `Upstream access forbidden`.
 - `results/model_ablation_prompts/v0/evaluation.md`: 6 total rows, 0 scored
   rows, 6 pending rows.
-- `research/run_logs/2026-06-18_phase32_model_profile_recheck.md`: latest
-  endpoint recheck confirms the same Claude account-pool blocker and shows that
-  the separate GPT credential profile lists GPT models but cannot complete chat
-  requests.
+- `research/run_logs/2026-06-19_phase33_alias_retry_model_recheck.md`: latest
+  endpoint recheck confirms the same Claude account-pool blocker across all
+  listed Claude candidates and shows that the separate GPT credential profile
+  lists GPT models but cannot complete chat requests for `gpt-5.5` or
+  `gpt-5.4`.
 - `results/human_fidelity_packets/annotation_summary.md`: human annotation is
   pending.
 - `results/reproducibility/package_report.md`: 7 pending checks remain.

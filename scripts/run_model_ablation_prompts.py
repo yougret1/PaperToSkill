@@ -113,6 +113,22 @@ def select_model_alias(model_slot: dict[str, Any], available: list[str]) -> tupl
     return None, f"unavailable_{candidates[0]}"
 
 
+def alias_attempts(model_slot: dict[str, Any], available: list[str]) -> list[tuple[str, str]]:
+    attempts = [(candidate, "exact") for candidate in alias_candidates(model_slot) if candidate in available]
+    if attempts:
+        return attempts
+
+    if model_slot["id"] == "gpt_5_5_or_gpt_family":
+        fallback = gpt_fallback(available)
+        if fallback:
+            return [(fallback, f"fallback_from_{alias_candidates(model_slot)[0]}")]
+
+    candidates = alias_candidates(model_slot)
+    if not available and candidates[0] != "deepseek-to-be-filled":
+        return [(candidates[0], "unverified_no_model_list")]
+    return []
+
+
 def extract_content(response: dict[str, Any]) -> str:
     choices = response.get("choices", [])
     if choices and isinstance(choices[0], dict):
@@ -129,7 +145,14 @@ def extract_content(response: dict[str, Any]) -> str:
 def write_markdown(path: Path, report: dict[str, Any]) -> None:
     rows = []
     for item in report["results"]:
-        detail = item.get("error_message") or item.get("selection_reason", "")
+        attempts = item.get("attempted_aliases") or []
+        if attempts:
+            detail = "; ".join(
+                f"{attempt['alias']}={attempt['status']}"
+                for attempt in attempts
+            )
+        else:
+            detail = item.get("error_message") or item.get("selection_reason", "")
         rows.append(
             "| "
             + " | ".join(
@@ -247,8 +270,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                 continue
             model_cache[cache_key] = available
 
-        alias, reason = select_model_alias(slot, available)
-        if alias is None:
+        attempts = alias_attempts(slot, available)
+        if not attempts:
+            _, reason = select_model_alias(slot, available)
             results.append(
                 {
                     "model_id": model_id,
@@ -262,45 +286,68 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
             continue
 
         prompt_text = Path(prompt["prompt_path"]).read_text(encoding="utf-8")
-        body = {
-            "model": alias,
-            "messages": [
-                {
-                    "role": "system",
-                    "content": "You are executing a PaperToSkill model-ablation prompt. Follow the output contract and do not invent completed evidence.",
-                },
-                {"role": "user", "content": prompt_text},
-            ],
-            "temperature": 0,
-            "max_tokens": args.max_tokens,
-        }
-        try:
-            status, response = request_json(endpoint(base_url, "chat/completions"), api_key, method="POST", body=body)
-            content = extract_content(response)
-            response_path = Path(prompt["expected_response_path"])
-            response_path.parent.mkdir(parents=True, exist_ok=True)
-            response_path.write_text(content.strip() + "\n", encoding="utf-8")
-            results.append(
-                {
+        attempt_records = []
+        saved_result: dict[str, Any] | None = None
+        for alias, reason in attempts:
+            body = {
+                "model": alias,
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": "You are executing a PaperToSkill model-ablation prompt. Follow the output contract and do not invent completed evidence.",
+                    },
+                    {"role": "user", "content": prompt_text},
+                ],
+                "temperature": 0,
+                "max_tokens": args.max_tokens,
+            }
+            try:
+                status, response = request_json(endpoint(base_url, "chat/completions"), api_key, method="POST", body=body)
+                content = extract_content(response)
+                response_path = Path(prompt["expected_response_path"])
+                response_path.parent.mkdir(parents=True, exist_ok=True)
+                response_path.write_text(content.strip() + "\n", encoding="utf-8")
+                attempt_records.append(
+                    {
+                        "alias": alias,
+                        "selection_reason": reason,
+                        "status": "success",
+                    }
+                )
+                saved_result = {
                     "model_id": model_id,
                     "case_id": prompt["case_id"],
                     "status": "success",
                     "alias_used": alias,
                     "selection_reason": reason,
+                    "attempted_aliases": attempt_records,
                     "http_status": status,
                     "response_chars": len(content),
                     "expected_response_path": prompt["expected_response_path"],
                 }
-            )
-        except RuntimeError as exc:
+                break
+            except RuntimeError as exc:
+                attempt_records.append(
+                    {
+                        "alias": alias,
+                        "selection_reason": reason,
+                        "status": "error",
+                        "error_message": str(exc),
+                    }
+                )
+
+        if saved_result is not None:
+            results.append(saved_result)
+        else:
             results.append(
                 {
                     "model_id": model_id,
                     "case_id": prompt["case_id"],
                     "status": "error",
-                    "alias_used": alias,
-                    "selection_reason": reason,
-                    "error_message": str(exc),
+                    "alias_used": attempts[-1][0],
+                    "selection_reason": "all_candidate_aliases_failed",
+                    "attempted_aliases": attempt_records,
+                    "error_message": attempt_records[-1]["error_message"],
                     "expected_response_path": prompt["expected_response_path"],
                 }
             )

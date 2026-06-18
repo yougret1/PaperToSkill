@@ -1222,3 +1222,36 @@ Evidence boundary:
   attempt with the user's updated credentials.
 - It does not complete model-quality ablations because no response files were
   saved or scored.
+
+## 2026-06-19 Phase 33
+
+Actions:
+
+- Updated `scripts/run_model_ablation_prompts.py` so live runs retry later
+  candidate aliases when an advertised first-choice alias fails at
+  chat-completion time.
+- Added `tests/test_model_ablation_execution.py` coverage for successful
+  fallback from a failed first Claude alias to a later Claude alias.
+- Reran the Claude/GPT-family model-ablation live runner and response
+  evaluator.
+- Updated `scripts/check_goal_completion.py` so "ablation attempted" is based
+  on provider/model attempt evidence, while saved-and-scored responses remain
+  the separate completion requirement.
+
+Results:
+
+- Claude catalog via `AI_SCIENTIST_OPENAI_API_KEY` lists 8 Claude-family models.
+- The runner tried `claude-opus-4-8`, `claude-opus-4-7`, and
+  `claude-opus-4-6` for both Claude prompt rows; all failed HTTP 503:
+  `No available accounts`.
+- GPT catalog via `PAPERTOSKILL_GPT_OPENAI_API_KEY` lists 17 models.
+- The runner tried `gpt-5.5` and `gpt-5.4` for both GPT prompt rows; both
+  failed HTTP 502: `Upstream access forbidden`.
+- Response evaluation remains 6 total rows, 0 scored rows, and 6 pending rows.
+
+Evidence boundary:
+
+- Phase 33 strengthens the live-run protocol and current provider-availability
+  evidence.
+- It does not complete model-quality ablations because no response files were
+  saved or scored.
