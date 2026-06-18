@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 135
+- Ready checks: 140
 - Pending checks: 7
 - Failed checks: 0
 
@@ -24,6 +24,9 @@ Evidence boundary: this report checks local package completeness and separates p
 | aaai_build_style | ready | present | paper/aaai/aaai2027.sty |
 | aaai_build_bst | ready | present | paper/aaai/aaai2027.bst |
 | aaai_author_kit_zip | ready | present | paper/aaai/AuthorKit27.zip |
+| aaai_package_checker | ready | present | scripts/check_aaai_package.py |
+| aaai_package_report_json | ready | present | results/reproducibility/aaai_package_report.json |
+| aaai_package_report_md | ready | present | results/reproducibility/aaai_package_report.md |
 | usage_examples_readme | ready | present | examples/usage/README.md |
 | usage_example_codex_skill | ready | present | examples/usage/codex_skill_usage.md |
 | usage_example_auto_note | ready | present | examples/usage/auto_note_scaffold_usage.md |
@@ -110,6 +113,8 @@ Evidence boundary: this report checks local package completeness and separates p
 | failure_archive_md | ready | present | results/failure_cases/failure_case_archive.md |
 | failure_archive_csv | ready | present | results/failure_cases/failure_case_archive.csv |
 | failure_archive_counts | ready | total=27; paper=21; project=6 | results\failure_cases\failure_case_archive.json |
+| aaai_package_report_ready | ready | overall=ready; counts={'ready': 17, 'fail': 0} | results\reproducibility\aaai_package_report.json |
+| aaai_package_core_checks_ready | ready | core checks ready | results\reproducibility\aaai_package_report.json |
 | toolformer_auto_note_script | ready | present | scripts/papertoskill_note_from_text.py |
 | toolformer_auto_note | ready | present | papers/auto_notes/toolformer_auto_note.md |
 | toolformer_auto_skill | ready | present | generated_skills/toolformer_auto/SKILL.md |

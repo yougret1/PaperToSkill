@@ -461,7 +461,7 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 135 ready checks, 7
+  `overall_status=ready_with_pending_external_evidence`, 140 ready checks, 7
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
@@ -478,6 +478,28 @@
 - Figure/table: `scripts/check_reproducibility_package.py`;
   `results/reproducibility/package_report.md`;
   `results/reproducibility/package_report.json`.
+
+## AAAI Package Verification Gate
+
+- Experiment: add an automated local gate for the AAAI-27 paper package and
+  generated build artifacts.
+- Main result: `results/reproducibility/aaai_package_report.md` reports
+  `overall_status=ready`, 17 ready checks, and 0 failed checks.
+- Checks: required AAAI files, author-kit SHA256, `aaai2027` declaration and
+  log load marker, fresh PDF/log/BibTeX outputs, PDF page/byte output marker,
+  and unresolved citation/reference/build markers.
+- Practical significance: the final-paper package is no longer only a set of
+  files; it has a reproducible local verification gate that can fail on stale
+  PDF artifacts or unresolved references.
+- Failure modes: this does not judge paper quality, venue compliance beyond the
+  checked package/build markers, or whether the manuscript is submission-final.
+- Limitations: a passing check depends on local generated build artifacts and
+  does not replace re-running the full LaTeX toolchain after future TeX edits.
+- Claim impact: strengthens the claim that the requested AAAI TeX package is
+  prepared and locally verifiable, while preserving the no-acceptance boundary.
+- Figure/table: `scripts/check_aaai_package.py`;
+  `results/reproducibility/aaai_package_report.md`;
+  `results/reproducibility/aaai_package_report.json`.
 
 ## Review And Rebuttal Package
 

@@ -44,6 +44,7 @@
 | `research/run_logs/2026-06-18_phase23_deepseek_followup_readiness.md` | DeepSeek follow-up readiness, runner behavior hardening, and endpoint recheck | Created |
 | `research/run_logs/2026-06-18_phase25_tokenizer_cost_proxy.md` | Tokenizer-aware compactness/cost proxy commands and outcomes | Created |
 | `research/run_logs/2026-06-18_phase26_model_ablation_recheck.md` | Claude/GPT-family model-ablation endpoint recheck and pending-response evidence | Created |
+| `research/run_logs/2026-06-18_phase27_aaai_package_gate.md` | AAAI package checker, report, and reproducibility-gate integration | Created |
 
 ## Paper Draft Package
 
@@ -60,6 +61,7 @@
 | `paper/aaai/papertoskill_aaai2027.tex` | AAAI-formatted PaperToSkill LaTeX draft | Created |
 | `paper/aaai/papertoskill_tables.tex` | LaTeX table fragments derived from current result tables | Created |
 | `paper/aaai/papertoskill_refs.bib` | Bibliography file for the AAAI draft | Created |
+| `scripts/check_aaai_package.py` | Verifies local AAAI package files, SHA256, style use, fresh PDF/log, and unresolved-reference markers | Created |
 
 ## AI-Scientist-v2 Inputs
 
@@ -241,6 +243,8 @@
 | `results/failure_cases/failure_case_archive.csv` | CSV failure-case archive | Created |
 | `results/reproducibility/package_report.md` | Human-readable reproducibility package report | Created |
 | `results/reproducibility/package_report.json` | Machine-readable reproducibility package report | Created |
+| `results/reproducibility/aaai_package_report.md` | Human-readable AAAI package verification report | Created |
+| `results/reproducibility/aaai_package_report.json` | Machine-readable AAAI package verification report | Created |
 | `results/model_ablation_prompts/v0/index.json` | Model-ablation prompt packet index with pending response slots | Created |
 | `results/model_ablation_prompts/v0/*.md` | Six model-ablation prompt packets across Claude, GPT-family, and DeepSeek slots | Created |
 | `results/model_ablation_prompts/v0/run_report.md` | Redacted live-attempt report showing provider/model availability status | Created |

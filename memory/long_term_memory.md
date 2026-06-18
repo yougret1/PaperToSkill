@@ -72,6 +72,9 @@ Initial target contribution categories:
   paper source maps and project-level failure/fix records.
 - `scripts/check_reproducibility_package.py`: checks local reproducibility
   package readiness and separates pending external evidence from local failures.
+- `scripts/check_aaai_package.py`: verifies the local AAAI package files,
+  official author-kit SHA256, `aaai2027` style declaration/load marker, fresh
+  PDF/log/BibTeX artifacts, and unresolved citation/reference/build markers.
 - `tests/test_papertoskill_extract.py`: extractor smoke test.
 - `tests/test_evaluate_skill.py`: evaluator smoke test.
 - `generated_skills/`: retained generated examples with source maps.
@@ -179,7 +182,7 @@ Initial target contribution categories:
   paper-reported limitations/failure branches and 6 project-level failure/fix
   records.
 - `results/reproducibility/`: reproducibility package report. Current status is
-  ready with pending external evidence, 135 ready checks, 7 pending checks, and
+  ready with pending external evidence, 140 ready checks, 7 pending checks, and
   0 failed checks.
 - `research/review_report.md` and `research/rebuttal_bank.md`: internal
   review/rebuttal readiness artifacts that map likely reviewer objections to
@@ -193,7 +196,8 @@ Initial target contribution categories:
 - `paper/limitations.md`: limitations and future-work text aligned to current
   deterministic/offline evidence.
 - `paper/aaai/`: official AAAI-27 author kit, template provenance, and
-  AAAI-formatted PaperToSkill LaTeX draft.
+  AAAI-formatted PaperToSkill LaTeX draft. The local AAAI package report is
+  ready with 17 ready checks and 0 failed checks.
 - `examples/usage/`: usage examples for Codex-style skill loading,
   extracted-text auto-note-to-skill conversion, and model-ablation execution.
 - `benchmarks/model_ablation_v0.json`: Claude/GPT-family/DeepSeek model

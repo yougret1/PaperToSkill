@@ -72,6 +72,9 @@ CORE_FILES = {
     "aaai_build_style": "paper/aaai/aaai2027.sty",
     "aaai_build_bst": "paper/aaai/aaai2027.bst",
     "aaai_author_kit_zip": "paper/aaai/AuthorKit27.zip",
+    "aaai_package_checker": "scripts/check_aaai_package.py",
+    "aaai_package_report_json": "results/reproducibility/aaai_package_report.json",
+    "aaai_package_report_md": "results/reproducibility/aaai_package_report.md",
     "usage_examples_readme": "examples/usage/README.md",
     "usage_example_codex_skill": "examples/usage/codex_skill_usage.md",
     "usage_example_auto_note": "examples/usage/auto_note_scaffold_usage.md",
@@ -365,6 +368,38 @@ def failure_archive_checks(root: Path) -> list[Check]:
     return checks
 
 
+def aaai_package_checks(root: Path) -> list[Check]:
+    checks: list[Check] = []
+    report_path = root / "results/reproducibility/aaai_package_report.json"
+    if not report_path.exists():
+        return checks
+    report = load_json(report_path)
+    status = "ready" if report.get("overall_status") == "ready" else "fail"
+    counts = report.get("status_counts", {})
+    detail = f"overall={report.get('overall_status')}; counts={counts}"
+    checks.append(Check("aaai_package_report_ready", status, detail, str(report_path.relative_to(root))))
+    ready_ids = {check.get("id") for check in report.get("checks", []) if check.get("status") == "ready"}
+    required_ready = {
+        "aaai_author_kit_sha256",
+        "aaai_tex_declares_style",
+        "aaai_log_loads_style",
+        "aaai_log_no_unresolved_items",
+        "aaai_log_reports_pdf_output",
+        "aaai_pdf_is_fresh",
+        "aaai_bbl_is_fresh",
+    }
+    missing = sorted(required_ready - ready_ids)
+    checks.append(
+        Check(
+            "aaai_package_core_checks_ready",
+            "ready" if not missing else "fail",
+            "core checks ready" if not missing else "missing=" + ",".join(missing),
+            str(report_path.relative_to(root)),
+        )
+    )
+    return checks
+
+
 def auto_note_checks(root: Path) -> list[Check]:
     checks: list[Check] = []
     for case in AUTO_NOTE_CASES:
@@ -494,6 +529,7 @@ def build_report(root: Path) -> dict[str, Any]:
     checks.extend(paper_checks(root))
     checks.extend(human_fidelity_checks(root))
     checks.extend(failure_archive_checks(root))
+    checks.extend(aaai_package_checks(root))
     checks.extend(auto_note_checks(root))
     checks.extend(model_ablation_checks(root))
     checks.append(secret_scan_check(root))

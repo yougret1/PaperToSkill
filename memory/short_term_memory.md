@@ -22,6 +22,10 @@ availability was tested again with the provided endpoint/key. `/v1/models`
 still lists `claude-opus-4-8`, but chat completions still fail with HTTP
 503/no available accounts, and no GPT-family alias is listed.
 
+Phase 27 is the latest local phase: AAAI package verification gate. The goal is
+to make the requested AAAI TeX paper package locally checkable beyond file
+presence.
+
 ## Latest User Request
 
 The user provided the PaperToSkill idea and asked to:
@@ -460,7 +464,7 @@ The user provided the PaperToSkill idea and asked to:
   artifact map, decision log, result cards, goal audit, reproducibility checker,
   stage log, and memory so tokenizer-aware proxy evidence is distinguished from
   real provider economics.
-- Current reproducibility package report after Phase 26 regeneration:
+- Reproducibility package report after Phase 26 regeneration:
   `ready_with_pending_external_evidence`, 135 ready checks, 7 pending checks,
   and 0 failed checks.
 - Phase 25 was committed and pushed as `a2a426e` on `origin/main`.
@@ -479,6 +483,20 @@ The user provided the PaperToSkill idea and asked to:
   - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
   - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
   - AAAI log search found no undefined citation/reference rerun warnings.
+- Phase 27 added `scripts/check_aaai_package.py`,
+  `tests/test_check_aaai_package.py`,
+  `results/reproducibility/aaai_package_report.json`, and
+  `results/reproducibility/aaai_package_report.md`.
+- Phase 27 AAAI package report status:
+  - `overall_status=ready`
+  - 17 ready checks
+  - 0 failed checks
+  - checks cover required package files, author-kit SHA256, `aaai2027`
+    declaration/load marker, fresh PDF/log/BibTeX artifacts, PDF output marker,
+    and unresolved citation/reference/build markers.
+- Current reproducibility package report after Phase 27 regeneration:
+  `ready_with_pending_external_evidence`, 140 ready checks, 7 pending checks,
+  and 0 failed checks.
 
 ## Current Blockers / Pending Checks
 
@@ -505,6 +523,9 @@ The user provided the PaperToSkill idea and asked to:
 - Need provider-specific prices, output-token accounting, live invoices, or
   success-per-dollar evidence before making stronger economic/cost-saving
   claims beyond local token/cost proxy.
+- AAAI package/build readiness is locally verified, but the manuscript is not
+  submission-final while live model, human-fidelity, and real cost evidence
+  decisions remain open.
 
 ## Next Actions
 

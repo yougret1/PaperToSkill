@@ -182,3 +182,13 @@
   tokenizer-aware sensitivity check, but this still is not provider billing,
   output-token cost, or success-per-dollar evidence.
 - Status: accepted for Phase 25.
+
+## 2026-06-18: Make AAAI Package Readiness A Local Gate
+
+- Decision: add `scripts/check_aaai_package.py` and require its generated
+  report from the reproducibility package checker.
+- Rationale: the user requested an AAAI TeX final-paper package. File presence
+  and a manual log grep are weaker than a reusable gate that checks the official
+  author-kit hash, style declaration/load marker, fresh PDF/log/BibTeX
+  artifacts, and unresolved citation/reference/build markers.
+- Status: accepted for Phase 27.

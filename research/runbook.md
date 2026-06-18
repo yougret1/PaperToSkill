@@ -140,6 +140,20 @@ pdflatex papertoskill_aaai2027.tex
 If `pdflatex` is unavailable in the local environment, treat the `.tex` package
 as prepared but not rendered.
 
+Verify the local AAAI package and generated PDF artifacts:
+
+```powershell
+python scripts\check_aaai_package.py `
+  --output-json results\reproducibility\aaai_package_report.json `
+  --output-md results\reproducibility\aaai_package_report.md `
+  --strict
+```
+
+This checker verifies the author-kit SHA256, required package files, the
+`aaai2027` style declaration/load marker, fresh PDF/log/bibliography artifacts,
+and unresolved citation/reference/build-warning markers. Passing it does not
+mean the paper is submission-final.
+
 ## AI-Scientist-v2 Dry Run
 
 From `D:\a_work\gitee\ai-scientist-v2`:

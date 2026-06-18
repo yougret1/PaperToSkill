@@ -1018,3 +1018,33 @@ Evidence boundary:
 - Phase 26 is current provider/model availability evidence only.
 - It does not complete Claude/GPT-family model-quality ablations, does not
   evaluate DeepSeek, and does not support negative model-quality conclusions.
+
+## 2026-06-18 Phase 27
+
+Actions:
+
+- Added `scripts/check_aaai_package.py`, an automated gate for the local
+  AAAI-27 paper package and generated build artifacts.
+- Added `tests/test_check_aaai_package.py`.
+- Generated `results/reproducibility/aaai_package_report.json` and
+  `results/reproducibility/aaai_package_report.md`.
+- Integrated the AAAI package report into
+  `scripts/check_reproducibility_package.py`.
+- Updated runbook, claim/evidence docs, result cards, goal audit, and memory to
+  treat AAAI readiness as a local gate rather than only file presence.
+
+Results:
+
+- The AAAI package report is `ready` with 17 ready checks and 0 failed checks.
+- The checker verifies required package files, the official author-kit SHA256,
+  `aaai2027` declaration and log load marker, fresh PDF/log/BibTeX outputs, PDF
+  output marker, and unresolved citation/reference/build-warning markers.
+- The reproducibility package report now shows
+  `ready_with_pending_external_evidence`, 140 ready checks, 7 pending checks,
+  and 0 failed checks.
+
+Evidence boundary:
+
+- Phase 27 supports local AAAI package/build-artifact readiness.
+- It does not make the manuscript submission-final, accepted, or empirically
+  stronger on live model, human-fidelity, or provider-billing claims.
