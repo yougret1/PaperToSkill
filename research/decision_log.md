@@ -192,3 +192,13 @@
   author-kit hash, style declaration/load marker, fresh PDF/log/BibTeX
   artifacts, and unresolved citation/reference/build markers.
 - Status: accepted for Phase 27.
+
+## 2026-06-18: Make Usage Examples Machine-Checkable
+
+- Decision: add `scripts/check_usage_examples.py`, generate a usage-example
+  report, and require that report from the reproducibility package checker.
+- Rationale: the user requested experiment usage examples. Markdown protocols
+  are useful, but a local gate can prove that files, prompt/response slots, and
+  the offline auto-note-to-skill chain are still executable while keeping live
+  model calls pending.
+- Status: accepted for Phase 28.

@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 140
+- Ready checks: 147
 - Pending checks: 7
 - Failed checks: 0
 
@@ -31,6 +31,9 @@ Evidence boundary: this report checks local package completeness and separates p
 | usage_example_codex_skill | ready | present | examples/usage/codex_skill_usage.md |
 | usage_example_auto_note | ready | present | examples/usage/auto_note_scaffold_usage.md |
 | usage_example_model_ablation | ready | present | examples/usage/model_ablation_usage.md |
+| usage_example_checker | ready | present | scripts/check_usage_examples.py |
+| usage_example_report_json | ready | present | results/reproducibility/usage_example_report.json |
+| usage_example_report_md | ready | present | results/reproducibility/usage_example_report.md |
 | artifact_map | ready | present | research/artifact_map.md |
 | claim_evidence_matrix | ready | present | research/claim_evidence_matrix.md |
 | runbook | ready | present | research/runbook.md |
@@ -39,6 +42,8 @@ Evidence boundary: this report checks local package completeness and separates p
 | phase22_model_ablation_run_log | ready | present | research/run_logs/2026-06-18_phase22_model_ablation_live_attempt.md |
 | phase23_deepseek_readiness_run_log | ready | present | research/run_logs/2026-06-18_phase23_deepseek_followup_readiness.md |
 | phase26_model_ablation_recheck_run_log | ready | present | research/run_logs/2026-06-18_phase26_model_ablation_recheck.md |
+| phase27_aaai_package_gate_run_log | ready | present | research/run_logs/2026-06-18_phase27_aaai_package_gate.md |
+| phase28_usage_example_gate_run_log | ready | present | research/run_logs/2026-06-18_phase28_usage_example_gate.md |
 | result_cards | ready | present | results/result_cards.md |
 | main_results_md | ready | present | results/tables/main_results.md |
 | main_results_csv | ready | present | results/tables/main_results.csv |
@@ -115,6 +120,8 @@ Evidence boundary: this report checks local package completeness and separates p
 | failure_archive_counts | ready | total=27; paper=21; project=6 | results\failure_cases\failure_case_archive.json |
 | aaai_package_report_ready | ready | overall=ready; counts={'ready': 17, 'fail': 0} | results\reproducibility\aaai_package_report.json |
 | aaai_package_core_checks_ready | ready | core checks ready | results\reproducibility\aaai_package_report.json |
+| usage_example_report_ready | ready | overall=ready; counts={'ready': 34, 'fail': 0} | results\reproducibility\usage_example_report.json |
+| usage_example_core_checks_ready | ready | core checks ready | results\reproducibility\usage_example_report.json |
 | toolformer_auto_note_script | ready | present | scripts/papertoskill_note_from_text.py |
 | toolformer_auto_note | ready | present | papers/auto_notes/toolformer_auto_note.md |
 | toolformer_auto_skill | ready | present | generated_skills/toolformer_auto/SKILL.md |

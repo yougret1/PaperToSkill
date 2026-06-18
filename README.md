@@ -10,14 +10,15 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 27: AAAI package verification gate. The AAAI-27 paper package, usage
+Phase 28: usage-example verification gate. The AAAI-27 paper package, usage
 examples, deterministic/offline experiments, model-ablation runner, DeepSeek
-follow-up path, local `o200k_base` cost-proxy tables, and automated AAAI build
-artifact checks are prepared. The latest live model recheck still finds
-`claude-opus-4-8` listed but blocked by provider account availability, with no
-GPT-family alias listed. The active goal is not yet complete because live model
-responses, DeepSeek responses, human-fidelity annotation, and provider-specific
-billing or success-per-dollar evidence remain pending.
+follow-up path, local `o200k_base` cost-proxy tables, automated AAAI build
+artifact checks, and a machine-checkable usage-example report are prepared. The
+latest live model recheck still finds `claude-opus-4-8` listed but blocked by
+provider account availability, with no GPT-family alias listed. The active goal
+is not yet complete because live model responses, DeepSeek responses,
+human-fidelity annotation, and provider-specific billing or success-per-dollar
+evidence remain pending.
 
 ## Memory
 
@@ -87,6 +88,7 @@ pending live-agent claims.
 - Failure-case archive: `results/failure_cases/`.
 - Reproducibility package report: `results/reproducibility/`.
 - AAAI package report: `results/reproducibility/aaai_package_report.md`.
+- Usage-example report: `results/reproducibility/usage_example_report.md`.
 - Auto-note comparison: `results/tables/auto_note_comparison.md`.
 - Usage examples: `examples/usage/`.
 - Model-ablation prompt packets: `results/model_ablation_prompts/v0/`.

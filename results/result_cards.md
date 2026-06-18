@@ -461,7 +461,7 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 140 ready checks, 7
+  `overall_status=ready_with_pending_external_evidence`, 147 ready checks, 7
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
@@ -478,6 +478,30 @@
 - Figure/table: `scripts/check_reproducibility_package.py`;
   `results/reproducibility/package_report.md`;
   `results/reproducibility/package_report.json`.
+
+## Usage Example Verification Gate
+
+- Experiment: add a machine-checkable gate for paper-facing usage examples.
+- Main result: `results/reproducibility/usage_example_report.md` reports
+  `overall_status=ready`, 34 ready checks, and 0 failed checks.
+- Checks: usage docs, Codex-style Toolformer skill inputs, model-ablation prompt
+  grid, model slots, response slots, and an offline AIDE extracted-text-to-note-
+  to-skill chain.
+- Offline example: the temporary AIDE chain selected 6 method windows, 6
+  experiment windows, and 5 limitation windows, then produced a generated skill
+  scoring 20/20 on the AIDE deterministic rubric.
+- Practical significance: the experiments section now has examples that are not
+  only described in Markdown but also locally checked for runnable inputs and
+  output slots.
+- Failure modes: the checker does not make live Claude/GPT/DeepSeek calls and
+  does not prove model-response quality or human usability.
+- Limitations: live response files, response scoring, and user-facing
+  qualitative evaluation remain pending.
+- Claim impact: strengthens the local usage-example readiness claim while
+  preserving the live-model evidence boundary.
+- Figure/table: `scripts/check_usage_examples.py`;
+  `results/reproducibility/usage_example_report.md`;
+  `results/reproducibility/usage_example_report.json`.
 
 ## AAAI Package Verification Gate
 

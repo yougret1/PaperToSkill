@@ -1,0 +1,229 @@
+{
+  "schema_version": "0.1",
+  "evidence_boundary": "Checks local usage-example files, input artifacts, prompt/response slots, and an offline auto-note-to-skill example chain. It does not execute live model calls or score model responses.",
+  "overall_status": "ready",
+  "status_counts": {
+    "ready": 34,
+    "fail": 0
+  },
+  "checks": [
+    {
+      "id": "usage_readme",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "examples/usage/README.md"
+    },
+    {
+      "id": "codex_skill_usage",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "examples/usage/codex_skill_usage.md"
+    },
+    {
+      "id": "auto_note_scaffold_usage",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "examples/usage/auto_note_scaffold_usage.md"
+    },
+    {
+      "id": "model_ablation_usage",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "examples/usage/model_ablation_usage.md"
+    },
+    {
+      "id": "codex_toolformer_skill",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "generated_skills/toolformer/SKILL.md"
+    },
+    {
+      "id": "codex_toolformer_source_map",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "generated_skills/toolformer/references/source_map.json"
+    },
+    {
+      "id": "codex_toolformer_prompt",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/live_transfer_prompts/toolformer_v0/codex_skill__full_skill.md"
+    },
+    {
+      "id": "auto_note_source_text",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "papers/extracted/aide.txt"
+    },
+    {
+      "id": "auto_note_rubric",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "benchmarks/rubric_aide_v0.json"
+    },
+    {
+      "id": "auto_note_script",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "scripts/papertoskill_note_from_text.py"
+    },
+    {
+      "id": "extract_script",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "scripts/papertoskill_extract.py"
+    },
+    {
+      "id": "evaluate_script",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "scripts/evaluate_skill.py"
+    },
+    {
+      "id": "model_ablation_task",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "benchmarks/model_ablation_v0.json"
+    },
+    {
+      "id": "model_ablation_prompt_index",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/model_ablation_prompts/v0/index.json"
+    },
+    {
+      "id": "model_ablation_builder",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "scripts/build_model_ablation_prompts.py"
+    },
+    {
+      "id": "model_ablation_runner",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "scripts/run_model_ablation_prompts.py"
+    },
+    {
+      "id": "model_ablation_evaluator",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "scripts/evaluate_model_ablation_responses.py"
+    },
+    {
+      "id": "usage_readme_mentions_codex",
+      "status": "ready",
+      "detail": "mentions codex_skill_usage.md",
+      "evidence": "examples/usage/README.md"
+    },
+    {
+      "id": "usage_readme_mentions_auto_note",
+      "status": "ready",
+      "detail": "mentions auto_note_scaffold_usage.md",
+      "evidence": "examples/usage/README.md"
+    },
+    {
+      "id": "usage_readme_mentions_model_ablation",
+      "status": "ready",
+      "detail": "mentions model_ablation_usage.md",
+      "evidence": "examples/usage/README.md"
+    },
+    {
+      "id": "codex_usage_mentions_prompt",
+      "status": "ready",
+      "detail": "mentions results/live_transfer_prompts/toolformer_v0/codex_skill__full_skill.md",
+      "evidence": "examples/usage/codex_skill_usage.md"
+    },
+    {
+      "id": "auto_note_usage_mentions_profile",
+      "status": "ready",
+      "detail": "mentions --profile aide",
+      "evidence": "examples/usage/auto_note_scaffold_usage.md"
+    },
+    {
+      "id": "model_ablation_usage_mentions_deepseek",
+      "status": "ready",
+      "detail": "mentions deepseek_followup_slot",
+      "evidence": "examples/usage/model_ablation_usage.md"
+    },
+    {
+      "id": "usage_model_ablation_prompt_grid",
+      "status": "ready",
+      "detail": "prompt_packets=6",
+      "evidence": "results/model_ablation_prompts/v0/index.json"
+    },
+    {
+      "id": "usage_model_ablation_model_slots",
+      "status": "ready",
+      "detail": "models=claude_opus_4_8,deepseek_followup_slot,gpt_5_5_or_gpt_family",
+      "evidence": "results/model_ablation_prompts/v0/index.json"
+    },
+    {
+      "id": "usage_model_ablation_cases",
+      "status": "ready",
+      "detail": "cases=aide_auto_skill_usage,toolformer_curated_skill_usage",
+      "evidence": "results/model_ablation_prompts/v0/index.json"
+    },
+    {
+      "id": "usage_model_ablation_prompts_exist",
+      "status": "ready",
+      "detail": "missing_prompts=0",
+      "evidence": "results/model_ablation_prompts/v0/index.json"
+    },
+    {
+      "id": "usage_model_ablation_response_slots",
+      "status": "ready",
+      "detail": "response_slots=6",
+      "evidence": "results/model_ablation_prompts/v0/index.json"
+    },
+    {
+      "id": "usage_auto_note_example_note_created",
+      "status": "ready",
+      "detail": "created in temporary directory",
+      "evidence": "temporary/aide_auto_note.md"
+    },
+    {
+      "id": "usage_auto_note_example_report_created",
+      "status": "ready",
+      "detail": "created in temporary directory",
+      "evidence": "temporary/aide_auto_note_report.json"
+    },
+    {
+      "id": "usage_auto_note_example_skill_created",
+      "status": "ready",
+      "detail": "created in temporary directory",
+      "evidence": "temporary/aide_auto_skill/SKILL.md"
+    },
+    {
+      "id": "usage_auto_note_example_source_map_created",
+      "status": "ready",
+      "detail": "created in temporary directory",
+      "evidence": "temporary/aide_auto_skill/references/source_map.json"
+    },
+    {
+      "id": "usage_auto_note_example_selected_windows",
+      "status": "ready",
+      "detail": "methods=6; experiments=6; limitations=5",
+      "evidence": "temporary/aide_auto_note_report.json"
+    },
+    {
+      "id": "usage_auto_note_example_rubric_score",
+      "status": "ready",
+      "detail": "20/20",
+      "evidence": "temporary/aide_auto_rubric.json"
+    }
+  ],
+  "auto_note_example_sample": {
+    "note_report": {
+      "paper_id": "aide_auto_usage_check",
+      "profile": "aide",
+      "method_windows": 6,
+      "experiment_windows": 6,
+      "limitation_windows": 5
+    },
+    "rubric": {
+      "score": 20.0,
+      "max_score": 20.0,
+      "skill": "temporary/aide_auto_skill/SKILL.md"
+    }
+  }
+}

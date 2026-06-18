@@ -45,6 +45,7 @@
 | `research/run_logs/2026-06-18_phase25_tokenizer_cost_proxy.md` | Tokenizer-aware compactness/cost proxy commands and outcomes | Created |
 | `research/run_logs/2026-06-18_phase26_model_ablation_recheck.md` | Claude/GPT-family model-ablation endpoint recheck and pending-response evidence | Created |
 | `research/run_logs/2026-06-18_phase27_aaai_package_gate.md` | AAAI package checker, report, and reproducibility-gate integration | Created |
+| `research/run_logs/2026-06-18_phase28_usage_example_gate.md` | Usage-example checker, offline example-chain run, and reproducibility-gate integration | Created |
 
 ## Paper Draft Package
 
@@ -148,6 +149,7 @@
 | `scripts/summarize_human_fidelity_annotations.py` | Summarizes and validates human-fidelity annotation CSV rows | Created |
 | `scripts/build_failure_case_archive.py` | Builds failure-case archive JSON, Markdown, and CSV outputs | Created |
 | `scripts/check_reproducibility_package.py` | Checks local reproducibility package readiness and pending external evidence | Created |
+| `scripts/check_usage_examples.py` | Verifies usage-example files, prompt/response slots, and an offline auto-note-to-skill example chain | Created |
 | `scripts/build_model_ablation_prompts.py` | Builds Claude/GPT-family/DeepSeek model-ablation prompt packets | Created |
 | `scripts/run_model_ablation_prompts.py` | Runs model-ablation prompt packets against OpenAI-compatible APIs with redacted reports | Created |
 | `scripts/evaluate_model_ablation_responses.py` | Scores saved model-ablation response files and keeps missing rows pending | Created |
@@ -165,6 +167,7 @@
 | `tests/test_summarize_human_fidelity_annotations.py` | Smoke test for human-fidelity annotation summarizer | Created |
 | `tests/test_build_failure_case_archive.py` | Smoke test for failure-case archive builder | Created |
 | `tests/test_check_reproducibility_package.py` | Smoke test for reproducibility package checker | Created |
+| `tests/test_check_usage_examples.py` | Smoke test for usage-example checker and offline example chain | Created |
 | `tests/test_build_model_ablation_prompts.py` | Smoke test for model-ablation prompt builder | Created |
 | `tests/test_model_ablation_execution.py` | Smoke tests for model-ablation runner alias selection, evaluator scoring, and skip behavior | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |
@@ -245,6 +248,8 @@
 | `results/reproducibility/package_report.json` | Machine-readable reproducibility package report | Created |
 | `results/reproducibility/aaai_package_report.md` | Human-readable AAAI package verification report | Created |
 | `results/reproducibility/aaai_package_report.json` | Machine-readable AAAI package verification report | Created |
+| `results/reproducibility/usage_example_report.md` | Human-readable usage-example verification report | Created |
+| `results/reproducibility/usage_example_report.json` | Machine-readable usage-example verification report | Created |
 | `results/model_ablation_prompts/v0/index.json` | Model-ablation prompt packet index with pending response slots | Created |
 | `results/model_ablation_prompts/v0/*.md` | Six model-ablation prompt packets across Claude, GPT-family, and DeepSeek slots | Created |
 | `results/model_ablation_prompts/v0/run_report.md` | Redacted live-attempt report showing provider/model availability status | Created |

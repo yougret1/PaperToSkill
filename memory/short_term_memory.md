@@ -26,6 +26,10 @@ Phase 27 is the latest local phase: AAAI package verification gate. The goal is
 to make the requested AAAI TeX paper package locally checkable beyond file
 presence.
 
+Phase 28 is the latest local phase: usage-example verification gate. The goal is
+to make the experiment usage examples machine-checkable without live model
+calls.
+
 ## Latest User Request
 
 The user provided the PaperToSkill idea and asked to:
@@ -497,6 +501,22 @@ The user provided the PaperToSkill idea and asked to:
 - Current reproducibility package report after Phase 27 regeneration:
   `ready_with_pending_external_evidence`, 140 ready checks, 7 pending checks,
   and 0 failed checks.
+- Phase 28 added `scripts/check_usage_examples.py`,
+  `tests/test_check_usage_examples.py`,
+  `results/reproducibility/usage_example_report.json`, and
+  `results/reproducibility/usage_example_report.md`.
+- Phase 28 usage-example report status:
+  - `overall_status=ready`
+  - 34 ready checks
+  - 0 failed checks
+  - checks cover usage docs, Codex-style Toolformer skill inputs,
+    model-ablation prompt/model/response slots, and an offline AIDE
+    extracted-text-to-note-to-skill chain.
+  - offline AIDE chain selected 6 method windows, 6 experiment windows, 5
+    limitation windows, and the temporary generated skill scored 20/20.
+- Current reproducibility package report after Phase 28 regeneration:
+  `ready_with_pending_external_evidence`, 147 ready checks, 7 pending checks,
+  and 0 failed checks.
 
 ## Current Blockers / Pending Checks
 
@@ -526,6 +546,8 @@ The user provided the PaperToSkill idea and asked to:
 - AAAI package/build readiness is locally verified, but the manuscript is not
   submission-final while live model, human-fidelity, and real cost evidence
   decisions remain open.
+- Usage examples are locally verified, but this does not complete live model
+  responses or prove human usability.
 
 ## Next Actions
 

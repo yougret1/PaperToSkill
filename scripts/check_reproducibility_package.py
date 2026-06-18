@@ -79,6 +79,9 @@ CORE_FILES = {
     "usage_example_codex_skill": "examples/usage/codex_skill_usage.md",
     "usage_example_auto_note": "examples/usage/auto_note_scaffold_usage.md",
     "usage_example_model_ablation": "examples/usage/model_ablation_usage.md",
+    "usage_example_checker": "scripts/check_usage_examples.py",
+    "usage_example_report_json": "results/reproducibility/usage_example_report.json",
+    "usage_example_report_md": "results/reproducibility/usage_example_report.md",
     "artifact_map": "research/artifact_map.md",
     "claim_evidence_matrix": "research/claim_evidence_matrix.md",
     "runbook": "research/runbook.md",
@@ -87,6 +90,8 @@ CORE_FILES = {
     "phase22_model_ablation_run_log": "research/run_logs/2026-06-18_phase22_model_ablation_live_attempt.md",
     "phase23_deepseek_readiness_run_log": "research/run_logs/2026-06-18_phase23_deepseek_followup_readiness.md",
     "phase26_model_ablation_recheck_run_log": "research/run_logs/2026-06-18_phase26_model_ablation_recheck.md",
+    "phase27_aaai_package_gate_run_log": "research/run_logs/2026-06-18_phase27_aaai_package_gate.md",
+    "phase28_usage_example_gate_run_log": "research/run_logs/2026-06-18_phase28_usage_example_gate.md",
     "result_cards": "results/result_cards.md",
 }
 
@@ -400,6 +405,36 @@ def aaai_package_checks(root: Path) -> list[Check]:
     return checks
 
 
+def usage_example_checks(root: Path) -> list[Check]:
+    checks: list[Check] = []
+    report_path = root / "results/reproducibility/usage_example_report.json"
+    if not report_path.exists():
+        return checks
+    report = load_json(report_path)
+    status = "ready" if report.get("overall_status") == "ready" else "fail"
+    counts = report.get("status_counts", {})
+    detail = f"overall={report.get('overall_status')}; counts={counts}"
+    checks.append(Check("usage_example_report_ready", status, detail, str(report_path.relative_to(root))))
+    ready_ids = {check.get("id") for check in report.get("checks", []) if check.get("status") == "ready"}
+    required_ready = {
+        "codex_toolformer_prompt",
+        "usage_model_ablation_prompt_grid",
+        "usage_model_ablation_response_slots",
+        "usage_auto_note_example_rubric_score",
+        "usage_auto_note_example_selected_windows",
+    }
+    missing = sorted(required_ready - ready_ids)
+    checks.append(
+        Check(
+            "usage_example_core_checks_ready",
+            "ready" if not missing else "fail",
+            "core checks ready" if not missing else "missing=" + ",".join(missing),
+            str(report_path.relative_to(root)),
+        )
+    )
+    return checks
+
+
 def auto_note_checks(root: Path) -> list[Check]:
     checks: list[Check] = []
     for case in AUTO_NOTE_CASES:
@@ -530,6 +565,7 @@ def build_report(root: Path) -> dict[str, Any]:
     checks.extend(human_fidelity_checks(root))
     checks.extend(failure_archive_checks(root))
     checks.extend(aaai_package_checks(root))
+    checks.extend(usage_example_checks(root))
     checks.extend(auto_note_checks(root))
     checks.extend(model_ablation_checks(root))
     checks.append(secret_scan_check(root))

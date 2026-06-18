@@ -12,6 +12,20 @@ results.
 - `model_ablation_usage.md`: run the prepared Claude/GPT-family prompt grid and
   later add DeepSeek using the same protocol.
 
+## Local Verification
+
+Run the usage-example gate from the repository root:
+
+```powershell
+python scripts\check_usage_examples.py `
+  --output-json results\reproducibility\usage_example_report.json `
+  --output-md results\reproducibility\usage_example_report.md `
+  --strict
+```
+
+The gate checks example files, prompt and response slots, and an offline
+auto-note-to-skill example chain. It does not execute live model calls.
+
 ## Evidence Boundary
 
 The current repository supports deterministic/offline readiness. Live response

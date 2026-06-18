@@ -46,7 +46,7 @@ class CheckReproducibilityPackageTest(unittest.TestCase):
             report = json.loads(output_json.read_text(encoding="utf-8"))
             self.assertEqual("ready_with_pending_external_evidence", report["overall_status"])
             self.assertEqual(0, report["status_counts"]["fail"])
-            self.assertGreaterEqual(report["status_counts"]["ready"], 140)
+            self.assertGreaterEqual(report["status_counts"]["ready"], 147)
             pending_ids = {check["id"] for check in report["checks"] if check["status"] == "pending"}
             self.assertIn("human_fidelity_annotation_complete", pending_ids)
             self.assertIn("ai_scientist_v2_live_responses", pending_ids)
@@ -57,6 +57,8 @@ class CheckReproducibilityPackageTest(unittest.TestCase):
             self.assertIn("aide_auto_source_span_support", ready_ids)
             self.assertIn("aaai_package_report_ready", ready_ids)
             self.assertIn("aaai_package_core_checks_ready", ready_ids)
+            self.assertIn("usage_example_report_ready", ready_ids)
+            self.assertIn("usage_example_core_checks_ready", ready_ids)
             self.assertTrue(output_md.exists())
 
 

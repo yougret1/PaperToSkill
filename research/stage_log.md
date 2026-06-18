@@ -1048,3 +1048,36 @@ Evidence boundary:
 - Phase 27 supports local AAAI package/build-artifact readiness.
 - It does not make the manuscript submission-final, accepted, or empirically
   stronger on live model, human-fidelity, or provider-billing claims.
+
+## 2026-06-18 Phase 28
+
+Actions:
+
+- Added `scripts/check_usage_examples.py`, a local gate for paper-facing usage
+  examples.
+- Added `tests/test_check_usage_examples.py`.
+- Generated `results/reproducibility/usage_example_report.json` and
+  `results/reproducibility/usage_example_report.md`.
+- Integrated the usage-example report into
+  `scripts/check_reproducibility_package.py`.
+- Updated runbook, claim/evidence docs, result cards, goal audit, and memory.
+
+Results:
+
+- The usage-example report is `ready` with 34 ready checks and 0 failed checks.
+- The checker validates usage-example files, Codex-style Toolformer skill
+  inputs, model-ablation prompt grid/model slots/response slots, and an offline
+  AIDE extracted-text-to-note-to-skill chain.
+- The offline example chain selected 6 method windows, 6 experiment windows,
+  and 5 limitation windows, then produced a temporary generated skill scoring
+  20/20 on the AIDE rubric.
+- The reproducibility package report now shows
+  `ready_with_pending_external_evidence`, 147 ready checks, 7 pending checks,
+  and 0 failed checks.
+
+Evidence boundary:
+
+- Phase 28 supports local usage-example executability and prompt-slot
+  readiness.
+- It does not complete live Claude/GPT/DeepSeek model ablations, live
+  cross-harness success, human usability validation, or provider billing.

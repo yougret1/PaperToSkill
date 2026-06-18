@@ -75,6 +75,9 @@ Initial target contribution categories:
 - `scripts/check_aaai_package.py`: verifies the local AAAI package files,
   official author-kit SHA256, `aaai2027` style declaration/load marker, fresh
   PDF/log/BibTeX artifacts, and unresolved citation/reference/build markers.
+- `scripts/check_usage_examples.py`: verifies usage-example files, prompt/
+  response slots, and an offline AIDE extracted-text-to-note-to-skill example
+  chain.
 - `tests/test_papertoskill_extract.py`: extractor smoke test.
 - `tests/test_evaluate_skill.py`: evaluator smoke test.
 - `generated_skills/`: retained generated examples with source maps.
@@ -182,7 +185,7 @@ Initial target contribution categories:
   paper-reported limitations/failure branches and 6 project-level failure/fix
   records.
 - `results/reproducibility/`: reproducibility package report. Current status is
-  ready with pending external evidence, 140 ready checks, 7 pending checks, and
+  ready with pending external evidence, 147 ready checks, 7 pending checks, and
   0 failed checks.
 - `research/review_report.md` and `research/rebuttal_bank.md`: internal
   review/rebuttal readiness artifacts that map likely reviewer objections to
@@ -200,6 +203,8 @@ Initial target contribution categories:
   ready with 17 ready checks and 0 failed checks.
 - `examples/usage/`: usage examples for Codex-style skill loading,
   extracted-text auto-note-to-skill conversion, and model-ablation execution.
+  The local usage-example report is ready with 34 ready checks and 0 failed
+  checks.
 - `benchmarks/model_ablation_v0.json`: Claude/GPT-family/DeepSeek model
   ablation prompt spec with response slots marked pending.
 - `scripts/build_model_ablation_prompts.py`: prompt-grid builder for model

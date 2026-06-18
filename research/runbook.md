@@ -123,6 +123,23 @@ the prompt packets, set those environment variables locally, and run the same
 runner with `--model-id deepseek_followup_slot`. The runner skips DeepSeek only
 while the placeholder alias remains unchanged.
 
+## Usage Example Gate
+
+Verify that paper-facing usage examples are locally executable where they do
+not require live model calls:
+
+```powershell
+python scripts\check_usage_examples.py `
+  --output-json results\reproducibility\usage_example_report.json `
+  --output-md results\reproducibility\usage_example_report.md `
+  --strict
+```
+
+This checker validates the Codex-style skill usage files, the model-ablation
+prompt grid and response slots, and an offline AIDE extracted-text-to-note-to-
+skill chain in a temporary directory. It does not execute Claude/GPT/DeepSeek
+calls or score model responses.
+
 ## AAAI Paper Package
 
 The official AAAI-27 author kit is stored under `paper/aaai/`.
