@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local usage-example files and runs an offline auto-note-to-skill example chain. It does not execute live model calls or score model responses.
 
 - Overall status: ready
-- Ready checks: 36
+- Ready checks: 39
 - Failed checks: 0
 
 ## Checks
@@ -22,6 +22,7 @@ Evidence boundary: this report checks local usage-example files and runs an offl
 | auto_note_script | ready | present | scripts/papertoskill_note_from_text.py |
 | extract_script | ready | present | scripts/papertoskill_extract.py |
 | evaluate_script | ready | present | scripts/evaluate_skill.py |
+| pipeline_script | ready | present | scripts/papertoskill_pipeline.py |
 | model_ablation_task | ready | present | benchmarks/model_ablation_v0.json |
 | model_ablation_prompt_index | ready | present | results/model_ablation_prompts/v0/index.json |
 | model_ablation_builder | ready | present | scripts/build_model_ablation_prompts.py |
@@ -46,6 +47,8 @@ Evidence boundary: this report checks local usage-example files and runs an offl
 | usage_auto_note_example_source_map_created | ready | created in temporary directory | temporary/aide_auto_skill/references/source_map.json |
 | usage_auto_note_example_selected_windows | ready | methods=6; experiments=6; limitations=5 | temporary/aide_auto_note_report.json |
 | usage_auto_note_example_rubric_score | ready | 20/20 | temporary/aide_auto_rubric.json |
+| usage_pipeline_example_manifest_created | ready | created in temporary directory | temporary/pipeline/manifest.json |
+| usage_pipeline_example_rubric_score | ready | 20.0/20 | temporary/pipeline/manifest.json |
 
 ## Offline Example Sample
 

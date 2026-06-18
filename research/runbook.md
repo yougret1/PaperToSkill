@@ -9,6 +9,26 @@ After any context compaction or session resume, read:
 
 Then update short-term memory with the current phase, blockers, and next action.
 
+## Local Text-To-Skill Pipeline
+
+Run the deterministic local pipeline from extracted paper text to note, skill,
+source map, rubric evaluation, and manifest:
+
+```powershell
+python scripts\papertoskill_pipeline.py `
+  --source papers\extracted\aide.txt `
+  --output-dir results\pipeline_examples\aide_auto `
+  --paper-id aide_auto `
+  --title "AIDE: AI-Driven Exploration in the Space of Code" `
+  --profile aide `
+  --skill-name aide-auto-paper-skill `
+  --rubric benchmarks\rubric_aide_v0.json
+```
+
+Evidence boundary: this command composes deterministic local scaffold steps. It
+does not prove human semantic fidelity, live harness success, or reliable
+arbitrary-PDF automation.
+
 ## AI-Scientist-v2 Environment
 
 Recommended for stable runs:

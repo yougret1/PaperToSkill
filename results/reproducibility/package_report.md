@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 167
+- Ready checks: 169
 - Pending checks: 7
 - Failed checks: 0
 
@@ -58,6 +58,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | phase31_goal_completion_run_log | ready | present | research/run_logs/2026-06-18_phase31_goal_completion_gate.md |
 | phase32_model_profile_recheck_run_log | ready | present | research/run_logs/2026-06-18_phase32_model_profile_recheck.md |
 | phase33_alias_retry_model_recheck_run_log | ready | present | research/run_logs/2026-06-19_phase33_alias_retry_model_recheck.md |
+| phase34_pipeline_command_run_log | ready | present | research/run_logs/2026-06-19_phase34_pipeline_command.md |
 | result_cards | ready | present | results/result_cards.md |
 | main_results_md | ready | present | results/tables/main_results.md |
 | main_results_csv | ready | present | results/tables/main_results.csv |
@@ -138,11 +139,12 @@ Evidence boundary: this report checks local package completeness and separates p
 | paper_table_core_checks_ready | ready | core checks ready | results\reproducibility\paper_table_report.json |
 | paper_claim_report_ready | ready | overall=ready; counts={'ready': 20, 'fail': 0} | results\reproducibility\paper_claim_report.json |
 | paper_claim_core_checks_ready | ready | core checks ready | results\reproducibility\paper_claim_report.json |
-| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 34, 'pending': 10, 'fail': 0} | results\reproducibility\goal_completion_report.json |
+| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 35, 'pending': 10, 'fail': 0} | results\reproducibility\goal_completion_report.json |
 | goal_completion_core_checks_ready | ready | core completion boundaries ready | results\reproducibility\goal_completion_report.json |
-| usage_example_report_ready | ready | overall=ready; counts={'ready': 36, 'fail': 0} | results\reproducibility\usage_example_report.json |
+| usage_example_report_ready | ready | overall=ready; counts={'ready': 39, 'fail': 0} | results\reproducibility\usage_example_report.json |
 | usage_example_core_checks_ready | ready | core checks ready | results\reproducibility\usage_example_report.json |
 | toolformer_auto_note_script | ready | present | scripts/papertoskill_note_from_text.py |
+| toolformer_auto_pipeline_script | ready | present | scripts/papertoskill_pipeline.py |
 | toolformer_auto_note | ready | present | papers/auto_notes/toolformer_auto_note.md |
 | toolformer_auto_skill | ready | present | generated_skills/toolformer_auto/SKILL.md |
 | toolformer_auto_source_map | ready | present | generated_skills/toolformer_auto/references/source_map.json |

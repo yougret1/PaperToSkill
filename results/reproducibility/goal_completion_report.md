@@ -3,7 +3,7 @@
 Evidence boundary: this report audits the active user goal against local repository evidence. Pending checks are remaining requirements, not negative evidence and not local package failures.
 
 - Overall status: not_complete_pending_external_evidence
-- Ready checks: 34
+- Ready checks: 35
 - Pending checks: 10
 - Failed checks: 0
 
@@ -18,6 +18,7 @@ Evidence boundary: this report audits the active user goal against local reposit
 | papertoskill_skill | ready | present | skill/SKILL.md |
 | extractor_script | ready | present | scripts/papertoskill_extract.py |
 | auto_note_script | ready | present | scripts/papertoskill_note_from_text.py |
+| pipeline_script | ready | present | scripts/papertoskill_pipeline.py |
 | aaai_tex | ready | present | paper/aaai/papertoskill_aaai2027.tex |
 | aaai_style | ready | present | paper/aaai/aaai2027.sty |
 | usage_readme | ready | present | examples/usage/README.md |

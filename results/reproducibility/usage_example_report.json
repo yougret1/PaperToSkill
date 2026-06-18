@@ -3,7 +3,7 @@
   "evidence_boundary": "Checks local usage-example files, input artifacts, prompt/response slots, and an offline auto-note-to-skill example chain. It does not execute live model calls or score model responses.",
   "overall_status": "ready",
   "status_counts": {
-    "ready": 36,
+    "ready": 39,
     "fail": 0
   },
   "checks": [
@@ -78,6 +78,12 @@
       "status": "ready",
       "detail": "present",
       "evidence": "scripts/evaluate_skill.py"
+    },
+    {
+      "id": "pipeline_script",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "scripts/papertoskill_pipeline.py"
     },
     {
       "id": "model_ablation_task",
@@ -222,6 +228,18 @@
       "status": "ready",
       "detail": "20/20",
       "evidence": "temporary/aide_auto_rubric.json"
+    },
+    {
+      "id": "usage_pipeline_example_manifest_created",
+      "status": "ready",
+      "detail": "created in temporary directory",
+      "evidence": "temporary/pipeline/manifest.json"
+    },
+    {
+      "id": "usage_pipeline_example_rubric_score",
+      "status": "ready",
+      "detail": "20.0/20",
+      "evidence": "temporary/pipeline/manifest.json"
     }
   ],
   "auto_note_example_sample": {
@@ -236,6 +254,11 @@
       "score": 20.0,
       "max_score": 20.0,
       "skill": "temporary/aide_auto_skill/SKILL.md"
+    },
+    "pipeline": {
+      "manifest": "temporary/pipeline/manifest.json",
+      "score": 20.0,
+      "max_score": 20
     }
   }
 }

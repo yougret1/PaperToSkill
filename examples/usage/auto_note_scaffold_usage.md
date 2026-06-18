@@ -8,6 +8,20 @@ note into a PaperToSkill skill.
 ## Example Command Sequence
 
 ```powershell
+python scripts\papertoskill_pipeline.py `
+  --source papers\extracted\aide.txt `
+  --output-dir results\pipeline_examples\aide_auto `
+  --paper-id aide_auto `
+  --title "AIDE: AI-Driven Exploration in the Space of Code" `
+  --profile aide `
+  --skill-name aide-auto-paper-skill `
+  --rubric benchmarks\rubric_aide_v0.json
+```
+
+The command above writes a manifest plus note, skill, source-map, and rubric
+artifacts. The equivalent expanded sequence is:
+
+```powershell
 python scripts\papertoskill_note_from_text.py `
   --source papers\extracted\aide.txt `
   --output papers\auto_notes\aide_auto_note.md `

@@ -106,6 +106,7 @@ CORE_FILES = {
     "phase31_goal_completion_run_log": "research/run_logs/2026-06-18_phase31_goal_completion_gate.md",
     "phase32_model_profile_recheck_run_log": "research/run_logs/2026-06-18_phase32_model_profile_recheck.md",
     "phase33_alias_retry_model_recheck_run_log": "research/run_logs/2026-06-19_phase33_alias_retry_model_recheck.md",
+    "phase34_pipeline_command_run_log": "research/run_logs/2026-06-19_phase34_pipeline_command.md",
     "result_cards": "results/result_cards.md",
 }
 
@@ -127,6 +128,7 @@ AUTO_NOTE_CASES = [
         "id": "toolformer_auto",
         "files": {
             "toolformer_auto_note_script": "scripts/papertoskill_note_from_text.py",
+            "toolformer_auto_pipeline_script": "scripts/papertoskill_pipeline.py",
             "toolformer_auto_note": "papers/auto_notes/toolformer_auto_note.md",
             "toolformer_auto_skill": "generated_skills/toolformer_auto/SKILL.md",
             "toolformer_auto_source_map": "generated_skills/toolformer_auto/references/source_map.json",

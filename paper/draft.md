@@ -210,7 +210,7 @@ records from the PaperToSkill development process. This archive supports the
 claim that failed branches are preserved as inspectable provenance. It is not
 evidence that failure recording improves live task outcomes.
 
-The reproducibility package checker reports 164 ready checks, 7 pending
+The reproducibility package checker reports 169 ready checks, 7 pending
 external-evidence checks, and 0 failed checks. The pending checks correspond to
 the four live transfer response sets, human-fidelity annotation status,
 model-ablation response files, and completed model-ablation evaluation. This
@@ -218,11 +218,11 @@ supports a local artifact-readiness claim, not a claim of completed live, model,
 or human evaluation.
 
 The model-ablation runner/evaluator is executable, but the current evidence is
-blocked rather than scored. The latest run report records two Claude errors
-with `claude-opus-4-8`, two GPT-family errors with `gpt-5.5`, zero saved
-response files, and six pending evaluation rows across Claude, GPT-family, and
-DeepSeek slots. These rows should not be interpreted as negative quality
-evidence for any model.
+blocked rather than scored. The latest run report records Claude errors across
+`claude-opus-4-8`, `claude-opus-4-7`, and `claude-opus-4-6`, GPT-family errors
+across `gpt-5.5` and `gpt-5.4`, zero saved response files, and six pending
+evaluation rows across Claude, GPT-family, and DeepSeek slots. These rows
+should not be interpreted as negative quality evidence for any model.
 
 Phases 19-20 evaluate the automatic note scaffold separately on Toolformer and
 AIDE. The Toolformer auto-note-derived skill scores 20/20 on the deterministic
@@ -231,8 +231,11 @@ rubric, 9.3/10 on context coverage, 10/10 on offline transfer readiness, and
 skill scores 20/20, 8.467/10 on context coverage, 9.5/10 on offline transfer
 readiness, and 1.0 source-span support with zero invalid ranges. These skills
 are 1,179 and 998 words respectively, both under the 1,200-word compactness
-budget. The result supports the narrower claim that extracted text can seed
-auditable note scaffolds; it does not establish robust arbitrary-PDF
+budget. Phase 34 packages this extracted-text path as a local one-command
+pipeline that writes a manifest, note, source map, skill, and rubric report;
+the temporary AIDE pipeline usage example scores 20/20. The result supports the
+narrower claim that extracted text can seed auditable note scaffolds; it does
+not establish robust arbitrary-PDF
 automation.
 
 ## 6. Discussion

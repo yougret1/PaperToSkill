@@ -19,6 +19,7 @@ REQUIRED_FILES = {
     "papertoskill_skill": "skill/SKILL.md",
     "extractor_script": "scripts/papertoskill_extract.py",
     "auto_note_script": "scripts/papertoskill_note_from_text.py",
+    "pipeline_script": "scripts/papertoskill_pipeline.py",
     "aaai_tex": "paper/aaai/papertoskill_aaai2027.tex",
     "aaai_style": "paper/aaai/aaai2027.sty",
     "usage_readme": "examples/usage/README.md",

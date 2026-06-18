@@ -1255,3 +1255,28 @@ Evidence boundary:
   evidence.
 - It does not complete model-quality ablations because no response files were
   saved or scored.
+
+## 2026-06-19 Phase 34
+
+Actions:
+
+- Added `scripts/papertoskill_pipeline.py`, a local one-command pipeline from
+  extracted text to auto-note scaffold, generated skill, source map, rubric
+  evaluation, and manifest.
+- Added `tests/test_papertoskill_pipeline.py`.
+- Updated the auto-note usage example and runbook with the one-command path.
+- Updated `scripts/check_usage_examples.py` so the usage gate runs a temporary
+  AIDE pipeline example.
+
+Results:
+
+- The temporary AIDE pipeline example creates a manifest and scores 20/20 on
+  `benchmarks/rubric_aide_v0.json`.
+- Usage-example report status remains `ready`, now with 39 ready checks and 0
+  failed checks.
+
+Evidence boundary:
+
+- Phase 34 improves the local user-facing conversion workflow.
+- It does not prove human semantic fidelity, live harness success, or reliable
+  arbitrary-PDF automation.

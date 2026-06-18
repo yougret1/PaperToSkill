@@ -32,6 +32,7 @@ AUTO_NOTE_USAGE_INPUTS = {
     "auto_note_script": "scripts/papertoskill_note_from_text.py",
     "extract_script": "scripts/papertoskill_extract.py",
     "evaluate_script": "scripts/evaluate_skill.py",
+    "pipeline_script": "scripts/papertoskill_pipeline.py",
 }
 
 MODEL_ABLATION_INPUTS = {
@@ -203,6 +204,24 @@ def run_auto_note_example(root: Path) -> tuple[list[Check], dict[str, Any]]:
         commands = [
             [
                 sys.executable,
+                "scripts/papertoskill_pipeline.py",
+                "--source",
+                "papers/extracted/aide.txt",
+                "--output-dir",
+                str(tmp_path / "pipeline"),
+                "--paper-id",
+                "aide_auto_usage_pipeline",
+                "--title",
+                "AIDE: AI-Driven Exploration in the Space of Code",
+                "--profile",
+                "aide",
+                "--skill-name",
+                "aide-auto-usage-pipeline",
+                "--rubric",
+                "benchmarks/rubric_aide_v0.json",
+            ],
+            [
+                sys.executable,
                 "scripts/papertoskill_note_from_text.py",
                 "--source",
                 "papers/extracted/aide.txt",
@@ -245,6 +264,8 @@ def run_auto_note_example(root: Path) -> tuple[list[Check], dict[str, Any]]:
         rubric = load_json(rubric_path)
         skill_path = skill_dir / "SKILL.md"
         source_map_path = skill_dir / "references/source_map.json"
+        pipeline_manifest_path = tmp_path / "pipeline" / "manifest.json"
+        pipeline_manifest = load_json(pipeline_manifest_path)
         score = float(rubric.get("score", 0))
         max_score = float(rubric.get("max_score", 20))
         selected = note_report.get("selected", {})
@@ -289,6 +310,18 @@ def run_auto_note_example(root: Path) -> tuple[list[Check], dict[str, Any]]:
                 f"{score:g}/{max_score:g}",
                 "temporary/aide_auto_rubric.json",
             ),
+            Check(
+                "usage_pipeline_example_manifest_created",
+                "ready" if pipeline_manifest_path.exists() else "fail",
+                "created in temporary directory",
+                "temporary/pipeline/manifest.json",
+            ),
+            Check(
+                "usage_pipeline_example_rubric_score",
+                "ready" if float(pipeline_manifest.get("score", {}).get("value", 0)) == max_score else "fail",
+                f"{pipeline_manifest.get('score', {}).get('value')}/{pipeline_manifest.get('score', {}).get('max_score')}",
+                "temporary/pipeline/manifest.json",
+            ),
         ]
         sample = {
             "note_report": {
@@ -302,6 +335,11 @@ def run_auto_note_example(root: Path) -> tuple[list[Check], dict[str, Any]]:
                 "score": score,
                 "max_score": max_score,
                 "skill": "temporary/aide_auto_skill/SKILL.md",
+            },
+            "pipeline": {
+                "manifest": "temporary/pipeline/manifest.json",
+                "score": pipeline_manifest.get("score", {}).get("value"),
+                "max_score": pipeline_manifest.get("score", {}).get("max_score"),
             },
         }
         return checks, sample

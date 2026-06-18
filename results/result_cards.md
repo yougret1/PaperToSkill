@@ -461,7 +461,7 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 164 ready checks, 7
+  `overall_status=ready_with_pending_external_evidence`, 169 ready checks, 7
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
@@ -483,13 +483,15 @@
 
 - Experiment: add a machine-checkable gate for paper-facing usage examples.
 - Main result: `results/reproducibility/usage_example_report.md` reports
-  `overall_status=ready`, 36 ready checks, and 0 failed checks.
+  `overall_status=ready`, 39 ready checks, and 0 failed checks.
 - Checks: usage docs, Codex-style Toolformer skill inputs, model-ablation prompt
-  grid, model slots, response slots, and an offline AIDE extracted-text-to-note-
-  to-skill chain.
+  grid, model slots, response slots, an offline AIDE extracted-text-to-note-to-
+  skill chain, and a one-command AIDE pipeline run.
 - Offline example: the temporary AIDE chain selected 6 method windows, 6
   experiment windows, and 5 limitation windows, then produced a generated skill
   scoring 20/20 on the AIDE deterministic rubric.
+- Pipeline example: the temporary one-command AIDE pipeline manifest produced a
+  note, source map, skill, and rubric report, also scoring 20/20.
 - Practical significance: the experiments section now has examples that are not
   only described in Markdown but also locally checked for runnable inputs and
   output slots.
@@ -757,7 +759,7 @@
 
 - Experiment: make the active-goal completion audit machine-checkable.
 - Main result: `results/reproducibility/goal_completion_report.md` reports
-  `overall_status=not_complete_pending_external_evidence`, 34 ready checks, 10
+  `overall_status=not_complete_pending_external_evidence`, 35 ready checks, 10
   pending checks, and 0 failed checks.
 - Checks: durable memory, AI-Scientist-v2 dry-run evidence, PaperToSkill
   prototype and benchmark readiness, AAAI/usage/table/claim gates,

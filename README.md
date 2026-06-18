@@ -10,9 +10,10 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 32: memory compaction and Claude/GPT credential-profile recheck. The
+Phase 34: local text-to-skill pipeline hardening. The
 AAAI-27 paper package, usage examples, deterministic/offline experiments,
-model-ablation runner, DeepSeek follow-up path, local `o200k_base` cost-proxy
+model-ablation runner, DeepSeek follow-up path, local `o200k_base` cost-proxy,
+and one-command extracted-text-to-skill pipeline
 tables, and machine-checkable package/goal gates are prepared. The latest live
 model recheck lists Claude 4.8/4.7/4.6 aliases and GPT-family aliases such as
 `gpt-5.5`/`gpt-5.4` under separate credential profiles, but chat completions
@@ -73,6 +74,7 @@ pending live-agent claims.
 
 - Benchmark manifest: `benchmarks/paper_manifest.json`
 - Extractor script: `scripts/papertoskill_extract.py`
+- One-command local pipeline: `scripts/papertoskill_pipeline.py`
 - Smoke tests: `tests/test_papertoskill_extract.py`
 - Retained generated case: `generated_skills/papertoskill_paper_note/SKILL.md`
 

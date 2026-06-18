@@ -142,6 +142,7 @@
 | `examples/papertoskill_paper_note.md` | Paper-like source note for retained case | Created |
 | `scripts/papertoskill_extract.py` | Deterministic local paper-to-skill scaffold | Created |
 | `scripts/papertoskill_note_from_text.py` | Deterministic extracted-text-to-note scaffold with line anchors | Created |
+| `scripts/papertoskill_pipeline.py` | Local text-to-note-to-skill-to-evaluation pipeline manifest command | Created |
 | `scripts/evaluate_skill.py` | Deterministic v0 evaluator for generated skills | Created |
 | `scripts/evaluate_context_baselines.py` | Deterministic evaluator for context baseline coverage | Created |
 | `scripts/audit_skill_source_map.py` | Deterministic source-map-aware unsupported-instruction audit | Created |
@@ -163,6 +164,7 @@
 | `scripts/evaluate_model_ablation_responses.py` | Scores saved model-ablation response files and keeps missing rows pending | Created |
 | `tests/test_papertoskill_extract.py` | Smoke test for extractor CLI and source map | Created |
 | `tests/test_papertoskill_note_from_text.py` | Smoke test for automatic text-to-note scaffold | Created |
+| `tests/test_papertoskill_pipeline.py` | Smoke test for one-command local text-to-skill pipeline | Created |
 | `tests/test_evaluate_skill.py` | Smoke test for evaluator CLI | Created |
 | `tests/test_evaluate_context_baselines.py` | Smoke test for context baseline evaluator | Created |
 | `tests/test_audit_skill_source_map.py` | Smoke test for source-map-aware audit | Created |
