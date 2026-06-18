@@ -176,11 +176,13 @@ Initial target contribution categories:
   paper-reported limitations/failure branches and 6 project-level failure/fix
   records.
 - `results/reproducibility/`: reproducibility package report. Current status is
-  ready with pending external evidence, 131 ready checks, 7 pending checks, and
+  ready with pending external evidence, 132 ready checks, 7 pending checks, and
   0 failed checks.
 - `research/review_report.md` and `research/rebuttal_bank.md`: internal
   review/rebuttal readiness artifacts that map likely reviewer objections to
   evidence and prohibited overclaims.
+- `research/goal_completion_audit.md`: requirement-by-requirement audit of the
+  active user goal, current evidence, blockers, and closure path.
 - `paper/outline.md`: section plan, contribution bullets, evidence boundary,
   and figure/table plan.
 - `paper/draft.md`: first evidence-bounded paper draft.

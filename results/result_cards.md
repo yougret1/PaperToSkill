@@ -456,7 +456,7 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 131 ready checks, 7
+  `overall_status=ready_with_pending_external_evidence`, 132 ready checks, 7
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
@@ -618,3 +618,27 @@
   tested, but not that model ablations are complete.
 - Figure/table: `research/run_logs/2026-06-18_phase23_deepseek_followup_readiness.md`;
   `examples/usage/model_ablation_usage.md`; `research/runbook.md`.
+
+## Goal Completion Audit
+
+- Experiment: audit the active user goal against current repository evidence
+  before deciding whether the overall goal is complete.
+- Main result: `research/goal_completion_audit.md` classifies local memory,
+  phase-level GitHub saving, deterministic/offline PaperToSkill development,
+  AAAI package preparation, usage examples, failure-branch provenance, and local
+  reproducibility readiness as satisfied for the current artifact package.
+- Remaining blockers: live Claude/GPT-family response files and scoring are not
+  complete, DeepSeek response collection is pending user configuration,
+  human-fidelity annotation is unscored, and provider-billing/success-per-dollar
+  evidence is not collected.
+- Practical significance: prevents the project from accidentally declaring
+  success simply because the local deterministic package is extensive and green.
+- Statistical evidence: none; this is a requirements and evidence audit.
+- Failure modes: the audit must be refreshed if the user changes the target
+  paper venue, adds new model credentials, or decides that deterministic/offline
+  evidence is sufficient for the first submission.
+- Limitations: it does not resolve external model availability or collect human
+  scores.
+- Claim impact: supports keeping the active goal open while showing exactly
+  what evidence is still missing.
+- Figure/table: `research/goal_completion_audit.md`.

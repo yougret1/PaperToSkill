@@ -10,11 +10,11 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 22: live model-ablation attempt infrastructure and evidence logging.
-The AAAI-27 paper package and usage examples are prepared, model-ablation
-runner/evaluator scripts are in place, and the latest endpoint attempt is
-recorded as blocked by provider/model availability rather than as completed
-Claude/GPT/DeepSeek evidence.
+Phase 24: goal-completion audit and closure planning. The AAAI-27 paper package,
+usage examples, deterministic/offline experiments, model-ablation runner, and
+DeepSeek follow-up path are prepared. The active goal is not yet complete
+because live Claude/GPT-family responses, DeepSeek responses, human-fidelity
+annotation, and stronger provider-billing evidence remain pending.
 
 ## Memory
 
@@ -39,6 +39,7 @@ continuing work.
 - `research/review_report.md`
 - `research/rebuttal_bank.md`
 - `research/runbook.md`
+- `research/goal_completion_audit.md`
 - `research/stage_log.md`
 - `research/run_logs/`
 

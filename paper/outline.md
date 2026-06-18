@@ -135,7 +135,7 @@ Main results from `results/tables/main_results.md`:
   failure branches and 6 project-level failure/fix records.
 - the reproducibility package checker reports local package readiness with
   pending live-response, model-ablation-response, and human-annotation evidence
-  separated from local failures: 131 ready checks, 7 pending checks, and 0
+  separated from local failures: 132 ready checks, 7 pending checks, and 0
   failed checks.
 - the model-ablation live attempt records that `claude-opus-4-8` is listed but
   blocked by provider account availability, and that no GPT-family alias is

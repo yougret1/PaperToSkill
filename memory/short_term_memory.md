@@ -9,14 +9,17 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 22 was committed and pushed as `dea3a7c` on `origin/main`: live
-model-ablation runner/evaluator, redacted run report, pending response
-evaluation, and paper/research/memory updates.
+Phase 23 was committed and pushed as `4e62194` on `origin/main`: rechecked the
+Claude/GPT-family endpoint, confirmed the same provider/model availability
+blocker, and hardened the DeepSeek follow-up path so a concrete DeepSeek alias
+will run through the same runner and evaluator without special placeholder
+flags.
 
-Phase 23 is active locally: rechecked the Claude/GPT-family endpoint, confirmed
-the same provider/model availability blocker, and hardened the DeepSeek
-follow-up path so a concrete DeepSeek alias will run through the same runner and
-evaluator without special placeholder flags.
+Phase 24 is active locally: goal-completion audit and closure planning. The
+audit records which user requirements are satisfied by current evidence and why
+the active goal should remain open until live model responses, DeepSeek
+follow-up responses, human-fidelity annotation, and stronger economic evidence
+are resolved or explicitly scoped out.
 
 ## Latest User Request
 
@@ -455,8 +458,8 @@ The user provided the PaperToSkill idea and asked to:
   - `gpt-5.5` was unavailable and no GPT-family fallback models were listed.
   - DeepSeek follow-up slot was not attempted and remains for the user to add.
   - Response evaluation has 6 total rows, 0 scored rows, and 6 pending rows.
-- Current reproducibility package report after Phase 23 regeneration:
-  `ready_with_pending_external_evidence`, 131 ready checks, 7 pending checks,
+- Current reproducibility package report after Phase 24 regeneration:
+  `ready_with_pending_external_evidence`, 132 ready checks, 7 pending checks,
   and 0 failed checks.
 - For stable long-running AI-Scientist-v2 work, create an isolated Python
   environment because the current global Anaconda environment has package-version
@@ -471,10 +474,9 @@ The user provided the PaperToSkill idea and asked to:
 
 ## Next Actions
 
-1. Regenerate model-ablation evaluation and reproducibility package reports after
-   the Phase 23 runner/doc updates.
+1. Regenerate the reproducibility package report after adding the Phase 24 audit.
 2. Run full unit tests, `git diff --check`, and raw-key secret scan.
-3. Commit and push Phase 23 if verification is clean.
+3. Commit and push Phase 24 if verification is clean.
 4. When provider capacity or a GPT-family endpoint is available, rerun the same
    model-ablation runner and then score saved responses.
 5. To add DeepSeek, fill `deepseek_followup_slot` with a real alias/env vars,

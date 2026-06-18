@@ -23,6 +23,7 @@
 | `research/review_report.md` | Internal adversarial review and submission-gate risks | Created |
 | `research/rebuttal_bank.md` | Evidence-bounded answers to likely reviewer objections | Created |
 | `research/runbook.md` | Reproducible local commands and endpoint notes | Created |
+| `research/goal_completion_audit.md` | Requirement-by-requirement audit of the active user goal and remaining blockers | Created |
 | `research/stage_log.md` | Phase-level chronological progress | Created |
 | `research/run_logs/2026-06-17_phase0_smoke.md` | Smoke-test commands and outcomes | Created |
 | `research/run_logs/2026-06-17_phase1_scaffold.md` | Extractor scaffold commands and outcomes | Created |

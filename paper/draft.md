@@ -203,7 +203,7 @@ records from the PaperToSkill development process. This archive supports the
 claim that failed branches are preserved as inspectable provenance. It is not
 evidence that failure recording improves live task outcomes.
 
-The reproducibility package checker reports 131 ready checks, 7 pending
+The reproducibility package checker reports 132 ready checks, 7 pending
 external-evidence checks, and 0 failed checks. The pending checks correspond to
 the four live transfer response sets, human-fidelity annotation status,
 model-ablation response files, and completed model-ablation evaluation. This
