@@ -3,8 +3,8 @@
 Evidence boundary: this report audits the active user goal against local repository evidence. Pending checks are remaining requirements, not negative evidence and not local package failures.
 
 - Overall status: not_complete_pending_external_evidence
-- Ready checks: 48
-- Pending checks: 7
+- Ready checks: 51
+- Pending checks: 8
 - Failed checks: 0
 
 ## Checks
@@ -19,6 +19,8 @@ Evidence boundary: this report audits the active user goal against local reposit
 | extractor_script | ready | present | scripts/papertoskill_extract.py |
 | auto_note_script | ready | present | scripts/papertoskill_note_from_text.py |
 | pipeline_script | ready | present | scripts/papertoskill_pipeline.py |
+| ai_scientist_smoke_runner | ready | present | scripts/run_ai_scientist_v2_smoke.py |
+| ai_scientist_smoke_report | ready | present | results/ai_scientist_v2_smoke/run_report.json |
 | aaai_tex | ready | present | paper/aaai/papertoskill_aaai2027.tex |
 | aaai_style | ready | present | paper/aaai/aaai2027.sty |
 | usage_readme | ready | present | examples/usage/README.md |
@@ -38,7 +40,9 @@ Evidence boundary: this report audits the active user goal against local reposit
 | memory_resume_rule_present | ready | long-term and short-term resume rules present | memory/long_term_memory.md; memory/short_term_memory.md |
 | memory_current_blockers_recorded | ready | current model-availability blockers recorded | memory/short_term_memory.md |
 | ai_scientist_v2_local_dry_run_recorded | ready | dry-run recorded in memory | memory/short_term_memory.md |
-| ai_scientist_v2_live_llm_run_complete | pending | live AI-Scientist-v2 run remains pending | memory/short_term_memory.md |
+| ai_scientist_v2_live_llm_smoke_complete | pending | overall_status=blocked_by_provider_or_model_availability | results/ai_scientist_v2_smoke/run_report.json |
+| ai_scientist_v2_live_llm_smoke_attempted | ready | overall_status=blocked_by_provider_or_model_availability | results/ai_scientist_v2_smoke/run_report.json |
+| ai_scientist_v2_live_llm_run_complete | pending | full live AI-Scientist-v2 run remains pending; smoke check is separate | memory/short_term_memory.md |
 | papertoskill_curated_benchmark_ready | ready | main_result_rows=4 | results/tables/main_results.csv |
 | offline_harness_transfer_ablation_ready | ready | transfer_rows=12 | results/tables/transfer_ablation.csv |
 | auto_note_examples_ready | ready | auto_note_rows=4 | results/tables/auto_note_comparison.csv |
@@ -65,4 +69,4 @@ Evidence boundary: this report audits the active user goal against local reposit
 | toolformer_live_transfer_responses_complete | ready | scored_rows=6/6 | results/live_transfer_prompts/evaluation.json; results/live_transfer_prompts/toolformer_v0/run_report.json |
 | live_cross_harness_responses_complete | ready | scored_rows=24; pending_rows=0; pending_tasks= | results/live_transfer_prompts/evaluation.json |
 | human_fidelity_annotation_complete | pending | status=pending; scored_rows=0; pending_rows=24 | results/human_fidelity_packets/annotation_summary.json |
-| active_goal_complete | pending | pending_requirements=ai_scientist_v2_live_llm_run_complete,provider_billing_evidence_complete,aaai_final_submission_ready,deepseek_followup_response_complete,model_ablation_evaluation_complete,human_fidelity_annotation_complete | all goal checks |
+| active_goal_complete | pending | pending_requirements=ai_scientist_v2_live_llm_smoke_complete,ai_scientist_v2_live_llm_run_complete,provider_billing_evidence_complete,aaai_final_submission_ready,deepseek_followup_response_complete,model_ablation_evaluation_complete,human_fidelity_annotation_complete | all goal checks |

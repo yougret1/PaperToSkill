@@ -528,13 +528,13 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 208 ready checks, 3
+  `overall_status=ready_with_pending_external_evidence`, 212 ready checks, 6
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
-  remaining external gaps explicit: live response files for the three remaining
-  transfer prompt-packet sets, completed human-fidelity annotation, DeepSeek
-  response files, and completed model-ablation scoring.
+  remaining external gaps explicit: completed AI-Scientist-v2 LLM-client smoke
+  response/contract, completed human-fidelity annotation, DeepSeek response
+  files, and completed model-ablation scoring.
 - Statistical evidence: none; this is a deterministic reproducibility gate.
 - Failure modes: the checker verifies package presence and key consistency
   gates, but it does not replace running live agents or collecting independent
@@ -545,6 +545,29 @@
 - Figure/table: `scripts/check_reproducibility_package.py`;
   `results/reproducibility/package_report.md`;
   `results/reproducibility/package_report.json`.
+
+## AI-Scientist-v2 LLM-Client Smoke
+
+- Experiment: run one bounded chat-completion smoke through the local
+  AI-Scientist-v2 `ai_scientist.llm` client using the Claude-family
+  OpenAI-compatible profile.
+- Main result: `results/ai_scientist_v2_smoke/run_report.md` reports
+  `overall_status=blocked_by_provider_or_model_availability`, 1 ready check, 2
+  pending checks, and 0 failed checks.
+- Provider outcome: the endpoint returned HTTP 403 with message `All available
+  accounts exhausted`; no response file was created.
+- Practical significance: records that the local AI-Scientist-v2 client path is
+  wired into PaperToSkill with a reproducible smoke command and redacted
+  availability report.
+- Failure modes: provider account exhaustion, model unavailability, or endpoint
+  errors can block the smoke independently of PaperToSkill logic.
+- Limitations: this is not BFTS, not live research-task success, and not human
+  semantic validation.
+- Claim impact: supports saying the AI-Scientist-v2 LLM-client smoke was
+  attempted and provider-blocked, but not completed.
+- Figure/table: `scripts/run_ai_scientist_v2_smoke.py`;
+  `results/ai_scientist_v2_smoke/run_report.md`;
+  `results/ai_scientist_v2_smoke/run_report.json`.
 
 ## Usage Example Verification Gate
 
@@ -867,21 +890,22 @@
 
 - Experiment: make the active-goal completion audit machine-checkable.
 - Main result: `results/reproducibility/goal_completion_report.md` reports
-  `overall_status=not_complete_pending_external_evidence`, 48 ready checks, 7
+  `overall_status=not_complete_pending_external_evidence`, 51 ready checks, 8
   pending checks, and 0 failed checks.
 - Checks: durable memory, AI-Scientist-v2 dry-run evidence, PaperToSkill
-  prototype and benchmark readiness, AAAI/usage/table/claim gates,
-  Claude/GPT-family ablation attempts and completion status, DeepSeek follow-up
-  readiness, all four live-transfer saved-response sets, human-fidelity
-  annotation, and provider billing evidence.
+  prototype and benchmark readiness, bounded AI-Scientist-v2 LLM-client smoke
+  attempt/completion status, AAAI/usage/table/claim gates, Claude/GPT-family
+  ablation attempts and completion status, DeepSeek follow-up readiness, all
+  four live-transfer saved-response sets, human-fidelity annotation, and
+  provider billing evidence.
 - Practical significance: the project now has a reusable gate that prevents
   accidentally marking the full user goal complete while external evidence is
   still missing.
 - Failure modes: the gate must be updated if the user changes the definition of
   completion, adds a new required model, or decides to submit an explicitly
   deterministic/offline paper without waiting for live/human/cost evidence.
-- Limitations: the gate does not collect live model responses, human scores, or
-  provider bills.
+- Limitations: the gate does not fix provider account exhaustion, collect human
+  scores, or collect provider bills.
 - Claim impact: strengthens completion discipline and keeps the current goal
   open with explicit pending requirements.
 - Figure/table: `scripts/check_goal_completion.py`;

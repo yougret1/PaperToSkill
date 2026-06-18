@@ -3,8 +3,8 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 208
-- Pending checks: 3
+- Ready checks: 212
+- Pending checks: 6
 - Failed checks: 0
 
 ## Checks
@@ -36,6 +36,9 @@ Evidence boundary: this report checks local package completeness and separates p
 | goal_completion_checker | ready | present | scripts/check_goal_completion.py |
 | goal_completion_report_json | ready | present | results/reproducibility/goal_completion_report.json |
 | goal_completion_report_md | ready | present | results/reproducibility/goal_completion_report.md |
+| ai_scientist_smoke_runner | ready | present | scripts/run_ai_scientist_v2_smoke.py |
+| ai_scientist_smoke_report_json | ready | present | results/ai_scientist_v2_smoke/run_report.json |
+| ai_scientist_smoke_report_md | ready | present | results/ai_scientist_v2_smoke/run_report.md |
 | usage_examples_readme | ready | present | examples/usage/README.md |
 | usage_example_codex_skill | ready | present | examples/usage/codex_skill_usage.md |
 | usage_example_auto_note | ready | present | examples/usage/auto_note_scaffold_usage.md |
@@ -65,6 +68,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | phase38_model_response_cost_proxy_run_log | ready | present | research/run_logs/2026-06-19_phase38_model_response_cost_proxy.md |
 | phase39_toolformer_live_transfer_run_log | ready | present | research/run_logs/2026-06-19_phase39_toolformer_live_transfer.md |
 | phase40_all_live_transfer_run_log | ready | present | research/run_logs/2026-06-19_phase40_all_live_transfer_responses.md |
+| phase41_ai_scientist_v2_smoke_run_log | ready | present | research/run_logs/2026-06-19_phase41_ai_scientist_v2_smoke.md |
 | result_cards | ready | present | results/result_cards.md |
 | main_results_md | ready | present | results/tables/main_results.md |
 | main_results_csv | ready | present | results/tables/main_results.csv |
@@ -148,8 +152,11 @@ Evidence boundary: this report checks local package completeness and separates p
 | paper_table_core_checks_ready | ready | core checks ready | results\reproducibility\paper_table_report.json |
 | paper_claim_report_ready | ready | overall=ready; counts={'ready': 20, 'fail': 0} | results\reproducibility\paper_claim_report.json |
 | paper_claim_core_checks_ready | ready | core checks ready | results\reproducibility\paper_claim_report.json |
-| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 48, 'pending': 7, 'fail': 0} | results\reproducibility\goal_completion_report.json |
+| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 51, 'pending': 8, 'fail': 0} | results\reproducibility\goal_completion_report.json |
 | goal_completion_core_checks_ready | ready | core completion boundaries ready | results\reproducibility\goal_completion_report.json |
+| ai_scientist_v2_llm_smoke_complete | pending | overall=blocked_by_provider_or_model_availability; counts={'ready': 1, 'pending': 2, 'fail': 0} | results\ai_scientist_v2_smoke\run_report.json |
+| ai_scientist_v2_llm_smoke_response | pending | missing until provider returns response | results\ai_scientist_v2_smoke\response.md |
+| ai_scientist_v2_llm_smoke_contract_ready | pending | missing=ai_scientist_v2_llm_response_saved,ai_scientist_v2_smoke_marker_ai_scientist_v2,ai_scientist_v2_smoke_marker_paper_to_skill,ai_scientist_v2_smoke_marker_papertoskill_smoke_ok | results\ai_scientist_v2_smoke\run_report.json |
 | usage_example_report_ready | ready | overall=ready; counts={'ready': 47, 'fail': 0} | results\reproducibility\usage_example_report.json |
 | usage_example_core_checks_ready | ready | core checks ready | results\reproducibility\usage_example_report.json |
 | toolformer_auto_note_script | ready | present | scripts/papertoskill_note_from_text.py |

@@ -7,67 +7,60 @@ Current date: 2026-06-19.
 
 ## Current Phase
 
-Phase 40 is in progress: AI Scientist-v2, Reflexion, and AIDE live-transfer
-saved responses were collected, all four paper packets were rescored, and the
-project is being integrated/verified before commit.
+Phase 41 is in progress: add bounded AI-Scientist-v2 live LLM-client smoke
+evidence without claiming full BFTS or live research-task success.
 
-Latest pushed commit before this phase: `6a52e66 Add Toolformer live transfer
+Latest pushed commit before Phase 41: `4fc9e80 Add all live transfer
 responses`.
 
-Current uncommitted Phase 40 work includes:
+Current Phase 41 work includes:
 
-- new saved responses and run reports under:
-  - `results/live_transfer_prompts/ai_scientist_v2_v0/`
-  - `results/live_transfer_prompts/reflexion_v0/`
-  - `results/live_transfer_prompts/aide_v0/`
-- updated aggregate live-transfer evaluation:
-  `results/live_transfer_prompts/evaluation.{json,md}`
-- updated package and goal reports:
-  `results/reproducibility/package_report.{json,md}` and
-  `results/reproducibility/goal_completion_report.{json,md}`
-- updated gates/tests:
-  `scripts/check_reproducibility_package.py`,
-  `scripts/check_goal_completion.py`, `scripts/check_paper_claims.py`,
-  `tests/test_check_reproducibility_package.py`,
-  `tests/test_check_goal_completion.py`, and
-  `tests/test_check_paper_claims.py`
-- updated docs/paper/memory/run logs, including:
-  `research/run_logs/2026-06-19_phase40_all_live_transfer_responses.md`
+- Added `scripts/run_ai_scientist_v2_smoke.py`.
+- Added `tests/test_run_ai_scientist_v2_smoke.py`.
+- Updated `scripts/check_goal_completion.py` and
+  `scripts/check_reproducibility_package.py` to include AI-Scientist-v2 smoke
+  runner/report evidence.
+- Updated `tests/test_check_goal_completion.py` and
+  `tests/test_check_reproducibility_package.py` for smoke attempted/blocked
+  boundaries.
+- Generated `results/ai_scientist_v2_smoke/run_report.{json,md}`.
+- Regenerated `results/reproducibility/goal_completion_report.{json,md}` and
+  `results/reproducibility/package_report.{json,md}`.
+- Added `research/run_logs/2026-06-19_phase41_ai_scientist_v2_smoke.md`.
+- Updated stage log, runbook, artifact map, goal audit, result cards, README,
+  and memory.
 
 ## Current Evidence
 
-- AI Scientist-v2 live-transfer run report:
-  `results/live_transfer_prompts/ai_scientist_v2_v0/run_report.md`
-  reports `overall_status=complete`, 6 successes, and alias
-  `claude-opus-4-8` for all rows.
-- Reflexion live-transfer run report:
-  `results/live_transfer_prompts/reflexion_v0/run_report.md`
-  reports `overall_status=complete`, 6 successes, and alias
-  `claude-opus-4-8` for all rows.
-- AIDE live-transfer run report:
-  `results/live_transfer_prompts/aide_v0/run_report.md`
-  reports `overall_status=complete`, 6 successes, and one provider fallback:
-  `claude-opus-4-8` remote connection closure followed by
-  `claude-opus-4-7` success on the first row.
-- Toolformer live-transfer run report from Phase 39 remains complete:
-  6 successes with `claude-opus-4-8`.
-- Aggregate live-transfer response evaluation:
-  `results/live_transfer_prompts/evaluation.md` reports 24 total rows,
-  24 scored rows, 0 pending rows, and average normalized score 1.0.
-  AI Scientist-v2, Reflexion, and AIDE rows score 11/11; Toolformer rows
-  score 9/9.
-- gpt-family rows are now saved and scored for the current two-case
-  model-ablation
-  protocol: Toolformer timed out on `gpt-5.5` then succeeded with `gpt-5.4`,
-  while AIDE succeeded with `gpt-5.5`.
 - AI-Scientist-v2 dry-run succeeded with the PaperToSkill seed idea at
   `D:\a_work\gitee\ai-scientist-v2\experiments\2026-06-17_15-22-40_papertoskill_extractor_attempt_0`.
+- All four live-transfer saved-response sets are complete and scored:
+  `results/live_transfer_prompts/evaluation.md` reports 24 total rows, 24
+  scored rows, 0 pending rows, and average normalized score 1.0.
+- Claude Opus 4.8 and GPT-family model-ablation rows are saved and scored for
+  the current two-case protocol; gpt-family rows are now saved and scored. In
+  the GPT-family retry, Toolformer timed out on `gpt-5.5` then succeeded with
+  `gpt-5.4`, while AIDE succeeded with `gpt-5.5`; DeepSeek remains pending.
+- AI-Scientist-v2 LLM-client smoke attempt:
+  `results/ai_scientist_v2_smoke/run_report.md` reports
+  `overall_status=blocked_by_provider_or_model_availability`, 1 ready check, 2
+  pending checks, and 0 failed checks.
+- The smoke provider error was HTTP 403
+  `All available accounts exhausted`; no
+  `results/ai_scientist_v2_smoke/response.md` file was created.
+- Goal report now shows `not_complete_pending_external_evidence`, 51 ready
+  checks, 8 pending checks, and 0 failed checks.
+- Package report now shows `ready_with_pending_external_evidence`, 212 ready
+  checks, 6 pending checks, and 0 failed checks.
 
 ## Boundaries To Preserve
 
 Do not claim:
 
 - DeepSeek completed.
+- AI-Scientist-v2 LLM-client smoke completed.
+- AI-Scientist-v2 full live LLM run completed.
+- BFTS or live research-task success completed.
 - Human semantic fidelity or expert validation completed.
 - Provider billing, live invoices, realized output-token bills, or
   success-per-dollar evidence.
@@ -75,16 +68,13 @@ Do not claim:
 - Saved-response output-contract scoring proves real live task success.
 - Submission-final or accepted AAAI paper.
 
-Supported after Phase 40 if verification passes:
+Supported after Phase 41 if verification passes:
 
-- All four live-transfer saved-response sets are complete for the current
-  prompt-packet protocol and deterministically scored.
-- Claude-family live-transfer coverage spans AI Scientist-v2, Reflexion, AIDE,
-  and Toolformer across Codex-style and Claude-style harness prompts and three
-  context variants.
-- AIDE has one provider fallback row from `claude-opus-4-8` to
-  `claude-opus-4-7`; record this as provider/alias evidence, not model-quality
-  failure evidence.
+- AI-Scientist-v2 LLM-client smoke was attempted and provider-blocked with a
+  redacted, reproducible report.
+- Package and goal gates separate provider/model availability pending evidence
+  from local failures.
+- All Phase 40 live-transfer saved-response evidence remains complete.
 
 ## Verification Still Needed Before Commit
 
@@ -102,22 +92,15 @@ git diff --check
 rg -n "sk-[A-Za-z0-9]{20,}" .
 ```
 
-Because `paper/aaai/papertoskill_aaai2027.tex` changed, rebuild the AAAI PDF
-before the AAAI package gate:
-
-```powershell
-cd paper\aaai
-pdflatex papertoskill_aaai2027.tex
-bibtex papertoskill_aaai2027
-pdflatex papertoskill_aaai2027.tex
-pdflatex papertoskill_aaai2027.tex
-```
+`rg` exit code 1 means no raw API-key-like strings were found.
 
 ## Persistent Blockers
 
 - DeepSeek follow-up remains pending user-provided alias/env profile.
-- AI Scientist-v2 full live LLM run remains pending; this is separate from the
-  completed AI Scientist-v2 live-transfer saved-response packet.
+- AI-Scientist-v2 LLM-client smoke remains provider-blocked until the endpoint
+  can return a chat completion.
+- AI-Scientist-v2 full live LLM/BFTS run remains pending and separate from
+  dry-run, smoke, and live-transfer saved responses.
 - Human-fidelity annotation remains pending.
 - Provider billing and success-per-dollar evidence remain pending.
 - Final AAAI submission readiness remains pending.

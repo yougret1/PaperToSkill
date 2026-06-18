@@ -1492,3 +1492,41 @@ Evidence boundary:
 - It does not establish human semantic fidelity, real live task success,
   DeepSeek completion, provider billing, success-per-dollar evidence, or final
   AAAI submission readiness.
+
+## 2026-06-19 Phase 41
+
+Actions:
+
+- Added `scripts/run_ai_scientist_v2_smoke.py`, a bounded AI-Scientist-v2
+  LLM-client smoke runner that imports the local `ai_scientist.llm` client and
+  asks for a tiny marker-contract response.
+- Added `tests/test_run_ai_scientist_v2_smoke.py` for successful response
+  contracts and redacted provider-error reports.
+- Ran the smoke check with shell-only Claude-family credentials.
+- Generated `results/ai_scientist_v2_smoke/run_report.json` and `.md`.
+- Integrated the smoke runner/report into the active-goal and reproducibility
+  package gates.
+
+Results:
+
+- The smoke attempt reached the provider but returned HTTP 403 with message
+  `All available accounts exhausted`.
+- The smoke report is
+  `overall_status=blocked_by_provider_or_model_availability`, with 1 ready
+  check, 2 pending checks, and 0 failed checks.
+- No `results/ai_scientist_v2_smoke/response.md` was created because the
+  provider did not return a chat-completion response.
+- The goal-completion report now shows 51 ready checks, 8 pending checks, and
+  0 failed checks. It marks `ai_scientist_v2_live_llm_smoke_attempted` ready,
+  but `ai_scientist_v2_live_llm_smoke_complete` and the full
+  `ai_scientist_v2_live_llm_run_complete` pending.
+- The reproducibility package report now shows 212 ready checks, 6 pending
+  checks, and 0 failed checks.
+
+Evidence boundary:
+
+- Phase 41 records provider-availability evidence for a bounded
+  AI-Scientist-v2 LLM-client smoke check.
+- It does not complete BFTS, prove research-task success, establish human
+  semantic fidelity, complete DeepSeek, collect provider billing, or make the
+  AAAI package submission-final.

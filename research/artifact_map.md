@@ -58,6 +58,7 @@
 | `research/run_logs/2026-06-19_phase38_model_response_cost_proxy.md` | Local output-token proxy for saved model-ablation responses | Created |
 | `research/run_logs/2026-06-19_phase39_toolformer_live_transfer.md` | Toolformer live-transfer response collection, scoring, and evidence boundary | Created |
 | `research/run_logs/2026-06-19_phase40_all_live_transfer_responses.md` | AI Scientist-v2, Reflexion, and AIDE live-transfer saved-response collection plus all-packet rescoring | Created |
+| `research/run_logs/2026-06-19_phase41_ai_scientist_v2_smoke.md` | Bounded AI-Scientist-v2 LLM-client smoke attempt and provider-blocked evidence boundary | Created |
 
 ## Paper Draft Package
 
@@ -168,6 +169,7 @@
 | `scripts/check_paper_tables.py` | Verifies AAAI LaTeX result-table values against generated CSV result tables | Created |
 | `scripts/check_paper_claims.py` | Verifies paper-facing text avoids unsupported overclaims and includes required evidence boundaries | Created |
 | `scripts/check_goal_completion.py` | Audits the active user goal against local evidence and exposes remaining pending requirements | Created |
+| `scripts/run_ai_scientist_v2_smoke.py` | Runs one bounded AI-Scientist-v2 LLM-client smoke check and writes redacted reports | Created |
 | `scripts/build_model_ablation_prompts.py` | Builds Claude/GPT-family/DeepSeek model-ablation prompt packets | Created |
 | `scripts/run_model_ablation_prompts.py` | Runs model-ablation prompt packets against OpenAI-compatible APIs with redacted reports | Created |
 | `scripts/evaluate_model_ablation_responses.py` | Scores saved model-ablation response files and keeps missing rows pending | Created |
@@ -193,6 +195,7 @@
 | `tests/test_evaluate_model_response_costs.py` | Smoke test for saved-response output-token proxy evaluator | Created |
 | `tests/test_live_transfer_execution.py` | Smoke tests for live-transfer runner skip behavior and saved-response scoring | Created |
 | `tests/test_check_goal_completion.py` | Smoke tests for active-goal completion checker and pending-evidence boundaries | Created |
+| `tests/test_run_ai_scientist_v2_smoke.py` | Smoke tests for AI-Scientist-v2 LLM-client smoke success and redacted provider errors | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |
 | `generated_skills/ai_scientist_v2/references/source_map.json` | Source-map evidence for AI Scientist-v2 generated skill | Created |
 | `generated_skills/reflexion/SKILL.md` | Retained generated skill from Reflexion note | Created |
@@ -284,6 +287,8 @@
 | `results/reproducibility/paper_claim_report.json` | Machine-readable paper claim-discipline report | Created |
 | `results/reproducibility/goal_completion_report.md` | Human-readable active-goal completion report with pending evidence boundaries | Created |
 | `results/reproducibility/goal_completion_report.json` | Machine-readable active-goal completion report | Created |
+| `results/ai_scientist_v2_smoke/run_report.md` | Human-readable bounded AI-Scientist-v2 LLM-client smoke report | Created |
+| `results/ai_scientist_v2_smoke/run_report.json` | Machine-readable bounded AI-Scientist-v2 LLM-client smoke report | Created |
 | `results/model_ablation_prompts/v0/index.json` | Model-ablation prompt packet index with pending response slots | Created |
 | `results/model_ablation_prompts/v0/*.md` | Six model-ablation prompt packets across Claude, GPT-family, and DeepSeek slots | Created |
 | `results/model_ablation_prompts/v0/run_report.md` | Redacted live-attempt report showing provider/model availability status | Created |

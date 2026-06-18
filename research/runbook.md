@@ -111,6 +111,27 @@ Earlier chat completion checks reached the server but failed due to exhausted
 provider accounts. Recheck with the current env profile before making any
 availability claim.
 
+## AI-Scientist-v2 LLM-Client Smoke
+
+From `D:\a_work\gitee\PaperToSkill`, run a bounded one-call smoke through the
+local AI-Scientist-v2 LLM client:
+
+```powershell
+$env:AI_SCIENTIST_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
+$env:AI_SCIENTIST_OPENAI_API_KEY = "<set locally>"
+$env:AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE = "1"
+
+python scripts\run_ai_scientist_v2_smoke.py --strict
+```
+
+Current Phase 41 status:
+`results/ai_scientist_v2_smoke/run_report.md` reports
+`overall_status=blocked_by_provider_or_model_availability`, 1 ready check, 2
+pending checks, and 0 failed checks. The provider returned HTTP 403
+`All available accounts exhausted`, so no response file was produced. This is a
+bounded client-availability smoke attempt, not a BFTS run or live research-task
+success.
+
 ## Model-Ablation Prompt Packets
 
 From `D:\a_work\gitee\PaperToSkill`:
@@ -226,7 +247,7 @@ python scripts\evaluate_live_transfer_responses.py `
   --output-md results\live_transfer_prompts\evaluation.md
 ```
 
-Current Phase 40 status: all four live-transfer response sets have saved
+Current live-transfer status: all four live-transfer response sets have saved
 responses across both harness prompt styles and all three context variants.
 `results/live_transfer_prompts/evaluation.md` reports 24 total rows, 24 scored
 rows, 0 pending rows, and average normalized score 1.0 under deterministic
@@ -327,9 +348,10 @@ python scripts\check_goal_completion.py `
 ```
 
 This checker is expected to report
-`not_complete_pending_external_evidence` until the DeepSeek follow-up response
-rows, human-fidelity annotation, provider-billing or success-per-dollar
-evidence, and final AAAI submission decisions are complete.
+`not_complete_pending_external_evidence` until the AI-Scientist-v2 LLM-client
+smoke can complete, the full AI-Scientist-v2 live run decision is resolved, the
+DeepSeek follow-up response rows, human-fidelity annotation, provider-billing or
+success-per-dollar evidence, and final AAAI submission decisions are complete.
 Passing `--strict` only fails on local requirement
 failures; pending external evidence remains pending rather than a package
 failure.

@@ -49,7 +49,13 @@ class CheckReproducibilityPackageTest(unittest.TestCase):
             self.assertGreaterEqual(report["status_counts"]["ready"], 164)
             pending_ids = {check["id"] for check in report["checks"] if check["status"] == "pending"}
             self.assertIn("human_fidelity_annotation_complete", pending_ids)
+            self.assertIn("ai_scientist_v2_llm_smoke_complete", pending_ids)
+            self.assertIn("ai_scientist_v2_llm_smoke_response", pending_ids)
+            self.assertIn("ai_scientist_v2_llm_smoke_contract_ready", pending_ids)
             ready_ids = {check["id"] for check in report["checks"] if check["status"] == "ready"}
+            self.assertIn("ai_scientist_smoke_runner", ready_ids)
+            self.assertIn("ai_scientist_smoke_report_json", ready_ids)
+            self.assertIn("ai_scientist_smoke_report_md", ready_ids)
             self.assertIn("ai_scientist_v2_live_responses", ready_ids)
             self.assertIn("reflexion_live_responses", ready_ids)
             self.assertIn("aide_live_responses", ready_ids)

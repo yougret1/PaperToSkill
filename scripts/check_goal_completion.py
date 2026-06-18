@@ -20,6 +20,8 @@ REQUIRED_FILES = {
     "extractor_script": "scripts/papertoskill_extract.py",
     "auto_note_script": "scripts/papertoskill_note_from_text.py",
     "pipeline_script": "scripts/papertoskill_pipeline.py",
+    "ai_scientist_smoke_runner": "scripts/run_ai_scientist_v2_smoke.py",
+    "ai_scientist_smoke_report": "results/ai_scientist_v2_smoke/run_report.json",
     "aaai_tex": "paper/aaai/papertoskill_aaai2027.tex",
     "aaai_style": "paper/aaai/aaai2027.sty",
     "usage_readme": "examples/usage/README.md",
@@ -139,8 +141,9 @@ def memory_checks(root: Path) -> list[Check]:
 
 def ai_scientist_checks(root: Path) -> list[Check]:
     short_text = read_text(root / "memory/short_term_memory.md")
+    smoke_report = load_json(root / "results/ai_scientist_v2_smoke/run_report.json")
     dry_run_ready = "AI-Scientist-v2 dry-run succeeded" in short_text
-    live_complete = "AI-Scientist-v2 live" in short_text and "complete" in short_text
+    live_complete = "AI-Scientist-v2 full live LLM run status: complete" in short_text
     return [
         Check(
             "ai_scientist_v2_local_dry_run_recorded",
@@ -149,9 +152,21 @@ def ai_scientist_checks(root: Path) -> list[Check]:
             "memory/short_term_memory.md",
         ),
         Check(
+            "ai_scientist_v2_live_llm_smoke_complete",
+            "ready" if smoke_report.get("overall_status") == "complete" else "pending",
+            f"overall_status={smoke_report.get('overall_status')}",
+            "results/ai_scientist_v2_smoke/run_report.json",
+        ),
+        Check(
+            "ai_scientist_v2_live_llm_smoke_attempted",
+            "ready" if smoke_report.get("overall_status") else "pending",
+            f"overall_status={smoke_report.get('overall_status')}",
+            "results/ai_scientist_v2_smoke/run_report.json",
+        ),
+        Check(
             "ai_scientist_v2_live_llm_run_complete",
             "ready" if live_complete else "pending",
-            "live AI-Scientist-v2 run evidence found" if live_complete else "live AI-Scientist-v2 run remains pending",
+            "full live AI-Scientist-v2 run evidence found" if live_complete else "full live AI-Scientist-v2 run remains pending; smoke check is separate",
             "memory/short_term_memory.md",
         ),
     ]

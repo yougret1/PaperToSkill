@@ -84,6 +84,9 @@ CORE_FILES = {
     "goal_completion_checker": "scripts/check_goal_completion.py",
     "goal_completion_report_json": "results/reproducibility/goal_completion_report.json",
     "goal_completion_report_md": "results/reproducibility/goal_completion_report.md",
+    "ai_scientist_smoke_runner": "scripts/run_ai_scientist_v2_smoke.py",
+    "ai_scientist_smoke_report_json": "results/ai_scientist_v2_smoke/run_report.json",
+    "ai_scientist_smoke_report_md": "results/ai_scientist_v2_smoke/run_report.md",
     "usage_examples_readme": "examples/usage/README.md",
     "usage_example_codex_skill": "examples/usage/codex_skill_usage.md",
     "usage_example_auto_note": "examples/usage/auto_note_scaffold_usage.md",
@@ -113,6 +116,7 @@ CORE_FILES = {
     "phase38_model_response_cost_proxy_run_log": "research/run_logs/2026-06-19_phase38_model_response_cost_proxy.md",
     "phase39_toolformer_live_transfer_run_log": "research/run_logs/2026-06-19_phase39_toolformer_live_transfer.md",
     "phase40_all_live_transfer_run_log": "research/run_logs/2026-06-19_phase40_all_live_transfer_responses.md",
+    "phase41_ai_scientist_v2_smoke_run_log": "research/run_logs/2026-06-19_phase41_ai_scientist_v2_smoke.md",
     "result_cards": "results/result_cards.md",
 }
 
@@ -568,6 +572,44 @@ def goal_completion_checks(root: Path) -> list[Check]:
     return checks
 
 
+def ai_scientist_smoke_checks(root: Path) -> list[Check]:
+    checks: list[Check] = []
+    report_path = root / "results/ai_scientist_v2_smoke/run_report.json"
+    if not report_path.exists():
+        return checks
+    report = load_json(report_path)
+    status = "ready" if report.get("overall_status") == "complete" else "pending"
+    counts = report.get("status_counts", {})
+    detail = f"overall={report.get('overall_status')}; counts={counts}"
+    checks.append(Check("ai_scientist_v2_llm_smoke_complete", status, detail, str(report_path.relative_to(root))))
+    response_path = root / "results/ai_scientist_v2_smoke/response.md"
+    checks.append(
+        Check(
+            "ai_scientist_v2_llm_smoke_response",
+            "ready" if response_path.exists() else "pending",
+            "present" if response_path.exists() else "missing until provider returns response",
+            str(response_path.relative_to(root)),
+        )
+    )
+    ready_ids = {check.get("id") for check in report.get("checks", []) if check.get("status") == "ready"}
+    required_ready = {
+        "ai_scientist_v2_llm_response_saved",
+        "ai_scientist_v2_smoke_marker_papertoskill_smoke_ok",
+        "ai_scientist_v2_smoke_marker_ai_scientist_v2",
+        "ai_scientist_v2_smoke_marker_paper_to_skill",
+    }
+    missing = sorted(required_ready - ready_ids)
+    checks.append(
+        Check(
+            "ai_scientist_v2_llm_smoke_contract_ready",
+            "ready" if not missing else "pending",
+            "contract markers ready" if not missing else "missing=" + ",".join(missing),
+            str(report_path.relative_to(root)),
+        )
+    )
+    return checks
+
+
 def usage_example_checks(root: Path) -> list[Check]:
     checks: list[Check] = []
     report_path = root / "results/reproducibility/usage_example_report.json"
@@ -802,6 +844,7 @@ def build_report(root: Path) -> dict[str, Any]:
     checks.extend(paper_table_checks(root))
     checks.extend(paper_claim_checks(root))
     checks.extend(goal_completion_checks(root))
+    checks.extend(ai_scientist_smoke_checks(root))
     checks.extend(usage_example_checks(root))
     checks.extend(auto_note_checks(root))
     checks.extend(model_ablation_checks(root))

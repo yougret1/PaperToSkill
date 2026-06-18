@@ -3,8 +3,8 @@
   "evidence_boundary": "Audits the active user goal against local repository evidence. Pending checks are explicit remaining requirements, not negative evidence and not local package failures.",
   "overall_status": "not_complete_pending_external_evidence",
   "status_counts": {
-    "ready": 48,
-    "pending": 7,
+    "ready": 51,
+    "pending": 8,
     "fail": 0
   },
   "checks": [
@@ -55,6 +55,18 @@
       "status": "ready",
       "detail": "present",
       "evidence": "scripts/papertoskill_pipeline.py"
+    },
+    {
+      "id": "ai_scientist_smoke_runner",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "scripts/run_ai_scientist_v2_smoke.py"
+    },
+    {
+      "id": "ai_scientist_smoke_report",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/ai_scientist_v2_smoke/run_report.json"
     },
     {
       "id": "aaai_tex",
@@ -171,9 +183,21 @@
       "evidence": "memory/short_term_memory.md"
     },
     {
+      "id": "ai_scientist_v2_live_llm_smoke_complete",
+      "status": "pending",
+      "detail": "overall_status=blocked_by_provider_or_model_availability",
+      "evidence": "results/ai_scientist_v2_smoke/run_report.json"
+    },
+    {
+      "id": "ai_scientist_v2_live_llm_smoke_attempted",
+      "status": "ready",
+      "detail": "overall_status=blocked_by_provider_or_model_availability",
+      "evidence": "results/ai_scientist_v2_smoke/run_report.json"
+    },
+    {
       "id": "ai_scientist_v2_live_llm_run_complete",
       "status": "pending",
-      "detail": "live AI-Scientist-v2 run remains pending",
+      "detail": "full live AI-Scientist-v2 run remains pending; smoke check is separate",
       "evidence": "memory/short_term_memory.md"
     },
     {
@@ -335,7 +359,7 @@
     {
       "id": "active_goal_complete",
       "status": "pending",
-      "detail": "pending_requirements=ai_scientist_v2_live_llm_run_complete,provider_billing_evidence_complete,aaai_final_submission_ready,deepseek_followup_response_complete,model_ablation_evaluation_complete,human_fidelity_annotation_complete",
+      "detail": "pending_requirements=ai_scientist_v2_live_llm_smoke_complete,ai_scientist_v2_live_llm_run_complete,provider_billing_evidence_complete,aaai_final_submission_ready,deepseek_followup_response_complete,model_ablation_evaluation_complete,human_fidelity_annotation_complete",
       "evidence": "all goal checks"
     }
   ]

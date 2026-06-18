@@ -3,8 +3,8 @@
   "evidence_boundary": "Checks local reproducibility artifacts and evidence gates. Pending live responses or human annotations are reported as pending external evidence, not local package failures.",
   "overall_status": "ready_with_pending_external_evidence",
   "status_counts": {
-    "ready": 208,
-    "pending": 3,
+    "ready": 212,
+    "pending": 6,
     "fail": 0
   },
   "checks": [
@@ -157,6 +157,24 @@
       "status": "ready",
       "detail": "present",
       "evidence": "results/reproducibility/goal_completion_report.md"
+    },
+    {
+      "id": "ai_scientist_smoke_runner",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "scripts/run_ai_scientist_v2_smoke.py"
+    },
+    {
+      "id": "ai_scientist_smoke_report_json",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/ai_scientist_v2_smoke/run_report.json"
+    },
+    {
+      "id": "ai_scientist_smoke_report_md",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/ai_scientist_v2_smoke/run_report.md"
     },
     {
       "id": "usage_examples_readme",
@@ -331,6 +349,12 @@
       "status": "ready",
       "detail": "present",
       "evidence": "research/run_logs/2026-06-19_phase40_all_live_transfer_responses.md"
+    },
+    {
+      "id": "phase41_ai_scientist_v2_smoke_run_log",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "research/run_logs/2026-06-19_phase41_ai_scientist_v2_smoke.md"
     },
     {
       "id": "result_cards",
@@ -833,7 +857,7 @@
     {
       "id": "goal_completion_report_ready",
       "status": "ready",
-      "detail": "overall=not_complete_pending_external_evidence; counts={'ready': 48, 'pending': 7, 'fail': 0}",
+      "detail": "overall=not_complete_pending_external_evidence; counts={'ready': 51, 'pending': 8, 'fail': 0}",
       "evidence": "results\\reproducibility\\goal_completion_report.json"
     },
     {
@@ -841,6 +865,24 @@
       "status": "ready",
       "detail": "core completion boundaries ready",
       "evidence": "results\\reproducibility\\goal_completion_report.json"
+    },
+    {
+      "id": "ai_scientist_v2_llm_smoke_complete",
+      "status": "pending",
+      "detail": "overall=blocked_by_provider_or_model_availability; counts={'ready': 1, 'pending': 2, 'fail': 0}",
+      "evidence": "results\\ai_scientist_v2_smoke\\run_report.json"
+    },
+    {
+      "id": "ai_scientist_v2_llm_smoke_response",
+      "status": "pending",
+      "detail": "missing until provider returns response",
+      "evidence": "results\\ai_scientist_v2_smoke\\response.md"
+    },
+    {
+      "id": "ai_scientist_v2_llm_smoke_contract_ready",
+      "status": "pending",
+      "detail": "missing=ai_scientist_v2_llm_response_saved,ai_scientist_v2_smoke_marker_ai_scientist_v2,ai_scientist_v2_smoke_marker_paper_to_skill,ai_scientist_v2_smoke_marker_papertoskill_smoke_ok",
+      "evidence": "results\\ai_scientist_v2_smoke\\run_report.json"
     },
     {
       "id": "usage_example_report_ready",

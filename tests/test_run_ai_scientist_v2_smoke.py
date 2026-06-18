@@ -1,0 +1,84 @@
+import json
+import sys
+import tempfile
+import types
+import unittest
+from argparse import Namespace
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
+
+import run_ai_scientist_v2_smoke as smoke  # noqa: E402
+
+
+class AIScientistV2SmokeTest(unittest.TestCase):
+    def tearDown(self):
+        for name in ["ai_scientist", "ai_scientist.llm"]:
+            sys.modules.pop(name, None)
+
+    def install_fake_ai_scientist(self, response_text=None, error=None):
+        package = types.ModuleType("ai_scientist")
+        llm = types.ModuleType("ai_scientist.llm")
+
+        def create_client(model):
+            return object(), model
+
+        def get_response_from_llm(prompt, client, model, system_message, temperature=0):
+            if error:
+                raise RuntimeError(error)
+            return response_text, []
+
+        llm.create_client = create_client
+        llm.get_response_from_llm = get_response_from_llm
+        sys.modules["ai_scientist"] = package
+        sys.modules["ai_scientist.llm"] = llm
+
+    def test_smoke_run_saves_contract_response(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            self.install_fake_ai_scientist(
+                "PAPERTOSKILL_SMOKE_OK from ai-scientist-v2 for paper-to-skill."
+            )
+            report = smoke.run(
+                Namespace(
+                    ai_scientist_root=tmp_path,
+                    model="claude-opus-4-8",
+                    prompt="prompt",
+                    system_message="system",
+                    response_output=tmp_path / "response.md",
+                )
+            )
+
+            self.assertEqual("complete", report["overall_status"])
+            self.assertTrue((tmp_path / "response.md").exists())
+            statuses = {check["id"]: check["status"] for check in report["checks"]}
+            self.assertEqual("ready", statuses["ai_scientist_v2_llm_response_saved"])
+            self.assertEqual("ready", statuses["ai_scientist_v2_smoke_marker_papertoskill_smoke_ok"])
+            self.assertEqual("ready", statuses["ai_scientist_v2_smoke_marker_ai_scientist_v2"])
+            self.assertEqual("ready", statuses["ai_scientist_v2_smoke_marker_paper_to_skill"])
+
+    def test_smoke_error_is_redacted_and_pending(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            fake_secret = "sk-" + "a" * 24
+            self.install_fake_ai_scientist(error=f"bad key {fake_secret}")
+            report = smoke.run(
+                Namespace(
+                    ai_scientist_root=tmp_path,
+                    model="claude-opus-4-8",
+                    prompt="prompt",
+                    system_message="system",
+                    response_output=tmp_path / "response.md",
+                )
+            )
+
+            self.assertEqual("blocked_by_provider_or_model_availability", report["overall_status"])
+            self.assertFalse((tmp_path / "response.md").exists())
+            self.assertIn("sk-REDACTED", json.dumps(report))
+            self.assertNotIn(fake_secret, json.dumps(report))
+
+
+if __name__ == "__main__":
+    unittest.main()
