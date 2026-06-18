@@ -10,10 +10,11 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 21: AAAI paper package, usage examples, and model-ablation prompt
-protocol. The official AAAI-27 author kit is downloaded under `paper/aaai/`,
-and Claude/GPT-family/DeepSeek model-ablation prompts are prepared as pending
-external evidence.
+Phase 22: live model-ablation attempt infrastructure and evidence logging.
+The AAAI-27 paper package and usage examples are prepared, model-ablation
+runner/evaluator scripts are in place, and the latest endpoint attempt is
+recorded as blocked by provider/model availability rather than as completed
+Claude/GPT/DeepSeek evidence.
 
 ## Memory
 
@@ -84,3 +85,6 @@ pending live-agent claims.
 - Auto-note comparison: `results/tables/auto_note_comparison.md`.
 - Usage examples: `examples/usage/`.
 - Model-ablation prompt packets: `results/model_ablation_prompts/v0/`.
+- Model-ablation run/evaluation reports:
+  `results/model_ablation_prompts/v0/run_report.md` and
+  `results/model_ablation_prompts/v0/evaluation.md`.

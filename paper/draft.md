@@ -156,6 +156,13 @@ those packets remain unscored until independent annotators fill them. The
 annotation summarizer currently reports 24 pending rows and no completed
 scores.
 
+We also prepare model-ablation prompt packets, a runner, and a response
+evaluator for Claude Opus 4.8, a GPT-family slot requested as GPT 5.5, and a
+DeepSeek follow-up slot. The current live attempt records provider/model
+availability rather than model quality: the endpoint lists `claude-opus-4-8`,
+but Claude prompt calls returned HTTP 503 because no provider accounts were
+available, and no GPT-family alias was listed.
+
 ## 5. Results
 
 Table 1 in `results/tables/main_results.md` summarizes the current benchmark.
@@ -196,11 +203,19 @@ records from the PaperToSkill development process. This archive supports the
 claim that failed branches are preserved as inspectable provenance. It is not
 evidence that failure recording improves live task outcomes.
 
-The reproducibility package checker reports 105 ready checks, 5 pending
+The reproducibility package checker reports 128 ready checks, 7 pending
 external-evidence checks, and 0 failed checks. The pending checks correspond to
-the four live response sets and the human-fidelity annotation status. This
-supports a local artifact-readiness claim, not a claim of completed live or
-human evaluation.
+the four live transfer response sets, human-fidelity annotation status,
+model-ablation response files, and completed model-ablation evaluation. This
+supports a local artifact-readiness claim, not a claim of completed live, model,
+or human evaluation.
+
+The model-ablation runner/evaluator is executable, but the current evidence is
+blocked rather than scored. The latest run report records two Claude errors
+with `claude-opus-4-8`, two skipped GPT-family rows because no GPT aliases were
+available, zero saved response files, and six pending evaluation rows across
+Claude, GPT-family, and DeepSeek slots. These rows should not be interpreted as
+negative quality evidence for any model.
 
 Phases 19-20 evaluate the automatic note scaffold separately on Toolformer and
 AIDE. The Toolformer auto-note-derived skill scores 20/20 on the deterministic
@@ -242,16 +257,17 @@ converts curated notes rather than arbitrary PDFs; automatic note scaffolds have
 only been retained on Toolformer and AIDE extracted text. Second, the metrics are
 deterministic and partly lexical, so they can over-credit exact matches or
 under-credit valid paraphrases. Third, live cross-harness execution has not
-completed because the
-provided remote endpoint returned service errors during chat-completion tests.
-Fourth, human-fidelity packets, a blank annotation template, and a summary
-script are prepared, but no independent annotations have been completed. Fifth,
-compactness is measured by word count and deterministic input-token proxy, not
-by tokenizer-exact model price, provider billing, or live success per dollar.
-Sixth, the failure-case archive is an evidence and provenance artifact rather
-than a controlled outcome study. Seventh, the reproducibility package is locally
-ready but still has pending external evidence for live responses and human
-annotations.
+completed because the provided remote endpoint returned service errors during
+chat-completion tests. Fourth, model ablations were attempted but not completed
+because Claude account capacity was unavailable and the endpoint did not list a
+GPT-family model. Fifth, human-fidelity packets, a blank annotation template,
+and a summary script are prepared, but no independent annotations have been
+completed. Sixth, compactness is measured by word count and deterministic
+input-token proxy, not by tokenizer-exact model price, provider billing, or live
+success per dollar. Seventh, the failure-case archive is an evidence and
+provenance artifact rather than a controlled outcome study. Eighth, the
+reproducibility package is locally ready but still has pending external evidence
+for live responses, model responses, and human annotations.
 
 These limits shape the correct claim: PaperToSkill currently provides
 reproducible evidence for compact, source-grounded skill artifacts and offline
@@ -263,10 +279,11 @@ success.
 PaperToSkill turns paper-derived procedural knowledge into portable,
 human-editable skills. In a four-paper benchmark, generated skills are compact,
 source-grounded, structurally valid, and more operationally complete than short
-summary baselines under deterministic evaluation. The next stage is to execute
-the prepared live prompt packets across agent harnesses, add human fidelity
-review, compute token and price costs, and test papers whose contributions are
-less naturally procedural.
+summary baselines under deterministic evaluation. The next stage is to re-run
+the prepared live prompt packets when provider capacity and GPT-family aliases
+are available, add the user's DeepSeek slot, run human fidelity review, compute
+token and price costs, and test papers whose contributions are less naturally
+procedural.
 
 ## Reproducibility Pointers
 
@@ -283,6 +300,9 @@ less naturally procedural.
 - Failure-case archive: `scripts/build_failure_case_archive.py`
 - Reproducibility package check:
   `scripts/check_reproducibility_package.py`
+- Model-ablation runner and evaluator:
+  `scripts/run_model_ablation_prompts.py`;
+  `scripts/evaluate_model_ablation_responses.py`
 - Review report and rebuttal bank: `research/review_report.md`;
   `research/rebuttal_bank.md`
 - Result tables: `results/tables/`

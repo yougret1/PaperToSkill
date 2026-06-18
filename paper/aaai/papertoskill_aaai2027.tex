@@ -137,8 +137,9 @@ estimated as $\lceil\mathrm{characters}/4\rceil$. These metrics are
 reproducible gates. They do not replace live agent execution or completed human
 fidelity annotation. We also prepare model-ablation prompt packets for Claude
 Opus 4.8, a GPT-family slot requested as GPT 5.5, and a later DeepSeek slot,
-but those packets are recorded as pending until model aliases, responses,
-scores, and billing are collected.
+and include a runner and response evaluator. These packets are recorded as
+pending until response files and scores are collected; provider/model
+availability failures are logged separately from model-quality results.
 
 \input{papertoskill_tables}
 
@@ -186,10 +187,13 @@ loading a generated skill in a Codex-style harness, generating an automatic
 note scaffold from extracted text, and building model-ablation prompts. The
 model-ablation protocol produces a prompt grid for Claude Opus 4.8, a
 GPT-family slot requested as GPT 5.5, and a DeepSeek follow-up slot. The
-provided endpoint has previously advertised the dashed Claude alias
-\texttt{claude-opus-4-8}, while chat completions have been blocked by provider
-capacity. Therefore, the paper treats model ablations as prepared but pending
-rather than completed evidence.
+latest live attempt found that the provided endpoint advertised the dashed
+Claude alias \texttt{claude-opus-4-8}, but both Claude prompt calls failed with
+HTTP 503 because no provider accounts were available. The same model catalog
+did not list \texttt{gpt-5.5} or any GPT-family fallback model, so GPT-family
+rows were skipped as unavailable. Therefore, the paper treats model ablations
+as attempted but blocked by provider/model availability rather than completed
+evidence.
 
 \section{Discussion}
 

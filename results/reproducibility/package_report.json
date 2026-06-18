@@ -3,8 +3,8 @@
   "evidence_boundary": "Checks local reproducibility artifacts and evidence gates. Pending live responses or human annotations are reported as pending external evidence, not local package failures.",
   "overall_status": "ready_with_pending_external_evidence",
   "status_counts": {
-    "ready": 121,
-    "pending": 6,
+    "ready": 128,
+    "pending": 7,
     "fail": 0
   },
   "checks": [
@@ -741,10 +741,46 @@
       "evidence": "scripts/build_model_ablation_prompts.py"
     },
     {
+      "id": "model_ablation_runner",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "scripts/run_model_ablation_prompts.py"
+    },
+    {
+      "id": "model_ablation_response_evaluator",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "scripts/evaluate_model_ablation_responses.py"
+    },
+    {
       "id": "model_ablation_prompt_index",
       "status": "ready",
       "detail": "present",
       "evidence": "results/model_ablation_prompts/v0/index.json"
+    },
+    {
+      "id": "model_ablation_run_report_json",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/model_ablation_prompts/v0/run_report.json"
+    },
+    {
+      "id": "model_ablation_run_report_md",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/model_ablation_prompts/v0/run_report.md"
+    },
+    {
+      "id": "model_ablation_evaluation_json",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/model_ablation_prompts/v0/evaluation.json"
+    },
+    {
+      "id": "model_ablation_evaluation_md",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/model_ablation_prompts/v0/evaluation.md"
     },
     {
       "id": "model_ablation_prompt_packets",
@@ -763,6 +799,18 @@
       "status": "pending",
       "detail": "missing_response_files=6",
       "evidence": "results\\model_ablation_prompts\\v0\\index.json"
+    },
+    {
+      "id": "model_ablation_run_report_valid",
+      "status": "ready",
+      "detail": "overall=blocked_by_provider_or_model_availability; counts={'error': 2, 'skipped': 2}",
+      "evidence": "results\\model_ablation_prompts\\v0\\run_report.json"
+    },
+    {
+      "id": "model_ablation_evaluation_complete",
+      "status": "pending",
+      "detail": "scored_rows=0; pending_rows=6",
+      "evidence": "results\\model_ablation_prompts\\v0\\evaluation.json"
     },
     {
       "id": "secret_scan",

@@ -137,7 +137,13 @@ AUTO_NOTE_CASES = [
 MODEL_ABLATION_FILES = {
     "model_ablation_task": "benchmarks/model_ablation_v0.json",
     "model_ablation_builder": "scripts/build_model_ablation_prompts.py",
+    "model_ablation_runner": "scripts/run_model_ablation_prompts.py",
+    "model_ablation_response_evaluator": "scripts/evaluate_model_ablation_responses.py",
     "model_ablation_prompt_index": "results/model_ablation_prompts/v0/index.json",
+    "model_ablation_run_report_json": "results/model_ablation_prompts/v0/run_report.json",
+    "model_ablation_run_report_md": "results/model_ablation_prompts/v0/run_report.md",
+    "model_ablation_evaluation_json": "results/model_ablation_prompts/v0/evaluation.json",
+    "model_ablation_evaluation_md": "results/model_ablation_prompts/v0/evaluation.md",
 }
 
 TEXT_SUFFIXES = {
@@ -440,6 +446,23 @@ def model_ablation_checks(root: Path) -> list[Check]:
                 str(index_path.relative_to(root)),
             )
         )
+
+    run_report_path = root / "results/model_ablation_prompts/v0/run_report.json"
+    if run_report_path.exists():
+        run_report = load_json(run_report_path)
+        status = "ready" if run_report.get("results") else "fail"
+        detail = f"overall={run_report.get('overall_status')}; counts={run_report.get('status_counts')}"
+        checks.append(Check("model_ablation_run_report_valid", status, detail, str(run_report_path.relative_to(root))))
+
+    evaluation_path = root / "results/model_ablation_prompts/v0/evaluation.json"
+    if evaluation_path.exists():
+        evaluation = load_json(evaluation_path)
+        summary = evaluation.get("summary", {})
+        pending = int(summary.get("pending_rows", 0))
+        scored = int(summary.get("scored_rows", 0))
+        status = "ready" if pending == 0 and scored > 0 else "pending"
+        detail = f"scored_rows={scored}; pending_rows={pending}"
+        checks.append(Check("model_ablation_evaluation_complete", status, detail, str(evaluation_path.relative_to(root))))
     return checks
 
 

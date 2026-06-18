@@ -1,4 +1,4 @@
-# PaperToSkill Short-Term Memory
+﻿# PaperToSkill Short-Term Memory
 
 Read this file after any context compaction or session resume, then update it as
 the active task state changes.
@@ -9,11 +9,14 @@ the active task state changes.
 
 ## Active Phase
 
-Phase 20 deterministic AIDE auto-note profile was committed and pushed as
-`0ebacef`. Phase 21 is active locally: official AAAI-27 template package
-(original zip plus build-local `aaai2027.sty/.bst`), AAAI-formatted paper draft,
-usage examples, and Claude/GPT-family/DeepSeek model-ablation prompt packets
-have been added and are moving through verification, commit, and push.
+Phase 21 was committed and pushed as `14232f7` on `origin/main`: official
+AAAI-27 template package, AAAI-formatted paper draft, usage examples, and
+Claude/GPT-family/DeepSeek model-ablation prompt packets.
+
+Phase 22 is active locally: live model-ablation runner/evaluator, redacted run
+report, pending response evaluation, and paper/research/memory updates. The
+latest endpoint attempt found `claude-opus-4-8` listed but blocked by provider
+account availability, and no GPT-family model alias listed.
 
 ## Latest User Request
 
@@ -441,24 +444,40 @@ The user provided the PaperToSkill idea and asked to:
 
 - Remote LLM chat completion is currently blocked by the provider account pool,
   not by the local code path.
-- For AI-Scientist-v2, use base URL `https://coderxiaoc.com/v1`.
-- Prefer model string `claude-opus-4-8` in local configs because that is what the
-  server advertises.
-- For stable long-running work, create an isolated Python environment because
-  the current global Anaconda environment now has package-version conflicts.
-- Need run actual LLM task execution once the remote endpoint works or another
-  model backend is available.
+- For AI-Scientist-v2 and model-ablation runner use base URL
+  `https://coderxiaoc.com/v1`.
+- Prefer model string `claude-opus-4-8` because the server advertises that
+  dashed alias.
+- Latest Phase 22 model-ablation attempt:
+  - `/v1/models` succeeded and listed 8 Claude-family model IDs.
+  - Claude rows selected `claude-opus-4-8` exactly but both failed HTTP 503:
+    `No available accounts: no available accounts`.
+  - `gpt-5.5` was unavailable and no GPT-family fallback models were listed.
+  - DeepSeek follow-up slot was not attempted and remains for the user to add.
+  - Response evaluation has 6 total rows, 0 scored rows, and 6 pending rows.
+- Current reproducibility package report after Phase 22 regeneration:
+  `ready_with_pending_external_evidence`, 128 ready checks, 7 pending checks,
+  and 0 failed checks.
+- For stable long-running AI-Scientist-v2 work, create an isolated Python
+  environment because the current global Anaconda environment has package-version
+  conflicts.
+- Need actual LLM task execution once the remote endpoint works or another model
+  backend is available.
 - Need completed human fidelity annotation before claiming semantic correctness
   beyond deterministic source-span support.
 - Need tokenizer-exact pricing, provider billing, or success-per-dollar evidence
   before making stronger economic/cost-saving claims.
-- Need Phase 21 final verification, commit, and push.
+- Need Phase 22 final verification, commit, and push.
 
 ## Next Actions
 
-1. Run Phase 21 final verification, secret scan, commit, and push.
-2. Re-test the remote LLM endpoint when provider accounts are available.
-3. Execute live cross-harness and model-ablation runs using the prompt packets when the endpoint
-   recovers.
-4. Run human fidelity annotation, tokenizer-exact pricing, or expand the
+1. Regenerate model-ablation evaluation and reproducibility package reports.
+2. Run full unit tests, `git diff --check`, and raw-key secret scan.
+3. Commit and push Phase 22 if verification is clean.
+4. When provider capacity or a GPT-family endpoint is available, rerun the same
+   model-ablation runner and then score saved responses.
+5. After Claude/GPT rows are available, let the user add DeepSeek by filling the
+   `deepseek_followup_slot`, regenerating prompts if needed, running the same
+   runner, and scoring with the same evaluator.
+6. Run human fidelity annotation, tokenizer-exact pricing, or expand the
    benchmark to less procedural/interface/theory-heavy papers.

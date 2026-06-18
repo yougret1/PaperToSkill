@@ -139,8 +139,11 @@ annotation, and either a less-procedural stress case or stronger PDF automation.
 
 Evidence to cite:
 
-- `results/reproducibility/package_report.md`: 5 pending external-evidence
+- `results/reproducibility/package_report.md`: 7 pending external-evidence
   checks and 0 failed local checks.
+- `results/model_ablation_prompts/v0/run_report.md`: current Claude/GPT-family
+  attempt is blocked by provider account availability and missing GPT-family
+  aliases, not completed model evidence.
 - `research/review_report.md`: submission gate status.
 
 Do not say:

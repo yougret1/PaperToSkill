@@ -39,6 +39,7 @@
 | `research/run_logs/2026-06-17_phase19_auto_note_scaffold.md` | Deterministic extracted-text-to-note scaffold commands and outcomes | Created |
 | `research/run_logs/2026-06-17_phase20_aide_auto_note_profile.md` | AIDE auto-note profile commands, bug fix, and outcomes | Created |
 | `research/run_logs/2026-06-18_phase21_aaai_usage_model_ablation.md` | AAAI template package, usage examples, and model-ablation prompt protocol | Created |
+| `research/run_logs/2026-06-18_phase22_model_ablation_live_attempt.md` | Model-ablation runner/evaluator, live endpoint attempt, and provider/model availability evidence | Created |
 
 ## Paper Draft Package
 
@@ -142,6 +143,8 @@
 | `scripts/build_failure_case_archive.py` | Builds failure-case archive JSON, Markdown, and CSV outputs | Created |
 | `scripts/check_reproducibility_package.py` | Checks local reproducibility package readiness and pending external evidence | Created |
 | `scripts/build_model_ablation_prompts.py` | Builds Claude/GPT-family/DeepSeek model-ablation prompt packets | Created |
+| `scripts/run_model_ablation_prompts.py` | Runs model-ablation prompt packets against OpenAI-compatible APIs with redacted reports | Created |
+| `scripts/evaluate_model_ablation_responses.py` | Scores saved model-ablation response files and keeps missing rows pending | Created |
 | `tests/test_papertoskill_extract.py` | Smoke test for extractor CLI and source map | Created |
 | `tests/test_papertoskill_note_from_text.py` | Smoke test for automatic text-to-note scaffold | Created |
 | `tests/test_evaluate_skill.py` | Smoke test for evaluator CLI | Created |
@@ -157,6 +160,7 @@
 | `tests/test_build_failure_case_archive.py` | Smoke test for failure-case archive builder | Created |
 | `tests/test_check_reproducibility_package.py` | Smoke test for reproducibility package checker | Created |
 | `tests/test_build_model_ablation_prompts.py` | Smoke test for model-ablation prompt builder | Created |
+| `tests/test_model_ablation_execution.py` | Smoke tests for model-ablation runner alias selection, evaluator scoring, and skip behavior | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |
 | `generated_skills/ai_scientist_v2/references/source_map.json` | Source-map evidence for AI Scientist-v2 generated skill | Created |
 | `generated_skills/reflexion/SKILL.md` | Retained generated skill from Reflexion note | Created |
@@ -231,6 +235,10 @@
 | `results/reproducibility/package_report.json` | Machine-readable reproducibility package report | Created |
 | `results/model_ablation_prompts/v0/index.json` | Model-ablation prompt packet index with pending response slots | Created |
 | `results/model_ablation_prompts/v0/*.md` | Six model-ablation prompt packets across Claude, GPT-family, and DeepSeek slots | Created |
+| `results/model_ablation_prompts/v0/run_report.md` | Redacted live-attempt report showing provider/model availability status | Created |
+| `results/model_ablation_prompts/v0/run_report.json` | Machine-readable live-attempt report for model ablations | Created |
+| `results/model_ablation_prompts/v0/evaluation.md` | Pending/scored summary for saved model-ablation responses | Created |
+| `results/model_ablation_prompts/v0/evaluation.json` | Machine-readable model-ablation response evaluation summary | Created |
 | `examples/usage/README.md` | Usage-example index and evidence boundary | Created |
 | `examples/usage/codex_skill_usage.md` | Codex-style generated-skill usage example | Created |
 | `examples/usage/auto_note_scaffold_usage.md` | Extracted-text auto-note-to-skill usage example | Created |

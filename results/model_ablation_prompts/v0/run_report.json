@@ -1,0 +1,67 @@
+{
+  "schema_version": "0.1",
+  "task": "papertoskill_model_ablation_v0",
+  "index_path": "results\\model_ablation_prompts\\v0\\index.json",
+  "evidence_boundary": "Live endpoint attempt report. Successful rows have saved response files; failed rows are provider/model availability evidence only.",
+  "started_at_unix": 1781773484,
+  "completed_at_unix": 1781773502,
+  "overall_status": "blocked_by_provider_or_model_availability",
+  "status_counts": {
+    "error": 2,
+    "skipped": 2
+  },
+  "model_catalogs": [
+    {
+      "base_url": "https://coderxiaoc.com/v1",
+      "auth_env": "AI_SCIENTIST_OPENAI_API_KEY",
+      "status": "success",
+      "model_count": 8,
+      "model_ids": [
+        "claude-fable-5",
+        "claude-haiku-4-5-20251001",
+        "claude-opus-4-5-20251101",
+        "claude-opus-4-6",
+        "claude-opus-4-7",
+        "claude-opus-4-8",
+        "claude-sonnet-4-5-20250929",
+        "claude-sonnet-4-6"
+      ]
+    }
+  ],
+  "results": [
+    {
+      "model_id": "claude_opus_4_8",
+      "case_id": "toolformer_curated_skill_usage",
+      "status": "error",
+      "alias_used": "claude-opus-4-8",
+      "selection_reason": "exact",
+      "error_message": "{\"error\": {\"message\": \"No available accounts: no available accounts\", \"type\": \"api_error\"}, \"http_error\": 503}",
+      "expected_response_path": "results\\model_ablation_prompts\\v0\\responses\\claude_opus_4_8__toolformer_curated_skill_usage.md"
+    },
+    {
+      "model_id": "claude_opus_4_8",
+      "case_id": "aide_auto_skill_usage",
+      "status": "error",
+      "alias_used": "claude-opus-4-8",
+      "selection_reason": "exact",
+      "error_message": "{\"error\": {\"message\": \"No available accounts: no available accounts\", \"type\": \"api_error\"}, \"http_error\": 503}",
+      "expected_response_path": "results\\model_ablation_prompts\\v0\\responses\\claude_opus_4_8__aide_auto_skill_usage.md"
+    },
+    {
+      "model_id": "gpt_5_5_or_gpt_family",
+      "case_id": "toolformer_curated_skill_usage",
+      "status": "skipped",
+      "selection_reason": "unavailable_gpt-5.5",
+      "available_gpt_models": [],
+      "expected_response_path": "results\\model_ablation_prompts\\v0\\responses\\gpt_5_5_or_gpt_family__toolformer_curated_skill_usage.md"
+    },
+    {
+      "model_id": "gpt_5_5_or_gpt_family",
+      "case_id": "aide_auto_skill_usage",
+      "status": "skipped",
+      "selection_reason": "unavailable_gpt-5.5",
+      "available_gpt_models": [],
+      "expected_response_path": "results\\model_ablation_prompts\\v0\\responses\\gpt_5_5_or_gpt_family__aide_auto_skill_usage.md"
+    }
+  ]
+}

@@ -3,8 +3,8 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 121
-- Pending checks: 6
+- Ready checks: 128
+- Pending checks: 7
 - Failed checks: 0
 
 ## Checks
@@ -133,8 +133,16 @@ Evidence boundary: this report checks local package completeness and separates p
 | aide_auto_source_span_support | ready | support_rate=1; invalid_ranges=0 | results\evaluations\aide_auto_source_span_validation_v0.json |
 | model_ablation_task | ready | present | benchmarks/model_ablation_v0.json |
 | model_ablation_builder | ready | present | scripts/build_model_ablation_prompts.py |
+| model_ablation_runner | ready | present | scripts/run_model_ablation_prompts.py |
+| model_ablation_response_evaluator | ready | present | scripts/evaluate_model_ablation_responses.py |
 | model_ablation_prompt_index | ready | present | results/model_ablation_prompts/v0/index.json |
+| model_ablation_run_report_json | ready | present | results/model_ablation_prompts/v0/run_report.json |
+| model_ablation_run_report_md | ready | present | results/model_ablation_prompts/v0/run_report.md |
+| model_ablation_evaluation_json | ready | present | results/model_ablation_prompts/v0/evaluation.json |
+| model_ablation_evaluation_md | ready | present | results/model_ablation_prompts/v0/evaluation.md |
 | model_ablation_prompt_packets | ready | prompt_packets=6; missing_prompts=0 | results\model_ablation_prompts\v0\index.json |
 | model_ablation_model_slots | ready | models=claude_opus_4_8,deepseek_followup_slot,gpt_5_5_or_gpt_family | results\model_ablation_prompts\v0\index.json |
 | model_ablation_responses | pending | missing_response_files=6 | results\model_ablation_prompts\v0\index.json |
+| model_ablation_run_report_valid | ready | overall=blocked_by_provider_or_model_availability; counts={'error': 2, 'skipped': 2} | results\model_ablation_prompts\v0\run_report.json |
+| model_ablation_evaluation_complete | pending | scored_rows=0; pending_rows=6 | results\model_ablation_prompts\v0\evaluation.json |
 | secret_scan | ready | no raw API-key-like strings found | repository text files |

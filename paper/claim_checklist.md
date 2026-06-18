@@ -15,7 +15,7 @@ exists.
 | Human fidelity readiness | Human-fidelity review protocol, four paper-specific review packets, a blank annotation template, and a pending annotation summary are prepared. | Human fidelity annotation has been completed or the skills are expert-validated. | `benchmarks/human_fidelity_review_v0.json`; `results/human_fidelity_packets/`; `results/human_fidelity_packets/annotation_summary.md` | Prepared, not completed |
 | Transfer notes | Removing `Transfer Notes` lowers offline transfer-readiness from 10/10 to 7.6/10 across all four paper cases. | Transfer notes have been proven to improve live Claude/Codex success rates. | `results/evaluations/*_harness_transfer_v0.json`; `results/tables/transfer_ablation.md` | Supported for offline readiness |
 | Live transfer | Prompt packets exist for later Codex-style and Claude-style live evaluation. | Live cross-harness execution has completed successfully. | `results/live_transfer_prompts/`; endpoint checks in `memory/short_term_memory.md` | Pending |
-| Model ablations | Claude Opus 4.8, GPT-family, and DeepSeek follow-up prompt slots are prepared for comparable usage-example ablations. | Claude/GPT/DeepSeek ablations have completed or GPT 5.5 is confirmed available. | `benchmarks/model_ablation_v0.json`; `results/model_ablation_prompts/v0/`; `examples/usage/model_ablation_usage.md` | Prepared, not completed |
+| Model ablations | Claude Opus 4.8, GPT-family, and DeepSeek follow-up prompt slots are prepared; the current live attempt shows Claude listed but blocked by provider account availability, and no GPT-family alias listed on the endpoint. | Claude/GPT/DeepSeek ablations have completed, GPT 5.5 is confirmed available, or unavailable rows are negative model-quality evidence. | `benchmarks/model_ablation_v0.json`; `results/model_ablation_prompts/v0/`; `scripts/run_model_ablation_prompts.py`; `scripts/evaluate_model_ablation_responses.py`; `results/model_ablation_prompts/v0/run_report.md`; `results/model_ablation_prompts/v0/evaluation.md`; `examples/usage/model_ablation_usage.md` | Attempted; blocked/unavailable, not completed |
 | AAAI paper package | The paper has an AAAI-27 LaTeX draft package using the official downloaded author kit. | The paper is submission-final or accepted by AAAI. | `paper/aaai/README.md`; `paper/aaai/papertoskill_aaai2027.tex`; `paper/aaai/AuthorKit27/AuthorKit27/aaai2027.sty` | Prepared |
 | Failure branches | PaperToSkill records 27 paper-reported and project-level failure/limitation cases as a first-class archive. | Failure-branch recording has been shown to improve final user outcomes or live reproduction success. | `benchmarks/failure_case_archive_v0.json`; `results/failure_cases/failure_case_archive.md`; `results/failure_cases/failure_case_archive.json` | Supported as provenance archive, not outcome evidence |
 | Reproducibility package | A local package checker reports local readiness while separating pending live, model-ablation, and human-fidelity evidence. | The package is submission-complete or all live/human/model evidence has been collected. | `scripts/check_reproducibility_package.py`; `results/reproducibility/package_report.md`; `results/reproducibility/package_report.json` | Ready with pending external evidence |
@@ -35,10 +35,12 @@ exists.
   complete with no errors.
 - Say "deterministic token/cost proxy" rather than "provider billing" unless
   tokenizer-exact model prices and live invoices are added.
-- Say "model-ablation prompts prepared" rather than "Claude/GPT/DeepSeek
-  ablations completed" until response files are collected and scored.
-- Say "GPT-family slot requested as GPT 5.5" unless the exact provider model
-  alias has been verified at run time.
+- Say "model-ablation protocol prepared and live attempt blocked by
+  provider/model availability" rather than "Claude/GPT/DeepSeek ablations
+  completed" until response files are collected and scored.
+- Say "GPT-family slot requested as GPT 5.5 but unavailable on the current
+  endpoint" unless the exact provider model alias has been verified at run
+  time.
 
 ## Claims Ready For Abstract
 

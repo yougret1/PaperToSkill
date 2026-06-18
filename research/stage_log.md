@@ -857,3 +857,43 @@ Evidence boundary:
   completed live results.
 - GPT 5.5 remains a requested GPT-family alias until verified at `/v1/models`.
 - DeepSeek remains a follow-up slot.
+
+## 2026-06-18 Phase 22
+
+Actions:
+
+- Added `scripts/run_model_ablation_prompts.py`, a live runner for the prepared
+  model-ablation prompt index.
+- Added `scripts/evaluate_model_ablation_responses.py`, a scorer for saved
+  model response files.
+- Added `tests/test_model_ablation_execution.py`.
+- Ran a baseline response evaluation over the current prompt index.
+- Attempted live Claude Opus 4.8 and GPT-family rows using the provided
+  OpenAI-compatible endpoint through environment variables.
+- Extended the reproducibility checker to include the model-ablation runner,
+  evaluator, run report, evaluation report, and completion gate.
+
+Results:
+
+- Baseline response evaluation:
+  - total rows: `6`
+  - scored rows: `0`
+  - pending rows: `6`
+- Live attempt:
+  - overall status: `blocked_by_provider_or_model_availability`
+  - Claude Opus 4.8 rows: `2` errors
+  - GPT-family rows: `2` skipped
+  - successful response files: `0`
+- `/v1/models` succeeded and listed eight Claude-family model IDs including
+  `claude-opus-4-8`.
+- Both Claude prompt calls selected `claude-opus-4-8` exactly but failed with
+  HTTP `503`, `No available accounts: no available accounts`.
+- The endpoint did not list `gpt-5.5` or any GPT-family fallback model, so the
+  GPT-family rows were skipped as unavailable.
+- The DeepSeek follow-up slot was intentionally not attempted.
+
+Evidence boundary:
+
+- Phase 22 records a live attempt and provider/model availability evidence.
+- It does not complete Claude/GPT/DeepSeek model ablations because no response
+  files were saved and no rows were scored.

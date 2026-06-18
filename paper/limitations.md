@@ -36,6 +36,16 @@ but the remote chat-completion endpoint returned service errors during the
 latest checks. As a result, transfer results are currently offline readiness
 scores, not live success rates.
 
+### Model Ablations Attempted But Not Completed
+
+Claude/GPT-family/DeepSeek model-ablation prompt packets, a runner, and a
+response evaluator are prepared. The latest live attempt found that the endpoint
+listed `claude-opus-4-8`, but both Claude prompt calls failed with HTTP 503
+because no provider accounts were available. The same model catalog did not list
+`gpt-5.5` or any GPT-family fallback model, so GPT-family rows were skipped as
+unavailable. DeepSeek remains an unattempted follow-up slot. These results are
+provider/model availability evidence, not model-quality evidence.
+
 ### Limited Benchmark Diversity
 
 The current four-paper benchmark focuses on agent, ML-engineering, and
@@ -82,13 +92,16 @@ The package should therefore be described as locally ready, not submission-final
 
 1. Execute live prompt packets once the remote endpoint is available, logging
    model, harness, prompt, response, intervention count, and task outcome.
-2. Run the prepared human source-fidelity packets with independent annotators
+2. Re-run the model-ablation protocol after Claude account capacity recovers or
+   a GPT-family endpoint is available, then score saved response files with the
+   same evaluator before adding DeepSeek.
+3. Run the prepared human source-fidelity packets with independent annotators
    and report agreement or adjudication.
-3. Extend extraction from curated notes toward raw PDF ingestion with stronger
+4. Extend extraction from curated notes toward raw PDF ingestion with stronger
    section detection, table handling, citation-aware source maps, and
    multi-paper auto-note validation.
-4. Add tokenizer-exact model pricing and success-per-dollar accounting for
+5. Add tokenizer-exact model pricing and success-per-dollar accounting for
    full-paper, summary, and skill contexts.
-5. Expand the benchmark with less procedural papers to test failure modes.
-6. Preserve negative and failed branches as paper evidence rather than filtering
+6. Expand the benchmark with less procedural papers to test failure modes.
+7. Preserve negative and failed branches as paper evidence rather than filtering
    them out of the research story.

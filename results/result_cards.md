@@ -456,12 +456,13 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 105 ready checks, 5
+  `overall_status=ready_with_pending_external_evidence`, 128 ready checks, 7
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
-  remaining external gaps explicit: live response files for four prompt-packet
-  sets and completed human-fidelity annotation.
+  remaining external gaps explicit: live response files for four transfer
+  prompt-packet sets, completed human-fidelity annotation, model-ablation
+  response files, and completed model-ablation scoring.
 - Statistical evidence: none; this is a deterministic reproducibility gate.
 - Failure modes: the checker verifies package presence and key consistency
   gates, but it does not replace running live agents or collecting independent
@@ -558,3 +559,36 @@
   results remain pending.
 - Figure/table: `paper/aaai/papertoskill_aaai2027.tex`;
   `examples/usage/`; `results/model_ablation_prompts/v0/index.json`.
+
+## Model-Ablation Live Attempt
+
+- Experiment: run prepared model-ablation prompt packets through the live runner
+  and score any saved responses.
+- Main result: `results/model_ablation_prompts/v0/run_report.md` reports
+  `overall_status=blocked_by_provider_or_model_availability`, with 2 Claude
+  errors, 2 GPT-family skips, and 0 successful response files.
+- Model catalog: `/v1/models` succeeded for `https://coderxiaoc.com/v1` and
+  listed eight Claude-family IDs, including `claude-opus-4-8`.
+- Claude result: both selected `claude-opus-4-8` exactly, but chat completions
+  failed with HTTP 503, `No available accounts: no available accounts`.
+- GPT-family result: `gpt-5.5` was not listed and no GPT-family fallback model
+  was available, so GPT-family rows were skipped.
+- DeepSeek result: not attempted; the follow-up slot remains ready for the
+  user's later configuration.
+- Response evaluation: `results/model_ablation_prompts/v0/evaluation.md`
+  reports 6 total rows, 0 scored rows, and 6 pending rows.
+- Practical significance: the project now has a reusable runner/evaluator path
+  for Claude/GPT/DeepSeek model ablations and records provider availability
+  without committing raw credentials.
+- Statistical evidence: none; no model responses were collected or scored.
+- Failure modes: provider account pool and model catalog availability can block
+  a live run independently of PaperToSkill prompt quality.
+- Limitations: this is provider/model availability evidence, not model-quality
+  evidence and not a completed ablation.
+- Claim impact: supports saying the ablation protocol was attempted and is
+  executable, while preserving the boundary that Claude/GPT/DeepSeek results
+  remain pending.
+- Figure/table: `scripts/run_model_ablation_prompts.py`;
+  `scripts/evaluate_model_ablation_responses.py`;
+  `results/model_ablation_prompts/v0/run_report.md`;
+  `results/model_ablation_prompts/v0/evaluation.md`.

@@ -176,7 +176,7 @@ Initial target contribution categories:
   paper-reported limitations/failure branches and 6 project-level failure/fix
   records.
 - `results/reproducibility/`: reproducibility package report. Current status is
-  ready with pending external evidence, 105 ready checks, 5 pending checks, and
+  ready with pending external evidence, 128 ready checks, 7 pending checks, and
   0 failed checks.
 - `research/review_report.md` and `research/rebuttal_bank.md`: internal
   review/rebuttal readiness artifacts that map likely reviewer objections to
@@ -195,9 +195,16 @@ Initial target contribution categories:
   ablation prompt spec with response slots marked pending.
 - `scripts/build_model_ablation_prompts.py`: prompt-grid builder for model
   ablations.
+- `scripts/run_model_ablation_prompts.py`: OpenAI-compatible live runner for
+  model-ablation prompt packets. It reads credentials from environment
+  variables or CLI overrides, writes redacted run reports, and saves successful
+  responses only to expected response paths.
+- `scripts/evaluate_model_ablation_responses.py`: deterministic scorer for
+  saved model-ablation response files. Missing response files are pending, not
+  negative model-quality evidence.
 - `results/model_ablation_prompts/v0/`: generated model-ablation prompts for
   Claude Opus 4.8, GPT-family, and DeepSeek follow-up slots over Toolformer and
-  AIDE auto-skill usage examples.
+  AIDE auto-skill usage examples, plus run/evaluation reports.
 
 ## Current Assumptions
 
@@ -224,8 +231,11 @@ Initial target contribution categories:
   official template is AAAI-27 because the author-kit endpoint available on
   2026-06-18 provides `aaai2027.sty`.
 - Model-ablation writing must distinguish prompt packets from completed
-  Claude/GPT/DeepSeek responses. GPT 5.5 is a requested GPT-family slot and
-  must be verified at run time before claimed as available.
+  Claude/GPT/DeepSeek responses. The current live attempt found
+  `claude-opus-4-8` listed but unavailable for chat completion due to provider
+  accounts, and no GPT-family model alias listed on the endpoint. GPT 5.5 is a
+  requested GPT-family slot and must be verified at run time before claimed as
+  available.
 
 ## LLM/API Configuration
 

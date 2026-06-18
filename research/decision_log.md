@@ -160,3 +160,16 @@
   endpoint has previously advertised `claude-opus-4-8`, while chat completion
   has failed due to provider capacity; GPT 5.5 must be verified at run time.
 - Status: accepted for Phase 21.
+
+## 2026-06-18: Record Live Model-Ablation Attempts As Availability Evidence
+
+- Decision: add a reusable live runner and response evaluator, run the Claude
+  and GPT-family slots against the current endpoint, and classify failures as
+  provider/model availability evidence unless response files are saved and
+  scored.
+- Rationale: the user requested Claude Opus 4.8 and GPT-family ablation before
+  adding DeepSeek. The current endpoint lists `claude-opus-4-8`, but chat
+  completions fail with HTTP 503 because no provider accounts are available,
+  and no GPT-family model alias is listed. Treating these as completed or
+  negative-quality model results would overclaim.
+- Status: accepted for Phase 22.
