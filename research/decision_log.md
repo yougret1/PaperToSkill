@@ -202,3 +202,14 @@
   the offline auto-note-to-skill chain are still executable while keeping live
   model calls pending.
 - Status: accepted for Phase 28.
+
+## 2026-06-18: Make AAAI Result Tables Drift-Checkable
+
+- Decision: add `scripts/check_paper_tables.py`, generate a paper-table
+  consistency report, and require that report from the reproducibility package
+  checker.
+- Rationale: the AAAI manuscript tables are LaTeX fragments that can be edited
+  by hand after result tables are generated. A local consistency gate prevents
+  copied numbers from drifting away from `results/tables/*.csv` while making
+  clear that this is a verification artifact, not new empirical evidence.
+- Status: accepted for Phase 29.

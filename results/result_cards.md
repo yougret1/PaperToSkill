@@ -525,6 +525,27 @@
   `results/reproducibility/aaai_package_report.md`;
   `results/reproducibility/aaai_package_report.json`.
 
+## Paper Table Consistency Gate
+
+- Experiment: add an automated local gate that compares AAAI LaTeX table values
+  with the generated CSV result tables.
+- Main result: `results/reproducibility/paper_table_report.md` reports
+  `overall_status=ready`, 76 ready checks, and 0 failed checks.
+- Checks: main deterministic/offline results, transfer-note ablation,
+  tokenizer-aware cost proxy, and curated-vs-auto note comparison.
+- Practical significance: the AAAI manuscript tables can now fail loudly if a
+  displayed number drifts from the reproducible result tables.
+- Failure modes: the checker parses the current table structure and should be
+  updated if table labels, row order, or column layout are intentionally
+  redesigned.
+- Limitations: this is manuscript consistency evidence, not a new experiment,
+  live model result, human-fidelity annotation, or provider-billing result.
+- Claim impact: strengthens paper-package reliability while preserving the
+  existing empirical evidence boundary.
+- Figure/table: `scripts/check_paper_tables.py`;
+  `results/reproducibility/paper_table_report.md`;
+  `results/reproducibility/paper_table_report.json`.
+
 ## Review And Rebuttal Package
 
 - Experiment: run an internal adversarial review and prepare an evidence-bounded

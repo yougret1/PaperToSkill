@@ -1081,3 +1081,33 @@ Evidence boundary:
   readiness.
 - It does not complete live Claude/GPT/DeepSeek model ablations, live
   cross-harness success, human usability validation, or provider billing.
+
+## 2026-06-18 Phase 29
+
+Actions:
+
+- Added `scripts/check_paper_tables.py`, a consistency gate for the AAAI result
+  tables.
+- Added `tests/test_check_paper_tables.py`.
+- Generated `results/reproducibility/paper_table_report.json` and
+  `results/reproducibility/paper_table_report.md`.
+- Integrated the paper-table report into
+  `scripts/check_reproducibility_package.py`.
+- Updated runbook, artifact map, decision log, result cards, goal audit, and
+  memory.
+
+Results:
+
+- The paper-table report is `ready` with 76 ready checks and 0 failed checks.
+- The checker parses `paper/aaai/papertoskill_tables.tex` and compares it
+  against generated CSV sources for main results, transfer ablation,
+  tokenizer-aware cost proxy, and auto-note comparison.
+- The reproducibility package report now shows
+  `ready_with_pending_external_evidence`, 153 ready checks, 7 pending checks,
+  and 0 failed checks.
+
+Evidence boundary:
+
+- Phase 29 prevents AAAI manuscript-table drift.
+- It does not add new empirical evidence and does not complete pending live
+  model, human-fidelity, or provider-billing evidence.

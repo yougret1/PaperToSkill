@@ -171,6 +171,20 @@ This checker verifies the author-kit SHA256, required package files, the
 and unresolved citation/reference/build-warning markers. Passing it does not
 mean the paper is submission-final.
 
+Verify that the AAAI result tables still match generated CSV result tables:
+
+```powershell
+python scripts\check_paper_tables.py `
+  --output-json results\reproducibility\paper_table_report.json `
+  --output-md results\reproducibility\paper_table_report.md `
+  --strict
+```
+
+This checker compares `paper/aaai/papertoskill_tables.tex` against
+`results/tables/main_results.csv`, `transfer_ablation.csv`,
+`context_cost_proxy_tokenizer.csv`, and `auto_note_comparison.csv`. Passing it
+prevents manuscript-table drift, but does not add new empirical evidence.
+
 ## AI-Scientist-v2 Dry Run
 
 From `D:\a_work\gitee\ai-scientist-v2`:

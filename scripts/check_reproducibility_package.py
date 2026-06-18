@@ -75,6 +75,9 @@ CORE_FILES = {
     "aaai_package_checker": "scripts/check_aaai_package.py",
     "aaai_package_report_json": "results/reproducibility/aaai_package_report.json",
     "aaai_package_report_md": "results/reproducibility/aaai_package_report.md",
+    "paper_table_checker": "scripts/check_paper_tables.py",
+    "paper_table_report_json": "results/reproducibility/paper_table_report.json",
+    "paper_table_report_md": "results/reproducibility/paper_table_report.md",
     "usage_examples_readme": "examples/usage/README.md",
     "usage_example_codex_skill": "examples/usage/codex_skill_usage.md",
     "usage_example_auto_note": "examples/usage/auto_note_scaffold_usage.md",
@@ -92,6 +95,7 @@ CORE_FILES = {
     "phase26_model_ablation_recheck_run_log": "research/run_logs/2026-06-18_phase26_model_ablation_recheck.md",
     "phase27_aaai_package_gate_run_log": "research/run_logs/2026-06-18_phase27_aaai_package_gate.md",
     "phase28_usage_example_gate_run_log": "research/run_logs/2026-06-18_phase28_usage_example_gate.md",
+    "phase29_paper_table_gate_run_log": "research/run_logs/2026-06-18_phase29_paper_table_gate.md",
     "result_cards": "results/result_cards.md",
 }
 
@@ -405,6 +409,35 @@ def aaai_package_checks(root: Path) -> list[Check]:
     return checks
 
 
+def paper_table_checks(root: Path) -> list[Check]:
+    checks: list[Check] = []
+    report_path = root / "results/reproducibility/paper_table_report.json"
+    if not report_path.exists():
+        return checks
+    report = load_json(report_path)
+    status = "ready" if report.get("overall_status") == "ready" else "fail"
+    counts = report.get("status_counts", {})
+    detail = f"overall={report.get('overall_status')}; counts={counts}"
+    checks.append(Check("paper_table_report_ready", status, detail, str(report_path.relative_to(root))))
+    ready_ids = {check.get("id") for check in report.get("checks", []) if check.get("status") == "ready"}
+    required_ready = {
+        "paper_table_main_aide_skill_coverage",
+        "paper_table_transfer_toolformer_no_transfer",
+        "paper_table_cost_ai_scientist_v2_skill_tokens",
+        "paper_table_auto_aide_automatic_extracted_text_note_scaffold_transfer",
+    }
+    missing = sorted(required_ready - ready_ids)
+    checks.append(
+        Check(
+            "paper_table_core_checks_ready",
+            "ready" if not missing else "fail",
+            "core checks ready" if not missing else "missing=" + ",".join(missing),
+            str(report_path.relative_to(root)),
+        )
+    )
+    return checks
+
+
 def usage_example_checks(root: Path) -> list[Check]:
     checks: list[Check] = []
     report_path = root / "results/reproducibility/usage_example_report.json"
@@ -565,6 +598,7 @@ def build_report(root: Path) -> dict[str, Any]:
     checks.extend(human_fidelity_checks(root))
     checks.extend(failure_archive_checks(root))
     checks.extend(aaai_package_checks(root))
+    checks.extend(paper_table_checks(root))
     checks.extend(usage_example_checks(root))
     checks.extend(auto_note_checks(root))
     checks.extend(model_ablation_checks(root))

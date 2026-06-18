@@ -22,13 +22,15 @@ availability was tested again with the provided endpoint/key. `/v1/models`
 still lists `claude-opus-4-8`, but chat completions still fail with HTTP
 503/no available accounts, and no GPT-family alias is listed.
 
-Phase 27 is the latest local phase: AAAI package verification gate. The goal is
-to make the requested AAAI TeX paper package locally checkable beyond file
-presence.
+Phase 27 added the AAAI package verification gate. The goal was to make the
+requested AAAI TeX paper package locally checkable beyond file presence.
 
-Phase 28 is the latest local phase: usage-example verification gate. The goal is
-to make the experiment usage examples machine-checkable without live model
-calls.
+Phase 28 added the usage-example verification gate. The goal was to make the
+experiment usage examples machine-checkable without live model calls.
+
+Phase 29 is the latest local phase: paper-table consistency gate. The goal is
+to make the AAAI manuscript result tables machine-checkable against generated
+CSV result sources.
 
 ## Latest User Request
 
@@ -516,6 +518,20 @@ The user provided the PaperToSkill idea and asked to:
     limitation windows, and the temporary generated skill scored 20/20.
 - Current reproducibility package report after Phase 28 regeneration:
   `ready_with_pending_external_evidence`, 147 ready checks, 7 pending checks,
+  and 0 failed checks.
+- Phase 29 added `scripts/check_paper_tables.py`,
+  `tests/test_check_paper_tables.py`,
+  `results/reproducibility/paper_table_report.json`, and
+  `results/reproducibility/paper_table_report.md`.
+- Phase 29 paper-table report status:
+  - `overall_status=ready`
+  - 76 ready checks
+  - 0 failed checks
+  - checks compare `paper/aaai/papertoskill_tables.tex` against
+    `results/tables/main_results.csv`, `transfer_ablation.csv`,
+    `context_cost_proxy_tokenizer.csv`, and `auto_note_comparison.csv`.
+- Current reproducibility package report after Phase 29 regeneration:
+  `ready_with_pending_external_evidence`, 153 ready checks, 7 pending checks,
   and 0 failed checks.
 
 ## Current Blockers / Pending Checks
