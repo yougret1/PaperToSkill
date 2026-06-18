@@ -13,11 +13,14 @@ Phase 24 was committed and pushed as `0ffc744` on `origin/main`: added the
 goal-completion audit and exposed which user requirements are satisfied by
 current evidence versus still pending.
 
-Phase 25 is active locally: tokenizer-aware compactness/cost proxy upgrade. The
-phase adds local `o200k_base` token counts while preserving the Phase 12
-`ceil(characters / 4)` proxy. Evidence must still be framed as local
-token/cost proxy, not provider billing, output-token accounting, live invoices,
-or success-per-dollar.
+Phase 25 was committed and pushed as `a2a426e` on `origin/main`: added local
+`o200k_base` tokenizer-aware compactness/cost proxy evidence while preserving
+the Phase 12 `ceil(characters / 4)` proxy.
+
+Phase 26 is the latest endpoint recheck: Claude/GPT-family model-ablation
+availability was tested again with the provided endpoint/key. `/v1/models`
+still lists `claude-opus-4-8`, but chat completions still fail with HTTP
+503/no available accounts, and no GPT-family alias is listed.
 
 ## Latest User Request
 
@@ -457,9 +460,25 @@ The user provided the PaperToSkill idea and asked to:
   artifact map, decision log, result cards, goal audit, reproducibility checker,
   stage log, and memory so tokenizer-aware proxy evidence is distinguished from
   real provider economics.
-- Current reproducibility package report after Phase 25 regeneration:
-  `ready_with_pending_external_evidence`, 134 ready checks, 7 pending checks,
+- Current reproducibility package report after Phase 26 regeneration:
+  `ready_with_pending_external_evidence`, 135 ready checks, 7 pending checks,
   and 0 failed checks.
+- Phase 25 was committed and pushed as `a2a426e` on `origin/main`.
+- Phase 26 reran the model-ablation live runner for `claude_opus_4_8` and
+  `gpt_5_5_or_gpt_family`:
+  - `/v1/models` succeeded and listed 8 Claude-family model IDs.
+  - Claude rows selected `claude-opus-4-8` exactly but both failed HTTP 503:
+    `No available accounts: no available accounts`.
+  - `gpt-5.5` was unavailable and no GPT-family fallback models were listed.
+  - No response files were saved.
+  - Response evaluation remains 6 total rows, 0 scored rows, and 6 pending
+    rows.
+  - Run log: `research/run_logs/2026-06-18_phase26_model_ablation_recheck.md`.
+- Phase 26 verification before saving:
+  - `python -m unittest discover -s tests -v`: passed, 30 tests OK.
+  - `git diff --check`: no whitespace errors; Windows LF/CRLF warnings only.
+  - `rg -n "sk-[A-Za-z0-9]{20,}" .`: no matches.
+  - AAAI log search found no undefined citation/reference rerun warnings.
 
 ## Current Blockers / Pending Checks
 
@@ -469,7 +488,7 @@ The user provided the PaperToSkill idea and asked to:
   `https://coderxiaoc.com/v1`.
 - Prefer model string `claude-opus-4-8` because the server advertises that
   dashed alias.
-- Latest Phase 22 model-ablation attempt:
+- Latest Phase 26 model-ablation attempt:
   - `/v1/models` succeeded and listed 8 Claude-family model IDs.
   - Claude rows selected `claude-opus-4-8` exactly but both failed HTTP 503:
     `No available accounts: no available accounts`.
@@ -489,13 +508,10 @@ The user provided the PaperToSkill idea and asked to:
 
 ## Next Actions
 
-1. Run full unit tests, `git diff --check`, raw-key secret scan, and optional
-   AAAI LaTeX build after Phase 25 edits.
-2. Commit and push Phase 25 if verification is clean.
-3. When provider capacity or a GPT-family endpoint is available, rerun the same
+1. When provider capacity or a GPT-family endpoint is available, rerun the same
    model-ablation runner and then score saved responses.
-4. To add DeepSeek, fill `deepseek_followup_slot` with a real alias/env vars,
+2. To add DeepSeek, fill `deepseek_followup_slot` with a real alias/env vars,
    rebuild prompts, run `--model-id deepseek_followup_slot`, and score with the
    same evaluator.
-5. Run human fidelity annotation, provider-specific pricing, or expand the
+3. Run human fidelity annotation, provider-specific pricing, or expand the
    benchmark to less procedural/interface/theory-heavy papers.

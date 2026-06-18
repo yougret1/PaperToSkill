@@ -161,7 +161,7 @@ scores.
 
 We also prepare model-ablation prompt packets, a runner, and a response
 evaluator for Claude Opus 4.8, a GPT-family slot requested as GPT 5.5, and a
-DeepSeek follow-up slot. The current live attempt records provider/model
+DeepSeek follow-up slot. The Phase 26 live recheck records provider/model
 availability rather than model quality: the endpoint lists `claude-opus-4-8`,
 but Claude prompt calls returned HTTP 503 because no provider accounts were
 available, and no GPT-family alias was listed.
@@ -207,7 +207,7 @@ records from the PaperToSkill development process. This archive supports the
 claim that failed branches are preserved as inspectable provenance. It is not
 evidence that failure recording improves live task outcomes.
 
-The reproducibility package checker reports 134 ready checks, 7 pending
+The reproducibility package checker reports 135 ready checks, 7 pending
 external-evidence checks, and 0 failed checks. The pending checks correspond to
 the four live transfer response sets, human-fidelity annotation status,
 model-ablation response files, and completed model-ablation evaluation. This

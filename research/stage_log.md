@@ -988,3 +988,33 @@ Evidence boundary:
   claims.
 - It does not support provider-specific prices, live invoices, output-token
   accounting, model-quality conclusions, or success-per-dollar claims.
+
+## 2026-06-18 Phase 26
+
+Actions:
+
+- Reran `scripts/run_model_ablation_prompts.py` for `claude_opus_4_8` and
+  `gpt_5_5_or_gpt_family` using the provided OpenAI-compatible endpoint through
+  local environment variables.
+- Reran `scripts/evaluate_model_ablation_responses.py` after the live attempt.
+- Added `research/run_logs/2026-06-18_phase26_model_ablation_recheck.md`.
+- Updated memory and artifact map with the latest provider/model availability
+  state.
+
+Results:
+
+- `/v1/models` succeeded and listed eight Claude-family model IDs, including
+  `claude-opus-4-8`.
+- Both Claude rows selected `claude-opus-4-8` exactly but failed with HTTP
+  `503`, `No available accounts: no available accounts`.
+- The model catalog did not list `gpt-5.5` or any GPT-family fallback model, so
+  both GPT-family rows were skipped as unavailable.
+- No response files were saved.
+- Response evaluation remains `6` total rows, `0` scored rows, and `6` pending
+  rows.
+
+Evidence boundary:
+
+- Phase 26 is current provider/model availability evidence only.
+- It does not complete Claude/GPT-family model-quality ablations, does not
+  evaluate DeepSeek, and does not support negative model-quality conclusions.

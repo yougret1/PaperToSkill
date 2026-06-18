@@ -39,7 +39,7 @@ scores, not live success rates.
 ### Model Ablations Attempted But Not Completed
 
 Claude/GPT-family/DeepSeek model-ablation prompt packets, a runner, and a
-response evaluator are prepared. The latest live attempt found that the endpoint
+response evaluator are prepared. The Phase 26 live recheck found that the endpoint
 listed `claude-opus-4-8`, but both Claude prompt calls failed with HTTP 503
 because no provider accounts were available. The same model catalog did not list
 `gpt-5.5` or any GPT-family fallback model, so GPT-family rows were skipped as

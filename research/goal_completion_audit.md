@@ -15,7 +15,7 @@ provider-billing or success-per-dollar evidence remain pending external or
 follow-up work.
 
 Local package status: `results/reproducibility/package_report.md` reports
-`ready_with_pending_external_evidence`, 134 ready checks, 7 pending checks, and
+`ready_with_pending_external_evidence`, 135 ready checks, 7 pending checks, and
 0 failed checks.
 
 ## Requirement Audit
@@ -24,11 +24,11 @@ Local package status: `results/reproducibility/package_report.md` reports
 | --- | --- | --- | --- |
 | Maintain durable local memory with at least long-term and short-term files. | `memory/long_term_memory.md`; `memory/short_term_memory.md`; reproducibility checks `memory_long_term` and `memory_short_term` are ready. | Complete locally | Continue reading both memory files after every resume/compaction and update short-term memory after phase changes. |
 | Use `ai-scientist-v2` to refine and develop PaperToSkill. | `ai_scientist_inputs/papertoskill.md`; `ai_scientist_inputs/papertoskill_seed_ideas.json`; AI-Scientist-v2 dry-run recorded in memory and run logs; PaperToSkill repo keeps AI-Scientist-v2 as execution context. | Partially complete | A live AI-Scientist-v2 run remains blocked by the same remote provider account availability. Re-run once the endpoint can serve chat completions or another backend is available. |
-| Save phase-level progress to `yougret1/PaperToSkill.git`. | Recent pushed commits include `14232f7`, `dea3a7c`, and `4e62194`; local repo is clean after Phase 23. | Complete through current phase | Keep committing/pushing phase-level increments. |
+| Save phase-level progress to `yougret1/PaperToSkill.git`. | Recent pushed commits include `4e62194`, `0ffc744`, and `a2a426e`; local repo was clean after Phase 25. | Complete through current pushed phase | Keep committing/pushing phase-level increments. |
 | Use official AAAI TeX template for final paper. | `paper/aaai/AuthorKit27.zip`; `paper/aaai/aaai2027.sty`; `paper/aaai/aaai2027.bst`; `paper/aaai/README.md`; `paper/aaai/papertoskill_aaai2027.tex`; `paper/aaai/papertoskill_aaai2027.pdf`. | Prepared, not submission-final | Keep the AAAI draft synchronized with new evidence. Submission-final requires final claims, figures, metadata, and any venue-specific updates. |
 | Provide experiment usage examples. | `examples/usage/README.md`; `examples/usage/codex_skill_usage.md`; `examples/usage/auto_note_scaffold_usage.md`; `examples/usage/model_ablation_usage.md`; `research/runbook.md`. | Complete locally | Keep examples synchronized if task specs or runner commands change. |
-| Run or prepare Claude Opus 4.8 ablation. | `benchmarks/model_ablation_v0.json`; prompt packets under `results/model_ablation_prompts/v0/`; runner/evaluator scripts; run reports show `claude-opus-4-8` listed but chat completions fail HTTP 503 `No available accounts`. | Attempted, blocked | Re-run `scripts/run_model_ablation_prompts.py` when provider account capacity is available. |
-| Run or prepare GPT 5.5 / GPT-family ablation. | Same model-ablation artifacts; latest run report shows `gpt-5.5` unavailable and no GPT-family fallback models listed. | Attempted, unavailable on current endpoint | Re-run when a GPT-family endpoint or model alias is available. Record actual alias used. |
+| Run or prepare Claude Opus 4.8 ablation. | `benchmarks/model_ablation_v0.json`; prompt packets under `results/model_ablation_prompts/v0/`; runner/evaluator scripts; Phase 26 run report shows `claude-opus-4-8` listed but chat completions fail HTTP 503 `No available accounts`. | Attempted, blocked | Re-run `scripts/run_model_ablation_prompts.py` when provider account capacity is available. |
+| Run or prepare GPT 5.5 / GPT-family ablation. | Same model-ablation artifacts; Phase 26 run report shows `gpt-5.5` unavailable and no GPT-family fallback models listed. | Attempted, unavailable on current endpoint | Re-run when a GPT-family endpoint or model alias is available. Record actual alias used. |
 | Provide DeepSeek-follow-up process for the user. | `deepseek_followup_slot` in `benchmarks/model_ablation_v0.json`; runner now skips only placeholder alias; tests cover placeholder vs configured DeepSeek behavior; usage docs and runbook include DeepSeek steps. | Process ready; model response pending | User fills concrete DeepSeek alias/env vars, rebuilds prompts, runs `--model-id deepseek_followup_slot`, then scores saved responses. |
 | Develop PaperToSkill extraction system. | `scripts/papertoskill_extract.py`; generated skills for four curated papers; source maps; deterministic auto-note scaffold for Toolformer/AIDE; tests. | Complete for current scoped prototype | Broader arbitrary-PDF automation remains unsupported and should not be claimed. |
 | Experiments: main results. | `results/tables/main_results.md`; four-paper deterministic results; generated skills outperform generic and abstract baselines on operational coverage. | Complete for deterministic/offline benchmark | Live task success remains pending. |
@@ -44,6 +44,9 @@ Local package status: `results/reproducibility/package_report.md` reports
   GPT-family rows skipped because no GPT-family model was listed.
 - `results/model_ablation_prompts/v0/evaluation.md`: 6 total rows, 0 scored
   rows, 6 pending rows.
+- `research/run_logs/2026-06-18_phase26_model_ablation_recheck.md`: latest
+  endpoint recheck confirms the same Claude account-pool blocker and GPT-family
+  model-catalog gap.
 - `results/human_fidelity_packets/annotation_summary.md`: human annotation is
   pending.
 - `results/reproducibility/package_report.md`: 7 pending checks remain.

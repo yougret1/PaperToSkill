@@ -83,6 +83,7 @@ CORE_FILES = {
     "stage_log": "research/stage_log.md",
     "phase22_model_ablation_run_log": "research/run_logs/2026-06-18_phase22_model_ablation_live_attempt.md",
     "phase23_deepseek_readiness_run_log": "research/run_logs/2026-06-18_phase23_deepseek_followup_readiness.md",
+    "phase26_model_ablation_recheck_run_log": "research/run_logs/2026-06-18_phase26_model_ablation_recheck.md",
     "result_cards": "results/result_cards.md",
 }
 

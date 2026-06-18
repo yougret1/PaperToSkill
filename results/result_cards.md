@@ -461,7 +461,7 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 134 ready checks, 7
+  `overall_status=ready_with_pending_external_evidence`, 135 ready checks, 7
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
@@ -582,6 +582,8 @@
   user's later configuration.
 - Response evaluation: `results/model_ablation_prompts/v0/evaluation.md`
   reports 6 total rows, 0 scored rows, and 6 pending rows.
+- Latest recheck: Phase 26 reran the same Claude/GPT-family slots and produced
+  the same provider/model availability outcome.
 - Practical significance: the project now has a reusable runner/evaluator path
   for Claude/GPT/DeepSeek model ablations and records provider availability
   without committing raw credentials.
@@ -595,6 +597,7 @@
   remain pending.
 - Figure/table: `scripts/run_model_ablation_prompts.py`;
   `scripts/evaluate_model_ablation_responses.py`;
+  `research/run_logs/2026-06-18_phase26_model_ablation_recheck.md`;
   `results/model_ablation_prompts/v0/run_report.md`;
   `results/model_ablation_prompts/v0/evaluation.md`.
 

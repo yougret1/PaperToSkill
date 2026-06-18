@@ -43,6 +43,7 @@
 | `research/run_logs/2026-06-18_phase22_model_ablation_live_attempt.md` | Model-ablation runner/evaluator, live endpoint attempt, and provider/model availability evidence | Created |
 | `research/run_logs/2026-06-18_phase23_deepseek_followup_readiness.md` | DeepSeek follow-up readiness, runner behavior hardening, and endpoint recheck | Created |
 | `research/run_logs/2026-06-18_phase25_tokenizer_cost_proxy.md` | Tokenizer-aware compactness/cost proxy commands and outcomes | Created |
+| `research/run_logs/2026-06-18_phase26_model_ablation_recheck.md` | Claude/GPT-family model-ablation endpoint recheck and pending-response evidence | Created |
 
 ## Paper Draft Package
 

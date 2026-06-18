@@ -179,7 +179,7 @@ Initial target contribution categories:
   paper-reported limitations/failure branches and 6 project-level failure/fix
   records.
 - `results/reproducibility/`: reproducibility package report. Current status is
-  ready with pending external evidence, 134 ready checks, 7 pending checks, and
+  ready with pending external evidence, 135 ready checks, 7 pending checks, and
   0 failed checks.
 - `research/review_report.md` and `research/rebuttal_bank.md`: internal
   review/rebuttal readiness artifacts that map likely reviewer objections to
@@ -211,7 +211,9 @@ Initial target contribution categories:
   negative model-quality evidence.
 - `results/model_ablation_prompts/v0/`: generated model-ablation prompts for
   Claude Opus 4.8, GPT-family, and DeepSeek follow-up slots over Toolformer and
-  AIDE auto-skill usage examples, plus run/evaluation reports.
+  AIDE auto-skill usage examples, plus run/evaluation reports. The latest
+  Phase 26 recheck still finds `claude-opus-4-8` listed but blocked at chat
+  completion with HTTP 503/no accounts, and no GPT-family alias in the catalog.
 - `results/tables/context_cost_proxy_tokenizer.*`: local `o200k_base`
   tokenizer-aware compactness/cost proxy reports. Generated skills use 1,079 vs
   45,212 tokens for AI Scientist-v2, 703 vs 16,414 for Reflexion, 1,285 vs
@@ -243,7 +245,7 @@ Initial target contribution categories:
   official template is AAAI-27 because the author-kit endpoint available on
   2026-06-18 provides `aaai2027.sty`.
 - Model-ablation writing must distinguish prompt packets from completed
-  Claude/GPT/DeepSeek responses. The current live attempt found
+  Claude/GPT/DeepSeek responses. The latest Phase 26 live recheck found
   `claude-opus-4-8` listed but unavailable for chat completion due to provider
   accounts, and no GPT-family model alias listed on the endpoint. GPT 5.5 is a
   requested GPT-family slot and must be verified at run time before claimed as

@@ -1,8 +1,8 @@
 # Model Ablation Run Report
 
 - Overall status: blocked_by_provider_or_model_availability
-- Started at unix time: 1781783914
-- Completed at unix time: 1781783918
+- Started at unix time: 1781788205
+- Completed at unix time: 1781788209
 - Successes: 0
 - Errors: 2
 - Skipped: 2

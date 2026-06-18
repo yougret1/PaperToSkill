@@ -10,12 +10,14 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 25: tokenizer-aware compactness/cost proxy upgrade. The AAAI-27 paper
+Phase 26: Claude/GPT-family model-ablation endpoint recheck. The AAAI-27 paper
 package, usage examples, deterministic/offline experiments, model-ablation
 runner, DeepSeek follow-up path, and local `o200k_base` cost-proxy tables are
-prepared. The active goal is not yet complete because live Claude/GPT-family
-responses, DeepSeek responses, human-fidelity annotation, and provider-specific
-billing or success-per-dollar evidence remain pending.
+prepared. The latest live recheck still finds `claude-opus-4-8` listed but
+blocked by provider account availability, with no GPT-family alias listed. The
+active goal is not yet complete because live model responses, DeepSeek
+responses, human-fidelity annotation, and provider-specific billing or
+success-per-dollar evidence remain pending.
 
 ## Memory
 
