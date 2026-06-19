@@ -98,6 +98,8 @@ Use these as entry points instead of searching the whole repo first:
 - `scripts/check_usage_examples.py`: usage-example gate.
 - `scripts/check_paper_tables.py`: AAAI result-table consistency gate.
 - `scripts/check_paper_claims.py`: paper overclaim/boundary gate.
+- `scripts/check_submission_review.py`: submission-review handoff freshness
+  gate.
 - `scripts/check_goal_completion.py`: active-goal completion gate.
 - `benchmarks/model_ablation_v0.json`: Claude/GPT-family/DeepSeek prompt spec.
 - `benchmarks/provider_billing_evidence_v0.json`: provider-billing evidence
@@ -114,11 +116,11 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 221 ready checks, 7 pending
+  reports `ready_with_pending_external_evidence`, 227 ready checks, 7 pending
   checks, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
-  reports `not_complete_pending_external_evidence`, 53 ready checks, 8 pending
+  reports `not_complete_pending_external_evidence`, 55 ready checks, 8 pending
   checks, and 0 failed checks.
 - AI-Scientist-v2 LLM-client smoke:
   `results/ai_scientist_v2_smoke/run_report.md`
@@ -154,6 +156,9 @@ Use these as entry points instead of searching the whole repo first:
 - Paper claims:
   `results/reproducibility/paper_claim_report.md`
   reports ready, 20 ready checks, 0 failed checks.
+- Submission-review handoff:
+  `results/reproducibility/submission_review_report.md`
+  reports ready, 15 ready checks, 0 failed checks.
 
 ## Model/API Configuration
 

@@ -38,6 +38,7 @@ REQUIRED_FILES = {
     "tokenizer_cost_proxy": "results/tables/context_cost_proxy_tokenizer.json",
     "model_response_cost_proxy": "results/tables/model_response_cost_proxy.json",
     "provider_billing_summary": "results/provider_billing_evidence/billing_summary.json",
+    "submission_review_report": "results/reproducibility/submission_review_report.json",
     "goal_completion_audit": "research/goal_completion_audit.md",
 }
 
@@ -256,6 +257,7 @@ def paper_package_checks(root: Path) -> list[Check]:
         report_ready_check(root, "usage_example_gate_ready", "results/reproducibility/usage_example_report.json"),
         report_ready_check(root, "paper_table_gate_ready", "results/reproducibility/paper_table_report.json"),
         report_ready_check(root, "paper_claim_gate_ready", "results/reproducibility/paper_claim_report.json"),
+        report_ready_check(root, "submission_review_handoff_ready", "results/reproducibility/submission_review_report.json"),
     ]
     ready = all(check.status == "ready" for check in checks)
     checks.append(

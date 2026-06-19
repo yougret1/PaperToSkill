@@ -381,6 +381,27 @@ This checker scans the AAAI manuscript and Markdown draft, but not
 `paper/claim_checklist.md` because that file intentionally stores unsupported
 phrases as negative examples.
 
+## Submission-Review Handoff Gate
+
+Verify that internal review, rebuttal, and submission checklist handoff files
+match current evidence rather than stale earlier-phase status:
+
+```powershell
+python scripts\check_submission_review.py `
+  --output-json results\reproducibility\submission_review_report.json `
+  --output-md results\reproducibility\submission_review_report.md `
+  --strict
+```
+
+Current Phase 44 status:
+`results/reproducibility/submission_review_report.md` reports ready, 15 ready
+checks, and 0 failed checks. It verifies that review handoff files describe the
+24 scored saved live-transfer response rows, 4 scored and 2 pending
+model-ablation rows, 0 scored and 24 pending human-fidelity rows, 0 measured
+and 6 pending provider-billing rows, and the AI-Scientist-v2 HTTP 403
+`All available accounts exhausted` smoke blocker. Passing this gate does not
+mean the AAAI paper is submission-final.
+
 ## Goal Completion Gate
 
 Verify the active user goal against current local evidence before deciding

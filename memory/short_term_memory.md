@@ -7,26 +7,22 @@ Current date: 2026-06-19.
 
 ## Current Phase
 
-Phase 43 is complete and pushed: the pending provider-billing and
-success-per-dollar evidence step is now executable through a strict
-billing-evidence handoff package.
+Phase 44 is complete pending commit/push: refreshed submission-review handoff
+artifacts and added a checker so review/rebuttal/submission-checklist files
+cannot drift behind the current evidence state.
 
-Latest Phase 43 implementation commit: `638ef35 Add provider billing evidence
-handoff`; a later memory-only commit may sit on top of it.
+Latest pushed commit before Phase 44: `86422d2 Refresh phase 43 memory`.
 
-Phase 43 added:
+Phase 44 added:
 
-- Added `benchmarks/provider_billing_evidence_v0.json`.
-- Added `scripts/summarize_provider_billing_evidence.py`.
-- Added `tests/test_summarize_provider_billing_evidence.py`.
-- Generated `results/provider_billing_evidence/billing_template.csv` and
-  `billing_summary.{json,md}`.
-- Updated `scripts/check_goal_completion.py` and
-  `scripts/check_reproducibility_package.py` with provider-billing handoff
-  checks.
-- Added `research/run_logs/2026-06-19_phase43_provider_billing_handoff.md`.
-- Rebuilt `paper/aaai/papertoskill_aaai2027.pdf` after the AAAI TeX wording
-  update.
+- Updated `research/review_report.md` and `research/rebuttal_bank.md` to remove
+  stale Phase 17 live-transfer pending/HTTP 503 wording.
+- Added `research/submission_checklist.md`.
+- Added `scripts/check_submission_review.py`.
+- Added `tests/test_check_submission_review.py`.
+- Generated `results/reproducibility/submission_review_report.{json,md}`.
+- Wired submission-review handoff into package and goal gates while keeping
+  `aaai_final_submission_ready` pending.
 
 ## Current Evidence
 
@@ -55,10 +51,17 @@ Phase 43 added:
   `results/provider_billing_evidence/billing_summary.md` reports
   `billing_status=pending`, 6 total rows, 0 measured rows, 6 pending rows, 0
   errors, total billed USD 0, and success per dollar `n/a`.
+- Submission-review handoff:
+  `results/reproducibility/submission_review_report.md` reports
+  `overall_status=ready`, 15 ready checks, and 0 failed checks.
 - Goal report now shows `not_complete_pending_external_evidence`, 53 ready
-  checks, 8 pending checks, and 0 failed checks.
+  checks, 8 pending checks, and 0 failed checks before Phase 44 regeneration;
+  current Phase 44 regenerated report shows 55 ready checks, 8 pending checks,
+  and 0 failed checks.
 - Package report now shows `ready_with_pending_external_evidence`, 221 ready
-  checks, 7 pending checks, and 0 failed checks.
+  checks, 7 pending checks, and 0 failed checks before Phase 44 regeneration;
+  current Phase 44 regenerated report shows 227 ready checks, 7 pending checks,
+  and 0 failed checks.
 
 ## Boundaries To Preserve
 
@@ -83,6 +86,8 @@ Supported after Phase 43:
   rows remain pending.
 - Provider-billing evidence handoff is ready and strictly validated, but all
   six billing rows remain pending.
+- Submission-review handoff is ready and checks that review/rebuttal/checklist
+  files match current evidence, but final AAAI submission remains pending.
 - Package and goal gates separate provider/model availability pending evidence
   from local failures.
 - All Phase 40 live-transfer saved-response evidence remains complete.
@@ -105,6 +110,25 @@ rg -n "sk-[A-Za-z0-9]{20,}" .
 
 `git diff --check` reported only Windows LF-to-CRLF warnings, and `rg` exited
 1 because no raw API-key-like strings were found.
+
+Phase 44 full verification passed:
+
+```powershell
+python -m unittest discover -s tests -v
+python scripts\check_submission_review.py --strict
+python scripts\check_paper_claims.py --strict
+python scripts\check_goal_completion.py --strict
+python scripts\check_reproducibility_package.py --strict
+python scripts\check_aaai_package.py --strict
+python scripts\check_paper_tables.py --strict
+python scripts\check_usage_examples.py --strict
+git diff --check
+rg -n "sk-[A-Za-z0-9]{20,}" .
+```
+
+Full unittest count is 58 tests. `git diff --check` reported only Windows
+LF-to-CRLF warnings, and `rg` exited 1 because no raw API-key-like strings were
+found.
 
 ## Persistent Blockers
 

@@ -1599,3 +1599,35 @@ Evidence boundary:
 - It does not collect live invoices, realized provider bills, DeepSeek
   responses, AI-Scientist-v2 live-run completion, human validation, or a real
   success-per-dollar result.
+
+## 2026-06-19 Phase 44
+
+Actions:
+
+- Refreshed `research/review_report.md` and `research/rebuttal_bank.md` to
+  match Phase 40-43 evidence.
+- Added `research/submission_checklist.md`.
+- Added `scripts/check_submission_review.py` and
+  `tests/test_check_submission_review.py`.
+- Generated `results/reproducibility/submission_review_report.{json,md}`.
+- Added submission-review handoff checks to active-goal and reproducibility
+  package gates.
+
+Results:
+
+- Submission-review handoff is ready with 15 ready checks and 0 failed checks.
+- The handoff now reflects 24 scored saved live-transfer response rows, 4
+  scored and 2 pending model-ablation rows, 0 scored and 24 pending
+  human-fidelity rows, 0 measured and 6 pending provider-billing rows, and the
+  AI-Scientist-v2 HTTP 403 provider blocker.
+- Goal-completion report now shows 55 ready checks, 8 pending checks, and
+  0 failed checks.
+- Reproducibility package report now shows 227 ready checks, 7 pending checks,
+  and 0 failed checks.
+
+Evidence boundary:
+
+- Phase 44 makes submission-review handoff freshness machine-checkable.
+- It does not complete final AAAI submission, human validation, DeepSeek,
+  provider billing, success-per-dollar evidence, AI-Scientist-v2 smoke
+  completion, or a full AI-Scientist-v2 live run.

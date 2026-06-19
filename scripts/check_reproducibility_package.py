@@ -82,6 +82,10 @@ CORE_FILES = {
     "paper_claim_checker": "scripts/check_paper_claims.py",
     "paper_claim_report_json": "results/reproducibility/paper_claim_report.json",
     "paper_claim_report_md": "results/reproducibility/paper_claim_report.md",
+    "submission_review_checker": "scripts/check_submission_review.py",
+    "submission_review_checklist": "research/submission_checklist.md",
+    "submission_review_report_json": "results/reproducibility/submission_review_report.json",
+    "submission_review_report_md": "results/reproducibility/submission_review_report.md",
     "goal_completion_checker": "scripts/check_goal_completion.py",
     "goal_completion_report_json": "results/reproducibility/goal_completion_report.json",
     "goal_completion_report_md": "results/reproducibility/goal_completion_report.md",
@@ -568,6 +572,37 @@ def paper_claim_checks(root: Path) -> list[Check]:
     return checks
 
 
+def submission_review_checks(root: Path) -> list[Check]:
+    checks: list[Check] = []
+    report_path = root / "results/reproducibility/submission_review_report.json"
+    if not report_path.exists():
+        return checks
+    report = load_json(report_path)
+    status = "ready" if report.get("overall_status") == "ready" else "fail"
+    counts = report.get("status_counts", {})
+    detail = f"overall={report.get('overall_status')}; counts={counts}"
+    checks.append(Check("submission_review_report_ready", status, detail, str(report_path.relative_to(root))))
+    ready_ids = {check.get("id") for check in report.get("checks", []) if check.get("status") == "ready"}
+    required_ready = {
+        "submission_review_live_transfer_current",
+        "submission_review_model_ablation_current",
+        "submission_review_human_fidelity_current",
+        "submission_review_provider_billing_current",
+        "submission_review_ai_scientist_smoke_current",
+        "submission_review_goal_package_counts_current",
+    }
+    missing = sorted(required_ready - ready_ids)
+    checks.append(
+        Check(
+            "submission_review_core_checks_ready",
+            "ready" if not missing else "fail",
+            "core checks ready" if not missing else "missing=" + ",".join(missing),
+            str(report_path.relative_to(root)),
+        )
+    )
+    return checks
+
+
 def goal_completion_checks(root: Path) -> list[Check]:
     checks: list[Check] = []
     report_path = root / "results/reproducibility/goal_completion_report.json"
@@ -586,6 +621,7 @@ def goal_completion_checks(root: Path) -> list[Check]:
         "claude_opus_4_8_ablation_attempted": "ready",
         "claude_opus_4_8_ablation_complete": "ready",
         "gpt_family_ablation_complete": "ready",
+        "submission_review_handoff_ready": "ready",
         "deepseek_followup_process_ready": "ready",
         "deepseek_followup_response_complete": "pending",
         "human_fidelity_annotation_complete": "pending",
@@ -918,6 +954,7 @@ def build_report(root: Path) -> dict[str, Any]:
     checks.extend(aaai_package_checks(root))
     checks.extend(paper_table_checks(root))
     checks.extend(paper_claim_checks(root))
+    checks.extend(submission_review_checks(root))
     checks.extend(goal_completion_checks(root))
     checks.extend(ai_scientist_smoke_checks(root))
     checks.extend(provider_billing_checks(root))

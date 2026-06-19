@@ -923,7 +923,7 @@
 
 - Experiment: make the active-goal completion audit machine-checkable.
 - Main result: `results/reproducibility/goal_completion_report.md` reports
-  `overall_status=not_complete_pending_external_evidence`, 53 ready checks, 8
+  `overall_status=not_complete_pending_external_evidence`, 55 ready checks, 8
   pending checks, and 0 failed checks.
 - Checks: durable memory, AI-Scientist-v2 dry-run evidence, PaperToSkill
   prototype and benchmark readiness, bounded AI-Scientist-v2 LLM-client smoke
@@ -944,3 +944,28 @@
 - Figure/table: `scripts/check_goal_completion.py`;
   `results/reproducibility/goal_completion_report.md`;
   `results/reproducibility/goal_completion_report.json`.
+
+## Submission Review Handoff Gate
+
+- Experiment: keep internal review, rebuttal, and submission checklist handoff
+  files synchronized with the current evidence state.
+- Main result: `results/reproducibility/submission_review_report.md` reports
+  `overall_status=ready`, 15 ready checks, and 0 failed checks.
+- Checks: stale HTTP 503/live-transfer pending language is absent; review
+  materials include the current 24 scored saved live-transfer response rows,
+  4 scored and 2 pending model-ablation rows, 0 scored and 24 pending
+  human-fidelity rows, 0 measured and 6 pending provider-billing rows, the
+  AI-Scientist-v2 HTTP 403 provider blocker, and current goal/package counts.
+- Practical significance: prevents reviewer-facing handoff materials from
+  lagging behind the evidence package while keeping final submission decisions
+  explicit.
+- Failure modes: the checker must be rerun after any future goal/package count
+  change or after DeepSeek, human-fidelity, provider-billing, or
+  AI-Scientist-v2 evidence is updated.
+- Limitations: this is review-handoff freshness, not new empirical evidence or
+  final AAAI submission readiness.
+- Claim impact: supports saying the submission-review handoff is current and
+  machine-checked, while final submission remains pending.
+- Figure/table: `scripts/check_submission_review.py`;
+  `research/submission_checklist.md`;
+  `results/reproducibility/submission_review_report.md`.

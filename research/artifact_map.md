@@ -22,6 +22,7 @@
 | `research/experiment_queue.md` | Phase 1 and Phase 2 runnable queue | Created |
 | `research/review_report.md` | Internal adversarial review and submission-gate risks | Created |
 | `research/rebuttal_bank.md` | Evidence-bounded answers to likely reviewer objections | Created |
+| `research/submission_checklist.md` | AAAI submission-review handoff checklist and final-decision boundaries | Created |
 | `research/runbook.md` | Reproducible local commands and endpoint notes | Created |
 | `research/goal_completion_audit.md` | Requirement-by-requirement audit of the active user goal and remaining blockers | Created |
 | `research/stage_log.md` | Phase-level chronological progress | Created |
@@ -61,6 +62,7 @@
 | `research/run_logs/2026-06-19_phase41_ai_scientist_v2_smoke.md` | Bounded AI-Scientist-v2 LLM-client smoke attempt and provider-blocked evidence boundary | Created |
 | `research/run_logs/2026-06-19_phase42_human_fidelity_handoff.md` | Human-fidelity annotation handoff guide, stricter template, and validation boundary | Created |
 | `research/run_logs/2026-06-19_phase43_provider_billing_handoff.md` | Provider-billing evidence template, strict summary, and pending real-billing boundary | Created |
+| `research/run_logs/2026-06-19_phase44_submission_review_handoff.md` | Submission-review handoff refresh, stale-review checker, and final-submission boundary | Created |
 
 ## Paper Draft Package
 
@@ -170,6 +172,7 @@
 | `scripts/check_usage_examples.py` | Verifies usage-example files, prompt/response slots, and an offline auto-note-to-skill example chain | Created |
 | `scripts/check_paper_tables.py` | Verifies AAAI LaTeX result-table values against generated CSV result tables | Created |
 | `scripts/check_paper_claims.py` | Verifies paper-facing text avoids unsupported overclaims and includes required evidence boundaries | Created |
+| `scripts/check_submission_review.py` | Verifies review, rebuttal, and submission checklist handoff artifacts against current evidence | Created |
 | `scripts/check_goal_completion.py` | Audits the active user goal against local evidence and exposes remaining pending requirements | Created |
 | `scripts/run_ai_scientist_v2_smoke.py` | Runs one bounded AI-Scientist-v2 LLM-client smoke check and writes redacted reports | Created |
 | `scripts/build_model_ablation_prompts.py` | Builds Claude/GPT-family/DeepSeek model-ablation prompt packets | Created |
@@ -198,6 +201,7 @@
 | `tests/test_evaluate_model_response_costs.py` | Smoke test for saved-response output-token proxy evaluator | Created |
 | `tests/test_live_transfer_execution.py` | Smoke tests for live-transfer runner skip behavior and saved-response scoring | Created |
 | `tests/test_check_goal_completion.py` | Smoke tests for active-goal completion checker and pending-evidence boundaries | Created |
+| `tests/test_check_submission_review.py` | Smoke tests for submission-review handoff drift checker | Created |
 | `tests/test_run_ai_scientist_v2_smoke.py` | Smoke tests for AI-Scientist-v2 LLM-client smoke success and redacted provider errors | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |
 | `generated_skills/ai_scientist_v2/references/source_map.json` | Source-map evidence for AI Scientist-v2 generated skill | Created |
@@ -292,6 +296,8 @@
 | `results/reproducibility/paper_table_report.json` | Machine-readable AAAI paper-table consistency report | Created |
 | `results/reproducibility/paper_claim_report.md` | Human-readable paper claim-discipline report | Created |
 | `results/reproducibility/paper_claim_report.json` | Machine-readable paper claim-discipline report | Created |
+| `results/reproducibility/submission_review_report.md` | Human-readable submission-review handoff freshness report | Created |
+| `results/reproducibility/submission_review_report.json` | Machine-readable submission-review handoff freshness report | Created |
 | `results/reproducibility/goal_completion_report.md` | Human-readable active-goal completion report with pending evidence boundaries | Created |
 | `results/reproducibility/goal_completion_report.json` | Machine-readable active-goal completion report | Created |
 | `results/ai_scientist_v2_smoke/run_report.md` | Human-readable bounded AI-Scientist-v2 LLM-client smoke report | Created |

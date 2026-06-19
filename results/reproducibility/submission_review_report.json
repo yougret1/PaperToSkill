@@ -1,0 +1,101 @@
+{
+  "schema_version": "0.1",
+  "evidence_boundary": "Checks internal review, rebuttal, and submission-checklist handoff artifacts against current repository evidence. A ready report means the handoff is current; it is not a final submission or acceptance claim.",
+  "overall_status": "ready",
+  "status_counts": {
+    "ready": 15,
+    "fail": 0
+  },
+  "checks": [
+    {
+      "id": "submission_review_target_review_report",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "research/review_report.md"
+    },
+    {
+      "id": "submission_review_target_rebuttal_bank",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "research/rebuttal_bank.md"
+    },
+    {
+      "id": "submission_review_target_submission_checklist",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "research/submission_checklist.md"
+    },
+    {
+      "id": "submission_review_no_stale_http_503_live_transfer_pending",
+      "status": "ready",
+      "detail": "Review handoff must not use stale Phase 17 live-transfer HTTP 503 wording.",
+      "evidence": "research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md"
+    },
+    {
+      "id": "submission_review_no_stale_live_transfer_pending",
+      "status": "ready",
+      "detail": "Live-transfer saved-response rows are now collected and scored; pending wording must be bounded to real task success or human semantics.",
+      "evidence": "research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md"
+    },
+    {
+      "id": "submission_review_no_stale_old_toolformer_token_row",
+      "status": "ready",
+      "detail": "Review handoff must use the current tokenizer-aware cost table values.",
+      "evidence": "research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md"
+    },
+    {
+      "id": "submission_review_no_unbounded_final_submission_ready",
+      "status": "ready",
+      "detail": "Do not claim final submission or acceptance readiness.",
+      "evidence": "research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md"
+    },
+    {
+      "id": "submission_review_no_unbounded_human_validation_complete",
+      "status": "ready",
+      "detail": "Do not claim completed human semantic validation.",
+      "evidence": "research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md"
+    },
+    {
+      "id": "submission_review_no_unbounded_provider_billing_complete",
+      "status": "ready",
+      "detail": "Do not claim provider billing or success-per-dollar completion.",
+      "evidence": "research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md"
+    },
+    {
+      "id": "submission_review_live_transfer_current",
+      "status": "ready",
+      "detail": "live_total=24; scored=24; pending=0",
+      "evidence": "results/live_transfer_prompts/evaluation.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md"
+    },
+    {
+      "id": "submission_review_model_ablation_current",
+      "status": "ready",
+      "detail": "scored=4; pending=2",
+      "evidence": "results/model_ablation_prompts/v0/evaluation.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md"
+    },
+    {
+      "id": "submission_review_human_fidelity_current",
+      "status": "ready",
+      "detail": "status=pending; scored=0; pending=24",
+      "evidence": "results/human_fidelity_packets/annotation_summary.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md"
+    },
+    {
+      "id": "submission_review_provider_billing_current",
+      "status": "ready",
+      "detail": "status=pending; measured=0; pending=6",
+      "evidence": "results/provider_billing_evidence/billing_summary.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md"
+    },
+    {
+      "id": "submission_review_ai_scientist_smoke_current",
+      "status": "ready",
+      "detail": "overall=blocked_by_provider_or_model_availability",
+      "evidence": "results/ai_scientist_v2_smoke/run_report.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md"
+    },
+    {
+      "id": "submission_review_goal_package_counts_current",
+      "status": "ready",
+      "detail": "goal={'ready': 55, 'pending': 8, 'fail': 0}; package={'ready': 227, 'pending': 7, 'fail': 0}",
+      "evidence": "results/reproducibility/goal_completion_report.json; results/reproducibility/package_report.json; research/submission_checklist.md"
+    }
+  ]
+}

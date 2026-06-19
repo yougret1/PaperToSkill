@@ -84,6 +84,8 @@ class CheckReproducibilityPackageTest(unittest.TestCase):
             self.assertIn("paper_table_core_checks_ready", ready_ids)
             self.assertIn("paper_claim_report_ready", ready_ids)
             self.assertIn("paper_claim_core_checks_ready", ready_ids)
+            self.assertIn("submission_review_report_ready", ready_ids)
+            self.assertIn("submission_review_core_checks_ready", ready_ids)
             self.assertIn("goal_completion_report_ready", ready_ids)
             self.assertIn("goal_completion_core_checks_ready", ready_ids)
             self.assertIn("usage_example_report_ready", ready_ids)

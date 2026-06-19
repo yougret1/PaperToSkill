@@ -22,12 +22,12 @@ proxy accounting for saved model-ablation responses, but this is not realized
 provider billing.
 
 Local package status: `results/reproducibility/package_report.md` reports
-`ready_with_pending_external_evidence`, 221 ready checks, 7 pending checks, and
+`ready_with_pending_external_evidence`, 227 ready checks, 7 pending checks, and
 0 failed checks.
 
 Machine-checkable goal status:
 `results/reproducibility/goal_completion_report.md` reports
-`not_complete_pending_external_evidence`, 53 ready checks, 8 pending checks,
+`not_complete_pending_external_evidence`, 55 ready checks, 8 pending checks,
 and 0 failed checks.
 
 ## Requirement Audit
@@ -49,6 +49,7 @@ and 0 failed checks.
 | Include failure branches and negative outcomes. | `results/failure_cases/failure_case_archive.md`; model-ablation run reports; limitations; result cards; stage logs. | Complete as provenance archive | Outcome impact of failure recording is not tested. |
 | Human-fidelity annotation handoff. | `benchmarks/human_fidelity_review_v0.json`; `results/human_fidelity_packets/annotation_guide.md`; `results/human_fidelity_packets/annotation_template.csv`; `results/human_fidelity_packets/annotation_summary.md`; package check `human_fidelity_annotation_handoff_ready` is ready. | Handoff ready; annotation pending | Independent reviewers still need to fill all 24 rows before claiming human validation. |
 | Provider-billing evidence handoff. | `benchmarks/provider_billing_evidence_v0.json`; `results/provider_billing_evidence/billing_template.csv`; `results/provider_billing_evidence/billing_summary.md`; goal/package checks `provider_billing_evidence_handoff_ready` are ready. | Handoff ready; billing pending | Fill provider usage exports or invoices before claiming realized bills or success-per-dollar. |
+| Submission-review handoff. | `research/review_report.md`; `research/rebuttal_bank.md`; `research/submission_checklist.md`; `scripts/check_submission_review.py`; `results/reproducibility/submission_review_report.md`; goal/package checks `submission_review_handoff_ready` and `submission_review_report_ready` are ready. | Handoff ready; final submission pending | Use this handoff to decide whether to submit as a deterministic/offline paper or wait for pending external evidence. |
 | Final paper narrative. | `paper/draft.md`; `paper/outline.md`; `paper/claim_checklist.md`; `paper/limitations.md`; AAAI `.tex` draft. | Prepared, not final | Final paper requires live/human/model evidence decisions or explicit decision to submit as deterministic/offline system paper. |
 | Machine-checkable completion gate. | `scripts/check_goal_completion.py`; `results/reproducibility/goal_completion_report.md`; reproducibility checks `goal_completion_report_ready` and `goal_completion_core_checks_ready` are ready. | Complete as a gate; full goal still pending | Re-run the gate after any model, human-fidelity, provider-billing, or final-paper evidence changes. |
 
@@ -110,6 +111,10 @@ and 0 failed checks.
 - `results/reproducibility/paper_claim_report.md`: paper claim-discipline gate
   is ready with 20 ready checks and 0 failed checks; it verifies unsupported
   overclaims remain absent but does not add new empirical evidence.
+- `results/reproducibility/submission_review_report.md`: submission-review
+  handoff gate is ready with 15 ready checks and 0 failed checks; it verifies
+  the review, rebuttal, and submission checklist files are synchronized with
+  current evidence but does not make the AAAI package submission-final.
 
 ## Completion Decision
 

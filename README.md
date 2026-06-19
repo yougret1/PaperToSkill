@@ -10,7 +10,7 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 43: Claude Opus 4.8 and GPT-family ablation rows are saved and scored for
+Phase 44: Claude Opus 4.8 and GPT-family ablation rows are saved and scored for
 the current two-case protocol, saved model responses have a local output-token
 proxy report, and all four live-transfer saved-response sets are collected and
 scored for the current prompt-packet protocol. A bounded AI-Scientist-v2
@@ -20,7 +20,10 @@ quality failure. The human-fidelity review handoff now includes an annotation
 guide, stricter blank template metadata, and summary validation, while completed
 human annotation remains pending. Provider-billing evidence collection now has
 a blank invoice/usage template and strict summary validation, while realized
-bills and success-per-dollar evidence remain pending.
+bills and success-per-dollar evidence remain pending. The submission-review
+handoff now includes updated adversarial review, rebuttal, and checklist files
+plus a checker that prevents stale review claims from drifting behind current
+evidence.
 The AAAI-27 paper package, usage examples, deterministic/offline experiments,
 model-ablation runner, DeepSeek follow-up path, local `o200k_base` input/output
 token proxies, one-command extracted-text-to-skill pipeline, local
@@ -52,6 +55,7 @@ continuing work.
 - `research/experiment_queue.md`
 - `research/review_report.md`
 - `research/rebuttal_bank.md`
+- `research/submission_checklist.md`
 - `research/runbook.md`
 - `research/goal_completion_audit.md`
 - `research/stage_log.md`
@@ -113,3 +117,5 @@ pending live-agent claims.
   `results/ai_scientist_v2_smoke/run_report.md`.
 - Provider-billing evidence handoff:
   `results/provider_billing_evidence/billing_summary.md`.
+- Submission-review handoff:
+  `results/reproducibility/submission_review_report.md`.
