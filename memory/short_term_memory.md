@@ -7,10 +7,30 @@ Current date: 2026-06-20.
 
 ## Current Phase
 
-Phase 53 is in progress locally: converted the Phase 51 external-evidence
-closure queue into executable handoff packets. This phase does not call
-providers, run BFTS, collect DeepSeek responses, collect human rows, collect
-provider bills, or claim external evidence completion.
+Phase 54 is in progress locally: executed the Phase 53 AI-Scientist-v2
+smoke-completion packet with shell-only credentials. The provider still did not
+return a smoke response; this phase does not run BFTS or claim live-run
+success.
+
+Phase 54 evidence so far:
+
+- Ran `scripts/run_ai_scientist_v2_smoke.py` with `--require-complete`,
+  `--timeout-seconds 30`, and four Claude aliases:
+  `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and
+  `claude-opus-4-6`.
+- The command exited non-zero because `--require-complete` was set and the
+  provider did not return a smoke response satisfying the marker contract.
+- `results/ai_scientist_v2_smoke/run_report.md` remains
+  `blocked_by_provider_or_model_availability`, with 5 ready checks, 2 pending
+  checks, and 0 failed checks.
+- All four aliases timed out after 30 seconds waiting for provider response.
+- No `results/ai_scientist_v2_smoke/response.md` file exists.
+- Regenerated `results/external_evidence_closure/closure.{json,md}`,
+  `results/external_evidence_packets/packets.{json,md}`,
+  `results/ai_scientist_v2_live_run_handoff/handoff.{json,md}`, and
+  `results/reproducibility/goal_completion_report.{json,md}`.
+- Added `research/run_logs/2026-06-20_phase54_ai_scientist_v2_smoke_packet_retry.md`.
+- Push status: pending for Phase 54. Commit and push after verification.
 
 Phase 53 changes currently local:
 
@@ -29,13 +49,13 @@ Phase 53 changes currently local:
     `not_complete_pending_external_evidence`, 67 ready checks, 8 pending
     checks, 0 failed checks.
   - `results/reproducibility/package_report.md`:
-    `ready_with_pending_external_evidence`, 259 ready checks, 8 pending
+    `ready_with_pending_external_evidence`, 260 ready checks, 8 pending
     checks, 0 failed checks.
 - Push status: resolved for Phase 51 through Phase 53. After committing
   `b6bd29b Add external evidence execution packets`, `git push origin main`
-  succeeded on 2026-06-20 and moved `origin/main` from `6a1cbf8` to `b6bd29b`.
-  This memory update should be committed and pushed as a memory-only status
-  commit.
+  succeeded on 2026-06-20. The follow-up memory-only commit
+  `99b26b5 Mark phase 53 pushed in memory` was also pushed, leaving
+  `origin/main` synchronized at `99b26b5`.
 
 Phase 51 changes currently local:
 
@@ -96,7 +116,7 @@ Phase 51 current reports:
   and 0 failed checks.
 - Package report:
   `results/reproducibility/package_report.md` reports
-  `ready_with_pending_external_evidence`, 259 ready checks, 8 pending checks,
+  `ready_with_pending_external_evidence`, 260 ready checks, 8 pending checks,
   and 0 failed checks.
 
 Latest pushed Phase 50 commits: `da704bc Refresh AI-Scientist-v2 smoke timeout
@@ -167,7 +187,7 @@ and 0 failed checks. No `results/ai_scientist_v2_smoke/response.md` exists.
   and 0 failed checks.
 - Package report:
   `results/reproducibility/package_report.md` reports
-  `ready_with_pending_external_evidence`, 259 ready checks, 8 pending checks,
+  `ready_with_pending_external_evidence`, 260 ready checks, 8 pending checks,
   and 0 failed checks.
 
 ## Boundaries To Preserve
@@ -208,7 +228,7 @@ Supported after Phase 51:
 
 ## Latest Verification
 
-Latest Phase 51 verification:
+Latest Phase 54 verification:
 
 ```powershell
 python -m unittest discover -s tests -v
@@ -216,6 +236,7 @@ python scripts\check_submission_review.py --strict
 python scripts\check_deepseek_followup.py --strict
 python scripts\check_usage_examples.py --strict
 python scripts\check_external_evidence_closure.py --strict
+python scripts\check_external_evidence_packets.py --strict
 python scripts\check_ai_scientist_v2_live_run_handoff.py --strict
 python scripts\check_goal_completion.py --strict
 python scripts\check_reproducibility_package.py --strict
@@ -226,9 +247,9 @@ git diff --check
 rg -n "sk-[A-Za-z0-9]{20,}" .
 ```
 
-All tests/checkers passed. `git diff --check` emitted only Windows LF-to-CRLF
-warnings. The raw-key scan returned no matches. Phase 51 is committed locally;
-remote push is pending due to the GitHub TCP 443 connectivity blocker above.
+Latest full unittest before Phase 54 passed with 70 tests. Re-run the full
+suite before committing Phase 54 if more files change. The latest Phase 54
+smoke packet retry remains provider-blocked; Phase 54 push is pending.
 
 ## Persistent Blockers
 

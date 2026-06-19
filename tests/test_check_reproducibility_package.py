@@ -116,6 +116,7 @@ class CheckReproducibilityPackageTest(unittest.TestCase):
             self.assertIn("phase51_external_evidence_closure_queue_run_log", ready_ids)
             self.assertIn("phase52_ai_scientist_v2_smoke_retry_run_log", ready_ids)
             self.assertIn("phase53_external_evidence_packets_run_log", ready_ids)
+            self.assertIn("phase54_ai_scientist_v2_smoke_packet_retry_run_log", ready_ids)
             self.assertIn("external_evidence_closure_report_ready", ready_ids)
             self.assertIn("external_evidence_closure_core_checks_ready", ready_ids)
             self.assertIn("external_evidence_closure_queue_items_ready", ready_ids)

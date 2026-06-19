@@ -15,8 +15,9 @@ current prompt-packet protocol. Phase 41 attempted a bounded AI-Scientist-v2
 LLM-client smoke through the local `ai_scientist.llm` client; Phase 45 rechecked
 the smoke path with a script-level timeout, Phase 46 tried the known Claude
 alias variants, Phase 48 recorded historical HTTP 403 plus timeout evidence,
-and Phase 52 rechecked all four aliases with a 30-second timeout. The latest
-report is still `blocked_by_provider_or_model_availability`: `claude-opus-4-8`,
+and Phase 54 executed the smoke-completion packet with a 30-second timeout. The
+latest report is still `blocked_by_provider_or_model_availability`:
+`claude-opus-4-8`,
 `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6` all timed out after
 30 seconds waiting for provider response. The full goal is not yet complete
 because the
@@ -31,7 +32,7 @@ Phase 53 adds execution packets for those queue items, with inputs, commands,
 completion criteria, escalation rules, and evidence boundaries.
 
 Local package status: `results/reproducibility/package_report.md` reports
-`ready_with_pending_external_evidence`, 259 ready checks, 8 pending checks, and
+`ready_with_pending_external_evidence`, 260 ready checks, 8 pending checks, and
 0 failed checks.
 
 Machine-checkable goal status:
@@ -97,7 +98,7 @@ execution packets without completing the evidence itself.
   success-per-dollar value is available.
 - `results/ai_scientist_v2_smoke/run_report.md`: bounded AI-Scientist-v2
   LLM-client smoke attempt remains
-  `blocked_by_provider_or_model_availability`; the latest recheck tried
+  `blocked_by_provider_or_model_availability`; the latest packet retry tried
   `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and
   `claude-opus-4-6`; all four aliases timed out after 30 seconds waiting for
   provider response. The attempt is recorded, but smoke completion and full

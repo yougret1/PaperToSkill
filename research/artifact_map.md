@@ -72,6 +72,7 @@
 | `research/run_logs/2026-06-20_phase51_external_evidence_closure_queue.md` | Local external-evidence closure queue and gate integration | Created |
 | `research/run_logs/2026-06-20_phase52_ai_scientist_v2_smoke_retry.md` | AI-Scientist-v2 smoke retry where all four Claude aliases again timed out after 30 seconds | Created |
 | `research/run_logs/2026-06-20_phase53_external_evidence_packets.md` | External-evidence execution packets and gate integration | Created |
+| `research/run_logs/2026-06-20_phase54_ai_scientist_v2_smoke_packet_retry.md` | AI-Scientist-v2 smoke-completion packet retry where all four Claude aliases timed out after 30 seconds | Created |
 
 ## Paper Draft Package
 

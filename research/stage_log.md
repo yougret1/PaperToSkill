@@ -1892,3 +1892,39 @@ Evidence boundary:
 - It does not complete the AI-Scientist-v2 smoke, run BFTS, prove live
   research-task success, resolve DeepSeek, collect human annotations, collect
   provider billing, or make the AAAI package submission-final.
+
+## 2026-06-20 Phase 54
+
+Actions:
+
+- Executed the Phase 53 AI-Scientist-v2 smoke-completion packet with
+  shell-only credentials, four Claude aliases, `--timeout-seconds 30`, and
+  `--require-complete`.
+- Regenerated the external-evidence closure queue, execution packets,
+  AI-Scientist-v2 live-run handoff, and active-goal report after the smoke
+  retry.
+- Added
+  `research/run_logs/2026-06-20_phase54_ai_scientist_v2_smoke_packet_retry.md`.
+
+Results:
+
+- `results/ai_scientist_v2_smoke/run_report.md` still reports
+  `overall_status=blocked_by_provider_or_model_availability`, with 5 ready
+  checks, 2 pending checks, and 0 failed checks.
+- `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and
+  `claude-opus-4-6` each timed out after 30 seconds waiting for provider
+  response.
+- No `results/ai_scientist_v2_smoke/response.md` file exists.
+- Because the smoke report is not complete, the full AI-Scientist-v2 live/BFTS
+  run remains blocked by provider smoke.
+- The reproducibility package report now shows 260 ready checks, 8 pending
+  checks, and 0 failed checks after adding the Phase 54 run log to the package
+  gate.
+
+Evidence boundary:
+
+- Phase 54 refreshes provider/model availability evidence for the bounded
+  AI-Scientist-v2 LLM-client smoke path using the execution-packet command.
+- It does not complete the AI-Scientist-v2 smoke, run BFTS, prove live
+  research-task success, resolve DeepSeek, collect human annotations, collect
+  provider billing, or make the AAAI package submission-final.
