@@ -7,13 +7,11 @@ Current date: 2026-06-19.
 
 ## Current Phase
 
-Phase 48 is in progress locally: rechecking the bounded AI-Scientist-v2
-LLM-client smoke path with a longer per-alias timeout and synchronizing the
-provider-blocked evidence.
+Phase 48 is complete and pushed.
 
-Latest pushed commit before Phase 48: `f9a902c Refresh phase 47 memory status`.
+Latest pushed commit: `447cc33 Refresh AI-Scientist-v2 smoke provider evidence`.
 
-Phase 48 evidence so far:
+Phase 48 completed:
 
 - Re-ran `scripts/run_ai_scientist_v2_smoke.py` with four Claude aliases and
   `--timeout-seconds 30`.
@@ -24,6 +22,10 @@ Phase 48 evidence so far:
   for provider response.
 - No `results/ai_scientist_v2_smoke/response.md` file exists.
 - Added `research/run_logs/2026-06-19_phase48_ai_scientist_v2_smoke_provider_recheck.md`.
+- Updated review/checklist/runbook/memory/result-card references and the
+  submission-review freshness checker to track current smoke blocker terms.
+- Full verification passed before the commit, and the raw-key scan returned no
+  matches.
 
 Phase 47 completed:
 
@@ -129,10 +131,10 @@ Supported after Phase 48:
 
 ## Latest Verification
 
-Latest Phase 47 verification before commit `1c467e9`:
+Latest Phase 48 verification before commit `447cc33`:
 
 ```powershell
-python -m unittest tests.test_check_deepseek_followup tests.test_check_usage_examples tests.test_check_goal_completion tests.test_check_reproducibility_package -v
+python -m unittest tests.test_run_ai_scientist_v2_smoke tests.test_check_submission_review tests.test_check_reproducibility_package tests.test_check_goal_completion -v
 python -m unittest discover -s tests -v
 python scripts\check_submission_review.py --strict
 python scripts\check_deepseek_followup.py --strict
