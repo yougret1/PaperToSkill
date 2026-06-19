@@ -7,23 +7,30 @@ Current date: 2026-06-19.
 
 ## Current Phase
 
-Phase 44 is complete and pushed to `origin/main` as
-`1f7ceeb Add submission review handoff gate`: refreshed submission-review
-handoff artifacts and added a checker so review/rebuttal/submission-checklist
-files cannot drift behind the current evidence state.
+Phase 45 is complete pending commit/push: rechecked the bounded
+AI-Scientist-v2 LLM-client smoke and improved the smoke runner's command-line
+status/timeout handling so provider-blocked attempts are harder to misread as
+completed smoke runs.
 
-Latest pushed commit after Phase 44: `1f7ceeb Add submission review handoff gate`.
+Latest pushed commit before Phase 45: `ca3d5a4 Refresh phase 44 memory status`.
 
-Phase 44 added:
+Phase 45 changed:
 
-- Updated `research/review_report.md` and `research/rebuttal_bank.md` to remove
-  stale Phase 17 live-transfer pending/HTTP 503 wording.
-- Added `research/submission_checklist.md`.
-- Added `scripts/check_submission_review.py`.
-- Added `tests/test_check_submission_review.py`.
-- Generated `results/reproducibility/submission_review_report.{json,md}`.
-- Wired submission-review handoff into package and goal gates while keeping
-  `aaai_final_submission_ready` pending.
+- Re-ran `scripts/run_ai_scientist_v2_smoke.py --strict` with shell-only
+  credentials.
+- The latest smoke recheck timed out after 15 seconds waiting for provider
+  response; no `results/ai_scientist_v2_smoke/response.md` file exists.
+- Updated `scripts/run_ai_scientist_v2_smoke.py` to print
+  `overall_status=...; ready=...; pending=...; fail=...`.
+- Added `--timeout-seconds`, which writes a blocked provider/model availability
+  report instead of relying on outer shell timeouts.
+- Added `--require-complete`, which exits non-zero unless a smoke response is
+  saved and satisfies the marker contract.
+- Added tests for smoke success, provider errors, status summaries, completion
+  exit semantics, and provider timeout reporting.
+- Added a reproducibility-package check for the smoke runner's status-summary,
+  timeout, and completion-mode UX.
+- Added `research/run_logs/2026-06-19_phase45_ai_scientist_v2_smoke_recheck.md`.
 
 ## Current Evidence
 
@@ -40,9 +47,9 @@ Phase 44 added:
   `results/ai_scientist_v2_smoke/run_report.md` reports
   `overall_status=blocked_by_provider_or_model_availability`, 1 ready check, 2
   pending checks, and 0 failed checks.
-- The smoke provider error was HTTP 403
-  `All available accounts exhausted`; no
-  `results/ai_scientist_v2_smoke/response.md` file was created.
+- The latest smoke provider/model availability detail is
+  `Timed out after 15 seconds waiting for provider response`; no
+  `results/ai_scientist_v2_smoke/response.md` file exists.
 - Human-fidelity annotation handoff:
   `results/human_fidelity_packets/annotation_guide.md` is present, the template
   has 24 blank rows, and `annotation_summary.md` reports
@@ -59,10 +66,8 @@ Phase 44 added:
   checks, 8 pending checks, and 0 failed checks before Phase 44 regeneration;
   current Phase 44 regenerated report shows 55 ready checks, 8 pending checks,
   and 0 failed checks.
-- Package report now shows `ready_with_pending_external_evidence`, 221 ready
-  checks, 7 pending checks, and 0 failed checks before Phase 44 regeneration;
-  current Phase 44 regenerated report shows 227 ready checks, 7 pending checks,
-  and 0 failed checks.
+- Package report now shows `ready_with_pending_external_evidence`, 229 ready
+  checks, 7 pending checks, and 0 failed checks after Phase 45 regeneration.
 
 ## Boundaries To Preserve
 
@@ -130,6 +135,31 @@ rg -n "sk-[A-Za-z0-9]{20,}" .
 Full unittest count is 58 tests. `git diff --check` reported only Windows
 LF-to-CRLF warnings, and `rg` exited 1 because no raw API-key-like strings were
 found.
+
+Phase 45 full verification passed:
+
+```powershell
+python -m unittest discover -s tests -v
+python scripts\check_submission_review.py --strict
+python scripts\check_goal_completion.py --strict
+python scripts\check_reproducibility_package.py --strict
+python scripts\check_paper_claims.py --strict
+python scripts\check_aaai_package.py --strict
+python scripts\check_paper_tables.py --strict
+python scripts\check_usage_examples.py --strict
+git diff --check
+rg -n "sk-[A-Za-z0-9]{20,}" .
+```
+
+Full unittest count is 59 tests. `git diff --check` reported only Windows
+LF-to-CRLF warnings, and `rg` exited 1 because no raw API-key-like strings were
+found.
+
+Latest reports show goal `not_complete_pending_external_evidence`, 55 ready
+checks, 8 pending checks, 0 failed checks; package
+`ready_with_pending_external_evidence`, 229 ready checks, 7 pending checks,
+0 failed checks; submission-review handoff ready with 15 ready checks and
+0 failed checks.
 
 ## Persistent Blockers
 

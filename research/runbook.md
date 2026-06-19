@@ -124,13 +124,21 @@ $env:AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE = "1"
 python scripts\run_ai_scientist_v2_smoke.py --strict
 ```
 
-Current Phase 41 status:
+The command prints the generated report paths plus an `overall_status`
+summary. Use `--require-complete` when a CI or handoff step should exit
+non-zero unless the provider returns a response satisfying the smoke contract:
+
+```powershell
+python scripts\run_ai_scientist_v2_smoke.py --strict --require-complete
+```
+
+Current Phase 45 status:
 `results/ai_scientist_v2_smoke/run_report.md` reports
 `overall_status=blocked_by_provider_or_model_availability`, 1 ready check, 2
-pending checks, and 0 failed checks. The provider returned HTTP 403
-`All available accounts exhausted`, so no response file was produced. This is a
-bounded client-availability smoke attempt, not a BFTS run or live research-task
-success.
+pending checks, and 0 failed checks. The latest recheck timed out after 15
+seconds waiting for provider response, so no response file was produced. This
+is a bounded client-availability smoke attempt, not a BFTS run or live
+research-task success.
 
 ## Model-Ablation Prompt Packets
 
@@ -398,9 +406,8 @@ Current Phase 44 status:
 checks, and 0 failed checks. It verifies that review handoff files describe the
 24 scored saved live-transfer response rows, 4 scored and 2 pending
 model-ablation rows, 0 scored and 24 pending human-fidelity rows, 0 measured
-and 6 pending provider-billing rows, and the AI-Scientist-v2 HTTP 403
-`All available accounts exhausted` smoke blocker. Passing this gate does not
-mean the AAAI paper is submission-final.
+and 6 pending provider-billing rows, and the current AI-Scientist-v2 smoke
+blocker. Passing this gate does not mean the AAAI paper is submission-final.
 
 ## Goal Completion Gate
 

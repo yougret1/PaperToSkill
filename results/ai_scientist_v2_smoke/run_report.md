@@ -14,4 +14,4 @@ Evidence boundary: this is a bounded LLM-client smoke check. It does not run BFT
 | --- | --- | --- | --- |
 | ai_scientist_v2_root | ready | present | D:\a_work\gitee\ai-scientist-v2 |
 | ai_scientist_v2_llm_response_saved | pending | response_chars=0 | D:\a_work\gitee\PaperToSkill\results\ai_scientist_v2_smoke\response.md |
-| ai_scientist_v2_llm_error | pending | Error code: 403 - {'error': {'message': 'All available accounts exhausted', 'type': 'server_error'}} | provider/model availability |
+| ai_scientist_v2_llm_error | pending | Timed out after 15 seconds waiting for provider response | provider/model availability |

@@ -1,6 +1,7 @@
 import json
 import sys
 import tempfile
+import time
 import types
 import unittest
 from argparse import Namespace
@@ -18,7 +19,7 @@ class AIScientistV2SmokeTest(unittest.TestCase):
         for name in ["ai_scientist", "ai_scientist.llm"]:
             sys.modules.pop(name, None)
 
-    def install_fake_ai_scientist(self, response_text=None, error=None):
+    def install_fake_ai_scientist(self, response_text=None, error=None, delay_seconds=0):
         package = types.ModuleType("ai_scientist")
         llm = types.ModuleType("ai_scientist.llm")
 
@@ -26,6 +27,8 @@ class AIScientistV2SmokeTest(unittest.TestCase):
             return object(), model
 
         def get_response_from_llm(prompt, client, model, system_message, temperature=0):
+            if delay_seconds:
+                time.sleep(delay_seconds)
             if error:
                 raise RuntimeError(error)
             return response_text, []
@@ -48,6 +51,7 @@ class AIScientistV2SmokeTest(unittest.TestCase):
                     prompt="prompt",
                     system_message="system",
                     response_output=tmp_path / "response.md",
+                    timeout_seconds=1,
                 )
             )
 
@@ -58,26 +62,60 @@ class AIScientistV2SmokeTest(unittest.TestCase):
             self.assertEqual("ready", statuses["ai_scientist_v2_smoke_marker_papertoskill_smoke_ok"])
             self.assertEqual("ready", statuses["ai_scientist_v2_smoke_marker_ai_scientist_v2"])
             self.assertEqual("ready", statuses["ai_scientist_v2_smoke_marker_paper_to_skill"])
+            self.assertEqual(0, smoke.exit_code(report, strict=True, require_complete=True))
+            self.assertIn("overall_status=complete", smoke.status_summary(report))
 
     def test_smoke_error_is_redacted_and_pending(self):
         with tempfile.TemporaryDirectory() as tmp:
             tmp_path = Path(tmp)
             fake_secret = "sk-" + "a" * 24
             self.install_fake_ai_scientist(error=f"bad key {fake_secret}")
+            response_path = tmp_path / "response.md"
+            response_path.write_text("stale response\n", encoding="utf-8")
             report = smoke.run(
                 Namespace(
                     ai_scientist_root=tmp_path,
                     model="claude-opus-4-8",
                     prompt="prompt",
                     system_message="system",
-                    response_output=tmp_path / "response.md",
+                    response_output=response_path,
+                    timeout_seconds=1,
                 )
             )
 
             self.assertEqual("blocked_by_provider_or_model_availability", report["overall_status"])
-            self.assertFalse((tmp_path / "response.md").exists())
+            self.assertFalse(response_path.exists())
             self.assertIn("sk-REDACTED", json.dumps(report))
             self.assertNotIn(fake_secret, json.dumps(report))
+            self.assertEqual(0, smoke.exit_code(report, strict=True, require_complete=False))
+            self.assertEqual(1, smoke.exit_code(report, strict=True, require_complete=True))
+            self.assertIn("overall_status=blocked_by_provider_or_model_availability", smoke.status_summary(report))
+
+    def test_smoke_timeout_is_reported_as_provider_blocker(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            self.install_fake_ai_scientist(
+                "PAPERTOSKILL_SMOKE_OK from ai-scientist-v2 for paper-to-skill.",
+                delay_seconds=0.2,
+            )
+            response_path = tmp_path / "response.md"
+            response_path.write_text("stale response\n", encoding="utf-8")
+            report = smoke.run(
+                Namespace(
+                    ai_scientist_root=tmp_path,
+                    model="claude-opus-4-8",
+                    prompt="prompt",
+                    system_message="system",
+                    response_output=response_path,
+                    timeout_seconds=0.01,
+                )
+            )
+
+            self.assertEqual("blocked_by_provider_or_model_availability", report["overall_status"])
+            self.assertFalse(response_path.exists())
+            details = [check["detail"] for check in report["checks"]]
+            self.assertTrue(any("Timed out after" in detail for detail in details))
+            self.assertEqual(1, smoke.exit_code(report, strict=True, require_complete=True))
 
 
 if __name__ == "__main__":

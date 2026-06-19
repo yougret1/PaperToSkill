@@ -14,6 +14,7 @@ import json
 import os
 import re
 import sys
+import threading
 import time
 from dataclasses import dataclass
 from pathlib import Path
@@ -136,6 +137,19 @@ def build_report(
     }
 
 
+def call_llm_with_timeout(args: argparse.Namespace) -> str:
+    create_client, get_response_from_llm = load_ai_scientist_llm(args.ai_scientist_root)
+    client, client_model = create_client(args.model)
+    response_text, _ = get_response_from_llm(
+        args.prompt,
+        client,
+        client_model,
+        args.system_message,
+        temperature=0,
+    )
+    return response_text
+
+
 def write_markdown(path: Path, report: dict[str, Any]) -> None:
     rows = [
         [check["id"], check["status"], check["detail"], check["evidence"]]
@@ -173,17 +187,28 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     error: str | None = None
 
     try:
-        create_client, get_response_from_llm = load_ai_scientist_llm(args.ai_scientist_root)
-        client, client_model = create_client(args.model)
-        response_text, _ = get_response_from_llm(
-            args.prompt,
-            client,
-            client_model,
-            args.system_message,
-            temperature=0,
-        )
+        result: dict[str, str] = {}
+
+        def target() -> None:
+            try:
+                result["response_text"] = call_llm_with_timeout(args)
+            except Exception as exc:  # noqa: BLE001 - report is redacted evidence
+                result["error"] = redact(str(exc))
+
+        thread = threading.Thread(target=target, daemon=True)
+        thread.start()
+        thread.join(args.timeout_seconds)
+        if thread.is_alive():
+            error = f"Timed out after {args.timeout_seconds:g} seconds waiting for provider response"
+        elif "error" in result:
+            error = result["error"]
+        else:
+            response_text = result.get("response_text", "")
         args.response_output.parent.mkdir(parents=True, exist_ok=True)
-        args.response_output.write_text(response_text.strip() + "\n", encoding="utf-8")
+        if response_text:
+            args.response_output.write_text(response_text.strip() + "\n", encoding="utf-8")
+        elif args.response_output.exists():
+            args.response_output.unlink()
     except Exception as exc:  # noqa: BLE001 - report is redacted evidence
         error = redact(str(exc))
 
@@ -204,6 +229,24 @@ def write_json(path: Path, report: dict[str, Any]) -> None:
     path.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
+def status_summary(report: dict[str, Any]) -> str:
+    counts = report.get("status_counts", {})
+    return (
+        f"overall_status={report.get('overall_status')}; "
+        f"ready={counts.get('ready', 0)}; "
+        f"pending={counts.get('pending', 0)}; "
+        f"fail={counts.get('fail', 0)}"
+    )
+
+
+def exit_code(report: dict[str, Any], *, strict: bool, require_complete: bool) -> int:
+    if require_complete and report.get("overall_status") != "complete":
+        return 1
+    if strict and report.get("overall_status") == "fail":
+        return 1
+    return 0
+
+
 def main() -> int:
     root = Path(__file__).resolve().parents[1]
     parser = argparse.ArgumentParser(description="Run a bounded AI-Scientist-v2 LLM smoke check.")
@@ -214,6 +257,12 @@ def main() -> int:
         help="Path to the local ai-scientist-v2 checkout.",
     )
     parser.add_argument("--model", default="claude-opus-4-8")
+    parser.add_argument(
+        "--timeout-seconds",
+        type=float,
+        default=30.0,
+        help="Maximum seconds to wait for the provider before writing a blocked report.",
+    )
     parser.add_argument(
         "--system-message",
         default=(
@@ -244,6 +293,11 @@ def main() -> int:
         default=root / "results" / "ai_scientist_v2_smoke" / "run_report.md",
     )
     parser.add_argument("--strict", action="store_true", help="Exit non-zero if smoke checks fail.")
+    parser.add_argument(
+        "--require-complete",
+        action="store_true",
+        help="Exit non-zero unless the provider returns a response that satisfies the smoke contract.",
+    )
     args = parser.parse_args()
 
     report = run(args)
@@ -251,9 +305,8 @@ def main() -> int:
     write_markdown(args.output_md, report)
     print(args.output_json)
     print(args.output_md)
-    if args.strict and report["overall_status"] == "fail":
-        return 1
-    return 0
+    print(status_summary(report))
+    return exit_code(report, strict=args.strict, require_complete=args.require_complete)
 
 
 if __name__ == "__main__":

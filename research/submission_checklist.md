@@ -14,7 +14,7 @@ complete with respect to pending external evidence.
 | Paper claims | Ready | `results/reproducibility/paper_claim_report.md` | Unsupported overclaim patterns are absent from paper-facing text. |
 | Paper tables | Ready | `results/reproducibility/paper_table_report.md` | AAAI tables match generated CSV result tables. |
 | Usage examples | Ready | `results/reproducibility/usage_example_report.md` | Local example files and offline example chain are synchronized. |
-| Reproducibility package | Ready with pending external evidence | `results/reproducibility/package_report.md`: 227 ready, 7 pending, 0 failed | Local package is coherent; external evidence remains pending. |
+| Reproducibility package | Ready with pending external evidence | `results/reproducibility/package_report.md`: 229 ready, 7 pending, 0 failed | Local package is coherent; external evidence remains pending. |
 | Active goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 55 ready, 8 pending, 0 failed | The overall user goal remains open. |
 
 ## Evidence Ready To Use
@@ -34,7 +34,7 @@ complete with respect to pending external evidence.
 
 | Pending Item | Current Evidence | Required Before Stronger Claim |
 | --- | --- | --- |
-| AI-Scientist-v2 LLM-client smoke completion | `results/ai_scientist_v2_smoke/run_report.md`: HTTP 403 `All available accounts exhausted` | Provider must return a response satisfying the smoke contract. |
+| AI-Scientist-v2 LLM-client smoke completion | `results/ai_scientist_v2_smoke/run_report.md`: `blocked_by_provider_or_model_availability`; latest detail is `Timed out after 15 seconds waiting for provider response` | Provider must return a response satisfying the smoke contract. |
 | Full AI-Scientist-v2 live/BFTS run | No full live-run completion artifact | Run and log a bounded full live task separately from smoke checks. |
 | DeepSeek ablation | `results/model_ablation_prompts/v0/evaluation.md`: 2 pending DeepSeek rows | User supplies DeepSeek alias/env vars, then responses are saved and scored. |
 | Human fidelity | `results/human_fidelity_packets/annotation_summary.md`: 0 scored rows, 24 pending rows | Independent reviewers fill the template and strict summarizer reports complete with no errors. |
@@ -79,6 +79,6 @@ strings were found.
   0 measured and 6 pending billing rows.
 - Do not claim DeepSeek completion while two DeepSeek rows are pending.
 - Do not claim AI-Scientist-v2 LLM-client smoke completion while the latest
-  provider response is HTTP 403 `All available accounts exhausted`.
+  smoke report is `blocked_by_provider_or_model_availability`.
 - Do not claim the AAAI paper is submission-final until the human submission
   decision is made and all selected evidence gates are intentionally accepted.

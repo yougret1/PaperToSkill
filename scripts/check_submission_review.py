@@ -161,12 +161,20 @@ def contains_all(text: str, terms: list[str]) -> bool:
     return all(term.lower() in lowered for term in terms)
 
 
+def smoke_blocker_detail(smoke: dict[str, Any]) -> str:
+    for check in smoke.get("checks", []):
+        if check.get("id") == "ai_scientist_v2_llm_error":
+            return str(check.get("detail", "")).strip()
+    return ""
+
+
 def evidence_alignment_checks(root: Path, combined_text: str) -> list[Check]:
     live = load_json(root / "results/live_transfer_prompts/evaluation.json").get("summary", {})
     model = load_json(root / "results/model_ablation_prompts/v0/evaluation.json").get("summary", {})
     human = load_json(root / "results/human_fidelity_packets/annotation_summary.json")
     billing = load_json(root / "results/provider_billing_evidence/billing_summary.json")
     smoke = load_json(root / "results/ai_scientist_v2_smoke/run_report.json")
+    smoke_detail = smoke_blocker_detail(smoke)
     goal = load_json(root / "results/reproducibility/goal_completion_report.json")
     package = load_json(root / "results/reproducibility/package_report.json")
     goal_counts = goal.get("status_counts", {})
@@ -220,9 +228,9 @@ def evidence_alignment_checks(root: Path, combined_text: str) -> list[Check]:
             "submission_review_ai_scientist_smoke_current",
             "ready"
             if smoke.get("overall_status") == "blocked_by_provider_or_model_availability"
-            and contains_all(combined_text, ["HTTP 403", "All available accounts exhausted"])
+            and contains_all(combined_text, ["blocked_by_provider_or_model_availability", smoke_detail])
             else "fail",
-            f"overall={smoke.get('overall_status')}",
+            f"overall={smoke.get('overall_status')}; detail={smoke_detail}",
             "results/ai_scientist_v2_smoke/run_report.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md",
         ),
         Check(

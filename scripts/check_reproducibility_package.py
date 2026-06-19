@@ -122,6 +122,7 @@ CORE_FILES = {
     "phase39_toolformer_live_transfer_run_log": "research/run_logs/2026-06-19_phase39_toolformer_live_transfer.md",
     "phase40_all_live_transfer_run_log": "research/run_logs/2026-06-19_phase40_all_live_transfer_responses.md",
     "phase41_ai_scientist_v2_smoke_run_log": "research/run_logs/2026-06-19_phase41_ai_scientist_v2_smoke.md",
+    "phase45_ai_scientist_v2_smoke_recheck_run_log": "research/run_logs/2026-06-19_phase45_ai_scientist_v2_smoke_recheck.md",
     "provider_billing_protocol": "benchmarks/provider_billing_evidence_v0.json",
     "provider_billing_summarizer": "scripts/summarize_provider_billing_evidence.py",
     "provider_billing_template": "results/provider_billing_evidence/billing_template.csv",
@@ -645,6 +646,24 @@ def goal_completion_checks(root: Path) -> list[Check]:
 
 def ai_scientist_smoke_checks(root: Path) -> list[Check]:
     checks: list[Check] = []
+    runner_path = root / "scripts/run_ai_scientist_v2_smoke.py"
+    if runner_path.exists():
+        runner_text = runner_path.read_text(encoding="utf-8")
+        has_status_summary = "def status_summary(" in runner_text and "overall_status=" in runner_text
+        has_require_complete = "--require-complete" in runner_text and "def exit_code(" in runner_text
+        has_timeout = "--timeout-seconds" in runner_text and "thread.join(args.timeout_seconds)" in runner_text
+        checks.append(
+            Check(
+                "ai_scientist_v2_smoke_cli_status_summary",
+                "ready" if has_status_summary and has_require_complete and has_timeout else "fail",
+                (
+                    f"status_summary={has_status_summary}; "
+                    f"require_complete={has_require_complete}; "
+                    f"timeout={has_timeout}"
+                ),
+                str(runner_path.relative_to(root)),
+            )
+        )
     report_path = root / "results/ai_scientist_v2_smoke/run_report.json"
     if not report_path.exists():
         return checks

@@ -1631,3 +1631,37 @@ Evidence boundary:
 - It does not complete final AAAI submission, human validation, DeepSeek,
   provider billing, success-per-dollar evidence, AI-Scientist-v2 smoke
   completion, or a full AI-Scientist-v2 live run.
+
+## 2026-06-19 Phase 45
+
+Actions:
+
+- Re-ran the bounded AI-Scientist-v2 LLM-client smoke with the configured
+  OpenAI-compatible endpoint and shell-only credential.
+- Updated `scripts/run_ai_scientist_v2_smoke.py` to print an explicit
+  `overall_status` summary after writing reports.
+- Added script-level `--timeout-seconds` handling so provider hangs produce a
+  redacted blocked report instead of only an outer-shell timeout.
+- Added `--require-complete` to the smoke runner for future checks that should
+  fail unless the provider returns a response satisfying the smoke contract.
+- Added regression coverage for smoke runner status summaries, timeout
+  handling, and completion exit semantics.
+- Added a reproducibility-package check that verifies the smoke runner exposes
+  the status summary, timeout handling, and `--require-complete` mode.
+
+Results:
+
+- The recheck reached the provider through `ai_scientist.llm`.
+- The provider did not return a smoke response within 15 seconds.
+- No `results/ai_scientist_v2_smoke/response.md` file was created.
+- The AI-Scientist-v2 smoke report remains
+  `blocked_by_provider_or_model_availability`, with 1 ready check, 2 pending
+  checks, and 0 failed checks.
+
+Evidence boundary:
+
+- Phase 45 records a fresh provider-blocked smoke recheck and improves command
+  clarity.
+- It does not complete the AI-Scientist-v2 smoke, run BFTS, prove live research
+  task success, resolve DeepSeek, collect human annotations, collect provider
+  billing, or make the AAAI package submission-final.

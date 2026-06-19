@@ -63,6 +63,7 @@
 | `research/run_logs/2026-06-19_phase42_human_fidelity_handoff.md` | Human-fidelity annotation handoff guide, stricter template, and validation boundary | Created |
 | `research/run_logs/2026-06-19_phase43_provider_billing_handoff.md` | Provider-billing evidence template, strict summary, and pending real-billing boundary | Created |
 | `research/run_logs/2026-06-19_phase44_submission_review_handoff.md` | Submission-review handoff refresh, stale-review checker, and final-submission boundary | Created |
+| `research/run_logs/2026-06-19_phase45_ai_scientist_v2_smoke_recheck.md` | AI-Scientist-v2 smoke recheck, provider-blocked status, timeout handling, and smoke CLI completion-mode UX | Created |
 
 ## Paper Draft Package
 
@@ -174,7 +175,7 @@
 | `scripts/check_paper_claims.py` | Verifies paper-facing text avoids unsupported overclaims and includes required evidence boundaries | Created |
 | `scripts/check_submission_review.py` | Verifies review, rebuttal, and submission checklist handoff artifacts against current evidence | Created |
 | `scripts/check_goal_completion.py` | Audits the active user goal against local evidence and exposes remaining pending requirements | Created |
-| `scripts/run_ai_scientist_v2_smoke.py` | Runs one bounded AI-Scientist-v2 LLM-client smoke check and writes redacted reports | Created |
+| `scripts/run_ai_scientist_v2_smoke.py` | Runs one bounded AI-Scientist-v2 LLM-client smoke check, writes redacted reports, clears stale responses on blocked attempts, prints status summary, and supports `--timeout-seconds` plus `--require-complete` | Created |
 | `scripts/build_model_ablation_prompts.py` | Builds Claude/GPT-family/DeepSeek model-ablation prompt packets | Created |
 | `scripts/run_model_ablation_prompts.py` | Runs model-ablation prompt packets against OpenAI-compatible APIs with redacted reports | Created |
 | `scripts/evaluate_model_ablation_responses.py` | Scores saved model-ablation response files and keeps missing rows pending | Created |
@@ -202,7 +203,7 @@
 | `tests/test_live_transfer_execution.py` | Smoke tests for live-transfer runner skip behavior and saved-response scoring | Created |
 | `tests/test_check_goal_completion.py` | Smoke tests for active-goal completion checker and pending-evidence boundaries | Created |
 | `tests/test_check_submission_review.py` | Smoke tests for submission-review handoff drift checker | Created |
-| `tests/test_run_ai_scientist_v2_smoke.py` | Smoke tests for AI-Scientist-v2 LLM-client smoke success and redacted provider errors | Created |
+| `tests/test_run_ai_scientist_v2_smoke.py` | Smoke tests for AI-Scientist-v2 LLM-client smoke success, redacted provider errors, stale-response cleanup, and timeout reporting | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |
 | `generated_skills/ai_scientist_v2/references/source_map.json` | Source-map evidence for AI Scientist-v2 generated skill | Created |
 | `generated_skills/reflexion/SKILL.md` | Retained generated skill from Reflexion note | Created |

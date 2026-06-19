@@ -40,7 +40,7 @@ output-contract evidence, not proof of live task success.
 | R5 | Saved live-transfer responses can be overread as real live success. | High | `results/live_transfer_prompts/evaluation.md` reports 24 total rows, 24 scored rows, 0 pending rows, and average normalized score 1.0 under deterministic output-contract scoring. | Say "saved live-transfer response files were scored"; do not say the system proves live task success, human semantics, or cross-harness outcome gains. |
 | R6 | Human fidelity is prepared but unscored. | High | `results/human_fidelity_packets/annotation_summary.md` reports 0 scored rows, 24 pending rows, and 0 errors. | Say "human-fidelity handoff ready"; do not say "human-validated" or "expert-validated." |
 | R7 | Cost/economic claims can be overread. | Medium | Context and response costs are local token proxies. `results/provider_billing_evidence/billing_summary.md` reports 0 measured rows and 6 pending rows. | Call these local input/output token proxies and billing handoff readiness; avoid provider bills, invoices, or success-per-dollar claims. |
-| R8 | AI-Scientist-v2 integration may look complete when it is only smoke-attempted. | Medium | Bounded LLM-client smoke reached the provider but returned HTTP 403 `All available accounts exhausted`. | Treat this as provider-availability evidence only; full AI-Scientist-v2 live/BFTS run remains pending. |
+| R8 | AI-Scientist-v2 integration may look complete when it is only smoke-attempted. | Medium | Bounded LLM-client smoke remains `blocked_by_provider_or_model_availability`; the latest Phase 45 recheck timed out after 15 seconds waiting for provider response. | Treat this as provider/model availability evidence only; full AI-Scientist-v2 live/BFTS run remains pending. |
 
 ## Claim Tightening Recommendations
 
@@ -57,13 +57,13 @@ output-contract evidence, not proof of live task success.
 | Gate | Status | Evidence |
 | --- | --- | --- |
 | Claim-evidence consistency | Pass with caveats | `paper/claim_checklist.md`; `research/claim_evidence_matrix.md`; `results/reproducibility/paper_claim_report.md` |
-| Local reproducibility package | Pass locally, external evidence pending | `results/reproducibility/package_report.md`: 227 ready, 7 pending, 0 failed |
+| Local reproducibility package | Pass locally, external evidence pending | `results/reproducibility/package_report.md`: 229 ready, 7 pending, 0 failed |
 | Active-goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 55 ready, 8 pending, 0 failed |
 | AAAI local package | Pass locally, not submission-final | `results/reproducibility/aaai_package_report.md` |
 | Live-transfer saved responses | Complete for saved-response scoring | `results/live_transfer_prompts/evaluation.md`: 24 scored, 0 pending |
 | Real live task success | Pending | Saved-response scoring is not human semantic or real task-success evidence |
 | Model ablation | Partial | `results/model_ablation_prompts/v0/evaluation.md`: 4 scored rows, 2 pending DeepSeek rows |
-| AI-Scientist-v2 LLM-client smoke | Attempted, provider-blocked | `results/ai_scientist_v2_smoke/run_report.md`: HTTP 403 `All available accounts exhausted` |
+| AI-Scientist-v2 LLM-client smoke | Attempted, provider-blocked | `results/ai_scientist_v2_smoke/run_report.md`: `blocked_by_provider_or_model_availability`; latest detail is `Timed out after 15 seconds waiting for provider response` |
 | Human fidelity | Handoff ready, annotation pending | `results/human_fidelity_packets/annotation_summary.md`: 0 scored, 24 pending |
 | Provider billing | Handoff ready, billing pending | `results/provider_billing_evidence/billing_summary.md`: 0 measured, 6 pending |
 

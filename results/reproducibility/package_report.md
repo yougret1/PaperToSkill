@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 227
+- Ready checks: 229
 - Pending checks: 7
 - Failed checks: 0
 
@@ -73,6 +73,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | phase39_toolformer_live_transfer_run_log | ready | present | research/run_logs/2026-06-19_phase39_toolformer_live_transfer.md |
 | phase40_all_live_transfer_run_log | ready | present | research/run_logs/2026-06-19_phase40_all_live_transfer_responses.md |
 | phase41_ai_scientist_v2_smoke_run_log | ready | present | research/run_logs/2026-06-19_phase41_ai_scientist_v2_smoke.md |
+| phase45_ai_scientist_v2_smoke_recheck_run_log | ready | present | research/run_logs/2026-06-19_phase45_ai_scientist_v2_smoke_recheck.md |
 | provider_billing_protocol | ready | present | benchmarks/provider_billing_evidence_v0.json |
 | provider_billing_summarizer | ready | present | scripts/summarize_provider_billing_evidence.py |
 | provider_billing_template | ready | present | results/provider_billing_evidence/billing_template.csv |
@@ -167,6 +168,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | submission_review_core_checks_ready | ready | core checks ready | results\reproducibility\submission_review_report.json |
 | goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 55, 'pending': 8, 'fail': 0} | results\reproducibility\goal_completion_report.json |
 | goal_completion_core_checks_ready | ready | core completion boundaries ready | results\reproducibility\goal_completion_report.json |
+| ai_scientist_v2_smoke_cli_status_summary | ready | status_summary=True; require_complete=True; timeout=True | scripts\run_ai_scientist_v2_smoke.py |
 | ai_scientist_v2_llm_smoke_complete | pending | overall=blocked_by_provider_or_model_availability; counts={'ready': 1, 'pending': 2, 'fail': 0} | results\ai_scientist_v2_smoke\run_report.json |
 | ai_scientist_v2_llm_smoke_response | pending | missing until provider returns response | results\ai_scientist_v2_smoke\response.md |
 | ai_scientist_v2_llm_smoke_contract_ready | pending | missing=ai_scientist_v2_llm_response_saved,ai_scientist_v2_smoke_marker_ai_scientist_v2,ai_scientist_v2_smoke_marker_paper_to_skill,ai_scientist_v2_smoke_marker_papertoskill_smoke_ok | results\ai_scientist_v2_smoke\run_report.json |
