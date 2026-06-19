@@ -22,10 +22,16 @@ Phase 51 changes currently local:
 - Added `research/run_logs/2026-06-20_phase51_external_evidence_closure_queue.md`.
 - Updated artifact map, runbook, stage log, result cards, review/checklist,
   goal audit, and memory references.
-- Local commit: `2031315 Add external evidence closure queue`.
-- Push status: attempted `git push origin main` on 2026-06-20 and GitHub reset
-  the connection (`Recv failure: Connection was reset`). Retry push before
-  starting Phase 52; if it succeeds, record a memory-only pushed-status commit.
+- Local commits:
+  - `2031315 Add external evidence closure queue`.
+  - `14caad7 Record phase 51 push blocker`.
+- Push status: blocked. Multiple `git push origin main` attempts on 2026-06-20
+  failed: first with `Recv failure: Connection was reset`, then with
+  `Failed to connect to github.com port 443`. `git ls-remote origin HEAD` also
+  failed on port 443. `Test-NetConnection github.com -Port 443` showed ping
+  succeeds but TCP 443 fails. Current branch is ahead of `origin/main` by 2
+  local commits. Retry push before starting Phase 52; if it succeeds, record a
+  memory-only pushed-status commit.
 
 Phase 51 current reports:
 
@@ -160,7 +166,7 @@ python -m unittest tests.test_check_external_evidence_closure tests.test_check_g
 ```
 
 All checks passed. Phase 51 is committed locally; remote push is pending due to
-the GitHub connection reset above.
+the GitHub TCP 443 connectivity blocker above.
 
 ## Persistent Blockers
 
