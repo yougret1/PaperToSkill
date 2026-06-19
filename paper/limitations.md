@@ -78,8 +78,10 @@ that are much smaller than full extracted paper text. Phase 38 also adds a local
 output-token proxy over saved Claude/GPT-family model-ablation responses.
 However, the project has not yet computed provider-specific prices, live
 invoices, realized provider output bills, or success-per-dollar. Cost claims
-should therefore remain framed as local input/output token proxies until a
-provider-specific pricing experiment is added.
+should therefore remain framed as local input/output token proxies. A provider
+billing template and summary validator are prepared for future invoice or usage
+exports, but the current billing summary has 6 pending rows and 0 measured
+provider bills.
 
 ### Failure Archive Is Not An Outcome Study
 

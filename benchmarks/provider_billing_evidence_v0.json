@@ -1,0 +1,56 @@
+{
+  "schema_version": "0.1",
+  "id": "provider_billing_evidence_v0",
+  "created": "2026-06-19",
+  "evidence_boundary": "This protocol prepares provider-billing and success-per-dollar evidence collection. Blank rows are pending, not realized bills or negative evidence.",
+  "completion_requirements": [
+    "Every evidence slot must be filled from a provider usage export, invoice, or auditable billing dashboard record.",
+    "Every measured row must include provider, model_alias, billing period, token counts, billed_usd, currency, invoice_or_usage_evidence, success_metric, success_value, and reviewer_id.",
+    "Do not claim provider billing, realized bills, or success-per-dollar until the summary reports billing_status=complete and zero errors.",
+    "Keep local token proxies separate from provider-specific billing rows."
+  ],
+  "evidence_slots": [
+    {
+      "evidence_id": "claude_model_ablation_billing",
+      "evidence_label": "Claude-family model-ablation provider billing",
+      "evidence_kind": "model_ablation",
+      "task_scope": "Claude Opus 4.8 two-case model-ablation rows",
+      "expected_artifact": "results/model_ablation_prompts/v0/run_report.md"
+    },
+    {
+      "evidence_id": "gpt_family_model_ablation_billing",
+      "evidence_label": "GPT-family model-ablation provider billing",
+      "evidence_kind": "model_ablation",
+      "task_scope": "GPT-family two-case model-ablation rows",
+      "expected_artifact": "results/model_ablation_prompts/v0/gpt_retry_run_report.md"
+    },
+    {
+      "evidence_id": "deepseek_model_ablation_billing",
+      "evidence_label": "DeepSeek follow-up model-ablation provider billing",
+      "evidence_kind": "model_ablation",
+      "task_scope": "DeepSeek follow-up rows after user configuration",
+      "expected_artifact": "results/model_ablation_prompts/v0/evaluation.md"
+    },
+    {
+      "evidence_id": "claude_live_transfer_billing",
+      "evidence_label": "Claude-family live-transfer provider billing",
+      "evidence_kind": "live_transfer",
+      "task_scope": "All four live-transfer saved-response packets",
+      "expected_artifact": "results/live_transfer_prompts/evaluation.md"
+    },
+    {
+      "evidence_id": "ai_scientist_v2_live_run_billing",
+      "evidence_label": "AI-Scientist-v2 live-run provider billing",
+      "evidence_kind": "ai_scientist_v2",
+      "task_scope": "Bounded smoke or future full live AI-Scientist-v2 run",
+      "expected_artifact": "results/ai_scientist_v2_smoke/run_report.md"
+    },
+    {
+      "evidence_id": "context_comparison_billing",
+      "evidence_label": "Context comparison provider billing",
+      "evidence_kind": "context_comparison",
+      "task_scope": "Full-paper, generated-skill, summary, and abstract context variants",
+      "expected_artifact": "results/tables/context_cost_proxy_tokenizer.md"
+    }
+  ]
+}

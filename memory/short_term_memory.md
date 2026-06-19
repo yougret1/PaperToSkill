@@ -7,24 +7,24 @@ Current date: 2026-06-19.
 
 ## Current Phase
 
-Phase 42 is in progress: make the pending human-fidelity review step easier to
-execute and harder to overclaim by adding a stricter annotation handoff package.
+Phase 43 is in progress: make the pending provider-billing and
+success-per-dollar evidence step executable by adding a strict billing-evidence
+handoff package.
 
-Latest pushed commit before Phase 42: `f4cea28 Add AI Scientist v2 smoke
-evidence`.
+Latest pushed commit before Phase 43: `01a0bff Strengthen human fidelity
+annotation handoff`.
 
-Current Phase 42 work includes:
+Current Phase 43 work includes:
 
-- Added completion requirements to `benchmarks/human_fidelity_review_v0.json`.
-- Updated `scripts/build_human_fidelity_packets.py` to add packet completion
-  requirements and stricter annotation-template metadata.
-- Added `results/human_fidelity_packets/annotation_guide.md`.
-- Updated `scripts/summarize_human_fidelity_annotations.py` to validate
-  evidence locators, confidence, reviewer/date metadata, and discussion flags.
-- Updated `scripts/check_reproducibility_package.py` with
-  `human_fidelity_annotation_handoff_ready`.
-- Regenerated human-fidelity packet artifacts and package report.
-- Added `research/run_logs/2026-06-19_phase42_human_fidelity_handoff.md`.
+- Added `benchmarks/provider_billing_evidence_v0.json`.
+- Added `scripts/summarize_provider_billing_evidence.py`.
+- Added `tests/test_summarize_provider_billing_evidence.py`.
+- Generated `results/provider_billing_evidence/billing_template.csv` and
+  `billing_summary.{json,md}`.
+- Updated `scripts/check_goal_completion.py` and
+  `scripts/check_reproducibility_package.py` with provider-billing handoff
+  checks.
+- Added `research/run_logs/2026-06-19_phase43_provider_billing_handoff.md`.
 
 ## Current Evidence
 
@@ -49,10 +49,14 @@ Current Phase 42 work includes:
   has 24 blank rows, and `annotation_summary.md` reports
   `annotation_status=pending`, 0 scored rows, 24 pending rows, average
   confidence `n/a`, and 0 validation errors.
-- Goal report now shows `not_complete_pending_external_evidence`, 51 ready
+- Provider-billing evidence handoff:
+  `results/provider_billing_evidence/billing_summary.md` reports
+  `billing_status=pending`, 6 total rows, 0 measured rows, 6 pending rows, 0
+  errors, total billed USD 0, and success per dollar `n/a`.
+- Goal report now shows `not_complete_pending_external_evidence`, 53 ready
   checks, 8 pending checks, and 0 failed checks.
-- Package report now shows `ready_with_pending_external_evidence`, 214 ready
-  checks, 6 pending checks, and 0 failed checks.
+- Package report now shows `ready_with_pending_external_evidence`, 221 ready
+  checks, 7 pending checks, and 0 failed checks.
 
 ## Boundaries To Preserve
 
@@ -69,12 +73,14 @@ Do not claim:
 - Saved-response output-contract scoring proves real live task success.
 - Submission-final or accepted AAAI paper.
 
-Supported after Phase 42 if verification passes:
+Supported after Phase 43 if verification passes:
 
 - AI-Scientist-v2 LLM-client smoke was attempted and provider-blocked with a
   redacted, reproducible report.
 - Human-fidelity annotation handoff is ready and strictly validated, but blank
   rows remain pending.
+- Provider-billing evidence handoff is ready and strictly validated, but all
+  six billing rows remain pending.
 - Package and goal gates separate provider/model availability pending evidence
   from local failures.
 - All Phase 40 live-transfer saved-response evidence remains complete.

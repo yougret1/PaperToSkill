@@ -3,8 +3,8 @@
   "evidence_boundary": "Checks local reproducibility artifacts and evidence gates. Pending live responses or human annotations are reported as pending external evidence, not local package failures.",
   "overall_status": "ready_with_pending_external_evidence",
   "status_counts": {
-    "ready": 214,
-    "pending": 6,
+    "ready": 221,
+    "pending": 7,
     "fail": 0
   },
   "checks": [
@@ -355,6 +355,36 @@
       "status": "ready",
       "detail": "present",
       "evidence": "research/run_logs/2026-06-19_phase41_ai_scientist_v2_smoke.md"
+    },
+    {
+      "id": "provider_billing_protocol",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "benchmarks/provider_billing_evidence_v0.json"
+    },
+    {
+      "id": "provider_billing_summarizer",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "scripts/summarize_provider_billing_evidence.py"
+    },
+    {
+      "id": "provider_billing_template",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/provider_billing_evidence/billing_template.csv"
+    },
+    {
+      "id": "provider_billing_summary_json",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/provider_billing_evidence/billing_summary.json"
+    },
+    {
+      "id": "provider_billing_summary_md",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/provider_billing_evidence/billing_summary.md"
     },
     {
       "id": "result_cards",
@@ -869,7 +899,7 @@
     {
       "id": "goal_completion_report_ready",
       "status": "ready",
-      "detail": "overall=not_complete_pending_external_evidence; counts={'ready': 51, 'pending': 8, 'fail': 0}",
+      "detail": "overall=not_complete_pending_external_evidence; counts={'ready': 53, 'pending': 8, 'fail': 0}",
       "evidence": "results\\reproducibility\\goal_completion_report.json"
     },
     {
@@ -895,6 +925,24 @@
       "status": "pending",
       "detail": "missing=ai_scientist_v2_llm_response_saved,ai_scientist_v2_smoke_marker_ai_scientist_v2,ai_scientist_v2_smoke_marker_paper_to_skill,ai_scientist_v2_smoke_marker_papertoskill_smoke_ok",
       "evidence": "results\\ai_scientist_v2_smoke\\run_report.json"
+    },
+    {
+      "id": "provider_billing_summary_valid",
+      "status": "ready",
+      "detail": "errors=0",
+      "evidence": "results\\provider_billing_evidence\\billing_summary.json"
+    },
+    {
+      "id": "provider_billing_evidence_handoff_ready",
+      "status": "ready",
+      "detail": "template_rows=6; summary_rows=6",
+      "evidence": "results/provider_billing_evidence/billing_template.csv; results/provider_billing_evidence/billing_summary.json"
+    },
+    {
+      "id": "provider_billing_evidence_complete",
+      "status": "pending",
+      "detail": "status=pending; measured_rows=0; pending_rows=6",
+      "evidence": "results\\provider_billing_evidence\\billing_summary.json"
     },
     {
       "id": "usage_example_report_ready",

@@ -10,7 +10,7 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 42: Claude Opus 4.8 and GPT-family ablation rows are saved and scored for
+Phase 43: Claude Opus 4.8 and GPT-family ablation rows are saved and scored for
 the current two-case protocol, saved model responses have a local output-token
 proxy report, and all four live-transfer saved-response sets are collected and
 scored for the current prompt-packet protocol. A bounded AI-Scientist-v2
@@ -18,7 +18,9 @@ LLM-client smoke runner is now present, and the latest attempt is recorded as
 provider-blocked by HTTP 403 `All available accounts exhausted`, not as a model
 quality failure. The human-fidelity review handoff now includes an annotation
 guide, stricter blank template metadata, and summary validation, while completed
-human annotation remains pending.
+human annotation remains pending. Provider-billing evidence collection now has
+a blank invoice/usage template and strict summary validation, while realized
+bills and success-per-dollar evidence remain pending.
 The AAAI-27 paper package, usage examples, deterministic/offline experiments,
 model-ablation runner, DeepSeek follow-up path, local `o200k_base` input/output
 token proxies, one-command extracted-text-to-skill pipeline, local
@@ -109,3 +111,5 @@ pending live-agent claims.
   `results/tables/model_response_cost_proxy.md`.
 - AI-Scientist-v2 LLM-client smoke report:
   `results/ai_scientist_v2_smoke/run_report.md`.
+- Provider-billing evidence handoff:
+  `results/provider_billing_evidence/billing_summary.md`.

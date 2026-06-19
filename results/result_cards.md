@@ -533,14 +533,15 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 214 ready checks, 6
+  `overall_status=ready_with_pending_external_evidence`, 221 ready checks, 7
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
   remaining external gaps explicit: completed AI-Scientist-v2 LLM-client smoke
   response/contract, completed human-fidelity annotation, DeepSeek response
-  files, and completed model-ablation scoring. The human-fidelity handoff itself
-  is now machine-checked as ready.
+  files, completed model-ablation scoring, and realized provider billing. The
+  human-fidelity and provider-billing handoffs themselves are now
+  machine-checked as ready.
 - Statistical evidence: none; this is a deterministic reproducibility gate.
 - Failure modes: the checker verifies package presence and key consistency
   gates, but it does not replace running live agents or collecting independent
@@ -841,6 +842,32 @@
   `results/tables/model_response_cost_proxy.csv`;
   `results/tables/model_response_cost_proxy.json`.
 
+## Provider Billing Evidence Handoff
+
+- Experiment: prepare auditable provider-billing and success-per-dollar
+  evidence slots without claiming realized bills.
+- Main result: `results/provider_billing_evidence/billing_summary.md` reports
+  `billing_status=pending`, 6 total rows, 0 measured rows, 6 pending rows, 0
+  errors, total billed USD 0, and success per dollar `n/a`.
+- Compared baselines: local input/output token proxies in
+  `results/tables/context_cost_proxy_tokenizer.md` and
+  `results/tables/model_response_cost_proxy.md`.
+- Practical significance: the project now has a concrete handoff for replacing
+  proxy economics with invoice-backed rows when provider exports are available.
+- Statistical evidence: none; no billing rows are measured yet.
+- Failure modes: a partially filled row fails validation unless provider,
+  model alias, billing period, token counts, billed USD, invoice/usage
+  evidence, success metric, success value, and reviewer ID are present.
+- Limitations: this is a template and validator, not a provider invoice or real
+  success-per-dollar result.
+- Claim impact: supports saying provider-billing evidence collection is
+  prepared, while preserving that provider billing remains pending.
+- Figure/table: `benchmarks/provider_billing_evidence_v0.json`;
+  `scripts/summarize_provider_billing_evidence.py`;
+  `results/provider_billing_evidence/billing_template.csv`;
+  `results/provider_billing_evidence/billing_summary.md`;
+  `results/provider_billing_evidence/billing_summary.json`.
+
 ## DeepSeek Follow-Up Readiness
 
 - Experiment: harden the model-ablation runner and usage docs so the user can
@@ -896,14 +923,14 @@
 
 - Experiment: make the active-goal completion audit machine-checkable.
 - Main result: `results/reproducibility/goal_completion_report.md` reports
-  `overall_status=not_complete_pending_external_evidence`, 51 ready checks, 8
+  `overall_status=not_complete_pending_external_evidence`, 53 ready checks, 8
   pending checks, and 0 failed checks.
 - Checks: durable memory, AI-Scientist-v2 dry-run evidence, PaperToSkill
   prototype and benchmark readiness, bounded AI-Scientist-v2 LLM-client smoke
   attempt/completion status, AAAI/usage/table/claim gates, Claude/GPT-family
   ablation attempts and completion status, DeepSeek follow-up readiness, all
-  four live-transfer saved-response sets, human-fidelity annotation, and
-  provider billing evidence.
+  four live-transfer saved-response sets, human-fidelity annotation,
+  provider-billing handoff, and provider billing completion evidence.
 - Practical significance: the project now has a reusable gate that prevents
   accidentally marking the full user goal complete while external evidence is
   still missing.

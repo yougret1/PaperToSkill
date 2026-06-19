@@ -60,6 +60,7 @@
 | `research/run_logs/2026-06-19_phase40_all_live_transfer_responses.md` | AI Scientist-v2, Reflexion, and AIDE live-transfer saved-response collection plus all-packet rescoring | Created |
 | `research/run_logs/2026-06-19_phase41_ai_scientist_v2_smoke.md` | Bounded AI-Scientist-v2 LLM-client smoke attempt and provider-blocked evidence boundary | Created |
 | `research/run_logs/2026-06-19_phase42_human_fidelity_handoff.md` | Human-fidelity annotation handoff guide, stricter template, and validation boundary | Created |
+| `research/run_logs/2026-06-19_phase43_provider_billing_handoff.md` | Provider-billing evidence template, strict summary, and pending real-billing boundary | Created |
 
 ## Paper Draft Package
 
@@ -175,6 +176,7 @@
 | `scripts/run_model_ablation_prompts.py` | Runs model-ablation prompt packets against OpenAI-compatible APIs with redacted reports | Created |
 | `scripts/evaluate_model_ablation_responses.py` | Scores saved model-ablation response files and keeps missing rows pending | Created |
 | `scripts/evaluate_model_response_costs.py` | Estimates local output-token proxies for saved model-ablation response files | Created |
+| `scripts/summarize_provider_billing_evidence.py` | Summarizes provider-billing evidence rows and keeps blank rows pending | Created |
 | `tests/test_papertoskill_extract.py` | Smoke test for extractor CLI and source map | Created |
 | `tests/test_papertoskill_note_from_text.py` | Smoke test for automatic text-to-note scaffold | Created |
 | `tests/test_papertoskill_pipeline.py` | Smoke test for one-command local text/PDF-to-skill pipeline | Created |
@@ -262,6 +264,9 @@
 | `results/tables/model_response_cost_proxy.md` | Paper-ready local output-token proxy for saved model-ablation responses | Created |
 | `results/tables/model_response_cost_proxy.csv` | CSV local output-token proxy for saved model-ablation responses | Created |
 | `results/tables/model_response_cost_proxy.json` | Machine-readable local output-token proxy for saved model-ablation responses | Created |
+| `results/provider_billing_evidence/billing_template.csv` | Blank provider-billing evidence rows for real invoice/usage exports | Created |
+| `results/provider_billing_evidence/billing_summary.md` | Pending provider-billing evidence summary | Created |
+| `results/provider_billing_evidence/billing_summary.json` | Machine-readable pending provider-billing evidence summary | Created |
 | `results/tables/auto_note_comparison.md` | Curated-vs-auto Toolformer/AIDE note comparison table | Created |
 | `results/tables/auto_note_comparison.csv` | CSV copy of curated-vs-auto Toolformer/AIDE note comparison | Created |
 | `results/human_fidelity_packets/README.md` | Summary of prepared human-fidelity packets | Created |

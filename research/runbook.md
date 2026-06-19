@@ -190,6 +190,28 @@ proxy accounting over these four saved Claude/GPT-family responses: 8,710
 `o200k_base` output tokens, with two DeepSeek rows still pending. This report is
 not provider billing or success-per-dollar evidence.
 
+## Provider Billing Evidence Handoff
+
+Prepare or refresh the blank provider-billing evidence template and pending
+summary:
+
+```powershell
+python scripts\summarize_provider_billing_evidence.py --init-template --strict
+```
+
+When real provider usage exports or invoices are available, fill
+`results/provider_billing_evidence/billing_template.csv` and rerun:
+
+```powershell
+python scripts\summarize_provider_billing_evidence.py --strict
+```
+
+Current Phase 43 status:
+`results/provider_billing_evidence/billing_summary.md` reports
+`billing_status=pending`, 6 total rows, 0 measured rows, 6 pending rows, 0
+errors, total billed USD 0, and success per dollar `n/a`. This is an auditable
+handoff for future real billing rows, not provider billing evidence.
+
 For DeepSeek follow-up, edit `deepseek_followup_slot` in
 `benchmarks/model_ablation_v0.json`, replacing `deepseek-to-be-filled` with the
 real model alias and setting concrete `auth_env` / `base_url_env` names. Rebuild

@@ -3,7 +3,7 @@
   "evidence_boundary": "Audits the active user goal against local repository evidence. Pending checks are explicit remaining requirements, not negative evidence and not local package failures.",
   "overall_status": "not_complete_pending_external_evidence",
   "status_counts": {
-    "ready": 51,
+    "ready": 53,
     "pending": 8,
     "fail": 0
   },
@@ -159,6 +159,12 @@
       "evidence": "results/tables/model_response_cost_proxy.json"
     },
     {
+      "id": "provider_billing_summary",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/provider_billing_evidence/billing_summary.json"
+    },
+    {
       "id": "goal_completion_audit",
       "status": "ready",
       "detail": "present",
@@ -225,10 +231,16 @@
       "evidence": "results/tables/context_cost_proxy_tokenizer.json"
     },
     {
+      "id": "provider_billing_evidence_handoff_ready",
+      "status": "ready",
+      "detail": "billing_status=pending; pending_rows=6; errors=0",
+      "evidence": "results/provider_billing_evidence/billing_summary.json"
+    },
+    {
       "id": "provider_billing_evidence_complete",
       "status": "pending",
-      "detail": "local input/output token proxies exist; provider billing and success-per-dollar evidence remain uncollected",
-      "evidence": "results/tables/context_cost_proxy_tokenizer.json; results/tables/model_response_cost_proxy.json"
+      "detail": "local input/output token proxies and billing handoff exist; realized provider billing remains uncollected",
+      "evidence": "results/provider_billing_evidence/billing_summary.json; results/tables/context_cost_proxy_tokenizer.json; results/tables/model_response_cost_proxy.json"
     },
     {
       "id": "model_response_output_token_proxy_ready",

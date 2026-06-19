@@ -37,6 +37,7 @@ REQUIRED_FILES = {
     "human_fidelity_summary": "results/human_fidelity_packets/annotation_summary.json",
     "tokenizer_cost_proxy": "results/tables/context_cost_proxy_tokenizer.json",
     "model_response_cost_proxy": "results/tables/model_response_cost_proxy.json",
+    "provider_billing_summary": "results/provider_billing_evidence/billing_summary.json",
     "goal_completion_audit": "research/goal_completion_audit.md",
 }
 
@@ -186,6 +187,13 @@ def system_and_experiment_checks(root: Path) -> list[Check]:
     response_measured = int(response_summary.get("measured_rows", 0))
     response_pending = int(response_summary.get("pending_rows", 0))
     response_tokens = response_summary.get("total_tokenizer_output_tokens")
+    billing_summary = load_json(root / "results/provider_billing_evidence/billing_summary.json")
+    billing_errors = billing_summary.get("errors", [])
+    billing_ready = (
+        int(billing_summary.get("total_rows", 0)) == 6
+        and int(billing_summary.get("pending_rows", 0)) == 6
+        and not billing_errors
+    )
     return [
         Check(
             "papertoskill_curated_benchmark_ready",
@@ -212,10 +220,18 @@ def system_and_experiment_checks(root: Path) -> list[Check]:
             "results/tables/context_cost_proxy_tokenizer.json",
         ),
         Check(
+            "provider_billing_evidence_handoff_ready",
+            "ready" if billing_ready else "fail",
+            f"billing_status={billing_summary.get('billing_status')}; pending_rows={billing_summary.get('pending_rows')}; errors={len(billing_errors)}",
+            "results/provider_billing_evidence/billing_summary.json",
+        ),
+        Check(
             "provider_billing_evidence_complete",
-            "pending",
-            "local input/output token proxies exist; provider billing and success-per-dollar evidence remain uncollected",
-            "results/tables/context_cost_proxy_tokenizer.json; results/tables/model_response_cost_proxy.json",
+            "ready" if billing_summary.get("billing_status") == "complete" else "pending",
+            "provider billing and success-per-dollar rows complete"
+            if billing_summary.get("billing_status") == "complete"
+            else "local input/output token proxies and billing handoff exist; realized provider billing remains uncollected",
+            "results/provider_billing_evidence/billing_summary.json; results/tables/context_cost_proxy_tokenizer.json; results/tables/model_response_cost_proxy.json",
         ),
         Check(
             "model_response_output_token_proxy_ready",

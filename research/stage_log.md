@@ -1561,3 +1561,41 @@ Evidence boundary:
 - It does not complete human semantic validation, create expert scores, resolve
   DeepSeek, prove live task success, collect provider billing, or make the AAAI
   package submission-final.
+
+## 2026-06-19 Phase 43
+
+Actions:
+
+- Added `benchmarks/provider_billing_evidence_v0.json` with six evidence slots
+  for Claude-family model ablation, GPT-family model ablation, DeepSeek
+  follow-up, live transfer, AI-Scientist-v2 live-run billing, and context
+  comparison billing.
+- Added `scripts/summarize_provider_billing_evidence.py` and
+  `tests/test_summarize_provider_billing_evidence.py`.
+- Generated `results/provider_billing_evidence/billing_template.csv` and
+  `billing_summary.{json,md}`.
+- Added provider-billing handoff checks to
+  `scripts/check_goal_completion.py` and
+  `scripts/check_reproducibility_package.py`.
+- Updated the paper draft, AAAI TeX, limitations, claim checklist, result
+  cards, runbook, artifact map, memory, and completion audit to state the
+  billing evidence boundary.
+
+Results:
+
+- The provider-billing handoff is ready with 6 template rows, 6 summary rows,
+  0 validation errors, and `billing_status=pending`.
+- All 6 billing rows remain pending; there are 0 measured provider bills and
+  no success-per-dollar value.
+- The goal-completion report shows 53 ready checks, 8 pending checks, and
+  0 failed checks.
+- The reproducibility package report shows 221 ready checks, 7 pending checks,
+  and 0 failed checks.
+
+Evidence boundary:
+
+- Phase 43 makes provider billing and success-per-dollar evidence collection
+  executable.
+- It does not collect live invoices, realized provider bills, DeepSeek
+  responses, AI-Scientist-v2 live-run completion, human validation, or a real
+  success-per-dollar result.

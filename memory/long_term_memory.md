@@ -49,6 +49,9 @@ Current supported claims:
 - Human-fidelity annotation handoff is ready: review packets, annotation guide,
   stricter blank template metadata, and strict summarizer validation are present
   for 24 paper-by-criterion rows; completed human annotation remains pending.
+- Provider-billing evidence handoff is ready: six billing evidence slots,
+  blank template rows, and strict summary validation are present; completed
+  provider billing and success-per-dollar evidence remain pending.
 - Claude Opus 4.8 and GPT-family model-ablation prompt rows are saved and
   scored for the current two-case protocol.
 - Local output-token proxy over saved Claude/GPT-family model-ablation responses:
@@ -107,11 +110,11 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 214 ready checks, 6 pending
+  reports `ready_with_pending_external_evidence`, 221 ready checks, 7 pending
   checks, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
-  reports `not_complete_pending_external_evidence`, 51 ready checks, 8 pending
+  reports `not_complete_pending_external_evidence`, 53 ready checks, 8 pending
   checks, and 0 failed checks.
 - AI-Scientist-v2 LLM-client smoke:
   `results/ai_scientist_v2_smoke/run_report.md`
@@ -132,6 +135,10 @@ Use these as entry points instead of searching the whole repo first:
   `results/tables/model_response_cost_proxy.md`
   reports 6 total rows, 4 measured rows, 2 pending rows, 9,420 character-proxy
   output tokens, and 8,710 `o200k_base` output tokens.
+- Provider billing evidence:
+  `results/provider_billing_evidence/billing_summary.md`
+  reports `billing_status=pending`, 6 total rows, 0 measured rows, 6 pending
+  rows, 0 errors, total billed USD 0, and success per dollar `n/a`.
 - Live-transfer response evaluation:
   `results/live_transfer_prompts/evaluation.md`
   reports 24 total rows, 24 scored rows, 0 pending rows, and 1.0 average

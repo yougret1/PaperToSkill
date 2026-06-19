@@ -156,7 +156,10 @@ The metrics are deterministic:
 
 These metrics are reproducible gates. They do not replace live agent execution,
 provider billing, live invoices, success-per-dollar accounting, or completed
-human fidelity annotation. To support later human review, we also
+human fidelity annotation. A billing evidence template and summary validator
+are prepared for future invoice or usage-export rows, but the current billing
+summary has 6 pending rows and 0 measured provider bills. To support later
+human review, we also
 prepare a six-criterion fidelity protocol, paper-specific review packets, a
 reviewer handoff guide, and a stricter blank annotation template, but those
 packets remain unscored until independent annotators fill them. The annotation

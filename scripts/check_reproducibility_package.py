@@ -118,6 +118,11 @@ CORE_FILES = {
     "phase39_toolformer_live_transfer_run_log": "research/run_logs/2026-06-19_phase39_toolformer_live_transfer.md",
     "phase40_all_live_transfer_run_log": "research/run_logs/2026-06-19_phase40_all_live_transfer_responses.md",
     "phase41_ai_scientist_v2_smoke_run_log": "research/run_logs/2026-06-19_phase41_ai_scientist_v2_smoke.md",
+    "provider_billing_protocol": "benchmarks/provider_billing_evidence_v0.json",
+    "provider_billing_summarizer": "scripts/summarize_provider_billing_evidence.py",
+    "provider_billing_template": "results/provider_billing_evidence/billing_template.csv",
+    "provider_billing_summary_json": "results/provider_billing_evidence/billing_summary.json",
+    "provider_billing_summary_md": "results/provider_billing_evidence/billing_summary.md",
     "result_cards": "results/result_cards.md",
 }
 
@@ -640,6 +645,46 @@ def ai_scientist_smoke_checks(root: Path) -> list[Check]:
     return checks
 
 
+def provider_billing_checks(root: Path) -> list[Check]:
+    checks: list[Check] = []
+    summary_path = root / "results/provider_billing_evidence/billing_summary.json"
+    template_path = root / "results/provider_billing_evidence/billing_template.csv"
+    if not summary_path.exists():
+        return checks
+    summary = load_json(summary_path)
+    errors = summary.get("errors", [])
+    checks.append(
+        Check(
+            "provider_billing_summary_valid",
+            "ready" if not errors else "fail",
+            f"errors={len(errors)}",
+            str(summary_path.relative_to(root)),
+        )
+    )
+    template_rows = 0
+    if template_path.exists():
+        with template_path.open(newline="", encoding="utf-8") as handle:
+            template_rows = sum(1 for _ in csv.DictReader(handle))
+    handoff_ready = template_rows == int(summary.get("total_rows", 0)) == 6
+    checks.append(
+        Check(
+            "provider_billing_evidence_handoff_ready",
+            "ready" if handoff_ready else "fail",
+            f"template_rows={template_rows}; summary_rows={summary.get('total_rows', 0)}",
+            "results/provider_billing_evidence/billing_template.csv; results/provider_billing_evidence/billing_summary.json",
+        )
+    )
+    checks.append(
+        Check(
+            "provider_billing_evidence_complete",
+            "ready" if summary.get("billing_status") == "complete" else "pending",
+            f"status={summary.get('billing_status')}; measured_rows={summary.get('measured_rows')}; pending_rows={summary.get('pending_rows')}",
+            str(summary_path.relative_to(root)),
+        )
+    )
+    return checks
+
+
 def usage_example_checks(root: Path) -> list[Check]:
     checks: list[Check] = []
     report_path = root / "results/reproducibility/usage_example_report.json"
@@ -875,6 +920,7 @@ def build_report(root: Path) -> dict[str, Any]:
     checks.extend(paper_claim_checks(root))
     checks.extend(goal_completion_checks(root))
     checks.extend(ai_scientist_smoke_checks(root))
+    checks.extend(provider_billing_checks(root))
     checks.extend(usage_example_checks(root))
     checks.extend(auto_note_checks(root))
     checks.extend(model_ablation_checks(root))

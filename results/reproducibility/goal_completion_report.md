@@ -3,7 +3,7 @@
 Evidence boundary: this report audits the active user goal against local repository evidence. Pending checks are remaining requirements, not negative evidence and not local package failures.
 
 - Overall status: not_complete_pending_external_evidence
-- Ready checks: 51
+- Ready checks: 53
 - Pending checks: 8
 - Failed checks: 0
 
@@ -36,6 +36,7 @@ Evidence boundary: this report audits the active user goal against local reposit
 | human_fidelity_summary | ready | present | results/human_fidelity_packets/annotation_summary.json |
 | tokenizer_cost_proxy | ready | present | results/tables/context_cost_proxy_tokenizer.json |
 | model_response_cost_proxy | ready | present | results/tables/model_response_cost_proxy.json |
+| provider_billing_summary | ready | present | results/provider_billing_evidence/billing_summary.json |
 | goal_completion_audit | ready | present | research/goal_completion_audit.md |
 | memory_resume_rule_present | ready | long-term and short-term resume rules present | memory/long_term_memory.md; memory/short_term_memory.md |
 | memory_current_blockers_recorded | ready | current model-availability blockers recorded | memory/short_term_memory.md |
@@ -47,7 +48,8 @@ Evidence boundary: this report audits the active user goal against local reposit
 | offline_harness_transfer_ablation_ready | ready | transfer_rows=12 | results/tables/transfer_ablation.csv |
 | auto_note_examples_ready | ready | auto_note_rows=4 | results/tables/auto_note_comparison.csv |
 | tokenizer_cost_proxy_ready | ready | context_size_rows=20; coverage_efficiency_rows=12 | results/tables/context_cost_proxy_tokenizer.json |
-| provider_billing_evidence_complete | pending | local input/output token proxies exist; provider billing and success-per-dollar evidence remain uncollected | results/tables/context_cost_proxy_tokenizer.json; results/tables/model_response_cost_proxy.json |
+| provider_billing_evidence_handoff_ready | ready | billing_status=pending; pending_rows=6; errors=0 | results/provider_billing_evidence/billing_summary.json |
+| provider_billing_evidence_complete | pending | local input/output token proxies and billing handoff exist; realized provider billing remains uncollected | results/provider_billing_evidence/billing_summary.json; results/tables/context_cost_proxy_tokenizer.json; results/tables/model_response_cost_proxy.json |
 | model_response_output_token_proxy_ready | ready | measured_rows=4; pending_rows=2; tokenizer_output_tokens=8710 | results/tables/model_response_cost_proxy.json |
 | failure_branch_archive_ready | ready | total=27; paper=21; project=6 | results/failure_cases/failure_case_archive.json |
 | aaai_package_gate_ready | ready | overall_status=ready | results/reproducibility/aaai_package_report.json |

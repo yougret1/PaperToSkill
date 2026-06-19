@@ -55,6 +55,8 @@ class CheckGoalCompletionTest(unittest.TestCase):
             self.assertEqual("ready", statuses["claude_opus_4_8_ablation_complete"])
             self.assertEqual("ready", statuses["gpt_family_ablation_complete"])
             self.assertEqual("ready", statuses["model_response_output_token_proxy_ready"])
+            self.assertEqual("ready", statuses["provider_billing_evidence_handoff_ready"])
+            self.assertEqual("pending", statuses["provider_billing_evidence_complete"])
             self.assertEqual("ready", statuses["ai_scientist_v2_live_llm_smoke_attempted"])
             self.assertEqual("pending", statuses["ai_scientist_v2_live_llm_smoke_complete"])
             self.assertEqual("pending", statuses["ai_scientist_v2_live_llm_run_complete"])
@@ -73,6 +75,8 @@ class CheckGoalCompletionTest(unittest.TestCase):
         checks = {check["id"]: check for check in report["checks"]}
         self.assertIn("provider_billing_evidence_complete", checks)
         self.assertEqual("pending", checks["provider_billing_evidence_complete"]["status"])
+        self.assertIn("provider_billing_evidence_handoff_ready", checks)
+        self.assertEqual("ready", checks["provider_billing_evidence_handoff_ready"]["status"])
         self.assertIn("live_cross_harness_responses_complete", checks)
         self.assertEqual("ready", checks["live_cross_harness_responses_complete"]["status"])
         self.assertIn("ai_scientist_v2_live_transfer_responses_complete", checks)
