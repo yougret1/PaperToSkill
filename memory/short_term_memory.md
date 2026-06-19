@@ -7,11 +7,10 @@ Current date: 2026-06-20.
 
 ## Current Phase
 
-Phase 64 is the current local phase. Phase 63 was committed as
-`ad8346b Record GitHub push connectivity diagnostics` and pushed to
-`origin/main` on 2026-06-20. Phase 64 records that the previous Phase 62/63
-local commits are now remotely saved, while GitHub HTTPS diagnostics can still
-fail intermittently after a successful push.
+Phase 65 is the current local phase. Phase 64 was committed as
+`b323879 Record recovered remote save status` and pushed to `origin/main` on
+2026-06-20. Phase 65 refreshes direct OpenAI-compatible provider diagnostics
+after the remote save recovery; external evidence remains pending.
 
 Phase 62 objective:
 
@@ -109,6 +108,19 @@ Phase 64 evidence:
   `Recv failure: Connection was reset`, so treat GitHub HTTPS access as
   intermittent; do not treat the old Phase 62/63 save as pending.
 
+Phase 65 evidence:
+
+- Re-ran direct OpenAI-compatible probes with shell-only credentials and the
+  tiny marker contract.
+- Claude-family aliases `claude-opus-4-8`, `claude-opus-4.8`,
+  `claude-opus-4-7`, and `claude-opus-4-6` still returned HTTP 503
+  `No available accounts: no available accounts`.
+- GPT-family aliases `gpt-5.5` and `gpt-5.4` still returned HTTP 502
+  `Upstream access forbidden, please contact administrator`.
+- Reports under `results/openai_compatible_direct_probe/` remain
+  `blocked_by_provider_or_model_availability`; no direct-probe response files
+  exist. This is diagnostic only and does not complete AI-Scientist-v2 smoke.
+
 ## Current Evidence
 
 - AI-Scientist-v2 dry-run succeeded with the PaperToSkill seed idea at
@@ -131,8 +143,8 @@ Phase 64 evidence:
   repeated 30-second timeouts for `claude-opus-4-8`, `claude-opus-4.8`,
   `claude-opus-4-7`, and `claude-opus-4-6`; Phase 57 GPT-family retry timed
   out for `gpt-5.5` and `gpt-5.4`; Phase 58 capped retries still timed out for
-  both credential profiles. Phase 59 direct probes show direct endpoint calls
-  are also blocked outside `ai_scientist.llm`.
+  both credential profiles. Phase 65 direct probes show direct endpoint calls
+  are still blocked outside `ai_scientist.llm`.
 - AI-Scientist-v2 full live/BFTS run remains blocked by smoke.
   `results/ai_scientist_v2_live_run_handoff/handoff.md` reports
   `blocked_by_provider_smoke`, with no completion artifacts.

@@ -2254,3 +2254,31 @@ Evidence boundary:
 - Phase 64 records remote-save recovery only.
 - It does not complete DeepSeek, AI-Scientist-v2 smoke/full live run, human
   annotation, provider billing, or the final AAAI submission decision.
+
+## 2026-06-20 Phase 65
+
+Actions:
+
+- Re-ran direct OpenAI-compatible endpoint probes after remote-save recovery.
+- Used shell-only credentials for the Claude-family and GPT-family profiles.
+- Updated the direct-probe JSON reports with fresh timestamps.
+- Added
+  `research/run_logs/2026-06-20_phase65_direct_probe_recheck.md`.
+
+Results:
+
+- Claude-family direct probe remains
+  `blocked_by_provider_or_model_availability`; `claude-opus-4-8`,
+  `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6` all returned
+  HTTP 503 `No available accounts: no available accounts`.
+- GPT-family direct probe remains
+  `blocked_by_provider_or_model_availability`; `gpt-5.5` and `gpt-5.4` both
+  returned HTTP 502 `Upstream access forbidden, please contact administrator`.
+- No direct-probe marker-contract response files were saved.
+
+Evidence boundary:
+
+- Phase 65 is a provider-availability diagnostic only.
+- It does not complete the AI-Scientist-v2 LLM-client smoke, BFTS/full live
+  run, DeepSeek rows, human annotation, provider billing, or the final AAAI
+  submission decision.

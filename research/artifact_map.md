@@ -83,6 +83,7 @@
 | `research/run_logs/2026-06-20_phase62_deepseek_configuration_helper.md` | DeepSeek follow-up configuration helper and handoff integration without storing secrets | Created |
 | `research/run_logs/2026-06-20_phase63_push_connectivity_diagnostic.md` | GitHub HTTPS connectivity diagnostic after Phase 62 push reset failures | Created |
 | `research/run_logs/2026-06-20_phase64_remote_save_recovered.md` | Successful remote save of Phase 62/63 commits with note that GitHub HTTPS diagnostics remain intermittent | Created |
+| `research/run_logs/2026-06-20_phase65_direct_probe_recheck.md` | Fresh direct OpenAI-compatible provider recheck after remote-save recovery; Claude remains HTTP 503 and GPT remains HTTP 502 | Created |
 
 ## Paper Draft Package
 
