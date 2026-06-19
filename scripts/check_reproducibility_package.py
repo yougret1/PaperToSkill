@@ -148,6 +148,7 @@ CORE_FILES = {
     "phase53_external_evidence_packets_run_log": "research/run_logs/2026-06-20_phase53_external_evidence_packets.md",
     "phase54_ai_scientist_v2_smoke_packet_retry_run_log": "research/run_logs/2026-06-20_phase54_ai_scientist_v2_smoke_packet_retry.md",
     "phase55_aaai_submission_decision_preflight_run_log": "research/run_logs/2026-06-20_phase55_aaai_submission_decision_preflight.md",
+    "phase56_ai_scientist_v2_smoke_after_push_recovery_run_log": "research/run_logs/2026-06-20_phase56_ai_scientist_v2_smoke_after_push_recovery.md",
     "provider_billing_protocol": "benchmarks/provider_billing_evidence_v0.json",
     "provider_billing_summarizer": "scripts/summarize_provider_billing_evidence.py",
     "provider_billing_template": "results/provider_billing_evidence/billing_template.csv",

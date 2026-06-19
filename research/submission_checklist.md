@@ -14,7 +14,7 @@ complete with respect to pending external evidence.
 | Paper claims | Ready | `results/reproducibility/paper_claim_report.md` | Unsupported overclaim patterns are absent from paper-facing text. |
 | Paper tables | Ready | `results/reproducibility/paper_table_report.md` | AAAI tables match generated CSV result tables. |
 | Usage examples | Ready | `results/reproducibility/usage_example_report.md`: 53 ready, 0 failed | Local example files, DeepSeek handoff, and offline example chain are synchronized. |
-| Reproducibility package | Ready with pending external evidence | `results/reproducibility/package_report.md`: 267 ready, 8 pending, 0 failed | Local package is coherent; external evidence remains pending. |
+| Reproducibility package | Ready with pending external evidence | `results/reproducibility/package_report.md`: 268 ready, 8 pending, 0 failed | Local package is coherent; external evidence remains pending. |
 | Active goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 70 ready, 8 pending, 0 failed | The overall user goal remains open. |
 | External evidence closure queue | Ready as local queue | `results/external_evidence_closure/closure.md`: 3 ready, 0 pending, 0 failed | Pending evidence is mapped to next actions; evidence itself remains pending. |
 | External evidence execution packets | Ready as local handoff | `results/external_evidence_packets/packets.md`: 7 ready, 0 pending, 0 failed | Pending evidence has runnable handoff packets; evidence itself remains pending. |

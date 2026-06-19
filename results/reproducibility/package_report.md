@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 267
+- Ready checks: 268
 - Pending checks: 8
 - Failed checks: 0
 
@@ -99,6 +99,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | phase53_external_evidence_packets_run_log | ready | present | research/run_logs/2026-06-20_phase53_external_evidence_packets.md |
 | phase54_ai_scientist_v2_smoke_packet_retry_run_log | ready | present | research/run_logs/2026-06-20_phase54_ai_scientist_v2_smoke_packet_retry.md |
 | phase55_aaai_submission_decision_preflight_run_log | ready | present | research/run_logs/2026-06-20_phase55_aaai_submission_decision_preflight.md |
+| phase56_ai_scientist_v2_smoke_after_push_recovery_run_log | ready | present | research/run_logs/2026-06-20_phase56_ai_scientist_v2_smoke_after_push_recovery.md |
 | provider_billing_protocol | ready | present | benchmarks/provider_billing_evidence_v0.json |
 | provider_billing_summarizer | ready | present | scripts/summarize_provider_billing_evidence.py |
 | provider_billing_template | ready | present | results/provider_billing_evidence/billing_template.csv |

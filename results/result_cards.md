@@ -564,7 +564,8 @@
   pending checks, and 0 failed checks after trying `claude-opus-4-8`,
   `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6`.
 - Provider outcome: earlier evidence included HTTP 403 `All available accounts
-  exhausted`; the latest recheck tried all four known aliases, and
+  exhausted`; the latest Phase 56 recheck after GitHub push recovery tried all
+  four known aliases, and
   `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and
   `claude-opus-4-6` each timed out after 30 seconds waiting for provider
   response. No response file was created.
@@ -580,7 +581,8 @@
   attempted and provider-blocked, but not completed.
 - Figure/table: `scripts/run_ai_scientist_v2_smoke.py`;
   `results/ai_scientist_v2_smoke/run_report.md`;
-  `results/ai_scientist_v2_smoke/run_report.json`.
+  `results/ai_scientist_v2_smoke/run_report.json`;
+  `research/run_logs/2026-06-20_phase56_ai_scientist_v2_smoke_after_push_recovery.md`.
 
 ## AI-Scientist-v2 Full Live-Run Handoff
 

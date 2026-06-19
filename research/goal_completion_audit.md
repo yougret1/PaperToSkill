@@ -15,8 +15,9 @@ current prompt-packet protocol. Phase 41 attempted a bounded AI-Scientist-v2
 LLM-client smoke through the local `ai_scientist.llm` client; Phase 45 rechecked
 the smoke path with a script-level timeout, Phase 46 tried the known Claude
 alias variants, Phase 48 recorded historical HTTP 403 plus timeout evidence,
-and Phase 54 executed the smoke-completion packet with a 30-second timeout. The
-latest report is still `blocked_by_provider_or_model_availability`:
+Phase 54 executed the smoke-completion packet with a 30-second timeout, and
+Phase 56 retried after GitHub push recovery. The latest report is still
+`blocked_by_provider_or_model_availability`:
 `claude-opus-4-8`,
 `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6` all timed out after
 30 seconds waiting for provider response. The full goal is not yet complete
@@ -34,7 +35,7 @@ local AAAI submission-decision preflight that exposes the submit-now and
 wait-for-evidence options without selecting either option.
 
 Local package status: `results/reproducibility/package_report.md` reports
-`ready_with_pending_external_evidence`, 267 ready checks, 8 pending checks, and
+`ready_with_pending_external_evidence`, 268 ready checks, 8 pending checks, and
 0 failed checks.
 
 Machine-checkable goal status:

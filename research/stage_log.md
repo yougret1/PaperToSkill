@@ -1965,3 +1965,35 @@ Evidence boundary:
   complete AI-Scientist-v2 smoke or full live/BFTS evidence, collect human
   annotations, collect provider billing, or make the AAAI package
   submission-final.
+
+## 2026-06-20 Phase 56
+
+Actions:
+
+- Confirmed GitHub connectivity recovered and pushed Phase 55 commits to
+  `origin/main`.
+- Re-ran the bounded AI-Scientist-v2 LLM-client smoke with shell-only
+  credentials, four Claude aliases, `--timeout-seconds 30`, and
+  `--require-complete`.
+- Added
+  `research/run_logs/2026-06-20_phase56_ai_scientist_v2_smoke_after_push_recovery.md`.
+
+Results:
+
+- `git push origin main` succeeded, moving `origin/main` from `d8639bc` to
+  `3183ffe`.
+- `results/ai_scientist_v2_smoke/run_report.md` still reports
+  `overall_status=blocked_by_provider_or_model_availability`, with 5 ready
+  checks, 2 pending checks, and 0 failed checks.
+- `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and
+  `claude-opus-4-6` each timed out after 30 seconds waiting for provider
+  response.
+- No `results/ai_scientist_v2_smoke/response.md` file exists.
+
+Evidence boundary:
+
+- Phase 56 refreshes provider/model availability evidence after remote push
+  recovery.
+- It does not complete the AI-Scientist-v2 smoke, run BFTS, prove live
+  research-task success, resolve DeepSeek, collect human annotations, collect
+  provider billing, or make the AAAI package submission-final.
