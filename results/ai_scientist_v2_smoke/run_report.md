@@ -15,8 +15,8 @@ Evidence boundary: this is a bounded LLM-client smoke check. It does not run BFT
 | --- | --- | --- | --- |
 | ai_scientist_v2_root | ready | present | D:\a_work\gitee\ai-scientist-v2 |
 | ai_scientist_v2_llm_response_saved | pending | response_chars=0 | D:\a_work\gitee\PaperToSkill\results\ai_scientist_v2_smoke\response.md |
-| ai_scientist_v2_llm_error | pending | claude-opus-4-8: Timed out after 15 seconds waiting for provider response; claude-opus-4.8: Timed out after 15 seconds waiting for provider response; claude-opus-4-7: Timed out after 15 seconds waiting for provider response; claude-opus-4-6: Timed out after 15 seconds waiting for provider response | provider/model availability |
-| ai_scientist_v2_llm_alias_attempt_1 | ready | claude-opus-4-8: blocked; Timed out after 15 seconds waiting for provider response | provider/model availability |
-| ai_scientist_v2_llm_alias_attempt_2 | ready | claude-opus-4.8: blocked; Timed out after 15 seconds waiting for provider response | provider/model availability |
-| ai_scientist_v2_llm_alias_attempt_3 | ready | claude-opus-4-7: blocked; Timed out after 15 seconds waiting for provider response | provider/model availability |
-| ai_scientist_v2_llm_alias_attempt_4 | ready | claude-opus-4-6: blocked; Timed out after 15 seconds waiting for provider response | provider/model availability |
+| ai_scientist_v2_llm_error | pending | claude-opus-4-8: Error code: 403 - {'error': {'message': 'All available accounts exhausted', 'type': 'server_error'}}; claude-opus-4.8: Timed out after 30 seconds waiting for provider response; claude-opus-4-7: Timed out after 30 seconds waiting for provider response; claude-opus-4-6: Timed out after 30 seconds waiting for provider response | provider/model availability |
+| ai_scientist_v2_llm_alias_attempt_1 | ready | claude-opus-4-8: blocked; Error code: 403 - {'error': {'message': 'All available accounts exhausted', 'type': 'server_error'}} | provider/model availability |
+| ai_scientist_v2_llm_alias_attempt_2 | ready | claude-opus-4.8: blocked; Timed out after 30 seconds waiting for provider response | provider/model availability |
+| ai_scientist_v2_llm_alias_attempt_3 | ready | claude-opus-4-7: blocked; Timed out after 30 seconds waiting for provider response | provider/model availability |
+| ai_scientist_v2_llm_alias_attempt_4 | ready | claude-opus-4-6: blocked; Timed out after 30 seconds waiting for provider response | provider/model availability |

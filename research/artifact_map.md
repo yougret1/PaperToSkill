@@ -66,6 +66,7 @@
 | `research/run_logs/2026-06-19_phase45_ai_scientist_v2_smoke_recheck.md` | AI-Scientist-v2 smoke recheck, provider-blocked status, timeout handling, and smoke CLI completion-mode UX | Created |
 | `research/run_logs/2026-06-19_phase46_ai_scientist_v2_smoke_alias_fallback.md` | AI-Scientist-v2 smoke alias-fallback recheck across four Claude aliases and provider-timeout boundary | Created |
 | `research/run_logs/2026-06-19_phase47_deepseek_followup_handoff.md` | Local DeepSeek follow-up handoff/preflight report and gate integration | Created |
+| `research/run_logs/2026-06-19_phase48_ai_scientist_v2_smoke_provider_recheck.md` | AI-Scientist-v2 smoke provider recheck with HTTP 403 and 30-second timeout evidence | Created |
 
 ## Paper Draft Package
 

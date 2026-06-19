@@ -135,22 +135,23 @@ python scripts\run_ai_scientist_v2_smoke.py --strict --require-complete
 To try the known Claude alias variants in one bounded run:
 
 ```powershell
-python scripts\run_ai_scientist_v2_smoke.py --strict --timeout-seconds 15 `
+python scripts\run_ai_scientist_v2_smoke.py --strict --timeout-seconds 30 `
   --model-alias claude-opus-4-8 `
   --model-alias claude-opus-4.8 `
   --model-alias claude-opus-4-7 `
   --model-alias claude-opus-4-6
 ```
 
-Current Phase 46 status:
+Current Phase 48 status:
 `results/ai_scientist_v2_smoke/run_report.md` reports
 `overall_status=blocked_by_provider_or_model_availability`, 5 ready checks, 2
 pending checks, and 0 failed checks. The latest recheck tried
 `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and
-`claude-opus-4-6`; all four aliases timed out after 15 seconds waiting for
-provider response, so no response file was produced. This is a bounded
-client-availability smoke attempt, not a BFTS run or live research-task
-success.
+`claude-opus-4-6`; `claude-opus-4-8` returned HTTP 403
+`All available accounts exhausted`, while the other three aliases timed out
+after 30 seconds waiting for provider response, so no response file was
+produced. This is a bounded client-availability smoke attempt, not a BFTS run
+or live research-task success.
 
 ## Model-Ablation Prompt Packets
 

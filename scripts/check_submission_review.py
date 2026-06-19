@@ -176,15 +176,27 @@ def smoke_alias_terms(smoke: dict[str, Any]) -> list[str]:
     ]
 
 
-def smoke_timeout_detail(smoke: dict[str, Any]) -> str:
-    detail = smoke_blocker_detail(smoke)
-    if "Timed out after 15 seconds waiting for provider response" in detail:
-        return "Timed out after 15 seconds waiting for provider response"
+def smoke_blocker_terms(smoke: dict[str, Any]) -> list[str]:
+    terms: list[str] = []
+    details = [smoke_blocker_detail(smoke)]
     for attempt in smoke.get("attempted_models", []):
         attempt_detail = str(attempt.get("detail", "")).strip()
-        if "Timed out after 15 seconds waiting for provider response" in attempt_detail:
-            return "Timed out after 15 seconds waiting for provider response"
-    return detail
+        if attempt_detail:
+            details.append(attempt_detail)
+    combined_detail = "\n".join(details)
+    if "All available accounts exhausted" in combined_detail:
+        terms.append("All available accounts exhausted")
+    for match in re.finditer(
+        r"Timed out after \d+(?:\.\d+)? seconds waiting for provider response",
+        combined_detail,
+        flags=re.IGNORECASE,
+    ):
+        phrase = match.group(0)
+        if phrase not in terms:
+            terms.append(phrase)
+    if not terms and smoke_blocker_detail(smoke):
+        terms.append(smoke_blocker_detail(smoke))
+    return terms
 
 
 def aggregate_handoff_current(goal_counts: dict[str, Any], package_counts: dict[str, Any], combined_text: str) -> bool:
@@ -211,7 +223,7 @@ def evidence_alignment_checks(root: Path, combined_text: str) -> list[Check]:
     smoke = load_json(root / "results/ai_scientist_v2_smoke/run_report.json")
     smoke_detail = smoke_blocker_detail(smoke)
     smoke_aliases = smoke_alias_terms(smoke)
-    smoke_timeout = smoke_timeout_detail(smoke)
+    smoke_terms = smoke_blocker_terms(smoke)
     goal = load_json(root / "results/reproducibility/goal_completion_report.json")
     package = load_json(root / "results/reproducibility/package_report.json")
     goal_counts = goal.get("status_counts", {})
@@ -267,7 +279,7 @@ def evidence_alignment_checks(root: Path, combined_text: str) -> list[Check]:
             if smoke.get("overall_status") == "blocked_by_provider_or_model_availability"
             and contains_all(
                 combined_text,
-                ["blocked_by_provider_or_model_availability", smoke_timeout, *smoke_aliases],
+                ["blocked_by_provider_or_model_availability", *smoke_terms, *smoke_aliases],
             )
             else "fail",
             f"overall={smoke.get('overall_status')}; detail={smoke_detail}; aliases={','.join(smoke_aliases)}",

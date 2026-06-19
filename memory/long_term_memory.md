@@ -66,10 +66,12 @@ Current supported claims:
 - Bounded AI-Scientist-v2 LLM-client smoke was attempted through the local
   `ai_scientist.llm` client and reached the provider path, but provider/model
   availability remains blocked. Earlier evidence included HTTP 403
-  `All available accounts exhausted`; the latest Phase 46 recheck tried
+  `All available accounts exhausted`; the latest Phase 48 recheck tried
   `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and
-  `claude-opus-4-6`, and all four aliases timed out after 15 seconds waiting
-  for provider response. This is not smoke completion or BFTS success.
+  `claude-opus-4-6`; `claude-opus-4-8` returned HTTP 403
+  `All available accounts exhausted`, while the other three aliases timed out
+  after 30 seconds waiting for provider response. This is not smoke completion
+  or BFTS success.
 
 Current unsupported claims:
 
@@ -125,7 +127,7 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 236 ready checks, 7 pending
+  reports `ready_with_pending_external_evidence`, 237 ready checks, 7 pending
   checks, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
@@ -135,8 +137,10 @@ Use these as entry points instead of searching the whole repo first:
   `results/ai_scientist_v2_smoke/run_report.md`
   reports `blocked_by_provider_or_model_availability`, 5 ready checks, 2 pending
   checks, and 0 failed checks after trying `claude-opus-4-8`,
-  `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6`; all four
-  attempts timed out after 15 seconds waiting for provider response.
+  `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6`;
+  `claude-opus-4-8` returned HTTP 403 `All available accounts exhausted`,
+  while the other three aliases timed out after 30 seconds waiting for provider
+  response.
 - AAAI package:
   `results/reproducibility/aaai_package_report.md`
   reports ready, 17 ready checks, 0 failed checks.

@@ -533,7 +533,7 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 236 ready checks, 7
+  `overall_status=ready_with_pending_external_evidence`, 237 ready checks, 7
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
@@ -563,9 +563,10 @@
   pending checks, and 0 failed checks after trying `claude-opus-4-8`,
   `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6`.
 - Provider outcome: earlier evidence included HTTP 403 `All available accounts
-  exhausted`; the latest recheck tried all four known aliases and each timed
-  out after 15 seconds waiting for provider response. No response file was
-  created.
+  exhausted`; the latest recheck tried all four known aliases. `claude-opus-4-8`
+  returned HTTP 403 `All available accounts exhausted`, while
+  `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6` each timed out
+  after 30 seconds waiting for provider response. No response file was created.
 - Practical significance: records that the local AI-Scientist-v2 client path is
   wired into PaperToSkill with a reproducible smoke command and redacted
   provider-availability reporting.

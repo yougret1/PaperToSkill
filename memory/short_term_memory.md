@@ -7,9 +7,23 @@ Current date: 2026-06-19.
 
 ## Current Phase
 
-Phase 47 is complete and pushed.
+Phase 48 is in progress locally: rechecking the bounded AI-Scientist-v2
+LLM-client smoke path with a longer per-alias timeout and synchronizing the
+provider-blocked evidence.
 
-Latest pushed commit: `1c467e9 Add DeepSeek follow-up handoff preflight`.
+Latest pushed commit before Phase 48: `f9a902c Refresh phase 47 memory status`.
+
+Phase 48 evidence so far:
+
+- Re-ran `scripts/run_ai_scientist_v2_smoke.py` with four Claude aliases and
+  `--timeout-seconds 30`.
+- `results/ai_scientist_v2_smoke/run_report.md` remains
+  `blocked_by_provider_or_model_availability`: `claude-opus-4-8` returned HTTP
+  403 `All available accounts exhausted`; `claude-opus-4.8`,
+  `claude-opus-4-7`, and `claude-opus-4-6` timed out after 30 seconds waiting
+  for provider response.
+- No `results/ai_scientist_v2_smoke/response.md` file exists.
+- Added `research/run_logs/2026-06-19_phase48_ai_scientist_v2_smoke_provider_recheck.md`.
 
 Phase 47 completed:
 
@@ -31,15 +45,16 @@ Latest smoke recheck:
 $env:AI_SCIENTIST_OPENAI_BASE_URL='https://coderxiaoc.com/v1'
 $env:AI_SCIENTIST_OPENAI_API_KEY='<set locally>'
 $env:AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE='1'
-python scripts\run_ai_scientist_v2_smoke.py --strict --timeout-seconds 15 `
+python scripts\run_ai_scientist_v2_smoke.py --strict --timeout-seconds 30 `
   --model-alias claude-opus-4-8 `
   --model-alias claude-opus-4.8 `
   --model-alias claude-opus-4-7 `
   --model-alias claude-opus-4-6
 ```
 
-Result: all four aliases timed out after 15 seconds waiting for provider
-response. `results/ai_scientist_v2_smoke/run_report.md` reports
+Result: `claude-opus-4-8` returned HTTP 403
+`All available accounts exhausted`; the other three aliases timed out after 30
+seconds waiting for provider response. `results/ai_scientist_v2_smoke/run_report.md` reports
 `blocked_by_provider_or_model_availability`, 5 ready checks, 2 pending checks,
 and 0 failed checks. No `results/ai_scientist_v2_smoke/response.md` exists.
 
@@ -77,7 +92,7 @@ and 0 failed checks. No `results/ai_scientist_v2_smoke/response.md` exists.
   and 0 failed checks.
 - Package report:
   `results/reproducibility/package_report.md` reports
-  `ready_with_pending_external_evidence`, 236 ready checks, 7 pending checks,
+  `ready_with_pending_external_evidence`, 237 ready checks, 7 pending checks,
   and 0 failed checks.
 
 ## Boundaries To Preserve
@@ -95,13 +110,14 @@ Do not claim:
 - Saved-response output-contract scoring proves real live task success.
 - Submission-final or accepted AAAI paper.
 
-Supported after Phase 47:
+Supported after Phase 48:
 
 - AI-Scientist-v2 LLM-client smoke was attempted through local
   `ai_scientist.llm` with four Claude aliases:
   `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and
   `claude-opus-4-6`.
-- All four aliases timed out after 15 seconds waiting for provider response,
+- `claude-opus-4-8` returned HTTP 403 `All available accounts exhausted`; the
+  other three aliases timed out after 30 seconds waiting for provider response,
   so provider/model availability remains blocked.
 - The absence of `results/ai_scientist_v2_smoke/response.md` is intentional
   while no alias satisfies the smoke marker contract.

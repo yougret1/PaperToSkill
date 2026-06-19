@@ -13,11 +13,12 @@ Claude Opus 4.8 plus GPT-family model-ablation rows are saved and scored, and
 all four live-transfer saved-response sets are collected and scored under the
 current prompt-packet protocol. Phase 41 attempted a bounded AI-Scientist-v2
 LLM-client smoke through the local `ai_scientist.llm` client; Phase 45 rechecked
-the smoke path with a script-level timeout, and Phase 46 tried the known Claude
-alias variants `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and
-`claude-opus-4-6`. The latest report is still
-`blocked_by_provider_or_model_availability` because all four aliases timed out
-after 15 seconds waiting for provider response. The full goal is not yet complete because the
+the smoke path with a script-level timeout, Phase 46 tried the known Claude
+alias variants, and Phase 48 rechecked them with a 30-second timeout. The latest
+report is still `blocked_by_provider_or_model_availability`: `claude-opus-4-8`
+returned HTTP 403 `All available accounts exhausted`, while `claude-opus-4.8`,
+`claude-opus-4-7`, and `claude-opus-4-6` timed out after 30 seconds waiting for
+provider response. The full goal is not yet complete because the
 AI-Scientist-v2 LLM-client smoke and full live-run evidence, DeepSeek follow-up
 responses, human-fidelity annotation, stronger provider-billing or
 success-per-dollar evidence, and final submission decisions remain pending
@@ -25,7 +26,7 @@ external or follow-up work. Phase 38 adds local output-token proxy accounting
 for saved model-ablation responses, but this is not realized provider billing.
 
 Local package status: `results/reproducibility/package_report.md` reports
-`ready_with_pending_external_evidence`, 236 ready checks, 7 pending checks, and
+`ready_with_pending_external_evidence`, 237 ready checks, 7 pending checks, and
 0 failed checks.
 
 Machine-checkable goal status:
@@ -38,7 +39,7 @@ and 0 failed checks.
 | Requirement | Current Evidence | Status | Next Action |
 | --- | --- | --- | --- |
 | Maintain durable local memory with at least long-term and short-term files. | `memory/long_term_memory.md`; `memory/short_term_memory.md`; reproducibility checks `memory_long_term` and `memory_short_term` are ready. | Complete locally | Continue reading both memory files after every resume/compaction and update short-term memory after phase changes. |
-| Use `ai-scientist-v2` to refine and develop PaperToSkill. | `ai_scientist_inputs/papertoskill.md`; `ai_scientist_inputs/papertoskill_seed_ideas.json`; AI-Scientist-v2 dry-run recorded in memory and run logs; PaperToSkill repo keeps AI-Scientist-v2 as execution context; `scripts/run_ai_scientist_v2_smoke.py`; `results/ai_scientist_v2_smoke/run_report.md`. | Partially complete | The bounded AI-Scientist-v2 LLM-client smoke was attempted, but the latest report remains `blocked_by_provider_or_model_availability`; `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6` all timed out after 15 seconds waiting for provider response. A full live AI-Scientist-v2 run remains pending and should be retried only when the endpoint can serve chat completions or another backend is available. |
+| Use `ai-scientist-v2` to refine and develop PaperToSkill. | `ai_scientist_inputs/papertoskill.md`; `ai_scientist_inputs/papertoskill_seed_ideas.json`; AI-Scientist-v2 dry-run recorded in memory and run logs; PaperToSkill repo keeps AI-Scientist-v2 as execution context; `scripts/run_ai_scientist_v2_smoke.py`; `results/ai_scientist_v2_smoke/run_report.md`. | Partially complete | The bounded AI-Scientist-v2 LLM-client smoke was attempted, but the latest report remains `blocked_by_provider_or_model_availability`; `claude-opus-4-8` returned HTTP 403 `All available accounts exhausted`, while `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6` timed out after 30 seconds waiting for provider response. A full live AI-Scientist-v2 run remains pending and should be retried only when the endpoint can serve chat completions or another backend is available. |
 | Save phase-level progress to `yougret1/PaperToSkill.git`. | Phase-level commits are pushed to `origin/main`; latest saved phases include AAAI package, usage-example, paper-table, and paper-claim gates. | Complete through current pushed phase | Keep committing/pushing phase-level increments. |
 | Use official AAAI TeX template for final paper. | `paper/aaai/AuthorKit27.zip`; `paper/aaai/aaai2027.sty`; `paper/aaai/aaai2027.bst`; `paper/aaai/README.md`; `paper/aaai/papertoskill_aaai2027.tex`; `paper/aaai/papertoskill_aaai2027.pdf`; `scripts/check_aaai_package.py`; `results/reproducibility/aaai_package_report.md`; `scripts/check_paper_tables.py`; `results/reproducibility/paper_table_report.md`; `scripts/check_paper_claims.py`; `results/reproducibility/paper_claim_report.md`. | Prepared and locally verified, not submission-final | Keep the AAAI draft synchronized with new evidence. Submission-final requires final claims, figures, metadata, and any venue-specific updates. |
 | Provide experiment usage examples. | `examples/usage/README.md`; `examples/usage/codex_skill_usage.md`; `examples/usage/auto_note_scaffold_usage.md`; `examples/usage/model_ablation_usage.md`; `scripts/check_usage_examples.py`; `results/reproducibility/usage_example_report.md`; `research/runbook.md`. | Complete and locally verified | Keep examples synchronized if task specs or runner commands change. |
@@ -80,9 +81,10 @@ and 0 failed checks.
   LLM-client smoke attempt remains
   `blocked_by_provider_or_model_availability`; the latest recheck tried
   `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and
-  `claude-opus-4-6`, and all four aliases timed out after 15 seconds waiting
-  for provider response. The attempt is recorded, but smoke completion and full
-  live AI-Scientist-v2 run evidence remain pending.
+  `claude-opus-4-6`; `claude-opus-4-8` returned HTTP 403
+  `All available accounts exhausted`, while the other three aliases timed out
+  after 30 seconds waiting for provider response. The attempt is recorded, but
+  smoke completion and full live AI-Scientist-v2 run evidence remain pending.
 - `results/live_transfer_prompts/ai_scientist_v2_v0/run_report.md`,
   `results/live_transfer_prompts/reflexion_v0/run_report.md`,
   `results/live_transfer_prompts/aide_v0/run_report.md`, and
