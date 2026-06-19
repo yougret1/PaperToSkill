@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 230
+- Ready checks: 236
 - Pending checks: 7
 - Failed checks: 0
 
@@ -50,6 +50,9 @@ Evidence boundary: this report checks local package completeness and separates p
 | usage_example_checker | ready | present | scripts/check_usage_examples.py |
 | usage_example_report_json | ready | present | results/reproducibility/usage_example_report.json |
 | usage_example_report_md | ready | present | results/reproducibility/usage_example_report.md |
+| deepseek_followup_checker | ready | present | scripts/check_deepseek_followup.py |
+| deepseek_followup_handoff_json | ready | present | results/deepseek_followup_handoff/handoff.json |
+| deepseek_followup_handoff_md | ready | present | results/deepseek_followup_handoff/handoff.md |
 | artifact_map | ready | present | research/artifact_map.md |
 | claim_evidence_matrix | ready | present | research/claim_evidence_matrix.md |
 | runbook | ready | present | research/runbook.md |
@@ -75,6 +78,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | phase41_ai_scientist_v2_smoke_run_log | ready | present | research/run_logs/2026-06-19_phase41_ai_scientist_v2_smoke.md |
 | phase45_ai_scientist_v2_smoke_recheck_run_log | ready | present | research/run_logs/2026-06-19_phase45_ai_scientist_v2_smoke_recheck.md |
 | phase46_ai_scientist_v2_smoke_alias_fallback_run_log | ready | present | research/run_logs/2026-06-19_phase46_ai_scientist_v2_smoke_alias_fallback.md |
+| phase47_deepseek_followup_handoff_run_log | ready | present | research/run_logs/2026-06-19_phase47_deepseek_followup_handoff.md |
 | provider_billing_protocol | ready | present | benchmarks/provider_billing_evidence_v0.json |
 | provider_billing_summarizer | ready | present | scripts/summarize_provider_billing_evidence.py |
 | provider_billing_template | ready | present | results/provider_billing_evidence/billing_template.csv |
@@ -167,7 +171,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | paper_claim_core_checks_ready | ready | core checks ready | results\reproducibility\paper_claim_report.json |
 | submission_review_report_ready | ready | overall=ready; counts={'ready': 15, 'fail': 0} | results\reproducibility\submission_review_report.json |
 | submission_review_core_checks_ready | ready | core checks ready | results\reproducibility\submission_review_report.json |
-| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 55, 'pending': 8, 'fail': 0} | results\reproducibility\goal_completion_report.json |
+| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 58, 'pending': 8, 'fail': 0} | results\reproducibility\goal_completion_report.json |
 | goal_completion_core_checks_ready | ready | core completion boundaries ready | results\reproducibility\goal_completion_report.json |
 | ai_scientist_v2_smoke_cli_status_summary | ready | status_summary=True; require_complete=True; timeout=True; alias_fallback=True | scripts\run_ai_scientist_v2_smoke.py |
 | ai_scientist_v2_llm_smoke_complete | pending | overall=blocked_by_provider_or_model_availability; counts={'ready': 5, 'pending': 2, 'fail': 0} | results\ai_scientist_v2_smoke\run_report.json |
@@ -176,8 +180,10 @@ Evidence boundary: this report checks local package completeness and separates p
 | provider_billing_summary_valid | ready | errors=0 | results\provider_billing_evidence\billing_summary.json |
 | provider_billing_evidence_handoff_ready | ready | template_rows=6; summary_rows=6 | results/provider_billing_evidence/billing_template.csv; results/provider_billing_evidence/billing_summary.json |
 | provider_billing_evidence_complete | pending | status=pending; measured_rows=0; pending_rows=6 | results\provider_billing_evidence\billing_summary.json |
-| usage_example_report_ready | ready | overall=ready; counts={'ready': 47, 'fail': 0} | results\reproducibility\usage_example_report.json |
+| usage_example_report_ready | ready | overall=ready; counts={'ready': 53, 'fail': 0} | results\reproducibility\usage_example_report.json |
 | usage_example_core_checks_ready | ready | core checks ready | results\reproducibility\usage_example_report.json |
+| deepseek_followup_handoff_report_ready | ready | overall=pending_user_configuration; failed=0 | results\deepseek_followup_handoff\handoff.json |
+| deepseek_followup_handoff_core_checks_ready | ready | core handoff checks ready | results\deepseek_followup_handoff\handoff.json |
 | toolformer_auto_note_script | ready | present | scripts/papertoskill_note_from_text.py |
 | toolformer_auto_pipeline_script | ready | present | scripts/papertoskill_pipeline.py |
 | toolformer_auto_note | ready | present | papers/auto_notes/toolformer_auto_note.md |

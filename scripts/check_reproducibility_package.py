@@ -99,6 +99,9 @@ CORE_FILES = {
     "usage_example_checker": "scripts/check_usage_examples.py",
     "usage_example_report_json": "results/reproducibility/usage_example_report.json",
     "usage_example_report_md": "results/reproducibility/usage_example_report.md",
+    "deepseek_followup_checker": "scripts/check_deepseek_followup.py",
+    "deepseek_followup_handoff_json": "results/deepseek_followup_handoff/handoff.json",
+    "deepseek_followup_handoff_md": "results/deepseek_followup_handoff/handoff.md",
     "artifact_map": "research/artifact_map.md",
     "claim_evidence_matrix": "research/claim_evidence_matrix.md",
     "runbook": "research/runbook.md",
@@ -124,6 +127,7 @@ CORE_FILES = {
     "phase41_ai_scientist_v2_smoke_run_log": "research/run_logs/2026-06-19_phase41_ai_scientist_v2_smoke.md",
     "phase45_ai_scientist_v2_smoke_recheck_run_log": "research/run_logs/2026-06-19_phase45_ai_scientist_v2_smoke_recheck.md",
     "phase46_ai_scientist_v2_smoke_alias_fallback_run_log": "research/run_logs/2026-06-19_phase46_ai_scientist_v2_smoke_alias_fallback.md",
+    "phase47_deepseek_followup_handoff_run_log": "research/run_logs/2026-06-19_phase47_deepseek_followup_handoff.md",
     "provider_billing_protocol": "benchmarks/provider_billing_evidence_v0.json",
     "provider_billing_summarizer": "scripts/summarize_provider_billing_evidence.py",
     "provider_billing_template": "results/provider_billing_evidence/billing_template.csv",
@@ -760,6 +764,9 @@ def usage_example_checks(root: Path) -> list[Check]:
         "usage_model_ablation_response_slots",
         "usage_model_ablation_gpt_profile",
         "usage_model_ablation_claude_alias_candidates",
+        "usage_deepseek_followup_handoff",
+        "usage_deepseek_followup_prompt_rows",
+        "usage_deepseek_followup_next_commands",
         "usage_auto_note_example_rubric_score",
         "usage_auto_note_example_selected_windows",
         "usage_pdf_pipeline_example_manifest_created",
@@ -771,6 +778,46 @@ def usage_example_checks(root: Path) -> list[Check]:
             "usage_example_core_checks_ready",
             "ready" if not missing else "fail",
             "core checks ready" if not missing else "missing=" + ",".join(missing),
+            str(report_path.relative_to(root)),
+        )
+    )
+    return checks
+
+
+def deepseek_followup_handoff_checks(root: Path) -> list[Check]:
+    checks: list[Check] = []
+    report_path = root / "results/deepseek_followup_handoff/handoff.json"
+    if not report_path.exists():
+        return checks
+    report = load_json(report_path)
+    failed = [check for check in report.get("checks", []) if check.get("status") == "fail"]
+    check_statuses = {check.get("id"): check.get("status") for check in report.get("checks", [])}
+    ready_or_pending = report.get("overall_status") in {
+        "pending_user_configuration",
+        "ready_to_run",
+        "responses_present",
+    }
+    checks.append(
+        Check(
+            "deepseek_followup_handoff_report_ready",
+            "ready" if ready_or_pending and not failed else "fail",
+            f"overall={report.get('overall_status')}; failed={len(failed)}",
+            str(report_path.relative_to(root)),
+        )
+    )
+    required_ready = {
+        "deepseek_followup_slot_present",
+        "deepseek_followup_index_rows",
+        "deepseek_followup_prompt_files",
+        "deepseek_followup_response_paths_declared",
+        "deepseek_followup_env_names_declared",
+    }
+    missing = sorted(check_id for check_id in required_ready if check_statuses.get(check_id) != "ready")
+    checks.append(
+        Check(
+            "deepseek_followup_handoff_core_checks_ready",
+            "ready" if not missing else "fail",
+            "core handoff checks ready" if not missing else "missing=" + ",".join(missing),
             str(report_path.relative_to(root)),
         )
     )
@@ -981,6 +1028,7 @@ def build_report(root: Path) -> dict[str, Any]:
     checks.extend(ai_scientist_smoke_checks(root))
     checks.extend(provider_billing_checks(root))
     checks.extend(usage_example_checks(root))
+    checks.extend(deepseek_followup_handoff_checks(root))
     checks.extend(auto_note_checks(root))
     checks.extend(model_ablation_checks(root))
     checks.extend(live_transfer_checks(root))

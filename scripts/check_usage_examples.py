@@ -44,6 +44,8 @@ MODEL_ABLATION_INPUTS = {
     "model_ablation_builder": "scripts/build_model_ablation_prompts.py",
     "model_ablation_runner": "scripts/run_model_ablation_prompts.py",
     "model_ablation_evaluator": "scripts/evaluate_model_ablation_responses.py",
+    "deepseek_followup_checker": "scripts/check_deepseek_followup.py",
+    "deepseek_followup_handoff": "results/deepseek_followup_handoff/handoff.json",
 }
 
 EXPECTED_MODEL_SLOTS = {"claude_opus_4_8", "gpt_5_5_or_gpt_family", "deepseek_followup_slot"}
@@ -108,6 +110,10 @@ def markdown_mentions_checks(root: Path) -> list[Check]:
         ),
         "auto_note_usage_mentions_profile": ("examples/usage/auto_note_scaffold_usage.md", "--profile aide"),
         "model_ablation_usage_mentions_deepseek": ("examples/usage/model_ablation_usage.md", "deepseek_followup_slot"),
+        "model_ablation_usage_mentions_deepseek_handoff": (
+            "examples/usage/model_ablation_usage.md",
+            "check_deepseek_followup.py",
+        ),
     }
     for check_id, (raw_path, needle) in expected_mentions.items():
         path = resolve_path(root, raw_path)
@@ -191,6 +197,45 @@ def model_ablation_prompt_grid_checks(root: Path) -> list[Check]:
             else "fail",
             "aliases=" + ",".join(sorted(claude_aliases)),
             evidence_path(root, task_path),
+        ),
+    ]
+    return checks
+
+
+def deepseek_handoff_checks(root: Path) -> list[Check]:
+    handoff_path = root / "results/deepseek_followup_handoff/handoff.json"
+    if not handoff_path.exists():
+        return [Check("usage_deepseek_followup_handoff", "fail", "missing handoff", evidence_path(root, handoff_path))]
+
+    handoff = load_json(handoff_path)
+    checks_by_id = {check.get("id"): check for check in handoff.get("checks", [])}
+    failed = [check_id for check_id, check in checks_by_id.items() if check.get("status") == "fail"]
+    prompt_rows = handoff.get("prompt_rows", [])
+    next_commands = "\n".join(handoff.get("next_commands", []))
+    checks = [
+        Check(
+            "usage_deepseek_followup_handoff",
+            "ready"
+            if handoff.get("overall_status") in {"pending_user_configuration", "ready_to_run", "responses_present"}
+            and not failed
+            else "fail",
+            f"overall={handoff.get('overall_status')}; failed={len(failed)}",
+            evidence_path(root, handoff_path),
+        ),
+        Check(
+            "usage_deepseek_followup_prompt_rows",
+            "ready" if len(prompt_rows) == 2 else "fail",
+            f"rows={len(prompt_rows)}",
+            evidence_path(root, handoff_path),
+        ),
+        Check(
+            "usage_deepseek_followup_next_commands",
+            "ready"
+            if "run_model_ablation_prompts.py" in next_commands
+            and "evaluate_model_ablation_responses.py" in next_commands
+            else "fail",
+            "runner and evaluator commands present",
+            evidence_path(root, handoff_path),
         ),
     ]
     return checks
@@ -444,6 +489,7 @@ def build_report(root: Path, *, run_examples: bool = True) -> dict[str, Any]:
     checks.extend(required_file_checks(root, MODEL_ABLATION_INPUTS))
     checks.extend(markdown_mentions_checks(root))
     checks.extend(model_ablation_prompt_grid_checks(root))
+    checks.extend(deepseek_handoff_checks(root))
     checks.extend(live_transfer_usage_checks(root))
     auto_note_sample: dict[str, Any] | None = None
     if run_examples:

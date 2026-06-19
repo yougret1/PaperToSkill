@@ -10,7 +10,8 @@ results.
 - `auto_note_scaffold_usage.md`: generate an auditable note scaffold from
   extracted paper text, then convert it to a skill.
 - `model_ablation_usage.md`: run the prepared Claude/GPT-family prompt grid and
-  later add DeepSeek using the same protocol.
+  later add DeepSeek using the same protocol plus the local DeepSeek handoff
+  check.
 
 ## Local Verification
 
@@ -24,7 +25,8 @@ python scripts\check_usage_examples.py `
 ```
 
 The gate checks example files, prompt and response slots, and an offline
-auto-note-to-skill example chain. It does not execute live model calls.
+auto-note-to-skill example chain. It also checks the DeepSeek follow-up
+handoff report. It does not execute live model calls.
 
 ## Evidence Boundary
 

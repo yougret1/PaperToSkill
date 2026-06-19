@@ -67,6 +67,7 @@ class CheckGoalCompletionTest(unittest.TestCase):
             self.assertEqual("ready", statuses["aide_live_transfer_responses_complete"])
             self.assertEqual("ready", statuses["toolformer_live_transfer_responses_complete"])
             self.assertEqual("ready", statuses["deepseek_followup_process_ready"])
+            self.assertEqual("ready", statuses["deepseek_followup_handoff_ready"])
             self.assertEqual("pending", statuses["deepseek_followup_response_complete"])
             self.assertEqual("ready", statuses["live_cross_harness_responses_complete"])
             self.assertEqual("pending", statuses["human_fidelity_annotation_complete"])

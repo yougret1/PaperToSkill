@@ -1,0 +1,92 @@
+{
+  "schema_version": "0.1",
+  "evidence_boundary": "Local DeepSeek follow-up handoff only. This report does not call DeepSeek, does not save model responses, and does not complete the DeepSeek ablation.",
+  "overall_status": "pending_user_configuration",
+  "task_path": "benchmarks\\model_ablation_v0.json",
+  "index_path": "results\\model_ablation_prompts\\v0\\index.json",
+  "slot": {
+    "id": "deepseek_followup_slot",
+    "model_alias": "deepseek-to-be-filled",
+    "auth_env": "DEEPSEEK_API_KEY",
+    "base_url_env": "DEEPSEEK_BASE_URL",
+    "provider_status": "placeholder_for_user_followup"
+  },
+  "prompt_rows": [
+    {
+      "case_id": "toolformer_curated_skill_usage",
+      "prompt_path": "results\\model_ablation_prompts\\v0\\deepseek_followup_slot__toolformer_curated_skill_usage.md",
+      "expected_response_path": "results\\model_ablation_prompts\\v0\\responses\\deepseek_followup_slot__toolformer_curated_skill_usage.md"
+    },
+    {
+      "case_id": "aide_auto_skill_usage",
+      "prompt_path": "results\\model_ablation_prompts\\v0\\deepseek_followup_slot__aide_auto_skill_usage.md",
+      "expected_response_path": "results\\model_ablation_prompts\\v0\\responses\\deepseek_followup_slot__aide_auto_skill_usage.md"
+    }
+  ],
+  "next_commands": [
+    "python scripts\\build_model_ablation_prompts.py `",
+    "  --task benchmarks\\model_ablation_v0.json `",
+    "  --output-dir results\\model_ablation_prompts\\v0",
+    "",
+    "python scripts\\run_model_ablation_prompts.py `",
+    "  --task benchmarks\\model_ablation_v0.json `",
+    "  --index results\\model_ablation_prompts\\v0\\index.json `",
+    "  --output-json results\\model_ablation_prompts\\v0\\deepseek_run_report.json `",
+    "  --output-md results\\model_ablation_prompts\\v0\\deepseek_run_report.md `",
+    "  --model-id deepseek_followup_slot",
+    "",
+    "python scripts\\evaluate_model_ablation_responses.py `",
+    "  --index results\\model_ablation_prompts\\v0\\index.json `",
+    "  --output-json results\\model_ablation_prompts\\v0\\evaluation.json `",
+    "  --output-md results\\model_ablation_prompts\\v0\\evaluation.md"
+  ],
+  "status_counts": {
+    "ready": 5,
+    "pending": 2,
+    "fail": 0
+  },
+  "checks": [
+    {
+      "id": "deepseek_followup_slot_present",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "benchmarks\\model_ablation_v0.json"
+    },
+    {
+      "id": "deepseek_followup_index_rows",
+      "status": "ready",
+      "detail": "rows=2; expected_cases=2",
+      "evidence": "results\\model_ablation_prompts\\v0\\index.json"
+    },
+    {
+      "id": "deepseek_followup_prompt_files",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results\\model_ablation_prompts\\v0\\index.json"
+    },
+    {
+      "id": "deepseek_followup_response_paths_declared",
+      "status": "ready",
+      "detail": "response_paths=2",
+      "evidence": "results\\model_ablation_prompts\\v0\\index.json"
+    },
+    {
+      "id": "deepseek_followup_env_names_declared",
+      "status": "ready",
+      "detail": "auth_env=DEEPSEEK_API_KEY; base_url_env=DEEPSEEK_BASE_URL",
+      "evidence": "benchmarks\\model_ablation_v0.json"
+    },
+    {
+      "id": "deepseek_followup_alias_configured",
+      "status": "pending",
+      "detail": "placeholder alias awaits user-provided DeepSeek model",
+      "evidence": "benchmarks\\model_ablation_v0.json"
+    },
+    {
+      "id": "deepseek_followup_responses_saved",
+      "status": "pending",
+      "detail": "saved=0; expected=2",
+      "evidence": "results\\model_ablation_prompts\\v0\\responses\\deepseek_followup_slot__toolformer_curated_skill_usage.md; results\\model_ablation_prompts\\v0\\responses\\deepseek_followup_slot__aide_auto_skill_usage.md"
+    }
+  ]
+}

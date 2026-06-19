@@ -25,12 +25,12 @@ external or follow-up work. Phase 38 adds local output-token proxy accounting
 for saved model-ablation responses, but this is not realized provider billing.
 
 Local package status: `results/reproducibility/package_report.md` reports
-`ready_with_pending_external_evidence`, 230 ready checks, 7 pending checks, and
+`ready_with_pending_external_evidence`, 236 ready checks, 7 pending checks, and
 0 failed checks.
 
 Machine-checkable goal status:
 `results/reproducibility/goal_completion_report.md` reports
-`not_complete_pending_external_evidence`, 55 ready checks, 8 pending checks,
+`not_complete_pending_external_evidence`, 58 ready checks, 8 pending checks,
 and 0 failed checks.
 
 ## Requirement Audit
@@ -44,7 +44,7 @@ and 0 failed checks.
 | Provide experiment usage examples. | `examples/usage/README.md`; `examples/usage/codex_skill_usage.md`; `examples/usage/auto_note_scaffold_usage.md`; `examples/usage/model_ablation_usage.md`; `scripts/check_usage_examples.py`; `results/reproducibility/usage_example_report.md`; `research/runbook.md`. | Complete and locally verified | Keep examples synchronized if task specs or runner commands change. |
 | Run or prepare Claude Opus 4.8 ablation. | `benchmarks/model_ablation_v0.json`; prompt packets under `results/model_ablation_prompts/v0/`; runner/evaluator scripts; latest run report shows `claude-opus-4-8` completed both current prompt rows; `results/model_ablation_prompts/v0/evaluation.md` scores both Claude rows 6/6. | Complete for current prompt protocol | Keep the same scorer if the prompt grid expands. Do not generalize beyond the two current prompt rows. |
 | Run or prepare GPT 5.5 / GPT-family ablation. | Same model-ablation artifacts; the Phase 37 retry with the separate GPT key saved both current GPT-family prompt responses. The Toolformer row timed out on `gpt-5.5` and succeeded with `gpt-5.4`; the AIDE row succeeded with `gpt-5.5`; both rows score 6/6. | Complete for current prompt protocol | Keep the actual alias evidence with the response files; do not call this a pure `gpt-5.5` result because one row used `gpt-5.4`. |
-| Provide DeepSeek-follow-up process for the user. | `deepseek_followup_slot` in `benchmarks/model_ablation_v0.json`; runner now skips only placeholder alias; tests cover placeholder vs configured DeepSeek behavior; usage docs and runbook include DeepSeek steps. | Process ready; model response pending | User fills concrete DeepSeek alias/env vars, rebuilds prompts, runs `--model-id deepseek_followup_slot`, then scores saved responses. |
+| Provide DeepSeek-follow-up process for the user. | `deepseek_followup_slot` in `benchmarks/model_ablation_v0.json`; `scripts/check_deepseek_followup.py`; `results/deepseek_followup_handoff/handoff.md`; runner skips only placeholder alias; tests cover placeholder vs configured DeepSeek behavior; usage docs and runbook include DeepSeek steps. | Handoff ready; model response pending | User fills concrete DeepSeek alias/env vars, reruns the handoff check, rebuilds prompts, runs `--model-id deepseek_followup_slot`, then scores saved responses. |
 | Develop PaperToSkill extraction system. | `scripts/papertoskill_extract.py`; `scripts/papertoskill_note_from_text.py`; `scripts/papertoskill_pipeline.py`; generated skills for four curated papers; source maps; deterministic auto-note scaffold for Toolformer/AIDE; one-command temporary AIDE pipeline example; local PDF-input smoke path using `pdftotext -layout`; tests. | Complete for current scoped prototype | Broader reliable arbitrary-PDF automation remains unsupported and should not be claimed. |
 | Experiments: main results. | `results/tables/main_results.md`; four-paper deterministic results; generated skills outperform generic and abstract baselines on operational coverage. | Complete for deterministic/offline benchmark | Live task success remains pending. |
 | Experiments: harness-transfer ablation. | `results/tables/transfer_ablation.md`; offline transfer-readiness drops when `Transfer Notes` are removed; `results/live_transfer_prompts/evaluation.md` now scores all 24 live-transfer saved-response rows across four paper packets. | Complete for offline readiness and saved-response coverage | Do not interpret saved-response output-contract scoring as human semantic fidelity or real live task success. |
@@ -69,6 +69,10 @@ and 0 failed checks.
 - `results/tables/model_response_cost_proxy.md`: local output-token proxy over
   saved model-ablation responses; 4 measured rows, 2 pending DeepSeek rows, and
   8,710 `o200k_base` output tokens. This is not provider billing evidence.
+- `results/deepseek_followup_handoff/handoff.md`: local DeepSeek follow-up
+  preflight is `pending_user_configuration`, with 5 ready checks, 2 pending
+  checks, and 0 failed checks. It does not call DeepSeek or complete DeepSeek
+  response collection.
 - `results/provider_billing_evidence/billing_summary.md`: provider-billing
   handoff is ready, but all 6 billing evidence rows remain pending and no
   success-per-dollar value is available.
@@ -107,10 +111,10 @@ and 0 failed checks.
   with 17 ready checks and 0 failed checks; this removes a local package
   uncertainty but not the external model/human/cost evidence blockers.
 - `results/reproducibility/usage_example_report.md`: usage-example gate is
-  ready with 47 ready checks and 0 failed checks; it verifies local examples,
-  the scored Toolformer Codex-style response slot, a temporary one-command AIDE
-  pipeline run, and a direct-PDF pipeline smoke run but does not execute
-  additional live model calls.
+  ready with 53 ready checks and 0 failed checks; it verifies local examples,
+  the scored Toolformer Codex-style response slot, DeepSeek handoff readiness,
+  a temporary one-command AIDE pipeline run, and a direct-PDF pipeline smoke run
+  but does not execute additional live model calls.
 - `results/reproducibility/paper_table_report.md`: AAAI paper-table gate is
   ready with 76 ready checks and 0 failed checks; it verifies manuscript-table
   consistency but does not add new empirical evidence.

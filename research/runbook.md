@@ -239,6 +239,19 @@ the prompt packets, set those environment variables locally, and run the same
 runner with `--model-id deepseek_followup_slot`. The runner skips DeepSeek only
 while the placeholder alias remains unchanged.
 
+Before and after editing the DeepSeek slot, generate the local handoff/preflight
+report:
+
+```powershell
+python scripts\check_deepseek_followup.py --strict
+```
+
+Current Phase 47 status:
+`results/deepseek_followup_handoff/handoff.md` reports
+`pending_user_configuration`, 5 ready checks, 2 pending checks, and 0 failed
+checks. This report lists the two DeepSeek prompt rows, expected response paths,
+and next commands. It does not call DeepSeek or complete the DeepSeek ablation.
+
 ## Live-Transfer Response Collection
 
 Existing live-transfer prompt packets live under

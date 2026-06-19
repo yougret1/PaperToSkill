@@ -3,7 +3,7 @@
   "evidence_boundary": "Checks local usage-example files, input artifacts, prompt/response slots, an offline auto-note-to-skill example chain, and a local PDF-input pipeline smoke run. It does not execute live model calls or score model responses.",
   "overall_status": "ready",
   "status_counts": {
-    "ready": 47,
+    "ready": 53,
     "fail": 0
   },
   "checks": [
@@ -134,6 +134,18 @@
       "evidence": "scripts/evaluate_model_ablation_responses.py"
     },
     {
+      "id": "deepseek_followup_checker",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "scripts/check_deepseek_followup.py"
+    },
+    {
+      "id": "deepseek_followup_handoff",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/deepseek_followup_handoff/handoff.json"
+    },
+    {
       "id": "usage_readme_mentions_codex",
       "status": "ready",
       "detail": "mentions codex_skill_usage.md",
@@ -173,6 +185,12 @@
       "id": "model_ablation_usage_mentions_deepseek",
       "status": "ready",
       "detail": "mentions deepseek_followup_slot",
+      "evidence": "examples/usage/model_ablation_usage.md"
+    },
+    {
+      "id": "model_ablation_usage_mentions_deepseek_handoff",
+      "status": "ready",
+      "detail": "mentions check_deepseek_followup.py",
       "evidence": "examples/usage/model_ablation_usage.md"
     },
     {
@@ -216,6 +234,24 @@
       "status": "ready",
       "detail": "aliases=claude-opus-4-6,claude-opus-4-7,claude-opus-4-8,claude-opus-4.8",
       "evidence": "benchmarks/model_ablation_v0.json"
+    },
+    {
+      "id": "usage_deepseek_followup_handoff",
+      "status": "ready",
+      "detail": "overall=pending_user_configuration; failed=0",
+      "evidence": "results/deepseek_followup_handoff/handoff.json"
+    },
+    {
+      "id": "usage_deepseek_followup_prompt_rows",
+      "status": "ready",
+      "detail": "rows=2",
+      "evidence": "results/deepseek_followup_handoff/handoff.json"
+    },
+    {
+      "id": "usage_deepseek_followup_next_commands",
+      "status": "ready",
+      "detail": "runner and evaluator commands present",
+      "evidence": "results/deepseek_followup_handoff/handoff.json"
     },
     {
       "id": "usage_live_transfer_evaluation",

@@ -7,28 +7,24 @@ Current date: 2026-06-19.
 
 ## Current Phase
 
-Phase 46 is complete and pushed to `origin/main` as
-`23a9e09 Try AI Scientist smoke aliases`: the bounded AI-Scientist-v2
-LLM-client smoke runner now tries repeated Claude aliases and records each
-attempt in reports.
+Phase 47 is in progress locally: adding a local DeepSeek follow-up
+handoff/preflight report so the user's later DeepSeek run has machine-checkable
+configuration, prompt rows, response paths, and next commands before any live
+call is made.
 
-Latest pushed commit after Phase 46: `23a9e09 Try AI Scientist smoke aliases`.
+Latest pushed commit after Phase 46: `be47496 Refresh phase 46 memory status`.
 
-Phase 46 changed:
+Phase 47 changes so far:
 
-- Updated `scripts/run_ai_scientist_v2_smoke.py` with repeatable
-  `--model-alias`, per-alias fallback, and `attempted_models` in JSON/Markdown
-  reports.
-- Added alias-attempt checks such as `ai_scientist_v2_llm_alias_attempt_1`.
-- Preserved stale-response cleanup when all aliases are blocked.
-- Added tests for fallback success after an earlier alias fails.
-- Extended `scripts/check_reproducibility_package.py` to require alias-fallback
-  support in the smoke CLI.
-- Updated `scripts/check_submission_review.py` so review handoff freshness is
-  checked against structured alias attempts plus the timeout detail instead of
-  a brittle full error string.
-- Added
-  `research/run_logs/2026-06-19_phase46_ai_scientist_v2_smoke_alias_fallback.md`.
+- Added `scripts/check_deepseek_followup.py`, which writes
+  `results/deepseek_followup_handoff/handoff.{json,md}` without making network
+  calls or reading API keys.
+- Current handoff status is `pending_user_configuration`: 5 ready checks, 2
+  pending checks, and 0 failed checks.
+- Added tests for the current placeholder state and a configured
+  `ready_to_run` DeepSeek state.
+- Integrated the handoff report into usage, goal, and package gates while
+  keeping DeepSeek response completion pending.
 
 Latest smoke recheck:
 
@@ -61,6 +57,10 @@ and 0 failed checks. No `results/ai_scientist_v2_smoke/response.md` exists.
   `gpt-5.5`; DeepSeek remains pending.
 - Explicit status anchor for gates: gpt-family rows are now saved and scored;
   DeepSeek remains pending.
+- DeepSeek follow-up handoff:
+  `results/deepseek_followup_handoff/handoff.md` reports
+  `pending_user_configuration`, 5 ready checks, 2 pending checks, and 0 failed
+  checks. It lists the two DeepSeek prompt rows and expected response paths.
 - Human-fidelity annotation handoff:
   `results/human_fidelity_packets/annotation_summary.md` reports
   `annotation_status=pending`, 0 scored rows, 24 pending rows, average
@@ -74,11 +74,11 @@ and 0 failed checks. No `results/ai_scientist_v2_smoke/response.md` exists.
   checks, and 0 failed checks.
 - Goal report:
   `results/reproducibility/goal_completion_report.md` reports
-  `not_complete_pending_external_evidence`, 55 ready checks, 8 pending checks,
+  `not_complete_pending_external_evidence`, 58 ready checks, 8 pending checks,
   and 0 failed checks.
 - Package report:
   `results/reproducibility/package_report.md` reports
-  `ready_with_pending_external_evidence`, 230 ready checks, 7 pending checks,
+  `ready_with_pending_external_evidence`, 236 ready checks, 7 pending checks,
   and 0 failed checks.
 
 ## Boundaries To Preserve
@@ -96,7 +96,7 @@ Do not claim:
 - Saved-response output-contract scoring proves real live task success.
 - Submission-final or accepted AAAI paper.
 
-Supported after Phase 46:
+Supported after Phase 47:
 
 - AI-Scientist-v2 LLM-client smoke was attempted through local
   `ai_scientist.llm` with four Claude aliases:
@@ -108,27 +108,23 @@ Supported after Phase 46:
   while no alias satisfies the smoke marker contract.
 - Package and goal gates separate provider/model availability pending evidence
   from local failures.
+- DeepSeek follow-up is locally preflighted: the slot, prompt rows, response
+  paths, env names, and next commands are machine-checked, but alias
+  configuration and response collection remain pending.
 
 ## Latest Verification
 
-Phase 46 full verification passed:
+Latest Phase 47 partial verification:
 
 ```powershell
-python -m unittest discover -s tests -v
-python scripts\check_submission_review.py --strict
+python -m unittest tests.test_check_deepseek_followup tests.test_check_usage_examples tests.test_check_goal_completion tests.test_check_reproducibility_package -v
+python scripts\check_deepseek_followup.py --strict
+python scripts\check_usage_examples.py --strict
 python scripts\check_goal_completion.py --strict
 python scripts\check_reproducibility_package.py --strict
-python scripts\check_paper_claims.py --strict
-python scripts\check_aaai_package.py --strict
-python scripts\check_paper_tables.py --strict
-python scripts\check_usage_examples.py --strict
-git diff --check
-rg -n "sk-[A-Za-z0-9]{20,}" .
 ```
 
-Full unittest count is 60 tests. `git diff --check` reported only Windows
-LF-to-CRLF warnings, and `rg` exited 1 because no raw API-key-like strings were
-found.
+Full Phase 47 verification still needs to run before committing.
 
 ## Persistent Blockers
 

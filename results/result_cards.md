@@ -533,7 +533,7 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 221 ready checks, 7
+  `overall_status=ready_with_pending_external_evidence`, 236 ready checks, 7
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
@@ -584,12 +584,13 @@
 
 - Experiment: add a machine-checkable gate for paper-facing usage examples.
 - Main result: `results/reproducibility/usage_example_report.md` reports
-  `overall_status=ready`, 47 ready checks, and 0 failed checks.
+  `overall_status=ready`, 53 ready checks, and 0 failed checks.
 - Checks: usage docs, Codex-style Toolformer skill inputs, model-ablation prompt
   grid, model slots, response slots, a scored Toolformer Codex-style
   live-transfer response slot, the aggregate live-transfer saved-response
-  evaluation, an offline AIDE extracted-text-to-note-to-skill chain, a
-  one-command AIDE pipeline run, and a direct-PDF pipeline smoke run.
+  evaluation, DeepSeek handoff readiness, an offline AIDE
+  extracted-text-to-note-to-skill chain, a one-command AIDE pipeline run, and a
+  direct-PDF pipeline smoke run.
 - Offline example: the temporary AIDE chain selected 6 method windows, 6
   experiment windows, and 5 limitation windows, then produced a generated skill
   scoring 20/20 on the AIDE deterministic rubric.
@@ -880,6 +881,10 @@
   alias remains `deepseek-to-be-filled`; once a concrete alias and environment
   variables are configured, it follows the same availability, response-save, and
   scoring path as Claude/GPT-family rows.
+- Phase 47 handoff result: `results/deepseek_followup_handoff/handoff.md`
+  reports `pending_user_configuration`, 5 ready checks, 2 pending checks, and
+  0 failed checks. It lists the two DeepSeek prompt rows, expected response
+  paths, and next commands.
 - Latest endpoint recheck: Claude Opus 4.8 and GPT-family rows now complete
   the current prompt protocol; DeepSeek remains pending user configuration.
 - Compared baselines: previous runner behavior required the placeholder include
@@ -896,6 +901,8 @@
 - Claim impact: supports saying the DeepSeek follow-up path is ready and
   tested, but not that model ablations are complete.
 - Figure/table: `research/run_logs/2026-06-18_phase23_deepseek_followup_readiness.md`;
+  `research/run_logs/2026-06-19_phase47_deepseek_followup_handoff.md`;
+  `results/deepseek_followup_handoff/handoff.md`;
   `examples/usage/model_ablation_usage.md`; `research/runbook.md`.
 
 ## Goal Completion Audit
@@ -927,7 +934,7 @@
 
 - Experiment: make the active-goal completion audit machine-checkable.
 - Main result: `results/reproducibility/goal_completion_report.md` reports
-  `overall_status=not_complete_pending_external_evidence`, 55 ready checks, 8
+  `overall_status=not_complete_pending_external_evidence`, 58 ready checks, 8
   pending checks, and 0 failed checks.
 - Checks: durable memory, AI-Scientist-v2 dry-run evidence, PaperToSkill
   prototype and benchmark readiness, bounded AI-Scientist-v2 LLM-client smoke

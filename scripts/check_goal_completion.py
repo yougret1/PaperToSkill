@@ -33,6 +33,8 @@ REQUIRED_FILES = {
     "live_transfer_evaluator": "scripts/evaluate_live_transfer_responses.py",
     "live_transfer_evaluation": "results/live_transfer_prompts/evaluation.json",
     "deepseek_usage": "examples/usage/model_ablation_usage.md",
+    "deepseek_followup_checker": "scripts/check_deepseek_followup.py",
+    "deepseek_followup_handoff": "results/deepseek_followup_handoff/handoff.json",
     "failure_archive": "results/failure_cases/failure_case_archive.json",
     "human_fidelity_summary": "results/human_fidelity_packets/annotation_summary.json",
     "tokenizer_cost_proxy": "results/tables/context_cost_proxy_tokenizer.json",
@@ -282,6 +284,7 @@ def model_ablation_checks(root: Path) -> list[Check]:
     run_reports = [load_json(path) for path in run_report_paths if path.exists()]
     run_evidence = "; ".join(str(path.relative_to(root)) for path in run_report_paths if path.exists())
     evaluation = load_json(root / "results/model_ablation_prompts/v0/evaluation.json")
+    handoff = load_json(root / "results/deepseek_followup_handoff/handoff.json")
     prompts = index.get("prompts", [])
     model_ids = {item.get("model_id") for item in prompts}
     expected_model_ids = {"claude_opus_4_8", "gpt_5_5_or_gpt_family", "deepseek_followup_slot"}
@@ -320,6 +323,11 @@ def model_ablation_checks(root: Path) -> list[Check]:
     deepseek_placeholder = "deepseek-to-be-filled" in deepseek_aliases
     claude_attempted = attempted_aliases(claude_rows)
     gpt_complete = model_complete("gpt_5_5_or_gpt_family")
+    handoff_failed = [check for check in handoff.get("checks", []) if check.get("status") == "fail"]
+    handoff_ready = (
+        handoff.get("overall_status") in {"pending_user_configuration", "ready_to_run", "responses_present"}
+        and not handoff_failed
+    )
     return [
         Check(
             "model_ablation_protocol_ready",
@@ -362,6 +370,12 @@ def model_ablation_checks(root: Path) -> list[Check]:
             "ready" if "deepseek_followup_slot" in model_ids else "fail",
             "DeepSeek slot is present and runner supports configured aliases",
             "benchmarks/model_ablation_v0.json; examples/usage/model_ablation_usage.md",
+        ),
+        Check(
+            "deepseek_followup_handoff_ready",
+            "ready" if handoff_ready else "fail",
+            f"overall={handoff.get('overall_status')}; failed={len(handoff_failed)}",
+            "results/deepseek_followup_handoff/handoff.json",
         ),
         Check(
             "deepseek_followup_response_complete",

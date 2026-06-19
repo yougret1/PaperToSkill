@@ -65,6 +65,7 @@
 | `research/run_logs/2026-06-19_phase44_submission_review_handoff.md` | Submission-review handoff refresh, stale-review checker, and final-submission boundary | Created |
 | `research/run_logs/2026-06-19_phase45_ai_scientist_v2_smoke_recheck.md` | AI-Scientist-v2 smoke recheck, provider-blocked status, timeout handling, and smoke CLI completion-mode UX | Created |
 | `research/run_logs/2026-06-19_phase46_ai_scientist_v2_smoke_alias_fallback.md` | AI-Scientist-v2 smoke alias-fallback recheck across four Claude aliases and provider-timeout boundary | Created |
+| `research/run_logs/2026-06-19_phase47_deepseek_followup_handoff.md` | Local DeepSeek follow-up handoff/preflight report and gate integration | Created |
 
 ## Paper Draft Package
 
@@ -181,6 +182,7 @@
 | `scripts/run_model_ablation_prompts.py` | Runs model-ablation prompt packets against OpenAI-compatible APIs with redacted reports | Created |
 | `scripts/evaluate_model_ablation_responses.py` | Scores saved model-ablation response files and keeps missing rows pending | Created |
 | `scripts/evaluate_model_response_costs.py` | Estimates local output-token proxies for saved model-ablation response files | Created |
+| `scripts/check_deepseek_followup.py` | Builds a local DeepSeek follow-up handoff/preflight report without network calls | Created |
 | `scripts/summarize_provider_billing_evidence.py` | Summarizes provider-billing evidence rows and keeps blank rows pending | Created |
 | `tests/test_papertoskill_extract.py` | Smoke test for extractor CLI and source map | Created |
 | `tests/test_papertoskill_note_from_text.py` | Smoke test for automatic text-to-note scaffold | Created |
@@ -201,6 +203,7 @@
 | `tests/test_build_model_ablation_prompts.py` | Smoke test for model-ablation prompt builder | Created |
 | `tests/test_model_ablation_execution.py` | Smoke tests for model-ablation runner alias selection, evaluator scoring, and skip behavior | Created |
 | `tests/test_evaluate_model_response_costs.py` | Smoke test for saved-response output-token proxy evaluator | Created |
+| `tests/test_check_deepseek_followup.py` | Smoke test for DeepSeek follow-up handoff states | Created |
 | `tests/test_live_transfer_execution.py` | Smoke tests for live-transfer runner skip behavior and saved-response scoring | Created |
 | `tests/test_check_goal_completion.py` | Smoke tests for active-goal completion checker and pending-evidence boundaries | Created |
 | `tests/test_check_submission_review.py` | Smoke tests for submission-review handoff drift checker | Created |
@@ -273,6 +276,8 @@
 | `results/provider_billing_evidence/billing_template.csv` | Blank provider-billing evidence rows for real invoice/usage exports | Created |
 | `results/provider_billing_evidence/billing_summary.md` | Pending provider-billing evidence summary | Created |
 | `results/provider_billing_evidence/billing_summary.json` | Machine-readable pending provider-billing evidence summary | Created |
+| `results/deepseek_followup_handoff/handoff.md` | Human-readable DeepSeek follow-up handoff/preflight report | Created |
+| `results/deepseek_followup_handoff/handoff.json` | Machine-readable DeepSeek follow-up handoff/preflight report | Created |
 | `results/tables/auto_note_comparison.md` | Curated-vs-auto Toolformer/AIDE note comparison table | Created |
 | `results/tables/auto_note_comparison.csv` | CSV copy of curated-vs-auto Toolformer/AIDE note comparison | Created |
 | `results/human_fidelity_packets/README.md` | Summary of prepared human-fidelity packets | Created |

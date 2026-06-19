@@ -3,7 +3,7 @@
 Evidence boundary: this report audits the active user goal against local repository evidence. Pending checks are remaining requirements, not negative evidence and not local package failures.
 
 - Overall status: not_complete_pending_external_evidence
-- Ready checks: 55
+- Ready checks: 58
 - Pending checks: 8
 - Failed checks: 0
 
@@ -32,6 +32,8 @@ Evidence boundary: this report audits the active user goal against local reposit
 | live_transfer_evaluator | ready | present | scripts/evaluate_live_transfer_responses.py |
 | live_transfer_evaluation | ready | present | results/live_transfer_prompts/evaluation.json |
 | deepseek_usage | ready | present | examples/usage/model_ablation_usage.md |
+| deepseek_followup_checker | ready | present | scripts/check_deepseek_followup.py |
+| deepseek_followup_handoff | ready | present | results/deepseek_followup_handoff/handoff.json |
 | failure_archive | ready | present | results/failure_cases/failure_case_archive.json |
 | human_fidelity_summary | ready | present | results/human_fidelity_packets/annotation_summary.json |
 | tokenizer_cost_proxy | ready | present | results/tables/context_cost_proxy_tokenizer.json |
@@ -65,6 +67,7 @@ Evidence boundary: this report audits the active user goal against local reposit
 | gpt_family_ablation_availability_checked | ready | rows=4; statuses=error,success; catalog_gpt_models=32 | results\model_ablation_prompts\v0\run_report.json; results\model_ablation_prompts\v0\gpt_retry_run_report.json |
 | gpt_family_ablation_complete | ready | saved and scored GPT-family responses exist for the current prompt protocol | results/model_ablation_prompts/v0/evaluation.json |
 | deepseek_followup_process_ready | ready | DeepSeek slot is present and runner supports configured aliases | benchmarks/model_ablation_v0.json; examples/usage/model_ablation_usage.md |
+| deepseek_followup_handoff_ready | ready | overall=pending_user_configuration; failed=0 | results/deepseek_followup_handoff/handoff.json |
 | deepseek_followup_response_complete | pending | placeholder alias still pending user-provided DeepSeek configuration | results/model_ablation_prompts/v0/evaluation.json |
 | model_ablation_evaluation_complete | pending | scored_rows=4; pending_rows=2 | results/model_ablation_prompts/v0/evaluation.json |
 | ai_scientist_v2_live_transfer_responses_complete | ready | scored_rows=6/6 | results/live_transfer_prompts/evaluation.json; results/live_transfer_prompts/ai_scientist_v2_v0/run_report.json |

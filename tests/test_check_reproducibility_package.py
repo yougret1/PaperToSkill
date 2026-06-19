@@ -61,6 +61,11 @@ class CheckReproducibilityPackageTest(unittest.TestCase):
             self.assertIn("ai_scientist_smoke_runner", ready_ids)
             self.assertIn("ai_scientist_smoke_report_json", ready_ids)
             self.assertIn("ai_scientist_smoke_report_md", ready_ids)
+            self.assertIn("deepseek_followup_checker", ready_ids)
+            self.assertIn("deepseek_followup_handoff_json", ready_ids)
+            self.assertIn("deepseek_followup_handoff_md", ready_ids)
+            self.assertIn("deepseek_followup_handoff_report_ready", ready_ids)
+            self.assertIn("deepseek_followup_handoff_core_checks_ready", ready_ids)
             self.assertIn("ai_scientist_v2_smoke_cli_status_summary", ready_ids)
             smoke_cli = {
                 check["id"]: check

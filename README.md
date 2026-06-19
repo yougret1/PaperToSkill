@@ -10,7 +10,7 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 46: Claude Opus 4.8 and GPT-family ablation rows are saved and scored for
+Phase 47: Claude Opus 4.8 and GPT-family ablation rows are saved and scored for
 the current two-case protocol, saved model responses have a local output-token
 proxy report, and all four live-transfer saved-response sets are collected and
 scored for the current prompt-packet protocol. A bounded AI-Scientist-v2
@@ -30,8 +30,9 @@ success-per-dollar evidence remain pending. The submission-review handoff now
 includes updated adversarial review, rebuttal, and checklist files plus a
 checker that prevents stale review claims from drifting behind current evidence.
 The AAAI-27 paper package, usage examples, deterministic/offline experiments,
-model-ablation runner, DeepSeek follow-up path, local `o200k_base` input/output
-token proxies, one-command extracted-text-to-skill pipeline, local
+model-ablation runner, DeepSeek follow-up path, local DeepSeek
+handoff/preflight report, local `o200k_base` input/output token proxies,
+one-command extracted-text-to-skill pipeline, local
 `pdftotext -layout` PDF smoke input path, result tables, and
 machine-checkable package/goal gates are prepared. The active goal is not yet
 complete because completed AI-Scientist-v2 LLM-client/full live-run evidence,
@@ -118,6 +119,8 @@ pending live-agent claims.
   `results/model_ablation_prompts/v0/evaluation.md`.
 - Model-response output-token proxy:
   `results/tables/model_response_cost_proxy.md`.
+- DeepSeek follow-up handoff:
+  `results/deepseek_followup_handoff/handoff.md`.
 - AI-Scientist-v2 LLM-client smoke report:
   `results/ai_scientist_v2_smoke/run_report.md`.
 - Provider-billing evidence handoff:

@@ -4,7 +4,7 @@ Date: 2026-06-19
 
 Evidence boundary: this is an internal adversarial review of the current
 PaperToSkill draft and artifact package. It updates the review handoff to match
-Phase 46 evidence, but it does not add new empirical results or claim final
+Phase 47 evidence, but it does not add new empirical results or claim final
 submission readiness.
 
 ## Overall Assessment
@@ -57,12 +57,12 @@ output-contract evidence, not proof of live task success.
 | Gate | Status | Evidence |
 | --- | --- | --- |
 | Claim-evidence consistency | Pass with caveats | `paper/claim_checklist.md`; `research/claim_evidence_matrix.md`; `results/reproducibility/paper_claim_report.md` |
-| Local reproducibility package | Pass locally, external evidence pending | `results/reproducibility/package_report.md`: 230 ready, 7 pending, 0 failed |
-| Active-goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 55 ready, 8 pending, 0 failed |
+| Local reproducibility package | Pass locally, external evidence pending | `results/reproducibility/package_report.md`: 236 ready, 7 pending, 0 failed |
+| Active-goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 58 ready, 8 pending, 0 failed |
 | AAAI local package | Pass locally, not submission-final | `results/reproducibility/aaai_package_report.md` |
 | Live-transfer saved responses | Complete for saved-response scoring | `results/live_transfer_prompts/evaluation.md`: 24 scored, 0 pending |
 | Real live task success | Pending | Saved-response scoring is not human semantic or real task-success evidence |
-| Model ablation | Partial | `results/model_ablation_prompts/v0/evaluation.md`: 4 scored rows, 2 pending DeepSeek rows |
+| Model ablation | Partial | `results/model_ablation_prompts/v0/evaluation.md`: 4 scored rows, 2 pending DeepSeek rows; `results/deepseek_followup_handoff/handoff.md`: `pending_user_configuration` |
 | AI-Scientist-v2 LLM-client smoke | Attempted, provider-blocked | `results/ai_scientist_v2_smoke/run_report.md`: `blocked_by_provider_or_model_availability`; attempted aliases `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6`; latest detail is `Timed out after 15 seconds waiting for provider response` |
 | Human fidelity | Handoff ready, annotation pending | `results/human_fidelity_packets/annotation_summary.md`: 0 scored, 24 pending |
 | Provider billing | Handoff ready, billing pending | `results/provider_billing_evidence/billing_summary.md`: 0 measured, 6 pending |
@@ -72,7 +72,8 @@ output-contract evidence, not proof of live task success.
 1. Fill and summarize the 24-row human-fidelity annotation template with
    independent reviewer scores.
 2. Run the DeepSeek follow-up rows after the user supplies a concrete alias and
-   credential profile.
+   credential profile; use `scripts/check_deepseek_followup.py --strict`
+   before and after editing the slot.
 3. Retry the bounded AI-Scientist-v2 LLM-client smoke only after the provider
    can serve chat completions; keep any full BFTS/live run separate.
 4. Fill provider usage or invoice rows before making billing or

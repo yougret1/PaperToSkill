@@ -54,6 +54,9 @@ Current supported claims:
   provider billing and success-per-dollar evidence remain pending.
 - Claude Opus 4.8 and GPT-family model-ablation prompt rows are saved and
   scored for the current two-case protocol.
+- DeepSeek follow-up handoff is ready as a local preflight: the slot, prompt
+  rows, response paths, env names, and next commands are checked; model alias
+  configuration and response files remain pending.
 - Local output-token proxy over saved Claude/GPT-family model-ablation responses:
   4 measured rows, 2 pending DeepSeek rows, 8,710 `o200k_base` output tokens.
 - All four live-transfer response sets are saved and scored for both harness
@@ -106,6 +109,8 @@ Use these as entry points instead of searching the whole repo first:
   gate.
 - `scripts/check_goal_completion.py`: active-goal completion gate.
 - `benchmarks/model_ablation_v0.json`: Claude/GPT-family/DeepSeek prompt spec.
+- `scripts/check_deepseek_followup.py`: local DeepSeek follow-up handoff and
+  preflight report generator; no network calls.
 - `benchmarks/provider_billing_evidence_v0.json`: provider-billing evidence
   slot protocol.
 - `scripts/summarize_provider_billing_evidence.py`: billing handoff template
@@ -120,11 +125,11 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 230 ready checks, 7 pending
+  reports `ready_with_pending_external_evidence`, 236 ready checks, 7 pending
   checks, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
-  reports `not_complete_pending_external_evidence`, 55 ready checks, 8 pending
+  reports `not_complete_pending_external_evidence`, 58 ready checks, 8 pending
   checks, and 0 failed checks.
 - AI-Scientist-v2 LLM-client smoke:
   `results/ai_scientist_v2_smoke/run_report.md`
@@ -137,7 +142,11 @@ Use these as entry points instead of searching the whole repo first:
   reports ready, 17 ready checks, 0 failed checks.
 - Usage examples:
   `results/reproducibility/usage_example_report.md`
-  reports ready, 47 ready checks, 0 failed checks.
+  reports ready, 53 ready checks, 0 failed checks.
+- DeepSeek follow-up handoff:
+  `results/deepseek_followup_handoff/handoff.md`
+  reports `pending_user_configuration`, 5 ready checks, 2 pending checks, and
+  0 failed checks.
 - Model ablation response evaluation:
   `results/model_ablation_prompts/v0/evaluation.md`
   reports 6 total rows, 4 scored Claude/GPT-family rows, 2 pending DeepSeek
@@ -200,6 +209,9 @@ DeepSeek:
   alias/env vars.
 - The runner skips the slot only while its alias remains
   `deepseek-to-be-filled`.
+- Use `scripts/check_deepseek_followup.py --strict` before and after editing
+  the DeepSeek slot to verify prompt rows, response paths, env names, and next
+  commands without making live calls.
 
 ## Engineering/Fix History To Preserve
 

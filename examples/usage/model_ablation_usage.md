@@ -55,20 +55,35 @@ python scripts\evaluate_model_ablation_responses.py `
 
 ## Adding DeepSeek
 
+Before editing the slot, inspect the local handoff/preflight report:
+
+```powershell
+python scripts\check_deepseek_followup.py --strict
+```
+
+The report is written to `results/deepseek_followup_handoff/handoff.md` and
+lists the current alias status, the two DeepSeek prompt rows, expected response
+paths, and the exact follow-up commands. While the alias is still
+`deepseek-to-be-filled`, this report should remain
+`pending_user_configuration`.
+
 1. Edit `benchmarks/model_ablation_v0.json`.
 2. In `deepseek_followup_slot`, replace `deepseek-to-be-filled` with the exact
    provider model alias.
 3. Set `auth_env` and `base_url_env` to the environment-variable names you will
    use locally.
 4. Rebuild prompt packets so the prompt index records the concrete alias.
-5. Set the DeepSeek environment variables locally and run:
+5. Rerun `python scripts\check_deepseek_followup.py --strict`; the report
+   should move from `pending_user_configuration` to `ready_to_run` until
+   response files are saved.
+6. Set the DeepSeek environment variables locally and run:
 
 ```powershell
 python scripts\run_model_ablation_prompts.py `
   --task benchmarks\model_ablation_v0.json `
   --index results\model_ablation_prompts\v0\index.json `
-  --output-json results\model_ablation_prompts\v0\run_report.json `
-  --output-md results\model_ablation_prompts\v0\run_report.md `
+  --output-json results\model_ablation_prompts\v0\deepseek_run_report.json `
+  --output-md results\model_ablation_prompts\v0\deepseek_run_report.md `
   --model-id deepseek_followup_slot
 ```
 
@@ -77,9 +92,20 @@ The runner skips the DeepSeek slot only while the alias remains
 same availability check, response-save, and scoring path as Claude/GPT-family
 slots.
 
+After a DeepSeek run, rerun the scorer and handoff check:
+
+```powershell
+python scripts\evaluate_model_ablation_responses.py `
+  --index results\model_ablation_prompts\v0\index.json `
+  --output-json results\model_ablation_prompts\v0\evaluation.json `
+  --output-md results\model_ablation_prompts\v0\evaluation.md
+
+python scripts\check_deepseek_followup.py --strict
+```
+
 ## Evidence Boundary
 
-The current repository contains prompt packets, runner/evaluator scripts, and
-redacted availability reports. A model ablation is not complete until responses
-are collected, scored with the same rubric, and provider/model aliases are
-recorded without committing raw keys.
+The current repository contains prompt packets, runner/evaluator scripts,
+DeepSeek handoff reports, and redacted availability reports. A model ablation
+is not complete until responses are collected, scored with the same rubric, and
+provider/model aliases are recorded without committing raw keys.
