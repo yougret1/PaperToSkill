@@ -7,14 +7,14 @@ Current date: 2026-06-19.
 
 ## Current Phase
 
-Phase 43 is in progress: make the pending provider-billing and
-success-per-dollar evidence step executable by adding a strict billing-evidence
-handoff package.
+Phase 43 is complete and pushed: the pending provider-billing and
+success-per-dollar evidence step is now executable through a strict
+billing-evidence handoff package.
 
-Latest pushed commit before Phase 43: `01a0bff Strengthen human fidelity
-annotation handoff`.
+Latest Phase 43 implementation commit: `638ef35 Add provider billing evidence
+handoff`; a later memory-only commit may sit on top of it.
 
-Current Phase 43 work includes:
+Phase 43 added:
 
 - Added `benchmarks/provider_billing_evidence_v0.json`.
 - Added `scripts/summarize_provider_billing_evidence.py`.
@@ -25,6 +25,8 @@ Current Phase 43 work includes:
   `scripts/check_reproducibility_package.py` with provider-billing handoff
   checks.
 - Added `research/run_logs/2026-06-19_phase43_provider_billing_handoff.md`.
+- Rebuilt `paper/aaai/papertoskill_aaai2027.pdf` after the AAAI TeX wording
+  update.
 
 ## Current Evidence
 
@@ -73,7 +75,7 @@ Do not claim:
 - Saved-response output-contract scoring proves real live task success.
 - Submission-final or accepted AAAI paper.
 
-Supported after Phase 43 if verification passes:
+Supported after Phase 43:
 
 - AI-Scientist-v2 LLM-client smoke was attempted and provider-blocked with a
   redacted, reproducible report.
@@ -85,9 +87,9 @@ Supported after Phase 43 if verification passes:
   from local failures.
 - All Phase 40 live-transfer saved-response evidence remains complete.
 
-## Verification Still Needed Before Commit
+## Latest Verification
 
-Run:
+Phase 43 passed:
 
 ```powershell
 python -m unittest discover -s tests -v
@@ -101,7 +103,8 @@ git diff --check
 rg -n "sk-[A-Za-z0-9]{20,}" .
 ```
 
-`rg` exit code 1 means no raw API-key-like strings were found.
+`git diff --check` reported only Windows LF-to-CRLF warnings, and `rg` exited
+1 because no raw API-key-like strings were found.
 
 ## Persistent Blockers
 

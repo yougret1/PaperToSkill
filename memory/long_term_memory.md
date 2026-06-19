@@ -100,6 +100,10 @@ Use these as entry points instead of searching the whole repo first:
 - `scripts/check_paper_claims.py`: paper overclaim/boundary gate.
 - `scripts/check_goal_completion.py`: active-goal completion gate.
 - `benchmarks/model_ablation_v0.json`: Claude/GPT-family/DeepSeek prompt spec.
+- `benchmarks/provider_billing_evidence_v0.json`: provider-billing evidence
+  slot protocol.
+- `scripts/summarize_provider_billing_evidence.py`: billing handoff template
+  and summary validator.
 - `examples/usage/`: usage examples for skill use, auto-note, and ablations.
 - `paper/aaai/`: official AAAI-27 author kit and LaTeX draft.
 - `results/reproducibility/`: machine-readable and Markdown readiness reports.
