@@ -11,9 +11,13 @@ Phase 49 is complete locally but not yet pushed: added a no-network
 AI-Scientist-v2 full live/BFTS run handoff so the pending full-run path is
 machine-checkable without claiming completion.
 
-Latest local Phase 49 commit: `bc99a25 Add AI-Scientist-v2 live run handoff`.
-Push status: pending; two `git push origin main` attempts failed with GitHub
-HTTPS connection reset, and `git ls-remote origin HEAD` also failed over HTTPS.
+Latest local Phase 49 commits before the final memory-blocker update:
+`bc99a25 Add AI-Scientist-v2 live run handoff` and
+`491bfcb Record phase 49 push status in memory`.
+Push status: pending. Multiple `git push origin main` attempts failed with
+GitHub HTTPS connection reset or connect timeout; `git ls-remote origin HEAD`
+and `curl.exe -I https://github.com` also failed over HTTPS. SSH reached GitHub
+but failed with `Permission denied (publickey)`, and `gh` CLI was not available.
 
 Phase 49 evidence so far:
 
