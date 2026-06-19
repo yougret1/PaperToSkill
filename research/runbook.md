@@ -605,6 +605,22 @@ The preflight does not select an option. Record a human decision only by adding
 `research/aaai_submission_decision.md` with a selected option, decision owner,
 decision date, claim boundary, and evidence policy.
 
+Prefer the validated helper when the research lead has made the decision:
+
+```powershell
+python scripts\generate_aaai_submission_decision.py `
+  --selected-option submit_now_deterministic_offline `
+  --decision-owner "<name or role>" `
+  --decision-date YYYY-MM-DD `
+  --claim-boundary "<accepted paper claim scope>" `
+  --evidence-policy "<submit now with limitations, or wait for named evidence>"
+python scripts\check_aaai_submission_decision.py --strict
+```
+
+Use `--selected-option wait_for_external_evidence` instead if the accepted
+policy is to wait for the named external evidence rows. Do not run either
+command until the human research lead has selected a policy.
+
 ## AI-Scientist-v2 Dry Run
 
 From `D:\a_work\gitee\ai-scientist-v2`:

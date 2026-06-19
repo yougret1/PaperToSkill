@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 282
+- Ready checks: 283
 - Pending checks: 8
 - Failed checks: 0
 
@@ -38,6 +38,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | submission_review_report_json | ready | present | results/reproducibility/submission_review_report.json |
 | submission_review_report_md | ready | present | results/reproducibility/submission_review_report.md |
 | aaai_submission_decision_checker | ready | present | scripts/check_aaai_submission_decision.py |
+| aaai_submission_decision_generator | ready | present | scripts/generate_aaai_submission_decision.py |
 | aaai_submission_decision_report_json | ready | present | results/aaai_submission_decision/decision.json |
 | aaai_submission_decision_report_md | ready | present | results/aaai_submission_decision/decision.md |
 | goal_completion_checker | ready | present | scripts/check_goal_completion.py |
@@ -201,7 +202,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | paper_claim_core_checks_ready | ready | core checks ready | results\reproducibility\paper_claim_report.json |
 | submission_review_report_ready | ready | overall=ready; counts={'ready': 15, 'fail': 0} | results\reproducibility\submission_review_report.json |
 | submission_review_core_checks_ready | ready | core checks ready | results\reproducibility\submission_review_report.json |
-| aaai_submission_decision_preflight_ready | ready | overall=pending_human_decision; decision_status=pending_user_decision; counts={'ready': 25, 'pending': 1, 'fail': 0} | results\aaai_submission_decision\decision.json |
+| aaai_submission_decision_preflight_ready | ready | overall=pending_human_decision; decision_status=pending_user_decision; counts={'ready': 26, 'pending': 1, 'fail': 0} | results\aaai_submission_decision\decision.json |
 | aaai_submission_decision_core_checks_ready | ready | core decision preflight checks ready | results\aaai_submission_decision\decision.json |
 | aaai_submission_decision_options_available | ready | both decision options available for human decision | results\aaai_submission_decision\decision.json |
 | goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 70, 'pending': 8, 'fail': 0} | results\reproducibility\goal_completion_report.json |

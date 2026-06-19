@@ -7,10 +7,11 @@ Current date: 2026-06-20.
 
 ## Current Phase
 
-Phase 65 is the current local phase. Phase 64 was committed as
-`b323879 Record recovered remote save status` and pushed to `origin/main` on
-2026-06-20. Phase 65 refreshes direct OpenAI-compatible provider diagnostics
-after the remote save recovery; external evidence remains pending.
+Phase 66 is the current local phase. Phase 65 was committed as
+`78c78ae Refresh direct provider probe evidence` and pushed to `origin/main` on
+2026-06-20. Phase 66 adds a validated helper for generating the human AAAI
+submission-decision record, without selecting a default option or completing
+external evidence.
 
 Phase 62 objective:
 
@@ -120,6 +121,18 @@ Phase 65 evidence:
 - Reports under `results/openai_compatible_direct_probe/` remain
   `blocked_by_provider_or_model_availability`; no direct-probe response files
   exist. This is diagnostic only and does not complete AI-Scientist-v2 smoke.
+
+Phase 66 evidence:
+
+- Added `scripts/generate_aaai_submission_decision.py`.
+- Added `tests/test_generate_aaai_submission_decision.py`.
+- Updated `scripts/check_aaai_submission_decision.py` so the preflight lists
+  the helper as an input and shows validated helper commands for both decision
+  options.
+- Updated `research/runbook.md`, `research/artifact_map.md`, and
+  reproducibility package checks to include the helper.
+- No `research/aaai_submission_decision.md` decision record was generated; the
+  final AAAI submission decision remains pending a human research-lead choice.
 
 ## Current Evidence
 

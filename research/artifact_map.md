@@ -84,6 +84,7 @@
 | `research/run_logs/2026-06-20_phase63_push_connectivity_diagnostic.md` | GitHub HTTPS connectivity diagnostic after Phase 62 push reset failures | Created |
 | `research/run_logs/2026-06-20_phase64_remote_save_recovered.md` | Successful remote save of Phase 62/63 commits with note that GitHub HTTPS diagnostics remain intermittent | Created |
 | `research/run_logs/2026-06-20_phase65_direct_probe_recheck.md` | Fresh direct OpenAI-compatible provider recheck after remote-save recovery; Claude remains HTTP 503 and GPT remains HTTP 502 | Created |
+| `research/run_logs/2026-06-20_phase66_aaai_decision_record_helper.md` | Validated helper for generating the human AAAI submission-decision record without selecting a default option | Created |
 
 ## Paper Draft Package
 
@@ -198,6 +199,7 @@
 | `scripts/check_external_evidence_closure.py` | Builds a local closure queue mapping pending external-evidence requirements to concrete next actions | Created |
 | `scripts/check_external_evidence_packets.py` | Builds execution packets with inputs, commands, completion criteria, and boundaries for each pending external-evidence item | Created |
 | `scripts/check_aaai_submission_decision.py` | Builds a local AAAI submission-decision preflight with submit-now and wait-for-evidence options while leaving the human decision pending | Created |
+| `scripts/generate_aaai_submission_decision.py` | Writes a validated human AAAI submission-decision record only after an explicit option, owner, date, claim boundary, and evidence policy are provided | Created |
 | `scripts/run_ai_scientist_v2_smoke.py` | Runs bounded AI-Scientist-v2 LLM-client smoke checks, writes redacted reports, clears stale responses on blocked attempts, prints status summary, and supports repeatable `--model-alias`, `--timeout-seconds`, and `--require-complete` | Created |
 | `scripts/run_openai_compatible_direct_probe.py` | Runs a direct OpenAI-compatible marker-contract probe outside `ai_scientist.llm` for provider diagnosis | Created |
 | `scripts/check_ai_scientist_v2_live_run_handoff.py` | Builds a no-network handoff/preflight report for the pending full AI-Scientist-v2 live/BFTS run | Created |
@@ -234,6 +236,7 @@
 | `tests/test_check_external_evidence_closure.py` | Smoke tests for external-evidence closure queue coverage and completion-state behavior | Created |
 | `tests/test_check_external_evidence_packets.py` | Smoke tests for external-evidence execution packet coverage, missing-closure failure, and secret-like command rejection | Created |
 | `tests/test_check_aaai_submission_decision.py` | Smoke tests for AAAI submission-decision preflight states and human decision-record parsing | Created |
+| `tests/test_generate_aaai_submission_decision.py` | Unit tests for the AAAI submission-decision record generator and secret/availability validation | Created |
 | `tests/test_check_submission_review.py` | Smoke tests for submission-review handoff drift checker | Created |
 | `tests/test_run_ai_scientist_v2_smoke.py` | Smoke tests for AI-Scientist-v2 LLM-client smoke success, redacted provider errors, stale-response cleanup, timeout reporting, and alias fallback | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |

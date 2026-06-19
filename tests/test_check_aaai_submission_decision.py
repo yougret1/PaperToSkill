@@ -39,6 +39,7 @@ class CheckAAAISubmissionDecisionTest(unittest.TestCase):
             self.assertIsNone(report["selected_option"])
             self.assertEqual(0, report["status_counts"]["fail"])
             statuses = {check["id"]: check["status"] for check in report["checks"]}
+            self.assertEqual("ready", statuses["aaai_submission_decision_input_decision_generator"])
             self.assertEqual("ready", statuses["aaai_submission_decision_local_gates_ready"])
             self.assertEqual("ready", statuses["aaai_submission_decision_pending_evidence_state_current"])
             self.assertEqual("ready", statuses["aaai_submission_decision_external_packet_ready"])
@@ -53,6 +54,7 @@ class CheckAAAISubmissionDecisionTest(unittest.TestCase):
                 option_statuses,
             )
             self.assertTrue(output_md.exists())
+            self.assertIn("generate_aaai_submission_decision.py", output_md.read_text(encoding="utf-8"))
 
     def test_missing_inputs_fail_preflight(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -84,6 +86,33 @@ class CheckAAAISubmissionDecisionTest(unittest.TestCase):
             parsed = decision.parse_decision_record(root)
             self.assertEqual("valid", parsed["status"])
             self.assertEqual("submit_now_deterministic_offline", parsed["selected_option"])
+
+    def test_self_referential_goal_failure_keeps_final_submission_pending(self):
+        goal = {
+            "overall_status": "fail",
+            "checks": [
+                {
+                    "id": "aaai_submission_decision_preflight_ready",
+                    "status": "fail",
+                    "detail": "overall=fail",
+                },
+                {
+                    "id": "aaai_final_submission_ready",
+                    "status": "fail",
+                    "detail": "one or more paper-package gates failed",
+                },
+                {
+                    "id": "active_goal_complete",
+                    "status": "fail",
+                    "detail": "failed_requirements=aaai_submission_decision_preflight_ready",
+                },
+            ],
+        }
+
+        pending = decision.effective_pending_goal_requirements(goal)
+
+        self.assertIn("aaai_final_submission_ready", pending)
+        self.assertTrue(decision.self_referential_goal_failure(goal))
 
 
 if __name__ == "__main__":

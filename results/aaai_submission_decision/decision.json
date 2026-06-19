@@ -35,7 +35,8 @@
         "python scripts\\check_paper_tables.py --strict",
         "python scripts\\check_usage_examples.py --strict",
         "python scripts\\check_submission_review.py --strict",
-        "python scripts\\check_aaai_submission_decision.py --strict"
+        "python scripts\\check_aaai_submission_decision.py --strict",
+        "python scripts\\generate_aaai_submission_decision.py --selected-option submit_now_deterministic_offline --decision-owner \"<name or role>\" --decision-date YYYY-MM-DD --claim-boundary \"<accepted bounded claim scope>\" --evidence-policy \"submit with explicit pending-evidence limitations\""
       ]
     },
     {
@@ -56,7 +57,8 @@
       "validation_commands": [
         "python scripts\\check_external_evidence_packets.py --strict",
         "python scripts\\check_goal_completion.py --strict",
-        "python scripts\\check_reproducibility_package.py --strict"
+        "python scripts\\check_reproducibility_package.py --strict",
+        "python scripts\\generate_aaai_submission_decision.py --selected-option wait_for_external_evidence --decision-owner \"<name or role>\" --decision-date YYYY-MM-DD --claim-boundary \"<claims deferred until named evidence is complete>\" --evidence-policy \"wait for named external evidence rows\""
       ]
     }
   ],
@@ -146,6 +148,12 @@
       "evidence": "results/provider_billing_evidence/billing_summary.json"
     },
     {
+      "id": "aaai_submission_decision_input_decision_generator",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "scripts/generate_aaai_submission_decision.py"
+    },
+    {
       "id": "aaai_submission_decision_input_submission_checklist",
       "status": "ready",
       "detail": "present",
@@ -220,7 +228,7 @@
   ],
   "overall_status": "pending_human_decision",
   "status_counts": {
-    "ready": 25,
+    "ready": 26,
     "pending": 1,
     "fail": 0
   }

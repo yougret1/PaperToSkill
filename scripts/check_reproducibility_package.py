@@ -87,6 +87,7 @@ CORE_FILES = {
     "submission_review_report_json": "results/reproducibility/submission_review_report.json",
     "submission_review_report_md": "results/reproducibility/submission_review_report.md",
     "aaai_submission_decision_checker": "scripts/check_aaai_submission_decision.py",
+    "aaai_submission_decision_generator": "scripts/generate_aaai_submission_decision.py",
     "aaai_submission_decision_report_json": "results/aaai_submission_decision/decision.json",
     "aaai_submission_decision_report_md": "results/aaai_submission_decision/decision.md",
     "goal_completion_checker": "scripts/check_goal_completion.py",

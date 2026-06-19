@@ -5,7 +5,7 @@ Evidence boundary: this report distinguishes submission choices, but it does not
 - Overall status: pending_human_decision
 - Decision status: pending_user_decision
 - Selected option: n/a
-- Ready checks: 25
+- Ready checks: 26
 - Pending checks: 1
 - Failed checks: 0
 
@@ -40,6 +40,7 @@ python scripts\check_paper_tables.py --strict
 python scripts\check_usage_examples.py --strict
 python scripts\check_submission_review.py --strict
 python scripts\check_aaai_submission_decision.py --strict
+python scripts\generate_aaai_submission_decision.py --selected-option submit_now_deterministic_offline --decision-owner "<name or role>" --decision-date YYYY-MM-DD --claim-boundary "<accepted bounded claim scope>" --evidence-policy "submit with explicit pending-evidence limitations"
 ```
 
 ### wait_for_external_evidence
@@ -66,11 +67,20 @@ Validation commands:
 python scripts\check_external_evidence_packets.py --strict
 python scripts\check_goal_completion.py --strict
 python scripts\check_reproducibility_package.py --strict
+python scripts\generate_aaai_submission_decision.py --selected-option wait_for_external_evidence --decision-owner "<name or role>" --decision-date YYYY-MM-DD --claim-boundary "<claims deferred until named evidence is complete>" --evidence-policy "wait for named external evidence rows"
 ```
 
 ## Decision Record Template
 
 Create `research/aaai_submission_decision.md` only after the human lead makes the decision:
+
+Recommended helper:
+
+```powershell
+python scripts\generate_aaai_submission_decision.py --selected-option submit_now_deterministic_offline --decision-owner "<name or role>" --decision-date YYYY-MM-DD --claim-boundary "<accepted paper claim scope>" --evidence-policy "<submit now with limitations, or wait for named evidence>"
+```
+
+Manual schema:
 
 ```markdown
 # AAAI Submission Decision
@@ -100,6 +110,7 @@ Evidence policy: <submit now with limitations, or wait for named evidence>
 | aaai_submission_decision_input_model_ablation_evaluation | ready | present | results/model_ablation_prompts/v0/evaluation.json |
 | aaai_submission_decision_input_human_fidelity | ready | present | results/human_fidelity_packets/annotation_summary.json |
 | aaai_submission_decision_input_provider_billing | ready | present | results/provider_billing_evidence/billing_summary.json |
+| aaai_submission_decision_input_decision_generator | ready | present | scripts/generate_aaai_submission_decision.py |
 | aaai_submission_decision_input_submission_checklist | ready | present | research/submission_checklist.md |
 | aaai_submission_decision_input_review_report | ready | present | research/review_report.md |
 | aaai_submission_decision_input_rebuttal_bank | ready | present | research/rebuttal_bank.md |

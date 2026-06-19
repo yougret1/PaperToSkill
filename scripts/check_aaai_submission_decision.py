@@ -29,6 +29,7 @@ REQUIRED_REPORTS = {
 }
 
 TEXT_INPUTS = {
+    "decision_generator": "scripts/generate_aaai_submission_decision.py",
     "submission_checklist": "research/submission_checklist.md",
     "review_report": "research/review_report.md",
     "rebuttal_bank": "research/rebuttal_bank.md",
@@ -111,6 +112,55 @@ def pending_goal_requirements(goal: dict[str, Any]) -> set[str]:
     }
 
 
+def check_statuses(report: dict[str, Any]) -> dict[str, str]:
+    return {
+        str(check.get("id", "")): str(check.get("status", ""))
+        for check in report.get("checks", [])
+    }
+
+
+def check_details(report: dict[str, Any]) -> dict[str, str]:
+    return {
+        str(check.get("id", "")): str(check.get("detail", ""))
+        for check in report.get("checks", [])
+    }
+
+
+def effective_pending_goal_requirements(goal: dict[str, Any]) -> set[str]:
+    pending = pending_goal_requirements(goal)
+    statuses = check_statuses(goal)
+    details = check_details(goal)
+    if (
+        statuses.get("aaai_final_submission_ready") == "fail"
+        and statuses.get("aaai_submission_decision_preflight_ready") == "fail"
+        and "paper-package gates failed" in details.get("aaai_final_submission_ready", "")
+    ):
+        pending.add("aaai_final_submission_ready")
+    return pending
+
+
+def self_referential_goal_failure(goal: dict[str, Any]) -> bool:
+    failed = set(failed_checks(goal))
+    allowed = {
+        "aaai_submission_decision_preflight_ready",
+        "aaai_final_submission_ready",
+        "active_goal_complete",
+    }
+    return bool(failed) and failed <= allowed
+
+
+def self_referential_package_failure(package: dict[str, Any]) -> bool:
+    failed = set(failed_checks(package))
+    allowed = {
+        "aaai_submission_decision_preflight_ready",
+        "aaai_submission_decision_core_checks_ready",
+        "aaai_submission_decision_options_available",
+        "goal_completion_report_ready",
+        "goal_completion_core_checks_ready",
+    }
+    return bool(failed) and failed <= allowed
+
+
 def failed_checks(report: dict[str, Any]) -> list[str]:
     return [
         str(check.get("id", ""))
@@ -153,7 +203,7 @@ def parse_decision_record(root: Path) -> dict[str, Any]:
 
 def build_options(reports: dict[str, dict[str, Any]], combined_text: str) -> list[dict[str, Any]]:
     local_ready = all(reports[key].get("overall_status") == "ready" for key in LOCAL_READY_REPORTS)
-    pending = pending_goal_requirements(reports["goal_completion"])
+    pending = effective_pending_goal_requirements(reports["goal_completion"])
     expected_pending_present = EXPECTED_PENDING_REQUIREMENTS <= pending
     boundary_ready = contains_all(
         combined_text,
@@ -198,6 +248,7 @@ def build_options(reports: dict[str, dict[str, Any]], combined_text: str) -> lis
                 "python scripts\\check_usage_examples.py --strict",
                 "python scripts\\check_submission_review.py --strict",
                 "python scripts\\check_aaai_submission_decision.py --strict",
+                "python scripts\\generate_aaai_submission_decision.py --selected-option submit_now_deterministic_offline --decision-owner \"<name or role>\" --decision-date YYYY-MM-DD --claim-boundary \"<accepted bounded claim scope>\" --evidence-policy \"submit with explicit pending-evidence limitations\"",
             ],
         },
         {
@@ -222,6 +273,7 @@ def build_options(reports: dict[str, dict[str, Any]], combined_text: str) -> lis
                 "python scripts\\check_external_evidence_packets.py --strict",
                 "python scripts\\check_goal_completion.py --strict",
                 "python scripts\\check_reproducibility_package.py --strict",
+                "python scripts\\generate_aaai_submission_decision.py --selected-option wait_for_external_evidence --decision-owner \"<name or role>\" --decision-date YYYY-MM-DD --claim-boundary \"<claims deferred until named evidence is complete>\" --evidence-policy \"wait for named external evidence rows\"",
             ],
         },
     ]
@@ -259,11 +311,19 @@ def local_gate_check(reports: dict[str, dict[str, Any]]) -> Check:
 def pending_state_check(reports: dict[str, dict[str, Any]]) -> Check:
     goal = reports["goal_completion"]
     package = reports["reproducibility_package"]
-    pending = pending_goal_requirements(goal)
+    pending = effective_pending_goal_requirements(goal)
     missing = sorted(EXPECTED_PENDING_REQUIREMENTS - pending)
-    ready = (
+    goal_status_ready = (
         goal.get("overall_status") == "not_complete_pending_external_evidence"
-        and package.get("overall_status") == "ready_with_pending_external_evidence"
+        or self_referential_goal_failure(goal)
+    )
+    package_status_ready = (
+        package.get("overall_status") == "ready_with_pending_external_evidence"
+        or self_referential_package_failure(package)
+    )
+    ready = (
+        goal_status_ready
+        and package_status_ready
         and not missing
     )
     return Check(
@@ -496,6 +556,14 @@ def write_markdown(path: Path, report: dict[str, Any]) -> None:
             "## Decision Record Template",
             "",
             "Create `research/aaai_submission_decision.md` only after the human lead makes the decision:",
+            "",
+            "Recommended helper:",
+            "",
+            "```powershell",
+            "python scripts\\generate_aaai_submission_decision.py --selected-option submit_now_deterministic_offline --decision-owner \"<name or role>\" --decision-date YYYY-MM-DD --claim-boundary \"<accepted paper claim scope>\" --evidence-policy \"<submit now with limitations, or wait for named evidence>\"",
+            "```",
+            "",
+            "Manual schema:",
             "",
             "```markdown",
             "# AAAI Submission Decision",

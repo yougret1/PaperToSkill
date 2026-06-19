@@ -2282,3 +2282,33 @@ Evidence boundary:
 - It does not complete the AI-Scientist-v2 LLM-client smoke, BFTS/full live
   run, DeepSeek rows, human annotation, provider billing, or the final AAAI
   submission decision.
+
+## 2026-06-20 Phase 66
+
+Actions:
+
+- Added `scripts/generate_aaai_submission_decision.py`, a validated helper that
+  writes `research/aaai_submission_decision.md` only when an explicit option,
+  owner, date, claim boundary, and evidence policy are supplied.
+- Added `tests/test_generate_aaai_submission_decision.py`.
+- Updated the AAAI submission-decision preflight so it lists the helper as an
+  input and includes helper commands for both decision options.
+- Updated `research/runbook.md`, artifact map, and reproducibility package
+  checks to include the helper.
+- Added
+  `research/run_logs/2026-06-20_phase66_aaai_decision_record_helper.md`.
+
+Results:
+
+- The helper validates the selected option against the current preflight,
+  rejects raw API-key-like material, and refuses empty required fields.
+- No human decision record was generated in this phase.
+- `aaai_final_submission_ready` remains pending until the research lead
+  explicitly records a selected option and evidence policy.
+
+Evidence boundary:
+
+- Phase 66 adds a local decision-record helper only.
+- It does not select an AAAI submission decision, submit the paper, complete
+  DeepSeek, complete AI-Scientist-v2 smoke/full live run, collect human
+  annotation, or collect provider billing.
