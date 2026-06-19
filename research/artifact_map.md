@@ -77,6 +77,7 @@
 | `research/run_logs/2026-06-20_phase56_ai_scientist_v2_smoke_after_push_recovery.md` | AI-Scientist-v2 smoke retry after GitHub push recovery; all four Claude aliases still timed out after 30 seconds | Created |
 | `research/run_logs/2026-06-20_phase57_ai_scientist_v2_gpt_smoke_retry.md` | AI-Scientist-v2 smoke retry through the GPT-family credential profile; `gpt-5.5` and `gpt-5.4` timed out after 60 seconds | Created |
 | `research/run_logs/2026-06-20_phase58_ai_scientist_v2_max_token_smoke.md` | AI-Scientist-v2 smoke runner max-token cap and capped Claude/GPT-family provider-timeout evidence | Created |
+| `research/run_logs/2026-06-20_phase59_openai_direct_probe.md` | Direct OpenAI-compatible endpoint probe showing Claude HTTP 503 and GPT HTTP 502 provider blockers outside `ai_scientist.llm` | Created |
 
 ## Paper Draft Package
 
@@ -192,6 +193,7 @@
 | `scripts/check_external_evidence_packets.py` | Builds execution packets with inputs, commands, completion criteria, and boundaries for each pending external-evidence item | Created |
 | `scripts/check_aaai_submission_decision.py` | Builds a local AAAI submission-decision preflight with submit-now and wait-for-evidence options while leaving the human decision pending | Created |
 | `scripts/run_ai_scientist_v2_smoke.py` | Runs bounded AI-Scientist-v2 LLM-client smoke checks, writes redacted reports, clears stale responses on blocked attempts, prints status summary, and supports repeatable `--model-alias`, `--timeout-seconds`, and `--require-complete` | Created |
+| `scripts/run_openai_compatible_direct_probe.py` | Runs a direct OpenAI-compatible marker-contract probe outside `ai_scientist.llm` for provider diagnosis | Created |
 | `scripts/check_ai_scientist_v2_live_run_handoff.py` | Builds a no-network handoff/preflight report for the pending full AI-Scientist-v2 live/BFTS run | Created |
 | `scripts/build_model_ablation_prompts.py` | Builds Claude/GPT-family/DeepSeek model-ablation prompt packets | Created |
 | `scripts/run_model_ablation_prompts.py` | Runs model-ablation prompt packets against OpenAI-compatible APIs with redacted reports | Created |
@@ -333,6 +335,10 @@
 | `results/aaai_submission_decision/decision.json` | Machine-readable AAAI submission-decision preflight | Created |
 | `results/ai_scientist_v2_smoke/run_report.md` | Human-readable bounded AI-Scientist-v2 LLM-client smoke report | Created |
 | `results/ai_scientist_v2_smoke/run_report.json` | Machine-readable bounded AI-Scientist-v2 LLM-client smoke report | Created |
+| `results/openai_compatible_direct_probe/claude_family/run_report.md` | Human-readable direct Claude-family provider diagnostic report | Created |
+| `results/openai_compatible_direct_probe/claude_family/run_report.json` | Machine-readable direct Claude-family provider diagnostic report | Created |
+| `results/openai_compatible_direct_probe/gpt_family/run_report.md` | Human-readable direct GPT-family provider diagnostic report | Created |
+| `results/openai_compatible_direct_probe/gpt_family/run_report.json` | Machine-readable direct GPT-family provider diagnostic report | Created |
 | `results/ai_scientist_v2_live_run_handoff/handoff.md` | Human-readable AI-Scientist-v2 full live-run handoff report | Created |
 | `results/ai_scientist_v2_live_run_handoff/handoff.json` | Machine-readable AI-Scientist-v2 full live-run handoff report | Created |
 | `results/model_ablation_prompts/v0/index.json` | Model-ablation prompt packet index with pending response slots | Created |

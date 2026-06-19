@@ -10,7 +10,7 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 58: Claude Opus 4.8 and GPT-family ablation rows are saved and scored for
+Phase 59: Claude Opus 4.8 and GPT-family ablation rows are saved and scored for
 the current two-case protocol, saved model responses have a local output-token
 proxy report, and all four live-transfer saved-response sets are collected and
 scored for the current prompt-packet protocol. A bounded AI-Scientist-v2
@@ -19,8 +19,11 @@ marker-contract smoke through the AI-Scientist-v2 OpenAI-compatible client
 path; the latest Claude-family aliases all timed out, and the immediately
 preceding GPT-family capped aliases also timed out. This remains a
 provider/model availability blocker, not a local package failure or
-model-quality result. The
-smoke runner now prints an explicit
+model-quality result. Phase 59 added a direct OpenAI-compatible endpoint probe
+that bypasses `ai_scientist.llm`; the direct Claude-family probe returned HTTP
+503 `No available accounts`, and the direct GPT-family probe returned HTTP 502
+`Upstream access forbidden`, so the provider blocker is visible outside the
+AI-Scientist-v2 wrapper too. The smoke runner now prints an explicit
 `overall_status` summary, has a script-level `--timeout-seconds`, offers
 repeatable `--model-alias`, supports `--max-tokens` for tiny smoke probes, and
 provides `--require-complete` for checks that should fail unless a response
@@ -129,6 +132,8 @@ pending live-agent claims.
   `results/deepseek_followup_handoff/handoff.md`.
 - AI-Scientist-v2 LLM-client smoke report:
   `results/ai_scientist_v2_smoke/run_report.md`.
+- OpenAI-compatible direct provider probe reports:
+  `results/openai_compatible_direct_probe/`.
 - Provider-billing evidence handoff:
   `results/provider_billing_evidence/billing_summary.md`.
 - Submission-review handoff:

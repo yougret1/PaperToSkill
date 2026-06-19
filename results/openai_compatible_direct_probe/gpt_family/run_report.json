@@ -1,0 +1,63 @@
+{
+  "schema_version": "0.1",
+  "evidence_boundary": "Direct OpenAI-compatible endpoint diagnostic. A complete report proves the configured endpoint can return the tiny marker-contract response without using ai_scientist.llm. It does not complete the AI-Scientist-v2 LLM-client smoke, BFTS, or a live research task.",
+  "model": "gpt-5.5",
+  "attempted_models": [
+    {
+      "model": "gpt-5.5",
+      "status": "blocked",
+      "detail": "{\"error\": {\"message\": \"Upstream access forbidden, please contact administrator\", \"type\": \"upstream_error\"}, \"http_error\": 502}"
+    },
+    {
+      "model": "gpt-5.4",
+      "status": "blocked",
+      "detail": "{\"error\": {\"message\": \"Upstream access forbidden, please contact administrator\", \"type\": \"upstream_error\"}, \"http_error\": 502}"
+    }
+  ],
+  "base_url_env": "AI_SCIENTIST_OPENAI_BASE_URL",
+  "base_url": "https://coderxiaoc.com/v1",
+  "auth_env": "AI_SCIENTIST_OPENAI_API_KEY",
+  "api_key_present": true,
+  "max_tokens": 128,
+  "timeout_seconds": 60.0,
+  "started_at_unix": 1781902099,
+  "completed_at_unix": 1781902106,
+  "overall_status": "blocked_by_provider_or_model_availability",
+  "status_counts": {
+    "ready": 3,
+    "pending": 2,
+    "fail": 0
+  },
+  "checks": [
+    {
+      "id": "direct_probe_configuration",
+      "status": "ready",
+      "detail": "base_url_present=True; api_key_present=True",
+      "evidence": "AI_SCIENTIST_OPENAI_BASE_URL; AI_SCIENTIST_OPENAI_API_KEY"
+    },
+    {
+      "id": "direct_probe_response_saved",
+      "status": "pending",
+      "detail": "response_chars=0",
+      "evidence": "results\\openai_compatible_direct_probe\\gpt_family\\response.md"
+    },
+    {
+      "id": "direct_probe_error",
+      "status": "pending",
+      "detail": "gpt-5.5: {\"error\": {\"message\": \"Upstream access forbidden, please contact administrator\", \"type\": \"upstream_error\"}, \"http_error\": 502}; gpt-5.4: {\"error\": {\"message\": \"Upstream access forbidden, please contact administrator\", \"type\": \"upstream_error\"}, \"http_error\": 502}",
+      "evidence": "provider/model availability"
+    },
+    {
+      "id": "direct_probe_alias_attempt_1",
+      "status": "ready",
+      "detail": "gpt-5.5: blocked; {\"error\": {\"message\": \"Upstream access forbidden, please contact administrator\", \"type\": \"upstream_error\"}, \"http_error\": 502}",
+      "evidence": "provider/model availability"
+    },
+    {
+      "id": "direct_probe_alias_attempt_2",
+      "status": "ready",
+      "detail": "gpt-5.4: blocked; {\"error\": {\"message\": \"Upstream access forbidden, please contact administrator\", \"type\": \"upstream_error\"}, \"http_error\": 502}",
+      "evidence": "provider/model availability"
+    }
+  ]
+}

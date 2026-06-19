@@ -20,7 +20,7 @@ TARGET_FILES = {
 STALE_PATTERNS = [
     {
         "id": "http_503_live_transfer_pending",
-        "pattern": r"HTTP\s+503|endpoint\s+still\s+returns|live prompt packets exist,\s*but endpoint",
+        "pattern": r"endpoint\s+still\s+returns|live prompt packets exist,\s*but endpoint",
         "detail": "Review handoff must not use stale Phase 17 live-transfer HTTP 503 wording.",
     },
     {

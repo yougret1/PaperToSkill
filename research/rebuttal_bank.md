@@ -72,7 +72,7 @@ human semantic review or real live-task success.
 Evidence to cite:
 
 - `paper/limitations.md`: heuristic metric limitation.
-- `results/reproducibility/package_report.md`: 270 ready checks, 8 pending
+- `results/reproducibility/package_report.md`: 281 ready checks, 8 pending
   checks, and 0 failed checks.
 - `results/human_fidelity_packets/`: prepared independent-review protocol.
 
@@ -167,13 +167,16 @@ attempted through the local AI-Scientist-v2 client. The latest smoke report is
 `blocked_by_provider_or_model_availability`: the Phase 58 capped smoke request
 used `--max-tokens 128`, tried `claude-opus-4-8`, `claude-opus-4.8`,
 `claude-opus-4-7`, and `claude-opus-4-6`, and all four aliases timed out after
-30 seconds waiting for provider response. The immediately preceding GPT-family
-capped retry tried `gpt-5.5` and `gpt-5.4`, and both timed out after 45
-seconds. Smoke completion and full live-run evidence remain pending.
+30 seconds waiting for provider response. Phase 59 direct endpoint probes
+bypassed `ai_scientist.llm`; Claude-family aliases returned HTTP 503
+`No available accounts`, and GPT-family aliases returned HTTP 502 `Upstream
+access forbidden`. Smoke completion and full live-run evidence remain pending.
 
 Evidence to cite:
 
 - `results/ai_scientist_v2_smoke/run_report.md`
+- `results/openai_compatible_direct_probe/claude_family/run_report.md`
+- `results/openai_compatible_direct_probe/gpt_family/run_report.md`
 - `memory/short_term_memory.md`
 - AI-Scientist-v2 dry-run experiment path recorded in memory.
 
@@ -192,7 +195,7 @@ Evidence to cite:
 
 - `results/reproducibility/goal_completion_report.md`: 70 ready checks,
   8 pending checks, 0 failed checks.
-- `results/reproducibility/package_report.md`: 270 ready checks, 8 pending
+- `results/reproducibility/package_report.md`: 281 ready checks, 8 pending
   checks, 0 failed checks.
 - `results/external_evidence_closure/closure.md`: six local closure items for
   the remaining external evidence.

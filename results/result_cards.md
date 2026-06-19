@@ -569,10 +569,13 @@
   the marker-contract smoke to `--max-tokens 128`, but the GPT-family capped
   retry timed out for `gpt-5.5` and `gpt-5.4`, and the latest Claude-family
   capped retry timed out for all four Claude aliases. No response file was
-  created.
+  created. Phase 59 direct endpoint probes bypassed `ai_scientist.llm` and
+  returned HTTP 503 `No available accounts` for Claude-family aliases and HTTP
+  502 `Upstream access forbidden` for GPT-family aliases.
 - Practical significance: records that the local AI-Scientist-v2 client path is
   wired into PaperToSkill with a reproducible smoke command and redacted
-  provider-availability reporting.
+  provider-availability reporting, and that the latest provider blocker is
+  visible even in a direct `/chat/completions` diagnostic.
 - Failure modes: provider account exhaustion, model unavailability, endpoint
   errors, or endpoint timeouts can block the smoke independently of
   PaperToSkill logic.
@@ -583,7 +586,9 @@
 - Figure/table: `scripts/run_ai_scientist_v2_smoke.py`;
   `results/ai_scientist_v2_smoke/run_report.md`;
   `results/ai_scientist_v2_smoke/run_report.json`;
-  `research/run_logs/2026-06-20_phase58_ai_scientist_v2_max_token_smoke.md`.
+  `results/openai_compatible_direct_probe/claude_family/run_report.md`;
+  `results/openai_compatible_direct_probe/gpt_family/run_report.md`;
+  `research/run_logs/2026-06-20_phase59_openai_direct_probe.md`.
 
 ## AI-Scientist-v2 Full Live-Run Handoff
 

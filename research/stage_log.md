@@ -2069,3 +2069,38 @@ Evidence boundary:
 - It does not complete the AI-Scientist-v2 smoke, run BFTS, prove live
   research-task success, resolve DeepSeek, collect human annotations, collect
   provider billing, or make the AAAI package submission-final.
+
+## 2026-06-20 Phase 59
+
+Actions:
+
+- Added `scripts/run_openai_compatible_direct_probe.py`, a direct
+  OpenAI-compatible `/chat/completions` marker-contract diagnostic that bypasses
+  `ai_scientist.llm`.
+- Added tests for direct-probe success, redacted errors, missing
+  configuration, and alias fallback.
+- Ran direct endpoint probes with shell-only Claude-family and GPT-family
+  credentials.
+- Added
+  `research/run_logs/2026-06-20_phase59_openai_direct_probe.md`.
+- Integrated the new diagnostic reports into the reproducibility package gate
+  as provider-availability evidence only.
+
+Results:
+
+- Claude-family direct probe: `claude-opus-4-8`, `claude-opus-4.8`,
+  `claude-opus-4-7`, and `claude-opus-4-6` all returned HTTP 503
+  `No available accounts: no available accounts`.
+- GPT-family direct probe: `gpt-5.5` and `gpt-5.4` both returned HTTP 502
+  `Upstream access forbidden, please contact administrator`.
+- Both direct-probe reports are
+  `blocked_by_provider_or_model_availability`; no direct-probe response files
+  exist.
+
+Evidence boundary:
+
+- Phase 59 clarifies that the current provider blocker is visible outside the
+  AI-Scientist-v2 wrapper.
+- It does not complete the AI-Scientist-v2 smoke, run BFTS, prove live
+  research-task success, resolve DeepSeek, collect human annotations, collect
+  provider billing, or make the AAAI package submission-final.

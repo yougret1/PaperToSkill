@@ -7,35 +7,36 @@ Current date: 2026-06-20.
 
 ## Current Phase
 
-Phase 58 is the current completed phase. Phase 57 was committed and pushed as
-`081e420 Retry AI-Scientist-v2 smoke with GPT profile`; before Phase 58 edits,
-`HEAD == origin/main == 081e420e45b81871ecd4b5a6f55f40bc725b7d9b`.
+Phase 59 is the current completed local phase. Phase 58 was committed and
+pushed as `2488ade Add max-token capped AI-Scientist-v2 smoke`; before Phase
+59 edits, `HEAD == origin/main ==
+2488aded5dd7fb58be110ee995f9e16f710f1ed1`.
 
-Phase 58 objective:
+Phase 59 objective:
 
-- Make the bounded AI-Scientist-v2 LLM-client smoke more diagnostic by capping
-  the tiny marker-contract request at `--max-tokens 128`.
+- Determine whether the AI-Scientist-v2 smoke blocker is specific to the
+  `ai_scientist.llm` wrapper or also appears when calling the
+  OpenAI-compatible endpoint directly.
 - Keep this as provider/model availability evidence only, not model-quality or
   live research-task evidence.
 
-Phase 58 evidence:
+Phase 59 evidence:
 
-- Added `--max-tokens` to `scripts/run_ai_scientist_v2_smoke.py`; it
-  temporarily overrides `ai_scientist.llm.MAX_NUM_TOKENS` for the smoke call
-  and restores the previous value afterward.
-- Added tests for the max-token cap and package-gate recognition.
-- Ran capped smoke retries with shell-only credentials:
-  - GPT-family: `--timeout-seconds 45 --max-tokens 128 --model-alias gpt-5.5 --model-alias gpt-5.4`; both aliases timed out.
-  - Claude-family: `--timeout-seconds 30 --max-tokens 128 --model-alias claude-opus-4-8 --model-alias claude-opus-4.8 --model-alias claude-opus-4-7 --model-alias claude-opus-4-6`; all four aliases timed out.
-- `results/ai_scientist_v2_smoke/run_report.md` remains
-  `blocked_by_provider_or_model_availability`, with latest report
-  `max_tokens=128`, 5 ready checks, 2 pending checks, and 0 failed checks.
-- No `results/ai_scientist_v2_smoke/response.md` file exists.
-- Added
-  `research/run_logs/2026-06-20_phase58_ai_scientist_v2_max_token_smoke.md`.
-- Updated the external-evidence closure queue and execution-packet generators
-  so the AI-Scientist-v2 smoke handoff uses the 128-token marker-contract
-  probe.
+- Added `scripts/run_openai_compatible_direct_probe.py`, a diagnostic that
+  bypasses `ai_scientist.llm` and calls `/chat/completions` directly with the
+  same tiny marker contract.
+- Added tests for success, redaction, missing configuration, and alias fallback.
+- Ran direct probes with shell-only credentials:
+  - Claude-family: `claude-opus-4-8`, `claude-opus-4.8`,
+    `claude-opus-4-7`, and `claude-opus-4-6` all returned HTTP 503
+    `No available accounts: no available accounts`.
+  - GPT-family: `gpt-5.5` and `gpt-5.4` both returned HTTP 502
+    `Upstream access forbidden, please contact administrator`.
+- Reports are under `results/openai_compatible_direct_probe/`; no direct-probe
+  response files exist.
+- Added `research/run_logs/2026-06-20_phase59_openai_direct_probe.md`.
+- Integrated the direct-probe reports into the reproducibility package gate as
+  diagnostic readiness checks only.
 
 ## Current Evidence
 
@@ -59,7 +60,8 @@ Phase 58 evidence:
   repeated 30-second timeouts for `claude-opus-4-8`, `claude-opus-4.8`,
   `claude-opus-4-7`, and `claude-opus-4-6`; Phase 57 GPT-family retry timed
   out for `gpt-5.5` and `gpt-5.4`; Phase 58 capped retries still timed out for
-  both credential profiles.
+  both credential profiles. Phase 59 direct probes show direct endpoint calls
+  are also blocked outside `ai_scientist.llm`.
 - AI-Scientist-v2 full live/BFTS run remains blocked by smoke.
   `results/ai_scientist_v2_live_run_handoff/handoff.md` reports
   `blocked_by_provider_smoke`, with no completion artifacts.
@@ -98,7 +100,7 @@ Supported:
 - `aaai_final_submission_ready` remains pending until a human decision and
   selected evidence policy are recorded.
 
-## Phase 58 Verification Completed
+## Phase 59 Verification Completed
 
 ```powershell
 python -m unittest discover -s tests -v
@@ -120,8 +122,9 @@ rg -n "sk-[A-Za-z0-9]{20,}" .
 
 Results:
 
-- `python -m unittest discover -s tests -v`: 74 tests passed.
-- All listed strict checkers passed.
+- `python -m unittest discover -s tests -v`: 79 tests passed.
+- All listed strict checkers passed after direct-probe report and
+  submission-review refresh.
 - `git diff --check`: no whitespace errors; only line-ending warnings.
 - Raw key scan produced no matches.
 

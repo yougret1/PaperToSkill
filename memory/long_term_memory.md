@@ -68,8 +68,11 @@ Current supported claims:
   availability remains blocked. Earlier evidence included HTTP 403
   `All available accounts exhausted` and repeated Claude/GPT-family timeouts.
   Phase 58 added a 128-token cap for the tiny marker-contract smoke; both
-  GPT-family and Claude-family capped retries still timed out. This is not
-  smoke completion or BFTS success.
+  GPT-family and Claude-family capped retries still timed out. Phase 59 added
+  a direct OpenAI-compatible endpoint probe that bypasses `ai_scientist.llm`;
+  direct Claude-family calls returned HTTP 503 `No available accounts`, and
+  direct GPT-family calls returned HTTP 502 `Upstream access forbidden`. This
+  is not smoke completion or BFTS success.
 - AI-Scientist-v2 full live-run handoff is ready as a local preflight: the
   launcher, seed idea, laptop-profile config, prior dry-run artifacts,
   environment variable names, and next full-run command are checked; provider
@@ -115,6 +118,9 @@ Use these as entry points instead of searching the whole repo first:
 - `scripts/run_ai_scientist_v2_smoke.py`: bounded AI-Scientist-v2 LLM-client
   smoke runner with status-summary output, repeatable `--model-alias`,
   `--timeout-seconds`, `--max-tokens`, and `--require-complete`.
+- `scripts/run_openai_compatible_direct_probe.py`: direct provider diagnostic
+  for the same tiny marker contract, bypassing `ai_scientist.llm`; this is
+  provider-availability evidence only.
 - `scripts/check_ai_scientist_v2_live_run_handoff.py`: local full
   AI-Scientist-v2 live/BFTS run handoff and preflight report generator; no
   network calls.
@@ -149,7 +155,7 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 270 ready checks, 8 pending
+  reports `ready_with_pending_external_evidence`, 281 ready checks, 8 pending
   checks, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
@@ -178,6 +184,11 @@ Use these as entry points instead of searching the whole repo first:
   checks, and 0 failed checks after the latest 128-token-capped Claude-family
   retry timed out for `claude-opus-4-8`, `claude-opus-4.8`,
   `claude-opus-4-7`, and `claude-opus-4-6`.
+- OpenAI-compatible direct provider probes:
+  `results/openai_compatible_direct_probe/claude_family/run_report.md` reports
+  HTTP 503 `No available accounts` for all four Claude aliases, and
+  `results/openai_compatible_direct_probe/gpt_family/run_report.md` reports
+  HTTP 502 `Upstream access forbidden` for `gpt-5.5` and `gpt-5.4`.
 - AI-Scientist-v2 live-run handoff:
   `results/ai_scientist_v2_live_run_handoff/handoff.md`
   reports `blocked_by_provider_smoke`, 10 ready checks, 2 pending checks, and
@@ -284,6 +295,7 @@ DeepSeek:
 | Model evidence state | GPT retry evidence was saved separately from the older Phase 36 failure report. | `scripts/check_goal_completion.py` reads both `run_report.json` and `gpt_retry_run_report.json` so historical GPT 502 evidence and current GPT-family success both remain visible. |
 | Output-token accounting | Cost section had input-token proxies but no saved-response output-token accounting. | `scripts/evaluate_model_response_costs.py` reports local output-token proxies for saved Claude/GPT-family responses while preserving the no-provider-billing boundary. |
 | AI-Scientist-v2 smoke boundary | AI-Scientist-v2 dry-run and live-transfer saved responses could be confused with a full live run. | `scripts/run_ai_scientist_v2_smoke.py` records bounded client smoke attempts with alias fallback, script-level timeout, and a tiny-request `--max-tokens` cap; current provider/model availability blocker keeps smoke completion and full run pending. |
+| Direct provider diagnosis | AI-Scientist-v2 smoke timeouts could be misread as only a wrapper bug. | `scripts/run_openai_compatible_direct_probe.py` calls `/chat/completions` directly with the same marker contract and shows the current Claude/GPT-family provider blockers are visible outside `ai_scientist.llm`; this remains diagnostic only. |
 
 ## Persistent Rules
 

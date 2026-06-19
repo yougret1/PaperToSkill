@@ -78,6 +78,37 @@ class CheckSubmissionReviewTest(unittest.TestCase):
             self.assertEqual("fail", statuses["submission_review_no_stale_http_503_live_transfer_pending"])
             self.assertEqual("fail", statuses["submission_review_no_stale_live_transfer_pending"])
 
+    def test_current_direct_probe_http_503_wording_is_allowed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_root = Path(tmp)
+            for relative in [
+                "research/review_report.md",
+                "research/rebuttal_bank.md",
+                "research/submission_checklist.md",
+                "results/live_transfer_prompts/evaluation.json",
+                "results/model_ablation_prompts/v0/evaluation.json",
+                "results/human_fidelity_packets/annotation_summary.json",
+                "results/provider_billing_evidence/billing_summary.json",
+                "results/ai_scientist_v2_smoke/run_report.json",
+                "results/reproducibility/goal_completion_report.json",
+                "results/reproducibility/package_report.json",
+            ]:
+                source = ROOT / relative
+                target = tmp_root / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(source, target)
+
+            review = tmp_root / "research" / "review_report.md"
+            review.write_text(
+                review.read_text(encoding="utf-8")
+                + "\n\nDirect endpoint probe returned HTTP 503 No available accounts.\n",
+                encoding="utf-8",
+            )
+
+            report = build_report(tmp_root)
+            statuses = {check["id"]: check["status"] for check in report["checks"]}
+            self.assertEqual("ready", statuses["submission_review_no_stale_http_503_live_transfer_pending"])
+
 
 if __name__ == "__main__":
     unittest.main()

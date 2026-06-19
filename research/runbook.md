@@ -155,7 +155,7 @@ python scripts\run_ai_scientist_v2_smoke.py --strict --require-complete --timeou
   --model-alias gpt-5.4
 ```
 
-Current Phase 58 status:
+Current AI-Scientist-v2 smoke status:
 `results/ai_scientist_v2_smoke/run_report.md` reports
 `overall_status=blocked_by_provider_or_model_availability`, `max_tokens=128`,
 5 ready checks, 2 pending checks, and 0 failed checks. The latest capped
@@ -165,6 +165,43 @@ seconds waiting for provider response, so no response file was produced. The
 immediately preceding capped GPT-family retry tried `gpt-5.5` and `gpt-5.4`;
 both timed out after 45 seconds. This is bounded client-availability smoke
 evidence, not a BFTS run or live research-task success.
+
+## OpenAI-Compatible Direct Provider Probe
+
+If the AI-Scientist-v2 smoke remains blocked, run the direct endpoint probe to
+distinguish provider availability from the local `ai_scientist.llm` wrapper:
+
+```powershell
+$env:AI_SCIENTIST_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
+$env:AI_SCIENTIST_OPENAI_API_KEY = "<set Claude-family key locally>"
+python scripts\run_openai_compatible_direct_probe.py --strict --require-complete --timeout-seconds 30 --max-tokens 128 `
+  --model-alias claude-opus-4-8 `
+  --model-alias claude-opus-4.8 `
+  --model-alias claude-opus-4-7 `
+  --model-alias claude-opus-4-6 `
+  --output-json results\openai_compatible_direct_probe\claude_family\run_report.json `
+  --output-md results\openai_compatible_direct_probe\claude_family\run_report.md `
+  --response-output results\openai_compatible_direct_probe\claude_family\response.md
+```
+
+```powershell
+$env:AI_SCIENTIST_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
+$env:AI_SCIENTIST_OPENAI_API_KEY = "<set GPT-family key locally>"
+python scripts\run_openai_compatible_direct_probe.py --strict --require-complete --timeout-seconds 60 --max-tokens 128 `
+  --model-alias gpt-5.5 `
+  --model-alias gpt-5.4 `
+  --output-json results\openai_compatible_direct_probe\gpt_family\run_report.json `
+  --output-md results\openai_compatible_direct_probe\gpt_family\run_report.md `
+  --response-output results\openai_compatible_direct_probe\gpt_family\response.md
+```
+
+Current Phase 59 direct-probe status:
+`results/openai_compatible_direct_probe/claude_family/run_report.md` reports
+HTTP 503 `No available accounts` for all four Claude-family aliases, and
+`results/openai_compatible_direct_probe/gpt_family/run_report.md` reports HTTP
+502 `Upstream access forbidden` for `gpt-5.5` and `gpt-5.4`. This diagnostic
+bypasses `ai_scientist.llm`, so it clarifies the provider blocker but does not
+complete the AI-Scientist-v2 smoke or any BFTS/live research run.
 
 ## Model-Ablation Prompt Packets
 

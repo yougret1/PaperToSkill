@@ -61,6 +61,11 @@ class CheckReproducibilityPackageTest(unittest.TestCase):
             self.assertIn("ai_scientist_smoke_runner", ready_ids)
             self.assertIn("ai_scientist_smoke_report_json", ready_ids)
             self.assertIn("ai_scientist_smoke_report_md", ready_ids)
+            self.assertIn("openai_direct_probe_runner", ready_ids)
+            self.assertIn("openai_direct_probe_claude_report_json", ready_ids)
+            self.assertIn("openai_direct_probe_claude_report_md", ready_ids)
+            self.assertIn("openai_direct_probe_gpt_report_json", ready_ids)
+            self.assertIn("openai_direct_probe_gpt_report_md", ready_ids)
             self.assertIn("phase50_ai_scientist_v2_smoke_timeout_recheck_run_log", ready_ids)
             self.assertIn("ai_scientist_live_run_handoff_checker", ready_ids)
             self.assertIn("ai_scientist_live_run_handoff_json", ready_ids)
@@ -74,6 +79,11 @@ class CheckReproducibilityPackageTest(unittest.TestCase):
             self.assertIn("deepseek_followup_handoff_report_ready", ready_ids)
             self.assertIn("deepseek_followup_handoff_core_checks_ready", ready_ids)
             self.assertIn("ai_scientist_v2_smoke_cli_status_summary", ready_ids)
+            self.assertIn("openai_direct_probe_cli_ready", ready_ids)
+            self.assertIn("openai_direct_probe_claude_family_report_ready", ready_ids)
+            self.assertIn("openai_direct_probe_claude_family_contract_consistent", ready_ids)
+            self.assertIn("openai_direct_probe_gpt_family_report_ready", ready_ids)
+            self.assertIn("openai_direct_probe_gpt_family_contract_consistent", ready_ids)
             smoke_cli = {
                 check["id"]: check
                 for check in report["checks"]

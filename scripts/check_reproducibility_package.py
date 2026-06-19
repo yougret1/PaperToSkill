@@ -101,6 +101,11 @@ CORE_FILES = {
     "ai_scientist_smoke_runner": "scripts/run_ai_scientist_v2_smoke.py",
     "ai_scientist_smoke_report_json": "results/ai_scientist_v2_smoke/run_report.json",
     "ai_scientist_smoke_report_md": "results/ai_scientist_v2_smoke/run_report.md",
+    "openai_direct_probe_runner": "scripts/run_openai_compatible_direct_probe.py",
+    "openai_direct_probe_claude_report_json": "results/openai_compatible_direct_probe/claude_family/run_report.json",
+    "openai_direct_probe_claude_report_md": "results/openai_compatible_direct_probe/claude_family/run_report.md",
+    "openai_direct_probe_gpt_report_json": "results/openai_compatible_direct_probe/gpt_family/run_report.json",
+    "openai_direct_probe_gpt_report_md": "results/openai_compatible_direct_probe/gpt_family/run_report.md",
     "ai_scientist_live_run_handoff_checker": "scripts/check_ai_scientist_v2_live_run_handoff.py",
     "ai_scientist_live_run_handoff_json": "results/ai_scientist_v2_live_run_handoff/handoff.json",
     "ai_scientist_live_run_handoff_md": "results/ai_scientist_v2_live_run_handoff/handoff.md",
@@ -151,6 +156,7 @@ CORE_FILES = {
     "phase56_ai_scientist_v2_smoke_after_push_recovery_run_log": "research/run_logs/2026-06-20_phase56_ai_scientist_v2_smoke_after_push_recovery.md",
     "phase57_ai_scientist_v2_gpt_smoke_retry_run_log": "research/run_logs/2026-06-20_phase57_ai_scientist_v2_gpt_smoke_retry.md",
     "phase58_ai_scientist_v2_max_token_smoke_run_log": "research/run_logs/2026-06-20_phase58_ai_scientist_v2_max_token_smoke.md",
+    "phase59_openai_direct_probe_run_log": "research/run_logs/2026-06-20_phase59_openai_direct_probe.md",
     "provider_billing_protocol": "benchmarks/provider_billing_evidence_v0.json",
     "provider_billing_summarizer": "scripts/summarize_provider_billing_evidence.py",
     "provider_billing_template": "results/provider_billing_evidence/billing_template.csv",
@@ -914,6 +920,84 @@ def ai_scientist_smoke_checks(root: Path) -> list[Check]:
     return checks
 
 
+def openai_compatible_direct_probe_checks(root: Path) -> list[Check]:
+    checks: list[Check] = []
+    runner_path = root / "scripts/run_openai_compatible_direct_probe.py"
+    if runner_path.exists():
+        runner_text = runner_path.read_text(encoding="utf-8")
+        has_status_summary = "def status_summary(" in runner_text and "overall_status=" in runner_text
+        has_require_complete = "--require-complete" in runner_text and "def exit_code(" in runner_text
+        has_alias_fallback = "--model-alias" in runner_text and "attempted_models" in runner_text
+        has_max_tokens = "--max-tokens" in runner_text and "max_tokens" in runner_text
+        checks.append(
+            Check(
+                "openai_direct_probe_cli_ready",
+                "ready"
+                if has_status_summary and has_require_complete and has_alias_fallback and has_max_tokens
+                else "fail",
+                (
+                    f"status_summary={has_status_summary}; "
+                    f"require_complete={has_require_complete}; "
+                    f"alias_fallback={has_alias_fallback}; "
+                    f"max_tokens={has_max_tokens}"
+                ),
+                str(runner_path.relative_to(root)),
+            )
+        )
+
+    profile_reports = {
+        "claude_family": root / "results/openai_compatible_direct_probe/claude_family/run_report.json",
+        "gpt_family": root / "results/openai_compatible_direct_probe/gpt_family/run_report.json",
+    }
+    allowed_statuses = {
+        "complete",
+        "blocked_by_provider_or_model_availability",
+        "pending_configuration",
+        "pending",
+    }
+    required_markers = {
+        "direct_probe_response_saved",
+        "direct_probe_marker_papertoskill_smoke_ok",
+        "direct_probe_marker_ai_scientist_v2",
+        "direct_probe_marker_paper_to_skill",
+    }
+    for profile, report_path in profile_reports.items():
+        if not report_path.exists():
+            continue
+        report = load_json(report_path)
+        overall = report.get("overall_status")
+        counts = report.get("status_counts", {})
+        checks.append(
+            Check(
+                f"openai_direct_probe_{profile}_report_ready",
+                "ready" if overall in allowed_statuses else "fail",
+                f"overall={overall}; counts={counts}; attempted={len(report.get('attempted_models', []))}",
+                str(report_path.relative_to(root)),
+            )
+        )
+        ready_ids = {check.get("id") for check in report.get("checks", []) if check.get("status") == "ready"}
+        marker_failures = [check.get("id") for check in report.get("checks", []) if check.get("status") == "fail"]
+        missing_markers = sorted(required_markers - ready_ids)
+        complete = overall == "complete"
+        consistent = (complete and not missing_markers and not marker_failures) or (
+            not complete and not marker_failures
+        )
+        detail = "contract consistent"
+        if missing_markers and complete:
+            detail = "missing=" + ",".join(missing_markers)
+        elif marker_failures:
+            detail = "failed=" + ",".join(str(item) for item in marker_failures)
+        checks.append(
+            Check(
+                f"openai_direct_probe_{profile}_contract_consistent",
+                "ready" if consistent else "fail",
+                detail,
+                str(report_path.relative_to(root)),
+            )
+        )
+    return checks
+
+
 def ai_scientist_live_run_handoff_checks(root: Path) -> list[Check]:
     checks: list[Check] = []
     report_path = root / "results/ai_scientist_v2_live_run_handoff/handoff.json"
@@ -1289,6 +1373,7 @@ def build_report(root: Path) -> dict[str, Any]:
     checks.extend(external_evidence_closure_checks(root))
     checks.extend(external_evidence_packet_checks(root))
     checks.extend(ai_scientist_smoke_checks(root))
+    checks.extend(openai_compatible_direct_probe_checks(root))
     checks.extend(ai_scientist_live_run_handoff_checks(root))
     checks.extend(provider_billing_checks(root))
     checks.extend(usage_example_checks(root))
