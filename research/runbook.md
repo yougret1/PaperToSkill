@@ -475,6 +475,27 @@ success-per-dollar evidence, and the AAAI submission decision.
 This queue is a local planning and checking artifact. It does not complete any
 of the external evidence items.
 
+## External Evidence Execution Packets
+
+Build executable handoff packets for each item in the external-evidence closure
+queue:
+
+```powershell
+python scripts\check_external_evidence_packets.py --strict
+```
+
+Current Phase 53 status:
+`results/external_evidence_packets/packets.md` reports
+`overall_status=ready`, 7 ready checks, 0 pending checks, and 0 failed checks.
+The six packets cover AI-Scientist-v2 smoke completion, AI-Scientist-v2 full
+live/BFTS run, DeepSeek response collection/model-ablation completion,
+human-fidelity annotation, provider billing/success-per-dollar evidence, and
+the AAAI submission decision.
+
+These packets list inputs, setup notes, run commands, validation commands,
+completion criteria, escalation rules, and evidence boundaries. They do not
+complete any external evidence by themselves.
+
 ## AI-Scientist-v2 Dry Run
 
 From `D:\a_work\gitee\ai-scientist-v2`:

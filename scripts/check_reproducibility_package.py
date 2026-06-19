@@ -92,6 +92,9 @@ CORE_FILES = {
     "external_closure_checker": "scripts/check_external_evidence_closure.py",
     "external_closure_report_json": "results/external_evidence_closure/closure.json",
     "external_closure_report_md": "results/external_evidence_closure/closure.md",
+    "external_packets_checker": "scripts/check_external_evidence_packets.py",
+    "external_packets_report_json": "results/external_evidence_packets/packets.json",
+    "external_packets_report_md": "results/external_evidence_packets/packets.md",
     "ai_scientist_smoke_runner": "scripts/run_ai_scientist_v2_smoke.py",
     "ai_scientist_smoke_report_json": "results/ai_scientist_v2_smoke/run_report.json",
     "ai_scientist_smoke_report_md": "results/ai_scientist_v2_smoke/run_report.md",
@@ -139,6 +142,7 @@ CORE_FILES = {
     "phase50_ai_scientist_v2_smoke_timeout_recheck_run_log": "research/run_logs/2026-06-20_phase50_ai_scientist_v2_smoke_timeout_recheck.md",
     "phase51_external_evidence_closure_queue_run_log": "research/run_logs/2026-06-20_phase51_external_evidence_closure_queue.md",
     "phase52_ai_scientist_v2_smoke_retry_run_log": "research/run_logs/2026-06-20_phase52_ai_scientist_v2_smoke_retry.md",
+    "phase53_external_evidence_packets_run_log": "research/run_logs/2026-06-20_phase53_external_evidence_packets.md",
     "provider_billing_protocol": "benchmarks/provider_billing_evidence_v0.json",
     "provider_billing_summarizer": "scripts/summarize_provider_billing_evidence.py",
     "provider_billing_template": "results/provider_billing_evidence/billing_template.csv",
@@ -644,6 +648,7 @@ def goal_completion_checks(root: Path) -> list[Check]:
         "human_fidelity_annotation_complete": "pending",
         "provider_billing_evidence_complete": "pending",
         "external_evidence_closure_queue_ready": "ready",
+        "external_evidence_execution_packets_ready": "ready",
     }
     mismatches = [
         f"{check_id}={check_statuses.get(check_id)}"
@@ -709,6 +714,65 @@ def external_evidence_closure_checks(root: Path) -> list[Check]:
             "external_evidence_closure_queue_items_ready",
             "ready" if not missing_items else "fail",
             "closure queue items declared" if not missing_items else "missing=" + ",".join(missing_items),
+            str(report_path.relative_to(root)),
+        )
+    )
+    return checks
+
+
+def external_evidence_packet_checks(root: Path) -> list[Check]:
+    checks: list[Check] = []
+    report_path = root / "results/external_evidence_packets/packets.json"
+    if not report_path.exists():
+        return checks
+    report = load_json(report_path)
+    failed = [check for check in report.get("checks", []) if check.get("status") == "fail"]
+    status = "ready" if report.get("overall_status") == "ready" and not failed else "fail"
+    counts = report.get("status_counts", {})
+    checks.append(
+        Check(
+            "external_evidence_packets_report_ready",
+            status,
+            f"overall={report.get('overall_status')}; counts={counts}; packets={len(report.get('packets', []))}",
+            str(report_path.relative_to(root)),
+        )
+    )
+
+    check_statuses = {check.get("id"): check.get("status") for check in report.get("checks", [])}
+    required_ready = {
+        "external_evidence_packets_closure_present",
+        "external_evidence_packets_match_closure",
+        "external_evidence_packets_have_details",
+        "external_evidence_packets_commands_declared",
+        "external_evidence_packets_completion_criteria_declared",
+        "external_evidence_packets_boundaries_declared",
+        "external_evidence_packets_no_secret_material",
+    }
+    missing = sorted(check_id for check_id in required_ready if check_statuses.get(check_id) != "ready")
+    checks.append(
+        Check(
+            "external_evidence_packets_core_checks_ready",
+            "ready" if not missing else "fail",
+            "core packet checks ready" if not missing else "missing=" + ",".join(missing),
+            str(report_path.relative_to(root)),
+        )
+    )
+
+    packet_ids = {packet.get("id") for packet in report.get("packets", [])}
+    required_packets = {
+        "ai_scientist_v2_smoke_completion",
+        "ai_scientist_v2_full_live_run",
+        "deepseek_followup_responses",
+        "human_fidelity_annotation",
+        "provider_billing_success_per_dollar",
+        "aaai_submission_decision",
+    }
+    missing_packets = sorted(required_packets - packet_ids)
+    checks.append(
+        Check(
+            "external_evidence_packets_items_ready",
+            "ready" if not missing_packets else "fail",
+            "execution packets declared" if not missing_packets else "missing=" + ",".join(missing_packets),
             str(report_path.relative_to(root)),
         )
     )
@@ -1145,6 +1209,7 @@ def build_report(root: Path) -> dict[str, Any]:
     checks.extend(submission_review_checks(root))
     checks.extend(goal_completion_checks(root))
     checks.extend(external_evidence_closure_checks(root))
+    checks.extend(external_evidence_packet_checks(root))
     checks.extend(ai_scientist_smoke_checks(root))
     checks.extend(ai_scientist_live_run_handoff_checks(root))
     checks.extend(provider_billing_checks(root))

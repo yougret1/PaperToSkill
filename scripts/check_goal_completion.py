@@ -39,6 +39,8 @@ REQUIRED_FILES = {
     "deepseek_followup_handoff": "results/deepseek_followup_handoff/handoff.json",
     "external_closure_checker": "scripts/check_external_evidence_closure.py",
     "external_closure_report": "results/external_evidence_closure/closure.json",
+    "external_packets_checker": "scripts/check_external_evidence_packets.py",
+    "external_packets_report": "results/external_evidence_packets/packets.json",
     "failure_archive": "results/failure_cases/failure_case_archive.json",
     "human_fidelity_summary": "results/human_fidelity_packets/annotation_summary.json",
     "tokenizer_cost_proxy": "results/tables/context_cost_proxy_tokenizer.json",
@@ -485,6 +487,36 @@ def external_evidence_closure_checks(root: Path) -> list[Check]:
     ]
 
 
+def external_evidence_packet_checks(root: Path) -> list[Check]:
+    report = load_json(root / "results/external_evidence_packets/packets.json")
+    failed = [check for check in report.get("checks", []) if check.get("status") == "fail"]
+    required_packets = {
+        "ai_scientist_v2_smoke_completion",
+        "ai_scientist_v2_full_live_run",
+        "deepseek_followup_responses",
+        "human_fidelity_annotation",
+        "provider_billing_success_per_dollar",
+        "aaai_submission_decision",
+    }
+    packet_ids = {packet.get("id") for packet in report.get("packets", [])}
+    missing_packets = sorted(required_packets - packet_ids)
+    status = (
+        "ready"
+        if report.get("overall_status") == "ready"
+        and not failed
+        and not missing_packets
+        else "fail"
+    )
+    return [
+        Check(
+            "external_evidence_execution_packets_ready",
+            status,
+            f"overall={report.get('overall_status')}; failed={len(failed)}; packets={len(packet_ids)}",
+            "results/external_evidence_packets/packets.json",
+        )
+    ]
+
+
 def completion_check(checks: list[Check]) -> Check:
     failed = [check.id for check in checks if check.status == "fail"]
     pending = [check.id for check in checks if check.status == "pending"]
@@ -516,6 +548,7 @@ def build_report(root: Path) -> dict[str, Any]:
     checks.extend(model_ablation_checks(root))
     checks.extend(live_and_human_checks(root))
     checks.extend(external_evidence_closure_checks(root))
+    checks.extend(external_evidence_packet_checks(root))
     checks.append(completion_check(checks))
 
     status_counts = {"ready": 0, "pending": 0, "fail": 0}

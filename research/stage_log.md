@@ -1856,3 +1856,39 @@ Evidence boundary:
 - It does not complete the AI-Scientist-v2 smoke, run BFTS, prove live
   research-task success, resolve DeepSeek, collect human annotations, collect
   provider billing, or make the AAAI package submission-final.
+
+## 2026-06-20 Phase 53
+
+Actions:
+
+- Added `scripts/check_external_evidence_packets.py`.
+- Added `tests/test_check_external_evidence_packets.py`.
+- Generated `results/external_evidence_packets/packets.md` and
+  `results/external_evidence_packets/packets.json`.
+- Integrated the execution packet report into the active-goal and
+  reproducibility package gates.
+- Added
+  `research/run_logs/2026-06-20_phase53_external_evidence_packets.md`.
+
+Results:
+
+- `results/external_evidence_packets/packets.md` reports
+  `overall_status=ready`, with 7 ready checks, 0 pending checks, and 0 failed
+  checks.
+- The six packets cover AI-Scientist-v2 smoke completion, AI-Scientist-v2 full
+  live/BFTS run, DeepSeek response collection/model-ablation completion,
+  human-fidelity annotation, provider billing/success-per-dollar evidence, and
+  the AAAI submission decision.
+- The active-goal report now shows 67 ready checks, 8 pending checks, and 0
+  failed checks.
+- The reproducibility package report now shows 259 ready checks, 8 pending
+  checks, and 0 failed checks.
+
+Evidence boundary:
+
+- Phase 53 makes each closure item runnable as a local handoff packet with
+  inputs, setup notes, commands, validation commands, completion criteria,
+  escalation rules, and evidence boundaries.
+- It does not complete the AI-Scientist-v2 smoke, run BFTS, prove live
+  research-task success, resolve DeepSeek, collect human annotations, collect
+  provider billing, or make the AAAI package submission-final.

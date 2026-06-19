@@ -7,10 +7,36 @@ Current date: 2026-06-20.
 
 ## Current Phase
 
-Phase 52 is in progress locally: rechecked the bounded AI-Scientist-v2
-LLM-client smoke after Phase 51 created the external-evidence closure queue.
-The smoke remains provider-blocked; this phase does not run BFTS or claim
-live-run success.
+Phase 53 is in progress locally: converted the Phase 51 external-evidence
+closure queue into executable handoff packets. This phase does not call
+providers, run BFTS, collect DeepSeek responses, collect human rows, collect
+provider bills, or claim external evidence completion.
+
+Phase 53 changes currently local:
+
+- Added `scripts/check_external_evidence_packets.py`.
+- Added `tests/test_check_external_evidence_packets.py`.
+- Generated `results/external_evidence_packets/packets.{json,md}`.
+- Integrated execution packets into `scripts/check_goal_completion.py` and
+  `scripts/check_reproducibility_package.py`.
+- Added `research/run_logs/2026-06-20_phase53_external_evidence_packets.md`.
+- Updated artifact map, runbook, stage log, result cards, review/checklist,
+  goal audit, README, and memory references.
+- Current reports:
+  - `results/external_evidence_packets/packets.md`: `ready`, 7 ready checks,
+    0 pending checks, 0 failed checks.
+  - `results/reproducibility/goal_completion_report.md`:
+    `not_complete_pending_external_evidence`, 67 ready checks, 8 pending
+    checks, 0 failed checks.
+  - `results/reproducibility/package_report.md`:
+    `ready_with_pending_external_evidence`, 259 ready checks, 8 pending
+    checks, 0 failed checks.
+- Push status: blocked before Phase 53 started. A retry on 2026-06-20 failed
+  with `Failed to connect to github.com port 443 after 21115 ms: Could not
+  connect to server`. Current branch was ahead of `origin/main` by 6 commits
+  before Phase 53 work; use `git status -sb` as the authoritative count. Retry
+  push after committing Phase 53; if it succeeds, record a memory-only
+  pushed-status commit.
 
 Phase 51 changes currently local:
 
@@ -32,7 +58,7 @@ Phase 51 changes currently local:
   failed on port 443. `Test-NetConnection github.com -Port 443` showed ping
   succeeds but TCP 443 fails. Current branch is ahead of `origin/main` by at
   least 4 local commits; use `git status -sb` as the authoritative count.
-  Retry push before starting Phase 53; if it succeeds, record a memory-only
+  Retry push after committing Phase 53; if it succeeds, record a memory-only
   pushed-status commit.
 
 Phase 52 evidence so far:
@@ -62,13 +88,16 @@ Phase 51 current reports:
   checks. Item statuses: 1 `pending_provider`, 1 `blocked_by_smoke`, 1
   `pending_user_configuration`, 1 `pending_reviewers`, 1
   `pending_billing_rows`, and 1 `pending_decision`.
+- External execution packets:
+  `results/external_evidence_packets/packets.md` reports `ready`, 7 ready
+  checks, 0 pending checks, and 0 failed checks.
 - Goal report:
   `results/reproducibility/goal_completion_report.md` reports
-  `not_complete_pending_external_evidence`, 64 ready checks, 8 pending checks,
+  `not_complete_pending_external_evidence`, 67 ready checks, 8 pending checks,
   and 0 failed checks.
 - Package report:
   `results/reproducibility/package_report.md` reports
-  `ready_with_pending_external_evidence`, 252 ready checks, 8 pending checks,
+  `ready_with_pending_external_evidence`, 259 ready checks, 8 pending checks,
   and 0 failed checks.
 
 Latest pushed Phase 50 commits: `da704bc Refresh AI-Scientist-v2 smoke timeout
@@ -126,17 +155,20 @@ and 0 failed checks. No `results/ai_scientist_v2_smoke/response.md` exists.
   `results/external_evidence_closure/closure.md` reports
   `pending_external_evidence`, 3 ready checks, 0 pending checks, and 0 failed
   checks. It maps all current pending goal requirements to six queue items.
+- External evidence execution packets:
+  `results/external_evidence_packets/packets.md` reports `ready`, 7 ready
+  checks, 0 pending checks, and 0 failed checks.
 - AI-Scientist-v2 live-run handoff:
   `results/ai_scientist_v2_live_run_handoff/handoff.md` reports
   `blocked_by_provider_smoke`, 10 ready checks, 2 pending checks, and 0 failed
   checks.
 - Goal report:
   `results/reproducibility/goal_completion_report.md` reports
-  `not_complete_pending_external_evidence`, 64 ready checks, 8 pending checks,
+  `not_complete_pending_external_evidence`, 67 ready checks, 8 pending checks,
   and 0 failed checks.
 - Package report:
   `results/reproducibility/package_report.md` reports
-  `ready_with_pending_external_evidence`, 252 ready checks, 8 pending checks,
+  `ready_with_pending_external_evidence`, 259 ready checks, 8 pending checks,
   and 0 failed checks.
 
 ## Boundaries To Preserve

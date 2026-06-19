@@ -10,7 +10,7 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 50: Claude Opus 4.8 and GPT-family ablation rows are saved and scored for
+Phase 53: Claude Opus 4.8 and GPT-family ablation rows are saved and scored for
 the current two-case protocol, saved model responses have a local output-token
 proxy report, and all four live-transfer saved-response sets are collected and
 scored for the current prompt-packet protocol. A bounded AI-Scientist-v2
@@ -32,7 +32,8 @@ includes updated adversarial review, rebuttal, and checklist files plus a
 checker that prevents stale review claims from drifting behind current evidence.
 The AAAI-27 paper package, usage examples, deterministic/offline experiments,
 model-ablation runner, DeepSeek follow-up path, local DeepSeek
-handoff/preflight report, local `o200k_base` input/output token proxies,
+handoff/preflight report, local external-evidence closure queue, external
+evidence execution packets, local `o200k_base` input/output token proxies,
 one-command extracted-text-to-skill pipeline, local
 `pdftotext -layout` PDF smoke input path, result tables, and
 machine-checkable package/goal gates are prepared. The active goal is not yet
@@ -128,3 +129,7 @@ pending live-agent claims.
   `results/provider_billing_evidence/billing_summary.md`.
 - Submission-review handoff:
   `results/reproducibility/submission_review_report.md`.
+- External-evidence closure queue:
+  `results/external_evidence_closure/closure.md`.
+- External-evidence execution packets:
+  `results/external_evidence_packets/packets.md`.

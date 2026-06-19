@@ -1,0 +1,304 @@
+{
+  "schema_version": "0.1",
+  "evidence_boundary": "Local execution packets for remaining external evidence. They define inputs, commands, criteria, and escalation paths without collecting the evidence themselves.",
+  "overall_status": "ready",
+  "status_counts": {
+    "ready": 7,
+    "pending": 0,
+    "fail": 0
+  },
+  "closure_status": "pending_external_evidence",
+  "packets": [
+    {
+      "id": "ai_scientist_v2_smoke_completion",
+      "status": "pending_provider",
+      "owner": "Execution/Ops",
+      "goal_requirements": [
+        "ai_scientist_v2_live_llm_smoke_complete"
+      ],
+      "source_closure_evidence": "results/ai_scientist_v2_smoke/run_report.json",
+      "current_detail": "overall=blocked_by_provider_or_model_availability; counts={'ready': 5, 'pending': 2, 'fail': 0}; attempted=claude-opus-4-8,claude-opus-4.8,claude-opus-4-7,claude-opus-4-6",
+      "inputs": [
+        "scripts/run_ai_scientist_v2_smoke.py",
+        "results/ai_scientist_v2_smoke/run_report.json",
+        "D:\\a_work\\gitee\\ai-scientist-v2"
+      ],
+      "setup": [
+        "Set AI_SCIENTIST_OPENAI_BASE_URL locally.",
+        "Set AI_SCIENTIST_OPENAI_API_KEY locally.",
+        "Set AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE=1 locally."
+      ],
+      "run_commands": [
+        "python scripts\\run_ai_scientist_v2_smoke.py --strict --require-complete --timeout-seconds 30 `",
+        "  --model-alias claude-opus-4-8 `",
+        "  --model-alias claude-opus-4.8 `",
+        "  --model-alias claude-opus-4-7 `",
+        "  --model-alias claude-opus-4-6",
+        "python scripts\\check_goal_completion.py --strict"
+      ],
+      "validation_commands": [
+        "python scripts\\run_ai_scientist_v2_smoke.py --strict --require-complete --timeout-seconds 30 `",
+        "  --model-alias claude-opus-4-8 `",
+        "  --model-alias claude-opus-4.8 `",
+        "  --model-alias claude-opus-4-7 `",
+        "  --model-alias claude-opus-4-6",
+        "python scripts\\check_goal_completion.py --strict"
+      ],
+      "completion_criteria": [
+        "results/ai_scientist_v2_smoke/run_report.json reports overall_status=complete.",
+        "results/ai_scientist_v2_smoke/response.md exists and satisfies all smoke marker checks.",
+        "No provider/model availability timeout or exhausted-account status remains in the smoke report."
+      ],
+      "blocker_escalation": "Escalate if every configured alias still times out or returns provider/account exhaustion.",
+      "evidence_boundary": "Execution packet only. This packet does not complete external evidence until its completion criteria are satisfied by fresh artifacts."
+    },
+    {
+      "id": "ai_scientist_v2_full_live_run",
+      "status": "blocked_by_smoke",
+      "owner": "Execution/Ops",
+      "goal_requirements": [
+        "ai_scientist_v2_live_llm_run_complete"
+      ],
+      "source_closure_evidence": "results/ai_scientist_v2_live_run_handoff/handoff.json",
+      "current_detail": "handoff=blocked_by_provider_smoke; completion_dirs=0",
+      "inputs": [
+        "results/ai_scientist_v2_live_run_handoff/handoff.json",
+        "ai_scientist_inputs/papertoskill_seed_ideas.json",
+        "D:\\a_work\\gitee\\ai-scientist-v2\\launch_scientist_bfts.py"
+      ],
+      "setup": [
+        "Complete the AI-Scientist-v2 smoke packet first.",
+        "Use an isolated environment for ai-scientist-v2 dependencies before a long run.",
+        "Keep writeup/review disabled for the bounded task unless the user changes scope."
+      ],
+      "run_commands": [
+        "cd D:\\a_work\\gitee\\ai-scientist-v2",
+        "$env:AI_SCIENTIST_OPENAI_BASE_URL='https://coderxiaoc.com/v1'",
+        "$env:AI_SCIENTIST_OPENAI_API_KEY='<set locally>'",
+        "$env:AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE='1'",
+        "python launch_scientist_bfts.py `",
+        "  --load_ideas D:\\a_work\\gitee\\PaperToSkill\\ai_scientist_inputs\\papertoskill_seed_ideas.json `",
+        "  --idea_idx 0 `",
+        "  --skip_writeup `",
+        "  --skip_review",
+        "python scripts\\check_ai_scientist_v2_live_run_handoff.py --strict",
+        "python scripts\\check_goal_completion.py --strict"
+      ],
+      "validation_commands": [
+        "python scripts\\check_ai_scientist_v2_live_run_handoff.py --strict",
+        "python scripts\\check_goal_completion.py --strict"
+      ],
+      "completion_criteria": [
+        "The bounded full AI-Scientist-v2 run produces a completion directory under ai-scientist-v2/experiments.",
+        "results/ai_scientist_v2_live_run_handoff/handoff.json reports overall_status=complete after rerun.",
+        "Run logs record the command, environment profile, output directory, and failure or success state."
+      ],
+      "blocker_escalation": "Do not start the full run while the smoke report is provider-blocked.",
+      "evidence_boundary": "Execution packet only. This packet does not complete external evidence until its completion criteria are satisfied by fresh artifacts."
+    },
+    {
+      "id": "deepseek_followup_responses",
+      "status": "pending_user_configuration",
+      "owner": "Execution/Ops",
+      "goal_requirements": [
+        "deepseek_followup_response_complete",
+        "model_ablation_evaluation_complete"
+      ],
+      "source_closure_evidence": "results/deepseek_followup_handoff/handoff.json; results/model_ablation_prompts/v0/evaluation.json",
+      "current_detail": "handoff=pending_user_configuration; scored_rows=4; pending_rows=2",
+      "inputs": [
+        "benchmarks/model_ablation_v0.json",
+        "results/deepseek_followup_handoff/handoff.json",
+        "results/model_ablation_prompts/v0/index.json"
+      ],
+      "setup": [
+        "Replace the deepseek-to-be-filled alias with a real DeepSeek model alias.",
+        "Set concrete DeepSeek base-url and API-key environment variable names locally.",
+        "Rebuild prompt packets before running the DeepSeek slot."
+      ],
+      "run_commands": [
+        "python scripts\\build_model_ablation_prompts.py `",
+        "  --task benchmarks\\model_ablation_v0.json `",
+        "  --output-dir results\\model_ablation_prompts\\v0",
+        "python scripts\\run_model_ablation_prompts.py `",
+        "  --task benchmarks\\model_ablation_v0.json `",
+        "  --index results\\model_ablation_prompts\\v0\\index.json `",
+        "  --output-json results\\model_ablation_prompts\\v0\\deepseek_run_report.json `",
+        "  --output-md results\\model_ablation_prompts\\v0\\deepseek_run_report.md `",
+        "  --model-id deepseek_followup_slot",
+        "python scripts\\evaluate_model_ablation_responses.py `",
+        "  --index results\\model_ablation_prompts\\v0\\index.json `",
+        "  --output-json results\\model_ablation_prompts\\v0\\evaluation.json `",
+        "  --output-md results\\model_ablation_prompts\\v0\\evaluation.md",
+        "python scripts\\check_deepseek_followup.py --strict",
+        "python scripts\\evaluate_model_ablation_responses.py --index results\\model_ablation_prompts\\v0\\index.json --output-json results\\model_ablation_prompts\\v0\\evaluation.json --output-md results\\model_ablation_prompts\\v0\\evaluation.md"
+      ],
+      "validation_commands": [
+        "python scripts\\check_deepseek_followup.py --strict",
+        "python scripts\\evaluate_model_ablation_responses.py --index results\\model_ablation_prompts\\v0\\index.json --output-json results\\model_ablation_prompts\\v0\\evaluation.json --output-md results\\model_ablation_prompts\\v0\\evaluation.md"
+      ],
+      "completion_criteria": [
+        "Both DeepSeek expected_response_path files exist.",
+        "results/deepseek_followup_handoff/handoff.json reports responses_present.",
+        "results/model_ablation_prompts/v0/evaluation.json reports pending_rows=0 and scored_rows=6."
+      ],
+      "blocker_escalation": "Escalate if the user has not supplied a concrete DeepSeek endpoint and model alias.",
+      "evidence_boundary": "Execution packet only. This packet does not complete external evidence until its completion criteria are satisfied by fresh artifacts."
+    },
+    {
+      "id": "human_fidelity_annotation",
+      "status": "pending_reviewers",
+      "owner": "Human reviewers",
+      "goal_requirements": [
+        "human_fidelity_annotation_complete"
+      ],
+      "source_closure_evidence": "results/human_fidelity_packets/annotation_summary.json",
+      "current_detail": "status=pending; scored_rows=0; pending_rows=24",
+      "inputs": [
+        "results/human_fidelity_packets/annotation_guide.md",
+        "results/human_fidelity_packets/annotation_template.csv",
+        "results/human_fidelity_packets/*_human_fidelity_packet.md"
+      ],
+      "setup": [
+        "Send the packet files and annotation guide to independent reviewers.",
+        "Keep blank rows blank; do not convert missing review rows into zero scores.",
+        "Collect reviewer-filled rows in the existing annotation_template.csv schema."
+      ],
+      "run_commands": [
+        "python scripts\\summarize_human_fidelity_annotations.py --strict",
+        "python scripts\\check_goal_completion.py --strict"
+      ],
+      "validation_commands": [
+        "python scripts\\summarize_human_fidelity_annotations.py --strict",
+        "python scripts\\check_goal_completion.py --strict"
+      ],
+      "completion_criteria": [
+        "results/human_fidelity_packets/annotation_summary.json reports annotation_status=complete.",
+        "All 24 paper-by-criterion rows are scored with no validation errors.",
+        "Reviewer notes and confidence fields are preserved for audit."
+      ],
+      "blocker_escalation": "Escalate if independent reviewers are unavailable or scoring criteria are ambiguous.",
+      "evidence_boundary": "Execution packet only. This packet does not complete external evidence until its completion criteria are satisfied by fresh artifacts."
+    },
+    {
+      "id": "provider_billing_success_per_dollar",
+      "status": "pending_billing_rows",
+      "owner": "Execution/Ops",
+      "goal_requirements": [
+        "provider_billing_evidence_complete"
+      ],
+      "source_closure_evidence": "results/provider_billing_evidence/billing_summary.json",
+      "current_detail": "status=pending; measured_rows=0; pending_rows=6; errors=0",
+      "inputs": [
+        "benchmarks/provider_billing_evidence_v0.json",
+        "results/provider_billing_evidence/billing_template.csv",
+        "results/provider_billing_evidence/billing_summary.json"
+      ],
+      "setup": [
+        "Export real provider usage or invoice rows for every measured model/provider row.",
+        "Fill billing_template.csv without adding raw API keys or secrets.",
+        "Keep local token proxies separate from realized provider bills."
+      ],
+      "run_commands": [
+        "python scripts\\summarize_provider_billing_evidence.py --strict",
+        "python scripts\\check_goal_completion.py --strict"
+      ],
+      "validation_commands": [
+        "python scripts\\summarize_provider_billing_evidence.py --strict",
+        "python scripts\\check_goal_completion.py --strict"
+      ],
+      "completion_criteria": [
+        "results/provider_billing_evidence/billing_summary.json reports billing_status=complete.",
+        "All 6 billing rows are measured and validation errors are empty.",
+        "Success-per-dollar can be computed from real billed USD rather than local token proxies."
+      ],
+      "blocker_escalation": "Escalate if the provider cannot export usage, invoices, or per-run billing rows.",
+      "evidence_boundary": "Execution packet only. This packet does not complete external evidence until its completion criteria are satisfied by fresh artifacts."
+    },
+    {
+      "id": "aaai_submission_decision",
+      "status": "pending_decision",
+      "owner": "Research Lead",
+      "goal_requirements": [
+        "aaai_final_submission_ready"
+      ],
+      "source_closure_evidence": "results/reproducibility/aaai_package_report.json; results/reproducibility/submission_review_report.json; research/submission_checklist.md",
+      "current_detail": "aaai_package=ready; submission_review=ready",
+      "inputs": [
+        "paper/aaai/papertoskill_aaai2027.tex",
+        "results/reproducibility/aaai_package_report.json",
+        "results/reproducibility/submission_review_report.json",
+        "research/submission_checklist.md"
+      ],
+      "setup": [
+        "Choose whether to submit as a deterministic/offline system paper or wait for external evidence.",
+        "If waiting, do not mark final submission ready until the chosen evidence rows are complete.",
+        "If submitting a bounded paper, explicitly scope claims to validated local evidence."
+      ],
+      "run_commands": [
+        "python scripts\\check_submission_review.py --strict",
+        "python scripts\\check_goal_completion.py --strict",
+        "python scripts\\check_reproducibility_package.py --strict",
+        "python scripts\\check_aaai_package.py --strict",
+        "python scripts\\check_paper_claims.py --strict"
+      ],
+      "validation_commands": [
+        "python scripts\\check_submission_review.py --strict",
+        "python scripts\\check_aaai_package.py --strict",
+        "python scripts\\check_paper_claims.py --strict",
+        "python scripts\\check_goal_completion.py --strict"
+      ],
+      "completion_criteria": [
+        "The research lead records the submission decision and claim boundary.",
+        "AAAI package, paper-claim, paper-table, and submission-review gates pass after the decision.",
+        "The active-goal completion report no longer has aaai_final_submission_ready pending."
+      ],
+      "blocker_escalation": "Escalate if evidence strength is insufficient for the intended AAAI claim scope.",
+      "evidence_boundary": "Execution packet only. This packet does not complete external evidence until its completion criteria are satisfied by fresh artifacts."
+    }
+  ],
+  "checks": [
+    {
+      "id": "external_evidence_packets_closure_present",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/external_evidence_closure/closure.json"
+    },
+    {
+      "id": "external_evidence_packets_match_closure",
+      "status": "ready",
+      "detail": "packets=6; closure_items=6",
+      "evidence": "results/external_evidence_closure/closure.json"
+    },
+    {
+      "id": "external_evidence_packets_have_details",
+      "status": "ready",
+      "detail": "all packets have detail templates",
+      "evidence": "scripts/check_external_evidence_packets.py"
+    },
+    {
+      "id": "external_evidence_packets_commands_declared",
+      "status": "ready",
+      "detail": "commands and validation commands declared",
+      "evidence": "results/external_evidence_packets/packets.json"
+    },
+    {
+      "id": "external_evidence_packets_completion_criteria_declared",
+      "status": "ready",
+      "detail": "completion criteria declared",
+      "evidence": "results/external_evidence_packets/packets.json"
+    },
+    {
+      "id": "external_evidence_packets_boundaries_declared",
+      "status": "ready",
+      "detail": "evidence boundaries declared",
+      "evidence": "results/external_evidence_packets/packets.json"
+    },
+    {
+      "id": "external_evidence_packets_no_secret_material",
+      "status": "ready",
+      "detail": "no raw API-key-like strings found",
+      "evidence": "results/external_evidence_packets/packets.json"
+    }
+  ]
+}

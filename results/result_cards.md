@@ -533,7 +533,7 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 252 ready checks, 8
+  `overall_status=ready_with_pending_external_evidence`, 259 ready checks, 8
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
@@ -959,15 +959,16 @@
 
 - Experiment: make the active-goal completion audit machine-checkable.
 - Main result: `results/reproducibility/goal_completion_report.md` reports
-  `overall_status=not_complete_pending_external_evidence`, 64 ready checks, 8
+  `overall_status=not_complete_pending_external_evidence`, 67 ready checks, 8
   pending checks, and 0 failed checks.
 - Checks: durable memory, AI-Scientist-v2 dry-run evidence, PaperToSkill
   prototype and benchmark readiness, bounded AI-Scientist-v2 LLM-client smoke
   attempt/completion status, full AI-Scientist-v2 live-run handoff/completion
   status, AAAI/usage/table/claim gates, Claude/GPT-family ablation attempts
   and completion status, DeepSeek follow-up readiness, all four live-transfer
-  saved-response sets, human-fidelity annotation, provider-billing handoff, and
-  provider billing completion evidence.
+  saved-response sets, human-fidelity annotation, provider-billing handoff,
+  external-evidence execution packets, and provider billing completion
+  evidence.
 - Practical significance: the project now has a reusable gate that prevents
   accidentally marking the full user goal complete while external evidence is
   still missing.
@@ -1007,6 +1008,34 @@
 - Figure/table: `scripts/check_external_evidence_closure.py`;
   `results/external_evidence_closure/closure.md`;
   `results/external_evidence_closure/closure.json`.
+
+## External Evidence Execution Packets
+
+- Experiment: turn each external-evidence closure queue item into a runnable
+  handoff packet with inputs, setup notes, commands, validation commands,
+  completion criteria, escalation rules, and evidence boundaries.
+- Main result: `results/external_evidence_packets/packets.md` reports
+  `overall_status=ready`, 7 ready checks, 0 pending checks, and 0 failed
+  checks.
+- Packet items: AI-Scientist-v2 smoke completion, AI-Scientist-v2 full
+  live/BFTS run, DeepSeek response collection and model-ablation completion,
+  human-fidelity annotation, provider billing and success-per-dollar evidence,
+  and AAAI submission decision.
+- Practical significance: the remaining external work is now not only mapped
+  but directly executable as a handoff checklist, reducing ambiguity after
+  context compaction or agent handoff.
+- Statistical evidence: none; this is a deterministic planning and gate
+  artifact.
+- Failure modes: packet commands can still be blocked by provider/model
+  availability, missing DeepSeek configuration, unavailable reviewers,
+  unavailable billing exports, or a pending submission decision.
+- Limitations: it does not call providers, run BFTS, collect annotations,
+  collect bills, or approve submission.
+- Claim impact: supports saying the external-evidence handoff is runnable and
+  machine-checked, not that the remaining evidence is complete.
+- Figure/table: `scripts/check_external_evidence_packets.py`;
+  `results/external_evidence_packets/packets.md`;
+  `results/external_evidence_packets/packets.json`.
 
 ## Submission Review Handoff Gate
 

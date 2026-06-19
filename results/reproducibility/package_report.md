@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 252
+- Ready checks: 259
 - Pending checks: 8
 - Failed checks: 0
 
@@ -43,6 +43,9 @@ Evidence boundary: this report checks local package completeness and separates p
 | external_closure_checker | ready | present | scripts/check_external_evidence_closure.py |
 | external_closure_report_json | ready | present | results/external_evidence_closure/closure.json |
 | external_closure_report_md | ready | present | results/external_evidence_closure/closure.md |
+| external_packets_checker | ready | present | scripts/check_external_evidence_packets.py |
+| external_packets_report_json | ready | present | results/external_evidence_packets/packets.json |
+| external_packets_report_md | ready | present | results/external_evidence_packets/packets.md |
 | ai_scientist_smoke_runner | ready | present | scripts/run_ai_scientist_v2_smoke.py |
 | ai_scientist_smoke_report_json | ready | present | results/ai_scientist_v2_smoke/run_report.json |
 | ai_scientist_smoke_report_md | ready | present | results/ai_scientist_v2_smoke/run_report.md |
@@ -90,6 +93,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | phase50_ai_scientist_v2_smoke_timeout_recheck_run_log | ready | present | research/run_logs/2026-06-20_phase50_ai_scientist_v2_smoke_timeout_recheck.md |
 | phase51_external_evidence_closure_queue_run_log | ready | present | research/run_logs/2026-06-20_phase51_external_evidence_closure_queue.md |
 | phase52_ai_scientist_v2_smoke_retry_run_log | ready | present | research/run_logs/2026-06-20_phase52_ai_scientist_v2_smoke_retry.md |
+| phase53_external_evidence_packets_run_log | ready | present | research/run_logs/2026-06-20_phase53_external_evidence_packets.md |
 | provider_billing_protocol | ready | present | benchmarks/provider_billing_evidence_v0.json |
 | provider_billing_summarizer | ready | present | scripts/summarize_provider_billing_evidence.py |
 | provider_billing_template | ready | present | results/provider_billing_evidence/billing_template.csv |
@@ -182,11 +186,14 @@ Evidence boundary: this report checks local package completeness and separates p
 | paper_claim_core_checks_ready | ready | core checks ready | results\reproducibility\paper_claim_report.json |
 | submission_review_report_ready | ready | overall=ready; counts={'ready': 15, 'fail': 0} | results\reproducibility\submission_review_report.json |
 | submission_review_core_checks_ready | ready | core checks ready | results\reproducibility\submission_review_report.json |
-| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 64, 'pending': 8, 'fail': 0} | results\reproducibility\goal_completion_report.json |
+| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 67, 'pending': 8, 'fail': 0} | results\reproducibility\goal_completion_report.json |
 | goal_completion_core_checks_ready | ready | core completion boundaries ready | results\reproducibility\goal_completion_report.json |
 | external_evidence_closure_report_ready | ready | overall=pending_external_evidence; counts={'ready': 3, 'pending': 0, 'fail': 0}; item_counts={'pending_provider': 1, 'blocked_by_smoke': 1, 'pending_user_configuration': 1, 'pending_reviewers': 1, 'pending_billing_rows': 1, 'pending_decision': 1} | results\external_evidence_closure\closure.json |
 | external_evidence_closure_core_checks_ready | ready | core closure checks ready | results\external_evidence_closure\closure.json |
 | external_evidence_closure_queue_items_ready | ready | closure queue items declared | results\external_evidence_closure\closure.json |
+| external_evidence_packets_report_ready | ready | overall=ready; counts={'ready': 7, 'pending': 0, 'fail': 0}; packets=6 | results\external_evidence_packets\packets.json |
+| external_evidence_packets_core_checks_ready | ready | core packet checks ready | results\external_evidence_packets\packets.json |
+| external_evidence_packets_items_ready | ready | execution packets declared | results\external_evidence_packets\packets.json |
 | ai_scientist_v2_smoke_cli_status_summary | ready | status_summary=True; require_complete=True; timeout=True; alias_fallback=True | scripts\run_ai_scientist_v2_smoke.py |
 | ai_scientist_v2_llm_smoke_complete | pending | overall=blocked_by_provider_or_model_availability; counts={'ready': 5, 'pending': 2, 'fail': 0} | results\ai_scientist_v2_smoke\run_report.json |
 | ai_scientist_v2_llm_smoke_response | pending | missing until provider returns response | results\ai_scientist_v2_smoke\response.md |

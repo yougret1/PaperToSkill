@@ -27,14 +27,16 @@ external or follow-up work. Phase 38 adds local output-token proxy accounting
 for saved model-ablation responses, but this is not realized provider billing.
 Phase 51 adds a local external-evidence closure queue that maps each remaining
 pending requirement to a concrete next action without claiming completion.
+Phase 53 adds execution packets for those queue items, with inputs, commands,
+completion criteria, escalation rules, and evidence boundaries.
 
 Local package status: `results/reproducibility/package_report.md` reports
-`ready_with_pending_external_evidence`, 252 ready checks, 8 pending checks, and
+`ready_with_pending_external_evidence`, 259 ready checks, 8 pending checks, and
 0 failed checks.
 
 Machine-checkable goal status:
 `results/reproducibility/goal_completion_report.md` reports
-`not_complete_pending_external_evidence`, 64 ready checks, 8 pending checks,
+`not_complete_pending_external_evidence`, 67 ready checks, 8 pending checks,
 and 0 failed checks.
 
 External-evidence closure queue:
@@ -42,6 +44,11 @@ External-evidence closure queue:
 `pending_external_evidence`, 3 ready checks, 0 pending checks, and 0 failed
 checks. It covers all current pending goal requirements with six next-action
 items.
+
+External-evidence execution packets:
+`results/external_evidence_packets/packets.md` reports `ready`, 7 ready checks,
+0 pending checks, and 0 failed checks. It turns the six closure items into
+execution packets without completing the evidence itself.
 
 ## Requirement Audit
 
@@ -66,6 +73,7 @@ items.
 | Final paper narrative. | `paper/draft.md`; `paper/outline.md`; `paper/claim_checklist.md`; `paper/limitations.md`; AAAI `.tex` draft. | Prepared, not final | Final paper requires live/human/model evidence decisions or explicit decision to submit as deterministic/offline system paper. |
 | Machine-checkable completion gate. | `scripts/check_goal_completion.py`; `results/reproducibility/goal_completion_report.md`; reproducibility checks `goal_completion_report_ready` and `goal_completion_core_checks_ready` are ready. | Complete as a gate; full goal still pending | Re-run the gate after any model, human-fidelity, provider-billing, or final-paper evidence changes. |
 | External evidence closure queue. | `scripts/check_external_evidence_closure.py`; `results/external_evidence_closure/closure.md`; goal/package checks `external_evidence_closure_queue_ready` and `external_evidence_closure_report_ready` are ready. | Complete as a local queue; evidence still pending | Work through the six queue items without treating queue readiness as evidence completion. |
+| External evidence execution packets. | `scripts/check_external_evidence_packets.py`; `results/external_evidence_packets/packets.md`; goal/package checks `external_evidence_execution_packets_ready` and `external_evidence_packets_report_ready` are ready. | Complete as local execution packets; evidence still pending | Use packets as the handoff checklist for each external evidence item. |
 
 ## Current Blocking Evidence
 
@@ -125,6 +133,9 @@ items.
 - `results/external_evidence_closure/closure.md`: all current pending goal
   requirements are mapped to six next-action items; this is a local queue, not
   evidence completion.
+- `results/external_evidence_packets/packets.md`: each closure item has a
+  local execution packet with inputs, commands, completion criteria, escalation
+  rules, and evidence boundaries; this is a handoff, not evidence completion.
 - `results/reproducibility/aaai_package_report.md`: AAAI package gate is ready
   with 17 ready checks and 0 failed checks; this removes a local package
   uncertainty but not the external model/human/cost evidence blockers.
