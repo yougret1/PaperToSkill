@@ -7,10 +7,10 @@ Current date: 2026-06-20.
 
 ## Current Phase
 
-Phase 51 is complete locally: added a no-network external evidence closure
-queue that maps remaining pending goal requirements to concrete next actions.
-This phase did not call APIs, run BFTS, collect external evidence, or mark the
-goal complete.
+Phase 52 is in progress locally: rechecked the bounded AI-Scientist-v2
+LLM-client smoke after Phase 51 created the external-evidence closure queue.
+The smoke remains provider-blocked; this phase does not run BFTS or claim
+live-run success.
 
 Phase 51 changes currently local:
 
@@ -32,8 +32,21 @@ Phase 51 changes currently local:
   failed on port 443. `Test-NetConnection github.com -Port 443` showed ping
   succeeds but TCP 443 fails. Current branch is ahead of `origin/main` by at
   least 4 local commits; use `git status -sb` as the authoritative count.
-  Retry push before starting Phase 52; if it succeeds, record a memory-only
+  Retry push before starting Phase 53; if it succeeds, record a memory-only
   pushed-status commit.
+
+Phase 52 evidence so far:
+
+- Re-ran `scripts/run_ai_scientist_v2_smoke.py` with shell-only credentials,
+  four Claude aliases, and `--timeout-seconds 30`.
+- `results/ai_scientist_v2_smoke/run_report.md` remains
+  `blocked_by_provider_or_model_availability`, with 5 ready checks, 2 pending
+  checks, and 0 failed checks.
+- `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and
+  `claude-opus-4-6` each timed out after 30 seconds waiting for provider
+  response.
+- No `results/ai_scientist_v2_smoke/response.md` file exists.
+- Added `research/run_logs/2026-06-20_phase52_ai_scientist_v2_smoke_retry.md`.
 
 Phase 51 current reports:
 
@@ -49,7 +62,7 @@ Phase 51 current reports:
   and 0 failed checks.
 - Package report:
   `results/reproducibility/package_report.md` reports
-  `ready_with_pending_external_evidence`, 251 ready checks, 8 pending checks,
+  `ready_with_pending_external_evidence`, 252 ready checks, 8 pending checks,
   and 0 failed checks.
 
 Latest pushed Phase 50 commits: `da704bc Refresh AI-Scientist-v2 smoke timeout
@@ -117,7 +130,7 @@ and 0 failed checks. No `results/ai_scientist_v2_smoke/response.md` exists.
   and 0 failed checks.
 - Package report:
   `results/reproducibility/package_report.md` reports
-  `ready_with_pending_external_evidence`, 251 ready checks, 8 pending checks,
+  `ready_with_pending_external_evidence`, 252 ready checks, 8 pending checks,
   and 0 failed checks.
 
 ## Boundaries To Preserve

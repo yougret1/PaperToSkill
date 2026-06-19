@@ -70,6 +70,7 @@
 | `research/run_logs/2026-06-19_phase49_ai_scientist_v2_live_run_handoff.md` | Local AI-Scientist-v2 full live/BFTS run handoff/preflight report and gate integration | Created |
 | `research/run_logs/2026-06-20_phase50_ai_scientist_v2_smoke_timeout_recheck.md` | AI-Scientist-v2 smoke recheck where all four Claude aliases timed out after 30 seconds | Created |
 | `research/run_logs/2026-06-20_phase51_external_evidence_closure_queue.md` | Local external-evidence closure queue and gate integration | Created |
+| `research/run_logs/2026-06-20_phase52_ai_scientist_v2_smoke_retry.md` | AI-Scientist-v2 smoke retry where all four Claude aliases again timed out after 30 seconds | Created |
 
 ## Paper Draft Package
 

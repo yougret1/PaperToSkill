@@ -1829,3 +1829,30 @@ Evidence boundary:
 - It does not complete the AI-Scientist-v2 smoke, run BFTS, prove live
   research-task success, resolve DeepSeek, collect human annotations, collect
   provider billing, or make the AAAI package submission-final.
+
+## 2026-06-20 Phase 52
+
+Actions:
+
+- Re-ran the bounded AI-Scientist-v2 LLM-client smoke with shell-only
+  credentials, four Claude aliases, and `--timeout-seconds 30`.
+- Added
+  `research/run_logs/2026-06-20_phase52_ai_scientist_v2_smoke_retry.md`.
+
+Results:
+
+- `results/ai_scientist_v2_smoke/run_report.md` still reports
+  `overall_status=blocked_by_provider_or_model_availability`, with 5 ready
+  checks, 2 pending checks, and 0 failed checks.
+- `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and
+  `claude-opus-4-6` each timed out after 30 seconds waiting for provider
+  response.
+- No `results/ai_scientist_v2_smoke/response.md` file was created.
+
+Evidence boundary:
+
+- Phase 52 refreshes provider/model availability evidence for the bounded
+  AI-Scientist-v2 LLM-client smoke path.
+- It does not complete the AI-Scientist-v2 smoke, run BFTS, prove live
+  research-task success, resolve DeepSeek, collect human annotations, collect
+  provider billing, or make the AAAI package submission-final.

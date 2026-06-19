@@ -142,7 +142,7 @@ python scripts\run_ai_scientist_v2_smoke.py --strict --timeout-seconds 30 `
   --model-alias claude-opus-4-6
 ```
 
-Current Phase 50 status:
+Current Phase 52 status:
 `results/ai_scientist_v2_smoke/run_report.md` reports
 `overall_status=blocked_by_provider_or_model_availability`, 5 ready checks, 2
 pending checks, and 0 failed checks. The latest recheck tried

@@ -15,7 +15,7 @@ current prompt-packet protocol. Phase 41 attempted a bounded AI-Scientist-v2
 LLM-client smoke through the local `ai_scientist.llm` client; Phase 45 rechecked
 the smoke path with a script-level timeout, Phase 46 tried the known Claude
 alias variants, Phase 48 recorded historical HTTP 403 plus timeout evidence,
-and Phase 50 rechecked all four aliases with a 30-second timeout. The latest
+and Phase 52 rechecked all four aliases with a 30-second timeout. The latest
 report is still `blocked_by_provider_or_model_availability`: `claude-opus-4-8`,
 `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6` all timed out after
 30 seconds waiting for provider response. The full goal is not yet complete
@@ -29,7 +29,7 @@ Phase 51 adds a local external-evidence closure queue that maps each remaining
 pending requirement to a concrete next action without claiming completion.
 
 Local package status: `results/reproducibility/package_report.md` reports
-`ready_with_pending_external_evidence`, 251 ready checks, 8 pending checks, and
+`ready_with_pending_external_evidence`, 252 ready checks, 8 pending checks, and
 0 failed checks.
 
 Machine-checkable goal status:
