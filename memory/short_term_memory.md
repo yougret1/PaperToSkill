@@ -7,38 +7,35 @@ Current date: 2026-06-20.
 
 ## Current Phase
 
-Phase 57 is in progress locally. Phase 56 was committed and pushed as
-`f1cc165 Refresh AI-Scientist-v2 smoke after push recovery`; before Phase 57
-edits, `HEAD == origin/main == f1cc165c0bfb290d0e8041b72a40cab89c15fb74`.
+Phase 58 is the current completed phase. Phase 57 was committed and pushed as
+`081e420 Retry AI-Scientist-v2 smoke with GPT profile`; before Phase 58 edits,
+`HEAD == origin/main == 081e420e45b81871ecd4b5a6f55f40bc725b7d9b`.
 
-Phase 57 objective:
+Phase 58 objective:
 
-- Test whether the bounded AI-Scientist-v2 LLM-client smoke can complete with
-  the GPT-family credential profile after repeated Claude-family provider
-  blockers.
+- Make the bounded AI-Scientist-v2 LLM-client smoke more diagnostic by capping
+  the tiny marker-contract request at `--max-tokens 128`.
 - Keep this as provider/model availability evidence only, not model-quality or
   live research-task evidence.
 
-Phase 57 evidence so far:
+Phase 58 evidence:
 
-- Used shell-only credentials:
-  `AI_SCIENTIST_OPENAI_BASE_URL=https://coderxiaoc.com/v1`,
-  `AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE=1`, and the GPT-family key mapped into
-  `AI_SCIENTIST_OPENAI_API_KEY` for this smoke only.
-- Ran:
-  `python scripts\run_ai_scientist_v2_smoke.py --strict --require-complete --timeout-seconds 60 --model-alias gpt-5.5 --model-alias gpt-5.4`.
-- The command exited non-zero because `--require-complete` was set.
+- Added `--max-tokens` to `scripts/run_ai_scientist_v2_smoke.py`; it
+  temporarily overrides `ai_scientist.llm.MAX_NUM_TOKENS` for the smoke call
+  and restores the previous value afterward.
+- Added tests for the max-token cap and package-gate recognition.
+- Ran capped smoke retries with shell-only credentials:
+  - GPT-family: `--timeout-seconds 45 --max-tokens 128 --model-alias gpt-5.5 --model-alias gpt-5.4`; both aliases timed out.
+  - Claude-family: `--timeout-seconds 30 --max-tokens 128 --model-alias claude-opus-4-8 --model-alias claude-opus-4.8 --model-alias claude-opus-4-7 --model-alias claude-opus-4-6`; all four aliases timed out.
 - `results/ai_scientist_v2_smoke/run_report.md` remains
-  `blocked_by_provider_or_model_availability`, with 3 ready checks, 2 pending
-  checks, and 0 failed checks.
-- `gpt-5.5` and `gpt-5.4` both timed out after 60 seconds waiting for provider
-  response.
+  `blocked_by_provider_or_model_availability`, with latest report
+  `max_tokens=128`, 5 ready checks, 2 pending checks, and 0 failed checks.
 - No `results/ai_scientist_v2_smoke/response.md` file exists.
 - Added
-  `research/run_logs/2026-06-20_phase57_ai_scientist_v2_gpt_smoke_retry.md`.
+  `research/run_logs/2026-06-20_phase58_ai_scientist_v2_max_token_smoke.md`.
 - Updated the external-evidence closure queue and execution-packet generators
-  so the AI-Scientist-v2 smoke handoff lists both Claude-family and GPT-family
-  retry commands.
+  so the AI-Scientist-v2 smoke handoff uses the 128-token marker-contract
+  probe.
 
 ## Current Evidence
 
@@ -60,8 +57,9 @@ Phase 57 evidence so far:
 - AI-Scientist-v2 LLM-client smoke remains provider/model blocked.
   Earlier Claude-family attempts included HTTP 403 account exhaustion and
   repeated 30-second timeouts for `claude-opus-4-8`, `claude-opus-4.8`,
-  `claude-opus-4-7`, and `claude-opus-4-6`; latest Phase 57 GPT-family retry
-  timed out for `gpt-5.5` and `gpt-5.4` after 60 seconds each.
+  `claude-opus-4-7`, and `claude-opus-4-6`; Phase 57 GPT-family retry timed
+  out for `gpt-5.5` and `gpt-5.4`; Phase 58 capped retries still timed out for
+  both credential profiles.
 - AI-Scientist-v2 full live/BFTS run remains blocked by smoke.
   `results/ai_scientist_v2_live_run_handoff/handoff.md` reports
   `blocked_by_provider_smoke`, with no completion artifacts.
@@ -100,7 +98,7 @@ Supported:
 - `aaai_final_submission_ready` remains pending until a human decision and
   selected evidence policy are recorded.
 
-## Verification To Run Before Phase 57 Commit
+## Phase 58 Verification Completed
 
 ```powershell
 python -m unittest discover -s tests -v
@@ -119,6 +117,13 @@ python scripts\check_paper_tables.py --strict
 git diff --check
 rg -n "sk-[A-Za-z0-9]{20,}" .
 ```
+
+Results:
+
+- `python -m unittest discover -s tests -v`: 74 tests passed.
+- All listed strict checkers passed.
+- `git diff --check`: no whitespace errors; only line-ending warnings.
+- Raw key scan produced no matches.
 
 ## Persistent Blockers
 

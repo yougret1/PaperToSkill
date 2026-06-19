@@ -80,6 +80,7 @@ class CheckReproducibilityPackageTest(unittest.TestCase):
                 if check["id"] == "ai_scientist_v2_smoke_cli_status_summary"
             }["ai_scientist_v2_smoke_cli_status_summary"]
             self.assertIn("alias_fallback=True", smoke_cli["detail"])
+            self.assertIn("max_tokens=True", smoke_cli["detail"])
             self.assertIn("ai_scientist_v2_live_responses", ready_ids)
             self.assertIn("reflexion_live_responses", ready_ids)
             self.assertIn("aide_live_responses", ready_ids)

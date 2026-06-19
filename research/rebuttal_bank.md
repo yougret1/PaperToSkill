@@ -72,7 +72,7 @@ human semantic review or real live-task success.
 Evidence to cite:
 
 - `paper/limitations.md`: heuristic metric limitation.
-- `results/reproducibility/package_report.md`: 269 ready checks, 8 pending
+- `results/reproducibility/package_report.md`: 270 ready checks, 8 pending
   checks, and 0 failed checks.
 - `results/human_fidelity_packets/`: prepared independent-review protocol.
 
@@ -164,12 +164,12 @@ Do not say:
 
 Short answer: The local dry run succeeded, and a bounded LLM-client smoke was
 attempted through the local AI-Scientist-v2 client. The latest smoke report is
-`blocked_by_provider_or_model_availability`: the GPT-family credential profile
-was mapped into the AI-Scientist-v2 OpenAI-compatible client path, `gpt-5.5`
-and `gpt-5.4` were tried, and both aliases timed out after 60 seconds waiting
-for provider response. Earlier Claude-family retries also timed out or returned
-provider/account availability blockers. Smoke completion and full live-run
-evidence remain pending.
+`blocked_by_provider_or_model_availability`: the Phase 58 capped smoke request
+used `--max-tokens 128`, tried `claude-opus-4-8`, `claude-opus-4.8`,
+`claude-opus-4-7`, and `claude-opus-4-6`, and all four aliases timed out after
+30 seconds waiting for provider response. The immediately preceding GPT-family
+capped retry tried `gpt-5.5` and `gpt-5.4`, and both timed out after 45
+seconds. Smoke completion and full live-run evidence remain pending.
 
 Evidence to cite:
 
@@ -192,7 +192,7 @@ Evidence to cite:
 
 - `results/reproducibility/goal_completion_report.md`: 70 ready checks,
   8 pending checks, 0 failed checks.
-- `results/reproducibility/package_report.md`: 269 ready checks, 8 pending
+- `results/reproducibility/package_report.md`: 270 ready checks, 8 pending
   checks, 0 failed checks.
 - `results/external_evidence_closure/closure.md`: six local closure items for
   the remaining external evidence.

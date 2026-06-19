@@ -26,14 +26,18 @@ class AIScientistV2SmokeTest(unittest.TestCase):
         delay_seconds=0,
         responses_by_model=None,
         errors_by_model=None,
+        token_observer=None,
     ):
         package = types.ModuleType("ai_scientist")
         llm = types.ModuleType("ai_scientist.llm")
+        llm.MAX_NUM_TOKENS = 4096
 
         def create_client(model):
             return object(), model
 
         def get_response_from_llm(prompt, client, model, system_message, temperature=0):
+            if token_observer is not None:
+                token_observer.append(llm.MAX_NUM_TOKENS)
             if delay_seconds:
                 time.sleep(delay_seconds)
             if errors_by_model and model in errors_by_model:
@@ -64,6 +68,7 @@ class AIScientistV2SmokeTest(unittest.TestCase):
                     response_output=tmp_path / "response.md",
                     timeout_seconds=1,
                     model_aliases=None,
+                    max_tokens=None,
                 )
             )
 
@@ -93,6 +98,7 @@ class AIScientistV2SmokeTest(unittest.TestCase):
                     response_output=response_path,
                     timeout_seconds=1,
                     model_aliases=None,
+                    max_tokens=None,
                 )
             )
 
@@ -122,6 +128,7 @@ class AIScientistV2SmokeTest(unittest.TestCase):
                     response_output=response_path,
                     timeout_seconds=0.01,
                     model_aliases=None,
+                    max_tokens=None,
                 )
             )
 
@@ -149,6 +156,7 @@ class AIScientistV2SmokeTest(unittest.TestCase):
                     response_output=tmp_path / "response.md",
                     timeout_seconds=1,
                     model_aliases=["claude-opus-4-8", "claude-opus-4-7", "claude-opus-4-6"],
+                    max_tokens=None,
                 )
             )
 
@@ -161,6 +169,31 @@ class AIScientistV2SmokeTest(unittest.TestCase):
             self.assertIn("blocked", checks["ai_scientist_v2_llm_alias_attempt_1"]["detail"])
             self.assertEqual("ready", checks["ai_scientist_v2_llm_alias_attempt_2"]["status"])
             self.assertTrue((tmp_path / "response.md").exists())
+
+    def test_smoke_temporarily_caps_max_tokens(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            observed_tokens = []
+            self.install_fake_ai_scientist(
+                "PAPERTOSKILL_SMOKE_OK from ai-scientist-v2 for paper-to-skill.",
+                token_observer=observed_tokens,
+            )
+            report = smoke.run(
+                Namespace(
+                    ai_scientist_root=tmp_path,
+                    model="gpt-5.5",
+                    prompt="prompt",
+                    system_message="system",
+                    response_output=tmp_path / "response.md",
+                    timeout_seconds=1,
+                    model_aliases=None,
+                    max_tokens=128,
+                )
+            )
+
+            self.assertEqual("complete", report["overall_status"])
+            self.assertEqual([128], observed_tokens)
+            self.assertEqual(4096, sys.modules["ai_scientist.llm"].MAX_NUM_TOKENS)
 
 
 if __name__ == "__main__":

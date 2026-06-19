@@ -49,9 +49,9 @@ def load_ai_scientist_llm(ai_scientist_root: Path):
     root = ai_scientist_root.resolve()
     if str(root) not in sys.path:
         sys.path.insert(0, str(root))
-    from ai_scientist.llm import create_client, get_response_from_llm  # type: ignore
+    import ai_scientist.llm as llm  # type: ignore
 
-    return create_client, get_response_from_llm
+    return llm
 
 
 def response_contract_checks(response_text: str, output_path: Path) -> list[Check]:
@@ -79,6 +79,7 @@ def build_report(
     response_text: str | None,
     started_at: int,
     completed_at: int,
+    max_tokens: int | None,
     error: str | None = None,
 ) -> dict[str, Any]:
     checks: list[Check] = [
@@ -141,6 +142,7 @@ def build_report(
         "base_url_env": "AI_SCIENTIST_OPENAI_BASE_URL",
         "base_url": base_url or "",
         "auth_env": "AI_SCIENTIST_OPENAI_API_KEY",
+        "max_tokens": max_tokens,
         "started_at_unix": started_at,
         "completed_at_unix": completed_at,
         "overall_status": overall,
@@ -150,15 +152,22 @@ def build_report(
 
 
 def call_llm_with_timeout(args: argparse.Namespace, model: str) -> str:
-    create_client, get_response_from_llm = load_ai_scientist_llm(args.ai_scientist_root)
-    client, client_model = create_client(model)
-    response_text, _ = get_response_from_llm(
-        args.prompt,
-        client,
-        client_model,
-        args.system_message,
-        temperature=0,
-    )
+    llm = load_ai_scientist_llm(args.ai_scientist_root)
+    client, client_model = llm.create_client(model)
+    old_max_tokens = getattr(llm, "MAX_NUM_TOKENS", None)
+    if args.max_tokens is not None:
+        llm.MAX_NUM_TOKENS = args.max_tokens
+    try:
+        response_text, _ = llm.get_response_from_llm(
+            args.prompt,
+            client,
+            client_model,
+            args.system_message,
+            temperature=0,
+        )
+    finally:
+        if args.max_tokens is not None and old_max_tokens is not None:
+            llm.MAX_NUM_TOKENS = old_max_tokens
     return response_text
 
 
@@ -197,6 +206,7 @@ def write_markdown(path: Path, report: dict[str, Any]) -> None:
         f"- Attempted models: {', '.join(attempt.get('model', '') for attempt in report.get('attempted_models', []))}",
         f"- Base URL env: {report['base_url_env']}",
         f"- Auth env: {report['auth_env']}",
+        f"- Max tokens override: {report.get('max_tokens') or 'default'}",
         f"- Ready checks: {report['status_counts'].get('ready', 0)}",
         f"- Pending checks: {report['status_counts'].get('pending', 0)}",
         f"- Failed checks: {report['status_counts'].get('fail', 0)}",
@@ -243,6 +253,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         response_text=response_text,
         started_at=started_at,
         completed_at=int(time.time()),
+        max_tokens=args.max_tokens,
         error=error,
     )
 
@@ -291,6 +302,15 @@ def main() -> int:
         type=float,
         default=30.0,
         help="Maximum seconds to wait for the provider before writing a blocked report.",
+    )
+    parser.add_argument(
+        "--max-tokens",
+        type=int,
+        default=None,
+        help=(
+            "Optional temporary cap for ai_scientist.llm.MAX_NUM_TOKENS during "
+            "the smoke call. Useful for tiny marker-contract probes."
+        ),
     )
     parser.add_argument(
         "--system-message",

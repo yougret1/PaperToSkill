@@ -16,13 +16,14 @@ LLM-client smoke through the local `ai_scientist.llm` client; Phase 45 rechecked
 the smoke path with a script-level timeout, Phase 46 tried the known Claude
 alias variants, Phase 48 recorded historical HTTP 403 plus timeout evidence,
 Phase 54 executed the smoke-completion packet with a 30-second timeout, Phase
-56 retried after GitHub push recovery, and Phase 57 tried the GPT-family
-credential profile through the same AI-Scientist-v2 OpenAI-compatible client
-path. The latest report is still
-`blocked_by_provider_or_model_availability`: `gpt-5.5` and `gpt-5.4` both
-timed out after 60 seconds waiting for provider response. Earlier Claude-family
-retries also timed out or returned provider/account availability blockers. The
-full goal is not yet complete because the
+56 retried after GitHub push recovery, Phase 57 tried the GPT-family credential
+profile through the same AI-Scientist-v2 OpenAI-compatible client path, and
+Phase 58 reduced the smoke request to `--max-tokens 128`. The latest report is
+still `blocked_by_provider_or_model_availability`: `claude-opus-4-8`,
+`claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6` all timed out
+after 30 seconds waiting for provider response with the 128-token cap. The
+immediately preceding capped GPT-family retry timed out for `gpt-5.5` and
+`gpt-5.4`. The full goal is not yet complete because the
 AI-Scientist-v2 LLM-client smoke and full live-run evidence, DeepSeek follow-up
 responses, human-fidelity annotation, stronger provider-billing or
 success-per-dollar evidence, and final submission decisions remain pending
@@ -36,7 +37,7 @@ local AAAI submission-decision preflight that exposes the submit-now and
 wait-for-evidence options without selecting either option.
 
 Local package status: `results/reproducibility/package_report.md` reports
-`ready_with_pending_external_evidence`, 269 ready checks, 8 pending checks, and
+`ready_with_pending_external_evidence`, 270 ready checks, 8 pending checks, and
 0 failed checks.
 
 Machine-checkable goal status:
@@ -66,7 +67,7 @@ preflight.
 | Requirement | Current Evidence | Status | Next Action |
 | --- | --- | --- | --- |
 | Maintain durable local memory with at least long-term and short-term files. | `memory/long_term_memory.md`; `memory/short_term_memory.md`; reproducibility checks `memory_long_term` and `memory_short_term` are ready. | Complete locally | Continue reading both memory files after every resume/compaction and update short-term memory after phase changes. |
-| Use `ai-scientist-v2` to refine and develop PaperToSkill. | `ai_scientist_inputs/papertoskill.md`; `ai_scientist_inputs/papertoskill_seed_ideas.json`; AI-Scientist-v2 dry-run recorded in memory and run logs; PaperToSkill repo keeps AI-Scientist-v2 as execution context; `scripts/run_ai_scientist_v2_smoke.py`; `results/ai_scientist_v2_smoke/run_report.md`; `scripts/check_ai_scientist_v2_live_run_handoff.py`; `results/ai_scientist_v2_live_run_handoff/handoff.md`. | Partially complete | The bounded AI-Scientist-v2 LLM-client smoke was attempted with Claude-family and GPT-family credential profiles, but the latest report remains `blocked_by_provider_or_model_availability`; `gpt-5.5` and `gpt-5.4` both timed out after 60 seconds waiting for provider response. The full live-run handoff is locally ready but remains blocked by smoke/provider availability and missing completion artifacts. |
+| Use `ai-scientist-v2` to refine and develop PaperToSkill. | `ai_scientist_inputs/papertoskill.md`; `ai_scientist_inputs/papertoskill_seed_ideas.json`; AI-Scientist-v2 dry-run recorded in memory and run logs; PaperToSkill repo keeps AI-Scientist-v2 as execution context; `scripts/run_ai_scientist_v2_smoke.py`; `results/ai_scientist_v2_smoke/run_report.md`; `scripts/check_ai_scientist_v2_live_run_handoff.py`; `results/ai_scientist_v2_live_run_handoff/handoff.md`. | Partially complete | The bounded AI-Scientist-v2 LLM-client smoke was attempted with Claude-family and GPT-family credential profiles, including a 128-token capped marker-contract probe, but the latest report remains `blocked_by_provider_or_model_availability`. The full live-run handoff is locally ready but remains blocked by smoke/provider availability and missing completion artifacts. |
 | Save phase-level progress to `yougret1/PaperToSkill.git`. | Phase-level commits are pushed to `origin/main`; latest saved phases include AAAI package, usage-example, paper-table, and paper-claim gates. | Complete through current pushed phase | Keep committing/pushing phase-level increments. |
 | Use official AAAI TeX template for final paper. | `paper/aaai/AuthorKit27.zip`; `paper/aaai/aaai2027.sty`; `paper/aaai/aaai2027.bst`; `paper/aaai/README.md`; `paper/aaai/papertoskill_aaai2027.tex`; `paper/aaai/papertoskill_aaai2027.pdf`; `scripts/check_aaai_package.py`; `results/reproducibility/aaai_package_report.md`; `scripts/check_paper_tables.py`; `results/reproducibility/paper_table_report.md`; `scripts/check_paper_claims.py`; `results/reproducibility/paper_claim_report.md`. | Prepared and locally verified, not submission-final | Keep the AAAI draft synchronized with new evidence. Submission-final requires final claims, figures, metadata, and any venue-specific updates. |
 | Provide experiment usage examples. | `examples/usage/README.md`; `examples/usage/codex_skill_usage.md`; `examples/usage/auto_note_scaffold_usage.md`; `examples/usage/model_ablation_usage.md`; `scripts/check_usage_examples.py`; `results/reproducibility/usage_example_report.md`; `research/runbook.md`. | Complete and locally verified | Keep examples synchronized if task specs or runner commands change. |
@@ -109,12 +110,11 @@ preflight.
   success-per-dollar value is available.
 - `results/ai_scientist_v2_smoke/run_report.md`: bounded AI-Scientist-v2
   LLM-client smoke attempt remains
-  `blocked_by_provider_or_model_availability`; the latest GPT-family retry
-  tried `gpt-5.5` and `gpt-5.4`; both aliases timed out after 60 seconds
-  waiting for provider response. Earlier Claude-family retries also timed out
-  or returned provider/account availability blockers. The attempts are
-  recorded, but smoke completion and full live AI-Scientist-v2 run evidence
-  remain pending.
+  `blocked_by_provider_or_model_availability`; the latest 128-token-capped
+  Claude-family retry timed out for `claude-opus-4-8`, `claude-opus-4.8`,
+  `claude-opus-4-7`, and `claude-opus-4-6`. The preceding capped GPT-family
+  retry timed out for `gpt-5.5` and `gpt-5.4`. The attempts are recorded, but
+  smoke completion and full live AI-Scientist-v2 run evidence remain pending.
 - `results/ai_scientist_v2_live_run_handoff/handoff.md`: full live-run
   handoff is `blocked_by_provider_smoke`, with 10 ready checks, 2 pending
   checks, and 0 failed checks. It does not run BFTS or complete the full

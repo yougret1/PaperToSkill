@@ -2033,3 +2033,39 @@ Evidence boundary:
 - It does not complete the AI-Scientist-v2 smoke, run BFTS, prove live
   research-task success, resolve DeepSeek, collect human annotations, collect
   provider billing, or make the AAAI package submission-final.
+
+## 2026-06-20 Phase 58
+
+Actions:
+
+- Added `--max-tokens` to `scripts/run_ai_scientist_v2_smoke.py`, allowing the
+  bounded smoke call to temporarily cap `ai_scientist.llm.MAX_NUM_TOKENS` and
+  restore the previous value afterward.
+- Added test coverage for the temporary token cap and restoration behavior.
+- Retried the bounded AI-Scientist-v2 LLM-client smoke with `--max-tokens 128`
+  for GPT-family aliases and Claude-family aliases.
+- Updated external-evidence closure and execution-packet commands so future
+  smoke retries use the 128-token marker-contract probe.
+- Added
+  `research/run_logs/2026-06-20_phase58_ai_scientist_v2_max_token_smoke.md`.
+
+Results:
+
+- GPT-family capped retry: `gpt-5.5` and `gpt-5.4` both timed out after 45
+  seconds waiting for provider response.
+- Claude-family capped retry: `claude-opus-4-8`, `claude-opus-4.8`,
+  `claude-opus-4-7`, and `claude-opus-4-6` all timed out after 30 seconds
+  waiting for provider response.
+- The latest `results/ai_scientist_v2_smoke/run_report.md` records the
+  Claude-family capped retry, `max_tokens=128`,
+  `overall_status=blocked_by_provider_or_model_availability`, 5 ready checks,
+  2 pending checks, and 0 failed checks.
+- No `results/ai_scientist_v2_smoke/response.md` file exists.
+
+Evidence boundary:
+
+- Phase 58 makes the smoke request smaller and more diagnostic, but the
+  provider still did not return a marker-contract response.
+- It does not complete the AI-Scientist-v2 smoke, run BFTS, prove live
+  research-task success, resolve DeepSeek, collect human annotations, collect
+  provider billing, or make the AAAI package submission-final.

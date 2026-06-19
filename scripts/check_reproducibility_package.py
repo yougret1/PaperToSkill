@@ -150,6 +150,7 @@ CORE_FILES = {
     "phase55_aaai_submission_decision_preflight_run_log": "research/run_logs/2026-06-20_phase55_aaai_submission_decision_preflight.md",
     "phase56_ai_scientist_v2_smoke_after_push_recovery_run_log": "research/run_logs/2026-06-20_phase56_ai_scientist_v2_smoke_after_push_recovery.md",
     "phase57_ai_scientist_v2_gpt_smoke_retry_run_log": "research/run_logs/2026-06-20_phase57_ai_scientist_v2_gpt_smoke_retry.md",
+    "phase58_ai_scientist_v2_max_token_smoke_run_log": "research/run_logs/2026-06-20_phase58_ai_scientist_v2_max_token_smoke.md",
     "provider_billing_protocol": "benchmarks/provider_billing_evidence_v0.json",
     "provider_billing_summarizer": "scripts/summarize_provider_billing_evidence.py",
     "provider_billing_template": "results/provider_billing_evidence/billing_template.csv",
@@ -860,15 +861,19 @@ def ai_scientist_smoke_checks(root: Path) -> list[Check]:
         has_require_complete = "--require-complete" in runner_text and "def exit_code(" in runner_text
         has_timeout = "--timeout-seconds" in runner_text and "thread.join(args.timeout_seconds)" in runner_text
         has_alias_fallback = "--model-alias" in runner_text and "attempted_models" in runner_text
+        has_max_tokens = "--max-tokens" in runner_text and "MAX_NUM_TOKENS" in runner_text
         checks.append(
             Check(
                 "ai_scientist_v2_smoke_cli_status_summary",
-                "ready" if has_status_summary and has_require_complete and has_timeout and has_alias_fallback else "fail",
+                "ready"
+                if has_status_summary and has_require_complete and has_timeout and has_alias_fallback and has_max_tokens
+                else "fail",
                 (
                     f"status_summary={has_status_summary}; "
                     f"require_complete={has_require_complete}; "
                     f"timeout={has_timeout}; "
-                    f"alias_fallback={has_alias_fallback}"
+                    f"alias_fallback={has_alias_fallback}; "
+                    f"max_tokens={has_max_tokens}"
                 ),
                 str(runner_path.relative_to(root)),
             )
