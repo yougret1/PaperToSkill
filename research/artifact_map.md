@@ -78,6 +78,8 @@
 | `research/run_logs/2026-06-20_phase57_ai_scientist_v2_gpt_smoke_retry.md` | AI-Scientist-v2 smoke retry through the GPT-family credential profile; `gpt-5.5` and `gpt-5.4` timed out after 60 seconds | Created |
 | `research/run_logs/2026-06-20_phase58_ai_scientist_v2_max_token_smoke.md` | AI-Scientist-v2 smoke runner max-token cap and capped Claude/GPT-family provider-timeout evidence | Created |
 | `research/run_logs/2026-06-20_phase59_openai_direct_probe.md` | Direct OpenAI-compatible endpoint probe showing Claude HTTP 503 and GPT HTTP 502 provider blockers outside `ai_scientist.llm` | Created |
+| `research/run_logs/2026-06-20_phase60_post_push_provider_recheck.md` | Post-push provider recheck confirming direct Claude/GPT-family blockers persist after Phase 59 remote save | Created |
+| `research/run_logs/2026-06-20_phase61_direct_probe_packet_preflight.md` | External-evidence packet update that runs direct provider probes before AI-Scientist-v2 wrapper smoke | Created |
 
 ## Paper Draft Package
 

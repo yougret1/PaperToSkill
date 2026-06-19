@@ -46,6 +46,23 @@ class CheckExternalEvidencePacketsTest(unittest.TestCase):
                 self.assertTrue(packet["completion_criteria"], packet["id"])
                 self.assertIn("does not complete external evidence", packet["evidence_boundary"])
 
+            smoke_packet = next(
+                packet for packet in report["packets"] if packet["id"] == "ai_scientist_v2_smoke_completion"
+            )
+            smoke_text = json.dumps(smoke_packet)
+            self.assertIn("scripts/run_openai_compatible_direct_probe.py", smoke_text)
+            self.assertIn("results\\\\openai_compatible_direct_probe\\\\claude_family\\\\run_report.json", smoke_text)
+            self.assertIn("results\\\\openai_compatible_direct_probe\\\\gpt_family\\\\run_report.json", smoke_text)
+            self.assertIn("Run the direct OpenAI-compatible probe first", smoke_text)
+            self.assertIn("At least one direct OpenAI-compatible probe report is complete", smoke_text)
+            run_commands = smoke_packet["run_commands"]
+            first_direct = run_commands.index("# Claude-family direct endpoint preflight")
+            first_smoke = run_commands.index("# Claude-family credential profile")
+            self.assertLess(first_direct, first_smoke)
+            self.assertIn("  --model-alias claude-opus-4-8 `", run_commands)
+            self.assertIn("  --model-alias claude-opus-4.8 `", run_commands)
+            self.assertIn("  --model-alias gpt-5.5 `", run_commands)
+
     def test_missing_closure_report_fails(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

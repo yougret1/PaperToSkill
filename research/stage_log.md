@@ -2134,3 +2134,35 @@ Evidence boundary:
 - It does not complete the AI-Scientist-v2 smoke, run BFTS, prove live
   research-task success, resolve DeepSeek, collect human annotations, collect
   provider billing, or make the AAAI package submission-final.
+
+## 2026-06-20 Phase 61
+
+Actions:
+
+- Updated `scripts/check_external_evidence_packets.py` so the
+  `ai_scientist_v2_smoke_completion` packet runs direct OpenAI-compatible
+  provider probes before AI-Scientist-v2 wrapper smoke commands.
+- Added direct-probe inputs, completion criteria, and escalation wording to the
+  smoke-completion packet.
+- Expanded the packet secret scan to include closure-report content as well as
+  generated packet content.
+- Added regression tests in `tests/test_check_external_evidence_packets.py` for
+  direct-probe-first ordering and alias coverage.
+- Added
+  `research/run_logs/2026-06-20_phase61_direct_probe_packet_preflight.md`.
+
+Results:
+
+- `results/external_evidence_packets/packets.md` now tells operators to run
+  Claude-family and GPT-family direct endpoint probes before wrapper smoke.
+- The packet says to keep wrapper smoke pending and escalate provider
+  availability if direct probes remain blocked.
+- Local packet, package, goal-completion, live-run handoff, and submission
+  review checks pass.
+
+Evidence boundary:
+
+- Phase 61 improves the external-evidence handoff only.
+- It does not complete the AI-Scientist-v2 smoke, run BFTS, prove live
+  research-task success, resolve DeepSeek, collect human annotations, collect
+  provider billing, or make the AAAI package submission-final.

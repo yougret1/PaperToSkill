@@ -7,18 +7,18 @@ Current date: 2026-06-20.
 
 ## Current Phase
 
-Phase 60 is the current local phase. Phase 59 was committed as
-`dc52b06 Add direct OpenAI-compatible provider probe` and pushed to
-`origin/main` on 2026-06-20. Phase 60 confirms that remote save and rechecks
-the direct provider diagnostic; provider/model availability remains blocked.
+Phase 61 is the current local phase. Phase 60 was committed as
+`a9fdbad Record post-push provider recheck` and pushed to `origin/main` on
+2026-06-20. Phase 61 improves the AI-Scientist-v2 smoke-completion execution
+packet so direct provider probes run before wrapper smoke attempts; external
+evidence remains pending.
 
-Phase 60 objective:
+Phase 61 objective:
 
-- Confirm that the Phase 59 provider diagnostic was saved to `origin/main`.
-- Recheck whether the direct OpenAI-compatible endpoint can now satisfy the
-  tiny marker contract.
-- Keep this as provider/model availability evidence only, not model-quality,
-  AI-Scientist-v2 smoke completion, or live research-task evidence.
+- Make the smoke-completion execution packet use Phase 59/60 direct provider
+  probes as a preflight before AI-Scientist-v2 wrapper smoke.
+- Preserve evidence boundaries: provider diagnostics and execution handoffs are
+  not smoke completion, BFTS completion, or live research-task evidence.
 
 Phase 59 evidence:
 
@@ -53,6 +53,21 @@ Phase 60 evidence:
   pending checks, and 0 failed checks. `results/reproducibility/goal_completion_report.md`
   still reports `not_complete_pending_external_evidence`, 70 ready checks, 8
   pending checks, and 0 failed checks.
+
+Phase 61 evidence:
+
+- Updated `scripts/check_external_evidence_packets.py` so
+  `ai_scientist_v2_smoke_completion` lists the direct-probe runner and
+  Claude/GPT-family reports as inputs and runs direct endpoint probes before
+  wrapper smoke commands.
+- Added completion criteria that at least one direct probe must return a saved
+  marker-contract response before wrapper smoke can be considered resolved.
+- Expanded the packet secret scan to include closure-report content as well as
+  generated packet content.
+- Added regression coverage in `tests/test_check_external_evidence_packets.py`
+  for direct-probe-first ordering and alias coverage.
+- Added
+  `research/run_logs/2026-06-20_phase61_direct_probe_packet_preflight.md`.
 
 ## Current Evidence
 

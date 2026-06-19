@@ -42,7 +42,11 @@ class Check:
 PACKET_DETAILS: dict[str, dict[str, Any]] = {
     "ai_scientist_v2_smoke_completion": {
         "owner": "Execution/Ops",
+        "use_validation_commands_as_run_commands": True,
         "inputs": [
+            "scripts/run_openai_compatible_direct_probe.py",
+            "results/openai_compatible_direct_probe/claude_family/run_report.json",
+            "results/openai_compatible_direct_probe/gpt_family/run_report.json",
             "scripts/run_ai_scientist_v2_smoke.py",
             "results/ai_scientist_v2_smoke/run_report.json",
             "D:\\a_work\\gitee\\ai-scientist-v2",
@@ -52,8 +56,25 @@ PACKET_DETAILS: dict[str, dict[str, Any]] = {
             "Set AI_SCIENTIST_OPENAI_API_KEY locally to the Claude-family or GPT-family credential profile.",
             "Set AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE=1 locally.",
             "For the GPT-family profile, map the GPT credential into AI_SCIENTIST_OPENAI_API_KEY for this smoke only.",
+            "Run the direct OpenAI-compatible probe first. If it is still blocked, keep the wrapper smoke pending and escalate provider availability instead of treating the wrapper as failed.",
         ],
         "validation_commands": [
+            "# Claude-family direct endpoint preflight",
+            "python scripts\\run_openai_compatible_direct_probe.py --strict --require-complete --timeout-seconds 30 --max-tokens 128 `",
+            "  --model-alias claude-opus-4-8 `",
+            "  --model-alias claude-opus-4.8 `",
+            "  --model-alias claude-opus-4-7 `",
+            "  --model-alias claude-opus-4-6 `",
+            "  --output-json results\\openai_compatible_direct_probe\\claude_family\\run_report.json `",
+            "  --output-md results\\openai_compatible_direct_probe\\claude_family\\run_report.md `",
+            "  --response-output results\\openai_compatible_direct_probe\\claude_family\\response.md",
+            "# GPT-family direct endpoint preflight",
+            "python scripts\\run_openai_compatible_direct_probe.py --strict --require-complete --timeout-seconds 60 --max-tokens 128 `",
+            "  --model-alias gpt-5.5 `",
+            "  --model-alias gpt-5.4 `",
+            "  --output-json results\\openai_compatible_direct_probe\\gpt_family\\run_report.json `",
+            "  --output-md results\\openai_compatible_direct_probe\\gpt_family\\run_report.md `",
+            "  --response-output results\\openai_compatible_direct_probe\\gpt_family\\response.md",
             "# Claude-family credential profile",
             "python scripts\\run_ai_scientist_v2_smoke.py --strict --require-complete --timeout-seconds 30 --max-tokens 128 `",
             "  --model-alias claude-opus-4-8 `",
@@ -67,11 +88,12 @@ PACKET_DETAILS: dict[str, dict[str, Any]] = {
             "python scripts\\check_goal_completion.py --strict",
         ],
         "completion_criteria": [
+            "At least one direct OpenAI-compatible probe report is complete and has a saved response satisfying the marker contract.",
             "results/ai_scientist_v2_smoke/run_report.json reports overall_status=complete.",
             "results/ai_scientist_v2_smoke/response.md exists and satisfies all smoke marker checks.",
-            "No provider/model availability timeout or exhausted-account status remains in the smoke report.",
+            "No provider/model availability timeout, exhausted-account, no-account, or upstream-forbidden status remains in the direct-probe or smoke reports.",
         ],
-        "blocker_escalation": "Escalate if every configured Claude-family and GPT-family alias still times out or returns provider/account exhaustion.",
+        "blocker_escalation": "Escalate if every configured Claude-family and GPT-family alias still times out or returns provider/account exhaustion, no available accounts, or upstream access forbidden in the direct probe or wrapper smoke.",
     },
     "ai_scientist_v2_full_live_run": {
         "owner": "Execution/Ops",
@@ -213,6 +235,8 @@ def status_counts(checks: list[Check]) -> dict[str, int]:
 
 
 def commands_for_item(item: dict[str, Any], detail: dict[str, Any]) -> list[str]:
+    if detail.get("use_validation_commands_as_run_commands"):
+        return [str(command) for command in detail.get("validation_commands", []) if str(command).strip()]
     commands = [str(command) for command in item.get("next_commands", []) if str(command).strip()]
     for command in detail.get("validation_commands", []):
         if command not in commands:
@@ -256,6 +280,7 @@ def build_report(root: Path) -> dict[str, Any]:
     packet_ids = {packet["id"] for packet in packets}
     closure_ids = {str(item.get("id", "")) for item in closure.get("items", [])}
     serialized_packets = json.dumps(packets, indent=2)
+    serialized_closure = json.dumps(closure, indent=2)
 
     missing_expected = sorted(EXPECTED_PACKET_IDS - packet_ids)
     extra_packets = sorted(packet_ids - EXPECTED_PACKET_IDS)
@@ -264,7 +289,7 @@ def build_report(root: Path) -> dict[str, Any]:
     no_validation = sorted(packet["id"] for packet in packets if not packet.get("validation_commands"))
     no_criteria = sorted(packet["id"] for packet in packets if not packet.get("completion_criteria"))
     no_boundary = sorted(packet["id"] for packet in packets if not packet.get("evidence_boundary"))
-    secret_like = sorted(set(SECRET_PATTERN.findall(serialized_packets)))
+    secret_like = sorted(set(SECRET_PATTERN.findall(serialized_packets + "\n" + serialized_closure)))
 
     checks = [
         Check(

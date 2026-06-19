@@ -18,6 +18,9 @@ Evidence boundary: these packets define how to finish pending external evidence.
 
 ### Inputs
 
+- scripts/run_openai_compatible_direct_probe.py
+- results/openai_compatible_direct_probe/claude_family/run_report.json
+- results/openai_compatible_direct_probe/gpt_family/run_report.json
 - scripts/run_ai_scientist_v2_smoke.py
 - results/ai_scientist_v2_smoke/run_report.json
 - D:\a_work\gitee\ai-scientist-v2
@@ -28,10 +31,27 @@ Evidence boundary: these packets define how to finish pending external evidence.
 - Set AI_SCIENTIST_OPENAI_API_KEY locally to the Claude-family or GPT-family credential profile.
 - Set AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE=1 locally.
 - For the GPT-family profile, map the GPT credential into AI_SCIENTIST_OPENAI_API_KEY for this smoke only.
+- Run the direct OpenAI-compatible probe first. If it is still blocked, keep the wrapper smoke pending and escalate provider availability instead of treating the wrapper as failed.
 
 ### Commands
 
 ```powershell
+# Claude-family direct endpoint preflight
+python scripts\run_openai_compatible_direct_probe.py --strict --require-complete --timeout-seconds 30 --max-tokens 128 `
+  --model-alias claude-opus-4-8 `
+  --model-alias claude-opus-4.8 `
+  --model-alias claude-opus-4-7 `
+  --model-alias claude-opus-4-6 `
+  --output-json results\openai_compatible_direct_probe\claude_family\run_report.json `
+  --output-md results\openai_compatible_direct_probe\claude_family\run_report.md `
+  --response-output results\openai_compatible_direct_probe\claude_family\response.md
+# GPT-family direct endpoint preflight
+python scripts\run_openai_compatible_direct_probe.py --strict --require-complete --timeout-seconds 60 --max-tokens 128 `
+  --model-alias gpt-5.5 `
+  --model-alias gpt-5.4 `
+  --output-json results\openai_compatible_direct_probe\gpt_family\run_report.json `
+  --output-md results\openai_compatible_direct_probe\gpt_family\run_report.md `
+  --response-output results\openai_compatible_direct_probe\gpt_family\response.md
 # Claude-family credential profile
 python scripts\run_ai_scientist_v2_smoke.py --strict --require-complete --timeout-seconds 30 --max-tokens 128 `
   --model-alias claude-opus-4-8 `
@@ -47,13 +67,14 @@ python scripts\check_goal_completion.py --strict
 
 ### Completion Criteria
 
+- At least one direct OpenAI-compatible probe report is complete and has a saved response satisfying the marker contract.
 - results/ai_scientist_v2_smoke/run_report.json reports overall_status=complete.
 - results/ai_scientist_v2_smoke/response.md exists and satisfies all smoke marker checks.
-- No provider/model availability timeout or exhausted-account status remains in the smoke report.
+- No provider/model availability timeout, exhausted-account, no-account, or upstream-forbidden status remains in the direct-probe or smoke reports.
 
 ### Escalation
 
-Escalate if every configured Claude-family and GPT-family alias still times out or returns provider/account exhaustion.
+Escalate if every configured Claude-family and GPT-family alias still times out or returns provider/account exhaustion, no available accounts, or upstream access forbidden in the direct probe or wrapper smoke.
 
 ### Boundary
 
