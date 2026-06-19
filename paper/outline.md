@@ -178,8 +178,9 @@ Current limitations:
   Opus 4.8 plus GPT-family rows are saved and scored for the current prompt
   protocol, but DeepSeek rows remain unattempted;
 - no human fidelity annotation or inter-rater agreement yet;
-- human-fidelity review packets and a summarizer are prepared, but annotation
-  remains pending;
+- human-fidelity review packets, a reviewer handoff guide, a stricter blank
+  annotation template, and a summarizer are prepared, but annotation remains
+  pending;
 - cost evidence includes local input/output token proxies, not provider bills
   or a full token-price study;
 - the failure-case archive is provenance evidence, not an outcome study showing
@@ -206,7 +207,7 @@ that are less directly procedural.
 | Table 3: Source grounding | `results/tables/compactness_source_grounding.md` | Source support and compactness |
 | Table 4: Context cost proxy | `results/tables/context_cost_proxy.md`; `results/tables/model_response_cost_proxy.md` | Full paper vs skill context size plus saved-response output-token proxy |
 | Table 5: Auto-note comparison | `results/tables/auto_note_comparison.md` | Curated vs extracted-text Toolformer and AIDE note scaffolds |
-| Appendix: Human-fidelity packets | `results/human_fidelity_packets/` | Prepared review packets and blank annotation template |
+| Appendix: Human-fidelity packets | `results/human_fidelity_packets/` | Prepared review packets, handoff guide, and blank annotation template |
 | Appendix: Human-fidelity summary | `results/human_fidelity_packets/annotation_summary.md` | Pending annotation status and validation summary |
 | Appendix: Failure-case archive | `results/failure_cases/failure_case_archive.md` | Paper-reported and project-level failure/limitation cases |
 | Appendix: Reproducibility package | `results/reproducibility/package_report.md` | Local package readiness and pending external evidence |

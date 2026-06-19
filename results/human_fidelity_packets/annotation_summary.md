@@ -6,6 +6,8 @@ Evidence boundary: blank score rows are pending, not negative evidence. Do not c
 - Total rows: 24
 - Scored rows: 0
 - Pending rows: 24
+- Average confidence: n/a
+- Needs discussion rows: 0
 - Errors: 0
 
 ## By Paper

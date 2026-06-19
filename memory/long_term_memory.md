@@ -46,6 +46,9 @@ Current supported claims:
   executability, AAAI package readiness, table consistency, paper claim
   discipline, and active-goal completion auditing.
 - Failure-case archive with paper-reported and project-level cases.
+- Human-fidelity annotation handoff is ready: review packets, annotation guide,
+  stricter blank template metadata, and strict summarizer validation are present
+  for 24 paper-by-criterion rows; completed human annotation remains pending.
 - Claude Opus 4.8 and GPT-family model-ablation prompt rows are saved and
   scored for the current two-case protocol.
 - Local output-token proxy over saved Claude/GPT-family model-ablation responses:
@@ -104,7 +107,7 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 212 ready checks, 6 pending
+  reports `ready_with_pending_external_evidence`, 214 ready checks, 6 pending
   checks, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`

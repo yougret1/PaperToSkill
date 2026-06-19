@@ -22,7 +22,7 @@ proxy accounting for saved model-ablation responses, but this is not realized
 provider billing.
 
 Local package status: `results/reproducibility/package_report.md` reports
-`ready_with_pending_external_evidence`, 212 ready checks, 6 pending checks, and
+`ready_with_pending_external_evidence`, 214 ready checks, 6 pending checks, and
 0 failed checks.
 
 Machine-checkable goal status:
@@ -47,6 +47,7 @@ and 0 failed checks.
 | Experiments: harness-transfer ablation. | `results/tables/transfer_ablation.md`; offline transfer-readiness drops when `Transfer Notes` are removed; `results/live_transfer_prompts/evaluation.md` now scores all 24 live-transfer saved-response rows across four paper packets. | Complete for offline readiness and saved-response coverage | Do not interpret saved-response output-contract scoring as human semantic fidelity or real live task success. |
 | Experiments: compactness/cost/examples. | `results/tables/context_cost_proxy.md`; `results/tables/context_cost_proxy_tokenizer.md`; `results/tables/model_response_cost_proxy.md`; `results/tables/compactness_source_grounding.md`; examples under `examples/usage/`. | Complete for character proxy, local tokenizer-aware input proxy, saved-response output-token proxy, and examples | Provider billing, realized output bills, and success-per-dollar remain pending. |
 | Include failure branches and negative outcomes. | `results/failure_cases/failure_case_archive.md`; model-ablation run reports; limitations; result cards; stage logs. | Complete as provenance archive | Outcome impact of failure recording is not tested. |
+| Human-fidelity annotation handoff. | `benchmarks/human_fidelity_review_v0.json`; `results/human_fidelity_packets/annotation_guide.md`; `results/human_fidelity_packets/annotation_template.csv`; `results/human_fidelity_packets/annotation_summary.md`; package check `human_fidelity_annotation_handoff_ready` is ready. | Handoff ready; annotation pending | Independent reviewers still need to fill all 24 rows before claiming human validation. |
 | Final paper narrative. | `paper/draft.md`; `paper/outline.md`; `paper/claim_checklist.md`; `paper/limitations.md`; AAAI `.tex` draft. | Prepared, not final | Final paper requires live/human/model evidence decisions or explicit decision to submit as deterministic/offline system paper. |
 | Machine-checkable completion gate. | `scripts/check_goal_completion.py`; `results/reproducibility/goal_completion_report.md`; reproducibility checks `goal_completion_report_ready` and `goal_completion_core_checks_ready` are ready. | Complete as a gate; full goal still pending | Re-run the gate after any model, human-fidelity, provider-billing, or final-paper evidence changes. |
 
@@ -84,7 +85,8 @@ and 0 failed checks.
   latest GPT-family retry records completed GPT-family rows and saved/scored
   responses.
 - `results/human_fidelity_packets/annotation_summary.md`: human annotation is
-  pending.
+  pending; Phase 42 adds `annotation_guide.md`, stricter template metadata, and
+  strict summary validation for the eventual reviewer-filled CSV.
 - `results/reproducibility/package_report.md`: pending checks remain for the
   AI-Scientist-v2 smoke response/contract, human fidelity, DeepSeek response
   files, and completed model-ablation scoring.

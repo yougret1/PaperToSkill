@@ -104,6 +104,14 @@ def write_packet(root: Path, output_dir: Path, config: dict[str, Any], paper: di
     packet_lines.extend(
         [
             "",
+            "## Completion Requirements",
+            "",
+        ]
+    )
+    packet_lines.extend(f"- {item}" for item in config["completion_requirements"])
+    packet_lines.extend(
+        [
+            "",
             "## Artifact Summary",
             "",
             f"- Generated skill: `{paper['skill_path']}`",
@@ -165,12 +173,16 @@ def write_annotation_template(path: Path, config: dict[str, Any], packet_rows: l
     columns = [
         "paper_id",
         "paper",
+        "packet_path",
         "criterion_id",
         "criterion_label",
         "score_0_to_3",
+        "evidence_locator",
         "evidence_note",
+        "confidence_0_to_1",
         "reviewer_id",
         "review_date",
+        "needs_discussion",
     ]
     with path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=columns)
@@ -181,14 +193,53 @@ def write_annotation_template(path: Path, config: dict[str, Any], packet_rows: l
                     {
                         "paper_id": packet["paper_id"],
                         "paper": packet["paper"],
+                        "packet_path": packet["packet_path"],
                         "criterion_id": criterion["id"],
                         "criterion_label": criterion["label"],
                         "score_0_to_3": "",
+                        "evidence_locator": "",
                         "evidence_note": "",
+                        "confidence_0_to_1": "",
                         "reviewer_id": "",
                         "review_date": "",
+                        "needs_discussion": "",
                     }
                 )
+
+
+def write_annotation_guide(path: Path, config: dict[str, Any], packet_rows: list[dict[str, Any]]) -> None:
+    lines = [
+        "# Human Fidelity Annotation Guide",
+        "",
+        "Evidence boundary: this guide prepares independent human review. It does not contain completed annotations.",
+        "",
+        "## Workflow",
+        "",
+        "1. Open the packet for one paper and read the generated skill, source-note excerpt, and artifact summary.",
+        "2. Score each criterion from 0 to 3 using the protocol scale.",
+        "3. Fill `evidence_locator` with a source-note line, source-map entry, generated-skill section, or packet section that supports the judgment.",
+        "4. Fill `evidence_note` with the shortest explanation needed to justify the score.",
+        "5. Fill `confidence_0_to_1`, `reviewer_id`, `review_date`, and optionally `needs_discussion`.",
+        "6. Run `scripts\\summarize_human_fidelity_annotations.py --strict` before using the annotations in any claim.",
+        "",
+        "## Completion Requirements",
+        "",
+    ]
+    lines.extend(f"- {item}" for item in config["completion_requirements"])
+    lines.extend(
+        [
+            "",
+            "## Packets",
+            "",
+            "| Paper | Packet | Rows |",
+            "| --- | --- | --- |",
+        ]
+    )
+    criteria_count = len(config["criteria"])
+    for row in packet_rows:
+        lines.append(f"| {row['paper']} | `{row['packet_path']}` | {criteria_count} |")
+    lines.append("")
+    path.write_text("\n".join(lines), encoding="utf-8")
 
 
 def write_summary(path: Path, packet_rows: list[dict[str, Any]]) -> None:
@@ -196,6 +247,9 @@ def write_summary(path: Path, packet_rows: list[dict[str, Any]]) -> None:
         "# Human Fidelity Review Packets",
         "",
         "Evidence boundary: packets and annotation templates are prepared, but no human annotation has been completed.",
+        "",
+        "- Annotation guide: `results/human_fidelity_packets/annotation_guide.md`",
+        "- Annotation template: `results/human_fidelity_packets/annotation_template.csv`",
         "",
         "| Paper | Packet | Source support rate | Invalid ranges | Coverage score | Annotation status |",
         "| --- | --- | --- | --- | --- | --- |",
@@ -215,6 +269,7 @@ def build_packets(root: Path, config_path: Path, output_dir: Path) -> dict[str, 
 
     index_path = output_dir / "index.json"
     annotation_template = output_dir / "annotation_template.csv"
+    annotation_guide = output_dir / "annotation_guide.md"
     summary_path = output_dir / "README.md"
 
     index_path.write_text(
@@ -223,6 +278,12 @@ def build_packets(root: Path, config_path: Path, output_dir: Path) -> dict[str, 
                 "schema_version": "0.1",
                 "protocol": str(config_path.relative_to(root)).replace("\\", "/"),
                 "evidence_boundary": config["evidence_boundary"],
+                "annotation_template": display_path(root, annotation_template),
+                "annotation_guide": display_path(root, annotation_guide),
+                "paper_count": len(config["papers"]),
+                "criteria_count": len(config["criteria"]),
+                "required_annotation_rows": len(config["papers"]) * len(config["criteria"]),
+                "completion_requirements": config["completion_requirements"],
                 "packets": packet_rows,
             },
             indent=2,
@@ -231,11 +292,13 @@ def build_packets(root: Path, config_path: Path, output_dir: Path) -> dict[str, 
         encoding="utf-8",
     )
     write_annotation_template(annotation_template, config, packet_rows)
+    write_annotation_guide(annotation_guide, config, packet_rows)
     write_summary(summary_path, packet_rows)
 
     written = {
         "index": index_path,
         "annotation_template": annotation_template,
+        "annotation_guide": annotation_guide,
         "summary": summary_path,
     }
     for row in packet_rows:

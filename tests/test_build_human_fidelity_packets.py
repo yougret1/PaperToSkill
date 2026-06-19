@@ -45,14 +45,24 @@ class BuildHumanFidelityPacketsTest(unittest.TestCase):
 
             packet_text = (output_dir / packet_names[0]).read_text(encoding="utf-8")
             self.assertIn("Central contribution fidelity", packet_text)
+            self.assertIn("## Completion Requirements", packet_text)
             self.assertIn("## Generated Skill", packet_text)
             self.assertIn("## Curated Source Note Excerpt", packet_text)
+
+            self.assertTrue((output_dir / "annotation_guide.md").exists())
+            guide_text = (output_dir / "annotation_guide.md").read_text(encoding="utf-8")
+            self.assertIn("confidence_0_to_1", guide_text)
+            self.assertIn("scripts\\summarize_human_fidelity_annotations.py --strict", guide_text)
 
             with (output_dir / "annotation_template.csv").open(encoding="utf-8", newline="") as handle:
                 rows = list(csv.DictReader(handle))
             self.assertEqual(24, len(rows))
             self.assertEqual("", rows[0]["score_0_to_3"])
             self.assertEqual("central_contribution", rows[0]["criterion_id"])
+            self.assertIn("packet_path", rows[0])
+            self.assertIn("evidence_locator", rows[0])
+            self.assertIn("confidence_0_to_1", rows[0])
+            self.assertIn("needs_discussion", rows[0])
 
 
 if __name__ == "__main__":

@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import re
 from dataclasses import dataclass
@@ -392,17 +393,46 @@ def human_fidelity_checks(root: Path) -> list[Check]:
         root,
         {
             "human_fidelity_protocol": "benchmarks/human_fidelity_review_v0.json",
+            "human_fidelity_guide": "results/human_fidelity_packets/annotation_guide.md",
             "human_fidelity_template": "results/human_fidelity_packets/annotation_template.csv",
             "human_fidelity_summary_json": "results/human_fidelity_packets/annotation_summary.json",
             "human_fidelity_summary_md": "results/human_fidelity_packets/annotation_summary.md",
         },
     )
+    index_path = root / "results/human_fidelity_packets/index.json"
+    template_path = root / "results/human_fidelity_packets/annotation_template.csv"
     summary_path = root / "results/human_fidelity_packets/annotation_summary.json"
     if summary_path.exists():
         summary = load_json(summary_path)
         errors = summary.get("errors", [])
         status = "ready" if not errors else "fail"
         checks.append(Check("human_fidelity_summary_valid", status, f"errors={len(errors)}", str(summary_path.relative_to(root))))
+        expected_rows = 0
+        if index_path.exists():
+            index = load_json(index_path)
+            expected_rows = int(index.get("required_annotation_rows", 0))
+        template_rows = 0
+        if template_path.exists():
+            with template_path.open(newline="", encoding="utf-8") as handle:
+                template_rows = sum(1 for _ in csv.DictReader(handle))
+        guide_text = (root / "results/human_fidelity_packets/annotation_guide.md").read_text(
+            encoding="utf-8", errors="ignore"
+        ) if (root / "results/human_fidelity_packets/annotation_guide.md").exists() else ""
+        handoff_ready = (
+            expected_rows == 24
+            and template_rows == expected_rows
+            and int(summary.get("total_rows", 0)) == expected_rows
+            and "confidence_0_to_1" in guide_text
+            and "evidence_locator" in guide_text
+        )
+        checks.append(
+            Check(
+                "human_fidelity_annotation_handoff_ready",
+                "ready" if handoff_ready else "fail",
+                f"expected_rows={expected_rows}; template_rows={template_rows}; summary_rows={summary.get('total_rows', 0)}",
+                "results/human_fidelity_packets/index.json; results/human_fidelity_packets/annotation_guide.md",
+            )
+        )
         annotation_status = summary.get("annotation_status")
         complete_status = "ready" if annotation_status == "complete" else "pending"
         checks.append(

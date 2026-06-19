@@ -2,6 +2,18 @@
   "schema_version": "0.1",
   "protocol": "benchmarks/human_fidelity_review_v0.json",
   "evidence_boundary": "This is a human-review protocol and packet manifest, not completed annotation evidence.",
+  "annotation_template": "results/human_fidelity_packets/annotation_template.csv",
+  "annotation_guide": "results/human_fidelity_packets/annotation_guide.md",
+  "paper_count": 4,
+  "criteria_count": 6,
+  "required_annotation_rows": 24,
+  "completion_requirements": [
+    "All 24 paper-by-criterion rows must have a score from 0 to 3.",
+    "Every scored row must include an evidence_locator and evidence_note.",
+    "Every scored row must include reviewer_id, review_date, and confidence_0_to_1.",
+    "Use needs_discussion=true when the score depends on ambiguous source support or inferred transfer guidance.",
+    "Do not claim human validation until the summarizer reports annotation_status=complete and zero errors."
+  ],
   "packets": [
     {
       "paper_id": "ai_scientist_v2",

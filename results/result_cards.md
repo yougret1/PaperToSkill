@@ -465,7 +465,9 @@
   deterministic coverage score, and six review criteria.
 - Practical significance: human-fidelity review is now operationally ready
   without overstating evidence. The annotation template has 24 blank rows
-  covering 4 papers x 6 criteria.
+  covering 4 papers x 6 criteria, and Phase 42 adds a reviewer handoff guide
+  plus required `evidence_locator`, `confidence_0_to_1`, and
+  `needs_discussion` fields.
 - Statistical evidence: none; no annotation has been completed.
 - Failure modes: packet quality depends on curated notes and source-map
   structure. Independent reviewers still need to fill the annotation template.
@@ -474,6 +476,7 @@
   to a prepared protocol with pending annotations.
 - Figure/table: `benchmarks/human_fidelity_review_v0.json`;
   `results/human_fidelity_packets/README.md`;
+  `results/human_fidelity_packets/annotation_guide.md`;
   `results/human_fidelity_packets/annotation_template.csv`.
 
 ## Human-Fidelity Annotation Summary
@@ -482,12 +485,14 @@
   template.
 - Main result: `scripts/summarize_human_fidelity_annotations.py` reports
   `annotation_status=pending`, 24 total rows, 0 scored rows, 24 pending rows,
-  and 0 validation errors for the current blank template.
+  average confidence `n/a`, 0 discussion rows, and 0 validation errors for the
+  current blank template.
 - Compared baselines: none; this is provenance and validation infrastructure for
   future human annotations.
 - Practical significance: once independent reviewers fill the template, the same
   script can summarize per-paper and per-criterion scores and catch missing
-  evidence notes or reviewer IDs.
+  evidence locators, evidence notes, confidence values, reviewer IDs, review
+  dates, and malformed discussion flags.
 - Statistical evidence: none; no annotation has been completed.
 - Failure modes: the summary is only as valid as the human-filled CSV; it does
   not judge fidelity by itself.
@@ -528,13 +533,14 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 212 ready checks, 6
+  `overall_status=ready_with_pending_external_evidence`, 214 ready checks, 6
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
   remaining external gaps explicit: completed AI-Scientist-v2 LLM-client smoke
   response/contract, completed human-fidelity annotation, DeepSeek response
-  files, and completed model-ablation scoring.
+  files, and completed model-ablation scoring. The human-fidelity handoff itself
+  is now machine-checked as ready.
 - Statistical evidence: none; this is a deterministic reproducibility gate.
 - Failure modes: the checker verifies package presence and key consistency
   gates, but it does not replace running live agents or collecting independent

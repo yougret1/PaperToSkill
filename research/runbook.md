@@ -276,6 +276,30 @@ extracted-text-to-note-to-skill chain, and a PDF-input pipeline
 smoke run in a temporary directory. It does not execute additional
 Claude/GPT/DeepSeek calls.
 
+## Human-Fidelity Annotation Handoff
+
+Regenerate the independent-review packets, annotation guide, and blank
+annotation template:
+
+```powershell
+python scripts\build_human_fidelity_packets.py
+```
+
+Before using reviewer-filled annotations in a claim, summarize them with strict
+validation:
+
+```powershell
+python scripts\summarize_human_fidelity_annotations.py --strict
+```
+
+Current Phase 42 status:
+`results/human_fidelity_packets/annotation_guide.md` provides the reviewer
+handoff, `annotation_template.csv` has 24 blank paper-by-criterion rows, and
+`annotation_summary.md` reports `annotation_status=pending`, 0 scored rows, 24
+pending rows, average confidence `n/a`, and 0 validation errors. The package
+gate marks `human_fidelity_annotation_handoff_ready` ready, while completed
+human-fidelity annotation remains pending.
+
 ## AAAI Paper Package
 
 The official AAAI-27 author kit is stored under `paper/aaai/`.

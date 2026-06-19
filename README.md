@@ -10,13 +10,15 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 41: Claude Opus 4.8 and GPT-family ablation rows are saved and scored for
+Phase 42: Claude Opus 4.8 and GPT-family ablation rows are saved and scored for
 the current two-case protocol, saved model responses have a local output-token
 proxy report, and all four live-transfer saved-response sets are collected and
 scored for the current prompt-packet protocol. A bounded AI-Scientist-v2
 LLM-client smoke runner is now present, and the latest attempt is recorded as
 provider-blocked by HTTP 403 `All available accounts exhausted`, not as a model
-quality failure.
+quality failure. The human-fidelity review handoff now includes an annotation
+guide, stricter blank template metadata, and summary validation, while completed
+human annotation remains pending.
 The AAAI-27 paper package, usage examples, deterministic/offline experiments,
 model-ablation runner, DeepSeek follow-up path, local `o200k_base` input/output
 token proxies, one-command extracted-text-to-skill pipeline, local

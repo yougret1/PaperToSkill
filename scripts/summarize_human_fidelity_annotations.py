@@ -14,12 +14,16 @@ from typing import Any
 REQUIRED_COLUMNS = [
     "paper_id",
     "paper",
+    "packet_path",
     "criterion_id",
     "criterion_label",
     "score_0_to_3",
+    "evidence_locator",
     "evidence_note",
+    "confidence_0_to_1",
     "reviewer_id",
     "review_date",
+    "needs_discussion",
 ]
 
 
@@ -45,6 +49,30 @@ def parse_score(value: str, row_number: int) -> int | None:
     return score
 
 
+def parse_confidence(value: str, row_number: int) -> float | None:
+    value = value.strip()
+    if value == "":
+        return None
+    try:
+        confidence = float(value)
+    except ValueError as exc:
+        raise ValueError(f"Row {row_number}: confidence_0_to_1 must be a number 0-1 or blank") from exc
+    if confidence < 0 or confidence > 1:
+        raise ValueError(f"Row {row_number}: confidence_0_to_1 must be between 0 and 1")
+    return confidence
+
+
+def parse_needs_discussion(value: str, row_number: int) -> bool | None:
+    value = value.strip().lower()
+    if value == "":
+        return None
+    if value in {"true", "yes", "1"}:
+        return True
+    if value in {"false", "no", "0"}:
+        return False
+    raise ValueError(f"Row {row_number}: needs_discussion must be true/false or blank")
+
+
 def format_decimal(value: float | None, digits: int = 3) -> str:
     if value is None:
         return "n/a"
@@ -60,24 +88,50 @@ def summarize(rows: list[dict[str, str]]) -> dict[str, Any]:
     by_criterion: dict[str, dict[str, Any]] = {}
     paper_scores: dict[str, list[int]] = defaultdict(list)
     criterion_scores: dict[str, list[int]] = defaultdict(list)
+    confidence_values: list[float] = []
+    discussion_rows = 0
     paper_labels: dict[str, str] = {}
     criterion_labels: dict[str, str] = {}
 
     for index, row in enumerate(rows, start=2):
         score = parse_score(row["score_0_to_3"], index)
+        confidence = parse_confidence(row["confidence_0_to_1"], index)
+        needs_discussion = parse_needs_discussion(row["needs_discussion"], index)
         paper_id = row["paper_id"].strip()
         criterion_id = row["criterion_id"].strip()
         paper_labels[paper_id] = row["paper"].strip()
         criterion_labels[criterion_id] = row["criterion_label"].strip()
         if score is None:
+            if any(
+                row[column].strip()
+                for column in [
+                    "evidence_locator",
+                    "evidence_note",
+                    "confidence_0_to_1",
+                    "reviewer_id",
+                    "review_date",
+                    "needs_discussion",
+                ]
+            ):
+                errors.append(f"Row {index}: pending annotation rows should not include partial metadata without a score")
             continue
         scored_rows += 1
+        if not row["evidence_locator"].strip():
+            errors.append(f"Row {index}: scored annotation requires evidence_locator")
         if not row["evidence_note"].strip():
             errors.append(f"Row {index}: scored annotation requires evidence_note")
+        if confidence is None:
+            errors.append(f"Row {index}: scored annotation requires confidence_0_to_1")
         if not row["reviewer_id"].strip():
             errors.append(f"Row {index}: scored annotation requires reviewer_id")
+        if not row["review_date"].strip():
+            errors.append(f"Row {index}: scored annotation requires review_date")
         paper_scores[paper_id].append(score)
         criterion_scores[criterion_id].append(score)
+        if confidence is not None:
+            confidence_values.append(confidence)
+        if needs_discussion:
+            discussion_rows += 1
 
     for paper_id, label in paper_labels.items():
         scores = paper_scores.get(paper_id, [])
@@ -106,6 +160,8 @@ def summarize(rows: list[dict[str, str]]) -> dict[str, Any]:
         "scored_rows": scored_rows,
         "pending_rows": total_rows - scored_rows,
         "annotation_status": "complete" if total_rows > 0 and scored_rows == total_rows else "pending",
+        "average_confidence": round(sum(confidence_values) / len(confidence_values), 3) if confidence_values else None,
+        "discussion_rows": discussion_rows,
         "errors": errors,
         "by_paper": by_paper,
         "by_criterion": by_criterion,
@@ -153,6 +209,8 @@ def write_markdown(path: Path, summary: dict[str, Any]) -> None:
         f"- Total rows: {summary['total_rows']}",
         f"- Scored rows: {summary['scored_rows']}",
         f"- Pending rows: {summary['pending_rows']}",
+        f"- Average confidence: {format_decimal(summary['average_confidence'])}",
+        f"- Needs discussion rows: {summary['discussion_rows']}",
         f"- Errors: {len(summary['errors'])}",
         "",
         "## By Paper",

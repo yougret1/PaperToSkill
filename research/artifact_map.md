@@ -59,6 +59,7 @@
 | `research/run_logs/2026-06-19_phase39_toolformer_live_transfer.md` | Toolformer live-transfer response collection, scoring, and evidence boundary | Created |
 | `research/run_logs/2026-06-19_phase40_all_live_transfer_responses.md` | AI Scientist-v2, Reflexion, and AIDE live-transfer saved-response collection plus all-packet rescoring | Created |
 | `research/run_logs/2026-06-19_phase41_ai_scientist_v2_smoke.md` | Bounded AI-Scientist-v2 LLM-client smoke attempt and provider-blocked evidence boundary | Created |
+| `research/run_logs/2026-06-19_phase42_human_fidelity_handoff.md` | Human-fidelity annotation handoff guide, stricter template, and validation boundary | Created |
 
 ## Paper Draft Package
 
@@ -265,6 +266,7 @@
 | `results/tables/auto_note_comparison.csv` | CSV copy of curated-vs-auto Toolformer/AIDE note comparison | Created |
 | `results/human_fidelity_packets/README.md` | Summary of prepared human-fidelity packets | Created |
 | `results/human_fidelity_packets/index.json` | Machine-readable packet index with pending annotation status | Created |
+| `results/human_fidelity_packets/annotation_guide.md` | Independent-review handoff guide with completion requirements | Created |
 | `results/human_fidelity_packets/annotation_template.csv` | Blank annotation rows for human reviewers | Created |
 | `results/human_fidelity_packets/annotation_summary.md` | Pending human-fidelity annotation summary | Created |
 | `results/human_fidelity_packets/annotation_summary.json` | Machine-readable pending annotation summary | Created |

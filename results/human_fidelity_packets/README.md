@@ -2,6 +2,9 @@
 
 Evidence boundary: packets and annotation templates are prepared, but no human annotation has been completed.
 
+- Annotation guide: `results/human_fidelity_packets/annotation_guide.md`
+- Annotation template: `results/human_fidelity_packets/annotation_template.csv`
+
 | Paper | Packet | Source support rate | Invalid ranges | Coverage score | Annotation status |
 | --- | --- | --- | --- | --- | --- |
 | AI Scientist-v2 | `results/human_fidelity_packets/ai_scientist_v2_human_fidelity_packet.md` | 0.938 | 0 | 7.867/9 | pending |

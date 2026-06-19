@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 212
+- Ready checks: 214
 - Pending checks: 6
 - Failed checks: 0
 
@@ -136,10 +136,12 @@ Evidence boundary: this report checks local package completeness and separates p
 | toolformer_live_prompt_packets | ready | prompt_packets=6; missing_prompts=0 | results/live_transfer_prompts/toolformer_v0/index.json |
 | toolformer_live_responses | ready | missing_response_files=0 | results/live_transfer_prompts/toolformer_v0/index.json |
 | human_fidelity_protocol | ready | present | benchmarks/human_fidelity_review_v0.json |
+| human_fidelity_guide | ready | present | results/human_fidelity_packets/annotation_guide.md |
 | human_fidelity_template | ready | present | results/human_fidelity_packets/annotation_template.csv |
 | human_fidelity_summary_json | ready | present | results/human_fidelity_packets/annotation_summary.json |
 | human_fidelity_summary_md | ready | present | results/human_fidelity_packets/annotation_summary.md |
 | human_fidelity_summary_valid | ready | errors=0 | results\human_fidelity_packets\annotation_summary.json |
+| human_fidelity_annotation_handoff_ready | ready | expected_rows=24; template_rows=24; summary_rows=24 | results/human_fidelity_packets/index.json; results/human_fidelity_packets/annotation_guide.md |
 | human_fidelity_annotation_complete | pending | status=pending; scored_rows=0; pending_rows=24 | results\human_fidelity_packets\annotation_summary.json |
 | failure_archive_config | ready | present | benchmarks/failure_case_archive_v0.json |
 | failure_archive_json | ready | present | results/failure_cases/failure_case_archive.json |

@@ -16,6 +16,14 @@ Evidence boundary: this packet is an input for human review. It is not a complet
 - 2: Mostly faithful with minor omissions or wording issues.
 - 3: Faithful, operationally useful, and source-supported.
 
+## Completion Requirements
+
+- All 24 paper-by-criterion rows must have a score from 0 to 3.
+- Every scored row must include an evidence_locator and evidence_note.
+- Every scored row must include reviewer_id, review_date, and confidence_0_to_1.
+- Use needs_discussion=true when the score depends on ambiguous source support or inferred transfer guidance.
+- Do not claim human validation until the summarizer reports annotation_status=complete and zero errors.
+
 ## Artifact Summary
 
 - Generated skill: `generated_skills/reflexion/SKILL.md`

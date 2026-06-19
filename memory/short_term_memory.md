@@ -7,28 +7,24 @@ Current date: 2026-06-19.
 
 ## Current Phase
 
-Phase 41 is in progress: add bounded AI-Scientist-v2 live LLM-client smoke
-evidence without claiming full BFTS or live research-task success.
+Phase 42 is in progress: make the pending human-fidelity review step easier to
+execute and harder to overclaim by adding a stricter annotation handoff package.
 
-Latest pushed commit before Phase 41: `4fc9e80 Add all live transfer
-responses`.
+Latest pushed commit before Phase 42: `f4cea28 Add AI Scientist v2 smoke
+evidence`.
 
-Current Phase 41 work includes:
+Current Phase 42 work includes:
 
-- Added `scripts/run_ai_scientist_v2_smoke.py`.
-- Added `tests/test_run_ai_scientist_v2_smoke.py`.
-- Updated `scripts/check_goal_completion.py` and
-  `scripts/check_reproducibility_package.py` to include AI-Scientist-v2 smoke
-  runner/report evidence.
-- Updated `tests/test_check_goal_completion.py` and
-  `tests/test_check_reproducibility_package.py` for smoke attempted/blocked
-  boundaries.
-- Generated `results/ai_scientist_v2_smoke/run_report.{json,md}`.
-- Regenerated `results/reproducibility/goal_completion_report.{json,md}` and
-  `results/reproducibility/package_report.{json,md}`.
-- Added `research/run_logs/2026-06-19_phase41_ai_scientist_v2_smoke.md`.
-- Updated stage log, runbook, artifact map, goal audit, result cards, README,
-  and memory.
+- Added completion requirements to `benchmarks/human_fidelity_review_v0.json`.
+- Updated `scripts/build_human_fidelity_packets.py` to add packet completion
+  requirements and stricter annotation-template metadata.
+- Added `results/human_fidelity_packets/annotation_guide.md`.
+- Updated `scripts/summarize_human_fidelity_annotations.py` to validate
+  evidence locators, confidence, reviewer/date metadata, and discussion flags.
+- Updated `scripts/check_reproducibility_package.py` with
+  `human_fidelity_annotation_handoff_ready`.
+- Regenerated human-fidelity packet artifacts and package report.
+- Added `research/run_logs/2026-06-19_phase42_human_fidelity_handoff.md`.
 
 ## Current Evidence
 
@@ -48,9 +44,14 @@ Current Phase 41 work includes:
 - The smoke provider error was HTTP 403
   `All available accounts exhausted`; no
   `results/ai_scientist_v2_smoke/response.md` file was created.
+- Human-fidelity annotation handoff:
+  `results/human_fidelity_packets/annotation_guide.md` is present, the template
+  has 24 blank rows, and `annotation_summary.md` reports
+  `annotation_status=pending`, 0 scored rows, 24 pending rows, average
+  confidence `n/a`, and 0 validation errors.
 - Goal report now shows `not_complete_pending_external_evidence`, 51 ready
   checks, 8 pending checks, and 0 failed checks.
-- Package report now shows `ready_with_pending_external_evidence`, 212 ready
+- Package report now shows `ready_with_pending_external_evidence`, 214 ready
   checks, 6 pending checks, and 0 failed checks.
 
 ## Boundaries To Preserve
@@ -68,10 +69,12 @@ Do not claim:
 - Saved-response output-contract scoring proves real live task success.
 - Submission-final or accepted AAAI paper.
 
-Supported after Phase 41 if verification passes:
+Supported after Phase 42 if verification passes:
 
 - AI-Scientist-v2 LLM-client smoke was attempted and provider-blocked with a
   redacted, reproducible report.
+- Human-fidelity annotation handoff is ready and strictly validated, but blank
+  rows remain pending.
 - Package and goal gates separate provider/model availability pending evidence
   from local failures.
 - All Phase 40 live-transfer saved-response evidence remains complete.

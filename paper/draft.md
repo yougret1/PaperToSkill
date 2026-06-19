@@ -157,10 +157,10 @@ The metrics are deterministic:
 These metrics are reproducible gates. They do not replace live agent execution,
 provider billing, live invoices, success-per-dollar accounting, or completed
 human fidelity annotation. To support later human review, we also
-prepare a six-criterion fidelity protocol and paper-specific review packets, but
-those packets remain unscored until independent annotators fill them. The
-annotation summarizer currently reports 24 pending rows and no completed
-scores.
+prepare a six-criterion fidelity protocol, paper-specific review packets, a
+reviewer handoff guide, and a stricter blank annotation template, but those
+packets remain unscored until independent annotators fill them. The annotation
+summarizer currently reports 24 pending rows and no completed scores.
 
 We also prepare model-ablation prompt packets, a runner, and a response
 evaluator for Claude Opus 4.8, a GPT-family slot requested as GPT 5.5, and a
@@ -297,9 +297,9 @@ downstream execution-outcome evaluation. Fourth, the current model-ablation prot
 partially complete: Claude Opus 4.8 and
 GPT-family rows have saved and scored responses, but DeepSeek remains pending
 user configuration. Fifth,
-human-fidelity packets, a blank annotation template,
-and a summary script are prepared, but no independent annotations have been
-completed. Sixth, compactness is measured by word count, deterministic
+human-fidelity packets, a reviewer handoff guide, a stricter blank annotation
+template, and a summary script are prepared, but no independent annotations have
+been completed. Sixth, compactness is measured by word count, deterministic
 character proxy, local tokenizer-aware input-token proxy, and local output-token
 proxy for saved model responses, not by provider-specific prices, live
 invoices, or live success per dollar. Seventh,
