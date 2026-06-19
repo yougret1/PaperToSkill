@@ -7,11 +7,13 @@ Current date: 2026-06-19.
 
 ## Current Phase
 
-Phase 49 is in progress locally: adding a no-network AI-Scientist-v2 full
-live/BFTS run handoff so the pending full-run path is machine-checkable without
-claiming completion.
+Phase 49 is complete locally but not yet pushed: added a no-network
+AI-Scientist-v2 full live/BFTS run handoff so the pending full-run path is
+machine-checkable without claiming completion.
 
-Latest pushed commit before Phase 49: `6ff4187 Refresh phase 48 memory status`.
+Latest local Phase 49 commit: `bc99a25 Add AI-Scientist-v2 live run handoff`.
+Push status: pending; two `git push origin main` attempts failed with GitHub
+HTTPS connection reset, and `git ls-remote origin HEAD` also failed over HTTPS.
 
 Phase 49 evidence so far:
 
@@ -149,14 +151,19 @@ Supported after Phase 48:
 
 ## Latest Verification
 
-Latest Phase 48 verification before commit `447cc33`:
+Latest Phase 49 verification before commit `bc99a25`:
 
 ```powershell
-python -m unittest tests.test_run_ai_scientist_v2_smoke tests.test_check_submission_review tests.test_check_reproducibility_package tests.test_check_goal_completion -v
+python scripts\check_ai_scientist_v2_live_run_handoff.py --strict
+python scripts\check_submission_review.py --strict
+python scripts\check_goal_completion.py --strict
+python scripts\check_reproducibility_package.py --strict
+python -m unittest tests.test_check_ai_scientist_v2_live_run_handoff tests.test_check_goal_completion tests.test_check_reproducibility_package tests.test_check_submission_review -v
 python -m unittest discover -s tests -v
 python scripts\check_submission_review.py --strict
 python scripts\check_deepseek_followup.py --strict
 python scripts\check_usage_examples.py --strict
+python scripts\check_ai_scientist_v2_live_run_handoff.py --strict
 python scripts\check_goal_completion.py --strict
 python scripts\check_reproducibility_package.py --strict
 python scripts\check_paper_claims.py --strict
