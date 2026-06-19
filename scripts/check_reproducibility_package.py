@@ -123,6 +123,7 @@ CORE_FILES = {
     "phase40_all_live_transfer_run_log": "research/run_logs/2026-06-19_phase40_all_live_transfer_responses.md",
     "phase41_ai_scientist_v2_smoke_run_log": "research/run_logs/2026-06-19_phase41_ai_scientist_v2_smoke.md",
     "phase45_ai_scientist_v2_smoke_recheck_run_log": "research/run_logs/2026-06-19_phase45_ai_scientist_v2_smoke_recheck.md",
+    "phase46_ai_scientist_v2_smoke_alias_fallback_run_log": "research/run_logs/2026-06-19_phase46_ai_scientist_v2_smoke_alias_fallback.md",
     "provider_billing_protocol": "benchmarks/provider_billing_evidence_v0.json",
     "provider_billing_summarizer": "scripts/summarize_provider_billing_evidence.py",
     "provider_billing_template": "results/provider_billing_evidence/billing_template.csv",
@@ -652,14 +653,16 @@ def ai_scientist_smoke_checks(root: Path) -> list[Check]:
         has_status_summary = "def status_summary(" in runner_text and "overall_status=" in runner_text
         has_require_complete = "--require-complete" in runner_text and "def exit_code(" in runner_text
         has_timeout = "--timeout-seconds" in runner_text and "thread.join(args.timeout_seconds)" in runner_text
+        has_alias_fallback = "--model-alias" in runner_text and "attempted_models" in runner_text
         checks.append(
             Check(
                 "ai_scientist_v2_smoke_cli_status_summary",
-                "ready" if has_status_summary and has_require_complete and has_timeout else "fail",
+                "ready" if has_status_summary and has_require_complete and has_timeout and has_alias_fallback else "fail",
                 (
                     f"status_summary={has_status_summary}; "
                     f"require_complete={has_require_complete}; "
-                    f"timeout={has_timeout}"
+                    f"timeout={has_timeout}; "
+                    f"alias_fallback={has_alias_fallback}"
                 ),
                 str(runner_path.relative_to(root)),
             )

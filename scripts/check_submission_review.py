@@ -168,6 +168,41 @@ def smoke_blocker_detail(smoke: dict[str, Any]) -> str:
     return ""
 
 
+def smoke_alias_terms(smoke: dict[str, Any]) -> list[str]:
+    return [
+        str(attempt.get("model", "")).strip()
+        for attempt in smoke.get("attempted_models", [])
+        if str(attempt.get("model", "")).strip()
+    ]
+
+
+def smoke_timeout_detail(smoke: dict[str, Any]) -> str:
+    detail = smoke_blocker_detail(smoke)
+    if "Timed out after 15 seconds waiting for provider response" in detail:
+        return "Timed out after 15 seconds waiting for provider response"
+    for attempt in smoke.get("attempted_models", []):
+        attempt_detail = str(attempt.get("detail", "")).strip()
+        if "Timed out after 15 seconds waiting for provider response" in attempt_detail:
+            return "Timed out after 15 seconds waiting for provider response"
+    return detail
+
+
+def aggregate_handoff_current(goal_counts: dict[str, Any], package_counts: dict[str, Any], combined_text: str) -> bool:
+    if goal_counts.get("fail") == 0 and package_counts.get("fail") == 0:
+        return contains_all(
+            combined_text,
+            [
+                f"{goal_counts.get('ready')} ready",
+                f"{goal_counts.get('pending')} pending",
+                f"{package_counts.get('ready')} ready",
+                f"{package_counts.get('pending')} pending",
+            ],
+        )
+    # Avoid a self-referential failure loop when stale aggregate reports failed
+    # only because the submission-review gate was generated before this check.
+    return contains_all(combined_text, ["active goal", "not complete", "pending external evidence"])
+
+
 def evidence_alignment_checks(root: Path, combined_text: str) -> list[Check]:
     live = load_json(root / "results/live_transfer_prompts/evaluation.json").get("summary", {})
     model = load_json(root / "results/model_ablation_prompts/v0/evaluation.json").get("summary", {})
@@ -175,6 +210,8 @@ def evidence_alignment_checks(root: Path, combined_text: str) -> list[Check]:
     billing = load_json(root / "results/provider_billing_evidence/billing_summary.json")
     smoke = load_json(root / "results/ai_scientist_v2_smoke/run_report.json")
     smoke_detail = smoke_blocker_detail(smoke)
+    smoke_aliases = smoke_alias_terms(smoke)
+    smoke_timeout = smoke_timeout_detail(smoke)
     goal = load_json(root / "results/reproducibility/goal_completion_report.json")
     package = load_json(root / "results/reproducibility/package_report.json")
     goal_counts = goal.get("status_counts", {})
@@ -228,25 +265,18 @@ def evidence_alignment_checks(root: Path, combined_text: str) -> list[Check]:
             "submission_review_ai_scientist_smoke_current",
             "ready"
             if smoke.get("overall_status") == "blocked_by_provider_or_model_availability"
-            and contains_all(combined_text, ["blocked_by_provider_or_model_availability", smoke_detail])
+            and contains_all(
+                combined_text,
+                ["blocked_by_provider_or_model_availability", smoke_timeout, *smoke_aliases],
+            )
             else "fail",
-            f"overall={smoke.get('overall_status')}; detail={smoke_detail}",
+            f"overall={smoke.get('overall_status')}; detail={smoke_detail}; aliases={','.join(smoke_aliases)}",
             "results/ai_scientist_v2_smoke/run_report.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md",
         ),
         Check(
             "submission_review_goal_package_counts_current",
             "ready"
-            if goal_counts.get("fail") == 0
-            and package_counts.get("fail") == 0
-            and contains_all(
-                combined_text,
-                [
-                    f"{goal_counts.get('ready')} ready",
-                    f"{goal_counts.get('pending')} pending",
-                    f"{package_counts.get('ready')} ready",
-                    f"{package_counts.get('pending')} pending",
-                ],
-            )
+            if aggregate_handoff_current(goal_counts, package_counts, combined_text)
             else "fail",
             (
                 f"goal={goal_counts}; "

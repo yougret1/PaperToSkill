@@ -63,9 +63,10 @@ Current supported claims:
 - Bounded AI-Scientist-v2 LLM-client smoke was attempted through the local
   `ai_scientist.llm` client and reached the provider path, but provider/model
   availability remains blocked. Earlier evidence included HTTP 403
-  `All available accounts exhausted`; the latest Phase 45 recheck timed out
-  after 15 seconds waiting for provider response. This is not smoke completion
-  or BFTS success.
+  `All available accounts exhausted`; the latest Phase 46 recheck tried
+  `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and
+  `claude-opus-4-6`, and all four aliases timed out after 15 seconds waiting
+  for provider response. This is not smoke completion or BFTS success.
 
 Current unsupported claims:
 
@@ -94,8 +95,8 @@ Use these as entry points instead of searching the whole repo first:
 - `scripts/evaluate_live_transfer_responses.py`: saved live-transfer response
   scorer.
 - `scripts/run_ai_scientist_v2_smoke.py`: bounded AI-Scientist-v2 LLM-client
-  smoke runner with status-summary output, `--timeout-seconds`, and
-  `--require-complete`.
+  smoke runner with status-summary output, repeatable `--model-alias`,
+  `--timeout-seconds`, and `--require-complete`.
 - `scripts/check_reproducibility_package.py`: aggregate local package gate.
 - `scripts/check_aaai_package.py`: AAAI package/build gate.
 - `scripts/check_usage_examples.py`: usage-example gate.
@@ -119,7 +120,7 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 229 ready checks, 7 pending
+  reports `ready_with_pending_external_evidence`, 230 ready checks, 7 pending
   checks, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
@@ -127,9 +128,10 @@ Use these as entry points instead of searching the whole repo first:
   checks, and 0 failed checks.
 - AI-Scientist-v2 LLM-client smoke:
   `results/ai_scientist_v2_smoke/run_report.md`
-  reports `blocked_by_provider_or_model_availability`, 1 ready check, 2 pending
-  checks, and 0 failed checks after timing out after 15 seconds waiting for
-  provider response.
+  reports `blocked_by_provider_or_model_availability`, 5 ready checks, 2 pending
+  checks, and 0 failed checks after trying `claude-opus-4-8`,
+  `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6`; all four
+  attempts timed out after 15 seconds waiting for provider response.
 - AAAI package:
   `results/reproducibility/aaai_package_report.md`
   reports ready, 17 ready checks, 0 failed checks.
@@ -221,7 +223,7 @@ DeepSeek:
 | Goal completion | Narrative completion audit could stale. | `scripts/check_goal_completion.py` makes the active-goal status machine-checkable. |
 | Model evidence state | GPT retry evidence was saved separately from the older Phase 36 failure report. | `scripts/check_goal_completion.py` reads both `run_report.json` and `gpt_retry_run_report.json` so historical GPT 502 evidence and current GPT-family success both remain visible. |
 | Output-token accounting | Cost section had input-token proxies but no saved-response output-token accounting. | `scripts/evaluate_model_response_costs.py` reports local output-token proxies for saved Claude/GPT-family responses while preserving the no-provider-billing boundary. |
-| AI-Scientist-v2 smoke boundary | AI-Scientist-v2 dry-run and live-transfer saved responses could be confused with a full live run. | `scripts/run_ai_scientist_v2_smoke.py` records a bounded client smoke attempt with script-level timeout; current provider/model availability blocker keeps smoke completion and full run pending. |
+| AI-Scientist-v2 smoke boundary | AI-Scientist-v2 dry-run and live-transfer saved responses could be confused with a full live run. | `scripts/run_ai_scientist_v2_smoke.py` records bounded client smoke attempts with alias fallback and script-level timeout; current provider/model availability blocker keeps smoke completion and full run pending. |
 
 ## Persistent Rules
 

@@ -19,7 +19,14 @@ class AIScientistV2SmokeTest(unittest.TestCase):
         for name in ["ai_scientist", "ai_scientist.llm"]:
             sys.modules.pop(name, None)
 
-    def install_fake_ai_scientist(self, response_text=None, error=None, delay_seconds=0):
+    def install_fake_ai_scientist(
+        self,
+        response_text=None,
+        error=None,
+        delay_seconds=0,
+        responses_by_model=None,
+        errors_by_model=None,
+    ):
         package = types.ModuleType("ai_scientist")
         llm = types.ModuleType("ai_scientist.llm")
 
@@ -29,8 +36,12 @@ class AIScientistV2SmokeTest(unittest.TestCase):
         def get_response_from_llm(prompt, client, model, system_message, temperature=0):
             if delay_seconds:
                 time.sleep(delay_seconds)
+            if errors_by_model and model in errors_by_model:
+                raise RuntimeError(errors_by_model[model])
             if error:
                 raise RuntimeError(error)
+            if responses_by_model and model in responses_by_model:
+                return responses_by_model[model], []
             return response_text, []
 
         llm.create_client = create_client
@@ -52,6 +63,7 @@ class AIScientistV2SmokeTest(unittest.TestCase):
                     system_message="system",
                     response_output=tmp_path / "response.md",
                     timeout_seconds=1,
+                    model_aliases=None,
                 )
             )
 
@@ -80,6 +92,7 @@ class AIScientistV2SmokeTest(unittest.TestCase):
                     system_message="system",
                     response_output=response_path,
                     timeout_seconds=1,
+                    model_aliases=None,
                 )
             )
 
@@ -108,6 +121,7 @@ class AIScientistV2SmokeTest(unittest.TestCase):
                     system_message="system",
                     response_output=response_path,
                     timeout_seconds=0.01,
+                    model_aliases=None,
                 )
             )
 
@@ -116,6 +130,37 @@ class AIScientistV2SmokeTest(unittest.TestCase):
             details = [check["detail"] for check in report["checks"]]
             self.assertTrue(any("Timed out after" in detail for detail in details))
             self.assertEqual(1, smoke.exit_code(report, strict=True, require_complete=True))
+
+    def test_smoke_tries_model_aliases_until_success(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            self.install_fake_ai_scientist(
+                responses_by_model={
+                    "claude-opus-4-7": "PAPERTOSKILL_SMOKE_OK from ai-scientist-v2 for paper-to-skill."
+                },
+                errors_by_model={"claude-opus-4-8": "alias unavailable"},
+            )
+            report = smoke.run(
+                Namespace(
+                    ai_scientist_root=tmp_path,
+                    model="claude-opus-4-8",
+                    prompt="prompt",
+                    system_message="system",
+                    response_output=tmp_path / "response.md",
+                    timeout_seconds=1,
+                    model_aliases=["claude-opus-4-8", "claude-opus-4-7", "claude-opus-4-6"],
+                )
+            )
+
+            self.assertEqual("complete", report["overall_status"])
+            attempts = report["attempted_models"]
+            self.assertEqual(["claude-opus-4-8", "claude-opus-4-7"], [item["model"] for item in attempts])
+            self.assertEqual(["blocked", "success"], [item["status"] for item in attempts])
+            checks = {check["id"]: check for check in report["checks"]}
+            self.assertEqual("ready", checks["ai_scientist_v2_llm_alias_attempt_1"]["status"])
+            self.assertIn("blocked", checks["ai_scientist_v2_llm_alias_attempt_1"]["detail"])
+            self.assertEqual("ready", checks["ai_scientist_v2_llm_alias_attempt_2"]["status"])
+            self.assertTrue((tmp_path / "response.md").exists())
 
 
 if __name__ == "__main__":

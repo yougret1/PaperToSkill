@@ -559,15 +559,19 @@
   AI-Scientist-v2 `ai_scientist.llm` client using the Claude-family
   OpenAI-compatible profile.
 - Main result: `results/ai_scientist_v2_smoke/run_report.md` reports
-  `overall_status=blocked_by_provider_or_model_availability`, 1 ready check, 2
-  pending checks, and 0 failed checks.
-- Provider outcome: the endpoint returned HTTP 403 with message `All available
-  accounts exhausted`; no response file was created.
+  `overall_status=blocked_by_provider_or_model_availability`, 5 ready checks, 2
+  pending checks, and 0 failed checks after trying `claude-opus-4-8`,
+  `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6`.
+- Provider outcome: earlier evidence included HTTP 403 `All available accounts
+  exhausted`; the latest recheck tried all four known aliases and each timed
+  out after 15 seconds waiting for provider response. No response file was
+  created.
 - Practical significance: records that the local AI-Scientist-v2 client path is
   wired into PaperToSkill with a reproducible smoke command and redacted
-  availability report.
-- Failure modes: provider account exhaustion, model unavailability, or endpoint
-  errors can block the smoke independently of PaperToSkill logic.
+  provider-availability reporting.
+- Failure modes: provider account exhaustion, model unavailability, endpoint
+  errors, or endpoint timeouts can block the smoke independently of
+  PaperToSkill logic.
 - Limitations: this is not BFTS, not live research-task success, and not human
   semantic validation.
 - Claim impact: supports saying the AI-Scientist-v2 LLM-client smoke was

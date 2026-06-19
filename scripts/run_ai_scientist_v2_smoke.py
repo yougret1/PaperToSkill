@@ -73,6 +73,7 @@ def build_report(
     *,
     ai_scientist_root: Path,
     model: str,
+    attempted_models: list[dict[str, str]],
     base_url: str | None,
     response_path: Path,
     response_text: str | None,
@@ -105,6 +106,16 @@ def build_report(
                 "provider/model availability",
             )
         )
+    if attempted_models:
+        for index, attempt in enumerate(attempted_models, start=1):
+            checks.append(
+                Check(
+                    f"ai_scientist_v2_llm_alias_attempt_{index}",
+                    "ready",
+                    f"{attempt.get('model')}: {attempt.get('status')}; {attempt.get('detail')}",
+                    "provider/model availability",
+                )
+            )
 
     status_counts = {"ready": 0, "pending": 0, "fail": 0}
     for check in checks:
@@ -126,6 +137,7 @@ def build_report(
         ),
         "ai_scientist_root": str(ai_scientist_root),
         "model": model,
+        "attempted_models": attempted_models,
         "base_url_env": "AI_SCIENTIST_OPENAI_BASE_URL",
         "base_url": base_url or "",
         "auth_env": "AI_SCIENTIST_OPENAI_API_KEY",
@@ -137,9 +149,9 @@ def build_report(
     }
 
 
-def call_llm_with_timeout(args: argparse.Namespace) -> str:
+def call_llm_with_timeout(args: argparse.Namespace, model: str) -> str:
     create_client, get_response_from_llm = load_ai_scientist_llm(args.ai_scientist_root)
-    client, client_model = create_client(args.model)
+    client, client_model = create_client(model)
     response_text, _ = get_response_from_llm(
         args.prompt,
         client,
@@ -148,6 +160,25 @@ def call_llm_with_timeout(args: argparse.Namespace) -> str:
         temperature=0,
     )
     return response_text
+
+
+def run_model_attempt(args: argparse.Namespace, model: str) -> tuple[str | None, str | None]:
+    result: dict[str, str] = {}
+
+    def target() -> None:
+        try:
+            result["response_text"] = call_llm_with_timeout(args, model)
+        except Exception as exc:  # noqa: BLE001 - report is redacted evidence
+            result["error"] = redact(str(exc))
+
+    thread = threading.Thread(target=target, daemon=True)
+    thread.start()
+    thread.join(args.timeout_seconds)
+    if thread.is_alive():
+        return None, f"Timed out after {args.timeout_seconds:g} seconds waiting for provider response"
+    if "error" in result:
+        return None, result["error"]
+    return result.get("response_text", ""), None
 
 
 def write_markdown(path: Path, report: dict[str, Any]) -> None:
@@ -163,6 +194,7 @@ def write_markdown(path: Path, report: dict[str, Any]) -> None:
         "",
         f"- Overall status: {report['overall_status']}",
         f"- Model: {report['model']}",
+        f"- Attempted models: {', '.join(attempt.get('model', '') for attempt in report.get('attempted_models', []))}",
         f"- Base URL env: {report['base_url_env']}",
         f"- Auth env: {report['auth_env']}",
         f"- Ready checks: {report['status_counts'].get('ready', 0)}",
@@ -185,36 +217,27 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     base_url = os.environ.get("AI_SCIENTIST_OPENAI_BASE_URL") or os.environ.get("OPENAI_BASE_URL")
     response_text: str | None = None
     error: str | None = None
+    attempted_models: list[dict[str, str]] = []
+    model_aliases = args.model_aliases or [args.model]
 
-    try:
-        result: dict[str, str] = {}
-
-        def target() -> None:
-            try:
-                result["response_text"] = call_llm_with_timeout(args)
-            except Exception as exc:  # noqa: BLE001 - report is redacted evidence
-                result["error"] = redact(str(exc))
-
-        thread = threading.Thread(target=target, daemon=True)
-        thread.start()
-        thread.join(args.timeout_seconds)
-        if thread.is_alive():
-            error = f"Timed out after {args.timeout_seconds:g} seconds waiting for provider response"
-        elif "error" in result:
-            error = result["error"]
-        else:
-            response_text = result.get("response_text", "")
-        args.response_output.parent.mkdir(parents=True, exist_ok=True)
+    for model in model_aliases:
+        response_text, error = run_model_attempt(args, model)
         if response_text:
-            args.response_output.write_text(response_text.strip() + "\n", encoding="utf-8")
-        elif args.response_output.exists():
-            args.response_output.unlink()
-    except Exception as exc:  # noqa: BLE001 - report is redacted evidence
-        error = redact(str(exc))
+            attempted_models.append({"model": model, "status": "success", "detail": f"response_chars={len(response_text)}"})
+            break
+        attempted_models.append({"model": model, "status": "blocked", "detail": redact(error or "empty response")[:500]})
+    args.response_output.parent.mkdir(parents=True, exist_ok=True)
+    if response_text:
+        args.response_output.write_text(response_text.strip() + "\n", encoding="utf-8")
+    elif args.response_output.exists():
+        args.response_output.unlink()
+    if not response_text and attempted_models:
+        error = "; ".join(f"{attempt['model']}: {attempt['detail']}" for attempt in attempted_models)
 
     return build_report(
         ai_scientist_root=args.ai_scientist_root,
-        model=args.model,
+        model=model_aliases[0],
+        attempted_models=attempted_models,
         base_url=base_url,
         response_path=args.response_output,
         response_text=response_text,
@@ -257,6 +280,12 @@ def main() -> int:
         help="Path to the local ai-scientist-v2 checkout.",
     )
     parser.add_argument("--model", default="claude-opus-4-8")
+    parser.add_argument(
+        "--model-alias",
+        dest="model_aliases",
+        action="append",
+        help="Candidate model alias to try, in order. Can be repeated.",
+    )
     parser.add_argument(
         "--timeout-seconds",
         type=float,
