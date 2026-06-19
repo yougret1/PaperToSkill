@@ -7,7 +7,7 @@ Current date: 2026-06-20.
 
 ## Current Phase
 
-Phase 50 is in progress locally: refreshed the bounded AI-Scientist-v2
+Phase 50 is complete locally but not yet pushed: refreshed the bounded AI-Scientist-v2
 LLM-client smoke evidence after GitHub connectivity recovered. The smoke
 remains provider-blocked; this phase does not run BFTS or claim live-run
 success.
@@ -29,6 +29,11 @@ Phase 50 evidence so far:
   `claude-opus-4-6` each timed out after 30 seconds waiting for provider
   response.
 - No `results/ai_scientist_v2_smoke/response.md` file exists.
+- Latest local Phase 50 commit: `da704bc Refresh AI-Scientist-v2 smoke timeout
+  evidence`.
+- Push status: pending again. Two `git push origin main` attempts failed with
+  GitHub HTTPS connection reset / connect timeout, and `curl.exe -I
+  https://github.com` timed out.
 
 Phase 49 evidence so far:
 
