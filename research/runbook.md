@@ -572,7 +572,7 @@ queue:
 python scripts\check_external_evidence_packets.py --strict
 ```
 
-Current Phase 53 status:
+Current Phase 69 status:
 `results/external_evidence_packets/packets.md` reports
 `overall_status=ready`, 7 ready checks, 0 pending checks, and 0 failed checks.
 The six packets cover AI-Scientist-v2 smoke completion, AI-Scientist-v2 full
@@ -583,6 +583,13 @@ the AAAI submission decision.
 These packets list inputs, setup notes, run commands, validation commands,
 completion criteria, escalation rules, and evidence boundaries. They do not
 complete any external evidence by themselves.
+
+The AAAI submission-decision packet now routes final-decision recording through
+`scripts/generate_aaai_submission_decision.py`. After the human research lead
+chooses exactly one option, run only the matching helper command, then rerun
+`scripts/check_aaai_submission_decision.py --strict`,
+`scripts/check_goal_completion.py --strict`, and
+`scripts/check_reproducibility_package.py --strict`.
 
 ## AAAI Submission Decision Preflight
 

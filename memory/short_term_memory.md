@@ -7,10 +7,11 @@ Current date: 2026-06-20.
 
 ## Current Phase
 
-Phase 68 is the current local phase. Phase 67 was committed as
-`a0d67bc Record decision helper remote save` and pushed to `origin/main` on
-2026-06-20. Phase 68 refreshes stale memory anchors after the Phase 67 remote
-save; no evidence status is promoted.
+Phase 69 is the current local phase. Phase 68 was committed as
+`5548070 Refresh memory anchors after remote save` and pushed to `origin/main`
+on 2026-06-20. Phase 69 syncs the AAAI submission-decision execution packet
+with the validated decision-record helper; no external evidence status is
+promoted and no AAAI option is selected.
 
 Phase 62 objective:
 
@@ -151,6 +152,31 @@ Phase 68 evidence:
   recursion fix to the long-term artifact/fix map.
 - Current recovery anchor before Phase 68 commit:
   `a0d67bc8d64ee7b25f3319817634fbc426bf31e0`.
+
+Phase 69 evidence:
+
+- Updated `scripts/check_external_evidence_packets.py` so the
+  `aaai_submission_decision` packet lists
+  `scripts/generate_aaai_submission_decision.py` and
+  `results/aaai_submission_decision/decision.json` as inputs.
+- The AAAI decision packet now separates pre-decision local gates, exactly one
+  human-selected helper command, and final validation after
+  `research/aaai_submission_decision.md` exists.
+- Added regression assertions in
+  `tests/test_check_external_evidence_packets.py`.
+- Regenerated `results/external_evidence_packets/packets.{json,md}` and
+  refreshed dependent AAAI decision, goal-completion, and package reports.
+- Current refreshed report anchors remain:
+  - `results/external_evidence_packets/packets.md`: ready, 7 ready checks,
+    0 pending checks, 0 failed checks.
+  - `results/aaai_submission_decision/decision.md`: pending human decision,
+    26 ready checks, 1 pending check, 0 failed checks.
+  - `results/reproducibility/goal_completion_report.md`: not complete pending
+    external evidence, 70 ready checks, 8 pending checks, 0 failed checks.
+  - `results/reproducibility/package_report.md`: ready with pending external
+    evidence, 283 ready checks, 8 pending checks, 0 failed checks.
+- No `research/aaai_submission_decision.md` decision record was generated; the
+  final AAAI submission decision remains pending a human research-lead choice.
 
 ## Current Evidence
 

@@ -87,6 +87,7 @@
 | `research/run_logs/2026-06-20_phase66_aaai_decision_record_helper.md` | Validated helper for generating the human AAAI submission-decision record without selecting a default option | Created |
 | `research/run_logs/2026-06-20_phase67_remote_save_after_decision_helper.md` | Successful remote save of the AAAI decision-record helper commit | Created |
 | `research/run_logs/2026-06-20_phase68_memory_anchor_refresh.md` | Memory and runbook anchor refresh after Phase 67 remote save | Created |
+| `research/run_logs/2026-06-20_phase69_aaai_decision_packet_helper_sync.md` | External-evidence AAAI decision packet synced with the validated decision-record helper | Created |
 
 ## Paper Draft Package
 

@@ -75,6 +75,31 @@ class CheckExternalEvidencePacketsTest(unittest.TestCase):
                 deepseek_packet["run_commands"][0],
             )
 
+            aaai_packet = next(
+                packet for packet in report["packets"] if packet["id"] == "aaai_submission_decision"
+            )
+            aaai_text = json.dumps(aaai_packet)
+            self.assertIn("scripts/generate_aaai_submission_decision.py", aaai_text)
+            self.assertIn("results/aaai_submission_decision/decision.json", aaai_text)
+            self.assertIn("--selected-option submit_now_deterministic_offline", aaai_text)
+            self.assertIn("--selected-option wait_for_external_evidence", aaai_text)
+            self.assertIn("research/aaai_submission_decision.md exists", aaai_text)
+            self.assertIn("scripts/check_aaai_submission_decision.py --strict validates", aaai_text)
+            self.assertIn("# Select exactly one human decision record command", aaai_packet["run_commands"])
+            self.assertIn("# Final validation after the selected decision record exists", aaai_packet["run_commands"])
+            self.assertLess(
+                aaai_packet["run_commands"].index("# Select exactly one human decision record command"),
+                aaai_packet["run_commands"].index(
+                    "python scripts\\generate_aaai_submission_decision.py --selected-option submit_now_deterministic_offline --decision-owner \"<name or role>\" --decision-date YYYY-MM-DD --claim-boundary \"<accepted bounded claim scope>\" --evidence-policy \"submit with explicit pending-evidence limitations\""
+                ),
+            )
+            self.assertLess(
+                aaai_packet["run_commands"].index(
+                    "python scripts\\generate_aaai_submission_decision.py --selected-option wait_for_external_evidence --decision-owner \"<name or role>\" --decision-date YYYY-MM-DD --claim-boundary \"<claims deferred until named evidence is complete>\" --evidence-policy \"wait for named external evidence rows\""
+                ),
+                aaai_packet["run_commands"].index("# Final validation after the selected decision record exists"),
+            )
+
     def test_missing_closure_report_fails(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

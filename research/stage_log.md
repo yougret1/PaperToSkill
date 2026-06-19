@@ -2362,3 +2362,47 @@ Evidence boundary:
 - Phase 68 refreshes memory/report anchors only.
 - It does not complete any pending external evidence or select the final AAAI
   submission decision.
+
+## 2026-06-20 Phase 69
+
+Actions:
+
+- Updated `scripts/check_external_evidence_packets.py` so the
+  `aaai_submission_decision` execution packet lists
+  `scripts/generate_aaai_submission_decision.py` and the current AAAI
+  decision preflight report as inputs.
+- Reordered the AAAI decision packet commands into pre-decision local gates,
+  exactly one human-selected helper command, and final validation after the
+  decision record exists.
+- Added helper commands for both available decision options:
+  `submit_now_deterministic_offline` and `wait_for_external_evidence`.
+- Tightened completion criteria so `research/aaai_submission_decision.md` must
+  exist and validate through `scripts/check_aaai_submission_decision.py --strict`.
+- Added regression assertions in
+  `tests/test_check_external_evidence_packets.py`.
+- Regenerated the external-evidence packet reports and refreshed dependent
+  AAAI decision, goal-completion, and reproducibility-package reports.
+- Added
+  `research/run_logs/2026-06-20_phase69_aaai_decision_packet_helper_sync.md`.
+
+Results:
+
+- `python -m unittest tests.test_check_external_evidence_packets -v`: 3 tests
+  passed.
+- `python scripts\check_external_evidence_packets.py --strict`: passed.
+- `python scripts\check_aaai_submission_decision.py --strict`: passed and still
+  reports `pending_human_decision`, 26 ready checks, 1 pending check, and 0
+  failed checks.
+- `python scripts\check_goal_completion.py --strict`: passed and still reports
+  `not_complete_pending_external_evidence`, 70 ready checks, 8 pending checks,
+  and 0 failed checks.
+- `python scripts\check_reproducibility_package.py --strict`: passed and still
+  reports `ready_with_pending_external_evidence`, 283 ready checks, 8 pending
+  checks, and 0 failed checks.
+
+Evidence boundary:
+
+- Phase 69 improves the local final-decision handoff only.
+- It does not generate `research/aaai_submission_decision.md`, select an AAAI
+  submission option, submit the paper, or complete any pending external
+  evidence.
