@@ -7,12 +7,13 @@ Current date: 2026-06-19.
 
 ## Current Phase
 
-Phase 45 is complete pending commit/push: rechecked the bounded
+Phase 45 is complete and pushed to `origin/main` as
+`95413ee Harden AI Scientist smoke recheck`: rechecked the bounded
 AI-Scientist-v2 LLM-client smoke and improved the smoke runner's command-line
 status/timeout handling so provider-blocked attempts are harder to misread as
 completed smoke runs.
 
-Latest pushed commit before Phase 45: `ca3d5a4 Refresh phase 44 memory status`.
+Latest pushed commit after Phase 45: `95413ee Harden AI Scientist smoke recheck`.
 
 Phase 45 changed:
 
