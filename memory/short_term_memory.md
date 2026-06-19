@@ -7,18 +7,18 @@ Current date: 2026-06-20.
 
 ## Current Phase
 
-Phase 59 is the current completed local phase. Phase 58 was committed and
-pushed as `2488ade Add max-token capped AI-Scientist-v2 smoke`; before Phase
-59 edits, `HEAD == origin/main ==
-2488aded5dd7fb58be110ee995f9e16f710f1ed1`.
+Phase 60 is the current local phase. Phase 59 was committed as
+`dc52b06 Add direct OpenAI-compatible provider probe` and pushed to
+`origin/main` on 2026-06-20. Phase 60 confirms that remote save and rechecks
+the direct provider diagnostic; provider/model availability remains blocked.
 
-Phase 59 objective:
+Phase 60 objective:
 
-- Determine whether the AI-Scientist-v2 smoke blocker is specific to the
-  `ai_scientist.llm` wrapper or also appears when calling the
-  OpenAI-compatible endpoint directly.
-- Keep this as provider/model availability evidence only, not model-quality or
-  live research-task evidence.
+- Confirm that the Phase 59 provider diagnostic was saved to `origin/main`.
+- Recheck whether the direct OpenAI-compatible endpoint can now satisfy the
+  tiny marker contract.
+- Keep this as provider/model availability evidence only, not model-quality,
+  AI-Scientist-v2 smoke completion, or live research-task evidence.
 
 Phase 59 evidence:
 
@@ -37,6 +37,22 @@ Phase 59 evidence:
 - Added `research/run_logs/2026-06-20_phase59_openai_direct_probe.md`.
 - Integrated the direct-probe reports into the reproducibility package gate as
   diagnostic readiness checks only.
+
+Phase 60 evidence:
+
+- `git push origin main` succeeded for Phase 59:
+  `2488ade..dc52b06  main -> main`.
+- Re-ran direct probes with shell-only credentials:
+  - Claude-family remains HTTP 503 `No available accounts: no available accounts`.
+  - GPT-family remains HTTP 502 `Upstream access forbidden, please contact
+    administrator`.
+- Added
+  `research/run_logs/2026-06-20_phase60_post_push_provider_recheck.md`.
+- Refreshed local gate reports. `results/reproducibility/package_report.md`
+  still reports `ready_with_pending_external_evidence`, 281 ready checks, 8
+  pending checks, and 0 failed checks. `results/reproducibility/goal_completion_report.md`
+  still reports `not_complete_pending_external_evidence`, 70 ready checks, 8
+  pending checks, and 0 failed checks.
 
 ## Current Evidence
 

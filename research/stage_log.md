@@ -2104,3 +2104,33 @@ Evidence boundary:
 - It does not complete the AI-Scientist-v2 smoke, run BFTS, prove live
   research-task success, resolve DeepSeek, collect human annotations, collect
   provider billing, or make the AAAI package submission-final.
+
+## 2026-06-20 Phase 60
+
+Actions:
+
+- Confirmed Phase 59 commit `dc52b06 Add direct OpenAI-compatible provider
+  probe` pushed successfully to `origin/main`.
+- Re-ran the direct OpenAI-compatible provider probes for Claude-family and
+  GPT-family credential profiles with the same tiny marker contract.
+- Added
+  `research/run_logs/2026-06-20_phase60_post_push_provider_recheck.md`.
+
+Results:
+
+- Claude-family direct probe still reports
+  `blocked_by_provider_or_model_availability`: `claude-opus-4-8`,
+  `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6` all returned
+  HTTP 503 `No available accounts: no available accounts`.
+- GPT-family direct probe still reports
+  `blocked_by_provider_or_model_availability`: `gpt-5.5` and `gpt-5.4` both
+  returned HTTP 502 `Upstream access forbidden, please contact administrator`.
+- No direct-probe response files exist for either profile.
+
+Evidence boundary:
+
+- Phase 60 confirms that the provider blocker persists after Phase 59 was
+  saved to the remote repository.
+- It does not complete the AI-Scientist-v2 smoke, run BFTS, prove live
+  research-task success, resolve DeepSeek, collect human annotations, collect
+  provider billing, or make the AAAI package submission-final.
