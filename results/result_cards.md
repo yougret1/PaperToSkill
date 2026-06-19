@@ -533,7 +533,7 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 243 ready checks, 8
+  `overall_status=ready_with_pending_external_evidence`, 244 ready checks, 8
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
@@ -564,10 +564,10 @@
   pending checks, and 0 failed checks after trying `claude-opus-4-8`,
   `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6`.
 - Provider outcome: earlier evidence included HTTP 403 `All available accounts
-  exhausted`; the latest recheck tried all four known aliases. `claude-opus-4-8`
-  returned HTTP 403 `All available accounts exhausted`, while
-  `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6` each timed out
-  after 30 seconds waiting for provider response. No response file was created.
+  exhausted`; the latest recheck tried all four known aliases, and
+  `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and
+  `claude-opus-4-6` each timed out after 30 seconds waiting for provider
+  response. No response file was created.
 - Practical significance: records that the local AI-Scientist-v2 client path is
   wired into PaperToSkill with a reproducible smoke command and redacted
   provider-availability reporting.
@@ -992,7 +992,7 @@
   materials include the current 24 scored saved live-transfer response rows,
   4 scored and 2 pending model-ablation rows, 0 scored and 24 pending
   human-fidelity rows, 0 measured and 6 pending provider-billing rows, the
-  AI-Scientist-v2 HTTP 403 provider blocker, and current goal/package counts.
+  AI-Scientist-v2 timeout provider blocker, and current goal/package counts.
 - Practical significance: prevents reviewer-facing handoff materials from
   lagging behind the evidence package while keeping final submission decisions
   explicit.

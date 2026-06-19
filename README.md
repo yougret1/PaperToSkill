@@ -10,16 +10,15 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 48: Claude Opus 4.8 and GPT-family ablation rows are saved and scored for
+Phase 50: Claude Opus 4.8 and GPT-family ablation rows are saved and scored for
 the current two-case protocol, saved model responses have a local output-token
 proxy report, and all four live-transfer saved-response sets are collected and
 scored for the current prompt-packet protocol. A bounded AI-Scientist-v2
 LLM-client smoke runner is present, and the latest recheck tried
 `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and
-`claude-opus-4-6`; `claude-opus-4-8` returned HTTP 403
-`All available accounts exhausted`, while the other three aliases timed out
-after 30 seconds waiting for provider response. This remains a provider/model
-availability blocker, not a local package failure or model-quality result. The
+`claude-opus-4-6`; all four aliases timed out after 30 seconds waiting for
+provider response. This remains a provider/model availability blocker, not a
+local package failure or model-quality result. The
 smoke runner now prints an explicit
 `overall_status` summary, has a script-level `--timeout-seconds`, offers
 repeatable `--model-alias`, and provides `--require-complete` for checks that

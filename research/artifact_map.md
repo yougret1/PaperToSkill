@@ -68,6 +68,7 @@
 | `research/run_logs/2026-06-19_phase47_deepseek_followup_handoff.md` | Local DeepSeek follow-up handoff/preflight report and gate integration | Created |
 | `research/run_logs/2026-06-19_phase48_ai_scientist_v2_smoke_provider_recheck.md` | AI-Scientist-v2 smoke provider recheck with HTTP 403 and 30-second timeout evidence | Created |
 | `research/run_logs/2026-06-19_phase49_ai_scientist_v2_live_run_handoff.md` | Local AI-Scientist-v2 full live/BFTS run handoff/preflight report and gate integration | Created |
+| `research/run_logs/2026-06-20_phase50_ai_scientist_v2_smoke_timeout_recheck.md` | AI-Scientist-v2 smoke recheck where all four Claude aliases timed out after 30 seconds | Created |
 
 ## Paper Draft Package
 

@@ -133,6 +133,7 @@ CORE_FILES = {
     "phase47_deepseek_followup_handoff_run_log": "research/run_logs/2026-06-19_phase47_deepseek_followup_handoff.md",
     "phase48_ai_scientist_v2_smoke_provider_recheck_run_log": "research/run_logs/2026-06-19_phase48_ai_scientist_v2_smoke_provider_recheck.md",
     "phase49_ai_scientist_v2_live_run_handoff_run_log": "research/run_logs/2026-06-19_phase49_ai_scientist_v2_live_run_handoff.md",
+    "phase50_ai_scientist_v2_smoke_timeout_recheck_run_log": "research/run_logs/2026-06-20_phase50_ai_scientist_v2_smoke_timeout_recheck.md",
     "provider_billing_protocol": "benchmarks/provider_billing_evidence_v0.json",
     "provider_billing_summarizer": "scripts/summarize_provider_billing_evidence.py",
     "provider_billing_template": "results/provider_billing_evidence/billing_template.csv",

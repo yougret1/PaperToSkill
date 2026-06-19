@@ -66,12 +66,10 @@ Current supported claims:
 - Bounded AI-Scientist-v2 LLM-client smoke was attempted through the local
   `ai_scientist.llm` client and reached the provider path, but provider/model
   availability remains blocked. Earlier evidence included HTTP 403
-  `All available accounts exhausted`; the latest Phase 48 recheck tried
+  `All available accounts exhausted`; the latest Phase 50 recheck tried
   `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and
-  `claude-opus-4-6`; `claude-opus-4-8` returned HTTP 403
-  `All available accounts exhausted`, while the other three aliases timed out
-  after 30 seconds waiting for provider response. This is not smoke completion
-  or BFTS success.
+  `claude-opus-4-6`, and all four aliases timed out after 30 seconds waiting
+  for provider response. This is not smoke completion or BFTS success.
 - AI-Scientist-v2 full live-run handoff is ready as a local preflight: the
   launcher, seed idea, laptop-profile config, prior dry-run artifacts,
   environment variable names, and next full-run command are checked; provider
@@ -134,7 +132,7 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 243 ready checks, 8 pending
+  reports `ready_with_pending_external_evidence`, 244 ready checks, 8 pending
   checks, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
@@ -144,10 +142,9 @@ Use these as entry points instead of searching the whole repo first:
   `results/ai_scientist_v2_smoke/run_report.md`
   reports `blocked_by_provider_or_model_availability`, 5 ready checks, 2 pending
   checks, and 0 failed checks after trying `claude-opus-4-8`,
-  `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6`;
-  `claude-opus-4-8` returned HTTP 403 `All available accounts exhausted`,
-  while the other three aliases timed out after 30 seconds waiting for provider
-  response.
+  `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6`; all four
+  aliases timed out after 30 seconds waiting for provider response in the
+  latest Phase 50 recheck.
 - AI-Scientist-v2 live-run handoff:
   `results/ai_scientist_v2_live_run_handoff/handoff.md`
   reports `blocked_by_provider_smoke`, 10 ready checks, 2 pending checks, and

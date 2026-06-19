@@ -61,6 +61,7 @@ class CheckReproducibilityPackageTest(unittest.TestCase):
             self.assertIn("ai_scientist_smoke_runner", ready_ids)
             self.assertIn("ai_scientist_smoke_report_json", ready_ids)
             self.assertIn("ai_scientist_smoke_report_md", ready_ids)
+            self.assertIn("phase50_ai_scientist_v2_smoke_timeout_recheck_run_log", ready_ids)
             self.assertIn("ai_scientist_live_run_handoff_checker", ready_ids)
             self.assertIn("ai_scientist_live_run_handoff_json", ready_ids)
             self.assertIn("ai_scientist_live_run_handoff_md", ready_ids)

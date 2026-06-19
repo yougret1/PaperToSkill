@@ -72,7 +72,7 @@ human semantic review or real live-task success.
 Evidence to cite:
 
 - `paper/limitations.md`: heuristic metric limitation.
-- `results/reproducibility/package_report.md`: 243 ready checks, 8 pending
+- `results/reproducibility/package_report.md`: 244 ready checks, 8 pending
   checks, and 0 failed checks.
 - `results/human_fidelity_packets/`: prepared independent-review protocol.
 
@@ -166,9 +166,8 @@ Short answer: The local dry run succeeded, and a bounded LLM-client smoke was
 attempted through the local AI-Scientist-v2 client. The latest smoke report is
 `blocked_by_provider_or_model_availability`: `claude-opus-4-8`,
 `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6` were all tried,
-`claude-opus-4-8` returned HTTP 403 `All available accounts exhausted`, and
-the other three aliases timed out after 30 seconds waiting for provider
-response. Smoke completion and full live-run evidence remain pending.
+and all four aliases timed out after 30 seconds waiting for provider response.
+Smoke completion and full live-run evidence remain pending.
 
 Evidence to cite:
 
@@ -191,7 +190,7 @@ Evidence to cite:
 
 - `results/reproducibility/goal_completion_report.md`: 61 ready checks,
   8 pending checks, 0 failed checks.
-- `results/reproducibility/package_report.md`: 243 ready checks, 8 pending
+- `results/reproducibility/package_report.md`: 244 ready checks, 8 pending
   checks, 0 failed checks.
 - `research/submission_checklist.md`: submission-review handoff checklist.
 
