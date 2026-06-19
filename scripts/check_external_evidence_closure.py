@@ -144,11 +144,16 @@ def build_items(reports: dict[str, dict[str, Any]]) -> list[QueueItem]:
             evidence=REQUIRED_REPORTS["ai_scientist_smoke"],
             next_action="Provider must return a smoke response satisfying all marker checks.",
             next_commands=[
+                "# Claude-family credential profile",
                 "python scripts\\run_ai_scientist_v2_smoke.py --strict --require-complete --timeout-seconds 30 `",
                 "  --model-alias claude-opus-4-8 `",
                 "  --model-alias claude-opus-4.8 `",
                 "  --model-alias claude-opus-4-7 `",
                 "  --model-alias claude-opus-4-6",
+                "# GPT-family credential profile",
+                "python scripts\\run_ai_scientist_v2_smoke.py --strict --require-complete --timeout-seconds 60 `",
+                "  --model-alias gpt-5.5 `",
+                "  --model-alias gpt-5.4",
             ],
         ),
         QueueItem(

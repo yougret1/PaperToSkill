@@ -1997,3 +1997,39 @@ Evidence boundary:
 - It does not complete the AI-Scientist-v2 smoke, run BFTS, prove live
   research-task success, resolve DeepSeek, collect human annotations, collect
   provider billing, or make the AAAI package submission-final.
+
+## 2026-06-20 Phase 57
+
+Actions:
+
+- Re-ran the bounded AI-Scientist-v2 LLM-client smoke using the GPT-family
+  credential profile mapped into `AI_SCIENTIST_OPENAI_API_KEY`, with
+  `--timeout-seconds 60`, `--require-complete`, and aliases `gpt-5.5` then
+  `gpt-5.4`.
+- Updated the external-evidence closure queue and execution-packet generators
+  so the AI-Scientist-v2 smoke handoff now lists both Claude-family and
+  GPT-family retry commands.
+- Updated review, rebuttal, checklist, runbook, result-card, goal-audit,
+  README, and memory wording to reflect the latest GPT-family smoke attempt.
+- Added
+  `research/run_logs/2026-06-20_phase57_ai_scientist_v2_gpt_smoke_retry.md`.
+
+Results:
+
+- `results/ai_scientist_v2_smoke/run_report.md` still reports
+  `overall_status=blocked_by_provider_or_model_availability`, with 3 ready
+  checks, 2 pending checks, and 0 failed checks.
+- `gpt-5.5` and `gpt-5.4` both timed out after 60 seconds waiting for provider
+  response.
+- No `results/ai_scientist_v2_smoke/response.md` file exists.
+- The full AI-Scientist-v2 live/BFTS run remains blocked by smoke/provider
+  availability and missing completion artifacts.
+
+Evidence boundary:
+
+- Phase 57 confirms that the AI-Scientist-v2 OpenAI-compatible client path can
+  be exercised with the GPT-family credential profile, but the provider did not
+  return a smoke response.
+- It does not complete the AI-Scientist-v2 smoke, run BFTS, prove live
+  research-task success, resolve DeepSeek, collect human annotations, collect
+  provider billing, or make the AAAI package submission-final.

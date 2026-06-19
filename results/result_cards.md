@@ -557,18 +557,17 @@
 ## AI-Scientist-v2 LLM-Client Smoke
 
 - Experiment: run one bounded chat-completion smoke through the local
-  AI-Scientist-v2 `ai_scientist.llm` client using the Claude-family
-  OpenAI-compatible profile.
+  AI-Scientist-v2 `ai_scientist.llm` client using OpenAI-compatible provider
+  profiles.
 - Main result: `results/ai_scientist_v2_smoke/run_report.md` reports
-  `overall_status=blocked_by_provider_or_model_availability`, 5 ready checks, 2
-  pending checks, and 0 failed checks after trying `claude-opus-4-8`,
-  `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6`.
+  `overall_status=blocked_by_provider_or_model_availability`, 3 ready checks, 2
+  pending checks, and 0 failed checks after the latest GPT-family retry tried
+  `gpt-5.5` and `gpt-5.4`.
 - Provider outcome: earlier evidence included HTTP 403 `All available accounts
-  exhausted`; the latest Phase 56 recheck after GitHub push recovery tried all
-  four known aliases, and
-  `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and
-  `claude-opus-4-6` each timed out after 30 seconds waiting for provider
-  response. No response file was created.
+  exhausted` and repeated Claude-family timeouts; the latest Phase 57 retry
+  mapped the GPT-family credential profile into the AI-Scientist-v2
+  OpenAI-compatible client path, and `gpt-5.5` plus `gpt-5.4` both timed out
+  after 60 seconds waiting for provider response. No response file was created.
 - Practical significance: records that the local AI-Scientist-v2 client path is
   wired into PaperToSkill with a reproducible smoke command and redacted
   provider-availability reporting.
@@ -582,7 +581,7 @@
 - Figure/table: `scripts/run_ai_scientist_v2_smoke.py`;
   `results/ai_scientist_v2_smoke/run_report.md`;
   `results/ai_scientist_v2_smoke/run_report.json`;
-  `research/run_logs/2026-06-20_phase56_ai_scientist_v2_smoke_after_push_recovery.md`.
+  `research/run_logs/2026-06-20_phase57_ai_scientist_v2_gpt_smoke_retry.md`.
 
 ## AI-Scientist-v2 Full Live-Run Handoff
 

@@ -7,61 +7,38 @@ Current date: 2026-06-20.
 
 ## Current Phase
 
-Phase 56 is in progress locally: after GitHub connectivity recovered and Phase
-55 was pushed, reran the bounded AI-Scientist-v2 LLM-client smoke. The provider
-still did not return a smoke response; this phase does not run BFTS or claim
-live-run success.
+Phase 57 is in progress locally. Phase 56 was committed and pushed as
+`f1cc165 Refresh AI-Scientist-v2 smoke after push recovery`; before Phase 57
+edits, `HEAD == origin/main == f1cc165c0bfb290d0e8041b72a40cab89c15fb74`.
 
-Phase 55 completed and pushed:
+Phase 57 objective:
 
-- Added `scripts/check_aaai_submission_decision.py`.
-- Added `tests/test_check_aaai_submission_decision.py`.
-- Generated `results/aaai_submission_decision/decision.{json,md}`.
-- Integrated the preflight into `scripts/check_goal_completion.py` and
-  `scripts/check_reproducibility_package.py`.
-- Added
-  `research/run_logs/2026-06-20_phase55_aaai_submission_decision_preflight.md`.
-- Updated submission-review handoff files, runbook, artifact map, result cards,
-  stage log, goal audit, README/memory references as needed.
-- Local commit: `3c6ab9e Add AAAI submission decision preflight`.
-- Follow-up memory-only commit: `3183ffe Record phase 55 push blocker`.
-- Push status: resolved. `git push origin main` succeeded on 2026-06-20 after
-  connectivity recovered; `origin/main` moved from `d8639bc` to `3183ffe`.
+- Test whether the bounded AI-Scientist-v2 LLM-client smoke can complete with
+  the GPT-family credential profile after repeated Claude-family provider
+  blockers.
+- Keep this as provider/model availability evidence only, not model-quality or
+  live research-task evidence.
 
-Phase 56 evidence so far:
+Phase 57 evidence so far:
 
-- Ran `scripts/run_ai_scientist_v2_smoke.py` with `--require-complete`,
-  `--timeout-seconds 30`, and four Claude aliases:
-  `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and
-  `claude-opus-4-6`.
-- The command exited non-zero because `--require-complete` was set and the
-  provider did not return a smoke response satisfying the marker contract.
+- Used shell-only credentials:
+  `AI_SCIENTIST_OPENAI_BASE_URL=https://coderxiaoc.com/v1`,
+  `AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE=1`, and the GPT-family key mapped into
+  `AI_SCIENTIST_OPENAI_API_KEY` for this smoke only.
+- Ran:
+  `python scripts\run_ai_scientist_v2_smoke.py --strict --require-complete --timeout-seconds 60 --model-alias gpt-5.5 --model-alias gpt-5.4`.
+- The command exited non-zero because `--require-complete` was set.
 - `results/ai_scientist_v2_smoke/run_report.md` remains
-  `blocked_by_provider_or_model_availability`, with 5 ready checks, 2 pending
+  `blocked_by_provider_or_model_availability`, with 3 ready checks, 2 pending
   checks, and 0 failed checks.
-- All four aliases timed out after 30 seconds waiting for provider response.
+- `gpt-5.5` and `gpt-5.4` both timed out after 60 seconds waiting for provider
+  response.
 - No `results/ai_scientist_v2_smoke/response.md` file exists.
 - Added
-  `research/run_logs/2026-06-20_phase56_ai_scientist_v2_smoke_after_push_recovery.md`.
-- Phase 56 commit/push status: pending.
-
-Current Phase 55 reports:
-
-- `results/aaai_submission_decision/decision.md`:
-  `pending_human_decision`, 25 ready checks, 1 pending check, 0 failed checks.
-  Both `submit_now_deterministic_offline` and `wait_for_external_evidence` are
-  available for a human decision. No option is selected by the preflight.
-- `results/reproducibility/goal_completion_report.md`:
-  `not_complete_pending_external_evidence`, 70 ready checks, 8 pending checks,
-  0 failed checks.
-- `results/reproducibility/package_report.md`:
-  `ready_with_pending_external_evidence`, 268 ready checks, 8 pending checks,
-  0 failed checks.
-
-Git state after Phase 55 push:
-
-- `HEAD == origin/main == 3183ffe5948b24cb3edc5fda53dd9dfca8687887` before
-  Phase 56 edits.
+  `research/run_logs/2026-06-20_phase57_ai_scientist_v2_gpt_smoke_retry.md`.
+- Updated the external-evidence closure queue and execution-packet generators
+  so the AI-Scientist-v2 smoke handoff lists both Claude-family and GPT-family
+  retry commands.
 
 ## Current Evidence
 
@@ -81,23 +58,22 @@ Git state after Phase 55 push:
   `results/live_transfer_prompts/evaluation.md` reports 24 total rows, 24
   scored rows, 0 pending rows, and average normalized score 1.0.
 - AI-Scientist-v2 LLM-client smoke remains provider/model blocked.
-  `results/ai_scientist_v2_smoke/run_report.md` reports
-  `blocked_by_provider_or_model_availability`; latest Phase 56 retry
-  tried `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and
-  `claude-opus-4-6`, and all four aliases timed out after 30 seconds waiting
-  for provider response. No `results/ai_scientist_v2_smoke/response.md` exists.
+  Earlier Claude-family attempts included HTTP 403 account exhaustion and
+  repeated 30-second timeouts for `claude-opus-4-8`, `claude-opus-4.8`,
+  `claude-opus-4-7`, and `claude-opus-4-6`; latest Phase 57 GPT-family retry
+  timed out for `gpt-5.5` and `gpt-5.4` after 60 seconds each.
 - AI-Scientist-v2 full live/BFTS run remains blocked by smoke.
   `results/ai_scientist_v2_live_run_handoff/handoff.md` reports
-  `blocked_by_provider_smoke`, 10 ready checks, 2 pending checks, 0 failed
-  checks.
+  `blocked_by_provider_smoke`, with no completion artifacts.
 - Human-fidelity annotation remains pending:
   `results/human_fidelity_packets/annotation_summary.md` reports 0 scored rows
   and 24 pending rows.
 - Provider billing and success-per-dollar evidence remain pending:
   `results/provider_billing_evidence/billing_summary.md` reports 0 measured
   rows, 6 pending rows, total billed USD 0, and success per dollar `n/a`.
-- External evidence closure queue and execution packets are ready as local
-  handoffs, not evidence completion.
+- External evidence closure queue, execution packets, and AAAI
+  submission-decision preflight are local handoffs/preflights only, not
+  completed external evidence.
 
 ## Boundaries To Preserve
 
@@ -115,17 +91,16 @@ Do not claim:
 - Submission-final or accepted AAAI paper.
 - A selected final AAAI submission decision.
 
-Supported after Phase 55:
+Supported:
 
 - The AAAI package, paper-claim, paper-table, usage-example, and
-  submission-review gates are locally ready.
-- The AAAI submission-decision preflight is locally ready: it exposes the two
-  defensible paths and required claim boundaries, but keeps the human decision
-  pending.
+  submission-review gates are locally ready when their checkers pass.
+- The AAAI submission-decision preflight exposes two defensible paths and keeps
+  the human decision pending.
 - `aaai_final_submission_ready` remains pending until a human decision and
   selected evidence policy are recorded.
 
-## Verification To Run Before Phase 55 Commit
+## Verification To Run Before Phase 57 Commit
 
 ```powershell
 python -m unittest discover -s tests -v

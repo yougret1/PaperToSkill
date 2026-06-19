@@ -14,7 +14,7 @@ complete with respect to pending external evidence.
 | Paper claims | Ready | `results/reproducibility/paper_claim_report.md` | Unsupported overclaim patterns are absent from paper-facing text. |
 | Paper tables | Ready | `results/reproducibility/paper_table_report.md` | AAAI tables match generated CSV result tables. |
 | Usage examples | Ready | `results/reproducibility/usage_example_report.md`: 53 ready, 0 failed | Local example files, DeepSeek handoff, and offline example chain are synchronized. |
-| Reproducibility package | Ready with pending external evidence | `results/reproducibility/package_report.md`: 268 ready, 8 pending, 0 failed | Local package is coherent; external evidence remains pending. |
+| Reproducibility package | Ready with pending external evidence | `results/reproducibility/package_report.md`: 269 ready, 8 pending, 0 failed | Local package is coherent; external evidence remains pending. |
 | Active goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 70 ready, 8 pending, 0 failed | The overall user goal remains open. |
 | External evidence closure queue | Ready as local queue | `results/external_evidence_closure/closure.md`: 3 ready, 0 pending, 0 failed | Pending evidence is mapped to next actions; evidence itself remains pending. |
 | External evidence execution packets | Ready as local handoff | `results/external_evidence_packets/packets.md`: 7 ready, 0 pending, 0 failed | Pending evidence has runnable handoff packets; evidence itself remains pending. |
@@ -41,7 +41,7 @@ complete with respect to pending external evidence.
 
 | Pending Item | Current Evidence | Required Before Stronger Claim |
 | --- | --- | --- |
-| AI-Scientist-v2 LLM-client smoke completion | `results/ai_scientist_v2_smoke/run_report.md`: `blocked_by_provider_or_model_availability`; attempted aliases `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6`; latest details are 30-second provider timeouts for all four aliases | Provider must return a response satisfying the smoke contract. |
+| AI-Scientist-v2 LLM-client smoke completion | `results/ai_scientist_v2_smoke/run_report.md`: `blocked_by_provider_or_model_availability`; latest attempted aliases are `gpt-5.5` and `gpt-5.4`; both timed out after 60 seconds waiting for provider response. Earlier Claude-family retries also timed out or returned provider/account availability blockers. | Provider must return a response satisfying the smoke contract. |
 | Full AI-Scientist-v2 live/BFTS run | `results/ai_scientist_v2_live_run_handoff/handoff.md`: `blocked_by_provider_smoke`, 10 ready, 2 pending, 0 failed; no full live-run completion artifact | Run and log a bounded full live task separately from smoke checks after provider smoke is resolved. |
 | DeepSeek ablation | `results/model_ablation_prompts/v0/evaluation.md`: 2 pending DeepSeek rows | User supplies DeepSeek alias/env vars, then responses are saved and scored. |
 | Human fidelity | `results/human_fidelity_packets/annotation_summary.md`: 0 scored rows, 24 pending rows | Independent reviewers fill the template and strict summarizer reports complete with no errors. |

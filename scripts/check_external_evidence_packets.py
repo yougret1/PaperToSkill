@@ -49,15 +49,21 @@ PACKET_DETAILS: dict[str, dict[str, Any]] = {
         ],
         "setup": [
             "Set AI_SCIENTIST_OPENAI_BASE_URL locally.",
-            "Set AI_SCIENTIST_OPENAI_API_KEY locally.",
+            "Set AI_SCIENTIST_OPENAI_API_KEY locally to the Claude-family or GPT-family credential profile.",
             "Set AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE=1 locally.",
+            "For the GPT-family profile, map the GPT credential into AI_SCIENTIST_OPENAI_API_KEY for this smoke only.",
         ],
         "validation_commands": [
+            "# Claude-family credential profile",
             "python scripts\\run_ai_scientist_v2_smoke.py --strict --require-complete --timeout-seconds 30 `",
             "  --model-alias claude-opus-4-8 `",
             "  --model-alias claude-opus-4.8 `",
             "  --model-alias claude-opus-4-7 `",
             "  --model-alias claude-opus-4-6",
+            "# GPT-family credential profile",
+            "python scripts\\run_ai_scientist_v2_smoke.py --strict --require-complete --timeout-seconds 60 `",
+            "  --model-alias gpt-5.5 `",
+            "  --model-alias gpt-5.4",
             "python scripts\\check_goal_completion.py --strict",
         ],
         "completion_criteria": [
@@ -65,7 +71,7 @@ PACKET_DETAILS: dict[str, dict[str, Any]] = {
             "results/ai_scientist_v2_smoke/response.md exists and satisfies all smoke marker checks.",
             "No provider/model availability timeout or exhausted-account status remains in the smoke report.",
         ],
-        "blocker_escalation": "Escalate if every configured alias still times out or returns provider/account exhaustion.",
+        "blocker_escalation": "Escalate if every configured Claude-family and GPT-family alias still times out or returns provider/account exhaustion.",
     },
     "ai_scientist_v2_full_live_run": {
         "owner": "Execution/Ops",

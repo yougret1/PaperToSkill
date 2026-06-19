@@ -66,11 +66,11 @@ Current supported claims:
 - Bounded AI-Scientist-v2 LLM-client smoke was attempted through the local
   `ai_scientist.llm` client and reached the provider path, but provider/model
   availability remains blocked. Earlier evidence included HTTP 403
-  `All available accounts exhausted`; the latest Phase 56 retry after GitHub
-  push recovery tried
-  `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and
-  `claude-opus-4-6`, and all four aliases timed out after 30 seconds waiting
-  for provider response. This is not smoke completion or BFTS success.
+  `All available accounts exhausted` and repeated Claude-family timeouts; the
+  latest Phase 57 retry mapped the GPT-family credential profile into
+  `AI_SCIENTIST_OPENAI_API_KEY` for the AI-Scientist-v2 OpenAI-compatible
+  client path, and `gpt-5.5` plus `gpt-5.4` both timed out after 60 seconds
+  waiting for provider response. This is not smoke completion or BFTS success.
 - AI-Scientist-v2 full live-run handoff is ready as a local preflight: the
   launcher, seed idea, laptop-profile config, prior dry-run artifacts,
   environment variable names, and next full-run command are checked; provider
@@ -150,7 +150,7 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 268 ready checks, 8 pending
+  reports `ready_with_pending_external_evidence`, 269 ready checks, 8 pending
   checks, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
@@ -175,11 +175,10 @@ Use these as entry points instead of searching the whole repo first:
   selected by the preflight.
 - AI-Scientist-v2 LLM-client smoke:
   `results/ai_scientist_v2_smoke/run_report.md`
-  reports `blocked_by_provider_or_model_availability`, 5 ready checks, 2 pending
-  checks, and 0 failed checks after trying `claude-opus-4-8`,
-  `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6`; all four
-  aliases timed out after 30 seconds waiting for provider response in the
-  latest Phase 56 retry after GitHub push recovery.
+  reports `blocked_by_provider_or_model_availability`, 3 ready checks, 2 pending
+  checks, and 0 failed checks after trying `gpt-5.5` and `gpt-5.4`; both
+  aliases timed out after 60 seconds waiting for provider response in the
+  latest Phase 57 GPT-family retry.
 - AI-Scientist-v2 live-run handoff:
   `results/ai_scientist_v2_live_run_handoff/handoff.md`
   reports `blocked_by_provider_smoke`, 10 ready checks, 2 pending checks, and

@@ -142,15 +142,28 @@ python scripts\run_ai_scientist_v2_smoke.py --strict --timeout-seconds 30 `
   --model-alias claude-opus-4-6
 ```
 
-Current Phase 56 status:
+To try the GPT-family credential profile through the same AI-Scientist-v2
+OpenAI-compatible client path, map the GPT key into
+`AI_SCIENTIST_OPENAI_API_KEY` locally for this smoke only:
+
+```powershell
+$env:AI_SCIENTIST_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
+$env:AI_SCIENTIST_OPENAI_API_KEY = "<set GPT-family key locally>"
+$env:AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE = "1"
+python scripts\run_ai_scientist_v2_smoke.py --strict --require-complete --timeout-seconds 60 `
+  --model-alias gpt-5.5 `
+  --model-alias gpt-5.4
+```
+
+Current Phase 57 status:
 `results/ai_scientist_v2_smoke/run_report.md` reports
-`overall_status=blocked_by_provider_or_model_availability`, 5 ready checks, 2
-pending checks, and 0 failed checks. The latest post-push-recovery retry tried
-`claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and
-`claude-opus-4-6`; all four aliases timed out after 30 seconds waiting for
-provider response, so no response file was produced. This is a bounded
-client-availability smoke attempt, not a BFTS run or live research-task
-success.
+`overall_status=blocked_by_provider_or_model_availability`, 3 ready checks, 2
+pending checks, and 0 failed checks. The latest GPT-family retry tried
+`gpt-5.5` and `gpt-5.4`; both aliases timed out after 60 seconds waiting for
+provider response, so no response file was produced. Earlier Claude-family
+retries also timed out or returned provider/account availability blockers. This
+is bounded client-availability smoke evidence, not a BFTS run or live
+research-task success.
 
 ## Model-Ablation Prompt Packets
 

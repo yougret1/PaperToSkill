@@ -14,7 +14,7 @@ Evidence boundary: these packets define how to finish pending external evidence.
 - Owner: Execution/Ops
 - Goal requirements: ai_scientist_v2_live_llm_smoke_complete
 - Source evidence: results/ai_scientist_v2_smoke/run_report.json
-- Current detail: overall=blocked_by_provider_or_model_availability; counts={'ready': 5, 'pending': 2, 'fail': 0}; attempted=claude-opus-4-8,claude-opus-4.8,claude-opus-4-7,claude-opus-4-6
+- Current detail: overall=blocked_by_provider_or_model_availability; counts={'ready': 3, 'pending': 2, 'fail': 0}; attempted=gpt-5.5,gpt-5.4
 
 ### Inputs
 
@@ -25,17 +25,23 @@ Evidence boundary: these packets define how to finish pending external evidence.
 ### Setup
 
 - Set AI_SCIENTIST_OPENAI_BASE_URL locally.
-- Set AI_SCIENTIST_OPENAI_API_KEY locally.
+- Set AI_SCIENTIST_OPENAI_API_KEY locally to the Claude-family or GPT-family credential profile.
 - Set AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE=1 locally.
+- For the GPT-family profile, map the GPT credential into AI_SCIENTIST_OPENAI_API_KEY for this smoke only.
 
 ### Commands
 
 ```powershell
+# Claude-family credential profile
 python scripts\run_ai_scientist_v2_smoke.py --strict --require-complete --timeout-seconds 30 `
   --model-alias claude-opus-4-8 `
   --model-alias claude-opus-4.8 `
   --model-alias claude-opus-4-7 `
   --model-alias claude-opus-4-6
+# GPT-family credential profile
+python scripts\run_ai_scientist_v2_smoke.py --strict --require-complete --timeout-seconds 60 `
+  --model-alias gpt-5.5 `
+  --model-alias gpt-5.4
 python scripts\check_goal_completion.py --strict
 ```
 
@@ -47,7 +53,7 @@ python scripts\check_goal_completion.py --strict
 
 ### Escalation
 
-Escalate if every configured alias still times out or returns provider/account exhaustion.
+Escalate if every configured Claude-family and GPT-family alias still times out or returns provider/account exhaustion.
 
 ### Boundary
 

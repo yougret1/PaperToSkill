@@ -12,7 +12,7 @@ Evidence boundary: this is a local closure queue. It does not collect DeepSeek r
 
 | Item | Status | Goal Requirements | Detail | Next Action |
 | --- | --- | --- | --- | --- |
-| ai_scientist_v2_smoke_completion | pending_provider | ai_scientist_v2_live_llm_smoke_complete | overall=blocked_by_provider_or_model_availability; counts={'ready': 5, 'pending': 2, 'fail': 0}; attempted=claude-opus-4-8,claude-opus-4.8,claude-opus-4-7,claude-opus-4-6 | Provider must return a smoke response satisfying all marker checks. |
+| ai_scientist_v2_smoke_completion | pending_provider | ai_scientist_v2_live_llm_smoke_complete | overall=blocked_by_provider_or_model_availability; counts={'ready': 3, 'pending': 2, 'fail': 0}; attempted=gpt-5.5,gpt-5.4 | Provider must return a smoke response satisfying all marker checks. |
 | ai_scientist_v2_full_live_run | blocked_by_smoke | ai_scientist_v2_live_llm_run_complete | handoff=blocked_by_provider_smoke; completion_dirs=0 | Run the bounded full AI-Scientist-v2 task only after the smoke report is complete. |
 | deepseek_followup_responses | pending_user_configuration | deepseek_followup_response_complete,model_ablation_evaluation_complete | handoff=pending_user_configuration; scored_rows=4; pending_rows=2 | User supplies DeepSeek alias/env vars, then run and score the two DeepSeek response rows. |
 | human_fidelity_annotation | pending_reviewers | human_fidelity_annotation_complete | status=pending; scored_rows=0; pending_rows=24 | Independent reviewers fill the annotation template, then rerun the strict summarizer. |

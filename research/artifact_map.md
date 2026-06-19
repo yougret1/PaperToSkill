@@ -75,6 +75,7 @@
 | `research/run_logs/2026-06-20_phase54_ai_scientist_v2_smoke_packet_retry.md` | AI-Scientist-v2 smoke-completion packet retry where all four Claude aliases timed out after 30 seconds | Created |
 | `research/run_logs/2026-06-20_phase55_aaai_submission_decision_preflight.md` | AAAI submission-decision preflight and gate integration | Created |
 | `research/run_logs/2026-06-20_phase56_ai_scientist_v2_smoke_after_push_recovery.md` | AI-Scientist-v2 smoke retry after GitHub push recovery; all four Claude aliases still timed out after 30 seconds | Created |
+| `research/run_logs/2026-06-20_phase57_ai_scientist_v2_gpt_smoke_retry.md` | AI-Scientist-v2 smoke retry through the GPT-family credential profile; `gpt-5.5` and `gpt-5.4` timed out after 60 seconds | Created |
 
 ## Paper Draft Package
 
