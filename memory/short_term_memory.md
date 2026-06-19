@@ -7,11 +7,12 @@ Current date: 2026-06-19.
 
 ## Current Phase
 
-Phase 44 is complete pending commit/push: refreshed submission-review handoff
-artifacts and added a checker so review/rebuttal/submission-checklist files
-cannot drift behind the current evidence state.
+Phase 44 is complete and pushed to `origin/main` as
+`1f7ceeb Add submission review handoff gate`: refreshed submission-review
+handoff artifacts and added a checker so review/rebuttal/submission-checklist
+files cannot drift behind the current evidence state.
 
-Latest pushed commit before Phase 44: `86422d2 Refresh phase 43 memory`.
+Latest pushed commit after Phase 44: `1f7ceeb Add submission review handoff gate`.
 
 Phase 44 added:
 
