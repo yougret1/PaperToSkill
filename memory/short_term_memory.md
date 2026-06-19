@@ -3,21 +3,19 @@
 Read this file after any context compaction or session resume. Also read
 `memory/long_term_memory.md` before taking project actions.
 
-Current date: 2026-06-19.
+Current date: 2026-06-20.
 
 ## Current Phase
 
-Phase 49 is complete locally but not yet pushed: added a no-network
-AI-Scientist-v2 full live/BFTS run handoff so the pending full-run path is
-machine-checkable without claiming completion.
+Phase 49 is complete and pushed: added a no-network AI-Scientist-v2 full
+live/BFTS run handoff so the pending full-run path is machine-checkable without
+claiming completion.
 
-Latest local Phase 49 commits before the final memory-blocker update:
+Latest pushed Phase 49 commits:
 `bc99a25 Add AI-Scientist-v2 live run handoff` and
-`491bfcb Record phase 49 push status in memory`.
-Push status: pending. Multiple `git push origin main` attempts failed with
-GitHub HTTPS connection reset or connect timeout; `git ls-remote origin HEAD`
-and `curl.exe -I https://github.com` also failed over HTTPS. SSH reached GitHub
-but failed with `Permission denied (publickey)`, and `gh` CLI was not available.
+`491bfcb Record phase 49 push status in memory`, followed by
+`1c57d75 Record GitHub push blocker`. Push status: resolved on 2026-06-20;
+`git push origin main` advanced `origin/main` from `6ff4187` to `1c57d75`.
 
 Phase 49 evidence so far:
 
