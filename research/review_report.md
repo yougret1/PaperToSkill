@@ -57,8 +57,8 @@ output-contract evidence, not proof of live task success.
 | Gate | Status | Evidence |
 | --- | --- | --- |
 | Claim-evidence consistency | Pass with caveats | `paper/claim_checklist.md`; `research/claim_evidence_matrix.md`; `results/reproducibility/paper_claim_report.md` |
-| Local reproducibility package | Pass locally, external evidence pending | `results/reproducibility/package_report.md`: 237 ready, 7 pending, 0 failed |
-| Active-goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 58 ready, 8 pending, 0 failed |
+| Local reproducibility package | Pass locally, external evidence pending | `results/reproducibility/package_report.md`: 243 ready, 8 pending, 0 failed |
+| Active-goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 61 ready, 8 pending, 0 failed |
 | AAAI local package | Pass locally, not submission-final | `results/reproducibility/aaai_package_report.md` |
 | Live-transfer saved responses | Complete for saved-response scoring | `results/live_transfer_prompts/evaluation.md`: 24 scored, 0 pending |
 | Real live task success | Pending | Saved-response scoring is not human semantic or real task-success evidence |

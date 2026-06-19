@@ -533,15 +533,16 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 237 ready checks, 7
+  `overall_status=ready_with_pending_external_evidence`, 243 ready checks, 8
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
   remaining external gaps explicit: completed AI-Scientist-v2 LLM-client smoke
-  response/contract, completed human-fidelity annotation, DeepSeek response
-  files, completed model-ablation scoring, and realized provider billing. The
-  human-fidelity and provider-billing handoffs themselves are now
-  machine-checked as ready.
+  response/contract, completed full AI-Scientist-v2 live-run artifacts,
+  completed human-fidelity annotation, DeepSeek response files, completed
+  model-ablation scoring, and realized provider billing. The full live-run,
+  human-fidelity, and provider-billing handoffs themselves are now
+  machine-checked as ready where they are local preflights.
 - Statistical evidence: none; this is a deterministic reproducibility gate.
 - Failure modes: the checker verifies package presence and key consistency
   gates, but it does not replace running live agents or collecting independent
@@ -580,6 +581,29 @@
 - Figure/table: `scripts/run_ai_scientist_v2_smoke.py`;
   `results/ai_scientist_v2_smoke/run_report.md`;
   `results/ai_scientist_v2_smoke/run_report.json`.
+
+## AI-Scientist-v2 Full Live-Run Handoff
+
+- Experiment: build a local handoff/preflight report for the pending full
+  AI-Scientist-v2 live/BFTS run without starting BFTS or calling an LLM.
+- Main result: `results/ai_scientist_v2_live_run_handoff/handoff.md` reports
+  `overall_status=blocked_by_provider_smoke`, 10 ready checks, 2 pending
+  checks, and 0 failed checks.
+- Checks: AI-Scientist-v2 root, launcher, dry-run/skip flags, laptop-profile
+  config, PaperToSkill seed idea, prior dry-run artifacts, environment variable
+  names, next full-run command, provider-smoke status, and full-run completion
+  artifacts.
+- Practical significance: replaces memory-only tracking of the full live-run
+  blocker with a machine-checkable handoff that future runs can follow.
+- Failure modes: provider/model availability can still block the smoke; full
+  BFTS can still fail after smoke is restored.
+- Limitations: this is not BFTS, not smoke completion, not live research-task
+  success, and not human semantic validation.
+- Claim impact: supports saying the full live-run path is locally preflighted,
+  but not completed.
+- Figure/table: `scripts/check_ai_scientist_v2_live_run_handoff.py`;
+  `results/ai_scientist_v2_live_run_handoff/handoff.md`;
+  `results/ai_scientist_v2_live_run_handoff/handoff.json`.
 
 ## Usage Example Verification Gate
 
@@ -935,14 +959,15 @@
 
 - Experiment: make the active-goal completion audit machine-checkable.
 - Main result: `results/reproducibility/goal_completion_report.md` reports
-  `overall_status=not_complete_pending_external_evidence`, 58 ready checks, 8
+  `overall_status=not_complete_pending_external_evidence`, 61 ready checks, 8
   pending checks, and 0 failed checks.
 - Checks: durable memory, AI-Scientist-v2 dry-run evidence, PaperToSkill
   prototype and benchmark readiness, bounded AI-Scientist-v2 LLM-client smoke
-  attempt/completion status, AAAI/usage/table/claim gates, Claude/GPT-family
-  ablation attempts and completion status, DeepSeek follow-up readiness, all
-  four live-transfer saved-response sets, human-fidelity annotation,
-  provider-billing handoff, and provider billing completion evidence.
+  attempt/completion status, full AI-Scientist-v2 live-run handoff/completion
+  status, AAAI/usage/table/claim gates, Claude/GPT-family ablation attempts
+  and completion status, DeepSeek follow-up readiness, all four live-transfer
+  saved-response sets, human-fidelity annotation, provider-billing handoff, and
+  provider billing completion evidence.
 - Practical significance: the project now has a reusable gate that prevents
   accidentally marking the full user goal complete while external evidence is
   still missing.

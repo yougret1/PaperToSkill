@@ -72,7 +72,7 @@ human semantic review or real live-task success.
 Evidence to cite:
 
 - `paper/limitations.md`: heuristic metric limitation.
-- `results/reproducibility/package_report.md`: 237 ready checks, 7 pending
+- `results/reproducibility/package_report.md`: 243 ready checks, 8 pending
   checks, and 0 failed checks.
 - `results/human_fidelity_packets/`: prepared independent-review protocol.
 
@@ -189,9 +189,9 @@ prominent.
 
 Evidence to cite:
 
-- `results/reproducibility/goal_completion_report.md`: 58 ready checks,
+- `results/reproducibility/goal_completion_report.md`: 61 ready checks,
   8 pending checks, 0 failed checks.
-- `results/reproducibility/package_report.md`: 237 ready checks, 7 pending
+- `results/reproducibility/package_report.md`: 243 ready checks, 8 pending
   checks, 0 failed checks.
 - `research/submission_checklist.md`: submission-review handoff checklist.
 

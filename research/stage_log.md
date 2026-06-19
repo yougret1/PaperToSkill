@@ -1728,3 +1728,43 @@ Evidence boundary:
 - It does not complete the AI-Scientist-v2 smoke, run BFTS, prove live research
   task success, resolve DeepSeek, collect human annotations, collect provider
   billing, or make the AAAI package submission-final.
+
+## 2026-06-19 Phase 49
+
+Actions:
+
+- Added `scripts/check_ai_scientist_v2_live_run_handoff.py`, a no-network
+  local handoff/preflight report for the pending full AI-Scientist-v2
+  live/BFTS run.
+- Generated
+  `results/ai_scientist_v2_live_run_handoff/handoff.{json,md}`.
+- Integrated the handoff into the active-goal and reproducibility package
+  gates.
+- Updated runbook, artifact map, submission-review materials, memory, and
+  result cards so the full live-run path is tracked by local evidence instead
+  of memory-only text.
+- Added
+  `research/run_logs/2026-06-19_phase49_ai_scientist_v2_live_run_handoff.md`.
+
+Results:
+
+- `results/ai_scientist_v2_live_run_handoff/handoff.md` reports
+  `overall_status=blocked_by_provider_smoke`, with 10 ready checks, 2 pending
+  checks, and 0 failed checks.
+- Ready checks cover the AI-Scientist-v2 root, launcher, dry-run/skip flags,
+  laptop-profile config, PaperToSkill seed idea, prior dry-run artifacts,
+  environment variable names, and next full-run command.
+- Pending checks cover provider-smoke completion and full-run completion
+  artifacts.
+- The active-goal report now shows 61 ready checks, 8 pending checks, and 0
+  failed checks.
+- The reproducibility package report now shows 243 ready checks, 8 pending
+  checks, and 0 failed checks.
+
+Evidence boundary:
+
+- Phase 49 makes the full AI-Scientist-v2 live-run path locally
+  machine-checkable.
+- It does not complete the AI-Scientist-v2 smoke, run BFTS, call an LLM, prove
+  live research-task success, resolve DeepSeek, collect human annotations,
+  collect provider billing, or make the AAAI package submission-final.

@@ -14,8 +14,8 @@ complete with respect to pending external evidence.
 | Paper claims | Ready | `results/reproducibility/paper_claim_report.md` | Unsupported overclaim patterns are absent from paper-facing text. |
 | Paper tables | Ready | `results/reproducibility/paper_table_report.md` | AAAI tables match generated CSV result tables. |
 | Usage examples | Ready | `results/reproducibility/usage_example_report.md`: 53 ready, 0 failed | Local example files, DeepSeek handoff, and offline example chain are synchronized. |
-| Reproducibility package | Ready with pending external evidence | `results/reproducibility/package_report.md`: 237 ready, 7 pending, 0 failed | Local package is coherent; external evidence remains pending. |
-| Active goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 58 ready, 8 pending, 0 failed | The overall user goal remains open. |
+| Reproducibility package | Ready with pending external evidence | `results/reproducibility/package_report.md`: 243 ready, 8 pending, 0 failed | Local package is coherent; external evidence remains pending. |
+| Active goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 61 ready, 8 pending, 0 failed | The overall user goal remains open. |
 
 ## Evidence Ready To Use
 
@@ -36,7 +36,7 @@ complete with respect to pending external evidence.
 | Pending Item | Current Evidence | Required Before Stronger Claim |
 | --- | --- | --- |
 | AI-Scientist-v2 LLM-client smoke completion | `results/ai_scientist_v2_smoke/run_report.md`: `blocked_by_provider_or_model_availability`; attempted aliases `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6`; latest details are HTTP 403 `All available accounts exhausted` for `claude-opus-4-8` and 30-second provider timeouts for the other three aliases | Provider must return a response satisfying the smoke contract. |
-| Full AI-Scientist-v2 live/BFTS run | No full live-run completion artifact | Run and log a bounded full live task separately from smoke checks. |
+| Full AI-Scientist-v2 live/BFTS run | `results/ai_scientist_v2_live_run_handoff/handoff.md`: `blocked_by_provider_smoke`, 10 ready, 2 pending, 0 failed; no full live-run completion artifact | Run and log a bounded full live task separately from smoke checks after provider smoke is resolved. |
 | DeepSeek ablation | `results/model_ablation_prompts/v0/evaluation.md`: 2 pending DeepSeek rows | User supplies DeepSeek alias/env vars, then responses are saved and scored. |
 | Human fidelity | `results/human_fidelity_packets/annotation_summary.md`: 0 scored rows, 24 pending rows | Independent reviewers fill the template and strict summarizer reports complete with no errors. |
 | Provider billing | `results/provider_billing_evidence/billing_summary.md`: 0 measured rows, 6 pending rows | Fill usage export or invoice rows and rerun strict billing summary. |

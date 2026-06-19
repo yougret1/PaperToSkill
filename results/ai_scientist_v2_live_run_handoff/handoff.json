@@ -1,0 +1,113 @@
+{
+  "schema_version": "0.1",
+  "evidence_boundary": "Local AI-Scientist-v2 full live-run handoff/preflight only. This report does not run BFTS, does not call an LLM, and does not prove live research-task success.",
+  "overall_status": "blocked_by_provider_smoke",
+  "ai_scientist_root": "D:\\a_work\\gitee\\ai-scientist-v2",
+  "launcher_path": "D:\\a_work\\gitee\\ai-scientist-v2\\launch_scientist_bfts.py",
+  "config_path": "D:\\a_work\\gitee\\ai-scientist-v2\\bfts_config.yaml",
+  "seed_ideas_path": "D:\\a_work\\gitee\\PaperToSkill\\ai_scientist_inputs\\papertoskill_seed_ideas.json",
+  "idea_idx": 0,
+  "selected_idea": {
+    "name": "papertoskill_extractor",
+    "title": "PaperToSkill: Converting Research Papers into Compact Reusable Agent Skills"
+  },
+  "dry_run_dirs": [
+    "D:\\a_work\\gitee\\ai-scientist-v2\\experiments\\2026-06-17_15-22-40_papertoskill_extractor_attempt_0"
+  ],
+  "completion_dirs": [],
+  "env_names": [
+    "AI_SCIENTIST_OPENAI_BASE_URL",
+    "AI_SCIENTIST_OPENAI_API_KEY",
+    "AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE"
+  ],
+  "next_commands": [
+    "cd D:\\a_work\\gitee\\ai-scientist-v2",
+    "$env:AI_SCIENTIST_OPENAI_BASE_URL='https://coderxiaoc.com/v1'",
+    "$env:AI_SCIENTIST_OPENAI_API_KEY='<set locally>'",
+    "$env:AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE='1'",
+    "python launch_scientist_bfts.py `",
+    "  --load_ideas D:\\a_work\\gitee\\PaperToSkill\\ai_scientist_inputs\\papertoskill_seed_ideas.json `",
+    "  --idea_idx 0 `",
+    "  --skip_writeup `",
+    "  --skip_review"
+  ],
+  "status_counts": {
+    "ready": 10,
+    "pending": 2,
+    "fail": 0
+  },
+  "checks": [
+    {
+      "id": "ai_scientist_v2_live_root_present",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "D:\\a_work\\gitee\\ai-scientist-v2"
+    },
+    {
+      "id": "ai_scientist_v2_live_launcher_present",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "D:\\a_work\\gitee\\ai-scientist-v2\\launch_scientist_bfts.py"
+    },
+    {
+      "id": "ai_scientist_v2_live_launcher_flags_ready",
+      "status": "ready",
+      "detail": "dry_run/skip flags present",
+      "evidence": "D:\\a_work\\gitee\\ai-scientist-v2\\launch_scientist_bfts.py"
+    },
+    {
+      "id": "ai_scientist_v2_live_config_present",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "D:\\a_work\\gitee\\ai-scientist-v2\\bfts_config.yaml"
+    },
+    {
+      "id": "ai_scientist_v2_live_config_laptop_profile",
+      "status": "ready",
+      "detail": "num_workers=1 and claude-opus-4-8 profile present",
+      "evidence": "D:\\a_work\\gitee\\ai-scientist-v2\\bfts_config.yaml"
+    },
+    {
+      "id": "ai_scientist_v2_live_seed_ideas_present",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "D:\\a_work\\gitee\\PaperToSkill\\ai_scientist_inputs\\papertoskill_seed_ideas.json"
+    },
+    {
+      "id": "ai_scientist_v2_live_seed_idea_selected",
+      "status": "ready",
+      "detail": "idea_idx=0; name=papertoskill_extractor",
+      "evidence": "D:\\a_work\\gitee\\PaperToSkill\\ai_scientist_inputs\\papertoskill_seed_ideas.json"
+    },
+    {
+      "id": "ai_scientist_v2_live_dry_run_artifacts_present",
+      "status": "ready",
+      "detail": "candidate_dirs=1",
+      "evidence": "D:\\a_work\\gitee\\ai-scientist-v2\\experiments\\2026-06-17_15-22-40_papertoskill_extractor_attempt_0"
+    },
+    {
+      "id": "ai_scientist_v2_live_env_names_declared",
+      "status": "ready",
+      "detail": "env_names=AI_SCIENTIST_OPENAI_BASE_URL,AI_SCIENTIST_OPENAI_API_KEY,AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE",
+      "evidence": "local shell environment"
+    },
+    {
+      "id": "ai_scientist_v2_live_next_commands_declared",
+      "status": "ready",
+      "detail": "full live command declared",
+      "evidence": "next_commands"
+    },
+    {
+      "id": "ai_scientist_v2_live_smoke_complete",
+      "status": "pending",
+      "detail": "smoke_overall=blocked_by_provider_or_model_availability",
+      "evidence": "D:\\a_work\\gitee\\PaperToSkill\\results\\ai_scientist_v2_smoke\\run_report.json"
+    },
+    {
+      "id": "ai_scientist_v2_live_completion_artifacts_present",
+      "status": "pending",
+      "detail": "completion_dirs=0",
+      "evidence": "D:\\a_work\\gitee\\ai-scientist-v2\\experiments"
+    }
+  ]
+}

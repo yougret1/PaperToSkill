@@ -3,8 +3,8 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 237
-- Pending checks: 7
+- Ready checks: 243
+- Pending checks: 8
 - Failed checks: 0
 
 ## Checks
@@ -43,6 +43,9 @@ Evidence boundary: this report checks local package completeness and separates p
 | ai_scientist_smoke_runner | ready | present | scripts/run_ai_scientist_v2_smoke.py |
 | ai_scientist_smoke_report_json | ready | present | results/ai_scientist_v2_smoke/run_report.json |
 | ai_scientist_smoke_report_md | ready | present | results/ai_scientist_v2_smoke/run_report.md |
+| ai_scientist_live_run_handoff_checker | ready | present | scripts/check_ai_scientist_v2_live_run_handoff.py |
+| ai_scientist_live_run_handoff_json | ready | present | results/ai_scientist_v2_live_run_handoff/handoff.json |
+| ai_scientist_live_run_handoff_md | ready | present | results/ai_scientist_v2_live_run_handoff/handoff.md |
 | usage_examples_readme | ready | present | examples/usage/README.md |
 | usage_example_codex_skill | ready | present | examples/usage/codex_skill_usage.md |
 | usage_example_auto_note | ready | present | examples/usage/auto_note_scaffold_usage.md |
@@ -80,6 +83,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | phase46_ai_scientist_v2_smoke_alias_fallback_run_log | ready | present | research/run_logs/2026-06-19_phase46_ai_scientist_v2_smoke_alias_fallback.md |
 | phase47_deepseek_followup_handoff_run_log | ready | present | research/run_logs/2026-06-19_phase47_deepseek_followup_handoff.md |
 | phase48_ai_scientist_v2_smoke_provider_recheck_run_log | ready | present | research/run_logs/2026-06-19_phase48_ai_scientist_v2_smoke_provider_recheck.md |
+| phase49_ai_scientist_v2_live_run_handoff_run_log | ready | present | research/run_logs/2026-06-19_phase49_ai_scientist_v2_live_run_handoff.md |
 | provider_billing_protocol | ready | present | benchmarks/provider_billing_evidence_v0.json |
 | provider_billing_summarizer | ready | present | scripts/summarize_provider_billing_evidence.py |
 | provider_billing_template | ready | present | results/provider_billing_evidence/billing_template.csv |
@@ -172,12 +176,15 @@ Evidence boundary: this report checks local package completeness and separates p
 | paper_claim_core_checks_ready | ready | core checks ready | results\reproducibility\paper_claim_report.json |
 | submission_review_report_ready | ready | overall=ready; counts={'ready': 15, 'fail': 0} | results\reproducibility\submission_review_report.json |
 | submission_review_core_checks_ready | ready | core checks ready | results\reproducibility\submission_review_report.json |
-| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 58, 'pending': 8, 'fail': 0} | results\reproducibility\goal_completion_report.json |
+| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 61, 'pending': 8, 'fail': 0} | results\reproducibility\goal_completion_report.json |
 | goal_completion_core_checks_ready | ready | core completion boundaries ready | results\reproducibility\goal_completion_report.json |
 | ai_scientist_v2_smoke_cli_status_summary | ready | status_summary=True; require_complete=True; timeout=True; alias_fallback=True | scripts\run_ai_scientist_v2_smoke.py |
 | ai_scientist_v2_llm_smoke_complete | pending | overall=blocked_by_provider_or_model_availability; counts={'ready': 5, 'pending': 2, 'fail': 0} | results\ai_scientist_v2_smoke\run_report.json |
 | ai_scientist_v2_llm_smoke_response | pending | missing until provider returns response | results\ai_scientist_v2_smoke\response.md |
 | ai_scientist_v2_llm_smoke_contract_ready | pending | missing=ai_scientist_v2_llm_response_saved,ai_scientist_v2_smoke_marker_ai_scientist_v2,ai_scientist_v2_smoke_marker_paper_to_skill,ai_scientist_v2_smoke_marker_papertoskill_smoke_ok | results\ai_scientist_v2_smoke\run_report.json |
+| ai_scientist_v2_live_run_handoff_report_ready | ready | overall=blocked_by_provider_smoke; failed=0 | results\ai_scientist_v2_live_run_handoff\handoff.json |
+| ai_scientist_v2_live_run_handoff_core_checks_ready | ready | core live-run handoff checks ready | results\ai_scientist_v2_live_run_handoff\handoff.json |
+| ai_scientist_v2_live_run_completion | pending | overall=blocked_by_provider_smoke; completion_dirs=0 | results\ai_scientist_v2_live_run_handoff\handoff.json |
 | provider_billing_summary_valid | ready | errors=0 | results\provider_billing_evidence\billing_summary.json |
 | provider_billing_evidence_handoff_ready | ready | template_rows=6; summary_rows=6 | results/provider_billing_evidence/billing_template.csv; results/provider_billing_evidence/billing_summary.json |
 | provider_billing_evidence_complete | pending | status=pending; measured_rows=0; pending_rows=6 | results\provider_billing_evidence\billing_summary.json |

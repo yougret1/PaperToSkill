@@ -471,3 +471,23 @@ python launch_scientist_bfts.py `
 
 This should create an `experiments/<timestamp>_papertoskill_extractor_attempt_0`
 folder and exit before running the expensive agentic search.
+
+## AI-Scientist-v2 Full Live-Run Handoff
+
+Before attempting the full live/BFTS run, generate the local handoff/preflight
+report:
+
+```powershell
+python scripts\check_ai_scientist_v2_live_run_handoff.py --strict
+```
+
+Current Phase 49 status:
+`results/ai_scientist_v2_live_run_handoff/handoff.md` reports
+`blocked_by_provider_smoke`, 10 ready checks, 2 pending checks, and 0 failed
+checks. It checks the AI-Scientist-v2 root, launcher, dry-run/skip flags,
+laptop-profile config, PaperToSkill seed idea, prior dry-run artifacts,
+environment variable names, and the next full-run command. It does not run BFTS
+or call an LLM.
+
+The eventual full live command is listed in the handoff report and should only
+be used once the smoke/provider blocker is resolved.

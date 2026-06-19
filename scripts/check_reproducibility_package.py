@@ -92,6 +92,9 @@ CORE_FILES = {
     "ai_scientist_smoke_runner": "scripts/run_ai_scientist_v2_smoke.py",
     "ai_scientist_smoke_report_json": "results/ai_scientist_v2_smoke/run_report.json",
     "ai_scientist_smoke_report_md": "results/ai_scientist_v2_smoke/run_report.md",
+    "ai_scientist_live_run_handoff_checker": "scripts/check_ai_scientist_v2_live_run_handoff.py",
+    "ai_scientist_live_run_handoff_json": "results/ai_scientist_v2_live_run_handoff/handoff.json",
+    "ai_scientist_live_run_handoff_md": "results/ai_scientist_v2_live_run_handoff/handoff.md",
     "usage_examples_readme": "examples/usage/README.md",
     "usage_example_codex_skill": "examples/usage/codex_skill_usage.md",
     "usage_example_auto_note": "examples/usage/auto_note_scaffold_usage.md",
@@ -129,6 +132,7 @@ CORE_FILES = {
     "phase46_ai_scientist_v2_smoke_alias_fallback_run_log": "research/run_logs/2026-06-19_phase46_ai_scientist_v2_smoke_alias_fallback.md",
     "phase47_deepseek_followup_handoff_run_log": "research/run_logs/2026-06-19_phase47_deepseek_followup_handoff.md",
     "phase48_ai_scientist_v2_smoke_provider_recheck_run_log": "research/run_logs/2026-06-19_phase48_ai_scientist_v2_smoke_provider_recheck.md",
+    "phase49_ai_scientist_v2_live_run_handoff_run_log": "research/run_logs/2026-06-19_phase49_ai_scientist_v2_live_run_handoff.md",
     "provider_billing_protocol": "benchmarks/provider_billing_evidence_v0.json",
     "provider_billing_summarizer": "scripts/summarize_provider_billing_evidence.py",
     "provider_billing_template": "results/provider_billing_evidence/billing_template.csv",
@@ -708,6 +712,59 @@ def ai_scientist_smoke_checks(root: Path) -> list[Check]:
     return checks
 
 
+def ai_scientist_live_run_handoff_checks(root: Path) -> list[Check]:
+    checks: list[Check] = []
+    report_path = root / "results/ai_scientist_v2_live_run_handoff/handoff.json"
+    if not report_path.exists():
+        return checks
+    report = load_json(report_path)
+    failed = [check for check in report.get("checks", []) if check.get("status") == "fail"]
+    check_statuses = {check.get("id"): check.get("status") for check in report.get("checks", [])}
+    ready_or_pending = report.get("overall_status") in {
+        "blocked_by_provider_smoke",
+        "ready_to_run",
+        "complete",
+    }
+    checks.append(
+        Check(
+            "ai_scientist_v2_live_run_handoff_report_ready",
+            "ready" if ready_or_pending and not failed else "fail",
+            f"overall={report.get('overall_status')}; failed={len(failed)}",
+            str(report_path.relative_to(root)),
+        )
+    )
+    required_ready = {
+        "ai_scientist_v2_live_root_present",
+        "ai_scientist_v2_live_launcher_present",
+        "ai_scientist_v2_live_launcher_flags_ready",
+        "ai_scientist_v2_live_config_present",
+        "ai_scientist_v2_live_config_laptop_profile",
+        "ai_scientist_v2_live_seed_ideas_present",
+        "ai_scientist_v2_live_seed_idea_selected",
+        "ai_scientist_v2_live_dry_run_artifacts_present",
+        "ai_scientist_v2_live_env_names_declared",
+        "ai_scientist_v2_live_next_commands_declared",
+    }
+    missing = sorted(check_id for check_id in required_ready if check_statuses.get(check_id) != "ready")
+    checks.append(
+        Check(
+            "ai_scientist_v2_live_run_handoff_core_checks_ready",
+            "ready" if not missing else "fail",
+            "core live-run handoff checks ready" if not missing else "missing=" + ",".join(missing),
+            str(report_path.relative_to(root)),
+        )
+    )
+    checks.append(
+        Check(
+            "ai_scientist_v2_live_run_completion",
+            "ready" if report.get("overall_status") == "complete" else "pending",
+            f"overall={report.get('overall_status')}; completion_dirs={len(report.get('completion_dirs', []))}",
+            str(report_path.relative_to(root)),
+        )
+    )
+    return checks
+
+
 def provider_billing_checks(root: Path) -> list[Check]:
     checks: list[Check] = []
     summary_path = root / "results/provider_billing_evidence/billing_summary.json"
@@ -1027,6 +1084,7 @@ def build_report(root: Path) -> dict[str, Any]:
     checks.extend(submission_review_checks(root))
     checks.extend(goal_completion_checks(root))
     checks.extend(ai_scientist_smoke_checks(root))
+    checks.extend(ai_scientist_live_run_handoff_checks(root))
     checks.extend(provider_billing_checks(root))
     checks.extend(usage_example_checks(root))
     checks.extend(deepseek_followup_handoff_checks(root))

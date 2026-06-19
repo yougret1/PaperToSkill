@@ -7,9 +7,23 @@ Current date: 2026-06-19.
 
 ## Current Phase
 
-Phase 48 is complete and pushed.
+Phase 49 is in progress locally: adding a no-network AI-Scientist-v2 full
+live/BFTS run handoff so the pending full-run path is machine-checkable without
+claiming completion.
 
-Latest pushed commit: `447cc33 Refresh AI-Scientist-v2 smoke provider evidence`.
+Latest pushed commit before Phase 49: `6ff4187 Refresh phase 48 memory status`.
+
+Phase 49 evidence so far:
+
+- Added `scripts/check_ai_scientist_v2_live_run_handoff.py`.
+- Generated `results/ai_scientist_v2_live_run_handoff/handoff.{json,md}`.
+- Current handoff status is `blocked_by_provider_smoke`: 10 ready checks, 2
+  pending checks, and 0 failed checks.
+- Ready checks cover the AI-Scientist-v2 root, `launch_scientist_bfts.py`,
+  dry-run/skip flags, laptop-profile config, PaperToSkill seed idea, prior
+  dry-run artifacts, environment variable names, and next full-run command.
+- Pending checks cover the provider-blocked smoke and missing full-run
+  completion artifacts. No BFTS run was started by the checker.
 
 Phase 48 completed:
 
@@ -88,13 +102,17 @@ and 0 failed checks. No `results/ai_scientist_v2_smoke/response.md` exists.
 - Submission-review handoff:
   `results/reproducibility/submission_review_report.md` reports ready, 15 ready
   checks, and 0 failed checks.
+- AI-Scientist-v2 live-run handoff:
+  `results/ai_scientist_v2_live_run_handoff/handoff.md` reports
+  `blocked_by_provider_smoke`, 10 ready checks, 2 pending checks, and 0 failed
+  checks.
 - Goal report:
   `results/reproducibility/goal_completion_report.md` reports
-  `not_complete_pending_external_evidence`, 58 ready checks, 8 pending checks,
+  `not_complete_pending_external_evidence`, 61 ready checks, 8 pending checks,
   and 0 failed checks.
 - Package report:
   `results/reproducibility/package_report.md` reports
-  `ready_with_pending_external_evidence`, 237 ready checks, 7 pending checks,
+  `ready_with_pending_external_evidence`, 243 ready checks, 8 pending checks,
   and 0 failed checks.
 
 ## Boundaries To Preserve

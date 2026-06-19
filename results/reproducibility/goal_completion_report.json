@@ -3,7 +3,7 @@
   "evidence_boundary": "Audits the active user goal against local repository evidence. Pending checks are explicit remaining requirements, not negative evidence and not local package failures.",
   "overall_status": "not_complete_pending_external_evidence",
   "status_counts": {
-    "ready": 58,
+    "ready": 61,
     "pending": 8,
     "fail": 0
   },
@@ -67,6 +67,18 @@
       "status": "ready",
       "detail": "present",
       "evidence": "results/ai_scientist_v2_smoke/run_report.json"
+    },
+    {
+      "id": "ai_scientist_live_run_handoff_checker",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "scripts/check_ai_scientist_v2_live_run_handoff.py"
+    },
+    {
+      "id": "ai_scientist_live_run_handoff",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/ai_scientist_v2_live_run_handoff/handoff.json"
     },
     {
       "id": "aaai_tex",
@@ -219,10 +231,16 @@
       "evidence": "results/ai_scientist_v2_smoke/run_report.json"
     },
     {
+      "id": "ai_scientist_v2_live_run_handoff_ready",
+      "status": "ready",
+      "detail": "overall=blocked_by_provider_smoke; failed=0",
+      "evidence": "results/ai_scientist_v2_live_run_handoff/handoff.json"
+    },
+    {
       "id": "ai_scientist_v2_live_llm_run_complete",
       "status": "pending",
-      "detail": "full live AI-Scientist-v2 run remains pending; smoke check is separate",
-      "evidence": "memory/short_term_memory.md"
+      "detail": "full live AI-Scientist-v2 run remains pending; handoff is local preflight only",
+      "evidence": "results/ai_scientist_v2_live_run_handoff/handoff.json"
     },
     {
       "id": "papertoskill_curated_benchmark_ready",

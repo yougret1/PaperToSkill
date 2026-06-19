@@ -72,6 +72,10 @@ Current supported claims:
   `All available accounts exhausted`, while the other three aliases timed out
   after 30 seconds waiting for provider response. This is not smoke completion
   or BFTS success.
+- AI-Scientist-v2 full live-run handoff is ready as a local preflight: the
+  launcher, seed idea, laptop-profile config, prior dry-run artifacts,
+  environment variable names, and next full-run command are checked; provider
+  smoke completion and full-run completion artifacts remain pending.
 
 Current unsupported claims:
 
@@ -102,6 +106,9 @@ Use these as entry points instead of searching the whole repo first:
 - `scripts/run_ai_scientist_v2_smoke.py`: bounded AI-Scientist-v2 LLM-client
   smoke runner with status-summary output, repeatable `--model-alias`,
   `--timeout-seconds`, and `--require-complete`.
+- `scripts/check_ai_scientist_v2_live_run_handoff.py`: local full
+  AI-Scientist-v2 live/BFTS run handoff and preflight report generator; no
+  network calls.
 - `scripts/check_reproducibility_package.py`: aggregate local package gate.
 - `scripts/check_aaai_package.py`: AAAI package/build gate.
 - `scripts/check_usage_examples.py`: usage-example gate.
@@ -127,11 +134,11 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 237 ready checks, 7 pending
+  reports `ready_with_pending_external_evidence`, 243 ready checks, 8 pending
   checks, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
-  reports `not_complete_pending_external_evidence`, 58 ready checks, 8 pending
+  reports `not_complete_pending_external_evidence`, 61 ready checks, 8 pending
   checks, and 0 failed checks.
 - AI-Scientist-v2 LLM-client smoke:
   `results/ai_scientist_v2_smoke/run_report.md`
@@ -141,6 +148,10 @@ Use these as entry points instead of searching the whole repo first:
   `claude-opus-4-8` returned HTTP 403 `All available accounts exhausted`,
   while the other three aliases timed out after 30 seconds waiting for provider
   response.
+- AI-Scientist-v2 live-run handoff:
+  `results/ai_scientist_v2_live_run_handoff/handoff.md`
+  reports `blocked_by_provider_smoke`, 10 ready checks, 2 pending checks, and
+  0 failed checks.
 - AAAI package:
   `results/reproducibility/aaai_package_report.md`
   reports ready, 17 ready checks, 0 failed checks.

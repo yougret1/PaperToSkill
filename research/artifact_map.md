@@ -67,6 +67,7 @@
 | `research/run_logs/2026-06-19_phase46_ai_scientist_v2_smoke_alias_fallback.md` | AI-Scientist-v2 smoke alias-fallback recheck across four Claude aliases and provider-timeout boundary | Created |
 | `research/run_logs/2026-06-19_phase47_deepseek_followup_handoff.md` | Local DeepSeek follow-up handoff/preflight report and gate integration | Created |
 | `research/run_logs/2026-06-19_phase48_ai_scientist_v2_smoke_provider_recheck.md` | AI-Scientist-v2 smoke provider recheck with HTTP 403 and 30-second timeout evidence | Created |
+| `research/run_logs/2026-06-19_phase49_ai_scientist_v2_live_run_handoff.md` | Local AI-Scientist-v2 full live/BFTS run handoff/preflight report and gate integration | Created |
 
 ## Paper Draft Package
 
@@ -179,6 +180,7 @@
 | `scripts/check_submission_review.py` | Verifies review, rebuttal, and submission checklist handoff artifacts against current evidence | Created |
 | `scripts/check_goal_completion.py` | Audits the active user goal against local evidence and exposes remaining pending requirements | Created |
 | `scripts/run_ai_scientist_v2_smoke.py` | Runs bounded AI-Scientist-v2 LLM-client smoke checks, writes redacted reports, clears stale responses on blocked attempts, prints status summary, and supports repeatable `--model-alias`, `--timeout-seconds`, and `--require-complete` | Created |
+| `scripts/check_ai_scientist_v2_live_run_handoff.py` | Builds a no-network handoff/preflight report for the pending full AI-Scientist-v2 live/BFTS run | Created |
 | `scripts/build_model_ablation_prompts.py` | Builds Claude/GPT-family/DeepSeek model-ablation prompt packets | Created |
 | `scripts/run_model_ablation_prompts.py` | Runs model-ablation prompt packets against OpenAI-compatible APIs with redacted reports | Created |
 | `scripts/evaluate_model_ablation_responses.py` | Scores saved model-ablation response files and keeps missing rows pending | Created |
@@ -310,6 +312,8 @@
 | `results/reproducibility/goal_completion_report.json` | Machine-readable active-goal completion report | Created |
 | `results/ai_scientist_v2_smoke/run_report.md` | Human-readable bounded AI-Scientist-v2 LLM-client smoke report | Created |
 | `results/ai_scientist_v2_smoke/run_report.json` | Machine-readable bounded AI-Scientist-v2 LLM-client smoke report | Created |
+| `results/ai_scientist_v2_live_run_handoff/handoff.md` | Human-readable AI-Scientist-v2 full live-run handoff report | Created |
+| `results/ai_scientist_v2_live_run_handoff/handoff.json` | Machine-readable AI-Scientist-v2 full live-run handoff report | Created |
 | `results/model_ablation_prompts/v0/index.json` | Model-ablation prompt packet index with pending response slots | Created |
 | `results/model_ablation_prompts/v0/*.md` | Six model-ablation prompt packets across Claude, GPT-family, and DeepSeek slots | Created |
 | `results/model_ablation_prompts/v0/run_report.md` | Redacted live-attempt report showing provider/model availability status | Created |

@@ -22,6 +22,8 @@ REQUIRED_FILES = {
     "pipeline_script": "scripts/papertoskill_pipeline.py",
     "ai_scientist_smoke_runner": "scripts/run_ai_scientist_v2_smoke.py",
     "ai_scientist_smoke_report": "results/ai_scientist_v2_smoke/run_report.json",
+    "ai_scientist_live_run_handoff_checker": "scripts/check_ai_scientist_v2_live_run_handoff.py",
+    "ai_scientist_live_run_handoff": "results/ai_scientist_v2_live_run_handoff/handoff.json",
     "aaai_tex": "paper/aaai/papertoskill_aaai2027.tex",
     "aaai_style": "paper/aaai/aaai2027.sty",
     "usage_readme": "examples/usage/README.md",
@@ -146,8 +148,14 @@ def memory_checks(root: Path) -> list[Check]:
 def ai_scientist_checks(root: Path) -> list[Check]:
     short_text = read_text(root / "memory/short_term_memory.md")
     smoke_report = load_json(root / "results/ai_scientist_v2_smoke/run_report.json")
+    handoff = load_json(root / "results/ai_scientist_v2_live_run_handoff/handoff.json")
     dry_run_ready = "AI-Scientist-v2 dry-run succeeded" in short_text
-    live_complete = "AI-Scientist-v2 full live LLM run status: complete" in short_text
+    handoff_failed = [check for check in handoff.get("checks", []) if check.get("status") == "fail"]
+    handoff_ready = (
+        handoff.get("overall_status") in {"blocked_by_provider_smoke", "ready_to_run", "complete"}
+        and not handoff_failed
+    )
+    live_complete = handoff.get("overall_status") == "complete"
     return [
         Check(
             "ai_scientist_v2_local_dry_run_recorded",
@@ -168,10 +176,16 @@ def ai_scientist_checks(root: Path) -> list[Check]:
             "results/ai_scientist_v2_smoke/run_report.json",
         ),
         Check(
+            "ai_scientist_v2_live_run_handoff_ready",
+            "ready" if handoff_ready else "fail",
+            f"overall={handoff.get('overall_status')}; failed={len(handoff_failed)}",
+            "results/ai_scientist_v2_live_run_handoff/handoff.json",
+        ),
+        Check(
             "ai_scientist_v2_live_llm_run_complete",
             "ready" if live_complete else "pending",
-            "full live AI-Scientist-v2 run evidence found" if live_complete else "full live AI-Scientist-v2 run remains pending; smoke check is separate",
-            "memory/short_term_memory.md",
+            "full live AI-Scientist-v2 run evidence found" if live_complete else "full live AI-Scientist-v2 run remains pending; handoff is local preflight only",
+            "results/ai_scientist_v2_live_run_handoff/handoff.json",
         ),
     ]
 
