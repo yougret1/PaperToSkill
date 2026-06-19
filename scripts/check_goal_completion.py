@@ -47,6 +47,8 @@ REQUIRED_FILES = {
     "model_response_cost_proxy": "results/tables/model_response_cost_proxy.json",
     "provider_billing_summary": "results/provider_billing_evidence/billing_summary.json",
     "submission_review_report": "results/reproducibility/submission_review_report.json",
+    "aaai_submission_decision_checker": "scripts/check_aaai_submission_decision.py",
+    "aaai_submission_decision_report": "results/aaai_submission_decision/decision.json",
     "goal_completion_audit": "research/goal_completion_audit.md",
 }
 
@@ -280,14 +282,28 @@ def paper_package_checks(root: Path) -> list[Check]:
         report_ready_check(root, "submission_review_handoff_ready", "results/reproducibility/submission_review_report.json"),
     ]
     ready = all(check.status == "ready" for check in checks)
+    decision_report = load_json(root / "results/aaai_submission_decision/decision.json")
+    decision_failed = [check for check in decision_report.get("checks", []) if check.get("status") == "fail"]
+    decision_ready = (
+        decision_report.get("overall_status") in {"pending_human_decision", "ready"}
+        and not decision_failed
+    )
+    checks.append(
+        Check(
+            "aaai_submission_decision_preflight_ready",
+            "ready" if decision_ready else "fail",
+            f"overall={decision_report.get('overall_status')}; decision_status={decision_report.get('decision_status')}; failed={len(decision_failed)}",
+            "results/aaai_submission_decision/decision.json",
+        )
+    )
     checks.append(
         Check(
             "aaai_final_submission_ready",
-            "pending" if ready else "fail",
-            "AAAI package is locally verified, but final live/model/human/cost evidence decisions remain pending"
-            if ready
+            "pending" if ready and decision_ready else "fail",
+            "AAAI package and submission-decision preflight are locally verified, but final human decision and selected evidence policy remain pending"
+            if ready and decision_ready
             else "one or more paper-package gates failed",
-            "paper/aaai/; results/reproducibility/",
+            "paper/aaai/; results/reproducibility/; results/aaai_submission_decision/decision.json",
         )
     )
     return checks

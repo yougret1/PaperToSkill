@@ -72,7 +72,7 @@ human semantic review or real live-task success.
 Evidence to cite:
 
 - `paper/limitations.md`: heuristic metric limitation.
-- `results/reproducibility/package_report.md`: 260 ready checks, 8 pending
+- `results/reproducibility/package_report.md`: 267 ready checks, 8 pending
   checks, and 0 failed checks.
 - `results/human_fidelity_packets/`: prepared independent-review protocol.
 
@@ -188,14 +188,16 @@ prominent.
 
 Evidence to cite:
 
-- `results/reproducibility/goal_completion_report.md`: 67 ready checks,
+- `results/reproducibility/goal_completion_report.md`: 70 ready checks,
   8 pending checks, 0 failed checks.
-- `results/reproducibility/package_report.md`: 260 ready checks, 8 pending
+- `results/reproducibility/package_report.md`: 267 ready checks, 8 pending
   checks, 0 failed checks.
 - `results/external_evidence_closure/closure.md`: six local closure items for
   the remaining external evidence.
 - `results/external_evidence_packets/packets.md`: six local execution packets
   for the remaining external evidence.
+- `results/aaai_submission_decision/decision.md`: both AAAI submission options
+  are available for a human decision, with no option selected by the preflight.
 - `research/submission_checklist.md`: submission-review handoff checklist.
 
 Do not say:

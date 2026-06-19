@@ -29,15 +29,17 @@ for saved model-ablation responses, but this is not realized provider billing.
 Phase 51 adds a local external-evidence closure queue that maps each remaining
 pending requirement to a concrete next action without claiming completion.
 Phase 53 adds execution packets for those queue items, with inputs, commands,
-completion criteria, escalation rules, and evidence boundaries.
+completion criteria, escalation rules, and evidence boundaries. Phase 55 adds a
+local AAAI submission-decision preflight that exposes the submit-now and
+wait-for-evidence options without selecting either option.
 
 Local package status: `results/reproducibility/package_report.md` reports
-`ready_with_pending_external_evidence`, 260 ready checks, 8 pending checks, and
+`ready_with_pending_external_evidence`, 267 ready checks, 8 pending checks, and
 0 failed checks.
 
 Machine-checkable goal status:
 `results/reproducibility/goal_completion_report.md` reports
-`not_complete_pending_external_evidence`, 67 ready checks, 8 pending checks,
+`not_complete_pending_external_evidence`, 70 ready checks, 8 pending checks,
 and 0 failed checks.
 
 External-evidence closure queue:
@@ -50,6 +52,12 @@ External-evidence execution packets:
 `results/external_evidence_packets/packets.md` reports `ready`, 7 ready checks,
 0 pending checks, and 0 failed checks. It turns the six closure items into
 execution packets without completing the evidence itself.
+
+AAAI submission-decision preflight:
+`results/aaai_submission_decision/decision.md` reports
+`pending_human_decision`, 25 ready checks, 1 pending check, and 0 failed
+checks. Both decision options are available, but no option is selected by the
+preflight.
 
 ## Requirement Audit
 
@@ -70,7 +78,8 @@ execution packets without completing the evidence itself.
 | Include failure branches and negative outcomes. | `results/failure_cases/failure_case_archive.md`; model-ablation run reports; limitations; result cards; stage logs. | Complete as provenance archive | Outcome impact of failure recording is not tested. |
 | Human-fidelity annotation handoff. | `benchmarks/human_fidelity_review_v0.json`; `results/human_fidelity_packets/annotation_guide.md`; `results/human_fidelity_packets/annotation_template.csv`; `results/human_fidelity_packets/annotation_summary.md`; package check `human_fidelity_annotation_handoff_ready` is ready. | Handoff ready; annotation pending | Independent reviewers still need to fill all 24 rows before claiming human validation. |
 | Provider-billing evidence handoff. | `benchmarks/provider_billing_evidence_v0.json`; `results/provider_billing_evidence/billing_template.csv`; `results/provider_billing_evidence/billing_summary.md`; goal/package checks `provider_billing_evidence_handoff_ready` are ready. | Handoff ready; billing pending | Fill provider usage exports or invoices before claiming realized bills or success-per-dollar. |
-| Submission-review handoff. | `research/review_report.md`; `research/rebuttal_bank.md`; `research/submission_checklist.md`; `scripts/check_submission_review.py`; `results/reproducibility/submission_review_report.md`; goal/package checks `submission_review_handoff_ready` and `submission_review_report_ready` are ready. | Handoff ready; final submission pending | Use this handoff to decide whether to submit as a deterministic/offline paper or wait for pending external evidence. |
+| Submission-review handoff. | `research/review_report.md`; `research/rebuttal_bank.md`; `research/submission_checklist.md`; `scripts/check_submission_review.py`; `results/reproducibility/submission_review_report.md`; goal/package checks `submission_review_handoff_ready` and `submission_review_report_ready` are ready. | Handoff ready; final submission pending | Use this handoff with the AAAI submission-decision preflight to decide whether to submit as a deterministic/offline paper or wait for pending external evidence. |
+| AAAI submission-decision preflight. | `scripts/check_aaai_submission_decision.py`; `results/aaai_submission_decision/decision.md`; goal/package checks `aaai_submission_decision_preflight_ready` are ready. | Preflight ready; human decision pending | Record a human decision only after choosing `submit_now_deterministic_offline` or `wait_for_external_evidence` with claim boundary and evidence policy. |
 | Final paper narrative. | `paper/draft.md`; `paper/outline.md`; `paper/claim_checklist.md`; `paper/limitations.md`; AAAI `.tex` draft. | Prepared, not final | Final paper requires live/human/model evidence decisions or explicit decision to submit as deterministic/offline system paper. |
 | Machine-checkable completion gate. | `scripts/check_goal_completion.py`; `results/reproducibility/goal_completion_report.md`; reproducibility checks `goal_completion_report_ready` and `goal_completion_core_checks_ready` are ready. | Complete as a gate; full goal still pending | Re-run the gate after any model, human-fidelity, provider-billing, or final-paper evidence changes. |
 | External evidence closure queue. | `scripts/check_external_evidence_closure.py`; `results/external_evidence_closure/closure.md`; goal/package checks `external_evidence_closure_queue_ready` and `external_evidence_closure_report_ready` are ready. | Complete as a local queue; evidence still pending | Work through the six queue items without treating queue readiness as evidence completion. |
@@ -155,16 +164,20 @@ execution packets without completing the evidence itself.
   handoff gate is ready with 15 ready checks and 0 failed checks; it verifies
   the review, rebuttal, and submission checklist files are synchronized with
   current evidence but does not make the AAAI package submission-final.
+- `results/aaai_submission_decision/decision.md`: submission-decision preflight
+  is `pending_human_decision` with both options available and no selected
+  option; it does not make the AAAI package submission-final.
 
 ## Completion Decision
 
 Do not mark the active goal complete yet. The current repository satisfies the
 local memory, scaffold, deterministic/offline experiment, AAAI-package, usage
-example, Claude Opus 4.8 ablation, GPT-family ablation, and
-saved live-transfer response requirements. It does not yet satisfy completed
-AI-Scientist-v2 LLM-client smoke/full live-run evidence, DeepSeek response
-collection, human semantic validation, or real provider-billing/economic
-evidence. Local
+example, Claude Opus 4.8 ablation, GPT-family ablation, saved live-transfer
+response requirements, and AAAI submission-decision preflight. It does not yet
+satisfy completed AI-Scientist-v2 LLM-client smoke/full live-run evidence,
+DeepSeek response collection, human semantic validation, real
+provider-billing/economic evidence, or a selected final submission decision.
+Local
 tokenizer-aware input and saved-response output proxy evidence are present, and
 the machine-checkable goal-completion gate agrees that the active goal is not
 complete.
@@ -173,7 +186,8 @@ complete.
 
 1. Let the user fill DeepSeek alias/env vars, then run and score the same prompt
    grid.
-2. Decide whether the final AAAI paper will remain an explicitly
-   deterministic/offline system paper or wait for live/human/model evidence.
+2. Use `results/aaai_submission_decision/decision.md` to decide whether the
+   final AAAI paper will remain an explicitly deterministic/offline system
+   paper or wait for live/human/model evidence.
 3. If waiting, collect human-fidelity annotations and provider-specific cost
    evidence before marking the full goal complete.

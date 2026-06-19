@@ -496,6 +496,27 @@ These packets list inputs, setup notes, run commands, validation commands,
 completion criteria, escalation rules, and evidence boundaries. They do not
 complete any external evidence by themselves.
 
+## AAAI Submission Decision Preflight
+
+Build the local preflight for the final AAAI decision:
+
+```powershell
+python scripts\check_aaai_submission_decision.py --strict
+```
+
+Current Phase 55 status:
+`results/aaai_submission_decision/decision.md` reports
+`overall_status=pending_human_decision`, 25 ready checks, 1 pending check, and
+0 failed checks. It exposes two options for the research lead:
+
+- submit now as a deterministic/offline system paper with explicit limitations;
+- wait for external evidence before making stronger live, human-fidelity,
+  DeepSeek, or provider-economics claims.
+
+The preflight does not select an option. Record a human decision only by adding
+`research/aaai_submission_decision.md` with a selected option, decision owner,
+decision date, claim boundary, and evidence policy.
+
 ## AI-Scientist-v2 Dry Run
 
 From `D:\a_work\gitee\ai-scientist-v2`:

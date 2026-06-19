@@ -1,0 +1,227 @@
+{
+  "schema_version": "0.1",
+  "evidence_boundary": "Local AAAI submission-decision preflight. It distinguishes available submission paths and required boundaries, but it does not make the human submission decision or complete pending external evidence.",
+  "decision_status": "pending_user_decision",
+  "selected_option": null,
+  "decision_record": {
+    "path": "research/aaai_submission_decision.md",
+    "status": "missing",
+    "selected_option": null,
+    "issues": [
+      "decision record is not present"
+    ]
+  },
+  "options": [
+    {
+      "id": "submit_now_deterministic_offline",
+      "status": "available_for_human_decision",
+      "decision_owner": "Research Lead",
+      "when_defensible": "Use only if the human lead accepts a bounded deterministic/offline system paper whose claims are scoped to local gates, saved-response scoring, and handoff readiness.",
+      "required_claim_scope": [
+        "Paper-note-to-skill conversion over curated and bounded extracted-text cases.",
+        "Deterministic local gates for coverage, source grounding, transfer readiness, and table/claim consistency.",
+        "Explicit limitations for human fidelity, provider billing, DeepSeek, and AI-Scientist-v2 live-run evidence."
+      ],
+      "must_not_claim": [
+        "AAAI acceptance or submission-final status.",
+        "Human-validated semantic fidelity.",
+        "Completed provider billing or success per dollar.",
+        "DeepSeek model-ablation completion.",
+        "Completed AI-Scientist-v2 LLM-client smoke or full live/BFTS run."
+      ],
+      "validation_commands": [
+        "python scripts\\check_aaai_package.py --strict",
+        "python scripts\\check_paper_claims.py --strict",
+        "python scripts\\check_paper_tables.py --strict",
+        "python scripts\\check_usage_examples.py --strict",
+        "python scripts\\check_submission_review.py --strict",
+        "python scripts\\check_aaai_submission_decision.py --strict"
+      ]
+    },
+    {
+      "id": "wait_for_external_evidence",
+      "status": "available_for_human_decision",
+      "decision_owner": "Research Lead",
+      "when_defensible": "Use if the intended paper claims require semantic fidelity, live AI-Scientist-v2 execution, DeepSeek comparison, or realized provider economics.",
+      "required_claim_scope": [
+        "Complete AI-Scientist-v2 smoke before any full live/BFTS run claim.",
+        "Collect and score DeepSeek follow-up rows.",
+        "Complete independent human-fidelity annotations.",
+        "Fill provider billing rows before success-per-dollar claims."
+      ],
+      "must_not_claim": [
+        "That the local preflight itself completes any external evidence.",
+        "That saved-response output-contract scoring proves live task success."
+      ],
+      "validation_commands": [
+        "python scripts\\check_external_evidence_packets.py --strict",
+        "python scripts\\check_goal_completion.py --strict",
+        "python scripts\\check_reproducibility_package.py --strict"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "id": "aaai_submission_decision_input_aaai_package",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/reproducibility/aaai_package_report.json"
+    },
+    {
+      "id": "aaai_submission_decision_input_paper_claims",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/reproducibility/paper_claim_report.json"
+    },
+    {
+      "id": "aaai_submission_decision_input_paper_tables",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/reproducibility/paper_table_report.json"
+    },
+    {
+      "id": "aaai_submission_decision_input_usage_examples",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/reproducibility/usage_example_report.json"
+    },
+    {
+      "id": "aaai_submission_decision_input_submission_review",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/reproducibility/submission_review_report.json"
+    },
+    {
+      "id": "aaai_submission_decision_input_goal_completion",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/reproducibility/goal_completion_report.json"
+    },
+    {
+      "id": "aaai_submission_decision_input_reproducibility_package",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/reproducibility/package_report.json"
+    },
+    {
+      "id": "aaai_submission_decision_input_external_packets",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/external_evidence_packets/packets.json"
+    },
+    {
+      "id": "aaai_submission_decision_input_ai_scientist_smoke",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/ai_scientist_v2_smoke/run_report.json"
+    },
+    {
+      "id": "aaai_submission_decision_input_ai_scientist_live_handoff",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/ai_scientist_v2_live_run_handoff/handoff.json"
+    },
+    {
+      "id": "aaai_submission_decision_input_deepseek_handoff",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/deepseek_followup_handoff/handoff.json"
+    },
+    {
+      "id": "aaai_submission_decision_input_model_ablation_evaluation",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/model_ablation_prompts/v0/evaluation.json"
+    },
+    {
+      "id": "aaai_submission_decision_input_human_fidelity",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/human_fidelity_packets/annotation_summary.json"
+    },
+    {
+      "id": "aaai_submission_decision_input_provider_billing",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/provider_billing_evidence/billing_summary.json"
+    },
+    {
+      "id": "aaai_submission_decision_input_submission_checklist",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "research/submission_checklist.md"
+    },
+    {
+      "id": "aaai_submission_decision_input_review_report",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "research/review_report.md"
+    },
+    {
+      "id": "aaai_submission_decision_input_rebuttal_bank",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "research/rebuttal_bank.md"
+    },
+    {
+      "id": "aaai_submission_decision_input_aaai_tex",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "paper/aaai/papertoskill_aaai2027.tex"
+    },
+    {
+      "id": "aaai_submission_decision_local_gates_ready",
+      "status": "ready",
+      "detail": "local submission gates ready",
+      "evidence": "results/reproducibility/aaai_package_report.json; results/reproducibility/paper_claim_report.json; results/reproducibility/paper_table_report.json; results/reproducibility/submission_review_report.json; results/reproducibility/usage_example_report.json"
+    },
+    {
+      "id": "aaai_submission_decision_pending_evidence_state_current",
+      "status": "ready",
+      "detail": "goal=not_complete_pending_external_evidence; package=ready_with_pending_external_evidence; pending=7",
+      "evidence": "results/reproducibility/goal_completion_report.json; results/reproducibility/package_report.json"
+    },
+    {
+      "id": "aaai_submission_decision_external_packet_ready",
+      "status": "ready",
+      "detail": "packet_status=pending_decision; criteria=3",
+      "evidence": "results/external_evidence_packets/packets.json"
+    },
+    {
+      "id": "aaai_submission_decision_boundaries_declared",
+      "status": "ready",
+      "detail": "submission options and non-negotiable boundaries declared",
+      "evidence": "research/submission_checklist.md; research/review_report.md; paper/aaai/papertoskill_aaai2027.tex"
+    },
+    {
+      "id": "aaai_submission_decision_options_declared",
+      "status": "ready",
+      "detail": "options=submit_now_deterministic_offline,wait_for_external_evidence",
+      "evidence": "results/aaai_submission_decision/decision.json"
+    },
+    {
+      "id": "aaai_submission_decision_no_default_selection",
+      "status": "ready",
+      "detail": "no option selected by the preflight",
+      "evidence": "research/aaai_submission_decision.md"
+    },
+    {
+      "id": "aaai_submission_decision_human_decision_recorded",
+      "status": "pending",
+      "detail": "no human decision record present",
+      "evidence": "research/aaai_submission_decision.md"
+    },
+    {
+      "id": "aaai_submission_decision_no_secret_material",
+      "status": "ready",
+      "detail": "no raw API-key-like strings found",
+      "evidence": "results/aaai_submission_decision/decision.json"
+    }
+  ],
+  "overall_status": "pending_human_decision",
+  "status_counts": {
+    "ready": 25,
+    "pending": 1,
+    "fail": 0
+  }
+}

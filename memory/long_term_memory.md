@@ -81,6 +81,9 @@ Current supported claims:
   each closure item has inputs, setup notes, commands, validation commands,
   completion criteria, escalation rules, and evidence boundaries without
   completing any external evidence.
+- AAAI submission-decision preflight is ready as a local audit artifact:
+  `submit_now_deterministic_offline` and `wait_for_external_evidence` are both
+  available for a human decision, but no option is selected by the preflight.
 
 Current unsupported claims:
 
@@ -92,6 +95,7 @@ Current unsupported claims:
 - Reliable arbitrary-PDF-to-skill automation.
 - Completed AI-Scientist-v2 LLM-client smoke or full BFTS/live research run.
 - Submission-final or accepted AAAI paper.
+- A selected final AAAI submission decision.
 
 ## Main Artifact Map
 
@@ -126,6 +130,8 @@ Use these as entry points instead of searching the whole repo first:
   pending external evidence and final-decision items.
 - `scripts/check_external_evidence_packets.py`: no-network execution packet
   builder for each pending external-evidence item.
+- `scripts/check_aaai_submission_decision.py`: no-network AAAI submission
+  decision preflight; exposes decision options without selecting one.
 - `benchmarks/model_ablation_v0.json`: Claude/GPT-family/DeepSeek prompt spec.
 - `scripts/check_deepseek_followup.py`: local DeepSeek follow-up handoff and
   preflight report generator; no network calls.
@@ -143,11 +149,11 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 260 ready checks, 8 pending
+  reports `ready_with_pending_external_evidence`, 267 ready checks, 8 pending
   checks, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
-  reports `not_complete_pending_external_evidence`, 67 ready checks, 8 pending
+  reports `not_complete_pending_external_evidence`, 70 ready checks, 8 pending
   checks, and 0 failed checks.
 - External evidence closure queue:
   `results/external_evidence_closure/closure.md`
@@ -161,6 +167,11 @@ Use these as entry points instead of searching the whole repo first:
   reports `ready`, 7 ready checks, 0 pending checks, and 0 failed checks. The
   packets cover the same six queue items and are local handoffs, not completed
   evidence.
+- AAAI submission-decision preflight:
+  `results/aaai_submission_decision/decision.md`
+  reports `pending_human_decision`, 25 ready checks, 1 pending check, and 0
+  failed checks. Both options are available for a human decision; no option is
+  selected by the preflight.
 - AI-Scientist-v2 LLM-client smoke:
   `results/ai_scientist_v2_smoke/run_report.md`
   reports `blocked_by_provider_or_model_availability`, 5 ready checks, 2 pending
@@ -270,6 +281,7 @@ DeepSeek:
 | Goal completion | Narrative completion audit could stale. | `scripts/check_goal_completion.py` makes the active-goal status machine-checkable. |
 | External evidence closure | Pending requirements were spread across multiple reports and docs. | `scripts/check_external_evidence_closure.py` maps current pending goal requirements to six concrete queue items without claiming evidence completion. |
 | External evidence execution | Closure queue items still required manual interpretation before handoff. | `scripts/check_external_evidence_packets.py` turns each queue item into inputs, commands, completion criteria, and escalation boundaries without claiming evidence completion. |
+| AAAI submission decision | The final submission item was only a checklist row. | `scripts/check_aaai_submission_decision.py` creates a preflight report with submit-now vs wait-for-evidence options while keeping the human decision pending. |
 | Model evidence state | GPT retry evidence was saved separately from the older Phase 36 failure report. | `scripts/check_goal_completion.py` reads both `run_report.json` and `gpt_retry_run_report.json` so historical GPT 502 evidence and current GPT-family success both remain visible. |
 | Output-token accounting | Cost section had input-token proxies but no saved-response output-token accounting. | `scripts/evaluate_model_response_costs.py` reports local output-token proxies for saved Claude/GPT-family responses while preserving the no-provider-billing boundary. |
 | AI-Scientist-v2 smoke boundary | AI-Scientist-v2 dry-run and live-transfer saved responses could be confused with a full live run. | `scripts/run_ai_scientist_v2_smoke.py` records bounded client smoke attempts with alias fallback and script-level timeout; current provider/model availability blocker keeps smoke completion and full run pending. |

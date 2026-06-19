@@ -16,7 +16,8 @@ source-span validation, compactness and local token-proxy accounting, usage
 examples, saved model-ablation responses for Claude Opus 4.8 and GPT-family
 slots, all four live-transfer saved-response sets, human-fidelity annotation
 handoff, provider-billing evidence handoff, a local external-evidence closure
-queue, external-evidence execution packets, and an AAAI-27 LaTeX package.
+queue, external-evidence execution packets, an AAAI submission-decision
+preflight, and an AAAI-27 LaTeX package.
 
 The strongest current framing remains:
 
@@ -58,10 +59,11 @@ output-contract evidence, not proof of live task success.
 | Gate | Status | Evidence |
 | --- | --- | --- |
 | Claim-evidence consistency | Pass with caveats | `paper/claim_checklist.md`; `research/claim_evidence_matrix.md`; `results/reproducibility/paper_claim_report.md` |
-| Local reproducibility package | Pass locally, external evidence pending | `results/reproducibility/package_report.md`: 260 ready, 8 pending, 0 failed |
-| Active-goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 67 ready, 8 pending, 0 failed |
+| Local reproducibility package | Pass locally, external evidence pending | `results/reproducibility/package_report.md`: 267 ready, 8 pending, 0 failed |
+| Active-goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 70 ready, 8 pending, 0 failed |
 | External evidence closure queue | Ready as local queue | `results/external_evidence_closure/closure.md`: 3 ready, 0 pending, 0 failed |
 | External evidence execution packets | Ready as local handoff | `results/external_evidence_packets/packets.md`: 7 ready, 0 pending, 0 failed |
+| AAAI submission decision preflight | Pending human decision | `results/aaai_submission_decision/decision.md`: 25 ready, 1 pending, 0 failed |
 | AAAI local package | Pass locally, not submission-final | `results/reproducibility/aaai_package_report.md` |
 | Live-transfer saved responses | Complete for saved-response scoring | `results/live_transfer_prompts/evaluation.md`: 24 scored, 0 pending |
 | Real live task success | Pending | Saved-response scoring is not human semantic or real task-success evidence |
@@ -88,7 +90,8 @@ output-contract evidence, not proof of live task success.
 ## Decision
 
 Do not mark the project or paper submission as complete. The current package is
-ready for internal review and reviewer-question preparation, but it is not a
+ready for internal review and reviewer-question preparation, and the AAAI
+submission-decision preflight makes both options auditable, but it is not a
 submission-final AAAI paper and it does not establish human validation, real
 live task success, DeepSeek completion, AI-Scientist-v2 live-run completion, or
 real provider economics.

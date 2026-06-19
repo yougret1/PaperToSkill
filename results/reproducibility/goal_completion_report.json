@@ -3,7 +3,7 @@
   "evidence_boundary": "Audits the active user goal against local repository evidence. Pending checks are explicit remaining requirements, not negative evidence and not local package failures.",
   "overall_status": "not_complete_pending_external_evidence",
   "status_counts": {
-    "ready": 67,
+    "ready": 70,
     "pending": 8,
     "fail": 0
   },
@@ -219,6 +219,18 @@
       "evidence": "results/reproducibility/submission_review_report.json"
     },
     {
+      "id": "aaai_submission_decision_checker",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "scripts/check_aaai_submission_decision.py"
+    },
+    {
+      "id": "aaai_submission_decision_report",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/aaai_submission_decision/decision.json"
+    },
+    {
       "id": "goal_completion_audit",
       "status": "ready",
       "detail": "present",
@@ -345,10 +357,16 @@
       "evidence": "results/reproducibility/submission_review_report.json"
     },
     {
+      "id": "aaai_submission_decision_preflight_ready",
+      "status": "ready",
+      "detail": "overall=pending_human_decision; decision_status=pending_user_decision; failed=0",
+      "evidence": "results/aaai_submission_decision/decision.json"
+    },
+    {
       "id": "aaai_final_submission_ready",
       "status": "pending",
-      "detail": "AAAI package is locally verified, but final live/model/human/cost evidence decisions remain pending",
-      "evidence": "paper/aaai/; results/reproducibility/"
+      "detail": "AAAI package and submission-decision preflight are locally verified, but final human decision and selected evidence policy remain pending",
+      "evidence": "paper/aaai/; results/reproducibility/; results/aaai_submission_decision/decision.json"
     },
     {
       "id": "model_ablation_protocol_ready",

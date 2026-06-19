@@ -73,6 +73,7 @@
 | `research/run_logs/2026-06-20_phase52_ai_scientist_v2_smoke_retry.md` | AI-Scientist-v2 smoke retry where all four Claude aliases again timed out after 30 seconds | Created |
 | `research/run_logs/2026-06-20_phase53_external_evidence_packets.md` | External-evidence execution packets and gate integration | Created |
 | `research/run_logs/2026-06-20_phase54_ai_scientist_v2_smoke_packet_retry.md` | AI-Scientist-v2 smoke-completion packet retry where all four Claude aliases timed out after 30 seconds | Created |
+| `research/run_logs/2026-06-20_phase55_aaai_submission_decision_preflight.md` | AAAI submission-decision preflight and gate integration | Created |
 
 ## Paper Draft Package
 
@@ -186,6 +187,7 @@
 | `scripts/check_goal_completion.py` | Audits the active user goal against local evidence and exposes remaining pending requirements | Created |
 | `scripts/check_external_evidence_closure.py` | Builds a local closure queue mapping pending external-evidence requirements to concrete next actions | Created |
 | `scripts/check_external_evidence_packets.py` | Builds execution packets with inputs, commands, completion criteria, and boundaries for each pending external-evidence item | Created |
+| `scripts/check_aaai_submission_decision.py` | Builds a local AAAI submission-decision preflight with submit-now and wait-for-evidence options while leaving the human decision pending | Created |
 | `scripts/run_ai_scientist_v2_smoke.py` | Runs bounded AI-Scientist-v2 LLM-client smoke checks, writes redacted reports, clears stale responses on blocked attempts, prints status summary, and supports repeatable `--model-alias`, `--timeout-seconds`, and `--require-complete` | Created |
 | `scripts/check_ai_scientist_v2_live_run_handoff.py` | Builds a no-network handoff/preflight report for the pending full AI-Scientist-v2 live/BFTS run | Created |
 | `scripts/build_model_ablation_prompts.py` | Builds Claude/GPT-family/DeepSeek model-ablation prompt packets | Created |
@@ -218,6 +220,7 @@
 | `tests/test_check_goal_completion.py` | Smoke tests for active-goal completion checker and pending-evidence boundaries | Created |
 | `tests/test_check_external_evidence_closure.py` | Smoke tests for external-evidence closure queue coverage and completion-state behavior | Created |
 | `tests/test_check_external_evidence_packets.py` | Smoke tests for external-evidence execution packet coverage, missing-closure failure, and secret-like command rejection | Created |
+| `tests/test_check_aaai_submission_decision.py` | Smoke tests for AAAI submission-decision preflight states and human decision-record parsing | Created |
 | `tests/test_check_submission_review.py` | Smoke tests for submission-review handoff drift checker | Created |
 | `tests/test_run_ai_scientist_v2_smoke.py` | Smoke tests for AI-Scientist-v2 LLM-client smoke success, redacted provider errors, stale-response cleanup, timeout reporting, and alias fallback | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |
@@ -323,6 +326,8 @@
 | `results/external_evidence_closure/closure.json` | Machine-readable closure queue for pending external evidence | Created |
 | `results/external_evidence_packets/packets.md` | Human-readable execution packets for pending external evidence | Created |
 | `results/external_evidence_packets/packets.json` | Machine-readable execution packets for pending external evidence | Created |
+| `results/aaai_submission_decision/decision.md` | Human-readable AAAI submission-decision preflight; no option selected | Created |
+| `results/aaai_submission_decision/decision.json` | Machine-readable AAAI submission-decision preflight | Created |
 | `results/ai_scientist_v2_smoke/run_report.md` | Human-readable bounded AI-Scientist-v2 LLM-client smoke report | Created |
 | `results/ai_scientist_v2_smoke/run_report.json` | Machine-readable bounded AI-Scientist-v2 LLM-client smoke report | Created |
 | `results/ai_scientist_v2_live_run_handoff/handoff.md` | Human-readable AI-Scientist-v2 full live-run handoff report | Created |

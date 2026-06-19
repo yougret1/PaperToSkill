@@ -3,7 +3,7 @@
 Evidence boundary: this report audits the active user goal against local repository evidence. Pending checks are remaining requirements, not negative evidence and not local package failures.
 
 - Overall status: not_complete_pending_external_evidence
-- Ready checks: 67
+- Ready checks: 70
 - Pending checks: 8
 - Failed checks: 0
 
@@ -46,6 +46,8 @@ Evidence boundary: this report audits the active user goal against local reposit
 | model_response_cost_proxy | ready | present | results/tables/model_response_cost_proxy.json |
 | provider_billing_summary | ready | present | results/provider_billing_evidence/billing_summary.json |
 | submission_review_report | ready | present | results/reproducibility/submission_review_report.json |
+| aaai_submission_decision_checker | ready | present | scripts/check_aaai_submission_decision.py |
+| aaai_submission_decision_report | ready | present | results/aaai_submission_decision/decision.json |
 | goal_completion_audit | ready | present | research/goal_completion_audit.md |
 | memory_resume_rule_present | ready | long-term and short-term resume rules present | memory/long_term_memory.md; memory/short_term_memory.md |
 | memory_current_blockers_recorded | ready | current model-availability blockers recorded | memory/short_term_memory.md |
@@ -67,7 +69,8 @@ Evidence boundary: this report audits the active user goal against local reposit
 | paper_table_gate_ready | ready | overall_status=ready | results/reproducibility/paper_table_report.json |
 | paper_claim_gate_ready | ready | overall_status=ready | results/reproducibility/paper_claim_report.json |
 | submission_review_handoff_ready | ready | overall_status=ready | results/reproducibility/submission_review_report.json |
-| aaai_final_submission_ready | pending | AAAI package is locally verified, but final live/model/human/cost evidence decisions remain pending | paper/aaai/; results/reproducibility/ |
+| aaai_submission_decision_preflight_ready | ready | overall=pending_human_decision; decision_status=pending_user_decision; failed=0 | results/aaai_submission_decision/decision.json |
+| aaai_final_submission_ready | pending | AAAI package and submission-decision preflight are locally verified, but final human decision and selected evidence policy remain pending | paper/aaai/; results/reproducibility/; results/aaai_submission_decision/decision.json |
 | model_ablation_protocol_ready | ready | prompt_packets=6; models=claude_opus_4_8,deepseek_followup_slot,gpt_5_5_or_gpt_family | results/model_ablation_prompts/v0/index.json |
 | claude_opus_4_8_ablation_attempted | ready | rows=2; statuses=success; attempted_aliases=claude-opus-4-8 | results/model_ablation_prompts/v0/run_report.json |
 | claude_opus_4_8_ablation_complete | ready | saved and scored responses are required before claiming completion | results/model_ablation_prompts/v0/evaluation.json |

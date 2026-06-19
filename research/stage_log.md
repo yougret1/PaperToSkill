@@ -1928,3 +1928,40 @@ Evidence boundary:
 - It does not complete the AI-Scientist-v2 smoke, run BFTS, prove live
   research-task success, resolve DeepSeek, collect human annotations, collect
   provider billing, or make the AAAI package submission-final.
+
+## 2026-06-20 Phase 55
+
+Actions:
+
+- Added `scripts/check_aaai_submission_decision.py`, a local AAAI
+  submission-decision preflight.
+- Added `tests/test_check_aaai_submission_decision.py`.
+- Generated `results/aaai_submission_decision/decision.md` and
+  `results/aaai_submission_decision/decision.json`.
+- Integrated the preflight into `scripts/check_goal_completion.py` and
+  `scripts/check_reproducibility_package.py`.
+- Updated the runbook, artifact map, result cards, submission-review handoff
+  files, goal audit, and memory references.
+- Added
+  `research/run_logs/2026-06-20_phase55_aaai_submission_decision_preflight.md`.
+
+Results:
+
+- `results/aaai_submission_decision/decision.md` reports
+  `overall_status=pending_human_decision`, with 25 ready checks, 1 pending
+  check, and 0 failed checks.
+- Both decision options are available for a human decision:
+  `submit_now_deterministic_offline` and `wait_for_external_evidence`.
+- No option is selected by the preflight.
+- The active-goal report now shows 70 ready checks, 8 pending checks, and 0
+  failed checks.
+- The reproducibility package report now shows 267 ready checks, 8 pending
+  checks, and 0 failed checks.
+
+Evidence boundary:
+
+- Phase 55 makes the final AAAI decision auditable and machine-checkable.
+- It does not submit the paper, select a claim scope, complete DeepSeek,
+  complete AI-Scientist-v2 smoke or full live/BFTS evidence, collect human
+  annotations, collect provider billing, or make the AAAI package
+  submission-final.

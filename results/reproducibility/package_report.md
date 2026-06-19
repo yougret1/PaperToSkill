@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 260
+- Ready checks: 267
 - Pending checks: 8
 - Failed checks: 0
 
@@ -37,6 +37,9 @@ Evidence boundary: this report checks local package completeness and separates p
 | submission_review_checklist | ready | present | research/submission_checklist.md |
 | submission_review_report_json | ready | present | results/reproducibility/submission_review_report.json |
 | submission_review_report_md | ready | present | results/reproducibility/submission_review_report.md |
+| aaai_submission_decision_checker | ready | present | scripts/check_aaai_submission_decision.py |
+| aaai_submission_decision_report_json | ready | present | results/aaai_submission_decision/decision.json |
+| aaai_submission_decision_report_md | ready | present | results/aaai_submission_decision/decision.md |
 | goal_completion_checker | ready | present | scripts/check_goal_completion.py |
 | goal_completion_report_json | ready | present | results/reproducibility/goal_completion_report.json |
 | goal_completion_report_md | ready | present | results/reproducibility/goal_completion_report.md |
@@ -95,6 +98,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | phase52_ai_scientist_v2_smoke_retry_run_log | ready | present | research/run_logs/2026-06-20_phase52_ai_scientist_v2_smoke_retry.md |
 | phase53_external_evidence_packets_run_log | ready | present | research/run_logs/2026-06-20_phase53_external_evidence_packets.md |
 | phase54_ai_scientist_v2_smoke_packet_retry_run_log | ready | present | research/run_logs/2026-06-20_phase54_ai_scientist_v2_smoke_packet_retry.md |
+| phase55_aaai_submission_decision_preflight_run_log | ready | present | research/run_logs/2026-06-20_phase55_aaai_submission_decision_preflight.md |
 | provider_billing_protocol | ready | present | benchmarks/provider_billing_evidence_v0.json |
 | provider_billing_summarizer | ready | present | scripts/summarize_provider_billing_evidence.py |
 | provider_billing_template | ready | present | results/provider_billing_evidence/billing_template.csv |
@@ -187,7 +191,10 @@ Evidence boundary: this report checks local package completeness and separates p
 | paper_claim_core_checks_ready | ready | core checks ready | results\reproducibility\paper_claim_report.json |
 | submission_review_report_ready | ready | overall=ready; counts={'ready': 15, 'fail': 0} | results\reproducibility\submission_review_report.json |
 | submission_review_core_checks_ready | ready | core checks ready | results\reproducibility\submission_review_report.json |
-| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 67, 'pending': 8, 'fail': 0} | results\reproducibility\goal_completion_report.json |
+| aaai_submission_decision_preflight_ready | ready | overall=pending_human_decision; decision_status=pending_user_decision; counts={'ready': 25, 'pending': 1, 'fail': 0} | results\aaai_submission_decision\decision.json |
+| aaai_submission_decision_core_checks_ready | ready | core decision preflight checks ready | results\aaai_submission_decision\decision.json |
+| aaai_submission_decision_options_available | ready | both decision options available for human decision | results\aaai_submission_decision\decision.json |
+| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 70, 'pending': 8, 'fail': 0} | results\reproducibility\goal_completion_report.json |
 | goal_completion_core_checks_ready | ready | core completion boundaries ready | results\reproducibility\goal_completion_report.json |
 | external_evidence_closure_report_ready | ready | overall=pending_external_evidence; counts={'ready': 3, 'pending': 0, 'fail': 0}; item_counts={'pending_provider': 1, 'blocked_by_smoke': 1, 'pending_user_configuration': 1, 'pending_reviewers': 1, 'pending_billing_rows': 1, 'pending_decision': 1} | results\external_evidence_closure\closure.json |
 | external_evidence_closure_core_checks_ready | ready | core closure checks ready | results\external_evidence_closure\closure.json |

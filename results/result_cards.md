@@ -1061,3 +1061,29 @@
 - Figure/table: `scripts/check_submission_review.py`;
   `research/submission_checklist.md`;
   `results/reproducibility/submission_review_report.md`.
+
+## AAAI Submission Decision Preflight
+
+- Experiment: make the final AAAI submission decision auditable without making
+  the decision for the user.
+- Main result: `results/aaai_submission_decision/decision.md` reports
+  `overall_status=pending_human_decision`, 25 ready checks, 1 pending check,
+  and 0 failed checks.
+- Options: the preflight exposes `submit_now_deterministic_offline` and
+  `wait_for_external_evidence`; both are available for a human decision, and no
+  option is selected by the preflight.
+- Practical significance: the `aaai_submission_decision` closure item now has a
+  machine-checkable local report that distinguishes a bounded deterministic
+  system-paper submission from waiting for live, human, DeepSeek, and provider
+  billing evidence.
+- Statistical evidence: none; this is a decision and claim-boundary preflight.
+- Failure modes: a future decision record can still be invalid if it lacks a
+  selected option, decision owner, decision date, claim boundary, or evidence
+  policy.
+- Limitations: it does not submit the paper, complete external evidence, or
+  make the active goal complete.
+- Claim impact: supports saying the final submission decision is locally
+  preflighted and auditable, not that the paper is submission-final.
+- Figure/table: `scripts/check_aaai_submission_decision.py`;
+  `results/aaai_submission_decision/decision.md`;
+  `research/run_logs/2026-06-20_phase55_aaai_submission_decision_preflight.md`.

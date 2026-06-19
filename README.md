@@ -10,7 +10,7 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 53: Claude Opus 4.8 and GPT-family ablation rows are saved and scored for
+Phase 55: Claude Opus 4.8 and GPT-family ablation rows are saved and scored for
 the current two-case protocol, saved model responses have a local output-token
 proxy report, and all four live-transfer saved-response sets are collected and
 scored for the current prompt-packet protocol. A bounded AI-Scientist-v2
@@ -33,13 +33,15 @@ checker that prevents stale review claims from drifting behind current evidence.
 The AAAI-27 paper package, usage examples, deterministic/offline experiments,
 model-ablation runner, DeepSeek follow-up path, local DeepSeek
 handoff/preflight report, local external-evidence closure queue, external
-evidence execution packets, local `o200k_base` input/output token proxies,
-one-command extracted-text-to-skill pipeline, local
+evidence execution packets, AAAI submission-decision preflight, local
+`o200k_base` input/output token proxies, one-command extracted-text-to-skill
+pipeline, local
 `pdftotext -layout` PDF smoke input path, result tables, and
 machine-checkable package/goal gates are prepared. The active goal is not yet
 complete because completed AI-Scientist-v2 LLM-client/full live-run evidence,
 DeepSeek responses, human-fidelity annotation, provider-specific billing or
-success-per-dollar evidence, and final submission decisions remain pending.
+success-per-dollar evidence, and a selected final submission decision remain
+pending.
 
 ## Memory
 
@@ -133,3 +135,5 @@ pending live-agent claims.
   `results/external_evidence_closure/closure.md`.
 - External-evidence execution packets:
   `results/external_evidence_packets/packets.md`.
+- AAAI submission-decision preflight:
+  `results/aaai_submission_decision/decision.md`.

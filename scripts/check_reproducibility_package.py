@@ -86,6 +86,9 @@ CORE_FILES = {
     "submission_review_checklist": "research/submission_checklist.md",
     "submission_review_report_json": "results/reproducibility/submission_review_report.json",
     "submission_review_report_md": "results/reproducibility/submission_review_report.md",
+    "aaai_submission_decision_checker": "scripts/check_aaai_submission_decision.py",
+    "aaai_submission_decision_report_json": "results/aaai_submission_decision/decision.json",
+    "aaai_submission_decision_report_md": "results/aaai_submission_decision/decision.md",
     "goal_completion_checker": "scripts/check_goal_completion.py",
     "goal_completion_report_json": "results/reproducibility/goal_completion_report.json",
     "goal_completion_report_md": "results/reproducibility/goal_completion_report.md",
@@ -144,6 +147,7 @@ CORE_FILES = {
     "phase52_ai_scientist_v2_smoke_retry_run_log": "research/run_logs/2026-06-20_phase52_ai_scientist_v2_smoke_retry.md",
     "phase53_external_evidence_packets_run_log": "research/run_logs/2026-06-20_phase53_external_evidence_packets.md",
     "phase54_ai_scientist_v2_smoke_packet_retry_run_log": "research/run_logs/2026-06-20_phase54_ai_scientist_v2_smoke_packet_retry.md",
+    "phase55_aaai_submission_decision_preflight_run_log": "research/run_logs/2026-06-20_phase55_aaai_submission_decision_preflight.md",
     "provider_billing_protocol": "benchmarks/provider_billing_evidence_v0.json",
     "provider_billing_summarizer": "scripts/summarize_provider_billing_evidence.py",
     "provider_billing_template": "results/provider_billing_evidence/billing_template.csv",
@@ -619,6 +623,71 @@ def submission_review_checks(root: Path) -> list[Check]:
             "submission_review_core_checks_ready",
             "ready" if not missing else "fail",
             "core checks ready" if not missing else "missing=" + ",".join(missing),
+            str(report_path.relative_to(root)),
+        )
+    )
+    return checks
+
+
+def aaai_submission_decision_checks(root: Path) -> list[Check]:
+    checks: list[Check] = []
+    report_path = root / "results/aaai_submission_decision/decision.json"
+    if not report_path.exists():
+        return checks
+    report = load_json(report_path)
+    failed = [check for check in report.get("checks", []) if check.get("status") == "fail"]
+    status = (
+        "ready"
+        if report.get("overall_status") in {"pending_human_decision", "ready"}
+        and not failed
+        else "fail"
+    )
+    counts = report.get("status_counts", {})
+    checks.append(
+        Check(
+            "aaai_submission_decision_preflight_ready",
+            status,
+            f"overall={report.get('overall_status')}; decision_status={report.get('decision_status')}; counts={counts}",
+            str(report_path.relative_to(root)),
+        )
+    )
+
+    check_statuses = {check.get("id"): check.get("status") for check in report.get("checks", [])}
+    required_ready = {
+        "aaai_submission_decision_local_gates_ready",
+        "aaai_submission_decision_pending_evidence_state_current",
+        "aaai_submission_decision_external_packet_ready",
+        "aaai_submission_decision_boundaries_declared",
+        "aaai_submission_decision_options_declared",
+        "aaai_submission_decision_no_default_selection",
+        "aaai_submission_decision_no_secret_material",
+    }
+    missing = sorted(check_id for check_id in required_ready if check_statuses.get(check_id) != "ready")
+    checks.append(
+        Check(
+            "aaai_submission_decision_core_checks_ready",
+            "ready" if not missing else "fail",
+            "core decision preflight checks ready" if not missing else "missing=" + ",".join(missing),
+            str(report_path.relative_to(root)),
+        )
+    )
+
+    option_ids = {option.get("id") for option in report.get("options", [])}
+    expected_option_ids = {"submit_now_deterministic_offline", "wait_for_external_evidence"}
+    unavailable = sorted(
+        option.get("id", "")
+        for option in report.get("options", [])
+        if option.get("status") != "available_for_human_decision"
+    )
+    checks.append(
+        Check(
+            "aaai_submission_decision_options_available",
+            "ready" if option_ids == expected_option_ids and not unavailable else "fail",
+            (
+                "both decision options available for human decision"
+                if option_ids == expected_option_ids and not unavailable
+                else f"options={','.join(sorted(str(item) for item in option_ids))}; unavailable={','.join(unavailable)}"
+            ),
             str(report_path.relative_to(root)),
         )
     )
@@ -1208,6 +1277,7 @@ def build_report(root: Path) -> dict[str, Any]:
     checks.extend(paper_table_checks(root))
     checks.extend(paper_claim_checks(root))
     checks.extend(submission_review_checks(root))
+    checks.extend(aaai_submission_decision_checks(root))
     checks.extend(goal_completion_checks(root))
     checks.extend(external_evidence_closure_checks(root))
     checks.extend(external_evidence_packet_checks(root))
