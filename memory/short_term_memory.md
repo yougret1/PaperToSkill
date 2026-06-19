@@ -7,10 +7,12 @@ Current date: 2026-06-19.
 
 ## Current Phase
 
-Phase 46 is implemented locally and ready to save: the bounded
-AI-Scientist-v2 LLM-client smoke runner now tries repeated Claude aliases and
-records each attempt in reports. This phase has not yet been committed/pushed
-at the time of this memory update.
+Phase 46 is complete and pushed to `origin/main` as
+`23a9e09 Try AI Scientist smoke aliases`: the bounded AI-Scientist-v2
+LLM-client smoke runner now tries repeated Claude aliases and records each
+attempt in reports.
+
+Latest pushed commit after Phase 46: `23a9e09 Try AI Scientist smoke aliases`.
 
 Phase 46 changed:
 
