@@ -7,11 +7,11 @@ Current date: 2026-06-20.
 
 ## Current Phase
 
-Phase 62 is the current local phase. Phase 61 was committed as
-`92beb7f Add direct probe preflight to smoke packet` and pushed to
-`origin/main` on 2026-06-20. Phase 62 adds a no-secret DeepSeek configuration
-helper and wires it into the DeepSeek handoff/usage/reproducibility path;
-external evidence remains pending.
+Phase 64 is the current local phase. Phase 63 was committed as
+`ad8346b Record GitHub push connectivity diagnostics` and pushed to
+`origin/main` on 2026-06-20. Phase 64 records that the previous Phase 62/63
+local commits are now remotely saved, while GitHub HTTPS diagnostics can still
+fail intermittently after a successful push.
 
 Phase 62 objective:
 
@@ -96,6 +96,18 @@ Phase 62 evidence:
 - Phase 63 added a push-recovery section to `research/runbook.md` with the
   status, push, `ls-remote`, and GitHub 443 diagnostic commands to run on the
   next resume.
+
+Phase 64 evidence:
+
+- `git push origin main` succeeded and advanced GitHub from `92beb7f` to
+  `ad8346b`, saving both local commits:
+  `0db90e2 Add DeepSeek followup configuration helper` and
+  `ad8346b Record GitHub push connectivity diagnostics`.
+- `git status -sb` then reported `main...origin/main`, so local tracking state
+  was clean and aligned after the push.
+- A follow-up `git ls-remote --heads origin main` still failed with
+  `Recv failure: Connection was reset`, so treat GitHub HTTPS access as
+  intermittent; do not treat the old Phase 62/63 save as pending.
 
 ## Current Evidence
 

@@ -2226,3 +2226,31 @@ Evidence boundary:
 - Phase 63 records remote-save diagnostics only.
 - It does not complete DeepSeek, AI-Scientist-v2 smoke/full live run, human
   annotation, provider billing, or the final AAAI submission decision.
+
+## 2026-06-20 Phase 64
+
+Actions:
+
+- Retried `git push origin main` after the Phase 63 connectivity diagnostic.
+- Confirmed local tracking state after the push.
+- Updated short-term memory and `research/runbook.md` so future resumes do not
+  treat the Phase 62/63 commits as unsaved.
+- Added
+  `research/run_logs/2026-06-20_phase64_remote_save_recovered.md`.
+
+Results:
+
+- `git push origin main` succeeded:
+  `92beb7f..ad8346b  main -> main`.
+- The remote save includes both `0db90e2 Add DeepSeek followup configuration
+  helper` and `ad8346b Record GitHub push connectivity diagnostics`.
+- `git status -sb` reported `main...origin/main` after the push.
+- A follow-up `git ls-remote --heads origin main` still failed with
+  `Recv failure: Connection was reset`, so GitHub HTTPS access should be
+  considered intermittent even though the remote save succeeded.
+
+Evidence boundary:
+
+- Phase 64 records remote-save recovery only.
+- It does not complete DeepSeek, AI-Scientist-v2 smoke/full live run, human
+  annotation, provider billing, or the final AAAI submission decision.
