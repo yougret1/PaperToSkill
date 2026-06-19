@@ -2328,10 +2328,37 @@ Results:
 - `git push origin main` succeeded:
   `78c78ae..4c02013  main -> main`.
 - `git status -sb` reported `main...origin/main` after the push.
-- Latest pushed HEAD is `4c020132be895469441489371516e6d14af7d2ef`.
+- Latest pushed HEAD after Phase 66 was
+  `4c020132be895469441489371516e6d14af7d2ef`.
 
 Evidence boundary:
 
 - Phase 67 records remote-save status only.
+- It does not complete any pending external evidence or select the final AAAI
+  submission decision.
+
+## 2026-06-20 Phase 68
+
+Actions:
+
+- Refreshed stale long-term and short-term memory anchors after the Phase 67
+  remote save.
+- Added `scripts/generate_aaai_submission_decision.py` and the AAAI gate
+  recursion fix to the long-term artifact/fix map.
+- Updated current generated-report counts in memory and runbook:
+  reproducibility package `283 ready / 8 pending / 0 failed`, AAAI decision
+  preflight `26 ready / 1 pending / 0 failed`, and usage examples `55 ready /
+  0 failed`.
+
+Results:
+
+- The current recovery anchor before this Phase 68 commit is
+  `a0d67bc8d64ee7b25f3319817634fbc426bf31e0`.
+- Memory now records Phase 67 as pushed to `origin/main` and avoids treating
+  the older Phase 66 commit as the latest pushed HEAD.
+
+Evidence boundary:
+
+- Phase 68 refreshes memory/report anchors only.
 - It does not complete any pending external evidence or select the final AAAI
   submission decision.

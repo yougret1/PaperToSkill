@@ -594,7 +594,7 @@ python scripts\check_aaai_submission_decision.py --strict
 
 Current Phase 55 status:
 `results/aaai_submission_decision/decision.md` reports
-`overall_status=pending_human_decision`, 25 ready checks, 1 pending check, and
+`overall_status=pending_human_decision`, 26 ready checks, 1 pending check, and
 0 failed checks. It exposes two options for the research lead:
 
 - submit now as a deterministic/offline system paper with explicit limitations;

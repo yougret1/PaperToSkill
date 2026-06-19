@@ -7,10 +7,10 @@ Current date: 2026-06-20.
 
 ## Current Phase
 
-Phase 67 is the current local phase. Phase 66 was committed as
-`4c02013 Add AAAI decision record helper` and pushed to `origin/main` on
-2026-06-20. Phase 67 records the successful Phase 66 remote save; no evidence
-status is promoted.
+Phase 68 is the current local phase. Phase 67 was committed as
+`a0d67bc Record decision helper remote save` and pushed to `origin/main` on
+2026-06-20. Phase 68 refreshes stale memory anchors after the Phase 67 remote
+save; no evidence status is promoted.
 
 Phase 62 objective:
 
@@ -137,8 +137,20 @@ Phase 66 evidence:
 
 Phase 67 evidence:
 
-- `git status -sb` after the Phase 66 push reported `main...origin/main`.
-- Latest pushed HEAD is `4c020132be895469441489371516e6d14af7d2ef`.
+- Phase 67 was pushed to `origin/main` as
+  `a0d67bc8d64ee7b25f3319817634fbc426bf31e0`.
+- `git status -sb` after the Phase 67 push reported `main...origin/main`.
+
+Phase 68 evidence:
+
+- Refreshed long-term memory report counts to match current generated reports:
+  reproducibility package `283 ready / 8 pending / 0 failed`, AAAI decision
+  preflight `26 ready / 1 pending / 0 failed`, and usage examples `55 ready /
+  0 failed`.
+- Added `scripts/generate_aaai_submission_decision.py` and the AAAI gate
+  recursion fix to the long-term artifact/fix map.
+- Current recovery anchor before Phase 68 commit:
+  `a0d67bc8d64ee7b25f3319817634fbc426bf31e0`.
 
 ## Current Evidence
 

@@ -86,6 +86,7 @@
 | `research/run_logs/2026-06-20_phase65_direct_probe_recheck.md` | Fresh direct OpenAI-compatible provider recheck after remote-save recovery; Claude remains HTTP 503 and GPT remains HTTP 502 | Created |
 | `research/run_logs/2026-06-20_phase66_aaai_decision_record_helper.md` | Validated helper for generating the human AAAI submission-decision record without selecting a default option | Created |
 | `research/run_logs/2026-06-20_phase67_remote_save_after_decision_helper.md` | Successful remote save of the AAAI decision-record helper commit | Created |
+| `research/run_logs/2026-06-20_phase68_memory_anchor_refresh.md` | Memory and runbook anchor refresh after Phase 67 remote save | Created |
 
 ## Paper Draft Package
 
