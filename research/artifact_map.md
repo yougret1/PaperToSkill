@@ -81,6 +81,7 @@
 | `research/run_logs/2026-06-20_phase60_post_push_provider_recheck.md` | Post-push provider recheck confirming direct Claude/GPT-family blockers persist after Phase 59 remote save | Created |
 | `research/run_logs/2026-06-20_phase61_direct_probe_packet_preflight.md` | External-evidence packet update that runs direct provider probes before AI-Scientist-v2 wrapper smoke | Created |
 | `research/run_logs/2026-06-20_phase62_deepseek_configuration_helper.md` | DeepSeek follow-up configuration helper and handoff integration without storing secrets | Created |
+| `research/run_logs/2026-06-20_phase63_push_connectivity_diagnostic.md` | GitHub HTTPS connectivity diagnostic after Phase 62 push reset failures | Created |
 
 ## Paper Draft Package
 

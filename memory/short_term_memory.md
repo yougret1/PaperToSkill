@@ -86,6 +86,16 @@ Phase 62 evidence:
 - Current refreshed reproducibility package report is
   `ready_with_pending_external_evidence`, 282 ready checks, 8 pending checks,
   and 0 failed checks.
+- Phase 62 was committed locally as
+  `0db90e2 Add DeepSeek followup configuration helper`, but push to
+  `origin/main` is currently blocked by GitHub HTTPS connectivity. `git push`
+  returned `Recv failure: Connection was reset`; `git ls-remote origin main`
+  failed to connect to `github.com:443`; `Test-NetConnection github.com -Port
+  443` reported ping success but `TcpTestSucceeded=False`. Current local state
+  after the failed push is `main...origin/main [ahead 1]`.
+- Phase 63 added a push-recovery section to `research/runbook.md` with the
+  status, push, `ls-remote`, and GitHub 443 diagnostic commands to run on the
+  next resume.
 
 ## Current Evidence
 
