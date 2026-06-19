@@ -3,7 +3,7 @@
 Evidence boundary: this report audits the active user goal against local repository evidence. Pending checks are remaining requirements, not negative evidence and not local package failures.
 
 - Overall status: not_complete_pending_external_evidence
-- Ready checks: 61
+- Ready checks: 64
 - Pending checks: 8
 - Failed checks: 0
 
@@ -36,6 +36,8 @@ Evidence boundary: this report audits the active user goal against local reposit
 | deepseek_usage | ready | present | examples/usage/model_ablation_usage.md |
 | deepseek_followup_checker | ready | present | scripts/check_deepseek_followup.py |
 | deepseek_followup_handoff | ready | present | results/deepseek_followup_handoff/handoff.json |
+| external_closure_checker | ready | present | scripts/check_external_evidence_closure.py |
+| external_closure_report | ready | present | results/external_evidence_closure/closure.json |
 | failure_archive | ready | present | results/failure_cases/failure_case_archive.json |
 | human_fidelity_summary | ready | present | results/human_fidelity_packets/annotation_summary.json |
 | tokenizer_cost_proxy | ready | present | results/tables/context_cost_proxy_tokenizer.json |
@@ -79,4 +81,5 @@ Evidence boundary: this report audits the active user goal against local reposit
 | toolformer_live_transfer_responses_complete | ready | scored_rows=6/6 | results/live_transfer_prompts/evaluation.json; results/live_transfer_prompts/toolformer_v0/run_report.json |
 | live_cross_harness_responses_complete | ready | scored_rows=24; pending_rows=0; pending_tasks= | results/live_transfer_prompts/evaluation.json |
 | human_fidelity_annotation_complete | pending | status=pending; scored_rows=0; pending_rows=24 | results/human_fidelity_packets/annotation_summary.json |
+| external_evidence_closure_queue_ready | ready | overall=pending_external_evidence; failed=0; items=6 | results/external_evidence_closure/closure.json |
 | active_goal_complete | pending | pending_requirements=ai_scientist_v2_live_llm_smoke_complete,ai_scientist_v2_live_llm_run_complete,provider_billing_evidence_complete,aaai_final_submission_ready,deepseek_followup_response_complete,model_ablation_evaluation_complete,human_fidelity_annotation_complete | all goal checks |

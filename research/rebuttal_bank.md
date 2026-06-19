@@ -1,6 +1,6 @@
 # PaperToSkill Rebuttal Bank
 
-Date: 2026-06-19
+Date: 2026-06-20
 
 Use this file to answer likely reviewer objections without exceeding the current
 evidence boundary. This is a reviewer-response handoff, not new evidence.
@@ -72,7 +72,7 @@ human semantic review or real live-task success.
 Evidence to cite:
 
 - `paper/limitations.md`: heuristic metric limitation.
-- `results/reproducibility/package_report.md`: 244 ready checks, 8 pending
+- `results/reproducibility/package_report.md`: 251 ready checks, 8 pending
   checks, and 0 failed checks.
 - `results/human_fidelity_packets/`: prepared independent-review protocol.
 
@@ -188,10 +188,12 @@ prominent.
 
 Evidence to cite:
 
-- `results/reproducibility/goal_completion_report.md`: 61 ready checks,
+- `results/reproducibility/goal_completion_report.md`: 64 ready checks,
   8 pending checks, 0 failed checks.
-- `results/reproducibility/package_report.md`: 244 ready checks, 8 pending
+- `results/reproducibility/package_report.md`: 251 ready checks, 8 pending
   checks, 0 failed checks.
+- `results/external_evidence_closure/closure.md`: six local closure items for
+  the remaining external evidence.
 - `research/submission_checklist.md`: submission-review handoff checklist.
 
 Do not say:

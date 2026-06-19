@@ -72,6 +72,7 @@ class CheckGoalCompletionTest(unittest.TestCase):
             self.assertEqual("pending", statuses["deepseek_followup_response_complete"])
             self.assertEqual("ready", statuses["live_cross_harness_responses_complete"])
             self.assertEqual("pending", statuses["human_fidelity_annotation_complete"])
+            self.assertEqual("ready", statuses["external_evidence_closure_queue_ready"])
             self.assertTrue(output_md.exists())
 
     def test_current_report_build_has_expected_boundaries(self):
@@ -102,6 +103,8 @@ class CheckGoalCompletionTest(unittest.TestCase):
         self.assertEqual("ready", checks["aide_live_transfer_responses_complete"]["status"])
         self.assertIn("toolformer_live_transfer_responses_complete", checks)
         self.assertEqual("ready", checks["toolformer_live_transfer_responses_complete"]["status"])
+        self.assertIn("external_evidence_closure_queue_ready", checks)
+        self.assertEqual("ready", checks["external_evidence_closure_queue_ready"]["status"])
 
 
 if __name__ == "__main__":

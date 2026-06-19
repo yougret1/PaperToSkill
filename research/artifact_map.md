@@ -69,6 +69,7 @@
 | `research/run_logs/2026-06-19_phase48_ai_scientist_v2_smoke_provider_recheck.md` | AI-Scientist-v2 smoke provider recheck with HTTP 403 and 30-second timeout evidence | Created |
 | `research/run_logs/2026-06-19_phase49_ai_scientist_v2_live_run_handoff.md` | Local AI-Scientist-v2 full live/BFTS run handoff/preflight report and gate integration | Created |
 | `research/run_logs/2026-06-20_phase50_ai_scientist_v2_smoke_timeout_recheck.md` | AI-Scientist-v2 smoke recheck where all four Claude aliases timed out after 30 seconds | Created |
+| `research/run_logs/2026-06-20_phase51_external_evidence_closure_queue.md` | Local external-evidence closure queue and gate integration | Created |
 
 ## Paper Draft Package
 
@@ -180,6 +181,7 @@
 | `scripts/check_paper_claims.py` | Verifies paper-facing text avoids unsupported overclaims and includes required evidence boundaries | Created |
 | `scripts/check_submission_review.py` | Verifies review, rebuttal, and submission checklist handoff artifacts against current evidence | Created |
 | `scripts/check_goal_completion.py` | Audits the active user goal against local evidence and exposes remaining pending requirements | Created |
+| `scripts/check_external_evidence_closure.py` | Builds a local closure queue mapping pending external-evidence requirements to concrete next actions | Created |
 | `scripts/run_ai_scientist_v2_smoke.py` | Runs bounded AI-Scientist-v2 LLM-client smoke checks, writes redacted reports, clears stale responses on blocked attempts, prints status summary, and supports repeatable `--model-alias`, `--timeout-seconds`, and `--require-complete` | Created |
 | `scripts/check_ai_scientist_v2_live_run_handoff.py` | Builds a no-network handoff/preflight report for the pending full AI-Scientist-v2 live/BFTS run | Created |
 | `scripts/build_model_ablation_prompts.py` | Builds Claude/GPT-family/DeepSeek model-ablation prompt packets | Created |
@@ -210,6 +212,7 @@
 | `tests/test_check_deepseek_followup.py` | Smoke test for DeepSeek follow-up handoff states | Created |
 | `tests/test_live_transfer_execution.py` | Smoke tests for live-transfer runner skip behavior and saved-response scoring | Created |
 | `tests/test_check_goal_completion.py` | Smoke tests for active-goal completion checker and pending-evidence boundaries | Created |
+| `tests/test_check_external_evidence_closure.py` | Smoke tests for external-evidence closure queue coverage and completion-state behavior | Created |
 | `tests/test_check_submission_review.py` | Smoke tests for submission-review handoff drift checker | Created |
 | `tests/test_run_ai_scientist_v2_smoke.py` | Smoke tests for AI-Scientist-v2 LLM-client smoke success, redacted provider errors, stale-response cleanup, timeout reporting, and alias fallback | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |
@@ -311,6 +314,8 @@
 | `results/reproducibility/submission_review_report.json` | Machine-readable submission-review handoff freshness report | Created |
 | `results/reproducibility/goal_completion_report.md` | Human-readable active-goal completion report with pending evidence boundaries | Created |
 | `results/reproducibility/goal_completion_report.json` | Machine-readable active-goal completion report | Created |
+| `results/external_evidence_closure/closure.md` | Human-readable closure queue for pending external evidence | Created |
+| `results/external_evidence_closure/closure.json` | Machine-readable closure queue for pending external evidence | Created |
 | `results/ai_scientist_v2_smoke/run_report.md` | Human-readable bounded AI-Scientist-v2 LLM-client smoke report | Created |
 | `results/ai_scientist_v2_smoke/run_report.json` | Machine-readable bounded AI-Scientist-v2 LLM-client smoke report | Created |
 | `results/ai_scientist_v2_live_run_handoff/handoff.md` | Human-readable AI-Scientist-v2 full live-run handoff report | Created |

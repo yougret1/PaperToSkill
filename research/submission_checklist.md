@@ -1,6 +1,6 @@
 # PaperToSkill Submission Checklist
 
-Date: 2026-06-19
+Date: 2026-06-20
 
 Evidence boundary: this checklist prepares an AAAI submission-review handoff. It
 does not declare the paper submission-final, accepted, human-validated, or
@@ -14,8 +14,9 @@ complete with respect to pending external evidence.
 | Paper claims | Ready | `results/reproducibility/paper_claim_report.md` | Unsupported overclaim patterns are absent from paper-facing text. |
 | Paper tables | Ready | `results/reproducibility/paper_table_report.md` | AAAI tables match generated CSV result tables. |
 | Usage examples | Ready | `results/reproducibility/usage_example_report.md`: 53 ready, 0 failed | Local example files, DeepSeek handoff, and offline example chain are synchronized. |
-| Reproducibility package | Ready with pending external evidence | `results/reproducibility/package_report.md`: 244 ready, 8 pending, 0 failed | Local package is coherent; external evidence remains pending. |
-| Active goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 61 ready, 8 pending, 0 failed | The overall user goal remains open. |
+| Reproducibility package | Ready with pending external evidence | `results/reproducibility/package_report.md`: 251 ready, 8 pending, 0 failed | Local package is coherent; external evidence remains pending. |
+| Active goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 64 ready, 8 pending, 0 failed | The overall user goal remains open. |
+| External evidence closure queue | Ready as local queue | `results/external_evidence_closure/closure.md`: 3 ready, 0 pending, 0 failed | Pending evidence is mapped to next actions; evidence itself remains pending. |
 
 ## Evidence Ready To Use
 
@@ -27,6 +28,7 @@ complete with respect to pending external evidence.
 | Saved live-transfer responses | `results/live_transfer_prompts/evaluation.md`: 24 total, 24 scored, 0 pending, average normalized score 1.0 | Saved-response output-contract scoring is not human semantic fidelity or real live task success. |
 | Model ablation | `results/model_ablation_prompts/v0/evaluation.md`: 6 total, 4 scored, 2 pending | Claude Opus 4.8 and GPT-family are scored; DeepSeek remains pending. |
 | DeepSeek handoff | `results/deepseek_followup_handoff/handoff.md`: `pending_user_configuration`, 5 ready, 2 pending, 0 failed | Preflight only; no DeepSeek response has been collected. |
+| External closure queue | `results/external_evidence_closure/closure.md`: six pending-external-evidence items | Local queue only; not evidence completion. |
 | Context cost proxy | `results/tables/context_cost_proxy_tokenizer.md` | Local `o200k_base` input-token proxy, not provider bills. |
 | Model response cost proxy | `results/tables/model_response_cost_proxy.md` | Local output-token proxy over saved responses, not invoices. |
 | Failure archive | `results/failure_cases/failure_case_archive.md`: 27 cases | Provenance and limitation record, not an outcome study. |

@@ -533,7 +533,7 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` reports
-  `overall_status=ready_with_pending_external_evidence`, 244 ready checks, 8
+  `overall_status=ready_with_pending_external_evidence`, 251 ready checks, 8
   pending checks, and 0 failed checks.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
@@ -959,7 +959,7 @@
 
 - Experiment: make the active-goal completion audit machine-checkable.
 - Main result: `results/reproducibility/goal_completion_report.md` reports
-  `overall_status=not_complete_pending_external_evidence`, 61 ready checks, 8
+  `overall_status=not_complete_pending_external_evidence`, 64 ready checks, 8
   pending checks, and 0 failed checks.
 - Checks: durable memory, AI-Scientist-v2 dry-run evidence, PaperToSkill
   prototype and benchmark readiness, bounded AI-Scientist-v2 LLM-client smoke
@@ -981,6 +981,32 @@
 - Figure/table: `scripts/check_goal_completion.py`;
   `results/reproducibility/goal_completion_report.md`;
   `results/reproducibility/goal_completion_report.json`.
+
+## External Evidence Closure Queue
+
+- Experiment: map every pending external-evidence goal requirement to a
+  concrete local queue item and next action.
+- Main result: `results/external_evidence_closure/closure.md` reports
+  `overall_status=pending_external_evidence`, 3 ready checks, 0 pending checks,
+  and 0 failed checks.
+- Queue items: AI-Scientist-v2 smoke completion, AI-Scientist-v2 full
+  live/BFTS run, DeepSeek response collection and model-ablation completion,
+  human-fidelity annotation, provider billing and success-per-dollar evidence,
+  and AAAI submission decision.
+- Practical significance: pending external work is now centrally mapped and
+  machine-checkable, reducing the chance that one blocker disappears from the
+  runbook or completion audit.
+- Statistical evidence: none; this is a deterministic planning and gate
+  artifact.
+- Failure modes: the queue must be regenerated after any external evidence
+  changes, and it cannot substitute for the missing external evidence itself.
+- Limitations: it does not call providers, run BFTS, collect annotations,
+  collect bills, or approve submission.
+- Claim impact: supports saying the remaining closure path is auditable, not
+  that the remaining evidence is complete.
+- Figure/table: `scripts/check_external_evidence_closure.py`;
+  `results/external_evidence_closure/closure.md`;
+  `results/external_evidence_closure/closure.json`.
 
 ## Submission Review Handoff Gate
 

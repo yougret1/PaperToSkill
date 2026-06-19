@@ -1797,3 +1797,35 @@ Evidence boundary:
 - It does not complete the AI-Scientist-v2 smoke, run BFTS, prove live
   research-task success, resolve DeepSeek, collect human annotations, collect
   provider billing, or make the AAAI package submission-final.
+
+## 2026-06-20 Phase 51
+
+Actions:
+
+- Added `scripts/check_external_evidence_closure.py`.
+- Added `tests/test_check_external_evidence_closure.py`.
+- Generated `results/external_evidence_closure/closure.md` and
+  `results/external_evidence_closure/closure.json`.
+- Integrated the closure queue into the active-goal and reproducibility package
+  gates.
+- Added
+  `research/run_logs/2026-06-20_phase51_external_evidence_closure_queue.md`.
+
+Results:
+
+- `results/external_evidence_closure/closure.md` reports
+  `overall_status=pending_external_evidence`, with 3 ready checks, 0 pending
+  checks, and 0 failed checks.
+- The queue maps pending goal requirements to six next-action items:
+  AI-Scientist-v2 smoke completion, AI-Scientist-v2 full live/BFTS run,
+  DeepSeek response collection/model-ablation completion, human-fidelity
+  annotation, provider billing/success-per-dollar evidence, and the AAAI
+  submission decision.
+
+Evidence boundary:
+
+- Phase 51 makes the remaining external-evidence closure path local and
+  auditable.
+- It does not complete the AI-Scientist-v2 smoke, run BFTS, prove live
+  research-task success, resolve DeepSeek, collect human annotations, collect
+  provider billing, or make the AAAI package submission-final.

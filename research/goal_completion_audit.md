@@ -1,6 +1,6 @@
 # Goal Completion Audit
 
-Date: 2026-06-19
+Date: 2026-06-20
 
 Purpose: audit the active user goal against current repository evidence before
 claiming completion. This is a requirement-by-requirement gate, not a claim that
@@ -25,15 +25,23 @@ responses, human-fidelity annotation, stronger provider-billing or
 success-per-dollar evidence, and final submission decisions remain pending
 external or follow-up work. Phase 38 adds local output-token proxy accounting
 for saved model-ablation responses, but this is not realized provider billing.
+Phase 51 adds a local external-evidence closure queue that maps each remaining
+pending requirement to a concrete next action without claiming completion.
 
 Local package status: `results/reproducibility/package_report.md` reports
-`ready_with_pending_external_evidence`, 244 ready checks, 8 pending checks, and
+`ready_with_pending_external_evidence`, 251 ready checks, 8 pending checks, and
 0 failed checks.
 
 Machine-checkable goal status:
 `results/reproducibility/goal_completion_report.md` reports
-`not_complete_pending_external_evidence`, 61 ready checks, 8 pending checks,
+`not_complete_pending_external_evidence`, 64 ready checks, 8 pending checks,
 and 0 failed checks.
+
+External-evidence closure queue:
+`results/external_evidence_closure/closure.md` reports
+`pending_external_evidence`, 3 ready checks, 0 pending checks, and 0 failed
+checks. It covers all current pending goal requirements with six next-action
+items.
 
 ## Requirement Audit
 
@@ -57,6 +65,7 @@ and 0 failed checks.
 | Submission-review handoff. | `research/review_report.md`; `research/rebuttal_bank.md`; `research/submission_checklist.md`; `scripts/check_submission_review.py`; `results/reproducibility/submission_review_report.md`; goal/package checks `submission_review_handoff_ready` and `submission_review_report_ready` are ready. | Handoff ready; final submission pending | Use this handoff to decide whether to submit as a deterministic/offline paper or wait for pending external evidence. |
 | Final paper narrative. | `paper/draft.md`; `paper/outline.md`; `paper/claim_checklist.md`; `paper/limitations.md`; AAAI `.tex` draft. | Prepared, not final | Final paper requires live/human/model evidence decisions or explicit decision to submit as deterministic/offline system paper. |
 | Machine-checkable completion gate. | `scripts/check_goal_completion.py`; `results/reproducibility/goal_completion_report.md`; reproducibility checks `goal_completion_report_ready` and `goal_completion_core_checks_ready` are ready. | Complete as a gate; full goal still pending | Re-run the gate after any model, human-fidelity, provider-billing, or final-paper evidence changes. |
+| External evidence closure queue. | `scripts/check_external_evidence_closure.py`; `results/external_evidence_closure/closure.md`; goal/package checks `external_evidence_closure_queue_ready` and `external_evidence_closure_report_ready` are ready. | Complete as a local queue; evidence still pending | Work through the six queue items without treating queue readiness as evidence completion. |
 
 ## Current Blocking Evidence
 
@@ -113,6 +122,9 @@ and 0 failed checks.
   files, and completed model-ablation scoring.
 - `results/reproducibility/goal_completion_report.md`: active-goal
   requirements are pending and `active_goal_complete` remains pending.
+- `results/external_evidence_closure/closure.md`: all current pending goal
+  requirements are mapped to six next-action items; this is a local queue, not
+  evidence completion.
 - `results/reproducibility/aaai_package_report.md`: AAAI package gate is ready
   with 17 ready checks and 0 failed checks; this removes a local package
   uncertainty but not the external model/human/cost evidence blockers.

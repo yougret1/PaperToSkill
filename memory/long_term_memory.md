@@ -74,6 +74,9 @@ Current supported claims:
   launcher, seed idea, laptop-profile config, prior dry-run artifacts,
   environment variable names, and next full-run command are checked; provider
   smoke completion and full-run completion artifacts remain pending.
+- External evidence closure queue is ready as a local planning/checking
+  artifact: it maps all current pending goal requirements to six next-action
+  items without completing any external evidence.
 
 Current unsupported claims:
 
@@ -115,6 +118,8 @@ Use these as entry points instead of searching the whole repo first:
 - `scripts/check_submission_review.py`: submission-review handoff freshness
   gate.
 - `scripts/check_goal_completion.py`: active-goal completion gate.
+- `scripts/check_external_evidence_closure.py`: no-network closure queue for
+  pending external evidence and final-decision items.
 - `benchmarks/model_ablation_v0.json`: Claude/GPT-family/DeepSeek prompt spec.
 - `scripts/check_deepseek_followup.py`: local DeepSeek follow-up handoff and
   preflight report generator; no network calls.
@@ -132,12 +137,19 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 244 ready checks, 8 pending
+  reports `ready_with_pending_external_evidence`, 251 ready checks, 8 pending
   checks, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
-  reports `not_complete_pending_external_evidence`, 61 ready checks, 8 pending
+  reports `not_complete_pending_external_evidence`, 64 ready checks, 8 pending
   checks, and 0 failed checks.
+- External evidence closure queue:
+  `results/external_evidence_closure/closure.md`
+  reports `pending_external_evidence`, 3 ready checks, 0 pending checks, and 0
+  failed checks. The six queue items are AI-Scientist-v2 smoke completion,
+  AI-Scientist-v2 full live/BFTS run, DeepSeek/model-ablation completion,
+  human-fidelity annotation, provider billing/success-per-dollar evidence, and
+  AAAI submission decision.
 - AI-Scientist-v2 LLM-client smoke:
   `results/ai_scientist_v2_smoke/run_report.md`
   reports `blocked_by_provider_or_model_availability`, 5 ready checks, 2 pending
@@ -245,6 +257,7 @@ DeepSeek:
 | Paper tables | LaTeX table values could drift from CSV results. | `scripts/check_paper_tables.py` compares `paper/aaai/papertoskill_tables.tex` with generated CSVs. |
 | Paper claims | Draft/AAAI text could overclaim pending evidence. | `scripts/check_paper_claims.py` checks unsupported positive claims and required boundary statements. |
 | Goal completion | Narrative completion audit could stale. | `scripts/check_goal_completion.py` makes the active-goal status machine-checkable. |
+| External evidence closure | Pending requirements were spread across multiple reports and docs. | `scripts/check_external_evidence_closure.py` maps current pending goal requirements to six concrete queue items without claiming evidence completion. |
 | Model evidence state | GPT retry evidence was saved separately from the older Phase 36 failure report. | `scripts/check_goal_completion.py` reads both `run_report.json` and `gpt_retry_run_report.json` so historical GPT 502 evidence and current GPT-family success both remain visible. |
 | Output-token accounting | Cost section had input-token proxies but no saved-response output-token accounting. | `scripts/evaluate_model_response_costs.py` reports local output-token proxies for saved Claude/GPT-family responses while preserving the no-provider-billing boundary. |
 | AI-Scientist-v2 smoke boundary | AI-Scientist-v2 dry-run and live-transfer saved responses could be confused with a full live run. | `scripts/run_ai_scientist_v2_smoke.py` records bounded client smoke attempts with alias fallback and script-level timeout; current provider/model availability blocker keeps smoke completion and full run pending. |

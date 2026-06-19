@@ -455,6 +455,26 @@ Passing `--strict` only fails on local requirement
 failures; pending external evidence remains pending rather than a package
 failure.
 
+## External Evidence Closure Queue
+
+Build the local closure queue that maps pending goal requirements to concrete
+next actions:
+
+```powershell
+python scripts\check_external_evidence_closure.py --strict
+```
+
+Current Phase 51 status:
+`results/external_evidence_closure/closure.md` reports
+`overall_status=pending_external_evidence`, 3 ready checks, 0 pending checks,
+and 0 failed checks. The queue covers AI-Scientist-v2 smoke completion,
+AI-Scientist-v2 full live/BFTS run, DeepSeek response collection and
+model-ablation completion, human-fidelity annotation, provider billing and
+success-per-dollar evidence, and the AAAI submission decision.
+
+This queue is a local planning and checking artifact. It does not complete any
+of the external evidence items.
+
 ## AI-Scientist-v2 Dry Run
 
 From `D:\a_work\gitee\ai-scientist-v2`:

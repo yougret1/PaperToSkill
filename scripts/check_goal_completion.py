@@ -37,6 +37,8 @@ REQUIRED_FILES = {
     "deepseek_usage": "examples/usage/model_ablation_usage.md",
     "deepseek_followup_checker": "scripts/check_deepseek_followup.py",
     "deepseek_followup_handoff": "results/deepseek_followup_handoff/handoff.json",
+    "external_closure_checker": "scripts/check_external_evidence_closure.py",
+    "external_closure_report": "results/external_evidence_closure/closure.json",
     "failure_archive": "results/failure_cases/failure_case_archive.json",
     "human_fidelity_summary": "results/human_fidelity_packets/annotation_summary.json",
     "tokenizer_cost_proxy": "results/tables/context_cost_proxy_tokenizer.json",
@@ -457,6 +459,32 @@ def live_and_human_checks(root: Path) -> list[Check]:
     return checks
 
 
+def external_evidence_closure_checks(root: Path) -> list[Check]:
+    report = load_json(root / "results/external_evidence_closure/closure.json")
+    failed = [check for check in report.get("checks", []) if check.get("status") == "fail"]
+    covered = [
+        check
+        for check in report.get("checks", [])
+        if check.get("id") == "external_closure_goal_pending_items_covered"
+        and check.get("status") == "ready"
+    ]
+    status = (
+        "ready"
+        if report.get("overall_status") in {"pending_external_evidence", "complete"}
+        and not failed
+        and covered
+        else "fail"
+    )
+    return [
+        Check(
+            "external_evidence_closure_queue_ready",
+            status,
+            f"overall={report.get('overall_status')}; failed={len(failed)}; items={len(report.get('items', []))}",
+            "results/external_evidence_closure/closure.json",
+        )
+    ]
+
+
 def completion_check(checks: list[Check]) -> Check:
     failed = [check.id for check in checks if check.status == "fail"]
     pending = [check.id for check in checks if check.status == "pending"]
@@ -487,6 +515,7 @@ def build_report(root: Path) -> dict[str, Any]:
     checks.extend(paper_package_checks(root))
     checks.extend(model_ablation_checks(root))
     checks.extend(live_and_human_checks(root))
+    checks.extend(external_evidence_closure_checks(root))
     checks.append(completion_check(checks))
 
     status_counts = {"ready": 0, "pending": 0, "fail": 0}

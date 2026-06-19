@@ -7,73 +7,43 @@ Current date: 2026-06-20.
 
 ## Current Phase
 
-Phase 50 is complete and pushed: refreshed the bounded AI-Scientist-v2
-LLM-client smoke evidence after GitHub connectivity recovered. The smoke
-remains provider-blocked; this phase does not run BFTS or claim live-run
-success.
+Phase 51 is in progress: added a no-network external evidence closure queue
+that maps remaining pending goal requirements to concrete next actions. This
+phase must not call APIs, run BFTS, collect external evidence, or mark the goal
+complete.
 
-Latest pushed Phase 49 commits:
-`bc99a25 Add AI-Scientist-v2 live run handoff` and
-`491bfcb Record phase 49 push status in memory`, followed by
-`1c57d75 Record GitHub push blocker`. Push status: resolved on 2026-06-20;
-`git push origin main` advanced `origin/main` from `6ff4187` to `1c57d75`.
+Phase 51 changes currently local:
 
-Phase 50 evidence so far:
+- Added `scripts/check_external_evidence_closure.py`.
+- Added `tests/test_check_external_evidence_closure.py`.
+- Generated `results/external_evidence_closure/closure.{json,md}`.
+- Integrated the closure queue into `scripts/check_goal_completion.py` and
+  `scripts/check_reproducibility_package.py`.
+- Added `research/run_logs/2026-06-20_phase51_external_evidence_closure_queue.md`.
+- Updated artifact map, runbook, stage log, result cards, review/checklist,
+  goal audit, and memory references.
 
-- Re-ran `scripts/run_ai_scientist_v2_smoke.py` with shell-only credentials,
-  four Claude aliases, and `--timeout-seconds 30`.
-- `results/ai_scientist_v2_smoke/run_report.md` remains
-  `blocked_by_provider_or_model_availability`, with 5 ready checks, 2 pending
-  checks, and 0 failed checks.
-- `claude-opus-4-8`, `claude-opus-4.8`, `claude-opus-4-7`, and
-  `claude-opus-4-6` each timed out after 30 seconds waiting for provider
-  response.
-- No `results/ai_scientist_v2_smoke/response.md` file exists.
-- Latest pushed Phase 50 commits: `da704bc Refresh AI-Scientist-v2 smoke
-  timeout evidence` and `1b98a84 Record phase 50 push pending`.
-- Push status: resolved on 2026-06-20; `origin/main` now points at `1b98a84`.
+Phase 51 current reports:
 
-Phase 49 evidence so far:
+- External closure queue:
+  `results/external_evidence_closure/closure.md` reports
+  `pending_external_evidence`, 3 ready checks, 0 pending checks, and 0 failed
+  checks. Item statuses: 1 `pending_provider`, 1 `blocked_by_smoke`, 1
+  `pending_user_configuration`, 1 `pending_reviewers`, 1
+  `pending_billing_rows`, and 1 `pending_decision`.
+- Goal report:
+  `results/reproducibility/goal_completion_report.md` reports
+  `not_complete_pending_external_evidence`, 64 ready checks, 8 pending checks,
+  and 0 failed checks.
+- Package report:
+  `results/reproducibility/package_report.md` reports
+  `ready_with_pending_external_evidence`, 251 ready checks, 8 pending checks,
+  and 0 failed checks.
 
-- Added `scripts/check_ai_scientist_v2_live_run_handoff.py`.
-- Generated `results/ai_scientist_v2_live_run_handoff/handoff.{json,md}`.
-- Current handoff status is `blocked_by_provider_smoke`: 10 ready checks, 2
-  pending checks, and 0 failed checks.
-- Ready checks cover the AI-Scientist-v2 root, `launch_scientist_bfts.py`,
-  dry-run/skip flags, laptop-profile config, PaperToSkill seed idea, prior
-  dry-run artifacts, environment variable names, and next full-run command.
-- Pending checks cover the provider-blocked smoke and missing full-run
-  completion artifacts. No BFTS run was started by the checker.
-
-Phase 48 completed:
-
-- Re-ran `scripts/run_ai_scientist_v2_smoke.py` with four Claude aliases and
-  `--timeout-seconds 30`.
-- `results/ai_scientist_v2_smoke/run_report.md` remains
-  `blocked_by_provider_or_model_availability`: `claude-opus-4-8` returned HTTP
-  403 `All available accounts exhausted`; `claude-opus-4.8`,
-  `claude-opus-4-7`, and `claude-opus-4-6` timed out after 30 seconds waiting
-  for provider response.
-- No `results/ai_scientist_v2_smoke/response.md` file exists.
-- Added `research/run_logs/2026-06-19_phase48_ai_scientist_v2_smoke_provider_recheck.md`.
-- Updated review/checklist/runbook/memory/result-card references and the
-  submission-review freshness checker to track current smoke blocker terms.
-- Full verification passed before the commit, and the raw-key scan returned no
-  matches.
-
-Phase 47 completed:
-
-- Added `scripts/check_deepseek_followup.py`, which writes
-  `results/deepseek_followup_handoff/handoff.{json,md}` without making network
-  calls or reading API keys.
-- Current handoff status is `pending_user_configuration`: 5 ready checks, 2
-  pending checks, and 0 failed checks.
-- Added tests for the current placeholder state and a configured
-  `ready_to_run` DeepSeek state.
-- Integrated the handoff report into usage, goal, and package gates while
-  keeping DeepSeek response completion pending.
-- Full verification passed before the commit, and no raw API keys were found by
-  the repository scan.
+Latest pushed Phase 50 commits: `da704bc Refresh AI-Scientist-v2 smoke timeout
+evidence`, `1b98a84 Record phase 50 push pending`, and `6a1cbf8 Mark phase 50
+pushed in memory`. Push status: resolved on 2026-06-20; `origin/main` points at
+`6a1cbf8`.
 
 Latest smoke recheck:
 
@@ -121,17 +91,21 @@ and 0 failed checks. No `results/ai_scientist_v2_smoke/response.md` exists.
 - Submission-review handoff:
   `results/reproducibility/submission_review_report.md` reports ready, 15 ready
   checks, and 0 failed checks.
+- External evidence closure queue:
+  `results/external_evidence_closure/closure.md` reports
+  `pending_external_evidence`, 3 ready checks, 0 pending checks, and 0 failed
+  checks. It maps all current pending goal requirements to six queue items.
 - AI-Scientist-v2 live-run handoff:
   `results/ai_scientist_v2_live_run_handoff/handoff.md` reports
   `blocked_by_provider_smoke`, 10 ready checks, 2 pending checks, and 0 failed
   checks.
 - Goal report:
   `results/reproducibility/goal_completion_report.md` reports
-  `not_complete_pending_external_evidence`, 61 ready checks, 8 pending checks,
+  `not_complete_pending_external_evidence`, 64 ready checks, 8 pending checks,
   and 0 failed checks.
 - Package report:
   `results/reproducibility/package_report.md` reports
-  `ready_with_pending_external_evidence`, 244 ready checks, 8 pending checks,
+  `ready_with_pending_external_evidence`, 251 ready checks, 8 pending checks,
   and 0 failed checks.
 
 ## Boundaries To Preserve
@@ -149,7 +123,7 @@ Do not claim:
 - Saved-response output-contract scoring proves real live task success.
 - Submission-final or accepted AAAI paper.
 
-Supported after Phase 50:
+Supported after Phase 51:
 
 - AI-Scientist-v2 LLM-client smoke was attempted through local
   `ai_scientist.llm` with four Claude aliases:
@@ -164,33 +138,25 @@ Supported after Phase 50:
 - DeepSeek follow-up is locally preflighted: the slot, prompt rows, response
   paths, env names, and next commands are machine-checked, but alias
   configuration and response collection remain pending.
+- Remaining external evidence is now centrally mapped in a local closure queue:
+  AI-Scientist-v2 smoke completion, AI-Scientist-v2 full live/BFTS run,
+  DeepSeek response collection/model-ablation completion, human-fidelity
+  annotation, provider billing/success-per-dollar evidence, and AAAI submission
+  decision.
 
 ## Latest Verification
 
-Latest Phase 49 verification before commit `bc99a25`:
+Latest Phase 51 partial verification:
 
 ```powershell
-python scripts\check_ai_scientist_v2_live_run_handoff.py --strict
-python scripts\check_submission_review.py --strict
+python scripts\check_external_evidence_closure.py --strict
 python scripts\check_goal_completion.py --strict
 python scripts\check_reproducibility_package.py --strict
-python -m unittest tests.test_check_ai_scientist_v2_live_run_handoff tests.test_check_goal_completion tests.test_check_reproducibility_package tests.test_check_submission_review -v
-python -m unittest discover -s tests -v
-python scripts\check_submission_review.py --strict
-python scripts\check_deepseek_followup.py --strict
-python scripts\check_usage_examples.py --strict
-python scripts\check_ai_scientist_v2_live_run_handoff.py --strict
-python scripts\check_goal_completion.py --strict
-python scripts\check_reproducibility_package.py --strict
-python scripts\check_paper_claims.py --strict
-python scripts\check_aaai_package.py --strict
-python scripts\check_paper_tables.py --strict
-git diff --check
-rg -n "sk-[A-Za-z0-9]{20,}" .
+python -m unittest tests.test_check_external_evidence_closure tests.test_check_goal_completion -v
 ```
 
-All tests/checkers passed. `git diff --check` emitted only Windows LF-to-CRLF
-warnings. The raw-key scan returned no matches.
+These checks passed. Full verification, commit, push, and post-push memory
+update are still pending for Phase 51.
 
 ## Persistent Blockers
 
