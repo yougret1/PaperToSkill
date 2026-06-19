@@ -25,13 +25,15 @@ Phase 51 changes currently local:
 - Local commits:
   - `2031315 Add external evidence closure queue`.
   - `14caad7 Record phase 51 push blocker`.
+  - `ce0a5a6 Record phase 51 GitHub connectivity blocker`.
 - Push status: blocked. Multiple `git push origin main` attempts on 2026-06-20
   failed: first with `Recv failure: Connection was reset`, then with
   `Failed to connect to github.com port 443`. `git ls-remote origin HEAD` also
   failed on port 443. `Test-NetConnection github.com -Port 443` showed ping
-  succeeds but TCP 443 fails. Current branch is ahead of `origin/main` by 2
-  local commits. Retry push before starting Phase 52; if it succeeds, record a
-  memory-only pushed-status commit.
+  succeeds but TCP 443 fails. Current branch is ahead of `origin/main` by at
+  least 4 local commits; use `git status -sb` as the authoritative count.
+  Retry push before starting Phase 52; if it succeeds, record a memory-only
+  pushed-status commit.
 
 Phase 51 current reports:
 
@@ -156,17 +158,27 @@ Supported after Phase 51:
 
 ## Latest Verification
 
-Latest Phase 51 partial verification:
+Latest Phase 51 verification:
 
 ```powershell
+python -m unittest discover -s tests -v
+python scripts\check_submission_review.py --strict
+python scripts\check_deepseek_followup.py --strict
+python scripts\check_usage_examples.py --strict
 python scripts\check_external_evidence_closure.py --strict
+python scripts\check_ai_scientist_v2_live_run_handoff.py --strict
 python scripts\check_goal_completion.py --strict
 python scripts\check_reproducibility_package.py --strict
-python -m unittest tests.test_check_external_evidence_closure tests.test_check_goal_completion -v
+python scripts\check_paper_claims.py --strict
+python scripts\check_aaai_package.py --strict
+python scripts\check_paper_tables.py --strict
+git diff --check
+rg -n "sk-[A-Za-z0-9]{20,}" .
 ```
 
-All checks passed. Phase 51 is committed locally; remote push is pending due to
-the GitHub TCP 443 connectivity blocker above.
+All tests/checkers passed. `git diff --check` emitted only Windows LF-to-CRLF
+warnings. The raw-key scan returned no matches. Phase 51 is committed locally;
+remote push is pending due to the GitHub TCP 443 connectivity blocker above.
 
 ## Persistent Blockers
 
