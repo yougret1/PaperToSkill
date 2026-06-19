@@ -85,6 +85,7 @@
 | `research/run_logs/2026-06-20_phase64_remote_save_recovered.md` | Successful remote save of Phase 62/63 commits with note that GitHub HTTPS diagnostics remain intermittent | Created |
 | `research/run_logs/2026-06-20_phase65_direct_probe_recheck.md` | Fresh direct OpenAI-compatible provider recheck after remote-save recovery; Claude remains HTTP 503 and GPT remains HTTP 502 | Created |
 | `research/run_logs/2026-06-20_phase66_aaai_decision_record_helper.md` | Validated helper for generating the human AAAI submission-decision record without selecting a default option | Created |
+| `research/run_logs/2026-06-20_phase67_remote_save_after_decision_helper.md` | Successful remote save of the AAAI decision-record helper commit | Created |
 
 ## Paper Draft Package
 

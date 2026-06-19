@@ -2312,3 +2312,26 @@ Evidence boundary:
 - It does not select an AAAI submission decision, submit the paper, complete
   DeepSeek, complete AI-Scientist-v2 smoke/full live run, collect human
   annotation, or collect provider billing.
+
+## 2026-06-20 Phase 67
+
+Actions:
+
+- Pushed Phase 66 commit `4c02013 Add AAAI decision record helper` to
+  `origin/main`.
+- Updated short-term memory and artifact map with the remote-save status.
+- Added
+  `research/run_logs/2026-06-20_phase67_remote_save_after_decision_helper.md`.
+
+Results:
+
+- `git push origin main` succeeded:
+  `78c78ae..4c02013  main -> main`.
+- `git status -sb` reported `main...origin/main` after the push.
+- Latest pushed HEAD is `4c020132be895469441489371516e6d14af7d2ef`.
+
+Evidence boundary:
+
+- Phase 67 records remote-save status only.
+- It does not complete any pending external evidence or select the final AAAI
+  submission decision.

@@ -7,11 +7,10 @@ Current date: 2026-06-20.
 
 ## Current Phase
 
-Phase 66 is the current local phase. Phase 65 was committed as
-`78c78ae Refresh direct provider probe evidence` and pushed to `origin/main` on
-2026-06-20. Phase 66 adds a validated helper for generating the human AAAI
-submission-decision record, without selecting a default option or completing
-external evidence.
+Phase 67 is the current local phase. Phase 66 was committed as
+`4c02013 Add AAAI decision record helper` and pushed to `origin/main` on
+2026-06-20. Phase 67 records the successful Phase 66 remote save; no evidence
+status is promoted.
 
 Phase 62 objective:
 
@@ -133,6 +132,13 @@ Phase 66 evidence:
   reproducibility package checks to include the helper.
 - No `research/aaai_submission_decision.md` decision record was generated; the
   final AAAI submission decision remains pending a human research-lead choice.
+- Phase 66 was pushed to `origin/main` as
+  `4c020132be895469441489371516e6d14af7d2ef`.
+
+Phase 67 evidence:
+
+- `git status -sb` after the Phase 66 push reported `main...origin/main`.
+- Latest pushed HEAD is `4c020132be895469441489371516e6d14af7d2ef`.
 
 ## Current Evidence
 
