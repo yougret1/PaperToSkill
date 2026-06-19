@@ -73,6 +73,7 @@ class CheckReproducibilityPackageTest(unittest.TestCase):
             self.assertIn("ai_scientist_v2_live_run_handoff_report_ready", ready_ids)
             self.assertIn("ai_scientist_v2_live_run_handoff_core_checks_ready", ready_ids)
             self.assertIn("ai_scientist_v2_live_run_completion", pending_ids)
+            self.assertIn("deepseek_followup_configurer", ready_ids)
             self.assertIn("deepseek_followup_checker", ready_ids)
             self.assertIn("deepseek_followup_handoff_json", ready_ids)
             self.assertIn("deepseek_followup_handoff_md", ready_ids)

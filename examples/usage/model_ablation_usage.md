@@ -67,16 +67,21 @@ paths, and the exact follow-up commands. While the alias is still
 `deepseek-to-be-filled`, this report should remain
 `pending_user_configuration`.
 
-1. Edit `benchmarks/model_ablation_v0.json`.
-2. In `deepseek_followup_slot`, replace `deepseek-to-be-filled` with the exact
-   provider model alias.
-3. Set `auth_env` and `base_url_env` to the environment-variable names you will
-   use locally.
-4. Rebuild prompt packets so the prompt index records the concrete alias.
-5. Rerun `python scripts\check_deepseek_followup.py --strict`; the report
+1. Configure only non-secret slot metadata. Do not put raw API keys in the
+   benchmark file.
+
+```powershell
+python scripts\configure_deepseek_followup.py `
+  --model-alias <deepseek-model-alias> `
+  --auth-env DEEPSEEK_API_KEY `
+  --base-url-env DEEPSEEK_BASE_URL
+```
+
+2. Rebuild prompt packets so the prompt index records the concrete alias.
+3. Rerun `python scripts\check_deepseek_followup.py --strict`; the report
    should move from `pending_user_configuration` to `ready_to_run` until
    response files are saved.
-6. Set the DeepSeek environment variables locally and run:
+4. Set the DeepSeek environment variables locally and run:
 
 ```powershell
 python scripts\run_model_ablation_prompts.py `

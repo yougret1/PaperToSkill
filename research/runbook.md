@@ -283,12 +283,20 @@ Current Phase 43 status:
 errors, total billed USD 0, and success per dollar `n/a`. This is an auditable
 handoff for future real billing rows, not provider billing evidence.
 
-For DeepSeek follow-up, edit `deepseek_followup_slot` in
-`benchmarks/model_ablation_v0.json`, replacing `deepseek-to-be-filled` with the
-real model alias and setting concrete `auth_env` / `base_url_env` names. Rebuild
-the prompt packets, set those environment variables locally, and run the same
-runner with `--model-id deepseek_followup_slot`. The runner skips DeepSeek only
-while the placeholder alias remains unchanged.
+For DeepSeek follow-up, configure `deepseek_followup_slot` with the helper
+script so only non-secret metadata is written to
+`benchmarks/model_ablation_v0.json`:
+
+```powershell
+python scripts\configure_deepseek_followup.py `
+  --model-alias <deepseek-model-alias> `
+  --auth-env DEEPSEEK_API_KEY `
+  --base-url-env DEEPSEEK_BASE_URL
+```
+
+Then rebuild the prompt packets, set those environment variables locally, and
+run the same runner with `--model-id deepseek_followup_slot`. The runner skips
+DeepSeek only while the placeholder alias remains unchanged.
 
 Before and after editing the DeepSeek slot, generate the local handoff/preflight
 report:
@@ -297,11 +305,12 @@ report:
 python scripts\check_deepseek_followup.py --strict
 ```
 
-Current Phase 47 status:
+Current Phase 62 status:
 `results/deepseek_followup_handoff/handoff.md` reports
 `pending_user_configuration`, 5 ready checks, 2 pending checks, and 0 failed
-checks. This report lists the two DeepSeek prompt rows, expected response paths,
-and next commands. It does not call DeepSeek or complete the DeepSeek ablation.
+checks. This report lists the configuration helper, two DeepSeek prompt rows,
+expected response paths, and next commands. It does not call DeepSeek or
+complete the DeepSeek ablation.
 
 ## Live-Transfer Response Collection
 

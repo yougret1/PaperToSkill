@@ -65,6 +65,12 @@ def deepseek_prompts(index: dict[str, Any]) -> list[dict[str, Any]]:
 
 def command_block(task_path: Path, index_path: Path) -> list[str]:
     return [
+        "python scripts\\configure_deepseek_followup.py `",
+        f"  --task {task_path} `",
+        "  --model-alias <deepseek-model-alias> `",
+        "  --auth-env DEEPSEEK_API_KEY `",
+        "  --base-url-env DEEPSEEK_BASE_URL",
+        "",
         "python scripts\\build_model_ablation_prompts.py `",
         f"  --task {task_path} `",
         "  --output-dir results\\model_ablation_prompts\\v0",
@@ -80,6 +86,8 @@ def command_block(task_path: Path, index_path: Path) -> list[str]:
         f"  --index {index_path} `",
         "  --output-json results\\model_ablation_prompts\\v0\\evaluation.json `",
         "  --output-md results\\model_ablation_prompts\\v0\\evaluation.md",
+        "",
+        "python scripts\\check_deepseek_followup.py --strict",
     ]
 
 
@@ -233,6 +241,13 @@ def write_markdown(path: Path, report: dict[str, Any]) -> None:
         f"- Ready checks: {report['status_counts'].get('ready', 0)}",
         f"- Pending checks: {report['status_counts'].get('pending', 0)}",
         f"- Failed checks: {report['status_counts'].get('fail', 0)}",
+        "",
+        "## Configuration Helper",
+        "",
+        "`scripts/configure_deepseek_followup.py` updates only non-secret slot "
+        "metadata: model alias, auth environment-variable name, base-URL "
+        "environment-variable name, and provider status. Keep raw keys in local "
+        "environment variables and never commit them.",
         "",
         "## Prompt Rows",
         "",

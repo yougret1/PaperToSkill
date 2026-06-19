@@ -39,6 +39,10 @@ class CheckDeepSeekFollowupTest(unittest.TestCase):
             self.assertEqual("ready", statuses["deepseek_followup_slot_present"])
             self.assertEqual("pending", statuses["deepseek_followup_alias_configured"])
             self.assertEqual("pending", statuses["deepseek_followup_responses_saved"])
+            next_commands = "\n".join(report["next_commands"])
+            self.assertIn("configure_deepseek_followup.py", next_commands)
+            self.assertIn("--model-alias <deepseek-model-alias>", next_commands)
+            self.assertIn("check_deepseek_followup.py --strict", next_commands)
             self.assertTrue(output_md.exists())
 
     def test_configured_slot_is_ready_to_run_until_responses_exist(self):
@@ -93,6 +97,7 @@ class CheckDeepSeekFollowupTest(unittest.TestCase):
             statuses = {check["id"]: check["status"] for check in report["checks"]}
             self.assertEqual("ready", statuses["deepseek_followup_alias_configured"])
             self.assertEqual("pending", statuses["deepseek_followup_responses_saved"])
+            self.assertIn("configure_deepseek_followup.py", "\n".join(report["next_commands"]))
 
 
 if __name__ == "__main__":

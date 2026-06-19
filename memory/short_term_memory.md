@@ -7,18 +7,18 @@ Current date: 2026-06-20.
 
 ## Current Phase
 
-Phase 61 is the current local phase. Phase 60 was committed as
-`a9fdbad Record post-push provider recheck` and pushed to `origin/main` on
-2026-06-20. Phase 61 improves the AI-Scientist-v2 smoke-completion execution
-packet so direct provider probes run before wrapper smoke attempts; external
-evidence remains pending.
+Phase 62 is the current local phase. Phase 61 was committed as
+`92beb7f Add direct probe preflight to smoke packet` and pushed to
+`origin/main` on 2026-06-20. Phase 62 adds a no-secret DeepSeek configuration
+helper and wires it into the DeepSeek handoff/usage/reproducibility path;
+external evidence remains pending.
 
-Phase 61 objective:
+Phase 62 objective:
 
-- Make the smoke-completion execution packet use Phase 59/60 direct provider
-  probes as a preflight before AI-Scientist-v2 wrapper smoke.
-- Preserve evidence boundaries: provider diagnostics and execution handoffs are
-  not smoke completion, BFTS completion, or live research-task evidence.
+- Make it easier for the user to add DeepSeek later without manually editing
+  JSON or committing secrets.
+- Preserve evidence boundaries: configuring a DeepSeek slot is not collecting
+  responses, scoring DeepSeek rows, or completing model ablations.
 
 Phase 59 evidence:
 
@@ -68,6 +68,24 @@ Phase 61 evidence:
   for direct-probe-first ordering and alias coverage.
 - Added
   `research/run_logs/2026-06-20_phase61_direct_probe_packet_preflight.md`.
+
+Phase 62 evidence:
+
+- Added `scripts/configure_deepseek_followup.py`, which configures only
+  non-secret DeepSeek slot metadata: model alias, auth env name, base-url env
+  name, and provider status.
+- The helper rejects raw API-key-like strings and requires uppercase
+  environment-variable names for credential locations.
+- Added `tests/test_configure_deepseek_followup.py`.
+- Updated `scripts/check_deepseek_followup.py`,
+  `scripts/check_external_evidence_packets.py`,
+  `examples/usage/model_ablation_usage.md`, `research/runbook.md`, and package
+  gates so future DeepSeek setup uses the helper.
+- Added
+  `research/run_logs/2026-06-20_phase62_deepseek_configuration_helper.md`.
+- Current refreshed reproducibility package report is
+  `ready_with_pending_external_evidence`, 282 ready checks, 8 pending checks,
+  and 0 failed checks.
 
 ## Current Evidence
 

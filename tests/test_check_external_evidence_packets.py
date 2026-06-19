@@ -63,6 +63,18 @@ class CheckExternalEvidencePacketsTest(unittest.TestCase):
             self.assertIn("  --model-alias claude-opus-4.8 `", run_commands)
             self.assertIn("  --model-alias gpt-5.5 `", run_commands)
 
+            deepseek_packet = next(
+                packet for packet in report["packets"] if packet["id"] == "deepseek_followup_responses"
+            )
+            deepseek_text = json.dumps(deepseek_packet)
+            self.assertIn("scripts/configure_deepseek_followup.py", deepseek_text)
+            self.assertIn("--model-alias <deepseek-model-alias>", deepseek_text)
+            self.assertIn("without storing secrets", deepseek_text)
+            self.assertEqual(
+                "python scripts\\configure_deepseek_followup.py --model-alias <deepseek-model-alias> --auth-env DEEPSEEK_API_KEY --base-url-env DEEPSEEK_BASE_URL",
+                deepseek_packet["run_commands"][0],
+            )
+
     def test_missing_closure_report_fails(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

@@ -116,6 +116,7 @@ CORE_FILES = {
     "usage_example_checker": "scripts/check_usage_examples.py",
     "usage_example_report_json": "results/reproducibility/usage_example_report.json",
     "usage_example_report_md": "results/reproducibility/usage_example_report.md",
+    "deepseek_followup_configurer": "scripts/configure_deepseek_followup.py",
     "deepseek_followup_checker": "scripts/check_deepseek_followup.py",
     "deepseek_followup_handoff_json": "results/deepseek_followup_handoff/handoff.json",
     "deepseek_followup_handoff_md": "results/deepseek_followup_handoff/handoff.md",

@@ -80,6 +80,7 @@
 | `research/run_logs/2026-06-20_phase59_openai_direct_probe.md` | Direct OpenAI-compatible endpoint probe showing Claude HTTP 503 and GPT HTTP 502 provider blockers outside `ai_scientist.llm` | Created |
 | `research/run_logs/2026-06-20_phase60_post_push_provider_recheck.md` | Post-push provider recheck confirming direct Claude/GPT-family blockers persist after Phase 59 remote save | Created |
 | `research/run_logs/2026-06-20_phase61_direct_probe_packet_preflight.md` | External-evidence packet update that runs direct provider probes before AI-Scientist-v2 wrapper smoke | Created |
+| `research/run_logs/2026-06-20_phase62_deepseek_configuration_helper.md` | DeepSeek follow-up configuration helper and handoff integration without storing secrets | Created |
 
 ## Paper Draft Package
 
@@ -202,6 +203,7 @@
 | `scripts/evaluate_model_ablation_responses.py` | Scores saved model-ablation response files and keeps missing rows pending | Created |
 | `scripts/evaluate_model_response_costs.py` | Estimates local output-token proxies for saved model-ablation response files | Created |
 | `scripts/check_deepseek_followup.py` | Builds a local DeepSeek follow-up handoff/preflight report without network calls | Created |
+| `scripts/configure_deepseek_followup.py` | Configures the DeepSeek follow-up slot with non-secret alias/env metadata | Created |
 | `scripts/summarize_provider_billing_evidence.py` | Summarizes provider-billing evidence rows and keeps blank rows pending | Created |
 | `tests/test_papertoskill_extract.py` | Smoke test for extractor CLI and source map | Created |
 | `tests/test_papertoskill_note_from_text.py` | Smoke test for automatic text-to-note scaffold | Created |
@@ -223,6 +225,7 @@
 | `tests/test_model_ablation_execution.py` | Smoke tests for model-ablation runner alias selection, evaluator scoring, and skip behavior | Created |
 | `tests/test_evaluate_model_response_costs.py` | Smoke test for saved-response output-token proxy evaluator | Created |
 | `tests/test_check_deepseek_followup.py` | Smoke test for DeepSeek follow-up handoff states | Created |
+| `tests/test_configure_deepseek_followup.py` | Smoke test for the no-secret DeepSeek configuration helper | Created |
 | `tests/test_live_transfer_execution.py` | Smoke tests for live-transfer runner skip behavior and saved-response scoring | Created |
 | `tests/test_check_goal_completion.py` | Smoke tests for active-goal completion checker and pending-evidence boundaries | Created |
 | `tests/test_check_external_evidence_closure.py` | Smoke tests for external-evidence closure queue coverage and completion-state behavior | Created |

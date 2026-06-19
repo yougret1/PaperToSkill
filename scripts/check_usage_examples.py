@@ -44,6 +44,7 @@ MODEL_ABLATION_INPUTS = {
     "model_ablation_builder": "scripts/build_model_ablation_prompts.py",
     "model_ablation_runner": "scripts/run_model_ablation_prompts.py",
     "model_ablation_evaluator": "scripts/evaluate_model_ablation_responses.py",
+    "deepseek_followup_configurer": "scripts/configure_deepseek_followup.py",
     "deepseek_followup_checker": "scripts/check_deepseek_followup.py",
     "deepseek_followup_handoff": "results/deepseek_followup_handoff/handoff.json",
 }
@@ -113,6 +114,10 @@ def markdown_mentions_checks(root: Path) -> list[Check]:
         "model_ablation_usage_mentions_deepseek_handoff": (
             "examples/usage/model_ablation_usage.md",
             "check_deepseek_followup.py",
+        ),
+        "model_ablation_usage_mentions_deepseek_configurer": (
+            "examples/usage/model_ablation_usage.md",
+            "configure_deepseek_followup.py",
         ),
     }
     for check_id, (raw_path, needle) in expected_mentions.items():
@@ -233,8 +238,9 @@ def deepseek_handoff_checks(root: Path) -> list[Check]:
             "ready"
             if "run_model_ablation_prompts.py" in next_commands
             and "evaluate_model_ablation_responses.py" in next_commands
+            and "configure_deepseek_followup.py" in next_commands
             else "fail",
-            "runner and evaluator commands present",
+            "configurer, runner, and evaluator commands present",
             evidence_path(root, handoff_path),
         ),
     ]

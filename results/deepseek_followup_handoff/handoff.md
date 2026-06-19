@@ -10,6 +10,10 @@ Evidence boundary: this is a local handoff/preflight report. It does not call De
 - Pending checks: 2
 - Failed checks: 0
 
+## Configuration Helper
+
+`scripts/configure_deepseek_followup.py` updates only non-secret slot metadata: model alias, auth environment-variable name, base-URL environment-variable name, and provider status. Keep raw keys in local environment variables and never commit them.
+
 ## Prompt Rows
 
 | Case | Prompt | Expected Response |
@@ -20,6 +24,12 @@ Evidence boundary: this is a local handoff/preflight report. It does not call De
 ## Next Commands
 
 ```powershell
+python scripts\configure_deepseek_followup.py `
+  --task benchmarks\model_ablation_v0.json `
+  --model-alias <deepseek-model-alias> `
+  --auth-env DEEPSEEK_API_KEY `
+  --base-url-env DEEPSEEK_BASE_URL
+
 python scripts\build_model_ablation_prompts.py `
   --task benchmarks\model_ablation_v0.json `
   --output-dir results\model_ablation_prompts\v0
@@ -35,6 +45,8 @@ python scripts\evaluate_model_ablation_responses.py `
   --index results\model_ablation_prompts\v0\index.json `
   --output-json results\model_ablation_prompts\v0\evaluation.json `
   --output-md results\model_ablation_prompts\v0\evaluation.md
+
+python scripts\check_deepseek_followup.py --strict
 ```
 
 ## Checks

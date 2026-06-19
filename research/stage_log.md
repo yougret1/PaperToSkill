@@ -2166,3 +2166,35 @@ Evidence boundary:
 - It does not complete the AI-Scientist-v2 smoke, run BFTS, prove live
   research-task success, resolve DeepSeek, collect human annotations, collect
   provider billing, or make the AAAI package submission-final.
+
+## 2026-06-20 Phase 62
+
+Actions:
+
+- Added `scripts/configure_deepseek_followup.py`, a no-secret helper for
+  configuring `deepseek_followup_slot` with model alias and environment
+  variable names.
+- Added `tests/test_configure_deepseek_followup.py`.
+- Updated `scripts/check_deepseek_followup.py` so the handoff report includes
+  the configuration helper before prompt building, running, scoring, and
+  rechecking.
+- Updated `scripts/check_external_evidence_packets.py`,
+  `examples/usage/model_ablation_usage.md`, `research/runbook.md`, and the
+  usage/reproducibility gates to reference the helper.
+- Added
+  `research/run_logs/2026-06-20_phase62_deepseek_configuration_helper.md`.
+
+Results:
+
+- The DeepSeek handoff now tells users to run
+  `scripts/configure_deepseek_followup.py` instead of manually editing JSON.
+- The helper rejects raw API-key-like values and requires uppercase environment
+  variable names for credential locations.
+- The DeepSeek slot remains `pending_user_configuration` until the user supplies
+  a concrete alias and local environment variables.
+
+Evidence boundary:
+
+- Phase 62 prepares DeepSeek configuration only.
+- It does not call DeepSeek, save DeepSeek responses, complete model ablations,
+  collect provider billing, or make the AAAI package submission-final.

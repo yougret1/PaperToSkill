@@ -120,21 +120,27 @@ PACKET_DETAILS: dict[str, dict[str, Any]] = {
     },
     "deepseek_followup_responses": {
         "owner": "Execution/Ops",
+        "use_validation_commands_as_run_commands": True,
         "inputs": [
+            "scripts/configure_deepseek_followup.py",
             "benchmarks/model_ablation_v0.json",
             "results/deepseek_followup_handoff/handoff.json",
             "results/model_ablation_prompts/v0/index.json",
         ],
         "setup": [
-            "Replace the deepseek-to-be-filled alias with a real DeepSeek model alias.",
+            "Use scripts/configure_deepseek_followup.py to replace the deepseek-to-be-filled alias with a real DeepSeek model alias without storing secrets.",
             "Set concrete DeepSeek base-url and API-key environment variable names locally.",
             "Rebuild prompt packets before running the DeepSeek slot.",
         ],
         "validation_commands": [
+            "python scripts\\configure_deepseek_followup.py --model-alias <deepseek-model-alias> --auth-env DEEPSEEK_API_KEY --base-url-env DEEPSEEK_BASE_URL",
+            "python scripts\\build_model_ablation_prompts.py --task benchmarks\\model_ablation_v0.json --output-dir results\\model_ablation_prompts\\v0",
+            "python scripts\\run_model_ablation_prompts.py --task benchmarks\\model_ablation_v0.json --index results\\model_ablation_prompts\\v0\\index.json --output-json results\\model_ablation_prompts\\v0\\deepseek_run_report.json --output-md results\\model_ablation_prompts\\v0\\deepseek_run_report.md --model-id deepseek_followup_slot",
             "python scripts\\check_deepseek_followup.py --strict",
             "python scripts\\evaluate_model_ablation_responses.py --index results\\model_ablation_prompts\\v0\\index.json --output-json results\\model_ablation_prompts\\v0\\evaluation.json --output-md results\\model_ablation_prompts\\v0\\evaluation.md",
         ],
         "completion_criteria": [
+            "DeepSeek slot is configured with a concrete non-placeholder alias and non-secret environment variable names.",
             "Both DeepSeek expected_response_path files exist.",
             "results/deepseek_followup_handoff/handoff.json reports responses_present.",
             "results/model_ablation_prompts/v0/evaluation.json reports pending_rows=0 and scored_rows=6.",

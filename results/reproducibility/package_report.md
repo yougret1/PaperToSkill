@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 281
+- Ready checks: 282
 - Pending checks: 8
 - Failed checks: 0
 
@@ -67,6 +67,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | usage_example_checker | ready | present | scripts/check_usage_examples.py |
 | usage_example_report_json | ready | present | results/reproducibility/usage_example_report.json |
 | usage_example_report_md | ready | present | results/reproducibility/usage_example_report.md |
+| deepseek_followup_configurer | ready | present | scripts/configure_deepseek_followup.py |
 | deepseek_followup_checker | ready | present | scripts/check_deepseek_followup.py |
 | deepseek_followup_handoff_json | ready | present | results/deepseek_followup_handoff/handoff.json |
 | deepseek_followup_handoff_md | ready | present | results/deepseek_followup_handoff/handoff.md |
@@ -226,7 +227,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | provider_billing_summary_valid | ready | errors=0 | results\provider_billing_evidence\billing_summary.json |
 | provider_billing_evidence_handoff_ready | ready | template_rows=6; summary_rows=6 | results/provider_billing_evidence/billing_template.csv; results/provider_billing_evidence/billing_summary.json |
 | provider_billing_evidence_complete | pending | status=pending; measured_rows=0; pending_rows=6 | results\provider_billing_evidence\billing_summary.json |
-| usage_example_report_ready | ready | overall=ready; counts={'ready': 53, 'fail': 0} | results\reproducibility\usage_example_report.json |
+| usage_example_report_ready | ready | overall=ready; counts={'ready': 55, 'fail': 0} | results\reproducibility\usage_example_report.json |
 | usage_example_core_checks_ready | ready | core checks ready | results\reproducibility\usage_example_report.json |
 | deepseek_followup_handoff_report_ready | ready | overall=pending_user_configuration; failed=0 | results\deepseek_followup_handoff\handoff.json |
 | deepseek_followup_handoff_core_checks_ready | ready | core handoff checks ready | results\deepseek_followup_handoff\handoff.json |

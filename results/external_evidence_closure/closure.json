@@ -99,6 +99,12 @@
       "evidence": "results/deepseek_followup_handoff/handoff.json; results/model_ablation_prompts/v0/evaluation.json",
       "next_action": "User supplies DeepSeek alias/env vars, then run and score the two DeepSeek response rows.",
       "next_commands": [
+        "python scripts\\configure_deepseek_followup.py `",
+        "  --task benchmarks\\model_ablation_v0.json `",
+        "  --model-alias <deepseek-model-alias> `",
+        "  --auth-env DEEPSEEK_API_KEY `",
+        "  --base-url-env DEEPSEEK_BASE_URL",
+        "",
         "python scripts\\build_model_ablation_prompts.py `",
         "  --task benchmarks\\model_ablation_v0.json `",
         "  --output-dir results\\model_ablation_prompts\\v0",
@@ -113,7 +119,9 @@
         "python scripts\\evaluate_model_ablation_responses.py `",
         "  --index results\\model_ablation_prompts\\v0\\index.json `",
         "  --output-json results\\model_ablation_prompts\\v0\\evaluation.json `",
-        "  --output-md results\\model_ablation_prompts\\v0\\evaluation.md"
+        "  --output-md results\\model_ablation_prompts\\v0\\evaluation.md",
+        "",
+        "python scripts\\check_deepseek_followup.py --strict"
       ]
     },
     {

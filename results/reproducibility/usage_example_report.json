@@ -3,7 +3,7 @@
   "evidence_boundary": "Checks local usage-example files, input artifacts, prompt/response slots, an offline auto-note-to-skill example chain, and a local PDF-input pipeline smoke run. It does not execute live model calls or score model responses.",
   "overall_status": "ready",
   "status_counts": {
-    "ready": 53,
+    "ready": 55,
     "fail": 0
   },
   "checks": [
@@ -134,6 +134,12 @@
       "evidence": "scripts/evaluate_model_ablation_responses.py"
     },
     {
+      "id": "deepseek_followup_configurer",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "scripts/configure_deepseek_followup.py"
+    },
+    {
       "id": "deepseek_followup_checker",
       "status": "ready",
       "detail": "present",
@@ -194,6 +200,12 @@
       "evidence": "examples/usage/model_ablation_usage.md"
     },
     {
+      "id": "model_ablation_usage_mentions_deepseek_configurer",
+      "status": "ready",
+      "detail": "mentions configure_deepseek_followup.py",
+      "evidence": "examples/usage/model_ablation_usage.md"
+    },
+    {
       "id": "usage_model_ablation_prompt_grid",
       "status": "ready",
       "detail": "prompt_packets=6",
@@ -250,7 +262,7 @@
     {
       "id": "usage_deepseek_followup_next_commands",
       "status": "ready",
-      "detail": "runner and evaluator commands present",
+      "detail": "configurer, runner, and evaluator commands present",
       "evidence": "results/deepseek_followup_handoff/handoff.json"
     },
     {
