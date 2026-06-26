@@ -53,14 +53,22 @@ class CheckExternalEvidencePacketsTest(unittest.TestCase):
             self.assertIn("scripts/run_openai_compatible_direct_probe.py", smoke_text)
             self.assertIn("results\\\\openai_compatible_direct_probe\\\\claude_family\\\\run_report.json", smoke_text)
             self.assertIn("results\\\\openai_compatible_direct_probe\\\\gpt_family\\\\run_report.json", smoke_text)
-            self.assertIn("Run the direct OpenAI-compatible probe first", smoke_text)
-            self.assertIn("At least one direct OpenAI-compatible probe report is complete", smoke_text)
+            self.assertIn("Run the protocol-specific direct provider probe first", smoke_text)
+            self.assertIn("At least one protocol-specific direct provider probe report is complete", smoke_text)
             run_commands = smoke_packet["run_commands"]
             first_direct = run_commands.index("# Claude-family direct endpoint preflight")
             first_smoke = run_commands.index("# Claude-family credential profile")
             self.assertLess(first_direct, first_smoke)
+            self.assertIn(
+                "python scripts\\run_openai_compatible_direct_probe.py --wire-api anthropic_messages --strict --require-complete --timeout-seconds 30 --max-tokens 128 `",
+                run_commands,
+            )
+            self.assertIn(
+                "python scripts\\run_openai_compatible_direct_probe.py --wire-api openai_responses --strict --require-complete --timeout-seconds 60 --max-tokens 128 `",
+                run_commands,
+            )
             self.assertIn("  --model-alias claude-opus-4-8 `", run_commands)
-            self.assertIn("  --model-alias claude-opus-4.8 `", run_commands)
+            self.assertNotIn("  --model-alias claude-opus-4.8 `", run_commands)
             self.assertIn("  --model-alias gpt-5.5 `", run_commands)
 
             deepseek_packet = next(

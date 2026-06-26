@@ -1,8 +1,9 @@
-# OpenAI-Compatible Direct Probe Report
+# Direct Provider Probe Report
 
-Evidence boundary: this direct endpoint diagnostic bypasses `ai_scientist.llm`; it does not complete the AI-Scientist-v2 smoke or any BFTS/live research run.
+Evidence boundary: this direct provider diagnostic bypasses `ai_scientist.llm`; it does not complete the AI-Scientist-v2 smoke or any BFTS/live research run.
 
 - Overall status: blocked_by_provider_or_model_availability
+- Wire API: openai_responses
 - Model: gpt-5.5
 - Attempted models: gpt-5.5, gpt-5.4
 - Base URL env: AI_SCIENTIST_OPENAI_BASE_URL

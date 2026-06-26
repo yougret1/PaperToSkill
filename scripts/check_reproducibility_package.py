@@ -931,25 +931,33 @@ def openai_compatible_direct_probe_checks(root: Path) -> list[Check]:
         has_require_complete = "--require-complete" in runner_text and "def exit_code(" in runner_text
         has_alias_fallback = "--model-alias" in runner_text and "attempted_models" in runner_text
         has_max_tokens = "--max-tokens" in runner_text and "max_tokens" in runner_text
+        has_wire_api = "--wire-api" in runner_text and "anthropic_messages" in runner_text and "openai_responses" in runner_text
         checks.append(
             Check(
                 "openai_direct_probe_cli_ready",
                 "ready"
-                if has_status_summary and has_require_complete and has_alias_fallback and has_max_tokens
+                if has_status_summary and has_require_complete and has_alias_fallback and has_max_tokens and has_wire_api
                 else "fail",
                 (
                     f"status_summary={has_status_summary}; "
                     f"require_complete={has_require_complete}; "
                     f"alias_fallback={has_alias_fallback}; "
-                    f"max_tokens={has_max_tokens}"
+                    f"max_tokens={has_max_tokens}; "
+                    f"wire_api={has_wire_api}"
                 ),
                 str(runner_path.relative_to(root)),
             )
         )
 
     profile_reports = {
-        "claude_family": root / "results/openai_compatible_direct_probe/claude_family/run_report.json",
-        "gpt_family": root / "results/openai_compatible_direct_probe/gpt_family/run_report.json",
+        "claude_family": (
+            root / "results/openai_compatible_direct_probe/claude_family/run_report.json",
+            "anthropic_messages",
+        ),
+        "gpt_family": (
+            root / "results/openai_compatible_direct_probe/gpt_family/run_report.json",
+            "openai_responses",
+        ),
     }
     allowed_statuses = {
         "complete",
@@ -963,17 +971,23 @@ def openai_compatible_direct_probe_checks(root: Path) -> list[Check]:
         "direct_probe_marker_ai_scientist_v2",
         "direct_probe_marker_paper_to_skill",
     }
-    for profile, report_path in profile_reports.items():
+    for profile, (report_path, expected_wire_api) in profile_reports.items():
         if not report_path.exists():
             continue
         report = load_json(report_path)
         overall = report.get("overall_status")
         counts = report.get("status_counts", {})
+        wire_api = report.get("wire_api", "openai_chat_completions")
+        wire_api_matches = wire_api == expected_wire_api
         checks.append(
             Check(
                 f"openai_direct_probe_{profile}_report_ready",
-                "ready" if overall in allowed_statuses else "fail",
-                f"overall={overall}; counts={counts}; attempted={len(report.get('attempted_models', []))}",
+                "ready" if overall in allowed_statuses and wire_api_matches else "fail",
+                (
+                    f"overall={overall}; counts={counts}; "
+                    f"attempted={len(report.get('attempted_models', []))}; "
+                    f"wire_api={wire_api}; expected_wire_api={expected_wire_api}"
+                ),
                 str(report_path.relative_to(root)),
             )
         )

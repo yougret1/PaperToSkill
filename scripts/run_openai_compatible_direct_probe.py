@@ -1,10 +1,10 @@
 #!/usr/bin/env python
-"""Run a direct OpenAI-compatible endpoint probe.
+"""Run a direct provider endpoint probe.
 
 This diagnostic bypasses the local ai-scientist-v2 LLM wrapper and calls the
-configured OpenAI-compatible `/chat/completions` endpoint directly. It uses the
-same tiny marker contract as the AI-Scientist-v2 smoke test, but it does not
-prove that the AI-Scientist-v2 client path or a full BFTS run works.
+configured provider endpoint directly. It uses the same tiny marker contract as
+the AI-Scientist-v2 smoke test, but it does not prove that the AI-Scientist-v2
+client path or a full BFTS run works.
 """
 
 from __future__ import annotations
@@ -23,6 +23,7 @@ from typing import Any
 
 SECRET_PATTERN = re.compile(r"sk-[A-Za-z0-9]{20,}")
 REQUIRED_MARKERS = ("PAPERTOSKILL_SMOKE_OK", "ai-scientist-v2", "paper-to-skill")
+WIRE_APIS = ("openai_chat_completions", "openai_responses", "anthropic_messages")
 
 
 @dataclass
@@ -49,17 +50,31 @@ def endpoint(base_url: str, suffix: str) -> str:
     return base_url.rstrip("/") + "/" + suffix.lstrip("/")
 
 
+def wire_endpoint(base_url: str, wire_api: str) -> str:
+    base = base_url.rstrip("/")
+    if wire_api == "anthropic_messages":
+        suffix = "messages" if base.endswith("/v1") else "v1/messages"
+        return endpoint(base_url, suffix)
+    if wire_api == "openai_responses":
+        return endpoint(base_url, "responses")
+    return endpoint(base_url, "chat/completions")
+
+
 def request_json(
     url: str,
     api_key: str,
     body: dict[str, Any],
     timeout_seconds: float,
+    *,
+    extra_headers: dict[str, str] | None = None,
 ) -> tuple[int, dict[str, Any]]:
     data = json.dumps(body).encode("utf-8")
     headers = {
         "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json",
     }
+    if extra_headers:
+        headers.update(extra_headers)
     request = urllib.request.Request(url, data=data, headers=headers, method="POST")
     try:
         with urllib.request.urlopen(request, timeout=timeout_seconds) as response:
@@ -78,6 +93,13 @@ def request_json(
 
 
 def extract_content(response: dict[str, Any]) -> str:
+    if isinstance(response.get("content"), list):
+        parts = []
+        for item in response["content"]:
+            if isinstance(item, dict) and item.get("text") is not None:
+                parts.append(str(item["text"]))
+        if parts:
+            return "\n".join(parts)
     choices = response.get("choices", [])
     if choices and isinstance(choices[0], dict):
         message = choices[0].get("message", {})
@@ -87,7 +109,58 @@ def extract_content(response: dict[str, Any]) -> str:
             return str(choices[0]["text"])
     if response.get("output_text") is not None:
         return str(response["output_text"])
+    output = response.get("output", [])
+    if isinstance(output, list):
+        parts = []
+        for item in output:
+            if not isinstance(item, dict):
+                continue
+            for content in item.get("content", []):
+                if isinstance(content, dict) and content.get("text") is not None:
+                    parts.append(str(content["text"]))
+        if parts:
+            return "\n".join(parts)
     return ""
+
+
+def build_wire_request(args: argparse.Namespace, model: str, base_url: str) -> tuple[str, dict[str, Any], dict[str, str]]:
+    if args.wire_api == "openai_responses":
+        prompt = f"{args.system_message}\n\n{args.prompt}".strip()
+        return (
+            wire_endpoint(base_url, args.wire_api),
+            {
+                "model": model,
+                "input": prompt,
+                "max_output_tokens": args.max_tokens,
+            },
+            {},
+        )
+    if args.wire_api == "anthropic_messages":
+        return (
+            wire_endpoint(base_url, args.wire_api),
+            {
+                "model": model,
+                "system": args.system_message,
+                "max_tokens": args.max_tokens,
+                "messages": [
+                    {"role": "user", "content": args.prompt},
+                ],
+            },
+            {"anthropic-version": args.anthropic_version},
+        )
+    return (
+        wire_endpoint(base_url, args.wire_api),
+        {
+            "model": model,
+            "messages": [
+                {"role": "system", "content": args.system_message},
+                {"role": "user", "content": args.prompt},
+            ],
+            "temperature": 0,
+            "max_tokens": args.max_tokens,
+        },
+        {},
+    )
 
 
 def response_contract_checks(response_text: str, output_path: Path) -> list[Check]:
@@ -117,6 +190,7 @@ def build_report(
     response_text: str | None,
     started_at: int,
     completed_at: int,
+    wire_api: str,
     max_tokens: int,
     timeout_seconds: float,
     error: str | None = None,
@@ -174,12 +248,13 @@ def build_report(
     return {
         "schema_version": "0.1",
         "evidence_boundary": (
-            "Direct OpenAI-compatible endpoint diagnostic. A complete report proves "
+            "Direct provider endpoint diagnostic. A complete report proves "
             "the configured endpoint can return the tiny marker-contract response "
             "without using ai_scientist.llm. It does not complete the AI-Scientist-v2 "
             "LLM-client smoke, BFTS, or a live research task."
         ),
         "model": model,
+        "wire_api": wire_api,
         "attempted_models": attempted_models,
         "base_url_env": base_url_env,
         "base_url": base_url or "",
@@ -196,21 +271,14 @@ def build_report(
 
 
 def run_model_attempt(args: argparse.Namespace, model: str, base_url: str, api_key: str) -> tuple[str | None, str | None, int | None]:
-    body = {
-        "model": model,
-        "messages": [
-            {"role": "system", "content": args.system_message},
-            {"role": "user", "content": args.prompt},
-        ],
-        "temperature": 0,
-        "max_tokens": args.max_tokens,
-    }
+    request_url, body, extra_headers = build_wire_request(args, model, base_url)
     try:
         status, response = request_json(
-            endpoint(base_url, "chat/completions"),
+            request_url,
             api_key,
             body,
             args.timeout_seconds,
+            extra_headers=extra_headers,
         )
         content = extract_content(response)
         if not content:
@@ -262,6 +330,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         response_text=response_text,
         started_at=started_at,
         completed_at=int(time.time()),
+        wire_api=args.wire_api,
         max_tokens=args.max_tokens,
         timeout_seconds=args.timeout_seconds,
         error=error,
@@ -275,13 +344,14 @@ def write_json(path: Path, report: dict[str, Any]) -> None:
 
 def write_markdown(path: Path, report: dict[str, Any]) -> None:
     lines = [
-        "# OpenAI-Compatible Direct Probe Report",
+        "# Direct Provider Probe Report",
         "",
-        "Evidence boundary: this direct endpoint diagnostic bypasses "
+        "Evidence boundary: this direct provider diagnostic bypasses "
         "`ai_scientist.llm`; it does not complete the AI-Scientist-v2 smoke "
         "or any BFTS/live research run.",
         "",
         f"- Overall status: {report['overall_status']}",
+        f"- Wire API: {report['wire_api']}",
         f"- Model: {report['model']}",
         f"- Attempted models: {', '.join(attempt.get('model', '') for attempt in report.get('attempted_models', []))}",
         f"- Base URL env: {report['base_url_env']}",
@@ -330,8 +400,18 @@ def exit_code(report: dict[str, Any], *, strict: bool, require_complete: bool) -
 def main() -> int:
     root = Path(__file__).resolve().parents[1]
     default_output_dir = root / "results" / "openai_compatible_direct_probe"
-    parser = argparse.ArgumentParser(description="Run a direct OpenAI-compatible endpoint probe.")
+    parser = argparse.ArgumentParser(description="Run a direct provider endpoint probe.")
     parser.add_argument("--model", default="claude-opus-4-8")
+    parser.add_argument(
+        "--wire-api",
+        choices=WIRE_APIS,
+        default="openai_chat_completions",
+        help=(
+            "Provider request protocol. Use openai_responses for GPT-family "
+            "Responses endpoints and anthropic_messages for Claude-family Messages endpoints."
+        ),
+    )
+    parser.add_argument("--anthropic-version", default="2023-06-01")
     parser.add_argument(
         "--model-alias",
         dest="model_aliases",
@@ -347,7 +427,7 @@ def main() -> int:
     parser.add_argument(
         "--system-message",
         default=(
-            "You are a direct OpenAI-compatible endpoint probe. Reply concisely "
+            "You are a direct provider endpoint probe. Reply concisely "
             "and follow the exact marker contract."
         ),
     )

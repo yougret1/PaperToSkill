@@ -27,6 +27,8 @@ class OpenAICompatibleDirectProbeTest(unittest.TestCase):
             "auth_env": "MISSING_KEY",
             "base_url": "https://example.test/v1",
             "api_key": "test-key",
+            "wire_api": "openai_chat_completions",
+            "anthropic_version": "2023-06-01",
             "timeout_seconds": 1,
             "max_tokens": 128,
             "system_message": "system",
@@ -40,11 +42,12 @@ class OpenAICompatibleDirectProbeTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             tmp_path = Path(tmp)
 
-            def fake_request_json(url, api_key, body, timeout_seconds):
+            def fake_request_json(url, api_key, body, timeout_seconds, **kwargs):
                 self.assertEqual("https://example.test/v1/chat/completions", url)
                 self.assertEqual("test-key", api_key)
                 self.assertEqual("claude-opus-4-8", body["model"])
                 self.assertEqual(128, body["max_tokens"])
+                self.assertEqual({}, kwargs["extra_headers"])
                 return 200, {
                     "choices": [
                         {
@@ -72,7 +75,7 @@ class OpenAICompatibleDirectProbeTest(unittest.TestCase):
             tmp_path = Path(tmp)
             fake_secret = "sk-" + "a" * 24
 
-            def fake_request_json(url, api_key, body, timeout_seconds):
+            def fake_request_json(url, api_key, body, timeout_seconds, **kwargs):
                 raise RuntimeError(f"bad key {fake_secret}")
 
             response_path = tmp_path / "response.md"
@@ -103,7 +106,7 @@ class OpenAICompatibleDirectProbeTest(unittest.TestCase):
             tmp_path = Path(tmp)
             calls = []
 
-            def fake_request_json(url, api_key, body, timeout_seconds):
+            def fake_request_json(url, api_key, body, timeout_seconds, **kwargs):
                 calls.append(body["model"])
                 if body["model"] == "claude-opus-4-8":
                     raise RuntimeError("capacity failure")
@@ -128,6 +131,65 @@ class OpenAICompatibleDirectProbeTest(unittest.TestCase):
             self.assertEqual("complete", report["overall_status"])
             self.assertEqual(["claude-opus-4-8", "claude-opus-4-7"], calls)
             self.assertEqual(["blocked", "success"], [item["status"] for item in report["attempted_models"]])
+
+    def test_openai_responses_wire_api_uses_responses_shape(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+
+            def fake_request_json(url, api_key, body, timeout_seconds, **kwargs):
+                self.assertEqual("https://example.test/v1/responses", url)
+                self.assertEqual("gpt-5.5", body["model"])
+                self.assertIn("system", body["input"])
+                self.assertIn("prompt", body["input"])
+                self.assertEqual(128, body["max_output_tokens"])
+                self.assertEqual({}, kwargs["extra_headers"])
+                return 200, {
+                    "output_text": "PAPERTOSKILL_SMOKE_OK from ai-scientist-v2 for paper-to-skill."
+                }
+
+            probe.request_json = fake_request_json
+            report = probe.run(
+                self.args(
+                    tmp_path,
+                    model="gpt-5.5",
+                    wire_api="openai_responses",
+                )
+            )
+
+            self.assertEqual("complete", report["overall_status"])
+            self.assertEqual("openai_responses", report["wire_api"])
+
+    def test_anthropic_messages_wire_api_uses_messages_shape(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+
+            def fake_request_json(url, api_key, body, timeout_seconds, **kwargs):
+                self.assertEqual("https://example.test/v1/messages", url)
+                self.assertEqual("claude-opus-4-8", body["model"])
+                self.assertEqual("system", body["system"])
+                self.assertEqual("prompt", body["messages"][0]["content"])
+                self.assertEqual(128, body["max_tokens"])
+                self.assertEqual({"anthropic-version": "2023-06-01"}, kwargs["extra_headers"])
+                return 200, {
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "PAPERTOSKILL_SMOKE_OK from ai-scientist-v2 for paper-to-skill.",
+                        }
+                    ]
+                }
+
+            probe.request_json = fake_request_json
+            report = probe.run(
+                self.args(
+                    tmp_path,
+                    base_url="https://example.test",
+                    wire_api="anthropic_messages",
+                )
+            )
+
+            self.assertEqual("complete", report["overall_status"])
+            self.assertEqual("anthropic_messages", report["wire_api"])
 
 
 if __name__ == "__main__":

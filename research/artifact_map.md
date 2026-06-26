@@ -88,6 +88,7 @@
 | `research/run_logs/2026-06-20_phase67_remote_save_after_decision_helper.md` | Successful remote save of the AAAI decision-record helper commit | Created |
 | `research/run_logs/2026-06-20_phase68_memory_anchor_refresh.md` | Memory and runbook anchor refresh after Phase 67 remote save | Created |
 | `research/run_logs/2026-06-20_phase69_aaai_decision_packet_helper_sync.md` | External-evidence AAAI decision packet synced with the validated decision-record helper | Created |
+| `research/run_logs/2026-06-26_phase70_protocol_specific_direct_probe.md` | Protocol-specific direct provider probe update for Claude Messages and GPT Responses diagnostics | Created |
 
 ## Paper Draft Package
 
@@ -204,7 +205,7 @@
 | `scripts/check_aaai_submission_decision.py` | Builds a local AAAI submission-decision preflight with submit-now and wait-for-evidence options while leaving the human decision pending | Created |
 | `scripts/generate_aaai_submission_decision.py` | Writes a validated human AAAI submission-decision record only after an explicit option, owner, date, claim boundary, and evidence policy are provided | Created |
 | `scripts/run_ai_scientist_v2_smoke.py` | Runs bounded AI-Scientist-v2 LLM-client smoke checks, writes redacted reports, clears stale responses on blocked attempts, prints status summary, and supports repeatable `--model-alias`, `--timeout-seconds`, and `--require-complete` | Created |
-| `scripts/run_openai_compatible_direct_probe.py` | Runs a direct OpenAI-compatible marker-contract probe outside `ai_scientist.llm` for provider diagnosis | Created |
+| `scripts/run_openai_compatible_direct_probe.py` | Runs a protocol-specific direct marker-contract probe outside `ai_scientist.llm` for provider diagnosis, including Claude Messages and GPT Responses modes | Created |
 | `scripts/check_ai_scientist_v2_live_run_handoff.py` | Builds a no-network handoff/preflight report for the pending full AI-Scientist-v2 live/BFTS run | Created |
 | `scripts/build_model_ablation_prompts.py` | Builds Claude/GPT-family/DeepSeek model-ablation prompt packets | Created |
 | `scripts/run_model_ablation_prompts.py` | Runs model-ablation prompt packets against OpenAI-compatible APIs with redacted reports | Created |

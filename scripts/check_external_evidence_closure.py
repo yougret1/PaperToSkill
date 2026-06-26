@@ -147,7 +147,6 @@ def build_items(reports: dict[str, dict[str, Any]]) -> list[QueueItem]:
                 "# Claude-family credential profile",
                 "python scripts\\run_ai_scientist_v2_smoke.py --strict --require-complete --timeout-seconds 30 --max-tokens 128 `",
                 "  --model-alias claude-opus-4-8 `",
-                "  --model-alias claude-opus-4.8 `",
                 "  --model-alias claude-opus-4-7 `",
                 "  --model-alias claude-opus-4-6",
                 "# GPT-family credential profile",

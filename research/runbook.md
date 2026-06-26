@@ -85,59 +85,82 @@ environment before long experiments.
 
 ## LLM Endpoint
 
-Use environment variables rather than tracked config files:
+Use environment variables rather than tracked config files. Current
+`coderxiaoc.com` routing is protocol-specific:
+
+- Claude-family direct probes use Anthropic Messages at
+  `https://coderxiaoc.com/v1/messages`.
+- GPT-family direct probes use OpenAI Responses at
+  `https://coderxiaoc.com/v1/responses`.
+- The legacy AI-Scientist-v2 wrapper smoke still exercises the local
+  `ai_scientist.llm` OpenAI-compatible client path, so keep its status separate
+  from the protocol-specific direct probes.
 
 ```powershell
-$env:AI_SCIENTIST_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
-$env:AI_SCIENTIST_OPENAI_API_KEY = "<set locally>"
+$env:AI_SCIENTIST_OPENAI_BASE_URL = "https://coderxiaoc.com"
+$env:AI_SCIENTIST_OPENAI_API_KEY = "<set Claude-family token locally>"
 $env:AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE = "1"
 
 $env:PAPERTOSKILL_GPT_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
 $env:PAPERTOSKILL_GPT_OPENAI_API_KEY = "<set locally>"
 ```
 
-Previously advertised Claude model ID from `/v1/models`:
+Current Claude Messages aliases:
 
 ```text
 claude-opus-4-8
+claude-opus-4-7
+claude-opus-4-6
 ```
 
-The user also requested `claude-opus-4.8`, `claude-opus-4-7`, and
-`claude-opus-4-6`. The GPT-family profile should be checked with the separate
-`PAPERTOSKILL_GPT_*` environment variables and is expected by the user to list
+The dotted `claude-opus-4.8` spelling appeared in older attempts, but the
+current direct-provider and handoff commands use the hyphenated model names
+above. The GPT-family profile should be checked with the separate
+`PAPERTOSKILL_GPT_*` environment variables and is expected by the user to use
 aliases such as `gpt-5.5` and `gpt-5.4`.
 
 ## Connectivity Smoke Test
 
+Claude Messages test:
+
 ```powershell
 $headers = @{ Authorization = "Bearer $env:AI_SCIENTIST_OPENAI_API_KEY" }
-Invoke-RestMethod `
-  -Uri "$env:AI_SCIENTIST_OPENAI_BASE_URL/models" `
-  -Method Get `
-  -Headers $headers
-```
-
-Chat completion test:
-
-```powershell
+$headers["anthropic-version"] = "2023-06-01"
 $body = @{
   model = "claude-opus-4-8"
   messages = @(@{ role = "user"; content = "Reply exactly: PaperToSkill API OK" })
-  max_tokens = 20
-  temperature = 0
+  max_tokens = 32
 } | ConvertTo-Json -Depth 6
 
 Invoke-RestMethod `
-  -Uri "$env:AI_SCIENTIST_OPENAI_BASE_URL/chat/completions" `
+  -Uri "$env:AI_SCIENTIST_OPENAI_BASE_URL/v1/messages" `
   -Method Post `
   -Headers $headers `
   -ContentType "application/json" `
   -Body $body
 ```
 
-Earlier chat completion checks reached the server but failed due to exhausted
-provider accounts. Recheck with the current env profile before making any
-availability claim.
+GPT Responses test:
+
+```powershell
+$headers = @{ Authorization = "Bearer $env:PAPERTOSKILL_GPT_OPENAI_API_KEY" }
+$body = @{
+  model = "gpt-5.5"
+  input = "Reply exactly: PaperToSkill API OK"
+  max_output_tokens = 32
+} | ConvertTo-Json -Depth 6
+
+Invoke-RestMethod `
+  -Uri "$env:PAPERTOSKILL_GPT_OPENAI_BASE_URL/responses" `
+  -Method Post `
+  -Headers $headers `
+  -ContentType "application/json" `
+  -Body $body
+```
+
+Earlier OpenAI-compatible chat-completion checks reached the server but failed
+due to exhausted or unavailable provider accounts. Recheck with the current
+protocol-specific env profile before making any availability claim.
 
 ## AI-Scientist-v2 LLM-Client Smoke
 
@@ -163,9 +186,11 @@ python scripts\run_ai_scientist_v2_smoke.py --strict --require-complete
 To try the known Claude alias variants in one bounded tiny-marker run:
 
 ```powershell
+$env:AI_SCIENTIST_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
+$env:AI_SCIENTIST_OPENAI_API_KEY = "<set Claude-family OpenAI-compatible key locally>"
+$env:AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE = "1"
 python scripts\run_ai_scientist_v2_smoke.py --strict --require-complete --timeout-seconds 30 --max-tokens 128 `
   --model-alias claude-opus-4-8 `
-  --model-alias claude-opus-4.8 `
   --model-alias claude-opus-4-7 `
   --model-alias claude-opus-4-6
 ```
@@ -187,24 +212,22 @@ Current AI-Scientist-v2 smoke status:
 `results/ai_scientist_v2_smoke/run_report.md` reports
 `overall_status=blocked_by_provider_or_model_availability`, `max_tokens=128`,
 5 ready checks, 2 pending checks, and 0 failed checks. The latest capped
-Claude-family retry tried `claude-opus-4-8`, `claude-opus-4.8`,
-`claude-opus-4-7`, and `claude-opus-4-6`; all four aliases timed out after 30
-seconds waiting for provider response, so no response file was produced. The
-immediately preceding capped GPT-family retry tried `gpt-5.5` and `gpt-5.4`;
-both timed out after 45 seconds. This is bounded client-availability smoke
-evidence, not a BFTS run or live research-task success.
+Claude-family retry used the older OpenAI-compatible wrapper path and timed out
+for its alias set; no response file was produced. The immediately preceding
+capped GPT-family retry tried `gpt-5.5` and `gpt-5.4`; both timed out after 45
+seconds. This is bounded client-availability smoke evidence, not a BFTS run or
+live research-task success.
 
-## OpenAI-Compatible Direct Provider Probe
+## Protocol-Specific Direct Provider Probe
 
 If the AI-Scientist-v2 smoke remains blocked, run the direct endpoint probe to
 distinguish provider availability from the local `ai_scientist.llm` wrapper:
 
 ```powershell
-$env:AI_SCIENTIST_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
-$env:AI_SCIENTIST_OPENAI_API_KEY = "<set Claude-family key locally>"
-python scripts\run_openai_compatible_direct_probe.py --strict --require-complete --timeout-seconds 30 --max-tokens 128 `
+$env:AI_SCIENTIST_OPENAI_BASE_URL = "https://coderxiaoc.com"
+$env:AI_SCIENTIST_OPENAI_API_KEY = "<set Claude-family token locally>"
+python scripts\run_openai_compatible_direct_probe.py --wire-api anthropic_messages --strict --require-complete --timeout-seconds 30 --max-tokens 128 `
   --model-alias claude-opus-4-8 `
-  --model-alias claude-opus-4.8 `
   --model-alias claude-opus-4-7 `
   --model-alias claude-opus-4-6 `
   --output-json results\openai_compatible_direct_probe\claude_family\run_report.json `
@@ -215,7 +238,7 @@ python scripts\run_openai_compatible_direct_probe.py --strict --require-complete
 ```powershell
 $env:AI_SCIENTIST_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
 $env:AI_SCIENTIST_OPENAI_API_KEY = "<set GPT-family key locally>"
-python scripts\run_openai_compatible_direct_probe.py --strict --require-complete --timeout-seconds 60 --max-tokens 128 `
+python scripts\run_openai_compatible_direct_probe.py --wire-api openai_responses --strict --require-complete --timeout-seconds 60 --max-tokens 128 `
   --model-alias gpt-5.5 `
   --model-alias gpt-5.4 `
   --output-json results\openai_compatible_direct_probe\gpt_family\run_report.json `
@@ -223,13 +246,15 @@ python scripts\run_openai_compatible_direct_probe.py --strict --require-complete
   --response-output results\openai_compatible_direct_probe\gpt_family\response.md
 ```
 
-Current Phase 59 direct-probe status:
+Current Phase 70 direct-probe status:
 `results/openai_compatible_direct_probe/claude_family/run_report.md` reports
-HTTP 503 `No available accounts` for all four Claude-family aliases, and
-`results/openai_compatible_direct_probe/gpt_family/run_report.md` reports HTTP
-502 `Upstream access forbidden` for `gpt-5.5` and `gpt-5.4`. This diagnostic
-bypasses `ai_scientist.llm`, so it clarifies the provider blocker but does not
-complete the AI-Scientist-v2 smoke or any BFTS/live research run.
+`wire_api=anthropic_messages`, attempted `claude-opus-4-8`,
+`claude-opus-4-7`, and `claude-opus-4-6`, and is still blocked by HTTP 502
+`Upstream service temporarily unavailable`. The GPT-family report uses
+`wire_api=openai_responses`, attempted `gpt-5.5` and `gpt-5.4`, and is still
+blocked by HTTP 502 `Upstream access forbidden`. This diagnostic bypasses
+`ai_scientist.llm`, so it clarifies the provider blocker but does not complete
+the AI-Scientist-v2 smoke or any BFTS/live research run.
 
 ## Model-Ablation Prompt Packets
 

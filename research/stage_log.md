@@ -2406,3 +2406,49 @@ Evidence boundary:
 - It does not generate `research/aaai_submission_decision.md`, select an AAAI
   submission option, submit the paper, or complete any pending external
   evidence.
+
+## 2026-06-26 Phase 70
+
+Actions:
+
+- Inspected local Claude Desktop and CC Switch configuration to identify the
+  normal Claude request shape.
+- Updated `scripts/run_openai_compatible_direct_probe.py` from a fixed
+  `/chat/completions` diagnostic into a protocol-aware direct provider probe.
+  It now supports `openai_chat_completions`, `openai_responses`, and
+  `anthropic_messages` wire APIs.
+- Updated external-evidence closure and packet commands so current direct
+  probes use Anthropic Messages for Claude-family models and OpenAI Responses
+  for GPT-family models.
+- Removed the older dotted Claude alias from current direct-probe and wrapper
+  smoke handoff commands; historical reports still preserve the older attempts.
+- Refreshed direct provider probe reports for Claude and GPT with shell-only
+  credentials.
+- Updated `research/runbook.md`, long-term memory, and short-term memory with
+  the protocol-specific routing and current blocker state.
+- Added
+  `research/run_logs/2026-06-26_phase70_protocol_specific_direct_probe.md`.
+
+Results:
+
+- Claude Desktop / CC Switch evidence indicates Claude direct requests should
+  use `POST https://coderxiaoc.com/v1/messages`, `Authorization: Bearer ...`,
+  and `anthropic-version: 2023-06-01`.
+- `results/openai_compatible_direct_probe/claude_family/run_report.md` now
+  records `wire_api=anthropic_messages`; `claude-opus-4-8`,
+  `claude-opus-4-7`, and `claude-opus-4-6` all returned HTTP 502
+  `Upstream service temporarily unavailable`.
+- `results/openai_compatible_direct_probe/gpt_family/run_report.md` now records
+  `wire_api=openai_responses`; `gpt-5.5` and `gpt-5.4` returned HTTP 502
+  `Upstream access forbidden`.
+- Focused tests for direct probe, external-evidence closure, external-evidence
+  packets, and reproducibility package passed.
+
+Evidence boundary:
+
+- Phase 70 corrects the direct-provider diagnostic protocol and updates
+  handoff commands.
+- The refreshed direct probes still did not produce a marker-contract response.
+- AI-Scientist-v2 LLM-client smoke, full live/BFTS run, DeepSeek follow-up,
+  human annotation, provider billing, and final AAAI submission readiness remain
+  pending.

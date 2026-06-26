@@ -68,11 +68,16 @@ Current supported claims:
   availability remains blocked. Earlier evidence included HTTP 403
   `All available accounts exhausted` and repeated Claude/GPT-family timeouts.
   Phase 58 added a 128-token cap for the tiny marker-contract smoke; both
-  GPT-family and Claude-family capped retries still timed out. Phase 59 added
-  a direct OpenAI-compatible endpoint probe that bypasses `ai_scientist.llm`;
-  direct Claude-family calls returned HTTP 503 `No available accounts`, and
-  direct GPT-family calls returned HTTP 502 `Upstream access forbidden`. This
-  is not smoke completion or BFTS success.
+  GPT-family and Claude-family capped retries still timed out. Phase 70 made
+  the direct provider probe protocol-aware: Claude-family diagnostics use
+  Anthropic Messages (`wire_api=anthropic_messages`) at
+  `https://coderxiaoc.com/v1/messages`, while GPT-family diagnostics use
+  OpenAI Responses (`wire_api=openai_responses`) at
+  `https://coderxiaoc.com/v1/responses`. Fresh protocol-specific direct probes
+  still did not return a marker-contract response: Claude aliases returned HTTP
+  502 `Upstream service temporarily unavailable`, and GPT aliases returned HTTP
+  502 `Upstream access forbidden`. This is not smoke completion or BFTS
+  success.
 - AI-Scientist-v2 full live-run handoff is ready as a local preflight: the
   launcher, seed idea, laptop-profile config, prior dry-run artifacts,
   environment variable names, and next full-run command are checked; provider
@@ -190,11 +195,14 @@ Use these as entry points instead of searching the whole repo first:
   checks, and 0 failed checks after the latest 128-token-capped Claude-family
   retry timed out for `claude-opus-4-8`, `claude-opus-4.8`,
   `claude-opus-4-7`, and `claude-opus-4-6`.
-- OpenAI-compatible direct provider probes:
+- Protocol-specific direct provider probes:
   `results/openai_compatible_direct_probe/claude_family/run_report.md` reports
-  HTTP 503 `No available accounts` for all four Claude aliases, and
-  `results/openai_compatible_direct_probe/gpt_family/run_report.md` reports
-  HTTP 502 `Upstream access forbidden` for `gpt-5.5` and `gpt-5.4`.
+  `wire_api=anthropic_messages`, 4 ready checks, 2 pending checks, and 0 failed
+  checks; `claude-opus-4-8`, `claude-opus-4-7`, and `claude-opus-4-6` returned
+  HTTP 502 `Upstream service temporarily unavailable`. The GPT-family report
+  uses `wire_api=openai_responses`, has 3 ready checks, 2 pending checks, and 0
+  failed checks; `gpt-5.5` and `gpt-5.4` returned HTTP 502
+  `Upstream access forbidden`.
 - AI-Scientist-v2 live-run handoff:
   `results/ai_scientist_v2_live_run_handoff/handoff.md`
   reports `blocked_by_provider_smoke`, 10 ready checks, 2 pending checks, and
@@ -243,11 +251,14 @@ shell-only values.
 
 Claude-family profile:
 
-- Base URL: `https://coderxiaoc.com/v1`.
+- Direct Claude diagnostics and local Claude Desktop/CC Switch routing use
+  Anthropic Messages at base URL `https://coderxiaoc.com`, request path
+  `/v1/messages`, and `anthropic-version: 2023-06-01`.
+- Current direct-probe aliases: `claude-opus-4-8`, `claude-opus-4-7`, and
+  `claude-opus-4-6`. The older dotted spelling `claude-opus-4.8` remains in
+  historical reports only; do not use it in new direct-probe handoff commands.
 - Key source: local environment variable, e.g.
-  `AI_SCIENTIST_OPENAI_API_KEY`.
-- User-requested aliases: `claude-opus-4.8`, `claude-opus-4-6`,
-  `claude-opus-4-7`.
+  `AI_SCIENTIST_OPENAI_API_KEY`; never commit raw keys.
 - Latest Phase 36 catalog evidence lists 14 Claude-family models, including
   `claude-opus-4-8`, `claude-opus-4-7`, and `claude-opus-4-6`.
 - `claude-opus-4-8` completed both current model-ablation prompt rows with
@@ -255,7 +266,8 @@ Claude-family profile:
 
 GPT-family profile:
 
-- Base URL: `https://coderxiaoc.com/v1`.
+- Direct GPT diagnostics use OpenAI Responses at base URL
+  `https://coderxiaoc.com/v1` and request path `/responses`.
 - Key source: local environment variable, e.g.
   `PAPERTOSKILL_GPT_OPENAI_API_KEY`.
 - Latest catalog evidence with the separate GPT key lists `gpt-5.5`,
@@ -303,7 +315,7 @@ DeepSeek:
 | Model evidence state | GPT retry evidence was saved separately from the older Phase 36 failure report. | `scripts/check_goal_completion.py` reads both `run_report.json` and `gpt_retry_run_report.json` so historical GPT 502 evidence and current GPT-family success both remain visible. |
 | Output-token accounting | Cost section had input-token proxies but no saved-response output-token accounting. | `scripts/evaluate_model_response_costs.py` reports local output-token proxies for saved Claude/GPT-family responses while preserving the no-provider-billing boundary. |
 | AI-Scientist-v2 smoke boundary | AI-Scientist-v2 dry-run and live-transfer saved responses could be confused with a full live run. | `scripts/run_ai_scientist_v2_smoke.py` records bounded client smoke attempts with alias fallback, script-level timeout, and a tiny-request `--max-tokens` cap; current provider/model availability blocker keeps smoke completion and full run pending. |
-| Direct provider diagnosis | AI-Scientist-v2 smoke timeouts could be misread as only a wrapper bug. | `scripts/run_openai_compatible_direct_probe.py` calls `/chat/completions` directly with the same marker contract and shows the current Claude/GPT-family provider blockers are visible outside `ai_scientist.llm`; this remains diagnostic only. |
+| Direct provider diagnosis | AI-Scientist-v2 smoke timeouts could be misread as only a wrapper bug or as only a model-name issue. | `scripts/run_openai_compatible_direct_probe.py` is now protocol-aware: Claude-family direct diagnostics use Anthropic Messages (`/v1/messages`) and GPT-family direct diagnostics use OpenAI Responses (`/v1/responses`) with the same marker contract. Current blockers remain provider/upstream availability; this diagnostic remains separate from AI-Scientist-v2 smoke completion. |
 
 ## Persistent Rules
 
