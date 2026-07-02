@@ -1,6 +1,6 @@
 # Goal Completion Audit
 
-Date: 2026-06-20
+Date: 2026-07-02
 
 Purpose: audit the active user goal against current repository evidence before
 claiming completion. This is a requirement-by-requirement gate, not a claim that
@@ -8,198 +8,75 @@ the full goal is complete.
 
 ## Summary
 
-Current status: substantial local research and artifact package is complete,
-Claude Opus 4.8 plus GPT-family model-ablation rows are saved and scored, and
-all four live-transfer saved-response sets are collected and scored under the
-current prompt-packet protocol. Phase 41 attempted a bounded AI-Scientist-v2
-LLM-client smoke through the local `ai_scientist.llm` client; Phase 45 rechecked
-the smoke path with a script-level timeout, Phase 46 tried the known Claude
-alias variants, Phase 48 recorded historical HTTP 403 plus timeout evidence,
-Phase 54 executed the smoke-completion packet with a 30-second timeout, Phase
-56 retried after GitHub push recovery, Phase 57 tried the GPT-family credential
-profile through the same AI-Scientist-v2 OpenAI-compatible client path, and
-Phase 58 reduced the smoke request to `--max-tokens 128`. The latest report is
-still `blocked_by_provider_or_model_availability`: `claude-opus-4-8`,
-`claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6` all timed out
-after 30 seconds waiting for provider response with the 128-token cap. The
-immediately preceding capped GPT-family retry timed out for `gpt-5.5` and
-`gpt-5.4`. Phase 59 added a direct OpenAI-compatible endpoint probe that
-bypasses `ai_scientist.llm`; direct Claude-family calls returned HTTP 503
-`No available accounts`, and direct GPT-family calls returned HTTP 502
-`Upstream access forbidden`. The full goal is not yet complete because the
-AI-Scientist-v2 LLM-client smoke and full live-run evidence, DeepSeek follow-up
-responses, human-fidelity annotation, stronger provider-billing or
-success-per-dollar evidence, and final submission decisions remain pending
-external or follow-up work. Phase 38 adds local output-token proxy accounting
-for saved model-ablation responses, but this is not realized provider billing.
-Phase 51 adds a local external-evidence closure queue that maps each remaining
-pending requirement to a concrete next action without claiming completion.
-Phase 53 adds execution packets for those queue items, with inputs, commands,
-completion criteria, escalation rules, and evidence boundaries. Phase 55 adds a
-local AAAI submission-decision preflight that exposes the submit-now and
-wait-for-evidence options without selecting either option.
+Current status: the local research and artifact package is ready with pending
+external evidence. Claude Opus 4.8, GPT-family, and DeepSeek model-ablation rows
+are saved and scored for the current two-case protocol. All four live-transfer
+saved-response sets are collected and scored under the current prompt-packet
+protocol. Local input/output token accounting is complete for the current
+evidence set.
 
-Local package status: `results/reproducibility/package_report.md` reports
-`ready_with_pending_external_evidence`, 281 ready checks, 8 pending checks, and
-0 failed checks.
+AI-Scientist-v2 is no longer the current blocker for the bounded evidence path:
 
-Machine-checkable goal status:
-`results/reproducibility/goal_completion_report.md` reports
-`not_complete_pending_external_evidence`, 70 ready checks, 8 pending checks,
-and 0 failed checks.
+- `results/ai_scientist_v2_smoke/run_report.md` reports `complete`.
+- `results/ai_scientist_v2_live_run_handoff/handoff.md` reports `complete` with
+  one completion directory:
+  `D:\a_work\gitee\ai-scientist-v2\experiments\2026-07-02_12-18-28_papertoskill_extractor_attempt_0`.
+- `research/run_logs/2026-07-02_phase76_ai_scientist_v2_full_live_run.md`
+  records the command shape, run directory, stage results, failed branch, and
+  evidence boundary.
 
-External-evidence closure queue:
-`results/external_evidence_closure/closure.md` reports
-`pending_external_evidence`, 3 ready checks, 0 pending checks, and 0 failed
-checks. It covers all current pending goal requirements with six next-action
-items.
+The full user goal is still not complete because human-fidelity annotation is
+pending and the recorded AAAI policy is `wait_for_external_evidence`.
 
-External-evidence execution packets:
-`results/external_evidence_packets/packets.md` reports `ready`, 7 ready checks,
-0 pending checks, and 0 failed checks. It turns the six closure items into
-execution packets without completing the evidence itself.
+Current machine reports:
 
-AAAI submission-decision preflight:
-`results/aaai_submission_decision/decision.md` reports
-`pending_human_decision`, 25 ready checks, 1 pending check, and 0 failed
-checks. Both decision options are available, but no option is selected by the
-preflight.
+- Package: `results/reproducibility/package_report.md` reports
+  `ready_with_pending_external_evidence`, 305 ready checks, 1 pending check, and
+  0 failed checks.
+- Goal: `results/reproducibility/goal_completion_report.md` reports
+  `not_complete_pending_external_evidence`, 77 ready checks, 3 pending checks,
+  and 0 failed checks.
+- Closure queue: `results/external_evidence_closure/closure.md` reports
+  `pending_external_evidence`, 2 queue items, and 0 failed checks.
+- Execution packets: `results/external_evidence_packets/packets.md` reports
+  `ready`, 2 packets, and 0 failed checks.
 
 ## Requirement Audit
 
 | Requirement | Current Evidence | Status | Next Action |
 | --- | --- | --- | --- |
-| Maintain durable local memory with at least long-term and short-term files. | `memory/long_term_memory.md`; `memory/short_term_memory.md`; reproducibility checks `memory_long_term` and `memory_short_term` are ready. | Complete locally | Continue reading both memory files after every resume/compaction and update short-term memory after phase changes. |
-| Use `ai-scientist-v2` to refine and develop PaperToSkill. | `ai_scientist_inputs/papertoskill.md`; `ai_scientist_inputs/papertoskill_seed_ideas.json`; AI-Scientist-v2 dry-run recorded in memory and run logs; PaperToSkill repo keeps AI-Scientist-v2 as execution context; `scripts/run_ai_scientist_v2_smoke.py`; `results/ai_scientist_v2_smoke/run_report.md`; `scripts/run_openai_compatible_direct_probe.py`; `results/openai_compatible_direct_probe/`; `scripts/check_ai_scientist_v2_live_run_handoff.py`; `results/ai_scientist_v2_live_run_handoff/handoff.md`. | Partially complete | The bounded AI-Scientist-v2 LLM-client smoke was attempted with Claude-family and GPT-family credential profiles, including a 128-token capped marker-contract probe, but the latest report remains `blocked_by_provider_or_model_availability`. A direct endpoint probe bypassing `ai_scientist.llm` also returned provider errors, so the blocker is not proven to be wrapper-local. The full live-run handoff is locally ready but remains blocked by smoke/provider availability and missing completion artifacts. |
-| Save phase-level progress to `yougret1/PaperToSkill.git`. | Phase-level commits are pushed to `origin/main`; latest saved phases include AAAI package, usage-example, paper-table, and paper-claim gates. | Complete through current pushed phase | Keep committing/pushing phase-level increments. |
-| Use official AAAI TeX template for final paper. | `paper/aaai/AuthorKit27.zip`; `paper/aaai/aaai2027.sty`; `paper/aaai/aaai2027.bst`; `paper/aaai/README.md`; `paper/aaai/papertoskill_aaai2027.tex`; `paper/aaai/papertoskill_aaai2027.pdf`; `scripts/check_aaai_package.py`; `results/reproducibility/aaai_package_report.md`; `scripts/check_paper_tables.py`; `results/reproducibility/paper_table_report.md`; `scripts/check_paper_claims.py`; `results/reproducibility/paper_claim_report.md`. | Prepared and locally verified, not submission-final | Keep the AAAI draft synchronized with new evidence. Submission-final requires final claims, figures, metadata, and any venue-specific updates. |
-| Provide experiment usage examples. | `examples/usage/README.md`; `examples/usage/codex_skill_usage.md`; `examples/usage/auto_note_scaffold_usage.md`; `examples/usage/model_ablation_usage.md`; `scripts/check_usage_examples.py`; `results/reproducibility/usage_example_report.md`; `research/runbook.md`. | Complete and locally verified | Keep examples synchronized if task specs or runner commands change. |
-| Run or prepare Claude Opus 4.8 ablation. | `benchmarks/model_ablation_v0.json`; prompt packets under `results/model_ablation_prompts/v0/`; runner/evaluator scripts; latest run report shows `claude-opus-4-8` completed both current prompt rows; `results/model_ablation_prompts/v0/evaluation.md` scores both Claude rows 6/6. | Complete for current prompt protocol | Keep the same scorer if the prompt grid expands. Do not generalize beyond the two current prompt rows. |
-| Run or prepare GPT 5.5 / GPT-family ablation. | Same model-ablation artifacts; the Phase 37 retry with the separate GPT key saved both current GPT-family prompt responses. The Toolformer row timed out on `gpt-5.5` and succeeded with `gpt-5.4`; the AIDE row succeeded with `gpt-5.5`; both rows score 6/6. | Complete for current prompt protocol | Keep the actual alias evidence with the response files; do not call this a pure `gpt-5.5` result because one row used `gpt-5.4`. |
-| Provide DeepSeek-follow-up process for the user. | `deepseek_followup_slot` in `benchmarks/model_ablation_v0.json`; `scripts/check_deepseek_followup.py`; `results/deepseek_followup_handoff/handoff.md`; runner skips only placeholder alias; tests cover placeholder vs configured DeepSeek behavior; usage docs and runbook include DeepSeek steps. | Handoff ready; model response pending | User fills concrete DeepSeek alias/env vars, reruns the handoff check, rebuilds prompts, runs `--model-id deepseek_followup_slot`, then scores saved responses. |
-| Develop PaperToSkill extraction system. | `scripts/papertoskill_extract.py`; `scripts/papertoskill_note_from_text.py`; `scripts/papertoskill_pipeline.py`; generated skills for four curated papers; source maps; deterministic auto-note scaffold for Toolformer/AIDE; one-command temporary AIDE pipeline example; local PDF-input smoke path using `pdftotext -layout`; tests. | Complete for current scoped prototype | Broader reliable arbitrary-PDF automation remains unsupported and should not be claimed. |
-| Experiments: main results. | `results/tables/main_results.md`; four-paper deterministic results; generated skills outperform generic and abstract baselines on operational coverage. | Complete for deterministic/offline benchmark | Live task success remains pending. |
-| Experiments: harness-transfer ablation. | `results/tables/transfer_ablation.md`; offline transfer-readiness drops when `Transfer Notes` are removed; `results/live_transfer_prompts/evaluation.md` now scores all 24 live-transfer saved-response rows across four paper packets. | Complete for offline readiness and saved-response coverage | Do not interpret saved-response output-contract scoring as human semantic fidelity or real live task success. |
-| Experiments: compactness/cost/examples. | `results/tables/context_cost_proxy.md`; `results/tables/context_cost_proxy_tokenizer.md`; `results/tables/model_response_cost_proxy.md`; `results/tables/compactness_source_grounding.md`; examples under `examples/usage/`. | Complete for character proxy, local tokenizer-aware input proxy, saved-response output-token proxy, and examples | Provider billing, realized output bills, and success-per-dollar remain pending. |
-| Include failure branches and negative outcomes. | `results/failure_cases/failure_case_archive.md`; model-ablation run reports; limitations; result cards; stage logs. | Complete as provenance archive | Outcome impact of failure recording is not tested. |
-| Human-fidelity annotation handoff. | `benchmarks/human_fidelity_review_v0.json`; `results/human_fidelity_packets/annotation_guide.md`; `results/human_fidelity_packets/annotation_template.csv`; `results/human_fidelity_packets/annotation_summary.md`; package check `human_fidelity_annotation_handoff_ready` is ready. | Handoff ready; annotation pending | Independent reviewers still need to fill all 24 rows before claiming human validation. |
-| Provider-billing evidence handoff. | `benchmarks/provider_billing_evidence_v0.json`; `results/provider_billing_evidence/billing_template.csv`; `results/provider_billing_evidence/billing_summary.md`; goal/package checks `provider_billing_evidence_handoff_ready` are ready. | Handoff ready; billing pending | Fill provider usage exports or invoices before claiming realized bills or success-per-dollar. |
-| Submission-review handoff. | `research/review_report.md`; `research/rebuttal_bank.md`; `research/submission_checklist.md`; `scripts/check_submission_review.py`; `results/reproducibility/submission_review_report.md`; goal/package checks `submission_review_handoff_ready` and `submission_review_report_ready` are ready. | Handoff ready; final submission pending | Use this handoff with the AAAI submission-decision preflight to decide whether to submit as a deterministic/offline paper or wait for pending external evidence. |
-| AAAI submission-decision preflight. | `scripts/check_aaai_submission_decision.py`; `results/aaai_submission_decision/decision.md`; goal/package checks `aaai_submission_decision_preflight_ready` are ready. | Preflight ready; human decision pending | Record a human decision only after choosing `submit_now_deterministic_offline` or `wait_for_external_evidence` with claim boundary and evidence policy. |
-| Final paper narrative. | `paper/draft.md`; `paper/outline.md`; `paper/claim_checklist.md`; `paper/limitations.md`; AAAI `.tex` draft. | Prepared, not final | Final paper requires live/human/model evidence decisions or explicit decision to submit as deterministic/offline system paper. |
-| Machine-checkable completion gate. | `scripts/check_goal_completion.py`; `results/reproducibility/goal_completion_report.md`; reproducibility checks `goal_completion_report_ready` and `goal_completion_core_checks_ready` are ready. | Complete as a gate; full goal still pending | Re-run the gate after any model, human-fidelity, provider-billing, or final-paper evidence changes. |
-| External evidence closure queue. | `scripts/check_external_evidence_closure.py`; `results/external_evidence_closure/closure.md`; goal/package checks `external_evidence_closure_queue_ready` and `external_evidence_closure_report_ready` are ready. | Complete as a local queue; evidence still pending | Work through the six queue items without treating queue readiness as evidence completion. |
-| External evidence execution packets. | `scripts/check_external_evidence_packets.py`; `results/external_evidence_packets/packets.md`; goal/package checks `external_evidence_execution_packets_ready` and `external_evidence_packets_report_ready` are ready. | Complete as local execution packets; evidence still pending | Use packets as the handoff checklist for each external evidence item. |
+| Durable local memory | `memory/long_term_memory.md`; `memory/short_term_memory.md` | Complete locally | Read and update both memory files after every resume/compaction. |
+| Use `ai-scientist-v2` to refine PaperToSkill | Seed idea files, bounded smoke report, full live-run handoff, Phase 76 run log, completion directory | Complete for bounded local evidence | Do not treat the synthetic run as broad live task success. |
+| Save phase-level progress to GitHub | Local branch currently has unpushed phase changes | Pending save for current phase | Commit and push after verification. |
+| Official AAAI TeX package | `paper/aaai/`; `results/reproducibility/aaai_package_report.md` | Locally ready | Keep draft synchronized with new evidence. |
+| Usage examples | `examples/usage/`; `results/reproducibility/usage_example_report.md` | Complete locally | Re-run after runner or task changes. |
+| Model ablations | `results/model_ablation_prompts/v0/evaluation.md`: 6 scored, 0 pending | Complete for saved-response protocol | Do not claim broad model quality or live task success. |
+| PaperToSkill extraction prototype | Extractor, auto-note scaffold, pipeline, generated skills/source maps | Complete for scoped prototype | Do not claim reliable arbitrary-PDF automation. |
+| Main deterministic experiments | `results/tables/main_results.md`; transfer, cost, source-span, failure archive reports | Complete for offline benchmark | Keep claims bounded to deterministic/local evidence. |
+| New-paper triage and Paper2Agent comparison | `research/new_paper_triage_2026-07-01.md`; `results/tables/paper2agent_artifact_comparison.md` | Complete for citation/positioning | Do not claim executable Paper2Agent baseline performance. |
+| Human-fidelity annotation | `results/human_fidelity_packets/annotation_template.csv`; `annotation_guide.md`; packets | Handoff ready; annotation pending | Independent reviewers fill all 24 rows and rerun the strict summarizer. |
+| AAAI submission decision | `research/aaai_submission_decision.md`; `results/aaai_submission_decision/decision.md` | Decision recorded as wait | Complete named evidence before stronger final-submission claims. |
+| External evidence closure/packets | Closure queue and packets have 2 current items | Complete as local handoff | Use packets for human annotation and final decision. |
 
-## Current Blocking Evidence
+## Current Pending Evidence
 
-- `results/model_ablation_prompts/v0/run_report.md`: Claude Opus 4.8 rows
-  completed successfully with HTTP 200 and saved response files. This historical
-  report also records a GPT-family HTTP 502 blocker from Phase 36.
-- `results/model_ablation_prompts/v0/gpt_retry_run_report.md`: GPT-family
-  Phase 37 retry completed both rows; Toolformer used `gpt-5.4` after a
-  `gpt-5.5` timeout, and AIDE used `gpt-5.5`.
-- `results/model_ablation_prompts/v0/evaluation.md`: 6 total rows, 4 scored
-  rows, 2 pending rows; Claude and GPT-family rows all score 6/6.
-- `results/tables/model_response_cost_proxy.md`: local output-token proxy over
-  saved model-ablation responses; 4 measured rows, 2 pending DeepSeek rows, and
-  8,710 `o200k_base` output tokens. This is not provider billing evidence.
-- `results/deepseek_followup_handoff/handoff.md`: local DeepSeek follow-up
-  preflight is `pending_user_configuration`, with 5 ready checks, 2 pending
-  checks, and 0 failed checks. It does not call DeepSeek or complete DeepSeek
-  response collection.
-- `results/provider_billing_evidence/billing_summary.md`: provider-billing
-  handoff is ready, but all 6 billing evidence rows remain pending and no
-  success-per-dollar value is available.
-- `results/ai_scientist_v2_smoke/run_report.md`: bounded AI-Scientist-v2
-  LLM-client smoke attempt remains
-  `blocked_by_provider_or_model_availability`; the latest 128-token-capped
-  Claude-family retry timed out for `claude-opus-4-8`, `claude-opus-4.8`,
-  `claude-opus-4-7`, and `claude-opus-4-6`. The preceding capped GPT-family
-  retry timed out for `gpt-5.5` and `gpt-5.4`. The attempts are recorded, but
-  smoke completion and full live AI-Scientist-v2 run evidence remain pending.
-- `results/openai_compatible_direct_probe/claude_family/run_report.md` and
-  `results/openai_compatible_direct_probe/gpt_family/run_report.md`: direct
-  `/chat/completions` probes bypassing `ai_scientist.llm` are also
-  `blocked_by_provider_or_model_availability`; Claude-family aliases returned
-  HTTP 503 `No available accounts`, and GPT-family aliases returned HTTP 502
-  `Upstream access forbidden`. These are provider diagnostics only.
-- `results/ai_scientist_v2_live_run_handoff/handoff.md`: full live-run
-  handoff is `blocked_by_provider_smoke`, with 10 ready checks, 2 pending
-  checks, and 0 failed checks. It does not run BFTS or complete the full
-  live-run requirement.
-- `results/live_transfer_prompts/ai_scientist_v2_v0/run_report.md`,
-  `results/live_transfer_prompts/reflexion_v0/run_report.md`,
-  `results/live_transfer_prompts/aide_v0/run_report.md`, and
-  `results/live_transfer_prompts/toolformer_v0/run_report.md`: each
-  live-transfer run completed 6/6 rows and saved response files. AIDE includes
-  one provider fallback row from `claude-opus-4-8` to `claude-opus-4-7` after a
-  remote connection closure.
-- `results/live_transfer_prompts/evaluation.md`: 24 total live-transfer rows,
-  24 scored rows, 0 pending rows, and 1.0 average normalized score over scored
-  rows.
-- `research/run_logs/2026-06-19_phase36_claude_ablation_success_gpt_blocked.md`:
-  endpoint recheck records completed Claude rows and the previous GPT
-  upstream-access blocker for `gpt-5.5`/`gpt-5.4`.
-- `research/run_logs/2026-06-19_phase37_gpt_family_ablation_success.md`:
-  latest GPT-family retry records completed GPT-family rows and saved/scored
-  responses.
-- `results/human_fidelity_packets/annotation_summary.md`: human annotation is
-  pending; Phase 42 adds `annotation_guide.md`, stricter template metadata, and
-  strict summary validation for the eventual reviewer-filled CSV.
-- `results/reproducibility/package_report.md`: pending checks remain for the
-  AI-Scientist-v2 smoke response/contract, human fidelity, DeepSeek response
-  files, and completed model-ablation scoring.
-- `results/reproducibility/goal_completion_report.md`: active-goal
-  requirements are pending and `active_goal_complete` remains pending.
-- `results/external_evidence_closure/closure.md`: all current pending goal
-  requirements are mapped to six next-action items; this is a local queue, not
-  evidence completion.
-- `results/external_evidence_packets/packets.md`: each closure item has a
-  local execution packet with inputs, commands, completion criteria, escalation
-  rules, and evidence boundaries; this is a handoff, not evidence completion.
-- `results/reproducibility/aaai_package_report.md`: AAAI package gate is ready
-  with 17 ready checks and 0 failed checks; this removes a local package
-  uncertainty but not the external model/human/cost evidence blockers.
-- `results/reproducibility/usage_example_report.md`: usage-example gate is
-  ready with 53 ready checks and 0 failed checks; it verifies local examples,
-  the scored Toolformer Codex-style response slot, DeepSeek handoff readiness,
-  a temporary one-command AIDE pipeline run, and a direct-PDF pipeline smoke run
-  but does not execute additional live model calls.
-- `results/reproducibility/paper_table_report.md`: AAAI paper-table gate is
-  ready with 76 ready checks and 0 failed checks; it verifies manuscript-table
-  consistency but does not add new empirical evidence.
-- `results/reproducibility/paper_claim_report.md`: paper claim-discipline gate
-  is ready with 20 ready checks and 0 failed checks; it verifies unsupported
-  overclaims remain absent but does not add new empirical evidence.
-- `results/reproducibility/submission_review_report.md`: submission-review
-  handoff gate is ready with 15 ready checks and 0 failed checks; it verifies
-  the review, rebuttal, and submission checklist files are synchronized with
-  current evidence but does not make the AAAI package submission-final.
-- `results/aaai_submission_decision/decision.md`: submission-decision preflight
-  is `pending_human_decision` with both options available and no selected
-  option; it does not make the AAAI package submission-final.
+- `human_fidelity_annotation_complete`: `results/human_fidelity_packets/annotation_summary.md`
+  reports 0 scored rows and 24 pending rows.
+- `aaai_final_submission_ready`: local package and submission-review gates are
+  ready, but the recorded policy waits for named external evidence.
 
 ## Completion Decision
 
-Do not mark the active goal complete yet. The current repository satisfies the
-local memory, scaffold, deterministic/offline experiment, AAAI-package, usage
-example, Claude Opus 4.8 ablation, GPT-family ablation, saved live-transfer
-response requirements, and AAAI submission-decision preflight. It does not yet
-satisfy completed AI-Scientist-v2 LLM-client smoke/full live-run evidence,
-DeepSeek response collection, human semantic validation, real
-provider-billing/economic evidence, or a selected final submission decision.
-Local
-tokenizer-aware input and saved-response output proxy evidence are present, and
-the machine-checkable goal-completion gate agrees that the active goal is not
-complete.
+Do not mark the active goal complete yet. The repository satisfies local memory,
+scaffold, deterministic/offline experiment, AAAI-package, usage-example,
+Claude/GPT-family/DeepSeek saved-response ablation, live-transfer saved-response
+coverage, bounded Paper2Agent comparison, and bounded AI-Scientist-v2
+smoke/full-live evidence. It still lacks completed human semantic validation and
+final AAAI submission readiness under the recorded wait policy.
 
 ## Recommended Next Closure Path
 
-1. Let the user fill DeepSeek alias/env vars, then run and score the same prompt
-   grid.
-2. Use `results/aaai_submission_decision/decision.md` to decide whether the
-   final AAAI paper will remain an explicitly deterministic/offline system
-   paper or wait for live/human/model evidence.
-3. If waiting, collect human-fidelity annotations and provider-specific cost
-   evidence before marking the full goal complete.
+1. Fill and summarize the 24-row human-fidelity annotation template.
+2. Re-run `check_goal_completion.py`, `check_reproducibility_package.py`, and
+   `check_submission_review.py`.
+3. Revisit the AAAI decision after the named external evidence is complete.

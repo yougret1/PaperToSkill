@@ -89,6 +89,7 @@
 | `research/run_logs/2026-06-20_phase68_memory_anchor_refresh.md` | Memory and runbook anchor refresh after Phase 67 remote save | Created |
 | `research/run_logs/2026-06-20_phase69_aaai_decision_packet_helper_sync.md` | External-evidence AAAI decision packet synced with the validated decision-record helper | Created |
 | `research/run_logs/2026-06-26_phase70_protocol_specific_direct_probe.md` | Protocol-specific direct provider probe update for Claude Messages and GPT Responses diagnostics | Created |
+| `research/run_logs/2026-07-02_phase76_ai_scientist_v2_full_live_run.md` | Bounded AI-Scientist-v2 marker smoke/full live-run completion, synthetic sensitivity result, failed HF branch boundary, and stale-queue refresh | Created |
 
 ## Paper Draft Package
 
@@ -308,6 +309,9 @@
 | `results/tables/model_response_cost_proxy.md` | Paper-ready local output-token proxy for saved model-ablation responses | Created |
 | `results/tables/model_response_cost_proxy.csv` | CSV local output-token proxy for saved model-ablation responses | Created |
 | `results/tables/model_response_cost_proxy.json` | Machine-readable local output-token proxy for saved model-ablation responses | Created |
+| `results/tables/paper2agent_artifact_comparison.md` | Paper2Agent vs PaperToSkill bounded artifact/workflow comparison | Created |
+| `results/tables/paper2agent_artifact_comparison.csv` | CSV copy of Paper2Agent artifact/workflow comparison | Created |
+| `results/tables/paper2agent_artifact_comparison.json` | Machine-readable Paper2Agent artifact/workflow comparison | Created |
 | `results/provider_billing_evidence/billing_template.csv` | Blank provider-billing evidence rows for real invoice/usage exports | Created |
 | `results/provider_billing_evidence/billing_summary.md` | Pending provider-billing evidence summary | Created |
 | `results/provider_billing_evidence/billing_summary.json` | Machine-readable pending provider-billing evidence summary | Created |
@@ -362,8 +366,15 @@
 | `results/model_ablation_prompts/v0/run_report.json` | Machine-readable live-attempt report for model ablations | Created |
 | `results/model_ablation_prompts/v0/gpt_retry_run_report.md` | Redacted GPT-family retry report with saved-response alias evidence | Created |
 | `results/model_ablation_prompts/v0/gpt_retry_run_report.json` | Machine-readable GPT-family retry report | Created |
+| `results/model_ablation_prompts/v0/gpt_protocol_run_report.md` | Redacted GPT-family protocol-refresh report using OpenAI Responses | Created |
+| `results/model_ablation_prompts/v0/gpt_protocol_run_report.json` | Machine-readable GPT-family protocol-refresh report | Created |
+| `results/model_ablation_prompts/v0/deepseek_run_report.md` | Redacted DeepSeek run report using Chat Completions | Created |
+| `results/model_ablation_prompts/v0/deepseek_run_report.json` | Machine-readable DeepSeek run report | Created |
+| `results/model_ablation_prompts/v0/claude_protocol_run_report.md` | Redacted Claude protocol-refresh report using Anthropic Messages with provider 502 blocker | Created |
+| `results/model_ablation_prompts/v0/claude_protocol_run_report.json` | Machine-readable Claude protocol-refresh report | Created |
 | `results/model_ablation_prompts/v0/evaluation.md` | Pending/scored summary for saved model-ablation responses | Created |
 | `results/model_ablation_prompts/v0/evaluation.json` | Machine-readable model-ablation response evaluation summary | Created |
+| `research/new_paper_triage_2026-07-01.md` | Triage of Paper2Agent, AgenticSciML, and Reasoning Manifolds against PaperToSkill | Created |
 | `examples/usage/README.md` | Usage-example index and evidence boundary | Created |
 | `examples/usage/codex_skill_usage.md` | Codex-style generated-skill usage example | Created |
 | `examples/usage/auto_note_scaffold_usage.md` | Extracted-text auto-note-to-skill usage example | Created |
@@ -377,4 +388,5 @@
 
 | Artifact | Purpose | Status |
 | --- | --- | --- |
-| Model-ablation response logs | Claude/GPT-family/DeepSeek response files and scores after endpoint/model availability | Planned |
+| Model-ablation response logs | Claude/GPT-family/DeepSeek response files and scores after endpoint/model availability | Created |
+| Paper2Agent executable baseline | Full Paper2Agent/MCP runtime comparison, if setup resources become available | Planned |

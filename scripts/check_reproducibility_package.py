@@ -123,6 +123,7 @@ CORE_FILES = {
     "deepseek_followup_handoff_md": "results/deepseek_followup_handoff/handoff.md",
     "artifact_map": "research/artifact_map.md",
     "claim_evidence_matrix": "research/claim_evidence_matrix.md",
+    "new_paper_triage": "research/new_paper_triage_2026-07-01.md",
     "runbook": "research/runbook.md",
     "goal_completion_audit": "research/goal_completion_audit.md",
     "stage_log": "research/stage_log.md",
@@ -164,6 +165,10 @@ CORE_FILES = {
     "provider_billing_template": "results/provider_billing_evidence/billing_template.csv",
     "provider_billing_summary_json": "results/provider_billing_evidence/billing_summary.json",
     "provider_billing_summary_md": "results/provider_billing_evidence/billing_summary.md",
+    "token_accounting_protocol": "benchmarks/token_accounting_v0.json",
+    "token_accounting_summarizer": "scripts/summarize_token_accounting.py",
+    "token_accounting_summary_json": "results/token_accounting/token_accounting_summary.json",
+    "token_accounting_summary_md": "results/token_accounting/token_accounting_summary.md",
     "result_cards": "results/result_cards.md",
 }
 
@@ -178,6 +183,9 @@ TABLE_FILES = {
     "model_response_cost_proxy_md": "results/tables/model_response_cost_proxy.md",
     "model_response_cost_proxy_json": "results/tables/model_response_cost_proxy.json",
     "model_response_cost_proxy_csv": "results/tables/model_response_cost_proxy.csv",
+    "paper2agent_artifact_comparison_md": "results/tables/paper2agent_artifact_comparison.md",
+    "paper2agent_artifact_comparison_json": "results/tables/paper2agent_artifact_comparison.json",
+    "paper2agent_artifact_comparison_csv": "results/tables/paper2agent_artifact_comparison.csv",
     "auto_note_comparison_md": "results/tables/auto_note_comparison.md",
     "auto_note_comparison_csv": "results/tables/auto_note_comparison.csv",
     "paper_ready_summary": "results/tables/paper_ready_summary.md",
@@ -236,6 +244,12 @@ MODEL_ABLATION_FILES = {
     "model_ablation_run_report_md": "results/model_ablation_prompts/v0/run_report.md",
     "model_ablation_gpt_retry_run_report_json": "results/model_ablation_prompts/v0/gpt_retry_run_report.json",
     "model_ablation_gpt_retry_run_report_md": "results/model_ablation_prompts/v0/gpt_retry_run_report.md",
+    "model_ablation_gpt_protocol_run_report_json": "results/model_ablation_prompts/v0/gpt_protocol_run_report.json",
+    "model_ablation_gpt_protocol_run_report_md": "results/model_ablation_prompts/v0/gpt_protocol_run_report.md",
+    "model_ablation_deepseek_run_report_json": "results/model_ablation_prompts/v0/deepseek_run_report.json",
+    "model_ablation_deepseek_run_report_md": "results/model_ablation_prompts/v0/deepseek_run_report.md",
+    "model_ablation_claude_protocol_run_report_json": "results/model_ablation_prompts/v0/claude_protocol_run_report.json",
+    "model_ablation_claude_protocol_run_report_md": "results/model_ablation_prompts/v0/claude_protocol_run_report.md",
     "model_ablation_evaluation_json": "results/model_ablation_prompts/v0/evaluation.json",
     "model_ablation_evaluation_md": "results/model_ablation_prompts/v0/evaluation.md",
 }
@@ -595,7 +609,7 @@ def paper_claim_checks(root: Path) -> list[Check]:
         "paper_claim_boundary_curated_scope",
         "paper_claim_boundary_not_pdf_automation",
         "paper_claim_boundary_live_transfer_saved_response_boundary",
-        "paper_claim_boundary_model_ablation_partial_boundary",
+        "paper_claim_boundary_model_ablation_saved_response_boundary",
     }
     missing = sorted(required_ready - ready_ids)
     checks.append(
@@ -624,7 +638,7 @@ def submission_review_checks(root: Path) -> list[Check]:
         "submission_review_live_transfer_current",
         "submission_review_model_ablation_current",
         "submission_review_human_fidelity_current",
-        "submission_review_provider_billing_current",
+        "submission_review_token_accounting_current",
         "submission_review_ai_scientist_smoke_current",
         "submission_review_goal_package_counts_current",
     }
@@ -725,9 +739,10 @@ def goal_completion_checks(root: Path) -> list[Check]:
         "gpt_family_ablation_complete": "ready",
         "submission_review_handoff_ready": "ready",
         "deepseek_followup_process_ready": "ready",
-        "deepseek_followup_response_complete": "pending",
+        "deepseek_followup_response_complete": "ready",
+        "model_ablation_evaluation_complete": "ready",
         "human_fidelity_annotation_complete": "pending",
-        "provider_billing_evidence_complete": "pending",
+        "token_accounting_complete": "ready",
         "external_evidence_closure_queue_ready": "ready",
         "external_evidence_execution_packets_ready": "ready",
     }
@@ -780,14 +795,21 @@ def external_evidence_closure_checks(root: Path) -> list[Check]:
         )
     )
 
+    pending_goal_requirements = set(report.get("pending_goal_requirements", []))
+    requirement_to_item = {
+        "ai_scientist_v2_live_llm_smoke_complete": "ai_scientist_v2_smoke_completion",
+        "ai_scientist_v2_live_llm_run_complete": "ai_scientist_v2_full_live_run",
+        "human_fidelity_annotation_complete": "human_fidelity_annotation",
+        "token_accounting_complete": "token_accounting_summary",
+        "aaai_final_submission_ready": "aaai_submission_decision",
+        "deepseek_followup_response_complete": "deepseek_followup_responses",
+        "model_ablation_evaluation_complete": "deepseek_followup_responses",
+    }
     item_ids = {item.get("id") for item in report.get("items", [])}
     required_items = {
-        "ai_scientist_v2_smoke_completion",
-        "ai_scientist_v2_full_live_run",
-        "deepseek_followup_responses",
-        "human_fidelity_annotation",
-        "provider_billing_success_per_dollar",
-        "aaai_submission_decision",
+        item_id
+        for requirement, item_id in requirement_to_item.items()
+        if requirement in pending_goal_requirements
     }
     missing_items = sorted(required_items - item_ids)
     checks.append(
@@ -839,16 +861,11 @@ def external_evidence_packet_checks(root: Path) -> list[Check]:
         )
     )
 
+    closure_path = root / "results/external_evidence_closure/closure.json"
+    closure = load_json(closure_path) if closure_path.exists() else {}
+    closure_item_ids = {item.get("id") for item in closure.get("items", [])}
     packet_ids = {packet.get("id") for packet in report.get("packets", [])}
-    required_packets = {
-        "ai_scientist_v2_smoke_completion",
-        "ai_scientist_v2_full_live_run",
-        "deepseek_followup_responses",
-        "human_fidelity_annotation",
-        "provider_billing_success_per_dollar",
-        "aaai_submission_decision",
-    }
-    missing_packets = sorted(required_packets - packet_ids)
+    missing_packets = sorted(closure_item_ids - packet_ids)
     checks.append(
         Check(
             "external_evidence_packets_items_ready",
@@ -1067,40 +1084,37 @@ def ai_scientist_live_run_handoff_checks(root: Path) -> list[Check]:
     return checks
 
 
-def provider_billing_checks(root: Path) -> list[Check]:
+def token_accounting_checks(root: Path) -> list[Check]:
     checks: list[Check] = []
-    summary_path = root / "results/provider_billing_evidence/billing_summary.json"
-    template_path = root / "results/provider_billing_evidence/billing_template.csv"
+    summary_path = root / "results/token_accounting/token_accounting_summary.json"
     if not summary_path.exists():
         return checks
     summary = load_json(summary_path)
     errors = summary.get("errors", [])
     checks.append(
         Check(
-            "provider_billing_summary_valid",
+            "token_accounting_summary_valid",
             "ready" if not errors else "fail",
             f"errors={len(errors)}",
             str(summary_path.relative_to(root)),
         )
     )
-    template_rows = 0
-    if template_path.exists():
-        with template_path.open(newline="", encoding="utf-8") as handle:
-            template_rows = sum(1 for _ in csv.DictReader(handle))
-    handoff_ready = template_rows == int(summary.get("total_rows", 0)) == 6
+    input_tokens = int(summary.get("composite_proxy", {}).get("generated_skill_input_tokens", 0))
+    output_tokens = int(summary.get("composite_proxy", {}).get("saved_response_output_tokens", 0))
+    accounting_complete = summary.get("accounting_status") == "complete" and input_tokens > 0 and output_tokens > 0
     checks.append(
         Check(
-            "provider_billing_evidence_handoff_ready",
-            "ready" if handoff_ready else "fail",
-            f"template_rows={template_rows}; summary_rows={summary.get('total_rows', 0)}",
-            "results/provider_billing_evidence/billing_template.csv; results/provider_billing_evidence/billing_summary.json",
+            "token_accounting_handoff_ready",
+            "ready" if accounting_complete else "fail",
+            f"status={summary.get('accounting_status')}; input_tokens={input_tokens}; output_tokens={output_tokens}",
+            "results/token_accounting/token_accounting_summary.json",
         )
     )
     checks.append(
         Check(
-            "provider_billing_evidence_complete",
-            "ready" if summary.get("billing_status") == "complete" else "pending",
-            f"status={summary.get('billing_status')}; measured_rows={summary.get('measured_rows')}; pending_rows={summary.get('pending_rows')}",
+            "token_accounting_complete",
+            "ready" if accounting_complete else "pending",
+            f"status={summary.get('accounting_status')}; input_tokens={input_tokens}; output_tokens={output_tokens}",
             str(summary_path.relative_to(root)),
         )
     )
@@ -1296,9 +1310,43 @@ def model_ablation_checks(root: Path) -> list[Check]:
         measured = int(summary.get("measured_rows", 0))
         pending = int(summary.get("pending_rows", 0))
         tokenizer_tokens = summary.get("total_tokenizer_output_tokens")
-        status = "ready" if measured >= 4 and pending == 2 and tokenizer_tokens else "fail"
+        status = "ready" if measured >= 6 and pending == 0 and tokenizer_tokens else "fail"
         detail = f"measured_rows={measured}; pending_rows={pending}; tokenizer_output_tokens={tokenizer_tokens}"
         checks.append(Check("model_response_output_token_proxy", status, detail, str(response_cost_path.relative_to(root))))
+    return checks
+
+
+def paper2agent_comparison_checks(root: Path) -> list[Check]:
+    checks: list[Check] = []
+    report_path = root / "results/tables/paper2agent_artifact_comparison.json"
+    if not report_path.exists():
+        return checks
+    report = load_json(report_path)
+    rows = report.get("rows", [])
+    failed_rows = [row for row in rows if row.get("status") != "ready"]
+    expected_criteria = {
+        "input_requirements",
+        "artifact_type",
+        "setup_burden",
+        "validation_checks",
+        "failure_handling",
+        "source_traceability",
+        "runtime_dependency",
+    }
+    actual_criteria = {str(row.get("criterion_id", "")) for row in rows}
+    ready = (
+        report.get("overall_status") == "ready"
+        and expected_criteria <= actual_criteria
+        and not failed_rows
+    )
+    checks.append(
+        Check(
+            "paper2agent_artifact_comparison_report_ready",
+            "ready" if ready else "fail",
+            f"overall={report.get('overall_status')}; ready={report.get('status_counts', {}).get('ready')}; failed_rows={len(failed_rows)}",
+            str(report_path.relative_to(root)),
+        )
+    )
     return checks
 
 
@@ -1391,11 +1439,12 @@ def build_report(root: Path) -> dict[str, Any]:
     checks.extend(ai_scientist_smoke_checks(root))
     checks.extend(openai_compatible_direct_probe_checks(root))
     checks.extend(ai_scientist_live_run_handoff_checks(root))
-    checks.extend(provider_billing_checks(root))
+    checks.extend(token_accounting_checks(root))
     checks.extend(usage_example_checks(root))
     checks.extend(deepseek_followup_handoff_checks(root))
     checks.extend(auto_note_checks(root))
     checks.extend(model_ablation_checks(root))
+    checks.extend(paper2agent_comparison_checks(root))
     checks.extend(live_transfer_checks(root))
     checks.append(secret_scan_check(root))
 

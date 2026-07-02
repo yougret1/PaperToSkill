@@ -6,16 +6,15 @@
 - Requested or advertised alias: `claude-opus-4-8`
 - Alias candidates:
 - `claude-opus-4-8`
-- `claude-opus-4.8`
 - `claude-opus-4-7`
 - `claude-opus-4-6`
-- Provider status: server_previously_advertised_claude_opus_4_8_but_chat_completion_blocked_by_provider_capacity; user_now_also_requested_claude_opus_4_6_and_4_7
+- Provider status: configured_from_local_api_docs; Claude-family uses Anthropic Messages at /v1/messages
 - Response status: pending
 
 ## Model-Specific Notes
 
-- Use base URL https://coderxiaoc.com/v1 through an OpenAI-compatible client.
-- Try advertised/user-requested Claude aliases in order: claude-opus-4-8, claude-opus-4.8, claude-opus-4-7, claude-opus-4-6.
+- Use base URL https://coderxiaoc.com with Anthropic Messages request path /v1/messages.
+- Try advertised/user-requested Claude aliases in order: claude-opus-4-8, claude-opus-4-7, and claude-opus-4-6.
 - Do not commit the raw API key or response logs containing credentials.
 
 ## Context Case

@@ -1,0 +1,65 @@
+{
+  "schema_version": "0.1",
+  "evidence_boundary": "Direct provider endpoint diagnostic. A complete report proves the configured endpoint can return the tiny marker-contract response without using ai_scientist.llm. It does not complete the AI-Scientist-v2 LLM-client smoke, BFTS, or a live research task.",
+  "model": "deepseek-v4-flash",
+  "wire_api": "openai_chat_completions",
+  "attempted_models": [
+    {
+      "model": "deepseek-v4-flash",
+      "status": "success",
+      "detail": "response_chars=162; http_status=200"
+    }
+  ],
+  "base_url_env": "PAPERTOSKILL_DEEPSEEK_BASE_URL",
+  "base_url": "https://api.deepseek.com",
+  "auth_env": "PAPERTOSKILL_DEEPSEEK_API_KEY",
+  "api_key_present": true,
+  "max_tokens": 128,
+  "timeout_seconds": 60.0,
+  "started_at_unix": 1782911097,
+  "completed_at_unix": 1782911099,
+  "overall_status": "complete",
+  "status_counts": {
+    "ready": 6,
+    "pending": 0,
+    "fail": 0
+  },
+  "checks": [
+    {
+      "id": "direct_probe_configuration",
+      "status": "ready",
+      "detail": "base_url_present=True; api_key_present=True",
+      "evidence": "PAPERTOSKILL_DEEPSEEK_BASE_URL; PAPERTOSKILL_DEEPSEEK_API_KEY"
+    },
+    {
+      "id": "direct_probe_response_saved",
+      "status": "ready",
+      "detail": "response_chars=162",
+      "evidence": "results\\openai_compatible_direct_probe\\deepseek_family\\response.md"
+    },
+    {
+      "id": "direct_probe_marker_papertoskill_smoke_ok",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results\\openai_compatible_direct_probe\\deepseek_family\\response.md"
+    },
+    {
+      "id": "direct_probe_marker_ai_scientist_v2",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results\\openai_compatible_direct_probe\\deepseek_family\\response.md"
+    },
+    {
+      "id": "direct_probe_marker_paper_to_skill",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results\\openai_compatible_direct_probe\\deepseek_family\\response.md"
+    },
+    {
+      "id": "direct_probe_alias_attempt_1",
+      "status": "ready",
+      "detail": "deepseek-v4-flash: success; response_chars=162; http_status=200",
+      "evidence": "provider/model availability"
+    }
+  ]
+}

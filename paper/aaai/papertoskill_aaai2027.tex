@@ -92,11 +92,17 @@ generate and filter tool-use examples for API calls~\cite{schick2023toolformer}.
 Skill-library and interface work such as Voyager and SWE-agent also demonstrate
 that reusable skills and agent-facing interfaces can determine whether a method
 transfers beyond its original implementation~\cite{wang2023voyager,yang2024sweagent}.
+Paper2Agent is the closest concurrent system: it converts papers and associated
+codebases into MCP servers with tools, resources, prompts, tests, and an
+interactive paper-agent layer~\cite{miao2025paper2agent}. AgenticSciML shows a
+related use of specialized agents, structured debate, method memory, and
+evolutionary search for scientific machine-learning discovery~\cite{jiang2026agenticsciml}.
 
-These papers each contribute reusable procedures, but the procedures remain
-inside the paper or the original system. PaperToSkill targets the conversion
-layer: extracting operational knowledge from papers into compact skills with
-validation checks, failure branches, and transfer notes.
+These systems show that papers can become active computational artifacts.
+PaperToSkill targets a different conversion layer: compact, human-editable
+skills that preserve operational knowledge, validation checks, failure branches,
+transfer notes, and source boundaries without requiring an MCP server or a
+runnable paper codebase.
 
 \section{Method}
 
@@ -137,15 +143,15 @@ source-span validation, offline transfer-readiness, word count under a
 tokenizer-aware input proxy using \texttt{o200k\_base}. For saved
 model-ablation responses, we additionally compute a local output-token proxy.
 These metrics are reproducible gates. They do not replace live agent execution,
-provider billing, live invoices, success-per-dollar accounting, or completed
-human fidelity annotation. A billing evidence template and summary validator
-are prepared for future invoice or usage-export rows, but the current billing
-summary has 6 pending rows and 0 measured provider bills. We also
-prepare model-ablation prompt packets for Claude
-Opus 4.8, a GPT-family slot requested as GPT 5.5, and a later DeepSeek slot,
-and include a runner and response evaluator. Claude Opus 4.8 and GPT-family
-rows now have saved and scored responses for the current two-case protocol;
-DeepSeek remains pending user configuration. Provider/model availability
+real billing records, invoice evidence, success-per-dollar accounting, or
+completed human fidelity annotation. The current package uses local token
+accounting over input-token and saved-response output-token proxies. We also
+prepare model-ablation prompt packets for Claude Opus 4.8, a GPT-family slot
+requested as GPT 5.5, and a DeepSeek slot, and include a protocol-aware runner
+and response evaluator. The current two-case protocol has 6/6 saved and scored
+rows across Claude, GPT-family, and DeepSeek slots. This is saved-response
+output-contract evidence only; it is not live downstream task success,
+provider billing, or a broad model-quality result. Provider/model availability
 failures are logged separately from model-quality results.
 
 \input{papertoskill_tables}
@@ -203,27 +209,45 @@ includes a direct-PDF smoke path through \texttt{pdftotext -layout} that records
 the generated text source in the manifest, but this does not establish robust
 arbitrary-PDF automation.
 
-\section{Usage Examples and Pending Model Ablations}
+We additionally compare PaperToSkill against Paper2Agent at the artifact and
+workflow level using the Paper2Agent paper text and current PaperToSkill
+artifacts. The bounded comparison covers required inputs, generated artifact
+type, setup burden, validation checks, failure handling, source traceability,
+and runtime dependency. All seven criteria are source-backed and ready in the
+local comparison table. The result clarifies positioning: Paper2Agent produces
+MCP servers for papers with associated codebases, while PaperToSkill produces
+portable natural-language skills with explicit source and failure boundaries.
+This comparison does not run Paper2Agent, deploy an MCP server, or establish an
+end-to-end baseline performance result.
+
+\section{Usage Examples and Model Ablations}
 
 The repository includes usage examples for three practical workflows:
 loading a generated skill in a Codex-style harness, generating an automatic
 note scaffold from extracted text or a smoke-tested PDF source, and building
 model-ablation prompts. The
 model-ablation protocol produces a prompt grid for Claude Opus 4.8, a
-GPT-family slot requested as GPT 5.5, and a DeepSeek follow-up slot. The
-latest live recheck completed both Claude Opus 4.8 prompt rows, saved response
-files, and scored both rows 6/6 under the response rubric. A later GPT-family
-retry with the separate GPT credential profile saved both current GPT-family
-rows: the Toolformer row timed out on \texttt{gpt-5.5} and then succeeded with
-\texttt{gpt-5.4}, while the AIDE row succeeded with \texttt{gpt-5.5}. Both
-GPT-family rows scored 6/6. Therefore, the paper treats Claude Opus 4.8 and
-GPT-family rows as completed for the current prompt protocol, while DeepSeek
-rows remain pending rather than negative model-quality evidence. A local
-output-token proxy over the four saved Claude/GPT-family responses counts 8,710
-\texttt{o200k\_base} output tokens: 2,272 for Claude Toolformer, 2,108 for
-Claude AIDE, 1,447 for GPT-family Toolformer, and 2,883 for GPT-family AIDE.
-This proxy is not provider billing, live-invoice, or success-per-dollar
-evidence.
+GPT-family slot requested as GPT 5.5, and a DeepSeek slot. In the current
+protocol, the saved-response evaluator reports 6 total rows, 6 scored rows, 0
+pending rows, and average normalized score 1.0. The GPT-family protocol refresh
+completed both rows with \texttt{gpt-5.5}. The DeepSeek run completed both rows
+with \texttt{deepseek-v4-flash}. The latest Claude protocol refresh used the
+correct Anthropic Messages path but was blocked by provider HTTP 502; the
+scored Claude rows come from previously saved response files. A local
+output-token proxy over all six saved model-ablation responses counts 9,594
+\texttt{o200k\_base} output tokens. This 6/6 saved-response score is not live
+downstream task success, provider billing, live-invoice, success-per-dollar
+evidence, or a broad model-quality result.
+
+The bounded AI-Scientist-v2 integration path is complete for the local marker
+smoke and one full live run. The smoke report records a complete marker-contract
+response, and the full-run handoff records one completion directory. The
+AI-Scientist-v2-generated synthetic benchmark ties skill and full-excerpt
+task-success rates at 0.80 while the skill uses fewer tokens (86.2 versus
+113.2); abstract, generic-summary, and no-context baselines score 0.20, 0.00,
+and 0.00. A retrieval-depth sensitivity branch reaches 1.00 only when K=all.
+This is bounded integration and synthetic sensitivity evidence, not human
+fidelity, real-data validation, or broad live research-task success.
 
 \section{Discussion}
 
@@ -251,10 +275,12 @@ are deterministic and partly lexical, so they can over-credit exact matches or
 under-credit valid paraphrases. Third, live-transfer saved-response coverage is
 complete for the current prompt-packet protocol, but the scorer is
 deterministic and contract-based rather than a human semantic-fidelity or live
-execution-outcome evaluation. Fourth,
+execution-outcome evaluation. Fourth, the bounded AI-Scientist-v2 smoke and
+full live run is complete, but its positive result is synthetic and should not
+be read as broad live task success. Fifth,
 human-fidelity packets, a reviewer handoff guide, a stricter blank annotation
 template, and a summary script are prepared, but no independent annotations have
-been completed. Fifth,
+been completed. Sixth,
 compactness is measured by word count, deterministic character proxy, local
 tokenizer-aware input-token proxy, and local output-token proxy for saved model
 responses, not by provider-specific prices, live invoices, or live success per
@@ -266,10 +292,11 @@ PaperToSkill turns paper-derived procedural knowledge into portable,
 human-editable skills. In a four-paper benchmark, generated skills are compact,
 source-grounded, structurally valid, and more operationally complete than short
 summary baselines under deterministic evaluation. The next stage is to add
-human fidelity review, collect provider-specific billing or invoice evidence,
-evaluate downstream execution outcomes separately from saved-response scoring,
-add the user's DeepSeek follow-up rows, and test papers whose contributions are
-less naturally procedural.
+human fidelity review, evaluate downstream execution outcomes separately from
+saved-response scoring,
+extend the bounded Paper2Agent artifact comparison into a real executable MCP
+baseline if resources permit, and test papers whose contributions are less
+naturally procedural.
 
 \bibliography{papertoskill_refs}
 

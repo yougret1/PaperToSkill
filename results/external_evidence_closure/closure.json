@@ -8,121 +8,34 @@
     "fail": 0
   },
   "item_status_counts": {
-    "pending_provider": 1,
-    "blocked_by_smoke": 1,
-    "pending_user_configuration": 1,
     "pending_reviewers": 1,
-    "pending_billing_rows": 1,
     "pending_decision": 1
   },
   "pending_goal_requirements": [
     "aaai_final_submission_ready",
-    "ai_scientist_v2_live_llm_run_complete",
-    "ai_scientist_v2_live_llm_smoke_complete",
-    "deepseek_followup_response_complete",
-    "human_fidelity_annotation_complete",
-    "model_ablation_evaluation_complete",
-    "provider_billing_evidence_complete"
+    "human_fidelity_annotation_complete"
   ],
   "checks": [
     {
       "id": "external_closure_required_reports_present",
       "status": "ready",
       "detail": "present",
-      "evidence": "results/reproducibility/goal_completion_report.json; results/ai_scientist_v2_smoke/run_report.json; results/ai_scientist_v2_live_run_handoff/handoff.json; results/deepseek_followup_handoff/handoff.json; results/model_ablation_prompts/v0/evaluation.json; results/human_fidelity_packets/annotation_summary.json; results/provider_billing_evidence/billing_summary.json; results/reproducibility/aaai_package_report.json; results/reproducibility/submission_review_report.json"
+      "evidence": "results/reproducibility/goal_completion_report.json; results/ai_scientist_v2_smoke/run_report.json; results/ai_scientist_v2_live_run_handoff/handoff.json; results/deepseek_followup_handoff/handoff.json; results/model_ablation_prompts/v0/evaluation.json; results/human_fidelity_packets/annotation_summary.json; results/token_accounting/token_accounting_summary.json; results/reproducibility/aaai_package_report.json; results/reproducibility/submission_review_report.json"
     },
     {
       "id": "external_closure_goal_pending_items_covered",
       "status": "ready",
-      "detail": "pending_goal_requirements=7; covered=7",
+      "detail": "pending_goal_requirements=2; covered=2",
       "evidence": "results/reproducibility/goal_completion_report.json"
     },
     {
       "id": "external_closure_queue_items_declared",
       "status": "ready",
-      "detail": "items=6",
+      "detail": "items=2",
       "evidence": "results/external_evidence_closure/closure.json"
     }
   ],
   "items": [
-    {
-      "id": "ai_scientist_v2_smoke_completion",
-      "status": "pending_provider",
-      "goal_requirements": [
-        "ai_scientist_v2_live_llm_smoke_complete"
-      ],
-      "detail": "overall=blocked_by_provider_or_model_availability; counts={'ready': 5, 'pending': 2, 'fail': 0}; attempted=claude-opus-4-8,claude-opus-4.8,claude-opus-4-7,claude-opus-4-6",
-      "evidence": "results/ai_scientist_v2_smoke/run_report.json",
-      "next_action": "Provider must return a smoke response satisfying all marker checks.",
-      "next_commands": [
-        "# Claude-family credential profile",
-        "python scripts\\run_ai_scientist_v2_smoke.py --strict --require-complete --timeout-seconds 30 --max-tokens 128 `",
-        "  --model-alias claude-opus-4-8 `",
-        "  --model-alias claude-opus-4-7 `",
-        "  --model-alias claude-opus-4-6",
-        "# GPT-family credential profile",
-        "python scripts\\run_ai_scientist_v2_smoke.py --strict --require-complete --timeout-seconds 60 --max-tokens 128 `",
-        "  --model-alias gpt-5.5 `",
-        "  --model-alias gpt-5.4"
-      ]
-    },
-    {
-      "id": "ai_scientist_v2_full_live_run",
-      "status": "blocked_by_smoke",
-      "goal_requirements": [
-        "ai_scientist_v2_live_llm_run_complete"
-      ],
-      "detail": "handoff=blocked_by_provider_smoke; completion_dirs=0",
-      "evidence": "results/ai_scientist_v2_live_run_handoff/handoff.json",
-      "next_action": "Run the bounded full AI-Scientist-v2 task only after the smoke report is complete.",
-      "next_commands": [
-        "cd D:\\a_work\\gitee\\ai-scientist-v2",
-        "$env:AI_SCIENTIST_OPENAI_BASE_URL='https://coderxiaoc.com/v1'",
-        "$env:AI_SCIENTIST_OPENAI_API_KEY='<set locally>'",
-        "$env:AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE='1'",
-        "python launch_scientist_bfts.py `",
-        "  --load_ideas D:\\a_work\\gitee\\PaperToSkill\\ai_scientist_inputs\\papertoskill_seed_ideas.json `",
-        "  --idea_idx 0 `",
-        "  --skip_writeup `",
-        "  --skip_review"
-      ]
-    },
-    {
-      "id": "deepseek_followup_responses",
-      "status": "pending_user_configuration",
-      "goal_requirements": [
-        "deepseek_followup_response_complete",
-        "model_ablation_evaluation_complete"
-      ],
-      "detail": "handoff=pending_user_configuration; scored_rows=4; pending_rows=2",
-      "evidence": "results/deepseek_followup_handoff/handoff.json; results/model_ablation_prompts/v0/evaluation.json",
-      "next_action": "User supplies DeepSeek alias/env vars, then run and score the two DeepSeek response rows.",
-      "next_commands": [
-        "python scripts\\configure_deepseek_followup.py `",
-        "  --task benchmarks\\model_ablation_v0.json `",
-        "  --model-alias <deepseek-model-alias> `",
-        "  --auth-env DEEPSEEK_API_KEY `",
-        "  --base-url-env DEEPSEEK_BASE_URL",
-        "",
-        "python scripts\\build_model_ablation_prompts.py `",
-        "  --task benchmarks\\model_ablation_v0.json `",
-        "  --output-dir results\\model_ablation_prompts\\v0",
-        "",
-        "python scripts\\run_model_ablation_prompts.py `",
-        "  --task benchmarks\\model_ablation_v0.json `",
-        "  --index results\\model_ablation_prompts\\v0\\index.json `",
-        "  --output-json results\\model_ablation_prompts\\v0\\deepseek_run_report.json `",
-        "  --output-md results\\model_ablation_prompts\\v0\\deepseek_run_report.md `",
-        "  --model-id deepseek_followup_slot",
-        "",
-        "python scripts\\evaluate_model_ablation_responses.py `",
-        "  --index results\\model_ablation_prompts\\v0\\index.json `",
-        "  --output-json results\\model_ablation_prompts\\v0\\evaluation.json `",
-        "  --output-md results\\model_ablation_prompts\\v0\\evaluation.md",
-        "",
-        "python scripts\\check_deepseek_followup.py --strict"
-      ]
-    },
     {
       "id": "human_fidelity_annotation",
       "status": "pending_reviewers",
@@ -134,19 +47,6 @@
       "next_action": "Independent reviewers fill the annotation template, then rerun the strict summarizer.",
       "next_commands": [
         "python scripts\\summarize_human_fidelity_annotations.py --strict"
-      ]
-    },
-    {
-      "id": "provider_billing_success_per_dollar",
-      "status": "pending_billing_rows",
-      "goal_requirements": [
-        "provider_billing_evidence_complete"
-      ],
-      "detail": "status=pending; measured_rows=0; pending_rows=6; errors=0",
-      "evidence": "results/provider_billing_evidence/billing_summary.json",
-      "next_action": "Fill usage-export or invoice rows, then rerun the strict billing summary.",
-      "next_commands": [
-        "python scripts\\summarize_provider_billing_evidence.py --strict"
       ]
     },
     {

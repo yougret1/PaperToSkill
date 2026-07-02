@@ -14,7 +14,7 @@ from check_ai_scientist_v2_live_run_handoff import build_report  # noqa: E402
 
 
 class CheckAIScientistV2LiveRunHandoffTest(unittest.TestCase):
-    def test_current_handoff_is_blocked_by_provider_smoke(self):
+    def test_current_handoff_is_complete_after_bounded_live_run(self):
         with tempfile.TemporaryDirectory() as tmp:
             output_json = Path(tmp) / "handoff.json"
             output_md = Path(tmp) / "handoff.md"
@@ -34,12 +34,17 @@ class CheckAIScientistV2LiveRunHandoffTest(unittest.TestCase):
             )
 
             report = json.loads(output_json.read_text(encoding="utf-8"))
-            self.assertEqual("blocked_by_provider_smoke", report["overall_status"])
+            self.assertEqual("complete", report["overall_status"])
             statuses = {check["id"]: check["status"] for check in report["checks"]}
             self.assertEqual("ready", statuses["ai_scientist_v2_live_seed_idea_selected"])
             self.assertEqual("ready", statuses["ai_scientist_v2_live_dry_run_artifacts_present"])
-            self.assertEqual("pending", statuses["ai_scientist_v2_live_smoke_complete"])
-            self.assertEqual("pending", statuses["ai_scientist_v2_live_completion_artifacts_present"])
+            self.assertEqual("ready", statuses["ai_scientist_v2_live_smoke_complete"])
+            self.assertEqual("ready", statuses["ai_scientist_v2_live_completion_artifacts_present"])
+            self.assertEqual("ready", statuses["ai_scientist_v2_live_successful_stage_attempt_present"])
+            self.assertEqual("ready", statuses["ai_scientist_v2_live_best_nodes_not_buggy"])
+            commands = "\n".join(report["next_commands"])
+            self.assertIn("ANTHROPIC_BASE_URL", commands)
+            self.assertIn("Remove-Item Env:\\AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE", commands)
             self.assertTrue(output_md.exists())
 
     def test_complete_smoke_without_completion_artifacts_is_ready_to_run(self):
@@ -73,6 +78,9 @@ class CheckAIScientistV2LiveRunHandoffTest(unittest.TestCase):
             statuses = {check["id"]: check["status"] for check in report["checks"]}
             self.assertEqual("ready", statuses["ai_scientist_v2_live_smoke_complete"])
             self.assertEqual("pending", statuses["ai_scientist_v2_live_completion_artifacts_present"])
+            commands = "\n".join(report["next_commands"])
+            self.assertIn("ANTHROPIC_API_KEY", commands)
+            self.assertNotIn("AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE='1'", commands)
 
 
 if __name__ == "__main__":

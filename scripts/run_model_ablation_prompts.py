@@ -21,6 +21,7 @@ from typing import Any
 
 
 SECRET_PATTERN = re.compile(r"sk-[A-Za-z0-9]{20,}")
+WIRE_APIS = ("openai_chat_completions", "openai_responses", "anthropic_messages")
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -35,15 +36,35 @@ def endpoint(base_url: str, suffix: str) -> str:
     return base_url.rstrip("/") + "/" + suffix.lstrip("/")
 
 
-def request_json(url: str, api_key: str, method: str = "GET", body: dict[str, Any] | None = None) -> tuple[int, dict[str, Any]]:
+def wire_endpoint(base_url: str, wire_api: str) -> str:
+    base = base_url.rstrip("/")
+    if wire_api == "anthropic_messages":
+        suffix = "messages" if base.endswith("/v1") else "v1/messages"
+        return endpoint(base_url, suffix)
+    if wire_api == "openai_responses":
+        return endpoint(base_url, "responses")
+    return endpoint(base_url, "chat/completions")
+
+
+def request_json(
+    url: str,
+    api_key: str,
+    method: str = "GET",
+    body: dict[str, Any] | None = None,
+    *,
+    extra_headers: dict[str, str] | None = None,
+    timeout_seconds: float = 60.0,
+) -> tuple[int, dict[str, Any]]:
     data = None if body is None else json.dumps(body).encode("utf-8")
     headers = {
         "Authorization": f"Bearer {api_key}",
         "Content-Type": "application/json",
     }
+    if extra_headers:
+        headers.update(extra_headers)
     request = urllib.request.Request(url, data=data, headers=headers, method=method)
     try:
-        with urllib.request.urlopen(request, timeout=60) as response:
+        with urllib.request.urlopen(request, timeout=timeout_seconds) as response:
             payload = response.read().decode("utf-8", errors="replace")
             return response.status, json.loads(payload) if payload else {}
     except urllib.error.HTTPError as exc:
@@ -125,11 +146,18 @@ def alias_attempts(model_slot: dict[str, Any], available: list[str]) -> list[tup
 
     candidates = alias_candidates(model_slot)
     if not available and candidates[0] != "deepseek-to-be-filled":
-        return [(candidates[0], "unverified_no_model_list")]
+        return [(candidate, "unverified_no_model_list") for candidate in candidates]
     return []
 
 
 def extract_content(response: dict[str, Any]) -> str:
+    if isinstance(response.get("content"), list):
+        parts = []
+        for item in response["content"]:
+            if isinstance(item, dict) and item.get("text") is not None:
+                parts.append(str(item["text"]))
+        if parts:
+            return "\n".join(parts)
     choices = response.get("choices", [])
     if choices and isinstance(choices[0], dict):
         message = choices[0].get("message", {})
@@ -139,7 +167,84 @@ def extract_content(response: dict[str, Any]) -> str:
             return str(choices[0]["text"])
     if response.get("output_text") is not None:
         return str(response["output_text"])
+    output = response.get("output", [])
+    if isinstance(output, list):
+        parts = []
+        for item in output:
+            if not isinstance(item, dict):
+                continue
+            for content in item.get("content", []):
+                if isinstance(content, dict) and content.get("text") is not None:
+                    parts.append(str(content["text"]))
+        if parts:
+            return "\n".join(parts)
     return json.dumps(response, indent=2, ensure_ascii=False)
+
+
+def slot_wire_api(model_slot: dict[str, Any]) -> str:
+    wire_api = str(model_slot.get("wire_api", "openai_chat_completions"))
+    if wire_api not in WIRE_APIS:
+        raise ValueError(f"unsupported wire_api for {model_slot.get('id', '')}: {wire_api}")
+    return wire_api
+
+
+def should_fetch_model_list(wire_api: str) -> bool:
+    return wire_api != "anthropic_messages"
+
+
+def build_wire_request(
+    *,
+    wire_api: str,
+    model: str,
+    prompt_text: str,
+    max_tokens: int,
+    anthropic_version: str,
+) -> tuple[dict[str, Any], dict[str, str]]:
+    system_message = (
+        "You are executing a PaperToSkill model-ablation prompt. "
+        "Follow the output contract and do not invent completed evidence."
+    )
+    if wire_api == "openai_responses":
+        return (
+            {
+                "model": model,
+                "input": f"{system_message}\n\n{prompt_text}",
+                "max_output_tokens": max_tokens,
+            },
+            {},
+        )
+    if wire_api == "anthropic_messages":
+        return (
+            {
+                "model": model,
+                "system": system_message,
+                "max_tokens": max_tokens,
+                "messages": [
+                    {"role": "user", "content": prompt_text},
+                ],
+            },
+            {"anthropic-version": anthropic_version},
+        )
+    return (
+        {
+            "model": model,
+            "messages": [
+                {"role": "system", "content": system_message},
+                {"role": "user", "content": prompt_text},
+            ],
+            "temperature": 0,
+            "max_tokens": max_tokens,
+        },
+        {},
+    )
+
+
+def max_attempts(args: argparse.Namespace) -> int:
+    return max(1, int(getattr(args, "max_attempts", 5)))
+
+
+def retry_delay_seconds(args: argparse.Namespace) -> float:
+    return max(0.0, float(getattr(args, "retry_delay_seconds", 2.0)))
 
 
 def write_markdown(path: Path, report: dict[str, Any]) -> None:
@@ -175,6 +280,8 @@ def write_markdown(path: Path, report: dict[str, Any]) -> None:
         f"- Successes: {report['status_counts'].get('success', 0)}",
         f"- Errors: {report['status_counts'].get('error', 0)}",
         f"- Skipped: {report['status_counts'].get('skipped', 0)}",
+        f"- Max attempts per alias: {report.get('max_attempts_per_alias', 1)}",
+        f"- Retry delay seconds: {report.get('retry_delay_seconds', 0)}",
         "",
         "Evidence boundary: credentials are read from environment variables and "
         "errors are redacted. A model ablation is complete only for rows with "
@@ -197,14 +304,15 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
 
     started = int(time.time())
     results: list[dict[str, Any]] = []
-    model_cache: dict[tuple[str, str], list[str]] = {}
-    model_catalogs: dict[tuple[str, str], dict[str, Any]] = {}
+    model_cache: dict[tuple[str, str, str], list[str]] = {}
+    model_catalogs: dict[tuple[str, str, str], dict[str, Any]] = {}
 
     for prompt in index["prompts"]:
         model_id = prompt["model_id"]
         if selected_model_ids and model_id not in selected_model_ids:
             continue
         slot = model_slots[model_id]
+        wire_api = slot_wire_api(slot)
         is_placeholder_model = str(slot.get("model_alias", "")) == "deepseek-to-be-filled"
         if is_placeholder_model and not args.include_placeholder_models:
             results.append(
@@ -213,6 +321,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                     "case_id": prompt["case_id"],
                     "status": "skipped",
                     "selection_reason": "placeholder_model_slot",
+                    "wire_api": wire_api,
                     "expected_response_path": prompt["expected_response_path"],
                 }
             )
@@ -227,47 +336,43 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                     "case_id": prompt["case_id"],
                     "status": "skipped",
                     "selection_reason": "missing_base_url_or_api_key_env",
+                    "wire_api": wire_api,
                     "expected_response_path": prompt["expected_response_path"],
                 }
             )
             continue
 
         auth_env = slot.get("auth_env", "")
-        cache_key = (base_url, auth_env)
+        cache_key = (base_url, auth_env, wire_api)
         available = model_cache.get(cache_key)
         if available is None:
-            try:
-                _, model_response = request_json(endpoint(base_url, "models"), api_key)
-                available = model_ids_from_response(model_response)
-                model_catalogs[cache_key] = {
-                    "base_url": base_url,
-                    "auth_env": auth_env,
-                    "status": "success",
-                    "model_count": len(available),
-                    "model_ids": available,
-                }
-            except RuntimeError as exc:
+            if should_fetch_model_list(wire_api):
+                try:
+                    _, model_response = request_json(
+                        endpoint(base_url, "models"),
+                        api_key,
+                        timeout_seconds=args.timeout_seconds,
+                    )
+                    available = model_ids_from_response(model_response)
+                    catalog_status = "success"
+                    catalog_error = ""
+                except RuntimeError as exc:
+                    available = []
+                    catalog_status = "error_continued_unverified"
+                    catalog_error = str(exc)
+            else:
                 available = []
-                model_catalogs[cache_key] = {
-                    "base_url": base_url,
-                    "auth_env": auth_env,
-                    "status": "error",
-                    "error_message": str(exc),
-                    "model_count": 0,
-                    "model_ids": [],
-                }
-                results.append(
-                    {
-                        "model_id": model_id,
-                        "case_id": prompt["case_id"],
-                        "status": "error",
-                        "selection_reason": "model_list_failed",
-                        "error_message": str(exc),
-                        "expected_response_path": prompt["expected_response_path"],
-                    }
-                )
-                model_cache[cache_key] = available
-                continue
+                catalog_status = "skipped_for_wire_api"
+                catalog_error = "anthropic_messages model catalog is not required by the local API docs"
+            model_catalogs[cache_key] = {
+                "base_url": base_url,
+                "auth_env": auth_env,
+                "wire_api": wire_api,
+                "status": catalog_status,
+                "error_message": catalog_error,
+                "model_count": len(available),
+                "model_ids": available,
+            }
             model_cache[cache_key] = available
 
         attempts = alias_attempts(slot, available)
@@ -279,6 +384,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                     "case_id": prompt["case_id"],
                     "status": "skipped",
                     "selection_reason": reason,
+                    "wire_api": wire_api,
                     "available_gpt_models": [model for model in available if model.lower().startswith("gpt")][:20],
                     "expected_response_path": prompt["expected_response_path"],
                 }
@@ -289,52 +395,64 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         attempt_records = []
         saved_result: dict[str, Any] | None = None
         for alias, reason in attempts:
-            body = {
-                "model": alias,
-                "messages": [
-                    {
-                        "role": "system",
-                        "content": "You are executing a PaperToSkill model-ablation prompt. Follow the output contract and do not invent completed evidence.",
-                    },
-                    {"role": "user", "content": prompt_text},
-                ],
-                "temperature": 0,
-                "max_tokens": args.max_tokens,
-            }
-            try:
-                status, response = request_json(endpoint(base_url, "chat/completions"), api_key, method="POST", body=body)
-                content = extract_content(response)
-                response_path = Path(prompt["expected_response_path"])
-                response_path.parent.mkdir(parents=True, exist_ok=True)
-                response_path.write_text(content.strip() + "\n", encoding="utf-8")
-                attempt_records.append(
-                    {
-                        "alias": alias,
-                        "selection_reason": reason,
+            body, extra_headers = build_wire_request(
+                wire_api=wire_api,
+                model=alias,
+                prompt_text=prompt_text,
+                max_tokens=args.max_tokens,
+                anthropic_version=args.anthropic_version,
+            )
+            last_error = ""
+            for attempt_number in range(1, max_attempts(args) + 1):
+                try:
+                    status, response = request_json(
+                        wire_endpoint(base_url, wire_api),
+                        api_key,
+                        method="POST",
+                        body=body,
+                        extra_headers=extra_headers,
+                        timeout_seconds=args.timeout_seconds,
+                    )
+                    content = extract_content(response)
+                    response_path = Path(prompt["expected_response_path"])
+                    response_path.parent.mkdir(parents=True, exist_ok=True)
+                    response_path.write_text(content.strip() + "\n", encoding="utf-8")
+                    attempt_records.append(
+                        {
+                            "alias": alias,
+                            "selection_reason": reason,
+                            "status": "success",
+                            "attempts": attempt_number,
+                        }
+                    )
+                    saved_result = {
+                        "model_id": model_id,
+                        "case_id": prompt["case_id"],
                         "status": "success",
-                    }
-                )
-                saved_result = {
-                    "model_id": model_id,
-                    "case_id": prompt["case_id"],
-                    "status": "success",
-                    "alias_used": alias,
-                    "selection_reason": reason,
-                    "attempted_aliases": attempt_records,
-                    "http_status": status,
-                    "response_chars": len(content),
-                    "expected_response_path": prompt["expected_response_path"],
-                }
-                break
-            except RuntimeError as exc:
-                attempt_records.append(
-                    {
-                        "alias": alias,
+                        "wire_api": wire_api,
+                        "alias_used": alias,
                         "selection_reason": reason,
-                        "status": "error",
-                        "error_message": str(exc),
+                        "attempted_aliases": attempt_records,
+                        "http_status": status,
+                        "response_chars": len(content),
+                        "expected_response_path": prompt["expected_response_path"],
                     }
-                )
+                    break
+                except RuntimeError as exc:
+                    last_error = str(exc)
+                    if attempt_number < max_attempts(args) and retry_delay_seconds(args):
+                        time.sleep(retry_delay_seconds(args))
+            if saved_result is not None:
+                break
+            attempt_records.append(
+                {
+                    "alias": alias,
+                    "selection_reason": reason,
+                    "status": "error",
+                    "attempts": max_attempts(args),
+                    "error_message": last_error,
+                }
+            )
 
         if saved_result is not None:
             results.append(saved_result)
@@ -344,6 +462,7 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
                     "model_id": model_id,
                     "case_id": prompt["case_id"],
                     "status": "error",
+                    "wire_api": wire_api,
                     "alias_used": attempts[-1][0],
                     "selection_reason": "all_candidate_aliases_failed",
                     "attempted_aliases": attempt_records,
@@ -374,6 +493,8 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
         ),
         "started_at_unix": started,
         "completed_at_unix": int(time.time()),
+        "max_attempts_per_alias": max_attempts(args),
+        "retry_delay_seconds": retry_delay_seconds(args),
         "overall_status": overall,
         "status_counts": counts,
         "model_catalogs": list(model_catalogs.values()),
@@ -391,6 +512,10 @@ def main() -> int:
     parser.add_argument("--base-url", help="Override base URL for all selected model slots.")
     parser.add_argument("--api-key", help="Override API key for all selected model slots. Prefer env vars.")
     parser.add_argument("--max-tokens", type=int, default=900)
+    parser.add_argument("--timeout-seconds", type=float, default=60.0)
+    parser.add_argument("--max-attempts", type=int, default=5)
+    parser.add_argument("--retry-delay-seconds", type=float, default=2.0)
+    parser.add_argument("--anthropic-version", default="2023-06-01")
     parser.add_argument("--include-placeholder-models", action="store_true")
     args = parser.parse_args()
 

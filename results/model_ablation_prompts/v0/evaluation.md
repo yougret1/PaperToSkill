@@ -3,8 +3,8 @@
 Evidence boundary: this scores saved response files only; pending rows are not completed ablations.
 
 - Total rows: 6
-- Scored rows: 4
-- Pending rows: 2
+- Scored rows: 6
+- Pending rows: 0
 - Average normalized score: 1.0
 
 | Model | Case | Status | Score | Normalized |
@@ -13,5 +13,5 @@ Evidence boundary: this scores saved response files only; pending rows are not c
 | claude_opus_4_8 | aide_auto_skill_usage | scored | 6/6 | 1.0 |
 | gpt_5_5_or_gpt_family | toolformer_curated_skill_usage | scored | 6/6 | 1.0 |
 | gpt_5_5_or_gpt_family | aide_auto_skill_usage | scored | 6/6 | 1.0 |
-| deepseek_followup_slot | toolformer_curated_skill_usage | pending | pending | pending |
-| deepseek_followup_slot | aide_auto_skill_usage | pending | pending | pending |
+| deepseek_followup_slot | toolformer_curated_skill_usage | scored | 6/6 | 1.0 |
+| deepseek_followup_slot | aide_auto_skill_usage | scored | 6/6 | 1.0 |

@@ -100,6 +100,7 @@ def build_prompts(task_path: Path, output_dir: Path) -> dict[str, Any]:
                     "model_id": model["id"],
                     "model_alias": model["model_alias"],
                     "model_aliases": model.get("model_aliases") or [model["model_alias"]],
+                    "wire_api": model.get("wire_api", "openai_chat_completions"),
                     "provider_status": model.get("provider_status", "pending"),
                     "response_status": model.get("response_status", "pending"),
                     "case_id": case["id"],

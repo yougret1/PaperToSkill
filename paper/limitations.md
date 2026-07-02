@@ -40,18 +40,26 @@ for the current prompt-packet protocol. However, the scorer is deterministic and
 contract-based, so live task success-rate claims and human semantic-fidelity
 claims remain unsupported.
 
+### AI-Scientist-v2 Integration Is Bounded
+
+The AI-Scientist-v2 marker smoke and one bounded full live run are complete for
+the current local gate. The run is useful integration evidence and produced a
+synthetic sensitivity result, but it should not be described as human semantic
+fidelity, real-data validation, or broad live research-task success. The
+HF/semantic-data branch remains a failed branch because dataset loading was
+invalid and `sentence_transformers` was missing.
+
 ### Model Ablations Partially Completed
 
 Claude/GPT-family/DeepSeek model-ablation prompt packets, a runner, and a
 response evaluator are prepared. The latest live recheck completed both Claude
 Opus 4.8 prompt rows, saved response files, and scored both rows 6/6. A later
-GPT-family retry with the separate GPT credential profile also saved both
-current GPT-family rows: the Toolformer row timed out on `gpt-5.5` and then
-succeeded with `gpt-5.4`, while the AIDE row succeeded with `gpt-5.5`. Both
-GPT-family rows scored 6/6. DeepSeek remains an unattempted follow-up slot.
-The Claude and GPT-family rows are model-response evidence for the current
-two-case prompt protocol; the earlier GPT 502 failures are provider
-availability history, not GPT model-quality evidence.
+GPT-family protocol refresh saved both rows with `gpt-5.5`, and DeepSeek saved
+both rows with `deepseek-v4-flash`; all six saved rows score 6/6. The latest
+Claude protocol refresh used Anthropic Messages but was blocked by provider
+HTTP 502, so the scored Claude rows come from earlier saved response files.
+These rows are saved-response evidence for the current two-case prompt
+protocol; provider errors are availability history, not model-quality evidence.
 
 ### Limited Benchmark Diversity
 
@@ -76,12 +84,11 @@ Generated skills are under a 1200-word budget and have both a deterministic
 character-based input-token proxy and a local `o200k_base` tokenizer-aware proxy
 that are much smaller than full extracted paper text. Phase 38 also adds a local
 output-token proxy over saved Claude/GPT-family model-ablation responses.
-However, the project has not yet computed provider-specific prices, live
-invoices, realized provider output bills, or success-per-dollar. Cost claims
-should therefore remain framed as local input/output token proxies. A provider
-billing template and summary validator are prepared for future invoice or usage
-exports, but the current billing summary has 6 pending rows and 0 measured
-provider bills.
+However, the project has not computed provider-specific prices, live invoices,
+realized provider output bills, or success-per-dollar. Cost claims should
+therefore remain framed as local input/output token proxies. Provider billing
+and success-per-dollar are outside the current claim set unless a separate
+future evidence policy explicitly reopens them.
 
 ### Failure Archive Is Not An Outcome Study
 
@@ -96,22 +103,22 @@ reproduction success.
 The reproducibility checker reports that local artifacts, deterministic results,
 prompt packets, saved live-transfer responses, failure archive, human-fidelity
 protocol, and secret scan are ready with zero failed checks. However, the same
-report still marks completed human-fidelity annotation and DeepSeek/model
-completion evidence as pending external evidence. The package should therefore
-be described as locally ready, not submission-final.
+report still marks completed human-fidelity annotation as pending external
+evidence. The AAAI decision is recorded as `wait_for_external_evidence`, so the
+package should therefore be described as locally ready, not submission-final.
 
 ## Future Work
 
-1. Add the user's concrete DeepSeek model alias and endpoint profile, then run
-   and score the same prompt grid.
-2. Run the prepared human source-fidelity packets with independent annotators
+1. Run the prepared human source-fidelity packets with independent annotators
    and report agreement or adjudication.
-3. Extend extraction from curated notes toward raw PDF ingestion with stronger
+2. Extend extraction from curated notes toward raw PDF ingestion with stronger
    section detection, table handling, citation-aware source maps, and
    multi-paper auto-note validation.
-4. Add provider-specific pricing, live invoices, realized output-token bills,
-   and success-per-dollar accounting for full-paper, summary, skill, and saved
-   response contexts.
+3. If future economics claims are desired, define a separate billing protocol
+   with provider-specific prices, live invoices, realized output-token bills,
+   and success-per-dollar accounting before making those claims.
+4. Extend the bounded Paper2Agent artifact/workflow comparison into a real
+   executable MCP baseline if Paper2Agent setup resources are available.
 5. Expand the benchmark with less procedural papers to test failure modes.
 6. Preserve negative and failed branches as paper evidence rather than filtering
    them out of the research story.

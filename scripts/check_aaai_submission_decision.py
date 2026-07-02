@@ -25,7 +25,7 @@ REQUIRED_REPORTS = {
     "deepseek_handoff": "results/deepseek_followup_handoff/handoff.json",
     "model_ablation_evaluation": "results/model_ablation_prompts/v0/evaluation.json",
     "human_fidelity": "results/human_fidelity_packets/annotation_summary.json",
-    "provider_billing": "results/provider_billing_evidence/billing_summary.json",
+    "token_accounting": "results/token_accounting/token_accounting_summary.json",
 }
 
 TEXT_INPUTS = {
@@ -46,12 +46,7 @@ LOCAL_READY_REPORTS = {
 
 EXPECTED_PENDING_REQUIREMENTS = {
     "aaai_final_submission_ready",
-    "ai_scientist_v2_live_llm_run_complete",
-    "ai_scientist_v2_live_llm_smoke_complete",
-    "deepseek_followup_response_complete",
     "human_fidelity_annotation_complete",
-    "model_ablation_evaluation_complete",
-    "provider_billing_evidence_complete",
 }
 
 DECISION_RECORD = "research/aaai_submission_decision.md"
@@ -211,7 +206,7 @@ def build_options(reports: dict[str, dict[str, Any]], combined_text: str) -> lis
             "deterministic/offline",
             "do not claim",
             "human validation",
-            "provider billing",
+            "token accounting",
             "DeepSeek",
             "AI-Scientist-v2 LLM-client smoke",
         ],
@@ -232,14 +227,16 @@ def build_options(reports: dict[str, dict[str, Any]], combined_text: str) -> lis
             "required_claim_scope": [
                 "Paper-note-to-skill conversion over curated and bounded extracted-text cases.",
                 "Deterministic local gates for coverage, source grounding, transfer readiness, and table/claim consistency.",
-                "Explicit limitations for human fidelity, provider billing, DeepSeek, and AI-Scientist-v2 live-run evidence.",
+                "Explicit limitations for human fidelity and bounded AI-Scientist-v2 integration evidence.",
+                "Local token accounting is used instead of provider billing evidence.",
+                "Model ablations are bounded to saved-response scoring for the current prompt protocol.",
             ],
             "must_not_claim": [
                 "AAAI acceptance or submission-final status.",
                 "Human-validated semantic fidelity.",
-                "Completed provider billing or success per dollar.",
-                "DeepSeek model-ablation completion.",
-                "Completed AI-Scientist-v2 LLM-client smoke or full live/BFTS run.",
+                "Provider billing, live invoices, or success per dollar.",
+                "Saved-response model ablations prove live downstream success, provider economics, or broad model quality.",
+                "The bounded AI-Scientist-v2 smoke/full live run proves human fidelity, real-data validation, or broad live task success.",
             ],
             "validation_commands": [
                 "python scripts\\check_aaai_package.py --strict",
@@ -256,14 +253,14 @@ def build_options(reports: dict[str, dict[str, Any]], combined_text: str) -> lis
             "status": wait_status,
             "decision_owner": "Research Lead",
             "when_defensible": (
-                "Use if the intended paper claims require semantic fidelity, live AI-Scientist-v2 execution, "
-                "DeepSeek comparison, or realized provider economics."
+                "Use if the intended paper claims require semantic fidelity, broad AI-Scientist-v2 "
+                "live research-task evidence beyond the current bounded run, or stronger human semantic evidence."
             ),
             "required_claim_scope": [
-                "Complete AI-Scientist-v2 smoke before any full live/BFTS run claim.",
-                "Collect and score DeepSeek follow-up rows.",
+                "Treat the completed bounded AI-Scientist-v2 smoke/full live run as local integration and synthetic sensitivity evidence only.",
                 "Complete independent human-fidelity annotations.",
-                "Fill provider billing rows before success-per-dollar claims.",
+                "Revisit final AAAI submission readiness after the named evidence rows clear.",
+                "Keep local token accounting separate from provider billing or success-per-dollar claims.",
             ],
             "must_not_claim": [
                 "That the local preflight itself completes any external evidence.",
@@ -374,8 +371,9 @@ def boundary_check(combined_text: str) -> Check:
         "Do not claim live task success",
         "Do not claim human validation",
         "Do not claim provider billing",
-        "Do not claim DeepSeek completion",
-        "Do not claim AI-Scientist-v2 LLM-client smoke completion",
+        "token accounting",
+        "Do not claim saved-response model-ablation scoring proves live task success",
+        "Do not claim the bounded AI-Scientist-v2 smoke/full live run proves human",
     ]
     missing = [term for term in terms if term.lower() not in combined_text.lower()]
     return Check(

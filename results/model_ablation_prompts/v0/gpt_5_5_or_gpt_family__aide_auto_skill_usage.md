@@ -7,13 +7,13 @@
 - Alias candidates:
 - `gpt-5.5`
 - `gpt-5.4`
-- Provider status: pending_model_list_verification
+- Provider status: configured_from_local_api_docs; GPT-family uses OpenAI Responses at /v1/responses
 - Response status: pending
 
 ## Model-Specific Notes
 
 - Use the separate GPT-family credential profile provided by the user.
-- Verify the exact GPT-family alias at /v1/models before running; expected candidates include gpt-5.5 and gpt-5.4.
+- Use OpenAI Responses request path /v1/responses; expected candidates include gpt-5.5 and gpt-5.4.
 - If GPT 5.5 is unavailable but another GPT-family model is listed, record the actual GPT-family model alias used and keep it in the response metadata.
 - Use the same prompt files, output contract, and scorer as the Claude slot.
 

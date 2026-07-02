@@ -8,11 +8,14 @@ scaffolds for Toolformer and AIDE; these are separate from the curated-note main
 benchmark. Phase 21 adds an AAAI-27 LaTeX package and usage examples. Phases
 22, 36, and 37 add model-ablation runner/evaluator evidence: Claude Opus 4.8
 and GPT-family rows are saved and scored for the current two-case protocol,
-while DeepSeek remains pending user configuration. Phase 38 adds a local
-output-token proxy over the saved Claude/GPT-family model responses; it is not
-provider billing evidence. Phase 40 completes saved and scored live-transfer
+with DeepSeek later completed for saved-response scoring. A local output-token
+proxy now covers all six saved model-ablation responses; it is not provider
+billing evidence. Phase 40 completes saved and scored live-transfer
 responses for all four paper packets under the deterministic output-contract
-evaluator.
+evaluator. Phase 73 adds the current GPT and DeepSeek model-ablation saves and
+Phase 74 adds a bounded source-backed Paper2Agent artifact/workflow comparison;
+these are saved-response and artifact-positioning results, not live success or
+MCP baseline evidence.
 
 ## Working Title
 
@@ -134,25 +137,29 @@ Main results from `results/tables/main_results.md`:
 - skills remain under 1200 words;
 - generated skills use 2.39%, 4.28%, 9.65%, and 6.16% of full extracted
   paper `o200k_base` tokenizer-aware input-token proxies;
-- saved Claude/GPT-family model-ablation responses total 8,710 local
-  `o200k_base` output tokens across four measured rows, with DeepSeek rows
-  pending;
+- saved Claude/GPT-family/DeepSeek model-ablation responses total 9,594 local
+  `o200k_base` output tokens across six measured rows;
 - full skills score 10/10 on offline transfer readiness, while removing
   transfer notes drops readiness to 7.6/10 in all four cases.
 - the failure-case archive records 27 cases: 21 paper-reported limitations or
   failure branches and 6 project-level failure/fix records.
 - the reproducibility package checker reports local package readiness with
-  pending DeepSeek-response and human-annotation evidence separated from local
+  bounded AI-Scientist-v2 smoke/full-run evidence complete, while pending
+  human-annotation and final-submission evidence remain separated from local
   failures.
 - all four live-transfer response sets have saved Claude-family responses across
   Codex-style and Claude-style harness prompts and all three context variants;
   the aggregate evaluator reports 24/24 scored rows, 0 pending rows, and 1.0
   average normalized score. AI Scientist-v2, Reflexion, and AIDE rows score
   11/11; Toolformer rows score 9/9.
-- the model-ablation live attempts record that Claude Opus 4.8 and GPT-family
-  each completed both current prompt rows and scored 6/6; the GPT-family
-  Toolformer row used `gpt-5.4` after a `gpt-5.5` timeout, while the AIDE row
-  used `gpt-5.5`.
+- the model-ablation protocol has 6 saved and scored rows in the current
+  protocol; GPT-family completed both rows with `gpt-5.5`, DeepSeek completed
+  both rows with `deepseek-v4-flash`, and the latest Claude protocol refresh was
+  provider-blocked so the scored Claude rows come from earlier saved response
+  files.
+- the bounded Paper2Agent artifact/workflow comparison reports 7/7 ready
+  criteria across required inputs, artifact type, setup burden, validation,
+  failure handling, source traceability, and runtime dependency.
 - in a separate auto-note comparison, the Toolformer extracted-text scaffold
   produces a 1,179-word skill scoring 20/20 on the deterministic rubric,
   9.3/10 on context coverage, 10/10 transfer readiness, and 1.0 source support
@@ -174,9 +181,11 @@ Current limitations:
 - live-transfer saved-response coverage is complete for the current prompt
   packets, but the scorer is a deterministic output-contract check rather than
   human semantic fidelity or real live task success;
-- Claude/GPT-family/DeepSeek model ablation prompts are prepared, and Claude
-  Opus 4.8 plus GPT-family rows are saved and scored for the current prompt
-  protocol, but DeepSeek rows remain unattempted;
+- Claude/GPT-family/DeepSeek model ablation rows are saved and scored for the
+  current prompt protocol, but this is saved-response evidence rather than live
+  task success, provider economics, or broad model-quality proof;
+- the bounded Paper2Agent comparison is source-backed artifact/workflow
+  positioning, not an executable MCP baseline run;
 - no human fidelity annotation or inter-rater agreement yet;
 - human-fidelity review packets, a reviewer handoff guide, a stricter blank
   annotation template, and a summarizer are prepared, but annotation remains
@@ -186,16 +195,19 @@ Current limitations:
 - the failure-case archive is provenance evidence, not an outcome study showing
   that recording failures improves final task success;
 - the reproducibility package is ready locally but still lacks completed human
-  annotations, DeepSeek responses, provider billing, and final submission
-  decisions;
+  annotations and final submission readiness under the recorded wait policy;
+  provider billing remains outside the current claim set, and the completed
+  bounded AI-Scientist-v2 smoke/full-run evidence is not human fidelity,
+  real-data validation, or broad live task-success evidence;
 - benchmark is focused on agent-method papers.
 
 ### 7. Conclusion
 
 PaperToSkill shows that papers can be translated into compact, source-grounded
 skills with measurable offline advantages over summaries. The next stage is live
-execution across harnesses, human fidelity review, and stress tests on papers
-that are less directly procedural.
+execution across harnesses, human fidelity review, a full executable
+Paper2Agent/MCP baseline if feasible, and stress tests on papers that are less
+directly procedural.
 
 ## Figure And Table Plan
 
@@ -213,6 +225,7 @@ that are less directly procedural.
 | Appendix: Reproducibility package | `results/reproducibility/package_report.md` | Local package readiness and pending external evidence |
 | Appendix: Review/rebuttal package | `research/review_report.md`; `research/rebuttal_bank.md` | Adversarial risks and evidence-bounded responses |
 | Appendix: Prompt packets | `results/live_transfer_prompts/` | Live prompt packets, run reports, saved responses, and deterministic output-contract scoring |
-| Appendix: Model ablation prompts | `results/model_ablation_prompts/v0/` | Claude/GPT-family/DeepSeek prompt grid, live-attempt reports, scored Claude/GPT-family responses, and pending DeepSeek rows |
+| Appendix: Model ablation prompts | `results/model_ablation_prompts/v0/` | Claude/GPT-family/DeepSeek prompt grid, live-attempt reports, and saved/scored rows under the current protocol |
 | Appendix: Model response cost proxy | `results/tables/model_response_cost_proxy.md` | Local output-token proxy for saved Claude/GPT-family model-ablation responses |
 | Appendix: AAAI package | `paper/aaai/` | Official AAAI-27 template provenance and LaTeX draft |
+| Appendix: Paper2Agent artifact comparison | `results/tables/paper2agent_artifact_comparison.md` | Source-backed skill-vs-MCP artifact/workflow positioning table |

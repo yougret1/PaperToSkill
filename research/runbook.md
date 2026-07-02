@@ -305,14 +305,22 @@ Estimate local output-token proxies for saved model responses:
 python scripts\evaluate_model_response_costs.py
 ```
 
-Current Phase 37 status: the two Claude Opus 4.8 rows and the two GPT-family
-rows are saved and scored 6/6 for the current prompt protocol. In the latest
-GPT-family retry, the Toolformer row timed out on `gpt-5.5` and succeeded with
-`gpt-5.4`; the AIDE row succeeded with `gpt-5.5`. Record this as a
-GPT-family result, not a pure `gpt-5.5` result. Phase 38 adds local output-token
-proxy accounting over these four saved Claude/GPT-family responses: 8,710
-`o200k_base` output tokens, with two DeepSeek rows still pending. This report is
-not provider billing or success-per-dollar evidence.
+Current status: the current two-case model-ablation protocol has 6/6 saved and
+scored rows. GPT-family was refreshed through OpenAI Responses and completed
+both rows with `gpt-5.5`; DeepSeek was run through Chat Completions and
+completed both rows with `deepseek-v4-flash`. The latest Claude protocol
+refresh used Anthropic Messages but was blocked by provider HTTP 502, so the
+scored Claude rows come from previously saved response files. Local output-token
+proxy accounting over all six saved responses reports 9,594 `o200k_base`
+output tokens. This report is not provider billing, live downstream task
+success, broad model-quality evidence, or success-per-dollar evidence.
+
+Current Paper2Agent comparison status:
+`results/tables/paper2agent_artifact_comparison.md` reports 7/7 ready criteria
+and 0 failed criteria for a bounded source-backed artifact/workflow comparison.
+It compares Paper2Agent's reported MCP workflow with current PaperToSkill
+artifacts. It does not run Paper2Agent, deploy an MCP server, or claim
+end-to-end baseline performance.
 
 ## Provider Billing Evidence Handoff
 
@@ -358,12 +366,12 @@ report:
 python scripts\check_deepseek_followup.py --strict
 ```
 
-Current Phase 62 status:
-`results/deepseek_followup_handoff/handoff.md` reports
-`pending_user_configuration`, 5 ready checks, 2 pending checks, and 0 failed
-checks. This report lists the configuration helper, two DeepSeek prompt rows,
-expected response paths, and next commands. It does not call DeepSeek or
-complete the DeepSeek ablation.
+Current status:
+`results/deepseek_followup_handoff/handoff.md` reports `responses_present`, 7
+ready checks, 0 pending checks, and 0 failed checks. The checked-in DeepSeek
+slot uses `deepseek-v4-flash`, both expected response files exist, and the
+saved-response evaluator scores both rows 6/6. Keep this separate from
+provider billing and live downstream task success.
 
 ## Live-Transfer Response Collection
 
@@ -539,13 +547,13 @@ python scripts\check_submission_review.py `
   --strict
 ```
 
-Current Phase 44 status:
+Current status:
 `results/reproducibility/submission_review_report.md` reports ready, 15 ready
 checks, and 0 failed checks. It verifies that review handoff files describe the
-24 scored saved live-transfer response rows, 4 scored and 2 pending
-model-ablation rows, 0 scored and 24 pending human-fidelity rows, 0 measured
-and 6 pending provider-billing rows, and the current AI-Scientist-v2 smoke
-blocker. Passing this gate does not mean the AAAI paper is submission-final.
+24 scored saved live-transfer response rows, 6 scored and 0 pending
+model-ablation rows, 0 scored and 24 pending human-fidelity rows, local token
+accounting, and the bounded AI-Scientist-v2 smoke/full live-run completion.
+Passing this gate does not mean the AAAI paper is submission-final.
 
 ## Goal Completion Gate
 
@@ -560,10 +568,8 @@ python scripts\check_goal_completion.py `
 ```
 
 This checker is expected to report
-`not_complete_pending_external_evidence` until the AI-Scientist-v2 LLM-client
-smoke can complete, the full AI-Scientist-v2 live run decision is resolved, the
-DeepSeek follow-up response rows, human-fidelity annotation, provider-billing or
-success-per-dollar evidence, and final AAAI submission decisions are complete.
+`not_complete_pending_external_evidence` until human-fidelity annotation and
+final AAAI submission readiness under the recorded wait policy are complete.
 Passing `--strict` only fails on local requirement
 failures; pending external evidence remains pending rather than a package
 failure.
@@ -577,13 +583,11 @@ next actions:
 python scripts\check_external_evidence_closure.py --strict
 ```
 
-Current Phase 51 status:
+Current status:
 `results/external_evidence_closure/closure.md` reports
 `overall_status=pending_external_evidence`, 3 ready checks, 0 pending checks,
-and 0 failed checks. The queue covers AI-Scientist-v2 smoke completion,
-AI-Scientist-v2 full live/BFTS run, DeepSeek response collection and
-model-ablation completion, human-fidelity annotation, provider billing and
-success-per-dollar evidence, and the AAAI submission decision.
+and 0 failed checks. The queue covers human-fidelity annotation and the AAAI
+submission decision.
 
 This queue is a local planning and checking artifact. It does not complete any
 of the external evidence items.
@@ -597,13 +601,11 @@ queue:
 python scripts\check_external_evidence_packets.py --strict
 ```
 
-Current Phase 69 status:
+Current status:
 `results/external_evidence_packets/packets.md` reports
 `overall_status=ready`, 7 ready checks, 0 pending checks, and 0 failed checks.
-The six packets cover AI-Scientist-v2 smoke completion, AI-Scientist-v2 full
-live/BFTS run, DeepSeek response collection/model-ablation completion,
-human-fidelity annotation, provider billing/success-per-dollar evidence, and
-the AAAI submission decision.
+The two packets cover human-fidelity annotation and the AAAI submission
+decision.
 
 These packets list inputs, setup notes, run commands, validation commands,
 completion criteria, escalation rules, and evidence boundaries. They do not
@@ -631,7 +633,7 @@ Current Phase 55 status:
 
 - submit now as a deterministic/offline system paper with explicit limitations;
 - wait for external evidence before making stronger live, human-fidelity,
-  DeepSeek, or provider-economics claims.
+  provider-economics, or AI-Scientist-v2 live-run claims.
 
 The preflight does not select an option. Record a human decision only by adding
 `research/aaai_submission_decision.md` with a selected option, decision owner,
@@ -678,13 +680,14 @@ report:
 python scripts\check_ai_scientist_v2_live_run_handoff.py --strict
 ```
 
-Current Phase 49 status:
+Current Phase 76 status:
 `results/ai_scientist_v2_live_run_handoff/handoff.md` reports
-`blocked_by_provider_smoke`, 10 ready checks, 2 pending checks, and 0 failed
-checks. It checks the AI-Scientist-v2 root, launcher, dry-run/skip flags,
-laptop-profile config, PaperToSkill seed idea, prior dry-run artifacts,
-environment variable names, and the next full-run command. It does not run BFTS
-or call an LLM.
+`complete`, 16 ready checks, 0 pending checks, 0 failed checks, and one
+completion directory. It checks the AI-Scientist-v2 root, launcher, dry-run/skip
+flags, laptop-profile config, PaperToSkill seed idea, prior dry-run artifacts,
+environment variable names, the smoke-completion evidence, completion artifacts,
+and non-buggy best-node consistency.
 
-The eventual full live command is listed in the handoff report and should only
-be used once the smoke/provider blocker is resolved.
+The completed run is bounded integration and synthetic sensitivity evidence. Do
+not treat it as human fidelity, real-data validation, or broad live research
+task success.

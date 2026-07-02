@@ -14,7 +14,7 @@ import check_aaai_submission_decision as decision  # noqa: E402
 
 
 class CheckAAAISubmissionDecisionTest(unittest.TestCase):
-    def test_current_preflight_is_pending_human_decision_without_failures(self):
+    def test_current_preflight_has_recorded_wait_decision_without_failures(self):
         with tempfile.TemporaryDirectory() as tmp:
             output_json = Path(tmp) / "decision.json"
             output_md = Path(tmp) / "decision.md"
@@ -34,9 +34,9 @@ class CheckAAAISubmissionDecisionTest(unittest.TestCase):
             )
 
             report = json.loads(output_json.read_text(encoding="utf-8"))
-            self.assertEqual("pending_human_decision", report["overall_status"])
-            self.assertEqual("pending_user_decision", report["decision_status"])
-            self.assertIsNone(report["selected_option"])
+            self.assertEqual("ready", report["overall_status"])
+            self.assertEqual("recorded", report["decision_status"])
+            self.assertEqual("wait_for_external_evidence", report["selected_option"])
             self.assertEqual(0, report["status_counts"]["fail"])
             statuses = {check["id"]: check["status"] for check in report["checks"]}
             self.assertEqual("ready", statuses["aaai_submission_decision_input_decision_generator"])
@@ -44,7 +44,7 @@ class CheckAAAISubmissionDecisionTest(unittest.TestCase):
             self.assertEqual("ready", statuses["aaai_submission_decision_pending_evidence_state_current"])
             self.assertEqual("ready", statuses["aaai_submission_decision_external_packet_ready"])
             self.assertEqual("ready", statuses["aaai_submission_decision_boundaries_declared"])
-            self.assertEqual("pending", statuses["aaai_submission_decision_human_decision_recorded"])
+            self.assertEqual("ready", statuses["aaai_submission_decision_human_decision_recorded"])
             option_statuses = {option["id"]: option["status"] for option in report["options"]}
             self.assertEqual(
                 {

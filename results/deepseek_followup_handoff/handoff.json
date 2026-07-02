@@ -1,15 +1,15 @@
 {
   "schema_version": "0.1",
   "evidence_boundary": "Local DeepSeek follow-up handoff only. This report does not call DeepSeek, does not save model responses, and does not complete the DeepSeek ablation.",
-  "overall_status": "pending_user_configuration",
+  "overall_status": "responses_present",
   "task_path": "benchmarks\\model_ablation_v0.json",
   "index_path": "results\\model_ablation_prompts\\v0\\index.json",
   "slot": {
     "id": "deepseek_followup_slot",
-    "model_alias": "deepseek-to-be-filled",
+    "model_alias": "deepseek-v4-flash",
     "auth_env": "DEEPSEEK_API_KEY",
     "base_url_env": "DEEPSEEK_BASE_URL",
-    "provider_status": "placeholder_for_user_followup"
+    "provider_status": "configured_from_local_api_docs; DeepSeek uses OpenAI Chat Completions at /chat/completions"
   },
   "prompt_rows": [
     {
@@ -49,8 +49,8 @@
     "python scripts\\check_deepseek_followup.py --strict"
   ],
   "status_counts": {
-    "ready": 5,
-    "pending": 2,
+    "ready": 7,
+    "pending": 0,
     "fail": 0
   },
   "checks": [
@@ -86,14 +86,14 @@
     },
     {
       "id": "deepseek_followup_alias_configured",
-      "status": "pending",
-      "detail": "placeholder alias awaits user-provided DeepSeek model",
+      "status": "ready",
+      "detail": "alias=deepseek-v4-flash",
       "evidence": "benchmarks\\model_ablation_v0.json"
     },
     {
       "id": "deepseek_followup_responses_saved",
-      "status": "pending",
-      "detail": "saved=0; expected=2",
+      "status": "ready",
+      "detail": "saved=2; expected=2",
       "evidence": "results\\model_ablation_prompts\\v0\\responses\\deepseek_followup_slot__toolformer_curated_skill_usage.md; results\\model_ablation_prompts\\v0\\responses\\deepseek_followup_slot__aide_auto_skill_usage.md"
     }
   ]

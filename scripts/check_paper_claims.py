@@ -69,9 +69,9 @@ FORBIDDEN_PATTERNS = [
         "detail": "Do not claim provider billing or success-per-dollar evidence.",
     },
     {
-        "id": "completed_model_ablation",
-        "pattern": r"\b(Claude/GPT/DeepSeek ablations have completed|all[^.\n]{0,80}model[- ]ablation[^.\n]{0,80}(complete|scored)|completed DeepSeek[^.\n]{0,80}ablation|GPT 5\.5 is confirmed)\b",
-        "detail": "Do not claim completed all-model or DeepSeek ablations.",
+        "id": "unbounded_model_ablation_quality",
+        "pattern": r"\b(model[- ]ablation[^.\n]{0,120}(proves|demonstrates)[^.\n]{0,120}(live task success|downstream execution|model quality|provider economics)|all model[- ]ablation experiments are complete)\b",
+        "detail": "Do not treat saved-response model-ablation scoring as live task, model-quality, or provider-economics proof.",
     },
     {
         "id": "submission_final",
@@ -107,9 +107,9 @@ REQUIRED_BOUNDARIES = [
         "detail": "Paper text should frame cost evidence as local proxy evidence.",
     },
     {
-        "id": "model_ablation_partial_boundary",
-        "pattern": r"(Claude[^.]{0,160}(saved|scored|completed)[^.]{0,240}GPT-family[^.]{0,160}(saved|scored|completed)[^.]{0,240}DeepSeek[^.]{0,160}(pending|remain)|GPT-family[^.]{0,160}(saved|scored|completed)[^.]{0,160}DeepSeek[^.]{0,120}(pending|remain)|Claude Opus 4\.8 and GPT-family rows have saved and scored\s+responses[^.]{0,160}DeepSeek remains pending)",
-        "detail": "Paper text should classify model ablations as partially completed with DeepSeek still pending.",
+        "id": "model_ablation_saved_response_boundary",
+        "pattern": r"(six[^.]{0,120}(saved|scored)[^.]{0,160}(model[- ]ablation|responses)[^.]{0,200}(not|does not|do not)[^.]{0,200}(live task|downstream|provider billing|provider economics|model-quality|model quality)|model[- ]ablation[^.]{0,160}(6/6|saved-response scor(?:e|ing)|saved-response accounting)[^.]{0,200}(not|does not|do not)[^.]{0,200}(live task|downstream|provider billing|provider economics|model-quality|model quality)|6/6[^.]{0,80}saved-response scor(?:e|ing)[^.]{0,200}(not|does not|do not)[^.]{0,200}(live task|downstream|provider billing|provider economics|model-quality|model quality)|Claude[^.]{0,160}latest[^.]{0,160}(blocked|502)[^.]{0,160}saved[^.]{0,160}scored)",
+        "detail": "Paper text should bound model-ablation rows as saved-response scoring, not live task or provider-economics proof.",
     },
 ]
 

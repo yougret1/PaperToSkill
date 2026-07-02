@@ -37,10 +37,12 @@ class CheckExternalEvidenceClosureTest(unittest.TestCase):
             self.assertEqual("pending_external_evidence", report["overall_status"])
             self.assertEqual(0, report["status_counts"]["fail"])
             item_ids = {item["id"] for item in report["items"]}
-            self.assertIn("ai_scientist_v2_smoke_completion", item_ids)
-            self.assertIn("deepseek_followup_responses", item_ids)
+            self.assertNotIn("ai_scientist_v2_smoke_completion", item_ids)
+            self.assertNotIn("ai_scientist_v2_full_live_run", item_ids)
+            self.assertNotIn("deepseek_followup_responses", item_ids)
             self.assertIn("human_fidelity_annotation", item_ids)
-            self.assertIn("provider_billing_success_per_dollar", item_ids)
+            self.assertNotIn("token_accounting_summary", item_ids)
+            self.assertIn("aaai_submission_decision", item_ids)
             checks = {check["id"]: check for check in report["checks"]}
             self.assertEqual("ready", checks["external_closure_goal_pending_items_covered"]["status"])
             self.assertTrue(output_md.exists())
@@ -74,10 +76,12 @@ class CheckExternalEvidenceClosureTest(unittest.TestCase):
                     "scored_rows": 24,
                     "pending_rows": 0,
                 },
-                "results/provider_billing_evidence/billing_summary.json": {
-                    "billing_status": "complete",
-                    "measured_rows": 6,
-                    "pending_rows": 0,
+                "results/token_accounting/token_accounting_summary.json": {
+                    "accounting_status": "complete",
+                    "composite_proxy": {
+                        "generated_skill_input_tokens": 4322,
+                        "saved_response_output_tokens": 9594,
+                    },
                     "errors": [],
                 },
                 "results/reproducibility/aaai_package_report.json": {
@@ -94,7 +98,7 @@ class CheckExternalEvidenceClosureTest(unittest.TestCase):
 
             report = closure.build_report(root)
             self.assertEqual("complete", report["overall_status"])
-            self.assertEqual(6, report["item_status_counts"]["complete"])
+            self.assertEqual([], report["items"])
 
     def test_missing_item_requirement_fails_coverage_check(self):
         original_build_items = closure.build_items

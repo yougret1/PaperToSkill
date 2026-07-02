@@ -1,15 +1,13 @@
 {
   "schema_version": "0.1",
   "evidence_boundary": "Local AAAI submission-decision preflight. It distinguishes available submission paths and required boundaries, but it does not make the human submission decision or complete pending external evidence.",
-  "decision_status": "pending_user_decision",
-  "selected_option": null,
+  "decision_status": "recorded",
+  "selected_option": "wait_for_external_evidence",
   "decision_record": {
     "path": "research/aaai_submission_decision.md",
-    "status": "missing",
-    "selected_option": null,
-    "issues": [
-      "decision record is not present"
-    ]
+    "status": "valid",
+    "selected_option": "wait_for_external_evidence",
+    "issues": []
   },
   "options": [
     {
@@ -20,14 +18,16 @@
       "required_claim_scope": [
         "Paper-note-to-skill conversion over curated and bounded extracted-text cases.",
         "Deterministic local gates for coverage, source grounding, transfer readiness, and table/claim consistency.",
-        "Explicit limitations for human fidelity, provider billing, DeepSeek, and AI-Scientist-v2 live-run evidence."
+        "Explicit limitations for human fidelity and bounded AI-Scientist-v2 integration evidence.",
+        "Local token accounting is used instead of provider billing evidence.",
+        "Model ablations are bounded to saved-response scoring for the current prompt protocol."
       ],
       "must_not_claim": [
         "AAAI acceptance or submission-final status.",
         "Human-validated semantic fidelity.",
-        "Completed provider billing or success per dollar.",
-        "DeepSeek model-ablation completion.",
-        "Completed AI-Scientist-v2 LLM-client smoke or full live/BFTS run."
+        "Provider billing, live invoices, or success per dollar.",
+        "Saved-response model ablations prove live downstream success, provider economics, or broad model quality.",
+        "The bounded AI-Scientist-v2 smoke/full live run proves human fidelity, real-data validation, or broad live task success."
       ],
       "validation_commands": [
         "python scripts\\check_aaai_package.py --strict",
@@ -43,12 +43,12 @@
       "id": "wait_for_external_evidence",
       "status": "available_for_human_decision",
       "decision_owner": "Research Lead",
-      "when_defensible": "Use if the intended paper claims require semantic fidelity, live AI-Scientist-v2 execution, DeepSeek comparison, or realized provider economics.",
+      "when_defensible": "Use if the intended paper claims require semantic fidelity, broad AI-Scientist-v2 live research-task evidence beyond the current bounded run, or stronger human semantic evidence.",
       "required_claim_scope": [
-        "Complete AI-Scientist-v2 smoke before any full live/BFTS run claim.",
-        "Collect and score DeepSeek follow-up rows.",
+        "Treat the completed bounded AI-Scientist-v2 smoke/full live run as local integration and synthetic sensitivity evidence only.",
         "Complete independent human-fidelity annotations.",
-        "Fill provider billing rows before success-per-dollar claims."
+        "Revisit final AAAI submission readiness after the named evidence rows clear.",
+        "Keep local token accounting separate from provider billing or success-per-dollar claims."
       ],
       "must_not_claim": [
         "That the local preflight itself completes any external evidence.",
@@ -142,10 +142,10 @@
       "evidence": "results/human_fidelity_packets/annotation_summary.json"
     },
     {
-      "id": "aaai_submission_decision_input_provider_billing",
+      "id": "aaai_submission_decision_input_token_accounting",
       "status": "ready",
       "detail": "present",
-      "evidence": "results/provider_billing_evidence/billing_summary.json"
+      "evidence": "results/token_accounting/token_accounting_summary.json"
     },
     {
       "id": "aaai_submission_decision_input_decision_generator",
@@ -186,7 +186,7 @@
     {
       "id": "aaai_submission_decision_pending_evidence_state_current",
       "status": "ready",
-      "detail": "goal=not_complete_pending_external_evidence; package=ready_with_pending_external_evidence; pending=7",
+      "detail": "goal=not_complete_pending_external_evidence; package=ready_with_pending_external_evidence; pending=2",
       "evidence": "results/reproducibility/goal_completion_report.json; results/reproducibility/package_report.json"
     },
     {
@@ -210,13 +210,13 @@
     {
       "id": "aaai_submission_decision_no_default_selection",
       "status": "ready",
-      "detail": "no option selected by the preflight",
+      "detail": "human-selected option=wait_for_external_evidence",
       "evidence": "research/aaai_submission_decision.md"
     },
     {
       "id": "aaai_submission_decision_human_decision_recorded",
-      "status": "pending",
-      "detail": "no human decision record present",
+      "status": "ready",
+      "detail": "selected_option=wait_for_external_evidence",
       "evidence": "research/aaai_submission_decision.md"
     },
     {
@@ -226,10 +226,10 @@
       "evidence": "results/aaai_submission_decision/decision.json"
     }
   ],
-  "overall_status": "pending_human_decision",
+  "overall_status": "ready",
   "status_counts": {
-    "ready": 26,
-    "pending": 1,
+    "ready": 27,
+    "pending": 0,
     "fail": 0
   }
 }

@@ -49,8 +49,8 @@ Evidence boundary: this report checks local usage-example files and runs an offl
 | usage_model_ablation_prompts_exist | ready | missing_prompts=0 | results/model_ablation_prompts/v0/index.json |
 | usage_model_ablation_response_slots | ready | response_slots=6 | results/model_ablation_prompts/v0/index.json |
 | usage_model_ablation_gpt_profile | ready | auth_env=PAPERTOSKILL_GPT_OPENAI_API_KEY; aliases=gpt-5.4,gpt-5.5 | benchmarks/model_ablation_v0.json |
-| usage_model_ablation_claude_alias_candidates | ready | aliases=claude-opus-4-6,claude-opus-4-7,claude-opus-4-8,claude-opus-4.8 | benchmarks/model_ablation_v0.json |
-| usage_deepseek_followup_handoff | ready | overall=pending_user_configuration; failed=0 | results/deepseek_followup_handoff/handoff.json |
+| usage_model_ablation_claude_alias_candidates | ready | aliases=claude-opus-4-6,claude-opus-4-7,claude-opus-4-8 | benchmarks/model_ablation_v0.json |
+| usage_deepseek_followup_handoff | ready | overall=responses_present; failed=0 | results/deepseek_followup_handoff/handoff.json |
 | usage_deepseek_followup_prompt_rows | ready | rows=2 | results/deepseek_followup_handoff/handoff.json |
 | usage_deepseek_followup_next_commands | ready | configurer, runner, and evaluator commands present | results/deepseek_followup_handoff/handoff.json |
 | usage_live_transfer_evaluation | ready | total_rows=24 | results/live_transfer_prompts/evaluation.json |

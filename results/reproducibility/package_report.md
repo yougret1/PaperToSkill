@@ -3,8 +3,8 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 283
-- Pending checks: 8
+- Ready checks: 305
+- Pending checks: 1
 - Failed checks: 0
 
 ## Checks
@@ -74,6 +74,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | deepseek_followup_handoff_md | ready | present | results/deepseek_followup_handoff/handoff.md |
 | artifact_map | ready | present | research/artifact_map.md |
 | claim_evidence_matrix | ready | present | research/claim_evidence_matrix.md |
+| new_paper_triage | ready | present | research/new_paper_triage_2026-07-01.md |
 | runbook | ready | present | research/runbook.md |
 | goal_completion_audit | ready | present | research/goal_completion_audit.md |
 | stage_log | ready | present | research/stage_log.md |
@@ -115,6 +116,10 @@ Evidence boundary: this report checks local package completeness and separates p
 | provider_billing_template | ready | present | results/provider_billing_evidence/billing_template.csv |
 | provider_billing_summary_json | ready | present | results/provider_billing_evidence/billing_summary.json |
 | provider_billing_summary_md | ready | present | results/provider_billing_evidence/billing_summary.md |
+| token_accounting_protocol | ready | present | benchmarks/token_accounting_v0.json |
+| token_accounting_summarizer | ready | present | scripts/summarize_token_accounting.py |
+| token_accounting_summary_json | ready | present | results/token_accounting/token_accounting_summary.json |
+| token_accounting_summary_md | ready | present | results/token_accounting/token_accounting_summary.md |
 | result_cards | ready | present | results/result_cards.md |
 | main_results_md | ready | present | results/tables/main_results.md |
 | main_results_csv | ready | present | results/tables/main_results.csv |
@@ -126,6 +131,9 @@ Evidence boundary: this report checks local package completeness and separates p
 | model_response_cost_proxy_md | ready | present | results/tables/model_response_cost_proxy.md |
 | model_response_cost_proxy_json | ready | present | results/tables/model_response_cost_proxy.json |
 | model_response_cost_proxy_csv | ready | present | results/tables/model_response_cost_proxy.csv |
+| paper2agent_artifact_comparison_md | ready | present | results/tables/paper2agent_artifact_comparison.md |
+| paper2agent_artifact_comparison_json | ready | present | results/tables/paper2agent_artifact_comparison.json |
+| paper2agent_artifact_comparison_csv | ready | present | results/tables/paper2agent_artifact_comparison.csv |
 | auto_note_comparison_md | ready | present | results/tables/auto_note_comparison.md |
 | auto_note_comparison_csv | ready | present | results/tables/auto_note_comparison.csv |
 | paper_ready_summary | ready | present | results/tables/paper_ready_summary.md |
@@ -200,37 +208,37 @@ Evidence boundary: this report checks local package completeness and separates p
 | paper_table_core_checks_ready | ready | core checks ready | results\reproducibility\paper_table_report.json |
 | paper_claim_report_ready | ready | overall=ready; counts={'ready': 20, 'fail': 0} | results\reproducibility\paper_claim_report.json |
 | paper_claim_core_checks_ready | ready | core checks ready | results\reproducibility\paper_claim_report.json |
-| submission_review_report_ready | ready | overall=ready; counts={'ready': 15, 'fail': 0} | results\reproducibility\submission_review_report.json |
+| submission_review_report_ready | ready | overall=ready; counts={'ready': 16, 'fail': 0} | results\reproducibility\submission_review_report.json |
 | submission_review_core_checks_ready | ready | core checks ready | results\reproducibility\submission_review_report.json |
-| aaai_submission_decision_preflight_ready | ready | overall=pending_human_decision; decision_status=pending_user_decision; counts={'ready': 26, 'pending': 1, 'fail': 0} | results\aaai_submission_decision\decision.json |
+| aaai_submission_decision_preflight_ready | ready | overall=ready; decision_status=recorded; counts={'ready': 27, 'pending': 0, 'fail': 0} | results\aaai_submission_decision\decision.json |
 | aaai_submission_decision_core_checks_ready | ready | core decision preflight checks ready | results\aaai_submission_decision\decision.json |
 | aaai_submission_decision_options_available | ready | both decision options available for human decision | results\aaai_submission_decision\decision.json |
-| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 70, 'pending': 8, 'fail': 0} | results\reproducibility\goal_completion_report.json |
+| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 77, 'pending': 3, 'fail': 0} | results\reproducibility\goal_completion_report.json |
 | goal_completion_core_checks_ready | ready | core completion boundaries ready | results\reproducibility\goal_completion_report.json |
-| external_evidence_closure_report_ready | ready | overall=pending_external_evidence; counts={'ready': 3, 'pending': 0, 'fail': 0}; item_counts={'pending_provider': 1, 'blocked_by_smoke': 1, 'pending_user_configuration': 1, 'pending_reviewers': 1, 'pending_billing_rows': 1, 'pending_decision': 1} | results\external_evidence_closure\closure.json |
+| external_evidence_closure_report_ready | ready | overall=pending_external_evidence; counts={'ready': 3, 'pending': 0, 'fail': 0}; item_counts={'pending_reviewers': 1, 'pending_decision': 1} | results\external_evidence_closure\closure.json |
 | external_evidence_closure_core_checks_ready | ready | core closure checks ready | results\external_evidence_closure\closure.json |
 | external_evidence_closure_queue_items_ready | ready | closure queue items declared | results\external_evidence_closure\closure.json |
-| external_evidence_packets_report_ready | ready | overall=ready; counts={'ready': 7, 'pending': 0, 'fail': 0}; packets=6 | results\external_evidence_packets\packets.json |
+| external_evidence_packets_report_ready | ready | overall=ready; counts={'ready': 7, 'pending': 0, 'fail': 0}; packets=2 | results\external_evidence_packets\packets.json |
 | external_evidence_packets_core_checks_ready | ready | core packet checks ready | results\external_evidence_packets\packets.json |
 | external_evidence_packets_items_ready | ready | execution packets declared | results\external_evidence_packets\packets.json |
 | ai_scientist_v2_smoke_cli_status_summary | ready | status_summary=True; require_complete=True; timeout=True; alias_fallback=True; max_tokens=True | scripts\run_ai_scientist_v2_smoke.py |
-| ai_scientist_v2_llm_smoke_complete | pending | overall=blocked_by_provider_or_model_availability; counts={'ready': 5, 'pending': 2, 'fail': 0} | results\ai_scientist_v2_smoke\run_report.json |
-| ai_scientist_v2_llm_smoke_response | pending | missing until provider returns response | results\ai_scientist_v2_smoke\response.md |
-| ai_scientist_v2_llm_smoke_contract_ready | pending | missing=ai_scientist_v2_llm_response_saved,ai_scientist_v2_smoke_marker_ai_scientist_v2,ai_scientist_v2_smoke_marker_paper_to_skill,ai_scientist_v2_smoke_marker_papertoskill_smoke_ok | results\ai_scientist_v2_smoke\run_report.json |
+| ai_scientist_v2_llm_smoke_complete | ready | overall=complete; counts={'ready': 6, 'pending': 0, 'fail': 0} | results\ai_scientist_v2_smoke\run_report.json |
+| ai_scientist_v2_llm_smoke_response | ready | present | results\ai_scientist_v2_smoke\response.md |
+| ai_scientist_v2_llm_smoke_contract_ready | ready | contract markers ready | results\ai_scientist_v2_smoke\run_report.json |
 | openai_direct_probe_cli_ready | ready | status_summary=True; require_complete=True; alias_fallback=True; max_tokens=True; wire_api=True | scripts\run_openai_compatible_direct_probe.py |
 | openai_direct_probe_claude_family_report_ready | ready | overall=blocked_by_provider_or_model_availability; counts={'ready': 4, 'pending': 2, 'fail': 0}; attempted=3; wire_api=anthropic_messages; expected_wire_api=anthropic_messages | results\openai_compatible_direct_probe\claude_family\run_report.json |
 | openai_direct_probe_claude_family_contract_consistent | ready | contract consistent | results\openai_compatible_direct_probe\claude_family\run_report.json |
 | openai_direct_probe_gpt_family_report_ready | ready | overall=blocked_by_provider_or_model_availability; counts={'ready': 3, 'pending': 2, 'fail': 0}; attempted=2; wire_api=openai_responses; expected_wire_api=openai_responses | results\openai_compatible_direct_probe\gpt_family\run_report.json |
 | openai_direct_probe_gpt_family_contract_consistent | ready | contract consistent | results\openai_compatible_direct_probe\gpt_family\run_report.json |
-| ai_scientist_v2_live_run_handoff_report_ready | ready | overall=blocked_by_provider_smoke; failed=0 | results\ai_scientist_v2_live_run_handoff\handoff.json |
+| ai_scientist_v2_live_run_handoff_report_ready | ready | overall=complete; failed=0 | results\ai_scientist_v2_live_run_handoff\handoff.json |
 | ai_scientist_v2_live_run_handoff_core_checks_ready | ready | core live-run handoff checks ready | results\ai_scientist_v2_live_run_handoff\handoff.json |
-| ai_scientist_v2_live_run_completion | pending | overall=blocked_by_provider_smoke; completion_dirs=0 | results\ai_scientist_v2_live_run_handoff\handoff.json |
-| provider_billing_summary_valid | ready | errors=0 | results\provider_billing_evidence\billing_summary.json |
-| provider_billing_evidence_handoff_ready | ready | template_rows=6; summary_rows=6 | results/provider_billing_evidence/billing_template.csv; results/provider_billing_evidence/billing_summary.json |
-| provider_billing_evidence_complete | pending | status=pending; measured_rows=0; pending_rows=6 | results\provider_billing_evidence\billing_summary.json |
+| ai_scientist_v2_live_run_completion | ready | overall=complete; completion_dirs=1 | results\ai_scientist_v2_live_run_handoff\handoff.json |
+| token_accounting_summary_valid | ready | errors=0 | results\token_accounting\token_accounting_summary.json |
+| token_accounting_handoff_ready | ready | status=complete; input_tokens=4322; output_tokens=9594 | results/token_accounting/token_accounting_summary.json |
+| token_accounting_complete | ready | status=complete; input_tokens=4322; output_tokens=9594 | results\token_accounting\token_accounting_summary.json |
 | usage_example_report_ready | ready | overall=ready; counts={'ready': 55, 'fail': 0} | results\reproducibility\usage_example_report.json |
 | usage_example_core_checks_ready | ready | core checks ready | results\reproducibility\usage_example_report.json |
-| deepseek_followup_handoff_report_ready | ready | overall=pending_user_configuration; failed=0 | results\deepseek_followup_handoff\handoff.json |
+| deepseek_followup_handoff_report_ready | ready | overall=responses_present; failed=0 | results\deepseek_followup_handoff\handoff.json |
 | deepseek_followup_handoff_core_checks_ready | ready | core handoff checks ready | results\deepseek_followup_handoff\handoff.json |
 | toolformer_auto_note_script | ready | present | scripts/papertoskill_note_from_text.py |
 | toolformer_auto_pipeline_script | ready | present | scripts/papertoskill_pipeline.py |
@@ -271,14 +279,21 @@ Evidence boundary: this report checks local package completeness and separates p
 | model_ablation_run_report_md | ready | present | results/model_ablation_prompts/v0/run_report.md |
 | model_ablation_gpt_retry_run_report_json | ready | present | results/model_ablation_prompts/v0/gpt_retry_run_report.json |
 | model_ablation_gpt_retry_run_report_md | ready | present | results/model_ablation_prompts/v0/gpt_retry_run_report.md |
+| model_ablation_gpt_protocol_run_report_json | ready | present | results/model_ablation_prompts/v0/gpt_protocol_run_report.json |
+| model_ablation_gpt_protocol_run_report_md | ready | present | results/model_ablation_prompts/v0/gpt_protocol_run_report.md |
+| model_ablation_deepseek_run_report_json | ready | present | results/model_ablation_prompts/v0/deepseek_run_report.json |
+| model_ablation_deepseek_run_report_md | ready | present | results/model_ablation_prompts/v0/deepseek_run_report.md |
+| model_ablation_claude_protocol_run_report_json | ready | present | results/model_ablation_prompts/v0/claude_protocol_run_report.json |
+| model_ablation_claude_protocol_run_report_md | ready | present | results/model_ablation_prompts/v0/claude_protocol_run_report.md |
 | model_ablation_evaluation_json | ready | present | results/model_ablation_prompts/v0/evaluation.json |
 | model_ablation_evaluation_md | ready | present | results/model_ablation_prompts/v0/evaluation.md |
 | model_ablation_prompt_packets | ready | prompt_packets=6; missing_prompts=0 | results\model_ablation_prompts\v0\index.json |
 | model_ablation_model_slots | ready | models=claude_opus_4_8,deepseek_followup_slot,gpt_5_5_or_gpt_family | results\model_ablation_prompts\v0\index.json |
-| model_ablation_responses | pending | missing_response_files=2 | results\model_ablation_prompts\v0\index.json |
+| model_ablation_responses | ready | missing_response_files=0 | results\model_ablation_prompts\v0\index.json |
 | model_ablation_run_report_valid | ready | overall=partial; counts={'success': 2, 'error': 2} | results\model_ablation_prompts\v0\run_report.json |
-| model_ablation_evaluation_complete | pending | scored_rows=4; pending_rows=2 | results\model_ablation_prompts\v0\evaluation.json |
-| model_response_output_token_proxy | ready | measured_rows=4; pending_rows=2; tokenizer_output_tokens=8710 | results\tables\model_response_cost_proxy.json |
+| model_ablation_evaluation_complete | ready | scored_rows=6; pending_rows=0 | results\model_ablation_prompts\v0\evaluation.json |
+| model_response_output_token_proxy | ready | measured_rows=6; pending_rows=0; tokenizer_output_tokens=9594 | results\tables\model_response_cost_proxy.json |
+| paper2agent_artifact_comparison_report_ready | ready | overall=ready; ready=7; failed_rows=0 | results\tables\paper2agent_artifact_comparison.json |
 | live_transfer_runner | ready | present | scripts/run_live_transfer_prompts.py |
 | live_transfer_response_evaluator | ready | present | scripts/evaluate_live_transfer_responses.py |
 | live_transfer_evaluation_json | ready | present | results/live_transfer_prompts/evaluation.json |

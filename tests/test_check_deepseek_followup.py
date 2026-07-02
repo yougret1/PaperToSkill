@@ -14,7 +14,7 @@ from check_deepseek_followup import build_report  # noqa: E402
 
 
 class CheckDeepSeekFollowupTest(unittest.TestCase):
-    def test_current_handoff_is_pending_user_configuration(self):
+    def test_current_handoff_has_saved_responses_after_api_docs_run(self):
         with tempfile.TemporaryDirectory() as tmp:
             output_json = Path(tmp) / "handoff.json"
             output_md = Path(tmp) / "handoff.md"
@@ -34,11 +34,12 @@ class CheckDeepSeekFollowupTest(unittest.TestCase):
             )
 
             report = json.loads(output_json.read_text(encoding="utf-8"))
-            self.assertEqual("pending_user_configuration", report["overall_status"])
+            self.assertEqual("responses_present", report["overall_status"])
             statuses = {check["id"]: check["status"] for check in report["checks"]}
             self.assertEqual("ready", statuses["deepseek_followup_slot_present"])
-            self.assertEqual("pending", statuses["deepseek_followup_alias_configured"])
-            self.assertEqual("pending", statuses["deepseek_followup_responses_saved"])
+            self.assertEqual("ready", statuses["deepseek_followup_alias_configured"])
+            self.assertEqual("ready", statuses["deepseek_followup_responses_saved"])
+            self.assertEqual("deepseek-v4-flash", report["slot"]["model_alias"])
             next_commands = "\n".join(report["next_commands"])
             self.assertIn("configure_deepseek_followup.py", next_commands)
             self.assertIn("--model-alias <deepseek-model-alias>", next_commands)

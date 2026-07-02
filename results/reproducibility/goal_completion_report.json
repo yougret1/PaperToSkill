@@ -3,8 +3,8 @@
   "evidence_boundary": "Audits the active user goal against local repository evidence. Pending checks are explicit remaining requirements, not negative evidence and not local package failures.",
   "overall_status": "not_complete_pending_external_evidence",
   "status_counts": {
-    "ready": 70,
-    "pending": 8,
+    "ready": 77,
+    "pending": 3,
     "fail": 0
   },
   "checks": [
@@ -207,10 +207,16 @@
       "evidence": "results/tables/model_response_cost_proxy.json"
     },
     {
-      "id": "provider_billing_summary",
+      "id": "paper2agent_artifact_comparison",
       "status": "ready",
       "detail": "present",
-      "evidence": "results/provider_billing_evidence/billing_summary.json"
+      "evidence": "results/tables/paper2agent_artifact_comparison.json"
+    },
+    {
+      "id": "token_accounting_summary",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results/token_accounting/token_accounting_summary.json"
     },
     {
       "id": "submission_review_report",
@@ -256,26 +262,26 @@
     },
     {
       "id": "ai_scientist_v2_live_llm_smoke_complete",
-      "status": "pending",
-      "detail": "overall_status=blocked_by_provider_or_model_availability",
+      "status": "ready",
+      "detail": "overall_status=complete",
       "evidence": "results/ai_scientist_v2_smoke/run_report.json"
     },
     {
       "id": "ai_scientist_v2_live_llm_smoke_attempted",
       "status": "ready",
-      "detail": "overall_status=blocked_by_provider_or_model_availability",
+      "detail": "overall_status=complete",
       "evidence": "results/ai_scientist_v2_smoke/run_report.json"
     },
     {
       "id": "ai_scientist_v2_live_run_handoff_ready",
       "status": "ready",
-      "detail": "overall=blocked_by_provider_smoke; failed=0",
+      "detail": "overall=complete; failed=0",
       "evidence": "results/ai_scientist_v2_live_run_handoff/handoff.json"
     },
     {
       "id": "ai_scientist_v2_live_llm_run_complete",
-      "status": "pending",
-      "detail": "full live AI-Scientist-v2 run remains pending; handoff is local preflight only",
+      "status": "ready",
+      "detail": "full live AI-Scientist-v2 run evidence found",
       "evidence": "results/ai_scientist_v2_live_run_handoff/handoff.json"
     },
     {
@@ -303,22 +309,28 @@
       "evidence": "results/tables/context_cost_proxy_tokenizer.json"
     },
     {
-      "id": "provider_billing_evidence_handoff_ready",
+      "id": "token_accounting_handoff_ready",
       "status": "ready",
-      "detail": "billing_status=pending; pending_rows=6; errors=0",
-      "evidence": "results/provider_billing_evidence/billing_summary.json"
+      "detail": "accounting_status=complete; errors=0",
+      "evidence": "results/token_accounting/token_accounting_summary.json"
     },
     {
-      "id": "provider_billing_evidence_complete",
-      "status": "pending",
-      "detail": "local input/output token proxies and billing handoff exist; realized provider billing remains uncollected",
-      "evidence": "results/provider_billing_evidence/billing_summary.json; results/tables/context_cost_proxy_tokenizer.json; results/tables/model_response_cost_proxy.json"
+      "id": "token_accounting_complete",
+      "status": "ready",
+      "detail": "local token accounting over input/output proxies is complete",
+      "evidence": "results/token_accounting/token_accounting_summary.json; results/tables/context_cost_proxy_tokenizer.json; results/tables/model_response_cost_proxy.json"
     },
     {
       "id": "model_response_output_token_proxy_ready",
       "status": "ready",
-      "detail": "measured_rows=4; pending_rows=2; tokenizer_output_tokens=8710",
+      "detail": "measured_rows=6; pending_rows=0; tokenizer_output_tokens=9594",
       "evidence": "results/tables/model_response_cost_proxy.json"
+    },
+    {
+      "id": "paper2agent_artifact_comparison_ready",
+      "status": "ready",
+      "detail": "overall=ready; rows=7; failed_rows=0",
+      "evidence": "results/tables/paper2agent_artifact_comparison.json"
     },
     {
       "id": "failure_branch_archive_ready",
@@ -359,7 +371,7 @@
     {
       "id": "aaai_submission_decision_preflight_ready",
       "status": "ready",
-      "detail": "overall=pending_human_decision; decision_status=pending_user_decision; failed=0",
+      "detail": "overall=ready; decision_status=recorded; failed=0",
       "evidence": "results/aaai_submission_decision/decision.json"
     },
     {
@@ -377,7 +389,7 @@
     {
       "id": "claude_opus_4_8_ablation_attempted",
       "status": "ready",
-      "detail": "rows=2; statuses=success; attempted_aliases=claude-opus-4-8",
+      "detail": "rows=4; statuses=error,success; attempted_aliases=claude-opus-4-6,claude-opus-4-7,claude-opus-4-8",
       "evidence": "results/model_ablation_prompts/v0/run_report.json"
     },
     {
@@ -389,8 +401,8 @@
     {
       "id": "gpt_family_ablation_availability_checked",
       "status": "ready",
-      "detail": "rows=4; statuses=error,success; catalog_gpt_models=32",
-      "evidence": "results\\model_ablation_prompts\\v0\\run_report.json; results\\model_ablation_prompts\\v0\\gpt_retry_run_report.json"
+      "detail": "rows=6; statuses=error,success; catalog_gpt_models=51",
+      "evidence": "results\\model_ablation_prompts\\v0\\run_report.json; results\\model_ablation_prompts\\v0\\gpt_retry_run_report.json; results\\model_ablation_prompts\\v0\\gpt_protocol_run_report.json; results\\model_ablation_prompts\\v0\\deepseek_run_report.json; results\\model_ablation_prompts\\v0\\claude_protocol_run_report.json"
     },
     {
       "id": "gpt_family_ablation_complete",
@@ -407,19 +419,19 @@
     {
       "id": "deepseek_followup_handoff_ready",
       "status": "ready",
-      "detail": "overall=pending_user_configuration; failed=0",
+      "detail": "overall=responses_present; failed=0",
       "evidence": "results/deepseek_followup_handoff/handoff.json"
     },
     {
       "id": "deepseek_followup_response_complete",
-      "status": "pending",
-      "detail": "placeholder alias still pending user-provided DeepSeek configuration",
+      "status": "ready",
+      "detail": "saved and scored DeepSeek responses exist for the current prompt protocol",
       "evidence": "results/model_ablation_prompts/v0/evaluation.json"
     },
     {
       "id": "model_ablation_evaluation_complete",
-      "status": "pending",
-      "detail": "scored_rows=4; pending_rows=2",
+      "status": "ready",
+      "detail": "scored_rows=6; pending_rows=0",
       "evidence": "results/model_ablation_prompts/v0/evaluation.json"
     },
     {
@@ -461,19 +473,19 @@
     {
       "id": "external_evidence_closure_queue_ready",
       "status": "ready",
-      "detail": "overall=pending_external_evidence; failed=0; items=6",
+      "detail": "overall=pending_external_evidence; failed=0; items=2",
       "evidence": "results/external_evidence_closure/closure.json"
     },
     {
       "id": "external_evidence_execution_packets_ready",
       "status": "ready",
-      "detail": "overall=ready; failed=0; packets=6",
+      "detail": "overall=ready; failed=0; packets=2",
       "evidence": "results/external_evidence_packets/packets.json"
     },
     {
       "id": "active_goal_complete",
       "status": "pending",
-      "detail": "pending_requirements=ai_scientist_v2_live_llm_smoke_complete,ai_scientist_v2_live_llm_run_complete,provider_billing_evidence_complete,aaai_final_submission_ready,deepseek_followup_response_complete,model_ablation_evaluation_complete,human_fidelity_annotation_complete",
+      "detail": "pending_requirements=aaai_final_submission_ready,human_fidelity_annotation_complete",
       "evidence": "all goal checks"
     }
   ]

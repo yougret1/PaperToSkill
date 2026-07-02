@@ -1,0 +1,95 @@
+{
+  "schema_version": "0.1",
+  "evidence_boundary": "Source-backed artifact/workflow comparison only. It compares Paper2Agent's reported MCP workflow with current PaperToSkill artifacts and does not run Paper2Agent, deploy an MCP server, or claim end-to-end baseline performance.",
+  "inputs": {
+    "paper2agent_text": "papers\\extracted_text\\Miao 等 - 2025 - Paper2Agent Reimagining Research Papers As Interactive and Reliable AI Agents.txt",
+    "papertoskill_evidence_paths": [
+      "generated_skills\\toolformer\\SKILL.md",
+      "skill\\SKILL.md",
+      "generated_skills\\toolformer\\references\\source_map.json",
+      "paper\\aaai\\papertoskill_aaai2027.tex",
+      "results\\reproducibility\\package_report.md"
+    ]
+  },
+  "size_proxy": {
+    "paper2agent_extracted_text_words": 9895,
+    "papertoskill_skill_words": 882
+  },
+  "overall_status": "ready",
+  "status_counts": {
+    "ready": 7,
+    "fail": 0
+  },
+  "rows": [
+    {
+      "criterion_id": "input_requirements",
+      "criterion": "Required inputs",
+      "status": "ready",
+      "paper2agent_expected": "paper plus associated codebase",
+      "papertoskill_expected": "paper-derived note or extracted text; codebase optional",
+      "paper2agent_evidence": "Paper2Agent : Reimagining Research Papers As Interactive and Reliable AI Agents Jiacheng Miao1,2 , Joe R. Davis1 ,",
+      "papertoskill_evidence": "on checks, failure cases, and transfer notes. --- # Toolformer: Language Models Can Teach Themselves to Use Tools This skill converts the source paper's operational contribution into an agent workflow. It is a scaffolded extraction and should be audited against the source before being used as validated paper knowledge. ## Source - Source file: `papers/notes/toolform",
+      "interpretation": "Paper2Agent optimizes for executable paper agents, while PaperToSkill can work when only paper text is available."
+    },
+    {
+      "criterion_id": "artifact_type",
+      "criterion": "Generated artifact",
+      "status": "ready",
+      "paper2agent_expected": "MCP server with tools, resources, and prompts",
+      "papertoskill_expected": "compact natural-language skill with references and transfer notes",
+      "paper2agent_evidence": "projects. A Paper2Agent automatically converts papers into AI agents Paper MCP servers Remote server Input: papers <Paper>_mcp.py",
+      "papertoskill_evidence": "transferable method, assumptions, workflow, validation checks, limitations, failure cases, and cross-harness transfer notes into a concise SKILL.md artifact. --- # PaperToSkill Convert a paper into an agent skill, not a summary. Preserve the paper's operational contribution, evidence boundaries, and failure cases in a compact form another agent can use. ## Input",
+      "interpretation": "The two systems expose paper knowledge through different artifact types rather than direct drop-in replacements."
+    },
+    {
+      "criterion_id": "setup_burden",
+      "criterion": "Setup burden",
+      "status": "ready",
+      "paper2agent_expected": "configure environment and deploy or connect an MCP server",
+      "papertoskill_expected": "load one skill file plus local reference artifacts into an agent harness",
+      "paper2agent_evidence": "server and then exposes that server to an AI agent interface. The process has four stages: (i) codebase identification and extraction, (ii) environment configuration, (iii) tool synthesis and MCP server generation, and (iv) testing, refinement, and deployment, followed by agent connection. We implemented this multi-agent AI system in Claude Code. We design an orchestrator agent that",
+      "papertoskill_evidence": "ll'' to mean a natural-language operational artifact with an entry-point \\texttt{SKILL.md}, similar to formats used by agent harnesses that load task-specific instructions. Unlike a summary, a skill is not only explanatory. It should specify when to use the method, which inputs are required, which steps to execute, how to validate progress, which failures to wat",
+      "interpretation": "PaperToSkill has lower setup burden for reading and transfer, but lacks executable MCP tools."
+    },
+    {
+      "criterion_id": "validation_checks",
+      "criterion": "Validation checks",
+      "status": "ready",
+      "paper2agent_expected": "iterative MCP tests and downstream case-study benchmarks",
+      "papertoskill_expected": "deterministic rubric, source-span, transfer-readiness, compactness, and saved-response checks",
+      "paper2agent_evidence": "tarts with codebase extraction and automated environment setup for reproducibility. Core analytical features are wrapped as MCP tools, then validated through iterative testing. The resulting MCP server is deployed remotely and integrated with an AI agent, enabling natural-language interaction with the paper’s methods and analyses.",
+      "papertoskill_evidence": "benchmark over AI Scientist-v2, Reflexion, AIDE, and Toolformer, PaperToSkill generates skills that score 20/20 on deterministic structural rubrics, preserve more deterministic operational coverage than generic-summary and abstract-only baselines, remain under a 1200-word compactness budget, and substantially reduce deterministic input-token proxy size relative to",
+      "interpretation": "Both use validation, but Paper2Agent validates executable tools and PaperToSkill validates source-grounded skill artifacts."
+    },
+    {
+      "criterion_id": "failure_handling",
+      "criterion": "Failure handling",
+      "status": "ready",
+      "paper2agent_expected": "remove failing MCP decorators/tools and report codebase limitations",
+      "papertoskill_expected": "record failure branches, stop conditions, and unsupported evidence boundaries",
+      "paper2agent_evidence": "in a loop of generating tests, executing them, diagnosing failures, and applying fixes. If functions re- peatedly fail, their MCP decorators are removed, and they will not be included in the MCP server. All results and logs are recorded for transparency. Paper2Agent contains six steps: 1. Locate and download the codebase. Identify the official repository linke",
+      "papertoskill_evidence": "are exactly the parts needed when a user wants an agent to apply a paper rather than merely explain it. The benchmark also reveals useful failure modes. During the AIDE case, the initial extractor capped workflow, validation, and failure candidates too aggressively, which dropped data-preview and LLM-cost content. Earlier phases also exposed title parsing, source-audit",
+      "interpretation": "PaperToSkill's distinctive contribution is making failure branches editable inside the skill artifact."
+    },
+    {
+      "criterion_id": "source_traceability",
+      "criterion": "Source traceability",
+      "status": "ready",
+      "paper2agent_expected": "tool/resource links and recorded workflow traces",
+      "papertoskill_expected": "source map and source-span validation tied to skill sections",
+      "paper2agent_evidence": "th around the variant, toggle different modalities—such as RNA-seq, ATAC- seq, or ChIP-seq histone tracks. Moreover, each MCP tool embeds a traceable link to the original GitHub source code, ensuring transparency and reproducibility. By connecting an AI agent with the AlphaGenome MCP, the system creates the AlphaGenome agent. Next, we benchmarked the Paper2Agent-gener",
+      "papertoskill_evidence": "-470.\", \"Tool use emerges with model scale; smaller models benefit less from the provided APIs. Source anchors: lines 433-496.\" ], \"source_map\": { \"sections\": [ { \"title\": \"Source\", \"line\": 3, \"level\": 2, \"characters\": 355 }, { \"title\": \"Abstract\", \"line\": 13, \"level\": 2, \"ch",
+      "interpretation": "Both care about provenance; PaperToSkill makes source boundaries central to the natural-language artifact."
+    },
+    {
+      "criterion_id": "runtime_dependency",
+      "criterion": "Runtime dependency",
+      "status": "ready",
+      "paper2agent_expected": "MCP runtime plus downstream agent connection",
+      "papertoskill_expected": "text skill usable across compatible agent harnesses",
+      "paper2agent_evidence": "projects. A Paper2Agent automatically converts papers into AI agents Paper MCP servers Remote server Input: papers <Paper>_mcp.py",
+      "papertoskill_evidence": "pact, human-editable skills that preserve operational knowledge, validation checks, failure branches, transfer notes, and source boundaries without requiring an MCP server or a runnable paper codebase. \\section{Method} PaperToSkill represents each converted paper as a skill package. The main file is \\texttt{SKILL.md}; optional references include a source map that links generated skill b",
+      "interpretation": "This is the main positioning gap: server-backed executable agents versus portable skill instructions."
+    }
+  ]
+}

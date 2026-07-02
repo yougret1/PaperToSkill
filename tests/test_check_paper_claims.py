@@ -43,7 +43,7 @@ class CheckPaperClaimsTest(unittest.TestCase):
             ready_ids = {check["id"] for check in report["checks"] if check["status"] == "ready"}
             self.assertIn("paper_claim_boundary_curated_scope", ready_ids)
             self.assertIn("paper_claim_boundary_live_transfer_saved_response_boundary", ready_ids)
-            self.assertIn("paper_claim_boundary_model_ablation_partial_boundary", ready_ids)
+            self.assertIn("paper_claim_boundary_model_ablation_saved_response_boundary", ready_ids)
             self.assertTrue(output_md.exists())
 
     def test_unbounded_live_transfer_claim_fails(self):

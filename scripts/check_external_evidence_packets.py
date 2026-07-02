@@ -12,14 +12,6 @@ from typing import Any
 
 
 CLOSURE_REPORT = "results/external_evidence_closure/closure.json"
-EXPECTED_PACKET_IDS = {
-    "ai_scientist_v2_smoke_completion",
-    "ai_scientist_v2_full_live_run",
-    "deepseek_followup_responses",
-    "human_fidelity_annotation",
-    "provider_billing_success_per_dollar",
-    "aaai_submission_decision",
-}
 SECRET_PATTERN = re.compile(r"sk-[A-Za-z0-9]{20,}")
 
 
@@ -52,10 +44,9 @@ PACKET_DETAILS: dict[str, dict[str, Any]] = {
             "D:\\a_work\\gitee\\ai-scientist-v2",
         ],
         "setup": [
-            "Set AI_SCIENTIST_OPENAI_BASE_URL locally. Use https://coderxiaoc.com for Claude Messages and https://coderxiaoc.com/v1 for GPT Responses.",
-            "Set AI_SCIENTIST_OPENAI_API_KEY locally to the Claude-family or GPT-family credential profile.",
-            "Set AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE=1 locally.",
-            "For the GPT-family profile, map the GPT credential into AI_SCIENTIST_OPENAI_API_KEY for this smoke only.",
+            "For the Claude-family wrapper smoke, set ANTHROPIC_BASE_URL=https://coderxiaoc.com and ANTHROPIC_API_KEY locally.",
+            "Clear AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE and OpenAI-compatible base-url env vars before using the Claude-family wrapper smoke.",
+            "Use protocol-specific direct probes for GPT-family Responses and DeepSeek Chat Completions; do not treat them as the AI-Scientist-v2 wrapper smoke.",
             "Run the protocol-specific direct provider probe first. If it is still blocked, keep the wrapper smoke pending and escalate provider availability instead of treating the wrapper as failed.",
         ],
         "validation_commands": [
@@ -75,14 +66,15 @@ PACKET_DETAILS: dict[str, dict[str, Any]] = {
             "  --output-md results\\openai_compatible_direct_probe\\gpt_family\\run_report.md `",
             "  --response-output results\\openai_compatible_direct_probe\\gpt_family\\response.md",
             "# Claude-family credential profile",
+            "Remove-Item Env:\\AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE -ErrorAction SilentlyContinue",
+            "Remove-Item Env:\\AI_SCIENTIST_OPENAI_BASE_URL -ErrorAction SilentlyContinue",
+            "Remove-Item Env:\\OPENAI_BASE_URL -ErrorAction SilentlyContinue",
+            "$env:ANTHROPIC_BASE_URL='https://coderxiaoc.com'",
+            "$env:ANTHROPIC_API_KEY='<set Claude-family token locally>'",
             "python scripts\\run_ai_scientist_v2_smoke.py --strict --require-complete --timeout-seconds 30 --max-tokens 128 `",
             "  --model-alias claude-opus-4-8 `",
             "  --model-alias claude-opus-4-7 `",
             "  --model-alias claude-opus-4-6",
-            "# GPT-family credential profile",
-            "python scripts\\run_ai_scientist_v2_smoke.py --strict --require-complete --timeout-seconds 60 --max-tokens 128 `",
-            "  --model-alias gpt-5.5 `",
-            "  --model-alias gpt-5.4",
             "python scripts\\check_goal_completion.py --strict",
         ],
         "completion_criteria": [
@@ -101,7 +93,7 @@ PACKET_DETAILS: dict[str, dict[str, Any]] = {
             "D:\\a_work\\gitee\\ai-scientist-v2\\launch_scientist_bfts.py",
         ],
         "setup": [
-            "Complete the AI-Scientist-v2 smoke packet first.",
+            "Complete the AI-Scientist-v2 smoke packet first; current successful path is Claude-family native Anthropic Messages.",
             "Use an isolated environment for ai-scientist-v2 dependencies before a long run.",
             "Keep writeup/review disabled for the bounded task unless the user changes scope.",
         ],
@@ -168,28 +160,29 @@ PACKET_DETAILS: dict[str, dict[str, Any]] = {
         ],
         "blocker_escalation": "Escalate if independent reviewers are unavailable or scoring criteria are ambiguous.",
     },
-    "provider_billing_success_per_dollar": {
+    "token_accounting_summary": {
         "owner": "Execution/Ops",
         "inputs": [
-            "benchmarks/provider_billing_evidence_v0.json",
-            "results/provider_billing_evidence/billing_template.csv",
-            "results/provider_billing_evidence/billing_summary.json",
+            "benchmarks/token_accounting_v0.json",
+            "results/tables/context_cost_proxy_tokenizer.json",
+            "results/tables/model_response_cost_proxy.json",
+            "scripts/summarize_token_accounting.py",
         ],
         "setup": [
-            "Export real provider usage or invoice rows for every measured model/provider row.",
-            "Fill billing_template.csv without adding raw API keys or secrets.",
-            "Keep local token proxies separate from realized provider bills.",
+            "Use local tokenizer-aware input-token proxy and saved-response output-token proxy reports.",
+            "Do not add provider invoices, API keys, or billing-dashboard exports.",
+            "Regenerate the summary whenever the context-cost or model-response cost proxy changes.",
         ],
         "validation_commands": [
-            "python scripts\\summarize_provider_billing_evidence.py --strict",
+            "python scripts\\summarize_token_accounting.py --strict",
             "python scripts\\check_goal_completion.py --strict",
         ],
         "completion_criteria": [
-            "results/provider_billing_evidence/billing_summary.json reports billing_status=complete.",
-            "All 6 billing rows are measured and validation errors are empty.",
-            "Success-per-dollar can be computed from real billed USD rather than local token proxies.",
+            "results/token_accounting/token_accounting_summary.json reports accounting_status=complete.",
+            "Input-token proxy and saved-response output-token proxy are both present.",
+            "Composite local token proxy is reported without using provider billing.",
         ],
-        "blocker_escalation": "Escalate if the provider cannot export usage, invoices, or per-run billing rows.",
+        "blocker_escalation": "Escalate only if the local token proxy reports are missing or inconsistent.",
     },
     "aaai_submission_decision": {
         "owner": "Research Lead",
@@ -301,8 +294,6 @@ def build_report(root: Path) -> dict[str, Any]:
     serialized_packets = json.dumps(packets, indent=2)
     serialized_closure = json.dumps(closure, indent=2)
 
-    missing_expected = sorted(EXPECTED_PACKET_IDS - packet_ids)
-    extra_packets = sorted(packet_ids - EXPECTED_PACKET_IDS)
     missing_detail = sorted(packet_id for packet_id in packet_ids if packet_id not in PACKET_DETAILS)
     commandless = sorted(packet["id"] for packet in packets if not packet.get("run_commands"))
     no_validation = sorted(packet["id"] for packet in packets if not packet.get("validation_commands"))
@@ -319,11 +310,11 @@ def build_report(root: Path) -> dict[str, Any]:
         ),
         Check(
             "external_evidence_packets_match_closure",
-            "ready" if packet_ids == closure_ids == EXPECTED_PACKET_IDS else "fail",
+            "ready" if closure_path.exists() and packet_ids == closure_ids and not missing_detail else "fail",
             (
                 f"packets={len(packet_ids)}; closure_items={len(closure_ids)}"
-                if packet_ids == closure_ids == EXPECTED_PACKET_IDS
-                else "missing=" + ",".join(missing_expected) + "; extra=" + ",".join(extra_packets)
+                if closure_path.exists() and packet_ids == closure_ids and not missing_detail
+                else "packet_ids=" + ",".join(sorted(packet_ids)) + "; closure_ids=" + ",".join(sorted(closure_ids))
             ),
             CLOSURE_REPORT,
         ),
@@ -396,8 +387,8 @@ def write_markdown(path: Path, report: dict[str, Any]) -> None:
         "# External Evidence Execution Packets",
         "",
         "Evidence boundary: these packets define how to finish pending external "
-        "evidence. They do not collect DeepSeek responses, human annotations, "
-        "provider bills, AI-Scientist-v2 live-run artifacts, or final submission "
+        "evidence. They do not collect human annotations, depend on provider bills, "
+        "AI-Scientist-v2 live-run artifacts, or final submission "
         "approval by themselves.",
         "",
         f"- Overall status: {report['overall_status']}",

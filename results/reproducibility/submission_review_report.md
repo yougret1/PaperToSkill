@@ -3,7 +3,7 @@
 Evidence boundary: this report checks internal review, rebuttal, and submission-checklist handoff artifacts against current repository evidence. It does not claim final submission readiness.
 
 - Overall status: ready
-- Ready checks: 15
+- Ready checks: 16
 - Failed checks: 0
 
 ## Checks
@@ -20,8 +20,9 @@ Evidence boundary: this report checks internal review, rebuttal, and submission-
 | submission_review_no_unbounded_human_validation_complete | ready | Do not claim completed human semantic validation. | research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md |
 | submission_review_no_unbounded_provider_billing_complete | ready | Do not claim provider billing or success-per-dollar completion. | research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md |
 | submission_review_live_transfer_current | ready | live_total=24; scored=24; pending=0 | results/live_transfer_prompts/evaluation.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md |
-| submission_review_model_ablation_current | ready | scored=4; pending=2 | results/model_ablation_prompts/v0/evaluation.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md |
+| submission_review_model_ablation_current | ready | total=6; scored=6; pending=0 | results/model_ablation_prompts/v0/evaluation.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md |
 | submission_review_human_fidelity_current | ready | status=pending; scored=0; pending=24 | results/human_fidelity_packets/annotation_summary.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md |
-| submission_review_provider_billing_current | ready | status=pending; measured=0; pending=6 | results/provider_billing_evidence/billing_summary.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md |
-| submission_review_ai_scientist_smoke_current | ready | overall=blocked_by_provider_or_model_availability; detail=claude-opus-4-8: Timed out after 30 seconds waiting for provider response; claude-opus-4.8: Timed out after 30 seconds waiting for provider response; claude-opus-4-7: Timed out after 30 seconds waiting for provider response; claude-opus-4-6: Timed out after 30 seconds waiting for provider response; aliases=claude-opus-4-8,claude-opus-4.8,claude-opus-4-7,claude-opus-4-6 | results/ai_scientist_v2_smoke/run_report.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md |
-| submission_review_goal_package_counts_current | ready | goal={'ready': 70, 'pending': 8, 'fail': 0}; package={'ready': 283, 'pending': 8, 'fail': 0} | results/reproducibility/goal_completion_report.json; results/reproducibility/package_report.json; research/submission_checklist.md |
+| submission_review_token_accounting_current | ready | status=complete; input_tokens=4322; output_tokens=9594 | results/token_accounting/token_accounting_summary.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md |
+| submission_review_ai_scientist_smoke_current | ready | overall=complete; detail=; aliases=claude-opus-4-8 | results/ai_scientist_v2_smoke/run_report.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md |
+| submission_review_ai_scientist_live_run_current | ready | overall=complete; completion_dirs=1 | results/ai_scientist_v2_live_run_handoff/handoff.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md |
+| submission_review_goal_package_counts_current | ready | goal={'ready': 77, 'pending': 3, 'fail': 0}; package={'ready': 305, 'pending': 1, 'fail': 0} | results/reproducibility/goal_completion_report.json; results/reproducibility/package_report.json; research/submission_checklist.md |

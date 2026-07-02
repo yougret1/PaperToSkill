@@ -25,14 +25,20 @@
 | E2.20 | Can the paper be packaged in official AAAI LaTeX format with usage examples and model-ablation prompts? | `python scripts\build_model_ablation_prompts.py --task benchmarks\model_ablation_v0.json --output-dir results\model_ablation_prompts\v0` plus reproducibility check | AAAI author-kit provenance, AAAI `.tex` draft, usage examples, model-ablation prompt grid, and updated package report | Writing/Analysis |
 | E2.21 | Can the current extracted-text-to-skill path run as one local command? | `python scripts\papertoskill_pipeline.py --source papers\extracted\aide.txt --output-dir results\pipeline_examples\aide_auto --paper-id aide_auto --title "AIDE: AI-Driven Exploration in the Space of Code" --profile aide --skill-name aide-auto-paper-skill --rubric benchmarks\rubric_aide_v0.json` | manifest, note, source map, skill, and rubric report from one command | Execution |
 | E2.22 | Can the local pipeline accept a PDF source as a smoke-tested input path? | `python scripts\papertoskill_pipeline.py --source paper\aaai\papertoskill_aaai2027.pdf --output-dir results\pipeline_examples\papertoskill_pdf --paper-id papertoskill_pdf --title "PaperToSkill" --skill-name papertoskill-pdf-pipeline` | manifest with PDF source metadata, extracted text path, note, source map, skill, and rubric report | Execution |
-| E4.1 | Do Claude Opus and a verified GPT-family model differ on PaperToSkill usage tasks? | Claude/GPT-family runner commands plus `python scripts\evaluate_model_ablation_responses.py --index results\model_ablation_prompts\v0\index.json --output-json results\model_ablation_prompts\v0\evaluation.json --output-md results\model_ablation_prompts\v0\evaluation.md` | 4 scored Claude/GPT-family rows and 2 pending DeepSeek rows | Analysis |
+| E4.1 | Do Claude Opus, GPT-family, and DeepSeek differ on PaperToSkill usage tasks? | Protocol-aware runner commands plus `python scripts\evaluate_model_ablation_responses.py --index results\model_ablation_prompts\v0\index.json --output-json results\model_ablation_prompts\v0\evaluation.json --output-md results\model_ablation_prompts\v0\evaluation.md` | 6 scored Claude/GPT-family/DeepSeek rows and 0 pending rows for saved-response scoring | Analysis |
+| E4.2 | How does a compact skill artifact compare with Paper2Agent-style MCP artifacts? | `python scripts\compare_paper2agent_artifacts.py` | `results/tables/paper2agent_artifact_comparison.md` with 7/7 ready criteria | Complete for bounded artifact/workflow comparison |
+
+## Completed Remote LLM Recovery
+
+| ID | Question | Evidence | Boundary |
+| --- | --- | --- | --- |
+| E3 | Can AI-Scientist-v2 run a tiny PaperToSkill agentic search? | `results/ai_scientist_v2_smoke/run_report.md`; `results/ai_scientist_v2_live_run_handoff/handoff.md`; `research/run_logs/2026-07-02_phase76_ai_scientist_v2_full_live_run.md` | Complete for bounded smoke/full-live synthetic integration evidence; not broad live task success. |
 
 ## Pending Remote LLM Recovery
 
 | ID | Question | Command | Expected Output | Blocker |
 | --- | --- | --- | --- | --- |
-| E3 | Can AI-Scientist-v2 run a tiny PaperToSkill agentic search? | `python launch_scientist_bfts.py --load_ideas D:\a_work\gitee\PaperToSkill\ai_scientist_inputs\papertoskill_seed_ideas.json --idea_idx 0 --skip_writeup --skip_review` | experiment logs under `ai-scientist-v2/experiments` | Remote provider account pool exhausted |
-| E4 | Can an LLM-assisted extractor improve method-step fidelity over the deterministic scaffold? | TBD after endpoint works | paired deterministic vs LLM-assisted generated skills | Remote provider account pool exhausted |
+| E4 | Can an LLM-assisted extractor improve method-step fidelity over the deterministic scaffold? | TBD after endpoint works and after a non-synthetic protocol is defined | paired deterministic vs LLM-assisted generated skills | Needs a real-data protocol and claim boundary, not just endpoint access |
 
 ## Next Design Work
 
@@ -41,4 +47,4 @@
 | E5 | Which benchmark papers should enter the first manual evaluation? | paper PDFs or extracted notes for core split |
 | E6 | How should unsupported instruction rate be scored? | source-map-aware evaluator script and audit task |
 | E7 | How should live harness transfer be evaluated after remote LLM recovery? | paired Codex-style and Claude-style task prompts with execution logs |
-| E8 | How should DeepSeek be added after Claude/GPT ablations? | fill `deepseek_followup_slot` in `benchmarks/model_ablation_v0.json`, regenerate prompts, collect responses, and score with the same rubric |
+| E8 | How should DeepSeek be refreshed if the alias or credential profile changes? | rerun the DeepSeek slot setup/runner/scorer path while keeping raw keys outside tracked files |

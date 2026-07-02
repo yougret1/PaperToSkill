@@ -41,8 +41,9 @@ class CheckSubmissionReviewTest(unittest.TestCase):
             self.assertIn("submission_review_live_transfer_current", ready_ids)
             self.assertIn("submission_review_model_ablation_current", ready_ids)
             self.assertIn("submission_review_human_fidelity_current", ready_ids)
-            self.assertIn("submission_review_provider_billing_current", ready_ids)
+            self.assertIn("submission_review_token_accounting_current", ready_ids)
             self.assertIn("submission_review_ai_scientist_smoke_current", ready_ids)
+            self.assertIn("submission_review_ai_scientist_live_run_current", ready_ids)
             self.assertTrue(output_md.exists())
 
     def test_stale_live_transfer_wording_fails(self):
@@ -55,8 +56,9 @@ class CheckSubmissionReviewTest(unittest.TestCase):
                 "results/live_transfer_prompts/evaluation.json",
                 "results/model_ablation_prompts/v0/evaluation.json",
                 "results/human_fidelity_packets/annotation_summary.json",
-                "results/provider_billing_evidence/billing_summary.json",
+                "results/token_accounting/token_accounting_summary.json",
                 "results/ai_scientist_v2_smoke/run_report.json",
+                "results/ai_scientist_v2_live_run_handoff/handoff.json",
                 "results/reproducibility/goal_completion_report.json",
                 "results/reproducibility/package_report.json",
             ]:
@@ -88,8 +90,9 @@ class CheckSubmissionReviewTest(unittest.TestCase):
                 "results/live_transfer_prompts/evaluation.json",
                 "results/model_ablation_prompts/v0/evaluation.json",
                 "results/human_fidelity_packets/annotation_summary.json",
-                "results/provider_billing_evidence/billing_summary.json",
+                "results/token_accounting/token_accounting_summary.json",
                 "results/ai_scientist_v2_smoke/run_report.json",
+                "results/ai_scientist_v2_live_run_handoff/handoff.json",
                 "results/reproducibility/goal_completion_report.json",
                 "results/reproducibility/package_report.json",
             ]:

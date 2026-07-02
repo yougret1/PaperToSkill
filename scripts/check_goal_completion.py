@@ -45,7 +45,8 @@ REQUIRED_FILES = {
     "human_fidelity_summary": "results/human_fidelity_packets/annotation_summary.json",
     "tokenizer_cost_proxy": "results/tables/context_cost_proxy_tokenizer.json",
     "model_response_cost_proxy": "results/tables/model_response_cost_proxy.json",
-    "provider_billing_summary": "results/provider_billing_evidence/billing_summary.json",
+    "paper2agent_artifact_comparison": "results/tables/paper2agent_artifact_comparison.json",
+    "token_accounting_summary": "results/token_accounting/token_accounting_summary.json",
     "submission_review_report": "results/reproducibility/submission_review_report.json",
     "aaai_submission_decision_checker": "scripts/check_aaai_submission_decision.py",
     "aaai_submission_decision_report": "results/aaai_submission_decision/decision.json",
@@ -123,16 +124,16 @@ def memory_checks(root: Path) -> list[Check]:
     lowered_short = short_text.lower()
     blockers_ready = (
         "deepseek" in lowered_short
-        and "pending" in lowered_short
-        and "provider billing" in lowered_short
+        and "responses_present" in lowered_short
+        and "token accounting" in lowered_short
         and "human-fidelity" in lowered_short
-        and "gpt-5.4" in short_text
         and "gpt-5.5" in short_text
     )
     current_model_status_ready = (
-        "gpt-family rows are now saved and scored" in lowered_short
-        and "deepseek" in lowered_short
-        and "pending" in lowered_short
+        "gpt protocol refresh completed both current rows" in lowered_short
+        and "deepseek completed both current rows" in lowered_short
+        and "claude protocol refresh" in lowered_short
+        and "502" in lowered_short
     )
     checks = [
         Check(
@@ -210,13 +211,11 @@ def system_and_experiment_checks(root: Path) -> list[Check]:
     response_measured = int(response_summary.get("measured_rows", 0))
     response_pending = int(response_summary.get("pending_rows", 0))
     response_tokens = response_summary.get("total_tokenizer_output_tokens")
-    billing_summary = load_json(root / "results/provider_billing_evidence/billing_summary.json")
-    billing_errors = billing_summary.get("errors", [])
-    billing_ready = (
-        int(billing_summary.get("total_rows", 0)) == 6
-        and int(billing_summary.get("pending_rows", 0)) == 6
-        and not billing_errors
-    )
+    token_accounting_summary = load_json(root / "results/token_accounting/token_accounting_summary.json")
+    token_accounting_errors = token_accounting_summary.get("errors", [])
+    paper2agent = load_json(root / "results/tables/paper2agent_artifact_comparison.json")
+    paper2agent_rows = paper2agent.get("rows", [])
+    paper2agent_failed = [row for row in paper2agent_rows if row.get("status") != "ready"]
     return [
         Check(
             "papertoskill_curated_benchmark_ready",
@@ -243,24 +242,36 @@ def system_and_experiment_checks(root: Path) -> list[Check]:
             "results/tables/context_cost_proxy_tokenizer.json",
         ),
         Check(
-            "provider_billing_evidence_handoff_ready",
-            "ready" if billing_ready else "fail",
-            f"billing_status={billing_summary.get('billing_status')}; pending_rows={billing_summary.get('pending_rows')}; errors={len(billing_errors)}",
-            "results/provider_billing_evidence/billing_summary.json",
+            "token_accounting_handoff_ready",
+            "ready"
+            if token_accounting_summary.get("accounting_status") == "complete" and not token_accounting_errors
+            else "fail",
+            f"accounting_status={token_accounting_summary.get('accounting_status')}; errors={len(token_accounting_errors)}",
+            "results/token_accounting/token_accounting_summary.json",
         ),
         Check(
-            "provider_billing_evidence_complete",
-            "ready" if billing_summary.get("billing_status") == "complete" else "pending",
-            "provider billing and success-per-dollar rows complete"
-            if billing_summary.get("billing_status") == "complete"
-            else "local input/output token proxies and billing handoff exist; realized provider billing remains uncollected",
-            "results/provider_billing_evidence/billing_summary.json; results/tables/context_cost_proxy_tokenizer.json; results/tables/model_response_cost_proxy.json",
+            "token_accounting_complete",
+            "ready" if token_accounting_summary.get("accounting_status") == "complete" else "pending",
+            "local token accounting over input/output proxies is complete"
+            if token_accounting_summary.get("accounting_status") == "complete"
+            else "local token accounting exists but is not complete",
+            "results/token_accounting/token_accounting_summary.json; results/tables/context_cost_proxy_tokenizer.json; results/tables/model_response_cost_proxy.json",
         ),
         Check(
             "model_response_output_token_proxy_ready",
-            "ready" if response_measured >= 4 and response_pending == 2 and response_tokens else "fail",
+            "ready" if response_measured >= 6 and response_pending == 0 and response_tokens else "fail",
             f"measured_rows={response_measured}; pending_rows={response_pending}; tokenizer_output_tokens={response_tokens}",
             "results/tables/model_response_cost_proxy.json",
+        ),
+        Check(
+            "paper2agent_artifact_comparison_ready",
+            "ready"
+            if paper2agent.get("overall_status") == "ready"
+            and len(paper2agent_rows) >= 7
+            and not paper2agent_failed
+            else "fail",
+            f"overall={paper2agent.get('overall_status')}; rows={len(paper2agent_rows)}; failed_rows={len(paper2agent_failed)}",
+            "results/tables/paper2agent_artifact_comparison.json",
         ),
         Check(
             "failure_branch_archive_ready",
@@ -314,6 +325,9 @@ def model_ablation_checks(root: Path) -> list[Check]:
     run_report_paths = [
         root / "results/model_ablation_prompts/v0/run_report.json",
         root / "results/model_ablation_prompts/v0/gpt_retry_run_report.json",
+        root / "results/model_ablation_prompts/v0/gpt_protocol_run_report.json",
+        root / "results/model_ablation_prompts/v0/deepseek_run_report.json",
+        root / "results/model_ablation_prompts/v0/claude_protocol_run_report.json",
     ]
     run_reports = [load_json(path) for path in run_report_paths if path.exists()]
     run_evidence = "; ".join(str(path.relative_to(root)) for path in run_report_paths if path.exists())
@@ -414,7 +428,13 @@ def model_ablation_checks(root: Path) -> list[Check]:
         Check(
             "deepseek_followup_response_complete",
             "ready" if model_complete("deepseek_followup_slot") else "pending",
-            "placeholder alias still pending user-provided DeepSeek configuration" if deepseek_placeholder else "configured DeepSeek responses are not all scored",
+            "saved and scored DeepSeek responses exist for the current prompt protocol"
+            if model_complete("deepseek_followup_slot")
+            else (
+                "placeholder alias still pending user-provided DeepSeek configuration"
+                if deepseek_placeholder
+                else "configured DeepSeek responses are not all scored"
+            ),
             "results/model_ablation_prompts/v0/evaluation.json",
         ),
         Check(
@@ -505,15 +525,9 @@ def external_evidence_closure_checks(root: Path) -> list[Check]:
 
 def external_evidence_packet_checks(root: Path) -> list[Check]:
     report = load_json(root / "results/external_evidence_packets/packets.json")
+    closure = load_json(root / "results/external_evidence_closure/closure.json")
     failed = [check for check in report.get("checks", []) if check.get("status") == "fail"]
-    required_packets = {
-        "ai_scientist_v2_smoke_completion",
-        "ai_scientist_v2_full_live_run",
-        "deepseek_followup_responses",
-        "human_fidelity_annotation",
-        "provider_billing_success_per_dollar",
-        "aaai_submission_decision",
-    }
+    required_packets = {item.get("id") for item in closure.get("items", [])}
     packet_ids = {packet.get("id") for packet in report.get("packets", [])}
     missing_packets = sorted(required_packets - packet_ids)
     status = (

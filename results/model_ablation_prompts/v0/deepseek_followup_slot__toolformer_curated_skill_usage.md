@@ -3,16 +3,17 @@
 ## Model Slot
 
 - Model ID: `deepseek_followup_slot`
-- Requested or advertised alias: `deepseek-to-be-filled`
+- Requested or advertised alias: `deepseek-v4-flash`
 - Alias candidates:
-- `deepseek-to-be-filled`
-- Provider status: placeholder_for_user_followup
+- `deepseek-v4-flash`
+- `deepseek-v4-pro`
+- Provider status: configured_from_local_api_docs; DeepSeek uses OpenAI Chat Completions at /chat/completions
 - Response status: pending
 
 ## Model-Specific Notes
 
-- This slot is intentionally present for the user's later DeepSeek addition.
-- Replace model_alias, auth_env, and base_url_env with the concrete DeepSeek endpoint before running.
+- Use base URL https://api.deepseek.com with request path /chat/completions.
+- Try deepseek-v4-flash first; deepseek-v4-pro is the fallback alias from the local API documentation.
 - Keep the same prompt grid and scoring protocol to make results comparable.
 
 ## Context Case

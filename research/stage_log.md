@@ -2452,3 +2452,217 @@ Evidence boundary:
 - AI-Scientist-v2 LLM-client smoke, full live/BFTS run, DeepSeek follow-up,
   human annotation, provider billing, and final AAAI submission readiness remain
   pending.
+
+Phase 71 evidence:
+
+- Verified the two local interface documents in `C:\Users\19351\Desktop\tem`
+  are runnable as written.
+- `GPT大模型接口说明文档.md` returned HTTP 200 on the first attempt for
+  `gpt-5.5` and `gpt-5.4` via `POST https://coderxiaoc.com/v1/responses`.
+- `Claude大模型接口说明文档.md` returned HTTP 200 on the first attempt for
+  `claude-opus-4-8`, `claude-opus-4-7`, and `claude-opus-4-6` via
+  `POST https://coderxiaoc.com/v1/messages`.
+- Added `research/run_logs/2026-06-30_interface_docs_runnable.md` as the
+  project record for this check.
+
+Evidence boundary:
+
+- This confirms the local document request shapes are runnable.
+- It does not change the separate AI-Scientist-v2 smoke / live-run blockers or
+  any AAAI submission state.
+
+## 2026-07-01 Phase 72
+
+Actions:
+
+- Re-tested the three local API interface documents in
+  `C:\Users\19351\Desktop\tem` from their current contents:
+  `GPT大模型接口说明文档.md`, `Claude大模型接口说明文档.md`, and
+  `DeepSeek大模型接口说明文档.md`.
+- Used each document's protocol shape and a minimal prompt:
+  `Reply with exactly one word: ok`.
+- Applied the documented retry rule: up to five attempts with short interval
+  retry before marking the current direct request path unavailable.
+- Recorded only redacted credential hints in project files.
+
+Results:
+
+- GPT doc is currently runnable:
+  - `gpt-5.5` via `POST https://coderxiaoc.com/v1/responses` returned HTTP 200
+    on attempt 2 with visible `ok`.
+  - `gpt-5.4` via `POST https://coderxiaoc.com/v1/responses` returned HTTP 200
+    on attempt 1 with visible `ok`.
+- DeepSeek doc is currently runnable:
+  - `deepseek-v4-flash` via
+    `POST https://api.deepseek.com/chat/completions` returned HTTP 200 on
+    attempt 1 with visible `ok`.
+  - `deepseek-v4-pro` via
+    `POST https://api.deepseek.com/chat/completions` returned HTTP 200 on
+    attempt 1 with visible `ok`.
+- Claude doc did not succeed as a direct HTTP request in this run:
+  - `claude-opus-4-8`, `claude-opus-4-7`, and `claude-opus-4-6` via
+    `POST https://coderxiaoc.com/v1/messages` returned HTTP 502 after five
+    attempts with the regular doc key.
+  - The same three models also returned HTTP 502 after five attempts with the
+    Desktop direct provider token listed in the doc.
+
+Evidence boundary:
+
+- The latest direct-document availability answer is: GPT and DeepSeek are
+  runnable now; Claude is not runnable via the documented naked HTTP request in
+  this run.
+- The Claude result is HTTP 502 gateway/upstream failure, not proof that the
+  model aliases are invalid or that Claude Desktop/CC Switch cannot work
+  through a richer client path.
+- This phase does not complete AI-Scientist-v2 LLM-client smoke, full
+  live/BFTS run, human annotation, provider billing, or AAAI submission
+  readiness.
+
+Phase 72 addendum:
+
+- A same-day Claude-only re-test was run after the earlier 502s.
+- The regular Claude doc key (`sk-c83d...cad7`) succeeded for
+  `claude-opus-4-8`, `claude-opus-4-7`, and `claude-opus-4-6` via
+  `POST https://coderxiaoc.com/v1/messages`; all returned HTTP 200 on attempt 1
+  with visible `ok`.
+- The same regular key also succeeded for all three models with the observed
+  Claude Code/Desktop beta header.
+- The Desktop direct provider token (`sk-6477...000e`) still returned HTTP 502
+  after five attempts for all three aliases.
+- Updated interpretation: the Claude document is runnable with the regular API
+  key; the earlier 502 result was transient upstream/direct-request
+  unavailability. The Desktop token remains unavailable through naked direct
+  HTTP in this test.
+
+## 2026-07-01 Phase 73
+
+Actions:
+
+- Reviewed newly added PDFs under `papers/raw` and extracted text under
+  `papers/extracted_text`.
+- Added `research/new_paper_triage_2026-07-01.md`.
+- Updated related-work framing, claim-source mapping, AAAI bibliography, and
+  paper/review handoff text.
+- Updated protocol-aware model-ablation evidence and local gates to reflect the
+  current GPT and DeepSeek runs while preserving the Claude provider blocker.
+
+New-paper decision:
+
+- Paper2Agent is core related work and the closest competing system. It builds
+  MCP servers and interactive paper agents from papers plus codebases. Add it
+  as a main citation and plan a future skill-vs-MCP comparison.
+- AgenticSciML is adjacent background for agentic scientific discovery. Cite it
+  as workflow/multi-agent context, not as a paper-to-skill baseline.
+- Reasoning Manifolds is a future theory-heavy/non-procedural stress case. Do
+  not add it to the current main experiment.
+
+Model/API evidence:
+
+- GPT protocol refresh completed both current model-ablation rows with
+  `gpt-5.5` through OpenAI Responses.
+- DeepSeek completed both current model-ablation rows with
+  `deepseek-v4-flash` through Chat Completions.
+- Latest Claude protocol refresh used Anthropic Messages but was blocked by
+  provider HTTP 502; scored Claude rows come from previously saved response
+  files.
+- `results/model_ablation_prompts/v0/evaluation.md` reports 6 total rows,
+  6 scored rows, 0 pending rows, and average normalized score 1.0.
+- `results/tables/model_response_cost_proxy.md` reports 6 measured rows,
+  0 pending rows, and 9,594 `o200k_base` output tokens.
+
+Evidence boundary:
+
+- Saved-response model-ablation scoring is not live downstream task success,
+  human semantic fidelity, provider billing, success per dollar, or a broad
+  model-quality comparison.
+- AI-Scientist-v2 LLM-client smoke/full live run, human fidelity annotation,
+  provider billing, and final AAAI decision remain pending.
+
+## 2026-07-01 Phase 74
+
+Actions:
+
+- Promoted the Paper2Agent work from a planned comparison to a completed
+  bounded artifact/workflow comparison.
+- Updated the AAAI draft, Markdown draft, outline, limitations, claim
+  checklist, related-work gap map, experiment queue, claim-evidence matrix,
+  review report, rebuttal bank, submission checklist, runbook, goal audit, and
+  memory anchors so they no longer treat Paper2Agent comparison or DeepSeek
+  saved-response rows as pending.
+- Wrote the human-action handoff to
+  `C:\Users\19351\Desktop\tem\toHuman\needHelp.md`.
+
+Results:
+
+- `results/tables/paper2agent_artifact_comparison.md` reports
+  `overall_status=ready`, 7 ready criteria, and 0 failed criteria.
+- `results/model_ablation_prompts/v0/evaluation.md` reports 6 total rows,
+  6 scored rows, 0 pending rows, and average normalized score 1.0.
+- `results/reproducibility/goal_completion_report.md` reports
+  `not_complete_pending_external_evidence`, 74 ready checks, 6 pending checks,
+  and 0 failed checks.
+- `results/reproducibility/package_report.md` reports
+  `ready_with_pending_external_evidence`, 296 ready checks, 6 pending checks,
+  and 0 failed checks.
+- `results/external_evidence_closure/closure.md` now has 5 queue items:
+  AI-Scientist-v2 smoke completion, AI-Scientist-v2 full live/BFTS run,
+  human-fidelity annotation, provider billing/success-per-dollar evidence, and
+  AAAI submission decision.
+
+Evidence boundary:
+
+- Phase 74 completes a source-backed Paper2Agent artifact/workflow comparison
+  only. It does not run Paper2Agent, deploy an MCP server, or claim executable
+  baseline performance.
+- DeepSeek is complete only for saved-response model-ablation scoring under the
+  current two-case protocol.
+- AI-Scientist-v2 LLM-client smoke/full live run, human-fidelity annotation,
+  provider billing, and final AAAI decision remain pending.
+
+## 2026-07-02 Phase 76
+
+Actions:
+
+- Closed the bounded AI-Scientist-v2 smoke/full live-run evidence path after the
+  documented Claude-family route produced a marker-contract smoke response and
+  a full AI-Scientist-v2 completion directory.
+- Refreshed stale external-evidence closure and execution-packet reports so
+  completed AI-Scientist-v2 evidence is no longer queued as pending.
+- Updated the human-help handoff so only human-fidelity annotation remains a
+  human-side action for the current evidence policy.
+- Recorded the full run in
+  `research/run_logs/2026-07-02_phase76_ai_scientist_v2_full_live_run.md`.
+
+Results:
+
+- `results/ai_scientist_v2_smoke/run_report.md` reports `complete`, 6 ready
+  checks, 0 pending checks, and 0 failed checks.
+- `results/ai_scientist_v2_live_run_handoff/handoff.md` reports `complete`,
+  16 ready checks, 0 pending checks, 0 failed checks, and one completion
+  directory:
+  `D:\a_work\gitee\ai-scientist-v2\experiments\2026-07-02_12-18-28_papertoskill_extractor_attempt_0`.
+- The AI-Scientist-v2-generated synthetic result shows skill task-success rate
+  0.80, full excerpt 0.80, abstract 0.20, generic summary 0.00, no context
+  0.00, with skill token cost 86.2 versus 113.2 for full excerpt.
+- The retrieval-depth sensitivity branch reports skill success 0.80 for
+  K=1,2,3,5 and 1.00 for K=all.
+- `results/external_evidence_closure/closure.md` now has two queue items:
+  human-fidelity annotation and AAAI submission decision.
+- `results/external_evidence_packets/packets.md` now has two packets matching
+  those queue items.
+- `results/reproducibility/goal_completion_report.md` reports
+  `not_complete_pending_external_evidence`, 77 ready checks, 3 pending checks,
+  and 0 failed checks.
+- `results/reproducibility/package_report.md` reports
+  `ready_with_pending_external_evidence`, 305 ready checks, 1 pending check,
+  and 0 failed checks.
+
+Evidence boundary:
+
+- The Phase 76 AI-Scientist-v2 evidence is bounded integration/synthetic
+  sensitivity evidence. It does not make the main PaperToSkill benchmark a
+  human-validated live task-success study.
+- The Stage 3 HF/semantic-data branch remains a failed branch only because of
+  invalid dataset loading/synthetic padding and missing `sentence_transformers`.
+- Human-fidelity annotation and final AAAI submission readiness remain pending
+  under the recorded `wait_for_external_evidence` policy.

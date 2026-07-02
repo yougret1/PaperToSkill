@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Build a local handoff report for the pending AI-Scientist-v2 live run."""
+"""Build a local handoff/status report for the bounded AI-Scientist-v2 live run."""
 
 from __future__ import annotations
 
@@ -11,9 +11,8 @@ from typing import Any
 
 
 REQUIRED_ENV_NAMES = (
-    "AI_SCIENTIST_OPENAI_BASE_URL",
-    "AI_SCIENTIST_OPENAI_API_KEY",
-    "AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE",
+    "ANTHROPIC_BASE_URL",
+    "ANTHROPIC_API_KEY",
 )
 
 
@@ -61,7 +60,7 @@ def dry_run_dirs(ai_scientist_root: Path, idea_name: str) -> list[Path]:
     experiments = ai_scientist_root / "experiments"
     if not experiments.exists():
         return []
-    return sorted(experiments.glob(f"*_{idea_name}_attempt_*"), key=lambda path: path.name)
+    return sorted(experiments.glob(f"*{idea_name}*attempt*"), key=lambda path: path.name)
 
 
 def dry_run_artifacts_ready(paths: list[Path]) -> bool:
@@ -87,12 +86,84 @@ def completion_dirs(paths: list[Path]) -> list[Path]:
     return complete
 
 
+def stage_attempt_summaries(paths: list[Path]) -> list[dict[str, Any]]:
+    attempts = []
+    for path in paths:
+        progress_paths = sorted(path.glob("logs/*/stage_*/notes/stage_progress.json"))
+        for progress_path in progress_paths:
+            progress = load_json(progress_path)
+            good_nodes = int(progress.get("good_nodes", 0) or 0)
+            buggy_nodes = int(progress.get("buggy_nodes", 0) or 0)
+            total_nodes = int(progress.get("total_nodes", 0) or 0)
+            attempts.append(
+                {
+                    "attempt_dir": str(path),
+                    "stage": str(progress.get("stage", progress_path.parent.parent.name)),
+                    "status": "has_good_nodes" if good_nodes > 0 else "no_good_nodes",
+                    "total_nodes": total_nodes,
+                    "good_nodes": good_nodes,
+                    "buggy_nodes": buggy_nodes,
+                    "best_metric": str(progress.get("best_metric", ""))[:500],
+                    "evidence": str(progress_path),
+                }
+            )
+    return attempts
+
+
+def best_node_consistency(paths: list[Path]) -> tuple[list[dict[str, str]], list[str]]:
+    records: list[dict[str, str]] = []
+    issues: list[str] = []
+    for path in paths:
+        stage_dirs = sorted(path.glob("logs/*/stage_*"))
+        for stage_dir in stage_dirs:
+            journal_path = stage_dir / "journal.json"
+            best_id_path = stage_dir / "best_node_id.txt"
+            if not journal_path.exists() or not best_id_path.exists():
+                continue
+
+            best_id = best_id_path.read_text(encoding="utf-8", errors="ignore").strip()
+            journal = load_json(journal_path)
+            nodes = journal.get("nodes", []) if isinstance(journal, dict) else []
+            best_nodes = [node for node in nodes if str(node.get("id", "")) == best_id]
+            if not best_nodes:
+                issue = f"{stage_dir}: best_node_id={best_id} missing from journal"
+                issues.append(issue)
+                records.append(
+                    {
+                        "stage_dir": str(stage_dir),
+                        "best_node_id": best_id,
+                        "status": "missing",
+                        "evidence": str(best_id_path),
+                    }
+                )
+                continue
+
+            best_node = best_nodes[0]
+            if best_node.get("is_buggy") is True:
+                issue = f"{stage_dir}: best_node_id={best_id} is marked buggy"
+                issues.append(issue)
+                status = "buggy"
+            else:
+                status = "ready"
+            records.append(
+                {
+                    "stage_dir": str(stage_dir),
+                    "best_node_id": best_id,
+                    "status": status,
+                    "evidence": str(best_id_path),
+                }
+            )
+    return records, issues
+
+
 def command_block(seed_path: Path, idea_idx: int) -> list[str]:
     return [
         "cd D:\\a_work\\gitee\\ai-scientist-v2",
-        "$env:AI_SCIENTIST_OPENAI_BASE_URL='https://coderxiaoc.com/v1'",
-        "$env:AI_SCIENTIST_OPENAI_API_KEY='<set locally>'",
-        "$env:AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE='1'",
+        "Remove-Item Env:\\AI_SCIENTIST_FORCE_OPENAI_COMPATIBLE -ErrorAction SilentlyContinue",
+        "Remove-Item Env:\\AI_SCIENTIST_OPENAI_BASE_URL -ErrorAction SilentlyContinue",
+        "Remove-Item Env:\\OPENAI_BASE_URL -ErrorAction SilentlyContinue",
+        "$env:ANTHROPIC_BASE_URL='https://coderxiaoc.com'",
+        "$env:ANTHROPIC_API_KEY='<set Claude-family token locally>'",
         "python launch_scientist_bfts.py `",
         f"  --load_ideas {seed_path} `",
         f"  --idea_idx {idea_idx} `",
@@ -124,6 +195,14 @@ def build_report(
     launcher_text = read_text(launcher_path)
     candidates = dry_run_dirs(ai_scientist_root, idea_name) if idea_name else []
     complete_dirs = completion_dirs(candidates)
+    stage_attempts = stage_attempt_summaries(candidates)
+    best_node_records, best_node_issues = best_node_consistency(complete_dirs)
+    successful_stage_attempts = [
+        attempt for attempt in stage_attempts if attempt["good_nodes"] > 0
+    ]
+    failed_stage_attempts = [
+        attempt for attempt in stage_attempts if attempt["good_nodes"] == 0
+    ]
     next_commands = command_block(seed_ideas_path, idea_idx)
 
     checks = [
@@ -201,6 +280,35 @@ def build_report(
             f"completion_dirs={len(complete_dirs)}",
             "; ".join(str(path) for path in complete_dirs) or str(ai_scientist_root / "experiments"),
         ),
+        Check(
+            "ai_scientist_v2_live_partial_stage_attempts_present",
+            "ready" if stage_attempts else "pending",
+            f"stage_attempts={len(stage_attempts)}",
+            "; ".join(attempt["evidence"] for attempt in stage_attempts[:5])
+            or str(ai_scientist_root / "experiments"),
+        ),
+        Check(
+            "ai_scientist_v2_live_successful_stage_attempt_present",
+            "ready" if successful_stage_attempts else "pending",
+            f"successful_stage_attempts={len(successful_stage_attempts)}",
+            "; ".join(attempt["evidence"] for attempt in successful_stage_attempts[:5])
+            or str(ai_scientist_root / "experiments"),
+        ),
+        Check(
+            "ai_scientist_v2_live_failed_stage_attempts_recorded",
+            "ready" if failed_stage_attempts else "pending",
+            f"failed_stage_attempts={len(failed_stage_attempts)}",
+            "; ".join(attempt["evidence"] for attempt in failed_stage_attempts[:5])
+            or str(ai_scientist_root / "experiments"),
+        ),
+        Check(
+            "ai_scientist_v2_live_best_nodes_not_buggy",
+            "fail" if best_node_issues else ("ready" if best_node_records else "pending"),
+            f"checked={len(best_node_records)}; issues={len(best_node_issues)}",
+            "; ".join(best_node_issues[:3])
+            or "; ".join(record["evidence"] for record in best_node_records[:5])
+            or str(ai_scientist_root / "experiments"),
+        ),
     ]
 
     status_counts = {"ready": 0, "pending": 0, "fail": 0}
@@ -235,6 +343,8 @@ def build_report(
         },
         "dry_run_dirs": [str(path) for path in candidates],
         "completion_dirs": [str(path) for path in complete_dirs],
+        "partial_stage_attempts": stage_attempts,
+        "best_node_consistency": best_node_records,
         "env_names": list(REQUIRED_ENV_NAMES),
         "next_commands": next_commands,
         "status_counts": status_counts,
@@ -275,6 +385,25 @@ def write_markdown(path: Path, report: dict[str, Any]) -> None:
         "```powershell",
         *report["next_commands"],
         "```",
+        "",
+        "## Partial Stage Attempts",
+        "",
+        markdown_table(
+            [
+                [
+                    attempt["stage"],
+                    attempt["status"],
+                    str(attempt["total_nodes"]),
+                    str(attempt["good_nodes"]),
+                    str(attempt["buggy_nodes"]),
+                    attempt["evidence"],
+                ]
+                for attempt in report.get("partial_stage_attempts", [])
+            ],
+            ["Stage", "Status", "Total Nodes", "Good Nodes", "Buggy Nodes", "Evidence"],
+        )
+        if report.get("partial_stage_attempts")
+        else "No partial stage attempts recorded.",
         "",
         "## Checks",
         "",

@@ -1,0 +1,907 @@
+                                                                                                                   Xiaomi EV                         2026-5-1
+
+                                             Reasoning emerges from constrained inference
+                                                  manifolds in large language models
+                                          Yanbiao Ma1      Fei Luo1    Linfeng Zhang2,3     Chuangxin Zhao2       Mingxuan Wang1        Yinan Wu2      Zhe
+                                            Qian1    Yang Lu4     Long Chen3       Zhao Cao1     Xiaoshuai Hao†‡3     Ji-Rong Wen†1      Jungong Han†2
+                                                    1 Renmin University of China     2 Tsinghua University    3 Xiaomi EV    4 Xiamen University
+
+                                          † Corresponding authors     ‡ Project leader   # ybma1998@ruc.edu.cn, haoxiaoshuai@xiaomi.com,
+                                                                      jrwen@ruc.edu.cn, jghan@tsinghua.edu.cn
+
+
+                                                                                               Abstract
+arXiv:2605.08142v1 [cs.LG] 2 May 2026
+
+
+
+
+                                             Reasoning in large language models is predominantly evaluated through labeled benchmarks, conflating
+                                             task performance with the quality of internal inference. Here we study reasoning as an intrinsic dynamical
+                                             process by examining the evolution of internal representations during inference. We find that inference-time
+                                             dynamics consistently self-organize into low-dimensional manifolds embedded within high-dimensional
+                                             representation spaces. we find that such geometric compression, although pervasive, is not sufficient for
+                                             stable or reliable reasoning. Instead, effective reasoning dynamics emerge within a constrained structural
+                                             regime characterized by three conditions: adequate representational expressivity, spontaneous manifold
+                                             compression, and preservation of non-degenerate information volume within the compressed subspace.
+                                             Models outside this regime exhibit characteristic pathological inference dynamics. Based on these insights,
+                                             we introduce a unified, label-free diagnostic computed solely from internal dynamics. These findings suggest
+                                             that reasoning in LLMs is fundamentally governed by geometric and informational constraints, offering a
+                                             complementary framework to benchmark-centric assessment.
+
+
+
+                                           Large language models have shown remarkable im-            taneously collapse onto extremely low-dimensional
+                                        provements in reasoning across mathematics [1, 2],            trajectories, despite residing in highly expressive
+                                        science, and commonsense domains [3, 4, 5]. Yet rea-          embedding spaces. These trajectories indicate that
+                                        soning ability is still predominantly evaluated using         reasoning dynamics are effectively confined to low-
+                                        labeled benchmarks and task accuracy [6, 7], implic-          dimensional manifolds embedded within the ambi-
+                                        itly treating reasoning as an opaque input–output             ent representation space. This dimensional collapse
+                                        mapping [8, 9]. Such evaluations conflate internal            is stimulus-induced, reproducible across runs, and
+                                        inference quality with dataset alignment and prompt-          emerges during inference rather than being imposed
+                                        ing strategies [10], offering limited insight into how        by architectural constraints. However, low dimen-
+                                        reasoning is internally realized or why models with           sionality alone does not guarantee robust reason-
+                                        similar accuracy can differ substantially in robustness       ing. Models with similarly compressed trajectories
+                                        and generalization.                                           can exhibit sharply different inference behavior, and
+                                           To address this limitation, we study reasoning from        overly aggressive compression can lead to brittle or
+                                        an internal perspective [11, 12, 13], characterizing          information-poor dynamics.
+                                        it as a dynamical process unfolding in representation            These observations indicate that robust reason-
+                                        space during inference [14]. Rather than focusing on          ing occupies a narrow admissible regime of inter-
+                                        correctness, we analyze how internal representations          nal structure. Healthy reasoning requires suffi-
+                                        evolve when models are engaged by generic cognitive           cient representational expressivity, spontaneous low-
+                                        stimuli, independent of task-specific supervision.            dimensional organization of inference dynamics, and
+                                           Across model families [15, 16, 17, 18], scales, and        non-degenerate information flow within the com-
+                                        prompts [19], we observe a striking and consis-               pressed manifold. Violating any of these constraints
+                                        tent regularity: inference-time representations spon-         leads to characteristic pathological regimes, includ-
+
+                                                                                                  1
+                                  Reasoning emerges from constrained inference manifolds in large language models
+
+
+                                     MMLU-Other
+
+
+                                                                 …
+          Business         Clinical
+                                    Global Facts   Marketing         Virology
+           Ethics        Knowledge
+
+
+                                                                        𝑘
+                                    𝑡𝑖𝑚𝑒=1,…,𝑘
+                                                         1       …
+                     v            𝑇𝑙𝑎𝑦𝑒𝑟=1
+                                    𝑡𝑖𝑚𝑒=1,…,𝑘
+                     v            𝑇𝑙𝑎𝑦𝑒𝑟=2                              𝑘
+Layer=n
+
+
+
+
+                                                         1
+                     …
+
+
+
+
+                                                                 …
+                                    𝑡𝑖𝑚𝑒=1,…,𝑘                          𝑘
+                     v            𝑇𝑙𝑎𝑦𝑒𝑟=𝑛                   1
+
+
+                     The last token                          Manifold
+
+          Large Language Model
+                                                     Intrinsic Dimension
+
+Figure 1: Inference-time reasoning dynamics self-organize into low-dimensional manifolds. Layer-wise evolution
+of intrinsic dimensionality (ID) for inference-time representation trajectories across representative large language
+models under generic cognitive stimulation. Despite the high ambient dimensionality of the embedding space, ID
+rapidly decreases with network depth and stabilizes at values orders of magnitude smaller than the embedding
+dimension, indicating that inference dynamics become confined to a compact manifold.
+
+
+ing diffuse exploration, representational crowding,                                 [15, 16, 17, 18]. For each stimulus, at each layer
+or degenerate collapse.                                                             and at each inference step, we record the hidden
+  In this work, we uncover intrinsic constraints and                                state of the last token in the current sequence. The
+introduce a unified, label-free diagnostic computed                                 sequence of such states within each layer is treated as
+solely from inference-time representations. With-                                   a discrete trajectory embedded in the model’s high-
+out relying on task supervision, this measure exposes                               dimensional representation space.
+whether internal trajectories reside within a geometri-                                Across all evaluated models, we observe a striking
+cally and informationally admissible regime for stable                              and highly reproducible phenomenon: despite being
+reasoning. Applied across contemporary large lan-                                   embedded in representation spaces with thousands
+guage models, it consistently separates structurally                                of dimensions, reasoning trajectories consistently and
+coherent inference from pathological dynamics and                                   spontaneously collapse onto low-dimensional man-
+predicts downstream robustness despite remaining                                    ifolds during inference. As shown in Figure 1, the
+entirely task-agnostic. Together, our results reframe                               intrinsic dimensionality [20, 21] of stimulus-induced
+reasoning evaluation in terms of internal geometry                                  representations decreases rapidly as inference pro-
+and information flow rather than task accuracy alone.                               ceeds through network layers and stabilizes at values
+                                                                                    far below the ambient embedding dimension. In
+Results                                                                             many cases, the intrinsic dimensionality converges
+                                                                                    to fewer than ten degrees of freedom. We further
+Inference-time reasoning dynamics self-                                             observe differences across model: weaker or earlier
+organize into low-dimensional manifolds                                             models tend to exhibit slower and less stable dimen-
+To characterize reasoning as an internal process                                    sional reduction, whereas newer-generation models
+rather than a simple input–output mapping, we                                       converge more consistently to compact manifolds.
+analyze inference-time representation trajectories                                     This dimensional collapse is robust across model
+elicited by generic cognitive stimuli [19] across                                   families and parameter scales and is not confined
+a range of contemporary large language models                                       to specific prompts or task types. As illustrated in
+
+                                                                                2
+                               Reasoning emerges from constrained inference manifolds in large language models
+
+
+ A                          Social Science                            Large Language Model    Intrinsic Dimension (ID)   B     Hidden Dimension vs
+                                                                                                                             Vocab Intrinsic Dimension
+
+                                                    …
+     Econometrics    Geography      Macroeconomics      Psychology     Qwen
+                                                                                                   ID (Social Science)
+                            Humanities                                                Final
+                                                                                      layer
+
+                                                    …                 DeepSeek
+                                                                                       v
+        Law         Jurisprudence    Formal logic    Moral Disputes
+                                                                                                    ID (Humanities)
+                               STEM                                    Gemma
+                                                                                       Last
+                                                                                      token
+                                                    …
+      Science        Technology      Engineering        Mathematics     GLM
+                                                                                                       ID (STEM)
+
+ C
+
+
+
+
+Figure 2: Low-dimensional organization is robust across stimuli and decoupled from global representational
+capacity. A, Distribution of stimulus-induced intrinsic dimensionality (ID; Two-Nearest-Neighbor local estimator, TLE)
+across heterogeneous generic cognitive stimuli, demonstrating that inference-time trajectories consistently concentrate
+on low-dimensional manifolds across prompts and domains. B, Intrinsic dimensionality of static vocabulary
+embeddings for the same model set, which remains near the ambient embedding dimension, indicating that the
+representational substrate retains high expressivity and that dimensional collapse is a stimulus-dependent property of
+inference dynamics rather than a global bottleneck.
+
+
+Figure 2A, low-dimensional organization emerges                                      representing diverse world concepts. The coexistence
+consistently under heterogeneous cognitive stimuli,                                  of near–full-dimensional world representations and
+including commonsense reasoning, linguistic reason-                                  sharply compressed reasoning trajectories demon-
+ing, and conceptual inference. Importantly, this struc-                              strates that dimensional collapse during reasoning
+ture arises dynamically during inference rather than                                 does not reflect representational degradation, but
+being imposed by architectural bottlenecks or explicit                               rather a stimulus-dependent specialization of infer-
+regularization, indicating that low-dimensional or-                                  ence dynamics.
+ganization is a spontaneous and general property of                                     Together, these results establish a fundamental
+reasoning dynamics in modern language models. The                                    empirical property of large language models: rea-
+emergence of compact reasoning manifolds stands                                      soning is realized as a low-dimensional dynamical
+in sharp contrast to the expressive capacity of the                                  process embedded within a highly expressive repre-
+underlying representation space itself.                                              sentation space. Inference-time dynamics are neither
+  To distinguish stimulus-induced organization from                                  diffuse explorations of the ambient space nor static
+global representational limitations, we estimate the                                 mappings between isolated representations. Instead,
+intrinsic dimensionality of general-purpose repre-                                   they self-organize into compact manifolds that con-
+sentations using static vocabulary embeddings. As                                    strain the evolution of internal states during reason-
+shown in Figure 2B, across all models these embed-                                   ing. At the same time, dimensional collapse alone is
+dings occupy spaces whose intrinsic dimensionality                                   insufficient to distinguish robust reasoning from brit-
+remains close to the ambient dimension, indicating                                   tle or degenerate behavior. As we show in the follow-
+that the models retain a high-capacity substrate for                                 ing section, models with similarly low-dimensional
+
+                                                                                 3
+                    Reasoning emerges from constrained inference manifolds in large language models
+
+
+reasoning trajectories can exhibit qualitatively differ-       compression during reasoning does not imply
+ent inference dynamics, indicating that additional             information loss. Instead, it reflects a focusing
+structural constraints are required to characterize            mechanism: deeper layers suppress irrelevant
+healthy reasoning processes.                                   noise (reducing dimensionality) while amplifying
+                                                               task-relevant conceptual variations (increasing
+Low-dimensional structure alone does not en-                   information volume). Early layers typically ex-
+sure robust reasoning                                          hibit higher-dimensional but information-sparse
+The spontaneous collapse of inference-time trajecto-           dynamics, whereas deeper layers operate on highly
+ries onto low-dimensional manifolds naturally invites          constrained manifolds that nonetheless sustain
+a simple interpretation: that stronger reasoning cor-          substantially greater information content. These
+responds to stronger compression, and that progres-            findings indicate that effective reasoning relies
+sively lower intrinsic dimensionality implies healthier        on maintaining high information content within
+inference dynamics. From a theoretical perspective,            a compact geometric structure, rather than on
+however, dimensionality reduction alone is insuffi-            indiscriminate compression.
+cient to guarantee meaningful computation. In the                 Crucially, intrinsic dimensionality alone cannot dis-
+extreme, unconstrained compression would be ex-                tinguish between these two mechanisms. Two mod-
+pected to drive reasoning trajectories toward rigid            els may exhibit similar degrees of geometric com-
+low-dimensional curves or near-fixed points, elimi-            pression while differing substantially in how much
+nating the degrees of freedom required to represent            information is preserved and organized within their
+intermediate computation.                                      reasoning trajectories. The observed increase in infor-
+   Empirically, we find that intrinsic dimensionality by       mation content with depth provides direct empirical
+itself does not reliably predict reasoning performance.        evidence that healthy reasoning dynamics do not
+Across multiple model families and parameter scales,           trade off geometric constraint against information
+models whose stimulus-induced trajectories exhibit             preservation, but instead integrate the two in a coor-
+lower intrinsic dimensionality do not consistently out-        dinated manner.
+perform those operating at slightly higher dimension-             Figure 4 visualizes this relationship by jointly plot-
+ality. In the representative examples shown in Figure          ting intrinsic dimensionality, information-carrying
+3A, more aggressively compressed models achieve                capacity, and reasoning performance across multiple
+reasoning performance comparable to, or even worse             model families. In this three-dimensional landscape,
+than, models with weaker compression. These obser-             each model is positioned according to its stimulus-
+vations indicate that, although low dimensionality is          induced intrinsic dimensionality, the information con-
+necessary for structured reasoning, it is insufficient         tent of its reasoning manifold, and downstream rea-
+to characterize reasoning quality.                             soning performance. Across architectures and scales,
+   This limitation motivates the introduction of an            high-performing models are not distributed along a
+additional quantity that captures how much informa-            single axis, but instead concentrate within a confined
+tion is actively present within the reasoning manifold.        region characterized by relatively low dimensionality
+To this end, we examine the joint evolution of geomet-         and elevated information content. Models located
+ric compression and information content across net-            at either extreme, corresponding to excessively com-
+work depth. We observe that, as inference proceeds             pressed or insufficiently informative regimes, tend to
+through deeper layers, the intrinsic dimensionality            exhibit degraded or unstable performance.
+of reasoning trajectories decreases systematically. In            Taken together, these results establish that intrinsic
+contrast, the information content of the reasoning             dimensionality alone cannot characterize healthy
+manifold, quantified by the information volume de-             reasoning dynamics. Geometric compression is a
+fined in Methods, exhibits a markedly different trend:         necessary component of structured inference, but
+across all evaluated models, it increases with depth           it must be accompanied by sufficient information
+(Figure 3B).                                                   preservation to support meaningful internal
+   This result demonstrates that dimensional                   computation.
+
+                                                           4
+                     Reasoning emerges from constrained inference manifolds in large language models
+
+
+  A
+
+
+
+
+  B
+
+
+
+
+Figure 3: Geometric compression alone does not explain robust reasoning. A, Relationship between
+stimulus-induced intrinsic dimensionality (ID) of inference-time representation trajectories and downstream reasoning
+performance across models of varying families and scales, showing that stronger compression (lower ID) does not
+consistently correspond to better performance. B, Joint evolution of geometry and information across depth: as
+inference progresses through layers, trajectory ID decreases while information-carrying capacity (information volume
+V ; see Methods) increases, indicating that effective reasoning requires low-dimensional organization together with
+non-degenerate information flow.
+
+
+Expressive    capacity stabilizes low-                         capacity, defined as the intrinsic dimensionality of its
+dimensional reasoning under increasing                         static vocabulary1 embedding space. This quantity
+conceptual diversity                                           captures the effective degrees of freedom available for
+                                                               representing diverse world concepts, independently
+The results in the preceding sections establish that           of any specific reasoning task. Importantly, expressive
+low-dimensional organization and sufficient infor-             capacity characterizes the representational substrate
+mation content are necessary components of healthy             on which inference-time dynamics operate, rather
+reasoning dynamics. However, even when both condi-             than the dynamics themselves.
+tions are satisfied, inference trajectories can become
+                                                                  1 In transformer-based language models, the static vocabulary
+unstable as the conceptual diversity of input stimuli
+increases. This suggests the presence of an addi-              embedding matrix maps discrete tokens to continuous vectors
+                                                               prior to contextual processing. It defines the representational
+tional structural factor governing the robustness of           substrate of the model, determining the degrees of freedom avail-
+low-dimensional reasoning under heterogeneous in-              able for encoding lexical and semantic concepts independently
+puts. We refer to this factor as the model’s expressive        of any specific input or reasoning trajectory.
+
+
+                                                           5
+                                                          Reasoning emerges from constrained inference manifolds in large language models
+
+
+
+
+                  Gemma3-27B                                                               Gemma3-27B                                                                     Gemma3-27B                                                               Gemma3-27B
+
+             Gemma3-12B                                                               Gemma3-12B                                                                     Gemma3-12B                                                               Gemma3-12B
+
+                  Qwen2.5-72B-Instruct                                                     Qwen2.5-72B-Instruct                                                           Qwen2.5-72B-Instruct                                                     Qwen2.5-72B-Instruct
+     Qwen3-32B                                                                Qwen3-32B                                                                      Qwen3-32B                                                                Qwen3-32B
+                            DeepSeek-R1-Distill-Qwen-32B                                             DeepSeek-R1-Distill-Qwen-32B                                                   DeepSeek-R1-Distill-Qwen-32B                                             DeepSeek-R1-Distill-Qwen-32B
+                               Qwen2.5-32B-Instruct                                                     Qwen2.5-32B-Instruct                                                           Qwen2.5-32B-Instruct                                                     Qwen2.5-32B-Instruct
+                                  DeepSeek-R1-Distill-Qwen-14B                                             DeepSeek-R1-Distill-Qwen-14B                                                   DeepSeek-R1-Distill-Qwen-14B                                             DeepSeek-R1-Distill-Qwen-14B
+     Qwen3-14B                                                                Qwen3-14B                                                                      Qwen3-14B                                                                Qwen3-14B
+                                   Qwen2.5-14B-Instruct                                                     Qwen2.5-14B-Instruct                                                           Qwen2.5-14B-Instruct                                                     Qwen2.5-14B-Instruct
+                 Qwen3-8B       Qwen3-1.7B                                                Qwen3-8B       Qwen3-1.7B                                                      Qwen3-8B       Qwen3-1.7B                                                Qwen3-8B       Qwen3-1.7B
+
+     Gemma3-1B                                                                Gemma3-1B                                                                      Gemma3-1B                                                                Gemma3-1B
+                               Qwen2.5-7B-Instruct                                                      Qwen2.5-7B-Instruct                                                            Qwen2.5-7B-Instruct                                                      Qwen2.5-7B-Instruct
+           Qwen3-4B                                                                 Qwen3-4B                                                                       Qwen3-4B                                                                 Qwen3-4B
+
+      Qwen2.5-3B-Instruct                                                      Qwen2.5-3B-Instruct                                                            Qwen2.5-3B-Instruct                                                      Qwen2.5-3B-Instruct
+                                     Qwen3-0.6B           DeepSeek-R1-                                        Qwen3-0.6B           DeepSeek-R1-                                              Qwen3-0.6B           DeepSeek-R1-                                        Qwen3-0.6B           DeepSeek-R1-
+                                                          Distill-Qwen-1.5B                                                        Distill-Qwen-1.5B                                                              Distill-Qwen-1.5B                                                        Distill-Qwen-1.5B
+       Qwen2.5-1.5B-Instruct                                                    Qwen2.5-1.5B-Instruct                                                          Qwen2.5-1.5B-Instruct                                                    Qwen2.5-1.5B-Instruct
+
+
+
+
+                  Gemma3-27B                                                               Gemma3-27B                                                                     Gemma3-27B                                                               Gemma3-27B
+
+             Gemma3-12B                                                               Gemma3-12B                                                                     Gemma3-12B                                                               Gemma3-12B
+
+                  Qwen2.5-72B-Instruct                                                     Qwen2.5-72B-Instruct                                                           Qwen2.5-72B-Instruct                                                     Qwen2.5-72B-Instruct
+     Qwen3-32B                                                                Qwen3-32B                                                                      Qwen3-32B                                                                Qwen3-32B
+                            DeepSeek-R1-Distill-Qwen-32B                                             DeepSeek-R1-Distill-Qwen-32B                                                   DeepSeek-R1-Distill-Qwen-32B                                             DeepSeek-R1-Distill-Qwen-32B
+                               Qwen2.5-32B-Instruct                                                     Qwen2.5-32B-Instruct                                                           Qwen2.5-32B-Instruct                                                     Qwen2.5-32B-Instruct
+                                  DeepSeek-R1-Distill-Qwen-14B                                             DeepSeek-R1-Distill-Qwen-14B                                                   DeepSeek-R1-Distill-Qwen-14B                                             DeepSeek-R1-Distill-Qwen-14B
+     Qwen3-14B                                                                Qwen3-14B                                                                      Qwen3-14B                                                                Qwen3-14B
+                                   Qwen2.5-14B-Instruct                                                     Qwen2.5-14B-Instruct                                                           Qwen2.5-14B-Instruct                                                     Qwen2.5-14B-Instruct
+                 Qwen3-8B       Qwen3-1.7B                                                Qwen3-8B       Qwen3-1.7B                                                      Qwen3-8B       Qwen3-1.7B                                                Qwen3-8B       Qwen3-1.7B
+
+     Gemma3-1B                                                                Gemma3-1B                                                                      Gemma3-1B                                                                Gemma3-1B
+                               Qwen2.5-7B-Instruct                                                      Qwen2.5-7B-Instruct                                                            Qwen2.5-7B-Instruct                                                      Qwen2.5-7B-Instruct
+           Qwen3-4B                                                                 Qwen3-4B                                                                       Qwen3-4B                                                                 Qwen3-4B
+
+      Qwen2.5-3B-Instruct                                                      Qwen2.5-3B-Instruct                                                            Qwen2.5-3B-Instruct                                                      Qwen2.5-3B-Instruct
+                                     Qwen3-0.6B           DeepSeek-R1-                                        Qwen3-0.6B           DeepSeek-R1-                                              Qwen3-0.6B           DeepSeek-R1-                                        Qwen3-0.6B           DeepSeek-R1-
+                                                          Distill-Qwen-1.5B                                                        Distill-Qwen-1.5B                                                              Distill-Qwen-1.5B                                                        Distill-Qwen-1.5B
+       Qwen2.5-1.5B-Instruct                                                    Qwen2.5-1.5B-Instruct                                                          Qwen2.5-1.5B-Instruct                                                    Qwen2.5-1.5B-Instruct
+
+
+
+
+Figure 4: An admissible regime of inference dynamics jointly constrains geometry, information and
+performance. Models are positioned in a three-dimensional space defined by stimulus-induced intrinsic
+dimensionality (ID), information-carrying capacity of inference trajectories (information volume V ; Methods) and
+downstream reasoning performance. High-performing models concentrate within a narrow region characterized by
+low ID and elevated V , whereas models outside this regime exhibit degraded or unstable performance, consistent with
+the proposed structural constraints on healthy reasoning.
+
+
+   To examine how expressive capacity influences the                                                                                                          These results indicate that expressive capacity
+stability of reasoning manifolds, we design a con-                                                                                                         stabilizes low-dimensional reasoning organization
+trolled stimulus expansion experiment that progres-                                                                                                        under stimulus expansion. Models with richer rep-
+sively increases conceptual diversity while tracking                                                                                                       resentational substrates are able to accommodate
+changes in stimulus-induced intrinsic dimensional-                                                                                                         increasing conceptual diversity without requiring
+ity. We partition the MMLU-Other benchmark into                                                                                                            substantial expansion of inference-time degrees of
+thirteen disjoint question types, each probing a dis-                                                                                                      freedom. By contrast, models with insufficient ex-
+tinct category of conceptual or cognitive content. For                                                                                                     pressive capacity must recruit additional dimensions
+each model, we first estimate inference-time intrin-                                                                                                       during inference to encode heterogeneous concepts,
+sic dimensionality using stimuli drawn from a sin-                                                                                                         leading to dispersion of reasoning trajectories and
+gle question type. We then incrementally expand                                                                                                            reduced structural stability. From this perspective,
+the stimulus set by cumulatively adding additional                                                                                                         expressive capacity does not directly determine rea-
+question types and recompute the stimulus-induced                                                                                                          soning performance, nor does it operate as a proxy
+intrinsic dimensionality at each stage.                                                                                                                    for model size or task accuracy. Instead, it functions
+   This procedure yields a growth curve that quan-                                                                                                         as a background structural condition that modulates
+tifies how the effective dimensionality of reasoning                                                                                                       how effectively low-dimensional, information-rich
+trajectories responds to increasing conceptual diver-                                                                                                      reasoning dynamics can be sustained as input diver-
+sity. Across models, we observe a clear and systematic                                                                                                     sity increases. Expressive capacity is therefore neither
+pattern: models with greater expressive capacity ex-                                                                                                       inherently beneficial nor detrimental; rather, it con-
+hibit significantly slower growth of stimulus-induced                                                                                                      ditions the regime within which inference dynamics
+intrinsic dimensionality as conceptual diversity in-                                                                                                       can remain compact and coordinated.
+creases (Figure 5A). In contrast, models with more                                                                                                            In summary, these results establish expressive ca-
+limited expressive capacity show a more rapid expan-                                                                                                       pacity as a necessary structural factor for robust
+sion of reasoning dimensionality when confronted                                                                                                           reasoning dynamics. Even when inference trajecto-
+with heterogeneous stimuli.                                                                                                                                ries are geometrically compact and information-rich,
+
+                                                                                                                                                       6
+                                                                           Reasoning emerges from constrained inference manifolds in large language models
+
+
+ A
+                                                                             Qwen                                                        Gemma                                                 DeepSeek
+                                             18                                                               16
+                                                                                                                                                                          25.0
+                                                                                                                                                              Gemma3-1B                                              DeepSeek-R1-
+                                                                                                                                                                                                                    Distill-Qwen-1.5B
+                                             16                                                                                                                           22.5
+                                                                                                              14
+               Stimulus-induced ID (Dstim)
+
+
+
+
+                                                                                                Qwen3-0.6B
+                                                                                                                                                              Gemma3-4B                                              DeepSeek-R1-
+                                                                                                                                                                          20.0                                      Distill-Qwen-14B
+                                             14
+                                                                                                Qwen3-4B
+                                                                                                              12
+                                                                                                                                                             Gemma3-12B
+                                                                                                                                                                          17.5
+                                             12
+                                                                                                Qwen3-8B                                                                  15.0                                       DeepSeek-R1-
+                                                                                                              10                                                                                                    Distill-Qwen-32B
+                                             10                                                                                                                           12.5
+                                                                                                                                                             Gemma3-27B
+                                                                                                Qwen3-32B
+                                                                                                               8                                                          10.0
+                                              8
+                                                                                                                                                                           7.5
+                                              6                                                                6
+                                                  1             4             7            10      13              1          4              7         10           13           1   4            7            10          13
+                                                                Accumulated concept types                                     Accumulated concept types                              Accumulated concept types
+     B
+                                                                    AIME'25                                   Arena-Hard                                    AutoLogi                                  BFCL v3
+                                    1.00                                                                                          0.88                                       0.92                                   0.89
+                                                                                    0.76                               0.79
+                                                                                                                                                                                                        0.74
+                                                                                                     0.69                                                      0.69
+         Spearman ρ
+
+
+
+
+                                    0.75                              0.68
+
+                                                                                                                                                                                          0.46
+                                    0.50
+
+                                                      0.23                                                                                        0.26
+                                    0.25
+
+                                    0.00
+                                                      ID            ID+V                           ID             ID+V                          ID         ID+V                        ID          ID+V          
+
+
+                                                             Creative Writing v3                             GPQA-Diamond                              LiveBench2024-11-25                       LiveCodeBench v5
+                                    1.00                                            0.94                                          0.91                                       0.90
+                                                                      0.88                                                                                                                                          0.89
+                                                      0.75                                                             0.73                                    0.71
+         Spearman ρ
+
+
+
+
+                                    0.75                                                                                                                                                                0.68
+
+
+                                    0.50
+                                                                                                     0.29                                         0.31                                    0.32
+                                    0.25
+
+                                    0.00
+                                                      ID            ID+V                           ID             ID+V                          ID         ID+V                        ID          ID+V          
+
+
+
+Figure 5: Expressive capacity stabilizes inference dynamics and enables a unified structural diagnostic. A,
+Stimulus expansion analysis showing that stimulus-induced intrinsic dimensionality increases with accumulated
+conceptual diversity, with higher-expressivity models exhibiting slower expansion. B, Benchmark-wise ablation of
+structural predictors. For each benchmark, bars show the Spearman correlation between model performance and
+intrinsic dimensionality alone, intrinsic dimensionality combined with information volume, and the full diagnostic H .
+The full diagnostic consistently provides the strongest association with benchmark performance.
+
+
+their stability under heterogeneous stimuli depends                                                                                          findings motivate a unified, label-free characteriza-
+on the representational capacity of the underlying                                                                                           tion of reasoning health that operates directly on
+embedding space. In the next section, we show how                                                                                            inference-time representations.
+expressive capacity, together with geometric organi-                                                                                            We formalize this characterization through a scalar
+zation and information content, can be integrated                                                                                            diagnostic that integrates the three structural com-
+into a unified, label-free characterization of reason-                                                                                       ponents into a single quantity. Specifically, for each
+ing health.                                                                                                                                  model we define a reasoning health score
+
+A unified structural diagnostic of reasoning                                                                                                                H = log(Dworld ) ·
+                                                                                                                                                                                             V
+                                                                                                                                                                                                      ,                         (1)
+                                                                                                                                                                                         exp(εDstim )
+The preceding sections identify three independent
+structural constraints governing healthy reasoning                                                                                           where Dworld denotes the intrinsic dimensionality of
+dynamics: low-dimensional geometric organization,                                                                                            static vocabulary embeddings, capturing expressive
+sufficient information content within the reasoning                                                                                          capacity; Dstim denotes the stimulus-induced intrin-
+manifold, and sufficient expressive capacity of the                                                                                          sic dimensionality of inference-time trajectories, cap-
+underlying representation space. Together, these                                                                                             turing geometric organization; and V denotes the
+
+                                                                                                                                         7
+                    Reasoning emerges from constrained inference manifolds in large language models
+
+
+information-carrying capacity of the reasoning man-           dynamics may underperform on specific tasks due to
+ifold. The parameter ε controls the strength of the           misalignment or insufficient supervision.
+penalty on diffuse inference dynamics and is fixed               Together, these results demonstrate that the struc-
+across all models. All quantities are computed solely         tural constraints identified in this work can be oper-
+from internal representations, as detailed in Meth-           ationalized into a unified, label-free diagnostic that
+ods.                                                          captures intrinsic aspects of reasoning health. By
+   This formulation reflects the structural constraints       grounding reasoning evaluation in the geometry and
+revealed by our empirical analyses. The numerator             information flow of inference-time dynamics, this
+rewards inference dynamics that sustain substantial           approach offers a principled means of comparing,
+information content, while the exponential penalty            diagnosing, and understanding reasoning behavior
+suppresses regimes in which reasoning trajectories            across large language models, independent of task-
+expand excessively in dimensionality. The logarith-           specific supervision.
+mic dependence on expressive capacity reflects its
+role as a background condition that supports stable           Discussion
+organization without dominating the diagnostic. Im-           The results presented in this work motivate a shift in
+portantly, the diagnostic does not incorporate task           how reasoning in large language models is concep-
+labels, correctness signals, or external supervision,         tualized and evaluated. Rather than focusing exclu-
+and is not used for training or model selection.              sively on task-level outcomes or benchmark scores,
+   To assess whether this structural diagnostic cap-          we examine reasoning through the internal structure
+tures meaningful variation in reasoning behavior, we          of inference-time dynamics. This perspective treats
+compare the resulting scores against model perfor-            reasoning as a constrained dynamical process unfold-
+mance on a range of independent reasoning bench-              ing within a representational space [22], and invites
+marks. For each model, we compute H from generic              questions not only about whether a model succeeds
+cognitive stimuli and evaluate its rank correlation           on a task, but about the internal regimes that make
+with benchmark scores reported on external leader-            such success possible or fragile. The Discussion below
+boards. Across all evaluated benchmarks, we observe           situates our findings within this broader conceptual
+consistently strong monotonic agreement (Spearman             framework, clarifies what is captured by structural
+rank correlation coefficients exceeding 0.9 across all        measures of reasoning health, delineates the regime
+evaluated benchmarks; Figure 5B).                             in which the framework applies, and outlines how
+   Crucially, this alignment emerges despite the diag-        such structural diagnostics may be used in practice.
+nostic being entirely task-agnostic. The computation
+of H does not reference benchmark tasks, evalua-              What is being measured by reasoning health?
+tion datasets, or performance labels, and relies only         A central contribution of this work is to clarify what
+on internal inference dynamics elicited by generic            is captured by internal measures of reasoning quality,
+stimuli. This result indicates that models exhibiting         as well as what is not. Rather than estimating task-
+structurally healthy reasoning dynamics, as charac-           specific competence or benchmark performance, the
+terized by geometric constraint, information content,         reasoning health diagnostic introduced here quanti-
+and expressive support, tend to generalize robustly           fies the structural organization of inference-time dy-
+across diverse reasoning tasks.                               namics. It evaluates whether internal representations
+   At the same time, the diagnostic is not intended           evolve within a regime that supports meaningful in-
+to replace benchmark-based evaluation. Rather, it             termediate computation, independent of whether a
+provides a complementary lens that isolates intrin-           particular output is correct [23, 24].
+sic properties of inference dynamics from dataset-               From this perspective, reasoning health character-
+specific effects, prompt sensitivity, and surface-level       izes how a model reasons, not what it knows or how
+correctness. Models with similar benchmark perfor-            well it performs on a given dataset. Models with sim-
+mance can occupy distinct regions of the intrinsic con-       ilar task accuracy may operate in fundamentally dif-
+straint space, while models with structurally healthy         ferent internal regimes [25, 18], while models with
+
+                                                          8
+                    Reasoning emerges from constrained inference manifolds in large language models
+
+
+structurally healthy inference dynamics may fail spe-          low-dimensional, information-rich dynamical process
+cific benchmarks due to misalignment, insufficient             embedded within a highly expressive representation
+supervision, or domain mismatch. The diagnostic                space. Outside this regime, inference dynamics ex-
+therefore complements, rather than replaces, exter-            hibit characteristic failure modes, including diffuse
+nal evaluation [7] by isolating intrinsic properties           exploration, information starvation, or instability un-
+of inference dynamics that are otherwise conflated             der stimulus expansion.
+with dataset effects. In this sense, reasoning health             Importantly, the admissible reasoning regime is
+provides a measure of whether a system operates                not expected to extend indefinitely with model scale,
+within a regime capable of sustaining intermediate             architectural complexity, or training compute [15].
+computational structure, rather than merely produc-            Changes that improve one structural dimension may
+ing correct outputs.                                           degrade another, shifting models toward or away
+                                                               from the admissible regime. The framework there-
+Structural determinants of healthy reasoning                   fore does not predict monotonic scaling laws for rea-
+dynamics                                                       soning performance [5], but instead delineates a
+Our results identify three structural factors that             structural window within which robust reasoning dy-
+jointly govern reasoning dynamics: low-dimensional             namics can be sustained. Whether similar regimes
+manifold structure, information content, and expres-           govern reasoning in non-autoregressive architectures,
+sive capacity. Low-dimensional manifold structure              multimodal systems, or embodied agents remains an
+constrains inference trajectories into coordinated in-         open question.
+ternal subspaces, preventing diffuse and unstable
+exploration. Information content ensures that these            Applications
+manifolds retain sufficient structured variation to            By grounding reasoning evaluation in internal dynam-
+support intermediate computation rather than col-              ics rather than task outcomes, the diagnostic intro-
+lapsing into trivial dynamics. Expressive capacity,            duced here enables comparison of reasoning behavior
+quantified independently through static embedding              across models, architectures, and training regimes
+geometry, provides the representational substrate              without reliance on labeled benchmarks. This makes
+that stabilizes low-dimensional reasoning manifolds            it applicable in settings where task-specific evaluation
+under increasing conceptual diversity.                         is limited or unavailable.
+   Crucially, none of these factors alone is sufficient.          More broadly, structural diagnostics provide a com-
+Dimensional compression without sufficient informa-            plementary perspective for monitoring and guiding
+tion content leads to rigid, uninformative dynam-              model development. Instead of optimizing solely for
+ics, while information-rich representations without            benchmark performance, training or fine-tuning pro-
+low-dimensional geometric constraint remain unsta-             cedures may be informed by constraints on inference
+ble. Likewise, expressive capacity conditions how              dynamics [26], promoting regimes that support ro-
+inference dynamics respond to heterogeneous stim-              bust and generalizable reasoning. Structural analysis
+uli, enabling models to maintain compact reasoning             may also help identify brittleness, characterize fail-
+trajectories as conceptual diversity increases. Healthy        ure modes, and assess how alignment or compression
+reasoning thus emerges not from any single mecha-              techniques affect internal computation.
+nism, but from the coordinated interaction of these               From this perspective, the identification of an ad-
+structural determinants.                                       missible structural regime raises questions about how
+                                                               such regimes might be encouraged during model
+Regime of validity of the admissible reasoning                 development. One possible implication, not exam-
+framework                                                      ined here, is whether training objectives that bias
+The framework developed in this work applies specif-           inference-time dynamics toward geometrically ad-
+ically to inference-time reasoning dynamics in con-            missible regimes could promote healthier reasoning
+temporary autoregressive language models. It char-             behavior. This does not imply a specific regulariza-
+acterizes a regime in which reasoning unfolds as a             tion strategy. Rather, the admissible regime provides
+
+                                                           9
+                    Reasoning emerges from constrained inference manifolds in large language models
+
+
+a structural reference for evaluating the effects of            internal metrics were computed solely from hidden-
+future training approaches.                                     state dynamics and did not access answer keys, cor-
+   Finally, this framework suggests a shift in how rea-         rectness labels, or benchmark scores.
+soning in large artificial systems is studied. By treat-
+                                                                Stimulus construction
+ing reasoning as a constrained dynamical process
+with identifiable structural regimes, it becomes pos-           To probe reasoning dynamics independently of task
+sible to analyze intelligence at a level that is more           supervision, we constructed a set of generic cognitive
+general and more mechanistic than task-specific eval-           stimuli from the “Other” subset of the Massive Multi-
+uation.                                                         task Language Understanding (MMLU) benchmark.
+                                                                This subset spans a broad range of conceptual, lin-
+Limitations and scope                                           guistic, and commonsense questions while avoiding
+Several caveats delimit the scope of our claims. First,         reliance on any single narrow reasoning domain.
+last-token hidden states provide a tractable proxy for             Stimuli were used only to elicit inference-time dy-
+inference dynamics but do not exhaust computation               namics. No answer labels were loaded during the
+distributed across positions, heads, or attention pat-          computation of internal metrics, and no notion of
+terns. Second, the stimuli used here are label-free             correctness entered the geometric or information-
+but not distribution-free, as they are derived from             theoretic analyses. This design ensured that all re-
+benchmark-style prompts rather than unconstrained               ported structural quantities reflected intrinsic prop-
+naturalistic interaction. Third, the proposed diag-             erties of inference dynamics rather than benchmark
+nostic is descriptive and correlational: it identifies a        alignment. For the stimulus-expansion analysis, the
+structural regime associated with strong reasoning              MMLU-Other prompts were partitioned into thirteen
+behavior, but does not by itself establish causal mech-         disjoint question types defined from the source bench-
+anisms. Finally, whether similar admissible regimes             mark. Progressively larger stimulus sets were then
+govern non-autoregressive, multimodal, or embodied              constructed by cumulatively adding question types
+systems remains an open question.                               and recomputing the corresponding structural quan-
+                                                                tities at each stage.
+Methods
+                                                                Inference-time representation extraction
+Models and inference configuration
+                                                                For each stimulus x, models generated responses au-
+We evaluated contemporary open-weight autoregres-               toregressively until termination by EOS or the max-
+sive large language models from four model fami-                imum generation length of 15,000 tokens. At infer-
+lies: Qwen2.5, Qwen3, Gemma 3, and DeepSeek-                    ence step t and transformer layer ℓ, we extracted the
+R1-Distill-Qwen. The Qwen2.5 series spanned pa-                 hidden state at the final sequence position, denoted
+rameter scales from 0.5B to 72B, the Qwen3 series
+spanned 0.6B to 32B, Gemma 3 included the 1B, 4B,                                       hℓ,t (x) ∈ Rdℓ ,                      (2)
+12B, and 27B checkpoints, and DeepSeek-R1-Distill-
+Qwen included the 1.5B, 14B, and 32B checkpoints.               where dℓ is the hidden width of layer ℓ.
+All model weights were publicly released and were                 A layer-specific reasoning trajectory was defined
+used in inference-only mode, without additional fine-           as the ordered sequence
+tuning or parameter updates.                                           Tℓ (x) = {hℓ,1 (x), hℓ,2 (x), . . . , hℓ,T (x) (x)},   (3)
+   Unless otherwise stated, all models were evalu-
+ated with the same prompt wrapper and the same                  where T (x) denotes the number of generated tokens
+decoding configuration. Responses were sampled at               for stimulus x. Unless otherwise stated, all analyses
+temperature 0.7, and the maximum generation length              were performed on the final-token hidden represen-
+was set to 15,000 tokens. Each prompt generated a               tations at each transformer layer. For cross-model
+single completion per run. No task-specific prompt              summary statistics, stimulus-induced intrinsic dimen-
+optimization, self-consistency voting, answer extrac-           sionality and information volume were aggregated
+tion heuristics, or post-hoc filtering was applied. All         across prompts at the final layer.
+
+                                                           10
+                      Reasoning emerges from constrained inference manifolds in large language models
+
+
+Preprocessing of representations                                         We estimated two conceptually distinct intrinsic
+For each prompt and layer, hidden states were mean-                    dimensionalities. First, the world expressivity
+centred before geometric analysis. Specifically,
+                                                                                                      Dworld ,                        (9)
+                 h̃ℓ,t (x) = hℓ,t (x) − h̄ℓ (x),
+                              1 T (x )                      (4)        was computed from the static vocabulary embedding
+                h̄ℓ (x) =              hℓ,t (x).                       matrix of each model. Second, the stimulus-induced
+                            T (x) t∑
+                                   =1                                  dimensionality
+  All intrinsic-dimensionality and information-                                               Dstim ,                (10)
+volume calculations were performed on centred
+representations. Unless otherwise stated, distances                    was computed from inference-time trajectories
+were computed in Euclidean geometry without                            elicited by the generic cognitive stimuli. At layer
+additional dimensionality reduction.                                   ℓ, the per-prompt quantity was
+
+Intrinsic dimensionality estimation                                                      Dstim,ℓ (x) = IDTLE (Tℓ (x)),               (11)
+Intrinsic dimensionality (ID) quantifies the effective
+number of degrees of freedom governing represen-                       and the model-level summary was obtained by ag-
+tations concentrated near a low-dimensional mani-                      gregating across prompts at the final layer. Unless
+fold embedded in a high-dimensional space [27, 21].                    otherwise stated, we used k = 20 neighbours and
+Given a set of points                                                  Euclidean distance throughout.
+
+                             i=1 ⊂ R ,
+                    Z = {zi }m      d
+                                                            (5)        Information volume of inference trajectories
+we estimated intrinsic dimensionality using the tight                  To quantify the amount of structured variation pre-
+local intrinsic dimensionality estimator (TLE) [21,                    served during inference, we computed the informa-
+28], a k-nearest-neighbour estimator designed for lo-                  tion volume of each trajectory. For a given prompt x
+cally sampled manifolds in high-dimensional spaces.                    and layer ℓ, we first defined the trajectory mean
+  For each point zi , let Vi denote its k-nearest neigh-
+bours, let Vi∗ = Vi ∪ {zi }, and let rk (zi ) denote the                                                1 T (x )
+                                                                                          h̄ℓ (x) =              hℓ,t (x),           (12)
+distance from zi to its k-th nearest neighbour. The                                                   T (x) t∑
+                                                                                                             =1
+local intrinsic dimensionality at zi was computed as
+                                                                      and the centred trajectory matrix
+                  1                dz (v, w)
+IDTLE (zi ) = −    ∗ 2  ∑       log i                                                     
+                |Vi | v,w∈V ∗       rk ( z i )                                Zℓ (x) = hℓ,1 (x) − h̄ℓ (x), hℓ,2 (x) − h̄ℓ (x),
+                            v̸=w
+                                i
+                                                                                                                                     (13)
+                                                                                     . . . , hℓ,T (x) (x) − h̄ℓ (x) ∈ Rdℓ ×T (x) .
+                                                                                                                   
+                                                           !−1
+                                         dz (2zi − v, w)
+                                    + log i                       ,         The information volume [29, 30] was then defined
+                                             rk ( z i )
+                                                                       as
+                                                            (6)
+                                                                                                                      
+where                                                                                1             dℓ                ⊤
+                                                                             Vℓ (x) = log det I +        Zℓ (x)Zℓ (x) .              (14)
+                                                                                     2            T (x )
+                        rk (zi ) (w − v)⊤ (w − v)
+           dzi (v, w) =                           .         (7)
+                           2 (zi − v)⊤ (w − v)                            This quantity is small for trajectories that collapse
+                                                                       toward fixed points or near-degenerate curves, and
+  The global intrinsic dimensionality of Z was ob-
+                                                                       larger for compact trajectories that retain substan-
+tained by averaging local estimates across points:
+                                                                       tial spread along informative directions. Model-level
+                              1 m                                      summaries of information volume were obtained by
+              IDTLE (Z ) =          IDTLE (zi ).            (8)
+                              m i∑
+                                 =1
+                                                                       aggregating Vℓ (x) across prompts at the final layer.
+
+                                                                  11
+                    Reasoning emerges from constrained inference manifolds in large language models
+
+
+Label-free reasoning health diagnostic                          organization was specifically associated with struc-
+To integrate the structural constraints identified in           tured inference dynamics.
+the main text, we defined a unified, label-free diag-           Statistical analysis and reproducibility
+nostic of reasoning dynamics:
+                                                                No statistical method was used to predetermine sam-
+           H = log(Dworld ) ·
+                                  V
+                                           ,        (15)        ple size. Sample sizes were determined by the num-
+                              exp(εDstim )                      ber of models and stimuli included in each analysis.
+                                                                   Unless otherwise stated, uncertainty intervals are
+where Dworld denotes the intrinsic dimensionality
+                                                                reported as two-sided 95% bootstrap confidence in-
+of static vocabulary embeddings, capturing repre-
+                                                                tervals estimated from Nboot = 1000 resamples. Boot-
+sentational expressivity; Dstim denotes the stimulus-
+                                                                strap resampling was performed with replacement
+induced intrinsic dimensionality of inference-time
+                                                                over stimuli. For the stimulus-expansion analysis, re-
+trajectories, capturing geometric organization; and
+                                                                sampling was performed within question types before
+V denotes the information volume of those trajecto-
+                                                                aggregation across cumulatively expanded stimulus
+ries, capturing the amount of structured variation
+                                                                sets. For benchmark-correlation analyses, models
+preserved within the compressed manifold.
+                                                                were resampled with replacement.
+   The penalty coefficient ε was fixed a priori to 0.1
+                                                                   Because all models were evaluated under the same
+for all models. This value was chosen to penalize
+                                                                decoding temperature (0.7) and the same maximum
+diffuse inference dynamics without allowing the di-
+                                                                generation length (15,000 tokens), cross-model com-
+mensionality term to dominate the contributions of
+                                                                parisons were not confounded by differences in gener-
+information volume and representational expressiv-
+                                                                ation hyperparameters. Qualitative trends reported
+ity. The value of ε was not tuned separately for any
+                                                                in the Results were consistent across model families,
+benchmark or model family.
+                                                                parameter scales, and stimulus subsets.
+   All three quantities were computed solely from in-
+ternal representations. The diagnostic did not access           Implementation details
+task labels, reference answers, or benchmark correct-
+                                                                All experiments were conducted using publicly re-
+ness signals, and was used exclusively for post-hoc
+                                                                leased model weights in inference-only mode with
+structural analysis rather than model training or se-
+                                                                standard open-source deep-learning libraries. Hid-
+lection.
+                                                                den states were extracted during autoregressive gen-
+Control analyses                                                eration and stored for post-hoc geometric analy-
+To verify that the observed low-dimensional organi-             sis. Nearest-neighbour computations for intrinsic-
+zation reflected structured inference rather than su-           dimensionality estimation and linear-algebra opera-
+perficial properties of autoregressive generation, we           tions for information-volume computation were per-
+performed several control analyses. First, token order          formed using GPU-accelerated routines where avail-
+within each trajectory was randomly shuffled before             able.
+recomputing intrinsic dimensionality and informa-                  All analysis code was deterministic conditioned
+tion volume. Second, the generic cognitive stimuli              on fixed model weights, prompts, generated trajecto-
+were replaced with non-cognitive or weakly struc-               ries, and random seeds. Because response generation
+tured prompts while maintaining the same decoding               was performed with sampling temperature set to 0.7,
+configuration (temperature = 0.7; maximum genera-               inference trajectories were stochastic at generation
+tion length = 15,000 tokens). Third, we recomputed              time unless random seeds were fixed explicitly.
+all metrics on truncated trajectories to confirm that
+                                                                Data availability
+the reported geometry was not driven by unusually
+long generations.                                               The prompt texts analysed in this study were derived
+   These controls did not reproduce the stable, com-            from the public MMLU benchmark, subject to its orig-
+pact manifolds observed under generic cognitive stim-           inal licence and terms of use. The source data un-
+ulation, indicating that the reported low-dimensional           derlying Figs. 1–5, together with the per-model sum-
+
+                                                           12
+                    Reasoning emerges from constrained inference manifolds in large language models
+
+
+mary statistics used for all geometric, information-                  Abu Awal Md Shoeb, Abubakar Abid, Adam Fisch,
+theoretic, and correlation analyses, will be deposited                Adam R Brown, Adam Santoro, Aditya Gupta, Adrià
+in a public repository upon publication. Public bench-                Garriga-Alonso, et al. Beyond the imitation game:
+mark scores used for the correlation analyses were                    Quantifying and extrapolating the capabilities of
+                                                                      language models. Transactions on machine learning
+obtained from the corresponding public evaluation
+                                                                      research, 2023.
+sources and will be listed in the Supplementary Ma-               [7] Percy Liang, Rishi Bommasani, Tony Lee, Dimitris
+terials together with access dates and checkpoint                     Tsipras, Dilara Soylu, Michihiro Yasunaga, Yian
+matching details.                                                     Zhang, Deepak Narayanan, Yuhuai Wu, Ananya Ku-
+                                                                      mar, et al. Holistic evaluation of language models.
+Code availability                                                     arXiv preprint arXiv:2211.09110, 2022.
+Custom code for hidden-state extraction, intrinsic-               [8] Sébastien Bubeck, Varun Chandrasekaran, Ronen
+                                                                      Eldan, Johannes Gehrke, Eric Horvitz, Ece Kamar,
+dimensionality estimation, information-volume
+                                                                      Peter Lee, Yin Tat Lee, Yuanzhi Li, Scott Lundberg,
+computation, stimulus-expansion analysis, the                         et al. Paper review:’sparks of artificial general intel-
+structural diagnostic H , and figure generation                       ligence: Early experiments with gpt-4’. 2023.
+will be made publicly available upon publication.                 [9] Philipp Mondorf and Barbara Plank. Beyond
+Intrinsic-dimensionality   estimation   leverages                     accuracy: evaluating the reasoning behavior of
+the perceptual-manifold-geometry pack-                                large language models–a survey. arXiv preprint
+age [21], which provides geometric analysis                           arXiv:2404.01869, 2024.
+                                                                 [10] Yixin Cao, Shibo Hong, Xinze Li, Jiahao Ying, Yubo
+tools for high-dimensional data manifolds in-
+                                                                      Ma, Haiyuan Liang, Yantao Liu, Zijun Yao, Xiaozhi
+cluding intrinsic dimension, curvature, density,                      Wang, Dan Huang, et al. Toward generalizable eval-
+and topological structure; the package is openly                      uation in the llm era: A survey beyond benchmarks.
+available at https://pypi.org/project/                                arXiv preprint arXiv:2504.18838, 2025.
+perceptual-manifold-geometry/.                                   [11] Nelson Elhage, Tristan Hume, Catherine Olsson,
+                                                                      Nicholas Schiefer, Tom Henighan, Shauna Kravec,
+References                                                            Zac Hatfield-Dodds, Robert Lasenby, Dawn Drain,
+ [1] Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten                 Carol Chen, et al. Toy models of superposition. arXiv
+     Bosma, Fei Xia, Ed Chi, Quoc V Le, Denny Zhou,                   preprint arXiv:2209.10652, 2022.
+     et al. Chain-of-thought prompting elicits reasoning         [12] Mor Geva, Jasmijn Bastings, Katja Filippova, and
+     in large language models. Advances in neural infor-              Amir Globerson. Dissecting recall of factual associa-
+     mation processing systems, 35:24824–24837, 2022.                 tions in auto-regressive language models. In Proceed-
+ [2] Takeshi Kojima, Shixiang Shane Gu, Machel Reid,                  ings of the 2023 Conference on Empirical Methods in
+     Yutaka Matsuo, and Yusuke Iwasawa. Large lan-                    Natural Language Processing, pages 12216–12235,
+     guage models are zero-shot reasoners. Advances                   2023.
+     in neural information processing systems, 35:22199–         [13] Simone Ciceri, Lorenzo Cassani, Matteo Osella,
+     22213, 2022.                                                     Pietro Rotondo, Filippo Valle, and Marco Gherardi.
+ [3] Yingheng Tang, Wenbin Xu, Jie Cao, Weilu Gao,                    Inversion dynamics of class manifolds in deep learn-
+     Steven Farrell, Benjamin Erichson, Michael W Ma-                 ing reveals tradeoffs underlying generalization. Na-
+     honey, Andy Nonaka, and Zhi Jackie Yao. A multi-                 ture Machine Intelligence, 6(1):40–47, 2024.
+     modal large language model for materials science.           [14] Maximilian Dreyer, Jim Berend, Tobias Labarta, Jo-
+     Nature Machine Intelligence, pages 1–14, 2026.                   hanna Vielhaben, Thomas Wiegand, Sebastian La-
+ [4] Aaron Hurst, Adam Lerer, Adam P Goucher, Adam                    puschkin, and Wojciech Samek. Mechanistic under-
+     Perelman, Aditya Ramesh, Aidan Clark, AJ Os-                     standing and validation of large ai models with se-
+     trow, Akila Welihinda, Alan Hayes, Alec Rad-                     manticlens. Nature Machine Intelligence, 7(9):1572–
+     ford, et al. Gpt-4o system card. arXiv preprint                  1585, 2025.
+     arXiv:2410.21276, 2024.                                     [15] Shuai Bai, Keqin Chen, Xuejing Liu, Jialin Wang,
+ [5] Chaojun Xiao, Jie Cai, Weilin Zhao, Biyuan Lin,                  Wenbin Ge, Sibo Song, Kai Dang, Peng Wang, Shi-
+     Guoyang Zeng, Jie Zhou, Zhi Zheng, Xu Han,                       jie Wang, Jun Tang, Humen Zhong, Yuanzhi Zhu,
+     Zhiyuan Liu, and Maosong Sun. Densing law of                     Mingkun Yang, Zhaohai Li, Jianqiang Wan, Pengfei
+     llms. Nature Machine Intelligence, pages 1–11, 2025.             Wang, Wei Ding, Zheren Fu, Yiheng Xu, Jiabo Ye,
+ [6] Aarohi Srivastava, Abhinav Rastogi, Abhishek Rao,                Xi Zhang, Tianbao Xie, Zesen Cheng, Hang Zhang,
+
+
+                                                            13
+                     Reasoning emerges from constrained inference manifolds in large language models
+
+
+     Zhibo Yang, Haiyang Xu, and Junyang Lin. Qwen2.5-               arXiv preprint arXiv:2408.03314, 2024.
+     vl technical report, 2025. URL https://arxiv.              [27] Daniel Durstewitz, Bruno Averbeck, and Georgia
+     org/abs/2502.13923.                                             Koppe. What neuroscience can tell ai about learn-
+[16] An Yang, Anfeng Li, Baosong Yang, Beichen Zhang,                ing in continuously changing environments. Nature
+     Binyuan Hui, Bo Zheng, Bowen Yu, Chang Gao,                     Machine Intelligence, pages 1–16, 2025.
+     Chengen Huang, Chenxu Lv, et al. Qwen3 technical           [28] Elena Facco, Maria d’Errico, Alex Rodriguez, and
+     report. arXiv preprint arXiv:2505.09388, 2025.                  Alessandro Laio. Estimating the intrinsic dimension
+[17] Gemma Team, Aishwarya Kamath, Johan Ferret,                     of datasets by a minimal neighborhood information.
+     Shreya Pathak, Nino Vieillard, Ramona Merhej,                   Scientific reports, 7(1):12140, 2017.
+     Sarah Perrin, et al. Gemma 3 technical report, 2025.       [29] Yanbiao Ma, Licheng Jiao, Fang Liu, Maoji Wen,
+     URL https://arxiv.org/abs/2503.19786.                           Lingling Li, Wenping Ma, Shuyuan Yang, Xu Liu,
+[18] Daya Guo, Dejian Yang, Haowei Zhang, Junxiao                    and Puhua Chen. Predicting and enhancing the
+     Song, Peiyi Wang, Qihao Zhu, Runxin Xu, Ruoyu                   fairness of dnns with the curvature of perceptual
+     Zhang, Shirong Ma, Xiao Bi, et al. Deepseek-r1                  manifolds. IEEE Transactions on Pattern Analysis
+     incentivizes reasoning in llms through reinforcement            and Machine Intelligence, 47(5):3394–3411, 2025.
+     learning. Nature, 645(8081):633–638, 2025.                 [30] John Wright, Yi Ma, Julien Mairal, Guillermo Sapiro,
+[19] Yubo Wang, Xueguang Ma, Ge Zhang, Yuansheng                     Thomas S Huang, and Shuicheng Yan. Sparse rep-
+     Ni, Abhranil Chandra, Shiguang Guo, Weiming Ren,                resentation for computer vision and pattern recog-
+     Aaran Arulraj, Xuan He, Ziyan Jiang, et al. Mmlu-               nition. Proceedings of the IEEE, 98(6):1031–1044,
+     pro: A more robust and challenging multi-task lan-              2010.
+     guage understanding benchmark. Advances in Neu-
+     ral Information Processing Systems, 37:95266–95290,
+     2024.
+[20] Alessio Ansuini, Alessandro Laio, Jakob H Macke,
+     and Davide Zoccolan. Intrinsic dimension of data
+     representations in deep neural networks. Advances
+     in Neural Information Processing Systems, 32, 2019.
+[21] Yanbiao Ma, Licheng Jiao, Fang Liu, Lingling Li,
+     Wenping Ma, Shuyuan Yang, Xu Liu, and Puhua
+     Chen. Unveiling and mitigating generalized biases of
+     dnns through the intrinsic dimensions of perceptual
+     manifolds. IEEE Transactions on Pattern Analysis and
+     Machine Intelligence, 47(3):2237–2244, 2024.
+[22] Abhinav Joshi, Divyanshu Bhatt, and Ashutosh Modi.
+     Geometry of decision making in language models.
+     arXiv preprint arXiv:2511.20315, 2025.
+[23] Miles Turpin, Julian Michael, Ethan Perez, and
+     Samuel Bowman. Language models don’t always say
+     what they think: Unfaithful explanations in chain-of-
+     thought prompting. Advances in Neural Information
+     Processing Systems, 36:74952–74965, 2023.
+[24] Dehua Peng, Zhipeng Gui, Wenzhang Wei, Fa Li, Jie
+     Gui, Huayi Wu, and Jianya Gong. Sampling-enabled
+     scalable manifold learning unveils the discriminative
+     cluster structure of high-dimensional data. Nature
+     Machine Intelligence, 7(10):1669–1684, 2025.
+[25] Sree Harsha Tanneru, Dan Ley, Chirag Agarwal, and
+     Himabindu Lakkaraju. On the hardness of faithful
+     chain-of-thought reasoning in large language mod-
+     els. arXiv preprint arXiv:2406.10625, 2024.
+[26] Charlie Snell, Jaehoon Lee, Kelvin Xu, and Aviral
+     Kumar. Scaling llm test-time compute optimally can
+     be more effective than scaling model parameters.
+
+
+                                                           14
+

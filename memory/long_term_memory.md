@@ -49,42 +49,54 @@ Current supported claims:
 - Human-fidelity annotation handoff is ready: review packets, annotation guide,
   stricter blank template metadata, and strict summarizer validation are present
   for 24 paper-by-criterion rows; completed human annotation remains pending.
-- Provider-billing evidence handoff is ready: six billing evidence slots,
-  blank template rows, and strict summary validation are present; completed
-  provider billing and success-per-dollar evidence remain pending.
-- Claude Opus 4.8 and GPT-family model-ablation prompt rows are saved and
-  scored for the current two-case protocol.
-- DeepSeek follow-up handoff is ready as a local preflight: the slot, prompt
-  rows, response paths, env names, and next commands are checked; model alias
-  configuration and response files remain pending.
-- Local output-token proxy over saved Claude/GPT-family model-ablation responses:
-  4 measured rows, 2 pending DeepSeek rows, 8,710 `o200k_base` output tokens.
+- Local token accounting handoff is ready: input-token and saved-response
+  output-token proxy summaries are present, and the composite local token
+  proxy is ready for reuse.
+- Claude Opus 4.8, GPT-family, and DeepSeek model-ablation prompt rows are
+  saved and scored for the current two-case protocol. GPT-family protocol
+  refresh completed both rows with `gpt-5.5`; DeepSeek completed both rows with
+  `deepseek-v4-flash`. The latest Claude protocol refresh used Anthropic
+  Messages but was blocked by provider HTTP 502, so scored Claude rows come
+  from previously saved response files.
+- DeepSeek follow-up handoff now reports `responses_present`: the slot, prompt
+  rows, response paths, env names, and saved response files are checked for the
+  current two-row protocol.
+- Local output-token proxy over saved Claude/GPT-family/DeepSeek
+  model-ablation responses: 6 measured rows, 0 pending rows, 9,594
+  `o200k_base` output tokens.
+- New-paper triage on 2026-07-01: cite Paper2Agent as the closest competing
+  paper-to-agent/MCP system; cite AgenticSciML as adjacent agentic-science
+  workflow background; keep Reasoning Manifolds as a future non-procedural
+  stress-case candidate rather than a main experiment. Paper2Agent and
+  AgenticSciML are already cited in the AAAI draft; Reasoning Manifolds is
+  kept as a future stress-case citation only.
+- Bounded Paper2Agent artifact/workflow comparison is complete in
+  `results/tables/paper2agent_artifact_comparison.md`: 7/7 criteria are ready.
+  It is source-backed positioning evidence only and does not run Paper2Agent,
+  deploy an MCP server, or claim end-to-end baseline performance.
 - All four live-transfer response sets are saved and scored for both harness
   prompt styles and all three context variants under the current prompt-packet
   protocol. AI Scientist-v2, Reflexion, and AIDE rows score 11/11; Toolformer
   rows score 9/9 in the saved-response output-contract evaluator.
-- Bounded AI-Scientist-v2 LLM-client smoke was attempted through the local
-  `ai_scientist.llm` client and reached the provider path, but provider/model
-  availability remains blocked. Earlier evidence included HTTP 403
-  `All available accounts exhausted` and repeated Claude/GPT-family timeouts.
-  Phase 58 added a 128-token cap for the tiny marker-contract smoke; both
-  GPT-family and Claude-family capped retries still timed out. Phase 70 made
-  the direct provider probe protocol-aware: Claude-family diagnostics use
-  Anthropic Messages (`wire_api=anthropic_messages`) at
-  `https://coderxiaoc.com/v1/messages`, while GPT-family diagnostics use
-  OpenAI Responses (`wire_api=openai_responses`) at
-  `https://coderxiaoc.com/v1/responses`. Fresh protocol-specific direct probes
-  still did not return a marker-contract response: Claude aliases returned HTTP
-  502 `Upstream service temporarily unavailable`, and GPT aliases returned HTTP
-  502 `Upstream access forbidden`. This is not smoke completion or BFTS
-  success.
-- AI-Scientist-v2 full live-run handoff is ready as a local preflight: the
-  launcher, seed idea, laptop-profile config, prior dry-run artifacts,
-  environment variable names, and next full-run command are checked; provider
-  smoke completion and full-run completion artifacts remain pending.
+- Bounded AI-Scientist-v2 LLM-client smoke is complete for the local marker
+  contract: `results/ai_scientist_v2_smoke/run_report.md` reports `complete`
+  and `results/ai_scientist_v2_smoke/response.md` exists. Earlier provider
+  failures remain useful historical diagnostics, not current blockers.
+- Bounded AI-Scientist-v2 full live run is complete for the current local gate:
+  `results/ai_scientist_v2_live_run_handoff/handoff.md` reports `complete`,
+  16 ready checks, 0 pending checks, 0 failed checks, and one completion
+  directory under
+  `D:\a_work\gitee\ai-scientist-v2\experiments\2026-07-02_12-18-28_papertoskill_extractor_attempt_0`.
+  The run produced synthetic benchmark/sensitivity evidence: skill TSR 0.80,
+  full excerpt TSR 0.80, abstract TSR 0.20, generic summary/no context 0.00,
+  and retrieval-depth skill TSR 1.00 only when K=all. The Stage 3 real-data/HF
+  branch remains a failed branch due invalid dataset loading/synthetic padding
+  and missing `sentence_transformers`.
 - External evidence closure queue is ready as a local planning/checking
-  artifact: it maps all current pending goal requirements to six next-action
-  items without completing any external evidence.
+  artifact: it maps all current pending goal requirements to two next-action
+  items, human-fidelity annotation and AAAI submission decision. Provider
+  billing and AI-Scientist-v2 smoke/full live-run evidence are no longer pending
+  queue items for the current policy.
 - External evidence execution packets are ready as a local handoff artifact:
   each closure item has inputs, setup notes, commands, validation commands,
   completion criteria, escalation rules, and evidence boundaries without
@@ -92,21 +104,29 @@ Current supported claims:
   the validated decision-record helper and requires a validated
   `research/aaai_submission_decision.md` record before final goal/package
   checks can clear `aaai_final_submission_ready`.
-- AAAI submission-decision preflight is ready as a local audit artifact:
-  `submit_now_deterministic_offline` and `wait_for_external_evidence` are both
-  available for a human decision, but no option is selected by the preflight.
+- AAAI submission decision is recorded as `wait_for_external_evidence` in
+  `research/aaai_submission_decision.md`. The local decision gate is ready, but
+  final submission readiness remains pending until the named external evidence
+  rows clear under that wait policy.
+- Phase 77 final-gate sync verified the newly added papers and API docs. The
+  decision remains: cite Paper2Agent and AgenticSciML, keep Reasoning Manifolds
+  as a future stress case, and do not add a new main experiment yet. All local
+  strict gates and 96 unit tests passed after refreshing the AAAI decision
+  state and rebuilding the AAAI PDF.
 
 Current unsupported claims:
 
-- Completed live DeepSeek model ablations.
+- Saved-response model-ablation scoring as proof of live downstream task
+  success, broad model quality, provider billing, or provider economics.
 - Saved-response output-contract scoring as proof of real live task success.
 - Human-validated semantic fidelity.
 - Provider billing, realized output-token bills, live invoices, or
-  success-per-dollar.
+  success-per-dollar as current paper claims.
 - Reliable arbitrary-PDF-to-skill automation.
-- Completed AI-Scientist-v2 LLM-client smoke or full BFTS/live research run.
+- Treating the bounded AI-Scientist-v2 synthetic smoke/full live run as broad
+  real-data or live research-task success.
 - Submission-final or accepted AAAI paper.
-- A selected final AAAI submission decision.
+- Final AAAI submission readiness under the recorded wait-for-evidence policy.
 
 ## Main Artifact Map
 
@@ -152,6 +172,8 @@ Use these as entry points instead of searching the whole repo first:
 - `benchmarks/model_ablation_v0.json`: Claude/GPT-family/DeepSeek prompt spec.
 - `scripts/check_deepseek_followup.py`: local DeepSeek follow-up handoff and
   preflight report generator; no network calls.
+- `research/new_paper_triage_2026-07-01.md`: triage of Paper2Agent,
+  AgenticSciML, and Reasoning Manifolds against PaperToSkill.
 - `benchmarks/provider_billing_evidence_v0.json`: provider-billing evidence
   slot protocol.
 - `scripts/summarize_provider_billing_evidence.py`: billing handoff template
@@ -166,35 +188,30 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 283 ready checks, 8 pending
-  checks, and 0 failed checks.
+  reports `ready_with_pending_external_evidence`, 305 ready checks, 1 pending
+  check, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
-  reports `not_complete_pending_external_evidence`, 70 ready checks, 8 pending
+  reports `not_complete_pending_external_evidence`, 77 ready checks, 3 pending
   checks, and 0 failed checks.
 - External evidence closure queue:
   `results/external_evidence_closure/closure.md`
   reports `pending_external_evidence`, 3 ready checks, 0 pending checks, and 0
-  failed checks. The six queue items are AI-Scientist-v2 smoke completion,
-  AI-Scientist-v2 full live/BFTS run, DeepSeek/model-ablation completion,
-  human-fidelity annotation, provider billing/success-per-dollar evidence, and
-  AAAI submission decision.
+  failed checks. The two queue items are human-fidelity annotation and AAAI
+  final submission readiness under the recorded wait policy.
 - External evidence execution packets:
   `results/external_evidence_packets/packets.md`
   reports `ready`, 7 ready checks, 0 pending checks, and 0 failed checks. The
-  packets cover the same six queue items and are local handoffs, not completed
+  packets cover the same two queue items and are local handoffs, not completed
   evidence.
 - AAAI submission-decision preflight:
   `results/aaai_submission_decision/decision.md`
-  reports `pending_human_decision`, 26 ready checks, 1 pending check, and 0
-  failed checks. Both options are available for a human decision; no option is
-  selected by the preflight.
+  reports `ready`, `selected_option=wait_for_external_evidence`, 27 ready
+  checks, 0 pending checks, and 0 failed checks. This records the decision to
+  wait; it does not complete the external evidence rows.
 - AI-Scientist-v2 LLM-client smoke:
   `results/ai_scientist_v2_smoke/run_report.md`
-  reports `blocked_by_provider_or_model_availability`, 5 ready checks, 2 pending
-  checks, and 0 failed checks after the latest 128-token-capped Claude-family
-  retry timed out for `claude-opus-4-8`, `claude-opus-4.8`,
-  `claude-opus-4-7`, and `claude-opus-4-6`.
+  reports `complete`, 6 ready checks, 0 pending checks, and 0 failed checks.
 - Protocol-specific direct provider probes:
   `results/openai_compatible_direct_probe/claude_family/run_report.md` reports
   `wire_api=anthropic_messages`, 4 ready checks, 2 pending checks, and 0 failed
@@ -205,8 +222,8 @@ Use these as entry points instead of searching the whole repo first:
   `Upstream access forbidden`.
 - AI-Scientist-v2 live-run handoff:
   `results/ai_scientist_v2_live_run_handoff/handoff.md`
-  reports `blocked_by_provider_smoke`, 10 ready checks, 2 pending checks, and
-  0 failed checks.
+  reports `complete`, 16 ready checks, 0 pending checks, 0 failed checks, and
+  one completion directory.
 - AAAI package:
   `results/reproducibility/aaai_package_report.md`
   reports ready, 17 ready checks, 0 failed checks.
@@ -215,20 +232,21 @@ Use these as entry points instead of searching the whole repo first:
   reports ready, 55 ready checks, 0 failed checks.
 - DeepSeek follow-up handoff:
   `results/deepseek_followup_handoff/handoff.md`
-  reports `pending_user_configuration`, 5 ready checks, 2 pending checks, and
-  0 failed checks.
+  reports `responses_present`, 7 ready checks, 0 pending checks, and 0 failed
+  checks.
 - Model ablation response evaluation:
   `results/model_ablation_prompts/v0/evaluation.md`
-  reports 6 total rows, 4 scored Claude/GPT-family rows, 2 pending DeepSeek
-  rows, and 1.0 average normalized score over scored rows.
+  reports 6 total rows, 6 scored rows, 0 pending rows, and 1.0 average
+  normalized score.
 - Model response output-token proxy:
   `results/tables/model_response_cost_proxy.md`
-  reports 6 total rows, 4 measured rows, 2 pending rows, 9,420 character-proxy
-  output tokens, and 8,710 `o200k_base` output tokens.
-- Provider billing evidence:
-  `results/provider_billing_evidence/billing_summary.md`
-  reports `billing_status=pending`, 6 total rows, 0 measured rows, 6 pending
-  rows, 0 errors, total billed USD 0, and success per dollar `n/a`.
+  reports 6 total rows, 6 measured rows, 0 pending rows, 10,381
+  character-proxy output tokens, and 9,594 `o200k_base` output tokens.
+- Local token accounting evidence:
+  `results/token_accounting/token_accounting_summary.md`
+  reports 4,322 generated-skill input tokens, 95,303 full-extracted input
+  tokens, 9,594 saved-response output tokens, and a 13,916 composite local
+  token proxy.
 - Live-transfer response evaluation:
   `results/live_transfer_prompts/evaluation.md`
   reports 24 total rows, 24 scored rows, 0 pending rows, and 1.0 average
@@ -259,10 +277,13 @@ Claude-family profile:
   historical reports only; do not use it in new direct-probe handoff commands.
 - Key source: local environment variable, e.g.
   `AI_SCIENTIST_OPENAI_API_KEY`; never commit raw keys.
-- Latest Phase 36 catalog evidence lists 14 Claude-family models, including
-  `claude-opus-4-8`, `claude-opus-4-7`, and `claude-opus-4-6`.
-- `claude-opus-4-8` completed both current model-ablation prompt rows with
-  HTTP 200; the saved-response scorer reports 2/2 Claude rows scored at 6/6.
+- Latest direct provider probe for the AI-Scientist-v2 evidence path used
+  `PAPERTOSKILL_CLAUDE_BASE_URL=https://coderxiaoc.com`,
+  `PAPERTOSKILL_CLAUDE_API_KEY`, Anthropic Messages, and aliases
+  `claude-opus-4-8`, `claude-opus-4-7`, and `claude-opus-4-6`; all returned
+  HTTP 502, so no fresh direct-probe response file exists.
+- Scored Claude model-ablation rows come from previously saved responses; do
+  not describe the latest Claude protocol refresh as a fresh success.
 
 GPT-family profile:
 
@@ -272,20 +293,19 @@ GPT-family profile:
   `PAPERTOSKILL_GPT_OPENAI_API_KEY`.
 - Latest catalog evidence with the separate GPT key lists `gpt-5.5`,
   `gpt-5.4`, and other GPT-family models.
-- Phase 37 GPT-family retry completed both current prompt rows:
-  Toolformer timed out on `gpt-5.5` then succeeded with `gpt-5.4`; AIDE
-  succeeded with `gpt-5.5`; both saved responses score 6/6.
-- Describe this as a GPT-family result, not a pure `gpt-5.5` result.
+- Current protocol-refresh evidence: GPT-family completed both current prompt
+  rows with `gpt-5.5` through OpenAI Responses and both saved responses score
+  6/6. Older Phase 37 fallback evidence remains historical only.
 
 DeepSeek:
 
-- Leave `deepseek_followup_slot` pending until the user supplies a concrete
-  alias/env vars.
-- The runner skips the slot only while its alias remains
+- `deepseek_followup_slot` is currently configured as `deepseek-v4-flash`.
+- Current DeepSeek run completed both two-case protocol rows through
+  OpenAI-compatible Chat Completions; both saved responses score 6/6.
+- The runner skips the slot only if its alias is reset to
   `deepseek-to-be-filled`.
-- Use `scripts/check_deepseek_followup.py --strict` before and after editing
-  the DeepSeek slot to verify prompt rows, response paths, env names, and next
-  commands without making live calls.
+- Use `scripts/check_deepseek_followup.py --strict` before and after future
+  edits to verify prompt rows, response paths, env names, and saved responses.
 
 ## Engineering/Fix History To Preserve
 
@@ -307,15 +327,15 @@ DeepSeek:
 | Paper tables | LaTeX table values could drift from CSV results. | `scripts/check_paper_tables.py` compares `paper/aaai/papertoskill_tables.tex` with generated CSVs. |
 | Paper claims | Draft/AAAI text could overclaim pending evidence. | `scripts/check_paper_claims.py` checks unsupported positive claims and required boundary statements. |
 | Goal completion | Narrative completion audit could stale. | `scripts/check_goal_completion.py` makes the active-goal status machine-checkable. |
-| External evidence closure | Pending requirements were spread across multiple reports and docs. | `scripts/check_external_evidence_closure.py` maps current pending goal requirements to six concrete queue items without claiming evidence completion. |
+| External evidence closure | Pending requirements were spread across multiple reports and docs. | `scripts/check_external_evidence_closure.py` maps current pending goal requirements to concrete queue items without claiming evidence completion. |
 | External evidence execution | Closure queue items still required manual interpretation before handoff. | `scripts/check_external_evidence_packets.py` turns each queue item into inputs, commands, completion criteria, and escalation boundaries without claiming evidence completion; the AAAI decision packet now routes final-decision recording through `scripts/generate_aaai_submission_decision.py`. |
 | AAAI submission decision | The final submission item was only a checklist row. | `scripts/check_aaai_submission_decision.py` creates a preflight report with submit-now vs wait-for-evidence options while keeping the human decision pending. |
 | AAAI decision record | A human decision record could be hand-written with drift, unavailable options, or secret-like fields. | `scripts/generate_aaai_submission_decision.py` writes the record only after an explicit option, owner, date, claim boundary, and evidence policy; it validates option availability and rejects raw API-key-like material. |
 | AAAI gate recursion | The decision preflight and goal/package gates can read each other during report refreshes, causing self-referential intermediate failures. | `scripts/check_aaai_submission_decision.py` treats only the known self-referential failure set as pending during its own preflight; regression covered by `tests/test_check_aaai_submission_decision.py`. |
 | Model evidence state | GPT retry evidence was saved separately from the older Phase 36 failure report. | `scripts/check_goal_completion.py` reads both `run_report.json` and `gpt_retry_run_report.json` so historical GPT 502 evidence and current GPT-family success both remain visible. |
 | Output-token accounting | Cost section had input-token proxies but no saved-response output-token accounting. | `scripts/evaluate_model_response_costs.py` reports local output-token proxies for saved Claude/GPT-family responses while preserving the no-provider-billing boundary. |
-| AI-Scientist-v2 smoke boundary | AI-Scientist-v2 dry-run and live-transfer saved responses could be confused with a full live run. | `scripts/run_ai_scientist_v2_smoke.py` records bounded client smoke attempts with alias fallback, script-level timeout, and a tiny-request `--max-tokens` cap; current provider/model availability blocker keeps smoke completion and full run pending. |
-| Direct provider diagnosis | AI-Scientist-v2 smoke timeouts could be misread as only a wrapper bug or as only a model-name issue. | `scripts/run_openai_compatible_direct_probe.py` is now protocol-aware: Claude-family direct diagnostics use Anthropic Messages (`/v1/messages`) and GPT-family direct diagnostics use OpenAI Responses (`/v1/responses`) with the same marker contract. Current blockers remain provider/upstream availability; this diagnostic remains separate from AI-Scientist-v2 smoke completion. |
+| AI-Scientist-v2 smoke boundary | AI-Scientist-v2 dry-run and live-transfer saved responses could be confused with a full live run. | `scripts/run_ai_scientist_v2_smoke.py` records bounded client smoke attempts with alias fallback, script-level timeout, and a tiny-request `--max-tokens` cap; the current marker-contract smoke is complete, but it remains separate from human fidelity and broad live task success. |
+| Direct provider diagnosis | AI-Scientist-v2 smoke timeouts could be misread as only a wrapper bug or as only a model-name issue. | `scripts/run_openai_compatible_direct_probe.py` is protocol-aware: Claude-family direct diagnostics use Anthropic Messages (`/v1/messages`) and GPT-family direct diagnostics use OpenAI Responses (`/v1/responses`) with the same marker contract. Historical provider blockers are diagnostics; the bounded smoke/full live-run evidence is now complete. |
 
 ## Persistent Rules
 
@@ -328,3 +348,36 @@ DeepSeek:
   decisions.
 - Before phase saving, run relevant tests/checkers, `git diff --check`, and a
   raw-key scan.
+
+## Model Interface Facts
+
+- GPT provider style follows OpenAI Responses API.
+- GPT BaseURL: `https://coderxiaoc.com/v1`.
+- GPT models confirmed usable: `gpt-5.5`, `gpt-5.4`.
+- Claude provider style follows Anthropic Messages API.
+- Claude BaseURL: `https://coderxiaoc.com` with request path `/v1/messages`.
+- Claude models confirmed usable: `claude-opus-4-8`, `claude-opus-4-7`, `claude-opus-4-6`.
+- 2026-06-30 verification: the local Desktop docs in `C:\Users\19351\Desktop\tem`
+  are runnable. GPT doc returned HTTP 200 on the first attempt for
+  `gpt-5.5` and `gpt-5.4` via `POST /v1/responses`. Claude doc returned HTTP 200
+  on the first attempt for `claude-opus-4-8`, `claude-opus-4-7`, and
+  `claude-opus-4-6` via `POST /v1/messages`.
+- DeepSeek temporary key verified on 2026-06-30:
+  `GET https://api.deepseek.com/models` returned `deepseek-v4-flash` and
+  `deepseek-v4-pro`; `POST https://api.deepseek.com/chat/completions`
+  succeeded for both models; `deepseek-v4-flash` returned visible content `ok`
+  on a slightly larger max-tokens probe.
+- 2026-07-01 re-test of the three Desktop API docs: GPT doc still runnable
+  (`gpt-5.5` HTTP 200 on attempt 2, `gpt-5.4` HTTP 200 on attempt 1, both
+  returned `ok`); DeepSeek doc runnable (`deepseek-v4-flash` and
+  `deepseek-v4-pro` both HTTP 200 on attempt 1, returned `ok`); Claude doc did
+  not complete as a direct HTTP request in this run (`claude-opus-4-8`,
+  `claude-opus-4-7`, and `claude-opus-4-6` returned HTTP 502 after five
+  attempts with both the regular doc key and Desktop token). Treat this as
+  current upstream/direct-request unavailability, not proof of bad model names.
+- 2026-07-01 same-day Claude-only re-test: the regular Claude doc key worked
+  for `claude-opus-4-8`, `claude-opus-4-7`, and `claude-opus-4-6` via
+  `POST https://coderxiaoc.com/v1/messages`; all returned HTTP 200 on attempt 1
+  with visible `ok`. The same regular key also worked with the Claude
+  Code/Desktop beta header. The Desktop direct provider token still returned
+  HTTP 502 after five attempts for all three aliases.

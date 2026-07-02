@@ -50,10 +50,19 @@ python scripts\evaluate_model_ablation_responses.py `
 - `gpt_5_5_or_gpt_family`: use the separate GPT credential profile, verify the
   exact GPT-family alias at `/v1/models`, and prefer `gpt-5.5` then `gpt-5.4`
   when available; record the actual alias used.
-- `deepseek_followup_slot`: replace the placeholder alias and endpoint with the
-  user's DeepSeek configuration, then run the same prompt grid.
+- `deepseek_followup_slot`: currently configured as `deepseek-v4-flash` with
+  both expected response files saved; refresh it with the same prompt grid if
+  the DeepSeek alias or credential profile changes.
 
-## Adding DeepSeek
+## Current DeepSeek Status
+
+The current repository has the DeepSeek slot configured as
+`deepseek-v4-flash`, with both expected response files saved and scored.
+`check_deepseek_followup.py` reports `responses_present`. The steps below
+remain the reuse path if the DeepSeek alias or credential profile changes
+later.
+
+## Adding Or Refreshing DeepSeek
 
 Before editing the slot, inspect the local handoff/preflight report:
 
@@ -63,9 +72,10 @@ python scripts\check_deepseek_followup.py --strict
 
 The report is written to `results/deepseek_followup_handoff/handoff.md` and
 lists the current alias status, the two DeepSeek prompt rows, expected response
-paths, and the exact follow-up commands. While the alias is still
-`deepseek-to-be-filled`, this report should remain
-`pending_user_configuration`.
+paths, and the exact follow-up commands. A fresh unconfigured slot remains
+`pending_user_configuration` while the alias is still `deepseek-to-be-filled`;
+the current checked-in slot reports `responses_present` because both response
+files are saved.
 
 1. Configure only non-secret slot metadata. Do not put raw API keys in the
    benchmark file.
@@ -111,6 +121,7 @@ python scripts\check_deepseek_followup.py --strict
 ## Evidence Boundary
 
 The current repository contains prompt packets, runner/evaluator scripts,
-DeepSeek handoff reports, and redacted availability reports. A model ablation
-is not complete until responses are collected, scored with the same rubric, and
-provider/model aliases are recorded without committing raw keys.
+DeepSeek handoff reports, redacted run reports, and 6/6 saved/scored rows for
+the current model-ablation protocol. This is still saved-response scoring only;
+it is not live downstream task success, provider billing, success per dollar,
+or broad model-quality proof.

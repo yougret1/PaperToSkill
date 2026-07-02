@@ -17,7 +17,7 @@ REQUIRED_REPORTS = {
     "deepseek_handoff": "results/deepseek_followup_handoff/handoff.json",
     "model_ablation_evaluation": "results/model_ablation_prompts/v0/evaluation.json",
     "human_fidelity_summary": "results/human_fidelity_packets/annotation_summary.json",
-    "provider_billing_summary": "results/provider_billing_evidence/billing_summary.json",
+    "token_accounting_summary": "results/token_accounting/token_accounting_summary.json",
     "aaai_package_report": "results/reproducibility/aaai_package_report.json",
     "submission_review_report": "results/reproducibility/submission_review_report.json",
 }
@@ -25,7 +25,7 @@ REQUIRED_REPORTS = {
 GOAL_REQUIREMENT_TO_ITEM = {
     "ai_scientist_v2_live_llm_smoke_complete": "ai_scientist_v2_smoke_completion",
     "ai_scientist_v2_live_llm_run_complete": "ai_scientist_v2_full_live_run",
-    "provider_billing_evidence_complete": "provider_billing_success_per_dollar",
+    "token_accounting_complete": "token_accounting_summary",
     "aaai_final_submission_ready": "aaai_submission_decision",
     "deepseek_followup_response_complete": "deepseek_followup_responses",
     "model_ablation_evaluation_complete": "deepseek_followup_responses",
@@ -118,7 +118,7 @@ def build_items(reports: dict[str, dict[str, Any]]) -> list[QueueItem]:
     deepseek = reports["deepseek_handoff"]
     model_eval = reports["model_ablation_evaluation"]
     human = reports["human_fidelity_summary"]
-    billing = reports["provider_billing_summary"]
+    token_accounting = reports["token_accounting_summary"]
     aaai = reports["aaai_package_report"]
     review = reports["submission_review_report"]
 
@@ -127,11 +127,11 @@ def build_items(reports: dict[str, dict[str, Any]]) -> list[QueueItem]:
     deepseek_status = str(deepseek.get("overall_status", ""))
     model_summary = model_eval.get("summary", {})
     human_status = str(human.get("annotation_status", ""))
-    billing_status = str(billing.get("billing_status", ""))
+    token_accounting_status = str(token_accounting.get("accounting_status", ""))
     aaai_ready = aaai.get("overall_status") == "ready"
     review_ready = review.get("overall_status") == "ready"
 
-    return [
+    all_items = [
         QueueItem(
             id="ai_scientist_v2_smoke_completion",
             status="complete" if smoke_complete else "pending_provider",
@@ -177,7 +177,11 @@ def build_items(reports: dict[str, dict[str, Any]]) -> list[QueueItem]:
                 f"pending_rows={model_summary.get('pending_rows')}"
             ),
             evidence=f"{REQUIRED_REPORTS['deepseek_handoff']}; {REQUIRED_REPORTS['model_ablation_evaluation']}",
-            next_action="User supplies DeepSeek alias/env vars, then run and score the two DeepSeek response rows.",
+            next_action=(
+                "No action needed while the current two DeepSeek response rows remain saved and scored."
+                if int(model_summary.get("pending_rows", 0)) == 0 and deepseek_status == "responses_present"
+                else "User supplies DeepSeek alias/env vars, then run and score the two DeepSeek response rows."
+            ),
             next_commands=deepseek.get("next_commands", []),
         ),
         QueueItem(
@@ -190,16 +194,18 @@ def build_items(reports: dict[str, dict[str, Any]]) -> list[QueueItem]:
             next_commands=["python scripts\\summarize_human_fidelity_annotations.py --strict"],
         ),
         QueueItem(
-            id="provider_billing_success_per_dollar",
-            status="complete" if billing_status == "complete" and not billing.get("errors") else "pending_billing_rows",
-            goal_requirements=["provider_billing_evidence_complete"],
+            id="token_accounting_summary",
+            status="complete" if token_accounting_status == "complete" and not token_accounting.get("errors") else "pending_token_accounting",
+            goal_requirements=["token_accounting_complete"],
             detail=(
-                f"status={billing_status}; measured_rows={billing.get('measured_rows')}; "
-                f"pending_rows={billing.get('pending_rows')}; errors={len(billing.get('errors', []))}"
+                f"status={token_accounting_status}; "
+                f"input_tokens={token_accounting.get('composite_proxy', {}).get('generated_skill_input_tokens')}; "
+                f"output_tokens={token_accounting.get('composite_proxy', {}).get('saved_response_output_tokens')}; "
+                f"errors={len(token_accounting.get('errors', []))}"
             ),
-            evidence=REQUIRED_REPORTS["provider_billing_summary"],
-            next_action="Fill usage-export or invoice rows, then rerun the strict billing summary.",
-            next_commands=["python scripts\\summarize_provider_billing_evidence.py --strict"],
+            evidence=REQUIRED_REPORTS["token_accounting_summary"],
+            next_action="Regenerate local token accounting from the input/output proxy reports.",
+            next_commands=["python scripts\\summarize_token_accounting.py --strict"],
         ),
         QueueItem(
             id="aaai_submission_decision",
@@ -215,6 +221,7 @@ def build_items(reports: dict[str, dict[str, Any]]) -> list[QueueItem]:
             ],
         ),
     ]
+    return [item for item in all_items if item.status != "complete"]
 
 
 def build_report(root: Path) -> dict[str, Any]:
@@ -261,7 +268,7 @@ def build_report(root: Path) -> dict[str, Any]:
         ),
         Check(
             "external_closure_queue_items_declared",
-            "ready" if len(items) == 6 else "fail",
+            "ready" if items or not pending_goal else "fail",
             f"items={len(items)}",
             "results/external_evidence_closure/closure.json",
         ),
@@ -270,7 +277,7 @@ def build_report(root: Path) -> dict[str, Any]:
     item_counts = item_status_counts(items)
     if counts.get("fail", 0):
         overall = "fail"
-    elif item_counts.get("complete", 0) == len(items):
+    elif not items:
         overall = "complete"
     else:
         overall = "pending_external_evidence"
@@ -317,8 +324,8 @@ def write_markdown(path: Path, report: dict[str, Any]) -> None:
         "# External Evidence Closure Queue",
         "",
         "Evidence boundary: this is a local closure queue. It does not collect "
-        "DeepSeek responses, human annotations, provider bills, AI-Scientist-v2 "
-        "live-run artifacts, or final submission approval.",
+        "human annotations, AI-Scientist-v2 live-run artifacts, "
+        "or final submission approval.",
         "",
         f"- Overall status: {report['overall_status']}",
         f"- Queue item statuses: {report['item_status_counts']}",

@@ -1,6 +1,6 @@
 # PaperToSkill Rebuttal Bank
 
-Date: 2026-06-20
+Date: 2026-07-01
 
 Use this file to answer likely reviewer objections without exceeding the current
 evidence boundary. This is a reviewer-response handoff, not new evidence.
@@ -72,7 +72,7 @@ human semantic review or real live-task success.
 Evidence to cite:
 
 - `paper/limitations.md`: heuristic metric limitation.
-- `results/reproducibility/package_report.md`: 283 ready checks, 8 pending
+- `results/reproducibility/package_report.md`: 301 ready checks, 5 pending
   checks, and 0 failed checks.
 - `results/human_fidelity_packets/`: prepared independent-review protocol.
 
@@ -104,7 +104,8 @@ Do not say:
 
 Short answer: Generated skills compress full extracted paper context under a
 local tokenizer-aware input-token proxy, and saved model responses have a local
-output-token proxy. Provider bills and success-per-dollar remain pending.
+output-token proxy. This is local token accounting, not provider billing or
+success-per-dollar evidence.
 
 Evidence to cite:
 
@@ -115,8 +116,9 @@ Evidence to cite:
 - Reflexion generated skill: 703 vs 16,414.
 - AIDE generated skill: 1,285 vs 13,312.
 - Toolformer generated skill: 1,255 vs 20,365.
-- `results/provider_billing_evidence/billing_summary.md`: 0 measured rows,
-  6 pending rows, success per dollar `n/a`.
+- `results/token_accounting/token_accounting_summary.md`: composite local token
+  proxy of 13,916 tokens over generated-skill input and saved-response output
+  evidence.
 
 Do not say:
 
@@ -140,50 +142,70 @@ Do not say:
 
 ## Q8: What is complete in the model ablation?
 
-Short answer: Claude Opus 4.8 and GPT-family rows are saved and scored for the
-current two-case protocol; DeepSeek remains pending.
+Short answer: Claude Opus 4.8, GPT-family, and DeepSeek rows are saved and
+scored for the current two-case protocol, but this is saved-response
+output-contract evidence only.
 
 Evidence to cite:
 
-- `results/model_ablation_prompts/v0/evaluation.md`: 6 total rows, 4 scored
-  rows, 2 pending DeepSeek rows, average normalized score 1.0 over scored rows.
-- `results/model_ablation_prompts/v0/run_report.md`: Claude Opus 4.8 saved
-  response evidence.
-- `results/model_ablation_prompts/v0/gpt_retry_run_report.md`: GPT-family retry
-  evidence.
-- `results/deepseek_followup_handoff/handoff.md`: local DeepSeek follow-up
-  handoff is `pending_user_configuration` with 5 ready, 2 pending, and 0 failed
-  checks.
+- `results/model_ablation_prompts/v0/evaluation.md`: 6 total rows, 6 scored
+  rows, 0 pending rows, average normalized score 1.0.
+- `results/model_ablation_prompts/v0/gpt_protocol_run_report.md`: GPT-family
+  protocol refresh completed both rows with `gpt-5.5`.
+- `results/model_ablation_prompts/v0/deepseek_run_report.md`: DeepSeek
+  completed both rows with `deepseek-v4-flash`.
+- `results/model_ablation_prompts/v0/claude_protocol_run_report.md`: latest
+  Claude protocol refresh used Anthropic Messages but was blocked by provider
+  HTTP 502; scored Claude rows come from earlier saved response files.
 
 Do not say:
 
-- "All model ablations are complete."
-- "DeepSeek has completed."
+- "Saved-response model-ablation scoring proves live task success."
+- "The provider failures are negative model-quality evidence."
+
+## Q8.5: How does PaperToSkill compare with Paper2Agent?
+
+Short answer: Paper2Agent is the closest competing artifact type, but the
+current evidence is a bounded artifact/workflow comparison, not a runtime
+baseline.
+
+Evidence to cite:
+
+- `results/tables/paper2agent_artifact_comparison.md`: 7/7 ready criteria and
+  0 failed criteria.
+- The comparison covers required inputs, generated artifact type, setup burden,
+  validation checks, failure handling, source traceability, and runtime
+  dependency.
+- Paper2Agent produces MCP servers from papers plus codebases; PaperToSkill
+  produces portable natural-language skills with source and failure boundaries.
+
+Do not say:
+
+- "PaperToSkill outperforms Paper2Agent."
+- "PaperToSkill has run a Paper2Agent MCP baseline."
 
 ## Q9: What happened with AI-Scientist-v2 integration?
 
-Short answer: The local dry run succeeded, and a bounded LLM-client smoke was
-attempted through the local AI-Scientist-v2 client. The latest smoke report is
-`blocked_by_provider_or_model_availability`: the Phase 58 capped smoke request
-used `--max-tokens 128`, tried `claude-opus-4-8`, `claude-opus-4.8`,
-`claude-opus-4-7`, and `claude-opus-4-6`, and all four aliases timed out after
-30 seconds waiting for provider response. Phase 59 direct endpoint probes
-bypassed `ai_scientist.llm`; Claude-family aliases returned HTTP 503
-`No available accounts`, and GPT-family aliases returned HTTP 502 `Upstream
-access forbidden`. Smoke completion and full live-run evidence remain pending.
+Short answer: The local dry run succeeded, the bounded LLM-client smoke is
+complete, and one bounded full live run produced a completion directory. The
+run is useful integration evidence for the PaperToSkill idea, but its positive
+result is synthetic and should not be described as human fidelity, real-data
+validation, or broad live research-task success. A separate HF/semantic-data
+branch is retained as a failed branch because dataset loading was invalid and
+`sentence_transformers` was missing.
 
 Evidence to cite:
 
 - `results/ai_scientist_v2_smoke/run_report.md`
-- `results/openai_compatible_direct_probe/claude_family/run_report.md`
-- `results/openai_compatible_direct_probe/gpt_family/run_report.md`
+- `results/ai_scientist_v2_live_run_handoff/handoff.md`
+- `research/run_logs/2026-07-02_phase76_ai_scientist_v2_full_live_run.md`
 - `memory/short_term_memory.md`
 - AI-Scientist-v2 dry-run experiment path recorded in memory.
 
 Do not say:
 
-- "AI-Scientist-v2 live run completed."
-- "BFTS succeeded."
+- "AI-Scientist-v2 proves real-data task success."
+- "BFTS succeeded as a broad live research benchmark."
 
 ## Q10: What must be done before a stronger submission?
 
@@ -193,16 +215,16 @@ prominent.
 
 Evidence to cite:
 
-- `results/reproducibility/goal_completion_report.md`: 70 ready checks,
-  8 pending checks, 0 failed checks.
-- `results/reproducibility/package_report.md`: 283 ready checks, 8 pending
-  checks, 0 failed checks.
-- `results/external_evidence_closure/closure.md`: six local closure items for
-  the remaining external evidence.
-- `results/external_evidence_packets/packets.md`: six local execution packets
-  for the remaining external evidence.
-- `results/aaai_submission_decision/decision.md`: both AAAI submission options
-  are available for a human decision, with no option selected by the preflight.
+- `results/reproducibility/goal_completion_report.md`: current ready/pending
+  counts after rerunning `scripts/check_goal_completion.py --strict`.
+- `results/reproducibility/package_report.md`: current ready/pending counts
+  after rerunning `scripts/check_reproducibility_package.py --strict`.
+- `results/external_evidence_closure/closure.md`: local closure items for
+  remaining external evidence.
+- `results/external_evidence_packets/packets.md`: local execution packets for
+  remaining external evidence.
+- `results/aaai_submission_decision/decision.md`: the recorded option is
+  `wait_for_external_evidence`.
 - `research/submission_checklist.md`: submission-review handoff checklist.
 
 Do not say:

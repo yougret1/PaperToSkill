@@ -3,7 +3,7 @@
   "evidence_boundary": "Checks internal review, rebuttal, and submission-checklist handoff artifacts against current repository evidence. A ready report means the handoff is current; it is not a final submission or acceptance claim.",
   "overall_status": "ready",
   "status_counts": {
-    "ready": 15,
+    "ready": 16,
     "fail": 0
   },
   "checks": [
@@ -70,7 +70,7 @@
     {
       "id": "submission_review_model_ablation_current",
       "status": "ready",
-      "detail": "scored=4; pending=2",
+      "detail": "total=6; scored=6; pending=0",
       "evidence": "results/model_ablation_prompts/v0/evaluation.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md"
     },
     {
@@ -80,21 +80,27 @@
       "evidence": "results/human_fidelity_packets/annotation_summary.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md"
     },
     {
-      "id": "submission_review_provider_billing_current",
+      "id": "submission_review_token_accounting_current",
       "status": "ready",
-      "detail": "status=pending; measured=0; pending=6",
-      "evidence": "results/provider_billing_evidence/billing_summary.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md"
+      "detail": "status=complete; input_tokens=4322; output_tokens=9594",
+      "evidence": "results/token_accounting/token_accounting_summary.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md"
     },
     {
       "id": "submission_review_ai_scientist_smoke_current",
       "status": "ready",
-      "detail": "overall=blocked_by_provider_or_model_availability; detail=claude-opus-4-8: Timed out after 30 seconds waiting for provider response; claude-opus-4.8: Timed out after 30 seconds waiting for provider response; claude-opus-4-7: Timed out after 30 seconds waiting for provider response; claude-opus-4-6: Timed out after 30 seconds waiting for provider response; aliases=claude-opus-4-8,claude-opus-4.8,claude-opus-4-7,claude-opus-4-6",
+      "detail": "overall=complete; detail=; aliases=claude-opus-4-8",
       "evidence": "results/ai_scientist_v2_smoke/run_report.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md"
+    },
+    {
+      "id": "submission_review_ai_scientist_live_run_current",
+      "status": "ready",
+      "detail": "overall=complete; completion_dirs=1",
+      "evidence": "results/ai_scientist_v2_live_run_handoff/handoff.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md"
     },
     {
       "id": "submission_review_goal_package_counts_current",
       "status": "ready",
-      "detail": "goal={'ready': 70, 'pending': 8, 'fail': 0}; package={'ready': 283, 'pending': 8, 'fail': 0}",
+      "detail": "goal={'ready': 77, 'pending': 3, 'fail': 0}; package={'ready': 305, 'pending': 1, 'fail': 0}",
       "evidence": "results/reproducibility/goal_completion_report.json; results/reproducibility/package_report.json; research/submission_checklist.md"
     }
   ]
