@@ -113,6 +113,11 @@ Current supported claims:
   as a future stress case, and do not add a new main experiment yet. All local
   strict gates and 96 unit tests passed after refreshing the AAAI decision
   state and rebuilding the AAAI PDF.
+- Phase 78 archived the local `ai-scientist-v2` tracked source/config
+  adaptations under `external/ai_scientist_v2_patches/` because the supporting
+  checkout's remote is the SakanaAI upstream. The archive backs up the local
+  coderxiaoc/BFTS integration patch inside the PaperToSkill GitHub history
+  without committing raw API keys or local presentation/build artifacts.
 
 Current unsupported claims:
 
@@ -174,6 +179,8 @@ Use these as entry points instead of searching the whole repo first:
   preflight report generator; no network calls.
 - `research/new_paper_triage_2026-07-01.md`: triage of Paper2Agent,
   AgenticSciML, and Reasoning Manifolds against PaperToSkill.
+- `external/ai_scientist_v2_patches/`: reproducibility backup for local
+  AI-Scientist-v2 adaptations used by the bounded Phase 76 integration run.
 - `benchmarks/provider_billing_evidence_v0.json`: provider-billing evidence
   slot protocol.
 - `scripts/summarize_provider_billing_evidence.py`: billing handoff template

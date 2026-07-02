@@ -35,6 +35,16 @@ Current date: 2026-07-02.
   - AAAI decision: ready, selected `wait_for_external_evidence`.
 - `C:\Users\19351\Desktop\tem\toHuman\needHelp.md` currently asks only for
   human-fidelity annotation. No `ok.txt` was present in the latest check.
+- 2026-07-02 Phase 78 archived the local `ai-scientist-v2` source/config
+  adaptations as a PaperToSkill artifact because that checkout's remote is the
+  SakanaAI upstream, not the user's PaperToSkill repo. Archive path:
+  `external/ai_scientist_v2_patches/2026-07-02_local_coderxiaoc_bfts_adaptation.patch.zip`.
+  Archive SHA256:
+  `2CEA03F4C8870FFB0F686B12320D413794BF24B983C5DCEA2BA4D96FFC1E7371`;
+  decompressed patch SHA256:
+  `45523E06C70D33C0F6B2FB769CD26D3701EF397B07D02DFBF781DA85ECEF7AF1`.
+  This preserves the local integration state without committing raw API keys,
+  `work/` presentation artifacts, or upstream memory files.
 
 ## Current Presentation Handoff
 
@@ -90,7 +100,7 @@ Current date: 2026-07-02.
 
 ## Current Phase
 
-Phase 77 is the current local phase. Phase 68 was committed as
+Phase 78 is the current local phase. Phase 68 was committed as
 `5548070 Refresh memory anchors after remote save` and pushed to `origin/main`
 on 2026-06-20. Phase 69 syncs the AAAI submission-decision execution packet
 with the validated decision-record helper; no external evidence status is
