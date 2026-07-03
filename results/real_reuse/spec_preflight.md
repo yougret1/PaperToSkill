@@ -5,7 +5,7 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 - Overall status: ready_to_implement
 - Spec path: benchmarks/real_reuse/real_reuse_v0.json
 - Task count: 8
-- Ready checks: 207
+- Ready checks: 296
 - Failed checks: 0
 
 ## Checks
@@ -219,3 +219,92 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 | swe_t2_fixture_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/fixtures/SWE-T2.json |
 | swe_t2_fixture_license_review_pending | ready | {'license_review': 'required_before_clone_or_patch_release', 'download_or_clone_status': 'not_started', 'external_project_root_policy': 'Place newly downloaded projects under D:/a_work/gitee.', 'secret_policy': 'Do not store API keys, private tokens, or credential-bearing logs in this manifest.'} | benchmarks/real_reuse/fixtures/SWE-T2.json |
 | real_reuse_fixture_manifests_materialized | ready | fixtures=AIDE-T1,AIDE-T2,REF-T1,REF-T2,SNAP-T1,SNAP-T2,SWE-T1,SWE-T2 | benchmarks/real_reuse/real_reuse_v0.json |
+| aide_t1_fixture_candidate_present | ready | present | benchmarks/real_reuse/fixture_candidates/AIDE-T1.json |
+| aide_t1_fixture_candidate_identity | ready | task_id=AIDE-T1; source_paper_id=aide | benchmarks/real_reuse/fixture_candidates/AIDE-T1.json |
+| aide_t1_fixture_candidate_status | ready | status=candidate_assets_selected_preparation_pending | benchmarks/real_reuse/fixture_candidates/AIDE-T1.json |
+| aide_t1_fixture_candidate_selected | ready | mle_bench_spaceship_titanic_submission | benchmarks/real_reuse/fixture_candidates/AIDE-T1.json |
+| aide_t1_fixture_candidate_source_urls | ready | source_urls=3 | benchmarks/real_reuse/fixture_candidates/AIDE-T1.json |
+| aide_t1_fixture_candidate_assets_match_slots | ready | asset_slots=dataset_manifest,starter_workspace,train_split,validation_split | benchmarks/real_reuse/fixture_candidates/AIDE-T1.json |
+| aide_t1_fixture_candidate_assets_not_downloaded | ready | candidate_assets=4 | benchmarks/real_reuse/fixture_candidates/AIDE-T1.json |
+| aide_t1_fixture_candidate_preparation_plan | ready | commands=3; status=not_started | benchmarks/real_reuse/fixture_candidates/AIDE-T1.json |
+| aide_t1_fixture_candidate_scoring_plan | ready | metric=validation_score; scorer_status=to_implement_next_phase | benchmarks/real_reuse/fixture_candidates/AIDE-T1.json |
+| aide_t1_fixture_candidate_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/fixture_candidates/AIDE-T1.json |
+| aide_t1_fixture_candidate_boundary | ready | This file records selected candidate assets and preparation commands only. It does not download data, clone repositories, execute tasks, score outputs, or provide downstream task-success results. | benchmarks/real_reuse/fixture_candidates/AIDE-T1.json |
+| aide_t2_fixture_candidate_present | ready | present | benchmarks/real_reuse/fixture_candidates/AIDE-T2.json |
+| aide_t2_fixture_candidate_identity | ready | task_id=AIDE-T2; source_paper_id=aide | benchmarks/real_reuse/fixture_candidates/AIDE-T2.json |
+| aide_t2_fixture_candidate_status | ready | status=candidate_assets_selected_preparation_pending | benchmarks/real_reuse/fixture_candidates/AIDE-T2.json |
+| aide_t2_fixture_candidate_selected | ready | mle_bench_spaceship_titanic_debug_workspace | benchmarks/real_reuse/fixture_candidates/AIDE-T2.json |
+| aide_t2_fixture_candidate_source_urls | ready | source_urls=3 | benchmarks/real_reuse/fixture_candidates/AIDE-T2.json |
+| aide_t2_fixture_candidate_assets_match_slots | ready | asset_slots=error_or_score_feedback,starter_workspace,validation_split,weak_script | benchmarks/real_reuse/fixture_candidates/AIDE-T2.json |
+| aide_t2_fixture_candidate_assets_not_downloaded | ready | candidate_assets=4 | benchmarks/real_reuse/fixture_candidates/AIDE-T2.json |
+| aide_t2_fixture_candidate_preparation_plan | ready | commands=3; status=not_started | benchmarks/real_reuse/fixture_candidates/AIDE-T2.json |
+| aide_t2_fixture_candidate_scoring_plan | ready | metric=best_node_score; scorer_status=to_implement_next_phase | benchmarks/real_reuse/fixture_candidates/AIDE-T2.json |
+| aide_t2_fixture_candidate_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/fixture_candidates/AIDE-T2.json |
+| aide_t2_fixture_candidate_boundary | ready | This file records selected candidate assets and preparation commands only. It does not download data, clone repositories, execute tasks, score outputs, or provide downstream task-success results. | benchmarks/real_reuse/fixture_candidates/AIDE-T2.json |
+| ref_t1_fixture_candidate_present | ready | present | benchmarks/real_reuse/fixture_candidates/REF-T1.json |
+| ref_t1_fixture_candidate_identity | ready | task_id=REF-T1; source_paper_id=reflexion | benchmarks/real_reuse/fixture_candidates/REF-T1.json |
+| ref_t1_fixture_candidate_status | ready | status=candidate_assets_selected_preparation_pending | benchmarks/real_reuse/fixture_candidates/REF-T1.json |
+| ref_t1_fixture_candidate_selected | ready | hotpotqa_distractor_reflection_retry | benchmarks/real_reuse/fixture_candidates/REF-T1.json |
+| ref_t1_fixture_candidate_source_urls | ready | source_urls=3 | benchmarks/real_reuse/fixture_candidates/REF-T1.json |
+| ref_t1_fixture_candidate_assets_match_slots | ready | asset_slots=answer_key,feedback_protocol,question,retrieval_context_or_tool_stub | benchmarks/real_reuse/fixture_candidates/REF-T1.json |
+| ref_t1_fixture_candidate_assets_not_downloaded | ready | candidate_assets=4 | benchmarks/real_reuse/fixture_candidates/REF-T1.json |
+| ref_t1_fixture_candidate_preparation_plan | ready | commands=2; status=not_started | benchmarks/real_reuse/fixture_candidates/REF-T1.json |
+| ref_t1_fixture_candidate_scoring_plan | ready | metric=exact_match_or_f1; scorer_status=to_implement_next_phase | benchmarks/real_reuse/fixture_candidates/REF-T1.json |
+| ref_t1_fixture_candidate_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/fixture_candidates/REF-T1.json |
+| ref_t1_fixture_candidate_boundary | ready | This file records selected candidate assets and preparation commands only. It does not download data, clone repositories, execute tasks, score outputs, or provide downstream task-success results. | benchmarks/real_reuse/fixture_candidates/REF-T1.json |
+| ref_t2_fixture_candidate_present | ready | present | benchmarks/real_reuse/fixture_candidates/REF-T2.json |
+| ref_t2_fixture_candidate_identity | ready | task_id=REF-T2; source_paper_id=reflexion | benchmarks/real_reuse/fixture_candidates/REF-T2.json |
+| ref_t2_fixture_candidate_status | ready | status=candidate_assets_selected_preparation_pending | benchmarks/real_reuse/fixture_candidates/REF-T2.json |
+| ref_t2_fixture_candidate_selected | ready | humaneval_failed_attempt_retry | benchmarks/real_reuse/fixture_candidates/REF-T2.json |
+| ref_t2_fixture_candidate_source_urls | ready | source_urls=3 | benchmarks/real_reuse/fixture_candidates/REF-T2.json |
+| ref_t2_fixture_candidate_assets_match_slots | ready | asset_slots=environment_feedback,failed_first_attempt,initial_task,objective_checker | benchmarks/real_reuse/fixture_candidates/REF-T2.json |
+| ref_t2_fixture_candidate_assets_not_downloaded | ready | candidate_assets=4 | benchmarks/real_reuse/fixture_candidates/REF-T2.json |
+| ref_t2_fixture_candidate_preparation_plan | ready | commands=3; status=not_started | benchmarks/real_reuse/fixture_candidates/REF-T2.json |
+| ref_t2_fixture_candidate_scoring_plan | ready | metric=second_attempt_success; scorer_status=to_implement_next_phase | benchmarks/real_reuse/fixture_candidates/REF-T2.json |
+| ref_t2_fixture_candidate_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/fixture_candidates/REF-T2.json |
+| ref_t2_fixture_candidate_boundary | ready | This file records selected candidate assets and preparation commands only. It does not download data, clone repositories, execute tasks, score outputs, or provide downstream task-success results. | benchmarks/real_reuse/fixture_candidates/REF-T2.json |
+| snap_t1_fixture_candidate_present | ready | present | benchmarks/real_reuse/fixture_candidates/SNAP-T1.json |
+| snap_t1_fixture_candidate_identity | ready | task_id=SNAP-T1; source_paper_id=snapatac2 | benchmarks/real_reuse/fixture_candidates/SNAP-T1.json |
+| snap_t1_fixture_candidate_status | ready | status=candidate_assets_selected_preparation_pending | benchmarks/real_reuse/fixture_candidates/SNAP-T1.json |
+| snap_t1_fixture_candidate_selected | ready | snapatac2_pbmc5k_embedding_pipeline | benchmarks/real_reuse/fixture_candidates/SNAP-T1.json |
+| snap_t1_fixture_candidate_source_urls | ready | source_urls=3 | benchmarks/real_reuse/fixture_candidates/SNAP-T1.json |
+| snap_t1_fixture_candidate_assets_match_slots | ready | asset_slots=dataset_manifest,expected_artifact_schema,preprocessing_notes,resource_budget | benchmarks/real_reuse/fixture_candidates/SNAP-T1.json |
+| snap_t1_fixture_candidate_assets_not_downloaded | ready | candidate_assets=4 | benchmarks/real_reuse/fixture_candidates/SNAP-T1.json |
+| snap_t1_fixture_candidate_preparation_plan | ready | commands=3; status=not_started | benchmarks/real_reuse/fixture_candidates/SNAP-T1.json |
+| snap_t1_fixture_candidate_scoring_plan | ready | metric=runtime_memory_quality; scorer_status=to_implement_next_phase | benchmarks/real_reuse/fixture_candidates/SNAP-T1.json |
+| snap_t1_fixture_candidate_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/fixture_candidates/SNAP-T1.json |
+| snap_t1_fixture_candidate_boundary | ready | This file records selected candidate assets and preparation commands only. It does not download data, clone repositories, execute tasks, score outputs, or provide downstream task-success results. | benchmarks/real_reuse/fixture_candidates/SNAP-T1.json |
+| snap_t2_fixture_candidate_present | ready | present | benchmarks/real_reuse/fixture_candidates/SNAP-T2.json |
+| snap_t2_fixture_candidate_identity | ready | task_id=SNAP-T2; source_paper_id=snapatac2 | benchmarks/real_reuse/fixture_candidates/SNAP-T2.json |
+| snap_t2_fixture_candidate_status | ready | status=candidate_assets_selected_preparation_pending | benchmarks/real_reuse/fixture_candidates/SNAP-T2.json |
+| snap_t2_fixture_candidate_selected | ready | snapatac2_multiome_or_cluster_labels | benchmarks/real_reuse/fixture_candidates/SNAP-T2.json |
+| snap_t2_fixture_candidate_source_urls | ready | source_urls=3 | benchmarks/real_reuse/fixture_candidates/SNAP-T2.json |
+| snap_t2_fixture_candidate_assets_match_slots | ready | asset_slots=dataset_manifest,expected_artifact_schema,reference_labels_or_proxy,resource_budget | benchmarks/real_reuse/fixture_candidates/SNAP-T2.json |
+| snap_t2_fixture_candidate_assets_not_downloaded | ready | candidate_assets=4 | benchmarks/real_reuse/fixture_candidates/SNAP-T2.json |
+| snap_t2_fixture_candidate_preparation_plan | ready | commands=3; status=not_started | benchmarks/real_reuse/fixture_candidates/SNAP-T2.json |
+| snap_t2_fixture_candidate_scoring_plan | ready | metric=ari_nmi_runtime_memory; scorer_status=to_implement_next_phase | benchmarks/real_reuse/fixture_candidates/SNAP-T2.json |
+| snap_t2_fixture_candidate_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/fixture_candidates/SNAP-T2.json |
+| snap_t2_fixture_candidate_boundary | ready | This file records selected candidate assets and preparation commands only. It does not download data, clone repositories, execute tasks, score outputs, or provide downstream task-success results. | benchmarks/real_reuse/fixture_candidates/SNAP-T2.json |
+| swe_t1_fixture_candidate_present | ready | present | benchmarks/real_reuse/fixture_candidates/SWE-T1.json |
+| swe_t1_fixture_candidate_identity | ready | task_id=SWE-T1; source_paper_id=swe_agent | benchmarks/real_reuse/fixture_candidates/SWE-T1.json |
+| swe_t1_fixture_candidate_status | ready | status=candidate_assets_selected_preparation_pending | benchmarks/real_reuse/fixture_candidates/SWE-T1.json |
+| swe_t1_fixture_candidate_selected | ready | swe_bench_lite_issue_to_patch | benchmarks/real_reuse/fixture_candidates/SWE-T1.json |
+| swe_t1_fixture_candidate_source_urls | ready | source_urls=3 | benchmarks/real_reuse/fixture_candidates/SWE-T1.json |
+| swe_t1_fixture_candidate_assets_match_slots | ready | asset_slots=issue_description,repository_snapshot,target_test_command | benchmarks/real_reuse/fixture_candidates/SWE-T1.json |
+| swe_t1_fixture_candidate_assets_not_downloaded | ready | candidate_assets=3 | benchmarks/real_reuse/fixture_candidates/SWE-T1.json |
+| swe_t1_fixture_candidate_preparation_plan | ready | commands=3; status=not_started | benchmarks/real_reuse/fixture_candidates/SWE-T1.json |
+| swe_t1_fixture_candidate_scoring_plan | ready | metric=resolved; scorer_status=to_implement_next_phase | benchmarks/real_reuse/fixture_candidates/SWE-T1.json |
+| swe_t1_fixture_candidate_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/fixture_candidates/SWE-T1.json |
+| swe_t1_fixture_candidate_boundary | ready | This file records selected candidate assets and preparation commands only. It does not download data, clone repositories, execute tasks, score outputs, or provide downstream task-success results. | benchmarks/real_reuse/fixture_candidates/SWE-T1.json |
+| swe_t2_fixture_candidate_present | ready | present | benchmarks/real_reuse/fixture_candidates/SWE-T2.json |
+| swe_t2_fixture_candidate_identity | ready | task_id=SWE-T2; source_paper_id=swe_agent | benchmarks/real_reuse/fixture_candidates/SWE-T2.json |
+| swe_t2_fixture_candidate_status | ready | status=candidate_assets_selected_preparation_pending | benchmarks/real_reuse/fixture_candidates/SWE-T2.json |
+| swe_t2_fixture_candidate_selected | ready | swe_bench_verified_failing_test_patch | benchmarks/real_reuse/fixture_candidates/SWE-T2.json |
+| swe_t2_fixture_candidate_source_urls | ready | source_urls=3 | benchmarks/real_reuse/fixture_candidates/SWE-T2.json |
+| swe_t2_fixture_candidate_assets_match_slots | ready | asset_slots=failing_test,repository_snapshot,target_test_command | benchmarks/real_reuse/fixture_candidates/SWE-T2.json |
+| swe_t2_fixture_candidate_assets_not_downloaded | ready | candidate_assets=3 | benchmarks/real_reuse/fixture_candidates/SWE-T2.json |
+| swe_t2_fixture_candidate_preparation_plan | ready | commands=3; status=not_started | benchmarks/real_reuse/fixture_candidates/SWE-T2.json |
+| swe_t2_fixture_candidate_scoring_plan | ready | metric=tests_passed; scorer_status=to_implement_next_phase | benchmarks/real_reuse/fixture_candidates/SWE-T2.json |
+| swe_t2_fixture_candidate_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/fixture_candidates/SWE-T2.json |
+| swe_t2_fixture_candidate_boundary | ready | This file records selected candidate assets and preparation commands only. It does not download data, clone repositories, execute tasks, score outputs, or provide downstream task-success results. | benchmarks/real_reuse/fixture_candidates/SWE-T2.json |
+| real_reuse_fixture_candidates_materialized | ready | candidates=AIDE-T1,AIDE-T2,REF-T1,REF-T2,SNAP-T1,SNAP-T2,SWE-T1,SWE-T2 | benchmarks/real_reuse/real_reuse_v0.json |

@@ -44,6 +44,7 @@ class CheckRealReuseBenchmarkTest(unittest.TestCase):
             self.assertIn("real_reuse_full_excerpt_sanity_scope", ready_ids)
             self.assertIn("real_reuse_task_specs_materialized", ready_ids)
             self.assertIn("real_reuse_fixture_manifests_materialized", ready_ids)
+            self.assertIn("real_reuse_fixture_candidates_materialized", ready_ids)
             self.assertIn("real_reuse_llm_ablation_linked_to_tasks", ready_ids)
             self.assertIn("snapatac2_code_url_declared", ready_ids)
             self.assertTrue(output_md.exists())
@@ -73,6 +74,35 @@ class CheckRealReuseBenchmarkTest(unittest.TestCase):
             statuses = {check["id"]: check["status"] for check in report["checks"]}
             self.assertEqual("fail", statuses["real_reuse_main_conditions"])
             self.assertEqual("fail", statuses["real_reuse_no_abstract_or_full_excerpt_main"])
+
+    def test_invalid_candidate_status_fails_preflight(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            candidate_dir = root / "benchmarks" / "real_reuse" / "fixture_candidates"
+            task_dir = root / "benchmarks" / "real_reuse" / "tasks"
+            fixture_dir = root / "benchmarks" / "real_reuse" / "fixtures"
+            spec_dir = root / "benchmarks" / "real_reuse"
+            candidate_dir.mkdir(parents=True)
+            task_dir.mkdir(parents=True)
+            fixture_dir.mkdir(parents=True)
+            spec_dir.mkdir(parents=True, exist_ok=True)
+            (spec_dir / "real_reuse_v0.json").write_text(SPEC.read_text(encoding="utf-8"), encoding="utf-8")
+            for source_dir, dest_dir in [
+                (ROOT / "benchmarks" / "real_reuse" / "tasks", task_dir),
+                (ROOT / "benchmarks" / "real_reuse" / "fixtures", fixture_dir),
+                (ROOT / "benchmarks" / "real_reuse" / "fixture_candidates", candidate_dir),
+            ]:
+                for path in source_dir.glob("*.json"):
+                    (dest_dir / path.name).write_text(path.read_text(encoding="utf-8"), encoding="utf-8")
+            candidate_path = candidate_dir / "AIDE-T1.json"
+            candidate = json.loads(candidate_path.read_text(encoding="utf-8"))
+            candidate["status"] = "executed"
+            candidate_path.write_text(json.dumps(candidate), encoding="utf-8")
+
+            report = build_report(root, spec_dir / "real_reuse_v0.json")
+            statuses = {check["id"]: check["status"] for check in report["checks"]}
+            self.assertEqual("fail", report["overall_status"])
+            self.assertEqual("fail", statuses["aide_t1_fixture_candidate_status"])
 
 
 if __name__ == "__main__":

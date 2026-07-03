@@ -15,7 +15,21 @@ Current date: 2026-07-03.
   discussion record. Do not rewrite the AAAI Results as if these new real-reuse
   experiments are complete; first update planning files, then revise paper text
   after execution.
-- 2026-07-03 Phase 82 fixture-manifest gate is now the current local phase:
+- 2026-07-03 active-goal update: prioritize the main real-reuse experiment over
+  auxiliary experiments. The paper's experiment section should get the main
+  table structure first, with TBD/pending numeric cells and explicit evidence
+  boundary; after scores are run, update the paper numbers promptly.
+- 2026-07-03 Phase 83 fixture-candidate gate is now the current local phase:
+  added `scripts/build_real_reuse_fixture_candidates.py` and generated the eight
+  `benchmarks/real_reuse/fixture_candidates/*.json` manifests. Candidate
+  sources are MLE-bench/Spaceship Titanic for AIDE-T1/T2, SWE-bench
+  Lite/Verified for SWE-T1/T2, HotPotQA and HumanEval for REF-T1/T2, and
+  SnapATAC2 official tutorial/API-backed assets for SNAP-T1/T2. The real-reuse
+  preflight now reports `ready_to_implement`, 8 tasks, 296 ready checks, and 0
+  failed checks; package gate reports 339 ready / 1 pending / 0 failed. This is
+  still not execution evidence: assets are not materialized, preparer/scorer
+  scripts and runner are not implemented, and no raw rows exist.
+- 2026-07-03 Phase 82 fixture-manifest gate is the previous local phase:
   added `scripts/build_real_reuse_fixture_manifests.py` and generated the eight
   `benchmarks/real_reuse/fixtures/*.json` manifests. The real-reuse preflight
   now validates fixture identity, status, asset slots, context conditions,
@@ -72,8 +86,8 @@ Current date: 2026-07-03.
   all strict local gates, `git diff --check`, and repository raw-key scan.
 - Current reports:
   - Goal completion: 77 ready / 3 pending / 0 failed.
-  - Reproducibility package: 330 ready / 1 pending / 0 failed after adding the
-    real-reuse fixture-manifest gate.
+  - Reproducibility package: 339 ready / 1 pending / 0 failed after adding the
+    real-reuse fixture-candidate gate.
   - External evidence queue: `human_fidelity_annotation` and
     `aaai_submission_decision`.
   - AAAI decision: ready, selected `wait_for_external_evidence`.
@@ -144,13 +158,33 @@ Current date: 2026-07-03.
 
 ## Current Phase
 
-Phase 82 is the current local phase. Phase 68 was committed as
+Phase 83 is the current local phase. Phase 68 was committed as
 `5548070 Refresh memory anchors after remote save` and pushed to `origin/main`
 on 2026-06-20. Phase 69 syncs the AAAI submission-decision execution packet
 with the validated decision-record helper; no external evidence status is
 promoted and no AAAI option is selected. Phase 70 updates the direct provider
 diagnostic to match the current coderxiaoc API protocols: Claude uses
 Anthropic Messages and GPT uses OpenAI Responses.
+
+Phase 83 evidence:
+
+- `scripts/build_real_reuse_fixture_candidates.py` materializes all eight
+  selected candidate asset/preparation manifests from task specs and fixture
+  manifests.
+- `benchmarks/real_reuse/fixture_candidates/AIDE-T1.json`, `AIDE-T2.json`,
+  `SWE-T1.json`, `SWE-T2.json`, `REF-T1.json`, `REF-T2.json`,
+  `SNAP-T1.json`, and `SNAP-T2.json` exist.
+- Candidate sources are MLE-bench/Spaceship Titanic for AIDE-T1/T2, SWE-bench
+  Lite/Verified for SWE-T1/T2, HotPotQA and HumanEval for REF-T1/T2, and
+  SnapATAC2 official tutorial/API-backed assets for SNAP-T1/T2.
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 8
+  tasks, 296 ready checks, and 0 failed checks.
+- `results/reproducibility/package_report.md` reports 339 ready / 1 pending /
+  0 failed after including the candidate builder and all eight manifests.
+- No fixture asset has been materialized; no external dataset/repo has been
+  downloaded for execution; no preparer/scorer, runner, raw row, or main result
+  artifact exists yet. Next implementation should materialize selected assets,
+  fix instance IDs, then implement the runner/scorer.
 
 Phase 82 evidence:
 
@@ -164,7 +198,7 @@ Phase 82 evidence:
   contract, license/provenance status, and planned outputs.
 - `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 8
   tasks, 207 ready checks, and 0 failed checks.
-- `results/reproducibility/package_report.md` reports 330 ready / 1 pending /
+- `results/reproducibility/package_report.md` reported 330 ready / 1 pending /
   0 failed after including the fixture builder and all eight manifests.
 - No concrete fixture asset has been selected; no dataset/repo has been
   downloaded or cloned; no scoring command, runner/scorer, raw row, or main

@@ -42,6 +42,7 @@ EXPECTED_RAW_ROW_FIELDS = {
     "output_path",
 }
 EXPECTED_FIXTURE_STATUS = "fixture_manifest_ready_assets_pending"
+EXPECTED_CANDIDATE_STATUS = "candidate_assets_selected_preparation_pending"
 
 
 @dataclass
@@ -176,6 +177,7 @@ def build_report(root: Path, spec_path: Path) -> dict[str, Any]:
     checks.extend(planned_output_checks(root, spec_path, spec))
     checks.extend(task_spec_file_checks(root, spec_path, tasks))
     checks.extend(fixture_manifest_checks(root, spec_path, tasks))
+    checks.extend(fixture_candidate_checks(root, spec_path, tasks))
     return report_from_checks(root, spec_path, spec, checks)
 
 
@@ -534,6 +536,158 @@ def fixture_manifest_checks(root: Path, spec_path: Path, tasks: dict[str, dict[s
             "real_reuse_fixture_manifests_materialized",
             "ready" if present_fixture_manifests == EXPECTED_MAIN_TASKS else "fail",
             "fixtures=" + ",".join(sorted(present_fixture_manifests)),
+            relative(root, spec_path),
+        )
+    )
+    return checks
+
+
+def fixture_candidate_checks(root: Path, spec_path: Path, tasks: dict[str, dict[str, Any]]) -> list[Check]:
+    checks: list[Check] = []
+    present_fixture_candidates: set[str] = set()
+    for task_id in sorted(tasks):
+        prefix = task_id.lower().replace("-", "_")
+        candidate_path = root / "benchmarks" / "real_reuse" / "fixture_candidates" / f"{task_id}.json"
+        task_spec_path = root / "benchmarks" / "real_reuse" / "tasks" / f"{task_id}.json"
+        fixture_path = root / "benchmarks" / "real_reuse" / "fixtures" / f"{task_id}.json"
+        if not candidate_path.exists():
+            checks.append(
+                Check(
+                    f"{prefix}_fixture_candidate_present",
+                    "fail",
+                    "missing",
+                    relative(root, candidate_path),
+                )
+            )
+            continue
+        candidate = load_json(candidate_path)
+        present_fixture_candidates.add(task_id)
+        task_spec = load_json(task_spec_path) if task_spec_path.exists() else {}
+        fixture = load_json(fixture_path) if fixture_path.exists() else {}
+        source_urls = candidate.get("source_urls", [])
+        source_url_ids = {str(item.get("id", "")) for item in source_urls}
+        candidate_assets = candidate.get("candidate_assets", [])
+        candidate_asset_slots = {str(item.get("slot", "")) for item in candidate_assets}
+        fixture_asset_slots = {str(item.get("id", "")) for item in fixture.get("asset_slots", [])}
+        preparation_plan = candidate.get("preparation_plan", {})
+        preparation_commands = preparation_plan.get("commands", [])
+        scoring_plan = candidate.get("scoring_plan", {})
+        boundary = str(candidate.get("evidence_boundary", "")).lower()
+        selected = candidate.get("selected_candidate", {})
+
+        checks.extend(
+            [
+                Check(
+                    f"{prefix}_fixture_candidate_present",
+                    "ready",
+                    "present",
+                    relative(root, candidate_path),
+                ),
+                Check(
+                    f"{prefix}_fixture_candidate_identity",
+                    "ready"
+                    if candidate.get("task_id") == task_id
+                    and candidate.get("source_paper_id") == tasks[task_id].get("source_paper_id")
+                    and candidate.get("task_spec") == f"benchmarks/real_reuse/tasks/{task_id}.json"
+                    and candidate.get("fixture_manifest") == f"benchmarks/real_reuse/fixtures/{task_id}.json"
+                    else "fail",
+                    f"task_id={candidate.get('task_id')}; source_paper_id={candidate.get('source_paper_id')}",
+                    relative(root, candidate_path),
+                ),
+                Check(
+                    f"{prefix}_fixture_candidate_status",
+                    "ready" if candidate.get("status") == EXPECTED_CANDIDATE_STATUS else "fail",
+                    f"status={candidate.get('status')}",
+                    relative(root, candidate_path),
+                ),
+                Check(
+                    f"{prefix}_fixture_candidate_selected",
+                    "ready"
+                    if selected.get("id")
+                    and selected.get("candidate_status") == "selected_for_preparation"
+                    and selected.get("relation_to_source_paper")
+                    else "fail",
+                    str(selected.get("id", "")) or "missing selected candidate",
+                    relative(root, candidate_path),
+                ),
+                Check(
+                    f"{prefix}_fixture_candidate_source_urls",
+                    "ready"
+                    if len(source_urls) >= 3
+                    and all(str(item.get("url", "")).startswith("https://") for item in source_urls)
+                    and all(item.get("checked_on") for item in source_urls)
+                    and all(item.get("source_type") == "primary_source_or_official_distribution" for item in source_urls)
+                    else "fail",
+                    f"source_urls={len(source_urls)}",
+                    relative(root, candidate_path),
+                ),
+                Check(
+                    f"{prefix}_fixture_candidate_assets_match_slots",
+                    "ready"
+                    if fixture_asset_slots <= candidate_asset_slots
+                    and all(asset.get("source_url_id") in source_url_ids for asset in candidate_assets)
+                    else "fail",
+                    "asset_slots=" + ",".join(sorted(candidate_asset_slots)),
+                    relative(root, candidate_path),
+                ),
+                Check(
+                    f"{prefix}_fixture_candidate_assets_not_downloaded",
+                    "ready"
+                    if candidate_assets
+                    and all(asset.get("materialization_status") == "not_downloaded" for asset in candidate_assets)
+                    and all(asset.get("license_status") == "review_required_before_use" for asset in candidate_assets)
+                    else "fail",
+                    f"candidate_assets={len(candidate_assets)}",
+                    relative(root, candidate_path),
+                ),
+                Check(
+                    f"{prefix}_fixture_candidate_preparation_plan",
+                    "ready"
+                    if preparation_plan.get("preparation_status") == "not_started"
+                    and preparation_plan.get("external_project_root") == "D:/a_work/gitee"
+                    and len(preparation_commands) >= 2
+                    and any("prepare_real_reuse" in str(command) for command in preparation_commands)
+                    and "never commit" in str(preparation_plan.get("credentials_policy", "")).lower()
+                    else "fail",
+                    f"commands={len(preparation_commands)}; status={preparation_plan.get('preparation_status')}",
+                    relative(root, candidate_path),
+                ),
+                Check(
+                    f"{prefix}_fixture_candidate_scoring_plan",
+                    "ready"
+                    if scoring_plan.get("scorer_status") == "to_implement_next_phase"
+                    and scoring_plan.get("metric_name") == task_spec.get("metric_contract", {}).get("name")
+                    and "score_real_reuse" in str(scoring_plan.get("scoring_command_template", ""))
+                    else "fail",
+                    f"metric={scoring_plan.get('metric_name')}; scorer_status={scoring_plan.get('scorer_status')}",
+                    relative(root, candidate_path),
+                ),
+                Check(
+                    f"{prefix}_fixture_candidate_no_mid_run_human",
+                    "ready"
+                    if candidate.get("run_controls", {}).get("first_pass_human_intervention") == "none_mid_run"
+                    and candidate.get("run_controls", {}).get("same_run_budget_across_conditions") is True
+                    else "fail",
+                    f"first_pass_human_intervention={candidate.get('run_controls', {}).get('first_pass_human_intervention')}",
+                    relative(root, candidate_path),
+                ),
+                Check(
+                    f"{prefix}_fixture_candidate_boundary",
+                    "ready"
+                    if "does not" in boundary
+                    and "execute tasks" in boundary
+                    and "downstream task-success results" in boundary
+                    else "fail",
+                    candidate.get("evidence_boundary", ""),
+                    relative(root, candidate_path),
+                ),
+            ]
+        )
+    checks.append(
+        Check(
+            "real_reuse_fixture_candidates_materialized",
+            "ready" if present_fixture_candidates == EXPECTED_MAIN_TASKS else "fail",
+            "candidates=" + ",".join(sorted(present_fixture_candidates)),
             relative(root, spec_path),
         )
     )

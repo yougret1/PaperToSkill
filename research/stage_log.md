@@ -2789,3 +2789,38 @@ Evidence boundary:
   produce downstream result rows.
 - The next implementation step is concrete fixture-asset selection plus
   runner/scorer implementation.
+
+## 2026-07-03 Phase 83
+
+Actions:
+
+- Added `scripts/build_real_reuse_fixture_candidates.py` to materialize
+  candidate asset/preparation manifests from the eight task specs and fixture
+  requirement manifests.
+- Generated `benchmarks/real_reuse/fixture_candidates/*.json` for all eight
+  real-reuse tasks.
+- Selected preparation candidates: MLE-bench Spaceship Titanic for AIDE-T1/T2,
+  SWE-bench Lite/Verified for SWE-T1/T2, HotPotQA and HumanEval for REF-T1/T2,
+  and SnapATAC2 official tutorial/API-backed datasets for SNAP-T1/T2.
+- Extended `scripts/check_real_reuse_benchmark.py` so the preflight validates
+  candidate identity, selected-source status, official/source URLs, asset-slot
+  coverage, not-downloaded/license-review boundaries, preparation commands,
+  scoring entry points, no-mid-run-human controls, and evidence boundaries.
+- Added candidate-builder tests and expanded package-gate expectations.
+
+Results:
+
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`,
+  8 tasks, 296 ready checks, and 0 failed checks.
+- `results/reproducibility/package_report.md` reports
+  `ready_with_pending_external_evidence`, 339 ready checks, 1 pending check,
+  and 0 failed checks.
+- These are preparation checks only, not execution checks.
+
+Evidence boundary:
+
+- Phase 83 selects candidate assets and preparation/scoring entry points only.
+  It does not download Kaggle/Hugging Face/SnapATAC2 data, clone external
+  projects for execution, fix task instance IDs, implement the preparer/scorer
+  scripts, run Summary or PaperToSkill conditions, or create downstream result
+  rows.

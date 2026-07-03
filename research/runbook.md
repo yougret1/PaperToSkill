@@ -77,12 +77,15 @@ Source of truth:
 research/real_reuse_experiment_plan.md
 benchmarks/real_reuse/real_reuse_v0.json
 benchmarks/real_reuse/tasks/
+benchmarks/real_reuse/fixtures/
+benchmarks/real_reuse/fixture_candidates/
 ```
 
 Current status: planned specification, per-task execution-contract specs, and
-fixture requirement manifests are ready. No concrete fixture asset has been
-selected and no task has been run. Do not write the AAAI paper as if these
-experiments have run.
+fixture requirement manifests are ready. Candidate assets and preparation
+commands are selected in `benchmarks/real_reuse/fixture_candidates/`, but no
+asset has been downloaded/materialized and no task has been run. Do not write
+the AAAI paper as if these experiments have run.
 
 Regenerate per-task specs from the master spec:
 
@@ -94,6 +97,12 @@ Regenerate fixture requirement manifests from the task specs:
 
 ```powershell
 python scripts\build_real_reuse_fixture_manifests.py
+```
+
+Regenerate candidate fixture-asset manifests from the task and fixture specs:
+
+```powershell
+python scripts\build_real_reuse_fixture_candidates.py
 ```
 
 Validate the planned spec before implementing runners or editing paper claims:
@@ -110,9 +119,9 @@ results/real_reuse/spec_preflight.md
 ```
 
 The expected status is `ready_to_implement`. That means the benchmark spec,
-per-task specs, and fixture requirement manifests are machine-checkable and
-ready for concrete asset selection plus runner/scorer implementation; it is not
-downstream task-success evidence.
+per-task specs, fixture requirement manifests, and candidate asset manifests are
+machine-checkable and ready for asset materialization plus runner/scorer
+implementation; it is not downstream task-success evidence.
 
 Planned main task grid:
 
@@ -130,8 +139,9 @@ Planned main task grid:
 Execution order:
 
 1. Verify source-paper code, benchmark setup, license, and metric details.
-2. Fill concrete fixture assets in `benchmarks/real_reuse/fixtures/`, including
-   license/provenance, path/URI, scoring command, and run budget.
+2. Materialize candidate fixture assets from
+   `benchmarks/real_reuse/fixture_candidates/`, including license/provenance,
+   fixed instance IDs, local path/URI, scoring command, and run budget.
 3. Create Summary and PaperToSkill context inputs for each task.
 4. Implement the real-reuse runner and scorer.
 5. Run agent-only tasks with no mid-run human intervention.

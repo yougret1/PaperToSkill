@@ -1,0 +1,122 @@
+{
+  "schema_version": "0.1",
+  "benchmark_id": "papertoskill_real_reuse_v0",
+  "task_id": "REF-T2",
+  "task_spec": "benchmarks/real_reuse/tasks/REF-T2.json",
+  "fixture_manifest": "benchmarks/real_reuse/fixtures/REF-T2.json",
+  "source_paper_id": "reflexion",
+  "domain": "Decision / programming",
+  "status": "candidate_assets_selected_preparation_pending",
+  "evidence_boundary": "This file records selected candidate assets and preparation commands only. It does not download data, clone repositories, execute tasks, score outputs, or provide downstream task-success results.",
+  "selected_candidate": {
+    "id": "humaneval_failed_attempt_retry",
+    "label": "HumanEval failed-attempt retry fixture",
+    "reason": "HumanEval provides objective unit tests for a second-attempt recovery task, avoiding subjective reflection-quality judgments.",
+    "relation_to_source_paper": "Reflexion uses programming tasks with environment feedback; this candidate focuses on failure recovery under a fixed test checker.",
+    "candidate_status": "selected_for_preparation"
+  },
+  "source_urls": [
+    {
+      "id": "reflexion_code",
+      "url": "https://github.com/noahshinn/reflexion",
+      "kind": "source_paper_code",
+      "source_type": "primary_source_or_official_distribution",
+      "checked_on": "2026-07-03",
+      "reachability_status": "declared_for_preparation_recheck",
+      "notes": "Reflexion reference implementation and task framing."
+    },
+    {
+      "id": "humaneval_repo",
+      "url": "https://github.com/openai/human-eval",
+      "kind": "dataset_and_checker",
+      "source_type": "primary_source_or_official_distribution",
+      "checked_on": "2026-07-03",
+      "reachability_status": "declared_for_preparation_recheck",
+      "notes": "HumanEval tasks and execution-based evaluation."
+    },
+    {
+      "id": "humaneval_paper",
+      "url": "https://arxiv.org/abs/2107.03374",
+      "kind": "benchmark_paper",
+      "source_type": "primary_source_or_official_distribution",
+      "checked_on": "2026-07-03",
+      "reachability_status": "declared_for_preparation_recheck",
+      "notes": "Benchmark paper for the coding-task metric context."
+    }
+  ],
+  "candidate_assets": [
+    {
+      "slot": "initial_task",
+      "source_url_id": "humaneval_repo",
+      "path_or_uri": null,
+      "local_path_policy": "Fill after preparation under benchmarks/real_reuse/assets/ or D:/a_work/gitee for external projects.",
+      "materialization_status": "not_downloaded",
+      "license_status": "review_required_before_use",
+      "required_for_execution": true,
+      "notes": "Selected HumanEval prompt and tests."
+    },
+    {
+      "slot": "failed_first_attempt",
+      "source_url_id": "humaneval_repo",
+      "path_or_uri": null,
+      "local_path_policy": "Fill after preparation under benchmarks/real_reuse/assets/ or D:/a_work/gitee for external projects.",
+      "materialization_status": "not_downloaded",
+      "license_status": "review_required_before_use",
+      "required_for_execution": true,
+      "notes": "Deterministic intentionally failing first attempt generated before execution."
+    },
+    {
+      "slot": "environment_feedback",
+      "source_url_id": "humaneval_repo",
+      "path_or_uri": null,
+      "local_path_policy": "Fill after preparation under benchmarks/real_reuse/assets/ or D:/a_work/gitee for external projects.",
+      "materialization_status": "not_downloaded",
+      "license_status": "review_required_before_use",
+      "required_for_execution": true,
+      "notes": "Unit-test failure output from the fixed checker."
+    },
+    {
+      "slot": "objective_checker",
+      "source_url_id": "humaneval_repo",
+      "path_or_uri": null,
+      "local_path_policy": "Fill after preparation under benchmarks/real_reuse/assets/ or D:/a_work/gitee for external projects.",
+      "materialization_status": "not_downloaded",
+      "license_status": "review_required_before_use",
+      "required_for_execution": true,
+      "notes": "HumanEval execution-based test harness or local equivalent."
+    }
+  ],
+  "preparation_plan": {
+    "preparation_status": "not_started",
+    "external_project_root": "D:/a_work/gitee",
+    "commands": [
+      "git clone https://github.com/openai/human-eval D:/a_work/gitee/human-eval",
+      "python scripts/prepare_real_reuse_reflexion_fixture.py --task REF-T2 --dataset humaneval --output-dir benchmarks/real_reuse/assets/REF-T2",
+      "python scripts/score_real_reuse_reflexion.py --task REF-T2 --candidate {candidate_file} --tests benchmarks/real_reuse/assets/REF-T2/tests.json"
+    ],
+    "environment_notes": [
+      "Sandbox code execution before running candidate model outputs.",
+      "Record failed first-attempt output and fixed feedback before model comparison."
+    ],
+    "credentials_policy": "Use local environment variables or user-managed credentials only; never commit API keys, Kaggle tokens, Hugging Face tokens, cookies, or credential-bearing logs."
+  },
+  "scoring_plan": {
+    "scorer_status": "to_implement_next_phase",
+    "metric_name": "second_attempt_success",
+    "metric_family": "pass_rate",
+    "direction": "higher_is_better",
+    "success_criterion": "Second attempt passes the objective checker after using reflection.",
+    "scoring_command_template": "python scripts/score_real_reuse_reflexion.py --task REF-T2 --candidate {candidate_file} --tests benchmarks/real_reuse/assets/REF-T2/tests.json",
+    "required_outputs": [
+      "second_attempt_output",
+      "checker_log"
+    ],
+    "reference_score_boundary": "Treat original paper scores as reported references unless the same dataset, input/output, metric, model/tool budget, and runtime setting are reproduced locally."
+  },
+  "run_controls": {
+    "first_pass_human_intervention": "none_mid_run",
+    "same_run_budget_across_conditions": true,
+    "same_prompt_template_across_conditions": true
+  },
+  "next_action": "Implement the task-specific preparer/scorer and materialize local assets before any Summary vs PaperToSkill run."
+}

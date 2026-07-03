@@ -1,0 +1,124 @@
+{
+  "schema_version": "0.1",
+  "benchmark_id": "papertoskill_real_reuse_v0",
+  "task_id": "SNAP-T2",
+  "task_spec": "benchmarks/real_reuse/tasks/SNAP-T2.json",
+  "fixture_manifest": "benchmarks/real_reuse/fixtures/SNAP-T2.json",
+  "source_paper_id": "snapatac2",
+  "domain": "Single-cell omics",
+  "status": "candidate_assets_selected_preparation_pending",
+  "evidence_boundary": "This file records selected candidate assets and preparation commands only. It does not download data, clone repositories, execute tasks, score outputs, or provide downstream task-success results.",
+  "selected_candidate": {
+    "id": "snapatac2_multiome_or_cluster_labels",
+    "label": "SnapATAC2 multiome/clustering tutorial fixture with labels or proxy metrics",
+    "reason": "A labeled or proxy-labeled tutorial dataset allows objective ARI/NMI or resource-quality scoring for a non-agent scientific data-analysis reuse task.",
+    "relation_to_source_paper": "This extends the main validity experiment beyond agents into source-paper-style scientific data-analysis reuse.",
+    "candidate_status": "selected_for_preparation"
+  },
+  "source_urls": [
+    {
+      "id": "snapatac2_code",
+      "url": "https://github.com/scverse/SnapATAC2",
+      "kind": "source_paper_code",
+      "source_type": "primary_source_or_official_distribution",
+      "checked_on": "2026-07-03",
+      "reachability_status": "declared_for_preparation_recheck",
+      "notes": "Current SnapATAC2 implementation repository."
+    },
+    {
+      "id": "snapatac2_tutorials",
+      "url": "https://scverse.org/SnapATAC2/tutorials/index.html",
+      "kind": "official_docs",
+      "source_type": "primary_source_or_official_distribution",
+      "checked_on": "2026-07-03",
+      "reachability_status": "declared_for_preparation_recheck",
+      "notes": "Official workflows for clustering, annotation, and multimodal analysis."
+    },
+    {
+      "id": "snapatac2_api",
+      "url": "https://scverse.org/SnapATAC2/api.html",
+      "kind": "official_api_docs",
+      "source_type": "primary_source_or_official_distribution",
+      "checked_on": "2026-07-03",
+      "reachability_status": "declared_for_preparation_recheck",
+      "notes": "API reference needed to define deterministic scorer inputs."
+    }
+  ],
+  "candidate_assets": [
+    {
+      "slot": "dataset_manifest",
+      "source_url_id": "snapatac2_tutorials",
+      "path_or_uri": null,
+      "local_path_policy": "Fill after preparation under benchmarks/real_reuse/assets/ or D:/a_work/gitee for external projects.",
+      "materialization_status": "not_downloaded",
+      "license_status": "review_required_before_use",
+      "required_for_execution": true,
+      "notes": "Small SnapATAC2 tutorial dataset with labels or a proxy-label plan."
+    },
+    {
+      "slot": "reference_labels_or_proxy",
+      "source_url_id": "snapatac2_tutorials",
+      "path_or_uri": null,
+      "local_path_policy": "Fill after preparation under benchmarks/real_reuse/assets/ or D:/a_work/gitee for external projects.",
+      "materialization_status": "not_downloaded",
+      "license_status": "review_required_before_use",
+      "required_for_execution": true,
+      "notes": "Reference labels, cell groups, or pre-registered proxy metric."
+    },
+    {
+      "slot": "resource_budget",
+      "source_url_id": "snapatac2_tutorials",
+      "path_or_uri": null,
+      "local_path_policy": "Fill after preparation under benchmarks/real_reuse/assets/ or D:/a_work/gitee for external projects.",
+      "materialization_status": "not_downloaded",
+      "license_status": "review_required_before_use",
+      "required_for_execution": true,
+      "notes": "Runtime and memory budget to define before execution."
+    },
+    {
+      "slot": "expected_artifact_schema",
+      "source_url_id": "snapatac2_api",
+      "path_or_uri": null,
+      "local_path_policy": "Fill after preparation under benchmarks/real_reuse/assets/ or D:/a_work/gitee for external projects.",
+      "materialization_status": "not_downloaded",
+      "license_status": "review_required_before_use",
+      "required_for_execution": true,
+      "notes": "Clustering/marker output schema for the scorer."
+    }
+  ],
+  "preparation_plan": {
+    "preparation_status": "not_started",
+    "external_project_root": "D:/a_work/gitee",
+    "commands": [
+      "git clone https://github.com/scverse/SnapATAC2 D:/a_work/gitee/SnapATAC2",
+      "python scripts/prepare_real_reuse_snapatac2_fixture.py --task SNAP-T2 --dataset tutorial-multiome-or-clustered --output-dir benchmarks/real_reuse/assets/SNAP-T2",
+      "python scripts/score_real_reuse_snapatac2.py --task SNAP-T2 --artifact-dir results/real_reuse/runs/SNAP-T2/{condition}"
+    ],
+    "environment_notes": [
+      "Choose the exact tutorial dataset and label/proxy metric before any model run.",
+      "If labels are unavailable, the proxy metric must be pre-registered and described as a proxy, not biological truth."
+    ],
+    "credentials_policy": "Use local environment variables or user-managed credentials only; never commit API keys, Kaggle tokens, Hugging Face tokens, cookies, or credential-bearing logs."
+  },
+  "scoring_plan": {
+    "scorer_status": "to_implement_next_phase",
+    "metric_name": "ari_nmi_runtime_memory",
+    "metric_family": "clustering_and_resource_metric",
+    "direction": "mixed",
+    "success_criterion": "Analysis completes and reports ARI/NMI or agreed proxy plus runtime and memory.",
+    "scoring_command_template": "python scripts/score_real_reuse_snapatac2.py --task SNAP-T2 --artifact-dir {artifact_dir}",
+    "required_outputs": [
+      "cluster_or_marker_output",
+      "quality_metric_log",
+      "runtime_log",
+      "memory_log"
+    ],
+    "reference_score_boundary": "Treat original paper scores as reported references unless the same dataset, input/output, metric, model/tool budget, and runtime setting are reproduced locally."
+  },
+  "run_controls": {
+    "first_pass_human_intervention": "none_mid_run",
+    "same_run_budget_across_conditions": true,
+    "same_prompt_template_across_conditions": true
+  },
+  "next_action": "Implement the task-specific preparer/scorer and materialize local assets before any Summary vs PaperToSkill run."
+}

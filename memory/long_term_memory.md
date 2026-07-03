@@ -29,6 +29,10 @@ This file is intentionally compact. Detailed chronological history lives in
 - Final paper artifacts must use an official AAAI TeX template downloaded from
   the web. Current package is AAAI-27 under `paper/aaai/`.
 - Experiments must include usage examples.
+- Experiment work should prioritize the main real-reuse experiment. Put the
+  main experiment table structure into the paper before scores are available,
+  then update numeric cells promptly after runs complete. Auxiliary experiments
+  are secondary and should not delay the main table/results path.
 - Claude Opus and GPT-family model ablations should be run before the user adds
   DeepSeek following the same process.
 - Do not silently treat unavailable model endpoints as model-quality failures.
@@ -118,21 +122,24 @@ Current supported claims:
   checkout's remote is the SakanaAI upstream. The archive backs up the local
   coderxiaoc/BFTS integration patch inside the PaperToSkill GitHub history
   without committing raw API keys or local presentation/build artifacts.
-- Phase 79/82 real-reuse planning/task/fixture gate: the next stronger validity
+- Phase 79/83 real-reuse planning/task/fixture/candidate gate: the next stronger validity
   target is original-style paper-task reuse over eight planned tasks from AIDE,
   SWE-agent, Reflexion, and SnapATAC2. Toolformer and AI Scientist-v2 remain
   sanity/auxiliary cases. `benchmarks/real_reuse/real_reuse_v0.json` and
   `benchmarks/real_reuse/tasks/*.json` are ready-to-implement planning
   artifacts; `benchmarks/real_reuse/fixtures/*.json` contains fixture
-  requirement manifests with asset slots only. `results/real_reuse/spec_preflight.md`
-  validates them. No concrete fixture assets or raw rows exist yet.
+  requirement manifests; `benchmarks/real_reuse/fixture_candidates/*.json`
+  records selected candidate datasets/repositories and preparation/scoring
+  entry points. `results/real_reuse/spec_preflight.md` validates them. No
+  materialized fixture assets, runner/scorer, raw rows, or real-reuse results
+  exist yet.
 
 Current unsupported claims:
 
 - PaperToSkill improves real original-style task outcomes across AIDE,
-  SWE-agent, Reflexion, SnapATAC2, or other domains; the Phase 82 real-reuse
-  spec/task/fixture contracts are ready to implement but concrete assets have
-  not been selected and the tasks have not been executed.
+  SWE-agent, Reflexion, SnapATAC2, or other domains; the Phase 83 real-reuse
+  spec/task/fixture/candidate contracts are ready to implement but assets have
+  not been materialized and the tasks have not been executed.
 - Saved-response model-ablation scoring as proof of live downstream task
   success, broad model quality, provider billing, or provider economics.
 - Saved-response output-contract scoring as proof of real live task success.
@@ -202,8 +209,12 @@ Use these as entry points instead of searching the whole repo first:
   execution-contract specs from the master real-reuse benchmark spec.
 - `scripts/build_real_reuse_fixture_manifests.py`: materializes fixture
   requirement manifests from the per-task real-reuse specs.
+- `scripts/build_real_reuse_fixture_candidates.py`: materializes selected
+  candidate asset/preparation manifests from the task specs and fixture
+  manifests.
 - `scripts/check_real_reuse_benchmark.py`: strict local preflight checker for
-  the planned real-reuse benchmark spec, per-task specs, and fixture manifests.
+  the planned real-reuse benchmark spec, per-task specs, fixture manifests, and
+  candidate asset/preparation manifests.
 - `benchmarks/real_reuse/tasks/*.json`: eight per-task execution-contract specs
   with input/output contracts, condition paths, metric contracts, run controls,
   workflow checklists, unsupported-error policy, and raw-row schema. They do
@@ -212,9 +223,13 @@ Use these as entry points instead of searching the whole repo first:
   with asset slots, context assets, scoring contracts, license/provenance
   status, and planned outputs. They do not select concrete datasets/repos or
   contain results.
+- `benchmarks/real_reuse/fixture_candidates/*.json`: eight candidate
+  asset/preparation manifests with selected source repositories/datasets,
+  preparation commands, scoring entry points, and license/provenance boundaries.
+  They do not download or materialize assets and do not contain results.
 - `results/real_reuse/spec_preflight.md`: ready-to-implement preflight report
-  for the real-reuse spec/task/fixture contracts. This is not task-success
-  evidence.
+  for the real-reuse spec/task/fixture/candidate contracts. This is not
+  task-success evidence.
 - `external/ai_scientist_v2_patches/`: reproducibility backup for local
   AI-Scientist-v2 adaptations used by the bounded Phase 76 integration run.
 - `benchmarks/provider_billing_evidence_v0.json`: provider-billing evidence
@@ -231,7 +246,7 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 330 ready checks, 1 pending
+  reports `ready_with_pending_external_evidence`, 339 ready checks, 1 pending
   check, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`

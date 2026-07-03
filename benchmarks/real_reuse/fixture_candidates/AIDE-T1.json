@@ -1,0 +1,122 @@
+{
+  "schema_version": "0.1",
+  "benchmark_id": "papertoskill_real_reuse_v0",
+  "task_id": "AIDE-T1",
+  "task_spec": "benchmarks/real_reuse/tasks/AIDE-T1.json",
+  "fixture_manifest": "benchmarks/real_reuse/fixtures/AIDE-T1.json",
+  "source_paper_id": "aide",
+  "domain": "ML engineering",
+  "status": "candidate_assets_selected_preparation_pending",
+  "evidence_boundary": "This file records selected candidate assets and preparation commands only. It does not download data, clone repositories, execute tasks, score outputs, or provide downstream task-success results.",
+  "selected_candidate": {
+    "id": "mle_bench_spaceship_titanic_submission",
+    "label": "MLE-bench Spaceship Titanic Kaggle-style submission task",
+    "reason": "Small, objective ML-engineering benchmark shape with a submission file and validation metric, matching the AIDE-style code-space optimization workflow.",
+    "relation_to_source_paper": "AIDE reports ML-engineering benchmark results over Weco-Kaggle, MLE-Bench, and RE-Bench-style tasks; this candidate keeps the Kaggle-style input/output contract while staying small enough for fixture preparation.",
+    "candidate_status": "selected_for_preparation"
+  },
+  "source_urls": [
+    {
+      "id": "aide_code",
+      "url": "https://github.com/WecoAI/aideml",
+      "kind": "source_paper_code",
+      "source_type": "primary_source_or_official_distribution",
+      "checked_on": "2026-07-03",
+      "reachability_status": "declared_for_preparation_recheck",
+      "notes": "AIDE implementation source for the workflow being reused."
+    },
+    {
+      "id": "mle_bench_repo",
+      "url": "https://github.com/openai/mle-bench",
+      "kind": "benchmark_harness",
+      "source_type": "primary_source_or_official_distribution",
+      "checked_on": "2026-07-03",
+      "reachability_status": "declared_for_preparation_recheck",
+      "notes": "MLE-bench harness; README includes the spaceship-titanic sample workflow."
+    },
+    {
+      "id": "kaggle_competition",
+      "url": "https://www.kaggle.com/competitions/spaceship-titanic",
+      "kind": "dataset_and_metric",
+      "source_type": "primary_source_or_official_distribution",
+      "checked_on": "2026-07-03",
+      "reachability_status": "declared_for_preparation_recheck",
+      "notes": "Candidate competition data and metric; requires Kaggle terms/credential handling outside tracked files."
+    }
+  ],
+  "candidate_assets": [
+    {
+      "slot": "dataset_manifest",
+      "source_url_id": "kaggle_competition",
+      "path_or_uri": null,
+      "local_path_policy": "Fill after preparation under benchmarks/real_reuse/assets/ or D:/a_work/gitee for external projects.",
+      "materialization_status": "not_downloaded",
+      "license_status": "review_required_before_use",
+      "required_for_execution": true,
+      "notes": "Kaggle competition metadata and metric description."
+    },
+    {
+      "slot": "train_split",
+      "source_url_id": "kaggle_competition",
+      "path_or_uri": null,
+      "local_path_policy": "Fill after preparation under benchmarks/real_reuse/assets/ or D:/a_work/gitee for external projects.",
+      "materialization_status": "not_downloaded",
+      "license_status": "review_required_before_use",
+      "required_for_execution": true,
+      "notes": "Training data after local download and validation split creation."
+    },
+    {
+      "slot": "validation_split",
+      "source_url_id": "kaggle_competition",
+      "path_or_uri": null,
+      "local_path_policy": "Fill after preparation under benchmarks/real_reuse/assets/ or D:/a_work/gitee for external projects.",
+      "materialization_status": "not_downloaded",
+      "license_status": "review_required_before_use",
+      "required_for_execution": true,
+      "notes": "Held-out validation labels created locally from the training data."
+    },
+    {
+      "slot": "starter_workspace",
+      "source_url_id": "mle_bench_repo",
+      "path_or_uri": null,
+      "local_path_policy": "Fill after preparation under benchmarks/real_reuse/assets/ or D:/a_work/gitee for external projects.",
+      "materialization_status": "not_downloaded",
+      "license_status": "review_required_before_use",
+      "required_for_execution": true,
+      "notes": "Local AIDE-style solution workspace and baseline script."
+    }
+  ],
+  "preparation_plan": {
+    "preparation_status": "not_started",
+    "external_project_root": "D:/a_work/gitee",
+    "commands": [
+      "git clone https://github.com/openai/mle-bench D:/a_work/gitee/mle-bench",
+      "kaggle competitions download -c spaceship-titanic -p benchmarks/real_reuse/assets/AIDE-T1/raw",
+      "python scripts/prepare_real_reuse_aide_fixture.py --task AIDE-T1 --competition spaceship-titanic --raw-dir benchmarks/real_reuse/assets/AIDE-T1/raw --output-dir benchmarks/real_reuse/assets/AIDE-T1"
+    ],
+    "environment_notes": [
+      "Kaggle API credentials and competition-rule acceptance must be handled locally and never committed.",
+      "The local runner should use the same attempt/time/token budget for Summary and PaperToSkill."
+    ],
+    "credentials_policy": "Use local environment variables or user-managed credentials only; never commit API keys, Kaggle tokens, Hugging Face tokens, cookies, or credential-bearing logs."
+  },
+  "scoring_plan": {
+    "scorer_status": "to_implement_next_phase",
+    "metric_name": "validation_score",
+    "metric_family": "kaggle_style_validation_metric",
+    "direction": "higher_is_better",
+    "success_criterion": "PaperToSkill condition produces a valid submission and improves over the starting baseline under the same budget.",
+    "scoring_command_template": "python scripts/score_real_reuse_aide.py --task AIDE-T1 --submission {submission_file} --labels benchmarks/real_reuse/assets/AIDE-T1/validation_labels.csv",
+    "required_outputs": [
+      "submission_file",
+      "validation_labels_or_metric_server"
+    ],
+    "reference_score_boundary": "Treat original paper scores as reported references unless the same dataset, input/output, metric, model/tool budget, and runtime setting are reproduced locally."
+  },
+  "run_controls": {
+    "first_pass_human_intervention": "none_mid_run",
+    "same_run_budget_across_conditions": true,
+    "same_prompt_template_across_conditions": true
+  },
+  "next_action": "Implement the task-specific preparer/scorer and materialize local assets before any Summary vs PaperToSkill run."
+}

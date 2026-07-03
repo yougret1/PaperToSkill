@@ -1,0 +1,122 @@
+{
+  "schema_version": "0.1",
+  "benchmark_id": "papertoskill_real_reuse_v0",
+  "task_id": "AIDE-T2",
+  "task_spec": "benchmarks/real_reuse/tasks/AIDE-T2.json",
+  "fixture_manifest": "benchmarks/real_reuse/fixtures/AIDE-T2.json",
+  "source_paper_id": "aide",
+  "domain": "ML engineering",
+  "status": "candidate_assets_selected_preparation_pending",
+  "evidence_boundary": "This file records selected candidate assets and preparation commands only. It does not download data, clone repositories, execute tasks, score outputs, or provide downstream task-success results.",
+  "selected_candidate": {
+    "id": "mle_bench_spaceship_titanic_debug_workspace",
+    "label": "MLE-bench Spaceship Titanic weak-script debug fixture",
+    "reason": "Uses the same objective competition but turns it into a weak-script plus score/error-feedback search task, directly exercising AIDE-style iterative refinement.",
+    "relation_to_source_paper": "AIDE's core method is iterative exploration and selection over candidate code nodes; this fixture makes the node-improvement objective explicit.",
+    "candidate_status": "selected_for_preparation"
+  },
+  "source_urls": [
+    {
+      "id": "aide_code",
+      "url": "https://github.com/WecoAI/aideml",
+      "kind": "source_paper_code",
+      "source_type": "primary_source_or_official_distribution",
+      "checked_on": "2026-07-03",
+      "reachability_status": "declared_for_preparation_recheck",
+      "notes": "AIDE implementation source for iterative code exploration."
+    },
+    {
+      "id": "mle_bench_repo",
+      "url": "https://github.com/openai/mle-bench",
+      "kind": "benchmark_harness",
+      "source_type": "primary_source_or_official_distribution",
+      "checked_on": "2026-07-03",
+      "reachability_status": "declared_for_preparation_recheck",
+      "notes": "MLE-bench harness and example competition workflow."
+    },
+    {
+      "id": "kaggle_competition",
+      "url": "https://www.kaggle.com/competitions/spaceship-titanic",
+      "kind": "dataset_and_metric",
+      "source_type": "primary_source_or_official_distribution",
+      "checked_on": "2026-07-03",
+      "reachability_status": "declared_for_preparation_recheck",
+      "notes": "Candidate data and validation metric; local terms review required before download."
+    }
+  ],
+  "candidate_assets": [
+    {
+      "slot": "weak_script",
+      "source_url_id": "mle_bench_repo",
+      "path_or_uri": null,
+      "local_path_policy": "Fill after preparation under benchmarks/real_reuse/assets/ or D:/a_work/gitee for external projects.",
+      "materialization_status": "not_downloaded",
+      "license_status": "review_required_before_use",
+      "required_for_execution": true,
+      "notes": "Local intentionally weak baseline script to be generated before execution."
+    },
+    {
+      "slot": "error_or_score_feedback",
+      "source_url_id": "kaggle_competition",
+      "path_or_uri": null,
+      "local_path_policy": "Fill after preparation under benchmarks/real_reuse/assets/ or D:/a_work/gitee for external projects.",
+      "materialization_status": "not_downloaded",
+      "license_status": "review_required_before_use",
+      "required_for_execution": true,
+      "notes": "Objective validation feedback generated from the weak script."
+    },
+    {
+      "slot": "validation_split",
+      "source_url_id": "kaggle_competition",
+      "path_or_uri": null,
+      "local_path_policy": "Fill after preparation under benchmarks/real_reuse/assets/ or D:/a_work/gitee for external projects.",
+      "materialization_status": "not_downloaded",
+      "license_status": "review_required_before_use",
+      "required_for_execution": true,
+      "notes": "Held-out validation split for the debug loop."
+    },
+    {
+      "slot": "starter_workspace",
+      "source_url_id": "mle_bench_repo",
+      "path_or_uri": null,
+      "local_path_policy": "Fill after preparation under benchmarks/real_reuse/assets/ or D:/a_work/gitee for external projects.",
+      "materialization_status": "not_downloaded",
+      "license_status": "review_required_before_use",
+      "required_for_execution": true,
+      "notes": "Workspace containing baseline, task prompt, and scoring harness."
+    }
+  ],
+  "preparation_plan": {
+    "preparation_status": "not_started",
+    "external_project_root": "D:/a_work/gitee",
+    "commands": [
+      "git clone https://github.com/openai/mle-bench D:/a_work/gitee/mle-bench",
+      "kaggle competitions download -c spaceship-titanic -p benchmarks/real_reuse/assets/AIDE-T2/raw",
+      "python scripts/prepare_real_reuse_aide_fixture.py --task AIDE-T2 --competition spaceship-titanic --make-weak-script --raw-dir benchmarks/real_reuse/assets/AIDE-T2/raw --output-dir benchmarks/real_reuse/assets/AIDE-T2"
+    ],
+    "environment_notes": [
+      "Use the same weak script and initial feedback for all conditions.",
+      "Do not let the model see validation labels directly; scoring is via the runner."
+    ],
+    "credentials_policy": "Use local environment variables or user-managed credentials only; never commit API keys, Kaggle tokens, Hugging Face tokens, cookies, or credential-bearing logs."
+  },
+  "scoring_plan": {
+    "scorer_status": "to_implement_next_phase",
+    "metric_name": "best_node_score",
+    "metric_family": "validation_metric_with_debug_success",
+    "direction": "higher_is_better",
+    "success_criterion": "The final candidate runs and improves over the provided weak script under the same attempt budget.",
+    "scoring_command_template": "python scripts/score_real_reuse_aide.py --task AIDE-T2 --candidate-script {candidate_script} --labels benchmarks/real_reuse/assets/AIDE-T2/validation_labels.csv",
+    "required_outputs": [
+      "candidate_script",
+      "validation_feedback"
+    ],
+    "reference_score_boundary": "Treat original paper scores as reported references unless the same dataset, input/output, metric, model/tool budget, and runtime setting are reproduced locally."
+  },
+  "run_controls": {
+    "first_pass_human_intervention": "none_mid_run",
+    "same_run_budget_across_conditions": true,
+    "same_prompt_template_across_conditions": true
+  },
+  "next_action": "Implement the task-specific preparer/scorer and materialize local assets before any Summary vs PaperToSkill run."
+}

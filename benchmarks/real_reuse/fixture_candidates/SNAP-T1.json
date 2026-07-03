@@ -1,0 +1,123 @@
+{
+  "schema_version": "0.1",
+  "benchmark_id": "papertoskill_real_reuse_v0",
+  "task_id": "SNAP-T1",
+  "task_spec": "benchmarks/real_reuse/tasks/SNAP-T1.json",
+  "fixture_manifest": "benchmarks/real_reuse/fixtures/SNAP-T1.json",
+  "source_paper_id": "snapatac2",
+  "domain": "Single-cell omics",
+  "status": "candidate_assets_selected_preparation_pending",
+  "evidence_boundary": "This file records selected candidate assets and preparation commands only. It does not download data, clone repositories, execute tasks, score outputs, or provide downstream task-success results.",
+  "selected_candidate": {
+    "id": "snapatac2_pbmc5k_embedding_pipeline",
+    "label": "SnapATAC2 PBMC5k clustering/embedding tutorial fixture",
+    "reason": "The official SnapATAC2 tutorial dataset supports a small single-cell analysis pipeline with objective completion, runtime, memory, and output-artifact checks.",
+    "relation_to_source_paper": "SnapATAC2's contribution is scalable single-cell omics analysis; this candidate keeps the same pipeline style at local scale.",
+    "candidate_status": "selected_for_preparation"
+  },
+  "source_urls": [
+    {
+      "id": "snapatac2_code",
+      "url": "https://github.com/scverse/SnapATAC2",
+      "kind": "source_paper_code",
+      "source_type": "primary_source_or_official_distribution",
+      "checked_on": "2026-07-03",
+      "reachability_status": "declared_for_preparation_recheck",
+      "notes": "Current SnapATAC2 implementation repository."
+    },
+    {
+      "id": "snapatac2_tutorials",
+      "url": "https://scverse.org/SnapATAC2/tutorials/index.html",
+      "kind": "official_docs",
+      "source_type": "primary_source_or_official_distribution",
+      "checked_on": "2026-07-03",
+      "reachability_status": "declared_for_preparation_recheck",
+      "notes": "Official tutorial index with dataset-backed analysis workflows."
+    },
+    {
+      "id": "snapatac2_api",
+      "url": "https://scverse.org/SnapATAC2/api.html",
+      "kind": "official_api_docs",
+      "source_type": "primary_source_or_official_distribution",
+      "checked_on": "2026-07-03",
+      "reachability_status": "declared_for_preparation_recheck",
+      "notes": "API reference for datasets, preprocessing, embedding, and clustering calls."
+    }
+  ],
+  "candidate_assets": [
+    {
+      "slot": "dataset_manifest",
+      "source_url_id": "snapatac2_tutorials",
+      "path_or_uri": null,
+      "local_path_policy": "Fill after preparation under benchmarks/real_reuse/assets/ or D:/a_work/gitee for external projects.",
+      "materialization_status": "not_downloaded",
+      "license_status": "review_required_before_use",
+      "required_for_execution": true,
+      "notes": "PBMC5k tutorial dataset or equivalent documented small dataset."
+    },
+    {
+      "slot": "preprocessing_notes",
+      "source_url_id": "snapatac2_api",
+      "path_or_uri": null,
+      "local_path_policy": "Fill after preparation under benchmarks/real_reuse/assets/ or D:/a_work/gitee for external projects.",
+      "materialization_status": "not_downloaded",
+      "license_status": "review_required_before_use",
+      "required_for_execution": true,
+      "notes": "Source-consistent preprocessing call sequence."
+    },
+    {
+      "slot": "resource_budget",
+      "source_url_id": "snapatac2_tutorials",
+      "path_or_uri": null,
+      "local_path_policy": "Fill after preparation under benchmarks/real_reuse/assets/ or D:/a_work/gitee for external projects.",
+      "materialization_status": "not_downloaded",
+      "license_status": "review_required_before_use",
+      "required_for_execution": true,
+      "notes": "Local runtime and memory budget to define before execution."
+    },
+    {
+      "slot": "expected_artifact_schema",
+      "source_url_id": "snapatac2_api",
+      "path_or_uri": null,
+      "local_path_policy": "Fill after preparation under benchmarks/real_reuse/assets/ or D:/a_work/gitee for external projects.",
+      "materialization_status": "not_downloaded",
+      "license_status": "review_required_before_use",
+      "required_for_execution": true,
+      "notes": "Embedding/clustering output schema for the scorer."
+    }
+  ],
+  "preparation_plan": {
+    "preparation_status": "not_started",
+    "external_project_root": "D:/a_work/gitee",
+    "commands": [
+      "git clone https://github.com/scverse/SnapATAC2 D:/a_work/gitee/SnapATAC2",
+      "python scripts/prepare_real_reuse_snapatac2_fixture.py --task SNAP-T1 --dataset pbmc5k --output-dir benchmarks/real_reuse/assets/SNAP-T1",
+      "python scripts/score_real_reuse_snapatac2.py --task SNAP-T1 --artifact-dir results/real_reuse/runs/SNAP-T1/{condition}"
+    ],
+    "environment_notes": [
+      "Pin the SnapATAC2 version and Python environment before comparing conditions.",
+      "Use completion plus machine-readable artifact checks; avoid subjective biological interpretation as the main score."
+    ],
+    "credentials_policy": "Use local environment variables or user-managed credentials only; never commit API keys, Kaggle tokens, Hugging Face tokens, cookies, or credential-bearing logs."
+  },
+  "scoring_plan": {
+    "scorer_status": "to_implement_next_phase",
+    "metric_name": "runtime_memory_quality",
+    "metric_family": "resource_and_embedding_quality",
+    "direction": "mixed",
+    "success_criterion": "Pipeline completes under the declared budget and produces expected embedding or clustering artifacts.",
+    "scoring_command_template": "python scripts/score_real_reuse_snapatac2.py --task SNAP-T1 --artifact-dir {artifact_dir}",
+    "required_outputs": [
+      "embedding_or_cluster_output",
+      "runtime_log",
+      "memory_log"
+    ],
+    "reference_score_boundary": "Treat original paper scores as reported references unless the same dataset, input/output, metric, model/tool budget, and runtime setting are reproduced locally."
+  },
+  "run_controls": {
+    "first_pass_human_intervention": "none_mid_run",
+    "same_run_budget_across_conditions": true,
+    "same_prompt_template_across_conditions": true
+  },
+  "next_action": "Implement the task-specific preparer/scorer and materialize local assets before any Summary vs PaperToSkill run."
+}
