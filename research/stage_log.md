@@ -3033,3 +3033,25 @@ Evidence boundary:
   does not append AIDE rows to `results/real_reuse/raw_rows.jsonl`, and does
   not update the AAAI table with AIDE scores. Synthetic CSVs used in unit tests
   are test fixtures, not paper evidence.
+
+## 2026-07-03 Phase 89
+
+Actions:
+
+- Retried `git push origin main` after the earlier Phase 87 GitHub HTTPS
+  connectivity blocker.
+- Recorded the remote-save recovery in
+  `research/run_logs/2026-07-03_phase89_remote_save_after_aide_execution_layer.md`.
+
+Results:
+
+- `git push origin main` succeeded, moving the remote from `ad1f9f2` to
+  `00118f6`.
+- The remote now contains the Phase 87 REF runner/raw rows, the Phase 87 push
+  blocker note, and the Phase 88 AIDE execution-layer commit.
+
+Evidence boundary:
+
+- Phase 89 is remote-save evidence only. It does not add new task results,
+  clear the missing Kaggle `train.csv` blocker, or complete the eight-task
+  real-reuse benchmark.
