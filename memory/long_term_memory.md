@@ -118,9 +118,17 @@ Current supported claims:
   checkout's remote is the SakanaAI upstream. The archive backs up the local
   coderxiaoc/BFTS integration patch inside the PaperToSkill GitHub history
   without committing raw API keys or local presentation/build artifacts.
+- Phase 79 real-reuse planning: the next stronger validity target is
+  original-style paper-task reuse over eight planned tasks from AIDE,
+  SWE-agent, Reflexion, and SnapATAC2. Toolformer and AI Scientist-v2 remain
+  sanity/auxiliary cases. This is planning only until future
+  `results/real_reuse/` raw rows exist.
 
 Current unsupported claims:
 
+- PaperToSkill improves real original-style task outcomes across AIDE,
+  SWE-agent, Reflexion, SnapATAC2, or other domains; the Phase 79 real-reuse
+  design is planned but not executed.
 - Saved-response model-ablation scoring as proof of live downstream task
   success, broad model quality, provider billing, or provider economics.
 - Saved-response output-contract scoring as proof of real live task success.
@@ -179,6 +187,9 @@ Use these as entry points instead of searching the whole repo first:
   preflight report generator; no network calls.
 - `research/new_paper_triage_2026-07-01.md`: triage of Paper2Agent,
   AgenticSciML, and Reasoning Manifolds against PaperToSkill.
+- `research/real_reuse_experiment_plan.md`: planned next-stage real-reuse
+  protocol with eight `paper-task` rows, table layouts, and evidence
+  boundaries. It is not a completed result artifact.
 - `external/ai_scientist_v2_patches/`: reproducibility backup for local
   AI-Scientist-v2 adaptations used by the bounded Phase 76 integration run.
 - `benchmarks/provider_billing_evidence_v0.json`: provider-billing evidence

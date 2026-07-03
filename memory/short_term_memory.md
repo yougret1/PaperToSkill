@@ -3,10 +3,25 @@
 Read this file after any context compaction or session resume. Also read
 `memory/long_term_memory.md` before taking project actions.
 
-Current date: 2026-07-02.
+Current date: 2026-07-03.
 
 ## Latest Resume/Completion Note
 
+- 2026-07-03 discussion update: the next-step experiment plan now treats
+  "original-style paper-task reuse" as the main future validity evidence. The
+  user agreed with an 8-task direction across AIDE, SWE-agent, Reflexion, and
+  one non-agent/data-analysis paper, with Toolformer and AI-Scientist-v2 kept as
+  sanity/auxiliary cases. `C:\Users\19351\Desktop\tem\nextStep.md` is the live
+  discussion record. Do not rewrite the AAAI Results as if these new real-reuse
+  experiments are complete; first update planning files, then revise paper text
+  after execution.
+- 2026-07-03 Phase 79 planning sync is in progress/completed locally: added
+  `research/real_reuse_experiment_plan.md`; updated `paper/outline.md`,
+  `research/experiment_queue.md`, `research/claim_evidence_matrix.md`,
+  `research/goal_completion_audit.md`, `research/runbook.md`,
+  `research/artifact_map.md`, `research/stage_log.md`, and
+  `research/run_logs/2026-07-03_phase79_real_reuse_planning.md`. This is
+  planning only; no `results/real_reuse/` evidence exists yet.
 - 2026-07-02 Phase 77 final sync completed after reviewing the added papers and
   API docs.
 - New-papers decision remains unchanged after verification:
@@ -100,13 +115,26 @@ Current date: 2026-07-02.
 
 ## Current Phase
 
-Phase 78 is the current local phase. Phase 68 was committed as
+Phase 79 is the current local phase. Phase 68 was committed as
 `5548070 Refresh memory anchors after remote save` and pushed to `origin/main`
 on 2026-06-20. Phase 69 syncs the AAAI submission-decision execution packet
 with the validated decision-record helper; no external evidence status is
 promoted and no AAAI option is selected. Phase 70 updates the direct provider
 diagnostic to match the current coderxiaoc API protocols: Claude uses
 Anthropic Messages and GPT uses OpenAI Responses.
+
+Phase 79 evidence:
+
+- Next-stage validity is now planned as original-style real-reuse tasks, not
+  offline coverage alone.
+- Main candidate papers/tasks are AIDE-T1/T2, SWE-T1/T2, REF-T1/T2, and
+  SNAP-T1/T2. Toolformer and AI Scientist-v2 remain sanity/auxiliary cases.
+- Summary is the main baseline. Abstract and main-table Full Excerpt columns
+  are dropped; Full Excerpt is only a small sanity check.
+- LLM ablation must be attached to the real-reuse tasks, not only the old
+  saved-response usage-plan protocol.
+- Do not update AAAI Results as completed real-reuse evidence until raw rows
+  exist under future `results/real_reuse/`.
 
 Phase 76/77 evidence:
 

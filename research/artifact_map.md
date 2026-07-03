@@ -19,6 +19,7 @@
 | `research/idea_cards.md` | Candidate ideas and selection notes | Created |
 | `research/claim_evidence_matrix.md` | Claims mapped to experiments/evidence | Created |
 | `research/experiment_design.md` | Planned evaluation and smoke tests | Created |
+| `research/real_reuse_experiment_plan.md` | Next-stage original-style paper-task reuse plan, table layouts, candidate papers, and evidence boundaries | Planned |
 | `research/experiment_queue.md` | Phase 1 and Phase 2 runnable queue | Created |
 | `research/review_report.md` | Internal adversarial review and submission-gate risks | Created |
 | `research/rebuttal_bank.md` | Evidence-bounded answers to likely reviewer objections | Created |
@@ -389,4 +390,6 @@
 | Artifact | Purpose | Status |
 | --- | --- | --- |
 | Model-ablation response logs | Claude/GPT-family/DeepSeek response files and scores after endpoint/model availability | Created |
+| `benchmarks/real_reuse/` | Future task specs for the eight original-style paper-task reuse experiments | Planned |
+| `results/real_reuse/` | Future raw rows, aggregate tables, sanity checks, cost table, and LLM ablation outputs for real-reuse experiments | Planned |
 | Paper2Agent executable baseline | Full Paper2Agent/MCP runtime comparison, if setup resources become available | Planned |

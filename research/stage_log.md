@@ -2666,3 +2666,35 @@ Evidence boundary:
   invalid dataset loading/synthetic padding and missing `sentence_transformers`.
 - Human-fidelity annotation and final AAAI submission readiness remain pending
   under the recorded `wait_for_external_evidence` policy.
+
+## 2026-07-03 Phase 79
+
+Actions:
+
+- Recorded the next-stage real-reuse experiment design in
+  `research/real_reuse_experiment_plan.md`.
+- Updated `paper/outline.md` so the current deterministic/offline results remain
+  the completed evidence, while original-style paper-task reuse is explicitly a
+  planned next-stage validity experiment.
+- Updated `research/experiment_queue.md`,
+  `research/claim_evidence_matrix.md`, `research/goal_completion_audit.md`,
+  `research/runbook.md`, and `research/artifact_map.md` to track the eight-task
+  plan across AIDE, SWE-agent, Reflexion, and SnapATAC2.
+- Kept Toolformer and AI Scientist-v2 as sanity/auxiliary cases rather than
+  main real-reuse evidence.
+
+Planned task grid:
+
+- AIDE-T1 and AIDE-T2 for ML engineering.
+- SWE-T1 and SWE-T2 for software engineering.
+- REF-T1 and REF-T2 for reasoning/QA or reflection-based retry.
+- SNAP-T1 and SNAP-T2 for single-cell data analysis.
+
+Evidence boundary:
+
+- Phase 79 is planning/protocol evidence only. It does not complete any
+  real-reuse run.
+- The AAAI manuscript results must not be rewritten as if these tasks have been
+  executed.
+- Existing deterministic/offline evaluations remain quality, grounding, cost,
+  and readiness evidence until real-reuse raw rows exist.

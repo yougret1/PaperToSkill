@@ -69,6 +69,52 @@ python scripts\papertoskill_pipeline.py `
   --skill-name papertoskill-pdf-pipeline
 ```
 
+## Planned Real-Reuse Experiments
+
+Source of truth:
+
+```text
+research/real_reuse_experiment_plan.md
+```
+
+Current status: planned only. Do not write the AAAI paper as if these
+experiments have run.
+
+Planned main task grid:
+
+| Task ID | Source Paper | Domain | Main Metric Family |
+| --- | --- | --- | --- |
+| AIDE-T1 | AIDE | ML engineering | Validation score / Kaggle-style metric |
+| AIDE-T2 | AIDE | ML engineering | Validation score / best-node score |
+| SWE-T1 | SWE-agent | Software engineering | Tests passed / resolved |
+| SWE-T2 | SWE-agent | Software engineering | Tests passed / resolved |
+| REF-T1 | Reflexion | Reasoning / QA | Exact match / F1 / success |
+| REF-T2 | Reflexion | Decision / programming | Success / pass rate |
+| SNAP-T1 | SnapATAC2 | Single-cell omics | Runtime, memory, clustering/embedding metric |
+| SNAP-T2 | SnapATAC2 | Single-cell omics | ARI/NMI/runtime/memory |
+
+Execution order:
+
+1. Verify source-paper code, benchmark setup, license, and metric details.
+2. Create task specs under future `benchmarks/real_reuse/`.
+3. Create Summary and PaperToSkill context inputs for each task.
+4. Run agent-only tasks with no mid-run human intervention.
+5. Save raw rows under future `results/real_reuse/raw_rows.*`.
+6. Aggregate table-ready files under future `results/real_reuse/`.
+7. Only after result artifacts exist, revise the AAAI Abstract, Introduction,
+   Experimental Setup, Results, Discussion, Limitations, and Conclusion.
+
+Required boundaries:
+
+- `Summary` is the main baseline.
+- `Abstract` is not part of the main comparison.
+- `Full Excerpt` is a small sanity check only.
+- Original paper scores are `reported references` unless the same environment,
+  data, input/output, metric, model/tool budget, and runtime setting are
+  reproduced.
+- The older saved-response model ablation is not a real-reuse result. Future
+  LLM ablation must run on the real `paper-task` rows.
+
 ## AI-Scientist-v2 Environment
 
 Recommended for stable runs:

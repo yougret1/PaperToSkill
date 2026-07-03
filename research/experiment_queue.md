@@ -44,7 +44,26 @@
 
 | ID | Question | Needed Artifact |
 | --- | --- | --- |
-| E5 | Which benchmark papers should enter the first manual evaluation? | paper PDFs or extracted notes for core split |
-| E6 | How should unsupported instruction rate be scored? | source-map-aware evaluator script and audit task |
-| E7 | How should live harness transfer be evaluated after remote LLM recovery? | paired Codex-style and Claude-style task prompts with execution logs |
-| E8 | How should DeepSeek be refreshed if the alias or credential profile changes? | rerun the DeepSeek slot setup/runner/scorer path while keeping raw keys outside tracked files |
+| E5 | Can PaperToSkill help agents reuse paper methods on original-style input/output tasks? | `research/real_reuse_experiment_plan.md`; future `benchmarks/real_reuse/`; future `results/real_reuse/` |
+| E5.1 | Are the four main papers and eight tasks feasible under objective metrics? | Per-paper task specs for AIDE, SWE-agent, Reflexion, and SnapATAC2 with source-paper reference scores and metric definitions |
+| E5.2 | Can the same task runner compare Summary vs PaperToSkill without mid-run human intervention? | Runner that logs task, condition, model, command, output path, metric, time, tokens, and failure reason |
+| E5.3 | Can the main real-reuse table be generated from raw rows? | Aggregator that emits `results/real_reuse/main_results.{csv,md,json}` and preserves raw rows |
+| E5.4 | Does a small Full Excerpt sanity check change the interpretation? | Three-task sanity table with Summary, PaperToSkill, Full Excerpt, metric, and token columns |
+| E5.5 | Which PaperToSkill components matter once downstream tasks are real? | Optional component-ablation task set with pre-registered workflow checklist and unsupported-error rubric |
+| E5.6 | Does the PaperToSkill effect hold across Claude-family, GPT-family, and DeepSeek-family models? | Real-reuse LLM ablation raw rows and aggregate table, separate from the older saved-response usage-plan protocol |
+| E6 | How should unsupported instruction rate be scored? | Source-map-aware evaluator script, blind annotation rubric, and pre-registered method checklist |
+| E7 | How should live harness transfer be evaluated after remote LLM recovery? | Paired Codex-style and Claude-style task prompts with execution logs, later aligned to real-reuse task specs |
+| E8 | How should DeepSeek be refreshed if the alias or credential profile changes? | Rerun the DeepSeek slot setup/runner/scorer path while keeping raw keys outside tracked files |
+
+## Planned Real-Reuse Task Grid
+
+| Task ID | Source Paper | Domain | Planned Metric | Status |
+| --- | --- | --- | --- | --- |
+| AIDE-T1 | AIDE | ML engineering | Validation score / Kaggle-style metric | Planned |
+| AIDE-T2 | AIDE | ML engineering | Validation score / best-node score | Planned |
+| SWE-T1 | SWE-agent | Software engineering | Tests passed / resolved | Planned |
+| SWE-T2 | SWE-agent | Software engineering | Tests passed / resolved | Planned |
+| REF-T1 | Reflexion | Reasoning / QA | Exact match / F1 / success | Planned |
+| REF-T2 | Reflexion | Decision / programming | Success / pass rate | Planned |
+| SNAP-T1 | SnapATAC2 | Single-cell omics | Runtime, memory, clustering/embedding metric | Planned |
+| SNAP-T2 | SnapATAC2 | Single-cell omics | ARI/NMI/runtime/memory | Planned |

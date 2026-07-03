@@ -15,13 +15,17 @@ responses for all four paper packets under the deterministic output-contract
 evaluator. Phase 73 adds the current GPT and DeepSeek model-ablation saves and
 Phase 74 adds a bounded source-backed Paper2Agent artifact/workflow comparison;
 these are saved-response and artifact-positioning results, not live success or
-MCP baseline evidence.
+MCP baseline evidence. Phase 79 starts a next-stage real-reuse experiment plan
+in `research/real_reuse_experiment_plan.md`; that plan is not yet executed and
+must not be described as completed evidence.
 
 ## Working Title
 
 PaperToSkill: Turning Research Papers into Portable Agent Skills
 
 ## Abstract Claim
+
+Current evidence-bounded claim:
 
 Research papers often contain reusable agent workflows, but those workflows are
 hard for non-expert users to operationalize. PaperToSkill studies whether a
@@ -31,6 +35,13 @@ transfer notes. On four curated agent-method papers, generated skills pass
 deterministic structural rubrics, preserve more task-relevant operational
 coverage than summary baselines, remain under a 1200-word compactness budget,
 and show stronger offline transfer readiness when transfer notes are retained.
+
+Next-stage target claim after additional experiments:
+
+PaperToSkill should be evaluated on original-paper-style input/output tasks to
+test whether agents or users can reuse the source paper's method from the skill
+and obtain acceptable real task outcomes. This claim is planned, not yet
+validated.
 
 ## Contribution Bullets
 
@@ -46,6 +57,9 @@ and show stronger offline transfer readiness when transfer notes are retained.
    summaries, source-span support, compactness, and offline transfer readiness.
 5. A provenance discipline for separating validated claims, inferred transfer
    guidance, blocked live experiments, and failure branches.
+6. Planned next-stage real-reuse evaluation over eight `paper-task` rows across
+   AIDE, SWE-agent, Reflexion, and SnapATAC2, with Toolformer and
+   AI Scientist-v2 retained as sanity/auxiliary cases.
 
 ## Section Plan
 
@@ -102,6 +116,8 @@ Describe extraction:
 
 ### 4. Experiments
 
+Current completed benchmark:
+
 Papers:
 
 - AI Scientist-v2: automated research workflow and agentic tree search.
@@ -124,6 +140,19 @@ Metrics:
 - source-span support rate;
 - word count and compactness budget;
 - unsupported instruction rate where available.
+
+Next-stage real-reuse benchmark plan:
+
+- Main candidate papers: AIDE, SWE-agent, Reflexion, and SnapATAC2.
+- Main unit: one `paper-task`, meaning a task that preserves the source
+  paper's input/output shape and metric family.
+- Planned task count: eight tasks, two per main paper/domain.
+- Main condition comparison: `Summary` versus `PaperToSkill`.
+- Full excerpts: small sanity check only, not the main table.
+- Model ablation: rerun a subset or all eight real-reuse tasks across
+  Claude-family, GPT-family, and DeepSeek-family slots using the same runner,
+  budget, prompts, and scoring logic.
+- Source of truth: `research/real_reuse_experiment_plan.md`.
 
 ### 5. Results
 
@@ -171,6 +200,11 @@ Interpretation: PaperToSkill preserves operational paper details that short
 summaries omit. The result is an artifact-readiness and coverage result, not yet
 a live agent success-rate result.
 
+Planned interpretation for next-stage work: if real-reuse experiments are
+completed, move the main evidence from artifact readiness to original-style
+paper-method reuse. Until then, the real-reuse tables remain planned evidence
+only.
+
 ### 6. Limitations
 
 Current limitations:
@@ -205,9 +239,9 @@ Current limitations:
 
 PaperToSkill shows that papers can be translated into compact, source-grounded
 skills with measurable offline advantages over summaries. The next stage is live
-execution across harnesses, human fidelity review, a full executable
-Paper2Agent/MCP baseline if feasible, and stress tests on papers that are less
-directly procedural.
+execution on original-style paper tasks, human fidelity review, a full
+executable Paper2Agent/MCP baseline if feasible, and stress tests on papers that
+are less directly procedural.
 
 ## Figure And Table Plan
 
@@ -229,3 +263,5 @@ directly procedural.
 | Appendix: Model response cost proxy | `results/tables/model_response_cost_proxy.md` | Local output-token proxy for saved Claude/GPT-family model-ablation responses |
 | Appendix: AAAI package | `paper/aaai/` | Official AAAI-27 template provenance and LaTeX draft |
 | Appendix: Paper2Agent artifact comparison | `results/tables/paper2agent_artifact_comparison.md` | Source-backed skill-vs-MCP artifact/workflow positioning table |
+| Planned: Real reuse main results | `research/real_reuse_experiment_plan.md`; future `results/real_reuse/` | Original-style paper-task reuse validity |
+| Planned: LLM real-reuse ablation | `research/real_reuse_experiment_plan.md`; future `results/real_reuse/` | Cross-model stability of Summary vs PaperToSkill on real tasks |
