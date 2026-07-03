@@ -23,8 +23,10 @@ Current date: 2026-07-04.
   AAAI/submission/usage/external-evidence/DeepSeek/AI-Scientist-v2 gates; rebuilt
   the AAAI PDF with `pdflatex`, `bibtex`, `pdflatex`, `pdflatex`; full unit
   discovery passed 158 tests; `git diff --check` reported only Windows
-  line-ending warnings; raw-key scan found no matches. Remaining Phase 97
-  action: commit and push the phase backup.
+  line-ending warnings; raw-key scan found no matches. Phase backup committed as
+  `26b474d Run SWE-T1 real reuse rows` and pushed successfully to `origin/main`
+  (`997fce8..26b474d`). Current blocker remains AIDE-T1/T2 official Kaggle
+  `train.csv`.
 - 2026-07-03 Phase 97 SWE-T1 live rows: processed the active AIDE human
   handoff first. `ok.txt` existed, but no official Kaggle Spaceship Titanic
   `train.csv`, Kaggle CLI, Python `kaggle` package, `kaggle.json`, or
