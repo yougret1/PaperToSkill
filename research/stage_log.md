@@ -3324,3 +3324,39 @@ Evidence boundary:
 - It does provide an important failure boundary: PaperToSkill scored higher
   than Summary on both SNAP dry-run tasks, but no SNAP row succeeded because
   complete runtime, memory, and quality artifacts were missing.
+
+## 2026-07-03 Phase 96
+
+Actions:
+
+- Removed the accidental copied SWE-T2 workspace from the PaperToSkill asset
+  tree and rematerialized SWE-T2 in external-workspace mode against
+  `D:\a_work\gitee\astropy__astropy`.
+- Copied SWE-T2 gold/test patches into
+  `benchmarks/real_reuse/assets/SWE-T2/scorer_only/` and updated the manifest
+  so hidden scorer assets no longer point at temporary extraction paths.
+- Fixed SWE patch scoring to resolve candidate and hidden test patch paths
+  before running `git apply` inside the temporary scoring workspace.
+- Ran focused SWE tests, validated the SWE-T2 gold scorer, and ran SWE-T2
+  Summary/PaperToSkill with GPT-family `gpt-5.5`.
+- Regenerated the real-reuse table data and updated the AAAI table/results
+  narrative.
+
+Results:
+
+- Focused SWE tests passed: 8 tests.
+- Gold scorer validation passed: `task_score=1.0`, `success=true`, hidden test
+  patch applied, and both Astropy target tests passed.
+- SWE-T2 Summary/PaperToSkill scored `0.000` / `1.000`.
+- `results/real_reuse/swe_run_report.md` reports `complete` with two scored
+  rows.
+- `results/real_reuse/main_results_plan.md` now reads 10 raw scored rows and
+  fills SWE-T2, REF-T1, REF-T2, SNAP-T1, and SNAP-T2.
+
+Evidence boundary:
+
+- This phase is one locked SWE-Bench Verified-style Astropy instance, not a
+  full SWE-agent reproduction and not the full eight-task benchmark.
+- SWE-T1 remains fixture-pending; AIDE still awaits the real Kaggle
+  Spaceship Titanic `train.csv`; SNAP-T1/T2 remain failure-boundary evidence
+  because both scored rows are below the success threshold.

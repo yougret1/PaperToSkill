@@ -69,6 +69,18 @@ class PrepareRealReuseSWEFixtureTest(unittest.TestCase):
                 "+    return a + b\n",
                 encoding="utf-8",
             )
+            test_patch = tmp_path / "test.patch"
+            test_patch.write_text(
+                "diff --git a/test_buggy.py b/test_buggy.py\n"
+                "--- a/test_buggy.py\n"
+                "+++ b/test_buggy.py\n"
+                "@@ -4,6 +4,7 @@ from buggy import add\n"
+                " class BuggyTest(unittest.TestCase):\n"
+                "     def test_add(self):\n"
+                "         self.assertEqual(add(2, 3), 5)\n"
+                "+        self.assertEqual(add(1, 1), 2)\n",
+                encoding="utf-8",
+            )
 
             output_dir = root / "benchmarks" / "real_reuse" / "assets" / "SWE-T2"
             completed = subprocess.run(
@@ -87,6 +99,8 @@ class PrepareRealReuseSWEFixtureTest(unittest.TestCase):
                     "python -m unittest discover -s .",
                     "--gold-patch",
                     str(gold_patch),
+                    "--test-patch",
+                    str(test_patch),
                     "--output-dir",
                     str(output_dir),
                     "--condition-dir",
@@ -104,12 +118,59 @@ class PrepareRealReuseSWEFixtureTest(unittest.TestCase):
             self.assertTrue((output_dir / "workspace" / "buggy.py").exists())
             self.assertTrue((root / "baselines" / "real_reuse" / "SWE-T2_summary.md").exists())
             hidden = set(manifest["hidden_from_model"])
-            self.assertIn(str(gold_patch.resolve()).replace("\\", "/"), hidden)
+            self.assertIn("benchmarks/real_reuse/assets/SWE-T2/scorer_only/gold.patch", hidden)
+            self.assertIn("benchmarks/real_reuse/assets/SWE-T2/scorer_only/test.patch", hidden)
             visible_slots = {item["slot"] for item in manifest["files"] if item["visibility"] == "model_visible"}
+            hidden_slots = {item["slot"] for item in manifest["files"] if item["visibility"] == "scorer_only"}
             self.assertIn("target_test_command", visible_slots)
+            self.assertIn("test_patch", hidden_slots)
+            self.assertTrue((output_dir / "scorer_only" / "gold.patch").exists())
+            self.assertTrue((output_dir / "scorer_only" / "test.patch").exists())
             prompt = (output_dir / "task_prompt.md").read_text(encoding="utf-8")
             self.assertIn("Return a single unified diff patch", prompt)
             self.assertNotIn("gold.patch", prompt)
+            self.assertNotIn("test.patch", prompt)
+
+    def test_external_workspace_mode_does_not_copy_repo_snapshot(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            root = prepare_temp_root(tmp_path)
+            repo = tmp_path / "repo"
+            write_tiny_repo(repo)
+            output_dir = root / "benchmarks" / "real_reuse" / "assets" / "SWE-T2"
+
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--root",
+                    str(root),
+                    "--task",
+                    "SWE-T2",
+                    "--workspace-mode",
+                    "external",
+                    "--repo-source",
+                    str(repo),
+                    "--issue-text",
+                    "The add helper fails the target unit test.",
+                    "--test-command",
+                    "python -m unittest discover -s .",
+                    "--output-dir",
+                    str(output_dir),
+                    "--condition-dir",
+                    str(root / "baselines" / "real_reuse"),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            manifest = json.loads((output_dir / "asset_manifest.json").read_text(encoding="utf-8"))
+            self.assertEqual(str(repo.resolve()).replace("\\", "/"), manifest["workspace_dir"])
+            self.assertFalse((output_dir / "workspace").exists())
+            self.assertTrue((output_dir / "workspace_readme.md").exists())
+            visible_slots = {item["slot"] for item in manifest["files"] if item["visibility"] == "model_visible"}
+            self.assertIn("workspace_readme", visible_slots)
 
 
 if __name__ == "__main__":

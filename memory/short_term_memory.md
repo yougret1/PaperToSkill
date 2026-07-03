@@ -7,6 +7,55 @@ Current date: 2026-07-03.
 
 ## Latest Resume/Completion Note
 
+- 2026-07-03 Phase 96 SWE-T2 live rows: cleaned the accidental copied
+  `benchmarks/real_reuse/assets/SWE-T2/workspace` directory and rematerialized
+  SWE-T2 with `--workspace-mode external` pointing to
+  `D:\a_work\gitee\astropy__astropy`. Fixed
+  `scripts/score_real_reuse_swe.py` so relative candidate/test patch paths are
+  resolved before scoring in the temporary workspace; focused SWE tests passed
+  (8 tests). Gold scorer validation passed with `task_score=1.0`,
+  `success=true`, hidden test patch applied, and 2/2 Astropy target tests
+  passed. Ran `scripts/run_real_reuse_swe.py` with GPT-family `gpt-5.5` for
+  SWE-T2 Summary and PaperToSkill. `results/real_reuse/swe_run_report.md`
+  reports `complete` with two scored rows: Summary `0.000`
+  (`patch_apply_failed`) and PaperToSkill `1.000` (patch applied and tests
+  passed). Updated `results/real_reuse/main_results_plan.*`,
+  `paper/aaai/papertoskill_tables.tex`, `paper/aaai/papertoskill_aaai2027.tex`,
+  `research/claim_evidence_matrix.md`, `research/experiment_queue.md`,
+  `research/artifact_map.md`, `research/goal_completion_audit.md`,
+  `research/runbook.md`, `paper/outline.md`, `results/result_cards.md`, and
+  `research/stage_log.md`; added
+  `research/run_logs/2026-07-03_phase96_swe_t2_real_reuse_rows.md`. Current
+  main real-reuse status: AIDE-T1/T2 `Awaiting dataset`, SWE-T1
+  `Fixture pending`, SWE-T2 `Scored (GPT-family)`, REF-T1/T2
+  `Scored (GPT-family)`, SNAP-T1/T2 `Scored (GPT-family)` but SNAP remains
+  failure-boundary evidence below success threshold. Final local verification
+  passed before commit: focused SWE fixture test passed, full unittest discovery
+  passed 157 tests, all refreshed strict gates passed, `git diff --check`
+  reported only Windows line-ending warnings, raw-key scan found no matches, and
+  the internal SWE-T2 workspace is absent. Remaining phase action: commit and
+  push.
+- 2026-07-03 discussion sync: user again asked whether the current real-reuse
+  experiment-design discussion requires modifying other parts of the original
+  paper. Rechecked `paper/aaai/papertoskill_aaai2027.tex`,
+  `paper/aaai/papertoskill_tables.tex`, and
+  `results/real_reuse/main_results_plan.md`. Current conclusion: no immediate
+  full-paper rewrite; only wording/status alignment is appropriate now.
+  `Experimental Setup` already lists the eight real-reuse paper-tasks, and
+  `Results` correctly treats REF/SNAP as partial GPT-family raw rows rather
+  than completed aggregate effectiveness. SNAP remains failure-boundary
+  evidence because both scored rows are below threshold. Updated
+  `C:\Users\19351\Desktop\tem\nextStep.md` with this confirmation.
+- 2026-07-03 discussion sync: user asked whether the current experiment-design
+  discussion requires modifying other parts of the existing paper. Current
+  answer: do not rewrite the whole AAAI manuscript now. Keep the cautious
+  evidence boundary and do only wording/status alignment until more real-reuse
+  rows exist. Current real-reuse status is AIDE `Awaiting dataset`, SWE-agent
+  `Fixture pending`, REF `Scored (GPT-family)`, and SnapATAC2
+  `Scored (GPT-family)`. SNAP-T1/T2 are scored GPT-family miniature-fixture
+  rows where PaperToSkill is above Summary but all rows fail the success
+  threshold, so they are failure-boundary evidence only. Updated
+  `C:\Users\19351\Desktop\tem\nextStep.md` with this correction.
 - 2026-07-03 Phase 95 SnapATAC2 live rows: retried `git push origin main` for
   Phase 94 but GitHub port 443 was unreachable. Then ran
   `scripts/run_real_reuse_snapatac2.py` with GPT-family `gpt-5.5` for

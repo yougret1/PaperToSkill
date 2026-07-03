@@ -191,7 +191,7 @@ temporary copy of the prepared workspace and running the locked test command:
 
 ```powershell
 python scripts\score_real_reuse_swe.py --task SWE-T1 --patch path\to\candidate.patch --workspace benchmarks\real_reuse\assets\SWE-T1\workspace --test-command-file benchmarks\real_reuse\assets\SWE-T1\target_test_command.txt --output-json path\to\metric.json
-python scripts\score_real_reuse_swe.py --task SWE-T2 --patch path\to\candidate.patch --workspace benchmarks\real_reuse\assets\SWE-T2\workspace --test-command-file benchmarks\real_reuse\assets\SWE-T2\target_test_command.txt --output-json path\to\metric.json
+python scripts\score_real_reuse_swe.py --task SWE-T2 --patch path\to\candidate.patch --workspace 'D:\a_work\gitee\astropy__astropy' --test-command-file benchmarks\real_reuse\assets\SWE-T2\target_test_command.txt --test-patch benchmarks\real_reuse\assets\SWE-T2\scorer_only\test.patch --output-json path\to\metric.json
 ```
 
 After SWE fixture manifests exist and are inspected, run Summary and
@@ -206,8 +206,9 @@ Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_API_KEY -ErrorAction SilentlyContinue
 ```
 
 Do not treat missing credentials, provider errors, or missing SWE fixture assets
-as model-quality failures. Do not append SWE score claims to the paper until
-`results/real_reuse/raw_rows.jsonl` contains scored SWE rows.
+as model-quality failures. SWE-T2 already has one scored GPT-family run; do not
+turn that single row into an aggregate SWE-agent or eight-task claim until the
+remaining real-reuse rows are executed.
 
 Run the locked Reflexion Summary-vs-PaperToSkill rows with the GPT-family
 Responses profile. Set the API key only in the shell, never in tracked files:

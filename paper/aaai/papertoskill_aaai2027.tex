@@ -159,12 +159,13 @@ Table~\ref{tab:real-reuse-main}. It contains eight original-style
 \emph{paper-task} rows across AIDE, SWE-agent, Reflexion, and SnapATAC2. Each
 row fixes the source paper, task input/output shape, metric family, reported
 reference boundary, and the two main conditions: Summary and PaperToSkill. At
-this revision, the Reflexion and SnapATAC2 rows have one GPT-family run with
-scored Summary and PaperToSkill outputs. AIDE still awaits the real competition
-dataset and SWE-agent remains fixture-pending. The SnapATAC2 rows use prepared
-official miniature fixtures and are scored local dry-run tasks rather than full
-paper reproductions. The filled REF/SNAP cells are still a partial slice of the
-downstream protocol and do not complete the eight-task benchmark.
+this revision, SWE-T2, the Reflexion rows, and the SnapATAC2 rows have one
+GPT-family run with scored Summary and PaperToSkill outputs. AIDE still awaits
+the real competition dataset and SWE-T1 remains fixture-pending. The SnapATAC2
+rows use prepared official miniature fixtures and are scored local dry-run tasks
+rather than full paper reproductions. The filled SWE/REF/SNAP cells are still a
+partial slice of the downstream protocol and do not complete the eight-task
+benchmark.
 
 \input{papertoskill_tables}
 
@@ -172,16 +173,19 @@ downstream protocol and do not complete the eight-task benchmark.
 
 The completed results below are deterministic/offline quality and grounding
 evidence for the current PaperToSkill artifacts, plus partial real-reuse
-execution evidence. In the real-reuse table, REF-T1 and REF-T2 are scored for
-one GPT-family run: both Summary and PaperToSkill reach 1.000 on the locked
-Reflexion QA and retry fixtures. SNAP-T1 and SNAP-T2 are also scored for one
+execution evidence. SWE-T2 is scored for one GPT-family run on a locked
+SWE-Bench Verified-style Astropy instance: the Summary patch fails to apply and
+scores 0.000, while the PaperToSkill patch applies, passes the hidden target
+tests, and scores 1.000. In the real-reuse table, REF-T1 and REF-T2 are also
+scored for one GPT-family run: both Summary and PaperToSkill reach 1.000 on the
+locked Reflexion QA and retry fixtures. SNAP-T1 and SNAP-T2 are scored for one
 GPT-family run over prepared official miniature fixtures. PaperToSkill scores
 above Summary on these two SnapATAC2 dry-run tasks (0.500 vs. 0.000 and 0.400
 vs. 0.200), but all SNAP scores remain below the success threshold, mainly
 because the responses did not produce complete runtime, memory, and quality
-artifacts. These four filled tasks show that the REF/SNAP runner, scorer, and
-table-update paths are live; they do not yet establish aggregate advantage over
-Summary or complete the main eight-task experiment. All four generated skills score 20/20 on deterministic skill rubrics. On context
+artifacts. These five filled tasks show that the SWE/REF/SNAP runner, scorer,
+and table-update paths are live; they do not yet establish aggregate advantage
+over Summary or complete the main eight-task experiment. All four generated skills score 20/20 on deterministic skill rubrics. On context
 coverage, the generated skills score 7.867/9 for AI Scientist-v2, 8.267/9 for
 Reflexion, 9.1/10 for AIDE, and 8.9/10 for Toolformer. The generic-summary and
 abstract-only baselines score substantially lower across all four cases

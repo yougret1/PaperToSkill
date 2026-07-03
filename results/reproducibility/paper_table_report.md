@@ -47,9 +47,9 @@ Evidence boundary: this report checks that AAAI LaTeX table values match generat
 | paper_table_real_reuse_swe_t2_output | ready | value=Focused patch + verification | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_swe_t2_metric | ready | value=tests_passed | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_swe_t2_reference | ready | value=Reported SWE-agent ref. | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
-| paper_table_real_reuse_swe_t2_summary_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
-| paper_table_real_reuse_swe_t2_papertoskill_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
-| paper_table_real_reuse_swe_t2_status | ready | value=Fixture pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t2_summary_score | ready | value=0.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t2_papertoskill_score | ready | value=1.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t2_status | ready | value=Scored (GPT-family) | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_ref_t1_task_id | ready | value=REF-T1 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_ref_t1_source_paper | ready | value=Reflexion | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_ref_t1_domain | ready | value=Reasoning / QA | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |

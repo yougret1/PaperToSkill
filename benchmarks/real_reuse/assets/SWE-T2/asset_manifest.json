@@ -1,0 +1,104 @@
+{
+  "schema_version": "0.1",
+  "benchmark_id": "papertoskill_real_reuse_v0",
+  "task_id": "SWE-T2",
+  "source_paper_id": "swe_agent",
+  "status": "prepared_assets_ready_for_dry_scoring",
+  "prepared_on": "2026-07-03",
+  "evidence_boundary": "Prepared SWE-agent fixture assets and condition contexts for dry scoring. This manifest does not run a model, compare Summary against PaperToSkill, score downstream outputs, or claim task success.",
+  "source_snapshot": {
+    "repo_source": "D:\\a_work\\gitee\\astropy__astropy",
+    "locked_task_instance": {
+      "source_kind": "swe_bench_verified_test_instance",
+      "dataset_id": "princeton-nlp/SWE-bench_Verified",
+      "dataset_sha": "c104f840cc67f8b6eec6f759ebc8b2693d585d4a",
+      "split": "test",
+      "instance_id": "astropy__astropy-12907",
+      "repo": "astropy/astropy",
+      "base_commit": "d16bfe05a744909de4b27f5875fe0d4ed41ce607",
+      "fail_to_pass": [
+        "astropy/modeling/tests/test_separable.py::test_separable[compound_model6-result6]",
+        "astropy/modeling/tests/test_separable.py::test_separable[compound_model9-result9]"
+      ],
+      "difficulty": "15 min - 1 hour",
+      "reference_boundary": "Strict comparison is only Summary vs PaperToSkill on this same verified instance and run budget."
+    }
+  },
+  "license_and_provenance": {
+    "source_urls": [
+      "https://github.com/SWE-agent/SWE-agent",
+      "https://github.com/princeton-nlp/SWE-bench",
+      "https://huggingface.co/datasets/princeton-nlp/SWE-bench_Verified"
+    ],
+    "local_use_scope": "locked local SWE real-reuse fixture for reproducible experiment setup",
+    "redistribution_note": "Do not redistribute third-party repository snapshots without checking their licenses."
+  },
+  "condition_contexts": [
+    {
+      "condition": "summary",
+      "path": "baselines/real_reuse/SWE-T2_summary.md",
+      "visibility": "model_visible"
+    },
+    {
+      "condition": "papertoskill",
+      "path": "generated_skills/real_reuse/swe_agent/SKILL.md",
+      "visibility": "model_visible"
+    }
+  ],
+  "workspace_dir": "D:/a_work/gitee/astropy__astropy",
+  "hidden_from_model": [
+    "benchmarks/real_reuse/assets/SWE-T2/scorer_only/gold.patch",
+    "benchmarks/real_reuse/assets/SWE-T2/scorer_only/test.patch"
+  ],
+  "asset_dir": "benchmarks/real_reuse/assets/SWE-T2",
+  "files": [
+    {
+      "slot": "instance_metadata",
+      "path": "benchmarks/real_reuse/assets/SWE-T2/instance_metadata.json",
+      "sha256": "d1dd7f3dd7fac046acc8ae8b6047f9182af9e5370f88c4ce1b44d4b0af7b14fc",
+      "visibility": "model_visible"
+    },
+    {
+      "slot": "failing_test",
+      "path": "benchmarks/real_reuse/assets/SWE-T2/failing_test.md",
+      "sha256": "133d339d493d6b7547846bbb940ff81c30ac78b2a821c48932580907631dfcbe",
+      "visibility": "model_visible"
+    },
+    {
+      "slot": "target_test_command",
+      "path": "benchmarks/real_reuse/assets/SWE-T2/target_test_command.txt",
+      "sha256": "064f759207a08db1654e8d31a67b71cffabef729008049b5c252efa227b5f71f",
+      "visibility": "model_visible"
+    },
+    {
+      "slot": "task_prompt",
+      "path": "benchmarks/real_reuse/assets/SWE-T2/task_prompt.md",
+      "sha256": "0b1612a3a1367e99ff68c1084c6904eaddfc79236ecebb43f2c6bde415b1ac28",
+      "visibility": "model_visible"
+    },
+    {
+      "slot": "workspace_readme",
+      "path": "benchmarks/real_reuse/assets/SWE-T2/workspace_readme.md",
+      "sha256": "6a4e609975bf4afe602d5bee2827cdcfdf140fafa23bcbc90a7d93912cece890",
+      "visibility": "model_visible"
+    },
+    {
+      "slot": "summary_context",
+      "path": "baselines/real_reuse/SWE-T2_summary.md",
+      "sha256": "b4849df6fa7e45df0b36fa6d9bc6c3e191cd2395a0365321d7720e379deaf57d",
+      "visibility": "condition_context"
+    },
+    {
+      "slot": "gold_patch",
+      "path": "benchmarks/real_reuse/assets/SWE-T2/scorer_only/gold.patch",
+      "sha256": "05cd42ab8daa126b5b3b6fe9b9bcd580be26bb9b41908cce24cd4f179899914c",
+      "visibility": "scorer_only"
+    },
+    {
+      "slot": "test_patch",
+      "path": "benchmarks/real_reuse/assets/SWE-T2/scorer_only/test.patch",
+      "sha256": "e7c99e5090b51c8b801af9cb64e5e2f94ac0c9ce60d8650c41ea7b8f0ebba1ce",
+      "visibility": "scorer_only"
+    }
+  ]
+}

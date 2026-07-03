@@ -298,12 +298,18 @@ def run_single(args: argparse.Namespace, task_id: str, condition: str, run_id: s
     patch_path.write_text(extract_patch(response_text).rstrip() + "\n", encoding="utf-8")
     workspace_dir = resolve(root, manifest["workspace_dir"])
     test_command_file = resolve(root, asset_file(manifest, "target_test_command"))
+    test_patch_path = None
+    try:
+        test_patch_path = resolve(root, asset_file(manifest, "test_patch"))
+    except KeyError:
+        test_patch_path = None
     metric = score_patch(
         task_id=task_id,
         patch_path=patch_path,
         workspace=workspace_dir,
         test_command=test_command_file.read_text(encoding="utf-8").strip(),
         timeout_seconds=args.score_timeout_seconds,
+        test_patch_path=test_patch_path,
     )
     write_json(metric_path, metric)
     usage = call_status.get("usage", {})

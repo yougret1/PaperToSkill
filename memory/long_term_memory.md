@@ -187,23 +187,29 @@ Current supported claims:
   pre-registered success threshold because complete runtime, memory, and
   quality artifacts were missing or malformed. This is failure-boundary
   evidence only, not a full SnapATAC2 reproduction and not non-agent downstream
-  success. SWE-agent fixture assets/raw rows still remain pending. Phase 91 targeted verification passed
+  success. Phase 96 materialized SWE-T2 as an external-workspace fixture
+  against `D:\a_work\gitee\astropy__astropy`, copied gold/test patches into
+  `benchmarks/real_reuse/assets/SWE-T2/scorer_only/`, fixed relative patch-path
+  scoring, validated the gold scorer, and ran SWE-T2 Summary/PaperToSkill with
+  GPT-family `gpt-5.5`. SWE-T2 Summary/PaperToSkill scored 0.000/1.000:
+  Summary failed patch application and PaperToSkill applied its patch and
+  passed both hidden Astropy target tests. This is one locked SWE-Bench
+  Verified-style instance, not a full SWE-agent reproduction. Phase 91 targeted verification passed
   for 18 SWE/table/preflight/package tests, refreshed the AAAI PDF/table gates,
   and moved SWE rows to `Fixture pending` without adding scores. Phase 92 full
   verification passed 143 unit tests, all strict local gates, `git diff
   --check` with only Windows line-ending warnings, and the raw-key scan with no
   matches. Phase 93 verification passed 153 unit tests and all strict local
   gates before documentation cleanup. Phase 94 verification passed 155 unit
-  tests and all strict local gates before phase save. The real-reuse table now
-  shows SNAP rows as `Ready to run` with scores still `Pending`.
+  tests and all strict local gates before phase save.
 - Phase 84 inserted the main real-reuse table scaffold into the AAAI paper, and
-  Phase 87 filled the REF-T1/REF-T2 cells from raw rows:
+  later phases filled SWE-T2, REF-T1/REF-T2, and SNAP-T1/SNAP-T2 from raw rows:
   `results/real_reuse/main_results_plan.csv`, `.md`, and `.json` are the table
   data source; `paper/aaai/papertoskill_tables.tex` contains
-  `tab:real-reuse-main`; AIDE and SWE-agent score cells remain pending
-  execution. Current statuses are AIDE `Awaiting dataset`, SWE-agent
-  `Fixture pending`, Reflexion `Scored (GPT-family)`, and SnapATAC2
-  `Scored (GPT-family)` with failed local miniature-fixture scores.
+  `tab:real-reuse-main`. Current statuses are AIDE `Awaiting dataset`, SWE-T1
+  `Fixture pending`, SWE-T2 `Scored (GPT-family)`, Reflexion
+  `Scored (GPT-family)`, and SnapATAC2 `Scored (GPT-family)` with failed local
+  miniature-fixture scores.
 - Phase 89 remote save recovered the earlier GitHub HTTPS blocker:
   `git push origin main` succeeded for the Phase 87/88 stack and the follow-up
   remote-save record was also pushed. Use `git status -sb` for the latest exact
@@ -212,7 +218,10 @@ Current supported claims:
 Current unsupported claims:
 
 - PaperToSkill improves real original-style task outcomes across AIDE,
-  SWE-agent, Reflexion, SnapATAC2, or other domains. The REF-T1/REF-T2 slice
+  SWE-agent, Reflexion, SnapATAC2, or other domains. The SWE-T2 slice has one
+  GPT-family Summary-vs-PaperToSkill run where Summary scores 0.000 and
+  PaperToSkill scores 1.000 on a locked Astropy instance; this is positive
+  single-task evidence, not a full SWE-agent result. The REF-T1/REF-T2 slice
   has one GPT-family Summary-vs-PaperToSkill run and both conditions score
   1.000, so it validates the REF execution path but does not show advantage
   over Summary. The SNAP-T1/SNAP-T2 slice has one GPT-family miniature-fixture

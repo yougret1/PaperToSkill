@@ -171,14 +171,20 @@ def prepare(args: argparse.Namespace) -> Path:
     test_command = args.test_command or default_test_command(lock)
 
     output_dir.mkdir(parents=True, exist_ok=True)
-    workspace_dir = output_dir / "workspace"
-    copy_repo_snapshot(repo_source, workspace_dir)
+    if args.workspace_mode == "copy":
+        workspace_dir = output_dir / "workspace"
+        copy_repo_snapshot(repo_source, workspace_dir)
+        readme_path = workspace_dir / "README.papertoskill.md"
+    else:
+        if not repo_source.exists() or not repo_source.is_dir():
+            raise ValueError(f"repo source does not exist or is not a directory: {repo_source}")
+        workspace_dir = repo_source
+        readme_path = output_dir / "workspace_readme.md"
 
     instance_path = output_dir / "instance_metadata.json"
     issue_path = output_dir / ("issue_description.md" if task_id == "SWE-T1" else "failing_test.md")
     test_command_path = output_dir / "target_test_command.txt"
     task_prompt_path = output_dir / "task_prompt.md"
-    readme_path = workspace_dir / "README.papertoskill.md"
     summary_path = write_summary_context(task_id, condition_dir)
 
     instance_payload = {
@@ -220,9 +226,19 @@ Do not expose scorer-only gold patches or hidden test patches to the model.
     ]
     hidden_from_model: list[str] = []
     if args.gold_patch:
-        gold_patch = resolve(root, args.gold_patch)
+        gold_patch_source = resolve(root, args.gold_patch)
+        gold_patch = output_dir / "scorer_only" / "gold.patch"
+        gold_patch.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(gold_patch_source, gold_patch)
         files.append(file_entry(root, gold_patch, "gold_patch", "scorer_only"))
         hidden_from_model.append(relative(root, gold_patch))
+    if args.test_patch:
+        test_patch_source = resolve(root, args.test_patch)
+        test_patch = output_dir / "scorer_only" / "test.patch"
+        test_patch.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(test_patch_source, test_patch)
+        files.append(file_entry(root, test_patch, "test_patch", "scorer_only"))
+        hidden_from_model.append(relative(root, test_patch))
 
     manifest = {
         "schema_version": SCHEMA_VERSION,
@@ -264,10 +280,12 @@ def main() -> int:
     parser = argparse.ArgumentParser(description="Prepare locked SWE real-reuse fixture assets.")
     parser.add_argument("--task", choices=TASK_IDS, required=True)
     parser.add_argument("--repo-source", type=Path, required=True)
+    parser.add_argument("--workspace-mode", choices=("copy", "external"), default="copy")
     parser.add_argument("--issue-text")
     parser.add_argument("--issue-file", type=Path)
     parser.add_argument("--test-command")
     parser.add_argument("--gold-patch", type=Path)
+    parser.add_argument("--test-patch", type=Path)
     parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--condition-dir", type=Path, default=Path("baselines/real_reuse"))

@@ -1095,3 +1095,32 @@
 - Figure/table: `scripts/check_aaai_submission_decision.py`;
   `results/aaai_submission_decision/decision.md`;
   `research/run_logs/2026-06-20_phase55_aaai_submission_decision_preflight.md`.
+
+## SWE-T2 Real-Reuse Rows
+
+- Experiment: locked SWE-Bench Verified-style Astropy instance
+  `astropy__astropy-12907` under Summary vs PaperToSkill with GPT-family
+  `gpt-5.5`.
+- Main result: Summary scores 0.000 because the generated patch fails to apply;
+  PaperToSkill scores 1.000 because the generated patch applies and passes both
+  hidden target tests.
+- Compared baselines: Summary and PaperToSkill use the same task prompt,
+  external Astropy workspace, hidden test patch, no-mid-run-human rule, and
+  scorer.
+- Practical significance: this is the first SWE-agent real-reuse row showing a
+  successful PaperToSkill outcome under the original-style issue-to-patch
+  input/output contract.
+- Statistical evidence: none; this is one locked task instance, not an
+  aggregate SWE-agent benchmark.
+- Failure modes: Summary produced an invalid patch for the target file after
+  the hidden test patch was applied; future SWE-T1/AIDE rows may still fail due
+  fixture availability, patch quality, environment drift, or model behavior.
+- Limitations: the result does not reproduce the full SWE-agent paper, does not
+  establish broad software-engineering effectiveness, and does not complete the
+  eight-task real-reuse benchmark.
+- Claim impact: strengthens the partial downstream evidence but keeps aggregate
+  effectiveness unsupported until remaining AIDE and SWE-T1 rows are executed.
+- Figure/table: `results/real_reuse/swe_run_report.md`;
+  `results/real_reuse/swe_t2_gold_metric.json`;
+  `results/real_reuse/main_results_plan.md`;
+  `paper/aaai/papertoskill_tables.tex`.

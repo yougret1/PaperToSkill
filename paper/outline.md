@@ -241,8 +241,9 @@ Current limitations:
 ### 7. Conclusion
 
 PaperToSkill shows that papers can be translated into compact, source-grounded
-skills with measurable offline advantages over summaries. The next stage is live
-execution on original-style paper tasks, human fidelity review, a full
+skills with measurable offline advantages over summaries and partial real-reuse
+execution evidence. The next stage is to finish live execution on the remaining
+original-style paper tasks, human fidelity review, a full
 executable Paper2Agent/MCP baseline if feasible, and stress tests on papers that
 are less directly procedural.
 
@@ -251,7 +252,7 @@ are less directly procedural.
 | Item | Source Artifact | Purpose |
 | --- | --- | --- |
 | Figure 1: PaperToSkill pipeline | `scripts/papertoskill_extract.py`; `skill/SKILL.md` | Show paper note to skill/source-map flow |
-| Table 1: Real-reuse main experiment | `results/real_reuse/main_results_plan.md` | Eight Summary-vs-PaperToSkill paper-task rows; REF rows succeed, SNAP rows are scored failures, AIDE/SWE remain pending |
+| Table 1: Real-reuse main experiment | `results/real_reuse/main_results_plan.md` | Eight Summary-vs-PaperToSkill paper-task rows; SWE-T2 and REF rows succeed, SNAP rows are scored failures, AIDE/SWE-T1 remain pending |
 | Table 2: Deterministic/offline quality results | `results/tables/main_results.md` | Coverage, source support, compactness |
 | Table 3: Transfer ablation | `results/tables/transfer_ablation.md` | Effect of transfer notes |
 | Table 4: Source grounding | `results/tables/compactness_source_grounding.md` | Source support and compactness |
