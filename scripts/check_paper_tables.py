@@ -14,6 +14,7 @@ from typing import Any
 
 TABLE_SOURCES = {
     "real_reuse_main": "results/real_reuse/main_results_plan.csv",
+    "real_reuse_failure_analysis": "results/real_reuse/failure_analysis.csv",
     "main_results": "results/tables/main_results.csv",
     "transfer_ablation": "results/tables/transfer_ablation.csv",
     "cost_proxy": "results/tables/context_cost_proxy_tokenizer.csv",
@@ -223,6 +224,36 @@ def real_reuse_main_checks(root: Path, tex_rows: list[list[str]]) -> list[Check]
     return checks
 
 
+def real_reuse_failure_checks(root: Path, tex_rows: list[list[str]]) -> list[Check]:
+    source_path = root / TABLE_SOURCES["real_reuse_failure_analysis"]
+    source = by_key(read_csv_rows(source_path), "Task ID")
+    actual = table_rows_by_paper(tex_rows, "tab:real-reuse-failure-analysis", 5)
+    evidence = f"paper/aaai/papertoskill_tables.tex vs {TABLE_SOURCES['real_reuse_failure_analysis']}"
+    checks: list[Check] = []
+    column_map = [
+        ("task_id", 0, "Task ID"),
+        ("summary_outcome", 1, "Summary Outcome"),
+        ("papertoskill_outcome", 2, "PaperToSkill Outcome"),
+        ("boundary_mode", 3, "Boundary Mode"),
+        ("contract_implication", 4, "Contract Implication"),
+    ]
+    for task_id, expected_row in source.items():
+        actual_row = actual.get(task_id)
+        if not actual_row:
+            checks.append(Check(f"paper_table_real_reuse_failure_{slug(task_id)}_row", "fail", "missing row", evidence))
+            continue
+        for suffix, index, column in column_map:
+            checks.append(
+                check_value(
+                    f"paper_table_real_reuse_failure_{slug(task_id)}_{suffix}",
+                    actual_row[index],
+                    expected_row[column],
+                    evidence,
+                )
+            )
+    return checks
+
+
 def transfer_checks(root: Path, tex_rows: list[list[str]]) -> list[Check]:
     source_path = root / TABLE_SOURCES["transfer_ablation"]
     source_rows = read_csv_rows(source_path)
@@ -353,6 +384,9 @@ def build_report(root: Path, tables_tex: Path) -> dict[str, Any]:
     checks: list[Check] = []
     try:
         checks.extend(real_reuse_main_checks(root, parse_tabular_rows(tex_text, "tab:real-reuse-main")))
+        checks.extend(
+            real_reuse_failure_checks(root, parse_tabular_rows(tex_text, "tab:real-reuse-failure-analysis"))
+        )
         checks.extend(main_results_checks(root, parse_tabular_rows(tex_text, "tab:main-results")))
         checks.extend(transfer_checks(root, parse_tabular_rows(tex_text, "tab:transfer-ablation")))
         checks.extend(cost_proxy_checks(root, parse_tabular_rows(tex_text, "tab:cost-proxy")))

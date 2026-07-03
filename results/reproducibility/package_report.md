@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 415
+- Ready checks: 419
 - Pending checks: 1
 - Failed checks: 0
 
@@ -79,6 +79,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | real_reuse_fixture_candidate_builder | ready | present | scripts/build_real_reuse_fixture_candidates.py |
 | real_reuse_asset_lock_builder | ready | present | scripts/build_real_reuse_asset_locks.py |
 | real_reuse_paper_table_builder | ready | present | scripts/build_real_reuse_paper_tables.py |
+| real_reuse_failure_analysis_builder | ready | present | scripts/build_real_reuse_failure_analysis.py |
 | real_reuse_benchmark_checker | ready | present | scripts/check_real_reuse_benchmark.py |
 | real_reuse_reflexion_preparer | ready | present | scripts/prepare_real_reuse_reflexion_fixture.py |
 | real_reuse_reflexion_scorer | ready | present | scripts/score_real_reuse_reflexion.py |
@@ -171,6 +172,9 @@ Evidence boundary: this report checks local package completeness and separates p
 | real_reuse_main_results_plan_csv | ready | present | results/real_reuse/main_results_plan.csv |
 | real_reuse_main_results_plan_md | ready | present | results/real_reuse/main_results_plan.md |
 | real_reuse_main_results_plan_json | ready | present | results/real_reuse/main_results_plan.json |
+| real_reuse_failure_analysis_csv | ready | present | results/real_reuse/failure_analysis.csv |
+| real_reuse_failure_analysis_md | ready | present | results/real_reuse/failure_analysis.md |
+| real_reuse_failure_analysis_json | ready | present | results/real_reuse/failure_analysis.json |
 | artifact_map | ready | present | research/artifact_map.md |
 | claim_evidence_matrix | ready | present | research/claim_evidence_matrix.md |
 | new_paper_triage | ready | present | research/new_paper_triage_2026-07-01.md |
@@ -304,7 +308,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | failure_archive_counts | ready | total=27; paper=21; project=6 | results\failure_cases\failure_case_archive.json |
 | aaai_package_report_ready | ready | overall=ready; counts={'ready': 17, 'fail': 0} | results\reproducibility\aaai_package_report.json |
 | aaai_package_core_checks_ready | ready | core checks ready | results\reproducibility\aaai_package_report.json |
-| paper_table_report_ready | ready | overall=ready; counts={'ready': 156, 'fail': 0} | results\reproducibility\paper_table_report.json |
+| paper_table_report_ready | ready | overall=ready; counts={'ready': 196, 'fail': 0} | results\reproducibility\paper_table_report.json |
 | paper_table_core_checks_ready | ready | core checks ready | results\reproducibility\paper_table_report.json |
 | paper_claim_report_ready | ready | overall=ready; counts={'ready': 20, 'fail': 0} | results\reproducibility\paper_claim_report.json |
 | paper_claim_core_checks_ready | ready | core checks ready | results\reproducibility\paper_claim_report.json |

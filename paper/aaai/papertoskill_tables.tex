@@ -22,6 +22,28 @@ SNAP-T2 & SnapATAC2 & Single-cell omics & Single-cell labels/proxy task & Cluste
 
 \begin{table*}[t]
 \centering
+\caption{Real-reuse failure-boundary analysis derived from the same scored raw rows as Table~\ref{tab:real-reuse-main}. This table explains first-pass boundary modes; it does not add new task-success evidence.}
+\label{tab:real-reuse-failure-analysis}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lllll}
+\toprule
+Task & Summary Outcome & PaperToSkill Outcome & Boundary Mode & Contract Implication \\
+\midrule
+AIDE-T1 & 0.000; timeout & 0.000; timeout & Budget timeout & runtime budget and fallback contract \\
+AIDE-T2 & 0.000; timeout & 0.000; timeout & Budget timeout & runtime budget and fallback contract \\
+SWE-T1 & 0.000; patch apply failed & 0.000; patch apply failed & Patch application & patch-format and apply-check contract \\
+SWE-T2 & 0.000; patch apply failed & 1.000; success & PaperToSkill-only success & preserve patch/tool-use constraints \\
+REF-T1 & 1.000; success & 1.000; success & Solved by both & harder task slice or stricter scorer \\
+REF-T2 & 1.000; success & 1.000; success & Solved by both & harder task slice or stricter scorer \\
+SNAP-T1 & 0.000; artifact parse failed & 0.500; artifact incomplete & Artifact completion & required artifact and metric manifest \\
+SNAP-T2 & 0.200; artifact incomplete & 0.400; artifact incomplete & Artifact completion & required artifact and metric manifest \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
+
+\begin{table*}[t]
+\centering
 \caption{Main deterministic/offline PaperToSkill results. Coverage scores are task-rubric scores; transfer readiness is an offline artifact-readiness metric.}
 \label{tab:main-results}
 \begin{tabular}{lrrrrrrrr}

@@ -1,0 +1,16 @@
+# Real-Reuse Failure-Boundary Analysis
+
+Evidence boundary: this table is derived from scored raw rows and summarizes first-pass boundary modes. It does not add new task success evidence or support aggregate downstream effectiveness.
+
+- Raw scored rows read: 16
+
+| Task ID | Summary Outcome | PaperToSkill Outcome | Boundary Mode | Contract Implication |
+| --- | --- | --- | --- | --- |
+| AIDE-T1 | 0.000; timeout | 0.000; timeout | Budget timeout | runtime budget and fallback contract |
+| AIDE-T2 | 0.000; timeout | 0.000; timeout | Budget timeout | runtime budget and fallback contract |
+| SWE-T1 | 0.000; patch apply failed | 0.000; patch apply failed | Patch application | patch-format and apply-check contract |
+| SWE-T2 | 0.000; patch apply failed | 1.000; success | PaperToSkill-only success | preserve patch/tool-use constraints |
+| REF-T1 | 1.000; success | 1.000; success | Solved by both | harder task slice or stricter scorer |
+| REF-T2 | 1.000; success | 1.000; success | Solved by both | harder task slice or stricter scorer |
+| SNAP-T1 | 0.000; artifact parse failed | 0.500; artifact incomplete | Artifact completion | required artifact and metric manifest |
+| SNAP-T2 | 0.200; artifact incomplete | 0.400; artifact incomplete | Artifact completion | required artifact and metric manifest |

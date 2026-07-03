@@ -1190,3 +1190,25 @@
   `results/real_reuse/swe_t2_gold_metric.json`;
   `results/real_reuse/main_results_plan.md`;
   `paper/aaai/papertoskill_tables.tex`.
+
+## Real-Reuse Failure-Boundary Analysis
+
+- Experiment: derived row-level analysis over the first eight-row GPT-family
+  Summary-vs-PaperToSkill real-reuse pass.
+- Main result: the table maps AIDE-T1/T2 to budget timeout, SWE-T1 to patch
+  application failure, SWE-T2 to PaperToSkill-only success, REF-T1/T2 to a
+  solved-by-both ceiling, and SNAP-T1/T2 to artifact completion boundaries.
+- Compared baselines: no new baseline; the analysis is derived from the same
+  Summary and PaperToSkill raw rows as the main real-reuse table.
+- Practical significance: the mixed results are now reviewable as concrete
+  method-contract pressure points: runtime budget/fallback, patch-format/apply
+  checks, harder task slices, and required artifact/metric manifests.
+- Statistical evidence: none; this is explanatory analysis over a single
+  GPT-family pass and does not add new task-success evidence.
+- Failure modes: because unsupported errors remain not automatically judged,
+  this table should not be read as semantic-fidelity annotation.
+- Claim impact: strengthens the honesty and diagnosability of the real-reuse
+  section without supporting aggregate downstream effectiveness.
+- Figure/table: `results/real_reuse/failure_analysis.md`;
+  `results/real_reuse/failure_analysis.json`;
+  `paper/aaai/papertoskill_tables.tex`.

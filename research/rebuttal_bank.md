@@ -1,6 +1,6 @@
 # PaperToSkill Rebuttal Bank
 
-Date: 2026-07-01
+Date: 2026-07-04
 
 Use this file to answer likely reviewer objections without exceeding the current
 evidence boundary. This is a reviewer-response handoff, not new evidence.
@@ -183,6 +183,29 @@ Do not say:
 
 - "PaperToSkill outperforms Paper2Agent."
 - "PaperToSkill has run a Paper2Agent MCP baseline."
+
+## Q8.6: Do the real-reuse results prove downstream effectiveness?
+
+Short answer: No. The first eight-row GPT-family pass is a stress test with
+mixed and failure-heavy outcomes. Its value is that it exposes concrete
+boundary modes under original-style tasks, while the paper avoids an aggregate
+effectiveness claim.
+
+Evidence to cite:
+
+- `results/real_reuse/main_results_plan.md`: all eight Summary-vs-PaperToSkill
+  rows are scored for the first GPT-family pass.
+- `results/real_reuse/failure_analysis.md`: row-level boundary modes include
+  budget timeout, patch application, PaperToSkill-only success, solved-by-both
+  ceiling, and artifact completion.
+- `paper/aaai/papertoskill_tables.tex`: the AAAI draft includes both the main
+  real-reuse table and the derived failure-boundary table.
+
+Do not say:
+
+- "PaperToSkill is broadly effective on real downstream tasks."
+- "PaperToSkill has aggregate advantage over Summary."
+- "Failure-boundary analysis is a new positive task-success result."
 
 ## Q9: What happened with AI-Scientist-v2 integration?
 

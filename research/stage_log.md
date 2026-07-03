@@ -3466,3 +3466,38 @@ Evidence boundary:
 
 - This phase is status-wording hygiene only. It does not add new task rows,
   rerun models, or strengthen downstream effectiveness claims.
+
+## 2026-07-04 Phase 100
+
+Actions:
+
+- Added `scripts/build_real_reuse_failure_analysis.py` to derive a row-level
+  failure-boundary table from `results/real_reuse/raw_rows.jsonl`.
+- Generated `results/real_reuse/failure_analysis.{csv,md,json}`.
+- Added `tests/test_build_real_reuse_failure_analysis.py`.
+- Added the failure-boundary table to `paper/aaai/papertoskill_tables.tex` and
+  referenced it from the AAAI Results paragraph.
+- Extended `scripts/check_paper_tables.py` so the new LaTeX table is checked
+  against `results/real_reuse/failure_analysis.csv`.
+- Added the new builder and result artifacts to
+  `scripts/check_reproducibility_package.py`.
+- Updated outline, artifact map, claim evidence matrix, runbook, rebuttal bank,
+  result cards, and memory.
+- Rebuilt the AAAI PDF.
+
+Results:
+
+- The derived table maps first-pass rows to boundary modes:
+  AIDE-T1/T2 budget timeout; SWE-T1 patch application; SWE-T2
+  PaperToSkill-only success; REF-T1/T2 solved by both; SNAP-T1/T2 artifact
+  completion.
+- Paper-table consistency now reports 196 ready checks and 0 failed checks.
+- Reproducibility package now reports 419 ready checks, 1 pending check, and 0
+  failed checks.
+
+Evidence boundary:
+
+- This phase does not rerun models or add new task-success evidence.
+- The failure-boundary table is explanatory analysis over the existing
+  first-pass raw rows and supports method-contract follow-up planning without
+  claiming aggregate downstream effectiveness.

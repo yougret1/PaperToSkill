@@ -121,6 +121,12 @@ Regenerate the paper-facing main real-reuse table scaffold:
 python scripts\build_real_reuse_paper_tables.py
 ```
 
+Regenerate the derived real-reuse failure-boundary analysis table:
+
+```powershell
+python scripts\build_real_reuse_failure_analysis.py
+```
+
 Regenerate the SWE-agent skill/readiness gate from extracted paper text:
 
 ```powershell

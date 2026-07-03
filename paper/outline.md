@@ -260,11 +260,12 @@ less directly procedural.
 | --- | --- | --- |
 | Figure 1: PaperToSkill pipeline | `scripts/papertoskill_extract.py`; `skill/SKILL.md` | Show paper note to skill/source-map flow |
 | Table 1: Real-reuse main experiment | `results/real_reuse/main_results_plan.md` | Eight Summary-vs-PaperToSkill paper-task rows; SWE-T2 and REF rows succeed, AIDE/SWE-T1/SNAP rows are scored failures, timeouts, or below-threshold rows |
-| Table 2: Deterministic/offline quality results | `results/tables/main_results.md` | Coverage, source support, compactness |
-| Table 3: Transfer ablation | `results/tables/transfer_ablation.md` | Effect of transfer notes |
-| Table 4: Source grounding | `results/tables/compactness_source_grounding.md` | Source support and compactness |
-| Table 5: Context cost proxy | `results/tables/context_cost_proxy.md`; `results/tables/model_response_cost_proxy.md` | Full paper vs skill context size plus saved-response output-token proxy |
-| Table 6: Auto-note comparison | `results/tables/auto_note_comparison.md` | Curated vs extracted-text Toolformer and AIDE note scaffolds |
+| Table 2: Real-reuse failure-boundary analysis | `results/real_reuse/failure_analysis.md` | Row-level boundary modes and follow-up method contracts for the first-pass real-reuse rows |
+| Table 3: Deterministic/offline quality results | `results/tables/main_results.md` | Coverage, source support, compactness |
+| Table 4: Transfer ablation | `results/tables/transfer_ablation.md` | Effect of transfer notes |
+| Table 5: Source grounding | `results/tables/compactness_source_grounding.md` | Source support and compactness |
+| Table 6: Context cost proxy | `results/tables/context_cost_proxy.md`; `results/tables/model_response_cost_proxy.md` | Full paper vs skill context size plus saved-response output-token proxy |
+| Table 7: Auto-note comparison | `results/tables/auto_note_comparison.md` | Curated vs extracted-text Toolformer and AIDE note scaffolds |
 | Appendix: Human-fidelity packets | `results/human_fidelity_packets/` | Prepared review packets, handoff guide, and blank annotation template |
 | Appendix: Human-fidelity summary | `results/human_fidelity_packets/annotation_summary.md` | Pending annotation status and validation summary |
 | Appendix: Failure-case archive | `results/failure_cases/failure_case_archive.md` | Paper-reported and project-level failure/limitation cases |
@@ -276,4 +277,5 @@ less directly procedural.
 | Appendix: AAAI package | `paper/aaai/` | Official AAAI-27 template provenance and LaTeX draft |
 | Appendix: Paper2Agent artifact comparison | `results/tables/paper2agent_artifact_comparison.md` | Source-backed skill-vs-MCP artifact/workflow positioning table |
 | Real reuse main results | `results/real_reuse/main_results_plan.md`; `results/real_reuse/raw_rows.jsonl` | Eight first-pass Summary-vs-PaperToSkill paper-task rows; mixed downstream and failure-boundary evidence |
+| Real reuse failure analysis | `results/real_reuse/failure_analysis.md`; `results/real_reuse/raw_rows.jsonl` | Derived first-pass boundary modes; not new task-success evidence |
 | Planned: LLM real-reuse ablation | `research/real_reuse_experiment_plan.md`; future `results/real_reuse/` | Cross-model stability of Summary vs PaperToSkill on real tasks |

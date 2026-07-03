@@ -56,6 +56,11 @@ Current supported claims:
   executability, AAAI package readiness, table consistency, paper claim
   discipline, and active-goal completion auditing.
 - Failure-case archive with paper-reported and project-level cases.
+- Real-reuse failure-boundary analysis is derived from the same first-pass raw
+  rows and is now included in the AAAI table set. It maps row-level outcomes to
+  budget timeout, patch application, PaperToSkill-only success, solved-by-both
+  ceiling, and artifact completion modes. This is explanatory boundary
+  analysis, not new task-success evidence.
 - Human-fidelity annotation handoff is ready: review packets, annotation guide,
   stricter blank template metadata, and strict summarizer validation are present
   for 24 paper-by-criterion rows; completed human annotation remains pending.
@@ -390,6 +395,9 @@ Use these as entry points instead of searching the whole repo first:
   threshold, so this is failure-boundary evidence.
 - `results/real_reuse/main_results_plan.csv`, `.md`, and `.json`: paper-facing
   real-reuse main table source with all eight rows filled from raw rows.
+- `results/real_reuse/failure_analysis.csv`, `.md`, and `.json`: derived
+  paper-facing real-reuse failure-boundary table source; it explains first-pass
+  boundary modes without adding new task-success evidence.
 - `generated_skills/real_reuse/swe_agent/SKILL.md` and
   `generated_skills/real_reuse/swe_agent/references/source_map.json`:
   SWE-agent source-anchored generated skill for the software-engineering
@@ -442,7 +450,7 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 415 ready checks, 1 pending
+  reports `ready_with_pending_external_evidence`, 419 ready checks, 1 pending
   check, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
@@ -508,7 +516,8 @@ Use these as entry points instead of searching the whole repo first:
   Toolformer rows score 9/9.
 - Paper tables:
   `results/reproducibility/paper_table_report.md`
-  reports ready, 156 ready checks, 0 failed checks.
+  reports ready, 196 ready checks, 0 failed checks after adding the
+  real-reuse failure-boundary table consistency checks.
 - Paper claims:
   `results/reproducibility/paper_claim_report.md`
   reports ready, 20 ready checks, 0 failed checks.
@@ -524,7 +533,9 @@ Use these as entry points instead of searching the whole repo first:
 - Real-reuse first-pass run:
   `results/real_reuse/raw_rows.jsonl` and
   `results/real_reuse/main_results_plan.md` contain one GPT-family `gpt-5.5`
-  Summary-vs-PaperToSkill pass for all eight rows. AIDE-T1/T2 score
+  Summary-vs-PaperToSkill pass for all eight rows. The derived
+  `results/real_reuse/failure_analysis.md` maps the first-pass rows to
+  boundary modes and follow-up method contracts. AIDE-T1/T2 score
   0.000/0.000 due 60-second scorer timeouts; SWE-T1 scores 0.000/0.000 due
   patch-apply failures; SWE-T2 scores 0.000/1.000 and is one positive
   PaperToSkill row; REF-T1/T2 score 1.000/1.000; SNAP-T1/T2 score 0.000/0.500

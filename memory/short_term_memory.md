@@ -7,6 +7,34 @@ Current date: 2026-07-04.
 
 ## Latest Resume/Completion Note
 
+- 2026-07-04 discussion sync: user asked whether the current discussion
+  requires modifying other parts of the original paper. Re-read memory,
+  confirmed `ok.txt` absent, inspected the current AAAI text/table/outline
+  state, and updated `C:\Users\19351\Desktop\tem\nextStep.md`. Current answer:
+  no broad rewrite is needed now. The formal draft already reflects the
+  eight-row real-reuse first pass and the new failure-boundary table with
+  cautious claims. Future paper edits should stay limited to consistency
+  checks, evidence-boundary wording, and table/report synchronization unless
+  repeated real-reuse evidence justifies stronger Abstract/Introduction/
+  Conclusion claims or exposes a Method schema gap.
+- 2026-07-04 Phase 100 real-reuse failure-boundary table: re-read memory,
+  checked `ok.txt` (absent), and confirmed `main...origin/main` before edits.
+  Added `scripts/build_real_reuse_failure_analysis.py`, generated
+  `results/real_reuse/failure_analysis.{csv,md,json}`, and added tests in
+  `tests/test_build_real_reuse_failure_analysis.py`. The table derives
+  row-level boundary modes from the first eight-row GPT-family raw rows:
+  AIDE-T1/T2 budget timeout, SWE-T1 patch application, SWE-T2
+  PaperToSkill-only success, REF-T1/T2 solved by both, and SNAP-T1/T2 artifact
+  completion. Added the table to `paper/aaai/papertoskill_tables.tex`, linked
+  it in the AAAI Results paragraph, expanded `scripts/check_paper_tables.py`
+  to verify it against the CSV, and added the new builder/artifacts to
+  `check_reproducibility_package.py`. Updated outline/artifact map/claim
+  matrix/runbook/rebuttal bank/result cards and rebuilt the AAAI PDF. Focused
+  tests, `check_paper_tables.py --strict`, `check_paper_claims.py --strict`,
+  `check_aaai_package.py --strict`, and `check_reproducibility_package.py
+  --strict` passed before final full verification. Evidence boundary: this is
+  explanatory failure-boundary analysis over existing raw rows, not new
+  task-success evidence and not aggregate downstream effectiveness.
 - 2026-07-04 Phase 99 real-reuse boundary wording cleanup: after the user asked
   whether other paper sections still needed modification, re-read memory,
   checked `C:\Users\19351\Desktop\tem\ok.txt` (absent), and verified

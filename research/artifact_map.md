@@ -417,6 +417,10 @@
 | `results/real_reuse/main_results_plan.csv` | Data source for the AAAI real-reuse main experiment table; all eight rows are filled from raw rows | Created |
 | `results/real_reuse/main_results_plan.md` | Human-readable real-reuse main experiment table with all eight rows filled from raw rows | Created |
 | `results/real_reuse/main_results_plan.json` | Machine-readable real-reuse main experiment table generated from raw rows and planned task specs | Created |
+| `scripts/build_real_reuse_failure_analysis.py` | Builds row-level failure-boundary analysis from real-reuse raw rows | Created |
+| `results/real_reuse/failure_analysis.csv` | Data source for the AAAI real-reuse failure-boundary table | Created |
+| `results/real_reuse/failure_analysis.md` | Human-readable first-pass real-reuse failure-boundary analysis | Created |
+| `results/real_reuse/failure_analysis.json` | Machine-readable first-pass real-reuse failure-boundary analysis | Created |
 | `results/reproducibility/aaai_package_report.md` | Human-readable AAAI package verification report | Created |
 | `results/reproducibility/aaai_package_report.json` | Machine-readable AAAI package verification report | Created |
 | `results/reproducibility/usage_example_report.md` | Human-readable usage-example verification report | Created |
