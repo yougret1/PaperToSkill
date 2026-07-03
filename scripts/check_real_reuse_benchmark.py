@@ -41,6 +41,7 @@ EXPECTED_RAW_ROW_FIELDS = {
     "failure_reason",
     "output_path",
 }
+EXPECTED_FIXTURE_STATUS = "fixture_manifest_ready_assets_pending"
 
 
 @dataclass
@@ -174,6 +175,7 @@ def build_report(root: Path, spec_path: Path) -> dict[str, Any]:
     checks.extend(llm_ablation_checks(root, spec_path, spec))
     checks.extend(planned_output_checks(root, spec_path, spec))
     checks.extend(task_spec_file_checks(root, spec_path, tasks))
+    checks.extend(fixture_manifest_checks(root, spec_path, tasks))
     return report_from_checks(root, spec_path, spec, checks)
 
 
@@ -435,6 +437,103 @@ def task_spec_file_checks(root: Path, spec_path: Path, tasks: dict[str, dict[str
             "real_reuse_task_specs_materialized",
             "ready" if present_task_specs == EXPECTED_MAIN_TASKS else "fail",
             "task_specs=" + ",".join(sorted(present_task_specs)),
+            relative(root, spec_path),
+        )
+    )
+    return checks
+
+
+def fixture_manifest_checks(root: Path, spec_path: Path, tasks: dict[str, dict[str, Any]]) -> list[Check]:
+    checks: list[Check] = []
+    present_fixture_manifests: set[str] = set()
+    for task_id in sorted(tasks):
+        prefix = task_id.lower().replace("-", "_")
+        fixture_path = root / "benchmarks" / "real_reuse" / "fixtures" / f"{task_id}.json"
+        task_spec_path = root / "benchmarks" / "real_reuse" / "tasks" / f"{task_id}.json"
+        if not fixture_path.exists():
+            checks.append(
+                Check(
+                    f"{prefix}_fixture_manifest_present",
+                    "fail",
+                    "missing",
+                    relative(root, fixture_path),
+                )
+            )
+            continue
+        fixture = load_json(fixture_path)
+        present_fixture_manifests.add(task_id)
+        task_spec = load_json(task_spec_path) if task_spec_path.exists() else {}
+        asset_slots = fixture.get("asset_slots", [])
+        context_conditions = {asset.get("condition") for asset in fixture.get("context_assets", [])}
+        checks.extend(
+            [
+                Check(
+                    f"{prefix}_fixture_manifest_present",
+                    "ready",
+                    "present",
+                    relative(root, fixture_path),
+                ),
+                Check(
+                    f"{prefix}_fixture_identity",
+                    "ready"
+                    if fixture.get("task_id") == task_id
+                    and fixture.get("source_paper_id") == tasks[task_id].get("source_paper_id")
+                    else "fail",
+                    f"task_id={fixture.get('task_id')}; source_paper_id={fixture.get('source_paper_id')}",
+                    relative(root, fixture_path),
+                ),
+                Check(
+                    f"{prefix}_fixture_status",
+                    "ready" if fixture.get("status") == EXPECTED_FIXTURE_STATUS else "fail",
+                    f"status={fixture.get('status')}",
+                    relative(root, fixture_path),
+                ),
+                Check(
+                    f"{prefix}_fixture_asset_slots_declared",
+                    "ready" if len(asset_slots) >= 3 else "fail",
+                    f"asset_slots={len(asset_slots)}",
+                    relative(root, fixture_path),
+                ),
+                Check(
+                    f"{prefix}_fixture_context_conditions",
+                    "ready" if context_conditions == EXPECTED_PRIMARY_CONDITIONS else "fail",
+                    "conditions=" + ",".join(sorted(str(condition) for condition in context_conditions)),
+                    relative(root, fixture_path),
+                ),
+                Check(
+                    f"{prefix}_fixture_metric_matches_task",
+                    "ready"
+                    if fixture.get("scoring_contract", {}).get("metric_name")
+                    == task_spec.get("metric_contract", {}).get("name")
+                    else "fail",
+                    f"metric={fixture.get('scoring_contract', {}).get('metric_name')}",
+                    relative(root, fixture_path),
+                ),
+                Check(
+                    f"{prefix}_fixture_no_mid_run_human",
+                    "ready"
+                    if fixture.get("execution_budget", {}).get("first_pass_human_intervention")
+                    == "none_mid_run"
+                    else "fail",
+                    f"first_pass_human_intervention={fixture.get('execution_budget', {}).get('first_pass_human_intervention')}",
+                    relative(root, fixture_path),
+                ),
+                Check(
+                    f"{prefix}_fixture_license_review_pending",
+                    "ready"
+                    if "required" in str(fixture.get("provenance_and_license", {}).get("license_review", ""))
+                    and fixture.get("provenance_and_license", {}).get("download_or_clone_status") == "not_started"
+                    else "fail",
+                    str(fixture.get("provenance_and_license", {})),
+                    relative(root, fixture_path),
+                ),
+            ]
+        )
+    checks.append(
+        Check(
+            "real_reuse_fixture_manifests_materialized",
+            "ready" if present_fixture_manifests == EXPECTED_MAIN_TASKS else "fail",
+            "fixtures=" + ",".join(sorted(present_fixture_manifests)),
             relative(root, spec_path),
         )
     )

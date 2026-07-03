@@ -135,7 +135,8 @@
 | `benchmarks/failure_case_archive_v0.json` | Failure-case archive config and project-level records | Created |
 | `benchmarks/model_ablation_v0.json` | Claude/GPT-family/DeepSeek model-ablation prompt packet spec | Created |
 | `benchmarks/real_reuse/real_reuse_v0.json` | Machine-checkable planned real-reuse benchmark spec with eight original-style paper-task rows | Created |
-| `benchmarks/real_reuse/tasks/*.json` | Per-task real-reuse execution-contract specs for all eight planned paper-task rows; fixtures and runs remain pending | Created |
+| `benchmarks/real_reuse/tasks/*.json` | Per-task real-reuse execution-contract specs for all eight planned paper-task rows; fixture assets and runs remain pending | Created |
+| `benchmarks/real_reuse/fixtures/*.json` | Per-task fixture requirement manifests with asset slots, scoring contracts, license/provenance status, and planned outputs; concrete assets remain pending | Created |
 | `benchmarks/tasks/ai_scientist_v2_research_run.json` | Downstream context-coverage task spec | Created |
 | `benchmarks/tasks/skill_source_audit.json` | Source-map-aware unsupported-instruction audit task | Created |
 | `benchmarks/tasks/ai_scientist_v2_harness_transfer.json` | Offline harness-transfer readiness task spec | Created |
@@ -186,6 +187,7 @@
 | `scripts/papertoskill_note_from_text.py` | Deterministic extracted-text-to-note scaffold with line anchors | Created |
 | `scripts/papertoskill_pipeline.py` | Local text/PDF-to-note-to-skill-to-evaluation pipeline manifest command; PDF input uses `pdftotext -layout` when available | Created |
 | `scripts/build_real_reuse_task_specs.py` | Materializes the eight per-task real-reuse execution-contract specs from the master benchmark spec | Created |
+| `scripts/build_real_reuse_fixture_manifests.py` | Materializes fixture requirement manifests for the eight real-reuse task contracts | Created |
 | `scripts/check_real_reuse_benchmark.py` | Validates the planned real-reuse benchmark spec, main conditions, sanity scope, reference-score boundary, and future output paths | Created |
 | `scripts/evaluate_skill.py` | Deterministic v0 evaluator for generated skills | Created |
 | `scripts/evaluate_context_baselines.py` | Deterministic evaluator for context baseline coverage | Created |
@@ -396,6 +398,6 @@
 | Artifact | Purpose | Status |
 | --- | --- | --- |
 | Model-ablation response logs | Claude/GPT-family/DeepSeek response files and scores after endpoint/model availability | Created |
-| `benchmarks/real_reuse/fixtures/` | Future fixture manifests, datasets, repositories, prompts, or harness setup for each real-reuse task | Planned |
+| Concrete real-reuse fixture assets | Future selected datasets, repositories, prompts, test commands, labels, and scoring commands for each real-reuse task | Planned |
 | `results/real_reuse/` | Future raw rows, aggregate tables, sanity checks, cost table, and LLM ablation outputs for real-reuse experiments | Planned |
 | Paper2Agent executable baseline | Full Paper2Agent/MCP runtime comparison, if setup resources become available | Planned |

@@ -1,0 +1,91 @@
+{
+  "schema_version": "0.1",
+  "benchmark_id": "papertoskill_real_reuse_v0",
+  "task_id": "REF-T1",
+  "task_spec": "benchmarks/real_reuse/tasks/REF-T1.json",
+  "source_paper_id": "reflexion",
+  "domain": "Reasoning / QA",
+  "fixture_kind": "objective_qa_retry_case",
+  "status": "fixture_manifest_ready_assets_pending",
+  "evidence_boundary": "This manifest records fixture requirements and asset slots only. It does not contain selected datasets, repositories, task outputs, scores, or downstream success evidence.",
+  "source_alignment": {
+    "original_style_input": "HotPotQA-style multi-hop question, retrieval context or tool access, first-answer feedback, and retry budget.",
+    "required_output": "Final answer plus reflection trace linking feedback to the next attempt.",
+    "metric_name": "exact_match_or_f1",
+    "metric_family": "qa_success",
+    "reference_score_policy": "Treat original paper scores as reported references unless the same dataset, input/output, metric, model/tool budget, and runtime setting are reproduced locally."
+  },
+  "asset_slots": [
+    {
+      "id": "question",
+      "status": "pending_selection",
+      "path_or_uri": null,
+      "sha256": null,
+      "notes": "Select a concrete, license-compatible asset before execution."
+    },
+    {
+      "id": "retrieval_context_or_tool_stub",
+      "status": "pending_selection",
+      "path_or_uri": null,
+      "sha256": null,
+      "notes": "Select a concrete, license-compatible asset before execution."
+    },
+    {
+      "id": "answer_key",
+      "status": "pending_selection",
+      "path_or_uri": null,
+      "sha256": null,
+      "notes": "Select a concrete, license-compatible asset before execution."
+    },
+    {
+      "id": "feedback_protocol",
+      "status": "pending_selection",
+      "path_or_uri": null,
+      "sha256": null,
+      "notes": "Select a concrete, license-compatible asset before execution."
+    }
+  ],
+  "context_assets": [
+    {
+      "condition": "summary",
+      "context_path": "baselines/real_reuse/REF-T1_summary.md",
+      "asset_status": "to_be_created_before_execution"
+    },
+    {
+      "condition": "papertoskill",
+      "context_path": "generated_skills/reflexion/SKILL.md",
+      "asset_status": "existing_or_to_be_verified_before_execution"
+    }
+  ],
+  "execution_budget": {
+    "max_attempts": "to_be_declared_in_fixture_or_runner_config",
+    "same_run_budget_across_conditions": true,
+    "first_pass_human_intervention": "none_mid_run",
+    "time_limit_seconds": "to_be_defined_before_execution",
+    "token_limit": "to_be_defined_before_execution"
+  },
+  "scoring_contract": {
+    "automated": true,
+    "metric_name": "exact_match_or_f1",
+    "direction": "higher_is_better",
+    "success_criterion": "Final answer matches target answer by exact match or F1 after using feedback.",
+    "scoring_command": "to_be_defined_after_qa_fixture_selection",
+    "metric_inputs": [
+      "final_answer",
+      "answer_key"
+    ]
+  },
+  "provenance_and_license": {
+    "license_review": "required_before_dataset_use",
+    "download_or_clone_status": "not_started",
+    "external_project_root_policy": "Place newly downloaded projects under D:/a_work/gitee.",
+    "secret_policy": "Do not store API keys, private tokens, or credential-bearing logs in this manifest."
+  },
+  "planned_outputs": {
+    "run_dir": "results/real_reuse/runs/REF-T1/",
+    "metric_log": "results/real_reuse/runs/REF-T1/metric.json",
+    "execution_log": "results/real_reuse/runs/REF-T1/run_log.md",
+    "raw_rows": "results/real_reuse/raw_rows.jsonl"
+  },
+  "next_action": "Select concrete fixture assets and fill path_or_uri plus license/provenance before runner execution."
+}

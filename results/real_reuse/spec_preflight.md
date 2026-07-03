@@ -5,7 +5,7 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 - Overall status: ready_to_implement
 - Spec path: benchmarks/real_reuse/real_reuse_v0.json
 - Task count: 8
-- Ready checks: 142
+- Ready checks: 207
 - Failed checks: 0
 
 ## Checks
@@ -154,3 +154,68 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 | swe_t2_task_spec_raw_row_schema | ready | fields=condition,domain,failure_reason,interventions,model_alias,model_family,output_path,run_id,source_paper_id,success,task_id,task_score,time_seconds,tokens,unsupported_errors,workflow_score | benchmarks/real_reuse/tasks/SWE-T2.json |
 | swe_t2_task_spec_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/tasks/SWE-T2.json |
 | real_reuse_task_specs_materialized | ready | task_specs=AIDE-T1,AIDE-T2,REF-T1,REF-T2,SNAP-T1,SNAP-T2,SWE-T1,SWE-T2 | benchmarks/real_reuse/real_reuse_v0.json |
+| aide_t1_fixture_manifest_present | ready | present | benchmarks/real_reuse/fixtures/AIDE-T1.json |
+| aide_t1_fixture_identity | ready | task_id=AIDE-T1; source_paper_id=aide | benchmarks/real_reuse/fixtures/AIDE-T1.json |
+| aide_t1_fixture_status | ready | status=fixture_manifest_ready_assets_pending | benchmarks/real_reuse/fixtures/AIDE-T1.json |
+| aide_t1_fixture_asset_slots_declared | ready | asset_slots=4 | benchmarks/real_reuse/fixtures/AIDE-T1.json |
+| aide_t1_fixture_context_conditions | ready | conditions=papertoskill,summary | benchmarks/real_reuse/fixtures/AIDE-T1.json |
+| aide_t1_fixture_metric_matches_task | ready | metric=validation_score | benchmarks/real_reuse/fixtures/AIDE-T1.json |
+| aide_t1_fixture_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/fixtures/AIDE-T1.json |
+| aide_t1_fixture_license_review_pending | ready | {'license_review': 'required_before_download_or_commit', 'download_or_clone_status': 'not_started', 'external_project_root_policy': 'Place newly downloaded projects under D:/a_work/gitee.', 'secret_policy': 'Do not store API keys, private tokens, or credential-bearing logs in this manifest.'} | benchmarks/real_reuse/fixtures/AIDE-T1.json |
+| aide_t2_fixture_manifest_present | ready | present | benchmarks/real_reuse/fixtures/AIDE-T2.json |
+| aide_t2_fixture_identity | ready | task_id=AIDE-T2; source_paper_id=aide | benchmarks/real_reuse/fixtures/AIDE-T2.json |
+| aide_t2_fixture_status | ready | status=fixture_manifest_ready_assets_pending | benchmarks/real_reuse/fixtures/AIDE-T2.json |
+| aide_t2_fixture_asset_slots_declared | ready | asset_slots=4 | benchmarks/real_reuse/fixtures/AIDE-T2.json |
+| aide_t2_fixture_context_conditions | ready | conditions=papertoskill,summary | benchmarks/real_reuse/fixtures/AIDE-T2.json |
+| aide_t2_fixture_metric_matches_task | ready | metric=best_node_score | benchmarks/real_reuse/fixtures/AIDE-T2.json |
+| aide_t2_fixture_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/fixtures/AIDE-T2.json |
+| aide_t2_fixture_license_review_pending | ready | {'license_review': 'required_before_download_or_commit', 'download_or_clone_status': 'not_started', 'external_project_root_policy': 'Place newly downloaded projects under D:/a_work/gitee.', 'secret_policy': 'Do not store API keys, private tokens, or credential-bearing logs in this manifest.'} | benchmarks/real_reuse/fixtures/AIDE-T2.json |
+| ref_t1_fixture_manifest_present | ready | present | benchmarks/real_reuse/fixtures/REF-T1.json |
+| ref_t1_fixture_identity | ready | task_id=REF-T1; source_paper_id=reflexion | benchmarks/real_reuse/fixtures/REF-T1.json |
+| ref_t1_fixture_status | ready | status=fixture_manifest_ready_assets_pending | benchmarks/real_reuse/fixtures/REF-T1.json |
+| ref_t1_fixture_asset_slots_declared | ready | asset_slots=4 | benchmarks/real_reuse/fixtures/REF-T1.json |
+| ref_t1_fixture_context_conditions | ready | conditions=papertoskill,summary | benchmarks/real_reuse/fixtures/REF-T1.json |
+| ref_t1_fixture_metric_matches_task | ready | metric=exact_match_or_f1 | benchmarks/real_reuse/fixtures/REF-T1.json |
+| ref_t1_fixture_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/fixtures/REF-T1.json |
+| ref_t1_fixture_license_review_pending | ready | {'license_review': 'required_before_dataset_use', 'download_or_clone_status': 'not_started', 'external_project_root_policy': 'Place newly downloaded projects under D:/a_work/gitee.', 'secret_policy': 'Do not store API keys, private tokens, or credential-bearing logs in this manifest.'} | benchmarks/real_reuse/fixtures/REF-T1.json |
+| ref_t2_fixture_manifest_present | ready | present | benchmarks/real_reuse/fixtures/REF-T2.json |
+| ref_t2_fixture_identity | ready | task_id=REF-T2; source_paper_id=reflexion | benchmarks/real_reuse/fixtures/REF-T2.json |
+| ref_t2_fixture_status | ready | status=fixture_manifest_ready_assets_pending | benchmarks/real_reuse/fixtures/REF-T2.json |
+| ref_t2_fixture_asset_slots_declared | ready | asset_slots=4 | benchmarks/real_reuse/fixtures/REF-T2.json |
+| ref_t2_fixture_context_conditions | ready | conditions=papertoskill,summary | benchmarks/real_reuse/fixtures/REF-T2.json |
+| ref_t2_fixture_metric_matches_task | ready | metric=second_attempt_success | benchmarks/real_reuse/fixtures/REF-T2.json |
+| ref_t2_fixture_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/fixtures/REF-T2.json |
+| ref_t2_fixture_license_review_pending | ready | {'license_review': 'required_before_dataset_or_repo_use', 'download_or_clone_status': 'not_started', 'external_project_root_policy': 'Place newly downloaded projects under D:/a_work/gitee.', 'secret_policy': 'Do not store API keys, private tokens, or credential-bearing logs in this manifest.'} | benchmarks/real_reuse/fixtures/REF-T2.json |
+| snap_t1_fixture_manifest_present | ready | present | benchmarks/real_reuse/fixtures/SNAP-T1.json |
+| snap_t1_fixture_identity | ready | task_id=SNAP-T1; source_paper_id=snapatac2 | benchmarks/real_reuse/fixtures/SNAP-T1.json |
+| snap_t1_fixture_status | ready | status=fixture_manifest_ready_assets_pending | benchmarks/real_reuse/fixtures/SNAP-T1.json |
+| snap_t1_fixture_asset_slots_declared | ready | asset_slots=4 | benchmarks/real_reuse/fixtures/SNAP-T1.json |
+| snap_t1_fixture_context_conditions | ready | conditions=papertoskill,summary | benchmarks/real_reuse/fixtures/SNAP-T1.json |
+| snap_t1_fixture_metric_matches_task | ready | metric=runtime_memory_quality | benchmarks/real_reuse/fixtures/SNAP-T1.json |
+| snap_t1_fixture_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/fixtures/SNAP-T1.json |
+| snap_t1_fixture_license_review_pending | ready | {'license_review': 'required_before_dataset_use', 'download_or_clone_status': 'not_started', 'external_project_root_policy': 'Place newly downloaded projects under D:/a_work/gitee.', 'secret_policy': 'Do not store API keys, private tokens, or credential-bearing logs in this manifest.'} | benchmarks/real_reuse/fixtures/SNAP-T1.json |
+| snap_t2_fixture_manifest_present | ready | present | benchmarks/real_reuse/fixtures/SNAP-T2.json |
+| snap_t2_fixture_identity | ready | task_id=SNAP-T2; source_paper_id=snapatac2 | benchmarks/real_reuse/fixtures/SNAP-T2.json |
+| snap_t2_fixture_status | ready | status=fixture_manifest_ready_assets_pending | benchmarks/real_reuse/fixtures/SNAP-T2.json |
+| snap_t2_fixture_asset_slots_declared | ready | asset_slots=4 | benchmarks/real_reuse/fixtures/SNAP-T2.json |
+| snap_t2_fixture_context_conditions | ready | conditions=papertoskill,summary | benchmarks/real_reuse/fixtures/SNAP-T2.json |
+| snap_t2_fixture_metric_matches_task | ready | metric=ari_nmi_runtime_memory | benchmarks/real_reuse/fixtures/SNAP-T2.json |
+| snap_t2_fixture_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/fixtures/SNAP-T2.json |
+| snap_t2_fixture_license_review_pending | ready | {'license_review': 'required_before_dataset_use', 'download_or_clone_status': 'not_started', 'external_project_root_policy': 'Place newly downloaded projects under D:/a_work/gitee.', 'secret_policy': 'Do not store API keys, private tokens, or credential-bearing logs in this manifest.'} | benchmarks/real_reuse/fixtures/SNAP-T2.json |
+| swe_t1_fixture_manifest_present | ready | present | benchmarks/real_reuse/fixtures/SWE-T1.json |
+| swe_t1_fixture_identity | ready | task_id=SWE-T1; source_paper_id=swe_agent | benchmarks/real_reuse/fixtures/SWE-T1.json |
+| swe_t1_fixture_status | ready | status=fixture_manifest_ready_assets_pending | benchmarks/real_reuse/fixtures/SWE-T1.json |
+| swe_t1_fixture_asset_slots_declared | ready | asset_slots=3 | benchmarks/real_reuse/fixtures/SWE-T1.json |
+| swe_t1_fixture_context_conditions | ready | conditions=papertoskill,summary | benchmarks/real_reuse/fixtures/SWE-T1.json |
+| swe_t1_fixture_metric_matches_task | ready | metric=resolved | benchmarks/real_reuse/fixtures/SWE-T1.json |
+| swe_t1_fixture_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/fixtures/SWE-T1.json |
+| swe_t1_fixture_license_review_pending | ready | {'license_review': 'required_before_clone_or_patch_release', 'download_or_clone_status': 'not_started', 'external_project_root_policy': 'Place newly downloaded projects under D:/a_work/gitee.', 'secret_policy': 'Do not store API keys, private tokens, or credential-bearing logs in this manifest.'} | benchmarks/real_reuse/fixtures/SWE-T1.json |
+| swe_t2_fixture_manifest_present | ready | present | benchmarks/real_reuse/fixtures/SWE-T2.json |
+| swe_t2_fixture_identity | ready | task_id=SWE-T2; source_paper_id=swe_agent | benchmarks/real_reuse/fixtures/SWE-T2.json |
+| swe_t2_fixture_status | ready | status=fixture_manifest_ready_assets_pending | benchmarks/real_reuse/fixtures/SWE-T2.json |
+| swe_t2_fixture_asset_slots_declared | ready | asset_slots=3 | benchmarks/real_reuse/fixtures/SWE-T2.json |
+| swe_t2_fixture_context_conditions | ready | conditions=papertoskill,summary | benchmarks/real_reuse/fixtures/SWE-T2.json |
+| swe_t2_fixture_metric_matches_task | ready | metric=tests_passed | benchmarks/real_reuse/fixtures/SWE-T2.json |
+| swe_t2_fixture_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/fixtures/SWE-T2.json |
+| swe_t2_fixture_license_review_pending | ready | {'license_review': 'required_before_clone_or_patch_release', 'download_or_clone_status': 'not_started', 'external_project_root_policy': 'Place newly downloaded projects under D:/a_work/gitee.', 'secret_policy': 'Do not store API keys, private tokens, or credential-bearing logs in this manifest.'} | benchmarks/real_reuse/fixtures/SWE-T2.json |
+| real_reuse_fixture_manifests_materialized | ready | fixtures=AIDE-T1,AIDE-T2,REF-T1,REF-T2,SNAP-T1,SNAP-T2,SWE-T1,SWE-T2 | benchmarks/real_reuse/real_reuse_v0.json |

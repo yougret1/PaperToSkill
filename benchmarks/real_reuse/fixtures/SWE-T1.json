@@ -1,0 +1,84 @@
+{
+  "schema_version": "0.1",
+  "benchmark_id": "papertoskill_real_reuse_v0",
+  "task_id": "SWE-T1",
+  "task_spec": "benchmarks/real_reuse/tasks/SWE-T1.json",
+  "source_paper_id": "swe_agent",
+  "domain": "Software engineering",
+  "fixture_kind": "repository_issue_to_patch",
+  "status": "fixture_manifest_ready_assets_pending",
+  "evidence_boundary": "This manifest records fixture requirements and asset slots only. It does not contain selected datasets, repositories, task outputs, scores, or downstream success evidence.",
+  "source_alignment": {
+    "original_style_input": "Repository snapshot, issue description, and test command.",
+    "required_output": "A minimal patch and verification log showing the test command outcome.",
+    "metric_name": "resolved",
+    "metric_family": "test_pass_rate",
+    "reference_score_policy": "Treat original paper scores as reported references unless the same dataset, input/output, metric, model/tool budget, and runtime setting are reproduced locally."
+  },
+  "asset_slots": [
+    {
+      "id": "repository_snapshot",
+      "status": "pending_selection",
+      "path_or_uri": null,
+      "sha256": null,
+      "notes": "Select a concrete, license-compatible asset before execution."
+    },
+    {
+      "id": "issue_description",
+      "status": "pending_selection",
+      "path_or_uri": null,
+      "sha256": null,
+      "notes": "Select a concrete, license-compatible asset before execution."
+    },
+    {
+      "id": "target_test_command",
+      "status": "pending_selection",
+      "path_or_uri": null,
+      "sha256": null,
+      "notes": "Select a concrete, license-compatible asset before execution."
+    }
+  ],
+  "context_assets": [
+    {
+      "condition": "summary",
+      "context_path": "baselines/real_reuse/SWE-T1_summary.md",
+      "asset_status": "to_be_created_before_execution"
+    },
+    {
+      "condition": "papertoskill",
+      "context_path": "generated_skills/real_reuse/swe_agent/SKILL.md",
+      "asset_status": "existing_or_to_be_verified_before_execution"
+    }
+  ],
+  "execution_budget": {
+    "max_attempts": "to_be_declared_in_fixture_or_runner_config",
+    "same_run_budget_across_conditions": true,
+    "first_pass_human_intervention": "none_mid_run",
+    "time_limit_seconds": "to_be_defined_before_execution",
+    "token_limit": "to_be_defined_before_execution"
+  },
+  "scoring_contract": {
+    "automated": true,
+    "metric_name": "resolved",
+    "direction": "higher_is_better",
+    "success_criterion": "Patch applies cleanly and target tests pass without unrelated changes.",
+    "scoring_command": "to_be_defined_after_repository_selection",
+    "metric_inputs": [
+      "patch_file",
+      "test_log"
+    ]
+  },
+  "provenance_and_license": {
+    "license_review": "required_before_clone_or_patch_release",
+    "download_or_clone_status": "not_started",
+    "external_project_root_policy": "Place newly downloaded projects under D:/a_work/gitee.",
+    "secret_policy": "Do not store API keys, private tokens, or credential-bearing logs in this manifest."
+  },
+  "planned_outputs": {
+    "run_dir": "results/real_reuse/runs/SWE-T1/",
+    "metric_log": "results/real_reuse/runs/SWE-T1/metric.json",
+    "execution_log": "results/real_reuse/runs/SWE-T1/run_log.md",
+    "raw_rows": "results/real_reuse/raw_rows.jsonl"
+  },
+  "next_action": "Select concrete fixture assets and fill path_or_uri plus license/provenance before runner execution."
+}

@@ -46,7 +46,7 @@
 | --- | --- | --- |
 | E5 | Can PaperToSkill help agents reuse paper methods on original-style input/output tasks? | `research/real_reuse_experiment_plan.md`; future `benchmarks/real_reuse/`; future `results/real_reuse/` |
 | E5.1 | Are the four main papers and eight tasks feasible under objective metrics? | Complete for planned spec and task contracts: `benchmarks/real_reuse/real_reuse_v0.json`; `benchmarks/real_reuse/tasks/*.json`; `results/real_reuse/spec_preflight.md` reports `ready_to_implement` |
-| E5.2 | Can each task be bound to a concrete fixture and then compared with Summary vs PaperToSkill without mid-run human intervention? | Fixture manifests, then a runner that logs task, condition, model, command, output path, metric, time, tokens, and failure reason |
+| E5.2 | Can each task be bound to a concrete fixture and then compared with Summary vs PaperToSkill without mid-run human intervention? | Fixture requirement manifests complete: `benchmarks/real_reuse/fixtures/*.json`; concrete assets, license/provenance, scoring commands, runner, and scorer remain pending |
 | E5.3 | Can the main real-reuse table be generated from raw rows? | Aggregator that emits `results/real_reuse/main_results.{csv,md,json}` and preserves raw rows |
 | E5.4 | Does a small Full Excerpt sanity check change the interpretation? | Three-task sanity table with Summary, PaperToSkill, Full Excerpt, metric, and token columns |
 | E5.5 | Which PaperToSkill components matter once downstream tasks are real? | Optional component-ablation task set with pre-registered workflow checklist and unsupported-error rubric |

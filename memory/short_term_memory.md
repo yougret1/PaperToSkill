@@ -15,7 +15,15 @@ Current date: 2026-07-03.
   discussion record. Do not rewrite the AAAI Results as if these new real-reuse
   experiments are complete; first update planning files, then revise paper text
   after execution.
-- 2026-07-03 Phase 81 task-spec gate is now the current local phase: added
+- 2026-07-03 Phase 82 fixture-manifest gate is now the current local phase:
+  added `scripts/build_real_reuse_fixture_manifests.py` and generated the eight
+  `benchmarks/real_reuse/fixtures/*.json` manifests. The real-reuse preflight
+  now validates fixture identity, status, asset slots, context conditions,
+  metric alignment, no-mid-run-human rule, and license/provenance boundary; it
+  reports `ready_to_implement`, 8 tasks, 207 ready checks, and 0 failed checks.
+  This is still not execution evidence: concrete fixture assets, scoring
+  commands, runner/scorer, and raw rows remain pending.
+- 2026-07-03 Phase 81 task-spec gate was the previous local phase: added
   `scripts/build_real_reuse_task_specs.py` and generated the eight
   `benchmarks/real_reuse/tasks/*.json` per-task execution-contract specs. The
   real-reuse preflight now validates task-spec identity, conditions, metric
@@ -64,8 +72,8 @@ Current date: 2026-07-03.
   all strict local gates, `git diff --check`, and repository raw-key scan.
 - Current reports:
   - Goal completion: 77 ready / 3 pending / 0 failed.
-  - Reproducibility package: 321 ready / 1 pending / 0 failed after adding the
-    real-reuse task-spec gate.
+  - Reproducibility package: 330 ready / 1 pending / 0 failed after adding the
+    real-reuse fixture-manifest gate.
   - External evidence queue: `human_fidelity_annotation` and
     `aaai_submission_decision`.
   - AAAI decision: ready, selected `wait_for_external_evidence`.
@@ -136,13 +144,32 @@ Current date: 2026-07-03.
 
 ## Current Phase
 
-Phase 81 is the current local phase. Phase 68 was committed as
+Phase 82 is the current local phase. Phase 68 was committed as
 `5548070 Refresh memory anchors after remote save` and pushed to `origin/main`
 on 2026-06-20. Phase 69 syncs the AAAI submission-decision execution packet
 with the validated decision-record helper; no external evidence status is
 promoted and no AAAI option is selected. Phase 70 updates the direct provider
 diagnostic to match the current coderxiaoc API protocols: Claude uses
 Anthropic Messages and GPT uses OpenAI Responses.
+
+Phase 82 evidence:
+
+- `scripts/build_real_reuse_fixture_manifests.py` materializes all eight
+  fixture requirement manifests from the per-task specs.
+- `benchmarks/real_reuse/fixtures/AIDE-T1.json`, `AIDE-T2.json`, `SWE-T1.json`,
+  `SWE-T2.json`, `REF-T1.json`, `REF-T2.json`, `SNAP-T1.json`, and
+  `SNAP-T2.json` exist.
+- Each fixture manifest records source alignment, required asset slots,
+  Summary/PaperToSkill context assets, execution budget slots, scoring
+  contract, license/provenance status, and planned outputs.
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 8
+  tasks, 207 ready checks, and 0 failed checks.
+- `results/reproducibility/package_report.md` reports 330 ready / 1 pending /
+  0 failed after including the fixture builder and all eight manifests.
+- No concrete fixture asset has been selected; no dataset/repo has been
+  downloaded or cloned; no scoring command, runner/scorer, raw row, or main
+  result artifact exists yet. Next implementation should select concrete
+  assets and then implement the runner/scorer.
 
 Phase 81 evidence:
 

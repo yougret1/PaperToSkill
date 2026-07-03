@@ -2760,3 +2760,32 @@ Evidence boundary:
   run any task, or create downstream result rows.
 - The next implementation step is fixture manifests under
   `benchmarks/real_reuse/fixtures/`, followed by the runner and scorer.
+
+## 2026-07-03 Phase 82
+
+Actions:
+
+- Added `scripts/build_real_reuse_fixture_manifests.py` to materialize fixture
+  requirement manifests from the eight per-task real-reuse contracts.
+- Generated `benchmarks/real_reuse/fixtures/*.json` for all eight tasks.
+- Extended `scripts/check_real_reuse_benchmark.py` so the preflight validates
+  each fixture manifest's identity, status, asset slots, context conditions,
+  metric alignment, no-mid-run-human rule, and license/provenance boundary.
+- Added fixture-manifest tests and expanded package-gate expectations.
+
+Results:
+
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`,
+  8 tasks, 207 ready checks, and 0 failed checks after validating fixture
+  manifests.
+- `results/reproducibility/package_report.md` reports
+  `ready_with_pending_external_evidence`, 330 ready checks, 1 pending check,
+  and 0 failed checks after adding the fixture builder and eight manifests.
+
+Evidence boundary:
+
+- Phase 82 creates fixture requirement manifests only. It does not select or
+  download datasets/repositories, fill scoring commands, run any task, or
+  produce downstream result rows.
+- The next implementation step is concrete fixture-asset selection plus
+  runner/scorer implementation.
