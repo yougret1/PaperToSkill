@@ -7,6 +7,22 @@ Current date: 2026-07-04.
 
 ## Latest Resume/Completion Note
 
+- 2026-07-04 Phase 99 real-reuse boundary wording cleanup: after the user asked
+  whether other paper sections still needed modification, re-read memory,
+  checked `C:\Users\19351\Desktop\tem\ok.txt` (absent), and verified
+  `git status -sb` was aligned with `origin/main` before edits. Cleaned the
+  generated real-reuse results boundary wording in
+  `scripts/build_real_reuse_paper_tables.py` so `main_results_plan.md/json`
+  no longer describe current unfilled cells as "pending cells" after all eight
+  rows have one scored GPT-family pass. The new wording says score cells are
+  generated from raw rows when available and future unfilled cells are planning
+  placeholders, not task-success evidence. Added regression assertions in
+  `tests/test_build_real_reuse_paper_tables.py` and regenerated
+  `results/real_reuse/main_results_plan.md/json`. Focused table-builder tests,
+  `check_paper_tables.py --strict`, `check_paper_claims.py --strict`, and
+  `check_reproducibility_package.py --strict` passed before memory/log updates.
+  This is wording/status hygiene only; it does not change scores or evidence
+  boundaries.
 - 2026-07-04 Phase 98 AIDE real-reuse completion and paper-sync: user
   provided the official Kaggle Spaceship Titanic `train.csv`, `test.csv`, and
   `sample_submission.csv` under

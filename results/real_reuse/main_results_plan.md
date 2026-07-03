@@ -1,6 +1,6 @@
 # Real-Reuse Main Results Table
 
-Evidence boundary: this table defines the main real-reuse experiment rows for the paper. Filled scores come from local raw rows; pending cells are not downstream task-success evidence.
+Evidence boundary: this table defines the main real-reuse experiment rows for the paper. Score cells are generated from local raw rows when available; any future unfilled cells are planning placeholders, not downstream task-success evidence.
 
 - Raw scored rows read: 16
 

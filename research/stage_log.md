@@ -3403,3 +3403,66 @@ Evidence boundary:
   hidden gold patch passes, but both model-generated patches fail to apply.
 - The full eight-task real-reuse benchmark remains incomplete because AIDE-T1
   and AIDE-T2 await the official Kaggle Spaceship Titanic `train.csv`.
+
+## 2026-07-04 Phase 98
+
+Actions:
+
+- Materialized AIDE-T1 and AIDE-T2 from the official Kaggle Spaceship Titanic
+  files supplied under
+  `C:\Users\19351\Desktop\tem\real_reuse_assets\spaceship-titanic\`.
+- Validated the local AIDE scorer against baseline/weak-script checks.
+- Ran AIDE-T1 and AIDE-T2 Summary/PaperToSkill once with the GPT-family
+  `gpt-5.5` slot.
+- Regenerated the real-reuse main table data and synchronized the AAAI
+  manuscript, outline, draft, result cards, reports, and memory to the full
+  eight-row first-pass state.
+
+Results:
+
+- The official `train.csv` has 8,693 rows and SHA256
+  `17336D553F49EBDF6ECB266D2B5D3746E5DD308445F7C7864141C4F28D2A88D0`.
+- AIDE-T1 Summary/PaperToSkill scored `0.000` / `0.000`.
+- AIDE-T2 Summary/PaperToSkill scored `0.000` / `0.000`.
+- Both AIDE rows failed because generated scripts exceeded the 60-second
+  scorer budget.
+- The first single-run GPT-family pass now covers all eight real-reuse task
+  rows: AIDE-T1/T2, SWE-T1/T2, REF-T1/T2, and SNAP-T1/T2.
+
+Evidence boundary:
+
+- This phase completes the first eight-row real-reuse pass, but the outcome is
+  mixed and failure-heavy: SWE-T2 is one positive PaperToSkill row, REF ties
+  Summary, AIDE and SWE-T1 are scored failures, and SNAP rows remain below
+  threshold.
+- The result is downstream stress-test and failure-boundary evidence, not
+  aggregate PaperToSkill advantage over Summary.
+- Kaggle-derived AIDE CSV fixture files remain local and ignored by Git; only
+  manifests, hashes, and derived scored rows are committed.
+
+## 2026-07-04 Phase 99
+
+Actions:
+
+- Rechecked memory, the human-fidelity handoff state, and Git status after the
+  discussion about whether other paper sections still needed modification.
+- Updated `scripts/build_real_reuse_paper_tables.py` so generated Markdown and
+  JSON evidence-boundary text no longer says "pending cells" after the first
+  eight-row pass has scored all planned rows.
+- Regenerated `results/real_reuse/main_results_plan.md` and
+  `results/real_reuse/main_results_plan.json`.
+- Added table-builder regression assertions that the generated evidence
+  boundary uses "future unfilled cells are planning placeholders" and does not
+  reintroduce "pending cells".
+
+Results:
+
+- The real-reuse score data is unchanged.
+- Focused table-builder unit tests passed.
+- Paper-table, paper-claim, and reproducibility-package strict checks passed
+  before final phase verification.
+
+Evidence boundary:
+
+- This phase is status-wording hygiene only. It does not add new task rows,
+  rerun models, or strengthen downstream effectiveness claims.

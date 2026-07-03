@@ -1,4 +1,5 @@
 import csv
+import json
 import subprocess
 import sys
 import tempfile
@@ -56,6 +57,12 @@ class BuildRealReusePaperTablesTest(unittest.TestCase):
             self.assertEqual("Skill pending", rows_by_id["SWE-T1"]["Status"])
             self.assertTrue(output_md.exists())
             self.assertTrue(output_json.exists())
+            output_md_text = output_md.read_text(encoding="utf-8")
+            self.assertIn("future unfilled cells are planning placeholders", output_md_text)
+            self.assertNotIn("pending cells", output_md_text.lower())
+            output_json_payload = json.loads(output_json.read_text(encoding="utf-8"))
+            self.assertIn("future unfilled cells are planning placeholders", output_json_payload["evidence_boundary"])
+            self.assertNotIn("pending cells", output_json_payload["evidence_boundary"].lower())
 
     def test_cli_marks_swe_runner_pending_after_skill_exists(self):
         with tempfile.TemporaryDirectory() as tmp:

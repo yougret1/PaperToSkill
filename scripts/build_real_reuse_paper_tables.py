@@ -236,8 +236,9 @@ def write_markdown(path: Path, rows: list[dict[str, str]], raw_row_count: int) -
         "# Real-Reuse Main Results Table",
         "",
         "Evidence boundary: this table defines the main real-reuse experiment "
-        "rows for the paper. Filled scores come from local raw rows; pending "
-        "cells are not downstream task-success evidence.",
+        "rows for the paper. Score cells are generated from local raw rows when "
+        "available; any future unfilled cells are planning placeholders, not "
+        "downstream task-success evidence.",
         "",
         f"- Raw scored rows read: {raw_row_count}",
         "",
@@ -252,8 +253,9 @@ def write_json(path: Path, rows: list[dict[str, str]], raw_rows: list[dict[str, 
     payload = {
         "schema_version": "0.1",
         "evidence_boundary": (
-            "Paper-facing real-reuse table. Filled score cells are generated "
-            "from raw_rows.jsonl; pending cells are not task-success evidence."
+            "Paper-facing real-reuse table. Score cells are generated from "
+            "raw_rows.jsonl when available; any future unfilled cells are "
+            "planning placeholders, not task-success evidence."
         ),
         "raw_row_count": len(raw_rows),
         "rows": rows,
