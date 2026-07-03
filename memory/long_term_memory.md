@@ -514,31 +514,24 @@ Use these as entry points instead of searching the whole repo first:
   reports ready, 20 ready checks, 0 failed checks.
 - Submission-review handoff:
   `results/reproducibility/submission_review_report.md`
-  reports ready, 15 ready checks, 0 failed checks.
+  reports ready, 16 ready checks, 0 failed checks.
 - Real-reuse preflight:
   `results/real_reuse/spec_preflight.md`
   reports `ready_to_implement`, 8 tasks, 462 ready checks, and 0 failed checks
   after validating the REF prepared asset/runner layer, AIDE execution-layer
   contract, SWE-agent skill/execution-layer contracts, and SnapATAC2
   skill/execution-layer/prepared-asset contracts.
-- Real-reuse REF run:
-  `results/real_reuse/reflexion_run_report.md` reports `complete` with 4
-  scored rows for GPT-family `gpt-5.5`; REF-T1 and REF-T2 Summary and
-  PaperToSkill all score 1.000. This is a partial REF-slice result, not the
-  full eight-task benchmark.
-- Real-reuse SWE-T1 run:
-  `results/real_reuse/raw_rows.jsonl` contains one GPT-family Summary row and
-  one GPT-family PaperToSkill row for locked SQLFluff instance
-  `sqlfluff__sqlfluff-1625`; both score 0.000 with `patch_apply_failed`.
-  `results/real_reuse/swe_t1_gold_metric.json` validates the hidden-test
-  scorer with the gold patch. This is failure-boundary evidence, not a
-  PaperToSkill success.
-- Real-reuse SnapATAC2 run:
-  `results/real_reuse/snapatac2_run_report.md` reports `complete` with 4
-  scored rows for GPT-family `gpt-5.5`; SNAP-T1 Summary/PaperToSkill score
-  0.000/0.500 and SNAP-T2 Summary/PaperToSkill score 0.200/0.400. All SNAP
-  rows fail the success threshold. This is failure-boundary evidence over
-  miniature fixtures, not a full SnapATAC2 reproduction.
+- Real-reuse first-pass run:
+  `results/real_reuse/raw_rows.jsonl` and
+  `results/real_reuse/main_results_plan.md` contain one GPT-family `gpt-5.5`
+  Summary-vs-PaperToSkill pass for all eight rows. AIDE-T1/T2 score
+  0.000/0.000 due 60-second scorer timeouts; SWE-T1 scores 0.000/0.000 due
+  patch-apply failures; SWE-T2 scores 0.000/1.000 and is one positive
+  PaperToSkill row; REF-T1/T2 score 1.000/1.000; SNAP-T1/T2 score 0.000/0.500
+  and 0.200/0.400 while failing the local success threshold. This is mixed
+  downstream stress-test evidence and failure-boundary evidence, not aggregate
+  effectiveness. AIDE Kaggle-derived CSV fixture files are kept local and
+  ignored by git; committed manifests retain hashes and provenance boundaries.
 
 ## Model/API Configuration
 

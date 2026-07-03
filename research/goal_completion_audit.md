@@ -1,6 +1,6 @@
 # Goal Completion Audit
 
-Date: 2026-07-03
+Date: 2026-07-04
 
 Purpose: audit the active user goal against current repository evidence before
 claiming completion. This is a requirement-by-requirement gate, not a claim that
@@ -51,7 +51,7 @@ Current machine reports:
 | --- | --- | --- | --- |
 | Durable local memory | `memory/long_term_memory.md`; `memory/short_term_memory.md` | Complete locally | Read and update both memory files after every resume/compaction. |
 | Use `ai-scientist-v2` to refine PaperToSkill | Seed idea files, bounded smoke report, full live-run handoff, Phase 76 run log, completion directory | Complete for bounded local evidence | Do not treat the synthetic run as broad live task success. |
-| Save phase-level progress to GitHub | Local branch currently has unpushed phase changes | Pending save for current phase | Commit and push after verification. |
+| Save phase-level progress to GitHub | Phase 98 commit `6885aaf Complete AIDE real reuse first pass` pushed to `origin/main`; `git status -sb` reports `main...origin/main` with only ignored local fixture/cache files | Complete for current phase | Continue phase-level commits after meaningful future milestones. |
 | Official AAAI TeX package | `paper/aaai/`; `results/reproducibility/aaai_package_report.md` | Locally ready | Keep draft synchronized with new evidence. |
 | Usage examples | `examples/usage/`; `results/reproducibility/usage_example_report.md` | Complete locally | Re-run after runner or task changes. |
 | Model ablations | `results/model_ablation_prompts/v0/evaluation.md`: 6 scored, 0 pending | Complete for saved-response protocol | Do not claim broad model quality or live task success. |
@@ -67,28 +67,36 @@ Current machine reports:
 
 - `human_fidelity_annotation_complete`: `results/human_fidelity_packets/annotation_summary.md`
   reports 0 scored rows and 24 pending rows.
-- `real_reuse_experiments_complete`: all eight planned rows have one GPT-family
-  Summary-vs-PaperToSkill run with scored raw rows and paper table cells. SWE-T2
-  and REF rows succeed; AIDE, SWE-T1, and SNAP rows are failure-boundary
-  evidence rather than aggregate effectiveness.
 - `aaai_final_submission_ready`: local package and submission-review gates are
   ready, but the recorded policy waits for named external evidence.
+
+## Completed But Bounded Evidence
+
+- `real_reuse_experiments_first_pass`: all eight planned rows have one
+  GPT-family Summary-vs-PaperToSkill run with scored raw rows and paper table
+  cells. SWE-T2 and REF rows succeed; AIDE, SWE-T1, and SNAP rows are
+  failure-boundary evidence rather than aggregate effectiveness.
 
 ## Completion Decision
 
 Do not mark the active goal complete yet. The repository satisfies local memory,
 scaffold, deterministic/offline experiment, AAAI-package, usage-example,
 Claude/GPT-family/DeepSeek saved-response ablation, live-transfer saved-response
-coverage, bounded Paper2Agent comparison, and bounded AI-Scientist-v2
-smoke/full-live evidence. It still lacks completed real-reuse experiments,
-human semantic validation, and final AAAI submission readiness under the
-recorded wait policy.
+coverage, bounded Paper2Agent comparison, bounded AI-Scientist-v2
+smoke/full-live evidence, and one full eight-row real-reuse first pass. It
+still lacks human semantic validation and final AAAI submission readiness under
+the recorded wait policy. The real-reuse first pass is complete as an execution
+milestone but mixed as effectiveness evidence, so it must not be promoted into
+an aggregate downstream-success claim.
 
 ## Recommended Next Closure Path
 
-1. Materialize the remaining locked fixture assets, including license/provenance,
-   path/URI, sha256 values, scoring command, and budget fields.
-2. Implement the real-reuse runner/model invocation artifacts.
+1. Keep the first-pass real-reuse result framed as mixed downstream
+   stress-test evidence unless a revised, pre-registered follow-up supports a
+   stronger claim.
+2. If pursuing stronger effectiveness evidence, design a follow-up that fixes
+   budget/artifact/patch-application contracts before rerunning; keep it
+   separate from the completed first-pass table.
 3. Analyze the eight-row real-reuse failure modes before changing the paper's
    main result claims beyond mixed first-pass evidence.
 4. Fill and summarize the 24-row human-fidelity annotation template.

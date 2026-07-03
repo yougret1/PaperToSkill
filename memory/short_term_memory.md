@@ -7,7 +7,7 @@ Current date: 2026-07-04.
 
 ## Latest Resume/Completion Note
 
-- 2026-07-04 Phase 98 AIDE real-reuse completion and paper-sync WIP: user
+- 2026-07-04 Phase 98 AIDE real-reuse completion and paper-sync: user
   provided the official Kaggle Spaceship Titanic `train.csv`, `test.csv`, and
   `sample_submission.csv` under
   `C:\Users\19351\Desktop\tem\real_reuse_assets\spaceship-titanic\`; the
@@ -22,9 +22,14 @@ Current date: 2026-07-04.
   REF-T1/T2 `1.000/1.000`, SNAP-T1 `0.000/0.500`, and SNAP-T2
   `0.200/0.400`. This is mixed/failure-heavy downstream evidence and does not
   establish aggregate PaperToSkill advantage over Summary. AAAI text, table
-  caption, `paper/draft.md`, and `paper/outline.md` are being synchronized to
-  this evidence boundary. Remaining action before phase save: refresh strict
-  gates/reports, rebuild the AAAI PDF, run tests/hygiene, then commit and push.
+  caption, `paper/draft.md`, `paper/outline.md`, memory, result cards, and
+  reports were synchronized to this evidence boundary. Strict gates passed,
+  the AAAI PDF was rebuilt, full unit discovery passed 158 tests, `git
+  diff --check` had only Windows line-ending warnings, and the raw-key scan had
+  no matches. Kaggle-derived AIDE CSVs are intentionally ignored by git; hashes
+  and manifests were committed. Phase backup commit `6885aaf Complete AIDE
+  real reuse first pass` was pushed to `origin/main`; `git status -sb` reports
+  `main...origin/main` with only ignored local fixture/cache files.
 - 2026-07-04 Phase 97 cleanup/resume: read long-term and short-term memory
   after context continuation, checked `git status -sb`, and checked
   `C:\Users\19351\Desktop\tem\ok.txt`; no new `ok.txt` was present, so AIDE
