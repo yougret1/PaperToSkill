@@ -15,13 +15,22 @@ Current date: 2026-07-03.
   discussion record. Do not rewrite the AAAI Results as if these new real-reuse
   experiments are complete; first update planning files, then revise paper text
   after execution.
-- 2026-07-03 Phase 80 spec gate is now the current local phase: added
+- 2026-07-03 Phase 81 task-spec gate is now the current local phase: added
+  `scripts/build_real_reuse_task_specs.py` and generated the eight
+  `benchmarks/real_reuse/tasks/*.json` per-task execution-contract specs. The
+  real-reuse preflight now validates task-spec identity, conditions, metric
+  contracts, raw-row schema, and no-mid-run-human rule; it reports
+  `ready_to_implement`, 8 tasks, 142 ready checks, and 0 failed checks. This
+  still is not execution evidence: fixtures, runner/scorer, and raw rows remain
+  pending.
+- 2026-07-03 Phase 80 spec gate was committed and pushed as
+  `bdd39cc test: add real reuse benchmark preflight`: added
   `benchmarks/real_reuse/real_reuse_v0.json`,
   `scripts/check_real_reuse_benchmark.py`,
   `tests/test_check_real_reuse_benchmark.py`, and
   `results/real_reuse/spec_preflight.{json,md}`. The preflight reports
-  `ready_to_implement`, 8 tasks, 85 ready checks, and 0 failed checks. This is
-  still planning/spec evidence only; no real-reuse raw rows exist.
+  `ready_to_implement`, 8 tasks, and initially 85 ready checks before Phase 81
+  task-spec validation.
 - 2026-07-03 Phase 79 planning sync completed locally: added
   `research/real_reuse_experiment_plan.md`; updated `paper/outline.md`,
   `research/experiment_queue.md`, `research/claim_evidence_matrix.md`,
@@ -55,8 +64,8 @@ Current date: 2026-07-03.
   all strict local gates, `git diff --check`, and repository raw-key scan.
 - Current reports:
   - Goal completion: 77 ready / 3 pending / 0 failed.
-  - Reproducibility package: 312 ready / 1 pending / 0 failed after adding the
-    real-reuse spec preflight gate.
+  - Reproducibility package: 321 ready / 1 pending / 0 failed after adding the
+    real-reuse task-spec gate.
   - External evidence queue: `human_fidelity_annotation` and
     `aaai_submission_decision`.
   - AAAI decision: ready, selected `wait_for_external_evidence`.
@@ -127,7 +136,7 @@ Current date: 2026-07-03.
 
 ## Current Phase
 
-Phase 80 is the current local phase. Phase 68 was committed as
+Phase 81 is the current local phase. Phase 68 was committed as
 `5548070 Refresh memory anchors after remote save` and pushed to `origin/main`
 on 2026-06-20. Phase 69 syncs the AAAI submission-decision execution packet
 with the validated decision-record helper; no external evidence status is
@@ -135,14 +144,34 @@ promoted and no AAAI option is selected. Phase 70 updates the direct provider
 diagnostic to match the current coderxiaoc API protocols: Claude uses
 Anthropic Messages and GPT uses OpenAI Responses.
 
+Phase 81 evidence:
+
+- `scripts/build_real_reuse_task_specs.py` materializes all eight per-task
+  execution-contract specs from the master spec.
+- `benchmarks/real_reuse/tasks/AIDE-T1.json`, `AIDE-T2.json`, `SWE-T1.json`,
+  `SWE-T2.json`, `REF-T1.json`, `REF-T2.json`, `SNAP-T1.json`, and
+  `SNAP-T2.json` exist.
+- Each task spec records input/output contract, Summary and PaperToSkill
+  condition paths, metric contract, reference-score policy, run controls,
+  workflow checklist, unsupported-error policy, raw-row schema, and artifact
+  paths.
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 8
+  tasks, 142 ready checks, and 0 failed checks.
+- `results/reproducibility/package_report.md` reports 321 ready / 1 pending /
+  0 failed after including the task-spec builder and all eight task specs.
+- No fixture manifests, runner/scorer, real-reuse raw rows, or main result
+  artifacts exist yet. Next implementation should create fixtures under
+  `benchmarks/real_reuse/fixtures/`, then implement the runner/scorer.
+
 Phase 80 evidence:
 
 - Real-reuse benchmark spec exists at
   `benchmarks/real_reuse/real_reuse_v0.json`.
 - Preflight checker exists at `scripts/check_real_reuse_benchmark.py`; test
   coverage exists at `tests/test_check_real_reuse_benchmark.py`.
-- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 8
-  tasks, 85 ready checks, and 0 failed checks.
+- Initial `results/real_reuse/spec_preflight.md` reported
+  `ready_to_implement`, 8 tasks, 85 ready checks, and 0 failed checks before
+  task-spec validation was added in Phase 81.
 - The aggregate package checker now includes real-reuse spec/preflight checks;
   `results/reproducibility/package_report.md` reports 312 ready / 1 pending /
   0 failed.

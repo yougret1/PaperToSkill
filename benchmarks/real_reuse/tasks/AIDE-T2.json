@@ -1,0 +1,100 @@
+{
+  "schema_version": "0.1",
+  "benchmark_id": "papertoskill_real_reuse_v0",
+  "master_spec": "benchmarks/real_reuse/real_reuse_v0.json",
+  "id": "AIDE-T2",
+  "source_paper_id": "aide",
+  "domain": "ML engineering",
+  "task_kind": "ml_debug_and_search",
+  "status": "spec_ready_assets_pending",
+  "evidence_boundary": "This per-task spec defines execution contracts only. It does not contain task outputs, scores, or downstream success evidence.",
+  "input_contract": {
+    "original_style_input": "A weak or failing ML script, validation feedback, error trace or score feedback, and objective metric.",
+    "required_fixture_manifest": "benchmarks/real_reuse/fixtures/AIDE-T2.json",
+    "fixture_status": "to_be_created_or_selected_before_execution"
+  },
+  "output_contract": {
+    "required_output": "A repaired or improved script plus a logged search/debug trajectory.",
+    "output_dir": "results/real_reuse/runs/AIDE-T2/outputs/",
+    "must_log_command": true,
+    "must_log_metric": true,
+    "must_preserve_raw_output": true
+  },
+  "conditions": [
+    {
+      "id": "summary",
+      "context_kind": "method_summary_baseline",
+      "context_path": "baselines/real_reuse/AIDE-T2_summary.md",
+      "asset_status": "to_be_created_before_execution"
+    },
+    {
+      "id": "papertoskill",
+      "context_kind": "generated_skill",
+      "context_path": "generated_skills/aide/SKILL.md",
+      "asset_status": "existing_or_to_be_verified_before_execution"
+    }
+  ],
+  "metric_contract": {
+    "name": "best_node_score",
+    "family": "validation_metric_with_debug_success",
+    "direction": "higher_is_better",
+    "automated": true,
+    "success_criterion": "The final candidate runs and improves over the provided weak script under the same attempt budget.",
+    "source_metric_relation": "Tests AIDE-style iterative code-space refinement and node selection.",
+    "score_field": "task_score",
+    "success_field": "success",
+    "metric_source_policy": "Use the original task metric family where practical; document any local proxy."
+  },
+  "reference_score_policy": {
+    "label": "AIDE reported search and benchmark references",
+    "score": null,
+    "comparability": "reported_reference_only_until_local_reproduction",
+    "policy": "Treat original paper scores as reported references unless the same dataset, input/output, metric, model/tool budget, and runtime setting are reproduced locally."
+  },
+  "run_controls": {
+    "first_pass_human_intervention": "none_mid_run",
+    "human_review": "optional_blind_review_after_run",
+    "same_prompt_template_across_conditions": true,
+    "same_task_metric_across_conditions": true,
+    "same_run_budget_across_conditions": true,
+    "max_attempts": "to_be_declared_in_fixture_or_runner_config",
+    "random_seed_policy": "record seed when the task harness uses randomness"
+  },
+  "workflow_checklist": [
+    "Record candidate edits and scores.",
+    "Avoid repeating local patches after a known failure.",
+    "Use validation feedback before choosing the final candidate.",
+    "Preserve cost or attempt budget in the run log."
+  ],
+  "unsupported_error_policy": [
+    "Count invented method claims that are not supported by the source paper or task fixture.",
+    "Count steps that contradict the declared input, output, metric, or run budget.",
+    "Count claims of completed results that are not present in the raw output log."
+  ],
+  "raw_row_schema": [
+    "run_id",
+    "task_id",
+    "source_paper_id",
+    "domain",
+    "condition",
+    "model_family",
+    "model_alias",
+    "task_score",
+    "success",
+    "workflow_score",
+    "unsupported_errors",
+    "tokens",
+    "time_seconds",
+    "interventions",
+    "failure_reason",
+    "output_path"
+  ],
+  "artifact_paths": {
+    "task_spec": "benchmarks/real_reuse/tasks/AIDE-T2.json",
+    "run_dir": "results/real_reuse/runs/AIDE-T2/",
+    "raw_rows": "results/real_reuse/raw_rows.jsonl",
+    "metric_log": "results/real_reuse/runs/AIDE-T2/metric.json",
+    "execution_log": "results/real_reuse/runs/AIDE-T2/run_log.md"
+  },
+  "next_action": "Create or select the fixture manifest and implement runner/scorer support before execution."
+}

@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 312
+- Ready checks: 321
 - Pending checks: 1
 - Failed checks: 0
 
@@ -74,7 +74,16 @@ Evidence boundary: this report checks local package completeness and separates p
 | deepseek_followup_handoff_md | ready | present | results/deepseek_followup_handoff/handoff.md |
 | real_reuse_plan | ready | present | research/real_reuse_experiment_plan.md |
 | real_reuse_benchmark_spec | ready | present | benchmarks/real_reuse/real_reuse_v0.json |
+| real_reuse_task_spec_builder | ready | present | scripts/build_real_reuse_task_specs.py |
 | real_reuse_benchmark_checker | ready | present | scripts/check_real_reuse_benchmark.py |
+| real_reuse_task_spec_aide_t1 | ready | present | benchmarks/real_reuse/tasks/AIDE-T1.json |
+| real_reuse_task_spec_aide_t2 | ready | present | benchmarks/real_reuse/tasks/AIDE-T2.json |
+| real_reuse_task_spec_swe_t1 | ready | present | benchmarks/real_reuse/tasks/SWE-T1.json |
+| real_reuse_task_spec_swe_t2 | ready | present | benchmarks/real_reuse/tasks/SWE-T2.json |
+| real_reuse_task_spec_ref_t1 | ready | present | benchmarks/real_reuse/tasks/REF-T1.json |
+| real_reuse_task_spec_ref_t2 | ready | present | benchmarks/real_reuse/tasks/REF-T2.json |
+| real_reuse_task_spec_snap_t1 | ready | present | benchmarks/real_reuse/tasks/SNAP-T1.json |
+| real_reuse_task_spec_snap_t2 | ready | present | benchmarks/real_reuse/tasks/SNAP-T2.json |
 | real_reuse_spec_preflight_json | ready | present | results/real_reuse/spec_preflight.json |
 | real_reuse_spec_preflight_md | ready | present | results/real_reuse/spec_preflight.md |
 | artifact_map | ready | present | research/artifact_map.md |

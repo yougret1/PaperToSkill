@@ -33,7 +33,7 @@ been run.
 Current machine reports:
 
 - Package: `results/reproducibility/package_report.md` reports
-  `ready_with_pending_external_evidence`, 305 ready checks, 1 pending check, and
+  `ready_with_pending_external_evidence`, 321 ready checks, 1 pending check, and
   0 failed checks.
 - Goal: `results/reproducibility/goal_completion_report.md` reports
   `not_complete_pending_external_evidence`, 77 ready checks, 3 pending checks,
@@ -55,7 +55,7 @@ Current machine reports:
 | Model ablations | `results/model_ablation_prompts/v0/evaluation.md`: 6 scored, 0 pending | Complete for saved-response protocol | Do not claim broad model quality or live task success. |
 | PaperToSkill extraction prototype | Extractor, auto-note scaffold, pipeline, generated skills/source maps | Complete for scoped prototype | Do not claim reliable arbitrary-PDF automation. |
 | Main deterministic experiments | `results/tables/main_results.md`; transfer, cost, source-span, failure archive reports | Complete for offline benchmark | Keep claims bounded to deterministic/local evidence. |
-| Next-stage real-reuse validity experiments | `research/real_reuse_experiment_plan.md`; `benchmarks/real_reuse/real_reuse_v0.json`; `results/real_reuse/spec_preflight.md` | Spec ready; not executed | Build per-task executable specs, runner, and scorer; then run the eight Summary-vs-PaperToSkill `paper-task` rows before revising main validity claims. |
+| Next-stage real-reuse validity experiments | `research/real_reuse_experiment_plan.md`; `benchmarks/real_reuse/real_reuse_v0.json`; `benchmarks/real_reuse/tasks/*.json`; `results/real_reuse/spec_preflight.md` | Spec and per-task contracts ready; not executed | Build fixtures, runner, and scorer; then run the eight Summary-vs-PaperToSkill `paper-task` rows before revising main validity claims. |
 | New-paper triage and Paper2Agent comparison | `research/new_paper_triage_2026-07-01.md`; `results/tables/paper2agent_artifact_comparison.md` | Complete for citation/positioning | Do not claim executable Paper2Agent baseline performance. |
 | Human-fidelity annotation | `results/human_fidelity_packets/annotation_template.csv`; `annotation_guide.md`; packets | Handoff ready; annotation pending | Independent reviewers fill all 24 rows and rerun the strict summarizer. |
 | AAAI submission decision | `research/aaai_submission_decision.md`; `results/aaai_submission_decision/decision.md` | Decision recorded as wait | Complete named evidence before stronger final-submission claims. |
@@ -65,8 +65,9 @@ Current machine reports:
 
 - `human_fidelity_annotation_complete`: `results/human_fidelity_packets/annotation_summary.md`
   reports 0 scored rows and 24 pending rows.
-- `real_reuse_experiments_complete`: the spec preflight is ready, but no
-  `results/real_reuse/raw_rows.jsonl` or main result artifact exists yet.
+- `real_reuse_experiments_complete`: the spec and per-task contracts are ready,
+  but no fixture manifests, `results/real_reuse/raw_rows.jsonl`, or main result
+  artifact exists yet.
 - `aaai_final_submission_ready`: local package and submission-review gates are
   ready, but the recorded policy waits for named external evidence.
 
@@ -82,11 +83,11 @@ recorded wait policy.
 
 ## Recommended Next Closure Path
 
-1. Convert the real-reuse benchmark spec into per-task executable specs and
-   runner/scorer artifacts.
-2. Run the eight Summary-vs-PaperToSkill `paper-task` rows and preserve raw
+1. Bind the eight real-reuse task contracts to concrete fixture manifests.
+2. Implement the real-reuse runner/scorer artifacts.
+3. Run the eight Summary-vs-PaperToSkill `paper-task` rows and preserve raw
    rows before changing the paper's main result claims.
-3. Fill and summarize the 24-row human-fidelity annotation template.
-4. Re-run `check_goal_completion.py`, `check_reproducibility_package.py`, and
+4. Fill and summarize the 24-row human-fidelity annotation template.
+5. Re-run `check_goal_completion.py`, `check_reproducibility_package.py`, and
    `check_submission_review.py`.
-5. Revisit the AAAI decision after the named external evidence is complete.
+6. Revisit the AAAI decision after the named external evidence is complete.

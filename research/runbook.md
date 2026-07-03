@@ -76,10 +76,18 @@ Source of truth:
 ```text
 research/real_reuse_experiment_plan.md
 benchmarks/real_reuse/real_reuse_v0.json
+benchmarks/real_reuse/tasks/
 ```
 
-Current status: planned specification ready; no real-reuse task has been run.
-Do not write the AAAI paper as if these experiments have run.
+Current status: planned specification and per-task execution-contract specs are
+ready; no real-reuse fixture has been selected and no task has been run. Do
+not write the AAAI paper as if these experiments have run.
+
+Regenerate per-task specs from the master spec:
+
+```powershell
+python scripts\build_real_reuse_task_specs.py
+```
 
 Validate the planned spec before implementing runners or editing paper claims:
 
@@ -94,9 +102,9 @@ results/real_reuse/spec_preflight.json
 results/real_reuse/spec_preflight.md
 ```
 
-The expected status is `ready_to_implement`. That means the benchmark spec is
-machine-checkable and ready for runner/scorer implementation; it is not
-downstream task-success evidence.
+The expected status is `ready_to_implement`. That means the benchmark spec and
+per-task specs are machine-checkable and ready for fixture/runner/scorer
+implementation; it is not downstream task-success evidence.
 
 Planned main task grid:
 
@@ -114,12 +122,13 @@ Planned main task grid:
 Execution order:
 
 1. Verify source-paper code, benchmark setup, license, and metric details.
-2. Create task specs under future `benchmarks/real_reuse/`.
+2. Create fixture manifests under future `benchmarks/real_reuse/fixtures/`.
 3. Create Summary and PaperToSkill context inputs for each task.
-4. Run agent-only tasks with no mid-run human intervention.
-5. Save raw rows under future `results/real_reuse/raw_rows.*`.
-6. Aggregate table-ready files under future `results/real_reuse/`.
-7. Only after result artifacts exist, revise the AAAI Abstract, Introduction,
+4. Implement the real-reuse runner and scorer.
+5. Run agent-only tasks with no mid-run human intervention.
+6. Save raw rows under future `results/real_reuse/raw_rows.*`.
+7. Aggregate table-ready files under future `results/real_reuse/`.
+8. Only after result artifacts exist, revise the AAAI Abstract, Introduction,
    Experimental Setup, Results, Discussion, Limitations, and Conclusion.
 
 Required boundaries:

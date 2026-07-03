@@ -25,6 +25,22 @@ EXPECTED_PRIMARY_CONDITIONS = {"summary", "papertoskill"}
 FORBIDDEN_MAIN_CONDITIONS = {"abstract", "full_excerpt"}
 EXPECTED_SANITY_TASKS = {"AIDE-T1", "SWE-T1", "SNAP-T1"}
 EXPECTED_MODEL_FAMILIES = {"Claude-family", "GPT-family", "DeepSeek-family"}
+EXPECTED_RAW_ROW_FIELDS = {
+    "run_id",
+    "task_id",
+    "source_paper_id",
+    "condition",
+    "model_family",
+    "model_alias",
+    "task_score",
+    "success",
+    "workflow_score",
+    "unsupported_errors",
+    "tokens",
+    "time_seconds",
+    "failure_reason",
+    "output_path",
+}
 
 
 @dataclass
@@ -157,6 +173,7 @@ def build_report(root: Path, spec_path: Path) -> dict[str, Any]:
     checks.extend(source_paper_checks(root, spec_path, papers))
     checks.extend(llm_ablation_checks(root, spec_path, spec))
     checks.extend(planned_output_checks(root, spec_path, spec))
+    checks.extend(task_spec_file_checks(root, spec_path, tasks))
     return report_from_checks(root, spec_path, spec, checks)
 
 
@@ -325,6 +342,103 @@ def planned_output_checks(root: Path, spec_path: Path, spec: dict[str, Any]) -> 
             relative(root, spec_path),
         ),
     ]
+
+
+def task_spec_file_checks(root: Path, spec_path: Path, tasks: dict[str, dict[str, Any]]) -> list[Check]:
+    checks: list[Check] = []
+    present_task_specs: set[str] = set()
+    for task_id in sorted(tasks):
+        task = tasks[task_id]
+        declared = task.get("planned_artifacts", {}).get("task_spec", "")
+        task_spec_path = root / str(declared)
+        prefix = task_id.lower().replace("-", "_")
+        if not declared:
+            checks.append(
+                Check(
+                    f"{prefix}_task_spec_path_declared",
+                    "fail",
+                    "missing task_spec planned artifact",
+                    relative(root, spec_path),
+                )
+            )
+            continue
+        if not task_spec_path.exists():
+            checks.append(
+                Check(
+                    f"{prefix}_task_spec_file_present",
+                    "fail",
+                    "missing",
+                    relative(root, task_spec_path),
+                )
+            )
+            continue
+        task_spec = load_json(task_spec_path)
+        present_task_specs.add(task_id)
+        conditions = {condition.get("id") for condition in task_spec.get("conditions", [])}
+        raw_fields = set(task_spec.get("raw_row_schema", []))
+        checks.extend(
+            [
+                Check(
+                    f"{prefix}_task_spec_file_present",
+                    "ready",
+                    "present",
+                    relative(root, task_spec_path),
+                ),
+                Check(
+                    f"{prefix}_task_spec_identity",
+                    "ready"
+                    if task_spec.get("id") == task_id
+                    and task_spec.get("source_paper_id") == task.get("source_paper_id")
+                    else "fail",
+                    f"id={task_spec.get('id')}; source_paper_id={task_spec.get('source_paper_id')}",
+                    relative(root, task_spec_path),
+                ),
+                Check(
+                    f"{prefix}_task_spec_status",
+                    "ready" if task_spec.get("status") == "spec_ready_assets_pending" else "fail",
+                    f"status={task_spec.get('status')}",
+                    relative(root, task_spec_path),
+                ),
+                Check(
+                    f"{prefix}_task_spec_conditions",
+                    "ready" if conditions == EXPECTED_PRIMARY_CONDITIONS else "fail",
+                    "conditions=" + ",".join(sorted(str(condition) for condition in conditions)),
+                    relative(root, task_spec_path),
+                ),
+                Check(
+                    f"{prefix}_task_spec_metric_matches",
+                    "ready"
+                    if task_spec.get("metric_contract", {}).get("name") == task.get("metric", {}).get("name")
+                    else "fail",
+                    f"metric={task_spec.get('metric_contract', {}).get('name')}",
+                    relative(root, task_spec_path),
+                ),
+                Check(
+                    f"{prefix}_task_spec_raw_row_schema",
+                    "ready" if EXPECTED_RAW_ROW_FIELDS <= raw_fields else "fail",
+                    "fields=" + ",".join(sorted(raw_fields)),
+                    relative(root, task_spec_path),
+                ),
+                Check(
+                    f"{prefix}_task_spec_no_mid_run_human",
+                    "ready"
+                    if task_spec.get("run_controls", {}).get("first_pass_human_intervention")
+                    == "none_mid_run"
+                    else "fail",
+                    f"first_pass_human_intervention={task_spec.get('run_controls', {}).get('first_pass_human_intervention')}",
+                    relative(root, task_spec_path),
+                ),
+            ]
+        )
+    checks.append(
+        Check(
+            "real_reuse_task_specs_materialized",
+            "ready" if present_task_specs == EXPECTED_MAIN_TASKS else "fail",
+            "task_specs=" + ",".join(sorted(present_task_specs)),
+            relative(root, spec_path),
+        )
+    )
+    return checks
 
 
 def report_from_checks(

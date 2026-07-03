@@ -2731,3 +2731,32 @@ Evidence boundary:
 - The next required implementation step is to create per-task executable specs
   under `benchmarks/real_reuse/tasks/`, then implement a runner and scorer that
   preserve raw rows under `results/real_reuse/`.
+
+## 2026-07-03 Phase 81
+
+Actions:
+
+- Added `scripts/build_real_reuse_task_specs.py` to materialize the eight
+  per-task real-reuse execution-contract specs from the master benchmark spec.
+- Generated `benchmarks/real_reuse/tasks/*.json` for AIDE-T1/T2, SWE-T1/T2,
+  REF-T1/T2, and SNAP-T1/T2.
+- Extended `scripts/check_real_reuse_benchmark.py` so the preflight validates
+  each per-task spec's identity, condition set, metric contract, raw-row schema,
+  and no-mid-run-human-intervention rule.
+- Added tests for the task-spec builder and expanded package-gate expectations.
+
+Results:
+
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`,
+  8 tasks, 142 ready checks, and 0 failed checks after validating the per-task
+  specs.
+- `results/reproducibility/package_report.md` reports
+  `ready_with_pending_external_evidence`, 321 ready checks, 1 pending check,
+  and 0 failed checks after adding the task-spec builder and eight task specs.
+
+Evidence boundary:
+
+- Phase 81 makes the task contracts concrete but still does not select fixtures,
+  run any task, or create downstream result rows.
+- The next implementation step is fixture manifests under
+  `benchmarks/real_reuse/fixtures/`, followed by the runner and scorer.
