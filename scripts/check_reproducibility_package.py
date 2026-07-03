@@ -121,6 +121,11 @@ CORE_FILES = {
     "deepseek_followup_checker": "scripts/check_deepseek_followup.py",
     "deepseek_followup_handoff_json": "results/deepseek_followup_handoff/handoff.json",
     "deepseek_followup_handoff_md": "results/deepseek_followup_handoff/handoff.md",
+    "real_reuse_plan": "research/real_reuse_experiment_plan.md",
+    "real_reuse_benchmark_spec": "benchmarks/real_reuse/real_reuse_v0.json",
+    "real_reuse_benchmark_checker": "scripts/check_real_reuse_benchmark.py",
+    "real_reuse_spec_preflight_json": "results/real_reuse/spec_preflight.json",
+    "real_reuse_spec_preflight_md": "results/real_reuse/spec_preflight.md",
     "artifact_map": "research/artifact_map.md",
     "claim_evidence_matrix": "research/claim_evidence_matrix.md",
     "new_paper_triage": "research/new_paper_triage_2026-07-01.md",
@@ -1198,6 +1203,45 @@ def deepseek_followup_handoff_checks(root: Path) -> list[Check]:
     return checks
 
 
+def real_reuse_benchmark_checks(root: Path) -> list[Check]:
+    checks: list[Check] = []
+    report_path = root / "results/real_reuse/spec_preflight.json"
+    if not report_path.exists():
+        return checks
+    report = load_json(report_path)
+    failed = [check for check in report.get("checks", []) if check.get("status") == "fail"]
+    check_statuses = {check.get("id"): check.get("status") for check in report.get("checks", [])}
+    ready = report.get("overall_status") == "ready_to_implement" and not failed
+    checks.append(
+        Check(
+            "real_reuse_spec_preflight_ready",
+            "ready" if ready else "fail",
+            f"overall={report.get('overall_status')}; failed={len(failed)}; tasks={report.get('task_count')}",
+            str(report_path.relative_to(root)),
+        )
+    )
+    required_ready = {
+        "real_reuse_expected_task_ids",
+        "real_reuse_main_papers",
+        "real_reuse_main_conditions",
+        "real_reuse_no_abstract_or_full_excerpt_main",
+        "real_reuse_full_excerpt_sanity_scope",
+        "real_reuse_llm_ablation_linked_to_tasks",
+        "real_reuse_llm_ablation_model_families",
+        "real_reuse_planned_outputs_complete",
+    }
+    missing = sorted(check_id for check_id in required_ready if check_statuses.get(check_id) != "ready")
+    checks.append(
+        Check(
+            "real_reuse_core_checks_ready",
+            "ready" if not missing else "fail",
+            "core real-reuse checks ready" if not missing else "missing=" + ",".join(missing),
+            str(report_path.relative_to(root)),
+        )
+    )
+    return checks
+
+
 def auto_note_checks(root: Path) -> list[Check]:
     checks: list[Check] = []
     for case in AUTO_NOTE_CASES:
@@ -1442,6 +1486,7 @@ def build_report(root: Path) -> dict[str, Any]:
     checks.extend(token_accounting_checks(root))
     checks.extend(usage_example_checks(root))
     checks.extend(deepseek_followup_handoff_checks(root))
+    checks.extend(real_reuse_benchmark_checks(root))
     checks.extend(auto_note_checks(root))
     checks.extend(model_ablation_checks(root))
     checks.extend(paper2agent_comparison_checks(root))

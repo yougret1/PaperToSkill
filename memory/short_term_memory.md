@@ -15,7 +15,14 @@ Current date: 2026-07-03.
   discussion record. Do not rewrite the AAAI Results as if these new real-reuse
   experiments are complete; first update planning files, then revise paper text
   after execution.
-- 2026-07-03 Phase 79 planning sync is in progress/completed locally: added
+- 2026-07-03 Phase 80 spec gate is now the current local phase: added
+  `benchmarks/real_reuse/real_reuse_v0.json`,
+  `scripts/check_real_reuse_benchmark.py`,
+  `tests/test_check_real_reuse_benchmark.py`, and
+  `results/real_reuse/spec_preflight.{json,md}`. The preflight reports
+  `ready_to_implement`, 8 tasks, 85 ready checks, and 0 failed checks. This is
+  still planning/spec evidence only; no real-reuse raw rows exist.
+- 2026-07-03 Phase 79 planning sync completed locally: added
   `research/real_reuse_experiment_plan.md`; updated `paper/outline.md`,
   `research/experiment_queue.md`, `research/claim_evidence_matrix.md`,
   `research/goal_completion_audit.md`, `research/runbook.md`,
@@ -48,7 +55,8 @@ Current date: 2026-07-03.
   all strict local gates, `git diff --check`, and repository raw-key scan.
 - Current reports:
   - Goal completion: 77 ready / 3 pending / 0 failed.
-  - Reproducibility package: 305 ready / 1 pending / 0 failed.
+  - Reproducibility package: 312 ready / 1 pending / 0 failed after adding the
+    real-reuse spec preflight gate.
   - External evidence queue: `human_fidelity_annotation` and
     `aaai_submission_decision`.
   - AAAI decision: ready, selected `wait_for_external_evidence`.
@@ -119,13 +127,28 @@ Current date: 2026-07-03.
 
 ## Current Phase
 
-Phase 79 is the current local phase. Phase 68 was committed as
+Phase 80 is the current local phase. Phase 68 was committed as
 `5548070 Refresh memory anchors after remote save` and pushed to `origin/main`
 on 2026-06-20. Phase 69 syncs the AAAI submission-decision execution packet
 with the validated decision-record helper; no external evidence status is
 promoted and no AAAI option is selected. Phase 70 updates the direct provider
 diagnostic to match the current coderxiaoc API protocols: Claude uses
 Anthropic Messages and GPT uses OpenAI Responses.
+
+Phase 80 evidence:
+
+- Real-reuse benchmark spec exists at
+  `benchmarks/real_reuse/real_reuse_v0.json`.
+- Preflight checker exists at `scripts/check_real_reuse_benchmark.py`; test
+  coverage exists at `tests/test_check_real_reuse_benchmark.py`.
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 8
+  tasks, 85 ready checks, and 0 failed checks.
+- The aggregate package checker now includes real-reuse spec/preflight checks;
+  `results/reproducibility/package_report.md` reports 312 ready / 1 pending /
+  0 failed.
+- No real-reuse task has been executed. Next implementation should create
+  per-task executable specs under `benchmarks/real_reuse/tasks/`, then a
+  runner/scorer that writes raw rows under `results/real_reuse/`.
 
 Phase 79 evidence:
 

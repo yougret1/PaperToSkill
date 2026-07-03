@@ -118,17 +118,18 @@ Current supported claims:
   checkout's remote is the SakanaAI upstream. The archive backs up the local
   coderxiaoc/BFTS integration patch inside the PaperToSkill GitHub history
   without committing raw API keys or local presentation/build artifacts.
-- Phase 79 real-reuse planning: the next stronger validity target is
-  original-style paper-task reuse over eight planned tasks from AIDE,
+- Phase 79/80 real-reuse planning and spec gate: the next stronger validity
+  target is original-style paper-task reuse over eight planned tasks from AIDE,
   SWE-agent, Reflexion, and SnapATAC2. Toolformer and AI Scientist-v2 remain
-  sanity/auxiliary cases. This is planning only until future
-  `results/real_reuse/` raw rows exist.
+  sanity/auxiliary cases. `benchmarks/real_reuse/real_reuse_v0.json` and
+  `results/real_reuse/spec_preflight.md` are ready-to-implement planning
+  artifacts only; no real-reuse raw rows exist yet.
 
 Current unsupported claims:
 
 - PaperToSkill improves real original-style task outcomes across AIDE,
-  SWE-agent, Reflexion, SnapATAC2, or other domains; the Phase 79 real-reuse
-  design is planned but not executed.
+  SWE-agent, Reflexion, SnapATAC2, or other domains; the Phase 80 real-reuse
+  spec is ready to implement but the tasks have not been executed.
 - Saved-response model-ablation scoring as proof of live downstream task
   success, broad model quality, provider billing, or provider economics.
 - Saved-response output-contract scoring as proof of real live task success.
@@ -190,6 +191,14 @@ Use these as entry points instead of searching the whole repo first:
 - `research/real_reuse_experiment_plan.md`: planned next-stage real-reuse
   protocol with eight `paper-task` rows, table layouts, and evidence
   boundaries. It is not a completed result artifact.
+- `benchmarks/real_reuse/real_reuse_v0.json`: machine-checkable planned
+  real-reuse benchmark spec with eight task rows, Summary/PaperToSkill main
+  conditions, Full Excerpt sanity scope, reference-score boundary, and planned
+  output paths.
+- `scripts/check_real_reuse_benchmark.py`: strict local preflight checker for
+  the planned real-reuse benchmark spec.
+- `results/real_reuse/spec_preflight.md`: ready-to-implement preflight report
+  for the real-reuse spec. This is not task-success evidence.
 - `external/ai_scientist_v2_patches/`: reproducibility backup for local
   AI-Scientist-v2 adaptations used by the bounded Phase 76 integration run.
 - `benchmarks/provider_billing_evidence_v0.json`: provider-billing evidence
@@ -206,7 +215,7 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 305 ready checks, 1 pending
+  reports `ready_with_pending_external_evidence`, 312 ready checks, 1 pending
   check, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`

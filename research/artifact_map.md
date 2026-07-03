@@ -134,6 +134,7 @@
 | `benchmarks/human_fidelity_review_v0.json` | Human-fidelity review protocol and packet manifest | Created |
 | `benchmarks/failure_case_archive_v0.json` | Failure-case archive config and project-level records | Created |
 | `benchmarks/model_ablation_v0.json` | Claude/GPT-family/DeepSeek model-ablation prompt packet spec | Created |
+| `benchmarks/real_reuse/real_reuse_v0.json` | Machine-checkable planned real-reuse benchmark spec with eight original-style paper-task rows | Created |
 | `benchmarks/tasks/ai_scientist_v2_research_run.json` | Downstream context-coverage task spec | Created |
 | `benchmarks/tasks/skill_source_audit.json` | Source-map-aware unsupported-instruction audit task | Created |
 | `benchmarks/tasks/ai_scientist_v2_harness_transfer.json` | Offline harness-transfer readiness task spec | Created |
@@ -183,6 +184,7 @@
 | `scripts/papertoskill_extract.py` | Deterministic local paper-to-skill scaffold | Created |
 | `scripts/papertoskill_note_from_text.py` | Deterministic extracted-text-to-note scaffold with line anchors | Created |
 | `scripts/papertoskill_pipeline.py` | Local text/PDF-to-note-to-skill-to-evaluation pipeline manifest command; PDF input uses `pdftotext -layout` when available | Created |
+| `scripts/check_real_reuse_benchmark.py` | Validates the planned real-reuse benchmark spec, main conditions, sanity scope, reference-score boundary, and future output paths | Created |
 | `scripts/evaluate_skill.py` | Deterministic v0 evaluator for generated skills | Created |
 | `scripts/evaluate_context_baselines.py` | Deterministic evaluator for context baseline coverage | Created |
 | `scripts/audit_skill_source_map.py` | Deterministic source-map-aware unsupported-instruction audit | Created |
@@ -335,6 +337,8 @@
 | `results/failure_cases/failure_case_archive.csv` | CSV failure-case archive | Created |
 | `results/reproducibility/package_report.md` | Human-readable reproducibility package report | Created |
 | `results/reproducibility/package_report.json` | Machine-readable reproducibility package report | Created |
+| `results/real_reuse/spec_preflight.md` | Human-readable preflight for the planned real-reuse benchmark spec; not a task-result table | Created |
+| `results/real_reuse/spec_preflight.json` | Machine-readable preflight for the planned real-reuse benchmark spec; not a task-result table | Created |
 | `results/reproducibility/aaai_package_report.md` | Human-readable AAAI package verification report | Created |
 | `results/reproducibility/aaai_package_report.json` | Machine-readable AAAI package verification report | Created |
 | `results/reproducibility/usage_example_report.md` | Human-readable usage-example verification report | Created |
@@ -390,6 +394,6 @@
 | Artifact | Purpose | Status |
 | --- | --- | --- |
 | Model-ablation response logs | Claude/GPT-family/DeepSeek response files and scores after endpoint/model availability | Created |
-| `benchmarks/real_reuse/` | Future task specs for the eight original-style paper-task reuse experiments | Planned |
+| `benchmarks/real_reuse/tasks/` | Future per-task executable specs for the eight original-style paper-task reuse experiments | Planned |
 | `results/real_reuse/` | Future raw rows, aggregate tables, sanity checks, cost table, and LLM ablation outputs for real-reuse experiments | Planned |
 | Paper2Agent executable baseline | Full Paper2Agent/MCP runtime comparison, if setup resources become available | Planned |

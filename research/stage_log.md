@@ -2698,3 +2698,36 @@ Evidence boundary:
   executed.
 - Existing deterministic/offline evaluations remain quality, grounding, cost,
   and readiness evidence until real-reuse raw rows exist.
+
+## 2026-07-03 Phase 80
+
+Actions:
+
+- Converted the Phase 79 real-reuse plan into a machine-checkable benchmark
+  specification at `benchmarks/real_reuse/real_reuse_v0.json`.
+- Added `scripts/check_real_reuse_benchmark.py` and regression tests so the
+  planned benchmark gates the eight task IDs, main paper set, Summary vs
+  PaperToSkill conditions, Full Excerpt sanity scope, reference-score boundary,
+  source-link declarations, workflow checklists, and future output paths.
+- Generated the local preflight reports under `results/real_reuse/` and wired
+  them into the aggregate reproducibility package checker.
+- Updated the runbook, artifact map, experiment queue, claim-evidence matrix,
+  and goal-completion audit so the next work starts from per-task executable
+  specs, runner, scorer, and raw rows.
+
+Results:
+
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`,
+  8 tasks, 85 ready checks, and 0 failed checks.
+- `results/reproducibility/package_report.md` reports
+  `ready_with_pending_external_evidence`, 312 ready checks, 1 pending check,
+  and 0 failed checks after adding the real-reuse preflight gate.
+
+Evidence boundary:
+
+- Phase 80 completes only the planned benchmark spec and preflight gate. It
+  does not run any real-reuse task and does not create downstream task-success
+  evidence.
+- The next required implementation step is to create per-task executable specs
+  under `benchmarks/real_reuse/tasks/`, then implement a runner and scorer that
+  preserve raw rows under `results/real_reuse/`.

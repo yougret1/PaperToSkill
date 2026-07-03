@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 305
+- Ready checks: 312
 - Pending checks: 1
 - Failed checks: 0
 
@@ -72,6 +72,11 @@ Evidence boundary: this report checks local package completeness and separates p
 | deepseek_followup_checker | ready | present | scripts/check_deepseek_followup.py |
 | deepseek_followup_handoff_json | ready | present | results/deepseek_followup_handoff/handoff.json |
 | deepseek_followup_handoff_md | ready | present | results/deepseek_followup_handoff/handoff.md |
+| real_reuse_plan | ready | present | research/real_reuse_experiment_plan.md |
+| real_reuse_benchmark_spec | ready | present | benchmarks/real_reuse/real_reuse_v0.json |
+| real_reuse_benchmark_checker | ready | present | scripts/check_real_reuse_benchmark.py |
+| real_reuse_spec_preflight_json | ready | present | results/real_reuse/spec_preflight.json |
+| real_reuse_spec_preflight_md | ready | present | results/real_reuse/spec_preflight.md |
 | artifact_map | ready | present | research/artifact_map.md |
 | claim_evidence_matrix | ready | present | research/claim_evidence_matrix.md |
 | new_paper_triage | ready | present | research/new_paper_triage_2026-07-01.md |
@@ -240,6 +245,8 @@ Evidence boundary: this report checks local package completeness and separates p
 | usage_example_core_checks_ready | ready | core checks ready | results\reproducibility\usage_example_report.json |
 | deepseek_followup_handoff_report_ready | ready | overall=responses_present; failed=0 | results\deepseek_followup_handoff\handoff.json |
 | deepseek_followup_handoff_core_checks_ready | ready | core handoff checks ready | results\deepseek_followup_handoff\handoff.json |
+| real_reuse_spec_preflight_ready | ready | overall=ready_to_implement; failed=0; tasks=8 | results\real_reuse\spec_preflight.json |
+| real_reuse_core_checks_ready | ready | core real-reuse checks ready | results\real_reuse\spec_preflight.json |
 | toolformer_auto_note_script | ready | present | scripts/papertoskill_note_from_text.py |
 | toolformer_auto_pipeline_script | ready | present | scripts/papertoskill_pipeline.py |
 | toolformer_auto_note | ready | present | papers/auto_notes/toolformer_auto_note.md |

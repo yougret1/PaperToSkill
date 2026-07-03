@@ -45,7 +45,7 @@
 | ID | Question | Needed Artifact |
 | --- | --- | --- |
 | E5 | Can PaperToSkill help agents reuse paper methods on original-style input/output tasks? | `research/real_reuse_experiment_plan.md`; future `benchmarks/real_reuse/`; future `results/real_reuse/` |
-| E5.1 | Are the four main papers and eight tasks feasible under objective metrics? | Per-paper task specs for AIDE, SWE-agent, Reflexion, and SnapATAC2 with source-paper reference scores and metric definitions |
+| E5.1 | Are the four main papers and eight tasks feasible under objective metrics? | Complete for planned spec: `benchmarks/real_reuse/real_reuse_v0.json`; `results/real_reuse/spec_preflight.md` reports `ready_to_implement` |
 | E5.2 | Can the same task runner compare Summary vs PaperToSkill without mid-run human intervention? | Runner that logs task, condition, model, command, output path, metric, time, tokens, and failure reason |
 | E5.3 | Can the main real-reuse table be generated from raw rows? | Aggregator that emits `results/real_reuse/main_results.{csv,md,json}` and preserves raw rows |
 | E5.4 | Does a small Full Excerpt sanity check change the interpretation? | Three-task sanity table with Summary, PaperToSkill, Full Excerpt, metric, and token columns |

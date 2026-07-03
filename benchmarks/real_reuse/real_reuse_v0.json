@@ -1,0 +1,438 @@
+{
+  "schema_version": "0.1",
+  "created": "2026-07-03",
+  "status": "planned",
+  "purpose": "Pre-register the next-stage original-style paper-task reuse benchmark for PaperToSkill.",
+  "evidence_boundary": "This benchmark spec defines planned tasks and validation gates. It does not contain real-reuse execution results and must not be cited as downstream task-success evidence.",
+  "source_verification": {
+    "checked_on": "2026-07-03",
+    "method": "curl -L --head --max-time 20 against paper and code URLs",
+    "boundary": "URL reachability only. This does not install dependencies, run repositories, or reproduce original paper benchmarks."
+  },
+  "main_conditions": [
+    "summary",
+    "papertoskill"
+  ],
+  "excluded_main_conditions": [
+    "abstract",
+    "full_excerpt"
+  ],
+  "sanity_conditions": [
+    "full_excerpt"
+  ],
+  "execution_controls": {
+    "first_pass_human_intervention": "none_mid_run",
+    "human_review": "optional_blind_review_after_run",
+    "same_prompt_template_across_conditions": true,
+    "same_task_metric_across_conditions": true,
+    "same_run_budget_across_conditions": true,
+    "reference_score_policy": "Treat original paper scores as reported references unless the same dataset, input/output, metric, model/tool budget, and runtime setting are reproduced locally."
+  },
+  "source_papers": [
+    {
+      "id": "aide",
+      "title": "AIDE: AI-Driven Exploration in the Space of Code",
+      "domain": "ML engineering",
+      "role": "main",
+      "paper_url": "https://arxiv.org/abs/2502.13138",
+      "pdf_url": "https://arxiv.org/pdf/2502.13138",
+      "code_url": "https://github.com/WecoAI/aideml",
+      "resource_status": "paper_and_code_urls_reachable",
+      "current_boundary": "Use reported Weco-Kaggle, MLE-Bench, or RE-Bench numbers only as references unless the same setup is reproduced."
+    },
+    {
+      "id": "swe_agent",
+      "title": "SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering",
+      "domain": "Software engineering",
+      "role": "main",
+      "paper_url": "https://arxiv.org/abs/2405.15793",
+      "pdf_url": "https://arxiv.org/pdf/2405.15793",
+      "code_url": "https://github.com/SWE-agent/SWE-agent",
+      "resource_status": "paper_and_code_urls_reachable",
+      "current_boundary": "Use SWE-bench-style reported numbers only as references unless local task instances and scoring match."
+    },
+    {
+      "id": "reflexion",
+      "title": "Reflexion: Language Agents with Verbal Reinforcement Learning",
+      "domain": "Reasoning and decision-making",
+      "role": "main",
+      "paper_url": "https://arxiv.org/abs/2303.11366",
+      "pdf_url": "https://arxiv.org/pdf/2303.11366",
+      "code_url": "https://github.com/noahshinn/reflexion",
+      "resource_status": "paper_and_code_urls_reachable",
+      "current_boundary": "Avoid subjective reflection-quality scoring in the main table; prefer objective QA, coding, or environment success metrics."
+    },
+    {
+      "id": "snapatac2",
+      "title": "SnapATAC2",
+      "domain": "Single-cell omics data analysis",
+      "role": "main_non_agent_case",
+      "paper_url": "https://www.nature.com/articles/s41592-023-02139-9",
+      "pdf_url": "https://www.nature.com/articles/s41592-023-02139-9.pdf",
+      "code_url": "https://github.com/scverse/SnapATAC2",
+      "resource_status": "paper_url_reachable_code_url_reaches_current_scverse_repo",
+      "current_boundary": "Requires dataset and environment smoke test before execution; use runtime, memory, and clustering or embedding metrics rather than subjective biological interpretation."
+    },
+    {
+      "id": "toolformer",
+      "title": "Toolformer: Language Models Can Teach Themselves to Use Tools",
+      "domain": "Tool use",
+      "role": "sanity_auxiliary",
+      "paper_url": "https://arxiv.org/abs/2302.04761",
+      "pdf_url": "https://arxiv.org/pdf/2302.04761",
+      "code_url": null,
+      "resource_status": "existing_papertoskill_case",
+      "current_boundary": "Original training/data-generation replication is too heavy for main real-reuse validity."
+    },
+    {
+      "id": "ai_scientist_v2",
+      "title": "The AI Scientist-v2: Workshop-Level Automated Scientific Discovery via Agentic Tree Search",
+      "domain": "Automated research",
+      "role": "sanity_auxiliary",
+      "paper_url": "https://arxiv.org/abs/2504.08066",
+      "pdf_url": "https://arxiv.org/pdf/2504.08066",
+      "code_url": "https://github.com/SakanaAI/AI-Scientist-v2",
+      "resource_status": "existing_integration_case",
+      "current_boundary": "Current evidence is bounded integration and synthetic sensitivity evidence, not broad real-task success."
+    }
+  ],
+  "tasks": [
+    {
+      "id": "AIDE-T1",
+      "source_paper_id": "aide",
+      "domain": "ML engineering",
+      "status": "planned",
+      "task_kind": "tabular_ml_submission",
+      "original_style_input": "A small Kaggle-style tabular dataset, objective metric, train/validation split, starter workspace, and submission contract.",
+      "required_output": "A runnable solution script plus submission file and run log.",
+      "metric": {
+        "name": "validation_score",
+        "family": "kaggle_style_validation_metric",
+        "direction": "higher_is_better",
+        "automated": true,
+        "success_criterion": "PaperToSkill condition produces a valid submission and improves over the starting baseline under the same budget.",
+        "source_metric_relation": "Matches AIDE-style ML engineering optimization but may be a smaller local task."
+      },
+      "paper_reference": {
+        "label": "AIDE reported Weco-Kaggle or MLE-Bench reference",
+        "score": null,
+        "comparability": "reported_reference_only_until_local_reproduction"
+      },
+      "conditions": [
+        "summary",
+        "papertoskill"
+      ],
+      "sanity_conditions": [
+        "full_excerpt"
+      ],
+      "workflow_checklist": [
+        "Maintain a solution tree or equivalent candidate history.",
+        "Evaluate each candidate with the declared objective metric.",
+        "Use feedback from failed or weaker candidates before refining.",
+        "Select the best solution based on measured score, not narrative confidence."
+      ],
+      "planned_artifacts": {
+        "task_spec": "benchmarks/real_reuse/tasks/AIDE-T1.json",
+        "run_dir": "results/real_reuse/runs/AIDE-T1/",
+        "raw_rows": "results/real_reuse/raw_rows.jsonl"
+      }
+    },
+    {
+      "id": "AIDE-T2",
+      "source_paper_id": "aide",
+      "domain": "ML engineering",
+      "status": "planned",
+      "task_kind": "ml_debug_and_search",
+      "original_style_input": "A weak or failing ML script, validation feedback, error trace or score feedback, and objective metric.",
+      "required_output": "A repaired or improved script plus a logged search/debug trajectory.",
+      "metric": {
+        "name": "best_node_score",
+        "family": "validation_metric_with_debug_success",
+        "direction": "higher_is_better",
+        "automated": true,
+        "success_criterion": "The final candidate runs and improves over the provided weak script under the same attempt budget.",
+        "source_metric_relation": "Tests AIDE-style iterative code-space refinement and node selection."
+      },
+      "paper_reference": {
+        "label": "AIDE reported search and benchmark references",
+        "score": null,
+        "comparability": "reported_reference_only_until_local_reproduction"
+      },
+      "conditions": [
+        "summary",
+        "papertoskill"
+      ],
+      "sanity_conditions": [],
+      "workflow_checklist": [
+        "Record candidate edits and scores.",
+        "Avoid repeating local patches after a known failure.",
+        "Use validation feedback before choosing the final candidate.",
+        "Preserve cost or attempt budget in the run log."
+      ],
+      "planned_artifacts": {
+        "task_spec": "benchmarks/real_reuse/tasks/AIDE-T2.json",
+        "run_dir": "results/real_reuse/runs/AIDE-T2/",
+        "raw_rows": "results/real_reuse/raw_rows.jsonl"
+      }
+    },
+    {
+      "id": "SWE-T1",
+      "source_paper_id": "swe_agent",
+      "domain": "Software engineering",
+      "status": "planned",
+      "task_kind": "issue_to_patch",
+      "original_style_input": "Repository snapshot, issue description, and test command.",
+      "required_output": "A minimal patch and verification log showing the test command outcome.",
+      "metric": {
+        "name": "resolved",
+        "family": "test_pass_rate",
+        "direction": "higher_is_better",
+        "automated": true,
+        "success_criterion": "Patch applies cleanly and target tests pass without unrelated changes.",
+        "source_metric_relation": "Matches SWE-agent/SWE-bench-style issue resolution."
+      },
+      "paper_reference": {
+        "label": "SWE-agent reported SWE-bench-style reference",
+        "score": null,
+        "comparability": "reported_reference_only_until_local_reproduction"
+      },
+      "conditions": [
+        "summary",
+        "papertoskill"
+      ],
+      "sanity_conditions": [
+        "full_excerpt"
+      ],
+      "workflow_checklist": [
+        "Inspect relevant files before editing.",
+        "Use repository commands to localize the bug.",
+        "Apply a minimal patch.",
+        "Run the specified tests and record failures."
+      ],
+      "planned_artifacts": {
+        "task_spec": "benchmarks/real_reuse/tasks/SWE-T1.json",
+        "run_dir": "results/real_reuse/runs/SWE-T1/",
+        "raw_rows": "results/real_reuse/raw_rows.jsonl"
+      }
+    },
+    {
+      "id": "SWE-T2",
+      "source_paper_id": "swe_agent",
+      "domain": "Software engineering",
+      "status": "planned",
+      "task_kind": "failing_test_to_patch",
+      "original_style_input": "Repository bug, failing unit test, and execution command.",
+      "required_output": "A focused code patch plus verification log.",
+      "metric": {
+        "name": "tests_passed",
+        "family": "unit_test_success",
+        "direction": "higher_is_better",
+        "automated": true,
+        "success_criterion": "Previously failing test passes and no required regression test fails.",
+        "source_metric_relation": "Tests SWE-agent-style agent-computer interface discipline in a smaller local setting."
+      },
+      "paper_reference": {
+        "label": "SWE-agent reported software-engineering benchmark reference",
+        "score": null,
+        "comparability": "reported_reference_only_until_local_reproduction"
+      },
+      "conditions": [
+        "summary",
+        "papertoskill"
+      ],
+      "sanity_conditions": [],
+      "workflow_checklist": [
+        "Use search and file inspection before editing.",
+        "Keep interface assumptions explicit.",
+        "Patch only the target behavior.",
+        "Run and log the requested test command."
+      ],
+      "planned_artifacts": {
+        "task_spec": "benchmarks/real_reuse/tasks/SWE-T2.json",
+        "run_dir": "results/real_reuse/runs/SWE-T2/",
+        "raw_rows": "results/real_reuse/raw_rows.jsonl"
+      }
+    },
+    {
+      "id": "REF-T1",
+      "source_paper_id": "reflexion",
+      "domain": "Reasoning / QA",
+      "status": "planned",
+      "task_kind": "multi_hop_qa_with_reflection",
+      "original_style_input": "HotPotQA-style multi-hop question, retrieval context or tool access, first-answer feedback, and retry budget.",
+      "required_output": "Final answer plus reflection trace linking feedback to the next attempt.",
+      "metric": {
+        "name": "exact_match_or_f1",
+        "family": "qa_success",
+        "direction": "higher_is_better",
+        "automated": true,
+        "success_criterion": "Final answer matches target answer by exact match or F1 after using feedback.",
+        "source_metric_relation": "Matches Reflexion-style verbal feedback and retry loop on QA tasks."
+      },
+      "paper_reference": {
+        "label": "Reflexion reported HotPotQA/ReAct-style reference",
+        "score": null,
+        "comparability": "reported_reference_only_until_local_reproduction"
+      },
+      "conditions": [
+        "summary",
+        "papertoskill"
+      ],
+      "sanity_conditions": [],
+      "workflow_checklist": [
+        "Generate a reflection grounded in concrete feedback.",
+        "Store or reuse reflection before the retry.",
+        "Change the second attempt based on reflection.",
+        "Report final answer in the required format."
+      ],
+      "planned_artifacts": {
+        "task_spec": "benchmarks/real_reuse/tasks/REF-T1.json",
+        "run_dir": "results/real_reuse/runs/REF-T1/",
+        "raw_rows": "results/real_reuse/raw_rows.jsonl"
+      }
+    },
+    {
+      "id": "REF-T2",
+      "source_paper_id": "reflexion",
+      "domain": "Decision / programming",
+      "status": "planned",
+      "task_kind": "failed_attempt_retry",
+      "original_style_input": "A coding or decision task, a failed first attempt, and environment feedback such as tests or observations.",
+      "required_output": "Corrected second attempt plus reflection that explains the failure-to-fix linkage.",
+      "metric": {
+        "name": "second_attempt_success",
+        "family": "pass_rate",
+        "direction": "higher_is_better",
+        "automated": true,
+        "success_criterion": "Second attempt passes the objective checker after using reflection.",
+        "source_metric_relation": "Tests Reflexion-style failure recovery without relying on subjective reflection quality."
+      },
+      "paper_reference": {
+        "label": "Reflexion reported HumanEval/ALFWorld-style reference",
+        "score": null,
+        "comparability": "reported_reference_only_until_local_reproduction"
+      },
+      "conditions": [
+        "summary",
+        "papertoskill"
+      ],
+      "sanity_conditions": [],
+      "workflow_checklist": [
+        "Identify the failure from environment feedback.",
+        "Write a specific reflection before retrying.",
+        "Make a changed second attempt.",
+        "Use the objective checker to decide success."
+      ],
+      "planned_artifacts": {
+        "task_spec": "benchmarks/real_reuse/tasks/REF-T2.json",
+        "run_dir": "results/real_reuse/runs/REF-T2/",
+        "raw_rows": "results/real_reuse/raw_rows.jsonl"
+      }
+    },
+    {
+      "id": "SNAP-T1",
+      "source_paper_id": "snapatac2",
+      "domain": "Single-cell omics",
+      "status": "planned",
+      "task_kind": "single_cell_embedding_pipeline",
+      "original_style_input": "Small single-cell accessibility or multi-omics dataset, analysis objective, and resource budget.",
+      "required_output": "Runnable analysis pipeline with embedding or clustering output plus runtime and memory log.",
+      "metric": {
+        "name": "runtime_memory_quality",
+        "family": "resource_and_embedding_quality",
+        "direction": "mixed",
+        "automated": true,
+        "success_criterion": "Pipeline completes under the declared budget and produces expected embedding or clustering artifacts.",
+        "source_metric_relation": "Matches SnapATAC2-style scalable single-cell analysis, adapted to a small local dataset."
+      },
+      "paper_reference": {
+        "label": "SnapATAC2 reported runtime/memory or analysis reference",
+        "score": null,
+        "comparability": "reported_reference_only_until_local_reproduction"
+      },
+      "conditions": [
+        "summary",
+        "papertoskill"
+      ],
+      "sanity_conditions": [
+        "full_excerpt"
+      ],
+      "workflow_checklist": [
+        "Load data with the declared preprocessing assumptions.",
+        "Run the selected SnapATAC2-style analysis path.",
+        "Record runtime and memory.",
+        "Emit machine-readable analysis artifacts."
+      ],
+      "planned_artifacts": {
+        "task_spec": "benchmarks/real_reuse/tasks/SNAP-T1.json",
+        "run_dir": "results/real_reuse/runs/SNAP-T1/",
+        "raw_rows": "results/real_reuse/raw_rows.jsonl"
+      }
+    },
+    {
+      "id": "SNAP-T2",
+      "source_paper_id": "snapatac2",
+      "domain": "Single-cell omics",
+      "status": "planned",
+      "task_kind": "single_cell_clustering_or_marker_analysis",
+      "original_style_input": "Single-cell dataset with target cell groups or reference labels and an analysis objective.",
+      "required_output": "Dimensionality reduction, clustering or marker output, and metric log.",
+      "metric": {
+        "name": "ari_nmi_runtime_memory",
+        "family": "clustering_and_resource_metric",
+        "direction": "mixed",
+        "automated": true,
+        "success_criterion": "Analysis completes and reports ARI/NMI or agreed proxy plus runtime and memory.",
+        "source_metric_relation": "Tests transfer to non-agent scientific data-analysis usage."
+      },
+      "paper_reference": {
+        "label": "SnapATAC2 reported clustering/resource reference",
+        "score": null,
+        "comparability": "reported_reference_only_until_local_reproduction"
+      },
+      "conditions": [
+        "summary",
+        "papertoskill"
+      ],
+      "sanity_conditions": [],
+      "workflow_checklist": [
+        "Use a source-paper-consistent preprocessing path.",
+        "Run dimensionality reduction and clustering or marker analysis.",
+        "Report objective quality and resource metrics.",
+        "Avoid subjective biological interpretation as the main score."
+      ],
+      "planned_artifacts": {
+        "task_spec": "benchmarks/real_reuse/tasks/SNAP-T2.json",
+        "run_dir": "results/real_reuse/runs/SNAP-T2/",
+        "raw_rows": "results/real_reuse/raw_rows.jsonl"
+      }
+    }
+  ],
+  "full_excerpt_sanity_tasks": [
+    "AIDE-T1",
+    "SWE-T1",
+    "SNAP-T1"
+  ],
+  "llm_ablation": {
+    "status": "planned",
+    "linked_to_real_reuse_tasks": true,
+    "model_families": [
+      "Claude-family",
+      "GPT-family",
+      "DeepSeek-family"
+    ],
+    "conditions": [
+      "summary",
+      "papertoskill"
+    ],
+    "boundary": "This future ablation must run the real-reuse tasks. The older saved-response usage-plan protocol is not downstream task-success evidence."
+  },
+  "planned_outputs": {
+    "spec_preflight_json": "results/real_reuse/spec_preflight.json",
+    "spec_preflight_md": "results/real_reuse/spec_preflight.md",
+    "raw_rows": "results/real_reuse/raw_rows.jsonl",
+    "main_results": "results/real_reuse/main_results.csv",
+    "domain_robustness": "results/real_reuse/domain_robustness.csv",
+    "llm_ablation_raw": "results/real_reuse/llm_ablation_raw.csv"
+  }
+}

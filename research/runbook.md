@@ -75,10 +75,28 @@ Source of truth:
 
 ```text
 research/real_reuse_experiment_plan.md
+benchmarks/real_reuse/real_reuse_v0.json
 ```
 
-Current status: planned only. Do not write the AAAI paper as if these
-experiments have run.
+Current status: planned specification ready; no real-reuse task has been run.
+Do not write the AAAI paper as if these experiments have run.
+
+Validate the planned spec before implementing runners or editing paper claims:
+
+```powershell
+python scripts\check_real_reuse_benchmark.py --strict
+```
+
+The preflight writes:
+
+```text
+results/real_reuse/spec_preflight.json
+results/real_reuse/spec_preflight.md
+```
+
+The expected status is `ready_to_implement`. That means the benchmark spec is
+machine-checkable and ready for runner/scorer implementation; it is not
+downstream task-success evidence.
 
 Planned main task grid:
 
