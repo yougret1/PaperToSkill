@@ -5,7 +5,9 @@ Evidence boundary: blank score rows are pending, not negative evidence. Do not c
 - Annotation status: pending
 - Total rows: 24
 - Scored rows: 0
-- Pending rows: 24
+- Required paper-criterion cells: 24
+- Scored paper-criterion cells: 0
+- Pending paper-criterion cells: 24
 - Average confidence: n/a
 - Needs discussion rows: 0
 - Errors: 0

@@ -244,7 +244,7 @@
 | `scripts/aggregate_results_tables.py` | Aggregates existing evaluation JSON into paper-ready tables | Created |
 | `scripts/evaluate_context_costs.py` | Estimates context token/cost proxies and coverage per context budget | Created |
 | `scripts/build_human_fidelity_packets.py` | Builds human-fidelity review packets and annotation template | Created |
-| `scripts/summarize_human_fidelity_annotations.py` | Summarizes and validates human-fidelity annotation CSV rows | Created |
+| `scripts/summarize_human_fidelity_annotations.py` | Summarizes and validates human-fidelity annotation CSV rows with paper-by-criterion cell completion and distinct-reviewer duplicate support | Created |
 | `scripts/build_failure_case_archive.py` | Builds failure-case archive JSON, Markdown, and CSV outputs | Created |
 | `scripts/check_reproducibility_package.py` | Checks local reproducibility package readiness and pending external evidence | Created |
 | `scripts/check_usage_examples.py` | Verifies usage-example files, prompt/response slots, and an offline auto-note-to-skill example chain | Created |
@@ -388,7 +388,7 @@
 | `results/human_fidelity_packets/README.md` | Summary of prepared human-fidelity packets | Created |
 | `results/human_fidelity_packets/index.json` | Machine-readable packet index with pending annotation status | Created |
 | `results/human_fidelity_packets/annotation_guide.md` | Independent-review handoff guide with completion requirements | Created |
-| `results/human_fidelity_packets/annotation_template.csv` | Blank annotation rows for human reviewers | Created |
+| `results/human_fidelity_packets/annotation_template.csv` | Blank annotation rows for human reviewers; additional reviewer rows may be appended for the same paper-by-criterion cell with distinct reviewer IDs | Created |
 | `results/human_fidelity_packets/reviewer_bundle_README.md` | Reviewer-facing quickstart for the human-fidelity bundle | Created |
 | `results/human_fidelity_packets/reviewer_bundle_manifest.json` | Reviewer-bundle file list and SHA256 checksums | Created |
 | `results/human_fidelity_packets/human_fidelity_reviewer_bundle.zip` | Shareable reviewer bundle with guide, template, and paper packets | Created |

@@ -302,7 +302,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | human_fidelity_summary_json | ready | present | results/human_fidelity_packets/annotation_summary.json |
 | human_fidelity_summary_md | ready | present | results/human_fidelity_packets/annotation_summary.md |
 | human_fidelity_summary_valid | ready | errors=0 | results\human_fidelity_packets\annotation_summary.json |
-| human_fidelity_annotation_handoff_ready | ready | expected_rows=24; template_rows=24; summary_rows=24 | results/human_fidelity_packets/index.json; results/human_fidelity_packets/annotation_guide.md |
+| human_fidelity_annotation_handoff_ready | ready | expected_cells=24; template_rows=24; summary_rows=24; summary_cells=24 | results/human_fidelity_packets/index.json; results/human_fidelity_packets/annotation_guide.md |
 | human_fidelity_reviewer_bundle_ready | ready | files=7; required_rows=24; zip_exists=True | results\human_fidelity_packets\reviewer_bundle_manifest.json |
 | human_fidelity_annotation_complete | pending | status=pending; scored_rows=0; pending_rows=24 | results\human_fidelity_packets\annotation_summary.json |
 | failure_archive_config | ready | present | benchmarks/failure_case_archive_v0.json |

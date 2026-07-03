@@ -26,7 +26,7 @@
       "setup": [
         "Send the packet files and annotation guide to independent reviewers.",
         "Keep blank rows blank; do not convert missing review rows into zero scores.",
-        "Collect reviewer-filled rows in the existing annotation_template.csv schema."
+        "Collect reviewer-filled rows in the existing annotation_template.csv schema; multiple reviewers may add rows for the same paper-by-criterion cell when reviewer_id values are distinct."
       ],
       "run_commands": [
         "python scripts\\summarize_human_fidelity_annotations.py --strict",
@@ -38,7 +38,7 @@
       ],
       "completion_criteria": [
         "results/human_fidelity_packets/annotation_summary.json reports annotation_status=complete.",
-        "All 24 paper-by-criterion rows are scored with no validation errors.",
+        "All 24 paper-by-criterion cells have at least one scored annotation with no validation errors.",
         "Reviewer notes and confidence fields are preserved for audit."
       ],
       "blocker_escalation": "Escalate if independent reviewers are unavailable or scoring criteria are ambiguous.",

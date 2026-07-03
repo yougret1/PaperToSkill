@@ -59,14 +59,14 @@ Current machine reports:
 | Main deterministic experiments | `results/tables/main_results.md`; transfer, cost, source-span, failure archive reports | Complete for offline benchmark | Keep claims bounded to deterministic/local evidence. |
 | Next-stage real-reuse validity experiments | `research/real_reuse_experiment_plan.md`; `benchmarks/real_reuse/real_reuse_v0.json`; `benchmarks/real_reuse/tasks/*.json`; `benchmarks/real_reuse/fixtures/*.json`; `benchmarks/real_reuse/fixture_candidates/*.json`; `benchmarks/real_reuse/asset_locks/*.json`; `benchmarks/real_reuse/assets/AIDE-T1/asset_manifest.json`; `benchmarks/real_reuse/assets/AIDE-T2/asset_manifest.json`; `benchmarks/real_reuse/assets/SWE-T1/asset_manifest.json`; `benchmarks/real_reuse/assets/SWE-T2/asset_manifest.json`; `benchmarks/real_reuse/assets/REF-T1/asset_manifest.json`; `benchmarks/real_reuse/assets/REF-T2/asset_manifest.json`; `benchmarks/real_reuse/assets/SNAP-T1/asset_manifest.json`; `benchmarks/real_reuse/assets/SNAP-T2/asset_manifest.json`; `scripts/score_real_reuse_reflexion.py`; `scripts/run_real_reuse_reflexion.py`; `scripts/prepare_real_reuse_aide_fixture.py`; `scripts/run_real_reuse_aide.py`; `scripts/prepare_real_reuse_swe_fixture.py`; `scripts/run_real_reuse_swe.py`; `scripts/prepare_real_reuse_snapatac2_fixture.py`; `scripts/run_real_reuse_snapatac2.py`; `results/real_reuse/raw_rows.jsonl`; `results/real_reuse/aide_run_report.md`; `results/real_reuse/swe_run_report.md`; `results/real_reuse/reflexion_run_report.md`; `results/real_reuse/snapatac2_run_report.md`; `results/real_reuse/spec_preflight.md`; `results/real_reuse/main_results_plan.md`; `paper/aaai/papertoskill_tables.tex` | Complete for one GPT-family single-run pass across all eight rows, but mixed as effectiveness evidence. AIDE-T1/T2 both score 0.000/0.000 because generated scripts time out under the 60-second scorer budget. SWE-T1 scores 0.000/0.000 because generated patches fail to apply; SWE-T2 scores 0.000/1.000; REF-T1/REF-T2 score 1.000/1.000; SNAP-T1/SNAP-T2 score 0.000/0.500 and 0.200/0.400 but fail the local success threshold. | Treat the current main experiment as a first-pass downstream result with failure-boundary analysis; do not claim aggregate PaperToSkill advantage unless a revised, pre-registered follow-up supports it. |
 | New-paper triage and Paper2Agent comparison | `research/new_paper_triage_2026-07-01.md`; `results/tables/paper2agent_artifact_comparison.md` | Complete for citation/positioning | Do not claim executable Paper2Agent baseline performance. |
-| Human-fidelity annotation | `results/human_fidelity_packets/annotation_template.csv`; `annotation_guide.md`; packets | Handoff ready; annotation pending | Independent reviewers fill all 24 rows and rerun the strict summarizer. |
+| Human-fidelity annotation | `results/human_fidelity_packets/annotation_template.csv`; `annotation_guide.md`; packets | Handoff ready; annotation pending | Independent reviewers score all 24 paper-by-criterion cells and rerun the strict summarizer. |
 | AAAI submission decision | `research/aaai_submission_decision.md`; `results/aaai_submission_decision/decision.md` | Decision recorded as wait | Complete named evidence before stronger final-submission claims. |
 | External evidence closure/packets | Closure queue and packets have 2 current items | Complete as local handoff | Use packets for human annotation and final decision. |
 
 ## Current Pending Evidence
 
 - `human_fidelity_annotation_complete`: `results/human_fidelity_packets/annotation_summary.md`
-  reports 0 scored rows and 24 pending rows.
+  reports 0 scored rows and 24 pending paper-by-criterion cells.
 - `aaai_final_submission_ready`: local package and submission-review gates are
   ready, but the recorded policy waits for named external evidence.
 
@@ -99,7 +99,7 @@ an aggregate downstream-success claim.
    separate from the completed first-pass table.
 3. Analyze the eight-row real-reuse failure modes before changing the paper's
    main result claims beyond mixed first-pass evidence.
-4. Fill and summarize the 24-row human-fidelity annotation template.
+4. Score all 24 paper-by-criterion cells in the human-fidelity annotation template and summarize them.
 5. Re-run `check_goal_completion.py`, `check_reproducibility_package.py`, and
    `check_submission_review.py`.
 6. Revisit the AAAI decision after the named external evidence is complete.

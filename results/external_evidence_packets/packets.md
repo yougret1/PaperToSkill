@@ -26,7 +26,7 @@ Evidence boundary: these packets define how to finish pending external evidence.
 
 - Send the packet files and annotation guide to independent reviewers.
 - Keep blank rows blank; do not convert missing review rows into zero scores.
-- Collect reviewer-filled rows in the existing annotation_template.csv schema.
+- Collect reviewer-filled rows in the existing annotation_template.csv schema; multiple reviewers may add rows for the same paper-by-criterion cell when reviewer_id values are distinct.
 
 ### Commands
 
@@ -38,7 +38,7 @@ python scripts\check_goal_completion.py --strict
 ### Completion Criteria
 
 - results/human_fidelity_packets/annotation_summary.json reports annotation_status=complete.
-- All 24 paper-by-criterion rows are scored with no validation errors.
+- All 24 paper-by-criterion cells have at least one scored annotation with no validation errors.
 - Reviewer notes and confidence fields are preserved for audit.
 
 ### Escalation

@@ -88,7 +88,8 @@ class SummarizeHumanFidelityAnnotationsTest(unittest.TestCase):
             )
             summary = json.loads(output_json.read_text(encoding="utf-8"))
             self.assertEqual(1, summary["scored_rows"])
-            self.assertEqual(5, len(summary["errors"]))
+            self.assertEqual(6, len(summary["errors"]))
+            self.assertIn("requires needs_discussion true/false", "\n".join(summary["errors"]))
 
     def test_complete_scored_rows_compute_confidence_and_discussion(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -131,10 +132,109 @@ class SummarizeHumanFidelityAnnotationsTest(unittest.TestCase):
             summary = json.loads(output_json.read_text(encoding="utf-8"))
             self.assertEqual("complete", summary["annotation_status"])
             self.assertEqual(24, summary["scored_rows"])
+            self.assertEqual(24, summary["required_cells"])
+            self.assertEqual(24, summary["scored_cells"])
             self.assertEqual(0, summary["pending_rows"])
             self.assertEqual(0.8, summary["average_confidence"])
             self.assertEqual(1, summary["discussion_rows"])
             self.assertEqual([], summary["errors"])
+
+    def test_multiple_reviewers_can_append_duplicate_cells(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            annotations = Path(tmp) / "annotations.csv"
+            with TEMPLATE.open(encoding="utf-8", newline="") as handle:
+                rows = list(csv.DictReader(handle))
+                fieldnames = list(rows[0].keys())
+            for row in rows:
+                row["score_0_to_3"] = "3"
+                row["evidence_locator"] = "source note line 1"
+                row["evidence_note"] = "faithful to source"
+                row["confidence_0_to_1"] = "0.8"
+                row["reviewer_id"] = "R1"
+                row["review_date"] = "2026-07-04"
+                row["needs_discussion"] = "false"
+            duplicate_reviewer_rows = []
+            for row in rows:
+                duplicate = dict(row)
+                duplicate["score_0_to_3"] = "2"
+                duplicate["evidence_note"] = "mostly faithful"
+                duplicate["confidence_0_to_1"] = "0.7"
+                duplicate["reviewer_id"] = "R2"
+                duplicate_reviewer_rows.append(duplicate)
+            with annotations.open("w", encoding="utf-8", newline="") as handle:
+                writer = csv.DictWriter(handle, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows(rows + duplicate_reviewer_rows)
+
+            output_json = Path(tmp) / "summary.json"
+            output_md = Path(tmp) / "summary.md"
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--annotations",
+                    str(annotations),
+                    "--output-json",
+                    str(output_json),
+                    "--output-md",
+                    str(output_md),
+                    "--strict",
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            summary = json.loads(output_json.read_text(encoding="utf-8"))
+            self.assertEqual("complete", summary["annotation_status"])
+            self.assertEqual(48, summary["total_rows"])
+            self.assertEqual(48, summary["scored_rows"])
+            self.assertEqual(24, summary["required_cells"])
+            self.assertEqual(24, summary["scored_cells"])
+            self.assertEqual(0, summary["pending_rows"])
+            self.assertEqual(0.75, summary["average_confidence"])
+            self.assertEqual([], summary["errors"])
+
+    def test_duplicate_reviewer_for_same_cell_is_error(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            annotations = Path(tmp) / "annotations.csv"
+            with TEMPLATE.open(encoding="utf-8", newline="") as handle:
+                rows = list(csv.DictReader(handle))
+                fieldnames = list(rows[0].keys())
+            first = rows[0]
+            for row in [first]:
+                row["score_0_to_3"] = "3"
+                row["evidence_locator"] = "source note line 1"
+                row["evidence_note"] = "faithful to source"
+                row["confidence_0_to_1"] = "0.8"
+                row["reviewer_id"] = "R1"
+                row["review_date"] = "2026-07-04"
+                row["needs_discussion"] = "false"
+            duplicate = dict(first)
+            rows.append(duplicate)
+            with annotations.open("w", encoding="utf-8", newline="") as handle:
+                writer = csv.DictWriter(handle, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows(rows)
+
+            output_json = Path(tmp) / "summary.json"
+            output_md = Path(tmp) / "summary.md"
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--annotations",
+                    str(annotations),
+                    "--output-json",
+                    str(output_json),
+                    "--output-md",
+                    str(output_md),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+            summary = json.loads(output_json.read_text(encoding="utf-8"))
+            self.assertIn("duplicate scored annotation", "\n".join(summary["errors"]))
 
 
 if __name__ == "__main__":

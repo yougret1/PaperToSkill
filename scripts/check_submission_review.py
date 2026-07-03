@@ -231,6 +231,22 @@ def evidence_alignment_checks(root: Path, combined_text: str) -> list[Check]:
     package = load_json(root / "results/reproducibility/package_report.json")
     goal_counts = goal.get("status_counts", {})
     package_counts = package.get("status_counts", {})
+    human_status = human.get("annotation_status")
+    human_scored = int(human.get("scored_rows", -1))
+    human_pending = int(human.get("pending_rows", 0))
+    human_cells = int(human.get("scored_cells", 0))
+    human_pending_current = (
+        human_status == "pending"
+        and human_scored == 0
+        and human_pending == 24
+        and contains_all(combined_text, ["0 scored", "24 pending", "human"])
+    )
+    human_complete_current = (
+        human_status == "complete"
+        and human_pending == 0
+        and human_cells >= 24
+        and contains_all(combined_text, ["human", "complete"])
+    )
 
     checks = [
         Check(
@@ -258,12 +274,12 @@ def evidence_alignment_checks(root: Path, combined_text: str) -> list[Check]:
         Check(
             "submission_review_human_fidelity_current",
             "ready"
-            if human.get("annotation_status") == "pending"
-            and int(human.get("scored_rows", -1)) == 0
-            and int(human.get("pending_rows", 0)) == 24
-            and contains_all(combined_text, ["0 scored", "24 pending", "human"])
+            if human_pending_current or human_complete_current
             else "fail",
-            f"status={human.get('annotation_status')}; scored={human.get('scored_rows')}; pending={human.get('pending_rows')}",
+            (
+                f"status={human_status}; scored={human.get('scored_rows')}; "
+                f"scored_cells={human.get('scored_cells')}; pending={human.get('pending_rows')}"
+            ),
             "results/human_fidelity_packets/annotation_summary.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md",
         ),
         Check(

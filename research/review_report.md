@@ -45,7 +45,7 @@ used as boundary evidence rather than aggregate downstream-effectiveness proof.
 | R3 | Curated notes weaken automation claims. | High | Main benchmark uses curated source-anchored notes; Toolformer and AIDE have deterministic extracted-text scaffolds. | Keep the main claim as paper-note-to-skill conversion; describe extracted-text scaffolds as bounded automation, not arbitrary-PDF reliability. |
 | R4 | Four papers may be too narrow and procedural. | Medium | Benchmark covers agent research automation, verbal reinforcement, ML-engineering agents, and tool-use data generation. | Describe this as a focused first benchmark; propose theory-heavy/interface-heavy stress cases as future work. |
 | R5 | Saved live-transfer responses can be overread as real live success. | High | `results/live_transfer_prompts/evaluation.md` reports 24 total rows, 24 scored rows, 0 pending rows, and average normalized score 1.0 under deterministic output-contract scoring. | Say "saved live-transfer response files were scored"; do not say the system proves live task success, human semantics, or cross-harness outcome gains. |
-| R6 | Human fidelity is prepared but unscored. | High | `results/human_fidelity_packets/annotation_summary.md` reports 0 scored rows, 24 pending rows, and 0 errors. | Say "human-fidelity handoff ready"; do not say "human-validated" or "expert-validated." |
+| R6 | Human fidelity is prepared but unscored. | High | `results/human_fidelity_packets/annotation_summary.md` reports 0 scored rows, 24 pending paper-by-criterion cells, and 0 errors. | Say "human-fidelity handoff ready"; do not say "human-validated" or "expert-validated." |
 | R7 | Cost/economic claims can be overread. | Medium | Context and response costs are local token proxies. `results/token_accounting/token_accounting_summary.md` reports 4,322 generated-skill input tokens, 95,303 full-extracted input tokens, and 9,594 saved-response output tokens. | Call these local input/output token proxies; they are not provider billing, invoices, or success-per-dollar claims. |
 | R8 | AI-Scientist-v2 integration may be overread as broad live task success. | Medium | Bounded LLM-client smoke is `complete`, and the full live-run handoff is `complete` with one completion directory. The run's positive result is synthetic; the HF/semantic-data branch remains a failed branch due invalid dataset loading/synthetic padding and missing `sentence_transformers`. | Treat this as bounded integration and synthetic sensitivity evidence only; do not claim human fidelity, real-data validation, or broad live research-task success. |
 | R9 | Paper2Agent positioning may be overread as a baseline win. | Medium | `results/tables/paper2agent_artifact_comparison.md` reports 7/7 ready source-backed criteria for artifact/workflow comparison. It does not run Paper2Agent or deploy an MCP server. | Use this as positioning evidence only; do not claim runtime superiority or baseline performance. |
@@ -85,8 +85,9 @@ used as boundary evidence rather than aggregate downstream-effectiveness proof.
 
 ## Recommended Next Experiments
 
-1. Fill and summarize the 24-row human-fidelity annotation template with
-   independent reviewer scores.
+1. Score all 24 paper-by-criterion cells in the human-fidelity annotation
+   template with independent reviewer scores, allowing distinct-reviewer
+   duplicate rows when multiple reviewers score the same cell.
 2. Repeat or expand the real-reuse runs if the paper needs a stronger
    downstream-effectiveness claim; otherwise keep the current real-reuse result
    as failure-boundary evidence.

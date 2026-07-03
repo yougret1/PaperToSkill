@@ -45,7 +45,7 @@ complete with respect to pending external evidence.
 
 | Pending Item | Current Evidence | Required Before Stronger Claim |
 | --- | --- | --- |
-| Human fidelity | `results/human_fidelity_packets/annotation_summary.md`: 0 scored rows, 24 pending rows | Independent reviewers fill the template and strict summarizer reports complete with no errors. |
+| Human fidelity | `results/human_fidelity_packets/annotation_summary.md`: 0 scored rows, 24 pending paper-by-criterion cells | Independent reviewers score all 24 cells and strict summarizer reports complete with no errors. |
 | Strong aggregate downstream-effectiveness claim | `results/real_reuse/main_results_plan.md`: first pass is mixed and failure-heavy | Repeat/expand real-reuse runs and resolve failure boundaries before claiming broad effectiveness. |
 | Final AAAI submission readiness | Local package and decision record are ready, but the selected policy waits for external evidence | Complete the human-fidelity evidence and then revisit the final submission decision. |
 

@@ -7,10 +7,26 @@ Current date: 2026-07-04.
 
 ## Latest Resume/Completion Note
 
+- 2026-07-04 Phase 103 human-fidelity multi-reviewer protocol: re-read
+  memory, confirmed `C:\Users\19351\Desktop\tem\ok.txt` absent, and audited
+  the human-fidelity annotation path. Fixed a protocol mismatch where the
+  handoff allowed 1-2 reviewers but the summarizer judged completion by raw CSV
+  rows. `scripts/summarize_human_fidelity_annotations.py` now judges completion
+  by 24 paper-by-criterion cells, reports `required_cells`, `scored_cells`, and
+  `pending_cells`, allows distinct-reviewer duplicate rows for the same cell,
+  rejects duplicate same-reviewer rows, and requires `needs_discussion`
+  true/false on scored rows. Updated packet-builder guidance, the protocol
+  config, external-evidence packet wording, package/submission-review gates,
+  runbook, artifact map, goal audit, long-term memory, and
+  `C:\Users\19351\Desktop\tem\toHuman.md`; regenerated human-fidelity packets,
+  reviewer bundle, annotation summary, external-evidence packets, package
+  report, goal-completion report, and submission-review report. Focused tests
+  and strict gates passed. Human fidelity remains pending: 24 required cells,
+  0 scored cells, 24 pending cells, 0 validation errors.
 - 2026-07-04 Phase 102 submission-review real-reuse sync: re-read long/short
   memory, checked `C:\Users\19351\Desktop\tem\ok.txt` (absent), and reran the
   current goal/package/human-fidelity reports. Human fidelity remains pending
-  with 0 scored rows and 24 pending rows; goal completion remains
+  with 0 scored rows and 24 pending cells; goal completion remains
   `not_complete_pending_external_evidence` with 77 ready / 3 pending / 0
   failed; package remains `ready_with_pending_external_evidence` with 423 ready
   / 1 pending / 0 failed. Synced `research/review_report.md`,
@@ -36,7 +52,7 @@ Current date: 2026-07-04.
   to the zip, and refreshed `scripts/check_reproducibility_package.py --strict`.
   Current package report is `ready_with_pending_external_evidence`, 423 ready,
   1 pending, 0 failed. Human fidelity remains pending: 0 scored rows, 24
-  pending rows, no validation errors.
+  pending cells, no validation errors.
 - 2026-07-04 human handoff refresh: after the Phase 100 backup, re-read
   memory, confirmed `ok.txt` absent, and verified the worktree was aligned with
   `origin/main` except ignored local fixture/build files. The existing
@@ -47,8 +63,8 @@ Current date: 2026-07-04.
   annotation guide and four packet files, says not to turn unfinished rows into
   zeroes, and instructs the user to create
   `C:\Users\19351\Desktop\tem\ok.txt` when complete. Human fidelity remains
-  pending until the strict summarizer reports all 24 rows scored with no
-  errors.
+  pending until the strict summarizer reports all 24 paper-by-criterion cells
+  scored with no errors.
 - 2026-07-04 discussion sync: user asked whether the current discussion
   requires modifying other parts of the original paper. Re-read memory,
   confirmed `ok.txt` absent, inspected the current AAAI text/table/outline
@@ -1262,7 +1278,7 @@ Phase 70 evidence:
   task-success proof.
 - Human-fidelity annotation remains pending:
   `results/human_fidelity_packets/annotation_summary.md` reports 0 scored rows
-  and 24 pending rows.
+  and 24 pending paper-by-criterion cells.
 - Provider billing and success-per-dollar evidence are outside the current
   claim set; local token accounting replaces them for the current package in
   `results/token_accounting/token_accounting_summary.md`.

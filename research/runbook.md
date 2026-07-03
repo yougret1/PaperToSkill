@@ -724,11 +724,13 @@ validation:
 python scripts\summarize_human_fidelity_annotations.py --strict
 ```
 
-Current Phase 101 status:
+Current status:
 `results/human_fidelity_packets/annotation_guide.md` provides the reviewer
 handoff, `annotation_template.csv` has 24 blank paper-by-criterion rows, and
 `annotation_summary.md` reports `annotation_status=pending`, 0 scored rows, 24
-pending rows, average confidence `n/a`, and 0 validation errors. The package
+pending paper-by-criterion cells, average confidence `n/a`, and 0 validation
+errors. Multiple reviewers may append rows for the same paper-by-criterion cell
+when `reviewer_id` values are distinct. The package
 gate marks `human_fidelity_annotation_handoff_ready` and
 `human_fidelity_reviewer_bundle_ready` ready, while completed human-fidelity
 annotation remains pending.
@@ -805,11 +807,12 @@ python scripts\check_submission_review.py `
 ```
 
 Current status:
-`results/reproducibility/submission_review_report.md` reports ready, 15 ready
+`results/reproducibility/submission_review_report.md` reports ready, 16 ready
 checks, and 0 failed checks. It verifies that review handoff files describe the
 24 scored saved live-transfer response rows, 6 scored and 0 pending
-model-ablation rows, 0 scored and 24 pending human-fidelity rows, local token
-accounting, and the bounded AI-Scientist-v2 smoke/full live-run completion.
+model-ablation rows, 0 scored and 24 pending human-fidelity cells, local token
+accounting, the bounded AI-Scientist-v2 smoke/full live-run completion, and the
+mixed eight-row real-reuse first pass.
 Passing this gate does not mean the AAAI paper is submission-final.
 
 ## Goal Completion Gate

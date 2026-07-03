@@ -588,7 +588,8 @@ def human_fidelity_checks(root: Path) -> list[Check]:
         handoff_ready = (
             expected_rows == 24
             and template_rows == expected_rows
-            and int(summary.get("total_rows", 0)) == expected_rows
+            and int(summary.get("total_rows", 0)) >= expected_rows
+            and int(summary.get("required_cells", summary.get("total_rows", 0))) == expected_rows
             and "confidence_0_to_1" in guide_text
             and "evidence_locator" in guide_text
         )
@@ -596,7 +597,11 @@ def human_fidelity_checks(root: Path) -> list[Check]:
             Check(
                 "human_fidelity_annotation_handoff_ready",
                 "ready" if handoff_ready else "fail",
-                f"expected_rows={expected_rows}; template_rows={template_rows}; summary_rows={summary.get('total_rows', 0)}",
+                (
+                    f"expected_cells={expected_rows}; template_rows={template_rows}; "
+                    f"summary_rows={summary.get('total_rows', 0)}; "
+                    f"summary_cells={summary.get('required_cells', summary.get('total_rows', 0))}"
+                ),
                 "results/human_fidelity_packets/index.json; results/human_fidelity_packets/annotation_guide.md",
             )
         )

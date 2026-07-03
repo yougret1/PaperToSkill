@@ -53,6 +53,8 @@ class BuildHumanFidelityPacketsTest(unittest.TestCase):
             self.assertTrue((output_dir / "annotation_guide.md").exists())
             guide_text = (output_dir / "annotation_guide.md").read_text(encoding="utf-8")
             self.assertIn("confidence_0_to_1", guide_text)
+            self.assertIn("Multiple reviewers may score", guide_text)
+            self.assertIn("needs_discussion", guide_text)
             self.assertIn("scripts\\summarize_human_fidelity_annotations.py --strict", guide_text)
 
             with (output_dir / "annotation_template.csv").open(encoding="utf-8", newline="") as handle:
@@ -71,6 +73,10 @@ class BuildHumanFidelityPacketsTest(unittest.TestCase):
             self.assertTrue(bundle_readme.exists())
             self.assertTrue(bundle_manifest.exists())
             self.assertTrue(bundle_zip.exists())
+            self.assertIn(
+                "append a duplicate paper/criterion row",
+                bundle_readme.read_text(encoding="utf-8"),
+            )
             manifest = json.loads(bundle_manifest.read_text(encoding="utf-8"))
             self.assertEqual(24, manifest["required_annotation_rows"])
             archive_paths = {item["archive_path"] for item in manifest["files"]}

@@ -36,7 +36,7 @@ Evidence to cite:
 - `results/tables/compactness_source_grounding.md`
 - Source-span support rates: 0.938, 1.0, 1.0, and 1.0 with zero invalid ranges.
 - `results/human_fidelity_packets/annotation_summary.md`: 0 scored rows,
-  24 pending rows, and 0 errors.
+  24 pending paper-by-criterion cells, and 0 errors.
 
 Do not say:
 

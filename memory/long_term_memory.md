@@ -63,7 +63,7 @@ Current supported claims:
   analysis, not new task-success evidence.
 - Human-fidelity annotation handoff is ready: review packets, annotation guide,
   reviewer bundle zip, checksum manifest, stricter blank template metadata,
-  and strict summarizer validation are present for 24 paper-by-criterion rows;
+  and strict summarizer validation are present for 24 paper-by-criterion cells;
   completed human annotation remains pending.
 - Local token accounting handoff is ready: input-token and saved-response
   output-token proxy summaries are present, and the composite local token
@@ -603,7 +603,7 @@ DeepSeek:
 | AIDE auto-note | Toolformer profile was semantically poor on AIDE; figure captions and related-work snippets leaked in. | Added `--profile aide`, target-section-first selection, overlap exception for shared AIDE caveat. |
 | Pipeline ergonomics | The extracted-text-to-note-to-skill workflow required three manual commands. | Added `scripts/papertoskill_pipeline.py` to write note, skill, source map, rubric report, and manifest in one local command. |
 | PDF pipeline input | Users needed a smoke-tested direct PDF entry point without claiming robust PDF understanding. | `scripts/papertoskill_pipeline.py` accepts `.pdf` sources through `pdftotext -layout`, records extracted text in the manifest, and remains bounded as local smoke support. |
-| Human fidelity | Blank annotation rows could be mistaken for negative scores. | `scripts/summarize_human_fidelity_annotations.py` marks blanks as pending. |
+| Human fidelity | Blank annotation rows could be mistaken for negative scores, and appended second-reviewer rows could make a fully covered review look pending. | `scripts/summarize_human_fidelity_annotations.py` marks blanks as pending and now judges completion by 24 paper-by-criterion cells while allowing distinct-reviewer duplicate rows. |
 | Reproducibility | Local package readiness was conflated with external live/human evidence. | `scripts/check_reproducibility_package.py` uses ready/pending/fail statuses. |
 | AAAI package | File presence was weaker than checking the actual author kit/build state. | `scripts/check_aaai_package.py` checks SHA256, style use, fresh PDF/log/BibTeX, unresolved markers. |
 | Usage examples | Markdown examples could drift from executable paths. | `scripts/check_usage_examples.py` validates files, prompt slots, and offline AIDE example chain. |

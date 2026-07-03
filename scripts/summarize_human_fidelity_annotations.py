@@ -92,6 +92,9 @@ def summarize(rows: list[dict[str, str]]) -> dict[str, Any]:
     discussion_rows = 0
     paper_labels: dict[str, str] = {}
     criterion_labels: dict[str, str] = {}
+    required_cells: set[tuple[str, str]] = set()
+    scored_cells: set[tuple[str, str]] = set()
+    scored_reviewers_by_cell: dict[tuple[str, str], set[str]] = defaultdict(set)
 
     for index, row in enumerate(rows, start=2):
         score = parse_score(row["score_0_to_3"], index)
@@ -101,6 +104,8 @@ def summarize(rows: list[dict[str, str]]) -> dict[str, Any]:
         criterion_id = row["criterion_id"].strip()
         paper_labels[paper_id] = row["paper"].strip()
         criterion_labels[criterion_id] = row["criterion_label"].strip()
+        cell = (paper_id, criterion_id)
+        required_cells.add(cell)
         if score is None:
             if any(
                 row[column].strip()
@@ -116,6 +121,7 @@ def summarize(rows: list[dict[str, str]]) -> dict[str, Any]:
                 errors.append(f"Row {index}: pending annotation rows should not include partial metadata without a score")
             continue
         scored_rows += 1
+        scored_cells.add(cell)
         if not row["evidence_locator"].strip():
             errors.append(f"Row {index}: scored annotation requires evidence_locator")
         if not row["evidence_note"].strip():
@@ -126,6 +132,17 @@ def summarize(rows: list[dict[str, str]]) -> dict[str, Any]:
             errors.append(f"Row {index}: scored annotation requires reviewer_id")
         if not row["review_date"].strip():
             errors.append(f"Row {index}: scored annotation requires review_date")
+        if needs_discussion is None:
+            errors.append(f"Row {index}: scored annotation requires needs_discussion true/false")
+        reviewer_id = row["reviewer_id"].strip()
+        if reviewer_id:
+            reviewer_key = (paper_id, criterion_id)
+            if reviewer_id in scored_reviewers_by_cell[reviewer_key]:
+                errors.append(
+                    f"Row {index}: duplicate scored annotation for reviewer_id={reviewer_id} "
+                    f"on {paper_id}/{criterion_id}"
+                )
+            scored_reviewers_by_cell[reviewer_key].add(reviewer_id)
         paper_scores[paper_id].append(score)
         criterion_scores[criterion_id].append(score)
         if confidence is not None:
@@ -135,31 +152,39 @@ def summarize(rows: list[dict[str, str]]) -> dict[str, Any]:
 
     for paper_id, label in paper_labels.items():
         scores = paper_scores.get(paper_id, [])
+        completed_cells = sum(1 for criterion_id in criterion_labels if (paper_id, criterion_id) in scored_cells)
         by_paper[paper_id] = {
             "paper": label,
             "scored_rows": len(scores),
+            "scored_cells": completed_cells,
             "average_score": round(sum(scores) / len(scores), 3) if scores else None,
             "max_score": 3,
-            "status": "complete" if len(scores) == 6 else "pending",
+            "status": "complete" if completed_cells == len(criterion_labels) else "pending",
         }
 
     for criterion_id, label in criterion_labels.items():
         scores = criterion_scores.get(criterion_id, [])
+        completed_cells = sum(1 for paper_id in paper_labels if (paper_id, criterion_id) in scored_cells)
         by_criterion[criterion_id] = {
             "criterion": label,
             "scored_rows": len(scores),
+            "scored_cells": completed_cells,
             "average_score": round(sum(scores) / len(scores), 3) if scores else None,
             "max_score": 3,
-            "status": "complete" if len(scores) == len(paper_labels) else "pending",
+            "status": "complete" if completed_cells == len(paper_labels) else "pending",
         }
 
+    pending_cells = len(required_cells - scored_cells)
     return {
         "schema_version": "0.1",
-        "evidence_boundary": "Summarizes human-fidelity annotation rows. Blank score rows are pending, not negative evidence.",
+        "evidence_boundary": "Summarizes human-fidelity annotation rows. Blank score rows are pending, not negative evidence. Multiple reviewers may score the same paper-criterion cell when reviewer_id values are distinct.",
         "total_rows": total_rows,
         "scored_rows": scored_rows,
-        "pending_rows": total_rows - scored_rows,
-        "annotation_status": "complete" if total_rows > 0 and scored_rows == total_rows else "pending",
+        "required_cells": len(required_cells),
+        "scored_cells": len(scored_cells),
+        "pending_rows": pending_cells,
+        "pending_cells": pending_cells,
+        "annotation_status": "complete" if required_cells and pending_cells == 0 else "pending",
         "average_confidence": round(sum(confidence_values) / len(confidence_values), 3) if confidence_values else None,
         "discussion_rows": discussion_rows,
         "errors": errors,
@@ -208,7 +233,9 @@ def write_markdown(path: Path, summary: dict[str, Any]) -> None:
         f"- Annotation status: {summary['annotation_status']}",
         f"- Total rows: {summary['total_rows']}",
         f"- Scored rows: {summary['scored_rows']}",
-        f"- Pending rows: {summary['pending_rows']}",
+        f"- Required paper-criterion cells: {summary['required_cells']}",
+        f"- Scored paper-criterion cells: {summary['scored_cells']}",
+        f"- Pending paper-criterion cells: {summary['pending_cells']}",
         f"- Average confidence: {format_decimal(summary['average_confidence'])}",
         f"- Needs discussion rows: {summary['discussion_rows']}",
         f"- Errors: {len(summary['errors'])}",

@@ -14,8 +14,10 @@ Evidence boundary: this bundle prepares independent review. It does not contain 
 1. Read `annotation_guide.md`.
 2. Open each paper packet listed below.
 3. Fill every row in `annotation_template.csv` with score/evidence/confidence/reviewer metadata.
-4. Leave unreviewed rows blank; do not convert missing review rows into zero scores.
-5. Return the filled `annotation_template.csv` to the PaperToSkill repository owner.
+4. Fill `needs_discussion` as `true` or `false` for every scored row.
+5. Leave unreviewed rows blank; do not convert missing review rows into zero scores.
+6. If a second reviewer scores the same item, append a duplicate paper/criterion row with that reviewer's distinct `reviewer_id`.
+7. Return the filled `annotation_template.csv` to the PaperToSkill repository owner.
 
 ## Paper Packets
 
@@ -28,4 +30,4 @@ Evidence boundary: this bundle prepares independent review. It does not contain 
 
 ## Claim Boundary
 
-PaperToSkill cannot claim human validation until the strict summarizer reports all 24 rows scored with no errors.
+PaperToSkill cannot claim human validation until the strict summarizer reports all 24 paper-by-criterion cells scored with no errors.
