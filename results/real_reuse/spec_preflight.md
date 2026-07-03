@@ -5,7 +5,7 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 - Overall status: ready_to_implement
 - Spec path: benchmarks/real_reuse/real_reuse_v0.json
 - Task count: 8
-- Ready checks: 424
+- Ready checks: 430
 - Failed checks: 0
 
 ## Checks
@@ -436,3 +436,9 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 | real_reuse_aide_scorer_present | ready | present | scripts/score_real_reuse_aide.py |
 | real_reuse_aide_runner_present | ready | present | scripts/run_real_reuse_aide.py |
 | real_reuse_aide_runner_contract_ready | ready | AIDE execution-layer contract snippets present | scripts/run_real_reuse_aide.py |
+| real_reuse_swe_agent_skill_present | ready | present | generated_skills/real_reuse/swe_agent/SKILL.md |
+| real_reuse_swe_agent_source_map_present | ready | present | generated_skills/real_reuse/swe_agent/references/source_map.json |
+| real_reuse_swe_agent_auto_note_report_present | ready | present | results/evaluations/swe_agent_auto_note_scaffold_v0.json |
+| real_reuse_swe_agent_skill_contract_ready | ready | SWE-agent skill contract snippets present | generated_skills/real_reuse/swe_agent/SKILL.md |
+| real_reuse_swe_agent_rubric_ready | ready | score=20/20 | results/evaluations/swe_agent_rubric_v0.json |
+| real_reuse_swe_agent_source_span_ready | ready | support_rate=1; invalid_ranges=0 | results/evaluations/swe_agent_auto_source_span_validation_v0.json |

@@ -89,9 +89,11 @@ task-specific Summary contexts, a deterministic scorer, and one GPT-family
 Summary-vs-PaperToSkill run. AIDE-T1/T2 now have a preparer, scorer, and runner
 contract, but their real Kaggle `spaceship-titanic` `train.csv` is still
 pending, so no AIDE fixture assets, raw rows, or task scores exist yet.
-SWE-agent and SnapATAC2 assets/runners/raw rows also remain pending. Do not
-write the AAAI paper as if the eight-task Summary vs PaperToSkill real-reuse
-comparison has run.
+SWE-agent has a generated skill, rubric report, source map, and source-span
+gate for the real-reuse software-engineering task family, but SWE-bench fixture
+assets/runners/raw rows remain pending. SnapATAC2 assets/runners/raw rows also
+remain pending. Do not write the AAAI paper as if the eight-task Summary vs
+PaperToSkill real-reuse comparison has run.
 
 Regenerate per-task specs from the master spec:
 
@@ -122,6 +124,18 @@ Regenerate the paper-facing main real-reuse table scaffold:
 ```powershell
 python scripts\build_real_reuse_paper_tables.py
 ```
+
+Regenerate the SWE-agent skill/readiness gate from extracted paper text:
+
+```powershell
+python scripts\papertoskill_note_from_text.py --source papers\extracted\swe_agent.txt --output papers\auto_notes\swe_agent_auto_note.md --paper-id swe_agent --title "SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering" --profile swe_agent --report results\evaluations\swe_agent_auto_note_scaffold_v0.json
+python scripts\papertoskill_extract.py --source papers\auto_notes\swe_agent_auto_note.md --output generated_skills\real_reuse\swe_agent --name swe-agent-paper-skill --title "SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering"
+python scripts\evaluate_skill.py --skill generated_skills\real_reuse\swe_agent\SKILL.md --rubric benchmarks\rubric_swe_agent_v0.json --output results\evaluations\swe_agent_rubric_v0.json
+python scripts\validate_source_spans.py --task benchmarks\tasks\swe_agent_auto_source_span_validation.json --output results\evaluations\swe_agent_auto_source_span_validation_v0.json
+```
+
+This gate checks the SWE-agent skill artifact only. It does not prepare
+SWE-bench assets, run SWE-T1/T2, or produce downstream task-success evidence.
 
 Prepare the two lightweight Reflexion fixture assets and condition contexts:
 
@@ -207,8 +221,9 @@ results/real_reuse/main_results_plan.md
 
 The expected status is `ready_to_implement`. That means the benchmark spec,
 per-task specs, fixture requirement manifests, candidate asset manifests, asset
-locks, the REF prepared-asset/runner layer, and the AIDE execution-layer script
-contracts are machine-checkable; it is not downstream task-success evidence.
+locks, the REF prepared-asset/runner layer, the AIDE execution-layer script
+contracts, and the SWE-agent skill gate are machine-checkable; it is not
+downstream task-success evidence.
 
 Planned main task grid:
 
@@ -231,9 +246,12 @@ Execution order:
    path/URI, sha256 values, scoring command, and run budget. REF-T1 and REF-T2
    are the first completed prepared-asset layer; AIDE fixture materialization
    waits for the real Kaggle Spaceship Titanic `train.csv`.
-3. Create Summary and PaperToSkill context inputs for each task.
+3. Create Summary and PaperToSkill context inputs for each task. SWE-agent now
+   has a source-anchored generated skill; task-specific SWE Summary contexts
+   still belong to the future SWE fixture-preparation layer.
 4. Implement the real-reuse runner and scorer. The REF-T1/REF-T2 runner is now
-   implemented; AIDE has preparer/scorer/runner scripts ready; SWE-agent and
+   implemented; AIDE has preparer/scorer/runner scripts ready; SWE-agent has
+   skill/readiness gates ready but still needs preparer/scorer/runner scripts;
    SnapATAC2 runners remain pending.
 5. Run agent-only tasks with no mid-run human intervention. REF-T1/REF-T2 have
    one GPT-family Summary-vs-PaperToSkill run.

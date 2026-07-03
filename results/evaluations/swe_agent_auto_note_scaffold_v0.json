@@ -1,0 +1,182 @@
+{
+  "source": "papers\\extracted\\swe_agent.txt",
+  "paper_id": "swe_agent",
+  "title": "SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering",
+  "profile": "swe_agent",
+  "line_count": 7767,
+  "ranges": {
+    "abstract": {
+      "start": 14,
+      "end": 32
+    },
+    "method": {
+      "start": 99,
+      "end": 268
+    },
+    "experiment": {
+      "start": 269,
+      "end": 619
+    },
+    "limitation": {
+      "start": 7726,
+      "end": 7767
+    },
+    "all": {
+      "start": 1,
+      "end": 7767
+    }
+  },
+  "selected": {
+    "abstract": {
+      "start": 14,
+      "end": 32
+    },
+    "methods": [
+      {
+        "prefix": "Frame the method as an agent-computer interface that shapes commands, documentation, state, history, and feedback",
+        "snippet": "... back to the LM. It also tracks the history of all previous commands and observations and, at each step, manages how these should be formatted and combined with ...",
+        "start": 135,
+        "end": 139,
+        "score": 4
+      },
+      {
+        "prefix": "Keep ACI actions simple, compact, efficient, and paired with concise environment feedback",
+        "snippet": "... Actions should be simple and easy to understand for agents. Many bash commands have documentation that includes dozens of options. Simple commands with a few options and ...",
+        "start": 148,
+        "end": 152,
+        "score": 3
+      },
+      {
+        "prefix": "Use SWE-agent's ReAct loop with thoughts, commands, execution feedback, and common Linux utilities when needed",
+        "snippet": "... search, navigate, edit, and execute code commands. The ACI com- prises several principal components, including search/navigation, file viewer, file editor, and context ...",
+        "start": 173,
+        "end": 177,
+        "score": 5
+      },
+      {
+        "prefix": "Localize code with LM-friendly search and navigation commands such as find_file, search_file, and search_dir",
+        "snippet": "... an issue. We introduce the special commands find_file, search_file, and search_dir, which output a summary of search results when searching for filenames and strings within files ...",
+        "start": 178,
+        "end": 182,
+        "score": 4
+      },
+      {
+        "prefix": "Inspect code through the file viewer with bounded windows, line numbers, scrolling, and goto",
+        "snippet": "... that the agent write a more specific query. File viewer. After finding a file they want to view, agents use the interactive file viewer by calling the command open on the ...",
+        "start": 235,
+        "end": 239,
+        "score": 5
+      },
+      {
+        "prefix": "Apply focused multiline edits through the edit command and immediately inspect the updated file view",
+        "snippet": "... with the file viewer, allowing agents to replace a specific range of lines in the open file. This command takes 3 required arguments: the start line, end line, and replacement ...",
+        "start": 244,
+        "end": 248,
+        "score": 4
+      },
+      {
+        "prefix": "Use editing guardrails such as linting feedback and discarded invalid edits to avoid error propagation",
+        "snippet": "... files in an IDE, we integrate a code linter into the edit function to alert the agent of mistakes it may have introduced when editing a file. Select errors from the linter ...",
+        "start": 250,
+        "end": 254,
+        "score": 3
+      },
+      {
+        "prefix": "Manage context with command documentation, demonstrations, malformed-response feedback, and collapsed old observations",
+        "snippet": "Context management. The SWE-agent system uses informative prompts, error messages, and history processors to keep agent context concise and informative. Agents receive ...",
+        "start": 255,
+        "end": 259,
+        "score": 3
+      }
+    ],
+    "experiments": [
+      {
+        "prefix": "Evaluate on SWE-bench full test, SWE-bench Lite, and HumanEvalFix with automated software-engineering metrics",
+        "snippet": "... Experimental Setup Datasets. We primarily evaluate on the SWE-bench dataset, which includes 2,294 task instances from 12 different repositories of popular Python packages [20]. ...",
+        "start": 268,
+        "end": 272,
+        "score": 4
+      },
+      {
+        "prefix": "Compare against non-interactive RAG and Shell-only or Basic CLI baselines under the reported settings",
+        "snippet": "Baselines. We compare SWE-agent to two baselines. The first setting is the non-interactive, retrieval- augmented generation (RAG) baselines established in Jimenez et al. [20]. ...",
+        "start": 287,
+        "end": 291,
+        "score": 4
+      },
+      {
+        "prefix": "Report % Resolved or pass@1, average cost, and the per-instance budget boundary",
+        "snippet": "... after interaction. Metrics. We report % Resolved or pass@1 as the main metric, which is the proportion of instances for which all tests pass successfully after the model ...",
+        "start": 294,
+        "end": 298,
+        "score": 5
+      },
+      {
+        "prefix": "Record the main SWE-bench and HumanEvalFix performance numbers as reported references",
+        "snippet": "... solving 12.47% (286/2,294) of the full SWE-bench test set and 18.00% (54/300) of the Lite split. As shown in Table 1, compared to RAG on Lite, SWE-agent is 8-13x more costly ...",
+        "start": 309,
+        "end": 313,
+        "score": 3
+      },
+      {
+        "prefix": "Use ACI ablations to separate the effect of editor, search, file viewer, context, and demonstrations",
+        "snippet": "... 3: SWE-bench Lite performance under ablations to the SWE-agent interface, which is denoted by . We consider different approaches to searching and editing (see Figures 5 and ...",
+        "start": 366,
+        "end": 370,
+        "score": 5
+      },
+      {
+        "prefix": "Track configuration search over window size, history processing, and decoding temperature",
+        "snippet": "... edits were submitted automatically. Configuration search. During the design process of SWE-agent, we arrived at the final ACI design through qualitative analysis of ...",
+        "start": 299,
+        "end": 303,
+        "score": 4
+      }
+    ],
+    "limitations": [
+      {
+        "prefix": "Run generated code in sandboxed or ephemeral containers rather than on an unprotected personal machine",
+        "snippet": "... framework are both carried out in sand-boxed code environments, which is made possible with Docker. Executing code in a Docker container ensures that its effects are ...",
+        "start": 7688,
+        "end": 7692,
+        "score": 3
+      },
+      {
+        "prefix": "Verify official repositories and datasets to avoid malicious evaluation infrastructure or injected instructions",
+        "snippet": "... malicious code or instructions to generate malicious code. For instance, an unofficial repository claiming to host an inference/evaluation harness for SWE-agent/bench could ...",
+        "start": 7696,
+        "end": 7700,
+        "score": 4
+      },
+      {
+        "prefix": "Do not ignore misuse risks when software-engineering agents can produce offensive or malicious code",
+        "snippet": "... of software engineering agents being deployed in the real world. Prior works have conceptualized and put forth prototypes of agents that can carry out offensive security ...",
+        "start": 7703,
+        "end": 7707,
+        "score": 3
+      },
+      {
+        "prefix": "Treat the ACI development process as manually crafted unless an automated interface-design loop is actually implemented",
+        "snippet": "... in this work, the ACI development process and case studies are done manually. Many components of SWE-agent were crafted from observations of recurring behavior within a ...",
+        "start": 7737,
+        "end": 7741,
+        "score": 4
+      },
+      {
+        "prefix": "Do not assume ACI principles transfer unchanged beyond programmatic software-engineering and code-generation tasks",
+        "snippet": "... the scope of SWE-agent is exclusively focused on programmatic tasks like software en- gineering and code generation. Were curious to see whether the same principles of ...",
+        "start": 7746,
+        "end": 7750,
+        "score": 4
+      },
+      {
+        "prefix": "Watch for editing failure cascades, repeated failed edits, and recovery degradation",
+        "snippet": "... minority of edit actions raise a linting error; out of 2,294 task instances, 1,185 (51.7%) of SWE-agent w/ GPT-4 Turbo trajectories have 1+ failed edits. While agents ...",
+        "start": 593,
+        "end": 597,
+        "score": 5
+      }
+    ]
+  },
+  "evidence_boundary": "Deterministic line-window scaffold. It identifies auditable source spans but does not prove semantic completeness or human fidelity."
+}

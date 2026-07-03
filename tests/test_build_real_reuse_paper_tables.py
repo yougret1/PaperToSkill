@@ -13,15 +13,26 @@ SCRIPT = ROOT / "scripts" / "build_real_reuse_paper_tables.py"
 class BuildRealReusePaperTablesTest(unittest.TestCase):
     def test_cli_builds_main_result_scaffold(self):
         with tempfile.TemporaryDirectory() as tmp:
-            output_csv = Path(tmp) / "main_results_plan.csv"
-            output_md = Path(tmp) / "main_results_plan.md"
-            output_json = Path(tmp) / "main_results_plan.json"
+            tmp_path = Path(tmp)
+            status_root = tmp_path / "status_root"
+            (status_root / "scripts").mkdir(parents=True)
+            for script in (
+                "prepare_real_reuse_aide_fixture.py",
+                "score_real_reuse_aide.py",
+                "run_real_reuse_aide.py",
+            ):
+                (status_root / "scripts" / script).write_text("# placeholder\n", encoding="utf-8")
+            output_csv = tmp_path / "main_results_plan.csv"
+            output_md = tmp_path / "main_results_plan.md"
+            output_json = tmp_path / "main_results_plan.json"
             subprocess.run(
                 [
                     sys.executable,
                     str(SCRIPT),
                     "--raw-rows",
-                    str(Path(tmp) / "missing_raw_rows.jsonl"),
+                    str(tmp_path / "missing_raw_rows.jsonl"),
+                    "--status-root",
+                    str(status_root),
                     "--output-csv",
                     str(output_csv),
                     "--output-md",
@@ -40,9 +51,45 @@ class BuildRealReusePaperTablesTest(unittest.TestCase):
             self.assertEqual("AIDE-T1", rows[0]["Task ID"])
             self.assertEqual("Pending", rows[0]["Summary Score"])
             self.assertEqual("Pending", rows[0]["PaperToSkill Score"])
-            self.assertEqual("Ready to run", rows[0]["Status"])
+            self.assertEqual("Awaiting dataset", rows[0]["Status"])
+            rows_by_id = {row["Task ID"]: row for row in rows}
+            self.assertEqual("Skill pending", rows_by_id["SWE-T1"]["Status"])
             self.assertTrue(output_md.exists())
             self.assertTrue(output_json.exists())
+
+    def test_cli_marks_swe_runner_pending_after_skill_exists(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            status_root = tmp_path / "status_root"
+            (status_root / "generated_skills" / "real_reuse" / "swe_agent").mkdir(parents=True)
+            (status_root / "generated_skills" / "real_reuse" / "swe_agent" / "SKILL.md").write_text(
+                "# SWE-agent\n",
+                encoding="utf-8",
+            )
+            output_csv = tmp_path / "main_results_plan.csv"
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--raw-rows",
+                    str(tmp_path / "missing_raw_rows.jsonl"),
+                    "--status-root",
+                    str(status_root),
+                    "--output-csv",
+                    str(output_csv),
+                    "--output-md",
+                    str(tmp_path / "main_results_plan.md"),
+                    "--output-json",
+                    str(tmp_path / "main_results_plan.json"),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            with output_csv.open("r", encoding="utf-8", newline="") as handle:
+                rows = {row["Task ID"]: row for row in csv.DictReader(handle)}
+            self.assertEqual("Runner pending", rows["SWE-T1"]["Status"])
 
     def test_cli_fills_scores_from_raw_rows(self):
         with tempfile.TemporaryDirectory() as tmp:

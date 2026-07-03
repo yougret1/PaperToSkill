@@ -129,6 +129,7 @@ class CheckReproducibilityPackageTest(unittest.TestCase):
             self.assertIn("real_reuse_core_checks_ready", ready_ids)
             self.assertIn("real_reuse_reflexion_runner_contract_ready", ready_ids)
             self.assertIn("real_reuse_aide_runner_contract_ready", ready_ids)
+            self.assertIn("real_reuse_swe_agent_skill_contract_ready", ready_ids)
             self.assertIn("ai_scientist_v2_smoke_cli_status_summary", ready_ids)
             self.assertIn("openai_direct_probe_cli_ready", ready_ids)
             self.assertIn("openai_direct_probe_claude_family_report_ready", ready_ids)

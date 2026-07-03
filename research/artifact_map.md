@@ -95,6 +95,7 @@
 | `research/run_logs/2026-07-03_phase87_real_reuse_reflexion_runner.md` | REF-T1/REF-T2 Summary-vs-PaperToSkill GPT-family execution, raw rows, table update, and evidence boundary | Created |
 | `research/run_logs/2026-07-03_phase88_real_reuse_aide_execution_layer.md` | AIDE-T1/T2 preparer, scorer, runner, gate integration, and Kaggle-data-pending boundary | Created |
 | `research/run_logs/2026-07-03_phase89_remote_save_after_aide_execution_layer.md` | Remote-save recovery after Phase 87/88 and follow-up memory/log synchronization to `origin/main` | Created |
+| `research/run_logs/2026-07-03_phase90_real_reuse_swe_agent_skill.md` | SWE-agent auto-note, generated skill, rubric/source-span gates, table status update, and runner-pending boundary | Created |
 
 ## Paper Draft Package
 
@@ -138,6 +139,7 @@
 | `benchmarks/human_fidelity_review_v0.json` | Human-fidelity review protocol and packet manifest | Created |
 | `benchmarks/failure_case_archive_v0.json` | Failure-case archive config and project-level records | Created |
 | `benchmarks/model_ablation_v0.json` | Claude/GPT-family/DeepSeek model-ablation prompt packet spec | Created |
+| `benchmarks/rubric_swe_agent_v0.json` | Deterministic v0 scoring rubric for the real-reuse SWE-agent generated skill | Created |
 | `benchmarks/real_reuse/real_reuse_v0.json` | Machine-checkable planned real-reuse benchmark spec with eight original-style paper-task rows | Created |
 | `benchmarks/real_reuse/tasks/*.json` | Per-task real-reuse execution-contract specs for all eight planned paper-task rows; REF rows are executed, AIDE execution scripts are ready, and remaining task assets/runs are pending | Created |
 | `benchmarks/real_reuse/fixtures/*.json` | Per-task fixture requirement manifests with asset slots, scoring contracts, license/provenance status, and planned outputs; concrete assets are partial | Created |
@@ -170,6 +172,7 @@
 | `benchmarks/tasks/aide_auto_research_run.json` | Context-coverage task spec for AIDE auto-note-derived skill | Created |
 | `benchmarks/tasks/aide_auto_harness_transfer.json` | Offline transfer-readiness task for AIDE auto-note-derived skill | Created |
 | `benchmarks/tasks/aide_auto_source_span_validation.json` | Source-span validation task for AIDE auto-note-derived skill | Created |
+| `benchmarks/tasks/swe_agent_auto_source_span_validation.json` | Source-span validation task for the real-reuse SWE-agent auto-note-derived skill | Created |
 | `baselines/ai_scientist_v2_generic_summary.md` | Generic summary baseline context | Created |
 | `baselines/ai_scientist_v2_abstract_only.md` | Abstract-only baseline context | Created |
 | `baselines/reflexion_generic_summary.md` | Generic summary baseline context for Reflexion | Created |
@@ -182,16 +185,19 @@
 | `papers/raw/reflexion.pdf` | Raw Reflexion PDF | Created |
 | `papers/raw/aide.pdf` | Raw AIDE PDF | Created |
 | `papers/raw/toolformer.pdf` | Raw Toolformer PDF | Created |
+| `papers/raw/swe_agent.pdf` | Raw SWE-agent PDF for the real-reuse software-engineering task family | Created |
 | `papers/extracted/ai_scientist_v2.txt` | Extracted PDF text | Created |
 | `papers/extracted/reflexion.txt` | Extracted Reflexion PDF text | Created |
 | `papers/extracted/aide.txt` | Extracted AIDE PDF text | Created |
 | `papers/extracted/toolformer.txt` | Extracted Toolformer PDF text | Created |
+| `papers/extracted/swe_agent.txt` | Extracted SWE-agent PDF text | Created |
 | `papers/notes/ai_scientist_v2_note.md` | Curated real-paper note for scaffold input | Created |
 | `papers/notes/reflexion_note.md` | Curated Reflexion source-anchored note for scaffold input | Created |
 | `papers/notes/aide_note.md` | Curated AIDE source-anchored note for scaffold input | Created |
 | `papers/notes/toolformer_note.md` | Curated Toolformer source-anchored note for scaffold input | Created |
 | `papers/auto_notes/toolformer_auto_note.md` | Deterministic automatic note scaffold from Toolformer extracted text | Created |
 | `papers/auto_notes/aide_auto_note.md` | Deterministic automatic note scaffold from AIDE extracted text | Created |
+| `papers/auto_notes/swe_agent_auto_note.md` | Deterministic automatic note scaffold from SWE-agent extracted text for real-reuse skill preparation | Created |
 | `examples/papertoskill_paper_note.md` | Paper-like source note for retained case | Created |
 | `scripts/papertoskill_extract.py` | Deterministic local paper-to-skill scaffold | Created |
 | `scripts/papertoskill_note_from_text.py` | Deterministic extracted-text-to-note scaffold with line anchors | Created |
@@ -207,7 +213,7 @@
 | `scripts/prepare_real_reuse_aide_fixture.py` | Prepares locked AIDE-T1/T2 Spaceship Titanic fixtures from a human-provided real `train.csv`, keeps validation labels scorer-only, and writes task-specific Summary contexts | Created |
 | `scripts/score_real_reuse_aide.py` | Scores AIDE candidate scripts or submissions in an isolated workspace against hidden validation labels and baseline-score JSON | Created |
 | `scripts/run_real_reuse_aide.py` | Runs locked AIDE-T1/T2 Summary-vs-PaperToSkill conditions, saves prompts/responses/metrics/raw rows, and separates provider/data availability from model quality | Created |
-| `scripts/check_real_reuse_benchmark.py` | Validates the planned real-reuse benchmark spec, main conditions, sanity scope, reference-score boundary, task/fixture/candidate/asset-lock layers, REF prepared assets, REF runner, AIDE execution-layer contract, and future output paths | Created |
+| `scripts/check_real_reuse_benchmark.py` | Validates the planned real-reuse benchmark spec, main conditions, sanity scope, reference-score boundary, task/fixture/candidate/asset-lock layers, REF prepared assets, REF runner, AIDE execution-layer contract, SWE-agent skill gate, and future output paths | Created |
 | `scripts/evaluate_skill.py` | Deterministic v0 evaluator for generated skills | Created |
 | `scripts/evaluate_context_baselines.py` | Deterministic evaluator for context baseline coverage | Created |
 | `scripts/audit_skill_source_map.py` | Deterministic source-map-aware unsupported-instruction audit | Created |
@@ -287,6 +293,8 @@
 | `generated_skills/toolformer_auto/references/source_map.json` | Source-map evidence for Toolformer auto-note-derived skill | Created |
 | `generated_skills/aide_auto/SKILL.md` | Retained generated skill from deterministic AIDE auto-note scaffold | Created |
 | `generated_skills/aide_auto/references/source_map.json` | Source-map evidence for AIDE auto-note-derived skill | Created |
+| `generated_skills/real_reuse/swe_agent/SKILL.md` | Retained SWE-agent generated skill for the real-reuse software-engineering task family; runner remains pending | Created |
+| `generated_skills/real_reuse/swe_agent/references/source_map.json` | Source-map evidence for the real-reuse SWE-agent generated skill | Created |
 | `generated_skills/papertoskill_paper_note/SKILL.md` | Retained generated skill from paper-like note | Created |
 | `generated_skills/papertoskill_paper_note/references/source_map.json` | Source-map evidence for retained generated skill | Created |
 | `results/evaluations/ai_scientist_v2_rubric_v0.json` | Scored rubric output for AI Scientist-v2 generated skill | Created |
@@ -316,6 +324,9 @@
 | `results/evaluations/aide_auto_context_baselines_v0.json` | AIDE auto-note-derived skill context coverage scores | Created |
 | `results/evaluations/aide_auto_harness_transfer_v0.json` | AIDE auto-note-derived skill transfer-readiness scores | Created |
 | `results/evaluations/aide_auto_source_span_validation_v0.json` | AIDE auto-note-derived skill source-span validation output | Created |
+| `results/evaluations/swe_agent_auto_note_scaffold_v0.json` | Selection report for deterministic SWE-agent auto-note scaffold | Created |
+| `results/evaluations/swe_agent_rubric_v0.json` | SWE-agent real-reuse generated skill rubric output | Created |
+| `results/evaluations/swe_agent_auto_source_span_validation_v0.json` | SWE-agent real-reuse generated skill source-span validation output | Created |
 | `results/live_transfer_prompts/ai_scientist_v2_v0/` | AI Scientist-v2 live Codex/Claude prompt packets, saved responses, and run report | Created |
 | `results/live_transfer_prompts/reflexion_v0/` | Reflexion live Codex/Claude prompt packets, saved responses, and run report | Created |
 | `results/live_transfer_prompts/aide_v0/` | AIDE live Codex/Claude prompt packets, saved responses, and run report | Created |
@@ -428,6 +439,6 @@
 | Artifact | Purpose | Status |
 | --- | --- | --- |
 | Model-ablation response logs | Claude/GPT-family/DeepSeek response files and scores after endpoint/model availability | Created |
-| Concrete real-reuse fixture assets | REF-T1/REF-T2 prepared assets, scorer, runner, and one GPT-family Summary-vs-PaperToSkill run are created; AIDE preparer/scorer/runner are ready but await real Kaggle `train.csv`; SWE-agent and SnapATAC2 assets/runners remain planned | Mixed |
+| Concrete real-reuse fixture assets | REF-T1/REF-T2 prepared assets, scorer, runner, and one GPT-family Summary-vs-PaperToSkill run are created; AIDE preparer/scorer/runner are ready but await real Kaggle `train.csv`; SWE-agent skill gate is ready but SWE assets/runner/raw rows remain pending; SnapATAC2 assets/runners remain planned | Mixed |
 | `results/real_reuse/` | Current REF raw rows and table artifacts plus future aggregate tables, sanity checks, cost table, and LLM ablation outputs for the remaining real-reuse experiments | Mixed |
 | Paper2Agent executable baseline | Full Paper2Agent/MCP runtime comparison, if setup resources become available | Planned |

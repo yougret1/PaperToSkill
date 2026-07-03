@@ -147,8 +147,16 @@ Current supported claims:
   131 unit tests, all strict local gates, `git diff --check`, and the raw-key
   scan passed. The preflight validates the AIDE execution-layer contract. AIDE
   fixture materialization and raw rows wait for the real Kaggle Spaceship
-  Titanic `train.csv`; SWE-agent and SnapATAC2 assets/runners/raw rows remain
-  pending.
+  Titanic `train.csv`. Phase 90 added the SWE-agent real-reuse skill gate:
+  `papers/auto_notes/swe_agent_auto_note.md`,
+  `generated_skills/real_reuse/swe_agent/SKILL.md`, source map,
+  `benchmarks/rubric_swe_agent_v0.json`, source-span task, and evaluation
+  reports. The SWE-agent skill scores 20/20, stays under the 1200-word budget,
+  and has source-span support_rate=1.0 with 0 invalid ranges. SWE-agent
+  assets/runners/raw rows still remain pending, and SnapATAC2 assets/runners/raw
+  rows remain pending. Phase 90 verification passed before save: 133 unit tests,
+  all strict local gates, refreshed AAAI PDF/package gate, raw-key scan with no
+  matches, and `git diff --check` with only Windows line-ending warnings.
 - Phase 84 inserted the main real-reuse table scaffold into the AAAI paper, and
   Phase 87 filled the REF-T1/REF-T2 cells from raw rows:
   `results/real_reuse/main_results_plan.csv`, `.md`, and `.json` are the table
@@ -295,10 +303,19 @@ Use these as entry points instead of searching the whole repo first:
 - `results/real_reuse/main_results_plan.csv`, `.md`, and `.json`: paper-facing
   real-reuse main table source with REF-T1/REF-T2 filled and other task-family
   score cells pending.
+- `generated_skills/real_reuse/swe_agent/SKILL.md` and
+  `generated_skills/real_reuse/swe_agent/references/source_map.json`:
+  SWE-agent source-anchored generated skill for the software-engineering
+  real-reuse task family. This is skill/readiness evidence only; SWE runner and
+  raw rows remain pending.
+- `results/evaluations/swe_agent_rubric_v0.json` and
+  `results/evaluations/swe_agent_auto_source_span_validation_v0.json`:
+  SWE-agent skill quality gates, currently 20/20 rubric and 1.0 source-span
+  support rate with 0 invalid ranges.
 - `results/real_reuse/spec_preflight.md`: ready-to-implement preflight report
   for the real-reuse spec/task/fixture/candidate/asset-lock contracts, REF
-  runner, and AIDE execution-layer contract. This is not task-success evidence
-  by itself.
+  runner, AIDE execution-layer contract, and SWE-agent skill gate. This is not
+  task-success evidence by itself.
 - `external/ai_scientist_v2_patches/`: reproducibility backup for local
   AI-Scientist-v2 adaptations used by the bounded Phase 76 integration run.
 - `benchmarks/provider_billing_evidence_v0.json`: provider-billing evidence
@@ -315,7 +332,7 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 376 ready checks, 1 pending
+  reports `ready_with_pending_external_evidence`, 377 ready checks, 1 pending
   check, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
@@ -390,9 +407,9 @@ Use these as entry points instead of searching the whole repo first:
   reports ready, 15 ready checks, 0 failed checks.
 - Real-reuse preflight:
   `results/real_reuse/spec_preflight.md`
-  reports `ready_to_implement`, 8 tasks, 424 ready checks, and 0 failed checks
-  after validating the REF prepared asset/runner layer and AIDE execution-layer
-  contract.
+  reports `ready_to_implement`, 8 tasks, 430 ready checks, and 0 failed checks
+  after validating the REF prepared asset/runner layer, AIDE execution-layer
+  contract, and SWE-agent skill gate.
 - Real-reuse REF run:
   `results/real_reuse/reflexion_run_report.md` reports `complete` with 4
   scored rows for GPT-family `gpt-5.5`; REF-T1 and REF-T2 Summary and

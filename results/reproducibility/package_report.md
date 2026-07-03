@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 376
+- Ready checks: 377
 - Pending checks: 1
 - Failed checks: 0
 
@@ -311,6 +311,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | real_reuse_core_checks_ready | ready | core real-reuse checks ready | results\real_reuse\spec_preflight.json |
 | real_reuse_reflexion_runner_contract_ready | ready | runner_contract_status=ready | results\real_reuse\spec_preflight.json |
 | real_reuse_aide_runner_contract_ready | ready | runner_contract_status=ready | results\real_reuse\spec_preflight.json |
+| real_reuse_swe_agent_skill_contract_ready | ready | skill_contract_status=ready | results\real_reuse\spec_preflight.json |
 | toolformer_auto_note_script | ready | present | scripts/papertoskill_note_from_text.py |
 | toolformer_auto_pipeline_script | ready | present | scripts/papertoskill_pipeline.py |
 | toolformer_auto_note | ready | present | papers/auto_notes/toolformer_auto_note.md |

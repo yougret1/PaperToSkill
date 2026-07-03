@@ -102,7 +102,72 @@ def latest_score_rows(raw_rows: list[dict[str, Any]]) -> dict[tuple[str, str], d
     return latest
 
 
-def row_status(task_id: str, score_rows: dict[tuple[str, str], dict[str, Any]]) -> str:
+def has_any(status_root: Path, relative_paths: list[str]) -> bool:
+    return any((status_root / path).exists() for path in relative_paths)
+
+
+def unscored_status(task_id: str, status_root: Path) -> str:
+    asset_manifest = status_root / "benchmarks" / "real_reuse" / "assets" / task_id / "asset_manifest.json"
+    if task_id.startswith("AIDE-"):
+        scripts_ready = all(
+            (status_root / "scripts" / script).exists()
+            for script in (
+                "prepare_real_reuse_aide_fixture.py",
+                "score_real_reuse_aide.py",
+                "run_real_reuse_aide.py",
+            )
+        )
+        if asset_manifest.exists():
+            return "Ready to run"
+        return "Awaiting dataset" if scripts_ready else "Runner pending"
+
+    if task_id.startswith("SWE-"):
+        skill_ready = has_any(
+            status_root,
+            [
+                "generated_skills/real_reuse/swe_agent/SKILL.md",
+                "generated_skills/swe_agent/SKILL.md",
+            ],
+        )
+        runner_ready = (status_root / "scripts" / "run_real_reuse_swe.py").exists()
+        if not skill_ready:
+            return "Skill pending"
+        if not runner_ready:
+            return "Runner pending"
+        return "Ready to run" if asset_manifest.exists() else "Fixture pending"
+
+    if task_id.startswith("SNAP-"):
+        skill_ready = has_any(
+            status_root,
+            [
+                "generated_skills/real_reuse/snapatac2/SKILL.md",
+                "generated_skills/snapatac2/SKILL.md",
+                "generated_skills/snap_atac2/SKILL.md",
+            ],
+        )
+        runner_ready = has_any(
+            status_root,
+            [
+                "scripts/run_real_reuse_snapatac2.py",
+                "scripts/run_real_reuse_snap.py",
+            ],
+        )
+        if not skill_ready:
+            return "Skill pending"
+        if not runner_ready:
+            return "Runner pending"
+        return "Ready to run" if asset_manifest.exists() else "Fixture pending"
+
+    if task_id.startswith("REF-"):
+        runner_ready = (status_root / "scripts" / "run_real_reuse_reflexion.py").exists()
+        if runner_ready and asset_manifest.exists():
+            return "Ready to run"
+        return "Fixture pending"
+
+    return "Pending execution"
+
+
+def row_status(task_id: str, score_rows: dict[tuple[str, str], dict[str, Any]], status_root: Path) -> str:
     summary = score_rows.get((task_id, "summary"))
     papertoskill = score_rows.get((task_id, "papertoskill"))
     scored = [row for row in (summary, papertoskill) if row]
@@ -112,12 +177,18 @@ def row_status(task_id: str, score_rows: dict[tuple[str, str], dict[str, Any]]) 
     if scored:
         families = sorted({str(row.get("model_family", "")) for row in scored if row.get("model_family")})
         return "Partial (" + ",".join(families) + ")"
-    return "Ready to run"
+    return unscored_status(task_id, status_root)
 
 
-def build_rows(spec: dict[str, Any], raw_rows: list[dict[str, Any]] | None = None) -> list[dict[str, str]]:
+def build_rows(
+    spec: dict[str, Any],
+    raw_rows: list[dict[str, Any]] | None = None,
+    *,
+    status_root: Path | None = None,
+) -> list[dict[str, str]]:
     papers = paper_by_id(spec)
     score_rows = latest_score_rows(raw_rows or [])
+    status_root = status_root or Path(__file__).resolve().parents[1]
     rows: list[dict[str, str]] = []
     for task in spec.get("tasks", []):
         task_id = str(task["id"])
@@ -135,7 +206,7 @@ def build_rows(spec: dict[str, Any], raw_rows: list[dict[str, Any]] | None = Non
                 "Reference": reference_label(task),
                 "Summary Score": score_string(summary),
                 "PaperToSkill Score": score_string(papertoskill),
-                "Status": row_status(task_id, score_rows),
+                "Status": row_status(task_id, score_rows, status_root),
             }
         )
     return rows
@@ -215,10 +286,16 @@ def main() -> int:
         type=Path,
         default=root / "results" / "real_reuse" / "raw_rows.jsonl",
     )
+    parser.add_argument(
+        "--status-root",
+        type=Path,
+        default=root,
+        help="Repository-like root used to infer unscored task readiness status.",
+    )
     args = parser.parse_args()
 
     raw_rows = load_raw_rows(args.raw_rows)
-    rows = build_rows(load_json(args.spec), raw_rows)
+    rows = build_rows(load_json(args.spec), raw_rows, status_root=args.status_root)
     write_csv(args.output_csv, rows)
     write_markdown(args.output_md, rows, len(raw_rows))
     write_json(args.output_json, rows, raw_rows)

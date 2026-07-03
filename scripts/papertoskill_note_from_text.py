@@ -258,6 +258,121 @@ AIDE_LIMITATION_SPECS = [
     ),
 ]
 
+SWE_AGENT_METHOD_SPECS = [
+    CandidateSpec(
+        "Frame the method as an agent-computer interface that shapes commands, documentation, state, history, and feedback",
+        ("agent-computer interface", "commands", "environment feedback", "history", "instructions"),
+        "method",
+    ),
+    CandidateSpec(
+        "Keep ACI actions simple, compact, efficient, and paired with concise environment feedback",
+        ("actions should be simple", "compact and efficient", "environment feedback", "concise", "guardrails"),
+        "method",
+    ),
+    CandidateSpec(
+        "Use SWE-agent's ReAct loop with thoughts, commands, execution feedback, and common Linux utilities when needed",
+        ("thought", "command", "feedback", "ReAct", "Linux shell"),
+        "method",
+    ),
+    CandidateSpec(
+        "Localize code with LM-friendly search and navigation commands such as find_file, search_file, and search_dir",
+        ("find_file", "search_file", "search_dir", "summary of search results", "specific query"),
+        "method",
+    ),
+    CandidateSpec(
+        "Inspect code through the file viewer with bounded windows, line numbers, scrolling, and goto",
+        ("file viewer", "100 lines", "scroll_down", "scroll_up", "goto"),
+        "method",
+    ),
+    CandidateSpec(
+        "Apply focused multiline edits through the edit command and immediately inspect the updated file view",
+        ("edit command", "replace", "range of lines", "updated content", "immediately"),
+        "method",
+    ),
+    CandidateSpec(
+        "Use editing guardrails such as linting feedback and discarded invalid edits to avoid error propagation",
+        ("linter", "invalid edits are discarded", "try editing", "syntax checker", "guardrails"),
+        "method",
+    ),
+    CandidateSpec(
+        "Manage context with command documentation, demonstrations, malformed-response feedback, and collapsed old observations",
+        ("context management", "demonstrations", "malformed", "collapsed", "last 5"),
+        "method",
+    ),
+]
+
+SWE_AGENT_EXPERIMENT_SPECS = [
+    CandidateSpec(
+        "Evaluate on SWE-bench full test, SWE-bench Lite, and HumanEvalFix with automated software-engineering metrics",
+        ("SWE-bench", "SWE-bench Lite", "HumanEvalFix", "datasets", "test set"),
+        "experiment",
+    ),
+    CandidateSpec(
+        "Compare against non-interactive RAG and Shell-only or Basic CLI baselines under the reported settings",
+        ("RAG", "Shell-only", "baselines", "retrieval", "Linux"),
+        "experiment",
+    ),
+    CandidateSpec(
+        "Report % Resolved or pass@1, average cost, and the per-instance budget boundary",
+        ("% Resolved", "pass@1", "Avg. Cost", "per-instance budget", "$4"),
+        "experiment",
+    ),
+    CandidateSpec(
+        "Record the main SWE-bench and HumanEvalFix performance numbers as reported references",
+        ("12.47", "18.00", "10.46", "87.7", "88.3"),
+        "experiment",
+    ),
+    CandidateSpec(
+        "Use ACI ablations to separate the effect of editor, search, file viewer, context, and demonstrations",
+        ("ablations", "Editor", "Search", "File Viewer", "Context"),
+        "experiment",
+    ),
+    CandidateSpec(
+        "Track configuration search over window size, history processing, and decoding temperature",
+        ("Configuration search", "window size", "history processing", "decoding temperature"),
+        "experiment",
+    ),
+]
+
+SWE_AGENT_LIMITATION_SPECS = [
+    CandidateSpec(
+        "Run generated code in sandboxed or ephemeral containers rather than on an unprotected personal machine",
+        ("security risks", "LM-generated code", "Docker", "sand-boxed", "containers"),
+        "limitation",
+        True,
+    ),
+    CandidateSpec(
+        "Verify official repositories and datasets to avoid malicious evaluation infrastructure or injected instructions",
+        ("unofficial repository", "malicious code", "instructions", "official repositories", "guidelines"),
+        "limitation",
+        True,
+    ),
+    CandidateSpec(
+        "Do not ignore misuse risks when software-engineering agents can produce offensive or malicious code",
+        ("offensive security", "malicious code", "deployed in the real world", "legal experts"),
+        "limitation",
+        True,
+    ),
+    CandidateSpec(
+        "Treat the ACI development process as manually crafted unless an automated interface-design loop is actually implemented",
+        ("ACI development process", "case studies", "manually", "automating", "prompt design"),
+        "limitation",
+        True,
+    ),
+    CandidateSpec(
+        "Do not assume ACI principles transfer unchanged beyond programmatic software-engineering and code-generation tasks",
+        ("scope", "programmatic tasks", "software engineering", "different domains", "transferable"),
+        "limitation",
+        True,
+    ),
+    CandidateSpec(
+        "Watch for editing failure cascades, repeated failed edits, and recovery degradation",
+        ("failed edits", "recovery", "linting error", "decrease", "failed edit"),
+        "limitation",
+        True,
+    ),
+]
+
 PROFILE_SPECS = {
     "toolformer": {
         "method": TOOLFORMER_METHOD_SPECS,
@@ -269,14 +384,33 @@ PROFILE_SPECS = {
         "experiment": AIDE_EXPERIMENT_SPECS,
         "limitation": AIDE_LIMITATION_SPECS,
     },
+    "swe_agent": {
+        "method": SWE_AGENT_METHOD_SPECS,
+        "experiment": SWE_AGENT_EXPERIMENT_SPECS,
+        "limitation": SWE_AGENT_LIMITATION_SPECS,
+    },
 }
 
 HEADING_PATTERNS = {
     "abstract": (r"\bAbstract\b",),
     "introduction": (r"\b1\s+Introduction\b", r"\bIntroduction\b"),
-    "method": (r"\b2\s+Approach\b", r"\b3\s+Methodology\b", r"\bMethods?\b", r"\bApproach\b", r"\bMethodology\b"),
+    "method": (
+        r"\b2\s+Approach\b",
+        r"\b2\s+The Agent-Computer Interface\b",
+        r"\b3\s+SWE-agent\b",
+        r"\b3\s+Methodology\b",
+        r"\bMethods?\b",
+        r"\bApproach\b",
+        r"\bMethodology\b",
+    ),
     "tools": (r"\b3\s+Tools\b", r"\bTools\b"),
-    "experiment": (r"\b4\s+Experiments\b", r"\bExperiments\b", r"\bEvaluation\b"),
+    "experiment": (
+        r"\b4\s+Experiments\b",
+        r"\b4\s+Experimental Setup\b",
+        r"\b5\s+Results\b",
+        r"\bExperiments\b",
+        r"\bEvaluation\b",
+    ),
     "analysis": (r"\b5\s+Analysis\b", r"\bAnalysis\b"),
     "related": (r"\b6\s+Related Work\b", r"\bRelated Work\b"),
     "limitation": (r"\b7\s+Limitations\b", r"\bLimitations\b"),
@@ -408,7 +542,7 @@ def overlaps_used(start: int, end: int, used: list[tuple[int, int]]) -> bool:
     return any(start <= used_end and end >= used_start for used_start, used_end in used)
 
 
-def trim_snippet(text: str, keywords: tuple[str, ...], max_chars: int = 210) -> str:
+def trim_snippet(text: str, keywords: tuple[str, ...], max_chars: int = 180) -> str:
     text = clean_text(text)
     if len(text) <= max_chars:
         return text

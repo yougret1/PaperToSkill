@@ -186,6 +186,7 @@ def build_report(root: Path, spec_path: Path) -> dict[str, Any]:
     checks.extend(prepared_asset_checks(root, spec_path, tasks))
     checks.extend(reflexion_runner_checks(root, spec_path))
     checks.extend(aide_runner_checks(root, spec_path))
+    checks.extend(swe_agent_skill_checks(root, spec_path))
     return report_from_checks(root, spec_path, spec, checks)
 
 
@@ -1094,6 +1095,109 @@ def aide_runner_checks(root: Path, spec_path: Path) -> list[Check]:
             relative(root, runner_path),
         )
     )
+    return checks
+
+
+def swe_agent_skill_checks(root: Path, spec_path: Path) -> list[Check]:
+    skill_path = root / "generated_skills" / "real_reuse" / "swe_agent" / "SKILL.md"
+    source_map_path = root / "generated_skills" / "real_reuse" / "swe_agent" / "references" / "source_map.json"
+    rubric_path = root / "results" / "evaluations" / "swe_agent_rubric_v0.json"
+    source_span_path = root / "results" / "evaluations" / "swe_agent_auto_source_span_validation_v0.json"
+    note_report_path = root / "results" / "evaluations" / "swe_agent_auto_note_scaffold_v0.json"
+    checks = [
+        Check(
+            "real_reuse_swe_agent_skill_present",
+            "ready" if skill_path.exists() else "fail",
+            "present" if skill_path.exists() else "missing",
+            relative(root, skill_path),
+        ),
+        Check(
+            "real_reuse_swe_agent_source_map_present",
+            "ready" if source_map_path.exists() else "fail",
+            "present" if source_map_path.exists() else "missing",
+            relative(root, source_map_path),
+        ),
+        Check(
+            "real_reuse_swe_agent_auto_note_report_present",
+            "ready" if note_report_path.exists() else "fail",
+            "present" if note_report_path.exists() else "missing",
+            relative(root, note_report_path),
+        ),
+    ]
+    if skill_path.exists():
+        skill_text = skill_path.read_text(encoding="utf-8")
+        required_snippets = {
+            "agent-computer interface",
+            "find_file",
+            "search_file",
+            "edit command",
+            "linter",
+            "Docker",
+            "Source anchors:",
+        }
+        missing = sorted(snippet for snippet in required_snippets if snippet not in skill_text)
+        checks.append(
+            Check(
+                "real_reuse_swe_agent_skill_contract_ready",
+                "ready" if not missing else "fail",
+                "SWE-agent skill contract snippets present" if not missing else "missing=" + ",".join(missing),
+                relative(root, skill_path),
+            )
+        )
+    else:
+        checks.append(
+            Check(
+                "real_reuse_swe_agent_skill_contract_ready",
+                "fail",
+                "missing SWE-agent skill",
+                relative(root, skill_path),
+            )
+        )
+
+    if rubric_path.exists():
+        rubric = load_json(rubric_path)
+        score = float(rubric.get("score", 0))
+        max_score = float(rubric.get("max_score", 20))
+        checks.append(
+            Check(
+                "real_reuse_swe_agent_rubric_ready",
+                "ready" if score == max_score else "fail",
+                f"score={score:g}/{max_score:g}",
+                relative(root, rubric_path),
+            )
+        )
+    else:
+        checks.append(
+            Check(
+                "real_reuse_swe_agent_rubric_ready",
+                "fail",
+                "missing",
+                relative(root, rubric_path),
+            )
+        )
+
+    if source_span_path.exists():
+        source_span = load_json(source_span_path)
+        result = source_span.get("results", [{}])[0]
+        support_rate = float(result.get("support_rate", 0))
+        invalid_ranges = int(result.get("invalid_ranges", 0))
+        checks.append(
+            Check(
+                "real_reuse_swe_agent_source_span_ready",
+                "ready" if support_rate >= 0.9 and invalid_ranges == 0 else "fail",
+                f"support_rate={support_rate:g}; invalid_ranges={invalid_ranges}",
+                relative(root, source_span_path),
+            )
+        )
+    else:
+        checks.append(
+            Check(
+                "real_reuse_swe_agent_source_span_ready",
+                "fail",
+                "missing",
+                relative(root, source_span_path),
+            )
+        )
     return checks
 
 

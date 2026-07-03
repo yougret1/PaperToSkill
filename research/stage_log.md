@@ -3055,3 +3055,50 @@ Evidence boundary:
 - Phase 89 is remote-save evidence only. It does not add new task results,
   clear the missing Kaggle `train.csv` blocker, or complete the eight-task
   real-reuse benchmark.
+
+## 2026-07-03 Phase 90
+
+Actions:
+
+- Added a SWE-agent profile to `scripts/papertoskill_note_from_text.py` so the
+  deterministic auto-note scaffold targets the SWE-agent paper's
+  agent-computer-interface method, SWE-bench evaluation setup, ablations, and
+  limitations.
+- Generated `papers/auto_notes/swe_agent_auto_note.md`,
+  `generated_skills/real_reuse/swe_agent/SKILL.md`, and
+  `generated_skills/real_reuse/swe_agent/references/source_map.json`.
+- Added `benchmarks/rubric_swe_agent_v0.json` and
+  `benchmarks/tasks/swe_agent_auto_source_span_validation.json`.
+- Ran the SWE-agent deterministic rubric and source-span validation.
+- Updated the real-reuse table builder so pending rows report accurate
+  readiness states: AIDE awaiting dataset, SWE-agent runner pending, SnapATAC2
+  skill pending, and Reflexion scored.
+- Extended the real-reuse and reproducibility gates to track the SWE-agent
+  skill/readiness artifacts.
+
+Results:
+
+- SWE-agent rubric score is 20/20.
+- The generated SWE-agent skill is 1186 words under the 1200-word compactness
+  budget.
+- SWE-agent source-span validation reports 20/20 supported claims,
+  `support_rate=1.0`, and 0 invalid ranges.
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 430
+  ready checks, and 0 failed checks.
+- `results/reproducibility/package_report.md` reports
+  `ready_with_pending_external_evidence`, 377 ready checks, 1 pending check,
+  and 0 failed checks.
+- The AAAI PDF was rebuilt after the table status update, and
+  `results/reproducibility/aaai_package_report.md` reports ready with 17 ready
+  checks and 0 failed checks.
+- Full unit discovery passed with 133 tests. All strict local gates passed.
+  `git diff --check` reported no whitespace errors beyond Windows line-ending
+  warnings, and the raw-key scan produced no matches.
+
+Evidence boundary:
+
+- Phase 90 is SWE-agent skill/readiness evidence only. It does not implement
+  SWE-bench fixture preparation, scoring, or running; does not append SWE raw
+  rows; and does not provide SWE-T1/T2 downstream task-success evidence.
+- AIDE remains blocked on the missing real Kaggle Spaceship Titanic
+  `train.csv`; the user-side `ok.txt` signal was not present.

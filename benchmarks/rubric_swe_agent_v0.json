@@ -1,0 +1,65 @@
+{
+  "schema_version": "0.1",
+  "created": "2026-07-03",
+  "purpose": "Deterministic v0 scoring rubric for SWE-agent paper-derived skills.",
+  "max_score": 20,
+  "criteria": [
+    {
+      "id": "structure",
+      "description": "Required skill sections are present.",
+      "max_points": 6,
+      "required_sections": [
+        "Source",
+        "Paper Snapshot",
+        "Central Contribution",
+        "Inputs",
+        "Workflow",
+        "Validation",
+        "Failure Cases",
+        "Transfer Notes"
+      ]
+    },
+    {
+      "id": "source_anchoring",
+      "description": "Workflow, validation, and failure sections preserve source anchors.",
+      "max_points": 3,
+      "anchor_pattern": "Source anchors:"
+    },
+    {
+      "id": "workflow_coverage",
+      "description": "Key SWE-agent ACI method concepts are present in the generated workflow.",
+      "max_points": 5,
+      "keywords": [
+        "agent-computer interface",
+        "simple",
+        "compact",
+        "environment feedback",
+        "find_file",
+        "search_file",
+        "file viewer",
+        "edit command",
+        "linter",
+        "context management"
+      ]
+    },
+    {
+      "id": "failure_coverage",
+      "description": "Known SWE-agent limitations and safety boundaries are present.",
+      "max_points": 4,
+      "keywords": [
+        "Docker",
+        "official repositories",
+        "malicious code",
+        "manually",
+        "programmatic tasks",
+        "failed edits"
+      ]
+    },
+    {
+      "id": "compactness",
+      "description": "Skill is compact enough for practical agent context.",
+      "max_points": 2,
+      "max_words": 1200
+    }
+  ]
+}

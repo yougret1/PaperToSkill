@@ -178,6 +178,53 @@ Smaller models do not always benefit; the method depends on model size.
             self.assertGreaterEqual(len(report_payload["selected"]["experiments"]), 3)
             self.assertGreaterEqual(len(report_payload["selected"]["limitations"]), 3)
 
+    def test_swe_agent_profile_produces_aci_scaffold(self):
+        if not (ROOT / "papers" / "extracted" / "swe_agent.txt").exists():
+            self.skipTest("SWE-agent extracted text is not available")
+
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / "swe_agent_auto_note.md"
+            report = Path(tmp) / "swe_agent_auto_note_report.json"
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--source",
+                    str(ROOT / "papers" / "extracted" / "swe_agent.txt"),
+                    "--output",
+                    str(output),
+                    "--paper-id",
+                    "swe_agent",
+                    "--title",
+                    "SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering",
+                    "--profile",
+                    "swe_agent",
+                    "--report",
+                    str(report),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            note = output.read_text(encoding="utf-8")
+            self.assertIn("## Methods", note)
+            self.assertIn("agent-computer interface", note)
+            self.assertIn("find_file", note)
+            self.assertIn("edit command", note)
+            self.assertIn("SWE-bench", note)
+            self.assertIn("HumanEvalFix", note)
+            self.assertIn("Docker", note)
+            self.assertIn("manually", note)
+            self.assertIn("Source anchors: lines", note)
+
+            report_payload = json.loads(report.read_text(encoding="utf-8"))
+            self.assertEqual(report_payload["paper_id"], "swe_agent")
+            self.assertEqual(report_payload["profile"], "swe_agent")
+            self.assertGreaterEqual(len(report_payload["selected"]["methods"]), 6)
+            self.assertGreaterEqual(len(report_payload["selected"]["experiments"]), 4)
+            self.assertGreaterEqual(len(report_payload["selected"]["limitations"]), 3)
+
 
 if __name__ == "__main__":
     unittest.main()

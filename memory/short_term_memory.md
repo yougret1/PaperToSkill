@@ -15,7 +15,24 @@ Current date: 2026-07-03.
   discussion record. Do not rewrite the AAAI Results as if these new real-reuse
   experiments are complete; first update planning files, then revise paper text
   after execution.
-- 2026-07-03 Phase 88 AIDE real-reuse execution layer is now the current local
+- 2026-07-03 Phase 90 SWE-agent skill gate is the current local phase before
+  final verification/commit: added the `swe_agent` auto-note profile, generated
+  `papers/auto_notes/swe_agent_auto_note.md`,
+  `generated_skills/real_reuse/swe_agent/SKILL.md`, and source map, added
+  `benchmarks/rubric_swe_agent_v0.json` and
+  `benchmarks/tasks/swe_agent_auto_source_span_validation.json`, and integrated
+  the SWE-agent skill gate into real-reuse/package checks. Current results:
+  rubric 20/20, 1186 words under the 1200-word budget, source-span 20/20
+  supported with support_rate=1.0 and invalid_ranges=0. Updated
+  `results/real_reuse/main_results_plan.*` reports AIDE rows as
+  `Awaiting dataset`, SWE rows as `Runner pending`, REF rows as
+  `Scored (GPT-family)`, and SNAP rows as `Skill pending`. This is
+  skill/readiness evidence only: no SWE assets, runner, raw rows, or paper
+  score cells exist yet. Full verification passed before phase save: 133 unit
+  tests, all strict gates, `git diff --check` with only line-ending warnings,
+  and raw-key scan with no matches. AIDE `ok.txt` and the real Kaggle
+  `train.csv` were still missing during verification.
+- 2026-07-03 Phase 88 AIDE real-reuse execution layer is now a previous local
   phase: added `scripts/prepare_real_reuse_aide_fixture.py`,
   `scripts/score_real_reuse_aide.py`, and `scripts/run_real_reuse_aide.py`;
   added AIDE tests for fixture preparation, scorer-only hidden label
@@ -232,13 +249,37 @@ Current date: 2026-07-03.
 
 ## Current Phase
 
-Phase 89 is the current local phase. Phase 68 was committed as
+Phase 90 is the current local phase. Phase 68 was committed as
 `5548070 Refresh memory anchors after remote save` and pushed to `origin/main`
 on 2026-06-20. Phase 69 syncs the AAAI submission-decision execution packet
 with the validated decision-record helper; no external evidence status is
 promoted and no AAAI option is selected. Phase 70 updates the direct provider
 diagnostic to match the current coderxiaoc API protocols: Claude uses
 Anthropic Messages and GPT uses OpenAI Responses.
+
+Phase 90 evidence:
+
+- `scripts/papertoskill_note_from_text.py` now has a `swe_agent` profile for
+  extracting SWE-agent's ACI workflow, SWE-bench validation setup, ablation
+  details, and limitations from `papers/extracted/swe_agent.txt`.
+- `papers/auto_notes/swe_agent_auto_note.md`,
+  `generated_skills/real_reuse/swe_agent/SKILL.md`, and
+  `generated_skills/real_reuse/swe_agent/references/source_map.json` exist.
+- `results/evaluations/swe_agent_rubric_v0.json` reports 20/20 and 1186 words.
+- `results/evaluations/swe_agent_auto_source_span_validation_v0.json` reports
+  20/20 supported claims, support_rate=1.0, and 0 invalid ranges.
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 8
+  tasks, 430 ready checks, and 0 failed checks after validating the SWE-agent
+  skill gate.
+- `results/reproducibility/package_report.md` reports 377 ready / 1 pending /
+  0 failed after adding the SWE-agent readiness artifacts.
+- `paper/aaai/papertoskill_aaai2027.pdf` was rebuilt after the table status
+  update; the AAAI package gate is ready with 17 ready / 0 failed checks.
+- Full verification passed before phase save: 133 unit tests, all strict gates,
+  no raw-key matches, and only Windows line-ending warnings from
+  `git diff --check`.
+- This is SWE-agent skill/readiness evidence only; SWE-bench fixture assets,
+  scorer, runner, raw rows, and paper scores remain pending.
 
 Phase 89 evidence:
 

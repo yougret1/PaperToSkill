@@ -1295,6 +1295,9 @@ def real_reuse_benchmark_checks(root: Path) -> list[Check]:
         "real_reuse_prepared_assets_reflexion_materialized",
         "real_reuse_reflexion_runner_contract_ready",
         "real_reuse_aide_runner_contract_ready",
+        "real_reuse_swe_agent_skill_contract_ready",
+        "real_reuse_swe_agent_rubric_ready",
+        "real_reuse_swe_agent_source_span_ready",
         "real_reuse_llm_ablation_linked_to_tasks",
         "real_reuse_llm_ablation_model_families",
         "real_reuse_planned_outputs_complete",
@@ -1323,6 +1326,15 @@ def real_reuse_benchmark_checks(root: Path) -> list[Check]:
             "real_reuse_aide_runner_contract_ready",
             "ready" if aide_runner_status == "ready" else "fail",
             f"runner_contract_status={aide_runner_status}",
+            str(report_path.relative_to(root)),
+        )
+    )
+    swe_skill_status = check_statuses.get("real_reuse_swe_agent_skill_contract_ready")
+    checks.append(
+        Check(
+            "real_reuse_swe_agent_skill_contract_ready",
+            "ready" if swe_skill_status == "ready" else "fail",
+            f"skill_contract_status={swe_skill_status}",
             str(report_path.relative_to(root)),
         )
     )
