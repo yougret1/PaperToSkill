@@ -7,7 +7,21 @@ Current date: 2026-07-03.
 
 ## Latest Resume/Completion Note
 
-- 2026-07-03 Phase 92 SnapATAC2 skill gate is the current verified local phase
+- 2026-07-03 Phase 93 SnapATAC2 execution layer is the current local phase
+  before final commit/push: added `scripts/prepare_real_reuse_snapatac2_fixture.py`,
+  `scripts/score_real_reuse_snapatac2.py`, and
+  `scripts/run_real_reuse_snapatac2.py`, plus focused tests and real-reuse /
+  package gate integration. SNAP-T1/T2 table rows now show `Fixture pending`
+  with score cells still `Pending`. Current anchors:
+  `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 8
+  tasks, 444 ready / 0 failed; package report reports 396 ready / 1 pending /
+  0 failed; `paper/aaai/papertoskill_tables.tex` and the rebuilt AAAI PDF match
+  the table source. Verification already passed before documentation cleanup:
+  153 unit tests, all strict local gates, `git diff --check` with only Windows
+  line-ending warnings, and raw-key scan with no matches. Evidence boundary:
+  this is SnapATAC2 execution-layer readiness only; no SNAP fixture assets,
+  raw rows, or downstream task-success evidence exist yet.
+- 2026-07-03 Phase 92 SnapATAC2 skill gate is a previous verified local phase
   before commit/push: added the `snapatac2` auto-note profile, generated
   `papers/auto_notes/snapatac2_auto_note.md`,
   `generated_skills/real_reuse/snapatac2/SKILL.md`, source map,
@@ -37,7 +51,9 @@ Current date: 2026-07-03.
   This conclusion was appended to
   `C:\Users\19351\Desktop\tem\nextStep.md`; the latest correction records
   SWE-agent as `Fixture pending` because its skill gate and execution layer
-  exist, but fixture assets/raw rows are still pending.
+  exist. Phase 93 supersedes the earlier SnapATAC2 `Runner pending` note:
+  SnapATAC2 now also has an execution layer, so its table status is
+  `Fixture pending` until fixture assets/raw rows exist.
 - 2026-07-03 discussion update: the next-step experiment plan now treats
   "original-style paper-task reuse" as the main future validity evidence. The
   user agreed with an 8-task direction across AIDE, SWE-agent, Reflexion, and
@@ -280,7 +296,7 @@ Current date: 2026-07-03.
 
 ## Current Phase
 
-Phase 92 is the current local phase before final commit/push.
+Phase 93 is the current local phase before final commit/push.
 Phase 68 was committed as
 `5548070 Refresh memory anchors after remote save` and pushed to `origin/main`
 on 2026-06-20. Phase 69 syncs the AAAI submission-decision execution packet
@@ -288,6 +304,35 @@ with the validated decision-record helper; no external evidence status is
 promoted and no AAAI option is selected. Phase 70 updates the direct provider
 diagnostic to match the current coderxiaoc API protocols: Claude uses
 Anthropic Messages and GPT uses OpenAI Responses.
+
+Phase 93 evidence:
+
+- `scripts/prepare_real_reuse_snapatac2_fixture.py` prepares locked SNAP-T1/T2
+  fixture assets from declared SnapATAC2 dataset manifests and expected
+  artifact schemas while keeping labels/metric thresholds scorer-only.
+- `scripts/score_real_reuse_snapatac2.py` scores candidate analysis artifacts
+  against runtime/memory/resource contracts and ARI/NMI-style labels/proxies
+  when available.
+- `scripts/run_real_reuse_snapatac2.py` runs locked SNAP-T1/T2 Summary and
+  PaperToSkill conditions, saves prompts/responses/metrics/raw rows when
+  scorable, and records missing fixture assets/provider availability separately
+  from model quality.
+- Focused SnapATAC2 preparer/scorer/runner tests exist and passed with the
+  table/preflight/package test set; full unit discovery passed with 153 tests
+  before documentation cleanup.
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 8
+  tasks, 444 ready checks, and 0 failed checks after validating the SnapATAC2
+  execution-layer contract.
+- `results/reproducibility/package_report.md` reports 396 ready / 1 pending /
+  0 failed after adding the SnapATAC2 execution-layer artifacts.
+- `results/real_reuse/main_results_plan.{csv,md,json}` and
+  `paper/aaai/papertoskill_tables.tex` now report SNAP-T1/T2 as
+  `Fixture pending`, with score cells still `Pending`.
+- Full verification passed before documentation cleanup: 153 unit tests, all
+  strict gates, no raw-key matches, and only Windows line-ending warnings from
+  `git diff --check`.
+- This is SnapATAC2 execution-layer readiness only; no SnapATAC2 fixture
+  assets, raw rows, or downstream task-success evidence exist yet.
 
 Phase 92 evidence:
 
@@ -318,6 +363,8 @@ Phase 92 evidence:
   `git diff --check`.
 - This is SnapATAC2 skill/readiness evidence only; no SnapATAC2 runner,
   fixture assets, raw rows, or downstream task-success evidence exist yet.
+- Phase 93 supersedes the Phase 92 SNAP status by adding the SnapATAC2
+  preparer/scorer/runner and moving table rows to `Fixture pending`.
 
 Phase 91 evidence:
 

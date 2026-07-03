@@ -3202,3 +3202,50 @@ Evidence boundary:
 - The current real-reuse effectiveness evidence is still only the partial
   REF-T1/REF-T2 GPT-family slice; AIDE, SWE-agent, and SnapATAC2 remain
   pending for downstream task scores.
+
+## 2026-07-03 Phase 93
+
+Actions:
+
+- Added `scripts/prepare_real_reuse_snapatac2_fixture.py` to prepare locked
+  SNAP-T1/T2 fixture assets from declared SnapATAC2 dataset manifests,
+  expected artifact schemas, resource budgets, and scorer-only labels/proxies.
+- Added `scripts/score_real_reuse_snapatac2.py` to score candidate
+  `candidate_output.json` / `analysis_artifacts.json` files against runtime,
+  memory, artifact-completion, and ARI/NMI-style contracts.
+- Added `scripts/run_real_reuse_snapatac2.py` to run Summary and PaperToSkill
+  conditions, save prompts/responses/metrics/raw rows when rows are scorable,
+  and treat missing fixture assets, missing credentials, or provider/model
+  errors as availability state.
+- Added focused SnapATAC2 unit tests for fixture preparation, scorer behavior,
+  runner fixture-response execution, pending availability states, and raw-row
+  output.
+- Extended real-reuse/package gates and table tests so SnapATAC2 now has a
+  validated execution-layer contract and SNAP-T1/T2 table rows move to
+  `Fixture pending`.
+
+Results:
+
+- `results/real_reuse/main_results_plan.{csv,md,json}` now reports SNAP-T1/T2
+  as `Fixture pending`, with score cells still `Pending`.
+- `paper/aaai/papertoskill_tables.tex` matches the generated real-reuse table,
+  and `paper/aaai/papertoskill_aaai2027.pdf` was rebuilt.
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 444
+  ready checks, and 0 failed checks.
+- `results/reproducibility/package_report.md` reports
+  `ready_with_pending_external_evidence`, 396 ready checks, 1 pending check,
+  and 0 failed checks.
+- Full unit discovery passed with 153 tests before documentation cleanup; all
+  strict local gates passed. `git diff --check` reported no whitespace errors
+  beyond Windows line-ending warnings, and the raw-key scan produced no
+  matches.
+
+Evidence boundary:
+
+- Phase 93 is SnapATAC2 execution-layer readiness only. It does not materialize
+  SNAP-T1/T2 fixture assets, does not run live Summary/PaperToSkill SNAP rows,
+  does not append SNAP raw rows, and does not add SNAP task scores to the
+  paper.
+- The current real-reuse effectiveness evidence is still only the partial
+  REF-T1/REF-T2 GPT-family slice; AIDE, SWE-agent, and SnapATAC2 remain
+  pending for downstream task scores.

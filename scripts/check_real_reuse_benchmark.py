@@ -189,6 +189,7 @@ def build_report(root: Path, spec_path: Path) -> dict[str, Any]:
     checks.extend(swe_agent_skill_checks(root, spec_path))
     checks.extend(swe_runner_checks(root, spec_path))
     checks.extend(snapatac2_skill_checks(root, spec_path))
+    checks.extend(snapatac2_runner_checks(root, spec_path))
     return report_from_checks(root, spec_path, spec, checks)
 
 
@@ -1368,6 +1369,73 @@ def snapatac2_skill_checks(root: Path, spec_path: Path) -> list[Check]:
                 relative(root, source_span_path),
             )
         )
+    return checks
+
+
+def snapatac2_runner_checks(root: Path, spec_path: Path) -> list[Check]:
+    preparer_path = root / "scripts" / "prepare_real_reuse_snapatac2_fixture.py"
+    scorer_path = root / "scripts" / "score_real_reuse_snapatac2.py"
+    runner_path = root / "scripts" / "run_real_reuse_snapatac2.py"
+    checks = [
+        Check(
+            "real_reuse_snapatac2_preparer_present",
+            "ready" if preparer_path.exists() else "fail",
+            "present" if preparer_path.exists() else "missing",
+            relative(root, preparer_path),
+        ),
+        Check(
+            "real_reuse_snapatac2_scorer_present",
+            "ready" if scorer_path.exists() else "fail",
+            "present" if scorer_path.exists() else "missing",
+            relative(root, scorer_path),
+        ),
+        Check(
+            "real_reuse_snapatac2_runner_present",
+            "ready" if runner_path.exists() else "fail",
+            "present" if runner_path.exists() else "missing",
+            relative(root, runner_path),
+        ),
+    ]
+    if not runner_path.exists() or not preparer_path.exists() or not scorer_path.exists():
+        checks.append(
+            Check(
+                "real_reuse_snapatac2_runner_contract_ready",
+                "fail",
+                "missing SnapATAC2 execution-layer script",
+                relative(root, runner_path),
+            )
+        )
+        return checks
+
+    runner_text = runner_path.read_text(encoding="utf-8")
+    preparer_text = preparer_path.read_text(encoding="utf-8")
+    scorer_text = scorer_path.read_text(encoding="utf-8")
+    required_snippets = {
+        "--fixture-response-dir": runner_text,
+        "raw_rows.jsonl": runner_text,
+        "score_artifact": runner_text,
+        "unsupported_errors_status": runner_text,
+        "provider_or_model_error": runner_text,
+        "missing_fixture_assets": runner_text,
+        "candidate_output.json": runner_text,
+        "reference_labels_or_proxy": preparer_text,
+        "hidden_from_model": preparer_text,
+        "expected_artifact_schema": preparer_text,
+        "resource_budget": preparer_text,
+        "adjusted_rand_index": scorer_text,
+        "normalized_mutual_info": scorer_text,
+        "runtime_memory_quality": scorer_text,
+        "ari_nmi_runtime_memory": scorer_text,
+    }
+    missing = sorted(snippet for snippet, text in required_snippets.items() if snippet not in text)
+    checks.append(
+        Check(
+            "real_reuse_snapatac2_runner_contract_ready",
+            "ready" if not missing else "fail",
+            "SnapATAC2 execution-layer contract snippets present" if not missing else "missing=" + ",".join(missing),
+            relative(root, runner_path),
+        )
+    )
     return checks
 
 

@@ -79,7 +79,7 @@ Evidence boundary: this report checks that AAAI LaTeX table values match generat
 | paper_table_real_reuse_snap_t1_reference | ready | value=Reported SnapATAC2 ref. | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_snap_t1_summary_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_snap_t1_papertoskill_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
-| paper_table_real_reuse_snap_t1_status | ready | value=Runner pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_snap_t1_status | ready | value=Fixture pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_snap_t2_task_id | ready | value=SNAP-T2 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_snap_t2_source_paper | ready | value=SnapATAC2 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_snap_t2_domain | ready | value=Single-cell omics | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
@@ -89,7 +89,7 @@ Evidence boundary: this report checks that AAAI LaTeX table values match generat
 | paper_table_real_reuse_snap_t2_reference | ready | value=Reported SnapATAC2 ref. | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_snap_t2_summary_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_snap_t2_papertoskill_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
-| paper_table_real_reuse_snap_t2_status | ready | value=Runner pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_snap_t2_status | ready | value=Fixture pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_main_ai_scientist_v2_rubric | ready | value=20/20 | paper/aaai/papertoskill_tables.tex vs results/tables/main_results.csv |
 | paper_table_main_ai_scientist_v2_skill_coverage | ready | value=7.867/9 | paper/aaai/papertoskill_tables.tex vs results/tables/main_results.csv |
 | paper_table_main_ai_scientist_v2_generic_summary | ready | value=1.733/9 | paper/aaai/papertoskill_tables.tex vs results/tables/main_results.csv |

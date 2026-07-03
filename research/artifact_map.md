@@ -217,7 +217,10 @@
 | `scripts/prepare_real_reuse_swe_fixture.py` | Prepares locked SWE-T1/T2 fixtures from local repository snapshots, writes task prompts and Summary contexts, and keeps gold patches scorer-only | Created |
 | `scripts/score_real_reuse_swe.py` | Scores SWE candidate patches by applying unified diffs in an isolated workspace and running the locked test command | Created |
 | `scripts/run_real_reuse_swe.py` | Runs locked SWE-T1/T2 Summary-vs-PaperToSkill conditions, saves prompts/responses/metrics/raw rows, and separates provider/fixture availability from model quality | Created |
-| `scripts/check_real_reuse_benchmark.py` | Validates the planned real-reuse benchmark spec, main conditions, sanity scope, reference-score boundary, task/fixture/candidate/asset-lock layers, REF prepared assets, REF runner, AIDE execution-layer contract, SWE-agent skill gate, SWE execution-layer contract, and future output paths | Created |
+| `scripts/check_real_reuse_benchmark.py` | Validates the planned real-reuse benchmark spec, main conditions, sanity scope, reference-score boundary, task/fixture/candidate/asset-lock layers, REF prepared assets, REF runner, AIDE execution-layer contract, SWE-agent skill/execution-layer contracts, SnapATAC2 skill/execution-layer contracts, and future output paths | Created |
+| `scripts/prepare_real_reuse_snapatac2_fixture.py` | Prepares locked SNAP-T1/T2 fixture assets from declared SnapATAC2 dataset manifests and expected artifact schemas while keeping scoring labels/thresholds hidden from the model | Created |
+| `scripts/score_real_reuse_snapatac2.py` | Scores SNAP candidate analysis artifacts for runtime/memory/resource-contract completion and ARI/NMI-style labels/proxies when available | Created |
+| `scripts/run_real_reuse_snapatac2.py` | Runs locked SNAP-T1/T2 Summary-vs-PaperToSkill conditions, saves prompts/responses/metrics/raw rows when scorable, and separates provider/fixture availability from model quality | Created |
 | `scripts/evaluate_skill.py` | Deterministic v0 evaluator for generated skills | Created |
 | `scripts/evaluate_context_baselines.py` | Deterministic evaluator for context baseline coverage | Created |
 | `scripts/audit_skill_source_map.py` | Deterministic source-map-aware unsupported-instruction audit | Created |
@@ -299,6 +302,8 @@
 | `generated_skills/aide_auto/references/source_map.json` | Source-map evidence for AIDE auto-note-derived skill | Created |
 | `generated_skills/real_reuse/swe_agent/SKILL.md` | Retained SWE-agent generated skill for the real-reuse software-engineering task family; execution layer is ready but fixture assets/raw rows remain pending | Created |
 | `generated_skills/real_reuse/swe_agent/references/source_map.json` | Source-map evidence for the real-reuse SWE-agent generated skill | Created |
+| `generated_skills/real_reuse/snapatac2/SKILL.md` | Retained SnapATAC2 generated skill for the single-cell omics real-reuse task family; execution layer is ready but fixture assets/raw rows remain pending | Created |
+| `generated_skills/real_reuse/snapatac2/references/source_map.json` | Source-map evidence for the real-reuse SnapATAC2 generated skill | Created |
 | `generated_skills/papertoskill_paper_note/SKILL.md` | Retained generated skill from paper-like note | Created |
 | `generated_skills/papertoskill_paper_note/references/source_map.json` | Source-map evidence for retained generated skill | Created |
 | `results/evaluations/ai_scientist_v2_rubric_v0.json` | Scored rubric output for AI Scientist-v2 generated skill | Created |
@@ -331,6 +336,9 @@
 | `results/evaluations/swe_agent_auto_note_scaffold_v0.json` | Selection report for deterministic SWE-agent auto-note scaffold | Created |
 | `results/evaluations/swe_agent_rubric_v0.json` | SWE-agent real-reuse generated skill rubric output | Created |
 | `results/evaluations/swe_agent_auto_source_span_validation_v0.json` | SWE-agent real-reuse generated skill source-span validation output | Created |
+| `results/evaluations/snapatac2_auto_note_scaffold_v0.json` | Selection report for deterministic SnapATAC2 auto-note scaffold | Created |
+| `results/evaluations/snapatac2_rubric_v0.json` | SnapATAC2 real-reuse generated skill rubric output | Created |
+| `results/evaluations/snapatac2_auto_source_span_validation_v0.json` | SnapATAC2 real-reuse generated skill source-span validation output | Created |
 | `results/live_transfer_prompts/ai_scientist_v2_v0/` | AI Scientist-v2 live Codex/Claude prompt packets, saved responses, and run report | Created |
 | `results/live_transfer_prompts/reflexion_v0/` | Reflexion live Codex/Claude prompt packets, saved responses, and run report | Created |
 | `results/live_transfer_prompts/aide_v0/` | AIDE live Codex/Claude prompt packets, saved responses, and run report | Created |
@@ -443,6 +451,6 @@
 | Artifact | Purpose | Status |
 | --- | --- | --- |
 | Model-ablation response logs | Claude/GPT-family/DeepSeek response files and scores after endpoint/model availability | Created |
-| Concrete real-reuse fixture assets | REF-T1/REF-T2 prepared assets, scorer, runner, and one GPT-family Summary-vs-PaperToSkill run are created; AIDE preparer/scorer/runner are ready but await real Kaggle `train.csv`; SWE-agent preparer/scorer/runner are ready but fixture assets/raw rows remain pending; SnapATAC2 assets/runners remain planned | Mixed |
+| Concrete real-reuse fixture assets | REF-T1/REF-T2 prepared assets, scorer, runner, and one GPT-family Summary-vs-PaperToSkill run are created; AIDE preparer/scorer/runner are ready but await real Kaggle `train.csv`; SWE-agent preparer/scorer/runner are ready but fixture assets/raw rows remain pending; SnapATAC2 preparer/scorer/runner are ready but fixture assets/raw rows remain pending | Mixed |
 | `results/real_reuse/` | Current REF raw rows and table artifacts plus future aggregate tables, sanity checks, cost table, and LLM ablation outputs for the remaining real-reuse experiments | Mixed |
 | Paper2Agent executable baseline | Full Paper2Agent/MCP runtime comparison, if setup resources become available | Planned |

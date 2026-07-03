@@ -93,7 +93,8 @@ SWE-agent has a generated skill, rubric report, source map, and source-span
 gate for the real-reuse software-engineering task family. SWE-agent now also
 has preparer/scorer/runner scripts, but SWE fixture assets/raw rows remain
 pending until local repository snapshots and issue/test contexts are prepared.
-SnapATAC2 assets/runners/raw rows also remain pending. Do not write the AAAI
+SnapATAC2 now has generated skill, source-map, preparer/scorer/runner scripts,
+and gate coverage, but SNAP fixture assets/raw rows remain pending. Do not write the AAAI
 paper as if the eight-task Summary vs PaperToSkill real-reuse comparison has
 run.
 
@@ -286,8 +287,9 @@ Execution order:
    written by the SWE fixture-preparation layer after local assets are
    materialized.
 4. Implement the real-reuse runner and scorer. The REF-T1/REF-T2 runner is now
-   implemented; AIDE and SWE-agent have preparer/scorer/runner scripts ready;
-   SnapATAC2 runners remain pending.
+   implemented; AIDE, SWE-agent, and SnapATAC2 have preparer/scorer/runner
+   scripts ready. AIDE awaits the real Kaggle `train.csv`; SWE-agent and
+   SnapATAC2 await fixture assets/raw rows.
 5. Run agent-only tasks with no mid-run human intervention. REF-T1/REF-T2 have
    one GPT-family Summary-vs-PaperToSkill run.
 6. Save raw rows under `results/real_reuse/raw_rows.*`.

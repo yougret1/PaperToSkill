@@ -5,7 +5,7 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 - Overall status: ready_to_implement
 - Spec path: benchmarks/real_reuse/real_reuse_v0.json
 - Task count: 8
-- Ready checks: 440
+- Ready checks: 444
 - Failed checks: 0
 
 ## Checks
@@ -452,3 +452,7 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 | real_reuse_snapatac2_skill_contract_ready | ready | SnapATAC2 skill contract snippets present | generated_skills/real_reuse/snapatac2/SKILL.md |
 | real_reuse_snapatac2_rubric_ready | ready | score=20/20 | results/evaluations/snapatac2_rubric_v0.json |
 | real_reuse_snapatac2_source_span_ready | ready | support_rate=1; invalid_ranges=0 | results/evaluations/snapatac2_auto_source_span_validation_v0.json |
+| real_reuse_snapatac2_preparer_present | ready | present | scripts/prepare_real_reuse_snapatac2_fixture.py |
+| real_reuse_snapatac2_scorer_present | ready | present | scripts/score_real_reuse_snapatac2.py |
+| real_reuse_snapatac2_runner_present | ready | present | scripts/run_real_reuse_snapatac2.py |
+| real_reuse_snapatac2_runner_contract_ready | ready | SnapATAC2 execution-layer contract snippets present | scripts/run_real_reuse_snapatac2.py |

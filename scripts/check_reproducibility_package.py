@@ -138,6 +138,9 @@ CORE_FILES = {
     "real_reuse_swe_preparer": "scripts/prepare_real_reuse_swe_fixture.py",
     "real_reuse_swe_scorer": "scripts/score_real_reuse_swe.py",
     "real_reuse_swe_runner": "scripts/run_real_reuse_swe.py",
+    "real_reuse_snapatac2_preparer": "scripts/prepare_real_reuse_snapatac2_fixture.py",
+    "real_reuse_snapatac2_scorer": "scripts/score_real_reuse_snapatac2.py",
+    "real_reuse_snapatac2_runner": "scripts/run_real_reuse_snapatac2.py",
     "real_reuse_snapatac2_auto_note": "papers/auto_notes/snapatac2_auto_note.md",
     "real_reuse_snapatac2_skill": "generated_skills/real_reuse/snapatac2/SKILL.md",
     "real_reuse_snapatac2_source_map": "generated_skills/real_reuse/snapatac2/references/source_map.json",
@@ -1311,6 +1314,7 @@ def real_reuse_benchmark_checks(root: Path) -> list[Check]:
         "real_reuse_swe_agent_rubric_ready",
         "real_reuse_swe_agent_source_span_ready",
         "real_reuse_snapatac2_skill_contract_ready",
+        "real_reuse_snapatac2_runner_contract_ready",
         "real_reuse_snapatac2_rubric_ready",
         "real_reuse_snapatac2_source_span_ready",
         "real_reuse_llm_ablation_linked_to_tasks",
@@ -1368,6 +1372,15 @@ def real_reuse_benchmark_checks(root: Path) -> list[Check]:
             "real_reuse_snapatac2_skill_contract_ready",
             "ready" if snapatac2_skill_status == "ready" else "fail",
             f"skill_contract_status={snapatac2_skill_status}",
+            str(report_path.relative_to(root)),
+        )
+    )
+    snapatac2_runner_status = check_statuses.get("real_reuse_snapatac2_runner_contract_ready")
+    checks.append(
+        Check(
+            "real_reuse_snapatac2_runner_contract_ready",
+            "ready" if snapatac2_runner_status == "ready" else "fail",
+            f"runner_contract_status={snapatac2_runner_status}",
             str(report_path.relative_to(root)),
         )
     )
