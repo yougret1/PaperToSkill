@@ -1,0 +1,177 @@
+{
+  "schema_version": "0.1",
+  "benchmark_id": "papertoskill_real_reuse_v0",
+  "task_id": "SWE-T1",
+  "task_spec": "benchmarks/real_reuse/tasks/SWE-T1.json",
+  "fixture_manifest": "benchmarks/real_reuse/fixtures/SWE-T1.json",
+  "fixture_candidate": "benchmarks/real_reuse/fixture_candidates/SWE-T1.json",
+  "source_paper_id": "swe_agent",
+  "domain": "Software engineering",
+  "status": "asset_lock_ready_preparation_pending",
+  "evidence_boundary": "This lock fixes the selected external source revisions, task instance, local materialization targets, and scorer/preparer contracts for a future real-reuse run. It does not download assets, run models, score outputs, or provide downstream task-success evidence.",
+  "source_probe": {
+    "checked_on": "2026-07-03",
+    "method": "Lightweight git ls-remote, Hugging Face dataset API, and official documentation reachability probes.",
+    "boundary": "Reachability and public metadata only; no large dataset download, clone, install, or task execution."
+  },
+  "selected_candidate_id": "swe_bench_lite_issue_to_patch",
+  "locked_task_instance": {
+    "source_kind": "swe_bench_lite_dev_instance",
+    "dataset_id": "princeton-nlp/SWE-bench_Lite",
+    "dataset_sha": "6ec7bb89b9342f664a54a6e0a6ea6501d3437cc2",
+    "split": "dev",
+    "instance_id": "sqlfluff__sqlfluff-1625",
+    "repo": "sqlfluff/sqlfluff",
+    "base_commit": "14e1a23a3166b9a645a16de96f694c77a5d4abb7",
+    "fail_to_pass": [
+      "test/cli/commands_test.py::test__cli__command_directed"
+    ],
+    "reference_boundary": "SWE-agent/SWE-bench paper scores are reported references unless the same instance, tests, and budget are reproduced locally."
+  },
+  "source_revision_locks": [
+    {
+      "source_url_id": "swe_agent_code",
+      "url": "https://github.com/SWE-agent/SWE-agent",
+      "kind": "source_paper_code",
+      "lock_type": "git_head_observed",
+      "observed_revision": "5f40e63360d654adcd91e30ed11473389bc4909b",
+      "observed_on": "2026-07-03",
+      "verification_command": "git ls-remote https://github.com/SWE-agent/SWE-agent HEAD",
+      "split_summary": null,
+      "must_reverify_before_materialization": true
+    },
+    {
+      "source_url_id": "swe_bench_repo",
+      "url": "https://github.com/princeton-nlp/SWE-bench",
+      "kind": "benchmark_harness",
+      "lock_type": "git_head_observed",
+      "observed_revision": "f7bbbb2ccdf479001d6467c9e34af59e44a840f9",
+      "observed_on": "2026-07-03",
+      "verification_command": "git ls-remote https://github.com/princeton-nlp/SWE-bench HEAD",
+      "split_summary": null,
+      "must_reverify_before_materialization": true
+    },
+    {
+      "source_url_id": "swe_bench_lite",
+      "url": "https://huggingface.co/datasets/princeton-nlp/SWE-bench_Lite",
+      "kind": "dataset",
+      "lock_type": "hf_dataset_sha_observed",
+      "observed_revision": "6ec7bb89b9342f664a54a6e0a6ea6501d3437cc2",
+      "observed_on": "2026-07-03",
+      "verification_command": "GET https://huggingface.co/api/datasets/princeton-nlp/SWE-bench_Lite",
+      "split_summary": "dev=23 examples; test=300 examples",
+      "must_reverify_before_materialization": true
+    }
+  ],
+  "asset_slot_locks": [
+    {
+      "slot": "repository_snapshot",
+      "source_url_id": "swe_bench_lite",
+      "locked_path_after_prepare": "benchmarks/real_reuse/assets/SWE-T1/repository_snapshot",
+      "materialization_status": "not_materialized",
+      "license_review_status": "pending",
+      "sha256_after_prepare": null,
+      "required_for_execution": true,
+      "notes": "Repository commit selected from a Lite instance."
+    },
+    {
+      "slot": "issue_description",
+      "source_url_id": "swe_bench_lite",
+      "locked_path_after_prepare": "benchmarks/real_reuse/assets/SWE-T1/issue_description",
+      "materialization_status": "not_materialized",
+      "license_review_status": "pending",
+      "sha256_after_prepare": null,
+      "required_for_execution": true,
+      "notes": "Issue text and metadata from the selected instance."
+    },
+    {
+      "slot": "target_test_command",
+      "source_url_id": "swe_bench_repo",
+      "locked_path_after_prepare": "benchmarks/real_reuse/assets/SWE-T1/target_test_command",
+      "materialization_status": "not_materialized",
+      "license_review_status": "pending",
+      "sha256_after_prepare": null,
+      "required_for_execution": true,
+      "notes": "Test command derived from FAIL_TO_PASS tests and harness metadata."
+    }
+  ],
+  "local_materialization_targets": {
+    "asset_dir": "benchmarks/real_reuse/assets/SWE-T1",
+    "prepared_manifest": "benchmarks/real_reuse/assets/SWE-T1/asset_manifest.json",
+    "run_dir": "results/real_reuse/runs/SWE-T1/",
+    "external_project_root": "D:/a_work/gitee",
+    "external_projects": [
+      {
+        "name": "SWE-bench",
+        "url": "https://github.com/princeton-nlp/SWE-bench",
+        "local_path": "D:/a_work/gitee/SWE-bench"
+      }
+    ]
+  },
+  "preparation_contract": {
+    "status": "not_started",
+    "preparer": "scripts/prepare_real_reuse_swe_fixture.py",
+    "must_complete_before_model_run": [
+      "Reverify source revisions or explicitly record an updated revision lock.",
+      "Complete license and terms review for every materialized asset.",
+      "Write the prepared asset manifest with paths and sha256 values.",
+      "Create condition contexts for Summary and PaperToSkill without exposing hidden scorer assets.",
+      "Confirm the scorer command exists and can run on a dry fixture."
+    ],
+    "hidden_from_model": [
+      "gold patch",
+      "test_patch beyond allowed failing-test context"
+    ],
+    "credential_policy": "Use user-managed credentials only. Never commit API keys, Kaggle tokens, Hugging Face tokens, cookies, or credential-bearing logs."
+  },
+  "scoring_lock": {
+    "scorer": "scripts/score_real_reuse_swe.py",
+    "metric_name": "resolved",
+    "metric_family": "test_pass_rate",
+    "direction": "higher_is_better",
+    "success_criterion": "Patch applies cleanly and target tests pass without unrelated changes.",
+    "scoring_command_template": "python scripts/score_real_reuse_swe.py --task SWE-T1 --patch {patch_file} --workspace benchmarks/real_reuse/assets/SWE-T1/workspace",
+    "required_metric_inputs": [
+      "patch_file",
+      "test_log"
+    ],
+    "raw_row_schema": [
+      "run_id",
+      "task_id",
+      "source_paper_id",
+      "domain",
+      "condition",
+      "model_family",
+      "model_alias",
+      "task_score",
+      "success",
+      "workflow_score",
+      "unsupported_errors",
+      "tokens",
+      "time_seconds",
+      "interventions",
+      "failure_reason",
+      "output_path"
+    ],
+    "answer_or_gold_policy": "Gold labels, answers, patches, canonical solutions, and scorer-only thresholds must stay out of model-visible context."
+  },
+  "condition_lock": [
+    {
+      "condition": "summary",
+      "context_path": "baselines/real_reuse/SWE-T1_summary.md",
+      "asset_status": "to_be_created_before_execution"
+    },
+    {
+      "condition": "papertoskill",
+      "context_path": "generated_skills/real_reuse/swe_agent/SKILL.md",
+      "asset_status": "existing_or_to_be_verified_before_execution"
+    }
+  ],
+  "run_control_lock": {
+    "first_pass_human_intervention": "none_mid_run",
+    "same_prompt_template_across_conditions": true,
+    "same_run_budget_across_conditions": true,
+    "same_task_metric_across_conditions": true
+  },
+  "next_action": "Implement the preparer/scorer named above, materialize assets, then run Summary and PaperToSkill under the same locked task instance and budget."
+}

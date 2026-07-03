@@ -19,6 +19,18 @@ Current date: 2026-07-03.
   auxiliary experiments. The paper's experiment section should get the main
   table structure first, with TBD/pending numeric cells and explicit evidence
   boundary; after scores are run, update the paper numbers promptly.
+- 2026-07-03 Phase 85 asset-lock gate is now the current local phase: added
+  `scripts/build_real_reuse_asset_locks.py`, generated all eight
+  `benchmarks/real_reuse/asset_locks/*.json` files, corrected the SnapATAC2 API
+  candidate URL to `https://scverse.org/SnapATAC2/api/index.html`, extended
+  `scripts/check_real_reuse_benchmark.py` and package expectations, and
+  validated `results/real_reuse/spec_preflight.md` as `ready_to_implement`
+  with 401 ready checks and 0 failed checks. Locked instances include
+  Spaceship Titanic split/weak-script seeds for AIDE, SWE-bench Lite
+  `sqlfluff__sqlfluff-1625`, SWE-bench Verified `astropy__astropy-12907`,
+  HotPotQA example `5a8b57f25542995d1e6f1371`, HumanEval `HumanEval/0`, and
+  SnapATAC2 `pbmc5k` / `pbmc10k_multiome`. This is not execution evidence:
+  assets, preparers/scorers, runner, raw rows, and scores remain pending.
 - 2026-07-03 Phase 84 paper-table gate is now the current local phase: added
   `scripts/build_real_reuse_paper_tables.py`, generated
   `results/real_reuse/main_results_plan.{csv,md}`, inserted
@@ -94,8 +106,8 @@ Current date: 2026-07-03.
   all strict local gates, `git diff --check`, and repository raw-key scan.
 - Current reports:
   - Goal completion: 77 ready / 3 pending / 0 failed.
-  - Reproducibility package: 342 ready / 1 pending / 0 failed after adding the
-    real-reuse paper-table scaffold.
+  - Reproducibility package: 351 ready / 1 pending / 0 failed after adding the
+    real-reuse asset-lock gate.
   - External evidence queue: `human_fidelity_annotation` and
     `aaai_submission_decision`.
   - AAAI decision: ready, selected `wait_for_external_evidence`.
@@ -166,13 +178,35 @@ Current date: 2026-07-03.
 
 ## Current Phase
 
-Phase 84 is the current local phase. Phase 68 was committed as
+Phase 85 is the current local phase. Phase 68 was committed as
 `5548070 Refresh memory anchors after remote save` and pushed to `origin/main`
 on 2026-06-20. Phase 69 syncs the AAAI submission-decision execution packet
 with the validated decision-record helper; no external evidence status is
 promoted and no AAAI option is selected. Phase 70 updates the direct provider
 diagnostic to match the current coderxiaoc API protocols: Claude uses
 Anthropic Messages and GPT uses OpenAI Responses.
+
+Phase 85 evidence:
+
+- `scripts/build_real_reuse_asset_locks.py` materializes preparation-time asset
+  locks from task specs, fixture manifests, and candidate manifests.
+- `benchmarks/real_reuse/asset_locks/AIDE-T1.json`, `AIDE-T2.json`,
+  `SWE-T1.json`, `SWE-T2.json`, `REF-T1.json`, `REF-T2.json`,
+  `SNAP-T1.json`, and `SNAP-T2.json` exist.
+- Locked task instances: Spaceship Titanic local validation split seed
+  `20260703`, Spaceship Titanic weak-script seed `20260703`, SWE-bench Lite
+  `sqlfluff__sqlfluff-1625`, SWE-bench Verified `astropy__astropy-12907`,
+  HotPotQA distractor validation `5a8b57f25542995d1e6f1371`, HumanEval
+  `HumanEval/0`, SnapATAC2 `snapatac2.datasets.pbmc5k`, and SnapATAC2
+  `snapatac2.datasets.pbmc10k_multiome`.
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 8
+  tasks, 401 ready checks, and 0 failed checks after validating asset locks.
+- `results/reproducibility/package_report.md` reports 351 ready / 1 pending /
+  0 failed after including the asset-lock builder and all eight lock manifests.
+- No fixture asset has been materialized; no task-specific preparer/scorer or
+  runner is implemented; no raw rows or real-reuse scores exist yet. Next
+  implementation should create preparer/scorer skeletons and materialize the
+  smallest feasible locked task asset.
 
 Phase 84 evidence:
 

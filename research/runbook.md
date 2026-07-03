@@ -79,13 +79,17 @@ benchmarks/real_reuse/real_reuse_v0.json
 benchmarks/real_reuse/tasks/
 benchmarks/real_reuse/fixtures/
 benchmarks/real_reuse/fixture_candidates/
+benchmarks/real_reuse/asset_locks/
 ```
 
 Current status: planned specification, per-task execution-contract specs, and
 fixture requirement manifests are ready. Candidate assets and preparation
-commands are selected in `benchmarks/real_reuse/fixture_candidates/`, but no
-asset has been downloaded/materialized and no task has been run. Do not write
-the AAAI paper as if these experiments have run.
+commands are selected in `benchmarks/real_reuse/fixture_candidates/`. The
+preparation-time source revisions, concrete task instances, local target paths,
+hidden scorer assets, and scorer/preparer contracts are locked in
+`benchmarks/real_reuse/asset_locks/`, but no asset has been
+downloaded/materialized and no task has been run. Do not write the AAAI paper as
+if these experiments have run.
 
 Regenerate per-task specs from the master spec:
 
@@ -103,6 +107,12 @@ Regenerate candidate fixture-asset manifests from the task and fixture specs:
 
 ```powershell
 python scripts\build_real_reuse_fixture_candidates.py
+```
+
+Regenerate preparation-time asset locks from the candidate manifests:
+
+```powershell
+python scripts\build_real_reuse_asset_locks.py
 ```
 
 Regenerate the paper-facing main real-reuse table scaffold:
@@ -127,9 +137,9 @@ results/real_reuse/main_results_plan.md
 ```
 
 The expected status is `ready_to_implement`. That means the benchmark spec,
-per-task specs, fixture requirement manifests, and candidate asset manifests are
-machine-checkable and ready for asset materialization plus runner/scorer
-implementation; it is not downstream task-success evidence.
+per-task specs, fixture requirement manifests, candidate asset manifests, and
+asset locks are machine-checkable and ready for asset materialization plus
+runner/scorer implementation; it is not downstream task-success evidence.
 
 Planned main task grid:
 
@@ -147,9 +157,9 @@ Planned main task grid:
 Execution order:
 
 1. Verify source-paper code, benchmark setup, license, and metric details.
-2. Materialize candidate fixture assets from
-   `benchmarks/real_reuse/fixture_candidates/`, including license/provenance,
-   fixed instance IDs, local path/URI, scoring command, and run budget.
+2. Materialize candidate fixture assets from the locked contracts in
+   `benchmarks/real_reuse/asset_locks/`, including license/provenance, local
+   path/URI, sha256 values, scoring command, and run budget.
 3. Create Summary and PaperToSkill context inputs for each task.
 4. Implement the real-reuse runner and scorer.
 5. Run agent-only tasks with no mid-run human intervention.

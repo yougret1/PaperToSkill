@@ -297,7 +297,7 @@ CANDIDATE_PROFILES: dict[str, dict[str, Any]] = {
             },
             {
                 "id": "snapatac2_api",
-                "url": "https://scverse.org/SnapATAC2/api.html",
+                "url": "https://scverse.org/SnapATAC2/api/index.html",
                 "kind": "official_api_docs",
                 "notes": "API reference for datasets, preprocessing, embedding, and clustering calls.",
             },
@@ -341,7 +341,7 @@ CANDIDATE_PROFILES: dict[str, dict[str, Any]] = {
             },
             {
                 "id": "snapatac2_api",
-                "url": "https://scverse.org/SnapATAC2/api.html",
+                "url": "https://scverse.org/SnapATAC2/api/index.html",
                 "kind": "official_api_docs",
                 "notes": "API reference needed to define deterministic scorer inputs.",
             },

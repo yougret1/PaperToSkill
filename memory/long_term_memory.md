@@ -122,7 +122,7 @@ Current supported claims:
   checkout's remote is the SakanaAI upstream. The archive backs up the local
   coderxiaoc/BFTS integration patch inside the PaperToSkill GitHub history
   without committing raw API keys or local presentation/build artifacts.
-- Phase 79/83 real-reuse planning/task/fixture/candidate gate: the next stronger validity
+- Phase 79/85 real-reuse planning/task/fixture/candidate/asset-lock gate: the next stronger validity
   target is original-style paper-task reuse over eight planned tasks from AIDE,
   SWE-agent, Reflexion, and SnapATAC2. Toolformer and AI Scientist-v2 remain
   sanity/auxiliary cases. `benchmarks/real_reuse/real_reuse_v0.json` and
@@ -130,9 +130,11 @@ Current supported claims:
   artifacts; `benchmarks/real_reuse/fixtures/*.json` contains fixture
   requirement manifests; `benchmarks/real_reuse/fixture_candidates/*.json`
   records selected candidate datasets/repositories and preparation/scoring
-  entry points. `results/real_reuse/spec_preflight.md` validates them. No
-  materialized fixture assets, runner/scorer, raw rows, or real-reuse results
-  exist yet.
+  entry points; `benchmarks/real_reuse/asset_locks/*.json` fixes preparation-
+  time source revisions, task instances, local materialization targets, hidden
+  scorer assets, and scorer/preparer contracts. `results/real_reuse/spec_preflight.md`
+  validates them. No materialized fixture assets, runner/scorer, raw rows, or
+  real-reuse results exist yet.
 - Phase 84 inserted the main real-reuse table scaffold into the AAAI paper:
   `results/real_reuse/main_results_plan.csv` and `.md` are the table data
   source; `paper/aaai/papertoskill_tables.tex` contains
@@ -216,6 +218,8 @@ Use these as entry points instead of searching the whole repo first:
 - `scripts/build_real_reuse_fixture_candidates.py`: materializes selected
   candidate asset/preparation manifests from the task specs and fixture
   manifests.
+- `scripts/build_real_reuse_asset_locks.py`: materializes preparation-time
+  asset locks from task specs, fixture manifests, and candidate manifests.
 - `scripts/build_real_reuse_paper_tables.py`: materializes the paper-facing
   real-reuse main-results table scaffold from the benchmark spec.
 - `scripts/check_real_reuse_benchmark.py`: strict local preflight checker for
@@ -233,11 +237,15 @@ Use these as entry points instead of searching the whole repo first:
   asset/preparation manifests with selected source repositories/datasets,
   preparation commands, scoring entry points, and license/provenance boundaries.
   They do not download or materialize assets and do not contain results.
+- `benchmarks/real_reuse/asset_locks/*.json`: eight preparation-time asset
+  locks with observed source revisions, fixed task instances, local
+  materialization targets, hidden scorer assets, and scorer/preparer contracts.
+  They do not download or materialize assets and do not contain results.
 - `results/real_reuse/main_results_plan.csv` and `.md`: paper-facing
   real-reuse main table scaffold with pending Summary/PaperToSkill score cells.
 - `results/real_reuse/spec_preflight.md`: ready-to-implement preflight report
-  for the real-reuse spec/task/fixture/candidate contracts. This is not
-  task-success evidence.
+  for the real-reuse spec/task/fixture/candidate/asset-lock contracts. This is
+  not task-success evidence.
 - `external/ai_scientist_v2_patches/`: reproducibility backup for local
   AI-Scientist-v2 adaptations used by the bounded Phase 76 integration run.
 - `benchmarks/provider_billing_evidence_v0.json`: provider-billing evidence
@@ -254,7 +262,7 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 342 ready checks, 1 pending
+  reports `ready_with_pending_external_evidence`, 351 ready checks, 1 pending
   check, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
@@ -320,7 +328,7 @@ Use these as entry points instead of searching the whole repo first:
   Toolformer rows score 9/9.
 - Paper tables:
   `results/reproducibility/paper_table_report.md`
-  reports ready, 76 ready checks, 0 failed checks.
+  reports ready, 156 ready checks, 0 failed checks.
 - Paper claims:
   `results/reproducibility/paper_claim_report.md`
   reports ready, 20 ready checks, 0 failed checks.

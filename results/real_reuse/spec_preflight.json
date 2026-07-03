@@ -5,7 +5,7 @@
   "spec_path": "benchmarks/real_reuse/real_reuse_v0.json",
   "task_count": 8,
   "status_counts": {
-    "ready": 296,
+    "ready": 401,
     "fail": 0
   },
   "checks": [
@@ -1783,6 +1783,636 @@
       "id": "real_reuse_fixture_candidates_materialized",
       "status": "ready",
       "detail": "candidates=AIDE-T1,AIDE-T2,REF-T1,REF-T2,SNAP-T1,SNAP-T2,SWE-T1,SWE-T2",
+      "evidence": "benchmarks/real_reuse/real_reuse_v0.json"
+    },
+    {
+      "id": "aide_t1_asset_lock_present",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T1.json"
+    },
+    {
+      "id": "aide_t1_asset_lock_identity",
+      "status": "ready",
+      "detail": "task_id=AIDE-T1; source_paper_id=aide",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T1.json"
+    },
+    {
+      "id": "aide_t1_asset_lock_status",
+      "status": "ready",
+      "detail": "status=asset_lock_ready_preparation_pending",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T1.json"
+    },
+    {
+      "id": "aide_t1_asset_lock_selected_candidate_matches",
+      "status": "ready",
+      "detail": "mle_bench_spaceship_titanic_submission",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T1.json"
+    },
+    {
+      "id": "aide_t1_asset_lock_instance_locked",
+      "status": "ready",
+      "detail": "{'source_kind': 'kaggle_competition', 'competition_slug': 'spaceship-titanic', 'local_instance_id': 'spaceship-titanic-validation-seed-20260703', 'split_seed': 20260703, 'split_policy': 'Create a deterministic local validation split from Kaggle training data; labels are scorer-only and must not enter model context.', 'reference_boundary': 'Kaggle/AIDE paper scores remain reported references unless this exact local split and budget are reproduced.'}",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T1.json"
+    },
+    {
+      "id": "aide_t1_asset_lock_source_revisions",
+      "status": "ready",
+      "detail": "source_locks=3; observed=2",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T1.json"
+    },
+    {
+      "id": "aide_t1_asset_lock_slots_match_fixture",
+      "status": "ready",
+      "detail": "asset_slots=dataset_manifest,starter_workspace,train_split,validation_split",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T1.json"
+    },
+    {
+      "id": "aide_t1_asset_lock_local_targets",
+      "status": "ready",
+      "detail": "{'asset_dir': 'benchmarks/real_reuse/assets/AIDE-T1', 'prepared_manifest': 'benchmarks/real_reuse/assets/AIDE-T1/asset_manifest.json', 'run_dir': 'results/real_reuse/runs/AIDE-T1/', 'external_project_root': 'D:/a_work/gitee', 'external_projects': [{'name': 'mle-bench', 'url': 'https://github.com/openai/mle-bench', 'local_path': 'D:/a_work/gitee/mle-bench'}]}",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T1.json"
+    },
+    {
+      "id": "aide_t1_asset_lock_preparation_contract",
+      "status": "ready",
+      "detail": "preparer=scripts/prepare_real_reuse_aide_fixture.py; status=not_started",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T1.json"
+    },
+    {
+      "id": "aide_t1_asset_lock_hidden_assets",
+      "status": "ready",
+      "detail": "validation_labels.csv,heldout split labels",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T1.json"
+    },
+    {
+      "id": "aide_t1_asset_lock_scoring_contract",
+      "status": "ready",
+      "detail": "metric=validation_score; scorer=scripts/score_real_reuse_aide.py",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T1.json"
+    },
+    {
+      "id": "aide_t1_asset_lock_no_mid_run_human",
+      "status": "ready",
+      "detail": "first_pass_human_intervention=none_mid_run",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T1.json"
+    },
+    {
+      "id": "aide_t1_asset_lock_boundary",
+      "status": "ready",
+      "detail": "This lock fixes the selected external source revisions, task instance, local materialization targets, and scorer/preparer contracts for a future real-reuse run. It does not download assets, run models, score outputs, or provide downstream task-success evidence.",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T1.json"
+    },
+    {
+      "id": "aide_t2_asset_lock_present",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T2.json"
+    },
+    {
+      "id": "aide_t2_asset_lock_identity",
+      "status": "ready",
+      "detail": "task_id=AIDE-T2; source_paper_id=aide",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T2.json"
+    },
+    {
+      "id": "aide_t2_asset_lock_status",
+      "status": "ready",
+      "detail": "status=asset_lock_ready_preparation_pending",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T2.json"
+    },
+    {
+      "id": "aide_t2_asset_lock_selected_candidate_matches",
+      "status": "ready",
+      "detail": "mle_bench_spaceship_titanic_debug_workspace",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T2.json"
+    },
+    {
+      "id": "aide_t2_asset_lock_instance_locked",
+      "status": "ready",
+      "detail": "{'source_kind': 'kaggle_competition_debug_fixture', 'competition_slug': 'spaceship-titanic', 'local_instance_id': 'spaceship-titanic-debug-weak-script-seed-20260703', 'split_seed': 20260703, 'weak_script_seed': 20260703, 'split_policy': 'Use the same deterministic validation split as AIDE-T1 and generate one weak baseline script before model runs.', 'reference_boundary': 'Only Summary and PaperToSkill runs under the same weak script and budget are strict comparisons.'}",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T2.json"
+    },
+    {
+      "id": "aide_t2_asset_lock_source_revisions",
+      "status": "ready",
+      "detail": "source_locks=3; observed=2",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T2.json"
+    },
+    {
+      "id": "aide_t2_asset_lock_slots_match_fixture",
+      "status": "ready",
+      "detail": "asset_slots=error_or_score_feedback,starter_workspace,validation_split,weak_script",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T2.json"
+    },
+    {
+      "id": "aide_t2_asset_lock_local_targets",
+      "status": "ready",
+      "detail": "{'asset_dir': 'benchmarks/real_reuse/assets/AIDE-T2', 'prepared_manifest': 'benchmarks/real_reuse/assets/AIDE-T2/asset_manifest.json', 'run_dir': 'results/real_reuse/runs/AIDE-T2/', 'external_project_root': 'D:/a_work/gitee', 'external_projects': [{'name': 'mle-bench', 'url': 'https://github.com/openai/mle-bench', 'local_path': 'D:/a_work/gitee/mle-bench'}]}",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T2.json"
+    },
+    {
+      "id": "aide_t2_asset_lock_preparation_contract",
+      "status": "ready",
+      "detail": "preparer=scripts/prepare_real_reuse_aide_fixture.py; status=not_started",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T2.json"
+    },
+    {
+      "id": "aide_t2_asset_lock_hidden_assets",
+      "status": "ready",
+      "detail": "validation_labels.csv,heldout split labels",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T2.json"
+    },
+    {
+      "id": "aide_t2_asset_lock_scoring_contract",
+      "status": "ready",
+      "detail": "metric=best_node_score; scorer=scripts/score_real_reuse_aide.py",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T2.json"
+    },
+    {
+      "id": "aide_t2_asset_lock_no_mid_run_human",
+      "status": "ready",
+      "detail": "first_pass_human_intervention=none_mid_run",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T2.json"
+    },
+    {
+      "id": "aide_t2_asset_lock_boundary",
+      "status": "ready",
+      "detail": "This lock fixes the selected external source revisions, task instance, local materialization targets, and scorer/preparer contracts for a future real-reuse run. It does not download assets, run models, score outputs, or provide downstream task-success evidence.",
+      "evidence": "benchmarks/real_reuse/asset_locks/AIDE-T2.json"
+    },
+    {
+      "id": "ref_t1_asset_lock_present",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T1.json"
+    },
+    {
+      "id": "ref_t1_asset_lock_identity",
+      "status": "ready",
+      "detail": "task_id=REF-T1; source_paper_id=reflexion",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T1.json"
+    },
+    {
+      "id": "ref_t1_asset_lock_status",
+      "status": "ready",
+      "detail": "status=asset_lock_ready_preparation_pending",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T1.json"
+    },
+    {
+      "id": "ref_t1_asset_lock_selected_candidate_matches",
+      "status": "ready",
+      "detail": "hotpotqa_distractor_reflection_retry",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T1.json"
+    },
+    {
+      "id": "ref_t1_asset_lock_instance_locked",
+      "status": "ready",
+      "detail": "{'source_kind': 'hotpotqa_distractor_validation_example', 'dataset_id': 'hotpotqa/hotpot_qa', 'dataset_sha': '1908d6afbbead072334abe2965f91bd2709910ab', 'config': 'distractor', 'split': 'validation', 'example_id': '5a8b57f25542995d1e6f1371', 'level': 'hard', 'type': 'comparison', 'question': 'Were Scott Derrickson and Ed Wood of the same nationality?', 'answer_key_policy': 'The gold answer is scorer-only; the model receives only the question, context/tool stub, and fixed feedback protocol.', 'reference_boundary': 'Reflexion paper scores are reported references unless this exact QA setup and retry budget are reproduced.'}",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T1.json"
+    },
+    {
+      "id": "ref_t1_asset_lock_source_revisions",
+      "status": "ready",
+      "detail": "source_locks=3; observed=2",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T1.json"
+    },
+    {
+      "id": "ref_t1_asset_lock_slots_match_fixture",
+      "status": "ready",
+      "detail": "asset_slots=answer_key,feedback_protocol,question,retrieval_context_or_tool_stub",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T1.json"
+    },
+    {
+      "id": "ref_t1_asset_lock_local_targets",
+      "status": "ready",
+      "detail": "{'asset_dir': 'benchmarks/real_reuse/assets/REF-T1', 'prepared_manifest': 'benchmarks/real_reuse/assets/REF-T1/asset_manifest.json', 'run_dir': 'results/real_reuse/runs/REF-T1/', 'external_project_root': 'D:/a_work/gitee', 'external_projects': []}",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T1.json"
+    },
+    {
+      "id": "ref_t1_asset_lock_preparation_contract",
+      "status": "ready",
+      "detail": "preparer=scripts/prepare_real_reuse_reflexion_fixture.py; status=not_started",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T1.json"
+    },
+    {
+      "id": "ref_t1_asset_lock_hidden_assets",
+      "status": "ready",
+      "detail": "gold answer,supporting-fact labels if not part of the allowed retrieval context",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T1.json"
+    },
+    {
+      "id": "ref_t1_asset_lock_scoring_contract",
+      "status": "ready",
+      "detail": "metric=exact_match_or_f1; scorer=scripts/score_real_reuse_reflexion.py",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T1.json"
+    },
+    {
+      "id": "ref_t1_asset_lock_no_mid_run_human",
+      "status": "ready",
+      "detail": "first_pass_human_intervention=none_mid_run",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T1.json"
+    },
+    {
+      "id": "ref_t1_asset_lock_boundary",
+      "status": "ready",
+      "detail": "This lock fixes the selected external source revisions, task instance, local materialization targets, and scorer/preparer contracts for a future real-reuse run. It does not download assets, run models, score outputs, or provide downstream task-success evidence.",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T1.json"
+    },
+    {
+      "id": "ref_t2_asset_lock_present",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T2.json"
+    },
+    {
+      "id": "ref_t2_asset_lock_identity",
+      "status": "ready",
+      "detail": "task_id=REF-T2; source_paper_id=reflexion",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T2.json"
+    },
+    {
+      "id": "ref_t2_asset_lock_status",
+      "status": "ready",
+      "detail": "status=asset_lock_ready_preparation_pending",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T2.json"
+    },
+    {
+      "id": "ref_t2_asset_lock_selected_candidate_matches",
+      "status": "ready",
+      "detail": "humaneval_failed_attempt_retry",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T2.json"
+    },
+    {
+      "id": "ref_t2_asset_lock_instance_locked",
+      "status": "ready",
+      "detail": "{'source_kind': 'humaneval_second_attempt_retry', 'dataset_id': 'openai/openai_humaneval', 'dataset_sha': '7dce6050a7d6d172f3cc5c32aa97f52fa1a2e544', 'split': 'test', 'task_id': 'HumanEval/0', 'entry_point': 'has_close_elements', 'failed_first_attempt_seed': 20260703, 'answer_key_policy': 'Canonical solution and tests are scorer/harness assets; model sees prompt plus fixed failed-attempt feedback only.', 'reference_boundary': 'Reflexion paper scores are references unless the same HumanEval task, feedback protocol, and budget are reproduced.'}",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T2.json"
+    },
+    {
+      "id": "ref_t2_asset_lock_source_revisions",
+      "status": "ready",
+      "detail": "source_locks=3; observed=2",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T2.json"
+    },
+    {
+      "id": "ref_t2_asset_lock_slots_match_fixture",
+      "status": "ready",
+      "detail": "asset_slots=environment_feedback,failed_first_attempt,initial_task,objective_checker",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T2.json"
+    },
+    {
+      "id": "ref_t2_asset_lock_local_targets",
+      "status": "ready",
+      "detail": "{'asset_dir': 'benchmarks/real_reuse/assets/REF-T2', 'prepared_manifest': 'benchmarks/real_reuse/assets/REF-T2/asset_manifest.json', 'run_dir': 'results/real_reuse/runs/REF-T2/', 'external_project_root': 'D:/a_work/gitee', 'external_projects': [{'name': 'human-eval', 'url': 'https://github.com/openai/human-eval', 'local_path': 'D:/a_work/gitee/human-eval'}]}",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T2.json"
+    },
+    {
+      "id": "ref_t2_asset_lock_preparation_contract",
+      "status": "ready",
+      "detail": "preparer=scripts/prepare_real_reuse_reflexion_fixture.py; status=not_started",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T2.json"
+    },
+    {
+      "id": "ref_t2_asset_lock_hidden_assets",
+      "status": "ready",
+      "detail": "canonical solution,private test oracle beyond provided feedback",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T2.json"
+    },
+    {
+      "id": "ref_t2_asset_lock_scoring_contract",
+      "status": "ready",
+      "detail": "metric=second_attempt_success; scorer=scripts/score_real_reuse_reflexion.py",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T2.json"
+    },
+    {
+      "id": "ref_t2_asset_lock_no_mid_run_human",
+      "status": "ready",
+      "detail": "first_pass_human_intervention=none_mid_run",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T2.json"
+    },
+    {
+      "id": "ref_t2_asset_lock_boundary",
+      "status": "ready",
+      "detail": "This lock fixes the selected external source revisions, task instance, local materialization targets, and scorer/preparer contracts for a future real-reuse run. It does not download assets, run models, score outputs, or provide downstream task-success evidence.",
+      "evidence": "benchmarks/real_reuse/asset_locks/REF-T2.json"
+    },
+    {
+      "id": "snap_t1_asset_lock_present",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T1.json"
+    },
+    {
+      "id": "snap_t1_asset_lock_identity",
+      "status": "ready",
+      "detail": "task_id=SNAP-T1; source_paper_id=snapatac2",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T1.json"
+    },
+    {
+      "id": "snap_t1_asset_lock_status",
+      "status": "ready",
+      "detail": "status=asset_lock_ready_preparation_pending",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T1.json"
+    },
+    {
+      "id": "snap_t1_asset_lock_selected_candidate_matches",
+      "status": "ready",
+      "detail": "snapatac2_pbmc5k_embedding_pipeline",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T1.json"
+    },
+    {
+      "id": "snap_t1_asset_lock_instance_locked",
+      "status": "ready",
+      "detail": "{'source_kind': 'snapatac2_builtin_dataset_pipeline', 'dataset_function': 'snapatac2.datasets.pbmc5k', 'tutorial_path': 'docs/tutorials/pbmc.ipynb', 'tutorial_lfs_oid': 'sha256:7b58060a27e69637f01ad41ebcdadb86cf023d3a912307da6b094b2bdf32fa9b', 'api_docs': 'https://scverse.org/SnapATAC2/api/index.html', 'resource_metric_policy': 'Score completion, expected artifact schema, runtime, and memory; do not score subjective biological interpretation.', 'reference_boundary': 'SnapATAC2 paper scores remain reported references unless the same dataset, environment, and resource measurement are reproduced.'}",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T1.json"
+    },
+    {
+      "id": "snap_t1_asset_lock_source_revisions",
+      "status": "ready",
+      "detail": "source_locks=3; observed=3",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T1.json"
+    },
+    {
+      "id": "snap_t1_asset_lock_slots_match_fixture",
+      "status": "ready",
+      "detail": "asset_slots=dataset_manifest,expected_artifact_schema,preprocessing_notes,resource_budget",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T1.json"
+    },
+    {
+      "id": "snap_t1_asset_lock_local_targets",
+      "status": "ready",
+      "detail": "{'asset_dir': 'benchmarks/real_reuse/assets/SNAP-T1', 'prepared_manifest': 'benchmarks/real_reuse/assets/SNAP-T1/asset_manifest.json', 'run_dir': 'results/real_reuse/runs/SNAP-T1/', 'external_project_root': 'D:/a_work/gitee', 'external_projects': [{'name': 'SnapATAC2', 'url': 'https://github.com/scverse/SnapATAC2', 'local_path': 'D:/a_work/gitee/SnapATAC2'}]}",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T1.json"
+    },
+    {
+      "id": "snap_t1_asset_lock_preparation_contract",
+      "status": "ready",
+      "detail": "preparer=scripts/prepare_real_reuse_snapatac2_fixture.py; status=not_started",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T1.json"
+    },
+    {
+      "id": "snap_t1_asset_lock_hidden_assets",
+      "status": "ready",
+      "detail": "post-run metric file,resource scorer thresholds",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T1.json"
+    },
+    {
+      "id": "snap_t1_asset_lock_scoring_contract",
+      "status": "ready",
+      "detail": "metric=runtime_memory_quality; scorer=scripts/score_real_reuse_snapatac2.py",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T1.json"
+    },
+    {
+      "id": "snap_t1_asset_lock_no_mid_run_human",
+      "status": "ready",
+      "detail": "first_pass_human_intervention=none_mid_run",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T1.json"
+    },
+    {
+      "id": "snap_t1_asset_lock_boundary",
+      "status": "ready",
+      "detail": "This lock fixes the selected external source revisions, task instance, local materialization targets, and scorer/preparer contracts for a future real-reuse run. It does not download assets, run models, score outputs, or provide downstream task-success evidence.",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T1.json"
+    },
+    {
+      "id": "snap_t2_asset_lock_present",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T2.json"
+    },
+    {
+      "id": "snap_t2_asset_lock_identity",
+      "status": "ready",
+      "detail": "task_id=SNAP-T2; source_paper_id=snapatac2",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T2.json"
+    },
+    {
+      "id": "snap_t2_asset_lock_status",
+      "status": "ready",
+      "detail": "status=asset_lock_ready_preparation_pending",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T2.json"
+    },
+    {
+      "id": "snap_t2_asset_lock_selected_candidate_matches",
+      "status": "ready",
+      "detail": "snapatac2_multiome_or_cluster_labels",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T2.json"
+    },
+    {
+      "id": "snap_t2_asset_lock_instance_locked",
+      "status": "ready",
+      "detail": "{'source_kind': 'snapatac2_builtin_multiome_or_cluster_fixture', 'dataset_function': 'snapatac2.datasets.pbmc10k_multiome', 'tutorial_path': 'docs/tutorials/modality.ipynb', 'tutorial_lfs_oid': 'sha256:79c7640e3fc12e0f2a9b9aac4f834cc4822865c5cbc3600358bd63ff7b1c8c37', 'api_docs': 'https://scverse.org/SnapATAC2/api/index.html', 'resource_metric_policy': 'Pre-register ARI/NMI when labels are available; otherwise mark the metric as a proxy before execution.', 'reference_boundary': 'Do not compare to paper resource scores as strict evidence unless the same data and environment are reproduced.'}",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T2.json"
+    },
+    {
+      "id": "snap_t2_asset_lock_source_revisions",
+      "status": "ready",
+      "detail": "source_locks=3; observed=3",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T2.json"
+    },
+    {
+      "id": "snap_t2_asset_lock_slots_match_fixture",
+      "status": "ready",
+      "detail": "asset_slots=dataset_manifest,expected_artifact_schema,reference_labels_or_proxy,resource_budget",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T2.json"
+    },
+    {
+      "id": "snap_t2_asset_lock_local_targets",
+      "status": "ready",
+      "detail": "{'asset_dir': 'benchmarks/real_reuse/assets/SNAP-T2', 'prepared_manifest': 'benchmarks/real_reuse/assets/SNAP-T2/asset_manifest.json', 'run_dir': 'results/real_reuse/runs/SNAP-T2/', 'external_project_root': 'D:/a_work/gitee', 'external_projects': [{'name': 'SnapATAC2', 'url': 'https://github.com/scverse/SnapATAC2', 'local_path': 'D:/a_work/gitee/SnapATAC2'}]}",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T2.json"
+    },
+    {
+      "id": "snap_t2_asset_lock_preparation_contract",
+      "status": "ready",
+      "detail": "preparer=scripts/prepare_real_reuse_snapatac2_fixture.py; status=not_started",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T2.json"
+    },
+    {
+      "id": "snap_t2_asset_lock_hidden_assets",
+      "status": "ready",
+      "detail": "reference labels if used only for scoring,post-run metric file",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T2.json"
+    },
+    {
+      "id": "snap_t2_asset_lock_scoring_contract",
+      "status": "ready",
+      "detail": "metric=ari_nmi_runtime_memory; scorer=scripts/score_real_reuse_snapatac2.py",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T2.json"
+    },
+    {
+      "id": "snap_t2_asset_lock_no_mid_run_human",
+      "status": "ready",
+      "detail": "first_pass_human_intervention=none_mid_run",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T2.json"
+    },
+    {
+      "id": "snap_t2_asset_lock_boundary",
+      "status": "ready",
+      "detail": "This lock fixes the selected external source revisions, task instance, local materialization targets, and scorer/preparer contracts for a future real-reuse run. It does not download assets, run models, score outputs, or provide downstream task-success evidence.",
+      "evidence": "benchmarks/real_reuse/asset_locks/SNAP-T2.json"
+    },
+    {
+      "id": "swe_t1_asset_lock_present",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T1.json"
+    },
+    {
+      "id": "swe_t1_asset_lock_identity",
+      "status": "ready",
+      "detail": "task_id=SWE-T1; source_paper_id=swe_agent",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T1.json"
+    },
+    {
+      "id": "swe_t1_asset_lock_status",
+      "status": "ready",
+      "detail": "status=asset_lock_ready_preparation_pending",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T1.json"
+    },
+    {
+      "id": "swe_t1_asset_lock_selected_candidate_matches",
+      "status": "ready",
+      "detail": "swe_bench_lite_issue_to_patch",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T1.json"
+    },
+    {
+      "id": "swe_t1_asset_lock_instance_locked",
+      "status": "ready",
+      "detail": "{'source_kind': 'swe_bench_lite_dev_instance', 'dataset_id': 'princeton-nlp/SWE-bench_Lite', 'dataset_sha': '6ec7bb89b9342f664a54a6e0a6ea6501d3437cc2', 'split': 'dev', 'instance_id': 'sqlfluff__sqlfluff-1625', 'repo': 'sqlfluff/sqlfluff', 'base_commit': '14e1a23a3166b9a645a16de96f694c77a5d4abb7', 'fail_to_pass': ['test/cli/commands_test.py::test__cli__command_directed'], 'reference_boundary': 'SWE-agent/SWE-bench paper scores are reported references unless the same instance, tests, and budget are reproduced locally.'}",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T1.json"
+    },
+    {
+      "id": "swe_t1_asset_lock_source_revisions",
+      "status": "ready",
+      "detail": "source_locks=3; observed=3",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T1.json"
+    },
+    {
+      "id": "swe_t1_asset_lock_slots_match_fixture",
+      "status": "ready",
+      "detail": "asset_slots=issue_description,repository_snapshot,target_test_command",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T1.json"
+    },
+    {
+      "id": "swe_t1_asset_lock_local_targets",
+      "status": "ready",
+      "detail": "{'asset_dir': 'benchmarks/real_reuse/assets/SWE-T1', 'prepared_manifest': 'benchmarks/real_reuse/assets/SWE-T1/asset_manifest.json', 'run_dir': 'results/real_reuse/runs/SWE-T1/', 'external_project_root': 'D:/a_work/gitee', 'external_projects': [{'name': 'SWE-bench', 'url': 'https://github.com/princeton-nlp/SWE-bench', 'local_path': 'D:/a_work/gitee/SWE-bench'}]}",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T1.json"
+    },
+    {
+      "id": "swe_t1_asset_lock_preparation_contract",
+      "status": "ready",
+      "detail": "preparer=scripts/prepare_real_reuse_swe_fixture.py; status=not_started",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T1.json"
+    },
+    {
+      "id": "swe_t1_asset_lock_hidden_assets",
+      "status": "ready",
+      "detail": "gold patch,test_patch beyond allowed failing-test context",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T1.json"
+    },
+    {
+      "id": "swe_t1_asset_lock_scoring_contract",
+      "status": "ready",
+      "detail": "metric=resolved; scorer=scripts/score_real_reuse_swe.py",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T1.json"
+    },
+    {
+      "id": "swe_t1_asset_lock_no_mid_run_human",
+      "status": "ready",
+      "detail": "first_pass_human_intervention=none_mid_run",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T1.json"
+    },
+    {
+      "id": "swe_t1_asset_lock_boundary",
+      "status": "ready",
+      "detail": "This lock fixes the selected external source revisions, task instance, local materialization targets, and scorer/preparer contracts for a future real-reuse run. It does not download assets, run models, score outputs, or provide downstream task-success evidence.",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T1.json"
+    },
+    {
+      "id": "swe_t2_asset_lock_present",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T2.json"
+    },
+    {
+      "id": "swe_t2_asset_lock_identity",
+      "status": "ready",
+      "detail": "task_id=SWE-T2; source_paper_id=swe_agent",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T2.json"
+    },
+    {
+      "id": "swe_t2_asset_lock_status",
+      "status": "ready",
+      "detail": "status=asset_lock_ready_preparation_pending",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T2.json"
+    },
+    {
+      "id": "swe_t2_asset_lock_selected_candidate_matches",
+      "status": "ready",
+      "detail": "swe_bench_verified_failing_test_patch",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T2.json"
+    },
+    {
+      "id": "swe_t2_asset_lock_instance_locked",
+      "status": "ready",
+      "detail": "{'source_kind': 'swe_bench_verified_test_instance', 'dataset_id': 'princeton-nlp/SWE-bench_Verified', 'dataset_sha': 'c104f840cc67f8b6eec6f759ebc8b2693d585d4a', 'split': 'test', 'instance_id': 'astropy__astropy-12907', 'repo': 'astropy/astropy', 'base_commit': 'd16bfe05a744909de4b27f5875fe0d4ed41ce607', 'fail_to_pass': ['astropy/modeling/tests/test_separable.py::test_separable[compound_model6-result6]', 'astropy/modeling/tests/test_separable.py::test_separable[compound_model9-result9]'], 'difficulty': '15 min - 1 hour', 'reference_boundary': 'Strict comparison is only Summary vs PaperToSkill on this same verified instance and run budget.'}",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T2.json"
+    },
+    {
+      "id": "swe_t2_asset_lock_source_revisions",
+      "status": "ready",
+      "detail": "source_locks=3; observed=3",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T2.json"
+    },
+    {
+      "id": "swe_t2_asset_lock_slots_match_fixture",
+      "status": "ready",
+      "detail": "asset_slots=failing_test,repository_snapshot,target_test_command",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T2.json"
+    },
+    {
+      "id": "swe_t2_asset_lock_local_targets",
+      "status": "ready",
+      "detail": "{'asset_dir': 'benchmarks/real_reuse/assets/SWE-T2', 'prepared_manifest': 'benchmarks/real_reuse/assets/SWE-T2/asset_manifest.json', 'run_dir': 'results/real_reuse/runs/SWE-T2/', 'external_project_root': 'D:/a_work/gitee', 'external_projects': [{'name': 'SWE-bench', 'url': 'https://github.com/princeton-nlp/SWE-bench', 'local_path': 'D:/a_work/gitee/SWE-bench'}]}",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T2.json"
+    },
+    {
+      "id": "swe_t2_asset_lock_preparation_contract",
+      "status": "ready",
+      "detail": "preparer=scripts/prepare_real_reuse_swe_fixture.py; status=not_started",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T2.json"
+    },
+    {
+      "id": "swe_t2_asset_lock_hidden_assets",
+      "status": "ready",
+      "detail": "gold patch,test_patch beyond allowed failing-test context",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T2.json"
+    },
+    {
+      "id": "swe_t2_asset_lock_scoring_contract",
+      "status": "ready",
+      "detail": "metric=tests_passed; scorer=scripts/score_real_reuse_swe.py",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T2.json"
+    },
+    {
+      "id": "swe_t2_asset_lock_no_mid_run_human",
+      "status": "ready",
+      "detail": "first_pass_human_intervention=none_mid_run",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T2.json"
+    },
+    {
+      "id": "swe_t2_asset_lock_boundary",
+      "status": "ready",
+      "detail": "This lock fixes the selected external source revisions, task instance, local materialization targets, and scorer/preparer contracts for a future real-reuse run. It does not download assets, run models, score outputs, or provide downstream task-success evidence.",
+      "evidence": "benchmarks/real_reuse/asset_locks/SWE-T2.json"
+    },
+    {
+      "id": "real_reuse_asset_locks_materialized",
+      "status": "ready",
+      "detail": "asset_locks=AIDE-T1,AIDE-T2,REF-T1,REF-T2,SNAP-T1,SNAP-T2,SWE-T1,SWE-T2",
       "evidence": "benchmarks/real_reuse/real_reuse_v0.json"
     }
   ]

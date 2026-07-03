@@ -2861,3 +2861,38 @@ Evidence boundary:
 - Phase 84 updates the paper table structure only. Summary/PaperToSkill task
   scores remain pending execution and must be filled after the main real-reuse
   tasks run.
+
+## 2026-07-03 Phase 85
+
+Actions:
+
+- Added `scripts/build_real_reuse_asset_locks.py` to materialize
+  preparation-time asset locks from the task specs, fixture manifests, and
+  candidate manifests.
+- Generated `benchmarks/real_reuse/asset_locks/*.json` for all eight real-reuse
+  tasks.
+- Locked concrete task instances and preparation contracts: Spaceship Titanic
+  split/weak-script seeds for AIDE-T1/T2, SWE-bench Lite
+  `sqlfluff__sqlfluff-1625`, SWE-bench Verified `astropy__astropy-12907`,
+  HotPotQA distractor validation example `5a8b57f25542995d1e6f1371`,
+  HumanEval `HumanEval/0`, and SnapATAC2 `pbmc5k` / `pbmc10k_multiome`
+  tutorial fixtures.
+- Corrected the SnapATAC2 candidate API URL from the stale `api.html` path to
+  the current official `api/index.html` path.
+- Extended `scripts/check_real_reuse_benchmark.py` so the preflight validates
+  asset-lock identity, selected candidate match, fixed task instance, observed
+  source revisions, asset-slot coverage, local targets, preparation contract,
+  hidden scorer assets, scoring contract, run controls, and evidence boundary.
+- Added asset-lock builder tests and expanded package-gate expectations.
+
+Results:
+
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`,
+  8 tasks, 401 ready checks, and 0 failed checks after validating asset locks.
+
+Evidence boundary:
+
+- Phase 85 locks source revisions, task instances, local materialization
+  targets, and scorer/preparer contracts only. It does not materialize datasets
+  or repositories for execution, implement the preparer/scorer scripts, run
+  Summary or PaperToSkill, or create downstream result rows.

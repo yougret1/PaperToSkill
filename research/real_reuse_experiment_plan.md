@@ -206,18 +206,27 @@ supporting role.
 1. Verify paper source, license, code availability, and benchmark setup for each
    selected paper.
 2. Create task specs under `benchmarks/real_reuse/`.
-3. Create or record context conditions under `baselines/real_reuse/` and
+3. Create fixture requirement manifests, candidate manifests, and asset locks
+   under `benchmarks/real_reuse/fixtures/`,
+   `benchmarks/real_reuse/fixture_candidates/`, and
+   `benchmarks/real_reuse/asset_locks/`.
+4. Create or record context conditions under `baselines/real_reuse/` and
    `generated_skills/`.
-4. Implement a runner that logs command, model family, condition, task output,
+5. Implement task-specific preparers and scorers that consume the asset locks
+   without exposing hidden scorer assets to model-visible context.
+6. Implement a runner that logs command, model family, condition, task output,
    metric, tokens, time, and failure reason.
-5. Implement a scorer/aggregator that emits raw rows and table-ready CSV/MD
+7. Implement a scorer/aggregator that emits raw rows and table-ready CSV/MD
    files under `results/real_reuse/`.
-6. Only after raw results exist, revise the AAAI Abstract, Contributions,
+8. Only after raw results exist, revise the AAAI Abstract, Contributions,
    Experimental Setup, Results, Discussion, Limitations, and Conclusion.
 
 ## Evidence Boundaries
 
 - This plan does not complete any real-reuse experiment.
+- Current asset locks fix source revisions, concrete task instances, local
+  materialization targets, hidden scorer assets, and scorer/preparer contracts,
+  but they do not materialize data or produce scores.
 - Existing deterministic/offline results remain useful as quality, grounding,
   and cost gates.
 - The older saved-response model ablation remains a usage-plan/output-contract

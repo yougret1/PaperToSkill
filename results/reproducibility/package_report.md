@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 342
+- Ready checks: 351
 - Pending checks: 1
 - Failed checks: 0
 
@@ -77,6 +77,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | real_reuse_task_spec_builder | ready | present | scripts/build_real_reuse_task_specs.py |
 | real_reuse_fixture_manifest_builder | ready | present | scripts/build_real_reuse_fixture_manifests.py |
 | real_reuse_fixture_candidate_builder | ready | present | scripts/build_real_reuse_fixture_candidates.py |
+| real_reuse_asset_lock_builder | ready | present | scripts/build_real_reuse_asset_locks.py |
 | real_reuse_paper_table_builder | ready | present | scripts/build_real_reuse_paper_tables.py |
 | real_reuse_benchmark_checker | ready | present | scripts/check_real_reuse_benchmark.py |
 | real_reuse_task_spec_aide_t1 | ready | present | benchmarks/real_reuse/tasks/AIDE-T1.json |
@@ -103,6 +104,14 @@ Evidence boundary: this report checks local package completeness and separates p
 | real_reuse_fixture_candidate_ref_t2 | ready | present | benchmarks/real_reuse/fixture_candidates/REF-T2.json |
 | real_reuse_fixture_candidate_snap_t1 | ready | present | benchmarks/real_reuse/fixture_candidates/SNAP-T1.json |
 | real_reuse_fixture_candidate_snap_t2 | ready | present | benchmarks/real_reuse/fixture_candidates/SNAP-T2.json |
+| real_reuse_asset_lock_aide_t1 | ready | present | benchmarks/real_reuse/asset_locks/AIDE-T1.json |
+| real_reuse_asset_lock_aide_t2 | ready | present | benchmarks/real_reuse/asset_locks/AIDE-T2.json |
+| real_reuse_asset_lock_swe_t1 | ready | present | benchmarks/real_reuse/asset_locks/SWE-T1.json |
+| real_reuse_asset_lock_swe_t2 | ready | present | benchmarks/real_reuse/asset_locks/SWE-T2.json |
+| real_reuse_asset_lock_ref_t1 | ready | present | benchmarks/real_reuse/asset_locks/REF-T1.json |
+| real_reuse_asset_lock_ref_t2 | ready | present | benchmarks/real_reuse/asset_locks/REF-T2.json |
+| real_reuse_asset_lock_snap_t1 | ready | present | benchmarks/real_reuse/asset_locks/SNAP-T1.json |
+| real_reuse_asset_lock_snap_t2 | ready | present | benchmarks/real_reuse/asset_locks/SNAP-T2.json |
 | real_reuse_spec_preflight_json | ready | present | results/real_reuse/spec_preflight.json |
 | real_reuse_spec_preflight_md | ready | present | results/real_reuse/spec_preflight.md |
 | real_reuse_main_results_plan_csv | ready | present | results/real_reuse/main_results_plan.csv |

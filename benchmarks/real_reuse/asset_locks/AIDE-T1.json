@@ -1,0 +1,182 @@
+{
+  "schema_version": "0.1",
+  "benchmark_id": "papertoskill_real_reuse_v0",
+  "task_id": "AIDE-T1",
+  "task_spec": "benchmarks/real_reuse/tasks/AIDE-T1.json",
+  "fixture_manifest": "benchmarks/real_reuse/fixtures/AIDE-T1.json",
+  "fixture_candidate": "benchmarks/real_reuse/fixture_candidates/AIDE-T1.json",
+  "source_paper_id": "aide",
+  "domain": "ML engineering",
+  "status": "asset_lock_ready_preparation_pending",
+  "evidence_boundary": "This lock fixes the selected external source revisions, task instance, local materialization targets, and scorer/preparer contracts for a future real-reuse run. It does not download assets, run models, score outputs, or provide downstream task-success evidence.",
+  "source_probe": {
+    "checked_on": "2026-07-03",
+    "method": "Lightweight git ls-remote, Hugging Face dataset API, and official documentation reachability probes.",
+    "boundary": "Reachability and public metadata only; no large dataset download, clone, install, or task execution."
+  },
+  "selected_candidate_id": "mle_bench_spaceship_titanic_submission",
+  "locked_task_instance": {
+    "source_kind": "kaggle_competition",
+    "competition_slug": "spaceship-titanic",
+    "local_instance_id": "spaceship-titanic-validation-seed-20260703",
+    "split_seed": 20260703,
+    "split_policy": "Create a deterministic local validation split from Kaggle training data; labels are scorer-only and must not enter model context.",
+    "reference_boundary": "Kaggle/AIDE paper scores remain reported references unless this exact local split and budget are reproduced."
+  },
+  "source_revision_locks": [
+    {
+      "source_url_id": "aide_code",
+      "url": "https://github.com/WecoAI/aideml",
+      "kind": "source_paper_code",
+      "lock_type": "git_head_observed",
+      "observed_revision": "40dcf28fc3a39e93c7192acec0c9e2e9bffa973d",
+      "observed_on": "2026-07-03",
+      "verification_command": "git ls-remote https://github.com/WecoAI/aideml HEAD",
+      "split_summary": null,
+      "must_reverify_before_materialization": true
+    },
+    {
+      "source_url_id": "mle_bench_repo",
+      "url": "https://github.com/openai/mle-bench",
+      "kind": "benchmark_harness",
+      "lock_type": "git_head_observed",
+      "observed_revision": "507f92e1138bb6e40dac5c6ee7a6758e6424bf97",
+      "observed_on": "2026-07-03",
+      "verification_command": "git ls-remote https://github.com/openai/mle-bench HEAD",
+      "split_summary": null,
+      "must_reverify_before_materialization": true
+    },
+    {
+      "source_url_id": "kaggle_competition",
+      "url": "https://www.kaggle.com/competitions/spaceship-titanic",
+      "kind": "dataset_and_metric",
+      "lock_type": "declared_source_recheck_required",
+      "observed_revision": null,
+      "observed_on": null,
+      "verification_command": null,
+      "split_summary": null,
+      "must_reverify_before_materialization": true
+    }
+  ],
+  "asset_slot_locks": [
+    {
+      "slot": "dataset_manifest",
+      "source_url_id": "kaggle_competition",
+      "locked_path_after_prepare": "benchmarks/real_reuse/assets/AIDE-T1/dataset_manifest",
+      "materialization_status": "not_materialized",
+      "license_review_status": "pending",
+      "sha256_after_prepare": null,
+      "required_for_execution": true,
+      "notes": "Kaggle competition metadata and metric description."
+    },
+    {
+      "slot": "train_split",
+      "source_url_id": "kaggle_competition",
+      "locked_path_after_prepare": "benchmarks/real_reuse/assets/AIDE-T1/train_split",
+      "materialization_status": "not_materialized",
+      "license_review_status": "pending",
+      "sha256_after_prepare": null,
+      "required_for_execution": true,
+      "notes": "Training data after local download and validation split creation."
+    },
+    {
+      "slot": "validation_split",
+      "source_url_id": "kaggle_competition",
+      "locked_path_after_prepare": "benchmarks/real_reuse/assets/AIDE-T1/validation_split",
+      "materialization_status": "not_materialized",
+      "license_review_status": "pending",
+      "sha256_after_prepare": null,
+      "required_for_execution": true,
+      "notes": "Held-out validation labels created locally from the training data."
+    },
+    {
+      "slot": "starter_workspace",
+      "source_url_id": "mle_bench_repo",
+      "locked_path_after_prepare": "benchmarks/real_reuse/assets/AIDE-T1/starter_workspace",
+      "materialization_status": "not_materialized",
+      "license_review_status": "pending",
+      "sha256_after_prepare": null,
+      "required_for_execution": true,
+      "notes": "Local AIDE-style solution workspace and baseline script."
+    }
+  ],
+  "local_materialization_targets": {
+    "asset_dir": "benchmarks/real_reuse/assets/AIDE-T1",
+    "prepared_manifest": "benchmarks/real_reuse/assets/AIDE-T1/asset_manifest.json",
+    "run_dir": "results/real_reuse/runs/AIDE-T1/",
+    "external_project_root": "D:/a_work/gitee",
+    "external_projects": [
+      {
+        "name": "mle-bench",
+        "url": "https://github.com/openai/mle-bench",
+        "local_path": "D:/a_work/gitee/mle-bench"
+      }
+    ]
+  },
+  "preparation_contract": {
+    "status": "not_started",
+    "preparer": "scripts/prepare_real_reuse_aide_fixture.py",
+    "must_complete_before_model_run": [
+      "Reverify source revisions or explicitly record an updated revision lock.",
+      "Complete license and terms review for every materialized asset.",
+      "Write the prepared asset manifest with paths and sha256 values.",
+      "Create condition contexts for Summary and PaperToSkill without exposing hidden scorer assets.",
+      "Confirm the scorer command exists and can run on a dry fixture."
+    ],
+    "hidden_from_model": [
+      "validation_labels.csv",
+      "heldout split labels"
+    ],
+    "credential_policy": "Use user-managed credentials only. Never commit API keys, Kaggle tokens, Hugging Face tokens, cookies, or credential-bearing logs."
+  },
+  "scoring_lock": {
+    "scorer": "scripts/score_real_reuse_aide.py",
+    "metric_name": "validation_score",
+    "metric_family": "kaggle_style_validation_metric",
+    "direction": "higher_is_better",
+    "success_criterion": "PaperToSkill condition produces a valid submission and improves over the starting baseline under the same budget.",
+    "scoring_command_template": "python scripts/score_real_reuse_aide.py --task AIDE-T1 --submission {submission_file} --labels benchmarks/real_reuse/assets/AIDE-T1/validation_labels.csv",
+    "required_metric_inputs": [
+      "submission_file",
+      "validation_labels_or_metric_server"
+    ],
+    "raw_row_schema": [
+      "run_id",
+      "task_id",
+      "source_paper_id",
+      "domain",
+      "condition",
+      "model_family",
+      "model_alias",
+      "task_score",
+      "success",
+      "workflow_score",
+      "unsupported_errors",
+      "tokens",
+      "time_seconds",
+      "interventions",
+      "failure_reason",
+      "output_path"
+    ],
+    "answer_or_gold_policy": "Gold labels, answers, patches, canonical solutions, and scorer-only thresholds must stay out of model-visible context."
+  },
+  "condition_lock": [
+    {
+      "condition": "summary",
+      "context_path": "baselines/real_reuse/AIDE-T1_summary.md",
+      "asset_status": "to_be_created_before_execution"
+    },
+    {
+      "condition": "papertoskill",
+      "context_path": "generated_skills/aide/SKILL.md",
+      "asset_status": "existing_or_to_be_verified_before_execution"
+    }
+  ],
+  "run_control_lock": {
+    "first_pass_human_intervention": "none_mid_run",
+    "same_prompt_template_across_conditions": true,
+    "same_run_budget_across_conditions": true,
+    "same_task_metric_across_conditions": true
+  },
+  "next_action": "Implement the preparer/scorer named above, materialize assets, then run Summary and PaperToSkill under the same locked task instance and budget."
+}

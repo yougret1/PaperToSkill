@@ -1,0 +1,185 @@
+{
+  "schema_version": "0.1",
+  "benchmark_id": "papertoskill_real_reuse_v0",
+  "task_id": "REF-T2",
+  "task_spec": "benchmarks/real_reuse/tasks/REF-T2.json",
+  "fixture_manifest": "benchmarks/real_reuse/fixtures/REF-T2.json",
+  "fixture_candidate": "benchmarks/real_reuse/fixture_candidates/REF-T2.json",
+  "source_paper_id": "reflexion",
+  "domain": "Decision / programming",
+  "status": "asset_lock_ready_preparation_pending",
+  "evidence_boundary": "This lock fixes the selected external source revisions, task instance, local materialization targets, and scorer/preparer contracts for a future real-reuse run. It does not download assets, run models, score outputs, or provide downstream task-success evidence.",
+  "source_probe": {
+    "checked_on": "2026-07-03",
+    "method": "Lightweight git ls-remote, Hugging Face dataset API, and official documentation reachability probes.",
+    "boundary": "Reachability and public metadata only; no large dataset download, clone, install, or task execution."
+  },
+  "selected_candidate_id": "humaneval_failed_attempt_retry",
+  "locked_task_instance": {
+    "source_kind": "humaneval_second_attempt_retry",
+    "dataset_id": "openai/openai_humaneval",
+    "dataset_sha": "7dce6050a7d6d172f3cc5c32aa97f52fa1a2e544",
+    "split": "test",
+    "task_id": "HumanEval/0",
+    "entry_point": "has_close_elements",
+    "failed_first_attempt_seed": 20260703,
+    "answer_key_policy": "Canonical solution and tests are scorer/harness assets; model sees prompt plus fixed failed-attempt feedback only.",
+    "reference_boundary": "Reflexion paper scores are references unless the same HumanEval task, feedback protocol, and budget are reproduced."
+  },
+  "source_revision_locks": [
+    {
+      "source_url_id": "reflexion_code",
+      "url": "https://github.com/noahshinn/reflexion",
+      "kind": "source_paper_code",
+      "lock_type": "git_head_observed",
+      "observed_revision": "218cf0ef1df84b05ce379dd4a8e47f17766733a0",
+      "observed_on": "2026-07-03",
+      "verification_command": "git ls-remote https://github.com/noahshinn/reflexion HEAD",
+      "split_summary": null,
+      "must_reverify_before_materialization": true
+    },
+    {
+      "source_url_id": "humaneval_repo",
+      "url": "https://github.com/openai/human-eval",
+      "kind": "dataset_and_checker",
+      "lock_type": "git_head_observed",
+      "observed_revision": "6d43fb980f9fee3c892a914eda09951f772ad10d",
+      "observed_on": "2026-07-03",
+      "verification_command": "git ls-remote https://github.com/openai/human-eval HEAD",
+      "split_summary": null,
+      "must_reverify_before_materialization": true
+    },
+    {
+      "source_url_id": "humaneval_paper",
+      "url": "https://arxiv.org/abs/2107.03374",
+      "kind": "benchmark_paper",
+      "lock_type": "declared_source_recheck_required",
+      "observed_revision": null,
+      "observed_on": null,
+      "verification_command": null,
+      "split_summary": null,
+      "must_reverify_before_materialization": true
+    }
+  ],
+  "asset_slot_locks": [
+    {
+      "slot": "initial_task",
+      "source_url_id": "humaneval_repo",
+      "locked_path_after_prepare": "benchmarks/real_reuse/assets/REF-T2/initial_task",
+      "materialization_status": "not_materialized",
+      "license_review_status": "pending",
+      "sha256_after_prepare": null,
+      "required_for_execution": true,
+      "notes": "Selected HumanEval prompt and tests."
+    },
+    {
+      "slot": "failed_first_attempt",
+      "source_url_id": "humaneval_repo",
+      "locked_path_after_prepare": "benchmarks/real_reuse/assets/REF-T2/failed_first_attempt",
+      "materialization_status": "not_materialized",
+      "license_review_status": "pending",
+      "sha256_after_prepare": null,
+      "required_for_execution": true,
+      "notes": "Deterministic intentionally failing first attempt generated before execution."
+    },
+    {
+      "slot": "environment_feedback",
+      "source_url_id": "humaneval_repo",
+      "locked_path_after_prepare": "benchmarks/real_reuse/assets/REF-T2/environment_feedback",
+      "materialization_status": "not_materialized",
+      "license_review_status": "pending",
+      "sha256_after_prepare": null,
+      "required_for_execution": true,
+      "notes": "Unit-test failure output from the fixed checker."
+    },
+    {
+      "slot": "objective_checker",
+      "source_url_id": "humaneval_repo",
+      "locked_path_after_prepare": "benchmarks/real_reuse/assets/REF-T2/objective_checker",
+      "materialization_status": "not_materialized",
+      "license_review_status": "pending",
+      "sha256_after_prepare": null,
+      "required_for_execution": true,
+      "notes": "HumanEval execution-based test harness or local equivalent."
+    }
+  ],
+  "local_materialization_targets": {
+    "asset_dir": "benchmarks/real_reuse/assets/REF-T2",
+    "prepared_manifest": "benchmarks/real_reuse/assets/REF-T2/asset_manifest.json",
+    "run_dir": "results/real_reuse/runs/REF-T2/",
+    "external_project_root": "D:/a_work/gitee",
+    "external_projects": [
+      {
+        "name": "human-eval",
+        "url": "https://github.com/openai/human-eval",
+        "local_path": "D:/a_work/gitee/human-eval"
+      }
+    ]
+  },
+  "preparation_contract": {
+    "status": "not_started",
+    "preparer": "scripts/prepare_real_reuse_reflexion_fixture.py",
+    "must_complete_before_model_run": [
+      "Reverify source revisions or explicitly record an updated revision lock.",
+      "Complete license and terms review for every materialized asset.",
+      "Write the prepared asset manifest with paths and sha256 values.",
+      "Create condition contexts for Summary and PaperToSkill without exposing hidden scorer assets.",
+      "Confirm the scorer command exists and can run on a dry fixture."
+    ],
+    "hidden_from_model": [
+      "canonical solution",
+      "private test oracle beyond provided feedback"
+    ],
+    "credential_policy": "Use user-managed credentials only. Never commit API keys, Kaggle tokens, Hugging Face tokens, cookies, or credential-bearing logs."
+  },
+  "scoring_lock": {
+    "scorer": "scripts/score_real_reuse_reflexion.py",
+    "metric_name": "second_attempt_success",
+    "metric_family": "pass_rate",
+    "direction": "higher_is_better",
+    "success_criterion": "Second attempt passes the objective checker after using reflection.",
+    "scoring_command_template": "python scripts/score_real_reuse_reflexion.py --task REF-T2 --candidate {candidate_file} --tests benchmarks/real_reuse/assets/REF-T2/tests.json",
+    "required_metric_inputs": [
+      "second_attempt_output",
+      "checker_log"
+    ],
+    "raw_row_schema": [
+      "run_id",
+      "task_id",
+      "source_paper_id",
+      "domain",
+      "condition",
+      "model_family",
+      "model_alias",
+      "task_score",
+      "success",
+      "workflow_score",
+      "unsupported_errors",
+      "tokens",
+      "time_seconds",
+      "interventions",
+      "failure_reason",
+      "output_path"
+    ],
+    "answer_or_gold_policy": "Gold labels, answers, patches, canonical solutions, and scorer-only thresholds must stay out of model-visible context."
+  },
+  "condition_lock": [
+    {
+      "condition": "summary",
+      "context_path": "baselines/real_reuse/REF-T2_summary.md",
+      "asset_status": "to_be_created_before_execution"
+    },
+    {
+      "condition": "papertoskill",
+      "context_path": "generated_skills/reflexion/SKILL.md",
+      "asset_status": "existing_or_to_be_verified_before_execution"
+    }
+  ],
+  "run_control_lock": {
+    "first_pass_human_intervention": "none_mid_run",
+    "same_prompt_template_across_conditions": true,
+    "same_run_budget_across_conditions": true,
+    "same_task_metric_across_conditions": true
+  },
+  "next_action": "Implement the preparer/scorer named above, materialize assets, then run Summary and PaperToSkill under the same locked task instance and budget."
+}

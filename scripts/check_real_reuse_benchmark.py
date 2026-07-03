@@ -43,6 +43,7 @@ EXPECTED_RAW_ROW_FIELDS = {
 }
 EXPECTED_FIXTURE_STATUS = "fixture_manifest_ready_assets_pending"
 EXPECTED_CANDIDATE_STATUS = "candidate_assets_selected_preparation_pending"
+EXPECTED_ASSET_LOCK_STATUS = "asset_lock_ready_preparation_pending"
 
 
 @dataclass
@@ -178,6 +179,7 @@ def build_report(root: Path, spec_path: Path) -> dict[str, Any]:
     checks.extend(task_spec_file_checks(root, spec_path, tasks))
     checks.extend(fixture_manifest_checks(root, spec_path, tasks))
     checks.extend(fixture_candidate_checks(root, spec_path, tasks))
+    checks.extend(asset_lock_checks(root, spec_path, tasks))
     return report_from_checks(root, spec_path, spec, checks)
 
 
@@ -688,6 +690,178 @@ def fixture_candidate_checks(root: Path, spec_path: Path, tasks: dict[str, dict[
             "real_reuse_fixture_candidates_materialized",
             "ready" if present_fixture_candidates == EXPECTED_MAIN_TASKS else "fail",
             "candidates=" + ",".join(sorted(present_fixture_candidates)),
+            relative(root, spec_path),
+        )
+    )
+    return checks
+
+
+def asset_lock_checks(root: Path, spec_path: Path, tasks: dict[str, dict[str, Any]]) -> list[Check]:
+    checks: list[Check] = []
+    present_asset_locks: set[str] = set()
+    for task_id in sorted(tasks):
+        prefix = task_id.lower().replace("-", "_")
+        lock_path = root / "benchmarks" / "real_reuse" / "asset_locks" / f"{task_id}.json"
+        task_spec_path = root / "benchmarks" / "real_reuse" / "tasks" / f"{task_id}.json"
+        fixture_path = root / "benchmarks" / "real_reuse" / "fixtures" / f"{task_id}.json"
+        candidate_path = root / "benchmarks" / "real_reuse" / "fixture_candidates" / f"{task_id}.json"
+        if not lock_path.exists():
+            checks.append(
+                Check(
+                    f"{prefix}_asset_lock_present",
+                    "fail",
+                    "missing",
+                    relative(root, lock_path),
+                )
+            )
+            continue
+        lock = load_json(lock_path)
+        present_asset_locks.add(task_id)
+        task_spec = load_json(task_spec_path) if task_spec_path.exists() else {}
+        fixture = load_json(fixture_path) if fixture_path.exists() else {}
+        candidate = load_json(candidate_path) if candidate_path.exists() else {}
+        asset_slot_locks = lock.get("asset_slot_locks", [])
+        locked_slots = {str(item.get("slot", "")) for item in asset_slot_locks}
+        fixture_asset_slots = {str(item.get("id", "")) for item in fixture.get("asset_slots", [])}
+        source_revision_locks = lock.get("source_revision_locks", [])
+        observed_locks = [item for item in source_revision_locks if item.get("observed_revision")]
+        locked_instance = lock.get("locked_task_instance", {})
+        preparation_contract = lock.get("preparation_contract", {})
+        scoring_lock = lock.get("scoring_lock", {})
+        local_targets = lock.get("local_materialization_targets", {})
+        boundary = str(lock.get("evidence_boundary", "")).lower()
+        hidden_assets = preparation_contract.get("hidden_from_model", [])
+
+        checks.extend(
+            [
+                Check(
+                    f"{prefix}_asset_lock_present",
+                    "ready",
+                    "present",
+                    relative(root, lock_path),
+                ),
+                Check(
+                    f"{prefix}_asset_lock_identity",
+                    "ready"
+                    if lock.get("task_id") == task_id
+                    and lock.get("source_paper_id") == tasks[task_id].get("source_paper_id")
+                    and lock.get("task_spec") == f"benchmarks/real_reuse/tasks/{task_id}.json"
+                    and lock.get("fixture_manifest") == f"benchmarks/real_reuse/fixtures/{task_id}.json"
+                    and lock.get("fixture_candidate") == f"benchmarks/real_reuse/fixture_candidates/{task_id}.json"
+                    else "fail",
+                    f"task_id={lock.get('task_id')}; source_paper_id={lock.get('source_paper_id')}",
+                    relative(root, lock_path),
+                ),
+                Check(
+                    f"{prefix}_asset_lock_status",
+                    "ready" if lock.get("status") == EXPECTED_ASSET_LOCK_STATUS else "fail",
+                    f"status={lock.get('status')}",
+                    relative(root, lock_path),
+                ),
+                Check(
+                    f"{prefix}_asset_lock_selected_candidate_matches",
+                    "ready"
+                    if lock.get("selected_candidate_id") == candidate.get("selected_candidate", {}).get("id")
+                    else "fail",
+                    str(lock.get("selected_candidate_id", "")),
+                    relative(root, lock_path),
+                ),
+                Check(
+                    f"{prefix}_asset_lock_instance_locked",
+                    "ready"
+                    if locked_instance.get("source_kind")
+                    and any(
+                        key in locked_instance
+                        for key in ("local_instance_id", "instance_id", "example_id", "task_id", "dataset_function")
+                    )
+                    else "fail",
+                    str(locked_instance),
+                    relative(root, lock_path),
+                ),
+                Check(
+                    f"{prefix}_asset_lock_source_revisions",
+                    "ready"
+                    if len(source_revision_locks) >= 3
+                    and observed_locks
+                    and all(item.get("must_reverify_before_materialization") is True for item in source_revision_locks)
+                    else "fail",
+                    f"source_locks={len(source_revision_locks)}; observed={len(observed_locks)}",
+                    relative(root, lock_path),
+                ),
+                Check(
+                    f"{prefix}_asset_lock_slots_match_fixture",
+                    "ready"
+                    if fixture_asset_slots <= locked_slots
+                    and asset_slot_locks
+                    and all(item.get("materialization_status") == "not_materialized" for item in asset_slot_locks)
+                    else "fail",
+                    "asset_slots=" + ",".join(sorted(locked_slots)),
+                    relative(root, lock_path),
+                ),
+                Check(
+                    f"{prefix}_asset_lock_local_targets",
+                    "ready"
+                    if local_targets.get("asset_dir") == f"benchmarks/real_reuse/assets/{task_id}"
+                    and local_targets.get("external_project_root") == "D:/a_work/gitee"
+                    and str(local_targets.get("run_dir", "")).startswith(f"results/real_reuse/runs/{task_id}/")
+                    else "fail",
+                    str(local_targets),
+                    relative(root, lock_path),
+                ),
+                Check(
+                    f"{prefix}_asset_lock_preparation_contract",
+                    "ready"
+                    if preparation_contract.get("status") == "not_started"
+                    and str(preparation_contract.get("preparer", "")).startswith("scripts/prepare_real_reuse_")
+                    and len(preparation_contract.get("must_complete_before_model_run", [])) >= 4
+                    and "Never commit" in str(preparation_contract.get("credential_policy", ""))
+                    else "fail",
+                    f"preparer={preparation_contract.get('preparer')}; status={preparation_contract.get('status')}",
+                    relative(root, lock_path),
+                ),
+                Check(
+                    f"{prefix}_asset_lock_hidden_assets",
+                    "ready" if hidden_assets else "fail",
+                    ",".join(str(item) for item in hidden_assets) or "missing hidden asset policy",
+                    relative(root, lock_path),
+                ),
+                Check(
+                    f"{prefix}_asset_lock_scoring_contract",
+                    "ready"
+                    if str(scoring_lock.get("scorer", "")).startswith("scripts/score_real_reuse_")
+                    and scoring_lock.get("metric_name") == task_spec.get("metric_contract", {}).get("name")
+                    and scoring_lock.get("raw_row_schema") == task_spec.get("raw_row_schema")
+                    and "must stay out of model-visible context" in str(scoring_lock.get("answer_or_gold_policy", ""))
+                    else "fail",
+                    f"metric={scoring_lock.get('metric_name')}; scorer={scoring_lock.get('scorer')}",
+                    relative(root, lock_path),
+                ),
+                Check(
+                    f"{prefix}_asset_lock_no_mid_run_human",
+                    "ready"
+                    if lock.get("run_control_lock", {}).get("first_pass_human_intervention") == "none_mid_run"
+                    and lock.get("run_control_lock", {}).get("same_run_budget_across_conditions") is True
+                    else "fail",
+                    f"first_pass_human_intervention={lock.get('run_control_lock', {}).get('first_pass_human_intervention')}",
+                    relative(root, lock_path),
+                ),
+                Check(
+                    f"{prefix}_asset_lock_boundary",
+                    "ready"
+                    if "does not download assets" in boundary
+                    and "score outputs" in boundary
+                    and "downstream task-success evidence" in boundary
+                    else "fail",
+                    lock.get("evidence_boundary", ""),
+                    relative(root, lock_path),
+                ),
+            ]
+        )
+    checks.append(
+        Check(
+            "real_reuse_asset_locks_materialized",
+            "ready" if present_asset_locks == EXPECTED_MAIN_TASKS else "fail",
+            "asset_locks=" + ",".join(sorted(present_asset_locks)),
             relative(root, spec_path),
         )
     )
