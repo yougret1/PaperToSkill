@@ -5,7 +5,7 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 - Overall status: ready_to_implement
 - Spec path: benchmarks/real_reuse/real_reuse_v0.json
 - Task count: 8
-- Ready checks: 444
+- Ready checks: 462
 - Failed checks: 0
 
 ## Checks
@@ -429,7 +429,25 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 | ref_t2_prepared_asset_visibility_split | ready | model_visible=4; scorer_only=2; hidden=2 | benchmarks/real_reuse/assets/REF-T2/asset_manifest.json |
 | ref_t2_prepared_asset_condition_contexts | ready | conditions=papertoskill,summary | benchmarks/real_reuse/assets/REF-T2/asset_manifest.json |
 | ref_t2_prepared_asset_boundary | ready | Prepared fixture assets and condition contexts for dry scoring. This manifest does not run a model, compare Summary against PaperToSkill, score downstream outputs, or claim task success. | benchmarks/real_reuse/assets/REF-T2/asset_manifest.json |
+| snap_t1_prepared_asset_manifest_present | ready | present | benchmarks/real_reuse/assets/SNAP-T1/asset_manifest.json |
+| snap_t1_prepared_asset_identity | ready | task_id=SNAP-T1; source_paper_id=snapatac2 | benchmarks/real_reuse/assets/SNAP-T1/asset_manifest.json |
+| snap_t1_prepared_asset_status | ready | status=prepared_assets_ready_for_dry_scoring | benchmarks/real_reuse/assets/SNAP-T1/asset_manifest.json |
+| snap_t1_prepared_asset_files_exist | ready | files=8; contexts=2; existing=10 | benchmarks/real_reuse/assets/SNAP-T1/asset_manifest.json |
+| snap_t1_prepared_asset_sha256 | ready | ok | benchmarks/real_reuse/assets/SNAP-T1/asset_manifest.json |
+| snap_t1_prepared_asset_visibility_split | ready | model_visible=6; scorer_only=1; hidden=1 | benchmarks/real_reuse/assets/SNAP-T1/asset_manifest.json |
+| snap_t1_prepared_asset_condition_contexts | ready | conditions=papertoskill,summary | benchmarks/real_reuse/assets/SNAP-T1/asset_manifest.json |
+| snap_t1_prepared_asset_boundary | ready | Prepared SnapATAC2 fixture metadata and condition contexts for dry scoring. This manifest does not run a model, compare Summary against PaperToSkill, score downstream outputs, or claim task success. Official miniature fixture files, when present, are smoke assets only and are not full SnapATAC2 paper reproductions. | benchmarks/real_reuse/assets/SNAP-T1/asset_manifest.json |
+| snap_t2_prepared_asset_manifest_present | ready | present | benchmarks/real_reuse/assets/SNAP-T2/asset_manifest.json |
+| snap_t2_prepared_asset_identity | ready | task_id=SNAP-T2; source_paper_id=snapatac2 | benchmarks/real_reuse/assets/SNAP-T2/asset_manifest.json |
+| snap_t2_prepared_asset_status | ready | status=prepared_assets_ready_for_dry_scoring | benchmarks/real_reuse/assets/SNAP-T2/asset_manifest.json |
+| snap_t2_prepared_asset_files_exist | ready | files=9; contexts=2; existing=11 | benchmarks/real_reuse/assets/SNAP-T2/asset_manifest.json |
+| snap_t2_prepared_asset_sha256 | ready | ok | benchmarks/real_reuse/assets/SNAP-T2/asset_manifest.json |
+| snap_t2_prepared_asset_visibility_split | ready | model_visible=6; scorer_only=2; hidden=2 | benchmarks/real_reuse/assets/SNAP-T2/asset_manifest.json |
+| snap_t2_prepared_asset_condition_contexts | ready | conditions=papertoskill,summary | benchmarks/real_reuse/assets/SNAP-T2/asset_manifest.json |
+| snap_t2_prepared_asset_boundary | ready | Prepared SnapATAC2 fixture metadata and condition contexts for dry scoring. This manifest does not run a model, compare Summary against PaperToSkill, score downstream outputs, or claim task success. Official miniature fixture files, when present, are smoke assets only and are not full SnapATAC2 paper reproductions. | benchmarks/real_reuse/assets/SNAP-T2/asset_manifest.json |
 | real_reuse_prepared_assets_reflexion_materialized | ready | prepared_tasks=REF-T1,REF-T2 | benchmarks/real_reuse/real_reuse_v0.json |
+| real_reuse_prepared_assets_snapatac2_materialized | ready | prepared_tasks=SNAP-T1,SNAP-T2 | benchmarks/real_reuse/real_reuse_v0.json |
+| real_reuse_prepared_assets_required_materialized | ready | prepared_tasks=REF-T1,REF-T2,SNAP-T1,SNAP-T2 | benchmarks/real_reuse/real_reuse_v0.json |
 | real_reuse_reflexion_runner_present | ready | present | scripts/run_real_reuse_reflexion.py |
 | real_reuse_reflexion_runner_contract_ready | ready | runner contract snippets present | scripts/run_real_reuse_reflexion.py |
 | real_reuse_aide_preparer_present | ready | present | scripts/prepare_real_reuse_aide_fixture.py |

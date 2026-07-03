@@ -78,6 +78,39 @@ class ScoreRealReuseSnapATAC2Test(unittest.TestCase):
             self.assertEqual(1.0, result["quality_detail"]["ari"])
             self.assertEqual(1.0, result["quality_detail"]["nmi"])
 
+    def test_scorer_threshold_from_manifest_controls_success(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            artifact_dir = tmp_path / "artifact"
+            thresholds_path = tmp_path / "scorer_thresholds.json"
+            manifest_path = tmp_path / "asset_manifest.json"
+            write_json(thresholds_path, {"success_threshold": 1.01})
+            write_json(
+                manifest_path,
+                {
+                    "files": [
+                        {"slot": "scorer_thresholds", "path": str(thresholds_path), "visibility": "scorer_only"}
+                    ]
+                },
+            )
+            write_json(
+                artifact_dir / "candidate_output.json",
+                {
+                    "completed": True,
+                    "method_steps": ["Run SnapATAC2 matrix-free spectral embedding"],
+                    "embedding_artifacts": ["embedding.csv"],
+                    "runtime_seconds": 1,
+                    "peak_memory_mb": 128,
+                },
+            )
+
+            result = score_artifact("SNAP-T1", artifact_dir, manifest_path, tmp_path)
+
+            self.assertEqual(1.0, result["task_score"])
+            self.assertEqual(1.01, result["success_threshold"])
+            self.assertFalse(result["success"])
+            self.assertEqual("missing_required_artifacts_or_metrics", result["failure_reason"])
+
     def test_invalid_or_missing_json_is_scored_not_crashed(self):
         with tempfile.TemporaryDirectory() as tmp:
             artifact_dir = Path(tmp) / "artifact"

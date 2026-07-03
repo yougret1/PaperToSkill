@@ -48,6 +48,17 @@ def load_budget(manifest: dict[str, Any] | None, root: Path) -> dict[str, Any]:
     return {"max_runtime_seconds": 1800, "max_peak_memory_mb": 8192}
 
 
+def load_success_threshold(manifest: dict[str, Any] | None, root: Path) -> float:
+    if manifest:
+        path = slot_path(manifest, "scorer_thresholds", root)
+        if path and path.exists():
+            payload = load_json(path)
+            value = payload.get("success_threshold")
+            if isinstance(value, (int, float)):
+                return float(value)
+    return 0.8
+
+
 def comb2(value: int) -> float:
     return value * (value - 1) / 2
 
@@ -159,7 +170,13 @@ def reference_labels_from_manifest(manifest: dict[str, Any] | None, root: Path) 
     return as_list(labels) if labels is not None else None
 
 
-def score_candidate(task_id: str, candidate: dict[str, Any], budget: dict[str, Any], reference_labels: list[Any] | None) -> dict[str, Any]:
+def score_candidate(
+    task_id: str,
+    candidate: dict[str, Any],
+    budget: dict[str, Any],
+    reference_labels: list[Any] | None,
+    success_threshold: float = 0.8,
+) -> dict[str, Any]:
     completed = candidate.get("completed") is True
     artifacts = has_artifacts(candidate, task_id)
     method = has_method_alignment(candidate)
@@ -175,16 +192,18 @@ def score_candidate(task_id: str, candidate: dict[str, Any], budget: dict[str, A
         quality, quality_detail = quality_score(candidate, reference_labels)
         components["quality"] = quality
     score = round(sum(components.values()) / len(components), 3)
+    success = score >= success_threshold
     return {
         "schema_version": SCHEMA_VERSION,
         "task_id": task_id,
         "metric_name": "runtime_memory_quality" if task_id == "SNAP-T1" else "ari_nmi_runtime_memory",
         "task_score": score,
-        "success": score >= 0.8,
+        "success": success,
+        "success_threshold": success_threshold,
         "components": components,
         "resource_detail": resource_detail,
         "quality_detail": quality_detail,
-        "failure_reason": "" if score >= 0.8 else "missing_required_artifacts_or_metrics",
+        "failure_reason": "" if success else "missing_required_artifacts_or_metrics",
         "evidence_boundary": (
             "Objective local scoring for one locked SnapATAC2 output. This "
             "does not compare Summary and PaperToSkill or claim aggregate "
@@ -210,7 +229,8 @@ def score_artifact(task_id: str, artifact_dir: Path, asset_manifest: Path | None
         }
     budget = load_budget(manifest, root)
     labels = reference_labels_from_manifest(manifest, root)
-    result = score_candidate(task_id, candidate, budget, labels)
+    threshold = load_success_threshold(manifest, root)
+    result = score_candidate(task_id, candidate, budget, labels, threshold)
     result["artifact_dir"] = artifact_dir.as_posix()
     result["asset_manifest"] = asset_manifest.as_posix() if asset_manifest else ""
     return result

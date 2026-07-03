@@ -78,6 +78,53 @@ class PrepareRealReuseSnapATAC2FixtureTest(unittest.TestCase):
             self.assertNotIn("cell_a", prompt)
             self.assertNotIn("reference_labels_or_proxy.json", prompt)
 
+    def test_prepare_official_miniature_fixture_copies_fragment_and_records_boundary(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            root = prepare_temp_root(tmp_path)
+            snap_root = tmp_path / "SnapATAC2"
+            source_dir = snap_root / "tests" / "test_tools"
+            source_dir.mkdir(parents=True)
+            (snap_root / "LICENSE").write_text("MIT fixture license\n", encoding="utf-8")
+            (source_dir / "test_clean.tsv.gz").write_bytes(b"miniature-fragment")
+            output_dir = root / "benchmarks" / "real_reuse" / "assets" / "SNAP-T2"
+
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--root",
+                    str(root),
+                    "--task",
+                    "SNAP-T2",
+                    "--materialization-mode",
+                    "official_miniature_fixture",
+                    "--snapatac2-root",
+                    str(snap_root),
+                    "--output-dir",
+                    str(output_dir),
+                    "--condition-dir",
+                    str(root / "baselines" / "real_reuse"),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            manifest = json.loads((output_dir / "asset_manifest.json").read_text(encoding="utf-8"))
+            files = {row["slot"]: row for row in manifest["files"]}
+            dataset_manifest = json.loads((output_dir / "dataset_manifest.json").read_text(encoding="utf-8"))
+            self.assertEqual("official_miniature_fixture", manifest["materialization_mode"])
+            self.assertEqual("official_repository_miniature_fixture_materialized", dataset_manifest["dataset_status"])
+            self.assertIn("not the full pbmc5k or pbmc10k_multiome dataset", dataset_manifest["evidence_boundary"])
+            self.assertEqual("model_visible", files["miniature_fragment"]["visibility"])
+            self.assertEqual("scorer_only", files["scorer_thresholds"]["visibility"])
+            self.assertEqual("scorer_only", files["reference_labels_or_proxy"]["visibility"])
+            self.assertIn(files["scorer_thresholds"]["path"], manifest["hidden_from_model"])
+            self.assertIn(files["reference_labels_or_proxy"]["path"], manifest["hidden_from_model"])
+            self.assertTrue((output_dir / "miniature_fragment.tsv.gz").exists())
+            self.assertNotIn("reference_labels_or_proxy.json", (output_dir / "task_prompt.md").read_text(encoding="utf-8"))
+
 
 if __name__ == "__main__":
     unittest.main()

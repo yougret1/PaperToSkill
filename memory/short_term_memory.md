@@ -7,12 +7,34 @@ Current date: 2026-07-03.
 
 ## Latest Resume/Completion Note
 
-- 2026-07-03 Phase 93 SnapATAC2 execution layer is the current local phase
-  before final commit/push: added `scripts/prepare_real_reuse_snapatac2_fixture.py`,
+- 2026-07-03 Phase 94 SnapATAC2 fixture materialization is the current local
+  phase before final commit/push: extended
+  `scripts/prepare_real_reuse_snapatac2_fixture.py` with
+  `official_miniature_fixture` mode, materialized SNAP-T1/T2 assets from the
+  official local SnapATAC2 checkout at revision
+  `7be57442708694217e27c8654ecd38a0de194aa4`, and added scorer-only thresholds
+  plus a SNAP-T2 proxy-label policy. New assets live under
+  `benchmarks/real_reuse/assets/SNAP-T1/` and
+  `benchmarks/real_reuse/assets/SNAP-T2/`; summary contexts live under
+  `baselines/real_reuse/SNAP-T1_summary.md` and
+  `baselines/real_reuse/SNAP-T2_summary.md`. The copied official miniature
+  fragments have SHA256 values
+  `c810f5e906de001def93b8fd58397f42a4f31f4a9e500d1245d469a68376c612`
+  and `95922648e50db7f47246f588ec38eafe9cbe4b42972d6e3a064916a2689d2251`.
+  `results/real_reuse/main_results_plan.{csv,md,json}` and the AAAI table now
+  show SNAP-T1/T2 as `Ready to run`, with score cells still `Pending`.
+  Current anchors: real-reuse preflight 462 ready / 0 failed; package 415
+  ready / 1 pending / 0 failed; AAAI package ready 17 / 0; paper-table ready
+  156 / 0. Full unit discovery passed with 155 tests and all strict local
+  gates passed. Evidence boundary: this is SnapATAC2 fixture-readiness evidence
+  only; no SNAP Summary/PaperToSkill rows were run, no SNAP raw rows were
+  appended, and no SNAP task scores were added to the paper.
+- 2026-07-03 Phase 93 SnapATAC2 execution layer is the previous local phase:
+  added `scripts/prepare_real_reuse_snapatac2_fixture.py`,
   `scripts/score_real_reuse_snapatac2.py`, and
   `scripts/run_real_reuse_snapatac2.py`, plus focused tests and real-reuse /
-  package gate integration. SNAP-T1/T2 table rows now show `Fixture pending`
-  with score cells still `Pending`. Current anchors:
+  package gate integration. SNAP-T1/T2 table rows then showed `Fixture pending`
+  with score cells still `Pending`. Historical anchors:
   `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 8
   tasks, 444 ready / 0 failed; package report reports 396 ready / 1 pending /
   0 failed; `paper/aaai/papertoskill_tables.tex` and the rebuilt AAAI PDF match
@@ -296,7 +318,7 @@ Current date: 2026-07-03.
 
 ## Current Phase
 
-Phase 93 is the current local phase before final commit/push.
+Phase 94 is the current local phase before final commit/push.
 Phase 68 was committed as
 `5548070 Refresh memory anchors after remote save` and pushed to `origin/main`
 on 2026-06-20. Phase 69 syncs the AAAI submission-decision execution packet
@@ -304,6 +326,43 @@ with the validated decision-record helper; no external evidence status is
 promoted and no AAAI option is selected. Phase 70 updates the direct provider
 diagnostic to match the current coderxiaoc API protocols: Claude uses
 Anthropic Messages and GPT uses OpenAI Responses.
+
+Phase 94 evidence:
+
+- `scripts/prepare_real_reuse_snapatac2_fixture.py` supports
+  `--materialization-mode official_miniature_fixture` with
+  `--snapatac2-root`.
+- SNAP-T1 copies official local SnapATAC2
+  `tests/test_tools/test_single.tsv.gz` into
+  `benchmarks/real_reuse/assets/SNAP-T1/miniature_fragment.tsv.gz`; SHA256 is
+  `c810f5e906de001def93b8fd58397f42a4f31f4a9e500d1245d469a68376c612`.
+- SNAP-T2 copies official local SnapATAC2
+  `tests/test_tools/test_clean.tsv.gz` into
+  `benchmarks/real_reuse/assets/SNAP-T2/miniature_fragment.tsv.gz`; SHA256 is
+  `95922648e50db7f47246f588ec38eafe9cbe4b42972d6e3a064916a2689d2251`.
+- Dataset manifests record SnapATAC2 revision
+  `7be57442708694217e27c8654ecd38a0de194aa4`, MIT license provenance,
+  official dataset references, tutorial LFS OIDs, copied-file checksums, and
+  the boundary that these are miniature smoke fixtures, not full paper-dataset
+  reproductions.
+- `scripts/score_real_reuse_snapatac2.py` now reads scorer-only
+  `scorer_thresholds.json` and applies the hidden success threshold.
+- `scripts/check_real_reuse_benchmark.py` validates prepared SNAP assets; the
+  preflight reports 462 ready checks and 0 failed checks.
+- `results/reproducibility/package_report.md` reports
+  `ready_with_pending_external_evidence`, 415 ready checks, 1 pending check,
+  and 0 failed checks.
+- `results/real_reuse/main_results_plan.{csv,md,json}` and
+  `paper/aaai/papertoskill_tables.tex` now report SNAP-T1/T2 as
+  `Ready to run`, with score cells still `Pending`.
+- `paper/aaai/papertoskill_aaai2027.pdf` was rebuilt after status text/table
+  updates.
+- Verification passed: 155 unit tests and all strict local gates. Final
+  `git diff --check` and raw-key scan still need to run immediately before
+  commit.
+- This is SnapATAC2 fixture-readiness evidence only; no SNAP Summary or
+  PaperToSkill rows were run, no SNAP raw rows were appended, and no SNAP task
+  scores were added to the paper.
 
 Phase 93 evidence:
 

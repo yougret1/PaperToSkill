@@ -47,6 +47,8 @@ class CheckRealReuseBenchmarkTest(unittest.TestCase):
             self.assertIn("real_reuse_fixture_candidates_materialized", ready_ids)
             self.assertIn("real_reuse_asset_locks_materialized", ready_ids)
             self.assertIn("real_reuse_prepared_assets_reflexion_materialized", ready_ids)
+            self.assertIn("real_reuse_prepared_assets_snapatac2_materialized", ready_ids)
+            self.assertIn("real_reuse_prepared_assets_required_materialized", ready_ids)
             self.assertIn("real_reuse_reflexion_runner_contract_ready", ready_ids)
             self.assertIn("real_reuse_aide_runner_contract_ready", ready_ids)
             self.assertIn("real_reuse_swe_agent_skill_contract_ready", ready_ids)

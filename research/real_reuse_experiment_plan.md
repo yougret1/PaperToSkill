@@ -211,15 +211,15 @@ supporting role.
    `benchmarks/real_reuse/fixture_candidates/`, and
    `benchmarks/real_reuse/asset_locks/` (complete for eight tasks).
 4. Create or record context conditions under `baselines/real_reuse/` and
-   `generated_skills/` (complete for REF-T1/REF-T2; SWE-agent skill context is
-   ready and task-specific SWE Summary contexts are generated during fixture
-   preparation).
+   `generated_skills/` (complete for REF-T1/REF-T2 and SNAP-T1/T2; SWE-agent
+   skill context is ready and task-specific SWE Summary contexts are generated
+   during fixture preparation).
 5. Implement task-specific preparers and scorers that consume the asset locks
    without exposing hidden scorer assets to model-visible context (complete for
-   REF-T1/REF-T2, AIDE-T1/T2, and SWE-T1/T2).
+   REF-T1/REF-T2, AIDE-T1/T2, SWE-T1/T2, and SNAP-T1/T2).
 6. Implement a runner that logs command, model family, condition, task output,
    metric, tokens, time, and failure reason (complete for REF-T1/REF-T2,
-   AIDE-T1/T2, and SWE-T1/T2).
+   AIDE-T1/T2, SWE-T1/T2, and SNAP-T1/T2).
 7. Implement a scorer/aggregator that emits raw rows and table-ready CSV/MD
    files under `results/real_reuse/` (partially complete: REF rows fill the
    main table; remaining task families are pending).
@@ -235,9 +235,10 @@ supporting role.
   path but does not show aggregate PaperToSkill advantage over Summary.
 - Current AIDE, SWE-agent, and SnapATAC2 asset locks fix source revisions,
   concrete task instances, local materialization targets, hidden scorer assets,
-  and scorer/preparer contracts, but AIDE/SWE/SNAP non-REF rows do not yet
-  produce scores. AIDE and SWE now have execution-layer scripts; their fixture
-  assets remain pending.
+  and scorer/preparer contracts. AIDE still awaits the real Kaggle
+  `train.csv`; SWE fixture assets remain pending; SNAP-T1/T2 now have
+  official miniature fixture assets and are ready to run, but SNAP rows do not
+  yet produce Summary/PaperToSkill scores.
 - Existing deterministic/offline results remain useful as quality, grounding,
   and cost gates.
 - The older saved-response model ablation remains a usage-plan/output-contract

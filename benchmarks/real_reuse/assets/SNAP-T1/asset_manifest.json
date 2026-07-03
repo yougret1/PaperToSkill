@@ -1,0 +1,85 @@
+{
+  "schema_version": "0.1",
+  "benchmark_id": "papertoskill_real_reuse_v0",
+  "task_id": "SNAP-T1",
+  "source_paper_id": "snapatac2",
+  "status": "prepared_assets_ready_for_dry_scoring",
+  "prepared_on": "2026-07-03",
+  "materialization_mode": "official_miniature_fixture",
+  "evidence_boundary": "Prepared SnapATAC2 fixture metadata and condition contexts for dry scoring. This manifest does not run a model, compare Summary against PaperToSkill, score downstream outputs, or claim task success. Official miniature fixture files, when present, are smoke assets only and are not full SnapATAC2 paper reproductions.",
+  "locked_task_instance": {
+    "source_kind": "snapatac2_builtin_dataset_pipeline",
+    "dataset_function": "snapatac2.datasets.pbmc5k",
+    "tutorial_path": "docs/tutorials/pbmc.ipynb",
+    "tutorial_lfs_oid": "sha256:7b58060a27e69637f01ad41ebcdadb86cf023d3a912307da6b094b2bdf32fa9b",
+    "api_docs": "https://scverse.org/SnapATAC2/api/index.html",
+    "resource_metric_policy": "Score completion, expected artifact schema, runtime, and memory; do not score subjective biological interpretation.",
+    "reference_boundary": "SnapATAC2 paper scores remain reported references unless the same dataset, environment, and resource measurement are reproduced."
+  },
+  "condition_contexts": [
+    {
+      "condition": "summary",
+      "path": "baselines/real_reuse/SNAP-T1_summary.md",
+      "visibility": "model_visible"
+    },
+    {
+      "condition": "papertoskill",
+      "path": "generated_skills/real_reuse/snapatac2/SKILL.md",
+      "visibility": "model_visible"
+    }
+  ],
+  "hidden_from_model": [
+    "benchmarks/real_reuse/assets/SNAP-T1/scorer_thresholds.json"
+  ],
+  "asset_dir": "benchmarks/real_reuse/assets/SNAP-T1",
+  "files": [
+    {
+      "slot": "dataset_manifest",
+      "path": "benchmarks/real_reuse/assets/SNAP-T1/dataset_manifest.json",
+      "sha256": "22ce79319f5059514cd6c203c0240d94ab55ca9cd4419660e21ba3873569016d",
+      "visibility": "model_visible"
+    },
+    {
+      "slot": "preprocessing_notes",
+      "path": "benchmarks/real_reuse/assets/SNAP-T1/preprocessing_notes.md",
+      "sha256": "b7525b47f43b57a4fed9de8126a451b5bc58ac88f36638b1ad9de4cc11f583df",
+      "visibility": "model_visible"
+    },
+    {
+      "slot": "resource_budget",
+      "path": "benchmarks/real_reuse/assets/SNAP-T1/resource_budget.json",
+      "sha256": "3310e5ab1dc96688197f165971b4fb228706106f108e75a2e8bbc01bbaeb3095",
+      "visibility": "model_visible"
+    },
+    {
+      "slot": "expected_artifact_schema",
+      "path": "benchmarks/real_reuse/assets/SNAP-T1/expected_artifact_schema.json",
+      "sha256": "251d39a2b6f8ace388484fe14c1f3db9799f4c095497c3ffd4796d943ed4ef6c",
+      "visibility": "model_visible"
+    },
+    {
+      "slot": "task_prompt",
+      "path": "benchmarks/real_reuse/assets/SNAP-T1/task_prompt.md",
+      "sha256": "0626f9e5960b81d854d5899f209060685e4f37a33815fda50615b1d7123d4737",
+      "visibility": "model_visible"
+    },
+    {
+      "slot": "summary_context",
+      "path": "baselines/real_reuse/SNAP-T1_summary.md",
+      "sha256": "9a1cb38c0f96869d833acdad20c32a0adc7685319606480431d43fb2b66e7d46",
+      "visibility": "condition_context"
+    },
+    {
+      "slot": "miniature_fragment",
+      "path": "benchmarks/real_reuse/assets/SNAP-T1/miniature_fragment.tsv.gz",
+      "sha256": "c810f5e906de001def93b8fd58397f42a4f31f4a9e500d1245d469a68376c612",
+      "visibility": "model_visible"
+    },
+    {
+      "slot": "scorer_thresholds",
+      "path": "benchmarks/real_reuse/assets/SNAP-T1/scorer_thresholds.json",
+      "sha256": "91dceb018be799e3c05687e2526106833e265e0a9fd8334f61d7b08784935c53",
+      "visibility": "scorer_only"
+    }
+  ]
+}

@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 396
+- Ready checks: 415
 - Pending checks: 1
 - Failed checks: 0
 
@@ -147,6 +147,25 @@ Evidence boundary: this report checks local package completeness and separates p
 | real_reuse_ref_t2_canonical_solution | ready | present | benchmarks/real_reuse/assets/REF-T2/canonical_solution.py |
 | real_reuse_ref_t1_summary_context | ready | present | baselines/real_reuse/REF-T1_summary.md |
 | real_reuse_ref_t2_summary_context | ready | present | baselines/real_reuse/REF-T2_summary.md |
+| real_reuse_snap_t1_asset_manifest | ready | present | benchmarks/real_reuse/assets/SNAP-T1/asset_manifest.json |
+| real_reuse_snap_t1_dataset_manifest | ready | present | benchmarks/real_reuse/assets/SNAP-T1/dataset_manifest.json |
+| real_reuse_snap_t1_miniature_fragment | ready | present | benchmarks/real_reuse/assets/SNAP-T1/miniature_fragment.tsv.gz |
+| real_reuse_snap_t1_preprocessing_notes | ready | present | benchmarks/real_reuse/assets/SNAP-T1/preprocessing_notes.md |
+| real_reuse_snap_t1_resource_budget | ready | present | benchmarks/real_reuse/assets/SNAP-T1/resource_budget.json |
+| real_reuse_snap_t1_expected_schema | ready | present | benchmarks/real_reuse/assets/SNAP-T1/expected_artifact_schema.json |
+| real_reuse_snap_t1_task_prompt | ready | present | benchmarks/real_reuse/assets/SNAP-T1/task_prompt.md |
+| real_reuse_snap_t1_scorer_thresholds | ready | present | benchmarks/real_reuse/assets/SNAP-T1/scorer_thresholds.json |
+| real_reuse_snap_t2_asset_manifest | ready | present | benchmarks/real_reuse/assets/SNAP-T2/asset_manifest.json |
+| real_reuse_snap_t2_dataset_manifest | ready | present | benchmarks/real_reuse/assets/SNAP-T2/dataset_manifest.json |
+| real_reuse_snap_t2_miniature_fragment | ready | present | benchmarks/real_reuse/assets/SNAP-T2/miniature_fragment.tsv.gz |
+| real_reuse_snap_t2_preprocessing_notes | ready | present | benchmarks/real_reuse/assets/SNAP-T2/preprocessing_notes.md |
+| real_reuse_snap_t2_resource_budget | ready | present | benchmarks/real_reuse/assets/SNAP-T2/resource_budget.json |
+| real_reuse_snap_t2_expected_schema | ready | present | benchmarks/real_reuse/assets/SNAP-T2/expected_artifact_schema.json |
+| real_reuse_snap_t2_task_prompt | ready | present | benchmarks/real_reuse/assets/SNAP-T2/task_prompt.md |
+| real_reuse_snap_t2_scorer_thresholds | ready | present | benchmarks/real_reuse/assets/SNAP-T2/scorer_thresholds.json |
+| real_reuse_snap_t2_reference_labels_or_proxy | ready | present | benchmarks/real_reuse/assets/SNAP-T2/reference_labels_or_proxy.json |
+| real_reuse_snap_t1_summary_context | ready | present | baselines/real_reuse/SNAP-T1_summary.md |
+| real_reuse_snap_t2_summary_context | ready | present | baselines/real_reuse/SNAP-T2_summary.md |
 | real_reuse_spec_preflight_json | ready | present | results/real_reuse/spec_preflight.json |
 | real_reuse_spec_preflight_md | ready | present | results/real_reuse/spec_preflight.md |
 | real_reuse_main_results_plan_csv | ready | present | results/real_reuse/main_results_plan.csv |

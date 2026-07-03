@@ -1,0 +1,92 @@
+{
+  "schema_version": "0.1",
+  "benchmark_id": "papertoskill_real_reuse_v0",
+  "task_id": "SNAP-T2",
+  "source_paper_id": "snapatac2",
+  "status": "prepared_assets_ready_for_dry_scoring",
+  "prepared_on": "2026-07-03",
+  "materialization_mode": "official_miniature_fixture",
+  "evidence_boundary": "Prepared SnapATAC2 fixture metadata and condition contexts for dry scoring. This manifest does not run a model, compare Summary against PaperToSkill, score downstream outputs, or claim task success. Official miniature fixture files, when present, are smoke assets only and are not full SnapATAC2 paper reproductions.",
+  "locked_task_instance": {
+    "source_kind": "snapatac2_builtin_multiome_or_cluster_fixture",
+    "dataset_function": "snapatac2.datasets.pbmc10k_multiome",
+    "tutorial_path": "docs/tutorials/modality.ipynb",
+    "tutorial_lfs_oid": "sha256:79c7640e3fc12e0f2a9b9aac4f834cc4822865c5cbc3600358bd63ff7b1c8c37",
+    "api_docs": "https://scverse.org/SnapATAC2/api/index.html",
+    "resource_metric_policy": "Pre-register ARI/NMI when labels are available; otherwise mark the metric as a proxy before execution.",
+    "reference_boundary": "Do not compare to paper resource scores as strict evidence unless the same data and environment are reproduced."
+  },
+  "condition_contexts": [
+    {
+      "condition": "summary",
+      "path": "baselines/real_reuse/SNAP-T2_summary.md",
+      "visibility": "model_visible"
+    },
+    {
+      "condition": "papertoskill",
+      "path": "generated_skills/real_reuse/snapatac2/SKILL.md",
+      "visibility": "model_visible"
+    }
+  ],
+  "hidden_from_model": [
+    "benchmarks/real_reuse/assets/SNAP-T2/scorer_thresholds.json",
+    "benchmarks/real_reuse/assets/SNAP-T2/reference_labels_or_proxy.json"
+  ],
+  "asset_dir": "benchmarks/real_reuse/assets/SNAP-T2",
+  "files": [
+    {
+      "slot": "dataset_manifest",
+      "path": "benchmarks/real_reuse/assets/SNAP-T2/dataset_manifest.json",
+      "sha256": "9ab6dd8e3f56bc2f57c250b82aad4bd1fedce8975e7f175a7cd28ba6206e04f6",
+      "visibility": "model_visible"
+    },
+    {
+      "slot": "preprocessing_notes",
+      "path": "benchmarks/real_reuse/assets/SNAP-T2/preprocessing_notes.md",
+      "sha256": "d611a7c295646a10dcc27140ddf1275a9f6fb1d681a063e337ec9c156885ae4a",
+      "visibility": "model_visible"
+    },
+    {
+      "slot": "resource_budget",
+      "path": "benchmarks/real_reuse/assets/SNAP-T2/resource_budget.json",
+      "sha256": "1b43f1c1fb32ab34641bdac3478adccad92cd9d5951cab6e19bad4602a6b6130",
+      "visibility": "model_visible"
+    },
+    {
+      "slot": "expected_artifact_schema",
+      "path": "benchmarks/real_reuse/assets/SNAP-T2/expected_artifact_schema.json",
+      "sha256": "24c5b4087cabbc8cbcaabdee53f711b5b081c189297d74743bfc03a32d44a225",
+      "visibility": "model_visible"
+    },
+    {
+      "slot": "task_prompt",
+      "path": "benchmarks/real_reuse/assets/SNAP-T2/task_prompt.md",
+      "sha256": "94c77787748a9aad93c33336ab9a9f7788976c4ed8f3a56a6a8d7a86cf507271",
+      "visibility": "model_visible"
+    },
+    {
+      "slot": "summary_context",
+      "path": "baselines/real_reuse/SNAP-T2_summary.md",
+      "sha256": "37825013fc789e6c6a1ef85ec7055be892e9fa4496e0dfaca25a96d8ff0c67ab",
+      "visibility": "condition_context"
+    },
+    {
+      "slot": "miniature_fragment",
+      "path": "benchmarks/real_reuse/assets/SNAP-T2/miniature_fragment.tsv.gz",
+      "sha256": "95922648e50db7f47246f588ec38eafe9cbe4b42972d6e3a064916a2689d2251",
+      "visibility": "model_visible"
+    },
+    {
+      "slot": "scorer_thresholds",
+      "path": "benchmarks/real_reuse/assets/SNAP-T2/scorer_thresholds.json",
+      "sha256": "32c9bc7cdf1642d60354d439b88ffb28d47c7ee84d22044d7c55a6f16ff1bfcf",
+      "visibility": "scorer_only"
+    },
+    {
+      "slot": "reference_labels_or_proxy",
+      "path": "benchmarks/real_reuse/assets/SNAP-T2/reference_labels_or_proxy.json",
+      "sha256": "ca4637072c9c131d8d330147966031c6552549eb6d634f7519abddf0fdba24c2",
+      "visibility": "scorer_only"
+    }
+  ]
+}

@@ -46,7 +46,9 @@ EXPECTED_FIXTURE_STATUS = "fixture_manifest_ready_assets_pending"
 EXPECTED_CANDIDATE_STATUS = "candidate_assets_selected_preparation_pending"
 EXPECTED_ASSET_LOCK_STATUS = "asset_lock_ready_preparation_pending"
 EXPECTED_PREPARED_ASSET_STATUS = "prepared_assets_ready_for_dry_scoring"
-EXPECTED_PREPARED_ASSET_TASKS = {"REF-T1", "REF-T2"}
+EXPECTED_REFLEXION_PREPARED_ASSET_TASKS = {"REF-T1", "REF-T2"}
+EXPECTED_SNAPATAC2_PREPARED_ASSET_TASKS = {"SNAP-T1", "SNAP-T2"}
+EXPECTED_PREPARED_ASSET_TASKS = EXPECTED_REFLEXION_PREPARED_ASSET_TASKS | EXPECTED_SNAPATAC2_PREPARED_ASSET_TASKS
 
 
 @dataclass
@@ -994,6 +996,22 @@ def prepared_asset_checks(root: Path, spec_path: Path, tasks: dict[str, dict[str
     checks.append(
         Check(
             "real_reuse_prepared_assets_reflexion_materialized",
+            "ready" if EXPECTED_REFLEXION_PREPARED_ASSET_TASKS <= prepared_tasks else "fail",
+            "prepared_tasks=" + ",".join(sorted(prepared_tasks & EXPECTED_REFLEXION_PREPARED_ASSET_TASKS)),
+            relative(root, spec_path),
+        )
+    )
+    checks.append(
+        Check(
+            "real_reuse_prepared_assets_snapatac2_materialized",
+            "ready" if EXPECTED_SNAPATAC2_PREPARED_ASSET_TASKS <= prepared_tasks else "fail",
+            "prepared_tasks=" + ",".join(sorted(prepared_tasks & EXPECTED_SNAPATAC2_PREPARED_ASSET_TASKS)),
+            relative(root, spec_path),
+        )
+    )
+    checks.append(
+        Check(
+            "real_reuse_prepared_assets_required_materialized",
             "ready" if prepared_tasks == EXPECTED_PREPARED_ASSET_TASKS else "fail",
             "prepared_tasks=" + ",".join(sorted(prepared_tasks)),
             relative(root, spec_path),

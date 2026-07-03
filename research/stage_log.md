@@ -3249,3 +3249,43 @@ Evidence boundary:
 - The current real-reuse effectiveness evidence is still only the partial
   REF-T1/REF-T2 GPT-family slice; AIDE, SWE-agent, and SnapATAC2 remain
   pending for downstream task scores.
+
+## 2026-07-03 Phase 94
+
+Actions:
+
+- Extended the SnapATAC2 preparer with `official_miniature_fixture`
+  materialization mode.
+- Materialized SNAP-T1/SNAP-T2 assets from the official local SnapATAC2
+  checkout at revision `7be57442708694217e27c8654ecd38a0de194aa4`.
+- Copied official repository miniature test fragments into
+  `benchmarks/real_reuse/assets/SNAP-T1/miniature_fragment.tsv.gz` and
+  `benchmarks/real_reuse/assets/SNAP-T2/miniature_fragment.tsv.gz`.
+- Wrote dataset manifests, scorer-only thresholds, SNAP-T2 proxy-label policy,
+  task prompts, resource budgets, expected schemas, preprocessing notes, and
+  Summary contexts.
+- Updated SnapATAC2 scorer support for scorer-only success thresholds.
+- Extended real-reuse/package gates so prepared SnapATAC2 assets are validated.
+- Refreshed the real-reuse main table and AAAI table/PDF so SNAP-T1/T2 now
+  show `Ready to run` with score cells still `Pending`.
+
+Results:
+
+- SNAP-T1 miniature fragment SHA256:
+  `c810f5e906de001def93b8fd58397f42a4f31f4a9e500d1245d469a68376c612`.
+- SNAP-T2 miniature fragment SHA256:
+  `95922648e50db7f47246f588ec38eafe9cbe4b42972d6e3a064916a2689d2251`.
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 462
+  ready checks, and 0 failed checks.
+- `results/reproducibility/package_report.md` reports
+  `ready_with_pending_external_evidence`, 415 ready checks, 1 pending check,
+  and 0 failed checks.
+- Full unit discovery passed with 155 tests. All strict local gates passed.
+
+Evidence boundary:
+
+- Phase 94 is SnapATAC2 fixture-readiness evidence only.
+- The miniature assets are official repository smoke/test fixtures, not full
+  pbmc5k or pbmc10k_multiome paper reproductions.
+- No SNAP Summary/PaperToSkill rows were run, no SNAP raw rows were appended,
+  and no SNAP task scores were added to the paper.

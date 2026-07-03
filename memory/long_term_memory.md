@@ -171,15 +171,24 @@ Current supported claims:
   `scripts/prepare_real_reuse_snapatac2_fixture.py`,
   `scripts/score_real_reuse_snapatac2.py`, and
   `scripts/run_real_reuse_snapatac2.py`, plus focused tests and gate
-  integration. SWE-agent and SnapATAC2 fixture assets/raw rows still remain
-  pending. Phase 91 targeted verification passed
+  integration. Phase 94 materialized official miniature SnapATAC2 fixture
+  assets for SNAP-T1/T2 under `benchmarks/real_reuse/assets/`, added
+  SNAP-T1/T2 Summary contexts, recorded SnapATAC2 revision
+  `7be57442708694217e27c8654ecd38a0de194aa4`, MIT license provenance,
+  official dataset references, and copied-fragment SHA256 values
+  `c810f5e906de001def93b8fd58397f42a4f31f4a9e500d1245d469a68376c612`
+  and `95922648e50db7f47246f588ec38eafe9cbe4b42972d6e3a064916a2689d2251`.
+  The miniature fixtures are smoke/fixture-readiness assets only, not full
+  pbmc5k/pbmc10k_multiome reproductions. SWE-agent fixture assets/raw rows and
+  SnapATAC2 raw rows still remain pending. Phase 91 targeted verification passed
   for 18 SWE/table/preflight/package tests, refreshed the AAAI PDF/table gates,
   and moved SWE rows to `Fixture pending` without adding scores. Phase 92 full
   verification passed 143 unit tests, all strict local gates, `git diff
   --check` with only Windows line-ending warnings, and the raw-key scan with no
   matches. Phase 93 verification passed 153 unit tests and all strict local
-  gates before documentation cleanup. The real-reuse table now shows SNAP rows
-  as `Fixture pending`.
+  gates before documentation cleanup. Phase 94 verification passed 155 unit
+  tests and all strict local gates before phase save. The real-reuse table now
+  shows SNAP rows as `Ready to run` with scores still `Pending`.
 - Phase 84 inserted the main real-reuse table scaffold into the AAAI paper, and
   Phase 87 filled the REF-T1/REF-T2 cells from raw rows:
   `results/real_reuse/main_results_plan.csv`, `.md`, and `.json` are the table
@@ -187,7 +196,7 @@ Current supported claims:
   `tab:real-reuse-main`; AIDE, SWE-agent, and SnapATAC2 score cells remain
   pending execution. Current statuses are AIDE `Awaiting dataset`, SWE-agent
   `Fixture pending`, Reflexion `Scored (GPT-family)`, and SnapATAC2
-  `Fixture pending`.
+  `Ready to run`.
 - Phase 89 remote save recovered the earlier GitHub HTTPS blocker:
   `git push origin main` succeeded for the Phase 87/88 stack and the follow-up
   remote-save record was also pushed. Use `git status -sb` for the latest exact
@@ -351,12 +360,21 @@ Use these as entry points instead of searching the whole repo first:
 - `generated_skills/real_reuse/snapatac2/SKILL.md` and
   `generated_skills/real_reuse/snapatac2/references/source_map.json`:
   SnapATAC2 source-anchored generated skill for the single-cell omics
-  real-reuse task family. The skill gate and execution layer are ready, but
-  SnapATAC2 fixture assets and raw rows remain pending.
+  real-reuse task family. The skill gate, execution layer, and miniature
+  fixture assets are ready, but SnapATAC2 raw rows remain pending.
 - `results/evaluations/snapatac2_rubric_v0.json` and
   `results/evaluations/snapatac2_auto_source_span_validation_v0.json`:
   SnapATAC2 skill quality gates, currently 20/20 rubric and 1.0 source-span
   support rate with 0 invalid ranges.
+- `benchmarks/real_reuse/assets/SNAP-T1/asset_manifest.json` and
+  `benchmarks/real_reuse/assets/SNAP-T2/asset_manifest.json`: prepared
+  SnapATAC2 miniature fixture manifests with model-visible dataset/resource/
+  schema/task assets, scorer-only thresholds, SNAP-T2 proxy metric policy, and
+  copied official repository test fragments. They are setup/smoke evidence
+  only; no SNAP Summary/PaperToSkill raw rows exist yet.
+- `baselines/real_reuse/SNAP-T1_summary.md` and
+  `baselines/real_reuse/SNAP-T2_summary.md`: task-specific Summary condition
+  contexts for the two prepared SnapATAC2 tasks.
 - `results/real_reuse/spec_preflight.md`: ready-to-implement preflight report
   for the real-reuse spec/task/fixture/candidate/asset-lock contracts, REF
   runner, AIDE execution-layer contract, SWE-agent skill/execution-layer
@@ -378,7 +396,7 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 392 ready checks, 1 pending
+  reports `ready_with_pending_external_evidence`, 415 ready checks, 1 pending
   check, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
@@ -453,10 +471,10 @@ Use these as entry points instead of searching the whole repo first:
   reports ready, 15 ready checks, 0 failed checks.
 - Real-reuse preflight:
   `results/real_reuse/spec_preflight.md`
-  reports `ready_to_implement`, 8 tasks, 444 ready checks, and 0 failed checks
+  reports `ready_to_implement`, 8 tasks, 462 ready checks, and 0 failed checks
   after validating the REF prepared asset/runner layer, AIDE execution-layer
   contract, SWE-agent skill/execution-layer contracts, and SnapATAC2
-  skill/execution-layer contracts.
+  skill/execution-layer/prepared-asset contracts.
 - Real-reuse REF run:
   `results/real_reuse/reflexion_run_report.md` reports `complete` with 4
   scored rows for GPT-family `gpt-5.5`; REF-T1 and REF-T2 Summary and
