@@ -1,6 +1,6 @@
 # PaperToSkill Review Report
 
-Date: 2026-07-02
+Date: 2026-07-04
 
 Evidence boundary: this is an internal adversarial review of the current
 PaperToSkill draft and artifact package. It updates the review handoff to match
@@ -18,7 +18,8 @@ DeepSeek slots, all four live-transfer saved-response sets, human-fidelity annot
 handoff, local token-accounting evidence, a local external-evidence closure
 queue, external-evidence execution packets, a bounded Paper2Agent
 artifact/workflow comparison, a bounded AI-Scientist-v2 marker smoke/full live
-run, a recorded AAAI submission decision, and an AAAI-27 LaTeX package.
+run, a first eight-row real-reuse stress test with a derived failure-boundary
+table, a recorded AAAI submission decision, and an AAAI-27 LaTeX package.
 
 The strongest current framing remains:
 
@@ -30,7 +31,10 @@ The strongest current framing remains:
 The paper should not be positioned as a completed live-agent study,
 human-validated semantic-fidelity study, provider-billing study, or reliable
 arbitrary-PDF-to-skill system. The 24 live-transfer rows are saved-response
-output-contract evidence, not proof of live task success.
+output-contract evidence, not proof of live task success. The first real-reuse
+pass is stronger than the saved-response evidence because it executes locked
+original-style tasks, but its outcome is mixed and failure-heavy; it should be
+used as boundary evidence rather than aggregate downstream-effectiveness proof.
 
 ## Major Risks
 
@@ -45,6 +49,7 @@ output-contract evidence, not proof of live task success.
 | R7 | Cost/economic claims can be overread. | Medium | Context and response costs are local token proxies. `results/token_accounting/token_accounting_summary.md` reports 4,322 generated-skill input tokens, 95,303 full-extracted input tokens, and 9,594 saved-response output tokens. | Call these local input/output token proxies; they are not provider billing, invoices, or success-per-dollar claims. |
 | R8 | AI-Scientist-v2 integration may be overread as broad live task success. | Medium | Bounded LLM-client smoke is `complete`, and the full live-run handoff is `complete` with one completion directory. The run's positive result is synthetic; the HF/semantic-data branch remains a failed branch due invalid dataset loading/synthetic padding and missing `sentence_transformers`. | Treat this as bounded integration and synthetic sensitivity evidence only; do not claim human fidelity, real-data validation, or broad live research-task success. |
 | R9 | Paper2Agent positioning may be overread as a baseline win. | Medium | `results/tables/paper2agent_artifact_comparison.md` reports 7/7 ready source-backed criteria for artifact/workflow comparison. It does not run Paper2Agent or deploy an MCP server. | Use this as positioning evidence only; do not claim runtime superiority or baseline performance. |
+| R10 | The real-reuse table may be mistaken for broad downstream effectiveness. | High | All eight AIDE/SWE/REF/SNAP paper-task rows have one GPT-family `gpt-5.5` Summary-vs-PaperToSkill pass. The result is mixed: SWE-T2 favors PaperToSkill, REF ties Summary, AIDE and SWE-T1 fail, and SNAP remains below success threshold. | Present the table as a first-pass stress test and failure-boundary analysis; do not claim aggregate advantage over Summary. |
 
 ## Claim Tightening Recommendations
 
@@ -55,24 +60,26 @@ output-contract evidence, not proof of live task success.
 | Results | "live transfer" can sound like task success. | "saved live-transfer response files scored with a deterministic output-contract evaluator; not human semantic or live task success evidence" |
 | Cost | "economic signal" can sound like real savings. | "local tokenizer-aware input/output token proxies; not provider billing, invoices, or success-per-dollar evidence" |
 | Failure archive | "first-class evidence" can sound causal. | "first-class provenance artifact for limitations and negative branches" |
+| Real-reuse | "downstream stress test" can sound like a success claim. | "first single-run real-reuse stress test with mixed outcomes and explicit failure-boundary modes" |
 
 ## Submission Gate Status
 
 | Gate | Status | Evidence |
 | --- | --- | --- |
 | Claim-evidence consistency | Pass with caveats | `paper/claim_checklist.md`; `research/claim_evidence_matrix.md`; `results/reproducibility/paper_claim_report.md` |
-| Local reproducibility package | Pass locally, external evidence pending | `results/reproducibility/package_report.md`: 305 ready, 1 pending, 0 failed |
+| Local reproducibility package | Pass locally, external evidence pending | `results/reproducibility/package_report.md`: 423 ready, 1 pending, 0 failed |
 | Active-goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 77 ready, 3 pending, 0 failed |
 | External evidence closure queue | Ready as local queue | `results/external_evidence_closure/closure.md`: 3 ready, 0 pending, 0 failed |
 | External evidence execution packets | Ready as local handoff | `results/external_evidence_packets/packets.md`: 7 ready, 0 pending, 0 failed |
 | AAAI submission decision | Recorded wait decision | `results/aaai_submission_decision/decision.md`: `selected_option=wait_for_external_evidence`, 27 ready, 0 pending, 0 failed |
 | AAAI local package | Pass locally, not submission-final | `results/reproducibility/aaai_package_report.md` |
 | Live-transfer saved responses | Complete for saved-response scoring | `results/live_transfer_prompts/evaluation.md`: 24 scored, 0 pending |
-| Real live task success | Pending | Saved-response scoring is not human semantic or real task-success evidence |
+| Real live task success | Partial and mixed | Saved-response scoring is not human semantic or real task-success evidence; the eight-row real-reuse pass is single-run, mixed, and failure-heavy rather than an aggregate success result. |
 | Model ablation | Complete for saved-response scoring | `results/model_ablation_prompts/v0/evaluation.md`: 6 scored rows, 0 pending; `results/deepseek_followup_handoff/handoff.md`: `responses_present` |
 | Paper2Agent artifact comparison | Complete for bounded positioning evidence | `results/tables/paper2agent_artifact_comparison.md`: 7 ready criteria, 0 failed |
 | AI-Scientist-v2 LLM-client smoke | Complete for bounded marker contract | `results/ai_scientist_v2_smoke/run_report.md`: `complete`; marker response saved. |
 | AI-Scientist-v2 full live run | Complete for bounded synthetic integration evidence | `results/ai_scientist_v2_live_run_handoff/handoff.md`: `complete`; one completion directory. |
+| Real-reuse first pass | Complete as mixed first-pass stress-test evidence | `results/real_reuse/main_results_plan.md`: eight scored rows; `results/real_reuse/failure_analysis.md`: boundary modes from the same raw rows. |
 | Human fidelity | Handoff ready, annotation pending | `results/human_fidelity_packets/annotation_summary.md`: 0 scored, 24 pending |
 | Local token accounting | Complete as current cost evidence | `results/token_accounting/token_accounting_summary.md`: complete local input/output token accounting |
 
@@ -80,15 +87,18 @@ output-contract evidence, not proof of live task success.
 
 1. Fill and summarize the 24-row human-fidelity annotation template with
    independent reviewer scores.
-2. Extend the bounded Paper2Agent comparison into a real executable MCP
+2. Repeat or expand the real-reuse runs if the paper needs a stronger
+   downstream-effectiveness claim; otherwise keep the current real-reuse result
+   as failure-boundary evidence.
+3. Extend the bounded Paper2Agent comparison into a real executable MCP
    baseline only if the codebase/environment resources are available. Keep the
    current artifact/workflow table as source-backed positioning evidence.
-3. Use the Phase 76 AI-Scientist-v2 run as bounded integration evidence only;
+4. Use the Phase 76 AI-Scientist-v2 run as bounded integration evidence only;
    keep the failed HF/semantic-data branch as a negative result, not a main
    benchmark result.
-4. Keep provider billing, invoices, and success-per-dollar outside the current
+5. Keep provider billing, invoices, and success-per-dollar outside the current
    claim set unless a separate future evidence policy explicitly reopens them.
-5. Follow the recorded AAAI decision: wait for the named human-fidelity and
+6. Follow the recorded AAAI decision: wait for the named human-fidelity and
    final-submission evidence before stronger claims.
 
 ## Decision
