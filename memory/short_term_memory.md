@@ -7,6 +7,32 @@ Current date: 2026-07-03.
 
 ## Latest Resume/Completion Note
 
+- 2026-07-03 Phase 95 SnapATAC2 live rows: retried `git push origin main` for
+  Phase 94 but GitHub port 443 was unreachable. Then ran
+  `scripts/run_real_reuse_snapatac2.py` with GPT-family `gpt-5.5` for
+  SNAP-T1/SNAP-T2 Summary and PaperToSkill using the local GPT API doc loaded
+  into process-local env vars only. `results/real_reuse/snapatac2_run_report.md`
+  reports `complete` with four scored rows appended to
+  `results/real_reuse/raw_rows.jsonl`. Scores: SNAP-T1 Summary 0.000,
+  PaperToSkill 0.500; SNAP-T2 Summary 0.200, PaperToSkill 0.400. All SNAP rows
+  failed the pre-registered success threshold due incomplete or malformed
+  runtime/memory/quality artifacts. Updated `results/real_reuse/main_results_plan.*`,
+  `paper/aaai/papertoskill_tables.tex`, `paper/aaai/papertoskill_aaai2027.tex`,
+  claim/queue/audit/outline/artifact-map docs, `research/stage_log.md`, and
+  `research/run_logs/2026-07-03_phase95_snapatac2_live_rows.md`. Evidence
+  boundary: this is real GPT-family miniature-fixture failure-boundary evidence,
+  not full SnapATAC2 paper reproduction or aggregate downstream success. AIDE
+  still awaits Kaggle `train.csv`; SWE-agent still awaits fixture assets/raw
+  rows.
+- 2026-07-03 discussion sync: user asked whether the previously written paper
+  sections need more changes under the current experiment-design discussion.
+  Current answer: no full AAAI rewrite now. Keep the cautious evidence
+  boundary; only do wording/status alignment until more real-reuse raw rows
+  exist. The authoritative table statuses are AIDE `Awaiting dataset`,
+  SWE-agent `Fixture pending`, Reflexion `Scored (GPT-family)`, and SnapATAC2
+  `Ready to run` meaning prepared miniature fixture assets only, not scored
+  task success. `C:\Users\19351\Desktop\tem\nextStep.md` was updated with this
+  latest correction.
 - 2026-07-03 Phase 94 SnapATAC2 fixture materialization is the current local
   phase before final commit/push: extended
   `scripts/prepare_real_reuse_snapatac2_fixture.py` with

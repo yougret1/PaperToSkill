@@ -390,11 +390,13 @@
 | `results/reproducibility/package_report.json` | Machine-readable reproducibility package report | Created |
 | `results/real_reuse/spec_preflight.md` | Human-readable preflight for the planned real-reuse benchmark spec; not a task-result table | Created |
 | `results/real_reuse/spec_preflight.json` | Machine-readable preflight for the planned real-reuse benchmark spec; not a task-result table | Created |
-| `results/real_reuse/raw_rows.jsonl` | Raw scored rows for currently executed real-reuse conditions; current rows cover REF-T1/REF-T2 Summary and PaperToSkill with GPT-family only | Created |
+| `results/real_reuse/raw_rows.jsonl` | Raw scored rows for currently executed real-reuse conditions; current rows cover REF-T1/REF-T2 and SNAP-T1/SNAP-T2 Summary and PaperToSkill with GPT-family | Created |
 | `results/real_reuse/reflexion_run_report.md` | Human-readable run report for the locked REF-T1/REF-T2 GPT-family real-reuse execution | Created |
 | `results/real_reuse/reflexion_run_report.json` | Machine-readable run report for the locked REF-T1/REF-T2 GPT-family real-reuse execution | Created |
-| `results/real_reuse/main_results_plan.csv` | Data source for the AAAI real-reuse main experiment table; REF rows are filled from raw rows while other task families remain pending | Created |
-| `results/real_reuse/main_results_plan.md` | Human-readable real-reuse main experiment table with filled REF rows and pending non-REF rows | Created |
+| `results/real_reuse/snapatac2_run_report.md` | Human-readable run report for the locked SNAP-T1/SNAP-T2 GPT-family real-reuse execution over prepared official miniature fixtures | Created |
+| `results/real_reuse/snapatac2_run_report.json` | Machine-readable run report for the locked SNAP-T1/SNAP-T2 GPT-family real-reuse execution over prepared official miniature fixtures | Created |
+| `results/real_reuse/main_results_plan.csv` | Data source for the AAAI real-reuse main experiment table; REF and SNAP rows are filled from raw rows while AIDE/SWE remain pending | Created |
+| `results/real_reuse/main_results_plan.md` | Human-readable real-reuse main experiment table with filled REF/SNAP rows and pending AIDE/SWE rows | Created |
 | `results/real_reuse/main_results_plan.json` | Machine-readable real-reuse main experiment table generated from raw rows and planned task specs | Created |
 | `results/reproducibility/aaai_package_report.md` | Human-readable AAAI package verification report | Created |
 | `results/reproducibility/aaai_package_report.json` | Machine-readable AAAI package verification report | Created |

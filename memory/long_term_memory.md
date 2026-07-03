@@ -179,8 +179,15 @@ Current supported claims:
   `c810f5e906de001def93b8fd58397f42a4f31f4a9e500d1245d469a68376c612`
   and `95922648e50db7f47246f588ec38eafe9cbe4b42972d6e3a064916a2689d2251`.
   The miniature fixtures are smoke/fixture-readiness assets only, not full
-  pbmc5k/pbmc10k_multiome reproductions. SWE-agent fixture assets/raw rows and
-  SnapATAC2 raw rows still remain pending. Phase 91 targeted verification passed
+  pbmc5k/pbmc10k_multiome reproductions. Phase 95 ran SNAP-T1/SNAP-T2 Summary
+  and PaperToSkill with GPT-family `gpt-5.5` over these prepared miniature
+  fixtures and appended four scored rows to `results/real_reuse/raw_rows.jsonl`.
+  SNAP-T1 Summary/PaperToSkill scored 0.000/0.500; SNAP-T2
+  Summary/PaperToSkill scored 0.200/0.400. All SNAP rows failed the
+  pre-registered success threshold because complete runtime, memory, and
+  quality artifacts were missing or malformed. This is failure-boundary
+  evidence only, not a full SnapATAC2 reproduction and not non-agent downstream
+  success. SWE-agent fixture assets/raw rows still remain pending. Phase 91 targeted verification passed
   for 18 SWE/table/preflight/package tests, refreshed the AAAI PDF/table gates,
   and moved SWE rows to `Fixture pending` without adding scores. Phase 92 full
   verification passed 143 unit tests, all strict local gates, `git diff
@@ -193,10 +200,10 @@ Current supported claims:
   Phase 87 filled the REF-T1/REF-T2 cells from raw rows:
   `results/real_reuse/main_results_plan.csv`, `.md`, and `.json` are the table
   data source; `paper/aaai/papertoskill_tables.tex` contains
-  `tab:real-reuse-main`; AIDE, SWE-agent, and SnapATAC2 score cells remain
-  pending execution. Current statuses are AIDE `Awaiting dataset`, SWE-agent
+  `tab:real-reuse-main`; AIDE and SWE-agent score cells remain pending
+  execution. Current statuses are AIDE `Awaiting dataset`, SWE-agent
   `Fixture pending`, Reflexion `Scored (GPT-family)`, and SnapATAC2
-  `Ready to run`.
+  `Scored (GPT-family)` with failed local miniature-fixture scores.
 - Phase 89 remote save recovered the earlier GitHub HTTPS blocker:
   `git push origin main` succeeded for the Phase 87/88 stack and the follow-up
   remote-save record was also pushed. Use `git status -sb` for the latest exact
@@ -206,9 +213,11 @@ Current unsupported claims:
 
 - PaperToSkill improves real original-style task outcomes across AIDE,
   SWE-agent, Reflexion, SnapATAC2, or other domains. The REF-T1/REF-T2 slice
-  now has one GPT-family Summary-vs-PaperToSkill run and both conditions score
+  has one GPT-family Summary-vs-PaperToSkill run and both conditions score
   1.000, so it validates the REF execution path but does not show advantage
-  over Summary and does not complete the eight-task benchmark.
+  over Summary. The SNAP-T1/SNAP-T2 slice has one GPT-family miniature-fixture
+  run where PaperToSkill scores higher than Summary but all rows fail the
+  success threshold. The eight-task benchmark remains incomplete.
 - Saved-response model-ablation scoring as proof of live downstream task
   success, broad model quality, provider billing, or provider economics.
 - Saved-response output-contract scoring as proof of real live task success.
@@ -341,13 +350,17 @@ Use these as entry points instead of searching the whole repo first:
 - `baselines/real_reuse/REF-T1_summary.md` and
   `baselines/real_reuse/REF-T2_summary.md`: task-specific Summary condition
   contexts for the two prepared Reflexion tasks.
-- `results/real_reuse/raw_rows.jsonl`: current REF-T1/REF-T2 GPT-family
-  Summary-vs-PaperToSkill raw scored rows; not a full eight-task result set.
+- `results/real_reuse/raw_rows.jsonl`: current REF-T1/REF-T2 and
+  SNAP-T1/SNAP-T2 GPT-family Summary-vs-PaperToSkill raw scored rows; not a
+  full eight-task result set.
 - `results/real_reuse/reflexion_run_report.md`: current REF-T1/REF-T2
   GPT-family run report, complete for 4/4 rows.
+- `results/real_reuse/snapatac2_run_report.md`: current SNAP-T1/SNAP-T2
+  GPT-family run report, complete for 4/4 rows; all rows failed the success
+  threshold, so this is failure-boundary evidence.
 - `results/real_reuse/main_results_plan.csv`, `.md`, and `.json`: paper-facing
-  real-reuse main table source with REF-T1/REF-T2 filled and other task-family
-  score cells pending.
+  real-reuse main table source with REF-T1/REF-T2 and SNAP-T1/SNAP-T2 filled;
+  AIDE/SWE score cells remain pending.
 - `generated_skills/real_reuse/swe_agent/SKILL.md` and
   `generated_skills/real_reuse/swe_agent/references/source_map.json`:
   SWE-agent source-anchored generated skill for the software-engineering
@@ -480,6 +493,12 @@ Use these as entry points instead of searching the whole repo first:
   scored rows for GPT-family `gpt-5.5`; REF-T1 and REF-T2 Summary and
   PaperToSkill all score 1.000. This is a partial REF-slice result, not the
   full eight-task benchmark.
+- Real-reuse SnapATAC2 run:
+  `results/real_reuse/snapatac2_run_report.md` reports `complete` with 4
+  scored rows for GPT-family `gpt-5.5`; SNAP-T1 Summary/PaperToSkill score
+  0.000/0.500 and SNAP-T2 Summary/PaperToSkill score 0.200/0.400. All SNAP
+  rows fail the success threshold. This is failure-boundary evidence over
+  miniature fixtures, not a full SnapATAC2 reproduction.
 
 ## Model/API Configuration
 

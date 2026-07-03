@@ -3289,3 +3289,38 @@ Evidence boundary:
   pbmc5k or pbmc10k_multiome paper reproductions.
 - No SNAP Summary/PaperToSkill rows were run, no SNAP raw rows were appended,
   and no SNAP task scores were added to the paper.
+
+## 2026-07-03 Phase 95
+
+Actions:
+
+- Retried the Phase 94 remote save; `git push origin main` failed because
+  GitHub port 443 was unreachable from the current environment.
+- Ran `scripts/run_real_reuse_snapatac2.py` with GPT-family `gpt-5.5` for
+  SNAP-T1/SNAP-T2 under Summary and PaperToSkill conditions.
+- Appended four scored SNAP rows to `results/real_reuse/raw_rows.jsonl`.
+- Regenerated `results/real_reuse/main_results_plan.{csv,md,json}`.
+- Updated `paper/aaai/papertoskill_tables.tex` and
+  `paper/aaai/papertoskill_aaai2027.tex` so the paper reports SNAP scores as
+  failed dry-run evidence rather than pending cells or positive results.
+
+Results:
+
+- `results/real_reuse/snapatac2_run_report.md` reports `complete` with four
+  scored rows.
+- SNAP-T1 Summary/PaperToSkill: `0.000` / `0.500`; both failed the success
+  threshold.
+- SNAP-T2 Summary/PaperToSkill: `0.200` / `0.400`; both failed the success
+  threshold.
+- `results/real_reuse/main_results_plan.md` now reads 8 raw scored rows and
+  fills REF-T1, REF-T2, SNAP-T1, and SNAP-T2.
+
+Evidence boundary:
+
+- Phase 95 is real GPT-family execution evidence for the locked SnapATAC2
+  miniature-fixture tasks only.
+- It is not a full SnapATAC2 paper reproduction and not evidence that
+  PaperToSkill successfully completes non-agent omics tasks.
+- It does provide an important failure boundary: PaperToSkill scored higher
+  than Summary on both SNAP dry-run tasks, but no SNAP row succeeded because
+  complete runtime, memory, and quality artifacts were missing.

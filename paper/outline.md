@@ -251,7 +251,7 @@ are less directly procedural.
 | Item | Source Artifact | Purpose |
 | --- | --- | --- |
 | Figure 1: PaperToSkill pipeline | `scripts/papertoskill_extract.py`; `skill/SKILL.md` | Show paper note to skill/source-map flow |
-| Table 1: Real-reuse main experiment | `results/real_reuse/main_results_plan.md` | Eight Summary-vs-PaperToSkill paper-task rows; REF rows filled from raw rows, remaining scores pending execution |
+| Table 1: Real-reuse main experiment | `results/real_reuse/main_results_plan.md` | Eight Summary-vs-PaperToSkill paper-task rows; REF rows succeed, SNAP rows are scored failures, AIDE/SWE remain pending |
 | Table 2: Deterministic/offline quality results | `results/tables/main_results.md` | Coverage, source support, compactness |
 | Table 3: Transfer ablation | `results/tables/transfer_ablation.md` | Effect of transfer notes |
 | Table 4: Source grounding | `results/tables/compactness_source_grounding.md` | Source support and compactness |
