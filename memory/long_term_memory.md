@@ -122,7 +122,7 @@ Current supported claims:
   checkout's remote is the SakanaAI upstream. The archive backs up the local
   coderxiaoc/BFTS integration patch inside the PaperToSkill GitHub history
   without committing raw API keys or local presentation/build artifacts.
-- Phase 79/87 real-reuse planning/task/fixture/candidate/asset-lock/REF-prepared-assets/runner gate: the next stronger validity
+- Phase 79/88 real-reuse planning/task/fixture/candidate/asset-lock/REF-prepared-assets/runner/AIDE-execution-layer gate: the next stronger validity
   target is original-style paper-task reuse over eight planned tasks from AIDE,
   SWE-agent, Reflexion, and SnapATAC2. Toolformer and AI Scientist-v2 remain
   sanity/auxiliary cases. `benchmarks/real_reuse/real_reuse_v0.json` and
@@ -142,7 +142,13 @@ Current supported claims:
   GPT-family `gpt-5.5` Responses profile, and saved four scored raw rows under
   `results/real_reuse/raw_rows.jsonl`: Summary and PaperToSkill both score
   1.000 on both locked REF tasks. This is partial REF-slice execution evidence
-  only; AIDE, SWE-agent, and SnapATAC2 assets/runners/raw rows remain pending.
+  only. Phase 88 added `scripts/prepare_real_reuse_aide_fixture.py`,
+  `scripts/score_real_reuse_aide.py`, and `scripts/run_real_reuse_aide.py`;
+  131 unit tests, all strict local gates, `git diff --check`, and the raw-key
+  scan passed. The preflight validates the AIDE execution-layer contract. AIDE
+  fixture materialization and raw rows wait for the real Kaggle Spaceship
+  Titanic `train.csv`; SWE-agent and SnapATAC2 assets/runners/raw rows remain
+  pending.
 - Phase 84 inserted the main real-reuse table scaffold into the AAAI paper, and
   Phase 87 filled the REF-T1/REF-T2 cells from raw rows:
   `results/real_reuse/main_results_plan.csv`, `.md`, and `.json` are the table
@@ -242,10 +248,18 @@ Use these as entry points instead of searching the whole repo first:
 - `scripts/run_real_reuse_reflexion.py`: runs locked REF-T1/REF-T2 Summary and
   PaperToSkill conditions, saves prompts/responses/metrics, appends raw rows,
   and separates provider availability from model quality.
+- `scripts/prepare_real_reuse_aide_fixture.py`: prepares locked AIDE-T1/T2
+  Spaceship Titanic fixtures from a human-provided real `train.csv`, while
+  keeping `validation_labels.csv` scorer-only.
+- `scripts/score_real_reuse_aide.py`: scores AIDE submissions or candidate
+  scripts in an isolated workspace against hidden validation labels.
+- `scripts/run_real_reuse_aide.py`: runs locked AIDE-T1/T2 Summary and
+  PaperToSkill conditions, saves prompts/responses/metrics/raw rows, and
+  separates provider/data availability from model quality.
 - `scripts/check_real_reuse_benchmark.py`: strict local preflight checker for
   the planned real-reuse benchmark spec, per-task specs, fixture manifests,
-  candidate asset/preparation manifests, asset locks, REF prepared assets, and
-  REF runner.
+  candidate asset/preparation manifests, asset locks, REF prepared assets, REF
+  runner, and AIDE execution-layer script contract.
 - `benchmarks/real_reuse/tasks/*.json`: eight per-task execution-contract specs
   with input/output contracts, condition paths, metric contracts, run controls,
   workflow checklists, unsupported-error policy, and raw-row schema. They do
@@ -278,8 +292,9 @@ Use these as entry points instead of searching the whole repo first:
   real-reuse main table source with REF-T1/REF-T2 filled and other task-family
   score cells pending.
 - `results/real_reuse/spec_preflight.md`: ready-to-implement preflight report
-  for the real-reuse spec/task/fixture/candidate/asset-lock contracts and REF
-  runner. This is not task-success evidence by itself.
+  for the real-reuse spec/task/fixture/candidate/asset-lock contracts, REF
+  runner, and AIDE execution-layer contract. This is not task-success evidence
+  by itself.
 - `external/ai_scientist_v2_patches/`: reproducibility backup for local
   AI-Scientist-v2 adaptations used by the bounded Phase 76 integration run.
 - `benchmarks/provider_billing_evidence_v0.json`: provider-billing evidence
@@ -296,7 +311,7 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 372 ready checks, 1 pending
+  reports `ready_with_pending_external_evidence`, 376 ready checks, 1 pending
   check, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
@@ -371,8 +386,9 @@ Use these as entry points instead of searching the whole repo first:
   reports ready, 15 ready checks, 0 failed checks.
 - Real-reuse preflight:
   `results/real_reuse/spec_preflight.md`
-  reports `ready_to_implement`, 8 tasks, 420 ready checks, and 0 failed checks
-  after validating the REF prepared asset and runner layer.
+  reports `ready_to_implement`, 8 tasks, 424 ready checks, and 0 failed checks
+  after validating the REF prepared asset/runner layer and AIDE execution-layer
+  contract.
 - Real-reuse REF run:
   `results/real_reuse/reflexion_run_report.md` reports `complete` with 4
   scored rows for GPT-family `gpt-5.5`; REF-T1 and REF-T2 Summary and

@@ -2982,3 +2982,54 @@ Evidence boundary:
   and PaperToSkill solve the two locked REF tasks under one GPT-family run. It
   does not show aggregate PaperToSkill advantage over Summary and does not
   complete the eight-task main experiment.
+
+## 2026-07-03 Phase 88
+
+Actions:
+
+- Added `scripts/prepare_real_reuse_aide_fixture.py` to prepare locked
+  AIDE-T1/AIDE-T2 fixtures from a real Kaggle Spaceship Titanic `train.csv`.
+  The preparer creates deterministic validation splits, task prompts, Summary
+  contexts, baseline submissions, and scorer-only `validation_labels.csv`.
+- Added `scripts/score_real_reuse_aide.py` to score AIDE submissions or
+  candidate scripts in an isolated temporary workspace against hidden
+  validation labels and baseline-score JSON.
+- Added `scripts/run_real_reuse_aide.py` to run locked AIDE Summary and
+  PaperToSkill conditions, save prompts/responses/metrics/raw rows, and record
+  missing credentials or provider errors as availability state rather than
+  model-quality failure.
+- Added AIDE unit tests for fixture preparation, scorer-only label separation,
+  isolated candidate execution, fixture-response runner execution,
+  missing-credential pending behavior, and hidden-label prompt separation.
+- Extended the real-reuse preflight and reproducibility package gates to track
+  the AIDE preparer/scorer/runner contract.
+- Updated the runbook, artifact map, and experiment queue so AIDE is described
+  as execution-layer ready but still blocked on real Kaggle data for fixture
+  materialization and paper scores.
+
+Results:
+
+- Targeted AIDE/preflight/package test set passed: 17 tests.
+- Full unit discovery passed: 131 tests.
+- All strict local gates passed, including submission review, AAAI decision,
+  DeepSeek follow-up, usage examples, external-evidence closure/packets,
+  AI-Scientist-v2 live-run handoff, goal completion, reproducibility package,
+  paper claims, AAAI package, paper tables, and real-reuse benchmark.
+- `git diff --check` returned only line-ending warnings, and the raw-key scan
+  produced no matches.
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`,
+  8 tasks, 424 ready checks, and 0 failed checks.
+- `results/reproducibility/package_report.md` reports
+  `ready_with_pending_external_evidence`, 376 ready checks, 1 pending check,
+  and 0 failed checks.
+- Human handoff remains active at
+  `C:\Users\19351\Desktop\tem\toHuman.md`; `ok.txt` and the real
+  `spaceship-titanic/train.csv` were not present during this phase.
+
+Evidence boundary:
+
+- Phase 88 is AIDE execution-layer readiness only. It does not materialize real
+  AIDE fixture assets, does not run Summary or PaperToSkill model conditions,
+  does not append AIDE rows to `results/real_reuse/raw_rows.jsonl`, and does
+  not update the AAAI table with AIDE scores. Synthetic CSVs used in unit tests
+  are test fixtures, not paper evidence.

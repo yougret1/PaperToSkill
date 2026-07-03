@@ -5,7 +5,7 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 - Overall status: ready_to_implement
 - Spec path: benchmarks/real_reuse/real_reuse_v0.json
 - Task count: 8
-- Ready checks: 420
+- Ready checks: 424
 - Failed checks: 0
 
 ## Checks
@@ -432,3 +432,7 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 | real_reuse_prepared_assets_reflexion_materialized | ready | prepared_tasks=REF-T1,REF-T2 | benchmarks/real_reuse/real_reuse_v0.json |
 | real_reuse_reflexion_runner_present | ready | present | scripts/run_real_reuse_reflexion.py |
 | real_reuse_reflexion_runner_contract_ready | ready | runner contract snippets present | scripts/run_real_reuse_reflexion.py |
+| real_reuse_aide_preparer_present | ready | present | scripts/prepare_real_reuse_aide_fixture.py |
+| real_reuse_aide_scorer_present | ready | present | scripts/score_real_reuse_aide.py |
+| real_reuse_aide_runner_present | ready | present | scripts/run_real_reuse_aide.py |
+| real_reuse_aide_runner_contract_ready | ready | AIDE execution-layer contract snippets present | scripts/run_real_reuse_aide.py |

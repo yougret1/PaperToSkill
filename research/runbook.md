@@ -84,11 +84,14 @@ benchmarks/real_reuse/asset_locks/
 
 Current status: planned specification, per-task execution-contract specs,
 fixture requirement manifests, candidate manifests, and asset locks are ready
-for all eight tasks. REF-T1 and REF-T2 now also have prepared local fixture
-assets, task-specific Summary contexts, and a deterministic scorer. AIDE,
-SWE-agent, and SnapATAC2 assets, runners, raw rows, and task scores remain
-pending. Do not write the AAAI paper as if the Summary vs PaperToSkill
-real-reuse comparison has run.
+for all eight tasks. REF-T1 and REF-T2 have prepared local fixture assets,
+task-specific Summary contexts, a deterministic scorer, and one GPT-family
+Summary-vs-PaperToSkill run. AIDE-T1/T2 now have a preparer, scorer, and runner
+contract, but their real Kaggle `spaceship-titanic` `train.csv` is still
+pending, so no AIDE fixture assets, raw rows, or task scores exist yet.
+SWE-agent and SnapATAC2 assets/runners/raw rows also remain pending. Do not
+write the AAAI paper as if the eight-task Summary vs PaperToSkill real-reuse
+comparison has run.
 
 Regenerate per-task specs from the master spec:
 
@@ -127,12 +130,33 @@ python scripts\prepare_real_reuse_reflexion_fixture.py --task REF-T1 --dataset h
 python scripts\prepare_real_reuse_reflexion_fixture.py --task REF-T2 --dataset humaneval --output-dir benchmarks\real_reuse\assets\REF-T2
 ```
 
+Prepare AIDE fixture assets after the human-provided Kaggle `train.csv` is
+available. The target source file is intentionally outside the repo so no
+Kaggle credentials or raw downloads are committed:
+
+```powershell
+python scripts\prepare_real_reuse_aide_fixture.py --task AIDE-T1 --train-csv C:\Users\19351\Desktop\tem\real_reuse_assets\spaceship-titanic\train.csv --output-dir benchmarks\real_reuse\assets\AIDE-T1
+python scripts\prepare_real_reuse_aide_fixture.py --task AIDE-T2 --train-csv C:\Users\19351\Desktop\tem\real_reuse_assets\spaceship-titanic\train.csv --output-dir benchmarks\real_reuse\assets\AIDE-T2
+```
+
+The preparer writes model-visible `train.csv`, `validation_features.csv`,
+baseline files, task prompts, and Summary contexts; it keeps
+`validation_labels.csv` scorer-only. Do not run AIDE model rows until this
+separation is confirmed in the generated `asset_manifest.json` files.
+
 Score a dry REF-T1 prediction or REF-T2 candidate without treating failure as a
 script crash:
 
 ```powershell
 python scripts\score_real_reuse_reflexion.py --task REF-T1 --prediction path\to\prediction.json --answer-key benchmarks\real_reuse\assets\REF-T1\answer_key.json
 python scripts\score_real_reuse_reflexion.py --task REF-T2 --candidate path\to\candidate.py --tests benchmarks\real_reuse\assets\REF-T2\tests.json
+```
+
+Score an AIDE candidate or submission locally against hidden validation labels:
+
+```powershell
+python scripts\score_real_reuse_aide.py --task AIDE-T1 --candidate-script path\to\candidate_solution.py --workspace benchmarks\real_reuse\assets\AIDE-T1\starter_workspace --labels benchmarks\real_reuse\assets\AIDE-T1\validation_labels.csv --output-json path\to\metric.json
+python scripts\score_real_reuse_aide.py --task AIDE-T2 --candidate-script path\to\candidate_solution.py --workspace benchmarks\real_reuse\assets\AIDE-T2\starter_workspace --labels benchmarks\real_reuse\assets\AIDE-T2\validation_labels.csv --output-json path\to\metric.json
 ```
 
 Run the locked Reflexion Summary-vs-PaperToSkill rows with the GPT-family
@@ -149,6 +173,22 @@ Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_API_KEY -ErrorAction SilentlyContinue
 The runner writes prompts, raw responses, metric JSON, and raw rows under
 `results/real_reuse/`. It records provider/model errors as availability
 evidence, not model-quality failures.
+
+After AIDE fixtures are prepared and inspected, run the locked AIDE rows with
+the same no-mid-run-human rule. The runner accepts fixture responses for dry
+tests or live API credentials for real model rows:
+
+```powershell
+$env:PAPERTOSKILL_GPT_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
+$env:PAPERTOSKILL_GPT_OPENAI_API_KEY = "<set locally>"
+python scripts\run_real_reuse_aide.py --task AIDE-T1 --task AIDE-T2 --condition summary --condition papertoskill --model-family GPT-family --model-alias gpt-5.5 --wire-api openai_responses --run-id phaseXX_gpt_aide_real_reuse
+Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_BASE_URL -ErrorAction SilentlyContinue
+Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_API_KEY -ErrorAction SilentlyContinue
+```
+
+Do not treat missing credentials, provider errors, or missing Kaggle data as
+model-quality failures. Do not append AIDE scores to the paper table until
+`results/real_reuse/raw_rows.jsonl` contains scored AIDE rows.
 
 Validate the planned spec before implementing runners or editing paper claims:
 
@@ -167,8 +207,8 @@ results/real_reuse/main_results_plan.md
 
 The expected status is `ready_to_implement`. That means the benchmark spec,
 per-task specs, fixture requirement manifests, candidate asset manifests, asset
-locks, and the REF prepared-asset layer are machine-checkable; it is not
-downstream task-success evidence.
+locks, the REF prepared-asset/runner layer, and the AIDE execution-layer script
+contracts are machine-checkable; it is not downstream task-success evidence.
 
 Planned main task grid:
 
@@ -189,10 +229,12 @@ Execution order:
 2. Materialize candidate fixture assets from the locked contracts in
    `benchmarks/real_reuse/asset_locks/`, including license/provenance, local
    path/URI, sha256 values, scoring command, and run budget. REF-T1 and REF-T2
-   are the first completed prepared-asset layer.
+   are the first completed prepared-asset layer; AIDE fixture materialization
+   waits for the real Kaggle Spaceship Titanic `train.csv`.
 3. Create Summary and PaperToSkill context inputs for each task.
 4. Implement the real-reuse runner and scorer. The REF-T1/REF-T2 runner is now
-   implemented; AIDE, SWE-agent, and SnapATAC2 runners remain pending.
+   implemented; AIDE has preparer/scorer/runner scripts ready; SWE-agent and
+   SnapATAC2 runners remain pending.
 5. Run agent-only tasks with no mid-run human intervention. REF-T1/REF-T2 have
    one GPT-family Summary-vs-PaperToSkill run.
 6. Save raw rows under `results/real_reuse/raw_rows.*`.

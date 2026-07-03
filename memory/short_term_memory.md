@@ -15,7 +15,26 @@ Current date: 2026-07-03.
   discussion record. Do not rewrite the AAAI Results as if these new real-reuse
   experiments are complete; first update planning files, then revise paper text
   after execution.
-- 2026-07-03 Phase 87 real-reuse Reflexion runner/execution is now the current
+- 2026-07-03 Phase 88 AIDE real-reuse execution layer is now the current local
+  phase: added `scripts/prepare_real_reuse_aide_fixture.py`,
+  `scripts/score_real_reuse_aide.py`, and `scripts/run_real_reuse_aide.py`;
+  added AIDE tests for fixture preparation, scorer-only hidden label
+  separation, isolated candidate scoring, fixture-response runner execution,
+  missing-credential pending behavior, and prompt/hidden-label separation.
+  The targeted AIDE/preflight/package test set passed 17 tests; full unit
+  discovery passed 131 tests; all strict local gates passed; `git diff --check`
+  returned only line-ending warnings; and the raw-key scan produced no matches.
+  Strict gates report `results/real_reuse/spec_preflight.md` as
+  `ready_to_implement` with 424 ready / 0 failed checks and
+  `results/reproducibility/package_report.md` as
+  `ready_with_pending_external_evidence` with 376 ready / 1 pending / 0 failed.
+  This is execution-layer readiness only: no AIDE fixture assets, raw rows, or
+  paper scores exist until the real Kaggle Spaceship Titanic `train.csv` is
+  provided. `C:\Users\19351\Desktop\tem\ok.txt` and
+  `C:\Users\19351\Desktop\tem\real_reuse_assets\spaceship-titanic\train.csv`
+  were missing in the latest check; the active human request is
+  `C:\Users\19351\Desktop\tem\toHuman.md`.
+- 2026-07-03 Phase 87 real-reuse Reflexion runner/execution is now a previous
   local phase: added `scripts/run_real_reuse_reflexion.py`, fixed REF-T1
   yes/no scoring for explanatory final answers, ran REF-T1/REF-T2 Summary and
   PaperToSkill with GPT-family `gpt-5.5`, and saved 4 scored raw rows under
@@ -137,13 +156,14 @@ Current date: 2026-07-03.
   all strict local gates, `git diff --check`, and repository raw-key scan.
 - Current reports:
   - Goal completion: 77 ready / 3 pending / 0 failed.
-  - Reproducibility package: 372 ready / 1 pending / 0 failed after adding the
-    REF real-reuse runner/execution layer.
+  - Reproducibility package: 376 ready / 1 pending / 0 failed after adding the
+    AIDE real-reuse execution layer.
   - External evidence queue: `human_fidelity_annotation` and
     `aaai_submission_decision`.
   - AAAI decision: ready, selected `wait_for_external_evidence`.
-- `C:\Users\19351\Desktop\tem\toHuman\needHelp.md` currently asks only for
-  human-fidelity annotation. No `ok.txt` was present in the latest check.
+- `C:\Users\19351\Desktop\tem\toHuman.md` currently asks the user for the
+  Kaggle Spaceship Titanic `train.csv` needed to materialize AIDE-T1/T2
+  fixtures. No `ok.txt` was present in the latest check.
 - 2026-07-02 Phase 78 archived the local `ai-scientist-v2` source/config
   adaptations as a PaperToSkill artifact because that checkout's remote is the
   SakanaAI upstream, not the user's PaperToSkill repo. Archive path:
@@ -209,13 +229,37 @@ Current date: 2026-07-03.
 
 ## Current Phase
 
-Phase 87 is the current local phase. Phase 68 was committed as
+Phase 88 is the current local phase. Phase 68 was committed as
 `5548070 Refresh memory anchors after remote save` and pushed to `origin/main`
 on 2026-06-20. Phase 69 syncs the AAAI submission-decision execution packet
 with the validated decision-record helper; no external evidence status is
 promoted and no AAAI option is selected. Phase 70 updates the direct provider
 diagnostic to match the current coderxiaoc API protocols: Claude uses
 Anthropic Messages and GPT uses OpenAI Responses.
+
+Phase 88 evidence:
+
+- `scripts/prepare_real_reuse_aide_fixture.py` prepares locked AIDE-T1/T2
+  fixture assets from a real Kaggle-style `train.csv`, writes model-visible
+  train/validation feature assets and Summary contexts, and keeps
+  `validation_labels.csv` scorer-only.
+- `scripts/score_real_reuse_aide.py` scores AIDE submissions or candidate
+  scripts against hidden validation labels, including isolated temporary
+  workspace execution for candidate scripts.
+- `scripts/run_real_reuse_aide.py` runs locked AIDE Summary/PaperToSkill
+  conditions, saves prompts/responses/metrics/raw rows when rows are scorable,
+  and records missing credentials/provider errors as availability state.
+- Targeted AIDE/preflight/package tests passed: 17 tests.
+- Full unit discovery passed: 131 tests.
+- All strict local gates passed; `git diff --check` returned only line-ending
+  warnings, and the raw-key scan produced no matches.
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 8
+  tasks, 424 ready checks, and 0 failed checks.
+- `results/reproducibility/package_report.md` reports 376 ready / 1 pending /
+  0 failed.
+- AIDE remains data-blocked for real fixture materialization: no Kaggle
+  `train.csv`, no AIDE asset manifests, no AIDE raw rows, and no AIDE table
+  score cells exist yet.
 
 Phase 87 evidence:
 
@@ -238,12 +282,9 @@ Phase 87 evidence:
 - `paper/aaai/papertoskill_tables.tex` and `paper/aaai/papertoskill_aaai2027.tex`
   now report the REF partial scores and explicitly say the result does not
   complete the eight-task benchmark or establish an advantage over Summary.
-- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 8
-  tasks, 420 ready checks, and 0 failed checks.
-- `results/reproducibility/package_report.md` reports 372 ready / 1 pending /
-  0 failed.
-- AIDE, SWE-agent, and SnapATAC2 assets/runners/raw rows remain pending; the
-  full main real-reuse experiment is not complete.
+- AIDE, SWE-agent, and SnapATAC2 assets/raw rows were pending at Phase 87; Phase
+  88 superseded this for AIDE execution-layer scripts only. AIDE data/assets/raw
+  rows remain pending.
 
 Phase 86 evidence:
 

@@ -132,6 +132,9 @@ CORE_FILES = {
     "real_reuse_reflexion_preparer": "scripts/prepare_real_reuse_reflexion_fixture.py",
     "real_reuse_reflexion_scorer": "scripts/score_real_reuse_reflexion.py",
     "real_reuse_reflexion_runner": "scripts/run_real_reuse_reflexion.py",
+    "real_reuse_aide_preparer": "scripts/prepare_real_reuse_aide_fixture.py",
+    "real_reuse_aide_scorer": "scripts/score_real_reuse_aide.py",
+    "real_reuse_aide_runner": "scripts/run_real_reuse_aide.py",
     "real_reuse_task_spec_aide_t1": "benchmarks/real_reuse/tasks/AIDE-T1.json",
     "real_reuse_task_spec_aide_t2": "benchmarks/real_reuse/tasks/AIDE-T2.json",
     "real_reuse_task_spec_swe_t1": "benchmarks/real_reuse/tasks/SWE-T1.json",
@@ -1291,6 +1294,7 @@ def real_reuse_benchmark_checks(root: Path) -> list[Check]:
         "real_reuse_asset_locks_materialized",
         "real_reuse_prepared_assets_reflexion_materialized",
         "real_reuse_reflexion_runner_contract_ready",
+        "real_reuse_aide_runner_contract_ready",
         "real_reuse_llm_ablation_linked_to_tasks",
         "real_reuse_llm_ablation_model_families",
         "real_reuse_planned_outputs_complete",
@@ -1310,6 +1314,15 @@ def real_reuse_benchmark_checks(root: Path) -> list[Check]:
             "real_reuse_reflexion_runner_contract_ready",
             "ready" if runner_status == "ready" else "fail",
             f"runner_contract_status={runner_status}",
+            str(report_path.relative_to(root)),
+        )
+    )
+    aide_runner_status = check_statuses.get("real_reuse_aide_runner_contract_ready")
+    checks.append(
+        Check(
+            "real_reuse_aide_runner_contract_ready",
+            "ready" if aide_runner_status == "ready" else "fail",
+            f"runner_contract_status={aide_runner_status}",
             str(report_path.relative_to(root)),
         )
     )

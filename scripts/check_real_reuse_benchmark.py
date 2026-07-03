@@ -185,6 +185,7 @@ def build_report(root: Path, spec_path: Path) -> dict[str, Any]:
     checks.extend(asset_lock_checks(root, spec_path, tasks))
     checks.extend(prepared_asset_checks(root, spec_path, tasks))
     checks.extend(reflexion_runner_checks(root, spec_path))
+    checks.extend(aide_runner_checks(root, spec_path))
     return report_from_checks(root, spec_path, spec, checks)
 
 
@@ -1034,6 +1035,66 @@ def reflexion_runner_checks(root: Path, spec_path: Path) -> list[Check]:
             relative(root, runner_path),
         ),
     ]
+
+
+def aide_runner_checks(root: Path, spec_path: Path) -> list[Check]:
+    preparer_path = root / "scripts" / "prepare_real_reuse_aide_fixture.py"
+    scorer_path = root / "scripts" / "score_real_reuse_aide.py"
+    runner_path = root / "scripts" / "run_real_reuse_aide.py"
+    checks = [
+        Check(
+            "real_reuse_aide_preparer_present",
+            "ready" if preparer_path.exists() else "fail",
+            "present" if preparer_path.exists() else "missing",
+            relative(root, preparer_path),
+        ),
+        Check(
+            "real_reuse_aide_scorer_present",
+            "ready" if scorer_path.exists() else "fail",
+            "present" if scorer_path.exists() else "missing",
+            relative(root, scorer_path),
+        ),
+        Check(
+            "real_reuse_aide_runner_present",
+            "ready" if runner_path.exists() else "fail",
+            "present" if runner_path.exists() else "missing",
+            relative(root, runner_path),
+        ),
+    ]
+    if not runner_path.exists() or not preparer_path.exists() or not scorer_path.exists():
+        checks.append(
+            Check(
+                "real_reuse_aide_runner_contract_ready",
+                "fail",
+                "missing AIDE execution-layer script",
+                relative(root, runner_path),
+            )
+        )
+        return checks
+
+    runner_text = runner_path.read_text(encoding="utf-8")
+    preparer_text = preparer_path.read_text(encoding="utf-8")
+    scorer_text = scorer_path.read_text(encoding="utf-8")
+    required_snippets = {
+        "--fixture-response-dir": runner_text,
+        "raw_rows.jsonl": runner_text,
+        "score_candidate": runner_text,
+        "unsupported_errors_status": runner_text,
+        "validation_labels": preparer_text,
+        "scorer_only": preparer_text,
+        "baseline_score": scorer_text,
+        "submission.csv": scorer_text,
+    }
+    missing = sorted(snippet for snippet, text in required_snippets.items() if snippet not in text)
+    checks.append(
+        Check(
+            "real_reuse_aide_runner_contract_ready",
+            "ready" if not missing else "fail",
+            "AIDE execution-layer contract snippets present" if not missing else "missing=" + ",".join(missing),
+            relative(root, runner_path),
+        )
+    )
+    return checks
 
 
 def report_from_checks(
