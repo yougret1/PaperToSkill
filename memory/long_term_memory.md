@@ -33,6 +33,12 @@ This file is intentionally compact. Detailed chronological history lives in
   main experiment table structure into the paper before scores are available,
   then update numeric cells promptly after runs complete. Auxiliary experiments
   are secondary and should not delay the main table/results path.
+- For the manuscript, real-reuse claims must track evidence state: experiment
+  protocols and pending tables may be written before execution, but `Abstract`,
+  `Introduction`, `Results`, and `Conclusion` must not claim downstream
+  effectiveness until scored raw rows exist. Existing deterministic/offline
+  evidence supports quality, grounding, compactness, readiness, and sanity
+  claims only.
 - Claude Opus and GPT-family model ablations should be run before the user adds
   DeepSeek following the same process.
 - Do not silently treat unavailable model endpoints as model-quality failures.
@@ -152,11 +158,14 @@ Current supported claims:
   `generated_skills/real_reuse/swe_agent/SKILL.md`, source map,
   `benchmarks/rubric_swe_agent_v0.json`, source-span task, and evaluation
   reports. The SWE-agent skill scores 20/20, stays under the 1200-word budget,
-  and has source-span support_rate=1.0 with 0 invalid ranges. SWE-agent
-  assets/runners/raw rows still remain pending, and SnapATAC2 assets/runners/raw
-  rows remain pending. Phase 90 verification passed before save: 133 unit tests,
-  all strict local gates, refreshed AAAI PDF/package gate, raw-key scan with no
-  matches, and `git diff --check` with only Windows line-ending warnings.
+  and has source-span support_rate=1.0 with 0 invalid ranges. Phase 91 added
+  `scripts/prepare_real_reuse_swe_fixture.py`,
+  `scripts/score_real_reuse_swe.py`, and
+  `scripts/run_real_reuse_swe.py`, plus focused tests and gate integration.
+  SWE-agent fixture assets/raw rows still remain pending, and SnapATAC2
+  assets/runners/raw rows remain pending. Phase 91 targeted verification passed
+  for 18 SWE/table/preflight/package tests, refreshed the AAAI PDF/table gates,
+  and moved SWE rows to `Fixture pending` without adding scores.
 - Phase 84 inserted the main real-reuse table scaffold into the AAAI paper, and
   Phase 87 filled the REF-T1/REF-T2 cells from raw rows:
   `results/real_reuse/main_results_plan.csv`, `.md`, and `.json` are the table
@@ -268,10 +277,21 @@ Use these as entry points instead of searching the whole repo first:
 - `scripts/run_real_reuse_aide.py`: runs locked AIDE-T1/T2 Summary and
   PaperToSkill conditions, saves prompts/responses/metrics/raw rows, and
   separates provider/data availability from model quality.
+- `scripts/prepare_real_reuse_swe_fixture.py`: prepares locked SWE-T1/T2
+  fixture assets from a local repository snapshot, writes model-visible
+  issue/test context and Summary contexts, and keeps gold patches scorer-only.
+- `scripts/score_real_reuse_swe.py`: scores SWE candidate patches by applying
+  unified diffs in an isolated temporary workspace and running the locked test
+  command.
+- `scripts/run_real_reuse_swe.py`: runs locked SWE-T1/T2 Summary and
+  PaperToSkill conditions, saves prompts/responses/metrics/raw rows when
+  scorable, and records missing fixture assets/provider availability separately
+  from model quality.
 - `scripts/check_real_reuse_benchmark.py`: strict local preflight checker for
   the planned real-reuse benchmark spec, per-task specs, fixture manifests,
   candidate asset/preparation manifests, asset locks, REF prepared assets, REF
-  runner, and AIDE execution-layer script contract.
+  runner, AIDE execution-layer script contract, SWE-agent skill gate, and SWE
+  execution-layer script contract.
 - `benchmarks/real_reuse/tasks/*.json`: eight per-task execution-contract specs
   with input/output contracts, condition paths, metric contracts, run controls,
   workflow checklists, unsupported-error policy, and raw-row schema. They do
@@ -306,16 +326,16 @@ Use these as entry points instead of searching the whole repo first:
 - `generated_skills/real_reuse/swe_agent/SKILL.md` and
   `generated_skills/real_reuse/swe_agent/references/source_map.json`:
   SWE-agent source-anchored generated skill for the software-engineering
-  real-reuse task family. This is skill/readiness evidence only; SWE runner and
-  raw rows remain pending.
+  real-reuse task family. The SWE execution layer is now ready, but fixture
+  assets and raw rows remain pending.
 - `results/evaluations/swe_agent_rubric_v0.json` and
   `results/evaluations/swe_agent_auto_source_span_validation_v0.json`:
   SWE-agent skill quality gates, currently 20/20 rubric and 1.0 source-span
   support rate with 0 invalid ranges.
 - `results/real_reuse/spec_preflight.md`: ready-to-implement preflight report
   for the real-reuse spec/task/fixture/candidate/asset-lock contracts, REF
-  runner, AIDE execution-layer contract, and SWE-agent skill gate. This is not
-  task-success evidence by itself.
+  runner, AIDE execution-layer contract, SWE-agent skill gate, and SWE
+  execution-layer contract. This is not task-success evidence by itself.
 - `external/ai_scientist_v2_patches/`: reproducibility backup for local
   AI-Scientist-v2 adaptations used by the bounded Phase 76 integration run.
 - `benchmarks/provider_billing_evidence_v0.json`: provider-billing evidence
@@ -332,7 +352,7 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 377 ready checks, 1 pending
+  reports `ready_with_pending_external_evidence`, 381 ready checks, 1 pending
   check, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
@@ -407,9 +427,9 @@ Use these as entry points instead of searching the whole repo first:
   reports ready, 15 ready checks, 0 failed checks.
 - Real-reuse preflight:
   `results/real_reuse/spec_preflight.md`
-  reports `ready_to_implement`, 8 tasks, 430 ready checks, and 0 failed checks
+  reports `ready_to_implement`, 8 tasks, 434 ready checks, and 0 failed checks
   after validating the REF prepared asset/runner layer, AIDE execution-layer
-  contract, and SWE-agent skill gate.
+  contract, SWE-agent skill gate, and SWE execution-layer contract.
 - Real-reuse REF run:
   `results/real_reuse/reflexion_run_report.md` reports `complete` with 4
   scored rows for GPT-family `gpt-5.5`; REF-T1 and REF-T2 Summary and

@@ -96,6 +96,7 @@
 | `research/run_logs/2026-07-03_phase88_real_reuse_aide_execution_layer.md` | AIDE-T1/T2 preparer, scorer, runner, gate integration, and Kaggle-data-pending boundary | Created |
 | `research/run_logs/2026-07-03_phase89_remote_save_after_aide_execution_layer.md` | Remote-save recovery after Phase 87/88 and follow-up memory/log synchronization to `origin/main` | Created |
 | `research/run_logs/2026-07-03_phase90_real_reuse_swe_agent_skill.md` | SWE-agent auto-note, generated skill, rubric/source-span gates, table status update, and runner-pending boundary | Created |
+| `research/run_logs/2026-07-03_phase91_real_reuse_swe_execution_layer.md` | SWE-T1/T2 preparer, scorer, runner, gate integration, fixture-pending table status, and evidence boundary | Created |
 
 ## Paper Draft Package
 
@@ -213,7 +214,10 @@
 | `scripts/prepare_real_reuse_aide_fixture.py` | Prepares locked AIDE-T1/T2 Spaceship Titanic fixtures from a human-provided real `train.csv`, keeps validation labels scorer-only, and writes task-specific Summary contexts | Created |
 | `scripts/score_real_reuse_aide.py` | Scores AIDE candidate scripts or submissions in an isolated workspace against hidden validation labels and baseline-score JSON | Created |
 | `scripts/run_real_reuse_aide.py` | Runs locked AIDE-T1/T2 Summary-vs-PaperToSkill conditions, saves prompts/responses/metrics/raw rows, and separates provider/data availability from model quality | Created |
-| `scripts/check_real_reuse_benchmark.py` | Validates the planned real-reuse benchmark spec, main conditions, sanity scope, reference-score boundary, task/fixture/candidate/asset-lock layers, REF prepared assets, REF runner, AIDE execution-layer contract, SWE-agent skill gate, and future output paths | Created |
+| `scripts/prepare_real_reuse_swe_fixture.py` | Prepares locked SWE-T1/T2 fixtures from local repository snapshots, writes task prompts and Summary contexts, and keeps gold patches scorer-only | Created |
+| `scripts/score_real_reuse_swe.py` | Scores SWE candidate patches by applying unified diffs in an isolated workspace and running the locked test command | Created |
+| `scripts/run_real_reuse_swe.py` | Runs locked SWE-T1/T2 Summary-vs-PaperToSkill conditions, saves prompts/responses/metrics/raw rows, and separates provider/fixture availability from model quality | Created |
+| `scripts/check_real_reuse_benchmark.py` | Validates the planned real-reuse benchmark spec, main conditions, sanity scope, reference-score boundary, task/fixture/candidate/asset-lock layers, REF prepared assets, REF runner, AIDE execution-layer contract, SWE-agent skill gate, SWE execution-layer contract, and future output paths | Created |
 | `scripts/evaluate_skill.py` | Deterministic v0 evaluator for generated skills | Created |
 | `scripts/evaluate_context_baselines.py` | Deterministic evaluator for context baseline coverage | Created |
 | `scripts/audit_skill_source_map.py` | Deterministic source-map-aware unsupported-instruction audit | Created |
@@ -293,7 +297,7 @@
 | `generated_skills/toolformer_auto/references/source_map.json` | Source-map evidence for Toolformer auto-note-derived skill | Created |
 | `generated_skills/aide_auto/SKILL.md` | Retained generated skill from deterministic AIDE auto-note scaffold | Created |
 | `generated_skills/aide_auto/references/source_map.json` | Source-map evidence for AIDE auto-note-derived skill | Created |
-| `generated_skills/real_reuse/swe_agent/SKILL.md` | Retained SWE-agent generated skill for the real-reuse software-engineering task family; runner remains pending | Created |
+| `generated_skills/real_reuse/swe_agent/SKILL.md` | Retained SWE-agent generated skill for the real-reuse software-engineering task family; execution layer is ready but fixture assets/raw rows remain pending | Created |
 | `generated_skills/real_reuse/swe_agent/references/source_map.json` | Source-map evidence for the real-reuse SWE-agent generated skill | Created |
 | `generated_skills/papertoskill_paper_note/SKILL.md` | Retained generated skill from paper-like note | Created |
 | `generated_skills/papertoskill_paper_note/references/source_map.json` | Source-map evidence for retained generated skill | Created |
@@ -439,6 +443,6 @@
 | Artifact | Purpose | Status |
 | --- | --- | --- |
 | Model-ablation response logs | Claude/GPT-family/DeepSeek response files and scores after endpoint/model availability | Created |
-| Concrete real-reuse fixture assets | REF-T1/REF-T2 prepared assets, scorer, runner, and one GPT-family Summary-vs-PaperToSkill run are created; AIDE preparer/scorer/runner are ready but await real Kaggle `train.csv`; SWE-agent skill gate is ready but SWE assets/runner/raw rows remain pending; SnapATAC2 assets/runners remain planned | Mixed |
+| Concrete real-reuse fixture assets | REF-T1/REF-T2 prepared assets, scorer, runner, and one GPT-family Summary-vs-PaperToSkill run are created; AIDE preparer/scorer/runner are ready but await real Kaggle `train.csv`; SWE-agent preparer/scorer/runner are ready but fixture assets/raw rows remain pending; SnapATAC2 assets/runners remain planned | Mixed |
 | `results/real_reuse/` | Current REF raw rows and table artifacts plus future aggregate tables, sanity checks, cost table, and LLM ablation outputs for the remaining real-reuse experiments | Mixed |
 | Paper2Agent executable baseline | Full Paper2Agent/MCP runtime comparison, if setup resources become available | Planned |

@@ -46,7 +46,7 @@
 | --- | --- | --- |
 | E5 | Can PaperToSkill help agents reuse paper methods on original-style input/output tasks? | `research/real_reuse_experiment_plan.md`; future `benchmarks/real_reuse/`; future `results/real_reuse/` |
 | E5.1 | Are the four main papers and eight tasks feasible under objective metrics? | Complete for planned spec and task contracts: `benchmarks/real_reuse/real_reuse_v0.json`; `benchmarks/real_reuse/tasks/*.json`; `results/real_reuse/spec_preflight.md` reports `ready_to_implement` |
-| E5.2 | Can each task be bound to a concrete fixture and then compared with Summary vs PaperToSkill without mid-run human intervention? | Fixture requirement manifests, candidate manifests, and asset locks complete for all eight tasks. REF-T1/REF-T2 prepared assets, deterministic scorers, runner, and one GPT-family Summary-vs-PaperToSkill run are complete. AIDE preparer/scorer/runner are ready, but fixture materialization and raw rows wait for the real Kaggle Spaceship Titanic `train.csv`. SWE-agent skill gate is ready; SWE assets/runners/raw rows remain pending. SnapATAC2 assets/runners/raw rows remain pending |
+| E5.2 | Can each task be bound to a concrete fixture and then compared with Summary vs PaperToSkill without mid-run human intervention? | Fixture requirement manifests, candidate manifests, and asset locks complete for all eight tasks. REF-T1/REF-T2 prepared assets, deterministic scorers, runner, and one GPT-family Summary-vs-PaperToSkill run are complete. AIDE preparer/scorer/runner are ready, but fixture materialization and raw rows wait for the real Kaggle Spaceship Titanic `train.csv`. SWE-agent preparer/scorer/runner are ready, but fixture assets and raw rows remain pending. SnapATAC2 assets/runners/raw rows remain pending |
 | E5.3 | Can the main real-reuse table be generated from raw rows? | Partially complete: `scripts/build_real_reuse_paper_tables.py` fills `results/real_reuse/main_results_plan.{csv,md,json}` from `results/real_reuse/raw_rows.jsonl`; current filled rows are REF-T1 and REF-T2 only |
 | E5.4 | Does a small Full Excerpt sanity check change the interpretation? | Three-task sanity table with Summary, PaperToSkill, Full Excerpt, metric, and token columns |
 | E5.5 | Which PaperToSkill components matter once downstream tasks are real? | Optional component-ablation task set with pre-registered workflow checklist and unsupported-error rubric |
@@ -61,8 +61,8 @@
 | --- | --- | --- | --- | --- |
 | AIDE-T1 | AIDE | ML engineering | Validation score / Kaggle-style metric | Execution layer ready; real Kaggle `train.csv` pending |
 | AIDE-T2 | AIDE | ML engineering | Validation score / best-node score | Execution layer ready; real Kaggle `train.csv` pending |
-| SWE-T1 | SWE-agent | Software engineering | Tests passed / resolved | Skill gate ready; runner pending |
-| SWE-T2 | SWE-agent | Software engineering | Tests passed / resolved | Skill gate ready; runner pending |
+| SWE-T1 | SWE-agent | Software engineering | Tests passed / resolved | Execution layer ready; fixture pending |
+| SWE-T2 | SWE-agent | Software engineering | Tests passed / resolved | Execution layer ready; fixture pending |
 | REF-T1 | Reflexion | Reasoning / QA | Exact match / F1 / success | Scored once: Summary 1.000, PaperToSkill 1.000 |
 | REF-T2 | Reflexion | Decision / programming | Success / pass rate | Scored once: Summary 1.000, PaperToSkill 1.000 |
 | SNAP-T1 | SnapATAC2 | Single-cell omics | Runtime, memory, clustering/embedding metric | Planned |

@@ -3102,3 +3102,52 @@ Evidence boundary:
   rows; and does not provide SWE-T1/T2 downstream task-success evidence.
 - AIDE remains blocked on the missing real Kaggle Spaceship Titanic
   `train.csv`; the user-side `ok.txt` signal was not present.
+
+## 2026-07-03 Phase 91
+
+Actions:
+
+- Added `scripts/prepare_real_reuse_swe_fixture.py` to prepare locked SWE-T1
+  and SWE-T2 fixture assets from local repository snapshots, issue/failing-test
+  context, and a locked test command.
+- Added `scripts/score_real_reuse_swe.py` to score candidate unified diff
+  patches by applying them in an isolated temporary copy of the prepared
+  workspace and running the locked test command.
+- Added `scripts/run_real_reuse_swe.py` to run Summary and PaperToSkill
+  conditions, save prompts/responses/metrics/raw rows when rows are scorable,
+  and treat missing fixture assets, missing credentials, or provider/model
+  errors as availability state.
+- Added focused SWE unit tests for fixture preparation, hidden gold-patch
+  separation, patch scoring, fixture-response runner execution,
+  missing-fixture and missing-credential pending behavior, and prompt
+  separation.
+- Updated the real-reuse table status logic and tests so SWE rows are
+  `Fixture pending` once the SWE skill and runner exist but no
+  `asset_manifest.json` has been prepared.
+- Extended real-reuse/package gates and documentation to include the SWE
+  execution-layer contract.
+
+Results:
+
+- Targeted SWE/table/preflight/package tests passed: 18 tests.
+- `results/real_reuse/main_results_plan.{csv,md,json}` now reports SWE-T1/T2
+  as `Fixture pending`, with score cells still `Pending`.
+- `paper/aaai/papertoskill_tables.tex` now matches the generated real-reuse
+  table, and `paper/aaai/papertoskill_aaai2027.pdf` was rebuilt.
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 434
+  ready checks, and 0 failed checks.
+- `results/reproducibility/package_report.md` reports
+  `ready_with_pending_external_evidence`, 381 ready checks, 1 pending check,
+  and 0 failed checks.
+- Paper-facing gates passed: `check_paper_tables.py`, `check_paper_claims.py`,
+  and `check_aaai_package.py`.
+
+Evidence boundary:
+
+- Phase 91 is SWE execution-layer readiness only. It does not materialize
+  official SWE-bench assets, does not prepare SWE-T1/T2 `asset_manifest.json`
+  files, does not run live Summary/PaperToSkill SWE rows, does not append SWE
+  raw rows, and does not add SWE task scores to the paper.
+- The current real-reuse effectiveness evidence is still only the partial
+  REF-T1/REF-T2 GPT-family slice; AIDE, SWE-agent, and SnapATAC2 remain
+  pending for downstream task scores.

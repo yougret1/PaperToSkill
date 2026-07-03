@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 377
+- Ready checks: 381
 - Pending checks: 1
 - Failed checks: 0
 
@@ -86,6 +86,9 @@ Evidence boundary: this report checks local package completeness and separates p
 | real_reuse_aide_preparer | ready | present | scripts/prepare_real_reuse_aide_fixture.py |
 | real_reuse_aide_scorer | ready | present | scripts/score_real_reuse_aide.py |
 | real_reuse_aide_runner | ready | present | scripts/run_real_reuse_aide.py |
+| real_reuse_swe_preparer | ready | present | scripts/prepare_real_reuse_swe_fixture.py |
+| real_reuse_swe_scorer | ready | present | scripts/score_real_reuse_swe.py |
+| real_reuse_swe_runner | ready | present | scripts/run_real_reuse_swe.py |
 | real_reuse_task_spec_aide_t1 | ready | present | benchmarks/real_reuse/tasks/AIDE-T1.json |
 | real_reuse_task_spec_aide_t2 | ready | present | benchmarks/real_reuse/tasks/AIDE-T2.json |
 | real_reuse_task_spec_swe_t1 | ready | present | benchmarks/real_reuse/tasks/SWE-T1.json |
@@ -312,6 +315,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | real_reuse_reflexion_runner_contract_ready | ready | runner_contract_status=ready | results\real_reuse\spec_preflight.json |
 | real_reuse_aide_runner_contract_ready | ready | runner_contract_status=ready | results\real_reuse\spec_preflight.json |
 | real_reuse_swe_agent_skill_contract_ready | ready | skill_contract_status=ready | results\real_reuse\spec_preflight.json |
+| real_reuse_swe_runner_contract_ready | ready | runner_contract_status=ready | results\real_reuse\spec_preflight.json |
 | toolformer_auto_note_script | ready | present | scripts/papertoskill_note_from_text.py |
 | toolformer_auto_pipeline_script | ready | present | scripts/papertoskill_pipeline.py |
 | toolformer_auto_note | ready | present | papers/auto_notes/toolformer_auto_note.md |

@@ -39,7 +39,7 @@ Evidence boundary: this report checks that AAAI LaTeX table values match generat
 | paper_table_real_reuse_swe_t1_reference | ready | value=Reported SWE-agent ref. | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_swe_t1_summary_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_swe_t1_papertoskill_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
-| paper_table_real_reuse_swe_t1_status | ready | value=Runner pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t1_status | ready | value=Fixture pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_swe_t2_task_id | ready | value=SWE-T2 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_swe_t2_source_paper | ready | value=SWE-agent | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_swe_t2_domain | ready | value=Software engineering | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
@@ -49,7 +49,7 @@ Evidence boundary: this report checks that AAAI LaTeX table values match generat
 | paper_table_real_reuse_swe_t2_reference | ready | value=Reported SWE-agent ref. | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_swe_t2_summary_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_swe_t2_papertoskill_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
-| paper_table_real_reuse_swe_t2_status | ready | value=Runner pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t2_status | ready | value=Fixture pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_ref_t1_task_id | ready | value=REF-T1 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_ref_t1_source_paper | ready | value=Reflexion | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_ref_t1_domain | ready | value=Reasoning / QA | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |

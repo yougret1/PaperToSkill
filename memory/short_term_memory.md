@@ -7,6 +7,36 @@ Current date: 2026-07-03.
 
 ## Latest Resume/Completion Note
 
+- 2026-07-03 Phase 91 SWE-agent execution layer is the current local WIP before
+  final full verification/commit: added
+  `scripts/prepare_real_reuse_swe_fixture.py`,
+  `scripts/score_real_reuse_swe.py`, and
+  `scripts/run_real_reuse_swe.py`; added focused SWE tests; updated
+  `scripts/build_real_reuse_paper_tables.py` tests so SWE rows become
+  `Fixture pending` after the skill and runner exist but before asset manifests
+  are prepared; refreshed the real-reuse table, AAAI table/PDF, preflight, and
+  package reports. Current anchors: `results/real_reuse/spec_preflight.md`
+  reports `ready_to_implement`, 434 ready / 0 failed; package report reports
+  381 ready / 1 pending / 0 failed; `results/real_reuse/main_results_plan.md`
+  shows SWE-T1/T2 `Fixture pending` with score cells still `Pending`. This is
+  execution-layer readiness only: no official SWE-bench assets, no SWE
+  `asset_manifest.json`, no SWE raw rows, and no SWE task-success evidence.
+  The SWE runner now records missing fixture assets as pending/no-raw-row
+  availability state instead of crashing.
+- 2026-07-03 discussion/state sync: user asked whether the original paper's
+  other sections need changes under the new real-reuse plan. Local AAAI text
+  check shows the current manuscript already has the key safety boundaries:
+  `Experimental Setup` includes the eight-row real-reuse protocol, `Results`
+  says REF-T1/REF-T2 are only one GPT-family partial slice, and it does not
+  claim the full benchmark is complete or better than Summary. Current advice:
+  do only small status/wording alignment now; do not rewrite `Abstract`,
+  `Introduction`, or `Conclusion` into strong real-reuse claims until true
+  AIDE/SWE/SNAP/REF raw rows exist. Keep old deterministic/offline experiments
+  as quality/grounding/cost/readiness evidence, not downstream effectiveness.
+  This conclusion was appended to
+  `C:\Users\19351\Desktop\tem\nextStep.md`; the latest correction records
+  SWE-agent as `Fixture pending` because its skill gate and execution layer
+  exist, but fixture assets/raw rows are still pending.
 - 2026-07-03 discussion update: the next-step experiment plan now treats
   "original-style paper-task reuse" as the main future validity evidence. The
   user agreed with an 8-task direction across AIDE, SWE-agent, Reflexion, and
@@ -15,7 +45,7 @@ Current date: 2026-07-03.
   discussion record. Do not rewrite the AAAI Results as if these new real-reuse
   experiments are complete; first update planning files, then revise paper text
   after execution.
-- 2026-07-03 Phase 90 SWE-agent skill gate is the current local phase before
+- 2026-07-03 Phase 90 SWE-agent skill gate is a previous local phase:
   final verification/commit: added the `swe_agent` auto-note profile, generated
   `papers/auto_notes/swe_agent_auto_note.md`,
   `generated_skills/real_reuse/swe_agent/SKILL.md`, and source map, added
@@ -249,13 +279,39 @@ Current date: 2026-07-03.
 
 ## Current Phase
 
-Phase 90 is the current local phase. Phase 68 was committed as
+Phase 91 is the current local phase before final full verification and commit.
+Phase 68 was committed as
 `5548070 Refresh memory anchors after remote save` and pushed to `origin/main`
 on 2026-06-20. Phase 69 syncs the AAAI submission-decision execution packet
 with the validated decision-record helper; no external evidence status is
 promoted and no AAAI option is selected. Phase 70 updates the direct provider
 diagnostic to match the current coderxiaoc API protocols: Claude uses
 Anthropic Messages and GPT uses OpenAI Responses.
+
+Phase 91 evidence:
+
+- `scripts/prepare_real_reuse_swe_fixture.py` prepares locked SWE-T1/T2
+  fixture assets from a local repo snapshot, issue/failing-test context, and a
+  locked test command. Any gold patch is scorer-only and hidden from
+  model-visible context.
+- `scripts/score_real_reuse_swe.py` scores candidate unified diff patches by
+  applying them in an isolated temporary workspace and running the locked test
+  command.
+- `scripts/run_real_reuse_swe.py` runs locked SWE Summary/PaperToSkill
+  conditions, supports fixture responses for dry tests, saves scored raw rows
+  only when output is scorable, and records missing fixture assets, missing
+  credentials, or provider errors as availability state.
+- Targeted SWE/table/preflight/package tests passed: 18 tests.
+- `results/real_reuse/main_results_plan.{csv,md,json}` and
+  `paper/aaai/papertoskill_tables.tex` now report SWE-T1/T2 as
+  `Fixture pending` with score cells still `Pending`.
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 8
+  tasks, 434 ready checks, and 0 failed checks.
+- `results/reproducibility/package_report.md` reports 381 ready / 1 pending /
+  0 failed.
+- `paper/aaai/papertoskill_aaai2027.pdf` was rebuilt after the table update.
+- This is SWE execution-layer readiness only: no SWE fixture asset manifests,
+  no SWE raw rows, and no SWE downstream task-success evidence exist yet.
 
 Phase 90 evidence:
 

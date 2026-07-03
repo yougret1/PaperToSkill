@@ -135,6 +135,9 @@ CORE_FILES = {
     "real_reuse_aide_preparer": "scripts/prepare_real_reuse_aide_fixture.py",
     "real_reuse_aide_scorer": "scripts/score_real_reuse_aide.py",
     "real_reuse_aide_runner": "scripts/run_real_reuse_aide.py",
+    "real_reuse_swe_preparer": "scripts/prepare_real_reuse_swe_fixture.py",
+    "real_reuse_swe_scorer": "scripts/score_real_reuse_swe.py",
+    "real_reuse_swe_runner": "scripts/run_real_reuse_swe.py",
     "real_reuse_task_spec_aide_t1": "benchmarks/real_reuse/tasks/AIDE-T1.json",
     "real_reuse_task_spec_aide_t2": "benchmarks/real_reuse/tasks/AIDE-T2.json",
     "real_reuse_task_spec_swe_t1": "benchmarks/real_reuse/tasks/SWE-T1.json",
@@ -1295,6 +1298,7 @@ def real_reuse_benchmark_checks(root: Path) -> list[Check]:
         "real_reuse_prepared_assets_reflexion_materialized",
         "real_reuse_reflexion_runner_contract_ready",
         "real_reuse_aide_runner_contract_ready",
+        "real_reuse_swe_runner_contract_ready",
         "real_reuse_swe_agent_skill_contract_ready",
         "real_reuse_swe_agent_rubric_ready",
         "real_reuse_swe_agent_source_span_ready",
@@ -1335,6 +1339,15 @@ def real_reuse_benchmark_checks(root: Path) -> list[Check]:
             "real_reuse_swe_agent_skill_contract_ready",
             "ready" if swe_skill_status == "ready" else "fail",
             f"skill_contract_status={swe_skill_status}",
+            str(report_path.relative_to(root)),
+        )
+    )
+    swe_runner_status = check_statuses.get("real_reuse_swe_runner_contract_ready")
+    checks.append(
+        Check(
+            "real_reuse_swe_runner_contract_ready",
+            "ready" if swe_runner_status == "ready" else "fail",
+            f"runner_contract_status={swe_runner_status}",
             str(report_path.relative_to(root)),
         )
     )

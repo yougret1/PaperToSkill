@@ -90,10 +90,12 @@ Summary-vs-PaperToSkill run. AIDE-T1/T2 now have a preparer, scorer, and runner
 contract, but their real Kaggle `spaceship-titanic` `train.csv` is still
 pending, so no AIDE fixture assets, raw rows, or task scores exist yet.
 SWE-agent has a generated skill, rubric report, source map, and source-span
-gate for the real-reuse software-engineering task family, but SWE-bench fixture
-assets/runners/raw rows remain pending. SnapATAC2 assets/runners/raw rows also
-remain pending. Do not write the AAAI paper as if the eight-task Summary vs
-PaperToSkill real-reuse comparison has run.
+gate for the real-reuse software-engineering task family. SWE-agent now also
+has preparer/scorer/runner scripts, but SWE fixture assets/raw rows remain
+pending until local repository snapshots and issue/test contexts are prepared.
+SnapATAC2 assets/runners/raw rows also remain pending. Do not write the AAAI
+paper as if the eight-task Summary vs PaperToSkill real-reuse comparison has
+run.
 
 Regenerate per-task specs from the master spec:
 
@@ -173,6 +175,39 @@ python scripts\score_real_reuse_aide.py --task AIDE-T1 --candidate-script path\t
 python scripts\score_real_reuse_aide.py --task AIDE-T2 --candidate-script path\to\candidate_solution.py --workspace benchmarks\real_reuse\assets\AIDE-T2\starter_workspace --labels benchmarks\real_reuse\assets\AIDE-T2\validation_labels.csv --output-json path\to\metric.json
 ```
 
+Prepare SWE fixture assets from a local repository snapshot after a concrete
+SWE-style repo/issue/test instance is available. The preparer copies a local
+snapshot into the locked asset directory, writes model-visible issue/test
+context and task prompts, and keeps any gold patch scorer-only:
+
+```powershell
+python scripts\prepare_real_reuse_swe_fixture.py --task SWE-T1 --repo-source path\to\local_repo_snapshot --issue-file path\to\issue.md --test-command "python -m pytest path\to\tests" --output-dir benchmarks\real_reuse\assets\SWE-T1
+python scripts\prepare_real_reuse_swe_fixture.py --task SWE-T2 --repo-source path\to\local_repo_snapshot --issue-file path\to\failing_test.md --test-command "python -m pytest path\to\tests" --output-dir benchmarks\real_reuse\assets\SWE-T2
+```
+
+Score a SWE patch locally by applying the candidate unified diff in an isolated
+temporary copy of the prepared workspace and running the locked test command:
+
+```powershell
+python scripts\score_real_reuse_swe.py --task SWE-T1 --patch path\to\candidate.patch --workspace benchmarks\real_reuse\assets\SWE-T1\workspace --test-command-file benchmarks\real_reuse\assets\SWE-T1\target_test_command.txt --output-json path\to\metric.json
+python scripts\score_real_reuse_swe.py --task SWE-T2 --patch path\to\candidate.patch --workspace benchmarks\real_reuse\assets\SWE-T2\workspace --test-command-file benchmarks\real_reuse\assets\SWE-T2\target_test_command.txt --output-json path\to\metric.json
+```
+
+After SWE fixture manifests exist and are inspected, run Summary and
+PaperToSkill conditions with the same no-mid-run-human rule:
+
+```powershell
+$env:PAPERTOSKILL_GPT_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
+$env:PAPERTOSKILL_GPT_OPENAI_API_KEY = "<set locally>"
+python scripts\run_real_reuse_swe.py --task SWE-T1 --task SWE-T2 --condition summary --condition papertoskill --model-family GPT-family --model-alias gpt-5.5 --wire-api openai_responses --run-id phaseXX_gpt_swe_real_reuse
+Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_BASE_URL -ErrorAction SilentlyContinue
+Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_API_KEY -ErrorAction SilentlyContinue
+```
+
+Do not treat missing credentials, provider errors, or missing SWE fixture assets
+as model-quality failures. Do not append SWE score claims to the paper until
+`results/real_reuse/raw_rows.jsonl` contains scored SWE rows.
+
 Run the locked Reflexion Summary-vs-PaperToSkill rows with the GPT-family
 Responses profile. Set the API key only in the shell, never in tracked files:
 
@@ -222,8 +257,8 @@ results/real_reuse/main_results_plan.md
 The expected status is `ready_to_implement`. That means the benchmark spec,
 per-task specs, fixture requirement manifests, candidate asset manifests, asset
 locks, the REF prepared-asset/runner layer, the AIDE execution-layer script
-contracts, and the SWE-agent skill gate are machine-checkable; it is not
-downstream task-success evidence.
+contracts, the SWE-agent skill gate, and the SWE execution-layer script
+contracts are machine-checkable; it is not downstream task-success evidence.
 
 Planned main task grid:
 
@@ -247,11 +282,11 @@ Execution order:
    are the first completed prepared-asset layer; AIDE fixture materialization
    waits for the real Kaggle Spaceship Titanic `train.csv`.
 3. Create Summary and PaperToSkill context inputs for each task. SWE-agent now
-   has a source-anchored generated skill; task-specific SWE Summary contexts
-   still belong to the future SWE fixture-preparation layer.
+   has a source-anchored generated skill; task-specific SWE Summary contexts are
+   written by the SWE fixture-preparation layer after local assets are
+   materialized.
 4. Implement the real-reuse runner and scorer. The REF-T1/REF-T2 runner is now
-   implemented; AIDE has preparer/scorer/runner scripts ready; SWE-agent has
-   skill/readiness gates ready but still needs preparer/scorer/runner scripts;
+   implemented; AIDE and SWE-agent have preparer/scorer/runner scripts ready;
    SnapATAC2 runners remain pending.
 5. Run agent-only tasks with no mid-run human intervention. REF-T1/REF-T2 have
    one GPT-family Summary-vs-PaperToSkill run.
