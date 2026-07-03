@@ -94,7 +94,7 @@
 | `research/run_logs/2026-07-03_phase86_real_reuse_reflexion_preparer_scorer.md` | REF-T1/REF-T2 real-reuse fixture preparation, scorer implementation, tests, and evidence boundary | Created |
 | `research/run_logs/2026-07-03_phase87_real_reuse_reflexion_runner.md` | REF-T1/REF-T2 Summary-vs-PaperToSkill GPT-family execution, raw rows, table update, and evidence boundary | Created |
 | `research/run_logs/2026-07-03_phase88_real_reuse_aide_execution_layer.md` | AIDE-T1/T2 preparer, scorer, runner, gate integration, and Kaggle-data-pending boundary | Created |
-| `research/run_logs/2026-07-03_phase89_remote_save_after_aide_execution_layer.md` | Remote-save recovery after Phase 87/88, pushing local main to `00118f6` on `origin/main` | Created |
+| `research/run_logs/2026-07-03_phase89_remote_save_after_aide_execution_layer.md` | Remote-save recovery after Phase 87/88 and follow-up memory/log synchronization to `origin/main` | Created |
 
 ## Paper Draft Package
 

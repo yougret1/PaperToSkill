@@ -156,8 +156,9 @@ Current supported claims:
   `tab:real-reuse-main`; AIDE, SWE-agent, and SnapATAC2 score cells remain
   pending execution.
 - Phase 89 remote save recovered the earlier GitHub HTTPS blocker:
-  `git push origin main` succeeded and moved `origin/main` from `ad1f9f2` to
-  `00118f6`, saving Phase 87, the push-blocker note, and Phase 88 remotely.
+  `git push origin main` succeeded for the Phase 87/88 stack and the follow-up
+  remote-save record was also pushed. Use `git status -sb` for the latest exact
+  remote alignment.
 
 Current unsupported claims:
 

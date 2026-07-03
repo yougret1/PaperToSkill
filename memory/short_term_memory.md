@@ -35,10 +35,11 @@ Current date: 2026-07-03.
   were missing in the latest check; the active human request is
   `C:\Users\19351\Desktop\tem\toHuman.md`.
 - 2026-07-03 Phase 89 remote save recovered the earlier GitHub HTTPS push
-  blocker: `git push origin main` succeeded and moved `origin/main` from
-  `ad1f9f2` to `00118f6`. The remote now contains Phase 87 REF real-reuse
-  rows, the Phase 87 push-blocker note, and the Phase 88 AIDE execution-layer
-  commit.
+  blocker: `git push origin main` succeeded for the Phase 87/88 stack and the
+  follow-up remote-save record was also pushed. `git status -sb` is the
+  authoritative check for the latest exact remote alignment. The remote now
+  contains Phase 87 REF real-reuse rows, the Phase 87 push-blocker note, and
+  the Phase 88 AIDE execution-layer commit.
 - 2026-07-03 Phase 87 real-reuse Reflexion runner/execution is now a previous
   local phase: added `scripts/run_real_reuse_reflexion.py`, fixed REF-T1
   yes/no scoring for explanatory final answers, ran REF-T1/REF-T2 Summary and
@@ -53,7 +54,7 @@ Current date: 2026-07-03.
 - 2026-07-03 Phase 87 local backup was committed as
   `9261bfc feat: run reflexion real reuse rows`; its initial push was blocked
   by GitHub HTTPS connectivity, but Phase 89 later pushed it successfully as
-  part of the `ad1f9f2..00118f6` remote update.
+  part of the recovered remote-save stack.
 - 2026-07-03 Phase 86 real-reuse Reflexion preparer/scorer is now a previous
   local phase: added `scripts/prepare_real_reuse_reflexion_fixture.py` and
   `scripts/score_real_reuse_reflexion.py`; materialized REF-T1 HotPotQA-style
@@ -242,7 +243,8 @@ Anthropic Messages and GPT uses OpenAI Responses.
 Phase 89 evidence:
 
 - `git push origin main` succeeded after the earlier GitHub HTTPS blocker.
-- Remote update: `ad1f9f2..00118f6  main -> main`.
+- Remote save recovered: the Phase 87/88 stack and the follow-up remote-save
+  record were pushed to `origin/main`.
 - The pushed state contains the Phase 87 REF runner/raw rows, the Phase 87
   push-blocker note, and the Phase 88 AIDE execution-layer commit.
 - This is remote-save evidence only; it does not clear the AIDE Kaggle-data

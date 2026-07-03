@@ -27,6 +27,8 @@ git push origin main
   `ad1f9f2..00118f6  main -> main`.
 - The pushed state includes Phase 87 REF raw rows/table update, the Phase 87
   connectivity-blocker note, and Phase 88 AIDE execution-layer readiness.
+- Follow-up documentation/memory synchronization may advance `origin/main`
+  beyond this exact hash; use `git status -sb` for the latest alignment.
 
 ## Evidence Boundary
 
