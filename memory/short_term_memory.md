@@ -26,6 +26,13 @@ Current date: 2026-07-03.
   SWE-agent, and SnapATAC2 remain pending. This is partial REF-slice evidence
   only: it validates the runner/scorer/table path but does not show
   PaperToSkill advantage over Summary or complete the eight-task benchmark.
+- 2026-07-03 Phase 87 local backup: committed as
+  `9261bfc feat: run reflexion real reuse rows` after 122 unit tests, all
+  strict gates, `git diff --check`, and raw-key scan passed. Push to
+  `origin/main` is currently blocked by GitHub HTTPS connectivity:
+  `git push origin main` failed twice and `git ls-remote --heads origin main`
+  failed because TCP 443 to `github.com` did not connect. Retry push when
+  network access recovers; do not treat Phase 87 as pushed yet.
 - 2026-07-03 Phase 86 real-reuse Reflexion preparer/scorer is now a previous
   local phase: added `scripts/prepare_real_reuse_reflexion_fixture.py` and
   `scripts/score_real_reuse_reflexion.py`; materialized REF-T1 HotPotQA-style
