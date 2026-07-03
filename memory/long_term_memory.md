@@ -194,7 +194,17 @@ Current supported claims:
   GPT-family `gpt-5.5`. SWE-T2 Summary/PaperToSkill scored 0.000/1.000:
   Summary failed patch application and PaperToSkill applied its patch and
   passed both hidden Astropy target tests. This is one locked SWE-Bench
-  Verified-style instance, not a full SWE-agent reproduction. Phase 91 targeted verification passed
+  Verified-style instance, not a full SWE-agent reproduction. Phase 97
+  materialized SWE-T1 as an external-workspace fixture against
+  `D:\a_work\gitee\sqlfluff__sqlfluff` at base commit
+  `14e1a23a3166b9a645a16de96f694c77a5d4abb7`, using local SWE-bench Lite
+  parquet extraction for the problem statement, gold patch, and hidden test
+  patch. It created a task-specific venv at
+  `D:\a_work\gitee\venvs\sqlfluff__sqlfluff-1625`, validated the gold scorer,
+  and ran SWE-T1 Summary/PaperToSkill with GPT-family `gpt-5.5`. SWE-T1
+  Summary/PaperToSkill scored 0.000/0.000 because both generated patches failed
+  to apply. This is one locked SWE-Bench Lite-style failure-boundary row, not a
+  full SWE-agent reproduction. Phase 91 targeted verification passed
   for 18 SWE/table/preflight/package tests, refreshed the AAAI PDF/table gates,
   and moved SWE rows to `Fixture pending` without adding scores. Phase 92 full
   verification passed 143 unit tests, all strict local gates, `git diff
@@ -203,11 +213,11 @@ Current supported claims:
   gates before documentation cleanup. Phase 94 verification passed 155 unit
   tests and all strict local gates before phase save.
 - Phase 84 inserted the main real-reuse table scaffold into the AAAI paper, and
-  later phases filled SWE-T2, REF-T1/REF-T2, and SNAP-T1/SNAP-T2 from raw rows:
+  later phases filled SWE-T1/SWE-T2, REF-T1/REF-T2, and SNAP-T1/SNAP-T2 from raw rows:
   `results/real_reuse/main_results_plan.csv`, `.md`, and `.json` are the table
   data source; `paper/aaai/papertoskill_tables.tex` contains
   `tab:real-reuse-main`. Current statuses are AIDE `Awaiting dataset`, SWE-T1
-  `Fixture pending`, SWE-T2 `Scored (GPT-family)`, Reflexion
+  `Scored (GPT-family)`, SWE-T2 `Scored (GPT-family)`, Reflexion
   `Scored (GPT-family)`, and SnapATAC2 `Scored (GPT-family)` with failed local
   miniature-fixture scores.
 - Phase 89 remote save recovered the earlier GitHub HTTPS blocker:
@@ -218,10 +228,13 @@ Current supported claims:
 Current unsupported claims:
 
 - PaperToSkill improves real original-style task outcomes across AIDE,
-  SWE-agent, Reflexion, SnapATAC2, or other domains. The SWE-T2 slice has one
-  GPT-family Summary-vs-PaperToSkill run where Summary scores 0.000 and
-  PaperToSkill scores 1.000 on a locked Astropy instance; this is positive
-  single-task evidence, not a full SWE-agent result. The REF-T1/REF-T2 slice
+  SWE-agent, Reflexion, SnapATAC2, or other domains. The SWE-T1 slice has one
+  GPT-family Summary-vs-PaperToSkill run where both conditions score 0.000 on a
+  locked SQLFluff instance due patch-apply failures; this is failure-boundary
+  evidence. The SWE-T2 slice has one GPT-family Summary-vs-PaperToSkill run
+  where Summary scores 0.000 and PaperToSkill scores 1.000 on a locked Astropy
+  instance; this is positive single-task evidence, not a full SWE-agent result.
+  The REF-T1/REF-T2 slice
   has one GPT-family Summary-vs-PaperToSkill run and both conditions score
   1.000, so it validates the REF execution path but does not show advantage
   over Summary. The SNAP-T1/SNAP-T2 slice has one GPT-family miniature-fixture
@@ -321,8 +334,9 @@ Use these as entry points instead of searching the whole repo first:
   PaperToSkill conditions, saves prompts/responses/metrics/raw rows, and
   separates provider/data availability from model quality.
 - `scripts/prepare_real_reuse_swe_fixture.py`: prepares locked SWE-T1/T2
-  fixture assets from a local repository snapshot, writes model-visible
-  issue/test context and Summary contexts, and keeps gold patches scorer-only.
+  fixture assets from a local repository snapshot or local SWE-bench parquet,
+  writes model-visible issue/test context and Summary contexts, and keeps gold
+  and hidden test patches scorer-only.
 - `scripts/score_real_reuse_swe.py`: scores SWE candidate patches by applying
   unified diffs in an isolated temporary workspace and running the locked test
   command.
@@ -359,22 +373,23 @@ Use these as entry points instead of searching the whole repo first:
 - `baselines/real_reuse/REF-T1_summary.md` and
   `baselines/real_reuse/REF-T2_summary.md`: task-specific Summary condition
   contexts for the two prepared Reflexion tasks.
-- `results/real_reuse/raw_rows.jsonl`: current REF-T1/REF-T2 and
-  SNAP-T1/SNAP-T2 GPT-family Summary-vs-PaperToSkill raw scored rows; not a
-  full eight-task result set.
+- `results/real_reuse/raw_rows.jsonl`: current SWE-T1/SWE-T2, REF-T1/REF-T2,
+  and SNAP-T1/SNAP-T2 GPT-family Summary-vs-PaperToSkill raw scored rows; not a
+  full eight-task result set because AIDE remains pending.
 - `results/real_reuse/reflexion_run_report.md`: current REF-T1/REF-T2
   GPT-family run report, complete for 4/4 rows.
 - `results/real_reuse/snapatac2_run_report.md`: current SNAP-T1/SNAP-T2
   GPT-family run report, complete for 4/4 rows; all rows failed the success
   threshold, so this is failure-boundary evidence.
 - `results/real_reuse/main_results_plan.csv`, `.md`, and `.json`: paper-facing
-  real-reuse main table source with REF-T1/REF-T2 and SNAP-T1/SNAP-T2 filled;
-  AIDE/SWE score cells remain pending.
+  real-reuse main table source with SWE-T1/SWE-T2, REF-T1/REF-T2, and
+  SNAP-T1/SNAP-T2 filled; AIDE score cells remain pending.
 - `generated_skills/real_reuse/swe_agent/SKILL.md` and
   `generated_skills/real_reuse/swe_agent/references/source_map.json`:
   SWE-agent source-anchored generated skill for the software-engineering
-  real-reuse task family. The SWE execution layer is now ready, but fixture
-  assets and raw rows remain pending.
+  real-reuse task family. SWE-T1 and SWE-T2 now have one GPT-family scored
+  Summary-vs-PaperToSkill run each; SWE-T1 is a failed patch-apply row and
+  SWE-T2 is a positive PaperToSkill row.
 - `results/evaluations/swe_agent_rubric_v0.json` and
   `results/evaluations/swe_agent_auto_source_span_validation_v0.json`:
   SWE-agent skill quality gates, currently 20/20 rubric and 1.0 source-span
@@ -382,8 +397,10 @@ Use these as entry points instead of searching the whole repo first:
 - `generated_skills/real_reuse/snapatac2/SKILL.md` and
   `generated_skills/real_reuse/snapatac2/references/source_map.json`:
   SnapATAC2 source-anchored generated skill for the single-cell omics
-  real-reuse task family. The skill gate, execution layer, and miniature
-  fixture assets are ready, but SnapATAC2 raw rows remain pending.
+  real-reuse task family. The skill gate, execution layer, miniature fixture
+  assets, and one GPT-family Summary-vs-PaperToSkill run are complete for
+  SNAP-T1/SNAP-T2. Both rows remain below the pre-registered success threshold,
+  so this is failure-boundary evidence rather than full SnapATAC2 reproduction.
 - `results/evaluations/snapatac2_rubric_v0.json` and
   `results/evaluations/snapatac2_auto_source_span_validation_v0.json`:
   SnapATAC2 skill quality gates, currently 20/20 rubric and 1.0 source-span
@@ -392,8 +409,9 @@ Use these as entry points instead of searching the whole repo first:
   `benchmarks/real_reuse/assets/SNAP-T2/asset_manifest.json`: prepared
   SnapATAC2 miniature fixture manifests with model-visible dataset/resource/
   schema/task assets, scorer-only thresholds, SNAP-T2 proxy metric policy, and
-  copied official repository test fragments. They are setup/smoke evidence
-  only; no SNAP Summary/PaperToSkill raw rows exist yet.
+  copied official repository test fragments. They were used for the Phase 95
+  GPT-family Summary-vs-PaperToSkill dry-run rows; the fixtures are miniature
+  failure-boundary assets, not full pbmc5k/pbmc10k_multiome reproductions.
 - `baselines/real_reuse/SNAP-T1_summary.md` and
   `baselines/real_reuse/SNAP-T2_summary.md`: task-specific Summary condition
   contexts for the two prepared SnapATAC2 tasks.
@@ -502,6 +520,13 @@ Use these as entry points instead of searching the whole repo first:
   scored rows for GPT-family `gpt-5.5`; REF-T1 and REF-T2 Summary and
   PaperToSkill all score 1.000. This is a partial REF-slice result, not the
   full eight-task benchmark.
+- Real-reuse SWE-T1 run:
+  `results/real_reuse/raw_rows.jsonl` contains one GPT-family Summary row and
+  one GPT-family PaperToSkill row for locked SQLFluff instance
+  `sqlfluff__sqlfluff-1625`; both score 0.000 with `patch_apply_failed`.
+  `results/real_reuse/swe_t1_gold_metric.json` validates the hidden-test
+  scorer with the gold patch. This is failure-boundary evidence, not a
+  PaperToSkill success.
 - Real-reuse SnapATAC2 run:
   `results/real_reuse/snapatac2_run_report.md` reports `complete` with 4
   scored rows for GPT-family `gpt-5.5`; SNAP-T1 Summary/PaperToSkill score

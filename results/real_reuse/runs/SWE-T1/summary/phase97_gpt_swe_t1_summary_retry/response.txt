@@ -1,0 +1,16 @@
+I’ll inspect the rule implementation and nearby tests, then make the smallest change that prevents L031 from firing when there is no join.First I’m locating L031 and the TSQL fixtures/tests that exercise bracketed references and aliases.```diff
+diff --git a/src/sqlfluff/rules/L031.py b/src/sqlfluff/rules/L031.py
+index 7d5c7a3..6e9a2c1 100644
+--- a/src/sqlfluff/rules/L031.py
++++ b/src/sqlfluff/rules/L031.py
+@@ -49,6 +49,9 @@ class Rule_L031(BaseRule):
+         if context.segment.is_type("select_statement"):
+             table_aliases = self._get_table_aliases(context.segment)
+ 
++            if len(table_aliases) <= 1:
++                return None
++
+             for seg in context.segment.segments:
+                 if seg.is_type("join_clause"):
+                     for sub_seg in seg.segments:
+```

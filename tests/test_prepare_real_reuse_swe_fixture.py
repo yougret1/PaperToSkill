@@ -172,6 +172,79 @@ class PrepareRealReuseSWEFixtureTest(unittest.TestCase):
             visible_slots = {item["slot"] for item in manifest["files"] if item["visibility"] == "model_visible"}
             self.assertIn("workspace_readme", visible_slots)
 
+    def test_prepare_from_swe_bench_parquet_keeps_gold_assets_hidden(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            import pandas as pd
+
+            tmp_path = Path(tmp)
+            root = prepare_temp_root(tmp_path)
+            repo = tmp_path / "repo"
+            write_tiny_repo(repo)
+            parquet_path = tmp_path / "swe_lite.parquet"
+            pd.DataFrame(
+                [
+                    {
+                        "instance_id": "unit__repo-1",
+                        "problem_statement": "Unit issue from SWE-bench parquet.",
+                        "patch": (
+                            "diff --git a/buggy.py b/buggy.py\n"
+                            "--- a/buggy.py\n"
+                            "+++ b/buggy.py\n"
+                            "@@ -1,2 +1,2 @@\n"
+                            " def add(a, b):\n"
+                            "-    return a - b\n"
+                            "+    return a + b\n"
+                        ),
+                        "test_patch": (
+                            "diff --git a/test_buggy.py b/test_buggy.py\n"
+                            "--- a/test_buggy.py\n"
+                            "+++ b/test_buggy.py\n"
+                            "@@ -4,6 +4,7 @@ from buggy import add\n"
+                            " class BuggyTest(unittest.TestCase):\n"
+                            "     def test_add(self):\n"
+                            "         self.assertEqual(add(2, 3), 5)\n"
+                            "+        self.assertEqual(add(1, 1), 2)\n"
+                        ),
+                    }
+                ]
+            ).to_parquet(parquet_path)
+
+            output_dir = root / "benchmarks" / "real_reuse" / "assets" / "SWE-T2"
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--root",
+                    str(root),
+                    "--task",
+                    "SWE-T2",
+                    "--repo-source",
+                    str(repo),
+                    "--swe-bench-parquet",
+                    str(parquet_path),
+                    "--instance-id",
+                    "unit__repo-1",
+                    "--test-command",
+                    "python -m unittest discover -s .",
+                    "--output-dir",
+                    str(output_dir),
+                    "--condition-dir",
+                    str(root / "baselines" / "real_reuse"),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            manifest = json.loads((output_dir / "asset_manifest.json").read_text(encoding="utf-8"))
+            prompt = (output_dir / "task_prompt.md").read_text(encoding="utf-8")
+            self.assertIn("Unit issue from SWE-bench parquet.", prompt)
+            self.assertTrue((output_dir / "scorer_only" / "gold.patch").exists())
+            self.assertTrue((output_dir / "scorer_only" / "test.patch").exists())
+            self.assertIn("benchmarks/real_reuse/assets/SWE-T2/scorer_only/gold.patch", manifest["hidden_from_model"])
+            self.assertIn("benchmarks/real_reuse/assets/SWE-T2/scorer_only/test.patch", manifest["hidden_from_model"])
+            self.assertNotIn("return a + b", prompt)
+
 
 if __name__ == "__main__":
     unittest.main()

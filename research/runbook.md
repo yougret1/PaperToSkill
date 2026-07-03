@@ -84,19 +84,15 @@ benchmarks/real_reuse/asset_locks/
 
 Current status: planned specification, per-task execution-contract specs,
 fixture requirement manifests, candidate manifests, and asset locks are ready
-for all eight tasks. REF-T1 and REF-T2 have prepared local fixture assets,
-task-specific Summary contexts, a deterministic scorer, and one GPT-family
-Summary-vs-PaperToSkill run. AIDE-T1/T2 now have a preparer, scorer, and runner
-contract, but their real Kaggle `spaceship-titanic` `train.csv` is still
-pending, so no AIDE fixture assets, raw rows, or task scores exist yet.
-SWE-agent has a generated skill, rubric report, source map, and source-span
-gate for the real-reuse software-engineering task family. SWE-agent now also
-has preparer/scorer/runner scripts, but SWE fixture assets/raw rows remain
-pending until local repository snapshots and issue/test contexts are prepared.
-SnapATAC2 now has generated skill, source-map, preparer/scorer/runner scripts,
-and gate coverage, but SNAP fixture assets/raw rows remain pending. Do not write the AAAI
-paper as if the eight-task Summary vs PaperToSkill real-reuse comparison has
-run.
+for all eight tasks. REF-T1/REF-T2, SWE-T1/SWE-T2, and SNAP-T1/SNAP-T2 have
+prepared assets and one GPT-family Summary-vs-PaperToSkill run each. REF rows
+score 1.000/1.000, SWE-T2 scores 0.000/1.000, SWE-T1 scores 0.000/0.000 due
+patch-apply failures, and SNAP rows are below the pre-registered success
+threshold. AIDE-T1/T2 now have a preparer, scorer, and runner contract, but
+their real Kaggle `spaceship-titanic` `train.csv` is still pending, so no AIDE
+fixture assets, raw rows, or task scores exist yet. Do not write the AAAI paper
+as if the eight-task Summary vs PaperToSkill real-reuse comparison is complete
+or as if the partial rows establish aggregate superiority over Summary.
 
 Regenerate per-task specs from the master spec:
 
@@ -177,12 +173,14 @@ python scripts\score_real_reuse_aide.py --task AIDE-T2 --candidate-script path\t
 ```
 
 Prepare SWE fixture assets from a local repository snapshot after a concrete
-SWE-style repo/issue/test instance is available. The preparer copies a local
-snapshot into the locked asset directory, writes model-visible issue/test
-context and task prompts, and keeps any gold patch scorer-only:
+SWE-style repo/issue/test instance is available. The preparer can copy a local
+snapshot or point to an external workspace, writes model-visible issue/test
+context and task prompts, and keeps any gold/test patches scorer-only. For
+SWE-bench parquet-backed rows, extract the locked problem statement and hidden
+patches directly from the local parquet:
 
 ```powershell
-python scripts\prepare_real_reuse_swe_fixture.py --task SWE-T1 --repo-source path\to\local_repo_snapshot --issue-file path\to\issue.md --test-command "python -m pytest path\to\tests" --output-dir benchmarks\real_reuse\assets\SWE-T1
+python scripts\prepare_real_reuse_swe_fixture.py --task SWE-T1 --workspace-mode external --repo-source 'D:\a_work\gitee\sqlfluff__sqlfluff' --swe-bench-parquet 'D:\a_work\gitee\SWE-bench_Lite\data\dev-00000-of-00001.parquet' --test-command 'D:\a_work\gitee\venvs\sqlfluff__sqlfluff-1625\Scripts\python.exe -m pytest test/cli/commands_test.py::test__cli__command_directed -q' --output-dir benchmarks\real_reuse\assets\SWE-T1
 python scripts\prepare_real_reuse_swe_fixture.py --task SWE-T2 --repo-source path\to\local_repo_snapshot --issue-file path\to\failing_test.md --test-command "python -m pytest path\to\tests" --output-dir benchmarks\real_reuse\assets\SWE-T2
 ```
 
@@ -190,7 +188,7 @@ Score a SWE patch locally by applying the candidate unified diff in an isolated
 temporary copy of the prepared workspace and running the locked test command:
 
 ```powershell
-python scripts\score_real_reuse_swe.py --task SWE-T1 --patch path\to\candidate.patch --workspace benchmarks\real_reuse\assets\SWE-T1\workspace --test-command-file benchmarks\real_reuse\assets\SWE-T1\target_test_command.txt --output-json path\to\metric.json
+python scripts\score_real_reuse_swe.py --task SWE-T1 --patch path\to\candidate.patch --workspace 'D:\a_work\gitee\sqlfluff__sqlfluff' --test-command-file benchmarks\real_reuse\assets\SWE-T1\target_test_command.txt --test-patch benchmarks\real_reuse\assets\SWE-T1\scorer_only\test.patch --output-json path\to\metric.json
 python scripts\score_real_reuse_swe.py --task SWE-T2 --patch path\to\candidate.patch --workspace 'D:\a_work\gitee\astropy__astropy' --test-command-file benchmarks\real_reuse\assets\SWE-T2\target_test_command.txt --test-patch benchmarks\real_reuse\assets\SWE-T2\scorer_only\test.patch --output-json path\to\metric.json
 ```
 
@@ -206,9 +204,11 @@ Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_API_KEY -ErrorAction SilentlyContinue
 ```
 
 Do not treat missing credentials, provider errors, or missing SWE fixture assets
-as model-quality failures. SWE-T2 already has one scored GPT-family run; do not
-turn that single row into an aggregate SWE-agent or eight-task claim until the
-remaining real-reuse rows are executed.
+as model-quality failures. SWE-T1 and SWE-T2 each have one scored GPT-family
+run; SWE-T1 is a failed patch-apply row for both Summary and PaperToSkill,
+while SWE-T2 is a positive PaperToSkill-vs-Summary row. Do not turn either
+single task into an aggregate SWE-agent or eight-task claim until the remaining
+real-reuse rows are executed.
 
 Run the locked Reflexion Summary-vs-PaperToSkill rows with the GPT-family
 Responses profile. Set the API key only in the shell, never in tracked files:
@@ -289,8 +289,8 @@ Execution order:
    materialized.
 4. Implement the real-reuse runner and scorer. The REF-T1/REF-T2 runner is now
    implemented; AIDE, SWE-agent, and SnapATAC2 have preparer/scorer/runner
-   scripts ready. AIDE awaits the real Kaggle `train.csv`; SWE-agent and
-   SnapATAC2 await fixture assets/raw rows.
+   scripts ready. AIDE awaits the real Kaggle `train.csv`; SWE-T1/SWE-T2 and
+   SNAP-T1/SNAP-T2 have raw rows, with SNAP remaining below success threshold.
 5. Run agent-only tasks with no mid-run human intervention. REF-T1/REF-T2 have
    one GPT-family Summary-vs-PaperToSkill run.
 6. Save raw rows under `results/real_reuse/raw_rows.*`.

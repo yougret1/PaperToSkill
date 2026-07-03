@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import shutil
 import subprocess
 import tempfile
@@ -60,6 +61,29 @@ def apply_runtime_shims(workspace: Path) -> list[str]:
     return shims
 
 
+def git_apply_command(patch_path: Path) -> list[str]:
+    return [
+        "git",
+        "apply",
+        "--recount",
+        "--whitespace=nowarn",
+        "--ignore-space-change",
+        str(patch_path),
+    ]
+
+
+def command_env(cwd: Path) -> dict[str, str]:
+    env = os.environ.copy()
+    source_dir = cwd / "src"
+    if source_dir.exists():
+        existing = env.get("PYTHONPATH", "")
+        entries = [str(source_dir)]
+        if existing:
+            entries.append(existing)
+        env["PYTHONPATH"] = os.pathsep.join(entries)
+    return env
+
+
 def run_command(command: list[str] | str, cwd: Path, timeout_seconds: float, *, shell: bool = False) -> dict[str, Any]:
     try:
         completed = subprocess.run(
@@ -69,6 +93,7 @@ def run_command(command: list[str] | str, cwd: Path, timeout_seconds: float, *, 
             capture_output=True,
             text=True,
             timeout=timeout_seconds,
+            env=command_env(cwd),
         )
         return {
             "returncode": completed.returncode,
@@ -112,7 +137,7 @@ def score_patch(
         test_patch_result = None
         if test_patch_path is not None:
             test_patch_result = run_command(
-                ["git", "apply", "--recount", "--whitespace=nowarn", str(test_patch_path)],
+                git_apply_command(test_patch_path),
                 tmp_path,
                 timeout_seconds,
             )
@@ -129,11 +154,7 @@ def score_patch(
                     "test_result": None,
                     "failure_reason": "test_patch_apply_failed",
                 }
-        apply_result = run_command(
-            ["git", "apply", "--recount", "--whitespace=nowarn", str(patch_path)],
-            tmp_path,
-            timeout_seconds,
-        )
+        apply_result = run_command(git_apply_command(patch_path), tmp_path, timeout_seconds)
         if apply_result["returncode"] != 0:
             return {
                 **base_result(task_id, patch_path, workspace, test_command, test_patch_path, runtime_shims),

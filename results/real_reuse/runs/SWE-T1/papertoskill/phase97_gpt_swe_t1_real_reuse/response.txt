@@ -1,0 +1,16 @@
+I’ll inspect the rule implementation and nearby tests, then make the smallest targeted change for TSQL alias handling in L031.```diff
+diff --git a/src/sqlfluff/rules/L031.py b/src/sqlfluff/rules/L031.py
+index c7d7c3d..a6c9c12 100644
+--- a/src/sqlfluff/rules/L031.py
++++ b/src/sqlfluff/rules/L031.py
+@@ -110,6 +110,9 @@ class Rule_L031(BaseRule):
+                         ):
+                             table_aliases.append(seg.raw)
+ 
++        if not table_aliases:
++            return None
++
+         # Look for column references with table aliases.
+         for seg in segment.recursive_crawl("object_reference"):
+             if seg.raw.split(".")[0] in table_aliases:
+```

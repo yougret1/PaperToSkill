@@ -3,10 +3,62 @@
 Read this file after any context compaction or session resume. Also read
 `memory/long_term_memory.md` before taking project actions.
 
-Current date: 2026-07-03.
+Current date: 2026-07-04.
 
 ## Latest Resume/Completion Note
 
+- 2026-07-04 Phase 97 cleanup/resume: read long-term and short-term memory
+  after context continuation, checked `git status -sb`, and checked
+  `C:\Users\19351\Desktop\tem\ok.txt`; no new `ok.txt` was present, so AIDE
+  remains blocked on the official Kaggle Spaceship Titanic `train.csv` requested
+  in `C:\Users\19351\Desktop\tem\toHuman.md`. Began Phase 97 cleanup by
+  updating stale current-state docs that still described SWE-T1 as
+  fixture-pending or SNAP rows as pending. Current real-reuse status remains:
+  AIDE-T1/T2 `Awaiting dataset`; SWE-T1/SWE-T2, REF-T1/T2, and SNAP-T1/T2
+  `Scored (GPT-family)`. SWE-T1 is failure-boundary evidence (0.000/0.000
+  patch-apply failures), SWE-T2 is one positive single-task row (0.000/1.000),
+  REF rows validate the runner/scorer/table path without Summary advantage, and
+  SNAP rows are below threshold failure-boundary evidence. Phase 97 cleanup
+  verification passed: refreshed strict goal/package/table/claim/real-reuse/
+  AAAI/submission/usage/external-evidence/DeepSeek/AI-Scientist-v2 gates; rebuilt
+  the AAAI PDF with `pdflatex`, `bibtex`, `pdflatex`, `pdflatex`; full unit
+  discovery passed 158 tests; `git diff --check` reported only Windows
+  line-ending warnings; raw-key scan found no matches. Remaining Phase 97
+  action: commit and push the phase backup.
+- 2026-07-03 Phase 97 SWE-T1 live rows: processed the active AIDE human
+  handoff first. `ok.txt` existed, but no official Kaggle Spaceship Titanic
+  `train.csv`, Kaggle CLI, Python `kaggle` package, `kaggle.json`, or
+  `KAGGLE_USERNAME` / `KAGGLE_KEY` env vars were present. Rewrote
+  `C:\Users\19351\Desktop\tem\toHuman.md` to ask again for official
+  `train.csv` or local user-managed Kaggle setup, then deleted `ok.txt`.
+  For SWE-T1, cloned `sqlfluff/sqlfluff` to
+  `D:\a_work\gitee\sqlfluff__sqlfluff`, checked out locked base commit
+  `14e1a23a3166b9a645a16de96f694c77a5d4abb7`, and created venv
+  `D:\a_work\gitee\venvs\sqlfluff__sqlfluff-1625` with old-compatible
+  SQLFluff dependencies plus editable SQLFluff install for plugin entry
+  points. Extended `scripts/prepare_real_reuse_swe_fixture.py` to materialize
+  fixtures directly from local SWE-bench parquet via `--swe-bench-parquet` and
+  `--instance-id`; extended `scripts/score_real_reuse_swe.py` to add `src/`
+  to `PYTHONPATH` and tolerate line-ending/space differences during
+  `git apply`; added a parquet-backed preparer regression test. Materialized
+  `benchmarks/real_reuse/assets/SWE-T1/` from
+  `D:\a_work\gitee\SWE-bench_Lite\data\dev-00000-of-00001.parquet`, keeping
+  gold/test patches under `scorer_only`. Gold scorer validation passed in
+  `results/real_reuse/swe_t1_gold_metric.json` with `task_score=1.0` and
+  hidden target pytest passed. Ran SWE-T1 with GPT-family `gpt-5.5`: first
+  Summary attempt timed out twice and appended no raw row; PaperToSkill scored
+  `0.000` with `patch_apply_failed`; a one-attempt Summary retry scored
+  `0.000` with `patch_apply_failed`. Updated
+  `results/real_reuse/main_results_plan.*`, `paper/aaai/papertoskill_tables.tex`,
+  `paper/aaai/papertoskill_aaai2027.tex`, `research/claim_evidence_matrix.md`,
+  `research/experiment_queue.md`, `research/artifact_map.md`,
+  `research/runbook.md`, `paper/outline.md`, `results/result_cards.md`, and
+  added `research/run_logs/2026-07-03_phase97_swe_t1_real_reuse_rows.md`.
+  Current main real-reuse status: AIDE-T1/T2 `Awaiting dataset`, SWE-T1/SWE-T2
+  `Scored (GPT-family)`, REF-T1/T2 `Scored (GPT-family)`, SNAP-T1/T2
+  `Scored (GPT-family)` but SNAP remains below threshold. Evidence boundary:
+  SWE-T1 is a real failed software-engineering row, not a PaperToSkill success
+  and not aggregate SWE-agent effectiveness.
 - 2026-07-03 Phase 96 SWE-T2 live rows: cleaned the accidental copied
   `benchmarks/real_reuse/assets/SWE-T2/workspace` directory and rematerialized
   SWE-T2 with `--workspace-mode external` pointing to

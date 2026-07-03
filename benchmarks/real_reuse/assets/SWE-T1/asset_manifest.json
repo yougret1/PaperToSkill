@@ -1,0 +1,104 @@
+{
+  "schema_version": "0.1",
+  "benchmark_id": "papertoskill_real_reuse_v0",
+  "task_id": "SWE-T1",
+  "source_paper_id": "swe_agent",
+  "status": "prepared_assets_ready_for_dry_scoring",
+  "prepared_on": "2026-07-03",
+  "evidence_boundary": "Prepared SWE-agent fixture assets and condition contexts for dry scoring. This manifest does not run a model, compare Summary against PaperToSkill, score downstream outputs, or claim task success.",
+  "source_snapshot": {
+    "repo_source": "D:\\a_work\\gitee\\sqlfluff__sqlfluff",
+    "locked_task_instance": {
+      "source_kind": "swe_bench_lite_dev_instance",
+      "dataset_id": "princeton-nlp/SWE-bench_Lite",
+      "dataset_sha": "6ec7bb89b9342f664a54a6e0a6ea6501d3437cc2",
+      "split": "dev",
+      "instance_id": "sqlfluff__sqlfluff-1625",
+      "repo": "sqlfluff/sqlfluff",
+      "base_commit": "14e1a23a3166b9a645a16de96f694c77a5d4abb7",
+      "fail_to_pass": [
+        "test/cli/commands_test.py::test__cli__command_directed"
+      ],
+      "reference_boundary": "SWE-agent/SWE-bench paper scores are reported references unless the same instance, tests, and budget are reproduced locally."
+    },
+    "swe_bench_parquet": "D:/a_work/gitee/SWE-bench_Lite/data/dev-00000-of-00001.parquet",
+    "swe_bench_instance_id": "sqlfluff__sqlfluff-1625"
+  },
+  "license_and_provenance": {
+    "source_urls": [
+      "https://github.com/SWE-agent/SWE-agent",
+      "https://github.com/princeton-nlp/SWE-bench",
+      "https://huggingface.co/datasets/princeton-nlp/SWE-bench_Lite"
+    ],
+    "local_use_scope": "locked local SWE real-reuse fixture for reproducible experiment setup",
+    "redistribution_note": "Do not redistribute third-party repository snapshots without checking their licenses."
+  },
+  "condition_contexts": [
+    {
+      "condition": "summary",
+      "path": "baselines/real_reuse/SWE-T1_summary.md",
+      "visibility": "model_visible"
+    },
+    {
+      "condition": "papertoskill",
+      "path": "generated_skills/real_reuse/swe_agent/SKILL.md",
+      "visibility": "model_visible"
+    }
+  ],
+  "workspace_dir": "D:/a_work/gitee/sqlfluff__sqlfluff",
+  "hidden_from_model": [
+    "benchmarks/real_reuse/assets/SWE-T1/scorer_only/gold.patch",
+    "benchmarks/real_reuse/assets/SWE-T1/scorer_only/test.patch"
+  ],
+  "asset_dir": "benchmarks/real_reuse/assets/SWE-T1",
+  "files": [
+    {
+      "slot": "instance_metadata",
+      "path": "benchmarks/real_reuse/assets/SWE-T1/instance_metadata.json",
+      "sha256": "6419ad938e9dd099466ed5ab0787b62e3561cbedd5422455b98ae631a8c32918",
+      "visibility": "model_visible"
+    },
+    {
+      "slot": "issue_description",
+      "path": "benchmarks/real_reuse/assets/SWE-T1/issue_description.md",
+      "sha256": "943e79113bb58586f3d57f7cffc3a2d7f985b19c7651157aab06c3ecc0d20d8d",
+      "visibility": "model_visible"
+    },
+    {
+      "slot": "target_test_command",
+      "path": "benchmarks/real_reuse/assets/SWE-T1/target_test_command.txt",
+      "sha256": "aa2249e6058567fdffbb424f0d272d20dbb75c51bc75b2658bc4826c662b316a",
+      "visibility": "model_visible"
+    },
+    {
+      "slot": "task_prompt",
+      "path": "benchmarks/real_reuse/assets/SWE-T1/task_prompt.md",
+      "sha256": "a52c523c3d59ce6c280851f7549b9716519fab391e341eea2c060af3e6d28446",
+      "visibility": "model_visible"
+    },
+    {
+      "slot": "workspace_readme",
+      "path": "benchmarks/real_reuse/assets/SWE-T1/workspace_readme.md",
+      "sha256": "921f64483b14c0de96fd18ce1eac182c000c13478724b3d0897487e5e7255d43",
+      "visibility": "model_visible"
+    },
+    {
+      "slot": "summary_context",
+      "path": "baselines/real_reuse/SWE-T1_summary.md",
+      "sha256": "13e65b8149a700dad2a566cce5b7c88413c3fc5b7ec2fa182d3a9a723cc6583d",
+      "visibility": "condition_context"
+    },
+    {
+      "slot": "gold_patch",
+      "path": "benchmarks/real_reuse/assets/SWE-T1/scorer_only/gold.patch",
+      "sha256": "298d0659c202d3ead826c7cb66a6cd5f24b8ac673b66d39c63023df2614d3a63",
+      "visibility": "scorer_only"
+    },
+    {
+      "slot": "test_patch",
+      "path": "benchmarks/real_reuse/assets/SWE-T1/scorer_only/test.patch",
+      "sha256": "594d2a3c9b7ea9c7bb7e289ff6c80157c1413762f1d7eb62a5d3d3955ad5bbdf",
+      "visibility": "scorer_only"
+    }
+  ]
+}

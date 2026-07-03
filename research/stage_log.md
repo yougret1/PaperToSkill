@@ -3360,3 +3360,46 @@ Evidence boundary:
 - SWE-T1 remains fixture-pending; AIDE still awaits the real Kaggle
   Spaceship Titanic `train.csv`; SNAP-T1/T2 remain failure-boundary evidence
   because both scored rows are below the success threshold.
+
+## 2026-07-03 Phase 97
+
+Actions:
+
+- Processed the active AIDE handoff path first. `ok.txt` existed, but the
+  official Kaggle Spaceship Titanic `train.csv`, Kaggle CLI/package, user
+  `kaggle.json`, and Kaggle environment variables were still unavailable.
+  Rewrote `C:\Users\19351\Desktop\tem\toHuman.md` to request the official
+  dataset or local user-managed Kaggle setup, then removed `ok.txt`.
+- Cloned and prepared the locked SQLFluff workspace for SWE-T1 at base commit
+  `14e1a23a3166b9a645a16de96f694c77a5d4abb7`.
+- Extended `scripts/prepare_real_reuse_swe_fixture.py` to materialize a SWE
+  fixture from local SWE-bench parquet via `--swe-bench-parquet` and
+  `--instance-id`, keeping gold/test patches under `scorer_only`.
+- Extended `scripts/score_real_reuse_swe.py` to add `src/` to `PYTHONPATH`
+  where present and to tolerate line-ending/space differences during
+  `git apply`.
+- Added a parquet-backed SWE preparer regression test.
+- Materialized `benchmarks/real_reuse/assets/SWE-T1/`, validated the hidden
+  gold scorer, and ran SWE-T1 Summary/PaperToSkill with GPT-family `gpt-5.5`.
+- Regenerated the real-reuse main table data and updated the AAAI table/results
+  narrative plus claim, queue, artifact, runbook, outline, and result-card
+  evidence docs.
+
+Results:
+
+- `results/real_reuse/swe_t1_gold_metric.json` validates the SWE-T1 scorer with
+  `task_score=1.0`.
+- SWE-T1 Summary/PaperToSkill scored `0.000` / `0.000`; both generated patches
+  failed to apply.
+- `results/real_reuse/main_results_plan.md` now reads 12 raw scored rows and
+  fills SWE-T1, SWE-T2, REF-T1, REF-T2, SNAP-T1, and SNAP-T2 while AIDE-T1/T2
+  remain pending.
+
+Evidence boundary:
+
+- SWE-T1 is one locked SWE-Bench Lite-style SQLFluff instance, not a full
+  SWE-agent reproduction and not a PaperToSkill success.
+- The row is useful failure-boundary evidence: the scorer path works and the
+  hidden gold patch passes, but both model-generated patches fail to apply.
+- The full eight-task real-reuse benchmark remains incomplete because AIDE-T1
+  and AIDE-T2 await the official Kaggle Spaceship Titanic `train.csv`.

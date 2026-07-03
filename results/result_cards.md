@@ -1096,6 +1096,39 @@
   `results/aaai_submission_decision/decision.md`;
   `research/run_logs/2026-06-20_phase55_aaai_submission_decision_preflight.md`.
 
+## SWE-T1 Real-Reuse Rows
+
+- Experiment: locked SWE-Bench Lite SQLFluff instance
+  `sqlfluff__sqlfluff-1625` under Summary vs PaperToSkill with GPT-family
+  `gpt-5.5`.
+- Main result: Summary scores 0.000 and PaperToSkill scores 0.000; both
+  generated candidate patches fail to apply under the hidden target-test
+  scoring setup.
+- Gold scorer validation: `results/real_reuse/swe_t1_gold_metric.json` scores
+  1.000 after applying the scorer-only hidden test patch and gold patch, so the
+  local metric path is live.
+- Compared baselines: Summary and PaperToSkill use the same task prompt,
+  external SQLFluff workspace, hidden test patch, no-mid-run-human rule, venv
+  test command, and scorer.
+- Practical significance: this fills the second SWE-agent row and exposes a
+  software-engineering failure boundary where PaperToSkill guidance alone did
+  not make the generated patch apply to the locked codebase.
+- Statistical evidence: none; this is one locked task instance, not an
+  aggregate SWE-agent benchmark.
+- Failure modes: the PaperToSkill output targeted a plausible rule location but
+  used context that did not match the locked file; the Summary retry also
+  produced an unapplied patch. The first Summary call timed out, then a
+  one-attempt retry produced the scored row.
+- Limitations: this result does not prove PaperToSkill is ineffective on
+  software engineering tasks; it is a single failed SWE-Bench Lite-style row.
+- Claim impact: strengthens the evidence boundary by adding a real failed task
+  row alongside the positive SWE-T2 row; aggregate downstream advantage remains
+  unsupported until AIDE and broader rows are complete.
+- Figure/table: `results/real_reuse/raw_rows.jsonl`;
+  `results/real_reuse/swe_t1_gold_metric.json`;
+  `results/real_reuse/main_results_plan.md`;
+  `paper/aaai/papertoskill_tables.tex`.
+
 ## SWE-T2 Real-Reuse Rows
 
 - Experiment: locked SWE-Bench Verified-style Astropy instance
@@ -1113,13 +1146,15 @@
 - Statistical evidence: none; this is one locked task instance, not an
   aggregate SWE-agent benchmark.
 - Failure modes: Summary produced an invalid patch for the target file after
-  the hidden test patch was applied; future SWE-T1/AIDE rows may still fail due
-  fixture availability, patch quality, environment drift, or model behavior.
+  the hidden test patch was applied; the later SWE-T1 row failed for both
+  Summary and PaperToSkill due patch-apply failures, and future AIDE rows may
+  still fail due fixture availability, patch quality, environment drift, or
+  model behavior.
 - Limitations: the result does not reproduce the full SWE-agent paper, does not
   establish broad software-engineering effectiveness, and does not complete the
   eight-task real-reuse benchmark.
 - Claim impact: strengthens the partial downstream evidence but keeps aggregate
-  effectiveness unsupported until remaining AIDE and SWE-T1 rows are executed.
+  effectiveness unsupported until the remaining AIDE rows are executed.
 - Figure/table: `results/real_reuse/swe_run_report.md`;
   `results/real_reuse/swe_t2_gold_metric.json`;
   `results/real_reuse/main_results_plan.md`;

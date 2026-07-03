@@ -106,6 +106,22 @@ def load_lock(root: Path, task_id: str) -> dict[str, Any]:
     return load_json(root / "benchmarks" / "real_reuse" / "asset_locks" / f"{task_id}.json")
 
 
+def load_swe_bench_instance(parquet_path: Path, instance_id: str) -> dict[str, Any]:
+    try:
+        import pandas as pd
+    except ImportError as exc:  # pragma: no cover - exercised only in missing envs.
+        raise ValueError("pandas is required to read --swe-bench-parquet") from exc
+    if not parquet_path.exists():
+        raise ValueError(f"SWE-bench parquet does not exist: {parquet_path}")
+    frame = pd.read_parquet(parquet_path)
+    if "instance_id" not in frame.columns:
+        raise ValueError(f"SWE-bench parquet is missing instance_id column: {parquet_path}")
+    matches = frame[frame["instance_id"] == instance_id]
+    if matches.empty:
+        raise ValueError(f"instance_id {instance_id!r} not found in {parquet_path}")
+    return matches.iloc[0].to_dict()
+
+
 def default_issue_text(lock: dict[str, Any]) -> str:
     instance = lock.get("locked_task_instance", {})
     tests = "\n".join(f"- {item}" for item in instance.get("fail_to_pass", []))
@@ -166,8 +182,17 @@ def prepare(args: argparse.Namespace) -> Path:
     papertoskill_context = resolve(root, args.papertoskill_context)
     repo_source = resolve(root, args.repo_source)
     lock = load_lock(root, task_id)
+    locked_instance = lock.get("locked_task_instance", {})
+    instance_id = args.instance_id or locked_instance.get("instance_id", "")
+    swe_bench_instance = None
+    if args.swe_bench_parquet:
+        swe_bench_instance = load_swe_bench_instance(resolve(root, args.swe_bench_parquet), instance_id)
 
-    issue_text = read_optional_text(args.issue_text, args.issue_file) or default_issue_text(lock)
+    issue_text = (
+        read_optional_text(args.issue_text, args.issue_file)
+        or (str(swe_bench_instance.get("problem_statement", "")).strip() if swe_bench_instance else "")
+        or default_issue_text(lock)
+    )
     test_command = args.test_command or default_test_command(lock)
 
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -191,9 +216,11 @@ def prepare(args: argparse.Namespace) -> Path:
         "schema_version": SCHEMA_VERSION,
         "task_id": task_id,
         "source_paper_id": "swe_agent",
-        "locked_task_instance": lock.get("locked_task_instance", {}),
+        "locked_task_instance": locked_instance,
         "selected_candidate_id": lock.get("selected_candidate_id"),
         "repo_source": str(repo_source),
+        "swe_bench_parquet": "" if args.swe_bench_parquet is None else str(resolve(root, args.swe_bench_parquet)),
+        "swe_bench_instance_id": instance_id,
         "test_command": test_command,
         "evidence_boundary": (
             "Prepared metadata for a local SWE real-reuse fixture. Gold patches "
@@ -225,18 +252,26 @@ Do not expose scorer-only gold patches or hidden test patches to the model.
         file_entry(root, summary_path, "summary_context", "condition_context"),
     ]
     hidden_from_model: list[str] = []
-    if args.gold_patch:
-        gold_patch_source = resolve(root, args.gold_patch)
+    gold_patch_text = str(swe_bench_instance.get("patch", "")).strip() if swe_bench_instance else ""
+    test_patch_text = str(swe_bench_instance.get("test_patch", "")).strip() if swe_bench_instance else ""
+    if args.gold_patch or gold_patch_text:
         gold_patch = output_dir / "scorer_only" / "gold.patch"
         gold_patch.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(gold_patch_source, gold_patch)
+        if args.gold_patch:
+            gold_patch_source = resolve(root, args.gold_patch)
+            shutil.copy2(gold_patch_source, gold_patch)
+        else:
+            write_text(gold_patch, gold_patch_text)
         files.append(file_entry(root, gold_patch, "gold_patch", "scorer_only"))
         hidden_from_model.append(relative(root, gold_patch))
-    if args.test_patch:
-        test_patch_source = resolve(root, args.test_patch)
+    if args.test_patch or test_patch_text:
         test_patch = output_dir / "scorer_only" / "test.patch"
         test_patch.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(test_patch_source, test_patch)
+        if args.test_patch:
+            test_patch_source = resolve(root, args.test_patch)
+            shutil.copy2(test_patch_source, test_patch)
+        else:
+            write_text(test_patch, test_patch_text)
         files.append(file_entry(root, test_patch, "test_patch", "scorer_only"))
         hidden_from_model.append(relative(root, test_patch))
 
@@ -255,7 +290,11 @@ Do not expose scorer-only gold patches or hidden test patches to the model.
         ),
         "source_snapshot": {
             "repo_source": str(repo_source),
-            "locked_task_instance": lock.get("locked_task_instance", {}),
+            "locked_task_instance": locked_instance,
+            "swe_bench_parquet": ""
+            if args.swe_bench_parquet is None
+            else relative(root, resolve(root, args.swe_bench_parquet)),
+            "swe_bench_instance_id": instance_id,
         },
         "license_and_provenance": {
             "source_urls": [item.get("url", "") for item in lock.get("source_revision_locks", [])],
@@ -286,6 +325,8 @@ def main() -> int:
     parser.add_argument("--test-command")
     parser.add_argument("--gold-patch", type=Path)
     parser.add_argument("--test-patch", type=Path)
+    parser.add_argument("--swe-bench-parquet", type=Path)
+    parser.add_argument("--instance-id")
     parser.add_argument("--root", type=Path, default=ROOT)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--condition-dir", type=Path, default=Path("baselines/real_reuse"))
