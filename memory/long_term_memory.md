@@ -133,6 +133,10 @@ Current supported claims:
   entry points. `results/real_reuse/spec_preflight.md` validates them. No
   materialized fixture assets, runner/scorer, raw rows, or real-reuse results
   exist yet.
+- Phase 84 inserted the main real-reuse table scaffold into the AAAI paper:
+  `results/real_reuse/main_results_plan.csv` and `.md` are the table data
+  source; `paper/aaai/papertoskill_tables.tex` contains
+  `tab:real-reuse-main`; score cells remain pending execution.
 
 Current unsupported claims:
 
@@ -212,6 +216,8 @@ Use these as entry points instead of searching the whole repo first:
 - `scripts/build_real_reuse_fixture_candidates.py`: materializes selected
   candidate asset/preparation manifests from the task specs and fixture
   manifests.
+- `scripts/build_real_reuse_paper_tables.py`: materializes the paper-facing
+  real-reuse main-results table scaffold from the benchmark spec.
 - `scripts/check_real_reuse_benchmark.py`: strict local preflight checker for
   the planned real-reuse benchmark spec, per-task specs, fixture manifests, and
   candidate asset/preparation manifests.
@@ -227,6 +233,8 @@ Use these as entry points instead of searching the whole repo first:
   asset/preparation manifests with selected source repositories/datasets,
   preparation commands, scoring entry points, and license/provenance boundaries.
   They do not download or materialize assets and do not contain results.
+- `results/real_reuse/main_results_plan.csv` and `.md`: paper-facing
+  real-reuse main table scaffold with pending Summary/PaperToSkill score cells.
 - `results/real_reuse/spec_preflight.md`: ready-to-implement preflight report
   for the real-reuse spec/task/fixture/candidate contracts. This is not
   task-success evidence.
@@ -246,7 +254,7 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 339 ready checks, 1 pending
+  reports `ready_with_pending_external_evidence`, 342 ready checks, 1 pending
   check, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`

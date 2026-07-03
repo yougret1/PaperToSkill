@@ -248,11 +248,12 @@ are less directly procedural.
 | Item | Source Artifact | Purpose |
 | --- | --- | --- |
 | Figure 1: PaperToSkill pipeline | `scripts/papertoskill_extract.py`; `skill/SKILL.md` | Show paper note to skill/source-map flow |
-| Table 1: Main results | `results/tables/main_results.md` | Coverage, source support, compactness |
-| Table 2: Transfer ablation | `results/tables/transfer_ablation.md` | Effect of transfer notes |
-| Table 3: Source grounding | `results/tables/compactness_source_grounding.md` | Source support and compactness |
-| Table 4: Context cost proxy | `results/tables/context_cost_proxy.md`; `results/tables/model_response_cost_proxy.md` | Full paper vs skill context size plus saved-response output-token proxy |
-| Table 5: Auto-note comparison | `results/tables/auto_note_comparison.md` | Curated vs extracted-text Toolformer and AIDE note scaffolds |
+| Table 1: Real-reuse main experiment | `results/real_reuse/main_results_plan.md` | Eight Summary-vs-PaperToSkill paper-task rows; scores pending execution |
+| Table 2: Deterministic/offline quality results | `results/tables/main_results.md` | Coverage, source support, compactness |
+| Table 3: Transfer ablation | `results/tables/transfer_ablation.md` | Effect of transfer notes |
+| Table 4: Source grounding | `results/tables/compactness_source_grounding.md` | Source support and compactness |
+| Table 5: Context cost proxy | `results/tables/context_cost_proxy.md`; `results/tables/model_response_cost_proxy.md` | Full paper vs skill context size plus saved-response output-token proxy |
+| Table 6: Auto-note comparison | `results/tables/auto_note_comparison.md` | Curated vs extracted-text Toolformer and AIDE note scaffolds |
 | Appendix: Human-fidelity packets | `results/human_fidelity_packets/` | Prepared review packets, handoff guide, and blank annotation template |
 | Appendix: Human-fidelity summary | `results/human_fidelity_packets/annotation_summary.md` | Pending annotation status and validation summary |
 | Appendix: Failure-case archive | `results/failure_cases/failure_case_archive.md` | Paper-reported and project-level failure/limitation cases |

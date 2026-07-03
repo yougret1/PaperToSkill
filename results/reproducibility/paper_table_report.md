@@ -3,13 +3,93 @@
 Evidence boundary: this report checks that AAAI LaTeX table values match generated CSV result tables. It does not add new empirical evidence.
 
 - Overall status: ready
-- Ready checks: 76
+- Ready checks: 156
 - Failed checks: 0
 
 ## Checks
 
 | Check | Status | Detail | Evidence |
 | --- | --- | --- | --- |
+| paper_table_real_reuse_aide_t1_task_id | ready | value=AIDE-T1 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t1_source_paper | ready | value=AIDE | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t1_domain | ready | value=ML engineering | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t1_input | ready | value=Kaggle-style dataset + metric | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t1_output | ready | value=Runnable solution/submission | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t1_metric | ready | value=validation_score | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t1_reference | ready | value=Reported AIDE ref. | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t1_summary_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t1_papertoskill_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t1_status | ready | value=Ready to run | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t2_task_id | ready | value=AIDE-T2 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t2_source_paper | ready | value=AIDE | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t2_domain | ready | value=ML engineering | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t2_input | ready | value=Weak ML script + feedback | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t2_output | ready | value=Improved script + trajectory | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t2_metric | ready | value=best_node_score | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t2_reference | ready | value=Reported AIDE ref. | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t2_summary_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t2_papertoskill_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t2_status | ready | value=Ready to run | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t1_task_id | ready | value=SWE-T1 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t1_source_paper | ready | value=SWE-agent | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t1_domain | ready | value=Software engineering | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t1_input | ready | value=Repo issue + tests | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t1_output | ready | value=Patch + test log | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t1_metric | ready | value=resolved | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t1_reference | ready | value=Reported SWE-agent ref. | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t1_summary_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t1_papertoskill_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t1_status | ready | value=Ready to run | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t2_task_id | ready | value=SWE-T2 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t2_source_paper | ready | value=SWE-agent | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t2_domain | ready | value=Software engineering | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t2_input | ready | value=Failing test + repo | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t2_output | ready | value=Focused patch + verification | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t2_metric | ready | value=tests_passed | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t2_reference | ready | value=Reported SWE-agent ref. | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t2_summary_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t2_papertoskill_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_swe_t2_status | ready | value=Ready to run | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t1_task_id | ready | value=REF-T1 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t1_source_paper | ready | value=Reflexion | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t1_domain | ready | value=Reasoning / QA | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t1_input | ready | value=Multi-hop QA + feedback | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t1_output | ready | value=Final answer + reflection trace | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t1_metric | ready | value=exact_match_or_f1 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t1_reference | ready | value=Reported Reflexion ref. | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t1_summary_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t1_papertoskill_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t1_status | ready | value=Ready to run | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t2_task_id | ready | value=REF-T2 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t2_source_paper | ready | value=Reflexion | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t2_domain | ready | value=Decision / programming | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t2_input | ready | value=Failed attempt + checker feedback | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t2_output | ready | value=Corrected second attempt | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t2_metric | ready | value=second_attempt_success | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t2_reference | ready | value=Reported Reflexion ref. | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t2_summary_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t2_papertoskill_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t2_status | ready | value=Ready to run | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_snap_t1_task_id | ready | value=SNAP-T1 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_snap_t1_source_paper | ready | value=SnapATAC2 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_snap_t1_domain | ready | value=Single-cell omics | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_snap_t1_input | ready | value=Small single-cell dataset | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_snap_t1_output | ready | value=Pipeline + embedding artifacts | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_snap_t1_metric | ready | value=runtime_memory_quality | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_snap_t1_reference | ready | value=Reported SnapATAC2 ref. | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_snap_t1_summary_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_snap_t1_papertoskill_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_snap_t1_status | ready | value=Ready to run | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_snap_t2_task_id | ready | value=SNAP-T2 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_snap_t2_source_paper | ready | value=SnapATAC2 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_snap_t2_domain | ready | value=Single-cell omics | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_snap_t2_input | ready | value=Single-cell labels/proxy task | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_snap_t2_output | ready | value=Clustering/marker artifacts | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_snap_t2_metric | ready | value=ari_nmi_runtime_memory | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_snap_t2_reference | ready | value=Reported SnapATAC2 ref. | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_snap_t2_summary_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_snap_t2_papertoskill_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_snap_t2_status | ready | value=Ready to run | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_main_ai_scientist_v2_rubric | ready | value=20/20 | paper/aaai/papertoskill_tables.tex vs results/tables/main_results.csv |
 | paper_table_main_ai_scientist_v2_skill_coverage | ready | value=7.867/9 | paper/aaai/papertoskill_tables.tex vs results/tables/main_results.csv |
 | paper_table_main_ai_scientist_v2_generic_summary | ready | value=1.733/9 | paper/aaai/papertoskill_tables.tex vs results/tables/main_results.csv |

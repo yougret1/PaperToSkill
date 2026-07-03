@@ -190,6 +190,7 @@
 | `scripts/build_real_reuse_task_specs.py` | Materializes the eight per-task real-reuse execution-contract specs from the master benchmark spec | Created |
 | `scripts/build_real_reuse_fixture_manifests.py` | Materializes fixture requirement manifests for the eight real-reuse task contracts | Created |
 | `scripts/build_real_reuse_fixture_candidates.py` | Materializes candidate asset/preparation manifests for the eight real-reuse fixture contracts | Created |
+| `scripts/build_real_reuse_paper_tables.py` | Materializes the paper-facing real-reuse main-results table scaffold from the benchmark spec | Created |
 | `scripts/check_real_reuse_benchmark.py` | Validates the planned real-reuse benchmark spec, main conditions, sanity scope, reference-score boundary, and future output paths | Created |
 | `scripts/evaluate_skill.py` | Deterministic v0 evaluator for generated skills | Created |
 | `scripts/evaluate_context_baselines.py` | Deterministic evaluator for context baseline coverage | Created |
@@ -345,6 +346,8 @@
 | `results/reproducibility/package_report.json` | Machine-readable reproducibility package report | Created |
 | `results/real_reuse/spec_preflight.md` | Human-readable preflight for the planned real-reuse benchmark spec; not a task-result table | Created |
 | `results/real_reuse/spec_preflight.json` | Machine-readable preflight for the planned real-reuse benchmark spec; not a task-result table | Created |
+| `results/real_reuse/main_results_plan.csv` | Data source for the AAAI real-reuse main experiment table scaffold; score cells remain pending execution | Created |
+| `results/real_reuse/main_results_plan.md` | Human-readable real-reuse main experiment table scaffold; not task-success evidence | Created |
 | `results/reproducibility/aaai_package_report.md` | Human-readable AAAI package verification report | Created |
 | `results/reproducibility/aaai_package_report.json` | Machine-readable AAAI package verification report | Created |
 | `results/reproducibility/usage_example_report.md` | Human-readable usage-example verification report | Created |

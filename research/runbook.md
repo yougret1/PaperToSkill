@@ -105,6 +105,12 @@ Regenerate candidate fixture-asset manifests from the task and fixture specs:
 python scripts\build_real_reuse_fixture_candidates.py
 ```
 
+Regenerate the paper-facing main real-reuse table scaffold:
+
+```powershell
+python scripts\build_real_reuse_paper_tables.py
+```
+
 Validate the planned spec before implementing runners or editing paper claims:
 
 ```powershell
@@ -116,6 +122,8 @@ The preflight writes:
 ```text
 results/real_reuse/spec_preflight.json
 results/real_reuse/spec_preflight.md
+results/real_reuse/main_results_plan.csv
+results/real_reuse/main_results_plan.md
 ```
 
 The expected status is `ready_to_implement`. That means the benchmark spec,
@@ -146,7 +154,8 @@ Execution order:
 4. Implement the real-reuse runner and scorer.
 5. Run agent-only tasks with no mid-run human intervention.
 6. Save raw rows under future `results/real_reuse/raw_rows.*`.
-7. Aggregate table-ready files under future `results/real_reuse/`.
+7. Update `results/real_reuse/main_results_plan.csv` and the matching
+   `paper/aaai/papertoskill_tables.tex` cells with real scores.
 8. Only after result artifacts exist, revise the AAAI Abstract, Introduction,
    Experimental Setup, Results, Discussion, Limitations, and Conclusion.
 

@@ -37,9 +37,10 @@ class CheckPaperTablesTest(unittest.TestCase):
 
             report = json.loads(output_json.read_text(encoding="utf-8"))
             self.assertEqual("ready", report["overall_status"])
-            self.assertEqual(76, report["status_counts"]["ready"])
+            self.assertEqual(156, report["status_counts"]["ready"])
             self.assertEqual(0, report["status_counts"]["fail"])
             ready_ids = {check["id"] for check in report["checks"] if check["status"] == "ready"}
+            self.assertIn("paper_table_real_reuse_aide_t1_papertoskill_score", ready_ids)
             self.assertIn("paper_table_main_aide_skill_coverage", ready_ids)
             self.assertIn("paper_table_cost_toolformer_reduction", ready_ids)
             self.assertIn("paper_table_auto_aide_automatic_extracted_text_note_scaffold_transfer", ready_ids)

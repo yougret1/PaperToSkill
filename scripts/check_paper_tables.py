@@ -13,6 +13,7 @@ from typing import Any
 
 
 TABLE_SOURCES = {
+    "real_reuse_main": "results/real_reuse/main_results_plan.csv",
     "main_results": "results/tables/main_results.csv",
     "transfer_ablation": "results/tables/transfer_ablation.csv",
     "cost_proxy": "results/tables/context_cost_proxy_tokenizer.csv",
@@ -51,6 +52,7 @@ def display_path(root: Path, path: Path) -> str:
 def clean_latex_cell(value: str) -> str:
     text = value.strip()
     text = text.replace(r"\%", "%")
+    text = text.replace(r"\_", "_")
     text = re.sub(r"\s+", " ", text)
     return text.strip()
 
@@ -178,6 +180,41 @@ def main_results_checks(root: Path, tex_rows: list[list[str]]) -> list[Check]:
             checks.append(
                 check_value(
                     f"paper_table_main_{slug(paper)}_{suffix}",
+                    actual_row[index],
+                    expected_row[column],
+                    evidence,
+                )
+            )
+    return checks
+
+
+def real_reuse_main_checks(root: Path, tex_rows: list[list[str]]) -> list[Check]:
+    source_path = root / TABLE_SOURCES["real_reuse_main"]
+    source = by_key(read_csv_rows(source_path), "Task ID")
+    actual = table_rows_by_paper(tex_rows, "tab:real-reuse-main", 10)
+    evidence = f"paper/aaai/papertoskill_tables.tex vs {TABLE_SOURCES['real_reuse_main']}"
+    checks: list[Check] = []
+    column_map = [
+        ("task_id", 0, "Task ID"),
+        ("source_paper", 1, "Source Paper"),
+        ("domain", 2, "Domain"),
+        ("input", 3, "Original-style Input"),
+        ("output", 4, "Required Output"),
+        ("metric", 5, "Metric"),
+        ("reference", 6, "Reference"),
+        ("summary_score", 7, "Summary Score"),
+        ("papertoskill_score", 8, "PaperToSkill Score"),
+        ("status", 9, "Status"),
+    ]
+    for task_id, expected_row in source.items():
+        actual_row = actual.get(task_id)
+        if not actual_row:
+            checks.append(Check(f"paper_table_real_reuse_{slug(task_id)}_row", "fail", "missing row", evidence))
+            continue
+        for suffix, index, column in column_map:
+            checks.append(
+                check_value(
+                    f"paper_table_real_reuse_{slug(task_id)}_{suffix}",
                     actual_row[index],
                     expected_row[column],
                     evidence,
@@ -315,6 +352,7 @@ def build_report(root: Path, tables_tex: Path) -> dict[str, Any]:
 
     checks: list[Check] = []
     try:
+        checks.extend(real_reuse_main_checks(root, parse_tabular_rows(tex_text, "tab:real-reuse-main")))
         checks.extend(main_results_checks(root, parse_tabular_rows(tex_text, "tab:main-results")))
         checks.extend(transfer_checks(root, parse_tabular_rows(tex_text, "tab:transfer-ablation")))
         checks.extend(cost_proxy_checks(root, parse_tabular_rows(tex_text, "tab:cost-proxy")))

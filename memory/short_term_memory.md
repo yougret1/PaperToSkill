@@ -19,7 +19,15 @@ Current date: 2026-07-03.
   auxiliary experiments. The paper's experiment section should get the main
   table structure first, with TBD/pending numeric cells and explicit evidence
   boundary; after scores are run, update the paper numbers promptly.
-- 2026-07-03 Phase 83 fixture-candidate gate is now the current local phase:
+- 2026-07-03 Phase 84 paper-table gate is now the current local phase: added
+  `scripts/build_real_reuse_paper_tables.py`, generated
+  `results/real_reuse/main_results_plan.{csv,md}`, inserted
+  `Table~\ref{tab:real-reuse-main}` into `paper/aaai/papertoskill_tables.tex`,
+  updated the AAAI Experimental Setup/Results boundary text, extended
+  `scripts/check_paper_tables.py` to validate the real-reuse table against the
+  CSV, and rebuilt `paper/aaai/papertoskill_aaai2027.pdf`. Scores remain
+  `Pending`; this is not execution evidence.
+- 2026-07-03 Phase 83 fixture-candidate gate is the previous local phase:
   added `scripts/build_real_reuse_fixture_candidates.py` and generated the eight
   `benchmarks/real_reuse/fixture_candidates/*.json` manifests. Candidate
   sources are MLE-bench/Spaceship Titanic for AIDE-T1/T2, SWE-bench
@@ -86,8 +94,8 @@ Current date: 2026-07-03.
   all strict local gates, `git diff --check`, and repository raw-key scan.
 - Current reports:
   - Goal completion: 77 ready / 3 pending / 0 failed.
-  - Reproducibility package: 339 ready / 1 pending / 0 failed after adding the
-    real-reuse fixture-candidate gate.
+  - Reproducibility package: 342 ready / 1 pending / 0 failed after adding the
+    real-reuse paper-table scaffold.
   - External evidence queue: `human_fidelity_annotation` and
     `aaai_submission_decision`.
   - AAAI decision: ready, selected `wait_for_external_evidence`.
@@ -158,13 +166,31 @@ Current date: 2026-07-03.
 
 ## Current Phase
 
-Phase 83 is the current local phase. Phase 68 was committed as
+Phase 84 is the current local phase. Phase 68 was committed as
 `5548070 Refresh memory anchors after remote save` and pushed to `origin/main`
 on 2026-06-20. Phase 69 syncs the AAAI submission-decision execution packet
 with the validated decision-record helper; no external evidence status is
 promoted and no AAAI option is selected. Phase 70 updates the direct provider
 diagnostic to match the current coderxiaoc API protocols: Claude uses
 Anthropic Messages and GPT uses OpenAI Responses.
+
+Phase 84 evidence:
+
+- `scripts/build_real_reuse_paper_tables.py` materializes the paper-facing
+  main real-reuse table scaffold from `benchmarks/real_reuse/real_reuse_v0.json`.
+- `results/real_reuse/main_results_plan.csv` and `.md` exist.
+- `paper/aaai/papertoskill_tables.tex` includes
+  `Table~\ref{tab:real-reuse-main}` with eight task rows and pending
+  Summary/PaperToSkill score cells.
+- `scripts/check_paper_tables.py` validates the real-reuse table against
+  `results/real_reuse/main_results_plan.csv`; the report is ready with 156
+  checks and 0 failed checks.
+- `paper/aaai/papertoskill_aaai2027.pdf` was rebuilt after the table update.
+- `results/reproducibility/package_report.md` reports 342 ready / 1 pending /
+  0 failed.
+- Next implementation should not expand auxiliary experiments first; materialize
+  the main real-reuse assets, implement preparers/scorers and runner, run raw
+  rows, then update the pending score cells.
 
 Phase 83 evidence:
 
@@ -179,7 +205,7 @@ Phase 83 evidence:
   SnapATAC2 official tutorial/API-backed assets for SNAP-T1/T2.
 - `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 8
   tasks, 296 ready checks, and 0 failed checks.
-- `results/reproducibility/package_report.md` reports 339 ready / 1 pending /
+- `results/reproducibility/package_report.md` reported 339 ready / 1 pending /
   0 failed after including the candidate builder and all eight manifests.
 - No fixture asset has been materialized; no external dataset/repo has been
   downloaded for execution; no preparer/scorer, runner, raw row, or main result

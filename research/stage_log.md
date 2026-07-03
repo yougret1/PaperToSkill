@@ -2824,3 +2824,40 @@ Evidence boundary:
   projects for execution, fix task instance IDs, implement the preparer/scorer
   scripts, run Summary or PaperToSkill conditions, or create downstream result
   rows.
+
+## 2026-07-03 Phase 84
+
+Actions:
+
+- Added `scripts/build_real_reuse_paper_tables.py` to materialize the
+  paper-facing main real-reuse table scaffold from
+  `benchmarks/real_reuse/real_reuse_v0.json`.
+- Generated `results/real_reuse/main_results_plan.csv` and
+  `results/real_reuse/main_results_plan.md`.
+- Inserted the real-reuse main experiment table into
+  `paper/aaai/papertoskill_tables.tex` as
+  `Table~\ref{tab:real-reuse-main}` with pending Summary/PaperToSkill score
+  cells.
+- Updated `paper/aaai/papertoskill_aaai2027.tex` so the Experimental Setup
+  identifies the real-reuse table as the primary downstream experiment and the
+  Results section explicitly treats current completed numbers as
+  deterministic/offline evidence.
+- Extended `scripts/check_paper_tables.py` so the AAAI table is checked against
+  `results/real_reuse/main_results_plan.csv`.
+- Rebuilt `paper/aaai/papertoskill_aaai2027.pdf`.
+
+Results:
+
+- `results/reproducibility/paper_table_report.md` reports `ready`, 156 ready
+  checks, and 0 failed checks.
+- `results/reproducibility/aaai_package_report.md` reports `ready`, 17 ready
+  checks, and 0 failed checks.
+- `results/reproducibility/package_report.md` reports
+  `ready_with_pending_external_evidence`, 342 ready checks, 1 pending check,
+  and 0 failed checks.
+
+Evidence boundary:
+
+- Phase 84 updates the paper table structure only. Summary/PaperToSkill task
+  scores remain pending execution and must be filled after the main real-reuse
+  tasks run.
