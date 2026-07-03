@@ -62,8 +62,9 @@ Current supported claims:
   ceiling, and artifact completion modes. This is explanatory boundary
   analysis, not new task-success evidence.
 - Human-fidelity annotation handoff is ready: review packets, annotation guide,
-  stricter blank template metadata, and strict summarizer validation are present
-  for 24 paper-by-criterion rows; completed human annotation remains pending.
+  reviewer bundle zip, checksum manifest, stricter blank template metadata,
+  and strict summarizer validation are present for 24 paper-by-criterion rows;
+  completed human annotation remains pending.
 - Local token accounting handoff is ready: input-token and saved-response
   output-token proxy summaries are present, and the composite local token
   proxy is ready for reuse.
@@ -450,7 +451,7 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 419 ready checks, 1 pending
+  reports `ready_with_pending_external_evidence`, 423 ready checks, 1 pending
   check, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`

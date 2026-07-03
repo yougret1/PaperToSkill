@@ -100,6 +100,7 @@
 | `research/run_logs/2026-07-03_phase96_swe_t2_real_reuse_rows.md` | SWE-T2 external fixture materialization, gold-scorer validation, GPT-family Summary-vs-PaperToSkill run, table update, and evidence boundary | Created |
 | `research/run_logs/2026-07-03_phase97_swe_t1_real_reuse_rows.md` | SWE-T1 external SQLFluff fixture materialization, parquet-backed gold/test patch extraction, gold-scorer validation, GPT-family Summary-vs-PaperToSkill run, table update, and failure-boundary evidence | Created |
 | `research/run_logs/2026-07-04_phase98_aide_real_reuse_and_paper_sync.md` | AIDE-T1/T2 official Kaggle fixture materialization, scorer validation, GPT-family Summary-vs-PaperToSkill timeout rows, all-eight-row first-pass boundary, and paper narrative sync | Created |
+| `research/run_logs/2026-07-04_phase101_human_fidelity_reviewer_bundle.md` | Human-fidelity reviewer zip bundle, checksum manifest, package-gate integration, and pending-human-validation boundary | Created |
 
 ## Paper Draft Package
 
@@ -388,6 +389,9 @@
 | `results/human_fidelity_packets/index.json` | Machine-readable packet index with pending annotation status | Created |
 | `results/human_fidelity_packets/annotation_guide.md` | Independent-review handoff guide with completion requirements | Created |
 | `results/human_fidelity_packets/annotation_template.csv` | Blank annotation rows for human reviewers | Created |
+| `results/human_fidelity_packets/reviewer_bundle_README.md` | Reviewer-facing quickstart for the human-fidelity bundle | Created |
+| `results/human_fidelity_packets/reviewer_bundle_manifest.json` | Reviewer-bundle file list and SHA256 checksums | Created |
+| `results/human_fidelity_packets/human_fidelity_reviewer_bundle.zip` | Shareable reviewer bundle with guide, template, and paper packets | Created |
 | `results/human_fidelity_packets/annotation_summary.md` | Pending human-fidelity annotation summary | Created |
 | `results/human_fidelity_packets/annotation_summary.json` | Machine-readable pending annotation summary | Created |
 | `results/human_fidelity_packets/ai_scientist_v2_human_fidelity_packet.md` | AI Scientist-v2 fidelity review packet | Created |

@@ -4,6 +4,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+import zipfile
 from pathlib import Path
 
 
@@ -63,6 +64,23 @@ class BuildHumanFidelityPacketsTest(unittest.TestCase):
             self.assertIn("evidence_locator", rows[0])
             self.assertIn("confidence_0_to_1", rows[0])
             self.assertIn("needs_discussion", rows[0])
+
+            bundle_readme = output_dir / "reviewer_bundle_README.md"
+            bundle_manifest = output_dir / "reviewer_bundle_manifest.json"
+            bundle_zip = output_dir / "human_fidelity_reviewer_bundle.zip"
+            self.assertTrue(bundle_readme.exists())
+            self.assertTrue(bundle_manifest.exists())
+            self.assertTrue(bundle_zip.exists())
+            manifest = json.loads(bundle_manifest.read_text(encoding="utf-8"))
+            self.assertEqual(24, manifest["required_annotation_rows"])
+            archive_paths = {item["archive_path"] for item in manifest["files"]}
+            self.assertIn("human_fidelity_review/annotation_template.csv", archive_paths)
+            self.assertIn("human_fidelity_review/ai_scientist_v2_human_fidelity_packet.md", archive_paths)
+            with zipfile.ZipFile(bundle_zip) as archive:
+                names = set(archive.namelist())
+            self.assertIn("human_fidelity_review/REVIEWER_README.md", names)
+            self.assertIn("human_fidelity_review/reviewer_bundle_manifest.json", names)
+            self.assertIn("human_fidelity_review/toolformer_human_fidelity_packet.md", names)
 
 
 if __name__ == "__main__":

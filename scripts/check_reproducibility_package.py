@@ -559,6 +559,9 @@ def human_fidelity_checks(root: Path) -> list[Check]:
             "human_fidelity_protocol": "benchmarks/human_fidelity_review_v0.json",
             "human_fidelity_guide": "results/human_fidelity_packets/annotation_guide.md",
             "human_fidelity_template": "results/human_fidelity_packets/annotation_template.csv",
+            "human_fidelity_reviewer_bundle_readme": "results/human_fidelity_packets/reviewer_bundle_README.md",
+            "human_fidelity_reviewer_bundle_manifest": "results/human_fidelity_packets/reviewer_bundle_manifest.json",
+            "human_fidelity_reviewer_bundle_zip": "results/human_fidelity_packets/human_fidelity_reviewer_bundle.zip",
             "human_fidelity_summary_json": "results/human_fidelity_packets/annotation_summary.json",
             "human_fidelity_summary_md": "results/human_fidelity_packets/annotation_summary.md",
         },
@@ -597,6 +600,34 @@ def human_fidelity_checks(root: Path) -> list[Check]:
                 "results/human_fidelity_packets/index.json; results/human_fidelity_packets/annotation_guide.md",
             )
         )
+        bundle_manifest_path = root / "results/human_fidelity_packets/reviewer_bundle_manifest.json"
+        bundle_zip_path = root / "results/human_fidelity_packets/human_fidelity_reviewer_bundle.zip"
+        if bundle_manifest_path.exists():
+            bundle_manifest = load_json(bundle_manifest_path)
+            bundle_files = bundle_manifest.get("files", [])
+            required_archive_paths = {
+                "human_fidelity_review/REVIEWER_README.md",
+                "human_fidelity_review/annotation_guide.md",
+                "human_fidelity_review/annotation_template.csv",
+                "human_fidelity_review/ai_scientist_v2_human_fidelity_packet.md",
+                "human_fidelity_review/reflexion_human_fidelity_packet.md",
+                "human_fidelity_review/aide_human_fidelity_packet.md",
+                "human_fidelity_review/toolformer_human_fidelity_packet.md",
+            }
+            archive_paths = {str(item.get("archive_path", "")) for item in bundle_files}
+            bundle_ready = (
+                bundle_manifest.get("required_annotation_rows") == 24
+                and required_archive_paths <= archive_paths
+                and bundle_zip_path.exists()
+            )
+            checks.append(
+                Check(
+                    "human_fidelity_reviewer_bundle_ready",
+                    "ready" if bundle_ready else "fail",
+                    f"files={len(bundle_files)}; required_rows={bundle_manifest.get('required_annotation_rows')}; zip_exists={bundle_zip_path.exists()}",
+                    str(bundle_manifest_path.relative_to(root)),
+                )
+            )
         annotation_status = summary.get("annotation_status")
         complete_status = "ready" if annotation_status == "complete" else "pending"
         checks.append(

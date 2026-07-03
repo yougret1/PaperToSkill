@@ -699,12 +699,23 @@ Claude/GPT/DeepSeek calls.
 
 ## Human-Fidelity Annotation Handoff
 
-Regenerate the independent-review packets, annotation guide, and blank
-annotation template:
+Regenerate the independent-review packets, annotation guide, blank annotation
+template, checksum manifest, and reviewer zip bundle:
 
 ```powershell
 python scripts\build_human_fidelity_packets.py
 ```
+
+The reviewer-facing bundle is:
+
+```text
+results\human_fidelity_packets\human_fidelity_reviewer_bundle.zip
+```
+
+It contains `annotation_guide.md`, `annotation_template.csv`, the four
+`*_human_fidelity_packet.md` files, a quick reviewer README, and
+`reviewer_bundle_manifest.json` with SHA256 checksums. This bundle is a
+handoff artifact only; it does not complete human validation.
 
 Before using reviewer-filled annotations in a claim, summarize them with strict
 validation:
@@ -713,13 +724,14 @@ validation:
 python scripts\summarize_human_fidelity_annotations.py --strict
 ```
 
-Current Phase 42 status:
+Current Phase 101 status:
 `results/human_fidelity_packets/annotation_guide.md` provides the reviewer
 handoff, `annotation_template.csv` has 24 blank paper-by-criterion rows, and
 `annotation_summary.md` reports `annotation_status=pending`, 0 scored rows, 24
 pending rows, average confidence `n/a`, and 0 validation errors. The package
-gate marks `human_fidelity_annotation_handoff_ready` ready, while completed
-human-fidelity annotation remains pending.
+gate marks `human_fidelity_annotation_handoff_ready` and
+`human_fidelity_reviewer_bundle_ready` ready, while completed human-fidelity
+annotation remains pending.
 
 ## AAAI Paper Package
 

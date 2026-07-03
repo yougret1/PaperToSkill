@@ -5,8 +5,10 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import re
+import zipfile
 from pathlib import Path
 from typing import Any
 
@@ -69,6 +71,14 @@ def display_path(root: Path, path: Path) -> str:
         return str(resolved.relative_to(root.resolve())).replace("\\", "/")
     except ValueError:
         return str(resolved)
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def write_packet(root: Path, output_dir: Path, config: dict[str, Any], paper: dict[str, Any]) -> dict[str, Any]:
@@ -262,6 +272,96 @@ def write_summary(path: Path, packet_rows: list[dict[str, Any]]) -> None:
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def write_reviewer_bundle_readme(path: Path, packet_rows: list[dict[str, Any]]) -> None:
+    lines = [
+        "# PaperToSkill Human Fidelity Reviewer Bundle",
+        "",
+        "Evidence boundary: this bundle prepares independent review. It does not contain completed human annotations.",
+        "",
+        "## Files",
+        "",
+        "- `annotation_guide.md`: scoring protocol and workflow.",
+        "- `annotation_template.csv`: file reviewers should fill.",
+        "- `*_human_fidelity_packet.md`: one packet per paper.",
+        "- `reviewer_bundle_manifest.json`: file list and SHA256 checksums.",
+        "",
+        "## Review Workflow",
+        "",
+        "1. Read `annotation_guide.md`.",
+        "2. Open each paper packet listed below.",
+        "3. Fill every row in `annotation_template.csv` with score/evidence/confidence/reviewer metadata.",
+        "4. Leave unreviewed rows blank; do not convert missing review rows into zero scores.",
+        "5. Return the filled `annotation_template.csv` to the PaperToSkill repository owner.",
+        "",
+        "## Paper Packets",
+        "",
+        "| Paper | Packet |",
+        "| --- | --- |",
+    ]
+    for row in packet_rows:
+        lines.append(f"| {row['paper']} | `{Path(row['packet_path']).name}` |")
+    lines.extend(
+        [
+            "",
+            "## Claim Boundary",
+            "",
+            "PaperToSkill cannot claim human validation until the strict summarizer reports all 24 rows scored with no errors.",
+            "",
+        ]
+    )
+    path.write_text("\n".join(lines), encoding="utf-8")
+
+
+def write_reviewer_bundle(
+    root: Path,
+    output_dir: Path,
+    packet_rows: list[dict[str, Any]],
+    annotation_template: Path,
+    annotation_guide: Path,
+) -> dict[str, Path]:
+    readme_path = output_dir / "reviewer_bundle_README.md"
+    manifest_path = output_dir / "reviewer_bundle_manifest.json"
+    zip_path = output_dir / "human_fidelity_reviewer_bundle.zip"
+    write_reviewer_bundle_readme(readme_path, packet_rows)
+
+    bundle_files = [
+        ("REVIEWER_README.md", readme_path, "Reviewer-facing quickstart."),
+        ("annotation_guide.md", annotation_guide, "Scoring protocol and completion rules."),
+        ("annotation_template.csv", annotation_template, "Blank 24-row annotation template to fill."),
+    ]
+    for row in packet_rows:
+        packet_path = root / row["packet_path"]
+        bundle_files.append((packet_path.name, packet_path, f"Human-fidelity packet for {row['paper']}."))
+
+    manifest = {
+        "schema_version": "0.1",
+        "evidence_boundary": "Reviewer bundle readiness only; no completed human annotation is included.",
+        "bundle_zip": display_path(root, zip_path),
+        "required_annotation_rows": 24,
+        "files": [
+            {
+                "archive_path": f"human_fidelity_review/{archive_name}",
+                "source_path": display_path(root, source_path),
+                "sha256": sha256_file(source_path),
+                "purpose": purpose,
+            }
+            for archive_name, source_path, purpose in bundle_files
+        ],
+    }
+    manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
+
+    with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        for archive_name, source_path, _purpose in bundle_files:
+            archive.write(source_path, arcname=f"human_fidelity_review/{archive_name}")
+        archive.write(manifest_path, arcname="human_fidelity_review/reviewer_bundle_manifest.json")
+
+    return {
+        "reviewer_bundle_readme": readme_path,
+        "reviewer_bundle_manifest": manifest_path,
+        "reviewer_bundle_zip": zip_path,
+    }
+
+
 def build_packets(root: Path, config_path: Path, output_dir: Path) -> dict[str, Path]:
     config = load_json(config_path)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -294,12 +394,14 @@ def build_packets(root: Path, config_path: Path, output_dir: Path) -> dict[str, 
     write_annotation_template(annotation_template, config, packet_rows)
     write_annotation_guide(annotation_guide, config, packet_rows)
     write_summary(summary_path, packet_rows)
+    bundle_paths = write_reviewer_bundle(root, output_dir, packet_rows, annotation_template, annotation_guide)
 
     written = {
         "index": index_path,
         "annotation_template": annotation_template,
         "annotation_guide": annotation_guide,
         "summary": summary_path,
+        **bundle_paths,
     }
     for row in packet_rows:
         packet_path = Path(row["packet_path"])

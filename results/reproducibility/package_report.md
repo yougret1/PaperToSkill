@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 419
+- Ready checks: 423
 - Pending checks: 1
 - Failed checks: 0
 
@@ -296,10 +296,14 @@ Evidence boundary: this report checks local package completeness and separates p
 | human_fidelity_protocol | ready | present | benchmarks/human_fidelity_review_v0.json |
 | human_fidelity_guide | ready | present | results/human_fidelity_packets/annotation_guide.md |
 | human_fidelity_template | ready | present | results/human_fidelity_packets/annotation_template.csv |
+| human_fidelity_reviewer_bundle_readme | ready | present | results/human_fidelity_packets/reviewer_bundle_README.md |
+| human_fidelity_reviewer_bundle_manifest | ready | present | results/human_fidelity_packets/reviewer_bundle_manifest.json |
+| human_fidelity_reviewer_bundle_zip | ready | present | results/human_fidelity_packets/human_fidelity_reviewer_bundle.zip |
 | human_fidelity_summary_json | ready | present | results/human_fidelity_packets/annotation_summary.json |
 | human_fidelity_summary_md | ready | present | results/human_fidelity_packets/annotation_summary.md |
 | human_fidelity_summary_valid | ready | errors=0 | results\human_fidelity_packets\annotation_summary.json |
 | human_fidelity_annotation_handoff_ready | ready | expected_rows=24; template_rows=24; summary_rows=24 | results/human_fidelity_packets/index.json; results/human_fidelity_packets/annotation_guide.md |
+| human_fidelity_reviewer_bundle_ready | ready | files=7; required_rows=24; zip_exists=True | results\human_fidelity_packets\reviewer_bundle_manifest.json |
 | human_fidelity_annotation_complete | pending | status=pending; scored_rows=0; pending_rows=24 | results\human_fidelity_packets\annotation_summary.json |
 | failure_archive_config | ready | present | benchmarks/failure_case_archive_v0.json |
 | failure_archive_json | ready | present | results/failure_cases/failure_case_archive.json |
