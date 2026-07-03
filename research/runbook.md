@@ -84,15 +84,12 @@ benchmarks/real_reuse/asset_locks/
 
 Current status: planned specification, per-task execution-contract specs,
 fixture requirement manifests, candidate manifests, and asset locks are ready
-for all eight tasks. REF-T1/REF-T2, SWE-T1/SWE-T2, and SNAP-T1/SNAP-T2 have
-prepared assets and one GPT-family Summary-vs-PaperToSkill run each. REF rows
-score 1.000/1.000, SWE-T2 scores 0.000/1.000, SWE-T1 scores 0.000/0.000 due
-patch-apply failures, and SNAP rows are below the pre-registered success
-threshold. AIDE-T1/T2 now have a preparer, scorer, and runner contract, but
-their real Kaggle `spaceship-titanic` `train.csv` is still pending, so no AIDE
-fixture assets, raw rows, or task scores exist yet. Do not write the AAAI paper
-as if the eight-task Summary vs PaperToSkill real-reuse comparison is complete
-or as if the partial rows establish aggregate superiority over Summary.
+for all eight tasks. All eight rows now have one GPT-family
+Summary-vs-PaperToSkill run. REF rows score 1.000/1.000, SWE-T2 scores
+0.000/1.000, SWE-T1 scores 0.000/0.000 due patch-apply failures, AIDE-T1/T2
+score 0.000/0.000 due scorer timeouts, and SNAP rows are below the
+pre-registered success threshold. Do not write the AAAI paper as if this
+single-run pass establishes aggregate superiority over Summary.
 
 Regenerate per-task specs from the master spec:
 
@@ -154,8 +151,9 @@ python scripts\prepare_real_reuse_aide_fixture.py --task AIDE-T2 --train-csv C:\
 
 The preparer writes model-visible `train.csv`, `validation_features.csv`,
 baseline files, task prompts, and Summary contexts; it keeps
-`validation_labels.csv` scorer-only. Do not run AIDE model rows until this
-separation is confirmed in the generated `asset_manifest.json` files.
+`validation_labels.csv` scorer-only. The current AIDE-T1/T2 fixtures were
+materialized from the official local `train.csv` and used for the Phase 98
+GPT-family single-run pass; synthetic data is not paper evidence.
 
 Score a dry REF-T1 prediction or REF-T2 candidate without treating failure as a
 script crash:
@@ -238,8 +236,9 @@ Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_API_KEY -ErrorAction SilentlyContinue
 ```
 
 Do not treat missing credentials, provider errors, or missing Kaggle data as
-model-quality failures. Do not append AIDE scores to the paper table until
-`results/real_reuse/raw_rows.jsonl` contains scored AIDE rows.
+model-quality failures. Current AIDE rows are scored failure-boundary rows:
+both Summary and PaperToSkill time out under the 60-second scorer budget for
+AIDE-T1/T2.
 
 Validate the planned spec before implementing runners or editing paper claims:
 
@@ -287,12 +286,11 @@ Execution order:
    has a source-anchored generated skill; task-specific SWE Summary contexts are
    written by the SWE fixture-preparation layer after local assets are
    materialized.
-4. Implement the real-reuse runner and scorer. The REF-T1/REF-T2 runner is now
-   implemented; AIDE, SWE-agent, and SnapATAC2 have preparer/scorer/runner
-   scripts ready. AIDE awaits the real Kaggle `train.csv`; SWE-T1/SWE-T2 and
-   SNAP-T1/SNAP-T2 have raw rows, with SNAP remaining below success threshold.
-5. Run agent-only tasks with no mid-run human intervention. REF-T1/REF-T2 have
-   one GPT-family Summary-vs-PaperToSkill run.
+4. Implement the real-reuse runner and scorer. The REF, AIDE, SWE-agent, and
+   SnapATAC2 preparer/scorer/runner paths are implemented and have one
+   GPT-family pass each; AIDE/SWE-T1/SNAP are failure-boundary rows.
+5. Run agent-only tasks with no mid-run human intervention. The first
+   GPT-family pass over all eight main rows is complete.
 6. Save raw rows under `results/real_reuse/raw_rows.*`.
 7. Update `results/real_reuse/main_results_plan.csv` and the matching
    `paper/aaai/papertoskill_tables.tex` cells with real scores.

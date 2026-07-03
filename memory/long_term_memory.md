@@ -204,7 +204,18 @@ Current supported claims:
   and ran SWE-T1 Summary/PaperToSkill with GPT-family `gpt-5.5`. SWE-T1
   Summary/PaperToSkill scored 0.000/0.000 because both generated patches failed
   to apply. This is one locked SWE-Bench Lite-style failure-boundary row, not a
-  full SWE-agent reproduction. Phase 91 targeted verification passed
+  full SWE-agent reproduction. Phase 98 materialized AIDE-T1/T2 from the
+  official Kaggle Spaceship Titanic files supplied by the user under
+  `C:\Users\19351\Desktop\tem\real_reuse_assets\spaceship-titanic\`, validated
+  the local scorer with baseline/weak-script scores around
+  `0.4997124784358827`, and ran AIDE-T1/T2 Summary/PaperToSkill with
+  GPT-family `gpt-5.5`. AIDE-T1 and AIDE-T2 both scored 0.000/0.000 because
+  all generated scripts exceeded the 60-second scorer budget. The first
+  single-run GPT-family pass now covers all eight real-reuse rows. It is mixed
+  and failure-heavy: SWE-T2 is one positive row, REF ties Summary at 1.000,
+  AIDE and SWE-T1 are scored failures, and SNAP rows remain below success
+  threshold. This does not establish aggregate PaperToSkill advantage over
+  Summary. Phase 91 targeted verification passed
   for 18 SWE/table/preflight/package tests, refreshed the AAAI PDF/table gates,
   and moved SWE rows to `Fixture pending` without adding scores. Phase 92 full
   verification passed 143 unit tests, all strict local gates, `git diff
@@ -213,13 +224,11 @@ Current supported claims:
   gates before documentation cleanup. Phase 94 verification passed 155 unit
   tests and all strict local gates before phase save.
 - Phase 84 inserted the main real-reuse table scaffold into the AAAI paper, and
-  later phases filled SWE-T1/SWE-T2, REF-T1/REF-T2, and SNAP-T1/SNAP-T2 from raw rows:
+  later phases filled AIDE-T1/AIDE-T2, SWE-T1/SWE-T2, REF-T1/REF-T2, and
+  SNAP-T1/SNAP-T2 from raw rows:
   `results/real_reuse/main_results_plan.csv`, `.md`, and `.json` are the table
   data source; `paper/aaai/papertoskill_tables.tex` contains
-  `tab:real-reuse-main`. Current statuses are AIDE `Awaiting dataset`, SWE-T1
-  `Scored (GPT-family)`, SWE-T2 `Scored (GPT-family)`, Reflexion
-  `Scored (GPT-family)`, and SnapATAC2 `Scored (GPT-family)` with failed local
-  miniature-fixture scores.
+  `tab:real-reuse-main`. Current statuses are all `Scored (GPT-family)`.
 - Phase 89 remote save recovered the earlier GitHub HTTPS blocker:
   `git push origin main` succeeded for the Phase 87/88 stack and the follow-up
   remote-save record was also pushed. Use `git status -sb` for the latest exact
@@ -228,18 +237,14 @@ Current supported claims:
 Current unsupported claims:
 
 - PaperToSkill improves real original-style task outcomes across AIDE,
-  SWE-agent, Reflexion, SnapATAC2, or other domains. The SWE-T1 slice has one
-  GPT-family Summary-vs-PaperToSkill run where both conditions score 0.000 on a
-  locked SQLFluff instance due patch-apply failures; this is failure-boundary
-  evidence. The SWE-T2 slice has one GPT-family Summary-vs-PaperToSkill run
-  where Summary scores 0.000 and PaperToSkill scores 1.000 on a locked Astropy
-  instance; this is positive single-task evidence, not a full SWE-agent result.
-  The REF-T1/REF-T2 slice
-  has one GPT-family Summary-vs-PaperToSkill run and both conditions score
-  1.000, so it validates the REF execution path but does not show advantage
-  over Summary. The SNAP-T1/SNAP-T2 slice has one GPT-family miniature-fixture
-  run where PaperToSkill scores higher than Summary but all rows fail the
-  success threshold. The eight-task benchmark remains incomplete.
+  SWE-agent, Reflexion, SnapATAC2, or other domains. The first single-run
+  GPT-family pass covers all eight rows, but it is mixed/failure-heavy rather
+  than confirmatory. AIDE-T1/T2 score 0.000/0.000 due scorer timeouts, SWE-T1
+  scores 0.000/0.000 due patch-apply failures, SWE-T2 scores 0.000/1.000 and
+  is one positive PaperToSkill row, REF-T1/REF-T2 score 1.000/1.000 and show no
+  advantage, and SNAP-T1/T2 score 0.000/0.500 and 0.200/0.400 while failing
+  the success threshold. This is downstream stress-test and failure-boundary
+  evidence, not broad effectiveness.
 - Saved-response model-ablation scoring as proof of live downstream task
   success, broad model quality, provider billing, or provider economics.
 - Saved-response output-contract scoring as proof of real live task success.
@@ -373,17 +378,18 @@ Use these as entry points instead of searching the whole repo first:
 - `baselines/real_reuse/REF-T1_summary.md` and
   `baselines/real_reuse/REF-T2_summary.md`: task-specific Summary condition
   contexts for the two prepared Reflexion tasks.
-- `results/real_reuse/raw_rows.jsonl`: current SWE-T1/SWE-T2, REF-T1/REF-T2,
-  and SNAP-T1/SNAP-T2 GPT-family Summary-vs-PaperToSkill raw scored rows; not a
-  full eight-task result set because AIDE remains pending.
+- `results/real_reuse/raw_rows.jsonl`: current AIDE-T1/AIDE-T2,
+  SWE-T1/SWE-T2, REF-T1/REF-T2, and SNAP-T1/SNAP-T2 GPT-family
+  Summary-vs-PaperToSkill raw scored rows; this is the first full eight-row
+  single-run pass, but it is mixed/failure-heavy and not aggregate effectiveness
+  evidence.
 - `results/real_reuse/reflexion_run_report.md`: current REF-T1/REF-T2
   GPT-family run report, complete for 4/4 rows.
 - `results/real_reuse/snapatac2_run_report.md`: current SNAP-T1/SNAP-T2
   GPT-family run report, complete for 4/4 rows; all rows failed the success
   threshold, so this is failure-boundary evidence.
 - `results/real_reuse/main_results_plan.csv`, `.md`, and `.json`: paper-facing
-  real-reuse main table source with SWE-T1/SWE-T2, REF-T1/REF-T2, and
-  SNAP-T1/SNAP-T2 filled; AIDE score cells remain pending.
+  real-reuse main table source with all eight rows filled from raw rows.
 - `generated_skills/real_reuse/swe_agent/SKILL.md` and
   `generated_skills/real_reuse/swe_agent/references/source_map.json`:
   SWE-agent source-anchored generated skill for the software-engineering

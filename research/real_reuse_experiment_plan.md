@@ -221,24 +221,22 @@ supporting role.
    metric, tokens, time, and failure reason (complete for REF-T1/REF-T2,
    AIDE-T1/T2, SWE-T1/T2, and SNAP-T1/T2).
 7. Implement a scorer/aggregator that emits raw rows and table-ready CSV/MD
-   files under `results/real_reuse/` (partially complete: REF rows fill the
-   main table; remaining task families are pending).
+   files under `results/real_reuse/` (complete for the first single-run pass:
+   all eight rows are filled in the main table).
 8. After broader raw results exist, revise the AAAI Abstract, Contributions,
-   Results, Discussion, Limitations, and Conclusion. Current AAAI text has only
-   a cautious REF partial-result update.
+   Results, Discussion, Limitations, and Conclusion (in progress for the
+   first-pass mixed/failure-boundary evidence boundary).
 
 ## Evidence Boundaries
 
-- This plan is now partially executed for REF-T1/REF-T2 only.
-- The REF rows have one GPT-family Summary-vs-PaperToSkill run and both
-  conditions score 1.000 on both locked tasks. This validates the execution
-  path but does not show aggregate PaperToSkill advantage over Summary.
-- Current AIDE, SWE-agent, and SnapATAC2 asset locks fix source revisions,
-  concrete task instances, local materialization targets, hidden scorer assets,
-  and scorer/preparer contracts. AIDE still awaits the real Kaggle
-  `train.csv`; SWE fixture assets remain pending; SNAP-T1/T2 now have
-  official miniature fixture assets and are ready to run, but SNAP rows do not
-  yet produce Summary/PaperToSkill scores.
+- This plan now has one GPT-family Summary-vs-PaperToSkill pass for all eight
+  planned rows. The result is mixed and should be read as first-pass downstream
+  evidence plus failure-boundary evidence, not aggregate effectiveness.
+- AIDE-T1/T2 both score 0.000/0.000 because generated scripts time out under
+  the 60-second scorer budget. SWE-T1 scores 0.000/0.000 because generated
+  patches fail to apply; SWE-T2 scores 0.000/1.000; REF-T1/REF-T2 score
+  1.000/1.000; SNAP-T1/SNAP-T2 score 0.000/0.500 and 0.200/0.400 but fail the
+  local success threshold.
 - Existing deterministic/offline results remain useful as quality, grounding,
   and cost gates.
 - The older saved-response model ablation remains a usage-plan/output-contract

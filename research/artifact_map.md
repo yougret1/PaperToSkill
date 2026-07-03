@@ -99,6 +99,7 @@
 | `research/run_logs/2026-07-03_phase91_real_reuse_swe_execution_layer.md` | SWE-T1/T2 preparer, scorer, runner, gate integration, fixture-pending table status, and evidence boundary | Created |
 | `research/run_logs/2026-07-03_phase96_swe_t2_real_reuse_rows.md` | SWE-T2 external fixture materialization, gold-scorer validation, GPT-family Summary-vs-PaperToSkill run, table update, and evidence boundary | Created |
 | `research/run_logs/2026-07-03_phase97_swe_t1_real_reuse_rows.md` | SWE-T1 external SQLFluff fixture materialization, parquet-backed gold/test patch extraction, gold-scorer validation, GPT-family Summary-vs-PaperToSkill run, table update, and failure-boundary evidence | Created |
+| `research/run_logs/2026-07-04_phase98_aide_real_reuse_and_paper_sync.md` | AIDE-T1/T2 official Kaggle fixture materialization, scorer validation, GPT-family Summary-vs-PaperToSkill timeout rows, all-eight-row first-pass boundary, and paper narrative sync | Created |
 
 ## Paper Draft Package
 
@@ -144,10 +145,12 @@
 | `benchmarks/model_ablation_v0.json` | Claude/GPT-family/DeepSeek model-ablation prompt packet spec | Created |
 | `benchmarks/rubric_swe_agent_v0.json` | Deterministic v0 scoring rubric for the real-reuse SWE-agent generated skill | Created |
 | `benchmarks/real_reuse/real_reuse_v0.json` | Machine-checkable planned real-reuse benchmark spec with eight original-style paper-task rows | Created |
-| `benchmarks/real_reuse/tasks/*.json` | Per-task real-reuse execution-contract specs for all eight planned paper-task rows; REF rows are executed, AIDE execution scripts are ready, and remaining task assets/runs are pending | Created |
+| `benchmarks/real_reuse/tasks/*.json` | Per-task real-reuse execution-contract specs for all eight planned paper-task rows; all eight rows now have one GPT-family Summary-vs-PaperToSkill raw-row pass | Created |
 | `benchmarks/real_reuse/fixtures/*.json` | Per-task fixture requirement manifests with asset slots, scoring contracts, license/provenance status, and planned outputs; concrete assets are partial | Created |
-| `benchmarks/real_reuse/fixture_candidates/*.json` | Per-task candidate asset manifests with selected source repositories/datasets, preparation commands, scoring entry points, and license/provenance boundaries; REF materialized and AIDE awaits real Kaggle data | Created |
-| `benchmarks/real_reuse/asset_locks/*.json` | Per-task preparation-time locks for external source revisions, fixed task instances, local materialization targets, hidden scorer assets, and scorer/preparer contracts; REF materialized and AIDE awaits real Kaggle data | Created |
+| `benchmarks/real_reuse/fixture_candidates/*.json` | Per-task candidate asset manifests with selected source repositories/datasets, preparation commands, scoring entry points, and license/provenance boundaries; all main task families have prepared or scored local rows | Created |
+| `benchmarks/real_reuse/asset_locks/*.json` | Per-task preparation-time locks for external source revisions, fixed task instances, local materialization targets, hidden scorer assets, and scorer/preparer contracts; all eight first-pass rows are now backed by locked assets | Created |
+| `benchmarks/real_reuse/assets/AIDE-T1/asset_manifest.json` | Prepared AIDE Spaceship Titanic local validation fixture manifest with model-visible split assets and scorer-only validation labels; not a model run by itself | Created |
+| `benchmarks/real_reuse/assets/AIDE-T2/asset_manifest.json` | Prepared AIDE weak-script/feedback local validation fixture manifest with model-visible split assets and scorer-only validation labels; not a model run by itself | Created |
 | `benchmarks/real_reuse/assets/REF-T1/asset_manifest.json` | Prepared HotPotQA-style Reflexion QA fixture manifest with model-visible task assets and hidden answer key; not a model run or result | Created |
 | `benchmarks/real_reuse/assets/REF-T2/asset_manifest.json` | Prepared HumanEval/0 Reflexion retry fixture manifest with model-visible failed attempt/feedback and hidden checker assets; not a model run or result | Created |
 | `benchmarks/real_reuse/assets/SWE-T1/asset_manifest.json` | Prepared SWE-Bench Lite-style SQLFluff fixture manifest with external workspace pointer, model-visible issue assets, local venv test command, and scorer-only gold/test patches; not a model run by itself | Created |
@@ -398,7 +401,7 @@
 | `results/reproducibility/package_report.json` | Machine-readable reproducibility package report | Created |
 | `results/real_reuse/spec_preflight.md` | Human-readable preflight for the planned real-reuse benchmark spec; not a task-result table | Created |
 | `results/real_reuse/spec_preflight.json` | Machine-readable preflight for the planned real-reuse benchmark spec; not a task-result table | Created |
-| `results/real_reuse/raw_rows.jsonl` | Raw scored rows for currently executed real-reuse conditions; current rows cover SWE-T1/SWE-T2, REF-T1/REF-T2, and SNAP-T1/SNAP-T2 Summary and PaperToSkill with GPT-family | Created |
+| `results/real_reuse/raw_rows.jsonl` | Raw scored rows for currently executed real-reuse conditions; current rows cover AIDE-T1/AIDE-T2, SWE-T1/SWE-T2, REF-T1/REF-T2, and SNAP-T1/SNAP-T2 Summary and PaperToSkill with GPT-family | Created |
 | `results/real_reuse/reflexion_run_report.md` | Human-readable run report for the locked REF-T1/REF-T2 GPT-family real-reuse execution | Created |
 | `results/real_reuse/reflexion_run_report.json` | Machine-readable run report for the locked REF-T1/REF-T2 GPT-family real-reuse execution | Created |
 | `results/real_reuse/swe_run_report.md` | Human-readable latest SWE runner report; raw scored SWE evidence is authoritative in `results/real_reuse/raw_rows.jsonl` because the later SWE-T1 Summary retry overwrote the default report path | Created |
@@ -407,8 +410,12 @@
 | `results/real_reuse/swe_t2_gold_metric.json` | Gold-patch scorer validation for the locked SWE-T2 fixture and hidden test patch | Created |
 | `results/real_reuse/snapatac2_run_report.md` | Human-readable run report for the locked SNAP-T1/SNAP-T2 GPT-family real-reuse execution over prepared official miniature fixtures | Created |
 | `results/real_reuse/snapatac2_run_report.json` | Machine-readable run report for the locked SNAP-T1/SNAP-T2 GPT-family real-reuse execution over prepared official miniature fixtures | Created |
-| `results/real_reuse/main_results_plan.csv` | Data source for the AAAI real-reuse main experiment table; SWE, REF, and SNAP rows are filled from raw rows while AIDE remains pending | Created |
-| `results/real_reuse/main_results_plan.md` | Human-readable real-reuse main experiment table with filled SWE/REF/SNAP rows and pending AIDE rows | Created |
+| `results/real_reuse/aide_run_report.md` | Human-readable run report for the locked AIDE-T1/AIDE-T2 GPT-family real-reuse execution over official Kaggle-derived local validation fixtures | Created |
+| `results/real_reuse/aide_run_report.json` | Machine-readable run report for the locked AIDE-T1/AIDE-T2 GPT-family real-reuse execution | Created |
+| `results/real_reuse/aide_t1_baseline_metric.json` | Baseline-submission scorer validation for the locked AIDE-T1 fixture | Created |
+| `results/real_reuse/aide_t2_weak_script_metric.json` | Weak-script scorer validation for the locked AIDE-T2 fixture | Created |
+| `results/real_reuse/main_results_plan.csv` | Data source for the AAAI real-reuse main experiment table; all eight rows are filled from raw rows | Created |
+| `results/real_reuse/main_results_plan.md` | Human-readable real-reuse main experiment table with all eight rows filled from raw rows | Created |
 | `results/real_reuse/main_results_plan.json` | Machine-readable real-reuse main experiment table generated from raw rows and planned task specs | Created |
 | `results/reproducibility/aaai_package_report.md` | Human-readable AAAI package verification report | Created |
 | `results/reproducibility/aaai_package_report.json` | Machine-readable AAAI package verification report | Created |
@@ -465,6 +472,6 @@
 | Artifact | Purpose | Status |
 | --- | --- | --- |
 | Model-ablation response logs | Claude/GPT-family/DeepSeek response files and scores after endpoint/model availability | Created |
-| Concrete real-reuse fixture assets | REF-T1/REF-T2 prepared assets, scorer, runner, and one GPT-family Summary-vs-PaperToSkill run are created; SWE-T1/SWE-T2 external fixture assets, gold-scorer validations, and one GPT-family Summary-vs-PaperToSkill run each are created; AIDE preparer/scorer/runner are ready but await real Kaggle `train.csv`; SnapATAC2 has prepared miniature fixtures and scored failure-boundary rows | Mixed |
-| `results/real_reuse/` | Current SWE-T1/SWE-T2/REF/SNAP raw rows and table artifacts plus future aggregate tables, sanity checks, cost table, and LLM ablation outputs for the remaining AIDE real-reuse experiments | Mixed |
+| Concrete real-reuse fixture assets | AIDE-T1/T2, REF-T1/T2, SWE-T1/T2, and SNAP-T1/T2 prepared assets plus one GPT-family Summary-vs-PaperToSkill pass are created; AIDE/SWE-T1/SNAP are failure-boundary rows, SWE-T2 is one positive PaperToSkill row, and REF shows no advantage | Mixed |
+| `results/real_reuse/` | Current AIDE/SWE/REF/SNAP raw rows and table artifacts plus future aggregate tables, sanity checks, cost table, and LLM ablation outputs | Mixed |
 | Paper2Agent executable baseline | Full Paper2Agent/MCP runtime comparison, if setup resources become available | Planned |

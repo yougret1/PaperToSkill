@@ -44,7 +44,13 @@ size relative to full extracted papers. These results support PaperToSkill as a
 reproducible conversion layer from curated paper notes to portable skills. All
 four live-transfer saved-response sets are collected and scored under a
 deterministic output-contract evaluator; these saved response files are not
-human semantic fidelity or downstream execution-outcome evidence.
+human semantic fidelity or downstream execution-outcome evidence. A first
+single-run real-reuse stress test over eight AIDE, SWE-agent, Reflexion, and
+SnapATAC2 paper-task rows is complete, but the outcome is mixed rather than
+confirmatory: one SWE task favors PaperToSkill, Reflexion ties Summary, and
+AIDE, SWE-T1, and SnapATAC2 expose timeout, patch-application, and artifact
+completion failures. We therefore treat these rows as downstream boundary
+evidence, not aggregate effectiveness.
 \end{abstract}
 
 \section{Introduction}
@@ -76,9 +82,11 @@ Our current contributions are: (1) a paper-to-skill schema for operationalizing
 research contributions; (2) a deterministic extraction scaffold that emits
 \texttt{SKILL.md} plus source maps; (3) deterministic extracted-text-to-note
 scaffolds evaluated on Toolformer and AIDE; (4) a four-paper benchmark using AI
-Scientist-v2, Reflexion, AIDE, and Toolformer; and (5) deterministic/offline
+Scientist-v2, Reflexion, AIDE, and Toolformer; (5) deterministic/offline
 evaluations for structure, context coverage, compactness, source grounding, and
-transfer readiness.
+transfer readiness; and (6) a first single-run real-reuse stress test that
+records both positive and failed Summary-vs-PaperToSkill outcomes without
+promoting them into an aggregate downstream-success claim.
 
 \section{Related Work}
 
@@ -159,20 +167,24 @@ Table~\ref{tab:real-reuse-main}. It contains eight original-style
 \emph{paper-task} rows across AIDE, SWE-agent, Reflexion, and SnapATAC2. Each
 row fixes the source paper, task input/output shape, metric family, reported
 reference boundary, and the two main conditions: Summary and PaperToSkill. At
-this revision, the SWE-agent rows, the Reflexion rows, and the SnapATAC2 rows
-have one GPT-family run with scored Summary and PaperToSkill outputs. AIDE
-still awaits the real competition dataset. The SnapATAC2 rows use prepared
-official miniature fixtures and are scored local dry-run tasks rather than full
-paper reproductions. The filled SWE/REF/SNAP cells are still a partial slice of
-the downstream protocol and do not complete the eight-task benchmark.
+this revision, all eight rows have one GPT-family run with scored Summary and
+PaperToSkill outputs. The AIDE rows use an official Kaggle Spaceship Titanic
+training file with a locked local validation split; the SnapATAC2 rows use
+prepared official miniature fixtures and are scored local dry-run tasks rather
+than full paper reproductions. These rows complete the first single-run pass
+over the real-reuse table, but they do not by themselves establish aggregate
+advantage over Summary.
 
 \input{papertoskill_tables}
 
 \section{Results}
 
 The completed results below are deterministic/offline quality and grounding
-evidence for the current PaperToSkill artifacts, plus partial real-reuse
-execution evidence. SWE-T1 is scored for one GPT-family run on a locked
+evidence for the current PaperToSkill artifacts, plus first-pass real-reuse
+execution evidence. AIDE-T1 and AIDE-T2 are scored for one GPT-family run on a
+locked Kaggle Spaceship Titanic validation split; both Summary and PaperToSkill
+produce scripts that exceed the 60-second scoring budget and score 0.000. SWE-T1
+is scored for one GPT-family run on a locked
 SWE-Bench Lite SQLFluff instance: both Summary and PaperToSkill produce patches
 that fail to apply and score 0.000. SWE-T2 is scored for one GPT-family run on
 a locked SWE-Bench Verified-style Astropy instance: the Summary patch fails to
@@ -184,9 +196,12 @@ for one GPT-family run over prepared official miniature fixtures. PaperToSkill
 scores above Summary on these two SnapATAC2 dry-run tasks (0.500 vs. 0.000 and
 0.400 vs. 0.200), but all SNAP scores remain below the success threshold,
 mainly because the responses did not produce complete runtime, memory, and
-quality artifacts. These six filled tasks show that the SWE/REF/SNAP runner,
-scorer, and table-update paths are live; they do not yet establish aggregate
-advantage over Summary or complete the main eight-task experiment. All four generated skills score 20/20 on deterministic skill rubrics. On context
+quality artifacts. Across the eight filled tasks, the runner, scorer, and
+table-update paths are live. The outcome is mixed: SWE-T2 is a positive
+PaperToSkill row, REF shows no advantage because both conditions solve the
+fixtures, and AIDE/SWE-T1/SNAP primarily expose budget, patch-application, and
+artifact-completion failure boundaries. These results do not establish
+aggregate advantage over Summary. All four generated skills score 20/20 on deterministic skill rubrics. On context
 coverage, the generated skills score 7.867/9 for AI Scientist-v2, 8.267/9 for
 Reflexion, 9.1/10 for AIDE, and 8.9/10 for Toolformer. The generic-summary and
 abstract-only baselines score substantially lower across all four cases
@@ -294,6 +309,16 @@ bugs. These records are the type of failure branches PaperToSkill should
 preserve: not just final successes, but the ways extraction, evaluation, or
 external dependencies can lose important operational content.
 
+The real-reuse rows add a harsher version of the same lesson. The AIDE rows
+show that a method skill can still fail when the generated script exceeds a
+locked scoring budget. SWE-T1 shows that software-engineering reuse can fail
+before tests run if a patch cannot be applied cleanly. The SnapATAC2 rows show
+that partial pipelines are not enough when the scorer requires complete
+runtime, memory, and quality artifacts. These failures point to the next method
+pressure points: budget contracts, patch/application constraints, required
+artifact manifests, and recovery instructions should be explicit when a source
+paper's method is converted into a reusable skill.
+
 \section{Limitations}
 
 The current work has several important limits. First, the main benchmark
@@ -312,19 +337,26 @@ been completed. Sixth,
 compactness is measured by word count, deterministic character proxy, local
 tokenizer-aware input-token proxy, and local output-token proxy for saved model
 responses, not by provider-specific prices, live invoices, or live success per
-dollar.
+dollar. Seventh, the real-reuse rows are single-run GPT-family measurements,
+and original-paper reference scores are reported references unless the same
+data, input/output contract, metric, budget, and runtime setting are reproduced
+locally. Several rows fail because generated scripts or patches do not finish
+within the locked budget or do not produce complete scorer artifacts, so they
+should be read as boundary evidence rather than a broad downstream
+effectiveness claim.
 
 \section{Conclusion}
 
 PaperToSkill turns paper-derived procedural knowledge into portable,
 human-editable skills. In a four-paper benchmark, generated skills are compact,
 source-grounded, structurally valid, and more operationally complete than short
-summary baselines under deterministic evaluation. The next stage is to add
-human fidelity review, evaluate downstream execution outcomes separately from
-saved-response scoring,
-extend the bounded Paper2Agent artifact comparison into a real executable MCP
-baseline if resources permit, and test papers whose contributions are less
-naturally procedural.
+summary baselines under deterministic evaluation. A first eight-row real-reuse
+stress test is now complete, but it is mixed and failure-heavy rather than a
+proof of aggregate downstream effectiveness. The next stage is to add human
+fidelity review, repeat and expand real-reuse runs, extend the bounded
+Paper2Agent artifact comparison into a real executable MCP baseline if
+resources permit, and use the real-reuse failure modes to refine budget,
+artifact, and failure-recovery contracts.
 
 \bibliography{papertoskill_refs}
 

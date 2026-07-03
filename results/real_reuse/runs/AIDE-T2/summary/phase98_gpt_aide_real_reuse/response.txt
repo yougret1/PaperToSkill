@@ -1,0 +1,294 @@
+```python
+import json
+import os
+import warnings
+
+import numpy as np
+import pandas as pd
+from sklearn.base import clone
+from sklearn.compose import ColumnTransformer
+from sklearn.ensemble import ExtraTreesClassifier, HistGradientBoostingClassifier, RandomForestClassifier, VotingClassifier
+from sklearn.impute import SimpleImputer
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import StratifiedKFold, cross_val_score
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+
+warnings.filterwarnings("ignore")
+
+
+RANDOM_STATE = 42
+TRAIN_PATH = "train.csv"
+VALID_PATH = "validation_features.csv"
+SUBMISSION_PATH = "submission.csv"
+
+
+def read_feedback_score(path="baseline_score.json"):
+    if not os.path.exists(path):
+        return None
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            payload = json.load(f)
+        if isinstance(payload, dict):
+            for key in ("score", "validation_score", "accuracy"):
+                if key in payload:
+                    return float(payload[key])
+        return float(payload)
+    except Exception:
+        return None
+
+
+def make_ohe():
+    try:
+        return OneHotEncoder(handle_unknown="ignore", sparse_output=False, min_frequency=2)
+    except TypeError:
+        return OneHotEncoder(handle_unknown="ignore", sparse=False)
+
+
+def add_features(train_df, valid_df):
+    train = train_df.copy()
+    valid = valid_df.copy()
+    train["_is_train"] = 1
+    valid["_is_train"] = 0
+
+    if "Transported" not in valid.columns:
+        valid["Transported"] = np.nan
+
+    data = pd.concat([train, valid], axis=0, ignore_index=True)
+
+    if "PassengerId" in data.columns:
+        passenger = data["PassengerId"].astype(str)
+        data["GroupId"] = passenger.str.split("_").str[0]
+        data["GroupMember"] = pd.to_numeric(passenger.str.split("_").str[1], errors="coerce")
+        data["GroupSize"] = data.groupby("GroupId")["PassengerId"].transform("count")
+        data["IsAlone"] = (data["GroupSize"] == 1).astype(int)
+    else:
+        data["GroupId"] = "missing"
+        data["GroupMember"] = np.nan
+        data["GroupSize"] = 1
+        data["IsAlone"] = 1
+
+    if "Cabin" in data.columns:
+        cabin = data["Cabin"].astype(str).replace("nan", np.nan)
+        cabin_parts = cabin.str.split("/", expand=True)
+        data["Deck"] = cabin_parts[0] if cabin_parts.shape[1] > 0 else np.nan
+        data["CabinNum"] = pd.to_numeric(cabin_parts[1], errors="coerce") if cabin_parts.shape[1] > 1 else np.nan
+        data["Side"] = cabin_parts[2] if cabin_parts.shape[1] > 2 else np.nan
+        data["CabinKnown"] = data["Cabin"].notna().astype(int)
+        data["CabinRegion"] = pd.cut(
+            data["CabinNum"],
+            bins=[-1, 300, 600, 900, 1200, 1500, 2000],
+            labels=["r0", "r1", "r2", "r3", "r4", "r5"],
+        ).astype(object)
+    else:
+        data["Deck"] = np.nan
+        data["CabinNum"] = np.nan
+        data["Side"] = np.nan
+        data["CabinKnown"] = 0
+        data["CabinRegion"] = np.nan
+
+    if "Name" in data.columns:
+        data["Surname"] = data["Name"].astype(str).str.split().str[-1].replace("nan", np.nan)
+        data["FamilySize"] = data.groupby("Surname")["PassengerId"].transform("count")
+        data.loc[data["Surname"].isna(), "FamilySize"] = np.nan
+        data["HasName"] = data["Name"].notna().astype(int)
+    else:
+        data["Surname"] = np.nan
+        data["FamilySize"] = np.nan
+        data["HasName"] = 0
+
+    spend_cols = [c for c in ["RoomService", "FoodCourt", "ShoppingMall", "Spa", "VRDeck"] if c in data.columns]
+    for col in spend_cols:
+        data[col] = pd.to_numeric(data[col], errors="coerce")
+
+    if spend_cols:
+        spend_filled = data[spend_cols].fillna(0)
+        data["TotalSpend"] = spend_filled.sum(axis=1)
+        data["LogTotalSpend"] = np.log1p(data["TotalSpend"])
+        data["NoSpend"] = (data["TotalSpend"] == 0).astype(int)
+        data["AnySpend"] = (data["TotalSpend"] > 0).astype(int)
+        data["LuxurySpend"] = spend_filled[[c for c in ["Spa", "VRDeck"] if c in spend_filled.columns]].sum(axis=1)
+        data["BasicSpend"] = spend_filled[[c for c in ["RoomService", "FoodCourt", "ShoppingMall"] if c in spend_filled.columns]].sum(axis=1)
+        data["SpendPerGroup"] = data["TotalSpend"] / data["GroupSize"].replace(0, np.nan)
+        data["MaxSpendItem"] = spend_filled.max(axis=1)
+        data["SpendItemsUsed"] = (spend_filled > 0).sum(axis=1)
+        for col in spend_cols:
+            data[f"Log_{col}"] = np.log1p(spend_filled[col])
+            data[f"Has_{col}"] = (spend_filled[col] > 0).astype(int)
+    else:
+        data["TotalSpend"] = 0
+        data["LogTotalSpend"] = 0
+        data["NoSpend"] = 1
+        data["AnySpend"] = 0
+        data["LuxurySpend"] = 0
+        data["BasicSpend"] = 0
+        data["SpendPerGroup"] = 0
+        data["MaxSpendItem"] = 0
+        data["SpendItemsUsed"] = 0
+
+    if "Age" in data.columns:
+        data["Age"] = pd.to_numeric(data["Age"], errors="coerce")
+        data["AgeBin"] = pd.cut(
+            data["Age"],
+            bins=[-1, 5, 12, 18, 25, 35, 50, 65, 120],
+            labels=["baby", "child", "teen", "young", "adult", "mid", "senior", "elder"],
+        ).astype(object)
+        data["IsChild"] = (data["Age"] < 13).astype(float)
+    else:
+        data["AgeBin"] = np.nan
+        data["IsChild"] = np.nan
+
+    for col in ["CryoSleep", "VIP"]:
+        if col in data.columns:
+            mapped = data[col].map({True: 1, False: 0, "True": 1, "False": 0, "true": 1, "false": 0})
+            data[f"{col}_num"] = pd.to_numeric(mapped, errors="coerce")
+        else:
+            data[f"{col}_num"] = np.nan
+
+    data["Cryo_NoSpend"] = data["CryoSleep_num"] * data["NoSpend"]
+    data["Cryo_AnySpend"] = data["CryoSleep_num"] * data["AnySpend"]
+    data["VIP_Spend"] = data["VIP_num"] * data["LogTotalSpend"]
+
+    if "HomePlanet" in data.columns and "Destination" in data.columns:
+        data["Route"] = data["HomePlanet"].astype(str) + "_to_" + data["Destination"].astype(str)
+    else:
+        data["Route"] = np.nan
+
+    drop_cols = ["Transported", "_is_train"]
+    X_all = data.drop(columns=[c for c in drop_cols if c in data.columns])
+    X_all = X_all.drop(columns=[c for c in ["PassengerId", "Name", "Cabin"] if c in X_all.columns], errors="ignore")
+
+    X_train = X_all.loc[data["_is_train"] == 1].reset_index(drop=True)
+    X_valid = X_all.loc[data["_is_train"] == 0].reset_index(drop=True)
+    return X_train, X_valid
+
+
+def build_preprocessor(X):
+    categorical_cols = X.select_dtypes(include=["object", "category", "bool"]).columns.tolist()
+    numeric_cols = [c for c in X.columns if c not in categorical_cols]
+
+    numeric_pipe = Pipeline(
+        steps=[
+            ("imputer", SimpleImputer(strategy="median")),
+            ("scaler", StandardScaler()),
+        ]
+    )
+    categorical_pipe = Pipeline(
+        steps=[
+            ("imputer", SimpleImputer(strategy="most_frequent")),
+            ("onehot", make_ohe()),
+        ]
+    )
+
+    return ColumnTransformer(
+        transformers=[
+            ("num", numeric_pipe, numeric_cols),
+            ("cat", categorical_pipe, categorical_cols),
+        ],
+        remainder="drop",
+    )
+
+
+def main():
+    train = pd.read_csv(TRAIN_PATH)
+    valid = pd.read_csv(VALID_PATH)
+
+    y = train["Transported"].map({True: 1, False: 0, "True": 1, "False": 0, 1: 1, 0: 0}).astype(int)
+    X, X_valid = add_features(train, valid)
+    preprocessor = build_preprocessor(X)
+
+    models = [
+        (
+            "hgb",
+            HistGradientBoostingClassifier(
+                learning_rate=0.045,
+                max_iter=420,
+                max_leaf_nodes=28,
+                l2_regularization=0.08,
+                random_state=RANDOM_STATE,
+            ),
+        ),
+        (
+            "extra",
+            ExtraTreesClassifier(
+                n_estimators=650,
+                max_features="sqrt",
+                min_samples_leaf=2,
+                class_weight="balanced_subsample",
+                random_state=RANDOM_STATE + 1,
+                n_jobs=-1,
+            ),
+        ),
+        (
+            "rf",
+            RandomForestClassifier(
+                n_estimators=500,
+                max_depth=12,
+                min_samples_leaf=3,
+                max_features="sqrt",
+                class_weight="balanced_subsample",
+                random_state=RANDOM_STATE + 2,
+                n_jobs=-1,
+            ),
+        ),
+        (
+            "logit",
+            LogisticRegression(
+                C=0.55,
+                max_iter=2000,
+                class_weight="balanced",
+                random_state=RANDOM_STATE + 3,
+            ),
+        ),
+    ]
+
+    candidate_pipelines = []
+    for name, model in models:
+        candidate_pipelines.append((name, Pipeline([("prep", clone(preprocessor)), ("model", model)])))
+
+    cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=RANDOM_STATE)
+    cv_scores = {}
+    for name, pipe in candidate_pipelines:
+        scores = cross_val_score(pipe, X, y, cv=cv, scoring="accuracy", n_jobs=None)
+        cv_scores[name] = float(scores.mean())
+
+    ranked = sorted(cv_scores, key=cv_scores.get, reverse=True)
+    top_names = ranked[:3]
+    voting_estimators = [(name, dict(candidate_pipelines)[name]) for name in top_names]
+
+    ensemble = VotingClassifier(
+        estimators=voting_estimators,
+        voting="soft",
+        weights=[max(cv_scores[name] - 0.5, 0.01) for name in top_names],
+        n_jobs=None,
+    )
+
+    ensemble_scores = cross_val_score(ensemble, X, y, cv=cv, scoring="accuracy", n_jobs=None)
+    best_single_name = ranked[0]
+
+    if float(ensemble_scores.mean()) >= cv_scores[best_single_name] - 0.001:
+        final_model = ensemble
+    else:
+        final_model = dict(candidate_pipelines)[best_single_name]
+
+    final_model.fit(X, y)
+    pred = final_model.predict(X_valid).astype(bool)
+
+    submission = pd.DataFrame(
+        {
+            "PassengerId": valid["PassengerId"],
+            "Transported": pred,
+        }
+    )
+    submission.to_csv(SUBMISSION_PATH, index=False)
+
+    baseline_score = read_feedback_score()
+    print(f"baseline_score={baseline_score}")
+    print(f"cv_scores={cv_scores}")
+    print(f"submission_rows={len(submission)}")
+
+
+if __name__ == "__main__":
+    main()
+```

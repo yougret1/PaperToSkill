@@ -17,9 +17,9 @@ Evidence boundary: this report checks that AAAI LaTeX table values match generat
 | paper_table_real_reuse_aide_t1_output | ready | value=Runnable solution/submission | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_aide_t1_metric | ready | value=validation_score | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_aide_t1_reference | ready | value=Reported AIDE ref. | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
-| paper_table_real_reuse_aide_t1_summary_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
-| paper_table_real_reuse_aide_t1_papertoskill_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
-| paper_table_real_reuse_aide_t1_status | ready | value=Awaiting dataset | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t1_summary_score | ready | value=0.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t1_papertoskill_score | ready | value=0.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t1_status | ready | value=Scored (GPT-family) | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_aide_t2_task_id | ready | value=AIDE-T2 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_aide_t2_source_paper | ready | value=AIDE | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_aide_t2_domain | ready | value=ML engineering | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
@@ -27,9 +27,9 @@ Evidence boundary: this report checks that AAAI LaTeX table values match generat
 | paper_table_real_reuse_aide_t2_output | ready | value=Improved script + trajectory | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_aide_t2_metric | ready | value=best_node_score | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_aide_t2_reference | ready | value=Reported AIDE ref. | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
-| paper_table_real_reuse_aide_t2_summary_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
-| paper_table_real_reuse_aide_t2_papertoskill_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
-| paper_table_real_reuse_aide_t2_status | ready | value=Awaiting dataset | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t2_summary_score | ready | value=0.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t2_papertoskill_score | ready | value=0.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_aide_t2_status | ready | value=Scored (GPT-family) | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_swe_t1_task_id | ready | value=SWE-T1 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_swe_t1_source_paper | ready | value=SWE-agent | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_swe_t1_domain | ready | value=Software engineering | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |

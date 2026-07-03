@@ -23,6 +23,11 @@ PaperToSkill as a reproducible conversion layer from curated paper notes to
 portable skills. All four live-transfer saved-response sets are collected and
 scored under a deterministic output-contract evaluator; these saved response
 files are not human semantic fidelity or downstream execution-outcome evidence.
+A first single-run real-reuse stress test over eight AIDE, SWE-agent,
+Reflexion, and SnapATAC2 paper-task rows is complete, but it is mixed rather
+than confirmatory: one SWE task favors PaperToSkill, Reflexion ties Summary,
+and AIDE, SWE-T1, and SnapATAC2 expose timeout, patch-application, and artifact
+completion failures.
 
 ## 1. Introduction
 
@@ -64,7 +69,10 @@ The current contributions are:
    Toolformer;
 5. deterministic/offline evaluations for structure, context coverage,
    compactness, source grounding, and transfer readiness;
-6. a claim discipline that separates validated evidence from pending live-agent
+6. a first single-run real-reuse stress test that records both positive and
+   failed Summary-vs-PaperToSkill outcomes without promoting them into an
+   aggregate downstream-success claim;
+7. a claim discipline that separates validated evidence from pending live-agent
    claims, including a first-class archive of paper-reported and project-level
    failure cases.
 
@@ -230,6 +238,16 @@ model-ablation scoring for the current prompt-packet protocol, not a claim of
 human semantic fidelity, downstream execution outcome, provider economics, or
 human evaluation.
 
+The first real-reuse pass covers eight original-style paper-task rows. AIDE-T1
+and AIDE-T2 score 0.000/0.000 because generated scripts exceed the scoring
+budget. SWE-T1 scores 0.000/0.000 because generated patches fail to apply,
+while SWE-T2 scores 0.000/1.000 and gives one positive PaperToSkill
+software-engineering row. REF-T1 and REF-T2 score 1.000/1.000, validating the
+runner/scorer path without showing advantage over Summary. SNAP-T1 and SNAP-T2
+score 0.000/0.500 and 0.200/0.400, but both remain below the success threshold.
+This is mixed first-pass downstream evidence and failure-boundary evidence, not
+a broad downstream effectiveness claim.
+
 The live-transfer saved-response evaluation now covers all four paper packets.
 AI Scientist-v2, Reflexion, AIDE, and Toolformer each have six saved responses
 across Codex-style and Claude-style harness prompts and three context variants.
@@ -313,6 +331,14 @@ two-column paper text, figures, and references into one line. The final scaffold
 therefore keeps source anchors auditable and treats automatic snippets as draft
 evidence that must be reviewed before live use.
 
+The real-reuse rows expose additional operational failures. AIDE shows that a
+method skill can still fail under a locked scoring budget. SWE-T1 shows that a
+software-engineering task can fail before tests run if a patch cannot be
+applied cleanly. SnapATAC2 shows that partial pipelines are insufficient when
+the scorer requires complete runtime, memory, and quality artifacts. These
+failures point to budget contracts, patch/application constraints, artifact
+manifests, and recovery instructions as future schema pressure points.
+
 ## 7. Limitations
 
 The current work has several important limits. First, the main benchmark
@@ -340,23 +366,26 @@ the failure-case archive is an evidence and
 provenance artifact rather than a controlled outcome study. Ninth, the
 reproducibility package is locally ready but still has pending external evidence
 for human annotations and final AAAI readiness under the recorded wait policy.
+Tenth, real-reuse rows are single-run GPT-family measurements; original-paper
+reference scores are reported references unless the same data, input/output
+contract, metric, budget, and runtime setting are reproduced locally.
 
 These limits shape the correct claim: PaperToSkill currently provides
 reproducible evidence for compact, source-grounded skill artifacts and offline
-coverage/readiness improvements. It does not yet establish live deployment
-success.
+coverage/readiness improvements, plus mixed first-pass real-reuse stress-test
+evidence. It does not yet establish aggregate live deployment success.
 
 ## 8. Conclusion
 
 PaperToSkill turns paper-derived procedural knowledge into portable,
 human-editable skills. In a four-paper benchmark, generated skills are compact,
 source-grounded, structurally valid, and more operationally complete than short
-summary baselines under deterministic evaluation. The next stage is to add the
-human fidelity review, evaluate downstream execution outcomes separately from
-saved-response scoring,
-extend the bounded Paper2Agent artifact/workflow comparison into a real
-executable MCP baseline if resources permit, and test papers whose contributions
-are less naturally procedural.
+summary baselines under deterministic evaluation. A first eight-row real-reuse
+stress test is complete, but it is mixed and failure-heavy rather than a proof
+of aggregate downstream effectiveness. The next stage is to add human fidelity
+review, repeat and expand real-reuse runs, extend the bounded Paper2Agent
+artifact/workflow comparison into a real executable MCP baseline if resources
+permit, and test papers whose contributions are less naturally procedural.
 
 ## Reproducibility Pointers
 

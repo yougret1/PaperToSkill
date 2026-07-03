@@ -7,6 +7,24 @@ Current date: 2026-07-04.
 
 ## Latest Resume/Completion Note
 
+- 2026-07-04 Phase 98 AIDE real-reuse completion and paper-sync WIP: user
+  provided the official Kaggle Spaceship Titanic `train.csv`, `test.csv`, and
+  `sample_submission.csv` under
+  `C:\Users\19351\Desktop\tem\real_reuse_assets\spaceship-titanic\`; the
+  `train.csv` has 8,693 rows and SHA256
+  `17336D553F49EBDF6ECB266D2B5D3746E5DD308445F7C7864141C4F28D2A88D0`.
+  AIDE-T1/T2 fixture assets were materialized, baseline scorer checks passed at
+  about `0.4997124784358827`, and the GPT-family `gpt-5.5` AIDE run appended
+  four scored rows: AIDE-T1 Summary/PaperToSkill `0.000/0.000` and AIDE-T2
+  Summary/PaperToSkill `0.000/0.000`, all due `timeout after 60s`. The first
+  single-run GPT-family real-reuse pass now covers all eight task rows:
+  AIDE-T1/T2 `0.000/0.000`, SWE-T1 `0.000/0.000`, SWE-T2 `0.000/1.000`,
+  REF-T1/T2 `1.000/1.000`, SNAP-T1 `0.000/0.500`, and SNAP-T2
+  `0.200/0.400`. This is mixed/failure-heavy downstream evidence and does not
+  establish aggregate PaperToSkill advantage over Summary. AAAI text, table
+  caption, `paper/draft.md`, and `paper/outline.md` are being synchronized to
+  this evidence boundary. Remaining action before phase save: refresh strict
+  gates/reports, rebuild the AAAI PDF, run tests/hygiene, then commit and push.
 - 2026-07-04 Phase 97 cleanup/resume: read long-term and short-term memory
   after context continuation, checked `git status -sb`, and checked
   `C:\Users\19351\Desktop\tem\ok.txt`; no new `ok.txt` was present, so AIDE

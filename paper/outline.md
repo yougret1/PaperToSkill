@@ -17,9 +17,10 @@ Phase 74 adds a bounded source-backed Paper2Agent artifact/workflow comparison;
 these are saved-response and artifact-positioning results, not live success or
 MCP baseline evidence. Phase 79 starts a next-stage real-reuse experiment plan
 in `research/real_reuse_experiment_plan.md`; Phase 87 partially executes the
-Reflexion slice with one GPT-family Summary-vs-PaperToSkill run. The full
-eight-task benchmark remains incomplete and must not be described as completed
-evidence.
+Reflexion slice with one GPT-family Summary-vs-PaperToSkill run, and later
+phases complete a first GPT-family pass over all eight real-reuse rows. The
+first pass is mixed and failure-heavy, so it must not be described as aggregate
+downstream effectiveness.
 
 ## Working Title
 
@@ -38,12 +39,13 @@ deterministic structural rubrics, preserve more task-relevant operational
 coverage than summary baselines, remain under a 1200-word compactness budget,
 and show stronger offline transfer readiness when transfer notes are retained.
 
-Next-stage target claim after additional experiments:
+Current downstream boundary claim:
 
 PaperToSkill should be evaluated on original-paper-style input/output tasks to
 test whether agents or users can reuse the source paper's method from the skill
-and obtain acceptable real task outcomes. This claim is planned, not yet
-validated.
+and obtain acceptable real task outcomes. A first single-run GPT-family pass
+over eight such tasks is complete, but it is mixed and failure-heavy rather
+than a validation of aggregate downstream effectiveness.
 
 ## Contribution Bullets
 
@@ -59,8 +61,8 @@ validated.
    summaries, source-span support, compactness, and offline transfer readiness.
 5. A provenance discipline for separating validated claims, inferred transfer
    guidance, blocked live experiments, and failure branches.
-6. Planned next-stage real-reuse evaluation over eight `paper-task` rows across
-   AIDE, SWE-agent, Reflexion, and SnapATAC2, with Toolformer and
+6. A first single-run real-reuse stress test over eight `paper-task` rows
+   across AIDE, SWE-agent, Reflexion, and SnapATAC2, with Toolformer and
    AI Scientist-v2 retained as sanity/auxiliary cases.
 
 ## Section Plan
@@ -143,12 +145,12 @@ Metrics:
 - word count and compactness budget;
 - unsupported instruction rate where available.
 
-Next-stage real-reuse benchmark plan:
+Real-reuse first-pass benchmark:
 
 - Main candidate papers: AIDE, SWE-agent, Reflexion, and SnapATAC2.
 - Main unit: one `paper-task`, meaning a task that preserves the source
   paper's input/output shape and metric family.
-- Planned task count: eight tasks, two per main paper/domain.
+- Task count: eight tasks, two per main paper/domain.
 - Main condition comparison: `Summary` versus `PaperToSkill`.
 - Full excerpts: small sanity check only, not the main table.
 - Model ablation: rerun a subset or all eight real-reuse tasks across
@@ -199,14 +201,19 @@ Main results from `results/tables/main_results.md`:
   support rate.
 
 Interpretation: PaperToSkill preserves operational paper details that short
-summaries omit. The result is an artifact-readiness and coverage result, not yet
-a live agent success-rate result.
+summaries omit. The deterministic result remains an artifact-readiness and
+coverage result, while the real-reuse first pass is downstream stress-test
+evidence rather than aggregate success-rate evidence.
 
-Current interpretation for next-stage work: REF-T1/REF-T2 show that the
-real-reuse runner/scorer/table path works, with both Summary and PaperToSkill
-scoring 1.000 under one GPT-family run. This does not yet show PaperToSkill
-advantage over Summary or complete the eight-task benchmark, so deterministic
-claims remain the validated core until broader real-reuse rows exist.
+Current real-reuse interpretation: all eight rows now have one GPT-family
+Summary-vs-PaperToSkill pass. AIDE-T1/T2 score 0.000/0.000 because generated
+scripts exceed the scoring budget. SWE-T1 scores 0.000/0.000 because patches
+fail to apply. SWE-T2 scores 0.000/1.000 and is the single positive row for
+PaperToSkill. REF-T1/T2 score 1.000/1.000, validating the runner/scorer path
+without showing advantage over Summary. SNAP-T1/T2 score 0.000/0.500 and
+0.200/0.400, but both remain below the success threshold. The correct paper
+claim is mixed first-pass evidence plus failure-boundary analysis, not
+aggregate downstream effectiveness.
 
 ### 6. Limitations
 
@@ -241,18 +248,18 @@ Current limitations:
 ### 7. Conclusion
 
 PaperToSkill shows that papers can be translated into compact, source-grounded
-skills with measurable offline advantages over summaries and partial real-reuse
-execution evidence. The next stage is to finish live execution on the remaining
-original-style paper tasks, human fidelity review, a full
-executable Paper2Agent/MCP baseline if feasible, and stress tests on papers that
-are less directly procedural.
+skills with measurable offline advantages over summaries and a completed
+first-pass real-reuse stress test. The next stage is to repeat and expand the
+original-style paper tasks, add human fidelity review, run a full executable
+Paper2Agent/MCP baseline if feasible, and stress test papers whose methods are
+less directly procedural.
 
 ## Figure And Table Plan
 
 | Item | Source Artifact | Purpose |
 | --- | --- | --- |
 | Figure 1: PaperToSkill pipeline | `scripts/papertoskill_extract.py`; `skill/SKILL.md` | Show paper note to skill/source-map flow |
-| Table 1: Real-reuse main experiment | `results/real_reuse/main_results_plan.md` | Eight Summary-vs-PaperToSkill paper-task rows; SWE-T2 and REF rows succeed, SWE-T1/SNAP rows are scored failures or below-threshold rows, AIDE remains pending |
+| Table 1: Real-reuse main experiment | `results/real_reuse/main_results_plan.md` | Eight Summary-vs-PaperToSkill paper-task rows; SWE-T2 and REF rows succeed, AIDE/SWE-T1/SNAP rows are scored failures, timeouts, or below-threshold rows |
 | Table 2: Deterministic/offline quality results | `results/tables/main_results.md` | Coverage, source support, compactness |
 | Table 3: Transfer ablation | `results/tables/transfer_ablation.md` | Effect of transfer notes |
 | Table 4: Source grounding | `results/tables/compactness_source_grounding.md` | Source support and compactness |
@@ -268,5 +275,5 @@ are less directly procedural.
 | Appendix: Model response cost proxy | `results/tables/model_response_cost_proxy.md` | Local output-token proxy for saved Claude/GPT-family model-ablation responses |
 | Appendix: AAAI package | `paper/aaai/` | Official AAAI-27 template provenance and LaTeX draft |
 | Appendix: Paper2Agent artifact comparison | `results/tables/paper2agent_artifact_comparison.md` | Source-backed skill-vs-MCP artifact/workflow positioning table |
-| Planned: Real reuse main results | `research/real_reuse_experiment_plan.md`; future `results/real_reuse/` | Original-style paper-task reuse validity |
+| Real reuse main results | `results/real_reuse/main_results_plan.md`; `results/real_reuse/raw_rows.jsonl` | Eight first-pass Summary-vs-PaperToSkill paper-task rows; mixed downstream and failure-boundary evidence |
 | Planned: LLM real-reuse ablation | `research/real_reuse_experiment_plan.md`; future `results/real_reuse/` | Cross-model stability of Summary vs PaperToSkill on real tasks |

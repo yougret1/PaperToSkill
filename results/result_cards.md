@@ -1096,6 +1096,38 @@
   `results/aaai_submission_decision/decision.md`;
   `research/run_logs/2026-06-20_phase55_aaai_submission_decision_preflight.md`.
 
+## AIDE Real-Reuse Rows
+
+- Experiment: locked Kaggle Spaceship Titanic validation split under Summary vs
+  PaperToSkill with GPT-family `gpt-5.5`.
+- Main result: AIDE-T1 Summary/PaperToSkill score 0.000/0.000; AIDE-T2
+  Summary/PaperToSkill score 0.000/0.000. All four generated scripts time out
+  under the 60-second scorer budget.
+- Baseline scorer validation: the deterministic baseline/weak-script path
+  scores 0.4997124784358827, so the validation labels, submission format, and
+  scoring path are live.
+- Compared baselines: Summary and PaperToSkill use the same official
+  Kaggle-derived local split, task prompt, no-mid-run-human rule, and hidden
+  validation-label scorer.
+- Practical significance: this completes the first GPT-family pass over the
+  AIDE rows but exposes a budget failure boundary for generated ML scripts.
+- Statistical evidence: none; these are two locked local validation tasks, not
+  a full AIDE or Kaggle benchmark reproduction.
+- Failure modes: generated scripts attempted heavier ML pipelines that did not
+  complete inside the scoring budget. This is a scorer-budget failure rather
+  than a provider/model availability failure.
+- Limitations: the result should not be read as proof that AIDE-style reuse is
+  impossible; it shows that the current prompt/context/budget contract is too
+  weak for these generated scripts.
+- Claim impact: completes the first eight-row real-reuse table pass, but the
+  AIDE rows are failure-boundary evidence and do not support aggregate
+  PaperToSkill advantage over Summary.
+- Figure/table: `results/real_reuse/aide_run_report.md`;
+  `results/real_reuse/aide_t1_baseline_metric.json`;
+  `results/real_reuse/aide_t2_weak_script_metric.json`;
+  `results/real_reuse/main_results_plan.md`;
+  `paper/aaai/papertoskill_tables.tex`.
+
 ## SWE-T1 Real-Reuse Rows
 
 - Experiment: locked SWE-Bench Lite SQLFluff instance
@@ -1123,7 +1155,8 @@
   software engineering tasks; it is a single failed SWE-Bench Lite-style row.
 - Claim impact: strengthens the evidence boundary by adding a real failed task
   row alongside the positive SWE-T2 row; aggregate downstream advantage remains
-  unsupported until AIDE and broader rows are complete.
+  unsupported after the full first-pass table because AIDE/SWE-T1/SNAP are
+  failure-boundary rows and REF shows no advantage.
 - Figure/table: `results/real_reuse/raw_rows.jsonl`;
   `results/real_reuse/swe_t1_gold_metric.json`;
   `results/real_reuse/main_results_plan.md`;
@@ -1147,14 +1180,12 @@
   aggregate SWE-agent benchmark.
 - Failure modes: Summary produced an invalid patch for the target file after
   the hidden test patch was applied; the later SWE-T1 row failed for both
-  Summary and PaperToSkill due patch-apply failures, and future AIDE rows may
-  still fail due fixture availability, patch quality, environment drift, or
-  model behavior.
-- Limitations: the result does not reproduce the full SWE-agent paper, does not
-  establish broad software-engineering effectiveness, and does not complete the
-  eight-task real-reuse benchmark.
+  Summary and PaperToSkill due patch-apply failures, and the AIDE rows failed
+  because generated scripts exceeded the locked scorer budget.
+- Limitations: the result does not reproduce the full SWE-agent paper and does
+  not establish broad software-engineering effectiveness.
 - Claim impact: strengthens the partial downstream evidence but keeps aggregate
-  effectiveness unsupported until the remaining AIDE rows are executed.
+  effectiveness unsupported after the eight-row first pass.
 - Figure/table: `results/real_reuse/swe_run_report.md`;
   `results/real_reuse/swe_t2_gold_metric.json`;
   `results/real_reuse/main_results_plan.md`;
