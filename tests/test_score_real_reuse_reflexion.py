@@ -44,6 +44,41 @@ class ScoreRealReuseReflexionTest(unittest.TestCase):
             self.assertEqual(1.0, metric["task_score"])
             self.assertTrue(metric["exact_match"])
 
+    def test_ref_t1_scores_explanatory_yes_no_answer(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            answer_key = tmp_path / "answer_key.json"
+            prediction = tmp_path / "prediction.json"
+            output = tmp_path / "metric.json"
+            answer_key.write_text(json.dumps({"answer": "yes", "aliases": ["yes"], "f1_success_threshold": 1.0}), encoding="utf-8")
+            prediction.write_text(
+                json.dumps({"final_answer": "Yes, Scott Derrickson and Ed Wood were both American."}),
+                encoding="utf-8",
+            )
+
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(SCORE_SCRIPT),
+                    "--task",
+                    "REF-T1",
+                    "--prediction",
+                    str(prediction),
+                    "--answer-key",
+                    str(answer_key),
+                    "--output-json",
+                    str(output),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            metric = json.loads(output.read_text(encoding="utf-8"))
+            self.assertTrue(metric["success"])
+            self.assertEqual(1.0, metric["task_score"])
+            self.assertTrue(metric["yes_no_match"])
+
     def test_ref_t1_wrong_answer_is_scored_not_crashed(self):
         with tempfile.TemporaryDirectory() as tmp:
             tmp_path = Path(tmp)

@@ -184,6 +184,7 @@ def build_report(root: Path, spec_path: Path) -> dict[str, Any]:
     checks.extend(fixture_candidate_checks(root, spec_path, tasks))
     checks.extend(asset_lock_checks(root, spec_path, tasks))
     checks.extend(prepared_asset_checks(root, spec_path, tasks))
+    checks.extend(reflexion_runner_checks(root, spec_path))
     return report_from_checks(root, spec_path, spec, checks)
 
 
@@ -994,6 +995,45 @@ def prepared_asset_checks(root: Path, spec_path: Path, tasks: dict[str, dict[str
         )
     )
     return checks
+
+
+def reflexion_runner_checks(root: Path, spec_path: Path) -> list[Check]:
+    runner_path = root / "scripts" / "run_real_reuse_reflexion.py"
+    if not runner_path.exists():
+        return [
+            Check(
+                "real_reuse_reflexion_runner_present",
+                "fail",
+                "missing",
+                relative(root, runner_path),
+            )
+        ]
+
+    text = runner_path.read_text(encoding="utf-8")
+    required_snippets = {
+        "--fixture-response-dir",
+        "raw_rows.jsonl",
+        "provider_or_model_error",
+        "score_ref_t1",
+        "score_ref_t2",
+        "unsupported_errors_status",
+        "does not complete the full",
+    }
+    missing = sorted(snippet for snippet in required_snippets if snippet not in text)
+    return [
+        Check(
+            "real_reuse_reflexion_runner_present",
+            "ready",
+            "present",
+            relative(root, runner_path),
+        ),
+        Check(
+            "real_reuse_reflexion_runner_contract_ready",
+            "ready" if not missing else "fail",
+            "runner contract snippets present" if not missing else "missing=" + ",".join(missing),
+            relative(root, runner_path),
+        ),
+    ]
 
 
 def report_from_checks(

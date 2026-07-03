@@ -2938,3 +2938,47 @@ Evidence boundary:
   run Summary or PaperToSkill model conditions, does not create real-reuse raw
   rows, and does not provide downstream task-success evidence. AIDE, SWE-agent,
   and SnapATAC2 fixture assets/runners remain pending.
+
+## 2026-07-03 Phase 87
+
+Actions:
+
+- Added `scripts/run_real_reuse_reflexion.py` to run locked REF-T1/REF-T2
+  Summary-vs-PaperToSkill conditions, save prompts/responses/metrics, append
+  scored raw rows, and report provider/model errors as availability evidence.
+- Added tests for fixture-response execution, missing-credential pending
+  behavior, prompt/scorer-only separation, and table filling from raw rows.
+- Fixed REF-T1 scoring so yes/no answers with explanatory final-answer text
+  are counted by their leading yes/no label while preserving EM/F1 fields.
+- Ran the locked REF-T1/REF-T2 tasks through the GPT-family Responses profile
+  using local shell-only credentials from the API docs.
+- Updated `scripts/build_real_reuse_paper_tables.py` so the paper-facing
+  real-reuse table fills existing score cells from `results/real_reuse/raw_rows.jsonl`.
+- Updated `paper/aaai/papertoskill_tables.tex` and the AAAI results wording so
+  REF-T1/REF-T2 have filled scores while AIDE, SWE-agent, and SnapATAC2 remain
+  pending.
+- Extended the real-reuse preflight and reproducibility package gates to track
+  the REF runner and generated table JSON.
+
+Results:
+
+- `results/real_reuse/reflexion_run_report.md` reports `complete` with 4
+  scored rows for GPT-family `gpt-5.5`.
+- `results/real_reuse/raw_rows.jsonl` contains REF-T1/REF-T2 Summary and
+  PaperToSkill scored rows. All four rows score 1.000 with zero interventions.
+- `results/real_reuse/main_results_plan.{csv,md,json}` now fill REF-T1 and
+  REF-T2 Summary/PaperToSkill scores as 1.000 and leave the remaining six rows
+  pending.
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 8
+  tasks, 420 ready checks, and 0 failed checks after adding runner checks.
+- `results/reproducibility/package_report.md` reports
+  `ready_with_pending_external_evidence`, 370 ready checks, 1 pending check,
+  and 0 failed checks after adding the runner and generated table JSON.
+
+Evidence boundary:
+
+- Phase 87 is partial real-reuse execution evidence for the Reflexion slice
+  only. It shows the REF runner/scorer/table path works and that both Summary
+  and PaperToSkill solve the two locked REF tasks under one GPT-family run. It
+  does not show aggregate PaperToSkill advantage over Summary and does not
+  complete the eight-task main experiment.

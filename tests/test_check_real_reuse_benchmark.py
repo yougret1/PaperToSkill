@@ -47,6 +47,7 @@ class CheckRealReuseBenchmarkTest(unittest.TestCase):
             self.assertIn("real_reuse_fixture_candidates_materialized", ready_ids)
             self.assertIn("real_reuse_asset_locks_materialized", ready_ids)
             self.assertIn("real_reuse_prepared_assets_reflexion_materialized", ready_ids)
+            self.assertIn("real_reuse_reflexion_runner_contract_ready", ready_ids)
             self.assertIn("real_reuse_llm_ablation_linked_to_tasks", ready_ids)
             self.assertIn("snapatac2_code_url_declared", ready_ids)
             self.assertTrue(output_md.exists())

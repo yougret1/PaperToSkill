@@ -205,28 +205,35 @@ supporting role.
 
 1. Verify paper source, license, code availability, and benchmark setup for each
    selected paper.
-2. Create task specs under `benchmarks/real_reuse/`.
+2. Create task specs under `benchmarks/real_reuse/` (complete for eight tasks).
 3. Create fixture requirement manifests, candidate manifests, and asset locks
    under `benchmarks/real_reuse/fixtures/`,
    `benchmarks/real_reuse/fixture_candidates/`, and
-   `benchmarks/real_reuse/asset_locks/`.
+   `benchmarks/real_reuse/asset_locks/` (complete for eight tasks).
 4. Create or record context conditions under `baselines/real_reuse/` and
-   `generated_skills/`.
+   `generated_skills/` (complete for REF-T1/REF-T2).
 5. Implement task-specific preparers and scorers that consume the asset locks
-   without exposing hidden scorer assets to model-visible context.
+   without exposing hidden scorer assets to model-visible context (complete for
+   REF-T1/REF-T2).
 6. Implement a runner that logs command, model family, condition, task output,
-   metric, tokens, time, and failure reason.
+   metric, tokens, time, and failure reason (complete for REF-T1/REF-T2).
 7. Implement a scorer/aggregator that emits raw rows and table-ready CSV/MD
-   files under `results/real_reuse/`.
-8. Only after raw results exist, revise the AAAI Abstract, Contributions,
-   Experimental Setup, Results, Discussion, Limitations, and Conclusion.
+   files under `results/real_reuse/` (partially complete: REF rows fill the
+   main table; remaining task families are pending).
+8. After broader raw results exist, revise the AAAI Abstract, Contributions,
+   Results, Discussion, Limitations, and Conclusion. Current AAAI text has only
+   a cautious REF partial-result update.
 
 ## Evidence Boundaries
 
-- This plan does not complete any real-reuse experiment.
-- Current asset locks fix source revisions, concrete task instances, local
-  materialization targets, hidden scorer assets, and scorer/preparer contracts,
-  but they do not materialize data or produce scores.
+- This plan is now partially executed for REF-T1/REF-T2 only.
+- The REF rows have one GPT-family Summary-vs-PaperToSkill run and both
+  conditions score 1.000 on both locked tasks. This validates the execution
+  path but does not show aggregate PaperToSkill advantage over Summary.
+- Current AIDE, SWE-agent, and SnapATAC2 asset locks fix source revisions,
+  concrete task instances, local materialization targets, hidden scorer assets,
+  and scorer/preparer contracts, but they do not yet materialize data or
+  produce scores.
 - Existing deterministic/offline results remain useful as quality, grounding,
   and cost gates.
 - The older saved-response model ablation remains a usage-plan/output-contract

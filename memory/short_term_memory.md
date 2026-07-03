@@ -15,7 +15,18 @@ Current date: 2026-07-03.
   discussion record. Do not rewrite the AAAI Results as if these new real-reuse
   experiments are complete; first update planning files, then revise paper text
   after execution.
-- 2026-07-03 Phase 86 real-reuse Reflexion preparer/scorer is now the current
+- 2026-07-03 Phase 87 real-reuse Reflexion runner/execution is now the current
+  local phase: added `scripts/run_real_reuse_reflexion.py`, fixed REF-T1
+  yes/no scoring for explanatory final answers, ran REF-T1/REF-T2 Summary and
+  PaperToSkill with GPT-family `gpt-5.5`, and saved 4 scored raw rows under
+  `results/real_reuse/raw_rows.jsonl`. `results/real_reuse/reflexion_run_report.md`
+  reports `complete`; REF-T1 and REF-T2 Summary and PaperToSkill all score
+  1.000. `results/real_reuse/main_results_plan.{csv,md,json}` and
+  `paper/aaai/papertoskill_tables.tex` now fill the two REF rows while AIDE,
+  SWE-agent, and SnapATAC2 remain pending. This is partial REF-slice evidence
+  only: it validates the runner/scorer/table path but does not show
+  PaperToSkill advantage over Summary or complete the eight-task benchmark.
+- 2026-07-03 Phase 86 real-reuse Reflexion preparer/scorer is now a previous
   local phase: added `scripts/prepare_real_reuse_reflexion_fixture.py` and
   `scripts/score_real_reuse_reflexion.py`; materialized REF-T1 HotPotQA-style
   assets and REF-T2 HumanEval-style assets under
@@ -24,8 +35,8 @@ Current date: 2026-07-03.
   the real-reuse preflight and package gate. `results/real_reuse/spec_preflight.md`
   reports `ready_to_implement`, 8 tasks, 418 ready checks, 0 failed checks.
   `results/reproducibility/package_report.md` reports 368 ready / 1 pending /
-  0 failed. This is still setup evidence: no Summary or PaperToSkill model
-  condition has been run and no real-reuse raw rows or scores exist.
+  0 failed. This setup evidence was extended by Phase 87, which added the REF
+  runner and created the first REF raw rows.
 - 2026-07-03 active-goal update: prioritize the main real-reuse experiment over
   auxiliary experiments. The paper's experiment section should get the main
   table structure first, with TBD/pending numeric cells and explicit evidence
@@ -40,17 +51,17 @@ Current date: 2026-07-03.
   Spaceship Titanic split/weak-script seeds for AIDE, SWE-bench Lite
   `sqlfluff__sqlfluff-1625`, SWE-bench Verified `astropy__astropy-12907`,
   HotPotQA example `5a8b57f25542995d1e6f1371`, HumanEval `HumanEval/0`, and
-  SnapATAC2 `pbmc5k` / `pbmc10k_multiome`. This is not execution evidence:
-  REF assets/scorers were added later in Phase 86; all real model runs, raw
-  rows, and scores remain pending.
+  SnapATAC2 `pbmc5k` / `pbmc10k_multiome`. This phase was setup evidence
+  only. Later Phase 86 prepared REF assets/scorers and Phase 87 ran REF rows;
+  AIDE, SWE-agent, and SnapATAC2 execution remains pending.
 - 2026-07-03 Phase 84 paper-table gate is a previous local phase: added
   `scripts/build_real_reuse_paper_tables.py`, generated
   `results/real_reuse/main_results_plan.{csv,md}`, inserted
   `Table~\ref{tab:real-reuse-main}` into `paper/aaai/papertoskill_tables.tex`,
   updated the AAAI Experimental Setup/Results boundary text, extended
   `scripts/check_paper_tables.py` to validate the real-reuse table against the
-  CSV, and rebuilt `paper/aaai/papertoskill_aaai2027.pdf`. Scores remain
-  `Pending`; this is not execution evidence.
+  CSV, and rebuilt `paper/aaai/papertoskill_aaai2027.pdf`. This phase was not
+  execution evidence; Phase 87 later filled only the REF-T1/REF-T2 cells.
 - 2026-07-03 Phase 83 fixture-candidate gate is the previous local phase:
   added `scripts/build_real_reuse_fixture_candidates.py` and generated the eight
   `benchmarks/real_reuse/fixture_candidates/*.json` manifests. Candidate
@@ -60,23 +71,24 @@ Current date: 2026-07-03.
   preflight now reports `ready_to_implement`, 8 tasks, 296 ready checks, and 0
   failed checks; package gate reports 339 ready / 1 pending / 0 failed. This is
   still not execution evidence: assets are not materialized, preparer/scorer
-  scripts and runner are not implemented, and no raw rows exist.
+  scripts and runner were not implemented at that phase. Phase 87 later added
+  REF raw rows only; AIDE, SWE-agent, and SnapATAC2 remain pending.
 - 2026-07-03 Phase 82 fixture-manifest gate is the previous local phase:
   added `scripts/build_real_reuse_fixture_manifests.py` and generated the eight
   `benchmarks/real_reuse/fixtures/*.json` manifests. The real-reuse preflight
   now validates fixture identity, status, asset slots, context conditions,
   metric alignment, no-mid-run-human rule, and license/provenance boundary; it
   reports `ready_to_implement`, 8 tasks, 207 ready checks, and 0 failed checks.
-  This is still not execution evidence: concrete fixture assets, scoring
-  commands, runner/scorer, and raw rows remain pending.
+  This was still not execution evidence at that phase. Phase 87 later added
+  REF raw rows only; AIDE, SWE-agent, and SnapATAC2 remain pending.
 - 2026-07-03 Phase 81 task-spec gate was the previous local phase: added
   `scripts/build_real_reuse_task_specs.py` and generated the eight
   `benchmarks/real_reuse/tasks/*.json` per-task execution-contract specs. The
   real-reuse preflight now validates task-spec identity, conditions, metric
   contracts, raw-row schema, and no-mid-run-human rule; it reports
   `ready_to_implement`, 8 tasks, 142 ready checks, and 0 failed checks. This
-  still is not execution evidence: fixtures, runner/scorer, and raw rows remain
-  pending.
+  was not execution evidence at that phase. Phase 87 later added REF raw rows
+  only; AIDE, SWE-agent, and SnapATAC2 remain pending.
 - 2026-07-03 Phase 80 spec gate was committed and pushed as
   `bdd39cc test: add real reuse benchmark preflight`: added
   `benchmarks/real_reuse/real_reuse_v0.json`,
@@ -118,8 +130,8 @@ Current date: 2026-07-03.
   all strict local gates, `git diff --check`, and repository raw-key scan.
 - Current reports:
   - Goal completion: 77 ready / 3 pending / 0 failed.
-  - Reproducibility package: 368 ready / 1 pending / 0 failed after adding the
-    REF real-reuse prepared asset layer.
+  - Reproducibility package: 372 ready / 1 pending / 0 failed after adding the
+    REF real-reuse runner/execution layer.
   - External evidence queue: `human_fidelity_annotation` and
     `aaai_submission_decision`.
   - AAAI decision: ready, selected `wait_for_external_evidence`.
@@ -190,13 +202,41 @@ Current date: 2026-07-03.
 
 ## Current Phase
 
-Phase 86 is the current local phase. Phase 68 was committed as
+Phase 87 is the current local phase. Phase 68 was committed as
 `5548070 Refresh memory anchors after remote save` and pushed to `origin/main`
 on 2026-06-20. Phase 69 syncs the AAAI submission-decision execution packet
 with the validated decision-record helper; no external evidence status is
 promoted and no AAAI option is selected. Phase 70 updates the direct provider
 diagnostic to match the current coderxiaoc API protocols: Claude uses
 Anthropic Messages and GPT uses OpenAI Responses.
+
+Phase 87 evidence:
+
+- `scripts/run_real_reuse_reflexion.py` runs locked REF-T1/REF-T2 Summary and
+  PaperToSkill conditions, saves prompts/responses/metrics, appends scored raw
+  rows, and reports provider/model errors as availability evidence rather than
+  model-quality failures.
+- REF-T1 and REF-T2 were run once with GPT-family `gpt-5.5` through OpenAI
+  Responses using shell-only credentials from the local API docs.
+- `results/real_reuse/reflexion_run_report.md` reports `complete` with 4
+  scored rows; `results/real_reuse/raw_rows.jsonl` contains the corresponding
+  raw rows.
+- REF-T1 Summary = 1.000, REF-T1 PaperToSkill = 1.000, REF-T2 Summary = 1.000,
+  and REF-T2 PaperToSkill = 1.000.
+- `scripts/score_real_reuse_reflexion.py` now treats explanatory yes/no
+  final-answer text as correct when the leading normalized label matches the
+  hidden answer key; EM/F1 fields are still preserved in the metric JSON.
+- `scripts/build_real_reuse_paper_tables.py` now fills
+  `results/real_reuse/main_results_plan.{csv,md,json}` from raw rows.
+- `paper/aaai/papertoskill_tables.tex` and `paper/aaai/papertoskill_aaai2027.tex`
+  now report the REF partial scores and explicitly say the result does not
+  complete the eight-task benchmark or establish an advantage over Summary.
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 8
+  tasks, 420 ready checks, and 0 failed checks.
+- `results/reproducibility/package_report.md` reports 372 ready / 1 pending /
+  0 failed.
+- AIDE, SWE-agent, and SnapATAC2 assets/runners/raw rows remain pending; the
+  full main real-reuse experiment is not complete.
 
 Phase 86 evidence:
 
@@ -220,10 +260,9 @@ Phase 86 evidence:
   assets.
 - `results/reproducibility/package_report.md` reports 368 ready / 1 pending /
   0 failed after including the REF preparer/scorer and prepared assets.
-- No Summary or PaperToSkill model condition has been executed; no
-  `results/real_reuse/raw_rows.jsonl` exists; the AAAI real-reuse score cells
-  remain pending. Next implementation can either build the REF task runner/model
-  invocation path or materialize another task family.
+- At the end of Phase 86 no Summary or PaperToSkill model condition had been
+  executed and no raw rows existed; this was superseded by Phase 87, which ran
+  the REF rows and filled their table cells.
 
 Phase 85 evidence:
 
@@ -242,10 +281,10 @@ Phase 85 evidence:
   tasks, 401 ready checks, and 0 failed checks after validating asset locks.
 - `results/reproducibility/package_report.md` reports 351 ready / 1 pending /
   0 failed after including the asset-lock builder and all eight lock manifests.
-- No fixture asset has been materialized; no task-specific preparer/scorer or
-  runner is implemented; no raw rows or real-reuse scores exist yet. Next
-  implementation should create preparer/scorer skeletons and materialize the
-  smallest feasible locked task asset.
+- At this phase, no fixture asset had been materialized and no task-specific
+  runner/scorer or raw row existed. Phase 86/87 superseded this for REF-T1 and
+  REF-T2 only; next implementation should materialize/run AIDE, SWE-agent, or
+  SnapATAC2 rows.
 
 Phase 84 evidence:
 
@@ -299,10 +338,10 @@ Phase 82 evidence:
   tasks, 207 ready checks, and 0 failed checks.
 - `results/reproducibility/package_report.md` reported 330 ready / 1 pending /
   0 failed after including the fixture builder and all eight manifests.
-- No concrete fixture asset has been selected; no dataset/repo has been
-  downloaded or cloned; no scoring command, runner/scorer, raw row, or main
-  result artifact exists yet. Next implementation should select concrete
-  assets and then implement the runner/scorer.
+- At this phase, no concrete fixture asset, scoring command, runner/scorer,
+  raw row, or main result artifact existed. Phase 87 superseded this for the
+  REF slice only; AIDE, SWE-agent, and SnapATAC2 still need executable assets,
+  scorers, runners, and raw rows.
 
 Phase 81 evidence:
 
@@ -319,9 +358,10 @@ Phase 81 evidence:
   tasks, 142 ready checks, and 0 failed checks.
 - `results/reproducibility/package_report.md` reports 321 ready / 1 pending /
   0 failed after including the task-spec builder and all eight task specs.
-- No fixture manifests, runner/scorer, real-reuse raw rows, or main result
-  artifacts exist yet. Next implementation should create fixtures under
-  `benchmarks/real_reuse/fixtures/`, then implement the runner/scorer.
+- At this phase, fixture manifests, runner/scorer, real-reuse raw rows, and
+  main result artifacts did not exist. Later phases created planning fixtures
+  for all tasks and ran REF-T1/REF-T2 only; the remaining main-experiment work
+  is AIDE, SWE-agent, and SnapATAC2 execution.
 
 Phase 80 evidence:
 
@@ -335,9 +375,9 @@ Phase 80 evidence:
 - The aggregate package checker now includes real-reuse spec/preflight checks;
   `results/reproducibility/package_report.md` reports 312 ready / 1 pending /
   0 failed.
-- No real-reuse task has been executed. Next implementation should create
-  per-task executable specs under `benchmarks/real_reuse/tasks/`, then a
-  runner/scorer that writes raw rows under `results/real_reuse/`.
+- At this phase, no real-reuse task had been executed. This is superseded by
+  Phase 87 for REF-T1/REF-T2 only; the full eight-task benchmark is still
+  incomplete.
 
 Phase 79 evidence:
 
@@ -349,8 +389,9 @@ Phase 79 evidence:
   are dropped; Full Excerpt is only a small sanity check.
 - LLM ablation must be attached to the real-reuse tasks, not only the old
   saved-response usage-plan protocol.
-- Do not update AAAI Results as completed real-reuse evidence until raw rows
-  exist under future `results/real_reuse/`.
+- Do not describe the main real-reuse benchmark as complete until all eight
+  task rows are executed or a clearly declared subset result is reported.
+  Current raw rows cover REF-T1/REF-T2 only.
 
 Phase 76/77 evidence:
 

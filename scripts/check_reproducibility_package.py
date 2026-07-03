@@ -131,6 +131,7 @@ CORE_FILES = {
     "real_reuse_benchmark_checker": "scripts/check_real_reuse_benchmark.py",
     "real_reuse_reflexion_preparer": "scripts/prepare_real_reuse_reflexion_fixture.py",
     "real_reuse_reflexion_scorer": "scripts/score_real_reuse_reflexion.py",
+    "real_reuse_reflexion_runner": "scripts/run_real_reuse_reflexion.py",
     "real_reuse_task_spec_aide_t1": "benchmarks/real_reuse/tasks/AIDE-T1.json",
     "real_reuse_task_spec_aide_t2": "benchmarks/real_reuse/tasks/AIDE-T2.json",
     "real_reuse_task_spec_swe_t1": "benchmarks/real_reuse/tasks/SWE-T1.json",
@@ -182,6 +183,7 @@ CORE_FILES = {
     "real_reuse_spec_preflight_md": "results/real_reuse/spec_preflight.md",
     "real_reuse_main_results_plan_csv": "results/real_reuse/main_results_plan.csv",
     "real_reuse_main_results_plan_md": "results/real_reuse/main_results_plan.md",
+    "real_reuse_main_results_plan_json": "results/real_reuse/main_results_plan.json",
     "artifact_map": "research/artifact_map.md",
     "claim_evidence_matrix": "research/claim_evidence_matrix.md",
     "new_paper_triage": "research/new_paper_triage_2026-07-01.md",
@@ -221,6 +223,7 @@ CORE_FILES = {
     "phase57_ai_scientist_v2_gpt_smoke_retry_run_log": "research/run_logs/2026-06-20_phase57_ai_scientist_v2_gpt_smoke_retry.md",
     "phase58_ai_scientist_v2_max_token_smoke_run_log": "research/run_logs/2026-06-20_phase58_ai_scientist_v2_max_token_smoke.md",
     "phase59_openai_direct_probe_run_log": "research/run_logs/2026-06-20_phase59_openai_direct_probe.md",
+    "phase87_real_reuse_reflexion_runner_run_log": "research/run_logs/2026-07-03_phase87_real_reuse_reflexion_runner.md",
     "provider_billing_protocol": "benchmarks/provider_billing_evidence_v0.json",
     "provider_billing_summarizer": "scripts/summarize_provider_billing_evidence.py",
     "provider_billing_template": "results/provider_billing_evidence/billing_template.csv",
@@ -1287,6 +1290,7 @@ def real_reuse_benchmark_checks(root: Path) -> list[Check]:
         "real_reuse_fixture_candidates_materialized",
         "real_reuse_asset_locks_materialized",
         "real_reuse_prepared_assets_reflexion_materialized",
+        "real_reuse_reflexion_runner_contract_ready",
         "real_reuse_llm_ablation_linked_to_tasks",
         "real_reuse_llm_ablation_model_families",
         "real_reuse_planned_outputs_complete",
@@ -1297,6 +1301,15 @@ def real_reuse_benchmark_checks(root: Path) -> list[Check]:
             "real_reuse_core_checks_ready",
             "ready" if not missing else "fail",
             "core real-reuse checks ready" if not missing else "missing=" + ",".join(missing),
+            str(report_path.relative_to(root)),
+        )
+    )
+    runner_status = check_statuses.get("real_reuse_reflexion_runner_contract_ready")
+    checks.append(
+        Check(
+            "real_reuse_reflexion_runner_contract_ready",
+            "ready" if runner_status == "ready" else "fail",
+            f"runner_contract_status={runner_status}",
             str(report_path.relative_to(root)),
         )
     )

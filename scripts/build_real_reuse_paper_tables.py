@@ -28,6 +28,17 @@ def load_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def load_raw_rows(path: Path) -> list[dict[str, Any]]:
+    if not path.exists():
+        return []
+    rows: list[dict[str, Any]] = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        rows.append(json.loads(line))
+    return rows
+
+
 def paper_by_id(spec: dict[str, Any]) -> dict[str, dict[str, Any]]:
     return {str(paper["id"]): paper for paper in spec.get("source_papers", [])}
 
@@ -75,23 +86,56 @@ def reference_label(task: dict[str, Any]) -> str:
     return "Reported paper ref."
 
 
-def build_rows(spec: dict[str, Any]) -> list[dict[str, str]]:
+def score_string(row: dict[str, Any] | None) -> str:
+    if not row or row.get("status") != "scored" or row.get("task_score") is None:
+        return "Pending"
+    return f"{float(row['task_score']):.3f}"
+
+
+def latest_score_rows(raw_rows: list[dict[str, Any]]) -> dict[tuple[str, str], dict[str, Any]]:
+    latest: dict[tuple[str, str], dict[str, Any]] = {}
+    for row in raw_rows:
+        if row.get("status") != "scored":
+            continue
+        key = (str(row.get("task_id", "")), str(row.get("condition", "")))
+        latest[key] = row
+    return latest
+
+
+def row_status(task_id: str, score_rows: dict[tuple[str, str], dict[str, Any]]) -> str:
+    summary = score_rows.get((task_id, "summary"))
+    papertoskill = score_rows.get((task_id, "papertoskill"))
+    scored = [row for row in (summary, papertoskill) if row]
+    if len(scored) == 2:
+        families = sorted({str(row.get("model_family", "")) for row in scored if row.get("model_family")})
+        return "Scored (" + ",".join(families) + ")"
+    if scored:
+        families = sorted({str(row.get("model_family", "")) for row in scored if row.get("model_family")})
+        return "Partial (" + ",".join(families) + ")"
+    return "Ready to run"
+
+
+def build_rows(spec: dict[str, Any], raw_rows: list[dict[str, Any]] | None = None) -> list[dict[str, str]]:
     papers = paper_by_id(spec)
+    score_rows = latest_score_rows(raw_rows or [])
     rows: list[dict[str, str]] = []
     for task in spec.get("tasks", []):
+        task_id = str(task["id"])
         paper = papers[str(task["source_paper_id"])]
+        summary = score_rows.get((task_id, "summary"))
+        papertoskill = score_rows.get((task_id, "papertoskill"))
         rows.append(
             {
-                "Task ID": str(task["id"]),
+                "Task ID": task_id,
                 "Source Paper": str(paper["title"]).split(":")[0],
                 "Domain": str(task["domain"]),
                 "Original-style Input": short_input(task),
                 "Required Output": short_output(task),
                 "Metric": str(task.get("metric", {}).get("name", "")),
                 "Reference": reference_label(task),
-                "Summary Score": "Pending",
-                "PaperToSkill Score": "Pending",
-                "Status": "Ready to run",
+                "Summary Score": score_string(summary),
+                "PaperToSkill Score": score_string(papertoskill),
+                "Status": row_status(task_id, score_rows),
             }
         )
     return rows
@@ -116,19 +160,35 @@ def write_csv(path: Path, rows: list[dict[str, str]]) -> None:
         writer.writerows(rows)
 
 
-def write_markdown(path: Path, rows: list[dict[str, str]]) -> None:
+def write_markdown(path: Path, rows: list[dict[str, str]], raw_row_count: int) -> None:
     lines = [
-        "# Real-Reuse Main Results Table Scaffold",
+        "# Real-Reuse Main Results Table",
         "",
-        "Evidence boundary: this table defines the main real-reuse experiment rows "
-        "for the paper. Scores are pending execution and must not be cited as "
-        "downstream task-success evidence.",
+        "Evidence boundary: this table defines the main real-reuse experiment "
+        "rows for the paper. Filled scores come from local raw rows; pending "
+        "cells are not downstream task-success evidence.",
+        "",
+        f"- Raw scored rows read: {raw_row_count}",
         "",
         markdown_table(rows, TABLE_COLUMNS),
         "",
     ]
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text("\n".join(lines), encoding="utf-8")
+
+
+def write_json(path: Path, rows: list[dict[str, str]], raw_rows: list[dict[str, Any]]) -> None:
+    payload = {
+        "schema_version": "0.1",
+        "evidence_boundary": (
+            "Paper-facing real-reuse table. Filled score cells are generated "
+            "from raw_rows.jsonl; pending cells are not task-success evidence."
+        ),
+        "raw_row_count": len(raw_rows),
+        "rows": rows,
+    }
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
 def main() -> int:
@@ -145,13 +205,26 @@ def main() -> int:
         type=Path,
         default=root / "results" / "real_reuse" / "main_results_plan.md",
     )
+    parser.add_argument(
+        "--output-json",
+        type=Path,
+        default=root / "results" / "real_reuse" / "main_results_plan.json",
+    )
+    parser.add_argument(
+        "--raw-rows",
+        type=Path,
+        default=root / "results" / "real_reuse" / "raw_rows.jsonl",
+    )
     args = parser.parse_args()
 
-    rows = build_rows(load_json(args.spec))
+    raw_rows = load_raw_rows(args.raw_rows)
+    rows = build_rows(load_json(args.spec), raw_rows)
     write_csv(args.output_csv, rows)
-    write_markdown(args.output_md, rows)
+    write_markdown(args.output_md, rows, len(raw_rows))
+    write_json(args.output_json, rows, raw_rows)
     print(args.output_csv)
     print(args.output_md)
+    print(args.output_json)
     return 0
 
 

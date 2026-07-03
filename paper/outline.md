@@ -16,8 +16,10 @@ evaluator. Phase 73 adds the current GPT and DeepSeek model-ablation saves and
 Phase 74 adds a bounded source-backed Paper2Agent artifact/workflow comparison;
 these are saved-response and artifact-positioning results, not live success or
 MCP baseline evidence. Phase 79 starts a next-stage real-reuse experiment plan
-in `research/real_reuse_experiment_plan.md`; that plan is not yet executed and
-must not be described as completed evidence.
+in `research/real_reuse_experiment_plan.md`; Phase 87 partially executes the
+Reflexion slice with one GPT-family Summary-vs-PaperToSkill run. The full
+eight-task benchmark remains incomplete and must not be described as completed
+evidence.
 
 ## Working Title
 
@@ -200,10 +202,11 @@ Interpretation: PaperToSkill preserves operational paper details that short
 summaries omit. The result is an artifact-readiness and coverage result, not yet
 a live agent success-rate result.
 
-Planned interpretation for next-stage work: if real-reuse experiments are
-completed, move the main evidence from artifact readiness to original-style
-paper-method reuse. Until then, the real-reuse tables remain planned evidence
-only.
+Current interpretation for next-stage work: REF-T1/REF-T2 show that the
+real-reuse runner/scorer/table path works, with both Summary and PaperToSkill
+scoring 1.000 under one GPT-family run. This does not yet show PaperToSkill
+advantage over Summary or complete the eight-task benchmark, so deterministic
+claims remain the validated core until broader real-reuse rows exist.
 
 ### 6. Limitations
 
@@ -248,7 +251,7 @@ are less directly procedural.
 | Item | Source Artifact | Purpose |
 | --- | --- | --- |
 | Figure 1: PaperToSkill pipeline | `scripts/papertoskill_extract.py`; `skill/SKILL.md` | Show paper note to skill/source-map flow |
-| Table 1: Real-reuse main experiment | `results/real_reuse/main_results_plan.md` | Eight Summary-vs-PaperToSkill paper-task rows; scores pending execution |
+| Table 1: Real-reuse main experiment | `results/real_reuse/main_results_plan.md` | Eight Summary-vs-PaperToSkill paper-task rows; REF rows filled from raw rows, remaining scores pending execution |
 | Table 2: Deterministic/offline quality results | `results/tables/main_results.md` | Coverage, source support, compactness |
 | Table 3: Transfer ablation | `results/tables/transfer_ablation.md` | Effect of transfer notes |
 | Table 4: Source grounding | `results/tables/compactness_source_grounding.md` | Source support and compactness |

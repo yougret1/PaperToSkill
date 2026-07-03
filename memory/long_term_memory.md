@@ -122,7 +122,7 @@ Current supported claims:
   checkout's remote is the SakanaAI upstream. The archive backs up the local
   coderxiaoc/BFTS integration patch inside the PaperToSkill GitHub history
   without committing raw API keys or local presentation/build artifacts.
-- Phase 79/86 real-reuse planning/task/fixture/candidate/asset-lock/REF-prepared-assets gate: the next stronger validity
+- Phase 79/87 real-reuse planning/task/fixture/candidate/asset-lock/REF-prepared-assets/runner gate: the next stronger validity
   target is original-style paper-task reuse over eight planned tasks from AIDE,
   SWE-agent, Reflexion, and SnapATAC2. Toolformer and AI Scientist-v2 remain
   sanity/auxiliary cases. `benchmarks/real_reuse/real_reuse_v0.json` and
@@ -137,21 +137,26 @@ Current supported claims:
   task-specific Summary contexts under `baselines/real_reuse/`, and implemented
   `scripts/prepare_real_reuse_reflexion_fixture.py` plus
   `scripts/score_real_reuse_reflexion.py`. `results/real_reuse/spec_preflight.md`
-  validates the REF prepared assets. AIDE, SWE-agent, and SnapATAC2 assets,
-  a full real-reuse runner, raw rows, and Summary vs PaperToSkill real-reuse
-  scores remain pending.
-- Phase 84 inserted the main real-reuse table scaffold into the AAAI paper:
-  `results/real_reuse/main_results_plan.csv` and `.md` are the table data
-  source; `paper/aaai/papertoskill_tables.tex` contains
-  `tab:real-reuse-main`; score cells remain pending execution.
+  validates the REF prepared assets and runner. Phase 87 added
+  `scripts/run_real_reuse_reflexion.py`, ran REF-T1/REF-T2 once through the
+  GPT-family `gpt-5.5` Responses profile, and saved four scored raw rows under
+  `results/real_reuse/raw_rows.jsonl`: Summary and PaperToSkill both score
+  1.000 on both locked REF tasks. This is partial REF-slice execution evidence
+  only; AIDE, SWE-agent, and SnapATAC2 assets/runners/raw rows remain pending.
+- Phase 84 inserted the main real-reuse table scaffold into the AAAI paper, and
+  Phase 87 filled the REF-T1/REF-T2 cells from raw rows:
+  `results/real_reuse/main_results_plan.csv`, `.md`, and `.json` are the table
+  data source; `paper/aaai/papertoskill_tables.tex` contains
+  `tab:real-reuse-main`; AIDE, SWE-agent, and SnapATAC2 score cells remain
+  pending execution.
 
 Current unsupported claims:
 
 - PaperToSkill improves real original-style task outcomes across AIDE,
-  SWE-agent, Reflexion, SnapATAC2, or other domains; the Phase 86 real-reuse
-  spec/task/fixture/candidate/asset-lock contracts are ready, and REF-T1/REF-T2
-  prepared assets plus scorers exist, but Summary and PaperToSkill task
-  conditions have not been executed and no raw rows exist.
+  SWE-agent, Reflexion, SnapATAC2, or other domains. The REF-T1/REF-T2 slice
+  now has one GPT-family Summary-vs-PaperToSkill run and both conditions score
+  1.000, so it validates the REF execution path but does not show advantage
+  over Summary and does not complete the eight-task benchmark.
 - Saved-response model-ablation scoring as proof of live downstream task
   success, broad model quality, provider billing, or provider economics.
 - Saved-response output-contract scoring as proof of real live task success.
@@ -227,15 +232,20 @@ Use these as entry points instead of searching the whole repo first:
 - `scripts/build_real_reuse_asset_locks.py`: materializes preparation-time
   asset locks from task specs, fixture manifests, and candidate manifests.
 - `scripts/build_real_reuse_paper_tables.py`: materializes the paper-facing
-  real-reuse main-results table scaffold from the benchmark spec.
+  real-reuse main-results table from the benchmark spec and fills existing
+  score cells from `results/real_reuse/raw_rows.jsonl`.
 - `scripts/prepare_real_reuse_reflexion_fixture.py`: materializes locked
   REF-T1 HotPotQA-style and REF-T2 HumanEval-style fixture assets, task prompts,
   Summary condition contexts, and scorer-only hidden assets.
 - `scripts/score_real_reuse_reflexion.py`: scores REF-T1 predictions with
   answer-key EM/F1 and REF-T2 candidates with the hidden HumanEval checker.
+- `scripts/run_real_reuse_reflexion.py`: runs locked REF-T1/REF-T2 Summary and
+  PaperToSkill conditions, saves prompts/responses/metrics, appends raw rows,
+  and separates provider availability from model quality.
 - `scripts/check_real_reuse_benchmark.py`: strict local preflight checker for
   the planned real-reuse benchmark spec, per-task specs, fixture manifests,
-  candidate asset/preparation manifests, asset locks, and REF prepared assets.
+  candidate asset/preparation manifests, asset locks, REF prepared assets, and
+  REF runner.
 - `benchmarks/real_reuse/tasks/*.json`: eight per-task execution-contract specs
   with input/output contracts, condition paths, metric contracts, run controls,
   workflow checklists, unsupported-error policy, and raw-row schema. They do
@@ -255,15 +265,21 @@ Use these as entry points instead of searching the whole repo first:
 - `benchmarks/real_reuse/assets/REF-T1/asset_manifest.json` and
   `benchmarks/real_reuse/assets/REF-T2/asset_manifest.json`: prepared Reflexion
   fixture manifests with sha256 values and model-visible/scorer-only asset
-  separation. They are setup evidence only, not model-run results.
+  separation. They are setup evidence; REF model-run results live under
+  `results/real_reuse/`.
 - `baselines/real_reuse/REF-T1_summary.md` and
   `baselines/real_reuse/REF-T2_summary.md`: task-specific Summary condition
   contexts for the two prepared Reflexion tasks.
-- `results/real_reuse/main_results_plan.csv` and `.md`: paper-facing
-  real-reuse main table scaffold with pending Summary/PaperToSkill score cells.
+- `results/real_reuse/raw_rows.jsonl`: current REF-T1/REF-T2 GPT-family
+  Summary-vs-PaperToSkill raw scored rows; not a full eight-task result set.
+- `results/real_reuse/reflexion_run_report.md`: current REF-T1/REF-T2
+  GPT-family run report, complete for 4/4 rows.
+- `results/real_reuse/main_results_plan.csv`, `.md`, and `.json`: paper-facing
+  real-reuse main table source with REF-T1/REF-T2 filled and other task-family
+  score cells pending.
 - `results/real_reuse/spec_preflight.md`: ready-to-implement preflight report
-  for the real-reuse spec/task/fixture/candidate/asset-lock contracts. This is
-  not task-success evidence.
+  for the real-reuse spec/task/fixture/candidate/asset-lock contracts and REF
+  runner. This is not task-success evidence by itself.
 - `external/ai_scientist_v2_patches/`: reproducibility backup for local
   AI-Scientist-v2 adaptations used by the bounded Phase 76 integration run.
 - `benchmarks/provider_billing_evidence_v0.json`: provider-billing evidence
@@ -280,7 +296,7 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 368 ready checks, 1 pending
+  reports `ready_with_pending_external_evidence`, 372 ready checks, 1 pending
   check, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
@@ -355,8 +371,13 @@ Use these as entry points instead of searching the whole repo first:
   reports ready, 15 ready checks, 0 failed checks.
 - Real-reuse preflight:
   `results/real_reuse/spec_preflight.md`
-  reports `ready_to_implement`, 8 tasks, 418 ready checks, and 0 failed checks
-  after validating the REF prepared asset layer.
+  reports `ready_to_implement`, 8 tasks, 420 ready checks, and 0 failed checks
+  after validating the REF prepared asset and runner layer.
+- Real-reuse REF run:
+  `results/real_reuse/reflexion_run_report.md` reports `complete` with 4
+  scored rows for GPT-family `gpt-5.5`; REF-T1 and REF-T2 Summary and
+  PaperToSkill all score 1.000. This is a partial REF-slice result, not the
+  full eight-task benchmark.
 
 ## Model/API Configuration
 

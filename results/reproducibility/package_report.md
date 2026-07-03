@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 368
+- Ready checks: 372
 - Pending checks: 1
 - Failed checks: 0
 
@@ -82,6 +82,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | real_reuse_benchmark_checker | ready | present | scripts/check_real_reuse_benchmark.py |
 | real_reuse_reflexion_preparer | ready | present | scripts/prepare_real_reuse_reflexion_fixture.py |
 | real_reuse_reflexion_scorer | ready | present | scripts/score_real_reuse_reflexion.py |
+| real_reuse_reflexion_runner | ready | present | scripts/run_real_reuse_reflexion.py |
 | real_reuse_task_spec_aide_t1 | ready | present | benchmarks/real_reuse/tasks/AIDE-T1.json |
 | real_reuse_task_spec_aide_t2 | ready | present | benchmarks/real_reuse/tasks/AIDE-T2.json |
 | real_reuse_task_spec_swe_t1 | ready | present | benchmarks/real_reuse/tasks/SWE-T1.json |
@@ -133,6 +134,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | real_reuse_spec_preflight_md | ready | present | results/real_reuse/spec_preflight.md |
 | real_reuse_main_results_plan_csv | ready | present | results/real_reuse/main_results_plan.csv |
 | real_reuse_main_results_plan_md | ready | present | results/real_reuse/main_results_plan.md |
+| real_reuse_main_results_plan_json | ready | present | results/real_reuse/main_results_plan.json |
 | artifact_map | ready | present | research/artifact_map.md |
 | claim_evidence_matrix | ready | present | research/claim_evidence_matrix.md |
 | new_paper_triage | ready | present | research/new_paper_triage_2026-07-01.md |
@@ -172,6 +174,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | phase57_ai_scientist_v2_gpt_smoke_retry_run_log | ready | present | research/run_logs/2026-06-20_phase57_ai_scientist_v2_gpt_smoke_retry.md |
 | phase58_ai_scientist_v2_max_token_smoke_run_log | ready | present | research/run_logs/2026-06-20_phase58_ai_scientist_v2_max_token_smoke.md |
 | phase59_openai_direct_probe_run_log | ready | present | research/run_logs/2026-06-20_phase59_openai_direct_probe.md |
+| phase87_real_reuse_reflexion_runner_run_log | ready | present | research/run_logs/2026-07-03_phase87_real_reuse_reflexion_runner.md |
 | provider_billing_protocol | ready | present | benchmarks/provider_billing_evidence_v0.json |
 | provider_billing_summarizer | ready | present | scripts/summarize_provider_billing_evidence.py |
 | provider_billing_template | ready | present | results/provider_billing_evidence/billing_template.csv |
@@ -303,6 +306,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | deepseek_followup_handoff_core_checks_ready | ready | core handoff checks ready | results\deepseek_followup_handoff\handoff.json |
 | real_reuse_spec_preflight_ready | ready | overall=ready_to_implement; failed=0; tasks=8 | results\real_reuse\spec_preflight.json |
 | real_reuse_core_checks_ready | ready | core real-reuse checks ready | results\real_reuse\spec_preflight.json |
+| real_reuse_reflexion_runner_contract_ready | ready | runner_contract_status=ready | results\real_reuse\spec_preflight.json |
 | toolformer_auto_note_script | ready | present | scripts/papertoskill_note_from_text.py |
 | toolformer_auto_pipeline_script | ready | present | scripts/papertoskill_pipeline.py |
 | toolformer_auto_note | ready | present | papers/auto_notes/toolformer_auto_note.md |

@@ -59,6 +59,13 @@ def token_f1(prediction: str, answer: str) -> float:
     return 2 * precision * recall / (precision + recall)
 
 
+def yes_no_label(text: str) -> str | None:
+    tokens = normalize_answer(text).split()
+    if tokens and tokens[0] in {"yes", "no"}:
+        return tokens[0]
+    return None
+
+
 def prediction_answer(path: Path) -> str:
     data = maybe_json(path)
     if data is not None:
@@ -84,20 +91,26 @@ def score_ref_t1(prediction_path: Path, answer_key_path: Path) -> dict[str, Any]
     prediction = prediction_answer(prediction_path)
     answers = [str(answer_key.get("answer", ""))]
     answers.extend(str(alias) for alias in answer_key.get("aliases", []))
-    exact = max(normalize_answer(prediction) == normalize_answer(answer) for answer in answers)
+    normalized_answers = [normalize_answer(answer) for answer in answers]
+    exact = max(normalize_answer(prediction) == answer for answer in normalized_answers)
     f1 = max(token_f1(prediction, answer) for answer in answers)
     threshold = float(answer_key.get("f1_success_threshold", 1.0))
-    success = bool(exact or f1 >= threshold)
+    prediction_label = yes_no_label(prediction)
+    answer_labels = {answer for answer in normalized_answers if answer in {"yes", "no"}}
+    yes_no_match = bool(prediction_label and prediction_label in answer_labels)
+    success = bool(exact or yes_no_match or f1 >= threshold)
     return {
         "schema_version": SCHEMA_VERSION,
         "task_id": "REF-T1",
         "metric_name": "exact_match_or_f1",
-        "task_score": 1.0 if exact else f1,
+        "task_score": 1.0 if exact or yes_no_match else f1,
         "success": success,
         "exact_match": bool(exact),
+        "yes_no_match": yes_no_match,
+        "prediction_yes_no": prediction_label,
         "f1": f1,
         "normalized_prediction": normalize_answer(prediction),
-        "normalized_answers": [normalize_answer(answer) for answer in answers],
+        "normalized_answers": normalized_answers,
         "prediction_path": prediction_path.as_posix(),
         "answer_key_path": answer_key_path.as_posix(),
         "evidence_boundary": (

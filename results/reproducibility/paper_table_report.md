@@ -57,9 +57,9 @@ Evidence boundary: this report checks that AAAI LaTeX table values match generat
 | paper_table_real_reuse_ref_t1_output | ready | value=Final answer + reflection trace | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_ref_t1_metric | ready | value=exact_match_or_f1 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_ref_t1_reference | ready | value=Reported Reflexion ref. | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
-| paper_table_real_reuse_ref_t1_summary_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
-| paper_table_real_reuse_ref_t1_papertoskill_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
-| paper_table_real_reuse_ref_t1_status | ready | value=Ready to run | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t1_summary_score | ready | value=1.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t1_papertoskill_score | ready | value=1.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t1_status | ready | value=Scored (GPT-family) | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_ref_t2_task_id | ready | value=REF-T2 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_ref_t2_source_paper | ready | value=Reflexion | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_ref_t2_domain | ready | value=Decision / programming | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
@@ -67,9 +67,9 @@ Evidence boundary: this report checks that AAAI LaTeX table values match generat
 | paper_table_real_reuse_ref_t2_output | ready | value=Corrected second attempt | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_ref_t2_metric | ready | value=second_attempt_success | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_ref_t2_reference | ready | value=Reported Reflexion ref. | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
-| paper_table_real_reuse_ref_t2_summary_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
-| paper_table_real_reuse_ref_t2_papertoskill_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
-| paper_table_real_reuse_ref_t2_status | ready | value=Ready to run | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t2_summary_score | ready | value=1.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t2_papertoskill_score | ready | value=1.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
+| paper_table_real_reuse_ref_t2_status | ready | value=Scored (GPT-family) | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_snap_t1_task_id | ready | value=SNAP-T1 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_snap_t1_source_paper | ready | value=SnapATAC2 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |
 | paper_table_real_reuse_snap_t1_domain | ready | value=Single-cell omics | paper/aaai/papertoskill_tables.tex vs results/real_reuse/main_results_plan.csv |

@@ -135,6 +135,21 @@ python scripts\score_real_reuse_reflexion.py --task REF-T1 --prediction path\to\
 python scripts\score_real_reuse_reflexion.py --task REF-T2 --candidate path\to\candidate.py --tests benchmarks\real_reuse\assets\REF-T2\tests.json
 ```
 
+Run the locked Reflexion Summary-vs-PaperToSkill rows with the GPT-family
+Responses profile. Set the API key only in the shell, never in tracked files:
+
+```powershell
+$env:PAPERTOSKILL_GPT_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
+$env:PAPERTOSKILL_GPT_OPENAI_API_KEY = "<set locally>"
+python scripts\run_real_reuse_reflexion.py --task REF-T1 --task REF-T2 --condition summary --condition papertoskill --model-family GPT-family --model-alias gpt-5.5 --wire-api openai_responses --run-id phase87_gpt_reflexion_real_reuse
+Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_BASE_URL -ErrorAction SilentlyContinue
+Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_API_KEY -ErrorAction SilentlyContinue
+```
+
+The runner writes prompts, raw responses, metric JSON, and raw rows under
+`results/real_reuse/`. It records provider/model errors as availability
+evidence, not model-quality failures.
+
 Validate the planned spec before implementing runners or editing paper claims:
 
 ```powershell
@@ -176,9 +191,11 @@ Execution order:
    path/URI, sha256 values, scoring command, and run budget. REF-T1 and REF-T2
    are the first completed prepared-asset layer.
 3. Create Summary and PaperToSkill context inputs for each task.
-4. Implement the real-reuse runner and scorer.
-5. Run agent-only tasks with no mid-run human intervention.
-6. Save raw rows under future `results/real_reuse/raw_rows.*`.
+4. Implement the real-reuse runner and scorer. The REF-T1/REF-T2 runner is now
+   implemented; AIDE, SWE-agent, and SnapATAC2 runners remain pending.
+5. Run agent-only tasks with no mid-run human intervention. REF-T1/REF-T2 have
+   one GPT-family Summary-vs-PaperToSkill run.
+6. Save raw rows under `results/real_reuse/raw_rows.*`.
 7. Update `results/real_reuse/main_results_plan.csv` and the matching
    `paper/aaai/papertoskill_tables.tex` cells with real scores.
 8. Only after result artifacts exist, revise the AAAI Abstract, Introduction,

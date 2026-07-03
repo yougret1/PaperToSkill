@@ -200,7 +200,8 @@
 | `scripts/build_real_reuse_paper_tables.py` | Materializes the paper-facing real-reuse main-results table scaffold from the benchmark spec | Created |
 | `scripts/prepare_real_reuse_reflexion_fixture.py` | Prepares locked REF-T1/REF-T2 local fixture assets, condition contexts, sha256 manifest entries, and scorer-only answer/checker separation | Created |
 | `scripts/score_real_reuse_reflexion.py` | Scores REF-T1 answer-key outputs with EM/F1 and REF-T2 HumanEval candidates with the hidden objective checker | Created |
-| `scripts/check_real_reuse_benchmark.py` | Validates the planned real-reuse benchmark spec, main conditions, sanity scope, reference-score boundary, task/fixture/candidate/asset-lock layers, REF prepared assets, and future output paths | Created |
+| `scripts/run_real_reuse_reflexion.py` | Runs locked REF-T1/REF-T2 Summary-vs-PaperToSkill conditions, saves prompts/responses/metrics/raw rows, and separates provider availability from model quality | Created |
+| `scripts/check_real_reuse_benchmark.py` | Validates the planned real-reuse benchmark spec, main conditions, sanity scope, reference-score boundary, task/fixture/candidate/asset-lock layers, REF prepared assets, REF runner, and future output paths | Created |
 | `scripts/evaluate_skill.py` | Deterministic v0 evaluator for generated skills | Created |
 | `scripts/evaluate_context_baselines.py` | Deterministic evaluator for context baseline coverage | Created |
 | `scripts/audit_skill_source_map.py` | Deterministic source-map-aware unsupported-instruction audit | Created |
@@ -357,8 +358,12 @@
 | `results/reproducibility/package_report.json` | Machine-readable reproducibility package report | Created |
 | `results/real_reuse/spec_preflight.md` | Human-readable preflight for the planned real-reuse benchmark spec; not a task-result table | Created |
 | `results/real_reuse/spec_preflight.json` | Machine-readable preflight for the planned real-reuse benchmark spec; not a task-result table | Created |
-| `results/real_reuse/main_results_plan.csv` | Data source for the AAAI real-reuse main experiment table scaffold; score cells remain pending execution | Created |
-| `results/real_reuse/main_results_plan.md` | Human-readable real-reuse main experiment table scaffold; not task-success evidence | Created |
+| `results/real_reuse/raw_rows.jsonl` | Raw scored rows for currently executed real-reuse conditions; current rows cover REF-T1/REF-T2 Summary and PaperToSkill with GPT-family only | Created |
+| `results/real_reuse/reflexion_run_report.md` | Human-readable run report for the locked REF-T1/REF-T2 GPT-family real-reuse execution | Created |
+| `results/real_reuse/reflexion_run_report.json` | Machine-readable run report for the locked REF-T1/REF-T2 GPT-family real-reuse execution | Created |
+| `results/real_reuse/main_results_plan.csv` | Data source for the AAAI real-reuse main experiment table; REF rows are filled from raw rows while other task families remain pending | Created |
+| `results/real_reuse/main_results_plan.md` | Human-readable real-reuse main experiment table with filled REF rows and pending non-REF rows | Created |
+| `results/real_reuse/main_results_plan.json` | Machine-readable real-reuse main experiment table generated from raw rows and planned task specs | Created |
 | `results/reproducibility/aaai_package_report.md` | Human-readable AAAI package verification report | Created |
 | `results/reproducibility/aaai_package_report.json` | Machine-readable AAAI package verification report | Created |
 | `results/reproducibility/usage_example_report.md` | Human-readable usage-example verification report | Created |
@@ -414,6 +419,6 @@
 | Artifact | Purpose | Status |
 | --- | --- | --- |
 | Model-ablation response logs | Claude/GPT-family/DeepSeek response files and scores after endpoint/model availability | Created |
-| Concrete real-reuse fixture assets | REF-T1/REF-T2 prepared assets and scorer scripts are created under `benchmarks/real_reuse/assets/`; AIDE, SWE-agent, and SnapATAC2 assets/runners remain planned | Mixed |
-| `results/real_reuse/` | Future raw rows, aggregate tables, sanity checks, cost table, and LLM ablation outputs for real-reuse experiments | Planned |
+| Concrete real-reuse fixture assets | REF-T1/REF-T2 prepared assets, scorer, runner, and one GPT-family Summary-vs-PaperToSkill run are created; AIDE, SWE-agent, and SnapATAC2 assets/runners remain planned | Mixed |
+| `results/real_reuse/` | Current REF raw rows and table artifacts plus future aggregate tables, sanity checks, cost table, and LLM ablation outputs for the remaining real-reuse experiments | Mixed |
 | Paper2Agent executable baseline | Full Paper2Agent/MCP runtime comparison, if setup resources become available | Planned |
