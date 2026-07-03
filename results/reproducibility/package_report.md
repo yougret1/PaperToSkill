@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 381
+- Ready checks: 392
 - Pending checks: 1
 - Failed checks: 0
 
@@ -89,6 +89,14 @@ Evidence boundary: this report checks local package completeness and separates p
 | real_reuse_swe_preparer | ready | present | scripts/prepare_real_reuse_swe_fixture.py |
 | real_reuse_swe_scorer | ready | present | scripts/score_real_reuse_swe.py |
 | real_reuse_swe_runner | ready | present | scripts/run_real_reuse_swe.py |
+| real_reuse_snapatac2_auto_note | ready | present | papers/auto_notes/snapatac2_auto_note.md |
+| real_reuse_snapatac2_skill | ready | present | generated_skills/real_reuse/snapatac2/SKILL.md |
+| real_reuse_snapatac2_source_map | ready | present | generated_skills/real_reuse/snapatac2/references/source_map.json |
+| real_reuse_snapatac2_rubric | ready | present | benchmarks/rubric_snapatac2_v0.json |
+| real_reuse_snapatac2_auto_note_report | ready | present | results/evaluations/snapatac2_auto_note_scaffold_v0.json |
+| real_reuse_snapatac2_rubric_report | ready | present | results/evaluations/snapatac2_rubric_v0.json |
+| real_reuse_snapatac2_source_span_task | ready | present | benchmarks/tasks/snapatac2_auto_source_span_validation.json |
+| real_reuse_snapatac2_source_span_report | ready | present | results/evaluations/snapatac2_auto_source_span_validation_v0.json |
 | real_reuse_task_spec_aide_t1 | ready | present | benchmarks/real_reuse/tasks/AIDE-T1.json |
 | real_reuse_task_spec_aide_t2 | ready | present | benchmarks/real_reuse/tasks/AIDE-T2.json |
 | real_reuse_task_spec_swe_t1 | ready | present | benchmarks/real_reuse/tasks/SWE-T1.json |
@@ -316,6 +324,9 @@ Evidence boundary: this report checks local package completeness and separates p
 | real_reuse_aide_runner_contract_ready | ready | runner_contract_status=ready | results\real_reuse\spec_preflight.json |
 | real_reuse_swe_agent_skill_contract_ready | ready | skill_contract_status=ready | results\real_reuse\spec_preflight.json |
 | real_reuse_swe_runner_contract_ready | ready | runner_contract_status=ready | results\real_reuse\spec_preflight.json |
+| real_reuse_snapatac2_skill_contract_ready | ready | skill_contract_status=ready | results\real_reuse\spec_preflight.json |
+| real_reuse_snapatac2_rubric_ready | ready | rubric_status=ready | results\real_reuse\spec_preflight.json |
+| real_reuse_snapatac2_source_span_ready | ready | source_span_status=ready | results\real_reuse\spec_preflight.json |
 | toolformer_auto_note_script | ready | present | scripts/papertoskill_note_from_text.py |
 | toolformer_auto_pipeline_script | ready | present | scripts/papertoskill_pipeline.py |
 | toolformer_auto_note | ready | present | papers/auto_notes/toolformer_auto_note.md |

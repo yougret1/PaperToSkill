@@ -162,16 +162,27 @@ Current supported claims:
   `scripts/prepare_real_reuse_swe_fixture.py`,
   `scripts/score_real_reuse_swe.py`, and
   `scripts/run_real_reuse_swe.py`, plus focused tests and gate integration.
-  SWE-agent fixture assets/raw rows still remain pending, and SnapATAC2
-  assets/runners/raw rows remain pending. Phase 91 targeted verification passed
+  Phase 92 added the SnapATAC2 real-reuse skill gate:
+  `papers/auto_notes/snapatac2_auto_note.md`,
+  `generated_skills/real_reuse/snapatac2/SKILL.md`, source map,
+  `benchmarks/rubric_snapatac2_v0.json`, source-span task, and evaluation
+  reports. The SnapATAC2 skill scores 20/20, stays under the 1200-word budget,
+  and has source-span support_rate=1.0 with 0 invalid ranges. SWE-agent fixture
+  assets/raw rows and SnapATAC2 runners/fixture assets/raw rows still remain
+  pending. Phase 91 targeted verification passed
   for 18 SWE/table/preflight/package tests, refreshed the AAAI PDF/table gates,
-  and moved SWE rows to `Fixture pending` without adding scores.
+  and moved SWE rows to `Fixture pending` without adding scores. Phase 92 full
+  verification passed 143 unit tests, all strict local gates, `git diff
+  --check` with only Windows line-ending warnings, and the raw-key scan with no
+  matches. The real-reuse table now shows SNAP rows as `Runner pending`.
 - Phase 84 inserted the main real-reuse table scaffold into the AAAI paper, and
   Phase 87 filled the REF-T1/REF-T2 cells from raw rows:
   `results/real_reuse/main_results_plan.csv`, `.md`, and `.json` are the table
   data source; `paper/aaai/papertoskill_tables.tex` contains
   `tab:real-reuse-main`; AIDE, SWE-agent, and SnapATAC2 score cells remain
-  pending execution.
+  pending execution. Current statuses are AIDE `Awaiting dataset`, SWE-agent
+  `Fixture pending`, Reflexion `Scored (GPT-family)`, and SnapATAC2 `Runner
+  pending`.
 - Phase 89 remote save recovered the earlier GitHub HTTPS blocker:
   `git push origin main` succeeded for the Phase 87/88 stack and the follow-up
   remote-save record was also pushed. Use `git status -sb` for the latest exact
@@ -332,10 +343,20 @@ Use these as entry points instead of searching the whole repo first:
   `results/evaluations/swe_agent_auto_source_span_validation_v0.json`:
   SWE-agent skill quality gates, currently 20/20 rubric and 1.0 source-span
   support rate with 0 invalid ranges.
+- `generated_skills/real_reuse/snapatac2/SKILL.md` and
+  `generated_skills/real_reuse/snapatac2/references/source_map.json`:
+  SnapATAC2 source-anchored generated skill for the single-cell omics
+  real-reuse task family. The skill gate is ready, but SnapATAC2 runner,
+  fixture assets, and raw rows remain pending.
+- `results/evaluations/snapatac2_rubric_v0.json` and
+  `results/evaluations/snapatac2_auto_source_span_validation_v0.json`:
+  SnapATAC2 skill quality gates, currently 20/20 rubric and 1.0 source-span
+  support rate with 0 invalid ranges.
 - `results/real_reuse/spec_preflight.md`: ready-to-implement preflight report
   for the real-reuse spec/task/fixture/candidate/asset-lock contracts, REF
-  runner, AIDE execution-layer contract, SWE-agent skill gate, and SWE
-  execution-layer contract. This is not task-success evidence by itself.
+  runner, AIDE execution-layer contract, SWE-agent skill/execution-layer
+  contracts, and SnapATAC2 skill gate. This is not task-success evidence by
+  itself.
 - `external/ai_scientist_v2_patches/`: reproducibility backup for local
   AI-Scientist-v2 adaptations used by the bounded Phase 76 integration run.
 - `benchmarks/provider_billing_evidence_v0.json`: provider-billing evidence
@@ -352,7 +373,7 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 381 ready checks, 1 pending
+  reports `ready_with_pending_external_evidence`, 392 ready checks, 1 pending
   check, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
@@ -427,9 +448,9 @@ Use these as entry points instead of searching the whole repo first:
   reports ready, 15 ready checks, 0 failed checks.
 - Real-reuse preflight:
   `results/real_reuse/spec_preflight.md`
-  reports `ready_to_implement`, 8 tasks, 434 ready checks, and 0 failed checks
+  reports `ready_to_implement`, 8 tasks, 440 ready checks, and 0 failed checks
   after validating the REF prepared asset/runner layer, AIDE execution-layer
-  contract, SWE-agent skill gate, and SWE execution-layer contract.
+  contract, SWE-agent skill/execution-layer contracts, and SnapATAC2 skill gate.
 - Real-reuse REF run:
   `results/real_reuse/reflexion_run_report.md` reports `complete` with 4
   scored rows for GPT-family `gpt-5.5`; REF-T1 and REF-T2 Summary and

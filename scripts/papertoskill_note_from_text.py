@@ -12,6 +12,7 @@ import argparse
 import json
 import re
 import textwrap
+import unicodedata
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -373,6 +374,108 @@ SWE_AGENT_LIMITATION_SPECS = [
     ),
 ]
 
+SNAPATAC2_METHOD_SPECS = [
+    CandidateSpec(
+        "Frame the method as matrix-free spectral embedding for scalable nonlinear dimensionality reduction",
+        ("matrix-free spectral embedding", "low-dimensional space", "Laplacian", "Lanczos", "linearly"),
+        "method",
+    ),
+    CandidateSpec(
+        "Use SnapATAC2's workflow modules for preprocessing, embedding/clustering, enrichment, and multimodal analysis",
+        ("preprocessing", "embedding/clustering", "functional enrichment", "multimodal", "four main parts"),
+        "method",
+    ),
+    CandidateSpec(
+        "Preserve the source preprocessing sequence for spectral embedding: IDF scaling, row-wise L2 normalization, degree normalization, and eigenvectors",
+        ("inverse document frequency", "row-wise", "L 2 norm", "degree matrix", "eigenvector"),
+        "method",
+    ),
+    CandidateSpec(
+        "Avoid constructing the full similarity matrix and compute eigenvectors with Lanczos matrix-vector products",
+        ("avoids calculating", "similarity matrix", "Lanczos algorithm", "matrix-vector product", "memory efficient"),
+        "method",
+    ),
+    CandidateSpec(
+        "Use out-of-sample Nystrom landmarks when the full cell-by-feature matrix is too large",
+        ("Nystr", "landmarks", "massive datasets", "hundreds of millions", "out-of-sample"),
+        "method",
+    ),
+    CandidateSpec(
+        "Extend the workflow to multi-view spectral embedding for paired ATAC/RNA or other multi-omics views",
+        ("Multi-view spectral embedding", "multiple views", "chromatin accessibility", "gene expression", "multi_spectral"),
+        "method",
+    ),
+    CandidateSpec(
+        "Select informative eigenvectors before downstream clustering instead of trusting every spectral component",
+        ("Eigenvector selection", "informative", "clustering", "eigenvalues", "weighted eigenvectors"),
+        "method",
+    ),
+]
+
+SNAPATAC2_EXPERIMENT_SPECS = [
+    CandidateSpec(
+        "Benchmark runtime and memory against LSI, LDA, PCA, classic spectral embedding, and neural models",
+        ("benchmark", "runtime", "memory", "LSI", "LDA", "PCA"),
+        "experiment",
+    ),
+    CandidateSpec(
+        "Report the paper's scalability references for 200,000 cells and the end-to-end ArchR comparison",
+        ("13.4 min", "200,000 cells", "21 GB", "5.22 h", "14.27 h"),
+        "experiment",
+    ),
+    CandidateSpec(
+        "Evaluate robustness to sequencing depth, noise, and rare cell-type abundance with ARI or silhouette metrics",
+        ("sequencing depths", "noise levels", "ARI", "rare cell", "ASW"),
+        "experiment",
+    ),
+    CandidateSpec(
+        "Use real scATAC-seq benchmarks with cell labels and bio-conservation metrics",
+        ("real scATAC-seq", "cell-type labels", "ARI", "AMI", "cell-type ASW"),
+        "experiment",
+    ),
+    CandidateSpec(
+        "Test transfer across scHi-C, scRNA-seq, DNA methylation, batch correction, and single-cell multiome data",
+        ("scHi-C", "scRNA-seq", "DNA methylation", "batch correction", "multiome"),
+        "experiment",
+    ),
+    CandidateSpec(
+        "Score embedding quality with normalized bio-conservation and batch-correction metrics instead of subjective interpretation",
+        ("bio-conservation", "batch correction", "S overall", "graph cLISI", "kBET"),
+        "experiment",
+    ),
+]
+
+SNAPATAC2_LIMITATION_SPECS = [
+    CandidateSpec(
+        "Do not claim arbitrary similarity metrics because the matrix-free implementation is currently cosine-specific",
+        ("limitation", "cosine", "other metrics", "cell-to-cell similarity", "Future developments"),
+        "limitation",
+        True,
+    ),
+    CandidateSpec(
+        "Use Nystrom landmarks or other memory controls when the cell-by-feature matrix itself is too large",
+        ("memory constraint", "Nystr", "landmarks", "hundreds of millions", "cell-by-feature"),
+        "limitation",
+    ),
+    CandidateSpec(
+        "Treat neural-network runtime and memory comparisons carefully because GPU feature limits and preprocessing exclusions affect comparability",
+        ("A100 GPU", "memory limitations", "500,000", "exclude data preprocessing", "lower limit"),
+        "limitation",
+        True,
+    ),
+    CandidateSpec(
+        "Preserve dataset and label provenance when scoring ARI, AMI, ASW, cLISI, iLISI, or kBET",
+        ("cell labels", "metrics", "ARI", "AMI", "kBET"),
+        "limitation",
+    ),
+    CandidateSpec(
+        "Use public data and official code availability records when reproducing benchmark-style tasks",
+        ("Data availability", "Code availability", "GitHub", "single-cell-benchmark", "Anndata objects"),
+        "limitation",
+        True,
+    ),
+]
+
 PROFILE_SPECS = {
     "toolformer": {
         "method": TOOLFORMER_METHOD_SPECS,
@@ -388,6 +491,11 @@ PROFILE_SPECS = {
         "method": SWE_AGENT_METHOD_SPECS,
         "experiment": SWE_AGENT_EXPERIMENT_SPECS,
         "limitation": SWE_AGENT_LIMITATION_SPECS,
+    },
+    "snapatac2": {
+        "method": SNAPATAC2_METHOD_SPECS,
+        "experiment": SNAPATAC2_EXPERIMENT_SPECS,
+        "limitation": SNAPATAC2_LIMITATION_SPECS,
     },
 }
 
@@ -408,6 +516,7 @@ HEADING_PATTERNS = {
         r"\b4\s+Experiments\b",
         r"\b4\s+Experimental Setup\b",
         r"\b5\s+Results\b",
+        r"\bResults\b",
         r"\bExperiments\b",
         r"\bEvaluation\b",
     ),
@@ -421,7 +530,7 @@ HEADING_PATTERNS = {
 
 def clean_text(value: str) -> str:
     value = value.replace("\f", " ")
-    value = value.encode("ascii", "ignore").decode("ascii")
+    value = unicodedata.normalize("NFKD", value).encode("ascii", "ignore").decode("ascii")
     return re.sub(r"\s+", " ", value).strip()
 
 

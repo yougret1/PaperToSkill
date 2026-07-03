@@ -3151,3 +3151,54 @@ Evidence boundary:
 - The current real-reuse effectiveness evidence is still only the partial
   REF-T1/REF-T2 GPT-family slice; AIDE, SWE-agent, and SnapATAC2 remain
   pending for downstream task scores.
+
+## 2026-07-03 Phase 92
+
+Actions:
+
+- Added a `snapatac2` profile to `scripts/papertoskill_note_from_text.py` for
+  extracting matrix-free spectral embedding workflow steps, validation metrics,
+  transfer cases, and limitations from the SnapATAC2 paper.
+- Normalized deterministic text extraction with Unicode decomposition before
+  ASCII conversion so terms such as `Nyström` become `Nystrom` instead of
+  losing letters in generated notes.
+- Generated the SnapATAC2 real-reuse skill gate artifacts:
+  `papers/auto_notes/snapatac2_auto_note.md`,
+  `generated_skills/real_reuse/snapatac2/SKILL.md`, source map,
+  `benchmarks/rubric_snapatac2_v0.json`,
+  `benchmarks/tasks/snapatac2_auto_source_span_validation.json`, and
+  evaluation reports.
+- Extended `scripts/check_real_reuse_benchmark.py` and
+  `scripts/check_reproducibility_package.py` so the real-reuse/package gates
+  validate SnapATAC2 skill, rubric, and source-span readiness.
+- Refreshed the real-reuse main table and AAAI table/PDF so SNAP-T1/T2 now
+  show `Runner pending` instead of `Skill pending`.
+
+Results:
+
+- SnapATAC2 rubric score is 20/20.
+- The generated SnapATAC2 skill is 1091 words under the 1200-word compactness
+  budget.
+- SnapATAC2 source-span validation reports 18/18 supported claims,
+  `support_rate=1.0`, and 0 invalid ranges.
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 440
+  ready checks, and 0 failed checks.
+- `results/reproducibility/package_report.md` reports
+  `ready_with_pending_external_evidence`, 392 ready checks, 1 pending check,
+  and 0 failed checks.
+- `paper/aaai/papertoskill_aaai2027.pdf` was rebuilt after the table status
+  update, and `results/reproducibility/aaai_package_report.md` reports ready
+  with 17 ready checks and 0 failed checks.
+- Full unit discovery passed with 143 tests. All strict local gates passed.
+  `git diff --check` reported no whitespace errors beyond Windows line-ending
+  warnings, and the raw-key scan produced no matches.
+
+Evidence boundary:
+
+- Phase 92 is SnapATAC2 skill/readiness evidence only. It does not implement
+  a SnapATAC2 runner, does not materialize SNAP-T1/T2 fixture assets, does not
+  run Summary/PaperToSkill rows, does not append SNAP raw rows, and does not
+  add SNAP task scores to the paper.
+- The current real-reuse effectiveness evidence is still only the partial
+  REF-T1/REF-T2 GPT-family slice; AIDE, SWE-agent, and SnapATAC2 remain
+  pending for downstream task scores.

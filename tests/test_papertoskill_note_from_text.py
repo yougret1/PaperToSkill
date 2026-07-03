@@ -225,6 +225,55 @@ Smaller models do not always benefit; the method depends on model size.
             self.assertGreaterEqual(len(report_payload["selected"]["experiments"]), 4)
             self.assertGreaterEqual(len(report_payload["selected"]["limitations"]), 3)
 
+    def test_snapatac2_profile_produces_single_cell_scaffold(self):
+        if not (ROOT / "papers" / "extracted" / "snapatac2.txt").exists():
+            self.skipTest("SnapATAC2 extracted text is not available")
+
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp) / "snapatac2_auto_note.md"
+            report = Path(tmp) / "snapatac2_auto_note_report.json"
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--source",
+                    str(ROOT / "papers" / "extracted" / "snapatac2.txt"),
+                    "--output",
+                    str(output),
+                    "--paper-id",
+                    "snapatac2",
+                    "--title",
+                    "A fast, scalable and versatile tool for analysis of single-cell omics data",
+                    "--profile",
+                    "snapatac2",
+                    "--report",
+                    str(report),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            note = output.read_text(encoding="utf-8")
+            self.assertIn("## Methods", note)
+            self.assertIn("matrix-free spectral embedding", note)
+            self.assertIn("Lanczos", note)
+            self.assertIn("Nystrom", note)
+            self.assertNotIn("Nystrm", note)
+            self.assertIn("multi-view spectral embedding", note)
+            self.assertIn("runtime", note)
+            self.assertIn("memory", note)
+            self.assertIn("ARI", note)
+            self.assertIn("cosine", note)
+            self.assertIn("Source anchors: lines", note)
+
+            report_payload = json.loads(report.read_text(encoding="utf-8"))
+            self.assertEqual(report_payload["paper_id"], "snapatac2")
+            self.assertEqual(report_payload["profile"], "snapatac2")
+            self.assertGreaterEqual(len(report_payload["selected"]["methods"]), 5)
+            self.assertGreaterEqual(len(report_payload["selected"]["experiments"]), 4)
+            self.assertGreaterEqual(len(report_payload["selected"]["limitations"]), 3)
+
 
 if __name__ == "__main__":
     unittest.main()

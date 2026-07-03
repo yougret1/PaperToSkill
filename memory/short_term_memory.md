@@ -7,22 +7,23 @@ Current date: 2026-07-03.
 
 ## Latest Resume/Completion Note
 
-- 2026-07-03 Phase 91 SWE-agent execution layer is the current local WIP before
-  final full verification/commit: added
-  `scripts/prepare_real_reuse_swe_fixture.py`,
-  `scripts/score_real_reuse_swe.py`, and
-  `scripts/run_real_reuse_swe.py`; added focused SWE tests; updated
-  `scripts/build_real_reuse_paper_tables.py` tests so SWE rows become
-  `Fixture pending` after the skill and runner exist but before asset manifests
-  are prepared; refreshed the real-reuse table, AAAI table/PDF, preflight, and
-  package reports. Current anchors: `results/real_reuse/spec_preflight.md`
-  reports `ready_to_implement`, 434 ready / 0 failed; package report reports
-  381 ready / 1 pending / 0 failed; `results/real_reuse/main_results_plan.md`
-  shows SWE-T1/T2 `Fixture pending` with score cells still `Pending`. This is
-  execution-layer readiness only: no official SWE-bench assets, no SWE
-  `asset_manifest.json`, no SWE raw rows, and no SWE task-success evidence.
-  The SWE runner now records missing fixture assets as pending/no-raw-row
-  availability state instead of crashing.
+- 2026-07-03 Phase 92 SnapATAC2 skill gate is the current verified local phase
+  before commit/push: added the `snapatac2` auto-note profile, generated
+  `papers/auto_notes/snapatac2_auto_note.md`,
+  `generated_skills/real_reuse/snapatac2/SKILL.md`, source map,
+  `benchmarks/rubric_snapatac2_v0.json`, source-span task, and evaluation
+  reports. Added package/preflight/table integration and tests, normalized
+  deterministic text extraction so `Nyström` becomes ASCII `Nystrom`, refreshed
+  `results/real_reuse/main_results_plan.*`, updated
+  `paper/aaai/papertoskill_tables.tex`, and rebuilt
+  `paper/aaai/papertoskill_aaai2027.pdf`. Current anchors:
+  `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 440
+  ready / 0 failed; package report reports 392 ready / 1 pending / 0 failed;
+  SNAP-T1/T2 rows now show `Runner pending` with score cells still `Pending`.
+  This is SnapATAC2 skill/readiness evidence only: no SNAP runner, fixture
+  assets, raw rows, or downstream task-success evidence exist yet. Full
+  verification passed: 143 unit tests, all strict gates, `git diff --check`
+  with only Windows line-ending warnings, and raw-key scan with no matches.
 - 2026-07-03 discussion/state sync: user asked whether the original paper's
   other sections need changes under the new real-reuse plan. Local AAAI text
   check shows the current manuscript already has the key safety boundaries:
@@ -279,7 +280,7 @@ Current date: 2026-07-03.
 
 ## Current Phase
 
-Phase 91 is the current local phase before final full verification and commit.
+Phase 92 is the current local phase before final commit/push.
 Phase 68 was committed as
 `5548070 Refresh memory anchors after remote save` and pushed to `origin/main`
 on 2026-06-20. Phase 69 syncs the AAAI submission-decision execution packet
@@ -287,6 +288,36 @@ with the validated decision-record helper; no external evidence status is
 promoted and no AAAI option is selected. Phase 70 updates the direct provider
 diagnostic to match the current coderxiaoc API protocols: Claude uses
 Anthropic Messages and GPT uses OpenAI Responses.
+
+Phase 92 evidence:
+
+- `scripts/papertoskill_note_from_text.py` now has a `snapatac2` profile for
+  extracting SnapATAC2 matrix-free spectral embedding workflow, benchmarking
+  metrics, transfer settings, and limitations from
+  `papers/extracted/snapatac2.txt`.
+- The auto-note path now uses Unicode normalization before ASCII conversion,
+  so extracted names such as `Nyström` become stable ASCII `Nystrom` instead
+  of losing the `o`.
+- `papers/auto_notes/snapatac2_auto_note.md`,
+  `generated_skills/real_reuse/snapatac2/SKILL.md`, and
+  `generated_skills/real_reuse/snapatac2/references/source_map.json` exist.
+- `results/evaluations/snapatac2_rubric_v0.json` reports 20/20 and 1091
+  words under the 1200-word budget.
+- `results/evaluations/snapatac2_auto_source_span_validation_v0.json` reports
+  18/18 supported claims, support_rate=1.0, and 0 invalid ranges.
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 8
+  tasks, 440 ready checks, and 0 failed checks after validating the SnapATAC2
+  skill gate.
+- `results/reproducibility/package_report.md` reports 392 ready / 1 pending /
+  0 failed after adding the SnapATAC2 readiness artifacts.
+- `results/real_reuse/main_results_plan.{csv,md,json}` and
+  `paper/aaai/papertoskill_tables.tex` now report SNAP-T1/T2 as
+  `Runner pending`, with score cells still `Pending`.
+- Full verification passed before phase save: 143 unit tests, all strict
+  gates, no raw-key matches, and only Windows line-ending warnings from
+  `git diff --check`.
+- This is SnapATAC2 skill/readiness evidence only; no SnapATAC2 runner,
+  fixture assets, raw rows, or downstream task-success evidence exist yet.
 
 Phase 91 evidence:
 
