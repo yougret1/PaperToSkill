@@ -15,11 +15,22 @@ Current date: 2026-07-03.
   discussion record. Do not rewrite the AAAI Results as if these new real-reuse
   experiments are complete; first update planning files, then revise paper text
   after execution.
+- 2026-07-03 Phase 86 real-reuse Reflexion preparer/scorer is now the current
+  local phase: added `scripts/prepare_real_reuse_reflexion_fixture.py` and
+  `scripts/score_real_reuse_reflexion.py`; materialized REF-T1 HotPotQA-style
+  assets and REF-T2 HumanEval-style assets under
+  `benchmarks/real_reuse/assets/REF-T1` and `REF-T2`; created
+  `baselines/real_reuse/REF-T1_summary.md` and `REF-T2_summary.md`; extended
+  the real-reuse preflight and package gate. `results/real_reuse/spec_preflight.md`
+  reports `ready_to_implement`, 8 tasks, 418 ready checks, 0 failed checks.
+  `results/reproducibility/package_report.md` reports 368 ready / 1 pending /
+  0 failed. This is still setup evidence: no Summary or PaperToSkill model
+  condition has been run and no real-reuse raw rows or scores exist.
 - 2026-07-03 active-goal update: prioritize the main real-reuse experiment over
   auxiliary experiments. The paper's experiment section should get the main
   table structure first, with TBD/pending numeric cells and explicit evidence
   boundary; after scores are run, update the paper numbers promptly.
-- 2026-07-03 Phase 85 asset-lock gate is now the current local phase: added
+- 2026-07-03 Phase 85 asset-lock gate is a previous local phase: added
   `scripts/build_real_reuse_asset_locks.py`, generated all eight
   `benchmarks/real_reuse/asset_locks/*.json` files, corrected the SnapATAC2 API
   candidate URL to `https://scverse.org/SnapATAC2/api/index.html`, extended
@@ -30,8 +41,9 @@ Current date: 2026-07-03.
   `sqlfluff__sqlfluff-1625`, SWE-bench Verified `astropy__astropy-12907`,
   HotPotQA example `5a8b57f25542995d1e6f1371`, HumanEval `HumanEval/0`, and
   SnapATAC2 `pbmc5k` / `pbmc10k_multiome`. This is not execution evidence:
-  assets, preparers/scorers, runner, raw rows, and scores remain pending.
-- 2026-07-03 Phase 84 paper-table gate is now the current local phase: added
+  REF assets/scorers were added later in Phase 86; all real model runs, raw
+  rows, and scores remain pending.
+- 2026-07-03 Phase 84 paper-table gate is a previous local phase: added
   `scripts/build_real_reuse_paper_tables.py`, generated
   `results/real_reuse/main_results_plan.{csv,md}`, inserted
   `Table~\ref{tab:real-reuse-main}` into `paper/aaai/papertoskill_tables.tex`,
@@ -106,8 +118,8 @@ Current date: 2026-07-03.
   all strict local gates, `git diff --check`, and repository raw-key scan.
 - Current reports:
   - Goal completion: 77 ready / 3 pending / 0 failed.
-  - Reproducibility package: 351 ready / 1 pending / 0 failed after adding the
-    real-reuse asset-lock gate.
+  - Reproducibility package: 368 ready / 1 pending / 0 failed after adding the
+    REF real-reuse prepared asset layer.
   - External evidence queue: `human_fidelity_annotation` and
     `aaai_submission_decision`.
   - AAAI decision: ready, selected `wait_for_external_evidence`.
@@ -178,13 +190,40 @@ Current date: 2026-07-03.
 
 ## Current Phase
 
-Phase 85 is the current local phase. Phase 68 was committed as
+Phase 86 is the current local phase. Phase 68 was committed as
 `5548070 Refresh memory anchors after remote save` and pushed to `origin/main`
 on 2026-06-20. Phase 69 syncs the AAAI submission-decision execution packet
 with the validated decision-record helper; no external evidence status is
 promoted and no AAAI option is selected. Phase 70 updates the direct provider
 diagnostic to match the current coderxiaoc API protocols: Claude uses
 Anthropic Messages and GPT uses OpenAI Responses.
+
+Phase 86 evidence:
+
+- `scripts/prepare_real_reuse_reflexion_fixture.py` materializes locked REF-T1
+  and REF-T2 fixture assets, task prompts, task-specific Summary condition
+  contexts, and hidden scorer-only assets.
+- `scripts/score_real_reuse_reflexion.py` scores REF-T1 predictions with EM/F1
+  against `answer_key.json` and REF-T2 candidates with the hidden HumanEval
+  checker.
+- REF-T1 assets are under `benchmarks/real_reuse/assets/REF-T1/` and include
+  question, retrieval context/tool stub, feedback protocol, task prompt, hidden
+  answer key, and `asset_manifest.json`.
+- REF-T2 assets are under `benchmarks/real_reuse/assets/REF-T2/` and include
+  initial task, failed first attempt, environment feedback, task prompt, hidden
+  tests/canonical solution, and `asset_manifest.json`.
+- Task-specific Summary contexts exist at
+  `baselines/real_reuse/REF-T1_summary.md` and
+  `baselines/real_reuse/REF-T2_summary.md`.
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`, 8
+  tasks, 418 ready checks, and 0 failed checks after validating prepared REF
+  assets.
+- `results/reproducibility/package_report.md` reports 368 ready / 1 pending /
+  0 failed after including the REF preparer/scorer and prepared assets.
+- No Summary or PaperToSkill model condition has been executed; no
+  `results/real_reuse/raw_rows.jsonl` exists; the AAAI real-reuse score cells
+  remain pending. Next implementation can either build the REF task runner/model
+  invocation path or materialize another task family.
 
 Phase 85 evidence:
 

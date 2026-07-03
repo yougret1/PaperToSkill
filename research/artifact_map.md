@@ -91,6 +91,7 @@
 | `research/run_logs/2026-06-20_phase69_aaai_decision_packet_helper_sync.md` | External-evidence AAAI decision packet synced with the validated decision-record helper | Created |
 | `research/run_logs/2026-06-26_phase70_protocol_specific_direct_probe.md` | Protocol-specific direct provider probe update for Claude Messages and GPT Responses diagnostics | Created |
 | `research/run_logs/2026-07-02_phase76_ai_scientist_v2_full_live_run.md` | Bounded AI-Scientist-v2 marker smoke/full live-run completion, synthetic sensitivity result, failed HF branch boundary, and stale-queue refresh | Created |
+| `research/run_logs/2026-07-03_phase86_real_reuse_reflexion_preparer_scorer.md` | REF-T1/REF-T2 real-reuse fixture preparation, scorer implementation, tests, and evidence boundary | Created |
 
 ## Paper Draft Package
 
@@ -139,6 +140,10 @@
 | `benchmarks/real_reuse/fixtures/*.json` | Per-task fixture requirement manifests with asset slots, scoring contracts, license/provenance status, and planned outputs; concrete assets remain pending | Created |
 | `benchmarks/real_reuse/fixture_candidates/*.json` | Per-task candidate asset manifests with selected source repositories/datasets, preparation commands, scoring entry points, and license/provenance boundaries; assets remain unmaterialized | Created |
 | `benchmarks/real_reuse/asset_locks/*.json` | Per-task preparation-time locks for external source revisions, fixed task instances, local materialization targets, hidden scorer assets, and scorer/preparer contracts; assets remain unmaterialized | Created |
+| `benchmarks/real_reuse/assets/REF-T1/asset_manifest.json` | Prepared HotPotQA-style Reflexion QA fixture manifest with model-visible task assets and hidden answer key; not a model run or result | Created |
+| `benchmarks/real_reuse/assets/REF-T2/asset_manifest.json` | Prepared HumanEval/0 Reflexion retry fixture manifest with model-visible failed attempt/feedback and hidden checker assets; not a model run or result | Created |
+| `baselines/real_reuse/REF-T1_summary.md` | Task-specific Summary baseline context for REF-T1 without scorer-only answer assets | Created |
+| `baselines/real_reuse/REF-T2_summary.md` | Task-specific Summary baseline context for REF-T2 without hidden checker or canonical-solution assets | Created |
 | `benchmarks/tasks/ai_scientist_v2_research_run.json` | Downstream context-coverage task spec | Created |
 | `benchmarks/tasks/skill_source_audit.json` | Source-map-aware unsupported-instruction audit task | Created |
 | `benchmarks/tasks/ai_scientist_v2_harness_transfer.json` | Offline harness-transfer readiness task spec | Created |
@@ -193,7 +198,9 @@
 | `scripts/build_real_reuse_fixture_candidates.py` | Materializes candidate asset/preparation manifests for the eight real-reuse fixture contracts | Created |
 | `scripts/build_real_reuse_asset_locks.py` | Materializes preparation-time asset locks for the eight real-reuse tasks from task, fixture, and candidate manifests | Created |
 | `scripts/build_real_reuse_paper_tables.py` | Materializes the paper-facing real-reuse main-results table scaffold from the benchmark spec | Created |
-| `scripts/check_real_reuse_benchmark.py` | Validates the planned real-reuse benchmark spec, main conditions, sanity scope, reference-score boundary, task/fixture/candidate/asset-lock layers, and future output paths | Created |
+| `scripts/prepare_real_reuse_reflexion_fixture.py` | Prepares locked REF-T1/REF-T2 local fixture assets, condition contexts, sha256 manifest entries, and scorer-only answer/checker separation | Created |
+| `scripts/score_real_reuse_reflexion.py` | Scores REF-T1 answer-key outputs with EM/F1 and REF-T2 HumanEval candidates with the hidden objective checker | Created |
+| `scripts/check_real_reuse_benchmark.py` | Validates the planned real-reuse benchmark spec, main conditions, sanity scope, reference-score boundary, task/fixture/candidate/asset-lock layers, REF prepared assets, and future output paths | Created |
 | `scripts/evaluate_skill.py` | Deterministic v0 evaluator for generated skills | Created |
 | `scripts/evaluate_context_baselines.py` | Deterministic evaluator for context baseline coverage | Created |
 | `scripts/audit_skill_source_map.py` | Deterministic source-map-aware unsupported-instruction audit | Created |
@@ -256,6 +263,8 @@
 | `tests/test_generate_aaai_submission_decision.py` | Unit tests for the AAAI submission-decision record generator and secret/availability validation | Created |
 | `tests/test_check_submission_review.py` | Smoke tests for submission-review handoff drift checker | Created |
 | `tests/test_run_ai_scientist_v2_smoke.py` | Smoke tests for AI-Scientist-v2 LLM-client smoke success, redacted provider errors, stale-response cleanup, timeout reporting, and alias fallback | Created |
+| `tests/test_prepare_real_reuse_reflexion_fixture.py` | Unit tests for REF-T1/REF-T2 fixture preparation and scorer-only asset separation | Created |
+| `tests/test_score_real_reuse_reflexion.py` | Unit tests for REF-T1 EM/F1 scoring and REF-T2 HumanEval checker scoring | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |
 | `generated_skills/ai_scientist_v2/references/source_map.json` | Source-map evidence for AI Scientist-v2 generated skill | Created |
 | `generated_skills/reflexion/SKILL.md` | Retained generated skill from Reflexion note | Created |
@@ -405,6 +414,6 @@
 | Artifact | Purpose | Status |
 | --- | --- | --- |
 | Model-ablation response logs | Claude/GPT-family/DeepSeek response files and scores after endpoint/model availability | Created |
-| Concrete real-reuse fixture assets | Candidate datasets/repositories and fixed task-instance locks are recorded under `benchmarks/real_reuse/fixture_candidates/*.json` and `benchmarks/real_reuse/asset_locks/*.json`; actual downloaded assets, labels, prepared manifests, and runnable scoring scripts remain planned | Planned |
+| Concrete real-reuse fixture assets | REF-T1/REF-T2 prepared assets and scorer scripts are created under `benchmarks/real_reuse/assets/`; AIDE, SWE-agent, and SnapATAC2 assets/runners remain planned | Mixed |
 | `results/real_reuse/` | Future raw rows, aggregate tables, sanity checks, cost table, and LLM ablation outputs for real-reuse experiments | Planned |
 | Paper2Agent executable baseline | Full Paper2Agent/MCP runtime comparison, if setup resources become available | Planned |

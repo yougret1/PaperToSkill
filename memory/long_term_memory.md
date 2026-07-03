@@ -122,7 +122,7 @@ Current supported claims:
   checkout's remote is the SakanaAI upstream. The archive backs up the local
   coderxiaoc/BFTS integration patch inside the PaperToSkill GitHub history
   without committing raw API keys or local presentation/build artifacts.
-- Phase 79/85 real-reuse planning/task/fixture/candidate/asset-lock gate: the next stronger validity
+- Phase 79/86 real-reuse planning/task/fixture/candidate/asset-lock/REF-prepared-assets gate: the next stronger validity
   target is original-style paper-task reuse over eight planned tasks from AIDE,
   SWE-agent, Reflexion, and SnapATAC2. Toolformer and AI Scientist-v2 remain
   sanity/auxiliary cases. `benchmarks/real_reuse/real_reuse_v0.json` and
@@ -132,9 +132,14 @@ Current supported claims:
   records selected candidate datasets/repositories and preparation/scoring
   entry points; `benchmarks/real_reuse/asset_locks/*.json` fixes preparation-
   time source revisions, task instances, local materialization targets, hidden
-  scorer assets, and scorer/preparer contracts. `results/real_reuse/spec_preflight.md`
-  validates them. No materialized fixture assets, runner/scorer, raw rows, or
-  real-reuse results exist yet.
+  scorer assets, and scorer/preparer contracts. Phase 86 materialized REF-T1
+  and REF-T2 fixture assets under `benchmarks/real_reuse/assets/`, added
+  task-specific Summary contexts under `baselines/real_reuse/`, and implemented
+  `scripts/prepare_real_reuse_reflexion_fixture.py` plus
+  `scripts/score_real_reuse_reflexion.py`. `results/real_reuse/spec_preflight.md`
+  validates the REF prepared assets. AIDE, SWE-agent, and SnapATAC2 assets,
+  a full real-reuse runner, raw rows, and Summary vs PaperToSkill real-reuse
+  scores remain pending.
 - Phase 84 inserted the main real-reuse table scaffold into the AAAI paper:
   `results/real_reuse/main_results_plan.csv` and `.md` are the table data
   source; `paper/aaai/papertoskill_tables.tex` contains
@@ -143,9 +148,10 @@ Current supported claims:
 Current unsupported claims:
 
 - PaperToSkill improves real original-style task outcomes across AIDE,
-  SWE-agent, Reflexion, SnapATAC2, or other domains; the Phase 83 real-reuse
-  spec/task/fixture/candidate contracts are ready to implement but assets have
-  not been materialized and the tasks have not been executed.
+  SWE-agent, Reflexion, SnapATAC2, or other domains; the Phase 86 real-reuse
+  spec/task/fixture/candidate/asset-lock contracts are ready, and REF-T1/REF-T2
+  prepared assets plus scorers exist, but Summary and PaperToSkill task
+  conditions have not been executed and no raw rows exist.
 - Saved-response model-ablation scoring as proof of live downstream task
   success, broad model quality, provider billing, or provider economics.
 - Saved-response output-contract scoring as proof of real live task success.
@@ -222,9 +228,14 @@ Use these as entry points instead of searching the whole repo first:
   asset locks from task specs, fixture manifests, and candidate manifests.
 - `scripts/build_real_reuse_paper_tables.py`: materializes the paper-facing
   real-reuse main-results table scaffold from the benchmark spec.
+- `scripts/prepare_real_reuse_reflexion_fixture.py`: materializes locked
+  REF-T1 HotPotQA-style and REF-T2 HumanEval-style fixture assets, task prompts,
+  Summary condition contexts, and scorer-only hidden assets.
+- `scripts/score_real_reuse_reflexion.py`: scores REF-T1 predictions with
+  answer-key EM/F1 and REF-T2 candidates with the hidden HumanEval checker.
 - `scripts/check_real_reuse_benchmark.py`: strict local preflight checker for
-  the planned real-reuse benchmark spec, per-task specs, fixture manifests, and
-  candidate asset/preparation manifests.
+  the planned real-reuse benchmark spec, per-task specs, fixture manifests,
+  candidate asset/preparation manifests, asset locks, and REF prepared assets.
 - `benchmarks/real_reuse/tasks/*.json`: eight per-task execution-contract specs
   with input/output contracts, condition paths, metric contracts, run controls,
   workflow checklists, unsupported-error policy, and raw-row schema. They do
@@ -241,6 +252,13 @@ Use these as entry points instead of searching the whole repo first:
   locks with observed source revisions, fixed task instances, local
   materialization targets, hidden scorer assets, and scorer/preparer contracts.
   They do not download or materialize assets and do not contain results.
+- `benchmarks/real_reuse/assets/REF-T1/asset_manifest.json` and
+  `benchmarks/real_reuse/assets/REF-T2/asset_manifest.json`: prepared Reflexion
+  fixture manifests with sha256 values and model-visible/scorer-only asset
+  separation. They are setup evidence only, not model-run results.
+- `baselines/real_reuse/REF-T1_summary.md` and
+  `baselines/real_reuse/REF-T2_summary.md`: task-specific Summary condition
+  contexts for the two prepared Reflexion tasks.
 - `results/real_reuse/main_results_plan.csv` and `.md`: paper-facing
   real-reuse main table scaffold with pending Summary/PaperToSkill score cells.
 - `results/real_reuse/spec_preflight.md`: ready-to-implement preflight report
@@ -262,7 +280,7 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 351 ready checks, 1 pending
+  reports `ready_with_pending_external_evidence`, 368 ready checks, 1 pending
   check, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
@@ -335,6 +353,10 @@ Use these as entry points instead of searching the whole repo first:
 - Submission-review handoff:
   `results/reproducibility/submission_review_report.md`
   reports ready, 15 ready checks, 0 failed checks.
+- Real-reuse preflight:
+  `results/real_reuse/spec_preflight.md`
+  reports `ready_to_implement`, 8 tasks, 418 ready checks, and 0 failed checks
+  after validating the REF prepared asset layer.
 
 ## Model/API Configuration
 

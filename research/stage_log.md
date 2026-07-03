@@ -2896,3 +2896,45 @@ Evidence boundary:
   targets, and scorer/preparer contracts only. It does not materialize datasets
   or repositories for execution, implement the preparer/scorer scripts, run
   Summary or PaperToSkill, or create downstream result rows.
+
+## 2026-07-03 Phase 86
+
+Actions:
+
+- Added `scripts/prepare_real_reuse_reflexion_fixture.py` for locked REF-T1
+  and REF-T2 fixture preparation.
+- Added `scripts/score_real_reuse_reflexion.py` for REF-T1 EM/F1 answer-key
+  scoring and REF-T2 HumanEval checker scoring.
+- Materialized REF-T1 assets under `benchmarks/real_reuse/assets/REF-T1/`:
+  question, retrieval context/tool stub, feedback protocol, task prompt, hidden
+  answer key, and `asset_manifest.json`.
+- Materialized REF-T2 assets under `benchmarks/real_reuse/assets/REF-T2/`:
+  initial task, failed first attempt, environment feedback, task prompt, hidden
+  tests/canonical solution, and `asset_manifest.json`.
+- Created task-specific Summary baseline contexts at
+  `baselines/real_reuse/REF-T1_summary.md` and
+  `baselines/real_reuse/REF-T2_summary.md`.
+- Extended `scripts/check_real_reuse_benchmark.py` so the preflight validates
+  REF prepared asset manifests, sha256 values, model-visible/scorer-only
+  separation, condition contexts, and evidence boundaries.
+- Extended the reproducibility package gate to include the REF preparer,
+  scorer, prepared assets, and Summary contexts.
+- Added tests for the REF preparer, REF scorer, prepared-asset preflight, and
+  package-gate expectations.
+
+Results:
+
+- `results/real_reuse/spec_preflight.md` reports `ready_to_implement`,
+  8 tasks, 418 ready checks, and 0 failed checks.
+- `results/reproducibility/package_report.md` reports
+  `ready_with_pending_external_evidence`, 368 ready checks, 1 pending check,
+  and 0 failed checks.
+- Targeted tests for the new preparer/scorer and real-reuse/package checks
+  passed before full-gate execution.
+
+Evidence boundary:
+
+- Phase 86 prepares REF fixture assets and objective scorers only. It does not
+  run Summary or PaperToSkill model conditions, does not create real-reuse raw
+  rows, and does not provide downstream task-success evidence. AIDE, SWE-agent,
+  and SnapATAC2 fixture assets/runners remain pending.

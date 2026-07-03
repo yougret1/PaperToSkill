@@ -46,6 +46,7 @@ class CheckRealReuseBenchmarkTest(unittest.TestCase):
             self.assertIn("real_reuse_fixture_manifests_materialized", ready_ids)
             self.assertIn("real_reuse_fixture_candidates_materialized", ready_ids)
             self.assertIn("real_reuse_asset_locks_materialized", ready_ids)
+            self.assertIn("real_reuse_prepared_assets_reflexion_materialized", ready_ids)
             self.assertIn("real_reuse_llm_ablation_linked_to_tasks", ready_ids)
             self.assertIn("snapatac2_code_url_declared", ready_ids)
             self.assertTrue(output_md.exists())
@@ -134,6 +135,34 @@ class CheckRealReuseBenchmarkTest(unittest.TestCase):
             self.assertEqual("fail", report["overall_status"])
             self.assertEqual("fail", statuses["aide_t1_asset_lock_present"])
             self.assertEqual("fail", statuses["real_reuse_asset_locks_materialized"])
+
+    def test_missing_reflexion_prepared_assets_fail_preflight(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for relative_dir in [
+                "benchmarks/real_reuse/tasks",
+                "benchmarks/real_reuse/fixtures",
+                "benchmarks/real_reuse/fixture_candidates",
+                "benchmarks/real_reuse/asset_locks",
+            ]:
+                (root / relative_dir).mkdir(parents=True)
+            spec_dir = root / "benchmarks" / "real_reuse"
+            spec_dir.mkdir(parents=True, exist_ok=True)
+            (spec_dir / "real_reuse_v0.json").write_text(SPEC.read_text(encoding="utf-8"), encoding="utf-8")
+            for source_dir, dest_dir in [
+                (ROOT / "benchmarks" / "real_reuse" / "tasks", root / "benchmarks" / "real_reuse" / "tasks"),
+                (ROOT / "benchmarks" / "real_reuse" / "fixtures", root / "benchmarks" / "real_reuse" / "fixtures"),
+                (ROOT / "benchmarks" / "real_reuse" / "fixture_candidates", root / "benchmarks" / "real_reuse" / "fixture_candidates"),
+                (ROOT / "benchmarks" / "real_reuse" / "asset_locks", root / "benchmarks" / "real_reuse" / "asset_locks"),
+            ]:
+                for path in source_dir.glob("*.json"):
+                    (dest_dir / path.name).write_text(path.read_text(encoding="utf-8"), encoding="utf-8")
+
+            report = build_report(root, spec_dir / "real_reuse_v0.json")
+            statuses = {check["id"]: check["status"] for check in report["checks"]}
+            self.assertEqual("fail", report["overall_status"])
+            self.assertEqual("fail", statuses["ref_t1_prepared_asset_manifest_present"])
+            self.assertEqual("fail", statuses["real_reuse_prepared_assets_reflexion_materialized"])
 
 
 if __name__ == "__main__":

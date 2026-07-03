@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from dataclasses import dataclass
 from pathlib import Path
@@ -44,6 +45,8 @@ EXPECTED_RAW_ROW_FIELDS = {
 EXPECTED_FIXTURE_STATUS = "fixture_manifest_ready_assets_pending"
 EXPECTED_CANDIDATE_STATUS = "candidate_assets_selected_preparation_pending"
 EXPECTED_ASSET_LOCK_STATUS = "asset_lock_ready_preparation_pending"
+EXPECTED_PREPARED_ASSET_STATUS = "prepared_assets_ready_for_dry_scoring"
+EXPECTED_PREPARED_ASSET_TASKS = {"REF-T1", "REF-T2"}
 
 
 @dataclass
@@ -180,6 +183,7 @@ def build_report(root: Path, spec_path: Path) -> dict[str, Any]:
     checks.extend(fixture_manifest_checks(root, spec_path, tasks))
     checks.extend(fixture_candidate_checks(root, spec_path, tasks))
     checks.extend(asset_lock_checks(root, spec_path, tasks))
+    checks.extend(prepared_asset_checks(root, spec_path, tasks))
     return report_from_checks(root, spec_path, spec, checks)
 
 
@@ -862,6 +866,130 @@ def asset_lock_checks(root: Path, spec_path: Path, tasks: dict[str, dict[str, An
             "real_reuse_asset_locks_materialized",
             "ready" if present_asset_locks == EXPECTED_MAIN_TASKS else "fail",
             "asset_locks=" + ",".join(sorted(present_asset_locks)),
+            relative(root, spec_path),
+        )
+    )
+    return checks
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def prepared_asset_checks(root: Path, spec_path: Path, tasks: dict[str, dict[str, Any]]) -> list[Check]:
+    checks: list[Check] = []
+    prepared_tasks: set[str] = set()
+    for task_id in sorted(EXPECTED_PREPARED_ASSET_TASKS):
+        prefix = task_id.lower().replace("-", "_")
+        if task_id not in tasks:
+            checks.append(
+                Check(
+                    f"{prefix}_prepared_asset_task_declared",
+                    "fail",
+                    "missing task in master spec",
+                    relative(root, spec_path),
+                )
+            )
+            continue
+
+        manifest_path = root / "benchmarks" / "real_reuse" / "assets" / task_id / "asset_manifest.json"
+        if not manifest_path.exists():
+            checks.append(
+                Check(
+                    f"{prefix}_prepared_asset_manifest_present",
+                    "fail",
+                    "missing",
+                    relative(root, manifest_path),
+                )
+            )
+            continue
+
+        manifest = load_json(manifest_path)
+        prepared_tasks.add(task_id)
+        files = manifest.get("files", [])
+        condition_contexts = manifest.get("condition_contexts", [])
+        model_visible = [item for item in files if item.get("visibility") == "model_visible"]
+        scorer_only = [item for item in files if item.get("visibility") == "scorer_only"]
+        condition_slots = {str(item.get("condition", "")) for item in condition_contexts}
+        file_paths = [root / str(item.get("path", "")) for item in files]
+        context_paths = [root / str(item.get("path", "")) for item in condition_contexts]
+        existing_paths = [path for path in file_paths + context_paths if path.exists()]
+        sha_mismatches = [
+            str(item.get("path", ""))
+            for item in files
+            if (root / str(item.get("path", ""))).exists()
+            and item.get("sha256")
+            and sha256_file(root / str(item.get("path", ""))) != item.get("sha256")
+        ]
+        hidden = set(str(path) for path in manifest.get("hidden_from_model", []))
+        scorer_paths = {str(item.get("path", "")) for item in scorer_only}
+        boundary = str(manifest.get("evidence_boundary", "")).lower()
+
+        checks.extend(
+            [
+                Check(
+                    f"{prefix}_prepared_asset_manifest_present",
+                    "ready",
+                    "present",
+                    relative(root, manifest_path),
+                ),
+                Check(
+                    f"{prefix}_prepared_asset_identity",
+                    "ready"
+                    if manifest.get("task_id") == task_id
+                    and manifest.get("source_paper_id") == tasks[task_id].get("source_paper_id")
+                    else "fail",
+                    f"task_id={manifest.get('task_id')}; source_paper_id={manifest.get('source_paper_id')}",
+                    relative(root, manifest_path),
+                ),
+                Check(
+                    f"{prefix}_prepared_asset_status",
+                    "ready" if manifest.get("status") == EXPECTED_PREPARED_ASSET_STATUS else "fail",
+                    f"status={manifest.get('status')}",
+                    relative(root, manifest_path),
+                ),
+                Check(
+                    f"{prefix}_prepared_asset_files_exist",
+                    "ready" if len(existing_paths) == len(file_paths) + len(context_paths) else "fail",
+                    f"files={len(file_paths)}; contexts={len(context_paths)}; existing={len(existing_paths)}",
+                    relative(root, manifest_path),
+                ),
+                Check(
+                    f"{prefix}_prepared_asset_sha256",
+                    "ready" if not sha_mismatches and len(files) >= 5 else "fail",
+                    "ok" if not sha_mismatches else "mismatch=" + ",".join(sha_mismatches),
+                    relative(root, manifest_path),
+                ),
+                Check(
+                    f"{prefix}_prepared_asset_visibility_split",
+                    "ready" if model_visible and scorer_only and scorer_paths <= hidden else "fail",
+                    f"model_visible={len(model_visible)}; scorer_only={len(scorer_only)}; hidden={len(hidden)}",
+                    relative(root, manifest_path),
+                ),
+                Check(
+                    f"{prefix}_prepared_asset_condition_contexts",
+                    "ready" if condition_slots == EXPECTED_PRIMARY_CONDITIONS else "fail",
+                    "conditions=" + ",".join(sorted(condition_slots)),
+                    relative(root, manifest_path),
+                ),
+                Check(
+                    f"{prefix}_prepared_asset_boundary",
+                    "ready"
+                    if "does not run a model" in boundary
+                    and "compare summary against papertoskill" in boundary
+                    and "claim task success" in boundary
+                    else "fail",
+                    manifest.get("evidence_boundary", ""),
+                    relative(root, manifest_path),
+                ),
+            ]
+        )
+
+    checks.append(
+        Check(
+            "real_reuse_prepared_assets_reflexion_materialized",
+            "ready" if prepared_tasks == EXPECTED_PREPARED_ASSET_TASKS else "fail",
+            "prepared_tasks=" + ",".join(sorted(prepared_tasks)),
             relative(root, spec_path),
         )
     )

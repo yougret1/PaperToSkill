@@ -46,7 +46,7 @@
 | --- | --- | --- |
 | E5 | Can PaperToSkill help agents reuse paper methods on original-style input/output tasks? | `research/real_reuse_experiment_plan.md`; future `benchmarks/real_reuse/`; future `results/real_reuse/` |
 | E5.1 | Are the four main papers and eight tasks feasible under objective metrics? | Complete for planned spec and task contracts: `benchmarks/real_reuse/real_reuse_v0.json`; `benchmarks/real_reuse/tasks/*.json`; `results/real_reuse/spec_preflight.md` reports `ready_to_implement` |
-| E5.2 | Can each task be bound to a concrete fixture and then compared with Summary vs PaperToSkill without mid-run human intervention? | Fixture requirement manifests and candidate asset/preparation manifests complete: `benchmarks/real_reuse/fixtures/*.json`; `benchmarks/real_reuse/fixture_candidates/*.json`; actual asset materialization, fixed instance IDs, runnable preparers/scorers, runner, and scorer remain pending |
+| E5.2 | Can each task be bound to a concrete fixture and then compared with Summary vs PaperToSkill without mid-run human intervention? | Fixture requirement manifests, candidate manifests, and asset locks complete for all eight tasks. REF-T1/REF-T2 prepared assets and deterministic scorers are now ready under `benchmarks/real_reuse/assets/`; AIDE, SWE-agent, SnapATAC2 assets/runners and all Summary vs PaperToSkill raw rows remain pending |
 | E5.3 | Can the main real-reuse table be generated from raw rows? | Aggregator that emits `results/real_reuse/main_results.{csv,md,json}` and preserves raw rows |
 | E5.4 | Does a small Full Excerpt sanity check change the interpretation? | Three-task sanity table with Summary, PaperToSkill, Full Excerpt, metric, and token columns |
 | E5.5 | Which PaperToSkill components matter once downstream tasks are real? | Optional component-ablation task set with pre-registered workflow checklist and unsupported-error rubric |
@@ -63,7 +63,7 @@
 | AIDE-T2 | AIDE | ML engineering | Validation score / best-node score | Planned |
 | SWE-T1 | SWE-agent | Software engineering | Tests passed / resolved | Planned |
 | SWE-T2 | SWE-agent | Software engineering | Tests passed / resolved | Planned |
-| REF-T1 | Reflexion | Reasoning / QA | Exact match / F1 / success | Planned |
-| REF-T2 | Reflexion | Decision / programming | Success / pass rate | Planned |
+| REF-T1 | Reflexion | Reasoning / QA | Exact match / F1 / success | Prepared assets/scorer ready; model runs pending |
+| REF-T2 | Reflexion | Decision / programming | Success / pass rate | Prepared assets/scorer ready; model runs pending |
 | SNAP-T1 | SnapATAC2 | Single-cell omics | Runtime, memory, clustering/embedding metric | Planned |
 | SNAP-T2 | SnapATAC2 | Single-cell omics | ARI/NMI/runtime/memory | Planned |

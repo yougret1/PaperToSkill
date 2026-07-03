@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 351
+- Ready checks: 368
 - Pending checks: 1
 - Failed checks: 0
 
@@ -80,6 +80,8 @@ Evidence boundary: this report checks local package completeness and separates p
 | real_reuse_asset_lock_builder | ready | present | scripts/build_real_reuse_asset_locks.py |
 | real_reuse_paper_table_builder | ready | present | scripts/build_real_reuse_paper_tables.py |
 | real_reuse_benchmark_checker | ready | present | scripts/check_real_reuse_benchmark.py |
+| real_reuse_reflexion_preparer | ready | present | scripts/prepare_real_reuse_reflexion_fixture.py |
+| real_reuse_reflexion_scorer | ready | present | scripts/score_real_reuse_reflexion.py |
 | real_reuse_task_spec_aide_t1 | ready | present | benchmarks/real_reuse/tasks/AIDE-T1.json |
 | real_reuse_task_spec_aide_t2 | ready | present | benchmarks/real_reuse/tasks/AIDE-T2.json |
 | real_reuse_task_spec_swe_t1 | ready | present | benchmarks/real_reuse/tasks/SWE-T1.json |
@@ -112,6 +114,21 @@ Evidence boundary: this report checks local package completeness and separates p
 | real_reuse_asset_lock_ref_t2 | ready | present | benchmarks/real_reuse/asset_locks/REF-T2.json |
 | real_reuse_asset_lock_snap_t1 | ready | present | benchmarks/real_reuse/asset_locks/SNAP-T1.json |
 | real_reuse_asset_lock_snap_t2 | ready | present | benchmarks/real_reuse/asset_locks/SNAP-T2.json |
+| real_reuse_ref_t1_asset_manifest | ready | present | benchmarks/real_reuse/assets/REF-T1/asset_manifest.json |
+| real_reuse_ref_t1_question | ready | present | benchmarks/real_reuse/assets/REF-T1/question.json |
+| real_reuse_ref_t1_context | ready | present | benchmarks/real_reuse/assets/REF-T1/retrieval_context_or_tool_stub.json |
+| real_reuse_ref_t1_feedback_protocol | ready | present | benchmarks/real_reuse/assets/REF-T1/feedback_protocol.md |
+| real_reuse_ref_t1_task_prompt | ready | present | benchmarks/real_reuse/assets/REF-T1/task_prompt.md |
+| real_reuse_ref_t1_answer_key | ready | present | benchmarks/real_reuse/assets/REF-T1/answer_key.json |
+| real_reuse_ref_t2_asset_manifest | ready | present | benchmarks/real_reuse/assets/REF-T2/asset_manifest.json |
+| real_reuse_ref_t2_initial_task | ready | present | benchmarks/real_reuse/assets/REF-T2/initial_task.json |
+| real_reuse_ref_t2_failed_first_attempt | ready | present | benchmarks/real_reuse/assets/REF-T2/failed_first_attempt.py |
+| real_reuse_ref_t2_environment_feedback | ready | present | benchmarks/real_reuse/assets/REF-T2/environment_feedback.md |
+| real_reuse_ref_t2_task_prompt | ready | present | benchmarks/real_reuse/assets/REF-T2/task_prompt.md |
+| real_reuse_ref_t2_tests | ready | present | benchmarks/real_reuse/assets/REF-T2/tests.json |
+| real_reuse_ref_t2_canonical_solution | ready | present | benchmarks/real_reuse/assets/REF-T2/canonical_solution.py |
+| real_reuse_ref_t1_summary_context | ready | present | baselines/real_reuse/REF-T1_summary.md |
+| real_reuse_ref_t2_summary_context | ready | present | baselines/real_reuse/REF-T2_summary.md |
 | real_reuse_spec_preflight_json | ready | present | results/real_reuse/spec_preflight.json |
 | real_reuse_spec_preflight_md | ready | present | results/real_reuse/spec_preflight.md |
 | real_reuse_main_results_plan_csv | ready | present | results/real_reuse/main_results_plan.csv |

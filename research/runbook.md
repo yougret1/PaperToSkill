@@ -82,14 +82,13 @@ benchmarks/real_reuse/fixture_candidates/
 benchmarks/real_reuse/asset_locks/
 ```
 
-Current status: planned specification, per-task execution-contract specs, and
-fixture requirement manifests are ready. Candidate assets and preparation
-commands are selected in `benchmarks/real_reuse/fixture_candidates/`. The
-preparation-time source revisions, concrete task instances, local target paths,
-hidden scorer assets, and scorer/preparer contracts are locked in
-`benchmarks/real_reuse/asset_locks/`, but no asset has been
-downloaded/materialized and no task has been run. Do not write the AAAI paper as
-if these experiments have run.
+Current status: planned specification, per-task execution-contract specs,
+fixture requirement manifests, candidate manifests, and asset locks are ready
+for all eight tasks. REF-T1 and REF-T2 now also have prepared local fixture
+assets, task-specific Summary contexts, and a deterministic scorer. AIDE,
+SWE-agent, and SnapATAC2 assets, runners, raw rows, and task scores remain
+pending. Do not write the AAAI paper as if the Summary vs PaperToSkill
+real-reuse comparison has run.
 
 Regenerate per-task specs from the master spec:
 
@@ -121,6 +120,21 @@ Regenerate the paper-facing main real-reuse table scaffold:
 python scripts\build_real_reuse_paper_tables.py
 ```
 
+Prepare the two lightweight Reflexion fixture assets and condition contexts:
+
+```powershell
+python scripts\prepare_real_reuse_reflexion_fixture.py --task REF-T1 --dataset hotpotqa --config distractor --output-dir benchmarks\real_reuse\assets\REF-T1
+python scripts\prepare_real_reuse_reflexion_fixture.py --task REF-T2 --dataset humaneval --output-dir benchmarks\real_reuse\assets\REF-T2
+```
+
+Score a dry REF-T1 prediction or REF-T2 candidate without treating failure as a
+script crash:
+
+```powershell
+python scripts\score_real_reuse_reflexion.py --task REF-T1 --prediction path\to\prediction.json --answer-key benchmarks\real_reuse\assets\REF-T1\answer_key.json
+python scripts\score_real_reuse_reflexion.py --task REF-T2 --candidate path\to\candidate.py --tests benchmarks\real_reuse\assets\REF-T2\tests.json
+```
+
 Validate the planned spec before implementing runners or editing paper claims:
 
 ```powershell
@@ -137,9 +151,9 @@ results/real_reuse/main_results_plan.md
 ```
 
 The expected status is `ready_to_implement`. That means the benchmark spec,
-per-task specs, fixture requirement manifests, candidate asset manifests, and
-asset locks are machine-checkable and ready for asset materialization plus
-runner/scorer implementation; it is not downstream task-success evidence.
+per-task specs, fixture requirement manifests, candidate asset manifests, asset
+locks, and the REF prepared-asset layer are machine-checkable; it is not
+downstream task-success evidence.
 
 Planned main task grid:
 
@@ -159,7 +173,8 @@ Execution order:
 1. Verify source-paper code, benchmark setup, license, and metric details.
 2. Materialize candidate fixture assets from the locked contracts in
    `benchmarks/real_reuse/asset_locks/`, including license/provenance, local
-   path/URI, sha256 values, scoring command, and run budget.
+   path/URI, sha256 values, scoring command, and run budget. REF-T1 and REF-T2
+   are the first completed prepared-asset layer.
 3. Create Summary and PaperToSkill context inputs for each task.
 4. Implement the real-reuse runner and scorer.
 5. Run agent-only tasks with no mid-run human intervention.

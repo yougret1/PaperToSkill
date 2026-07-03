@@ -27,13 +27,14 @@ AI-Scientist-v2 is no longer the current blocker for the bounded evidence path:
 
 The full user goal is still not complete because human-fidelity annotation is
 pending, the recorded AAAI policy is `wait_for_external_evidence`, and the
-newly selected stronger real-reuse evaluation has a validated spec but has not
-been run.
+newly selected stronger real-reuse evaluation has a validated spec and prepared
+REF-T1/REF-T2 fixture/scorer layer but has not run Summary or PaperToSkill
+conditions.
 
 Current machine reports:
 
 - Package: `results/reproducibility/package_report.md` reports
-  `ready_with_pending_external_evidence`, 351 ready checks, 1 pending check, and
+  `ready_with_pending_external_evidence`, 368 ready checks, 1 pending check, and
   0 failed checks.
 - Goal: `results/reproducibility/goal_completion_report.md` reports
   `not_complete_pending_external_evidence`, 77 ready checks, 3 pending checks,
@@ -55,7 +56,7 @@ Current machine reports:
 | Model ablations | `results/model_ablation_prompts/v0/evaluation.md`: 6 scored, 0 pending | Complete for saved-response protocol | Do not claim broad model quality or live task success. |
 | PaperToSkill extraction prototype | Extractor, auto-note scaffold, pipeline, generated skills/source maps | Complete for scoped prototype | Do not claim reliable arbitrary-PDF automation. |
 | Main deterministic experiments | `results/tables/main_results.md`; transfer, cost, source-span, failure archive reports | Complete for offline benchmark | Keep claims bounded to deterministic/local evidence. |
-| Next-stage real-reuse validity experiments | `research/real_reuse_experiment_plan.md`; `benchmarks/real_reuse/real_reuse_v0.json`; `benchmarks/real_reuse/tasks/*.json`; `benchmarks/real_reuse/fixtures/*.json`; `benchmarks/real_reuse/fixture_candidates/*.json`; `benchmarks/real_reuse/asset_locks/*.json`; `results/real_reuse/spec_preflight.md`; `results/real_reuse/main_results_plan.md`; `paper/aaai/papertoskill_tables.tex` | Spec, task contracts, fixture requirement manifests, candidate asset/preparation manifests, asset locks, and paper table scaffold ready; not executed | Materialize concrete assets from the locks, implement preparers/scorers and runner, then run the eight Summary-vs-PaperToSkill `paper-task` rows and replace pending table cells with scores. |
+| Next-stage real-reuse validity experiments | `research/real_reuse_experiment_plan.md`; `benchmarks/real_reuse/real_reuse_v0.json`; `benchmarks/real_reuse/tasks/*.json`; `benchmarks/real_reuse/fixtures/*.json`; `benchmarks/real_reuse/fixture_candidates/*.json`; `benchmarks/real_reuse/asset_locks/*.json`; `benchmarks/real_reuse/assets/REF-T1/asset_manifest.json`; `benchmarks/real_reuse/assets/REF-T2/asset_manifest.json`; `scripts/score_real_reuse_reflexion.py`; `results/real_reuse/spec_preflight.md`; `results/real_reuse/main_results_plan.md`; `paper/aaai/papertoskill_tables.tex` | Spec, task contracts, fixture requirement manifests, candidate asset/preparation manifests, asset locks, paper table scaffold, and REF prepared fixture/scorer layer ready; Summary-vs-PaperToSkill real runs not executed | Materialize remaining task-family assets, implement runner/model invocation, then run the eight Summary-vs-PaperToSkill `paper-task` rows and replace pending table cells with scores. |
 | New-paper triage and Paper2Agent comparison | `research/new_paper_triage_2026-07-01.md`; `results/tables/paper2agent_artifact_comparison.md` | Complete for citation/positioning | Do not claim executable Paper2Agent baseline performance. |
 | Human-fidelity annotation | `results/human_fidelity_packets/annotation_template.csv`; `annotation_guide.md`; packets | Handoff ready; annotation pending | Independent reviewers fill all 24 rows and rerun the strict summarizer. |
 | AAAI submission decision | `research/aaai_submission_decision.md`; `results/aaai_submission_decision/decision.md` | Decision recorded as wait | Complete named evidence before stronger final-submission claims. |
@@ -66,9 +67,10 @@ Current machine reports:
 - `human_fidelity_annotation_complete`: `results/human_fidelity_packets/annotation_summary.md`
   reports 0 scored rows and 24 pending rows.
 - `real_reuse_experiments_complete`: the spec, per-task contracts, fixture
-  requirement manifests, candidate asset manifests, asset locks, and paper table
-  scaffold are ready, but no materialized fixture assets,
-  `results/real_reuse/raw_rows.jsonl`, or main result artifact exists yet.
+  requirement manifests, candidate asset manifests, asset locks, paper table
+  scaffold, and REF-T1/REF-T2 prepared assets/scorers are ready, but no Summary
+  or PaperToSkill model condition has been run and no
+  `results/real_reuse/raw_rows.jsonl` or main result artifact exists yet.
 - `aaai_final_submission_ready`: local package and submission-review gates are
   ready, but the recorded policy waits for named external evidence.
 
@@ -84,9 +86,9 @@ recorded wait policy.
 
 ## Recommended Next Closure Path
 
-1. Materialize the locked fixture assets, including license/provenance,
+1. Materialize the remaining locked fixture assets, including license/provenance,
    path/URI, sha256 values, scoring command, and budget fields.
-2. Implement the real-reuse preparer/scorer and runner artifacts.
+2. Implement the real-reuse runner/model invocation artifacts.
 3. Run the eight Summary-vs-PaperToSkill `paper-task` rows and preserve raw
    rows before changing the paper's main result claims.
 4. Fill and summarize the 24-row human-fidelity annotation template.
