@@ -20,14 +20,14 @@ real-reuse tasks under the selected source papers' objective metrics while
 keeping provider latency, API timeouts, and retry counts out of the core method
 score.
 
-Immediate stabilization focus: SWE-T1 source-context reporting is complete, so
-the next core boundary is SNAP artifact execution. The SNAP diagnosis in
-`results/real_reuse/snapatac2_artifact_followup.md` shows that the selected
-SNAP rows are plan/JSON outputs under a non-executing runner, while the scorer
-requires completed artifacts plus runtime/memory records. A future SNAP
-follow-up must remain paired Summary vs PaperToSkill, execute a controlled
-candidate script or pre-registered scaffold, and report separately unless it is
-explicitly promoted into the main table.
+Immediate stabilization focus: SWE-T1 source-context reporting and the SNAP
+artifact-execution diagnosis are complete. Phase 108 added a paired SNAP
+executable-artifact follow-up in
+`results/real_reuse/snapatac2_executable_artifact_followup.md`: a
+pre-registered controlled scaffold reaches the existing SNAP
+artifact/runtime/memory scorer contract for both Summary and PaperToSkill
+conditions. This is diagnostic evidence only; the main SNAP rows remain
+unchanged unless explicitly promoted.
 
 The package also contains supporting evidence: deterministic/offline gates,
 source maps and source-span validation, usage examples, saved live-transfer
@@ -112,6 +112,9 @@ pending live-agent claims.
   `results/real_reuse/failure_analysis.md`.
 - SNAP artifact-execution diagnosis:
   `results/real_reuse/snapatac2_artifact_followup.md`.
+- SNAP executable-artifact follow-up:
+  `results/real_reuse/snapatac2_executable_artifact_followup.md`; this is a
+  diagnostic follow-up and not a main-table replacement.
 - Auxiliary Full Excerpt sanity check:
   `results/real_reuse/full_excerpt_sanity.md`; this is not a main baseline.
 - Real-paper cases: AI Scientist-v2, Reflexion, AIDE, and Toolformer.

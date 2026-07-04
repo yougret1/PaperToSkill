@@ -31,12 +31,12 @@ Test-NetConnection github.com -Port 443 | Format-List
 ```
 
 Current status as of 2026-07-04: the latest confirmed remote backup is
-`bcf6db6` (`Record SNAP memory push recovery`). A newer local commit,
-`f54be5b` (`Sync SNAP follow-up planning records`), exists but is not yet
-confirmed on `origin/main` because the last `git push origin main` and
-`git ls-remote --heads origin main` attempts failed with `Recv failure:
-Connection was reset`. Retry the push when network connectivity allows, and
-keep this GitHub transport issue separate from experiment correctness.
+`6424ba6` (`Sync remote backup status records`). The earlier HTTPS reset around
+local commit `f54be5b` was recovered by a successful push. Keep future GitHub
+transport issues separate from experiment correctness. If the working tree
+contains later phase work, such as phase108 follow-up artifacts or record-sync
+edits, do not call that work remote-backed until a new phase-save push is
+verified.
 
 ## Local Text-To-Skill Pipeline
 
@@ -322,10 +322,22 @@ Current diagnosis:
 `pre_registered_followup_needed`. The selected SNAP main rows are plan/JSON
 outputs without executed artifacts and runtime/memory records; the miniature
 fixtures are readable; `snapatac2` is not importable in the current Python
-environment. A future paired Summary/PaperToSkill follow-up must execute a
-controlled candidate script or pre-registered scaffold before setting
-`completed=true`, and it must preserve the same locked fixture, resource
-budget, hidden labels/proxy policy, scorer, and no-mid-run-human rule.
+environment.
+
+Run the paired executable-artifact follow-up without replacing the main rows:
+
+```powershell
+python scripts\run_real_reuse_snapatac2_executable_followup.py --run-id phase108_snapatac2_executable_artifact_followup
+```
+
+Current phase108 result:
+`results/real_reuse/snapatac2_executable_artifact_followup.md` reports
+`overall_status=complete`; all four SNAP-T1/T2 Summary/PaperToSkill rows score
+1.000 under the existing SNAP scorer. The runner executes a pre-registered
+controlled scaffold over the same miniature fixtures, records concrete
+artifacts plus runtime/memory, and does not append to `raw_rows.jsonl`. Treat
+this as diagnostic evidence that the artifact/runtime/memory contract can
+close, not as a main-row replacement or PaperToSkill advantage.
 
 Validate the real-reuse benchmark after task/spec/scorer edits or before
 editing paper claims:

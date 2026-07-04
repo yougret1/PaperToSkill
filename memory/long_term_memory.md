@@ -290,13 +290,13 @@ Current supported claims:
   specific L031 message-text change. Preserve the first-pass SWE-T1 0.000/0.000
   rows as the paper-facing main rows; report phase107 only as a
   shared-source-context follow-up.
-- Latest confirmed GitHub backup includes commit `bcf6db6` (`Record SNAP
-  memory push recovery`). A newer local commit `f54be5b` (`Sync SNAP follow-up
-  planning records`) exists but is not yet confirmed on `origin/main` because
-  the last GitHub HTTPS push/ls-remote attempts failed with `Recv failure:
-  Connection was reset`. Treat this as a phase-save transport issue, not an
-  experiment-correctness blocker, and verify local/remote alignment before
-  claiming a new phase save.
+- Latest confirmed GitHub backup includes commit `6424ba6` (`Sync remote
+  backup status records`). The earlier HTTPS reset around local commit
+  `f54be5b` was recovered by a successful push to `origin/main`. Keep future
+  GitHub transport failures separate from experiment correctness and verify
+  local/remote alignment before claiming a new phase save. Current phase108
+  follow-up and record-sync work exists beyond that remote commit until the
+  next explicit phase save and push succeeds.
 - SNAP artifact-execution follow-up diagnosis is now materialized in
   `results/real_reuse/snapatac2_artifact_followup.{md,json}` with builder
   `scripts/build_real_reuse_snapatac2_artifact_followup.py`: all selected SNAP
@@ -304,10 +304,17 @@ Current supported claims:
   outputs rather than executed artifacts; miniature fixtures are readable;
   `snapatac2` is not importable in the current Python environment. This is a
   pre-registered follow-up contract, not a main-row replacement.
-- Phase 89 remote save recovered an earlier GitHub HTTPS blocker for the Phase
-  87/88 stack. That historical recovery does not imply the newest local commit
-  is backed up; use `git status -sb` and a successful remote check for the
-  latest exact alignment.
+- Phase108 SNAP executable-artifact follow-up is materialized in
+  `results/real_reuse/snapatac2_executable_artifact_followup.{csv,md,json}`
+  with runner `scripts/run_real_reuse_snapatac2_executable_followup.py`: a
+  paired pre-registered controlled scaffold over the same miniature fixtures
+  scores 1.000 for Summary and PaperToSkill on SNAP-T1/T2 under the existing
+  scorer. It validates the artifact/runtime/memory contract path, does not
+  append to `raw_rows.jsonl`, does not replace main SNAP rows, and does not
+  show PaperToSkill advantage.
+- Phase 89 and the 2026-07-04 record-sync push both recovered GitHub HTTPS
+  transport interruptions. Use `git status -sb` and a successful remote check
+  for the latest exact alignment before each phase-save claim.
 
 Current unsupported claims:
 
@@ -600,9 +607,10 @@ Use these as entry points instead of searching the whole repo first:
   Toolformer rows score 9/9.
 - Paper tables:
   `results/reproducibility/paper_table_report.md`
-  reports ready, 250 ready checks, 0 failed checks after adding the
-  SWE-T1 source-context follow-up table consistency checks alongside the
-  real-reuse main, failure-boundary, and Full Excerpt sanity checks.
+  reports ready, 278 ready checks, 0 failed checks after adding the SNAP
+  executable-artifact follow-up table consistency checks alongside the
+  real-reuse main, failure-boundary, SWE-T1 source-context follow-up, and Full
+  Excerpt sanity checks.
 - Paper claims:
   `results/reproducibility/paper_claim_report.md`
   reports ready, 20 ready checks, 0 failed checks.
@@ -639,6 +647,11 @@ Use these as entry points instead of searching the whole repo first:
   SNAP-T1 rows with Summary/PaperToSkill/Full Excerpt scores and local
   whitespace token proxies. It is reviewer-question and cost/context sanity
   evidence only, not a main baseline or aggregate task-success claim.
+- SNAP executable-artifact follow-up:
+  `results/real_reuse/snapatac2_executable_artifact_followup.md` contains the
+  phase108 paired controlled-scaffold diagnostic rows. All four rows score
+  1.000, but this is execution-contract evidence only and not a main-row
+  replacement.
 
 ## Model/API Configuration
 

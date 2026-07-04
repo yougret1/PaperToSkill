@@ -234,6 +234,7 @@
 | `scripts/score_real_reuse_snapatac2.py` | Scores SNAP candidate analysis artifacts for runtime/memory/resource-contract completion and ARI/NMI-style labels/proxies when available | Created |
 | `scripts/run_real_reuse_snapatac2.py` | Runs locked SNAP-T1/T2 Summary-vs-PaperToSkill conditions, saves prompts/responses/metrics/raw rows when scorable, and separates provider/fixture availability from model quality | Created |
 | `scripts/build_real_reuse_snapatac2_artifact_followup.py` | Builds the SNAP artifact-execution diagnosis and pre-registered follow-up contract from selected main rows, candidate outputs, fixture readability, and local dependency state | Created |
+| `scripts/run_real_reuse_snapatac2_executable_followup.py` | Runs the paired SNAP executable-artifact diagnostic follow-up with a pre-registered controlled scaffold, concrete artifacts, runtime/memory records, and no main raw-row replacement | Created |
 | `scripts/evaluate_skill.py` | Deterministic v0 evaluator for generated skills | Created |
 | `scripts/evaluate_context_baselines.py` | Deterministic evaluator for context baseline coverage | Created |
 | `scripts/audit_skill_source_map.py` | Deterministic source-map-aware unsupported-instruction audit | Created |
@@ -303,6 +304,7 @@
 | `tests/test_score_real_reuse_aide.py` | Unit tests for AIDE validation scoring and isolated candidate-script execution | Created |
 | `tests/test_run_real_reuse_aide.py` | Unit tests for AIDE fixture-response execution, missing-credential pending behavior, and hidden-label prompt separation | Created |
 | `tests/test_build_real_reuse_snapatac2_artifact_followup.py` | Unit test for SNAP artifact-execution follow-up diagnosis over invalid JSON and plan-only candidate outputs | Created |
+| `tests/test_run_real_reuse_snapatac2_executable_followup.py` | Unit test for the paired SNAP executable-artifact follow-up runner and no-main-raw-row policy | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |
 | `generated_skills/ai_scientist_v2/references/source_map.json` | Source-map evidence for AI Scientist-v2 generated skill | Created |
 | `generated_skills/reflexion/SKILL.md` | Retained generated skill from Reflexion note | Created |
@@ -419,6 +421,9 @@
 | `results/real_reuse/snapatac2_run_report.json` | Machine-readable run report for the locked SNAP-T1/SNAP-T2 GPT-family real-reuse execution over prepared official miniature fixtures | Created |
 | `results/real_reuse/snapatac2_artifact_followup.md` | Human-readable SNAP artifact-execution diagnosis and pre-registered follow-up contract; does not replace the main SNAP rows | Created |
 | `results/real_reuse/snapatac2_artifact_followup.json` | Machine-readable SNAP artifact-execution diagnosis, fixture probe, and follow-up contract | Created |
+| `results/real_reuse/snapatac2_executable_artifact_followup.md` | Human-readable phase108 SNAP executable-artifact follow-up; all paired controlled-scaffold rows score 1.000 and main SNAP rows remain unchanged | Created |
+| `results/real_reuse/snapatac2_executable_artifact_followup.json` | Machine-readable phase108 SNAP executable-artifact follow-up report | Created |
+| `results/real_reuse/snapatac2_executable_artifact_followup.csv` | CSV source for the AAAI SNAP executable-artifact follow-up table | Created |
 | `results/real_reuse/aide_run_report.md` | Human-readable run report for the locked AIDE-T1/AIDE-T2 GPT-family real-reuse execution over official Kaggle-derived local validation fixtures | Created |
 | `results/real_reuse/aide_run_report.json` | Machine-readable run report for the locked AIDE-T1/AIDE-T2 GPT-family real-reuse execution | Created |
 | `results/real_reuse/aide_t1_baseline_metric.json` | Baseline-submission scorer validation for the locked AIDE-T1 fixture | Created |
@@ -454,8 +459,8 @@
 | `results/external_evidence_closure/closure.json` | Machine-readable closure queue for pending external evidence | Created |
 | `results/external_evidence_packets/packets.md` | Human-readable execution packets for pending external evidence | Created |
 | `results/external_evidence_packets/packets.json` | Machine-readable execution packets for pending external evidence | Created |
-| `results/aaai_submission_decision/decision.md` | Human-readable AAAI submission-decision preflight; no option selected | Created |
-| `results/aaai_submission_decision/decision.json` | Machine-readable AAAI submission-decision preflight | Created |
+| `results/aaai_submission_decision/decision.md` | Human-readable AAAI submission-decision record with `wait_for_external_evidence` selected | Created |
+| `results/aaai_submission_decision/decision.json` | Machine-readable AAAI submission-decision record | Created |
 | `results/ai_scientist_v2_smoke/run_report.md` | Human-readable bounded AI-Scientist-v2 LLM-client smoke report | Created |
 | `results/ai_scientist_v2_smoke/run_report.json` | Machine-readable bounded AI-Scientist-v2 LLM-client smoke report | Created |
 | `results/openai_compatible_direct_probe/claude_family/run_report.md` | Human-readable direct Claude-family provider diagnostic report | Created |
@@ -464,7 +469,7 @@
 | `results/openai_compatible_direct_probe/gpt_family/run_report.json` | Machine-readable direct GPT-family provider diagnostic report | Created |
 | `results/ai_scientist_v2_live_run_handoff/handoff.md` | Human-readable AI-Scientist-v2 full live-run handoff report | Created |
 | `results/ai_scientist_v2_live_run_handoff/handoff.json` | Machine-readable AI-Scientist-v2 full live-run handoff report | Created |
-| `results/model_ablation_prompts/v0/index.json` | Model-ablation prompt packet index with pending response slots | Created |
+| `results/model_ablation_prompts/v0/index.json` | Model-ablation prompt packet index for the older two-case saved-response protocol | Created |
 | `results/model_ablation_prompts/v0/*.md` | Six model-ablation prompt packets across Claude, GPT-family, and DeepSeek slots | Created |
 | `results/model_ablation_prompts/v0/run_report.md` | Redacted live-attempt report showing provider/model availability status | Created |
 | `results/model_ablation_prompts/v0/run_report.json` | Machine-readable live-attempt report for model ablations | Created |
@@ -492,7 +497,7 @@
 
 | Artifact | Purpose | Status |
 | --- | --- | --- |
-| Model-ablation response logs | Claude/GPT-family/DeepSeek response files and scores after endpoint/model availability | Created |
+| Real-reuse LLM ablation response logs | Future Claude/GPT-family/DeepSeek raw rows collected under the real-reuse task protocol, separate from the older saved-response usage-plan protocol | Planned |
 | Concrete real-reuse fixture assets | AIDE-T1/T2, REF-T1/T2, SWE-T1/T2, and SNAP-T1/T2 prepared assets plus one GPT-family Summary-vs-PaperToSkill pass are created; AIDE-T2 and SWE-T2 are PaperToSkill-only successes, AIDE-T1 and REF are solved by both conditions, and SWE-T1/SNAP remain boundary rows | Mixed |
 | `results/real_reuse/` | Current AIDE/SWE/REF/SNAP raw rows and table artifacts plus future aggregate tables, sanity checks, cost table, and LLM ablation outputs | Mixed |
 | Paper2Agent executable baseline | Full Paper2Agent/MCP runtime comparison, if setup resources become available | Planned |

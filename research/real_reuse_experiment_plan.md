@@ -2,8 +2,10 @@
 
 Date: 2026-07-04
 
-Status: first GPT-family pass scored; next work is to stabilize the core
-real-reuse evidence before running remaining auxiliary analyses.
+Status: first GPT-family pass scored; SWE-T1 source-context and SNAP
+executable-artifact diagnostic follow-ups are complete. Next work is to
+stabilize or rerun core real-reuse evidence before running remaining auxiliary
+analyses.
 
 ## Research Question
 
@@ -134,12 +136,15 @@ the scorer requires completed artifacts plus runtime/memory records. The
 miniature fixtures are readable, but `snapatac2` is not importable in the
 current Python environment.
 
-The next SNAP step should be a paired executable-artifact follow-up that keeps
-Summary and PaperToSkill under the same fixture, scorer, resource budget,
-hidden labels/proxy policy, and no-mid-run-human rule. It should execute a
-controlled candidate script or pre-registered scaffold before setting
-`completed=true`. This follow-up should not replace the main SNAP rows unless
-explicitly promoted.
+The paired executable-artifact follow-up has now run as
+`phase108_snapatac2_executable_artifact_followup` and is reported in
+`results/real_reuse/snapatac2_executable_artifact_followup.{csv,md,json}`. It
+kept Summary and PaperToSkill under the same fixture, scorer, resource budget,
+hidden labels/proxy policy, and no-mid-run-human rule, but used a
+pre-registered controlled scaffold rather than an LLM response. All four rows
+score 1.000 under the existing SNAP scorer. This validates that concrete
+artifacts plus runtime/memory records can satisfy the SNAP contract, but it
+does not replace the main SNAP rows and does not show a PaperToSkill advantage.
 
 ## Table 2: Full Excerpt Sanity Check
 
@@ -277,9 +282,11 @@ analyses are stable.
   reported as dedicated diagnostic follow-up evidence in
   `results/real_reuse/swe_t1_source_context_followup.{csv,md,json}` and in the
   AAAI table set.
-- The SNAP artifact-execution diagnosis is a completed follow-up contract, not
-  a main-row replacement. It identifies an execution gap in the current SNAP
-  runner and pre-registers the next paired executable-artifact follow-up.
+- The SNAP artifact-execution diagnosis and paired executable-artifact
+  follow-up are complete diagnostic evidence, not main-row replacements. The
+  phase108 follow-up scores 1.000 for Summary and PaperToSkill on SNAP-T1/T2
+  using a controlled scaffold, so it validates the artifact/runtime/memory
+  contract path but does not establish PaperToSkill advantage.
 - Existing deterministic/offline results remain useful as quality, grounding,
   and cost gates.
 - The older saved-response model ablation remains a usage-plan/output-contract
