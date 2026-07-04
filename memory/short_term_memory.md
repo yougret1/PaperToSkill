@@ -25,15 +25,13 @@ Current date: 2026-07-04.
   ablation auxiliary, component ablation appendix-only, and user study
   last/optional. Provider latency, timeouts, and retry counts are availability
   metadata, not effectiveness metrics.
-- The latest local committed checkpoint is `4b606f9` (`Document real-reuse row
-  selection metadata`), on top of `641eef0`, `f44da1b`, and `d248878`. The
-  last previously recorded pushed checkpoint is
-  `641eef055ebbee26e7092d0bf6a4b49eb68efcc6`. Two `git push origin main`
-  attempts for `4b606f9` failed in this turn: first with `Recv failure:
-  Connection was reset`, then with `Failed to connect to github.com port 443
-  after 21090 ms`. Treat this as GitHub/network availability, not experiment
-  correctness. `toHuman.md` now asks the user to create `ok.txt` only after
-  GitHub connectivity is ready for retry.
+- The latest pushed checkpoint is `43bc1a0` (`Record row selection push
+  blocker`), on top of `4b606f9` (`Document real-reuse row selection
+  metadata`), `641eef0`, `f44da1b`, and `d248878`. Two earlier
+  `git push origin main` attempts failed in this turn with GitHub/network
+  connectivity errors, but a later retry succeeded and updated `origin/main`
+  from `641eef0` to `43bc1a0`. `toHuman.md` now says no immediate human-side
+  action is required.
 - Commits `e597fcf` (`Add AIDE real-reuse LLM ablation row`), `1521b72`
   (`Record AIDE ablation push blocker`), `200419a`
   (`Add SWE real-reuse LLM ablation row`), `cb20cb1`
@@ -46,10 +44,12 @@ Current date: 2026-07-04.
   (`Track Claude ablation availability metadata`), `d248878`
   (`Sync core real-reuse stabilization records`), `f44da1b`
   (`Guard real-reuse planned outputs`), `641eef0`
-  (`Sync memory after real-reuse guard`), and `4b606f9`
-  (`Document real-reuse row selection metadata`) are the current saved
-  phase/checkpoint range. The current GitHub push failure is transport
-  availability metadata, not experiment correctness evidence.
+  (`Sync memory after real-reuse guard`), `4b606f9`
+  (`Document real-reuse row selection metadata`), and `43bc1a0`
+  (`Record row selection push blocker`) are the current saved and pushed
+  phase/checkpoint range. The earlier GitHub push failures in this turn were
+  transient transport availability metadata, not experiment correctness
+  evidence.
 - Verification before the phase save passed:
   `python -m unittest tests.test_build_real_reuse_llm_ablation_results -v`
   (4 tests), `check_real_reuse_benchmark.py --strict`,
@@ -62,12 +62,11 @@ Current date: 2026-07-04.
 - `C:\Users\19351\Desktop\tem\toHuman.md` should say no immediate human action
   is required, and `ok.txt` should only be created for completed human-fidelity
   annotation or a concrete placed core asset.
-- Current GitHub transport note: prior phase pushes were recorded through
-  `641eef0`; the new row-selection metadata commit `4b606f9` is local only.
-  Two push attempts failed with GitHub/network connectivity errors. Before
-  claiming this or any future phase save is remote-backed, rerun
+- Current GitHub transport note: `git push origin main` eventually succeeded
+  for the row-selection metadata phase, updating `main` from `641eef0` to
+  `43bc1a0`. Before claiming any future phase save is remote-backed, rerun
   `git status -sb`, `git log -3 --oneline`, and
-  `git ls-remote --heads origin main`, then retry `git push origin main`.
+  `git ls-remote --heads origin main`.
 - Latest phase checkpoint: after record-sync commit `977b2b9`
   (`Sync experiment planning records`), Claude-family REF-T2 was retried from
   the local Claude API doc key with the v0 300-second / 5-attempt protocol;
@@ -223,8 +222,7 @@ Current date: 2026-07-04.
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
 6. The row-selection metadata guard has passed focused tests plus strict local
-   gates and is saved locally in commit `4b606f9`. GitHub upload is pending
-   network recovery.
+   gates and is pushed through commit `43bc1a0`.
 7. No human-side GitHub action is required. Retry `git push origin main` only
    when doing a phase save or remote-backup sync, and record any blocking
    network error in `toHuman.md`.

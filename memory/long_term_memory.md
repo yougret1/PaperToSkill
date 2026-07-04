@@ -293,8 +293,7 @@ Current supported claims:
   rows as the paper-facing main rows; report phase107 only as a
   shared-source-context follow-up.
 - Phase109 substantive experiment and subsequent record-sync evidence is
-  locally tracked through checkpoint `4b606f9` (`Document real-reuse row
-  selection metadata`), which is local-only until GitHub connectivity recovers.
+  pushed through checkpoint `43bc1a0` (`Record row selection push blocker`).
   This range includes `e597fcf` (AIDE-T2 GPT-family LLM ablation),
   `1521b72` (AIDE push-blocker record), `200419a` (SWE-T2 GPT-family LLM
   ablation), `cb20cb1` (SWE push-blocker record), `bc9644a`
@@ -304,13 +303,14 @@ Current supported claims:
   record sync), `7ee44ad` (pending-row availability metadata in the LLM
   ablation summary), `d248878` (core real-reuse stabilization records),
   `f44da1b` (real-reuse planned-output guard), and `641eef0` (memory sync
-  after the guard), and `4b606f9` (row-selection metadata in real-reuse main
-  and failure-boundary outputs). Two `git push origin main` attempts for
-  `4b606f9` failed on 2026-07-04 with GitHub/network connectivity errors, so
-  keep future GitHub transport failures separate from experiment correctness
-  and verify exact local/remote alignment with `git status -sb` and
-  `git ls-remote --heads origin main` before claiming a new remote-backed
-  phase save.
+  after the guard), `4b606f9` (row-selection metadata in real-reuse main and
+  failure-boundary outputs), and `43bc1a0` (record of the transient push
+  blocker). Two early `git push origin main` attempts failed on 2026-07-04 with
+  GitHub/network connectivity errors, but a later retry succeeded and updated
+  `origin/main` from `641eef0` to `43bc1a0`. Keep future GitHub transport
+  failures separate from experiment correctness and verify exact local/remote
+  alignment with `git status -sb` and `git ls-remote --heads origin main`
+  before claiming a new remote-backed phase save.
 - Core real-reuse stabilization guard commit `f44da1b` (`Guard real-reuse
   planned outputs`) is pushed after the record-sync save. It removes the
   deprecated `domain_robustness` planned output from
