@@ -7,20 +7,20 @@ Current date: 2026-07-04.
 
 ## Current Task
 
-- Latest user request: update the related planning/handoff/memory records,
-  including `C:\Users\19351\Desktop\tem\toHuman.md`, without touching local
-  logs (`research/run_logs/**` and `research/stage_log.md`).
+- Latest user request: save, upload to GitHub, then continue the project; if
+  network/upload blocks progress, write exact details to
+  `C:\Users\19351\Desktop\tem\toHuman.md` and continue non-blocked local work.
 - Current execution priority remains the core real-reuse main experiment.
   SWE-T1 source-context reporting, SNAP artifact-execution diagnosis, and the
   phase108 SNAP executable-artifact follow-up are complete and remain
   diagnostic only.
 - Latest confirmed GitHub backup includes commit `6424ba6` (`Sync remote
-  backup status records`). The earlier HTTPS reset around local commit
-  `f54be5b` has been recovered; keep any future GitHub transport failures
-  separate from experiment correctness.
-- Current local phase108 follow-up and record-sync changes are newer than that
-  confirmed remote backup. Do not describe them as GitHub-backed until a later
-  phase-save commit/push succeeds.
+  backup status records`). Local commits `10ffc10` (`Add SNAP executable
+  artifact follow-up`) and `516895a` (`Pre-register real-reuse LLM ablation
+  plan`) are saved locally but not uploaded; `git status -sb` reports
+  `main...origin/main [ahead 2]`. `git push origin main` failed with GitHub
+  HTTPS reset and then port-443 connection failure. The exact commands/errors
+  are recorded in `C:\Users\19351\Desktop\tem\toHuman.md`.
 - `C:\Users\19351\Desktop\tem\toHuman.md` should say no immediate human action
   is required, and `ok.txt` should only be created for completed human-fidelity
   annotation or a concrete placed core asset.
@@ -128,20 +128,23 @@ Current date: 2026-07-04.
    consistent.
 2. Before the next phase save, check `git status -sb`, commit meaningful
    progress, and push when GitHub connectivity allows.
-3. Decide the next core-experiment step: either execute the pre-registered
-   real-reuse LLM ablation plan after provider env vars are available, or
-   pre-register/promote a real task-contract fix for remaining failure-heavy
-   rows.
-4. Keep Summary and PaperToSkill paired under the same task/scorer contract for
+3. Retry `git push origin main` when GitHub connectivity returns; do not claim
+   remote backup for `10ffc10` or `516895a` until `git status -sb` no longer
+   reports `ahead 2`.
+4. Execute the pre-registered real-reuse LLM ablation plan after provider env
+   vars are available, or use the local API docs under
+   `C:\Users\19351\Desktop\论文\SelfPaper\LLMAPIDocument` to set them in the
+   shell only. Do not commit raw keys.
+5. Keep Summary and PaperToSkill paired under the same task/scorer contract for
    any follow-up. Main SNAP rows remain unchanged unless explicitly promoted.
-5. During core reruns, collect auxiliary raw data where cheap: provider
+6. During core reruns, collect auxiliary raw data where cheap: provider
    availability, failure reasons, context/token proxies, and raw rows needed
    for future real-reuse LLM ablation.
-6. Run broader verification gates before the next phase save:
+7. Run broader verification gates before the next phase save:
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-7. Save and push the next meaningful phase after new core-experiment progress.
+8. Save and push the next meaningful phase after new core-experiment progress.
 
 ## Boundaries
 

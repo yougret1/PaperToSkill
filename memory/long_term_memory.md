@@ -294,9 +294,10 @@ Current supported claims:
   backup status records`). The earlier HTTPS reset around local commit
   `f54be5b` was recovered by a successful push to `origin/main`. Keep future
   GitHub transport failures separate from experiment correctness and verify
-  local/remote alignment before claiming a new phase save. Current phase108
-  follow-up and record-sync work exists beyond that remote commit until the
-  next explicit phase save and push succeeds.
+  local/remote alignment before claiming a new phase save. Local commits
+  `10ffc10` and `516895a` currently exist beyond that remote commit; upload is
+  blocked by GitHub HTTPS reset / port-443 connection failure and is recorded
+  in `C:\Users\19351\Desktop\tem\toHuman.md`.
 - SNAP artifact-execution follow-up diagnosis is now materialized in
   `results/real_reuse/snapatac2_artifact_followup.{md,json}` with builder
   `scripts/build_real_reuse_snapatac2_artifact_followup.py`: all selected SNAP
