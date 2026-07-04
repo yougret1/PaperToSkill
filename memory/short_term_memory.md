@@ -87,6 +87,13 @@ Current date: 2026-07-04.
 - LLM ablation should be attached to the real-reuse task protocol after the
   core rows stabilize; it should not rely on the older saved-response
   usage-plan protocol as downstream task evidence.
+- A pre-registered real-reuse LLM ablation command plan now exists in
+  `benchmarks/real_reuse/llm_ablation_v0.json` and
+  `results/real_reuse/llm_ablation_plan.{md,json}`. It selects AIDE-T2,
+  SWE-T2, and REF-T2; uses GPT-family `gpt-5.5`, Claude-family
+  `claude-opus-4-8`, and DeepSeek-family `deepseek-v4-flash`; and gives each
+  provider call 300 seconds, 5 attempts, and 5-second retry delays. It has not
+  run models or added raw rows.
 - Human-fidelity annotation supports semantic fidelity and reviewability, not
   main task effectiveness. It remains pending: 0 scored rows and 24 pending
   paper-by-criterion cells.
@@ -121,9 +128,10 @@ Current date: 2026-07-04.
    consistent.
 2. Before the next phase save, check `git status -sb`, commit meaningful
    progress, and push when GitHub connectivity allows.
-3. Decide the next core-experiment step: either pre-register/promote a real
-   task-contract fix for failure-heavy rows or collect real-reuse LLM ablation
-   raw rows on stabilized task slices.
+3. Decide the next core-experiment step: either execute the pre-registered
+   real-reuse LLM ablation plan after provider env vars are available, or
+   pre-register/promote a real task-contract fix for remaining failure-heavy
+   rows.
 4. Keep Summary and PaperToSkill paired under the same task/scorer contract for
    any follow-up. Main SNAP rows remain unchanged unless explicitly promoted.
 5. During core reruns, collect auxiliary raw data where cheap: provider

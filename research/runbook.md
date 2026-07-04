@@ -409,6 +409,21 @@ Required boundaries:
 - The older saved-response model ablation is not a real-reuse result. Future
   LLM ablation must run on the real `paper-task` rows.
 
+Build the pre-registered real-reuse LLM ablation command plan:
+
+```powershell
+python scripts\build_real_reuse_llm_ablation_plan.py
+```
+
+Current plan:
+`results/real_reuse/llm_ablation_plan.md` selects AIDE-T2 and SWE-T2 as
+positive PaperToSkill-only slices plus REF-T2 as a ceiling/control slice. It
+uses GPT-family `gpt-5.5`, Claude-family `claude-opus-4-8`, and
+DeepSeek-family `deepseek-v4-flash`, with 300-second provider timeouts, five
+attempts, and five-second retry delays. The plan is not a model run and does
+not add raw rows. Set provider environment variables locally before executing
+any listed command, and never commit raw keys.
+
 ## AI-Scientist-v2 Environment
 
 Recommended for stable runs:

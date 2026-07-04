@@ -1,0 +1,244 @@
+{
+  "schema_version": "0.1",
+  "spec_path": "benchmarks/real_reuse/llm_ablation_v0.json",
+  "main_table_path": "results/real_reuse/main_results_plan.csv",
+  "purpose": "Pre-register real-reuse LLM ablation rows on stabilized paper-task slices.",
+  "evidence_boundary": "Protocol and command plan only. It does not add model responses, scored raw rows, or main-table replacements. Provider latency, timeout, and retry counts are availability metadata, not method-effectiveness metrics.",
+  "tasks": [
+    {
+      "task_id": "AIDE-T2",
+      "role": "positive_method_reuse",
+      "reason": "First GPT-family pass is a PaperToSkill-only success under the AIDE scorer.",
+      "source_paper": "AIDE",
+      "metric": "best_node_score",
+      "current_summary_score": "0.000",
+      "current_papertoskill_score": "0.826"
+    },
+    {
+      "task_id": "SWE-T2",
+      "role": "positive_method_reuse",
+      "reason": "First GPT-family pass is a PaperToSkill-only success under hidden patch/test scoring.",
+      "source_paper": "SWE-agent",
+      "metric": "tests_passed",
+      "current_summary_score": "0.000",
+      "current_papertoskill_score": "1.000"
+    },
+    {
+      "task_id": "REF-T2",
+      "role": "ceiling_control",
+      "reason": "Both Summary and PaperToSkill solve the stable checker task; useful as a control for model-family regressions.",
+      "source_paper": "Reflexion",
+      "metric": "second_attempt_success",
+      "current_summary_score": "1.000",
+      "current_papertoskill_score": "1.000"
+    }
+  ],
+  "model_slots": [
+    {
+      "id": "gpt_5_5",
+      "model_family": "GPT-family",
+      "model_alias": "gpt-5.5",
+      "wire_api": "openai_responses",
+      "base_url_env": "PAPERTOSKILL_GPT_OPENAI_BASE_URL",
+      "api_key_env": "PAPERTOSKILL_GPT_OPENAI_API_KEY",
+      "timeout_seconds": 300,
+      "max_attempts": 5,
+      "retry_delay_seconds": 5,
+      "role": "base_model_and_ablation_reference"
+    },
+    {
+      "id": "claude_opus_4_8",
+      "model_family": "Claude-family",
+      "model_alias": "claude-opus-4-8",
+      "wire_api": "anthropic_messages",
+      "base_url_env": "PAPERTOSKILL_CLAUDE_BASE_URL",
+      "api_key_env": "PAPERTOSKILL_CLAUDE_API_KEY",
+      "timeout_seconds": 300,
+      "max_attempts": 5,
+      "retry_delay_seconds": 5,
+      "role": "ablation_model"
+    },
+    {
+      "id": "deepseek_v4_flash",
+      "model_family": "DeepSeek-family",
+      "model_alias": "deepseek-v4-flash",
+      "wire_api": "openai_chat_completions",
+      "base_url_env": "DEEPSEEK_BASE_URL",
+      "api_key_env": "DEEPSEEK_API_KEY",
+      "timeout_seconds": 300,
+      "max_attempts": 5,
+      "retry_delay_seconds": 5,
+      "role": "ablation_model"
+    }
+  ],
+  "commands": [
+    {
+      "task_id": "AIDE-T2",
+      "model_slot": "gpt_5_5",
+      "model_family": "GPT-family",
+      "model_alias": "gpt-5.5",
+      "wire_api": "openai_responses",
+      "conditions": [
+        "summary",
+        "papertoskill"
+      ],
+      "expected_raw_rows": 2,
+      "run_id": "phaseXX_llm_ablation_gpt_5_5_aide_t2",
+      "command": "python scripts\\run_real_reuse_aide.py --task AIDE-T2 --condition summary --condition papertoskill --model-family GPT-family --model-alias gpt-5.5 --wire-api openai_responses --base-url-env PAPERTOSKILL_GPT_OPENAI_BASE_URL --api-key-env PAPERTOSKILL_GPT_OPENAI_API_KEY --timeout-seconds 300 --max-attempts 5 --retry-delay-seconds 5 --max-tokens 1800 --run-id phaseXX_llm_ablation_gpt_5_5_aide_t2 --score-timeout-seconds 300"
+    },
+    {
+      "task_id": "AIDE-T2",
+      "model_slot": "claude_opus_4_8",
+      "model_family": "Claude-family",
+      "model_alias": "claude-opus-4-8",
+      "wire_api": "anthropic_messages",
+      "conditions": [
+        "summary",
+        "papertoskill"
+      ],
+      "expected_raw_rows": 2,
+      "run_id": "phaseXX_llm_ablation_claude_opus_4_8_aide_t2",
+      "command": "python scripts\\run_real_reuse_aide.py --task AIDE-T2 --condition summary --condition papertoskill --model-family Claude-family --model-alias claude-opus-4-8 --wire-api anthropic_messages --base-url-env PAPERTOSKILL_CLAUDE_BASE_URL --api-key-env PAPERTOSKILL_CLAUDE_API_KEY --timeout-seconds 300 --max-attempts 5 --retry-delay-seconds 5 --max-tokens 1800 --run-id phaseXX_llm_ablation_claude_opus_4_8_aide_t2 --score-timeout-seconds 300"
+    },
+    {
+      "task_id": "AIDE-T2",
+      "model_slot": "deepseek_v4_flash",
+      "model_family": "DeepSeek-family",
+      "model_alias": "deepseek-v4-flash",
+      "wire_api": "openai_chat_completions",
+      "conditions": [
+        "summary",
+        "papertoskill"
+      ],
+      "expected_raw_rows": 2,
+      "run_id": "phaseXX_llm_ablation_deepseek_v4_flash_aide_t2",
+      "command": "python scripts\\run_real_reuse_aide.py --task AIDE-T2 --condition summary --condition papertoskill --model-family DeepSeek-family --model-alias deepseek-v4-flash --wire-api openai_chat_completions --base-url-env DEEPSEEK_BASE_URL --api-key-env DEEPSEEK_API_KEY --timeout-seconds 300 --max-attempts 5 --retry-delay-seconds 5 --max-tokens 1800 --run-id phaseXX_llm_ablation_deepseek_v4_flash_aide_t2 --score-timeout-seconds 300"
+    },
+    {
+      "task_id": "SWE-T2",
+      "model_slot": "gpt_5_5",
+      "model_family": "GPT-family",
+      "model_alias": "gpt-5.5",
+      "wire_api": "openai_responses",
+      "conditions": [
+        "summary",
+        "papertoskill"
+      ],
+      "expected_raw_rows": 2,
+      "run_id": "phaseXX_llm_ablation_gpt_5_5_swe_t2",
+      "command": "python scripts\\run_real_reuse_swe.py --task SWE-T2 --condition summary --condition papertoskill --model-family GPT-family --model-alias gpt-5.5 --wire-api openai_responses --base-url-env PAPERTOSKILL_GPT_OPENAI_BASE_URL --api-key-env PAPERTOSKILL_GPT_OPENAI_API_KEY --timeout-seconds 300 --max-attempts 5 --retry-delay-seconds 5 --max-tokens 2200 --run-id phaseXX_llm_ablation_gpt_5_5_swe_t2 --score-timeout-seconds 120"
+    },
+    {
+      "task_id": "SWE-T2",
+      "model_slot": "claude_opus_4_8",
+      "model_family": "Claude-family",
+      "model_alias": "claude-opus-4-8",
+      "wire_api": "anthropic_messages",
+      "conditions": [
+        "summary",
+        "papertoskill"
+      ],
+      "expected_raw_rows": 2,
+      "run_id": "phaseXX_llm_ablation_claude_opus_4_8_swe_t2",
+      "command": "python scripts\\run_real_reuse_swe.py --task SWE-T2 --condition summary --condition papertoskill --model-family Claude-family --model-alias claude-opus-4-8 --wire-api anthropic_messages --base-url-env PAPERTOSKILL_CLAUDE_BASE_URL --api-key-env PAPERTOSKILL_CLAUDE_API_KEY --timeout-seconds 300 --max-attempts 5 --retry-delay-seconds 5 --max-tokens 2200 --run-id phaseXX_llm_ablation_claude_opus_4_8_swe_t2 --score-timeout-seconds 120"
+    },
+    {
+      "task_id": "SWE-T2",
+      "model_slot": "deepseek_v4_flash",
+      "model_family": "DeepSeek-family",
+      "model_alias": "deepseek-v4-flash",
+      "wire_api": "openai_chat_completions",
+      "conditions": [
+        "summary",
+        "papertoskill"
+      ],
+      "expected_raw_rows": 2,
+      "run_id": "phaseXX_llm_ablation_deepseek_v4_flash_swe_t2",
+      "command": "python scripts\\run_real_reuse_swe.py --task SWE-T2 --condition summary --condition papertoskill --model-family DeepSeek-family --model-alias deepseek-v4-flash --wire-api openai_chat_completions --base-url-env DEEPSEEK_BASE_URL --api-key-env DEEPSEEK_API_KEY --timeout-seconds 300 --max-attempts 5 --retry-delay-seconds 5 --max-tokens 2200 --run-id phaseXX_llm_ablation_deepseek_v4_flash_swe_t2 --score-timeout-seconds 120"
+    },
+    {
+      "task_id": "REF-T2",
+      "model_slot": "gpt_5_5",
+      "model_family": "GPT-family",
+      "model_alias": "gpt-5.5",
+      "wire_api": "openai_responses",
+      "conditions": [
+        "summary",
+        "papertoskill"
+      ],
+      "expected_raw_rows": 2,
+      "run_id": "phaseXX_llm_ablation_gpt_5_5_ref_t2",
+      "command": "python scripts\\run_real_reuse_reflexion.py --task REF-T2 --condition summary --condition papertoskill --model-family GPT-family --model-alias gpt-5.5 --wire-api openai_responses --base-url-env PAPERTOSKILL_GPT_OPENAI_BASE_URL --api-key-env PAPERTOSKILL_GPT_OPENAI_API_KEY --timeout-seconds 300 --max-attempts 5 --retry-delay-seconds 5 --max-tokens 1600 --run-id phaseXX_llm_ablation_gpt_5_5_ref_t2 --score-timeout-seconds 10"
+    },
+    {
+      "task_id": "REF-T2",
+      "model_slot": "claude_opus_4_8",
+      "model_family": "Claude-family",
+      "model_alias": "claude-opus-4-8",
+      "wire_api": "anthropic_messages",
+      "conditions": [
+        "summary",
+        "papertoskill"
+      ],
+      "expected_raw_rows": 2,
+      "run_id": "phaseXX_llm_ablation_claude_opus_4_8_ref_t2",
+      "command": "python scripts\\run_real_reuse_reflexion.py --task REF-T2 --condition summary --condition papertoskill --model-family Claude-family --model-alias claude-opus-4-8 --wire-api anthropic_messages --base-url-env PAPERTOSKILL_CLAUDE_BASE_URL --api-key-env PAPERTOSKILL_CLAUDE_API_KEY --timeout-seconds 300 --max-attempts 5 --retry-delay-seconds 5 --max-tokens 1600 --run-id phaseXX_llm_ablation_claude_opus_4_8_ref_t2 --score-timeout-seconds 10"
+    },
+    {
+      "task_id": "REF-T2",
+      "model_slot": "deepseek_v4_flash",
+      "model_family": "DeepSeek-family",
+      "model_alias": "deepseek-v4-flash",
+      "wire_api": "openai_chat_completions",
+      "conditions": [
+        "summary",
+        "papertoskill"
+      ],
+      "expected_raw_rows": 2,
+      "run_id": "phaseXX_llm_ablation_deepseek_v4_flash_ref_t2",
+      "command": "python scripts\\run_real_reuse_reflexion.py --task REF-T2 --condition summary --condition papertoskill --model-family DeepSeek-family --model-alias deepseek-v4-flash --wire-api openai_chat_completions --base-url-env DEEPSEEK_BASE_URL --api-key-env DEEPSEEK_API_KEY --timeout-seconds 300 --max-attempts 5 --retry-delay-seconds 5 --max-tokens 1600 --run-id phaseXX_llm_ablation_deepseek_v4_flash_ref_t2 --score-timeout-seconds 10"
+    }
+  ],
+  "expected_scored_raw_rows": 18,
+  "deferred_until_contract_fix": [
+    {
+      "task_id": "SWE-T1",
+      "reason": "Phase107 fixed patch application but both conditions still fail the hidden objective; do not mix this task-contract issue into model ablation."
+    },
+    {
+      "task_id": "SNAP-T1",
+      "reason": "Main row is a plan/artifact-completion boundary; phase108 validates a controlled scaffold but does not replace the main row."
+    },
+    {
+      "task_id": "SNAP-T2",
+      "reason": "Main row is a plan/artifact-completion boundary; phase108 validates a controlled scaffold but does not replace the main row."
+    }
+  ],
+  "optional_expansion_after_pilot": [
+    {
+      "task_id": "AIDE-T1",
+      "reason": "Solved by both; add only if a larger ceiling/easy-row slice is needed."
+    },
+    {
+      "task_id": "REF-T1",
+      "reason": "Solved by both; add only if a larger ceiling/easy-row slice is needed."
+    }
+  ],
+  "aggregation_plan": {
+    "raw_row_source": "results/real_reuse/raw_rows.jsonl",
+    "future_outputs": [
+      "results/real_reuse/llm_ablation_raw_rows.csv",
+      "results/real_reuse/llm_ablation_summary.md",
+      "results/real_reuse/llm_ablation_summary.json"
+    ],
+    "comparison_rule": "Compare Summary and PaperToSkill within the same task and model slot. Do not compare provider response time as a core effectiveness score."
+  },
+  "environment_status": {
+    "DEEPSEEK_API_KEY": "missing",
+    "DEEPSEEK_BASE_URL": "missing",
+    "PAPERTOSKILL_CLAUDE_API_KEY": "missing",
+    "PAPERTOSKILL_CLAUDE_BASE_URL": "missing",
+    "PAPERTOSKILL_GPT_OPENAI_API_KEY": "missing",
+    "PAPERTOSKILL_GPT_OPENAI_BASE_URL": "missing"
+  }
+}

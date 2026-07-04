@@ -1,0 +1,117 @@
+{
+  "schema_version": "0.1",
+  "id": "real_reuse_llm_ablation_v0",
+  "purpose": "Pre-register real-reuse LLM ablation rows on stabilized paper-task slices.",
+  "evidence_boundary": "Protocol and command plan only. It does not add model responses, scored raw rows, or main-table replacements. Provider latency, timeout, and retry counts are availability metadata, not method-effectiveness metrics.",
+  "conditions": [
+    "summary",
+    "papertoskill"
+  ],
+  "selection_policy": {
+    "primary_subset": [
+      {
+        "task_id": "AIDE-T2",
+        "role": "positive_method_reuse",
+        "reason": "First GPT-family pass is a PaperToSkill-only success under the AIDE scorer."
+      },
+      {
+        "task_id": "SWE-T2",
+        "role": "positive_method_reuse",
+        "reason": "First GPT-family pass is a PaperToSkill-only success under hidden patch/test scoring."
+      },
+      {
+        "task_id": "REF-T2",
+        "role": "ceiling_control",
+        "reason": "Both Summary and PaperToSkill solve the stable checker task; useful as a control for model-family regressions."
+      }
+    ],
+    "deferred_until_contract_fix": [
+      {
+        "task_id": "SWE-T1",
+        "reason": "Phase107 fixed patch application but both conditions still fail the hidden objective; do not mix this task-contract issue into model ablation."
+      },
+      {
+        "task_id": "SNAP-T1",
+        "reason": "Main row is a plan/artifact-completion boundary; phase108 validates a controlled scaffold but does not replace the main row."
+      },
+      {
+        "task_id": "SNAP-T2",
+        "reason": "Main row is a plan/artifact-completion boundary; phase108 validates a controlled scaffold but does not replace the main row."
+      }
+    ],
+    "optional_expansion_after_pilot": [
+      {
+        "task_id": "AIDE-T1",
+        "reason": "Solved by both; add only if a larger ceiling/easy-row slice is needed."
+      },
+      {
+        "task_id": "REF-T1",
+        "reason": "Solved by both; add only if a larger ceiling/easy-row slice is needed."
+      }
+    ]
+  },
+  "model_slots": [
+    {
+      "id": "gpt_5_5",
+      "model_family": "GPT-family",
+      "model_alias": "gpt-5.5",
+      "wire_api": "openai_responses",
+      "base_url_env": "PAPERTOSKILL_GPT_OPENAI_BASE_URL",
+      "api_key_env": "PAPERTOSKILL_GPT_OPENAI_API_KEY",
+      "timeout_seconds": 300,
+      "max_attempts": 5,
+      "retry_delay_seconds": 5,
+      "role": "base_model_and_ablation_reference"
+    },
+    {
+      "id": "claude_opus_4_8",
+      "model_family": "Claude-family",
+      "model_alias": "claude-opus-4-8",
+      "wire_api": "anthropic_messages",
+      "base_url_env": "PAPERTOSKILL_CLAUDE_BASE_URL",
+      "api_key_env": "PAPERTOSKILL_CLAUDE_API_KEY",
+      "timeout_seconds": 300,
+      "max_attempts": 5,
+      "retry_delay_seconds": 5,
+      "role": "ablation_model"
+    },
+    {
+      "id": "deepseek_v4_flash",
+      "model_family": "DeepSeek-family",
+      "model_alias": "deepseek-v4-flash",
+      "wire_api": "openai_chat_completions",
+      "base_url_env": "DEEPSEEK_BASE_URL",
+      "api_key_env": "DEEPSEEK_API_KEY",
+      "timeout_seconds": 300,
+      "max_attempts": 5,
+      "retry_delay_seconds": 5,
+      "role": "ablation_model"
+    }
+  ],
+  "runner_defaults": {
+    "AIDE": {
+      "script": "scripts/run_real_reuse_aide.py",
+      "score_timeout_seconds": 300,
+      "max_tokens": 1800
+    },
+    "SWE": {
+      "script": "scripts/run_real_reuse_swe.py",
+      "score_timeout_seconds": 120,
+      "max_tokens": 2200
+    },
+    "REF": {
+      "script": "scripts/run_real_reuse_reflexion.py",
+      "score_timeout_seconds": 10,
+      "max_tokens": 1600
+    }
+  },
+  "aggregation_plan": {
+    "raw_row_source": "results/real_reuse/raw_rows.jsonl",
+    "future_outputs": [
+      "results/real_reuse/llm_ablation_raw_rows.csv",
+      "results/real_reuse/llm_ablation_summary.md",
+      "results/real_reuse/llm_ablation_summary.json"
+    ],
+    "comparison_rule": "Compare Summary and PaperToSkill within the same task and model slot. Do not compare provider response time as a core effectiveness score."
+  }
+}

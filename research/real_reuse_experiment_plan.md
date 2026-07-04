@@ -196,19 +196,27 @@ family. It is not a broad model ranking.
 | Claude-family | TBD | stabilized subset | TBD | TBD | TBD | TBD | TBD | TBD |
 | DeepSeek-family | TBD | stabilized subset | TBD | TBD | TBD | TBD | TBD | TBD |
 
+Current pre-registered pilot: `benchmarks/real_reuse/llm_ablation_v0.json` and
+`results/real_reuse/llm_ablation_plan.md` select AIDE-T2 and SWE-T2 as
+positive PaperToSkill-only slices plus REF-T2 as a ceiling/control slice. The
+plan uses GPT-family `gpt-5.5`, Claude-family `claude-opus-4-8`, and
+DeepSeek-family `deepseek-v4-flash`, with 300-second provider timeouts, five
+attempts, and five-second retry delays. It is a command plan only; no new model
+responses or raw rows have been collected under this protocol yet.
+
 ## Table 5: LLM Ablation Raw Rows
 
 Purpose: raw `task x model x condition` table for audit and appendix.
 
 | Task ID | Source Paper | Model Family | Model Alias | Condition | Task Score | Success | Unsupported Errors | Tokens | Failure Reason |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| AIDE-T1 | AIDE | Claude-family | TBD | Summary | TBD | TBD | TBD | TBD | TBD |
-| AIDE-T1 | AIDE | Claude-family | TBD | PaperToSkill | TBD | TBD | TBD | TBD | TBD |
-| AIDE-T1 | AIDE | GPT-family | TBD | Summary | TBD | TBD | TBD | TBD | TBD |
-| AIDE-T1 | AIDE | GPT-family | TBD | PaperToSkill | TBD | TBD | TBD | TBD | TBD |
-| AIDE-T1 | AIDE | DeepSeek-family | TBD | Summary | TBD | TBD | TBD | TBD | TBD |
-| AIDE-T1 | AIDE | DeepSeek-family | TBD | PaperToSkill | TBD | TBD | TBD | TBD | TBD |
-| ... | Repeat for all eight tasks | ... | ... | ... | ... | ... | ... | ... | ... |
+| AIDE-T2 | AIDE | GPT-family | gpt-5.5 | Summary | TBD | TBD | TBD | TBD | TBD |
+| AIDE-T2 | AIDE | GPT-family | gpt-5.5 | PaperToSkill | TBD | TBD | TBD | TBD | TBD |
+| AIDE-T2 | AIDE | Claude-family | claude-opus-4-8 | Summary | TBD | TBD | TBD | TBD | TBD |
+| AIDE-T2 | AIDE | Claude-family | claude-opus-4-8 | PaperToSkill | TBD | TBD | TBD | TBD | TBD |
+| AIDE-T2 | AIDE | DeepSeek-family | deepseek-v4-flash | Summary | TBD | TBD | TBD | TBD | TBD |
+| AIDE-T2 | AIDE | DeepSeek-family | deepseek-v4-flash | PaperToSkill | TBD | TBD | TBD | TBD | TBD |
+| SWE-T2 / REF-T2 | Repeat same model x condition grid | ... | ... | ... | ... | ... | ... | ... | ... |
 
 ## Table 6: Quality / Grounding Gate
 
@@ -291,6 +299,10 @@ analyses are stable.
   and cost gates.
 - The older saved-response model ablation remains a usage-plan/output-contract
   result; it does not prove live downstream task success.
+- The real-reuse LLM ablation pilot is pre-registered but not run. Its current
+  artifact is a command/environment plan only, and missing provider
+  environment variables are availability metadata rather than model-quality
+  evidence.
 - AI-Scientist-v2 evidence remains bounded integration/synthetic sensitivity
   evidence.
 - Do not claim that PaperToSkill beats an original paper method unless the same

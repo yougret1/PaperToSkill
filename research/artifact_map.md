@@ -146,6 +146,7 @@
 | `benchmarks/model_ablation_v0.json` | Claude/GPT-family/DeepSeek model-ablation prompt packet spec | Created |
 | `benchmarks/rubric_swe_agent_v0.json` | Deterministic v0 scoring rubric for the real-reuse SWE-agent generated skill | Created |
 | `benchmarks/real_reuse/real_reuse_v0.json` | Machine-checkable planned real-reuse benchmark spec with eight original-style paper-task rows | Created |
+| `benchmarks/real_reuse/llm_ablation_v0.json` | Pre-registered real-reuse LLM ablation protocol over stabilized AIDE-T2, SWE-T2, and REF-T2 slices with GPT/Claude/DeepSeek model slots | Created |
 | `benchmarks/real_reuse/tasks/*.json` | Per-task real-reuse execution-contract specs for all eight planned paper-task rows; all eight rows now have one GPT-family Summary-vs-PaperToSkill raw-row pass | Created |
 | `benchmarks/real_reuse/fixtures/*.json` | Per-task fixture requirement manifests with asset slots, scoring contracts, license/provenance status, and planned outputs; concrete assets are partial | Created |
 | `benchmarks/real_reuse/fixture_candidates/*.json` | Per-task candidate asset manifests with selected source repositories/datasets, preparation commands, scoring entry points, and license/provenance boundaries; all main task families have prepared or scored local rows | Created |
@@ -220,6 +221,7 @@
 | `scripts/build_real_reuse_fixture_candidates.py` | Materializes candidate asset/preparation manifests for the eight real-reuse fixture contracts | Created |
 | `scripts/build_real_reuse_asset_locks.py` | Materializes preparation-time asset locks for the eight real-reuse tasks from task, fixture, and candidate manifests | Created |
 | `scripts/build_real_reuse_paper_tables.py` | Materializes the paper-facing real-reuse main-results table from the benchmark spec and raw rows, using `results/real_reuse/main_run_selection.json` to keep follow-up rows from silently replacing pre-registered main rows | Created |
+| `scripts/build_real_reuse_llm_ablation_plan.py` | Builds the pre-registered real-reuse LLM ablation task/model command plan without calling models or adding raw rows | Created |
 | `scripts/prepare_real_reuse_reflexion_fixture.py` | Prepares locked REF-T1/REF-T2 local fixture assets, condition contexts, sha256 manifest entries, and scorer-only answer/checker separation | Created |
 | `scripts/score_real_reuse_reflexion.py` | Scores REF-T1 answer-key outputs with EM/F1 and REF-T2 HumanEval candidates with the hidden objective checker | Created |
 | `scripts/run_real_reuse_reflexion.py` | Runs locked REF-T1/REF-T2 Summary-vs-PaperToSkill conditions, saves prompts/responses/metrics/raw rows, and separates provider availability from model quality | Created |
@@ -305,6 +307,7 @@
 | `tests/test_run_real_reuse_aide.py` | Unit tests for AIDE fixture-response execution, missing-credential pending behavior, and hidden-label prompt separation | Created |
 | `tests/test_build_real_reuse_snapatac2_artifact_followup.py` | Unit test for SNAP artifact-execution follow-up diagnosis over invalid JSON and plan-only candidate outputs | Created |
 | `tests/test_run_real_reuse_snapatac2_executable_followup.py` | Unit test for the paired SNAP executable-artifact follow-up runner and no-main-raw-row policy | Created |
+| `tests/test_build_real_reuse_llm_ablation_plan.py` | Unit tests for the real-reuse LLM ablation plan, selected stabilized subset, long retry budget, and generated command shape | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |
 | `generated_skills/ai_scientist_v2/references/source_map.json` | Source-map evidence for AI Scientist-v2 generated skill | Created |
 | `generated_skills/reflexion/SKILL.md` | Retained generated skill from Reflexion note | Created |
@@ -443,6 +446,8 @@
 | `results/real_reuse/full_excerpt_sanity.csv` | Data source for the AAAI Full Excerpt sanity table; the pre-registered three-row sanity subset is scored | Created |
 | `results/real_reuse/full_excerpt_sanity.md` | Human-readable Full Excerpt sanity check with local whitespace token proxies | Created |
 | `results/real_reuse/full_excerpt_sanity.json` | Machine-readable Full Excerpt sanity check and evidence boundary | Created |
+| `results/real_reuse/llm_ablation_plan.md` | Human-readable command plan for future real-reuse LLM ablation rows; no model calls or scores | Created |
+| `results/real_reuse/llm_ablation_plan.json` | Machine-readable real-reuse LLM ablation command plan and environment-presence summary | Created |
 | `results/reproducibility/aaai_package_report.md` | Human-readable AAAI package verification report | Created |
 | `results/reproducibility/aaai_package_report.json` | Machine-readable AAAI package verification report | Created |
 | `results/reproducibility/usage_example_report.md` | Human-readable usage-example verification report | Created |

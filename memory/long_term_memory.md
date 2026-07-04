@@ -652,6 +652,13 @@ Use these as entry points instead of searching the whole repo first:
   phase108 paired controlled-scaffold diagnostic rows. All four rows score
   1.000, but this is execution-contract evidence only and not a main-row
   replacement.
+- Real-reuse LLM ablation plan:
+  `benchmarks/real_reuse/llm_ablation_v0.json` and
+  `results/real_reuse/llm_ablation_plan.{md,json}` pre-register a stabilized
+  AIDE-T2/SWE-T2/REF-T2 pilot over GPT-family `gpt-5.5`, Claude-family
+  `claude-opus-4-8`, and DeepSeek-family `deepseek-v4-flash` with 300-second
+  timeouts and 5 attempts. This is a command/environment plan only; no new
+  model responses or raw rows have been collected under it.
 
 ## Model/API Configuration
 
