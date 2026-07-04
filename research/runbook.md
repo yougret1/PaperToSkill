@@ -431,11 +431,13 @@ python scripts\build_real_reuse_llm_ablation_results.py
 ```
 
 Current aggregate:
-`results/real_reuse/llm_ablation_summary.md` reports 2 collected rows and 16
-pending rows out of 18 expected rows. The completed REF-T2 / GPT-family /
-`gpt-5.5` ceiling/control pair scores Summary 1.000 and PaperToSkill 1.000,
-both on attempt 1. This is auxiliary control evidence, not a main-row
-replacement and not PaperToSkill advantage.
+`results/real_reuse/llm_ablation_summary.md` reports 4 collected rows and 14
+pending rows out of 18 expected rows. REF-T2 / GPT-family / `gpt-5.5` scores
+Summary 1.000 and PaperToSkill 1.000 as a ceiling/control pair. AIDE-T2 /
+GPT-family / `gpt-5.5` scores Summary 0.814 and PaperToSkill 0.000 because the
+PaperToSkill candidate timed out under the 300-second local scorer. These are
+auxiliary model/repetition rows, not main-row replacements and not aggregate
+PaperToSkill advantage.
 
 ## AI-Scientist-v2 Environment
 

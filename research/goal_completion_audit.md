@@ -99,10 +99,12 @@ task-success claim.
   with Summary, PaperToSkill, and Full Excerpt values plus token proxies; the
   result remains auxiliary sanity evidence.
 - `real_reuse_llm_ablation_phase109_partial`: the pre-registered real-reuse
-  LLM ablation has 2 collected rows out of 18 expected rows. REF-T2 /
-  GPT-family / `gpt-5.5` scores Summary 1.000 and PaperToSkill 1.000, both on
-  attempt 1. This is ceiling/control auxiliary evidence, not a main-table
-  replacement and not PaperToSkill advantage.
+  LLM ablation has 4 collected rows out of 18 expected rows. REF-T2 /
+  GPT-family / `gpt-5.5` scores Summary 1.000 and PaperToSkill 1.000 as a
+  ceiling/control pair. AIDE-T2 / GPT-family / `gpt-5.5` scores Summary 0.814
+  and PaperToSkill 0.000 because the PaperToSkill candidate timed out under
+  the 300-second local scorer. This is auxiliary model/repetition evidence,
+  not a main-table replacement and not PaperToSkill advantage.
 
 ## Completion Decision
 

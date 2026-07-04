@@ -429,8 +429,8 @@
 | `results/real_reuse/snapatac2_executable_artifact_followup.md` | Human-readable phase108 SNAP executable-artifact follow-up; all paired controlled-scaffold rows score 1.000 and main SNAP rows remain unchanged | Created |
 | `results/real_reuse/snapatac2_executable_artifact_followup.json` | Machine-readable phase108 SNAP executable-artifact follow-up report | Created |
 | `results/real_reuse/snapatac2_executable_artifact_followup.csv` | CSV source for the AAAI SNAP executable-artifact follow-up table | Created |
-| `results/real_reuse/aide_run_report.md` | Human-readable run report for the locked AIDE-T1/AIDE-T2 GPT-family real-reuse execution over official Kaggle-derived local validation fixtures | Created |
-| `results/real_reuse/aide_run_report.json` | Machine-readable run report for the locked AIDE-T1/AIDE-T2 GPT-family real-reuse execution | Created |
+| `results/real_reuse/aide_run_report.md` | Human-readable latest AIDE runner report; raw scored AIDE evidence and paper-facing row selection are authoritative in `results/real_reuse/raw_rows.jsonl` and `results/real_reuse/main_run_selection.json` because phase109 AIDE-T2 LLM-ablation output overwrote the default report path | Created |
+| `results/real_reuse/aide_run_report.json` | Machine-readable latest AIDE runner report; current default report path reflects phase109 AIDE-T2 LLM-ablation output | Created |
 | `results/real_reuse/aide_t1_baseline_metric.json` | Baseline-submission scorer validation for the locked AIDE-T1 fixture | Created |
 | `results/real_reuse/aide_t2_weak_script_metric.json` | Weak-script scorer validation for the locked AIDE-T2 fixture | Created |
 | `results/real_reuse/main_run_selection.json` | Paper-facing main-row selection file that pins first-pass/pre-registered real-reuse rows so follow-up raw rows such as SWE-T1 phase107 remain auditable without replacing main-table cells | Created |
@@ -450,7 +450,7 @@
 | `results/real_reuse/full_excerpt_sanity.json` | Machine-readable Full Excerpt sanity check and evidence boundary | Created |
 | `results/real_reuse/llm_ablation_plan.md` | Human-readable command plan for real-reuse LLM ablation rows using the phase109 run-id prefix; the plan itself does not call models | Created |
 | `results/real_reuse/llm_ablation_plan.json` | Machine-readable real-reuse LLM ablation command plan and environment-presence summary | Created |
-| `results/real_reuse/llm_ablation_summary.md` | Human-readable real-reuse LLM ablation aggregate; currently 2 collected REF-T2 GPT-family rows and 16 pending rows | Created |
+| `results/real_reuse/llm_ablation_summary.md` | Human-readable real-reuse LLM ablation aggregate; currently 4 collected GPT-family rows for AIDE-T2 and REF-T2, with 14 pending rows | Created |
 | `results/real_reuse/llm_ablation_summary.json` | Machine-readable real-reuse LLM ablation aggregate keyed to pre-registered run IDs | Created |
 | `results/real_reuse/llm_ablation_raw_rows.csv` | CSV export of collected pre-registered real-reuse LLM ablation raw rows | Created |
 | `results/reproducibility/aaai_package_report.md` | Human-readable AAAI package verification report | Created |

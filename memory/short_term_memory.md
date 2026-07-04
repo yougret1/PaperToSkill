@@ -31,6 +31,11 @@ Current date: 2026-07-04.
   `check_goal_completion.py --strict`,
   `check_reproducibility_package.py --strict`, `git diff --check` with only
   CRLF warnings, and a raw-key scan with no matches.
+- Current uncommitted local work after that backup includes the AIDE-T2 /
+  GPT-family / `gpt-5.5` LLM-ablation pair, regenerated
+  `llm_ablation_summary.*`, AIDE runner report updates, and an added
+  aggregation regression test. Save and push this as the next phase after
+  verification.
 - `C:\Users\19351\Desktop\tem\toHuman.md` should say no immediate human action
   is required, and `ok.txt` should only be created for completed human-fidelity
   annotation or a concrete placed core asset.
@@ -102,11 +107,12 @@ Current date: 2026-07-04.
   SWE-T2, and REF-T2; uses GPT-family `gpt-5.5`, Claude-family
   `claude-opus-4-8`, and DeepSeek-family `deepseek-v4-flash`; and gives each
   provider call 300 seconds, 5 attempts, and 5-second retry delays. Phase109
-  has collected the REF-T2 / GPT-family / `gpt-5.5` Summary/PaperToSkill pair:
-  both rows score 1.000, both succeeded on attempt 1, and
-  `results/real_reuse/llm_ablation_summary.md` reports 2 collected rows out of
-  18 expected rows. This is ceiling/control auxiliary evidence, not a main-row
-  replacement and not PaperToSkill advantage.
+  has collected four GPT-family rows: REF-T2 Summary/PaperToSkill score
+  1.000/1.000 as a ceiling/control pair, while AIDE-T2 scores 0.814/0.000 with
+  the PaperToSkill candidate timing out under the 300-second local scorer.
+  `results/real_reuse/llm_ablation_summary.md` reports 4 collected rows out of
+  18 expected rows. This is auxiliary model/repetition evidence, not a main-row
+  replacement and not aggregate PaperToSkill advantage.
 - Human-fidelity annotation supports semantic fidelity and reviewability, not
   main task effectiveness. It remains pending: 0 scored rows and 24 pending
   paper-by-criterion cells.
@@ -140,8 +146,8 @@ Current date: 2026-07-04.
    vars are available, or use the local API docs under
    `C:\Users\19351\Desktop\论文\SelfPaper\LLMAPIDocument` to set them in the
    shell only. Do not commit raw keys.
-   Current collected slice is only REF-T2 / GPT-family / `gpt-5.5`; AIDE-T2,
-   SWE-T2, Claude, and DeepSeek rows remain pending.
+   Current collected slices are REF-T2 / GPT-family / `gpt-5.5` and AIDE-T2 /
+   GPT-family / `gpt-5.5`; SWE-T2, Claude, and DeepSeek rows remain pending.
 2. Keep Summary and PaperToSkill paired under the same task/scorer contract for
    any follow-up. Main SNAP rows remain unchanged unless explicitly promoted.
 3. During core reruns, collect auxiliary raw data where cheap: provider

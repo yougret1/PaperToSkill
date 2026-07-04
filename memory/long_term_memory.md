@@ -661,9 +661,11 @@ Use these as entry points instead of searching the whole repo first:
   `results/real_reuse/llm_ablation_plan.{md,json}` pre-register a stabilized
   AIDE-T2/SWE-T2/REF-T2 pilot over GPT-family `gpt-5.5`, Claude-family
   `claude-opus-4-8`, and DeepSeek-family `deepseek-v4-flash` with 300-second
-  timeouts and 5 attempts. Phase109 has collected the GPT-family REF-T2
-  ceiling/control pair; AIDE-T2, SWE-T2, Claude-family, and DeepSeek-family
-  rows remain pending.
+  timeouts and 5 attempts. Phase109 has collected GPT-family REF-T2 and
+  AIDE-T2 pairs: REF-T2 scores 1.000/1.000 as a ceiling/control pair, while
+  AIDE-T2 scores Summary 0.814 and PaperToSkill 0.000 because the PaperToSkill
+  candidate timed out under the 300-second local scorer. SWE-T2,
+  Claude-family, and DeepSeek-family rows remain pending.
 - Real-reuse LLM ablation aggregation:
   `results/real_reuse/llm_ablation_summary.md`,
   `results/real_reuse/llm_ablation_summary.json`, and
