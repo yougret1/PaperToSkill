@@ -9,10 +9,9 @@ Current date: 2026-07-04.
 
 - Latest user request / active goal: save work with git/GitHub where possible,
   then continue the core real-reuse main experiment. Remote backup succeeded
-  through `95f0c3f`, backing up `a4d2831` and the SNAP artifact-execution
-  diagnosis. A later post-SNAP memory-sync commit is local only for now because
-  `git push origin main` failed with `Recv failure: Connection was reset`; the
-  blocker is recorded in `C:\Users\19351\Desktop\tem\toHuman.md`.
+  through post-SNAP memory-sync commit `159903d` after an intermittent GitHub
+  HTTPS reset; `C:\Users\19351\Desktop\tem\toHuman.md` currently has no human
+  action needed for GitHub connectivity.
 - Local logs remain excluded unless explicitly doing a phase log:
   `research/run_logs/**` and `research/stage_log.md`.
 - `C:\Users\19351\Desktop\tem\ok.txt` was absent at the latest check.
@@ -129,10 +128,9 @@ Current date: 2026-07-04.
 
 ## Immediate Next Actions
 
-1. Retry `git push origin main` later. Remote backup is current through
-   `95f0c3f`, but the latest post-SNAP memory-sync commit is local only.
-   Preserve the commit and keep transport failures separate from experiment
-   correctness.
+1. Check `git status -sb` before the next phase save. The latest verified
+   remote backup includes `159903d`; preserve local commits and keep any future
+   GitHub transport failures separate from experiment correctness.
 2. SNAP artifact-completion/budget inspection has produced
    `results/real_reuse/snapatac2_artifact_followup.{md,json}` via
    `scripts/build_real_reuse_snapatac2_artifact_followup.py`. The diagnosis is

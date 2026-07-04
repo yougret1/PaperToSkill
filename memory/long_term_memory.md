@@ -300,10 +300,9 @@ Current supported claims:
 - Local record-sync commit `a4d2831` (`Sync record state after planning
   update`) initially hit a GitHub HTTPS `OpenSSL SSL_read: SSL_ERROR_SYSCALL`
   push failure, but a later `git push origin main` succeeded and advanced
-  GitHub from `bdf0144` to `95f0c3f`. A later post-SNAP memory-sync commit was
-  created locally, but its first push failed with `Recv failure: Connection was
-  reset`; this is recorded in `C:\Users\19351\Desktop\tem\toHuman.md` and
-  should be retried later.
+  GitHub from `bdf0144` to `95f0c3f`. A later post-SNAP memory-sync push also
+  initially failed with `Recv failure: Connection was reset`, then succeeded
+  and advanced GitHub to `159903d`.
 - SNAP artifact-execution follow-up diagnosis is now materialized in
   `results/real_reuse/snapatac2_artifact_followup.{md,json}` with builder
   `scripts/build_real_reuse_snapatac2_artifact_followup.py`: all selected SNAP
