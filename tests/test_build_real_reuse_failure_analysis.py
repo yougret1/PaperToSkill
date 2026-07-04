@@ -102,10 +102,105 @@ class BuildRealReuseFailureAnalysisTest(unittest.TestCase):
             self.assertEqual("Artifact completion", rows["SNAP-T1"]["Boundary Mode"])
             self.assertEqual("Artifact completion", rows["SNAP-T2"]["Boundary Mode"])
 
+    def test_cli_row_selection_keeps_followup_out_of_failure_table(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            raw_rows = tmp_path / "raw_rows.jsonl"
+            raw_rows.write_text(
+                "\n".join(
+                    [
+                        json_line(
+                            "SWE-T1",
+                            "summary",
+                            0.0,
+                            False,
+                            "patch_apply_failed",
+                            run_id="phase97_summary",
+                        ),
+                        json_line(
+                            "SWE-T1",
+                            "papertoskill",
+                            0.0,
+                            False,
+                            "patch_apply_failed",
+                            run_id="phase97_papertoskill",
+                        ),
+                        json_line(
+                            "SWE-T1",
+                            "summary",
+                            0.0,
+                            False,
+                            "test_command_failed",
+                            run_id="phase107_followup",
+                        ),
+                        json_line(
+                            "SWE-T1",
+                            "papertoskill",
+                            0.0,
+                            False,
+                            "test_command_failed",
+                            run_id="phase107_followup",
+                        ),
+                    ]
+                )
+                + "\n",
+                encoding="utf-8",
+            )
+            selection = tmp_path / "main_run_selection.json"
+            selection.write_text(
+                json.dumps(
+                    {
+                        "rows": [
+                            {"task_id": "SWE-T1", "condition": "summary", "run_id": "phase97_summary"},
+                            {
+                                "task_id": "SWE-T1",
+                                "condition": "papertoskill",
+                                "run_id": "phase97_papertoskill",
+                            },
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+            output_csv = tmp_path / "failure_analysis.csv"
 
-def json_line(task_id: str, condition: str, task_score: float, success: bool, failure_reason: str) -> str:
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--raw-rows",
+                    str(raw_rows),
+                    "--row-selection",
+                    str(selection),
+                    "--output-csv",
+                    str(output_csv),
+                    "--output-md",
+                    str(tmp_path / "failure_analysis.md"),
+                    "--output-json",
+                    str(tmp_path / "failure_analysis.json"),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            with output_csv.open("r", encoding="utf-8", newline="") as handle:
+                rows = {row["Task ID"]: row for row in csv.DictReader(handle)}
+            self.assertEqual("Patch application", rows["SWE-T1"]["Boundary Mode"])
+            self.assertEqual("0.000; patch apply failed", rows["SWE-T1"]["Summary Outcome"])
+
+
+def json_line(
+    task_id: str,
+    condition: str,
+    task_score: float,
+    success: bool,
+    failure_reason: str,
+    run_id: str = "run",
+) -> str:
     return json.dumps(
         {
+            "run_id": run_id,
             "task_id": task_id,
             "condition": condition,
             "status": "scored",

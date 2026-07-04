@@ -262,6 +262,9 @@ Current supported claims:
   `results/real_reuse/main_results_plan.csv`, `.md`, and `.json` are the table
   data source; `paper/aaai/papertoskill_tables.tex` contains
   `tab:real-reuse-main`. Current statuses are all `Scored (GPT-family)`.
+  `results/real_reuse/main_run_selection.json` locks the paper-facing main rows
+  so later follow-up raw rows, including SWE-T1 phase107, do not silently
+  replace the pre-registered main experiment cells.
 - Phase 104/105 added and executed the auxiliary Full Excerpt sanity check for
   AIDE-T1, SWE-T1, and SNAP-T1:
   `scripts/build_real_reuse_full_excerpt_sanity.py` writes
@@ -276,6 +279,17 @@ Current supported claims:
   GPT-family `gpt-5.5`). Token columns are local whitespace context proxies,
   not provider billing or output-token costs. This remains auxiliary sanity
   evidence, not a main baseline or aggregate effectiveness claim.
+- Phase 107 executed the SWE-T1 shared-source-context follow-up
+  `phase107_gpt_swe_t1_source_context_followup` with GPT-family `gpt-5.5`.
+  The follow-up exposed the same locked SQLFluff `L031.py` source slice to both
+  Summary and PaperToSkill because the first-pass prompt implied repository
+  inspection while the one-shot runner did not provide an inspection tool. Both
+  calls succeeded on the first attempt and both generated patches applied, but
+  both scored 0.000 because the hidden test failed. The diagnostic boundary is
+  that both candidates edited rule logic while the hidden scorer expected the
+  specific L031 message-text change. Preserve the first-pass SWE-T1 0.000/0.000
+  rows as the paper-facing main rows; report phase107 only as a
+  shared-source-context follow-up.
 - Phase 89 remote save recovered the earlier GitHub HTTPS blocker:
   `git push origin main` succeeded for the Phase 87/88 stack and the follow-up
   remote-save record was also pushed. Use `git status -sb` for the latest exact
@@ -369,7 +383,12 @@ Use these as entry points instead of searching the whole repo first:
   asset locks from task specs, fixture manifests, and candidate manifests.
 - `scripts/build_real_reuse_paper_tables.py`: materializes the paper-facing
   real-reuse main-results table from the benchmark spec and fills existing
-  score cells from `results/real_reuse/raw_rows.jsonl`.
+  score cells from `results/real_reuse/raw_rows.jsonl`. It can use
+  `results/real_reuse/main_run_selection.json` to keep follow-up rows from
+  silently replacing paper-facing main cells.
+- `scripts/build_real_reuse_failure_analysis.py`: materializes the derived
+  real-reuse failure-boundary table and uses the same row-selection policy when
+  building paper-facing first-pass boundary analysis.
 - `scripts/prepare_real_reuse_reflexion_fixture.py`: materializes locked
   REF-T1 HotPotQA-style and REF-T2 HumanEval-style fixture assets, task prompts,
   Summary condition contexts, and scorer-only hidden assets.
@@ -438,6 +457,9 @@ Use these as entry points instead of searching the whole repo first:
   threshold, so this is failure-boundary evidence.
 - `results/real_reuse/main_results_plan.csv`, `.md`, and `.json`: paper-facing
   real-reuse main table source with all eight rows filled from raw rows.
+- `results/real_reuse/main_run_selection.json`: paper-facing row-selection
+  manifest that pins the main table to pre-registered rows and leaves follow-up
+  rows available for dedicated follow-up analysis.
 - `results/real_reuse/failure_analysis.csv`, `.md`, and `.json`: derived
   paper-facing real-reuse failure-boundary table source; it explains first-pass
   boundary modes without adding new task-success evidence.
@@ -564,8 +586,9 @@ Use these as entry points instead of searching the whole repo first:
   Toolformer rows score 9/9.
 - Paper tables:
   `results/reproducibility/paper_table_report.md`
-  reports ready, 226 ready checks, 0 failed checks after adding the
-  real-reuse failure-boundary and Full Excerpt sanity table consistency checks.
+  reports ready, 250 ready checks, 0 failed checks after adding the
+  SWE-T1 source-context follow-up table consistency checks alongside the
+  real-reuse main, failure-boundary, and Full Excerpt sanity checks.
 - Paper claims:
   `results/reproducibility/paper_claim_report.md`
   reports ready, 20 ready checks, 0 failed checks.
@@ -592,13 +615,11 @@ Use these as entry points instead of searching the whole repo first:
   effectiveness. AIDE Kaggle-derived CSV fixture files are kept local and
   ignored by git; committed manifests retain hashes and provenance boundaries.
 - Current SWE-T1 stabilization boundary: preserve the first-pass SWE-T1
-  0.000/0.000 patch-apply result as scored failure-boundary evidence. A
-  follow-up may expose the same locked SQLFluff source context to both Summary
-  and PaperToSkill because the original one-shot runner did not actually let
-  the model inspect the repository despite the task prompt's wording. That
-  follow-up must be pre-registered, paired across conditions, and reported as
-  a shared-source-context follow-up rather than a silent replacement of the
-  first-pass row.
+  0.000/0.000 patch-apply result as the paper-facing main-row evidence.
+  Phase107 has already run as a paired shared-source-context follow-up and also
+  scored 0.000/0.000, but both patches applied and then failed the hidden test.
+  This is diagnostic follow-up evidence about task-contract/hidden-objective
+  mismatch, not a replacement for the first-pass main row.
 - Full Excerpt sanity check:
   `results/real_reuse/full_excerpt_sanity.md` contains AIDE-T1, SWE-T1, and
   SNAP-T1 rows with Summary/PaperToSkill/Full Excerpt scores and local

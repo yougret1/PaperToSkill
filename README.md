@@ -20,10 +20,15 @@ real-reuse tasks under the selected source papers' objective metrics while
 keeping provider latency, API timeouts, and retry counts out of the core method
 score.
 
-Immediate stabilization focus: SWE-T1 is being treated as a pre-registered
-source-context follow-up candidate. The first-pass 0.000/0.000 patch-apply row
-must remain intact; any follow-up should expose the same locked source context
-to Summary and PaperToSkill and rerun both conditions under the same scorer.
+Immediate stabilization focus: the SWE-T1 shared-source-context follow-up has
+now run locally as `phase107_gpt_swe_t1_source_context_followup`. Both Summary
+and PaperToSkill still scored 0.000, but both patches applied and then failed
+the hidden target test. This follow-up is diagnostic evidence only; the
+first-pass SWE-T1 row remains the paper-facing main-table row, and
+`results/real_reuse/main_run_selection.json` now prevents follow-up raw rows
+from silently replacing main experiment cells. The dedicated follow-up report is
+`results/real_reuse/swe_t1_source_context_followup.md`, and the paper-table
+consistency gate now includes that follow-up table.
 
 The package also contains supporting evidence: deterministic/offline gates,
 source maps and source-span validation, usage examples, saved live-transfer
@@ -101,6 +106,9 @@ pending live-agent claims.
   the eight-row Summary-vs-PaperToSkill real-reuse first pass over AIDE,
   SWE-agent, Reflexion, and SnapATAC2. Treat it as mixed downstream
   stress-test/failure-boundary evidence until the core rows are stabilized.
+- Paper-facing main row selection:
+  `results/real_reuse/main_run_selection.json`; this keeps follow-up rows such
+  as SWE-T1 phase107 out of the main table unless they are explicitly promoted.
 - Current real-reuse failure-boundary analysis:
   `results/real_reuse/failure_analysis.md`.
 - Auxiliary Full Excerpt sanity check:

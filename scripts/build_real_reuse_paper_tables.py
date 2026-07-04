@@ -39,6 +39,20 @@ def load_raw_rows(path: Path) -> list[dict[str, Any]]:
     return rows
 
 
+def load_row_selection(path: Path | None) -> dict[tuple[str, str], str]:
+    if path is None or not path.exists():
+        return {}
+    payload = load_json(path)
+    selected: dict[tuple[str, str], str] = {}
+    for item in payload.get("rows", []):
+        task_id = str(item.get("task_id", ""))
+        condition = str(item.get("condition", ""))
+        run_id = str(item.get("run_id", ""))
+        if task_id and condition and run_id:
+            selected[(task_id, condition)] = run_id
+    return selected
+
+
 def paper_by_id(spec: dict[str, Any]) -> dict[str, dict[str, Any]]:
     return {str(paper["id"]): paper for paper in spec.get("source_papers", [])}
 
@@ -92,13 +106,27 @@ def score_string(row: dict[str, Any] | None) -> str:
     return f"{float(row['task_score']):.3f}"
 
 
-def latest_score_rows(raw_rows: list[dict[str, Any]]) -> dict[tuple[str, str], dict[str, Any]]:
+def latest_score_rows(
+    raw_rows: list[dict[str, Any]],
+    row_selection: dict[tuple[str, str], str] | None = None,
+) -> dict[tuple[str, str], dict[str, Any]]:
     latest: dict[tuple[str, str], dict[str, Any]] = {}
+    row_selection = row_selection or {}
     for row in raw_rows:
         if row.get("status") != "scored":
             continue
         key = (str(row.get("task_id", "")), str(row.get("condition", "")))
+        selected_run_id = row_selection.get(key)
+        if selected_run_id is not None and row.get("run_id") != selected_run_id:
+            continue
         latest[key] = row
+    missing = sorted(
+        f"{task_id}/{condition}:{run_id}"
+        for (task_id, condition), run_id in row_selection.items()
+        if (task_id, condition) not in latest
+    )
+    if missing:
+        raise ValueError("row selection references missing scored rows: " + ", ".join(missing))
     return latest
 
 
@@ -185,9 +213,10 @@ def build_rows(
     raw_rows: list[dict[str, Any]] | None = None,
     *,
     status_root: Path | None = None,
+    row_selection: dict[tuple[str, str], str] | None = None,
 ) -> list[dict[str, str]]:
     papers = paper_by_id(spec)
-    score_rows = latest_score_rows(raw_rows or [])
+    score_rows = latest_score_rows(raw_rows or [], row_selection=row_selection)
     status_root = status_root or Path(__file__).resolve().parents[1]
     rows: list[dict[str, str]] = []
     for task in spec.get("tasks", []):
@@ -289,6 +318,14 @@ def main() -> int:
         default=root / "results" / "real_reuse" / "raw_rows.jsonl",
     )
     parser.add_argument(
+        "--row-selection",
+        type=Path,
+        help=(
+            "Optional JSON selecting run_id values for paper-facing rows. "
+            "If omitted, the repository default is used only with the default raw rows file."
+        ),
+    )
+    parser.add_argument(
         "--status-root",
         type=Path,
         default=root,
@@ -297,7 +334,17 @@ def main() -> int:
     args = parser.parse_args()
 
     raw_rows = load_raw_rows(args.raw_rows)
-    rows = build_rows(load_json(args.spec), raw_rows, status_root=args.status_root)
+    default_raw_rows = root / "results" / "real_reuse" / "raw_rows.jsonl"
+    default_selection = root / "results" / "real_reuse" / "main_run_selection.json"
+    row_selection_path = args.row_selection
+    if row_selection_path is None and args.raw_rows.resolve() == default_raw_rows.resolve():
+        row_selection_path = default_selection
+    rows = build_rows(
+        load_json(args.spec),
+        raw_rows,
+        status_root=args.status_root,
+        row_selection=load_row_selection(row_selection_path),
+    )
     write_csv(args.output_csv, rows)
     write_markdown(args.output_md, rows, len(raw_rows))
     write_json(args.output_json, rows, raw_rows)

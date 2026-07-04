@@ -3,7 +3,7 @@
 Evidence boundary: this report checks that AAAI LaTeX table values match generated CSV result tables. It does not add new empirical evidence.
 
 - Overall status: ready
-- Ready checks: 226
+- Ready checks: 250
 - Failed checks: 0
 
 ## Checks
@@ -130,6 +130,30 @@ Evidence boundary: this report checks that AAAI LaTeX table values match generat
 | paper_table_real_reuse_failure_snap_t2_papertoskill_outcome | ready | value=0.400; artifact incomplete | paper/aaai/papertoskill_tables.tex vs results/real_reuse/failure_analysis.csv |
 | paper_table_real_reuse_failure_snap_t2_boundary_mode | ready | value=Artifact completion | paper/aaai/papertoskill_tables.tex vs results/real_reuse/failure_analysis.csv |
 | paper_table_real_reuse_failure_snap_t2_contract_implication | ready | value=required artifact and metric manifest | paper/aaai/papertoskill_tables.tex vs results/real_reuse/failure_analysis.csv |
+| paper_table_swe_t1_source_context_followup_summary_task_id | ready | value=SWE-T1 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
+| paper_table_swe_t1_source_context_followup_summary_condition | ready | value=Summary | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
+| paper_table_swe_t1_source_context_followup_summary_first_pass_run | ready | value=phase97_gpt_swe_t1_summary_retry | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
+| paper_table_swe_t1_source_context_followup_summary_first_pass_score | ready | value=0.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
+| paper_table_swe_t1_source_context_followup_summary_first_pass_failure | ready | value=patch_apply_failed | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
+| paper_table_swe_t1_source_context_followup_summary_first_pass_patch_applied | ready | value=No | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
+| paper_table_swe_t1_source_context_followup_summary_followup_run | ready | value=phase107_gpt_swe_t1_source_context_followup | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
+| paper_table_swe_t1_source_context_followup_summary_followup_score | ready | value=0.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
+| paper_table_swe_t1_source_context_followup_summary_followup_patch_applied | ready | value=Yes | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
+| paper_table_swe_t1_source_context_followup_summary_followup_test_passed | ready | value=No | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
+| paper_table_swe_t1_source_context_followup_summary_followup_failure | ready | value=test_command_failed | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
+| paper_table_swe_t1_source_context_followup_summary_interpretation | ready | value=Source context fixed patch application; hidden test still failed | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
+| paper_table_swe_t1_source_context_followup_papertoskill_task_id | ready | value=SWE-T1 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
+| paper_table_swe_t1_source_context_followup_papertoskill_condition | ready | value=PaperToSkill | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
+| paper_table_swe_t1_source_context_followup_papertoskill_first_pass_run | ready | value=phase97_gpt_swe_t1_real_reuse | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
+| paper_table_swe_t1_source_context_followup_papertoskill_first_pass_score | ready | value=0.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
+| paper_table_swe_t1_source_context_followup_papertoskill_first_pass_failure | ready | value=patch_apply_failed | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
+| paper_table_swe_t1_source_context_followup_papertoskill_first_pass_patch_applied | ready | value=No | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
+| paper_table_swe_t1_source_context_followup_papertoskill_followup_run | ready | value=phase107_gpt_swe_t1_source_context_followup | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
+| paper_table_swe_t1_source_context_followup_papertoskill_followup_score | ready | value=0.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
+| paper_table_swe_t1_source_context_followup_papertoskill_followup_patch_applied | ready | value=Yes | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
+| paper_table_swe_t1_source_context_followup_papertoskill_followup_test_passed | ready | value=No | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
+| paper_table_swe_t1_source_context_followup_papertoskill_followup_failure | ready | value=test_command_failed | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
+| paper_table_swe_t1_source_context_followup_papertoskill_interpretation | ready | value=Source context fixed patch application; hidden test still failed | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
 | paper_table_full_excerpt_sanity_aide_t1_task_id | ready | value=AIDE-T1 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
 | paper_table_full_excerpt_sanity_aide_t1_source_paper | ready | value=AIDE | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
 | paper_table_full_excerpt_sanity_aide_t1_metric | ready | value=validation_score | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |

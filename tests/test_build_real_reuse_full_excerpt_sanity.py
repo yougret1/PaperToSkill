@@ -38,8 +38,8 @@ class BuildRealReuseFullExcerptSanityTest(unittest.TestCase):
                 rows = list(csv.DictReader(handle))
             self.assertEqual(["AIDE-T1", "SWE-T1", "SNAP-T1"], [row["Task ID"] for row in rows])
             rows_by_id = {row["Task ID"]: row for row in rows}
-            self.assertEqual("0.000", rows_by_id["AIDE-T1"]["Summary Score"])
-            self.assertEqual("0.000", rows_by_id["AIDE-T1"]["PaperToSkill Score"])
+            self.assertEqual("0.816", rows_by_id["AIDE-T1"]["Summary Score"])
+            self.assertEqual("0.817", rows_by_id["AIDE-T1"]["PaperToSkill Score"])
             self.assertEqual("0.000", rows_by_id["AIDE-T1"]["Full Excerpt Score"])
             self.assertEqual("0.000", rows_by_id["SWE-T1"]["Full Excerpt Score"])
             self.assertEqual("0.250", rows_by_id["SNAP-T1"]["Full Excerpt Score"])

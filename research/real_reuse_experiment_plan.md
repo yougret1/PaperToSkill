@@ -103,24 +103,26 @@ Column definitions:
 - `Status`: execution state and current evidence boundary for the row.
 - `Metric`: the task's original metric family wherever possible.
 
-### Current Pre-Registered Follow-Up Candidate: SWE-T1 Source Context
+### Completed Follow-Up: SWE-T1 Source Context
 
-SWE-T1 is the immediate failure-boundary row under inspection. The first-pass
-row scored Summary 0.000 and PaperToSkill 0.000 because both generated patches
-failed to apply. That row should remain in the raw evidence.
+SWE-T1 remains a failure-boundary row. The paper-facing first-pass row scored
+Summary 0.000 and PaperToSkill 0.000 because both generated patches failed to
+apply. That row remains the main-table evidence.
 
-The current follow-up diagnosis is a task-contract mismatch: the prompt asks
-the agent to inspect the repository before editing, but the one-shot runner did
-not actually provide an interactive repository-inspection tool. The follow-up
-therefore may expose the same locked SQLFluff source slice to both conditions
-as model-visible source context, then rerun Summary and PaperToSkill with the
-same scorer, local workspace, hidden test patch, model family, timeout/retry
-policy, and no-mid-run-human rule.
+The source-context follow-up has run locally as
+`phase107_gpt_swe_t1_source_context_followup`. It exposed the same locked
+SQLFluff `L031.py` source slice to Summary and PaperToSkill because the
+first-pass prompt asked the agent to inspect the repository while the one-shot
+runner did not provide an interactive inspection tool.
 
-This follow-up tests whether the SWE-T1 failure was caused by missing
-task-local source context. It must not be described as replacing the first
-SWE-T1 row, and any improved score should be labeled as a shared-source-context
-follow-up.
+The follow-up result is Summary 0.000 and PaperToSkill 0.000. In contrast to
+the first pass, both candidate patches applied and both hidden test patches
+applied, but both candidates failed the target test. The diagnostic
+interpretation is task-contract/hidden-objective mismatch: both models edited
+rule logic while the hidden scorer expected the specific L031 warning-message
+change. This follow-up must be reported separately and must not silently
+replace the first-pass SWE-T1 main row. The paper-facing main row selection is
+locked by `results/real_reuse/main_run_selection.json`.
 
 ## Table 2: Full Excerpt Sanity Check
 
@@ -234,7 +236,9 @@ analyses are stable.
    AIDE-T1/T2, SWE-T1/T2, and SNAP-T1/T2).
 7. Implement a scorer/aggregator that emits raw rows and table-ready CSV/MD
    files under `results/real_reuse/` (complete for the first single-run pass:
-   all eight rows are filled in the main table).
+   all eight rows are filled in the main table). Paper-facing main rows should
+   be selected through `results/real_reuse/main_run_selection.json` so
+   follow-up raw rows remain auditable without overwriting the main cells.
 8. After broader raw results exist, revise the AAAI Abstract, Contributions,
    Results, Discussion, Limitations, and Conclusion (in progress for the
    first-pass mixed/failure-boundary evidence boundary).
@@ -250,6 +254,12 @@ analyses are stable.
   0.000/0.000 because generated patches fail to apply; SWE-T2 scores
   0.000/1.000; REF-T1/REF-T2 score 1.000/1.000; SNAP-T1/SNAP-T2 score
   0.000/0.500 and 0.200/0.400 but fail the local success threshold.
+- SWE-T1 phase107 is a completed shared-source-context follow-up, not a main
+  row replacement. It also scores Summary 0.000 and PaperToSkill 0.000, but
+  both candidate patches apply and then fail the hidden test. It is now
+  reported as dedicated diagnostic follow-up evidence in
+  `results/real_reuse/swe_t1_source_context_followup.{csv,md,json}` and in the
+  AAAI table set.
 - Existing deterministic/offline results remain useful as quality, grounding,
   and cost gates.
 - The older saved-response model ablation remains a usage-plan/output-contract

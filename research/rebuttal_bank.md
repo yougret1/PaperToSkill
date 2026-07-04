@@ -198,8 +198,12 @@ Evidence to cite:
 - `results/real_reuse/failure_analysis.md`: row-level boundary modes include
   budget timeout, patch application, PaperToSkill-only success, solved-by-both
   ceiling, and artifact completion.
+- `results/real_reuse/swe_t1_source_context_followup.md`: SWE-T1 phase107
+  shared-source-context follow-up where both patches applied but both failed
+  the hidden test, clarifying a task-contract / hidden-objective boundary.
 - `paper/aaai/papertoskill_tables.tex`: the AAAI draft includes both the main
-  real-reuse table and the derived failure-boundary table.
+  real-reuse table, the derived failure-boundary table, and the SWE-T1
+  follow-up table.
 
 Do not say:
 

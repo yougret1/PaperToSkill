@@ -15,6 +15,7 @@ from typing import Any
 TABLE_SOURCES = {
     "real_reuse_main": "results/real_reuse/main_results_plan.csv",
     "real_reuse_failure_analysis": "results/real_reuse/failure_analysis.csv",
+    "real_reuse_swe_t1_source_context_followup": "results/real_reuse/swe_t1_source_context_followup.csv",
     "real_reuse_full_excerpt_sanity": "results/real_reuse/full_excerpt_sanity.csv",
     "main_results": "results/tables/main_results.csv",
     "transfer_ablation": "results/tables/transfer_ablation.csv",
@@ -290,6 +291,60 @@ def real_reuse_full_excerpt_sanity_checks(root: Path, tex_rows: list[list[str]])
     return checks
 
 
+def real_reuse_swe_t1_source_context_followup_checks(root: Path, tex_rows: list[list[str]]) -> list[Check]:
+    source_path = root / TABLE_SOURCES["real_reuse_swe_t1_source_context_followup"]
+    source = by_key(read_csv_rows(source_path), "Condition")
+    actual: dict[str, list[str]] = {}
+    for row in tex_rows:
+        if len(row) != 12:
+            raise ValueError(
+                "Unexpected width in tab:swe-t1-source-context-followup: "
+                f"expected 12, got {len(row)} for {row}"
+            )
+        actual[row[1]] = row
+    evidence = (
+        f"paper/aaai/papertoskill_tables.tex vs "
+        f"{TABLE_SOURCES['real_reuse_swe_t1_source_context_followup']}"
+    )
+    checks: list[Check] = []
+    column_map = [
+        ("task_id", 0, "Task ID"),
+        ("condition", 1, "Condition"),
+        ("first_pass_run", 2, "First-pass Run"),
+        ("first_pass_score", 3, "First-pass Score"),
+        ("first_pass_failure", 4, "First-pass Failure"),
+        ("first_pass_patch_applied", 5, "First-pass Patch Applied"),
+        ("followup_run", 6, "Follow-up Run"),
+        ("followup_score", 7, "Follow-up Score"),
+        ("followup_patch_applied", 8, "Follow-up Patch Applied"),
+        ("followup_test_passed", 9, "Follow-up Test Passed"),
+        ("followup_failure", 10, "Follow-up Failure"),
+        ("interpretation", 11, "Interpretation"),
+    ]
+    for condition, expected_row in source.items():
+        actual_row = actual.get(condition)
+        if not actual_row:
+            checks.append(
+                Check(
+                    f"paper_table_swe_t1_source_context_followup_{slug(condition)}_row",
+                    "fail",
+                    "missing row",
+                    evidence,
+                )
+            )
+            continue
+        for suffix, index, column in column_map:
+            checks.append(
+                check_value(
+                    f"paper_table_swe_t1_source_context_followup_{slug(condition)}_{suffix}",
+                    actual_row[index],
+                    expected_row[column],
+                    evidence,
+                )
+            )
+    return checks
+
+
 def transfer_checks(root: Path, tex_rows: list[list[str]]) -> list[Check]:
     source_path = root / TABLE_SOURCES["transfer_ablation"]
     source_rows = read_csv_rows(source_path)
@@ -422,6 +477,12 @@ def build_report(root: Path, tables_tex: Path) -> dict[str, Any]:
         checks.extend(real_reuse_main_checks(root, parse_tabular_rows(tex_text, "tab:real-reuse-main")))
         checks.extend(
             real_reuse_failure_checks(root, parse_tabular_rows(tex_text, "tab:real-reuse-failure-analysis"))
+        )
+        checks.extend(
+            real_reuse_swe_t1_source_context_followup_checks(
+                root,
+                parse_tabular_rows(tex_text, "tab:swe-t1-source-context-followup"),
+            )
         )
         checks.extend(
             real_reuse_full_excerpt_sanity_checks(root, parse_tabular_rows(tex_text, "tab:full-excerpt-sanity"))

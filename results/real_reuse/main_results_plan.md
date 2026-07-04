@@ -2,7 +2,7 @@
 
 Evidence boundary: this table defines the main real-reuse experiment rows for the paper. Score cells are generated from local raw rows when available; any future unfilled cells are planning placeholders, not downstream task-success evidence.
 
-- Raw scored rows read: 24
+- Raw scored rows read: 26
 
 | Task ID | Source Paper | Domain | Original-style Input | Required Output | Metric | Reference | Summary Score | PaperToSkill Score | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |

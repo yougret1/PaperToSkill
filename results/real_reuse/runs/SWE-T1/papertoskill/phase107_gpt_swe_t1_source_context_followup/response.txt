@@ -1,0 +1,18 @@
+I’ll inspect the rule and nearby tests to make a minimal change that matches the existing style, then verify if the local environment supports the requested test.I’m locating the repository files and references to L031 so the patch stays limited to this rule and its tests.```diff
+diff --git a/src/sqlfluff/rules/L031.py b/src/sqlfluff/rules/L031.py
+index 0f5bb43..b8e62e5 100644
+--- a/src/sqlfluff/rules/L031.py
++++ b/src/sqlfluff/rules/L031.py
+@@ -136,6 +136,11 @@ class Rule_L031(BaseRule):
+ 
+         # For each aliased table, check whether to keep or remove it.
+         for alias_info in to_check:
++            # If there are no join clauses, then there are no join conditions
++            # to simplify by removing aliases.
++            if not any(fe.get_child("join_clause") for fe in from_expression_elements):
++                continue
++
+             # If the same table appears more than once in the FROM clause with
+             # different alias names, do not consider removing its aliases.
+             # The aliases may have been introduced simply to make each
+```

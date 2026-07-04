@@ -2,7 +2,7 @@
 
 Evidence boundary: this table is derived from scored raw rows and summarizes first-pass boundary modes. It does not add new task success evidence or support aggregate downstream effectiveness.
 
-- Raw scored rows read: 24
+- Raw scored rows read: 26
 
 | Task ID | Summary Outcome | PaperToSkill Outcome | Boundary Mode | Contract Implication |
 | --- | --- | --- | --- | --- |

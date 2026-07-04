@@ -30,12 +30,13 @@ git ls-remote --heads origin main
 Test-NetConnection github.com -Port 443 | Format-List
 ```
 
-Current status as of 2026-07-04: the latest known record-sync phase was pushed
-to `origin/main`. Use `git log -1 --oneline` and
-`git ls-remote --heads origin main` to verify the current exact commit before
-making a new phase-save claim. If future pushes fail, diagnose transport
-separately from project correctness and keep local commits intact until the
-next successful push.
+Current status as of 2026-07-04: local commit `8b50758`
+(`Materialize SWE-T1 source context asset`) exists, but its first
+`git push origin main` attempt failed with GitHub HTTPS connectivity. Use
+`git log -1 --oneline` and `git ls-remote --heads origin main` to verify the
+current exact local/remote alignment before making a phase-save claim. Diagnose
+transport separately from project correctness and keep local commits intact
+until the next successful push.
 
 ## Local Text-To-Skill Pipeline
 
@@ -129,13 +130,17 @@ Regenerate preparation-time asset locks from the candidate manifests:
 python scripts\build_real_reuse_asset_locks.py
 ```
 
-Regenerate the paper-facing main real-reuse table scaffold:
+Regenerate the paper-facing main real-reuse table scaffold. When using the
+default raw rows path, the table builder should use
+`results/real_reuse/main_run_selection.json` to keep follow-up rows from
+silently replacing the pre-registered main rows:
 
 ```powershell
 python scripts\build_real_reuse_paper_tables.py
 ```
 
-Regenerate the derived real-reuse failure-boundary analysis table:
+Regenerate the derived real-reuse failure-boundary analysis table. It should
+use the same main-row selection policy as the main table:
 
 ```powershell
 python scripts\build_real_reuse_failure_analysis.py
@@ -211,15 +216,16 @@ python scripts\prepare_real_reuse_swe_fixture.py --task SWE-T1 --workspace-mode 
 python scripts\prepare_real_reuse_swe_fixture.py --task SWE-T2 --repo-source path\to\local_repo_snapshot --issue-file path\to\failing_test.md --test-command "python -m pytest path\to\tests" --output-dir benchmarks\real_reuse\assets\SWE-T2
 ```
 
-Current SWE-T1 follow-up boundary: the first-pass SWE-T1 row remains scored as
-0.000/0.000 because both generated patches failed to apply. A follow-up may
-expose the same locked SQLFluff source context to both Summary and PaperToSkill
-because the one-shot runner did not actually provide repository-inspection
-tools despite the prompt's wording. Do not overwrite the first-pass evidence;
-label any rerun as a shared-source-context follow-up.
+Current SWE-T1 follow-up boundary: the first-pass SWE-T1 row remains the
+paper-facing main row and is scored as 0.000/0.000 because both generated
+patches failed to apply. The shared-source-context follow-up has already run as
+`phase107_gpt_swe_t1_source_context_followup`: both Summary and PaperToSkill
+still scored 0.000, but both patches applied and then failed the hidden target
+test. Treat phase107 as diagnostic follow-up evidence about
+task-contract/hidden-objective mismatch, not as a main-table replacement.
 
-Prepare the SWE-T1 source-context follow-up fixture after the source-context
-preparer support is present:
+To reproduce or refresh the SWE-T1 source-context fixture, expose the same
+locked SQLFluff source slice to both conditions:
 
 ```powershell
 python scripts\prepare_real_reuse_swe_fixture.py --task SWE-T1 --workspace-mode external --repo-source 'D:\a_work\gitee\sqlfluff__sqlfluff' --swe-bench-parquet 'D:\a_work\gitee\SWE-bench_Lite\data\dev-00000-of-00001.parquet' --test-command 'D:\a_work\gitee\venvs\sqlfluff__sqlfluff-1625\Scripts\python.exe -m pytest test/cli/commands_test.py::test__cli__command_directed -q' --source-context-file 'D:\a_work\gitee\sqlfluff__sqlfluff\src\sqlfluff\rules\L031.py' --source-context-label 'src/sqlfluff/rules/L031.py @ 14e1a23a3166b9a645a16de96f694c77a5d4abb7' --output-dir benchmarks\real_reuse\assets\SWE-T1
@@ -233,24 +239,26 @@ python scripts\score_real_reuse_swe.py --task SWE-T1 --patch path\to\candidate.p
 python scripts\score_real_reuse_swe.py --task SWE-T2 --patch path\to\candidate.patch --workspace 'D:\a_work\gitee\astropy__astropy' --test-command-file benchmarks\real_reuse\assets\SWE-T2\target_test_command.txt --test-patch benchmarks\real_reuse\assets\SWE-T2\scorer_only\test.patch --output-json path\to\metric.json
 ```
 
-To rerun SWE rows after a pre-registered scorer/prompt/patch-contract fix, run
-Summary and PaperToSkill conditions with the same no-mid-run-human rule:
+To rerun SWE rows after a pre-registered scorer, prompt-contract,
+source-context, budget, or patch-contract fix, run Summary and PaperToSkill
+conditions with the same no-mid-run-human rule. The phase107 source-context
+follow-up used a longer provider timeout/retry budget and a longer local
+scorer timeout:
 
 ```powershell
 $env:PAPERTOSKILL_GPT_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
 $env:PAPERTOSKILL_GPT_OPENAI_API_KEY = "<set locally>"
-python scripts\run_real_reuse_swe.py --task SWE-T1 --task SWE-T2 --condition summary --condition papertoskill --model-family GPT-family --model-alias gpt-5.5 --wire-api openai_responses --timeout-seconds 300 --max-attempts 5 --retry-delay-seconds 5 --run-id phaseXX_gpt_swe_real_reuse
+python scripts\run_real_reuse_swe.py --task SWE-T1 --condition summary --condition papertoskill --model-family GPT-family --model-alias gpt-5.5 --wire-api openai_responses --timeout-seconds 300 --max-attempts 5 --retry-delay-seconds 5 --score-timeout-seconds 120 --run-id phaseXX_gpt_swe_source_context_followup
 Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_BASE_URL -ErrorAction SilentlyContinue
 Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_API_KEY -ErrorAction SilentlyContinue
 ```
 
 Do not treat missing credentials, provider errors, or missing SWE fixture assets
 as model-quality failures. SWE-T1 and SWE-T2 each have one scored GPT-family
-run; SWE-T1 is a failed patch-apply row for both Summary and PaperToSkill,
-while SWE-T2 is a positive PaperToSkill-vs-Summary row. Do not turn either
-single task into an aggregate SWE-agent or eight-task claim. All eight
-real-reuse rows have a first-pass score, but the evidence is mixed and should
-be stabilized before stronger claims.
+main run; SWE-T1 also has the phase107 shared-source-context follow-up. Do not
+turn either single task into an aggregate SWE-agent or eight-task claim. All
+eight real-reuse rows have a first-pass score, but the evidence is mixed and
+should be stabilized before stronger claims.
 
 Run the locked Reflexion Summary-vs-PaperToSkill rows with the GPT-family
 Responses profile. Set the API key only in the shell, never in tracked files:
@@ -339,22 +347,26 @@ Planned main task grid:
 
 Current execution order:
 
-1. Stabilize the core real-reuse experiment first, starting with the SWE-T1
-   shared-source-context follow-up while preserving the scored 0.000/0.000
-   first-pass row.
-2. Pre-register any scorer, prompt-contract, source-context, budget, or
+1. Treat paper-facing main-row selection and the dedicated SWE-T1 phase107
+   follow-up report as complete. `results/real_reuse/main_run_selection.json`
+   keeps phase107 from overwriting the first-pass SWE-T1 main-table cells, and
+   `results/real_reuse/swe_t1_source_context_followup.{csv,md,json}` reports
+   the paired follow-up.
+2. Continue stabilizing failure-heavy core real-reuse rows, with SNAP
+   artifact-completion / budget boundaries as the next likely inspection area.
+3. Pre-register any scorer, prompt-contract, source-context, budget, or
    artifact-contract change before rerunning a row.
-3. Rerun affected Summary and PaperToSkill conditions under the same locked
+4. Rerun affected Summary and PaperToSkill conditions under the same locked
    task, input/output, scorer, local setting, and no-mid-run-human rule.
-4. Collect auxiliary data opportunistically during core reruns, including
+5. Collect auxiliary data opportunistically during core reruns, including
    provider availability, failure reasons, context/token proxies, and raw rows
    needed for future real-reuse LLM ablation.
-5. Regenerate `results/real_reuse/main_results_plan.*`,
+6. Regenerate `results/real_reuse/main_results_plan.*`,
    `results/real_reuse/failure_analysis.*`, any affected paper tables, and
    readiness reports.
-6. Aggregate LLM ablation, quality/grounding evidence, and optional appendix
+7. Aggregate LLM ablation, quality/grounding evidence, and optional appendix
    analyses only after the core rows are stable.
-7. Keep user study last and optional, only for user-efficiency or usability
+8. Keep user study last and optional, only for user-efficiency or usability
    claims.
 
 Required boundaries:
@@ -832,8 +844,9 @@ python scripts\check_paper_tables.py `
 ```
 
 This checker compares `paper/aaai/papertoskill_tables.tex` against the
-real-reuse main, failure-boundary, and Full Excerpt sanity CSVs as well as
-`results/tables/main_results.csv`, `transfer_ablation.csv`,
+real-reuse main, failure-boundary, SWE-T1 source-context follow-up, and Full
+Excerpt sanity CSVs as well as `results/tables/main_results.csv`,
+`transfer_ablation.csv`,
 `context_cost_proxy_tokenizer.csv`, and `auto_note_comparison.csv`. Passing it
 prevents manuscript-table drift, but does not add new empirical evidence.
 

@@ -7,19 +7,22 @@ Current date: 2026-07-04.
 
 ## Current Task
 
-- Latest user request: modify the other related planning/record files,
-  including the current `C:\Users\19351\Desktop\tem\toHuman.md`, while
-  excluding local logs.
-- Local logs excluded from this sync: `research/run_logs/**` and
-  `research/stage_log.md`.
+- Latest user request / active goal: save the current phase with git, upload to
+  GitHub, then continue the core real-reuse main experiment. Use generous
+  timeout/retry budgets for LLM service calls, keep provider instability
+  separate from method quality, and record network/download blockers in
+  `C:\Users\19351\Desktop\tem\toHuman.md` before continuing other work.
+- Local logs remain excluded unless explicitly doing a phase log:
+  `research/run_logs/**` and `research/stage_log.md`.
 - `C:\Users\19351\Desktop\tem\ok.txt` was absent at the latest check.
-- Preserve the pre-existing in-progress SWE-T1 source-context code changes in
-  `scripts/prepare_real_reuse_swe_fixture.py`,
-  `scripts/run_real_reuse_swe.py`,
-  `tests/test_prepare_real_reuse_swe_fixture.py`, and
-  `tests/test_run_real_reuse_swe.py`. They were already dirty before this
-  records-only pass and should not be reverted or silently folded into a
-  records-only commit.
+- Preserve the completed phase107 row-selection and follow-up-reporting changes
+  already in the worktree. They include appended SWE-T1 follow-up raw rows and
+  run outputs, row-selection support in
+  `scripts/build_real_reuse_paper_tables.py` and
+  `scripts/build_real_reuse_failure_analysis.py`,
+  `results/real_reuse/main_run_selection.json`, and
+  `results/real_reuse/swe_t1_source_context_followup.{csv,md,json}`. Do not
+  revert them during this records-only sync.
 
 ## Record Sync Completed This Turn
 
@@ -47,10 +50,19 @@ Current date: 2026-07-04.
 - Runbook/queue/review records should point future execution back to the
   core real-reuse stabilization path and use generous model-call
   timeout/retry budgets because the third-party service is unstable.
-- Current records should mention the immediate SWE-T1 source-context follow-up
-  boundary: preserve the original first-pass 0.000/0.000 evidence,
-  pre-register the shared source-context change, and rerun Summary and
-  PaperToSkill under the same locked scorer/no-mid-run-human rule.
+- Current records should mention the completed SWE-T1 source-context follow-up
+  boundary: phase107 exposed the same locked SQLFluff source slice to Summary
+  and PaperToSkill; both calls succeeded; both patches applied; both hidden
+  tests failed; both task scores remain 0.000. Preserve the original
+  first-pass SWE-T1 rows as the paper-facing main rows and report phase107 only
+  as shared-source-context follow-up evidence.
+- Current records should mention that `results/real_reuse/main_run_selection.json`
+  locks paper-facing main-table rows so follow-up raw rows do not silently
+  replace the pre-registered main experiment cells.
+- Current records should mention that the dedicated SWE-T1 source-context
+  follow-up table/report has been generated and that
+  `scripts/check_paper_tables.py --strict` passed with 250 ready checks and 0
+  failed checks after adding the follow-up table consistency checks.
 
 ## Current Core Experiment State
 
@@ -70,6 +82,12 @@ Current date: 2026-07-04.
 - Evidence boundary: this is mixed first-pass downstream stress-test and
   failure-boundary evidence, not aggregate PaperToSkill superiority over
   Summary.
+- SWE-T1 phase107 shared-source-context follow-up is complete locally with
+  Summary/PaperToSkill both `0.000/0.000`. Unlike the first-pass row, both
+  candidate patches applied; the failure reason is `test_command_failed`
+  because the hidden test expected the specific L031 warning-message change
+  while both candidates edited rule logic. This is diagnostic follow-up
+  evidence, not a main-table replacement.
 
 ## Current Auxiliary Evidence Policy
 
@@ -107,22 +125,22 @@ Current date: 2026-07-04.
 
 ## Immediate Next Actions
 
-1. Finish verifying this record-sync pass without touching local logs.
-2. Return to the SWE-T1 source-context follow-up: materialize the shared
-   model-visible source context from the locked SQLFluff source file, confirm
-   the manifest exposes it as model-visible context only, and document the
-   follow-up as paired Summary vs PaperToSkill rather than a replacement for
-   the first-pass row.
-3. Rerun affected Summary and PaperToSkill conditions under the same locked
-   task, input/output, scorer, local setting, and no-mid-run-human rule.
-4. Continue SNAP artifact-completion/budget inspection after SWE-T1 or in
-   parallel only when it does not disrupt the core rerun record.
-5. During core reruns, collect auxiliary raw data where cheap: provider
+1. Commit and push the verified phase107 row-selection / follow-up-reporting
+   and record-sync work. If GitHub push fails again, update `toHuman.md` with
+   command, error, and blocked remote-backup artifact, then continue local work.
+2. Continue SNAP artifact-completion/budget inspection or the next
+   pre-registered failure-heavy real-reuse follow-up, keeping Summary and
+   PaperToSkill paired under the same task/scorer contract.
+3. During core reruns, collect auxiliary raw data where cheap: provider
    availability, failure reasons, context/token proxies, and raw rows needed
    for future real-reuse LLM ablation.
-6. After result changes, regenerate `results/real_reuse/main_results_plan.*`,
-   `results/real_reuse/failure_analysis.*`, affected paper tables, readiness
-   reports, and memory.
+4. Run broader verification gates before the next phase save:
+   `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
+   `check_reproducibility_package.py`, `check_goal_completion.py`,
+   `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
+5. Retry `git push origin main` later for local commit `8b50758` and the next
+   phase commit; GitHub HTTPS failure is a remote-backup blocker, not an
+   experiment failure.
 
 ## Boundaries
 

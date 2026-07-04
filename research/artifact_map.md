@@ -219,7 +219,7 @@
 | `scripts/build_real_reuse_fixture_manifests.py` | Materializes fixture requirement manifests for the eight real-reuse task contracts | Created |
 | `scripts/build_real_reuse_fixture_candidates.py` | Materializes candidate asset/preparation manifests for the eight real-reuse fixture contracts | Created |
 | `scripts/build_real_reuse_asset_locks.py` | Materializes preparation-time asset locks for the eight real-reuse tasks from task, fixture, and candidate manifests | Created |
-| `scripts/build_real_reuse_paper_tables.py` | Materializes the paper-facing real-reuse main-results table scaffold from the benchmark spec | Created |
+| `scripts/build_real_reuse_paper_tables.py` | Materializes the paper-facing real-reuse main-results table from the benchmark spec and raw rows, using `results/real_reuse/main_run_selection.json` to keep follow-up rows from silently replacing pre-registered main rows | Created |
 | `scripts/prepare_real_reuse_reflexion_fixture.py` | Prepares locked REF-T1/REF-T2 local fixture assets, condition contexts, sha256 manifest entries, and scorer-only answer/checker separation | Created |
 | `scripts/score_real_reuse_reflexion.py` | Scores REF-T1 answer-key outputs with EM/F1 and REF-T2 HumanEval candidates with the hidden objective checker | Created |
 | `scripts/run_real_reuse_reflexion.py` | Runs locked REF-T1/REF-T2 Summary-vs-PaperToSkill conditions, saves prompts/responses/metrics/raw rows, and separates provider availability from model quality | Created |
@@ -248,7 +248,8 @@
 | `scripts/build_failure_case_archive.py` | Builds failure-case archive JSON, Markdown, and CSV outputs | Created |
 | `scripts/check_reproducibility_package.py` | Checks local reproducibility package readiness and pending external evidence | Created |
 | `scripts/check_usage_examples.py` | Verifies usage-example files, prompt/response slots, and an offline auto-note-to-skill example chain | Created |
-| `scripts/check_paper_tables.py` | Verifies AAAI LaTeX result-table values against generated CSV result tables | Created |
+| `scripts/build_real_reuse_swe_t1_source_context_followup.py` | Builds the dedicated SWE-T1 shared-source-context follow-up table from first-pass and phase107 raw rows | Created |
+| `scripts/check_paper_tables.py` | Verifies AAAI LaTeX result-table values against generated CSV result tables, including real-reuse main, failure-boundary, SWE-T1 source-context follow-up, and Full Excerpt sanity tables | Created |
 | `scripts/check_paper_claims.py` | Verifies paper-facing text avoids unsupported overclaims and includes required evidence boundaries | Created |
 | `scripts/check_submission_review.py` | Verifies review, rebuttal, and submission checklist handoff artifacts against current evidence | Created |
 | `scripts/check_goal_completion.py` | Audits the active user goal against local evidence and exposes remaining pending requirements | Created |
@@ -418,6 +419,7 @@
 | `results/real_reuse/aide_run_report.json` | Machine-readable run report for the locked AIDE-T1/AIDE-T2 GPT-family real-reuse execution | Created |
 | `results/real_reuse/aide_t1_baseline_metric.json` | Baseline-submission scorer validation for the locked AIDE-T1 fixture | Created |
 | `results/real_reuse/aide_t2_weak_script_metric.json` | Weak-script scorer validation for the locked AIDE-T2 fixture | Created |
+| `results/real_reuse/main_run_selection.json` | Paper-facing main-row selection file that pins first-pass/pre-registered real-reuse rows so follow-up raw rows such as SWE-T1 phase107 remain auditable without replacing main-table cells | Created |
 | `results/real_reuse/main_results_plan.csv` | Data source for the AAAI real-reuse main experiment table; all eight rows are filled from raw rows | Created |
 | `results/real_reuse/main_results_plan.md` | Human-readable real-reuse main experiment table with all eight rows filled from raw rows | Created |
 | `results/real_reuse/main_results_plan.json` | Machine-readable real-reuse main experiment table generated from raw rows and planned task specs | Created |
@@ -425,6 +427,9 @@
 | `results/real_reuse/failure_analysis.csv` | Data source for the AAAI real-reuse failure-boundary table | Created |
 | `results/real_reuse/failure_analysis.md` | Human-readable first-pass real-reuse failure-boundary analysis | Created |
 | `results/real_reuse/failure_analysis.json` | Machine-readable first-pass real-reuse failure-boundary analysis | Created |
+| `results/real_reuse/swe_t1_source_context_followup.csv` | Data source for the AAAI SWE-T1 shared-source-context follow-up table; phase107 remains diagnostic follow-up evidence, not a main-row replacement | Created |
+| `results/real_reuse/swe_t1_source_context_followup.md` | Human-readable SWE-T1 shared-source-context follow-up report comparing first-pass patch-apply failures with phase107 patch-applied / hidden-test-failed outcomes | Created |
+| `results/real_reuse/swe_t1_source_context_followup.json` | Machine-readable SWE-T1 shared-source-context follow-up report and evidence boundary | Created |
 | `scripts/build_real_reuse_full_excerpt_sanity.py` | Builds the auxiliary Full Excerpt sanity table from pre-registered tasks, raw rows, and context paths | Created |
 | `results/real_reuse/full_excerpt_sanity.csv` | Data source for the AAAI Full Excerpt sanity table; the pre-registered three-row sanity subset is scored | Created |
 | `results/real_reuse/full_excerpt_sanity.md` | Human-readable Full Excerpt sanity check with local whitespace token proxies | Created |

@@ -1,0 +1,17 @@
+I’ll inspect the rule and nearby tests, then make the smallest change that prevents L031 from firing on a single aliased table without joins.I’m checking the repository layout and current implementation so the patch matches the local code rather than only the prompt excerpt.```diff
+diff --git a/src/sqlfluff/rules/L031.py b/src/sqlfluff/rules/L031.py
+index 4f9f9b2..2a6d7d4 100644
+--- a/src/sqlfluff/rules/L031.py
++++ b/src/sqlfluff/rules/L031.py
+@@ -137,6 +137,10 @@ class Rule_L031(BaseRule):
+         # A buffer to keep any violations.
+         violation_buff = []
+ 
++        # This rule is only relevant when multiple table expressions are present.
++        if len(from_expression_elements) <= 1:
++            return None
++
+         to_check = list(
+             self._filter_table_expressions(base_table, from_expression_elements)
+         )
+```
