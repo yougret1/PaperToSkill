@@ -311,17 +311,15 @@ Current supported claims:
   task-contract decision), `ef7dc1b` (memory sync after contract decisions),
   `cdf67b9` (SWE-T1 issue-aligned contract), `0f3a499` (SWE scorer override
   support), `599382d` (SWE-T1 issue-aligned follow-up table), `12e97df`
-  (phase110 GitHub push blocker), and `24f8029` (phase110 push-status memory
-  clarification). Prior thread
-  state recorded `0f3a4997badd333f8399c6274659af444997a765` as pushed to
-  `origin/main`, but fresh `git push origin main` and
-  `git ls-remote --heads origin main` attempts on 2026-07-05 failed with
-  GitHub HTTPS connection-reset / port-443 transport errors. Keep GitHub
-  transport failures separate from experiment correctness and verify exact
-  local/remote
-  alignment with `git status -sb`, `git log -3 --oneline`, and
-  `git ls-remote --heads origin main` before claiming a new remote-backed phase
-  save.
+  (phase110 GitHub push blocker), `24f8029` (phase110 push-status memory
+  clarification), and `cdeab1f` (phase110 diagnostic paper/memory
+  clarification). The temporary 2026-07-05 GitHub HTTPS connection-reset /
+  port-443 failures recovered: `git push origin main` succeeded and
+  `git ls-remote --heads origin main` verified
+  `cdeab1f05309cfc1adf53f4528459244dd6f55e4 refs/heads/main`. Verify exact
+  local/remote alignment with `git status -sb`, `git log -3 --oneline`, and
+  `git ls-remote --heads origin main` before claiming any later remote-backed
+  phase save.
 - Core real-reuse stabilization guard commit `f44da1b` (`Guard real-reuse
   planned outputs`) is pushed after the record-sync save. It removes the
   deprecated `domain_robustness` planned output from
@@ -380,9 +378,10 @@ Current supported claims:
   scorer/contract can close for both conditions. It does not show a
   PaperToSkill advantage and does not replace the locked first-pass SWE-T1
   main row unless explicitly promoted later. Local commit `599382d` saves this
-  table and the rebuilt AAAI PDF locally; follow-up local commits `12e97df` and
-  `24f8029` only record push-status/memory corrections. This range is not
-  remote-backed yet because GitHub push failed with transport errors.
+  table and the rebuilt AAAI PDF locally; follow-up commits `12e97df`,
+  `24f8029`, and `cdeab1f` record push-status and paper/memory boundary
+  clarifications. This range is now remote-backed at `origin/main` through
+  `cdeab1f05309cfc1adf53f4528459244dd6f55e4`.
 - Phase109 has collected scored real-reuse LLM ablation rows only on the
   pre-registered stabilized slices. Current collected GPT-family pairs are
   REF-T2 1.000/1.000,
@@ -401,13 +400,12 @@ Current supported claims:
 - Phase 89 and the 2026-07-04 record-sync push both recovered GitHub HTTPS
   transport interruptions. Use `git status -sb` and a successful remote check
   for the latest exact alignment before each phase-save claim.
-- Latest phase artifact checkpoint:
-  `599382d Add SWE-T1 issue-aligned follow-up table`; later local commits
-  `12e97df` and `24f8029` only record push-status/memory corrections. The
-  branch is ahead of `origin/main`; three `git push origin main` attempts and
-  one `git ls-remote --heads origin main` attempt on 2026-07-05 failed with
-  GitHub HTTPS transport errors. Rerun remote verification before making
-  remote-backed claims.
+- Latest remote-backed phase checkpoint:
+  `cdeab1f Clarify phase110 diagnostics in paper and memory`. `origin/main`
+  was verified at
+  `cdeab1f05309cfc1adf53f4528459244dd6f55e4 refs/heads/main` after the
+  temporary 2026-07-05 GitHub HTTPS transport errors recovered. Rerun remote
+  verification before making later remote-backed claims.
 
 Current unsupported claims:
 

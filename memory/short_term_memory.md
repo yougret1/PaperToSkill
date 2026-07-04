@@ -65,14 +65,11 @@ Current date: 2026-07-05.
   contains the appended phase110 raw rows, run artifacts, run report,
   dedicated CSV/MD/JSON table, builder/test, paper table, rebuilt AAAI PDF, and
   table/package checker/report updates.
-- Current remote-backup status: local `main` contains phase artifact commit
-  `599382d` and subsequent push-status memory records, and remains ahead of
-  `origin/main`. Three `git push origin main` attempts on 2026-07-05 failed
-  with GitHub HTTPS transport errors (`Recv failure: Connection was reset`,
-  `Failed to connect to github.com port 443`, then `Recv failure: Connection
-  was reset`), and `git ls-remote --heads origin main` failed with a port-443
-  connection error. Do not claim the phase110 table commit is remote-backed
-  until a future push and `git ls-remote` verification succeed.
+- Current remote-backup status: GitHub backup recovered. Local `main` and
+  `origin/main` are aligned at
+  `cdeab1f05309cfc1adf53f4528459244dd6f55e4` after pushing
+  `cdeab1f Clarify phase110 diagnostics in paper and memory` and verifying
+  `git ls-remote --heads origin main`.
 - The current discussion policy is: stabilize the core eight-row real-reuse
   evidence first; collect auxiliary raw data opportunistically; keep LLM
   ablation auxiliary, component ablation appendix-only, and user study
@@ -106,11 +103,12 @@ Current date: 2026-07-05.
   (`Pre-register SWE-T1 issue-aligned contract`), `0f3a499`
   (`Support SWE scorer override runs`), `599382d`
   (`Add SWE-T1 issue-aligned follow-up table`), `12e97df`
-  (`Record phase110 GitHub push blocker`), and `24f8029`
-  (`Clarify phase110 push status memory`) are the current local saved
-  phase/checkpoint range, subject to fresh remote verification. The
-  earlier GitHub push failures in this turn were transient transport
-  availability metadata, not experiment correctness evidence.
+  (`Record phase110 GitHub push blocker`), `24f8029`
+  (`Clarify phase110 push status memory`), and `cdeab1f`
+  (`Clarify phase110 diagnostics in paper and memory`) are pushed to
+  `origin/main` and verified by `git ls-remote --heads origin main`. The
+  earlier GitHub push failures were transient transport availability metadata,
+  not experiment correctness evidence.
 - Verification before the `599382d` phase save passed:
   `python -m unittest tests.test_build_real_reuse_swe_t1_issue_aligned_followup
   tests.test_check_paper_tables tests.test_check_reproducibility_package -v`,
@@ -124,15 +122,12 @@ Current date: 2026-07-05.
 - `C:\Users\19351\Desktop\tem\toHuman.md` should say no immediate human action
   is required, and `ok.txt` should only be created for completed human-fidelity
   annotation or a concrete placed core asset.
-- Current GitHub transport note: local phase artifact commit `599382d` and
-  later push-status memory records `12e97df` and `24f8029` are not yet
-  verified as pushed. Push attempts on
-  2026-07-05 failed with `Recv failure: Connection was reset`, `Failed to
-  connect to github.com port 443`, and `Recv failure: Connection was reset`;
-  `git ls-remote --heads origin main` also failed with port-443 connection
-  failure. Before claiming any future phase save is remote-backed, rerun
-  `git status -sb`, `git log -3 --oneline`, and
-  `git ls-remote --heads origin main`.
+- Current GitHub transport note: previous 2026-07-05 connection-reset /
+  port-443 failures have recovered. `git push origin main` succeeded and
+  `git ls-remote --heads origin main` returned
+  `cdeab1f05309cfc1adf53f4528459244dd6f55e4 refs/heads/main`. Before claiming
+  any later phase save is remote-backed, rerun `git status -sb`,
+  `git log -3 --oneline`, and `git ls-remote --heads origin main`.
 - Historical Claude-family availability checkpoint: after record-sync commit
   `977b2b9` (`Sync experiment planning records`), Claude-family REF-T2 was
   retried from the local Claude API doc key with the v0 300-second / 5-attempt
@@ -289,11 +284,9 @@ Current date: 2026-07-05.
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-6. Latest phase artifact commit: `599382d Add SWE-T1 issue-aligned follow-up
-   table`; later local commits may only record push status. None of these
-   phase110 commits are remote-backed yet because GitHub HTTPS push and
-   `ls-remote` failed with connection errors. Retry remote backup when network
-   availability recovers.
+6. Latest remote-backed phase checkpoint:
+   `cdeab1f Clarify phase110 diagnostics in paper and memory`, verified on
+   `origin/main` by `git ls-remote --heads origin main`.
 7. No experiment-side human action is required.
 
 ## Boundaries

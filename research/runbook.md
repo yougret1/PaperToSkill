@@ -30,15 +30,16 @@ git ls-remote --heads origin main
 Test-NetConnection github.com -Port 443 | Format-List
 ```
 
-Current status as of 2026-07-05: local `main` contains
-`599382d Add SWE-T1 issue-aligned follow-up table`, followed by local
-push-status memory records `12e97df` and `24f8029`. Prior thread state
-recorded `0f3a4997badd333f8399c6274659af444997a765` as pushed to
-`origin/main`, but fresh `git push origin main` and
-`git ls-remote --heads origin main` attempts on 2026-07-05 failed with GitHub
-HTTPS connection-reset / port-443 transport errors. Treat this as GitHub
-transport availability, not experiment correctness. Re-run remote verification
-before making future remote-backed checkpoint claims.
+Current status as of 2026-07-05: the temporary GitHub HTTPS transport blocker
+has recovered. `git push origin main` succeeded after the phase110 diagnostic
+paper/memory clarification, and `git ls-remote --heads origin main` verified:
+
+```text
+cdeab1f05309cfc1adf53f4528459244dd6f55e4 refs/heads/main
+```
+
+Re-run remote verification before making future remote-backed checkpoint
+claims.
 
 ## Local Text-To-Skill Pipeline
 
