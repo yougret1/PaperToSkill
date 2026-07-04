@@ -30,15 +30,15 @@ git ls-remote --heads origin main
 Test-NetConnection github.com -Port 443 | Format-List
 ```
 
-Current status as of 2026-07-04: the current local/tracking checkpoint is
-`7ee44ad0edac3700ec7221ca0978f22558c54044` (`Track Claude ablation
-availability metadata`), after the `977b2b9` experiment-planning record sync
-and the phase109 LLM-ablation availability saves. Treat this as a
-remote-backup checkpoint, not an experiment result. Before making any new
-phase-save claim, verify the exact current remote head with `git status -sb`
-and `git ls-remote --heads origin main`. Keep future GitHub transport issues
-separate from experiment correctness, and do not call future phase work
-remote-backed until a new phase-save push is verified.
+Current status as of 2026-07-04: the latest local committed checkpoint is
+`641eef055ebbee26e7092d0bf6a4b49eb68efcc6` (`Sync memory after real-reuse
+guard`), after `d248878` (`Sync core real-reuse stabilization records`) and
+`f44da1b` (`Guard real-reuse planned outputs`). Treat this as a phase
+checkpoint, not an experiment result. During the current record-sync turn,
+`git ls-remote --heads origin main` returned `Recv failure: Connection was
+reset`, so do not make a fresh remote-backed phase-save claim until that
+verification succeeds. Keep future GitHub transport issues separate from
+experiment correctness.
 
 ## Local Text-To-Skill Pipeline
 

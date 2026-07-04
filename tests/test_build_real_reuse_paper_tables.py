@@ -329,6 +329,48 @@ class BuildRealReusePaperTablesTest(unittest.TestCase):
                 rows = {row["Task ID"]: row for row in csv.DictReader(handle)}
             self.assertEqual("0.000", rows["SWE-T1"]["Summary Score"])
             self.assertEqual("0.000", rows["SWE-T1"]["PaperToSkill Score"])
+            output_md_text = (tmp_path / "main_results_plan.md").read_text(encoding="utf-8")
+            self.assertIn(f"Row selection file: {selection}", output_md_text)
+            self.assertIn("Row selection entries: 2", output_md_text)
+            self.assertIn("diagnostic follow-up rows remain auditable", output_md_text)
+            output_json_payload = json.loads((tmp_path / "main_results_plan.json").read_text(encoding="utf-8"))
+            self.assertEqual(str(selection), output_json_payload["row_selection"]["path"])
+            self.assertEqual(2, output_json_payload["row_selection"]["entries"])
+            self.assertIn(
+                "diagnostic follow-up rows remain auditable",
+                output_json_payload["row_selection"]["boundary"],
+            )
+
+    def test_current_main_results_reports_default_row_selection_metadata(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            output_md = tmp_path / "main_results_plan.md"
+            output_json = tmp_path / "main_results_plan.json"
+
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--output-csv",
+                    str(tmp_path / "main_results_plan.csv"),
+                    "--output-md",
+                    str(output_md),
+                    "--output-json",
+                    str(output_json),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            output_md_text = output_md.read_text(encoding="utf-8")
+            expected_selection = str(ROOT / "results" / "real_reuse" / "main_run_selection.json")
+            self.assertIn(f"Row selection file: {expected_selection}", output_md_text)
+            self.assertIn("Row selection entries: 16", output_md_text)
+            payload = json.loads(output_json.read_text(encoding="utf-8"))
+            self.assertEqual(expected_selection, payload["row_selection"]["path"])
+            self.assertEqual(16, payload["row_selection"]["entries"])
+            self.assertIn("diagnostic follow-up rows remain auditable", payload["row_selection"]["boundary"])
 
 
 def json_line(task_id: str, condition: str, task_score: float, run_id: str = "run") -> str:

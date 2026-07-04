@@ -7,12 +7,15 @@ Current date: 2026-07-04.
 
 ## Current Task
 
-- Latest user request: save the record-sync work, upload it to GitHub, then
-  continue the project. Record-sync commit `d248878` (`Sync core real-reuse
-  stabilization records`) and core-stabilization guard commit `f44da1b`
-  (`Guard real-reuse planned outputs`) were pushed to `origin/main`. Current
-  local work continues without touching local logs (`research/run_logs/**` and
-  `research/stage_log.md`).
+- Latest user request: update the other related planning/handoff/memory records,
+  including `C:\Users\19351\Desktop\tem\toHuman.md`, while leaving local logs
+  unchanged. This is record-sync-only work; do not modify
+  `research/run_logs/**` or `research/stage_log.md`.
+- Row-selection metadata for paper-facing real-reuse outputs is now
+  implemented and verified locally: `scripts/build_real_reuse_paper_tables.py`
+  and `scripts/build_real_reuse_failure_analysis.py` write row-selection path,
+  entry count, and boundary text into Markdown/JSON outputs so follow-up raw
+  rows cannot be mistaken for main-table replacements.
 - Current execution priority remains the core real-reuse main experiment.
   SWE-T1 source-context reporting, SNAP artifact-execution diagnosis, and the
   phase108 SNAP executable-artifact follow-up are complete and remain
@@ -22,11 +25,14 @@ Current date: 2026-07-04.
   ablation auxiliary, component ablation appendix-only, and user study
   last/optional. Provider latency, timeouts, and retry counts are availability
   metadata, not effectiveness metrics.
-- The latest substantive pushed checkpoint is `f44da1b` (`Guard real-reuse
-  planned outputs`), which was pushed after `d248878`, `7ee44ad`, and
-  `977b2b9`. A later memory-sync commit may sit on top; verify the exact
-  current remote head with `git status -sb` and `git ls-remote --heads origin
-  main` before making any fresh phase-save claim.
+- The latest local committed checkpoint is `641eef0` (`Sync memory after
+  real-reuse guard`), on top of `f44da1b` (`Guard real-reuse planned outputs`)
+  and `d248878` (`Sync core real-reuse stabilization records`). The last
+  previously recorded pushed checkpoint in `toHuman.md` is
+  `641eef055ebbee26e7092d0bf6a4b49eb68efcc6`. A fresh remote verification in
+  this record-sync turn via `git ls-remote --heads origin main` failed with
+  `Recv failure: Connection was reset`, so do not make a new remote-backed
+  phase-save claim until remote verification succeeds.
 - Commits `e597fcf` (`Add AIDE real-reuse LLM ablation row`), `1521b72`
   (`Record AIDE ablation push blocker`), `200419a`
   (`Add SWE real-reuse LLM ablation row`), `cb20cb1`
@@ -37,10 +43,11 @@ Current date: 2026-07-04.
   (`Record Claude LLM ablation availability`), `977b2b9`
   (`Sync experiment planning records`), `7ee44ad`
   (`Track Claude ablation availability metadata`), `d248878`
-  (`Sync core real-reuse stabilization records`), and `f44da1b`
-  (`Guard real-reuse planned outputs`) are the current saved phase/checkpoint
-  range. The earlier GitHub HTTPS reset / port-443 blocker is resolved for the
-  previously pushed commits.
+  (`Sync core real-reuse stabilization records`), `f44da1b`
+  (`Guard real-reuse planned outputs`), and `641eef0`
+  (`Sync memory after real-reuse guard`) are the current saved
+  phase/checkpoint range. The current remote re-verification failure is GitHub
+  transport availability metadata, not experiment correctness evidence.
 - Verification before the phase save passed:
   `python -m unittest tests.test_build_real_reuse_llm_ablation_results -v`
   (4 tests), `check_real_reuse_benchmark.py --strict`,
@@ -53,10 +60,11 @@ Current date: 2026-07-04.
 - `C:\Users\19351\Desktop\tem\toHuman.md` should say no immediate human action
   is required, and `ok.txt` should only be created for completed human-fidelity
   annotation or a concrete placed core asset.
-- Current GitHub transport note: `git push origin main` succeeded for
-  `d248878`, updating `main` from `7ee44ad` to `d248878`, then succeeded again
-  for `f44da1b`, updating `main` from `d248878` to `f44da1b`. Before claiming
-  any future remote-backed phase save, rerun `git status -sb`,
+- Current GitHub transport note: prior phase pushes were recorded through
+  `641eef0`, but the latest verification command
+  `git ls-remote --heads origin main` returned `Recv failure: Connection was
+  reset`. No human action is required for this verification failure. Before
+  claiming any future remote-backed phase save, rerun `git status -sb`,
   `git log -3 --oneline`, and `git ls-remote --heads origin main`.
 - Latest phase checkpoint: after record-sync commit `977b2b9`
   (`Sync experiment planning records`), Claude-family REF-T2 was retried from
@@ -73,6 +81,11 @@ Current date: 2026-07-04.
   checks current planned output paths (`main_results_plan.*`,
   `failure_analysis.*`, and `llm_ablation_raw_rows.csv`). This keeps the
   "no separate breadth experiment" decision machine-checkable.
+- Current row-selection guard change: regenerated
+  `results/real_reuse/main_results_plan.{md,json}` and
+  `results/real_reuse/failure_analysis.{md,json}` now report that
+  `results/real_reuse/main_run_selection.json` contributed 16 selected rows,
+  preserving first-pass main rows while leaving diagnostic follow-ups auditable.
 
 ## Latest Record Sync Policy
 
@@ -207,7 +220,9 @@ Current date: 2026-07-04.
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-6. No human-side GitHub action is required. Retry `git push origin main` only
+6. The row-selection metadata guard has passed focused tests plus strict local
+   gates; the next action is a phase-level commit and push attempt.
+7. No human-side GitHub action is required. Retry `git push origin main` only
    when doing a phase save or remote-backup sync, and record any blocking
    network error in `toHuman.md`.
 

@@ -82,7 +82,10 @@ Current supported claims:
   rows and is now included in the AAAI table set. It maps row-level outcomes to
   PaperToSkill-only success, patch application, solved-by-both ceiling, and
   artifact completion modes. This is explanatory boundary analysis, not new
-  task-success evidence.
+  task-success evidence. The main-table and failure-boundary builders now emit
+  row-selection metadata into Markdown/JSON outputs so
+  `results/real_reuse/main_run_selection.json` is visible as the source of the
+  16 paper-facing row selections.
 - Human-fidelity annotation handoff is ready: review packets, annotation guide,
   reviewer bundle zip, checksum manifest, stricter blank template metadata,
   and strict summarizer validation are present for 24 paper-by-criterion cells;
@@ -289,19 +292,23 @@ Current supported claims:
   specific L031 message-text change. Preserve the first-pass SWE-T1 0.000/0.000
   rows as the paper-facing main rows; report phase107 only as a
   shared-source-context follow-up.
-- Phase109 substantive experiment and record-sync evidence is locally tracked
-  through checkpoint `7ee44ad` (`Track Claude ablation availability
-  metadata`). This range includes `e597fcf` (AIDE-T2 GPT-family LLM
-  ablation), `1521b72` (AIDE push-blocker record), `200419a` (SWE-T2
-  GPT-family LLM ablation), `cb20cb1` (SWE push-blocker record), `bc9644a`
+- Phase109 substantive experiment and subsequent record-sync evidence is
+  locally tracked through checkpoint `641eef0` (`Sync memory after real-reuse
+  guard`). This range includes `e597fcf` (AIDE-T2 GPT-family LLM ablation),
+  `1521b72` (AIDE push-blocker record), `200419a` (SWE-T2 GPT-family LLM
+  ablation), `cb20cb1` (SWE push-blocker record), `bc9644a`
   (status-hash-churn guard), `ea15664` (DeepSeek-family LLM ablation rows),
   `ea0f016` (memory sync after DeepSeek LLM ablation), `0d4934b`
   (Claude-family availability evidence), `977b2b9` (experiment-planning
-  record sync), and `7ee44ad` (pending-row availability metadata in the LLM
-  ablation summary). Keep future GitHub transport failures separate from
-  experiment correctness and verify exact local/remote alignment with
-  `git status -sb` and `git ls-remote --heads origin main` before claiming a
-  new remote-backed phase save.
+  record sync), `7ee44ad` (pending-row availability metadata in the LLM
+  ablation summary), `d248878` (core real-reuse stabilization records),
+  `f44da1b` (real-reuse planned-output guard), and `641eef0` (memory sync
+  after the guard). A fresh `git ls-remote --heads origin main` during the
+  2026-07-04 record-sync turn returned `Recv failure: Connection was reset`,
+  so keep future GitHub transport failures separate from experiment correctness
+  and verify exact local/remote alignment with `git status -sb` and
+  `git ls-remote --heads origin main` before claiming a new remote-backed
+  phase save.
 - Core real-reuse stabilization guard commit `f44da1b` (`Guard real-reuse
   planned outputs`) is pushed after the record-sync save. It removes the
   deprecated `domain_robustness` planned output from
@@ -665,6 +672,10 @@ Use these as entry points instead of searching the whole repo first:
   downstream stress-test evidence and failure-boundary evidence, not aggregate
   effectiveness. AIDE Kaggle-derived CSV fixture files are kept local and
   ignored by git; committed manifests retain hashes and provenance boundaries.
+  The generated main-table and failure-boundary Markdown/JSON outputs report
+  the active row-selection file and entry count, making the boundary between
+  first-pass main rows and diagnostic follow-ups explicit in paper-facing
+  artifacts.
 - Current SWE-T1 stabilization boundary: preserve the first-pass SWE-T1
   0.000/0.000 patch-apply result as the paper-facing main-row evidence.
   Phase107 has already run as a paired shared-source-context follow-up and also

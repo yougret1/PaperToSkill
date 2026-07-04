@@ -53,6 +53,19 @@ def load_row_selection(path: Path | None) -> dict[tuple[str, str], str]:
     return selected
 
 
+def row_selection_summary(path: Path | None, row_selection: dict[tuple[str, str], str]) -> dict[str, Any]:
+    return {
+        "path": str(path) if path else None,
+        "entries": len(row_selection),
+        "boundary": (
+            "Selected run_id values pin paper-facing main rows so diagnostic "
+            "follow-up rows remain auditable without replacing the main table."
+            if row_selection
+            else "No row-selection file was applied."
+        ),
+    }
+
+
 def paper_by_id(spec: dict[str, Any]) -> dict[str, dict[str, Any]]:
     return {str(paper["id"]): paper for paper in spec.get("source_papers", [])}
 
@@ -260,7 +273,12 @@ def write_csv(path: Path, rows: list[dict[str, str]]) -> None:
         writer.writerows(rows)
 
 
-def write_markdown(path: Path, rows: list[dict[str, str]], raw_row_count: int) -> None:
+def write_markdown(
+    path: Path,
+    rows: list[dict[str, str]],
+    raw_row_count: int,
+    row_selection_info: dict[str, Any],
+) -> None:
     lines = [
         "# Real-Reuse Main Results Table",
         "",
@@ -270,6 +288,9 @@ def write_markdown(path: Path, rows: list[dict[str, str]], raw_row_count: int) -
         "downstream task-success evidence.",
         "",
         f"- Raw scored rows read: {raw_row_count}",
+        f"- Row selection file: {row_selection_info['path'] or 'not applied'}",
+        f"- Row selection entries: {row_selection_info['entries']}",
+        f"- Row selection boundary: {row_selection_info['boundary']}",
         "",
         markdown_table(rows, TABLE_COLUMNS),
         "",
@@ -278,7 +299,12 @@ def write_markdown(path: Path, rows: list[dict[str, str]], raw_row_count: int) -
     path.write_text("\n".join(lines), encoding="utf-8")
 
 
-def write_json(path: Path, rows: list[dict[str, str]], raw_rows: list[dict[str, Any]]) -> None:
+def write_json(
+    path: Path,
+    rows: list[dict[str, str]],
+    raw_rows: list[dict[str, Any]],
+    row_selection_info: dict[str, Any],
+) -> None:
     payload = {
         "schema_version": "0.1",
         "evidence_boundary": (
@@ -287,6 +313,7 @@ def write_json(path: Path, rows: list[dict[str, str]], raw_rows: list[dict[str, 
             "planning placeholders, not task-success evidence."
         ),
         "raw_row_count": len(raw_rows),
+        "row_selection": row_selection_info,
         "rows": rows,
     }
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -339,15 +366,17 @@ def main() -> int:
     row_selection_path = args.row_selection
     if row_selection_path is None and args.raw_rows.resolve() == default_raw_rows.resolve():
         row_selection_path = default_selection
+    row_selection = load_row_selection(row_selection_path)
+    row_selection_info = row_selection_summary(row_selection_path, row_selection)
     rows = build_rows(
         load_json(args.spec),
         raw_rows,
         status_root=args.status_root,
-        row_selection=load_row_selection(row_selection_path),
+        row_selection=row_selection,
     )
     write_csv(args.output_csv, rows)
-    write_markdown(args.output_md, rows, len(raw_rows))
-    write_json(args.output_json, rows, raw_rows)
+    write_markdown(args.output_md, rows, len(raw_rows), row_selection_info)
+    write_json(args.output_json, rows, raw_rows, row_selection_info)
     print(args.output_csv)
     print(args.output_md)
     print(args.output_json)

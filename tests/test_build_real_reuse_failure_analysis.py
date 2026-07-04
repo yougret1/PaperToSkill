@@ -188,6 +188,48 @@ class BuildRealReuseFailureAnalysisTest(unittest.TestCase):
                 rows = {row["Task ID"]: row for row in csv.DictReader(handle)}
             self.assertEqual("Patch application", rows["SWE-T1"]["Boundary Mode"])
             self.assertEqual("0.000; patch apply failed", rows["SWE-T1"]["Summary Outcome"])
+            output_md_text = (tmp_path / "failure_analysis.md").read_text(encoding="utf-8")
+            self.assertIn(f"Row selection file: {selection}", output_md_text)
+            self.assertIn("Row selection entries: 2", output_md_text)
+            self.assertIn("same main rows as the main real-reuse table", output_md_text)
+            output_json_payload = json.loads((tmp_path / "failure_analysis.json").read_text(encoding="utf-8"))
+            self.assertEqual(str(selection), output_json_payload["row_selection"]["path"])
+            self.assertEqual(2, output_json_payload["row_selection"]["entries"])
+            self.assertIn(
+                "same main rows as the main real-reuse table",
+                output_json_payload["row_selection"]["boundary"],
+            )
+
+    def test_current_failure_analysis_reports_default_row_selection_metadata(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            output_md = tmp_path / "failure_analysis.md"
+            output_json = tmp_path / "failure_analysis.json"
+
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--output-csv",
+                    str(tmp_path / "failure_analysis.csv"),
+                    "--output-md",
+                    str(output_md),
+                    "--output-json",
+                    str(output_json),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            output_md_text = output_md.read_text(encoding="utf-8")
+            expected_selection = str(ROOT / "results" / "real_reuse" / "main_run_selection.json")
+            self.assertIn(f"Row selection file: {expected_selection}", output_md_text)
+            self.assertIn("Row selection entries: 16", output_md_text)
+            payload = json.loads(output_json.read_text(encoding="utf-8"))
+            self.assertEqual(expected_selection, payload["row_selection"]["path"])
+            self.assertEqual(16, payload["row_selection"]["entries"])
+            self.assertIn("same main rows as the main real-reuse table", payload["row_selection"]["boundary"])
 
 
 def json_line(

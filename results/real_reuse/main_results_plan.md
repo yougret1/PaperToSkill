@@ -2,7 +2,10 @@
 
 Evidence boundary: this table defines the main real-reuse experiment rows for the paper. Score cells are generated from local raw rows when available; any future unfilled cells are planning placeholders, not downstream task-success evidence.
 
-- Raw scored rows read: 26
+- Raw scored rows read: 38
+- Row selection file: D:\a_work\gitee\PaperToSkill\results\real_reuse\main_run_selection.json
+- Row selection entries: 16
+- Row selection boundary: Selected run_id values pin paper-facing main rows so diagnostic follow-up rows remain auditable without replacing the main table.
 
 | Task ID | Source Paper | Domain | Original-style Input | Required Output | Metric | Reference | Summary Score | PaperToSkill Score | Status |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
