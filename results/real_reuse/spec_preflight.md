@@ -5,7 +5,7 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 - Overall status: ready_to_implement
 - Spec path: benchmarks/real_reuse/real_reuse_v0.json
 - Task count: 8
-- Ready checks: 470
+- Ready checks: 472
 - Failed checks: 0
 
 ## Checks
@@ -95,8 +95,10 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 | real_reuse_llm_ablation_linked_to_tasks | ready | linked=True | benchmarks/real_reuse/real_reuse_v0.json |
 | real_reuse_llm_ablation_model_families | ready | families=Claude-family,DeepSeek-family,GPT-family | benchmarks/real_reuse/real_reuse_v0.json |
 | real_reuse_llm_ablation_conditions | ready | conditions=papertoskill,summary | benchmarks/real_reuse/real_reuse_v0.json |
-| real_reuse_planned_outputs_complete | ready | outputs=6 | benchmarks/real_reuse/real_reuse_v0.json |
-| real_reuse_planned_outputs_under_results_real_reuse | ready | results_real_reuse_paths=6 | benchmarks/real_reuse/real_reuse_v0.json |
+| real_reuse_planned_outputs_complete | ready | outputs=10 | benchmarks/real_reuse/real_reuse_v0.json |
+| real_reuse_no_deprecated_domain_robustness_output | ready | forbidden=none | benchmarks/real_reuse/real_reuse_v0.json |
+| real_reuse_planned_output_paths_current | ready | paths_current | benchmarks/real_reuse/real_reuse_v0.json |
+| real_reuse_planned_outputs_under_results_real_reuse | ready | results_real_reuse_paths=10 | benchmarks/real_reuse/real_reuse_v0.json |
 | aide_t1_task_spec_file_present | ready | present | benchmarks/real_reuse/tasks/AIDE-T1.json |
 | aide_t1_task_spec_identity | ready | id=AIDE-T1; source_paper_id=aide | benchmarks/real_reuse/tasks/AIDE-T1.json |
 | aide_t1_task_spec_status | ready | status=spec_ready_assets_pending | benchmarks/real_reuse/tasks/AIDE-T1.json |

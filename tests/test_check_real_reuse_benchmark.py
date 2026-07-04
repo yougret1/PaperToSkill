@@ -64,6 +64,8 @@ class CheckRealReuseBenchmarkTest(unittest.TestCase):
             self.assertIn("real_reuse_snapatac2_rubric_ready", ready_ids)
             self.assertIn("real_reuse_snapatac2_source_span_ready", ready_ids)
             self.assertIn("real_reuse_llm_ablation_linked_to_tasks", ready_ids)
+            self.assertIn("real_reuse_no_deprecated_domain_robustness_output", ready_ids)
+            self.assertIn("real_reuse_planned_output_paths_current", ready_ids)
             self.assertIn("snapatac2_code_url_declared", ready_ids)
             self.assertTrue(output_md.exists())
 
@@ -92,6 +94,18 @@ class CheckRealReuseBenchmarkTest(unittest.TestCase):
             statuses = {check["id"]: check["status"] for check in report["checks"]}
             self.assertEqual("fail", statuses["real_reuse_main_conditions"])
             self.assertEqual("fail", statuses["real_reuse_no_abstract_or_full_excerpt_main"])
+
+    def test_deprecated_domain_robustness_output_fails_preflight(self):
+        spec = json.loads(SPEC.read_text(encoding="utf-8"))
+        spec["planned_outputs"]["domain_robustness"] = "results/real_reuse/domain_robustness.csv"
+        with tempfile.TemporaryDirectory() as tmp:
+            spec_path = Path(tmp) / "real_reuse_v0.json"
+            spec_path.write_text(json.dumps(spec), encoding="utf-8")
+
+            report = build_report(Path(tmp), spec_path)
+            self.assertEqual("fail", report["overall_status"])
+            statuses = {check["id"]: check["status"] for check in report["checks"]}
+            self.assertEqual("fail", statuses["real_reuse_no_deprecated_domain_robustness_output"])
 
     def test_invalid_candidate_status_fails_preflight(self):
         with tempfile.TemporaryDirectory() as tmp:

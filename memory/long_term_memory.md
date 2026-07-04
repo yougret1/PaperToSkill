@@ -639,10 +639,12 @@ Use these as entry points instead of searching the whole repo first:
   reports ready, 16 ready checks, 0 failed checks.
 - Real-reuse preflight:
   `results/real_reuse/spec_preflight.md`
-  reports `ready_to_implement`, 8 tasks, 462 ready checks, and 0 failed checks
+  reports `ready_to_implement`, 8 tasks, 472 ready checks, and 0 failed checks
   after validating the REF prepared asset/runner layer, AIDE execution-layer
-  contract, SWE-agent skill/execution-layer contracts, and SnapATAC2
-  skill/execution-layer/prepared-asset contracts.
+  contract, SWE-agent skill/execution-layer contracts, SnapATAC2
+  skill/execution-layer/prepared-asset contracts, current real-reuse planned
+  output paths, and the guard that forbids reintroducing a separate
+  `domain_robustness` planned output.
 - Real-reuse first-pass run:
   `results/real_reuse/raw_rows.jsonl` and
   `results/real_reuse/main_results_plan.md` contain one GPT-family `gpt-5.5`

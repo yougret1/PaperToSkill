@@ -7,10 +7,11 @@ Current date: 2026-07-04.
 
 ## Current Task
 
-- Latest user request: modify related project records, including the current
-  `C:\Users\19351\Desktop\tem\toHuman.md`, while leaving local logs
-  unchanged. This record-sync pass updates planning/handoff/review records
-  only; it must not touch `research/run_logs/**` or `research/stage_log.md`.
+- Latest user request: save the record-sync work, upload it to GitHub, then
+  continue the project. Record-sync commit `d248878` (`Sync core real-reuse
+  stabilization records`) was pushed to `origin/main`. Current local work
+  continues core real-reuse stabilization without touching local logs
+  (`research/run_logs/**` and `research/stage_log.md`).
 - Current execution priority remains the core real-reuse main experiment.
   SWE-T1 source-context reporting, SNAP artifact-execution diagnosis, and the
   phase108 SNAP executable-artifact follow-up are complete and remain
@@ -20,11 +21,10 @@ Current date: 2026-07-04.
   ablation auxiliary, component ablation appendix-only, and user study
   last/optional. Provider latency, timeouts, and retry counts are availability
   metadata, not effectiveness metrics.
-- The latest local/tracking checkpoint is `7ee44ad` (`Track Claude ablation
-  availability metadata`), which sits after record-sync commit `977b2b9`
-  (`Sync experiment planning records`). Verify the exact current remote head
-  with `git status -sb` and `git ls-remote --heads origin main` before making
-  any fresh phase-save claim.
+- The latest confirmed pushed checkpoint is `d248878` (`Sync core real-reuse
+  stabilization records`), which was pushed after `7ee44ad` and `977b2b9`.
+  Verify the exact current remote head with `git status -sb` and
+  `git ls-remote --heads origin main` before making any fresh phase-save claim.
 - Commits `e597fcf` (`Add AIDE real-reuse LLM ablation row`), `1521b72`
   (`Record AIDE ablation push blocker`), `200419a`
   (`Add SWE real-reuse LLM ablation row`), `cb20cb1`
@@ -33,8 +33,9 @@ Current date: 2026-07-04.
   (`Add DeepSeek real-reuse LLM ablation rows`), `ea0f016`
   (`Sync memory after DeepSeek LLM ablation`), `0d4934b`
   (`Record Claude LLM ablation availability`), `977b2b9`
-  (`Sync experiment planning records`), and `7ee44ad`
-  (`Track Claude ablation availability metadata`) are the current saved
+  (`Sync experiment planning records`), `7ee44ad`
+  (`Track Claude ablation availability metadata`), and `d248878`
+  (`Sync core real-reuse stabilization records`) are the current saved
   phase/checkpoint range. The earlier GitHub HTTPS reset / port-443 blocker is
   resolved for the previously pushed commits.
 - Verification before the phase save passed:
@@ -49,10 +50,8 @@ Current date: 2026-07-04.
 - `C:\Users\19351\Desktop\tem\toHuman.md` should say no immediate human action
   is required, and `ok.txt` should only be created for completed human-fidelity
   annotation or a concrete placed core asset.
-- Current GitHub transport note: local `HEAD` is `7ee44ad`. A fresh
-  `git ls-remote --heads origin main` during the current record-sync attempt
-  returned `Recv failure: Connection was reset`; this is remote-availability
-  metadata only and is not a project-correctness blocker. Before claiming any
+- Current GitHub transport note: `git push origin main` succeeded for
+  `d248878`, updating `main` from `7ee44ad` to `d248878`. Before claiming any
   future remote-backed phase save, rerun `git status -sb`,
   `git log -3 --oneline`, and `git ls-remote --heads origin main`.
 - Latest phase checkpoint: after record-sync commit `977b2b9`
@@ -65,6 +64,11 @@ Current date: 2026-07-04.
   availability metadata from the latest AIDE/SWE/REF runner reports appears in
   `results/real_reuse/llm_ablation_summary.{md,json}` without changing the
   12/18 scored-row count.
+- Current local core-stabilization change: the real-reuse preflight now treats
+  a separate `domain_robustness` planned output as deprecated/forbidden and
+  checks current planned output paths (`main_results_plan.*`,
+  `failure_analysis.*`, and `llm_ablation_raw_rows.csv`). This keeps the
+  "no separate breadth experiment" decision machine-checkable.
 
 ## Latest Record Sync Policy
 

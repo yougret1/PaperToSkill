@@ -27,6 +27,19 @@ EXPECTED_FULL_EXCERPT_CONDITION = "full_excerpt"
 FORBIDDEN_MAIN_CONDITIONS = {"abstract", "full_excerpt"}
 EXPECTED_SANITY_TASKS = {"AIDE-T1", "SWE-T1", "SNAP-T1"}
 EXPECTED_MODEL_FAMILIES = {"Claude-family", "GPT-family", "DeepSeek-family"}
+EXPECTED_PLANNED_OUTPUTS = {
+    "spec_preflight_json": "results/real_reuse/spec_preflight.json",
+    "spec_preflight_md": "results/real_reuse/spec_preflight.md",
+    "raw_rows": "results/real_reuse/raw_rows.jsonl",
+    "main_results_plan_csv": "results/real_reuse/main_results_plan.csv",
+    "main_results_plan_md": "results/real_reuse/main_results_plan.md",
+    "main_results_plan_json": "results/real_reuse/main_results_plan.json",
+    "failure_analysis_csv": "results/real_reuse/failure_analysis.csv",
+    "failure_analysis_md": "results/real_reuse/failure_analysis.md",
+    "failure_analysis_json": "results/real_reuse/failure_analysis.json",
+    "llm_ablation_raw_rows": "results/real_reuse/llm_ablation_raw_rows.csv",
+}
+FORBIDDEN_PLANNED_OUTPUTS = {"domain_robustness"}
 EXPECTED_RAW_ROW_FIELDS = {
     "run_id",
     "task_id",
@@ -344,21 +357,40 @@ def llm_ablation_checks(root: Path, spec_path: Path, spec: dict[str, Any]) -> li
 
 def planned_output_checks(root: Path, spec_path: Path, spec: dict[str, Any]) -> list[Check]:
     outputs = spec.get("planned_outputs", {})
-    required = {
-        "spec_preflight_json",
-        "spec_preflight_md",
-        "raw_rows",
-        "main_results",
-        "domain_robustness",
-        "llm_ablation_raw",
-    }
+    required = set(EXPECTED_PLANNED_OUTPUTS)
     missing = sorted(required - set(outputs))
+    forbidden = sorted(FORBIDDEN_PLANNED_OUTPUTS & set(outputs))
+    mismatched = sorted(
+        key
+        for key, expected_path in EXPECTED_PLANNED_OUTPUTS.items()
+        if key in outputs and str(outputs[key]) != expected_path
+    )
     results_paths = [str(value) for value in outputs.values() if str(value).startswith("results/real_reuse/")]
     return [
         Check(
             "real_reuse_planned_outputs_complete",
             "ready" if not missing else "fail",
             "missing=" + ",".join(missing) if missing else f"outputs={len(outputs)}",
+            relative(root, spec_path),
+        ),
+        Check(
+            "real_reuse_no_deprecated_domain_robustness_output",
+            "ready" if not forbidden else "fail",
+            "forbidden=none" if not forbidden else "forbidden=" + ",".join(forbidden),
+            relative(root, spec_path),
+        ),
+        Check(
+            "real_reuse_planned_output_paths_current",
+            "ready" if not mismatched else "fail",
+            (
+                "paths_current"
+                if not mismatched
+                else "mismatched="
+                + ",".join(
+                    f"{key}:{outputs.get(key)}!={EXPECTED_PLANNED_OUTPUTS[key]}"
+                    for key in mismatched
+                )
+            ),
             relative(root, spec_path),
         ),
         Check(
