@@ -30,14 +30,15 @@ git ls-remote --heads origin main
 Test-NetConnection github.com -Port 443 | Format-List
 ```
 
-Current status as of 2026-07-04: the last verified remote head was
-`a6ede5d0ac0f0e8e37f1c93cf02675a630bf8164` on `origin/main`, which includes
-the phase109 LLM-ablation availability save and later status-sync recovery
-commits. Treat this as a remote-backup checkpoint, not an experiment result.
-Before making any new phase-save claim, verify the exact current remote head
-with `git status -sb` and `git ls-remote --heads origin main`. Keep future
-GitHub transport issues separate from experiment correctness, and do not call
-future phase work remote-backed until a new phase-save push is verified.
+Current status as of 2026-07-04: the current local/tracking checkpoint is
+`7ee44ad0edac3700ec7221ca0978f22558c54044` (`Track Claude ablation
+availability metadata`), after the `977b2b9` experiment-planning record sync
+and the phase109 LLM-ablation availability saves. Treat this as a
+remote-backup checkpoint, not an experiment result. Before making any new
+phase-save claim, verify the exact current remote head with `git status -sb`
+and `git ls-remote --heads origin main`. Keep future GitHub transport issues
+separate from experiment correctness, and do not call future phase work
+remote-backed until a new phase-save push is verified.
 
 ## Local Text-To-Skill Pipeline
 

@@ -51,7 +51,7 @@ Current machine reports:
 | --- | --- | --- | --- |
 | Durable local memory | `memory/long_term_memory.md`; `memory/short_term_memory.md` | Complete locally | Read and update both memory files after every resume/compaction. |
 | Use `ai-scientist-v2` to refine PaperToSkill | Seed idea files, bounded smoke report, full live-run handoff, Phase 76 run log, completion directory | Complete for bounded local evidence | Do not treat the synthetic run as broad live task success. |
-| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. The latest remote-backed substantive phase is confirmed through `0922119` (`Record runbook push blocker`), with `0d4934b` carrying the Claude-family LLM ablation availability evidence and `8886cf3`/`532c1f0`/`0922119` carrying status-sync records. The earlier GitHub HTTPS blockers through `0922119` are resolved by successful push; a later memory-only status-sync commit may sit locally if `git status -sb` reports ahead. | Complete for the latest saved remote phase | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim with `git status -sb` and `git ls-remote --heads origin main`; keep transport failures separate from experiment correctness. |
+| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. The latest local/tracking checkpoint is `7ee44ad` (`Track Claude ablation availability metadata`), after `977b2b9` (`Sync experiment planning records`) and the earlier Phase109 LLM-ablation commits. A fresh `git ls-remote --heads origin main` during this record-sync attempt returned a GitHub HTTPS connection reset, so future remote-backed claims should re-run the remote check instead of relying on stale checkpoint text. | Complete for the latest saved local phase; fresh remote re-verification pending network availability | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim with `git status -sb` and `git ls-remote --heads origin main`; keep transport failures separate from experiment correctness. |
 | Official AAAI TeX package | `paper/aaai/`; `results/reproducibility/aaai_package_report.md` | Locally ready | Keep draft synchronized with new evidence. |
 | Usage examples | `examples/usage/`; `results/reproducibility/usage_example_report.md` | Complete locally | Re-run after runner or task changes. |
 | Model ablations | `results/model_ablation_prompts/v0/evaluation.md`: 6 scored, 0 pending | Complete for saved-response protocol | Do not claim broad model quality or live task success. |
@@ -128,9 +128,11 @@ an aggregate downstream-success claim.
    and phase108 SNAP executable-artifact follow-up are complete. Phase109 has
    collected the pre-registered GPT-family and DeepSeek-family scored rows on
    stabilized slices and attempted all Claude-family rows, which remain
-   provider-502 availability evidence; next focus is retrying Claude-family
-   rows when available or deciding whether to promote a pre-registered
-   task-contract fix.
+   provider-502 availability evidence. The next focus is local core-task
+   stabilization: review failure-boundary/task-contract diagnostics,
+   pre-register any task-contract fix, and rerun affected paired conditions
+   before promoting any replacement row. Retry Claude-family rows only
+   opportunistically when provider availability recovers.
 2. Keep provider latency, API timeouts, and retry counts separate from the core
    task metrics; record provider availability only as execution metadata and
    give model calls generous timeout/retry budgets.

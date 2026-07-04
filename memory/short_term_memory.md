@@ -20,20 +20,23 @@ Current date: 2026-07-04.
   ablation auxiliary, component ablation appendix-only, and user study
   last/optional. Provider latency, timeouts, and retry counts are availability
   metadata, not effectiveness metrics.
-- The latest substantive phase save is confirmed on GitHub through commit
-  `0d4934b` (`Record Claude LLM ablation availability`). A later status-sync
-  commit may sit on top; do not chase the status-sync hash in memory. Verify
-  the exact current remote head with `git status -sb` and
-  `git ls-remote --heads origin main` before making a fresh phase-save claim.
+- The latest local/tracking checkpoint is `7ee44ad` (`Track Claude ablation
+  availability metadata`), which sits after record-sync commit `977b2b9`
+  (`Sync experiment planning records`). Verify the exact current remote head
+  with `git status -sb` and `git ls-remote --heads origin main` before making
+  any fresh phase-save claim.
 - Commits `e597fcf` (`Add AIDE real-reuse LLM ablation row`), `1521b72`
   (`Record AIDE ablation push blocker`), `200419a`
   (`Add SWE real-reuse LLM ablation row`), `cb20cb1`
   (`Record SWE ablation push blocker`), `bc9644a`
   (`Avoid remote status hash churn after SWE ablation`), `ea15664`
   (`Add DeepSeek real-reuse LLM ablation rows`), `ea0f016`
-  (`Sync memory after DeepSeek LLM ablation`), and `0d4934b`
-  (`Record Claude LLM ablation availability`) are remote-backed. The GitHub
-  HTTPS reset / port-443 blocker is resolved for these commits.
+  (`Sync memory after DeepSeek LLM ablation`), `0d4934b`
+  (`Record Claude LLM ablation availability`), `977b2b9`
+  (`Sync experiment planning records`), and `7ee44ad`
+  (`Track Claude ablation availability metadata`) are the current saved
+  phase/checkpoint range. The earlier GitHub HTTPS reset / port-443 blocker is
+  resolved for the previously pushed commits.
 - Verification before the phase save passed:
   `python -m unittest tests.test_build_real_reuse_llm_ablation_results -v`
   (4 tests), `check_real_reuse_benchmark.py --strict`,
@@ -46,21 +49,22 @@ Current date: 2026-07-04.
 - `C:\Users\19351\Desktop\tem\toHuman.md` should say no immediate human action
   is required, and `ok.txt` should only be created for completed human-fidelity
   annotation or a concrete placed core asset.
-- Current GitHub transport note: the runbook/status-sync and goal-audit
-  push blockers are resolved; `origin/main` was verified at `a6ede5d` after a
-  successful `git push origin main`. Treat future transport failures as
-  remote-backup availability, not project correctness; check `git status -sb`,
-  `git log -3 --oneline`, and `git ls-remote --heads origin main` before
-  claiming remote alignment.
-- New phase checkpoint: record-sync commit `977b2b9`
-  (`Sync experiment planning records`) was pushed to `origin/main` on
-  2026-07-04. After that save, Claude-family REF-T2 was retried from the local
-  Claude API doc key with the v0 300-second / 5-attempt protocol; both Summary
-  and PaperToSkill still returned provider HTTP 502 after 5 attempts. This is
-  availability metadata only. `scripts/build_real_reuse_llm_ablation_results.py`
-  now carries pending-run availability metadata from the latest AIDE/SWE/REF
-  runner reports into `results/real_reuse/llm_ablation_summary.{md,json}`
-  without changing the 12/18 scored-row count.
+- Current GitHub transport note: local `HEAD` is `7ee44ad`. A fresh
+  `git ls-remote --heads origin main` during the current record-sync attempt
+  returned `Recv failure: Connection was reset`; this is remote-availability
+  metadata only and is not a project-correctness blocker. Before claiming any
+  future remote-backed phase save, rerun `git status -sb`,
+  `git log -3 --oneline`, and `git ls-remote --heads origin main`.
+- Latest phase checkpoint: after record-sync commit `977b2b9`
+  (`Sync experiment planning records`), Claude-family REF-T2 was retried from
+  the local Claude API doc key with the v0 300-second / 5-attempt protocol;
+  both Summary and PaperToSkill still returned provider HTTP 502 after 5
+  attempts. This is availability metadata only. Commit `7ee44ad`
+  (`Track Claude ablation availability metadata`) then updated
+  `scripts/build_real_reuse_llm_ablation_results.py` so pending-run
+  availability metadata from the latest AIDE/SWE/REF runner reports appears in
+  `results/real_reuse/llm_ablation_summary.{md,json}` without changing the
+  12/18 scored-row count.
 
 ## Latest Record Sync Policy
 
@@ -173,26 +177,30 @@ Current date: 2026-07-04.
 
 ## Immediate Next Actions
 
-1. Continue the pre-registered real-reuse LLM ablation rows when provider env
-   vars are available, or use the local API docs under
-   `C:\Users\19351\Desktop\论文\SelfPaper\LLMAPIDocument` to set them in the
-   shell only. Do not commit raw keys.
-   Current collected scored slices are all GPT-family and DeepSeek-family rows
-   for REF-T2, AIDE-T2, and SWE-T2. Claude-family rows remain pending as scored
-   rows; REF-T2, AIDE-T2, and SWE-T2 were all attempted and blocked by provider
-   HTTP 502 after 5 attempts per condition. The latest REF-T2 retry on
-   2026-07-04 was also blocked by HTTP 502.
-2. Keep Summary and PaperToSkill paired under the same task/scorer contract for
+1. Continue local, non-network core real-reuse stabilization first. Read and
+   use `results/real_reuse/failure_analysis.md`,
+   `results/real_reuse/swe_t1_source_context_followup.md`,
+   `results/real_reuse/snapatac2_artifact_followup.md`,
+   `results/real_reuse/snapatac2_executable_artifact_followup.md`, and
+   `research/runbook.md`; pre-register any task-contract fix before rerunning
+   affected paired conditions, and do not change paper-facing main rows unless
+   explicitly promoted.
+2. Retry Claude-family real-reuse LLM ablation rows only opportunistically when
+   provider availability recovers. The current collected scored slices are all
+   GPT-family and DeepSeek-family rows for REF-T2, AIDE-T2, and SWE-T2; all
+   six Claude-family condition rows were attempted and blocked by provider
+   HTTP 502 after 5 attempts per condition. Do not commit raw keys.
+3. Keep Summary and PaperToSkill paired under the same task/scorer contract for
    any follow-up. Main SNAP rows remain unchanged unless explicitly promoted.
-3. During core reruns, collect auxiliary raw data where cheap: provider
+4. During core reruns, collect auxiliary raw data where cheap: provider
    availability, failure reasons, context/token proxies, and raw rows needed
    for real-reuse LLM ablation.
-4. Run broader verification gates before the next phase save:
+5. Run broader verification gates before the next phase save:
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-5. No current GitHub retry item is open. Retry `git push origin main` only
-   when doing a phase save or remote-backup sync, and record any concrete
+6. No human-side GitHub action is required. Retry `git push origin main` only
+   when doing a phase save or remote-backup sync, and record any blocking
    network error in `toHuman.md`.
 
 ## Boundaries
