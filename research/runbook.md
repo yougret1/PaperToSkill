@@ -31,14 +31,14 @@ Test-NetConnection github.com -Port 443 | Format-List
 ```
 
 Current status as of 2026-07-04: the latest local committed checkpoint is
-`641eef055ebbee26e7092d0bf6a4b49eb68efcc6` (`Sync memory after real-reuse
-guard`), after `d248878` (`Sync core real-reuse stabilization records`) and
-`f44da1b` (`Guard real-reuse planned outputs`). Treat this as a phase
-checkpoint, not an experiment result. During the current record-sync turn,
-`git ls-remote --heads origin main` returned `Recv failure: Connection was
-reset`, so do not make a fresh remote-backed phase-save claim until that
-verification succeeds. Keep future GitHub transport issues separate from
-experiment correctness.
+`4b606f9` (`Document real-reuse row selection metadata`), after
+`641eef0` (`Sync memory after real-reuse guard`), `d248878`
+(`Sync core real-reuse stabilization records`), and `f44da1b`
+(`Guard real-reuse planned outputs`). Treat this as a phase checkpoint, not an
+experiment result. Two `git push origin main` attempts for `4b606f9` failed
+with GitHub/network connectivity errors, so do not make a fresh remote-backed
+phase-save claim until remote verification and push succeed. Keep future GitHub
+transport issues separate from experiment correctness.
 
 ## Local Text-To-Skill Pipeline
 

@@ -293,8 +293,9 @@ Current supported claims:
   rows as the paper-facing main rows; report phase107 only as a
   shared-source-context follow-up.
 - Phase109 substantive experiment and subsequent record-sync evidence is
-  locally tracked through checkpoint `641eef0` (`Sync memory after real-reuse
-  guard`). This range includes `e597fcf` (AIDE-T2 GPT-family LLM ablation),
+  locally tracked through checkpoint `4b606f9` (`Document real-reuse row
+  selection metadata`), which is local-only until GitHub connectivity recovers.
+  This range includes `e597fcf` (AIDE-T2 GPT-family LLM ablation),
   `1521b72` (AIDE push-blocker record), `200419a` (SWE-T2 GPT-family LLM
   ablation), `cb20cb1` (SWE push-blocker record), `bc9644a`
   (status-hash-churn guard), `ea15664` (DeepSeek-family LLM ablation rows),
@@ -303,9 +304,10 @@ Current supported claims:
   record sync), `7ee44ad` (pending-row availability metadata in the LLM
   ablation summary), `d248878` (core real-reuse stabilization records),
   `f44da1b` (real-reuse planned-output guard), and `641eef0` (memory sync
-  after the guard). A fresh `git ls-remote --heads origin main` during the
-  2026-07-04 record-sync turn returned `Recv failure: Connection was reset`,
-  so keep future GitHub transport failures separate from experiment correctness
+  after the guard), and `4b606f9` (row-selection metadata in real-reuse main
+  and failure-boundary outputs). Two `git push origin main` attempts for
+  `4b606f9` failed on 2026-07-04 with GitHub/network connectivity errors, so
+  keep future GitHub transport failures separate from experiment correctness
   and verify exact local/remote alignment with `git status -sb` and
   `git ls-remote --heads origin main` before claiming a new remote-backed
   phase save.
