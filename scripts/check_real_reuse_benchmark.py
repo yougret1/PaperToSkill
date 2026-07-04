@@ -64,6 +64,7 @@ EXPECTED_REFLEXION_PREPARED_ASSET_TASKS = {"REF-T1", "REF-T2"}
 EXPECTED_SNAPATAC2_PREPARED_ASSET_TASKS = {"SNAP-T1", "SNAP-T2"}
 EXPECTED_PREPARED_ASSET_TASKS = EXPECTED_REFLEXION_PREPARED_ASSET_TASKS | EXPECTED_SNAPATAC2_PREPARED_ASSET_TASKS
 EXPECTED_SNAPATAC2_EXECUTABLE_CONTRACT = Path("benchmarks/real_reuse/snapatac2_executable_candidate_contract_v0.json")
+EXPECTED_SWE_T1_TASK_CONTRACT_DECISION = Path("benchmarks/real_reuse/swe_t1_task_contract_decision_v0.json")
 EXPECTED_SNAPATAC2_SCORER_COMPONENTS = {
     "completed",
     "artifacts",
@@ -221,6 +222,7 @@ def build_report(root: Path, spec_path: Path) -> dict[str, Any]:
     checks.extend(snapatac2_skill_checks(root, spec_path))
     checks.extend(snapatac2_runner_checks(root, spec_path))
     checks.extend(snapatac2_executable_contract_checks(root, spec_path))
+    checks.extend(swe_t1_task_contract_decision_checks(root, spec_path))
     return report_from_checks(root, spec_path, spec, checks)
 
 
@@ -1612,6 +1614,75 @@ def snapatac2_executable_contract_checks(root: Path, spec_path: Path) -> list[Ch
             "main_rows_unchanged_by_default="
             + str(promotion_policy.get("main_rows_unchanged_by_default")),
             relative(root, contract_path),
+        ),
+    ]
+
+
+def swe_t1_task_contract_decision_checks(root: Path, spec_path: Path) -> list[Check]:
+    decision_path = root / EXPECTED_SWE_T1_TASK_CONTRACT_DECISION
+    if not decision_path.exists():
+        return [
+            Check(
+                "real_reuse_swe_t1_task_contract_decision_present",
+                "fail",
+                "missing",
+                relative(root, decision_path),
+            )
+        ]
+
+    decision = load_json(decision_path)
+    main_policy = decision.get("current_main_row_policy", {})
+    revision_policy = decision.get("future_revision_policy", {})
+    required_properties = set(revision_policy.get("required_properties", []))
+    expected_properties = {
+        "Summary and PaperToSkill remain paired.",
+        "Hidden tests directly exercise the issue reproduction queries from the model-visible issue description.",
+        "Scorer-only gold patches and hidden test patches remain hidden from model prompts.",
+        "Any replacement of the paper-facing main row requires explicit promotion through results/real_reuse/main_run_selection.json.",
+    }
+
+    return [
+        Check(
+            "real_reuse_swe_t1_task_contract_decision_present",
+            "ready",
+            "present",
+            relative(root, decision_path),
+        ),
+        Check(
+            "real_reuse_swe_t1_task_contract_decision_scope",
+            "ready"
+            if decision.get("task_id") == "SWE-T1"
+            and decision.get("decision") == "freeze_current_main_row_as_boundary_evidence"
+            else "fail",
+            "task_id=" + str(decision.get("task_id")) + "; decision=" + str(decision.get("decision")),
+            relative(root, decision_path),
+        ),
+        Check(
+            "real_reuse_swe_t1_task_contract_preserves_main_row",
+            "ready"
+            if main_policy.get("preserve_first_pass_main_row") is True
+            and main_policy.get("do_not_promote_phase107_followup") is True
+            and main_policy.get("paper_facing_selection_file") == "results/real_reuse/main_run_selection.json"
+            else "fail",
+            "preserve_first_pass_main_row=" + str(main_policy.get("preserve_first_pass_main_row")),
+            relative(root, decision_path),
+        ),
+        Check(
+            "real_reuse_swe_t1_task_contract_no_current_rerun",
+            "ready" if main_policy.get("do_not_rerun_under_current_hidden_test_contract") is True else "fail",
+            "do_not_rerun_under_current_hidden_test_contract="
+            + str(main_policy.get("do_not_rerun_under_current_hidden_test_contract")),
+            relative(root, decision_path),
+        ),
+        Check(
+            "real_reuse_swe_t1_future_revision_rules",
+            "ready"
+            if revision_policy.get("requires_pre_registration") is True
+            and revision_policy.get("revision_kind") == "issue_aligned_hidden_test_contract"
+            and expected_properties <= required_properties
+            else "fail",
+            "required_properties=" + str(len(required_properties)),
+            relative(root, decision_path),
         ),
     ]
 

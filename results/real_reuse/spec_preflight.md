@@ -5,7 +5,7 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 - Overall status: ready_to_implement
 - Spec path: benchmarks/real_reuse/real_reuse_v0.json
 - Task count: 8
-- Ready checks: 478
+- Ready checks: 483
 - Failed checks: 0
 
 ## Checks
@@ -490,3 +490,8 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 | real_reuse_snapatac2_executable_contract_candidate_outputs | ready | required_outputs=artifact_manifest.json,candidate_output.json,resource_record.json | benchmarks/real_reuse/snapatac2_executable_candidate_contract_v0.json |
 | real_reuse_snapatac2_executable_contract_scoring_components | ready | SNAP-T1=artifacts,completed,method_alignment,resource; SNAP-T2=artifacts,completed,method_alignment,quality,resource | benchmarks/real_reuse/snapatac2_executable_candidate_contract_v0.json |
 | real_reuse_snapatac2_executable_contract_no_main_replacement | ready | main_rows_unchanged_by_default=True | benchmarks/real_reuse/snapatac2_executable_candidate_contract_v0.json |
+| real_reuse_swe_t1_task_contract_decision_present | ready | present | benchmarks/real_reuse/swe_t1_task_contract_decision_v0.json |
+| real_reuse_swe_t1_task_contract_decision_scope | ready | task_id=SWE-T1; decision=freeze_current_main_row_as_boundary_evidence | benchmarks/real_reuse/swe_t1_task_contract_decision_v0.json |
+| real_reuse_swe_t1_task_contract_preserves_main_row | ready | preserve_first_pass_main_row=True | benchmarks/real_reuse/swe_t1_task_contract_decision_v0.json |
+| real_reuse_swe_t1_task_contract_no_current_rerun | ready | do_not_rerun_under_current_hidden_test_contract=True | benchmarks/real_reuse/swe_t1_task_contract_decision_v0.json |
+| real_reuse_swe_t1_future_revision_rules | ready | required_properties=6 | benchmarks/real_reuse/swe_t1_task_contract_decision_v0.json |

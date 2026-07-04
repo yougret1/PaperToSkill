@@ -668,12 +668,13 @@ Use these as entry points instead of searching the whole repo first:
   reports ready, 16 ready checks, 0 failed checks.
 - Real-reuse preflight:
   `results/real_reuse/spec_preflight.md`
-  reports `ready_to_implement`, 8 tasks, 472 ready checks, and 0 failed checks
+  reports `ready_to_implement`, 8 tasks, 483 ready checks, and 0 failed checks
   after validating the REF prepared asset/runner layer, AIDE execution-layer
   contract, SWE-agent skill/execution-layer contracts, SnapATAC2
   skill/execution-layer/prepared-asset contracts, current real-reuse planned
-  output paths, and the guard that forbids reintroducing a separate
-  `domain_robustness` planned output.
+  output paths, the guard that forbids reintroducing a separate
+  `domain_robustness` planned output, the SNAP executable-candidate contract,
+  and the SWE-T1 task-contract decision.
 - Real-reuse first-pass run:
   `results/real_reuse/raw_rows.jsonl` and
   `results/real_reuse/main_results_plan.md` contain one GPT-family `gpt-5.5`
@@ -713,6 +714,16 @@ Use these as entry points instead of searching the whole repo first:
   executable candidate outputs, runner-owned runtime/memory/artifact records,
   scorer components, failure handling, and promotion rule for any future SNAP
   rerun. The strict preflight now guards this contract.
+- SWE-T1 task-contract decision:
+  `benchmarks/real_reuse/swe_t1_task_contract_decision_v0.json` and
+  `research/swe_t1_task_contract_decision.md` freeze the current SWE-T1 main
+  row as boundary evidence. The decision records that first pass failed at
+  patch application, phase107 fixed patch application but failed the hidden
+  test, and the current scorer-only hidden test checks a specific L031 warning
+  message rather than directly testing the no-join alias false-positive issue.
+  Do not spend more SWE-T1 model calls under this hidden-test contract; if a
+  stronger SWE-T1 row is needed, pre-register an issue-aligned hidden
+  test/scorer contract first.
 - Real-reuse LLM ablation plan:
   `benchmarks/real_reuse/llm_ablation_v0.json` and
   `results/real_reuse/llm_ablation_plan.{md,json}` pre-register a stabilized

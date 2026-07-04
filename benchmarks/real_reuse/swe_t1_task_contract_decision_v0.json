@@ -1,0 +1,52 @@
+{
+  "schema_version": "0.1",
+  "decision_id": "swe_t1_task_contract_decision_v0",
+  "status": "pre_registered_decision",
+  "task_id": "SWE-T1",
+  "source_paper_id": "swe_agent",
+  "decision": "freeze_current_main_row_as_boundary_evidence",
+  "evidence_boundary": "This decision explains the current SWE-T1 task-contract boundary. It does not add task-success evidence, does not change current paper-facing main rows, and does not authorize a rerun by itself.",
+  "evidence_reviewed": [
+    {
+      "artifact": "results/real_reuse/failure_analysis.md",
+      "finding": "First-pass Summary and PaperToSkill both scored 0.000 because patches failed to apply."
+    },
+    {
+      "artifact": "results/real_reuse/swe_t1_source_context_followup.md",
+      "finding": "Shared-source-context follow-up made both candidate patches apply, but both still failed the hidden target test."
+    },
+    {
+      "artifact": "benchmarks/real_reuse/assets/SWE-T1/issue_description.md",
+      "finding": "The model-visible issue asks for a TSQL no-join alias false-positive fix."
+    },
+    {
+      "artifact": "benchmarks/real_reuse/assets/SWE-T1/scorer_only/test.patch",
+      "finding": "The scorer-only hidden test patch checks a specific L031 warning-message text change rather than directly testing the no-join alias false-positive reproduction."
+    }
+  ],
+  "current_main_row_policy": {
+    "preserve_first_pass_main_row": true,
+    "paper_facing_selection_file": "results/real_reuse/main_run_selection.json",
+    "do_not_promote_phase107_followup": true,
+    "do_not_rerun_under_current_hidden_test_contract": true
+  },
+  "diagnosis": {
+    "first_pass_boundary": "patch_apply_failed",
+    "phase107_boundary": "test_command_failed_after_patch_applied",
+    "contract_mismatch": "The current hidden target can reject issue-reasonable logic fixes because it primarily asserts the expected lint-message text.",
+    "model_visible_context_status": "The phase107 source context fixed patch application but did not fix the objective mismatch."
+  },
+  "future_revision_policy": {
+    "requires_pre_registration": true,
+    "revision_kind": "issue_aligned_hidden_test_contract",
+    "required_properties": [
+      "Summary and PaperToSkill remain paired.",
+      "Both conditions use the same locked SQLFluff instance, source context, scorer, resource budget, model family, and no-mid-run-human rule.",
+      "Hidden tests directly exercise the issue reproduction queries from the model-visible issue description.",
+      "Message-text assertions may be retained only as secondary regression checks, not as the sole success criterion.",
+      "Scorer-only gold patches and hidden test patches remain hidden from model prompts.",
+      "Any replacement of the paper-facing main row requires explicit promotion through results/real_reuse/main_run_selection.json."
+    ]
+  },
+  "next_action": "Do not spend more model calls on SWE-T1 under the current hidden-test contract. If the paper needs a stronger SWE-T1 row, first implement a revised issue-aligned scorer/test contract and run paired Summary/PaperToSkill conditions only after that pre-registration."
+}

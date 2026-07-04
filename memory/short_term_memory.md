@@ -27,10 +27,16 @@ Current date: 2026-07-04.
   summarized in `research/snapatac2_executable_candidate_contract.md`, and
   covered by strict real-reuse preflight checks. This does not replace the SNAP
   main rows.
-- Next immediate non-network priority: draft the SWE-T1 task-contract decision
-  note before any further SWE-T1 model calls. AIDE/REF ceiling rows can wait;
-  Claude-family LLM ablation retry remains opportunistic only when provider
-  availability recovers.
+- SWE-T1 task-contract decision is now completed locally:
+  `benchmarks/real_reuse/swe_t1_task_contract_decision_v0.json` and
+  `research/swe_t1_task_contract_decision.md` freeze the current SWE-T1 main
+  row as boundary evidence, forbid more model calls under the current hidden
+  test contract, and require issue-aligned hidden tests before any future
+  paired rerun.
+- Current remote-backup status: local commit `25017a8` exists for the SNAP
+  contract/preflight checkpoint, but `git push origin main` failed three times
+  with GitHub HTTPS transport errors. `toHuman.md` records the exact command
+  and errors. Continue non-network work and retry push later.
 - The current discussion policy is: stabilize the core eight-row real-reuse
   evidence first; collect auxiliary raw data opportunistically; keep LLM
   ablation auxiliary, component ablation appendix-only, and user study
@@ -95,9 +101,10 @@ Current date: 2026-07-04.
   a separate `domain_robustness` planned output as deprecated/forbidden,
   checks current planned output paths (`main_results_plan.*`,
   `failure_analysis.*`, and `llm_ablation_raw_rows.csv`), and checks the
-  pre-registered SNAP executable-candidate contract. This keeps the "no
-  separate breadth experiment" decision and the SNAP execution-contract
-  boundary machine-checkable.
+  pre-registered SNAP executable-candidate contract, and checks the SWE-T1
+  task-contract decision. This keeps the "no separate breadth experiment"
+  decision, SNAP execution-contract boundary, and SWE-T1 rerun boundary
+  machine-checkable.
 - Current row-selection guard change: regenerated
   `results/real_reuse/main_results_plan.{md,json}` and
   `results/real_reuse/failure_analysis.{md,json}` now report that
@@ -215,13 +222,13 @@ Current date: 2026-07-04.
 
 ## Immediate Next Actions
 
-1. Continue local, non-network core real-reuse stabilization first. The SNAP
-   executable-candidate contract is now pre-registered and guarded by
-   preflight, so the next immediate local action is the SWE-T1 task-contract
-   decision note. Use `results/real_reuse/failure_analysis.md`,
-   `results/real_reuse/swe_t1_source_context_followup.md`, and
-   `research/real_reuse_stabilization_queue.md`; do not change paper-facing
-   main rows unless explicitly promoted.
+1. Continue local, non-network core real-reuse stabilization first. SNAP
+   executable-candidate and SWE-T1 task-contract decisions are now
+   pre-registered and guarded by preflight. If a stronger SWE-T1 row is needed
+   later, first implement an issue-aligned revised hidden test/scorer contract;
+   do not spend more SWE-T1 model calls under the current hidden-test
+   contract, and do not change paper-facing main rows unless explicitly
+   promoted.
 2. Retry Claude-family real-reuse LLM ablation rows only opportunistically when
    provider availability recovers. The current collected scored slices are all
    GPT-family and DeepSeek-family rows for REF-T2, AIDE-T2, and SWE-T2; all
@@ -236,12 +243,11 @@ Current date: 2026-07-04.
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-6. The row-selection metadata guard has passed focused tests plus strict local
-   gates and is pushed through the latest observed remote checkpoint
-   `03b7ca4`.
-7. No human-side GitHub action is required. Retry `git push origin main` only
-   when doing a phase save or remote-backup sync, and record any blocking
-   network error in `toHuman.md`.
+6. Retry `git push origin main` when GitHub HTTPS availability recovers. The
+   current branch is locally ahead of origin; the push blocker is recorded in
+   `toHuman.md`.
+7. No immediate human-side action is required unless the user wants to handle
+   the GitHub network issue externally.
 
 ## Boundaries
 
