@@ -293,6 +293,10 @@ Current supported claims:
 - Phase 107 reporting save is complete on GitHub: commit `4040f56`
   (`Report SWE-T1 source-context follow-up`) was pushed to `origin/main` after
   commit `8b50758`, advancing the remote from `cf7b54e` to `4040f56`.
+- Post-push memory sync is also complete on GitHub: commit `bdf0144`
+  (`Sync post-push memory state`) was pushed to `origin/main`, and the local
+  `main` branch was aligned with `origin/main` at that commit on the latest
+  record-sync check.
 - Phase 89 remote save recovered the earlier GitHub HTTPS blocker:
   `git push origin main` succeeded for the Phase 87/88 stack and the follow-up
   remote-save record was also pushed. Use `git status -sb` for the latest exact

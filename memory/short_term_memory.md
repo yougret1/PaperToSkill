@@ -7,8 +7,10 @@ Current date: 2026-07-04.
 
 ## Current Task
 
-- Latest user request / active goal: save the current phase with git, upload to
-  GitHub, then continue the core real-reuse main experiment. Use generous
+- Latest user request / active goal: update related planning/handoff/memory
+  records, including the current `C:\Users\19351\Desktop\tem\toHuman.md`,
+  while excluding local logs. The scientific priority remains to continue the
+  core real-reuse main experiment after this records-only sync. Use generous
   timeout/retry budgets for LLM service calls, keep provider instability
   separate from method quality, and record network/download blockers in
   `C:\Users\19351\Desktop\tem\toHuman.md` before continuing other work.
@@ -30,6 +32,9 @@ Current date: 2026-07-04.
   GitHub connectivity, AAAI final-submission advice, provider billing,
   domain-robustness planning, component ablation, or a user study as the
   current human action.
+- Updated `toHuman.md`, `research/runbook.md`, and
+  `research/goal_completion_audit.md` so they no longer say commit `8b50758`
+  is awaiting remote backup. The remote is aligned at `bdf0144`.
 - Added the record-sync boundary to `toHuman.md`: do not modify local logs,
   do not reopen a separate domain-robustness experiment, keep component
   ablation appendix-only, keep user-study work last/optional, and record
@@ -125,8 +130,8 @@ Current date: 2026-07-04.
 
 ## Immediate Next Actions
 
-1. Phase save and remote backup are complete: `git push origin main` advanced
-   GitHub from `cf7b54e` to `4040f56`, so commits `8b50758` and `4040f56` are
+1. Phase save and remote backup are complete: `main` and `origin/main` are
+   aligned at `bdf0144`, so commits `8b50758`, `4040f56`, and `bdf0144` are
    backed up remotely.
 2. Continue SNAP artifact-completion/budget inspection or the next
    pre-registered failure-heavy real-reuse follow-up, keeping Summary and
