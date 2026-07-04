@@ -318,8 +318,11 @@ Current supported claims:
   `9888f17` (bounded summary-comparison claim cleanup), `1ab714f` (current
   project record sync), `2b5d9d0` (GitHub backup recovery record), and
   `05b3963` (real-reuse record-boundary tightening). The temporary 2026-07-05
-  GitHub HTTPS transport blocker later recovered; the latest verified remote
-  checkpoint is
+  GitHub HTTPS transport blocker later recovered through `05b3963`. A later
+  local phase commit, `77e8ada Add SNAP executable candidate runner`, is not
+  remote-backed yet because `git push origin main` and the follow-up
+  `git ls-remote --heads origin main` both failed with `Recv failure:
+  Connection was reset`. The latest verified remote checkpoint remains
   `05b3963560cb5553233fe2da1afd3e927ec386ef refs/heads/main`. Verify exact
   local/remote alignment with
   `git status -sb`, `git log -5 --oneline`, and
@@ -413,8 +416,10 @@ Current supported claims:
 - Phase 89 and the 2026-07-04/2026-07-05 record-sync pushes recovered GitHub
   HTTPS transport interruptions. Use `git status -sb` and a successful remote
   check for the latest exact alignment before each phase-save claim.
-- Latest verified remote-backed phase checkpoint:
-  `05b3963 Tighten real-reuse record boundaries`, verified at
+- Latest local phase commit:
+  `77e8ada Add SNAP executable candidate runner`. Latest verified
+  remote-backed checkpoint remains `05b3963 Tighten real-reuse record
+  boundaries`, verified at
   `05b3963560cb5553233fe2da1afd3e927ec386ef refs/heads/main`. Rerun remote
   verification before making later remote-backed claims.
 
