@@ -314,9 +314,10 @@ Current supported claims:
   state recorded `0f3a4997badd333f8399c6274659af444997a765` as pushed to
   `origin/main`, but fresh `git push origin main` and
   `git ls-remote --heads origin main` attempts on 2026-07-05 failed with
-  GitHub HTTPS connection-reset / port-443 transport errors. Keep GitHub
-  transport failures separate from experiment correctness and verify exact
-  local/remote alignment with `git status -sb` and
+  GitHub HTTPS connection-reset / port-443 transport errors. Later local
+  commits may only record this push-status state. Keep GitHub transport
+  failures separate from experiment correctness and verify exact local/remote
+  alignment with `git status -sb`, `git log -3 --oneline`, and
   `git ls-remote --heads origin main` before claiming a new remote-backed phase
   save.
 - Core real-reuse stabilization guard commit `f44da1b` (`Guard real-reuse
@@ -397,12 +398,12 @@ Current supported claims:
 - Phase 89 and the 2026-07-04 record-sync push both recovered GitHub HTTPS
   transport interruptions. Use `git status -sb` and a successful remote check
   for the latest exact alignment before each phase-save claim.
-- Latest local checkpoint:
-  `599382d Add SWE-T1 issue-aligned follow-up table`. The branch is ahead of
-  `origin/main`; two `git push origin main` attempts and one
-  `git ls-remote --heads origin main` attempt on 2026-07-05 failed with GitHub
-  HTTPS transport errors. Rerun remote verification before making
-  remote-backed claims.
+- Latest phase artifact checkpoint:
+  `599382d Add SWE-T1 issue-aligned follow-up table`; later local commits may
+  only record push-status updates. The branch is ahead of `origin/main`; three
+  `git push origin main` attempts and one `git ls-remote --heads origin main`
+  attempt on 2026-07-05 failed with GitHub HTTPS transport errors. Rerun
+  remote verification before making remote-backed claims.
 
 Current unsupported claims:
 
