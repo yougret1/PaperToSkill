@@ -293,8 +293,8 @@ Current supported claims:
   rows as the paper-facing main rows; report phase107 only as a
   shared-source-context follow-up.
 - Phase109 substantive experiment and subsequent record-sync evidence is
-  pushed through at least checkpoint `03b7ca4` (`Plan real-reuse stabilization
-  priorities`), subject to fresh remote verification before future
+  pushed through verified checkpoint `ef7dc1b` (`Sync memory after contract
+  decisions`), subject to fresh remote verification before future
   remote-backed claims. This range includes `e597fcf` (AIDE-T2 GPT-family LLM
   ablation),
   `1521b72` (AIDE push-blocker record), `200419a` (SWE-T2 GPT-family LLM
@@ -307,11 +307,13 @@ Current supported claims:
   `f44da1b` (real-reuse planned-output guard), and `641eef0` (memory sync
   after the guard), `4b606f9` (row-selection metadata in real-reuse main and
   failure-boundary outputs), `43bc1a0` (record of the transient push blocker),
-  `a170aa6` (push-status sync), and `03b7ca4` (core stabilization queue). Some
-  `git push origin main` attempts failed on 2026-07-04 with GitHub/network
-  connectivity errors, but later retries succeeded through `03b7ca4`. Keep
-  future GitHub transport failures separate from experiment correctness and
-  verify exact local/remote alignment with `git status -sb` and
+  `a170aa6` (push-status sync), `03b7ca4` (core stabilization queue),
+  `25017a8` (SNAP executable-candidate contract), `36ae48e` (SWE-T1
+  task-contract decision), and `ef7dc1b` (memory sync after contract
+  decisions). Some `git push origin main` attempts failed on 2026-07-04 with
+  GitHub/network connectivity errors, but later retries succeeded through
+  `ef7dc1b`. Keep future GitHub transport failures separate from experiment
+  correctness and verify exact local/remote alignment with `git status -sb` and
   `git ls-remote --heads origin main` before claiming a new remote-backed phase
   save.
 - Core real-reuse stabilization guard commit `f44da1b` (`Guard real-reuse
@@ -346,6 +348,16 @@ Current supported claims:
   unchanged unless a future paired rerun is explicitly promoted through
   `results/real_reuse/main_run_selection.json`. This is a future-rerun
   contract, not new task-success evidence.
+- The SWE-T1 issue-aligned revised scorer/test contract is now
+  pre-registered in
+  `benchmarks/real_reuse/swe_t1_issue_aligned_contract_v0.json`, implemented
+  as
+  `benchmarks/real_reuse/assets/SWE-T1/scorer_only/issue_aligned_check.py`,
+  summarized in `research/swe_t1_issue_aligned_contract.md`, and validated in
+  `results/real_reuse/swe_t1_issue_aligned_contract_validation.{md,json}`.
+  The validation uses the base SQLFluff workspace and existing phase107
+  patches only; it adds no model calls, no raw rows, and no main-row
+  replacement.
 - Phase109 has collected scored real-reuse LLM ablation rows only on the
   pre-registered stabilized slices. Current collected GPT-family pairs are
   REF-T2 1.000/1.000,
@@ -365,8 +377,8 @@ Current supported claims:
   transport interruptions. Use `git status -sb` and a successful remote check
   for the latest exact alignment before each phase-save claim.
 - Latest verified remote checkpoint after the SNAP executable-candidate
-  contract and SWE-T1 task-contract decision saves:
-  `36ae48ea4ab6f4213b7e31b7e796e853c4f867de refs/heads/main`.
+  contract, SWE-T1 task-contract decision, and memory sync saves:
+  `ef7dc1b43bcbc9ea4b09a2dec5a60523422d6d97 refs/heads/main`.
 
 Current unsupported claims:
 
@@ -671,13 +683,14 @@ Use these as entry points instead of searching the whole repo first:
   reports ready, 16 ready checks, 0 failed checks.
 - Real-reuse preflight:
   `results/real_reuse/spec_preflight.md`
-  reports `ready_to_implement`, 8 tasks, 483 ready checks, and 0 failed checks
+  reports `ready_to_implement`, 8 tasks, 489 ready checks, and 0 failed checks
   after validating the REF prepared asset/runner layer, AIDE execution-layer
   contract, SWE-agent skill/execution-layer contracts, SnapATAC2
   skill/execution-layer/prepared-asset contracts, current real-reuse planned
   output paths, the guard that forbids reintroducing a separate
   `domain_robustness` planned output, the SNAP executable-candidate contract,
-  and the SWE-T1 task-contract decision.
+  the SWE-T1 task-contract decision, and the SWE-T1 issue-aligned revised
+  scorer/test contract.
 - Real-reuse first-pass run:
   `results/real_reuse/raw_rows.jsonl` and
   `results/real_reuse/main_results_plan.md` contain one GPT-family `gpt-5.5`
@@ -700,7 +713,12 @@ Use these as entry points instead of searching the whole repo first:
   Phase107 has already run as a paired shared-source-context follow-up and also
   scored 0.000/0.000, but both patches applied and then failed the hidden test.
   This is diagnostic follow-up evidence about task-contract/hidden-objective
-  mismatch, not a replacement for the first-pass main row.
+  mismatch, not a replacement for the first-pass main row. The issue-aligned
+  revised check is now pre-registered and locally validated: the base workspace
+  fails the no-join alias check, the phase107 Summary patch passes, and the
+  phase107 PaperToSkill patch fails the join-alias regression guard. This is
+  contract validation only; a future paired rerun would still be required
+  before any promotion.
 - Full Excerpt sanity check:
   `results/real_reuse/full_excerpt_sanity.md` contains AIDE-T1, SWE-T1, and
   SNAP-T1 rows with Summary/PaperToSkill/Full Excerpt scores and local
@@ -725,8 +743,9 @@ Use these as entry points instead of searching the whole repo first:
   test, and the current scorer-only hidden test checks a specific L031 warning
   message rather than directly testing the no-join alias false-positive issue.
   Do not spend more SWE-T1 model calls under this hidden-test contract; if a
-  stronger SWE-T1 row is needed, pre-register an issue-aligned hidden
-  test/scorer contract first.
+  stronger SWE-T1 row is needed, use the pre-registered issue-aligned hidden
+  test/scorer contract and run a paired Summary/PaperToSkill rerun before any
+  possible promotion.
 - Real-reuse LLM ablation plan:
   `benchmarks/real_reuse/llm_ablation_v0.json` and
   `results/real_reuse/llm_ablation_plan.{md,json}` pre-register a stabilized

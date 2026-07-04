@@ -5,7 +5,7 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 - Overall status: ready_to_implement
 - Spec path: benchmarks/real_reuse/real_reuse_v0.json
 - Task count: 8
-- Ready checks: 483
+- Ready checks: 489
 - Failed checks: 0
 
 ## Checks
@@ -495,3 +495,9 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 | real_reuse_swe_t1_task_contract_preserves_main_row | ready | preserve_first_pass_main_row=True | benchmarks/real_reuse/swe_t1_task_contract_decision_v0.json |
 | real_reuse_swe_t1_task_contract_no_current_rerun | ready | do_not_rerun_under_current_hidden_test_contract=True | benchmarks/real_reuse/swe_t1_task_contract_decision_v0.json |
 | real_reuse_swe_t1_future_revision_rules | ready | required_properties=6 | benchmarks/real_reuse/swe_t1_task_contract_decision_v0.json |
+| real_reuse_swe_t1_issue_aligned_contract_present | ready | present | benchmarks/real_reuse/swe_t1_issue_aligned_contract_v0.json |
+| real_reuse_swe_t1_issue_aligned_contract_scope | ready | task_id=SWE-T1; base_decision=benchmarks/real_reuse/swe_t1_task_contract_decision_v0.json | benchmarks/real_reuse/swe_t1_issue_aligned_contract_v0.json |
+| real_reuse_swe_t1_issue_aligned_check_present | ready | present=True | benchmarks/real_reuse/assets/SWE-T1/scorer_only/issue_aligned_check.py |
+| real_reuse_swe_t1_issue_aligned_criteria | ready | criteria=4 | benchmarks/real_reuse/swe_t1_issue_aligned_contract_v0.json |
+| real_reuse_swe_t1_issue_aligned_pairing | ready | conditions=papertoskill,summary | benchmarks/real_reuse/swe_t1_issue_aligned_contract_v0.json |
+| real_reuse_swe_t1_issue_aligned_no_main_replacement | ready | main_rows_unchanged_by_default=True | benchmarks/real_reuse/swe_t1_issue_aligned_contract_v0.json |

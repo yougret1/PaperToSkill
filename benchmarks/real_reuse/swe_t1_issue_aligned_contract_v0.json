@@ -1,0 +1,51 @@
+{
+  "schema_version": "0.1",
+  "contract_id": "swe_t1_issue_aligned_contract_v0",
+  "status": "pre_registered",
+  "task_id": "SWE-T1",
+  "source_paper_id": "swe_agent",
+  "evidence_boundary": "This contract pre-registers a future issue-aligned SWE-T1 scorer/test path. It does not replace current paper-facing SWE-T1 rows and does not add task-success evidence.",
+  "base_decision": "benchmarks/real_reuse/swe_t1_task_contract_decision_v0.json",
+  "scorer_only_check": "benchmarks/real_reuse/assets/SWE-T1/scorer_only/issue_aligned_check.py",
+  "candidate_contract": {
+    "accepted_candidate_form": "single unified diff patch",
+    "model_visible_inputs": [
+      "locked issue description",
+      "locked task prompt",
+      "model-visible source context when using a source-context follow-up",
+      "condition context"
+    ],
+    "hidden_from_model": [
+      "issue_aligned_check.py",
+      "gold.patch",
+      "test.patch",
+      "main_run_selection.json"
+    ]
+  },
+  "paired_run_policy": {
+    "conditions": [
+      "summary",
+      "papertoskill"
+    ],
+    "base_model_policy": "Use GPT-family gpt-5.5 unless explicitly running an LLM ablation.",
+    "same_fixture": true,
+    "same_source_context": true,
+    "same_scorer": true,
+    "same_resource_budget": true,
+    "no_mid_run_human_intervention": true
+  },
+  "issue_aligned_success_criteria": [
+    "A TSQL single-table query without an alias must not trigger L031.",
+    "A TSQL single-table query with an alias must not trigger L031.",
+    "A TSQL query with aliases in a join must still trigger L031 as a regression guard.",
+    "The candidate patch must apply cleanly before the issue-aligned check runs."
+  ],
+  "promotion_policy": {
+    "main_rows_unchanged_by_default": true,
+    "requires_paired_rerun_before_promotion": true,
+    "promotion_requires_pre_registration": true,
+    "paper_facing_selection_file": "results/real_reuse/main_run_selection.json"
+  },
+  "raw_rows_policy": "diagnostic_until_explicit_promotion",
+  "next_action": "Validate the issue-aligned check against base and known candidate patches locally, then run paired Summary/PaperToSkill only if the paper needs a stronger SWE-T1 row."
+}

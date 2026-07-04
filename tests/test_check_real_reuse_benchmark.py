@@ -72,6 +72,12 @@ class CheckRealReuseBenchmarkTest(unittest.TestCase):
             self.assertIn("real_reuse_swe_t1_task_contract_preserves_main_row", ready_ids)
             self.assertIn("real_reuse_swe_t1_task_contract_no_current_rerun", ready_ids)
             self.assertIn("real_reuse_swe_t1_future_revision_rules", ready_ids)
+            self.assertIn("real_reuse_swe_t1_issue_aligned_contract_present", ready_ids)
+            self.assertIn("real_reuse_swe_t1_issue_aligned_contract_scope", ready_ids)
+            self.assertIn("real_reuse_swe_t1_issue_aligned_check_present", ready_ids)
+            self.assertIn("real_reuse_swe_t1_issue_aligned_criteria", ready_ids)
+            self.assertIn("real_reuse_swe_t1_issue_aligned_pairing", ready_ids)
+            self.assertIn("real_reuse_swe_t1_issue_aligned_no_main_replacement", ready_ids)
             self.assertIn("real_reuse_snapatac2_rubric_ready", ready_ids)
             self.assertIn("real_reuse_snapatac2_source_span_ready", ready_ids)
             self.assertIn("real_reuse_llm_ablation_linked_to_tasks", ready_ids)
@@ -270,6 +276,43 @@ class CheckRealReuseBenchmarkTest(unittest.TestCase):
             statuses = {check["id"]: check["status"] for check in report["checks"]}
             self.assertEqual("fail", report["overall_status"])
             self.assertEqual("fail", statuses["real_reuse_swe_t1_task_contract_decision_present"])
+
+    def test_missing_swe_t1_issue_aligned_contract_fails_preflight(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            for relative_dir in [
+                "benchmarks/real_reuse/tasks",
+                "benchmarks/real_reuse/fixtures",
+                "benchmarks/real_reuse/fixture_candidates",
+                "benchmarks/real_reuse/asset_locks",
+                "benchmarks/real_reuse/assets/SWE-T1/scorer_only",
+                "scripts",
+                "generated_skills/real_reuse/swe_agent/references",
+                "generated_skills/real_reuse/snapatac2/references",
+                "results/evaluations",
+            ]:
+                (root / relative_dir).mkdir(parents=True)
+            spec_dir = root / "benchmarks" / "real_reuse"
+            spec_dir.mkdir(parents=True, exist_ok=True)
+            (spec_dir / "real_reuse_v0.json").write_text(SPEC.read_text(encoding="utf-8"), encoding="utf-8")
+            for source_dir, dest_dir in [
+                (ROOT / "benchmarks" / "real_reuse" / "tasks", root / "benchmarks" / "real_reuse" / "tasks"),
+                (ROOT / "benchmarks" / "real_reuse" / "fixtures", root / "benchmarks" / "real_reuse" / "fixtures"),
+                (ROOT / "benchmarks" / "real_reuse" / "fixture_candidates", root / "benchmarks" / "real_reuse" / "fixture_candidates"),
+                (ROOT / "benchmarks" / "real_reuse" / "asset_locks", root / "benchmarks" / "real_reuse" / "asset_locks"),
+            ]:
+                for path in source_dir.glob("*.json"):
+                    (dest_dir / path.name).write_text(path.read_text(encoding="utf-8"), encoding="utf-8")
+            for path in [
+                ROOT / "benchmarks" / "real_reuse" / "snapatac2_executable_candidate_contract_v0.json",
+                ROOT / "benchmarks" / "real_reuse" / "swe_t1_task_contract_decision_v0.json",
+            ]:
+                (spec_dir / path.name).write_text(path.read_text(encoding="utf-8"), encoding="utf-8")
+
+            report = build_report(root, spec_dir / "real_reuse_v0.json")
+            statuses = {check["id"]: check["status"] for check in report["checks"]}
+            self.assertEqual("fail", report["overall_status"])
+            self.assertEqual("fail", statuses["real_reuse_swe_t1_issue_aligned_contract_present"])
 
 
 if __name__ == "__main__":

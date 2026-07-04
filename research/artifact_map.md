@@ -23,6 +23,7 @@
 | `research/real_reuse_stabilization_queue.md` | Current non-network stabilization queue for the eight locked real-reuse rows, with SNAP contract and SWE-T1 task-contract priorities | Created |
 | `research/snapatac2_executable_candidate_contract.md` | Human-readable SNAP executable-candidate contract for future paired reruns; does not replace current SNAP main rows | Created |
 | `research/swe_t1_task_contract_decision.md` | Human-readable SWE-T1 task-contract decision: freeze current SWE-T1 as boundary evidence and require issue-aligned hidden tests before any future rerun | Created |
+| `research/swe_t1_issue_aligned_contract.md` | Human-readable SWE-T1 issue-aligned revised scorer/test contract; future-rerun contract only, not a main-row replacement | Created |
 | `research/experiment_queue.md` | Phase 1 and Phase 2 runnable queue | Created |
 | `research/review_report.md` | Internal adversarial review and submission-gate risks | Created |
 | `research/rebuttal_bank.md` | Evidence-bounded answers to likely reviewer objections | Created |
@@ -152,6 +153,7 @@
 | `benchmarks/real_reuse/llm_ablation_v0.json` | Pre-registered real-reuse LLM ablation protocol over stabilized AIDE-T2, SWE-T2, and REF-T2 slices with GPT/Claude/DeepSeek model slots | Created |
 | `benchmarks/real_reuse/snapatac2_executable_candidate_contract_v0.json` | Pre-registered executable-candidate contract for future SNAP-T1/T2 paired reruns; runner must execute candidates, materialize artifacts, record runtime/memory, and keep rows diagnostic unless explicitly promoted | Created |
 | `benchmarks/real_reuse/swe_t1_task_contract_decision_v0.json` | Pre-registered SWE-T1 task-contract decision that preserves the current main row as boundary evidence and requires an issue-aligned hidden-test contract before rerun | Created |
+| `benchmarks/real_reuse/swe_t1_issue_aligned_contract_v0.json` | Pre-registered SWE-T1 issue-aligned revised scorer/test contract for a future paired rerun; diagnostic until explicit promotion | Created |
 | `benchmarks/real_reuse/tasks/*.json` | Per-task real-reuse execution-contract specs for all eight planned paper-task rows; all eight rows now have one GPT-family Summary-vs-PaperToSkill raw-row pass | Created |
 | `benchmarks/real_reuse/fixtures/*.json` | Per-task fixture requirement manifests with asset slots, scoring contracts, license/provenance status, and planned outputs; concrete assets are partial | Created |
 | `benchmarks/real_reuse/fixture_candidates/*.json` | Per-task candidate asset manifests with selected source repositories/datasets, preparation commands, scoring entry points, and license/provenance boundaries; all main task families have prepared or scored local rows | Created |
@@ -161,6 +163,7 @@
 | `benchmarks/real_reuse/assets/REF-T1/asset_manifest.json` | Prepared HotPotQA-style Reflexion QA fixture manifest with model-visible task assets and hidden answer key; not a model run or result | Created |
 | `benchmarks/real_reuse/assets/REF-T2/asset_manifest.json` | Prepared HumanEval/0 Reflexion retry fixture manifest with model-visible failed attempt/feedback and hidden checker assets; not a model run or result | Created |
 | `benchmarks/real_reuse/assets/SWE-T1/asset_manifest.json` | Prepared SWE-Bench Lite-style SQLFluff fixture manifest with external workspace pointer, model-visible issue assets, local venv test command, and scorer-only gold/test patches; not a model run by itself | Created |
+| `benchmarks/real_reuse/assets/SWE-T1/scorer_only/issue_aligned_check.py` | Scorer-only SWE-T1 issue-aligned check for no-join alias behavior plus join-alias regression guard; hidden from model prompts | Created |
 | `benchmarks/real_reuse/assets/SWE-T2/asset_manifest.json` | Prepared SWE-Bench Verified-style Astropy fixture manifest with external workspace pointer, model-visible task assets, and scorer-only gold/test patches; not a model run by itself | Created |
 | `benchmarks/real_reuse/assets/SNAP-T1/asset_manifest.json` | Prepared SnapATAC2 official miniature-fixture manifest with model-visible task assets and scorer-only thresholds | Created |
 | `benchmarks/real_reuse/assets/SNAP-T2/asset_manifest.json` | Prepared SnapATAC2 official miniature-fixture manifest with model-visible task assets, proxy-label policy, and scorer-only thresholds | Created |
@@ -450,6 +453,8 @@
 | `results/real_reuse/swe_t1_source_context_followup.csv` | Data source for the AAAI SWE-T1 shared-source-context follow-up table; phase107 remains diagnostic follow-up evidence, not a main-row replacement | Created |
 | `results/real_reuse/swe_t1_source_context_followup.md` | Human-readable SWE-T1 shared-source-context follow-up report comparing first-pass patch-apply failures with phase107 patch-applied / hidden-test-failed outcomes | Created |
 | `results/real_reuse/swe_t1_source_context_followup.json` | Machine-readable SWE-T1 shared-source-context follow-up report and evidence boundary | Created |
+| `results/real_reuse/swe_t1_issue_aligned_contract_validation.md` | Human-readable validation of the SWE-T1 issue-aligned check against the base workspace and existing phase107 patches; diagnostic contract evidence only | Created |
+| `results/real_reuse/swe_t1_issue_aligned_contract_validation.json` | Machine-readable SWE-T1 issue-aligned contract validation report | Created |
 | `scripts/build_real_reuse_full_excerpt_sanity.py` | Builds the auxiliary Full Excerpt sanity table from pre-registered tasks, raw rows, and context paths | Created |
 | `results/real_reuse/full_excerpt_sanity.csv` | Data source for the AAAI Full Excerpt sanity table; the pre-registered three-row sanity subset is scored | Created |
 | `results/real_reuse/full_excerpt_sanity.md` | Human-readable Full Excerpt sanity check with local whitespace token proxies | Created |

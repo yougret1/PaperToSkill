@@ -65,6 +65,8 @@ EXPECTED_SNAPATAC2_PREPARED_ASSET_TASKS = {"SNAP-T1", "SNAP-T2"}
 EXPECTED_PREPARED_ASSET_TASKS = EXPECTED_REFLEXION_PREPARED_ASSET_TASKS | EXPECTED_SNAPATAC2_PREPARED_ASSET_TASKS
 EXPECTED_SNAPATAC2_EXECUTABLE_CONTRACT = Path("benchmarks/real_reuse/snapatac2_executable_candidate_contract_v0.json")
 EXPECTED_SWE_T1_TASK_CONTRACT_DECISION = Path("benchmarks/real_reuse/swe_t1_task_contract_decision_v0.json")
+EXPECTED_SWE_T1_ISSUE_ALIGNED_CONTRACT = Path("benchmarks/real_reuse/swe_t1_issue_aligned_contract_v0.json")
+EXPECTED_SWE_T1_ISSUE_ALIGNED_CHECK = Path("benchmarks/real_reuse/assets/SWE-T1/scorer_only/issue_aligned_check.py")
 EXPECTED_SNAPATAC2_SCORER_COMPONENTS = {
     "completed",
     "artifacts",
@@ -223,6 +225,7 @@ def build_report(root: Path, spec_path: Path) -> dict[str, Any]:
     checks.extend(snapatac2_runner_checks(root, spec_path))
     checks.extend(snapatac2_executable_contract_checks(root, spec_path))
     checks.extend(swe_t1_task_contract_decision_checks(root, spec_path))
+    checks.extend(swe_t1_issue_aligned_contract_checks(root, spec_path))
     return report_from_checks(root, spec_path, spec, checks)
 
 
@@ -1683,6 +1686,91 @@ def swe_t1_task_contract_decision_checks(root: Path, spec_path: Path) -> list[Ch
             else "fail",
             "required_properties=" + str(len(required_properties)),
             relative(root, decision_path),
+        ),
+    ]
+
+
+def swe_t1_issue_aligned_contract_checks(root: Path, spec_path: Path) -> list[Check]:
+    contract_path = root / EXPECTED_SWE_T1_ISSUE_ALIGNED_CONTRACT
+    check_path = root / EXPECTED_SWE_T1_ISSUE_ALIGNED_CHECK
+    if not contract_path.exists():
+        return [
+            Check(
+                "real_reuse_swe_t1_issue_aligned_contract_present",
+                "fail",
+                "missing",
+                relative(root, contract_path),
+            )
+        ]
+
+    contract = load_json(contract_path)
+    paired_policy = contract.get("paired_run_policy", {})
+    promotion_policy = contract.get("promotion_policy", {})
+    criteria = set(contract.get("issue_aligned_success_criteria", []))
+    expected_criteria = {
+        "A TSQL single-table query with an alias must not trigger L031.",
+        "A TSQL query with aliases in a join must still trigger L031 as a regression guard.",
+        "The candidate patch must apply cleanly before the issue-aligned check runs.",
+    }
+    required_pairing = {
+        "same_fixture",
+        "same_source_context",
+        "same_scorer",
+        "same_resource_budget",
+        "no_mid_run_human_intervention",
+    }
+
+    return [
+        Check(
+            "real_reuse_swe_t1_issue_aligned_contract_present",
+            "ready",
+            "present",
+            relative(root, contract_path),
+        ),
+        Check(
+            "real_reuse_swe_t1_issue_aligned_contract_scope",
+            "ready"
+            if contract.get("task_id") == "SWE-T1"
+            and contract.get("base_decision") == EXPECTED_SWE_T1_TASK_CONTRACT_DECISION.as_posix()
+            else "fail",
+            "task_id=" + str(contract.get("task_id")) + "; base_decision=" + str(contract.get("base_decision")),
+            relative(root, contract_path),
+        ),
+        Check(
+            "real_reuse_swe_t1_issue_aligned_check_present",
+            "ready"
+            if check_path.exists()
+            and contract.get("scorer_only_check") == EXPECTED_SWE_T1_ISSUE_ALIGNED_CHECK.as_posix()
+            else "fail",
+            "present=" + str(check_path.exists()),
+            relative(root, check_path),
+        ),
+        Check(
+            "real_reuse_swe_t1_issue_aligned_criteria",
+            "ready" if expected_criteria <= criteria else "fail",
+            "criteria=" + str(len(criteria)),
+            relative(root, contract_path),
+        ),
+        Check(
+            "real_reuse_swe_t1_issue_aligned_pairing",
+            "ready"
+            if set(paired_policy.get("conditions", [])) == EXPECTED_PRIMARY_CONDITIONS
+            and all(paired_policy.get(field) is True for field in required_pairing)
+            and "gpt-5.5" in str(paired_policy.get("base_model_policy", ""))
+            else "fail",
+            "conditions=" + ",".join(sorted(str(item) for item in paired_policy.get("conditions", []))),
+            relative(root, contract_path),
+        ),
+        Check(
+            "real_reuse_swe_t1_issue_aligned_no_main_replacement",
+            "ready"
+            if promotion_policy.get("main_rows_unchanged_by_default") is True
+            and promotion_policy.get("requires_paired_rerun_before_promotion") is True
+            and contract.get("raw_rows_policy") == "diagnostic_until_explicit_promotion"
+            else "fail",
+            "main_rows_unchanged_by_default="
+            + str(promotion_policy.get("main_rows_unchanged_by_default")),
+            relative(root, contract_path),
         ),
     ]
 

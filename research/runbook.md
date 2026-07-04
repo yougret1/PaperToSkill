@@ -30,14 +30,16 @@ git ls-remote --heads origin main
 Test-NetConnection github.com -Port 443 | Format-List
 ```
 
-Current status as of 2026-07-04: the latest observed pushed checkpoint is at
-least `03b7ca4` (`Plan real-reuse stabilization priorities`), after
-`a170aa6`, `43bc1a0`, `4b606f9`, `641eef0`, `d248878`, and `f44da1b`. Treat
-this as a phase checkpoint, not an experiment result. Some early
-`git push origin main` attempts failed with GitHub/network connectivity errors,
-but later retries succeeded through `03b7ca4`. Keep future GitHub transport
-issues separate from experiment correctness, and re-run remote verification
-before making future remote-backed checkpoint claims.
+Current status as of 2026-07-05: the latest verified pushed checkpoint before
+the current local SWE-T1 issue-aligned contract work is `ef7dc1b`
+(`Sync memory after contract decisions`). It includes the earlier
+row-selection/stabilization range plus the SNAP executable-candidate contract
+and SWE-T1 task-contract decision commits. Treat this as a phase checkpoint,
+not an experiment result. Some early `git push origin main` attempts failed
+with GitHub/network connectivity errors, but later retries succeeded through
+`ef7dc1b`. Keep future GitHub transport issues separate from experiment
+correctness, and re-run remote verification before making future remote-backed
+checkpoint claims.
 
 ## Local Text-To-Skill Pipeline
 

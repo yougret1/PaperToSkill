@@ -3,7 +3,7 @@
 Read this file after any context compaction or session resume. Also read
 `memory/long_term_memory.md` before taking project actions.
 
-Current date: 2026-07-04.
+Current date: 2026-07-05.
 
 ## Current Task
 
@@ -33,19 +33,34 @@ Current date: 2026-07-04.
   row as boundary evidence, forbid more model calls under the current hidden
   test contract, and require issue-aligned hidden tests before any future
   paired rerun.
+- SWE-T1 issue-aligned revised scorer/test contract is now pre-registered and
+  validated locally:
+  `benchmarks/real_reuse/swe_t1_issue_aligned_contract_v0.json`,
+  `benchmarks/real_reuse/assets/SWE-T1/scorer_only/issue_aligned_check.py`,
+  `research/swe_t1_issue_aligned_contract.md`, and
+  `results/real_reuse/swe_t1_issue_aligned_contract_validation.{md,json}`.
+  The base workspace fails the alias no-join check as expected; the phase107
+  Summary patch passes; the phase107 PaperToSkill patch fails the join
+  regression guard. This is diagnostic contract validation only, not a new raw
+  row and not a main-row replacement.
 - Current remote-backup status: GitHub push recovered. `origin/main` is
-  verified at `36ae48e` (`Record SWE-T1 task contract decision`), after
-  `25017a8` (`Pre-register SNAP executable candidate contract`). Earlier
-  `git push origin main` failures were transport availability only and are
-  recorded in `toHuman.md` as recovered history.
+  verified at `ef7dc1b43bcbc9ea4b09a2dec5a60523422d6d97`, which includes
+  `36ae48e` (`Record SWE-T1 task contract decision`), `25017a8`
+  (`Pre-register SNAP executable candidate contract`), and the memory sync
+  `ef7dc1b` (`Sync memory after contract decisions`). Earlier `git push origin
+  main` failures were transport availability only and are recorded in
+  `toHuman.md` as recovered history. Current SWE-T1 issue-aligned contract
+  changes are local until a future explicit phase save.
 - The current discussion policy is: stabilize the core eight-row real-reuse
   evidence first; collect auxiliary raw data opportunistically; keep LLM
   ablation auxiliary, component ablation appendix-only, and user study
   last/optional. Provider latency, timeouts, and retry counts are availability
   metadata, not effectiveness metrics.
-- The latest successful remote backup in this turn pushed through at least
-  `03b7ca4` (`Plan real-reuse stabilization priorities`), on top of
-  `a170aa6`, `43bc1a0`, `4b606f9`, `641eef0`, `f44da1b`, and `d248878`. Some
+- The latest verified remote backup before the current local issue-aligned
+  SWE-T1 work is `ef7dc1b43bcbc9ea4b09a2dec5a60523422d6d97`
+  (`ef7dc1b Sync memory after contract decisions`). It includes the earlier
+  row-selection/stabilization commits plus `25017a8` (SNAP executable
+  candidate contract) and `36ae48e` (SWE-T1 task-contract decision). Some
   earlier `git push origin main` attempts failed with GitHub/network
   connectivity errors, but later retries succeeded. `toHuman.md` now says no
   immediate human-side action is required. Verify exact remote state with
@@ -66,9 +81,12 @@ Current date: 2026-07-04.
   (`Sync memory after real-reuse guard`), `4b606f9`
   (`Document real-reuse row selection metadata`), `43bc1a0`
   (`Record row selection push blocker`), `a170aa6`
-  (`Sync row selection push status`), and `03b7ca4`
-  (`Plan real-reuse stabilization priorities`) are the current saved and
-  pushed phase/checkpoint range, subject to fresh remote verification. The
+  (`Sync row selection push status`), `03b7ca4`
+  (`Plan real-reuse stabilization priorities`), `25017a8`
+  (`Pre-register SNAP executable candidate contract`), `36ae48e`
+  (`Record SWE-T1 task contract decision`), and `ef7dc1b`
+  (`Sync memory after contract decisions`) are the current saved and pushed
+  phase/checkpoint range, subject to fresh remote verification. The
   earlier GitHub push failures in this turn were transient transport
   availability metadata, not experiment correctness evidence.
 - Verification before the phase save passed:
@@ -84,10 +102,11 @@ Current date: 2026-07-04.
   is required, and `ok.txt` should only be created for completed human-fidelity
   annotation or a concrete placed core asset.
 - Current GitHub transport note: `git push origin main` eventually succeeded
-  for the row-selection and stabilization-queue phase, updating `main` through
-  `03b7ca4` in the latest observed successful push. Before claiming any future
-  phase save is remote-backed, rerun `git status -sb`, `git log -3 --oneline`,
-  and `git ls-remote --heads origin main`.
+  for the row-selection, stabilization-queue, SNAP contract, SWE-T1 decision,
+  and memory-sync phases, updating `main` through `ef7dc1b` in the latest
+  verified successful push. Before claiming any future phase save is
+  remote-backed, rerun `git status -sb`, `git log -3 --oneline`, and
+  `git ls-remote --heads origin main`.
 - Latest phase checkpoint: after record-sync commit `977b2b9`
   (`Sync experiment planning records`), Claude-family REF-T2 was retried from
   the local Claude API doc key with the v0 300-second / 5-attempt protocol;
@@ -224,12 +243,12 @@ Current date: 2026-07-04.
 ## Immediate Next Actions
 
 1. Continue local, non-network core real-reuse stabilization first. SNAP
-   executable-candidate and SWE-T1 task-contract decisions are now
-   pre-registered and guarded by preflight. If a stronger SWE-T1 row is needed
-   later, first implement an issue-aligned revised hidden test/scorer contract;
-   do not spend more SWE-T1 model calls under the current hidden-test
-   contract, and do not change paper-facing main rows unless explicitly
-   promoted.
+   executable-candidate, SWE-T1 task-contract decision, and SWE-T1
+   issue-aligned revised scorer/test contract are now pre-registered and
+   guarded by focused preflight. If a stronger SWE-T1 row is needed later, run
+   a paired Summary/PaperToSkill rerun only under the issue-aligned contract;
+   do not spend more SWE-T1 model calls under the old hidden-test contract,
+   and do not change paper-facing main rows unless explicitly promoted.
 2. Retry Claude-family real-reuse LLM ablation rows only opportunistically when
    provider availability recovers. The current collected scored slices are all
    GPT-family and DeepSeek-family rows for REF-T2, AIDE-T2, and SWE-T2; all
@@ -245,7 +264,7 @@ Current date: 2026-07-04.
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
 6. Latest remote verification:
-   `36ae48ea4ab6f4213b7e31b7e796e853c4f867de refs/heads/main`.
+   `ef7dc1b43bcbc9ea4b09a2dec5a60523422d6d97 refs/heads/main`.
 7. No immediate human-side action is required.
 
 ## Boundaries

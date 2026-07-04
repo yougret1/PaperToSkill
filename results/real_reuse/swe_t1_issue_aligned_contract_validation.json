@@ -1,0 +1,34 @@
+{
+  "schema_version": "0.1",
+  "task_id": "SWE-T1",
+  "status": "diagnostic_validation_complete",
+  "evidence_boundary": "This validates the pre-registered issue-aligned check against the base workspace and existing phase107 candidate patches. It does not add new model calls, does not append raw rows, and does not replace the paper-facing SWE-T1 main row.",
+  "contract": "benchmarks/real_reuse/swe_t1_issue_aligned_contract_v0.json",
+  "check_script": "benchmarks/real_reuse/assets/SWE-T1/scorer_only/issue_aligned_check.py",
+  "validation_rows": [
+    {
+      "label": "base_workspace",
+      "patch": "",
+      "expected": "fail",
+      "observed_success": false,
+      "finding": "Base workspace fails because the alias no-join query still triggers L031."
+    },
+    {
+      "label": "phase107_summary_patch",
+      "patch": "results/real_reuse/runs/SWE-T1/summary/phase107_gpt_swe_t1_source_context_followup/candidate.patch",
+      "expected": "diagnostic_score_only",
+      "observed_success": true,
+      "task_score": 1.0,
+      "finding": "The Summary source-context follow-up patch passes the issue-aligned no-join and join-regression checks."
+    },
+    {
+      "label": "phase107_papertoskill_patch",
+      "patch": "results/real_reuse/runs/SWE-T1/papertoskill/phase107_gpt_swe_t1_source_context_followup/candidate.patch",
+      "expected": "diagnostic_score_only",
+      "observed_success": false,
+      "task_score": 0.0,
+      "finding": "The PaperToSkill source-context follow-up patch fixes the no-join alias issue but fails the join-regression guard because L031 no longer fires on the join-alias query."
+    }
+  ],
+  "main_row_policy": "Keep the first-pass SWE-T1 main row unchanged unless a future paired rerun is pre-registered and explicitly promoted through results/real_reuse/main_run_selection.json."
+}
