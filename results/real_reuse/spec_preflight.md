@@ -5,7 +5,7 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 - Overall status: ready_to_implement
 - Spec path: benchmarks/real_reuse/real_reuse_v0.json
 - Task count: 8
-- Ready checks: 472
+- Ready checks: 478
 - Failed checks: 0
 
 ## Checks
@@ -484,3 +484,9 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 | real_reuse_snapatac2_scorer_present | ready | present | scripts/score_real_reuse_snapatac2.py |
 | real_reuse_snapatac2_runner_present | ready | present | scripts/run_real_reuse_snapatac2.py |
 | real_reuse_snapatac2_runner_contract_ready | ready | SnapATAC2 execution-layer contract snippets present | scripts/run_real_reuse_snapatac2.py |
+| real_reuse_snapatac2_executable_contract_present | ready | present | benchmarks/real_reuse/snapatac2_executable_candidate_contract_v0.json |
+| real_reuse_snapatac2_executable_contract_scope | ready | tasks=SNAP-T1,SNAP-T2; conditions=papertoskill,summary | benchmarks/real_reuse/snapatac2_executable_candidate_contract_v0.json |
+| real_reuse_snapatac2_executable_contract_runner_owns_completion | ready | requirements=append_raw_rows_only_if_explicitly_promoted,call_existing_scorer,execute_candidate,measure_peak_memory,measure_runtime,write_artifact_manifest,write_candidate_output,write_resource_record | benchmarks/real_reuse/snapatac2_executable_candidate_contract_v0.json |
+| real_reuse_snapatac2_executable_contract_candidate_outputs | ready | required_outputs=artifact_manifest.json,candidate_output.json,resource_record.json | benchmarks/real_reuse/snapatac2_executable_candidate_contract_v0.json |
+| real_reuse_snapatac2_executable_contract_scoring_components | ready | SNAP-T1=artifacts,completed,method_alignment,resource; SNAP-T2=artifacts,completed,method_alignment,quality,resource | benchmarks/real_reuse/snapatac2_executable_candidate_contract_v0.json |
+| real_reuse_snapatac2_executable_contract_no_main_replacement | ready | main_rows_unchanged_by_default=True | benchmarks/real_reuse/snapatac2_executable_candidate_contract_v0.json |

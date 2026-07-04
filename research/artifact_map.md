@@ -20,6 +20,8 @@
 | `research/claim_evidence_matrix.md` | Claims mapped to experiments/evidence | Created |
 | `research/experiment_design.md` | Planned evaluation and smoke tests | Created |
 | `research/real_reuse_experiment_plan.md` | Next-stage original-style paper-task reuse plan, table layouts, candidate papers, and evidence boundaries | Planned |
+| `research/real_reuse_stabilization_queue.md` | Current non-network stabilization queue for the eight locked real-reuse rows, with SNAP contract and SWE-T1 task-contract priorities | Created |
+| `research/snapatac2_executable_candidate_contract.md` | Human-readable SNAP executable-candidate contract for future paired reruns; does not replace current SNAP main rows | Created |
 | `research/experiment_queue.md` | Phase 1 and Phase 2 runnable queue | Created |
 | `research/review_report.md` | Internal adversarial review and submission-gate risks | Created |
 | `research/rebuttal_bank.md` | Evidence-bounded answers to likely reviewer objections | Created |
@@ -147,6 +149,7 @@
 | `benchmarks/rubric_swe_agent_v0.json` | Deterministic v0 scoring rubric for the real-reuse SWE-agent generated skill | Created |
 | `benchmarks/real_reuse/real_reuse_v0.json` | Machine-checkable planned real-reuse benchmark spec with eight original-style paper-task rows | Created |
 | `benchmarks/real_reuse/llm_ablation_v0.json` | Pre-registered real-reuse LLM ablation protocol over stabilized AIDE-T2, SWE-T2, and REF-T2 slices with GPT/Claude/DeepSeek model slots | Created |
+| `benchmarks/real_reuse/snapatac2_executable_candidate_contract_v0.json` | Pre-registered executable-candidate contract for future SNAP-T1/T2 paired reruns; runner must execute candidates, materialize artifacts, record runtime/memory, and keep rows diagnostic unless explicitly promoted | Created |
 | `benchmarks/real_reuse/tasks/*.json` | Per-task real-reuse execution-contract specs for all eight planned paper-task rows; all eight rows now have one GPT-family Summary-vs-PaperToSkill raw-row pass | Created |
 | `benchmarks/real_reuse/fixtures/*.json` | Per-task fixture requirement manifests with asset slots, scoring contracts, license/provenance status, and planned outputs; concrete assets are partial | Created |
 | `benchmarks/real_reuse/fixture_candidates/*.json` | Per-task candidate asset manifests with selected source repositories/datasets, preparation commands, scoring entry points, and license/provenance boundaries; all main task families have prepared or scored local rows | Created |
@@ -232,7 +235,7 @@
 | `scripts/prepare_real_reuse_swe_fixture.py` | Prepares locked SWE-T1/T2 fixtures from local repository snapshots, writes task prompts and Summary contexts, and keeps gold patches scorer-only | Created |
 | `scripts/score_real_reuse_swe.py` | Scores SWE candidate patches by applying unified diffs in an isolated workspace and running the locked test command | Created |
 | `scripts/run_real_reuse_swe.py` | Runs locked SWE-T1/T2 Summary-vs-PaperToSkill conditions, saves prompts/responses/metrics/raw rows, and separates provider/fixture availability from model quality | Created |
-| `scripts/check_real_reuse_benchmark.py` | Validates the planned real-reuse benchmark spec, main conditions, sanity scope, reference-score boundary, task/fixture/candidate/asset-lock layers, REF prepared assets, REF runner, AIDE execution-layer contract, SWE-agent skill/execution-layer contracts, SnapATAC2 skill/execution-layer contracts, and future output paths | Created |
+| `scripts/check_real_reuse_benchmark.py` | Validates the planned real-reuse benchmark spec, main conditions, sanity scope, reference-score boundary, task/fixture/candidate/asset-lock layers, REF prepared assets, REF runner, AIDE execution-layer contract, SWE-agent skill/execution-layer contracts, SnapATAC2 skill/execution-layer contracts, SNAP executable-candidate contract, and future output paths | Created |
 | `scripts/prepare_real_reuse_snapatac2_fixture.py` | Prepares locked SNAP-T1/T2 fixture assets from declared SnapATAC2 dataset manifests and expected artifact schemas while keeping scoring labels/thresholds hidden from the model | Created |
 | `scripts/score_real_reuse_snapatac2.py` | Scores SNAP candidate analysis artifacts for runtime/memory/resource-contract completion and ARI/NMI-style labels/proxies when available | Created |
 | `scripts/run_real_reuse_snapatac2.py` | Runs locked SNAP-T1/T2 Summary-vs-PaperToSkill conditions, saves prompts/responses/metrics/raw rows when scorable, and separates provider/fixture availability from model quality | Created |

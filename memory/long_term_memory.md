@@ -336,6 +336,16 @@ Current supported claims:
   scorer. It validates the artifact/runtime/memory contract path, does not
   append to `raw_rows.jsonl`, does not replace main SNAP rows, and does not
   show PaperToSkill advantage.
+- The SNAP executable-candidate contract is now pre-registered in
+  `benchmarks/real_reuse/snapatac2_executable_candidate_contract_v0.json` and
+  summarized in `research/snapatac2_executable_candidate_contract.md`. The
+  real-reuse preflight checks that it applies to SNAP-T1/T2, keeps
+  Summary/PaperToSkill paired, makes the runner own execution/runtime/memory
+  and artifact-manifest materialization, uses
+  `scripts/score_real_reuse_snapatac2.py`, and leaves current main SNAP rows
+  unchanged unless a future paired rerun is explicitly promoted through
+  `results/real_reuse/main_run_selection.json`. This is a future-rerun
+  contract, not new task-success evidence.
 - Phase109 has collected scored real-reuse LLM ablation rows only on the
   pre-registered stabilized slices. Current collected GPT-family pairs are
   REF-T2 1.000/1.000,
@@ -697,6 +707,12 @@ Use these as entry points instead of searching the whole repo first:
   phase108 paired controlled-scaffold diagnostic rows. All four rows score
   1.000, but this is execution-contract evidence only and not a main-row
   replacement.
+- SNAP executable-candidate contract:
+  `benchmarks/real_reuse/snapatac2_executable_candidate_contract_v0.json` and
+  `research/snapatac2_executable_candidate_contract.md` define the required
+  executable candidate outputs, runner-owned runtime/memory/artifact records,
+  scorer components, failure handling, and promotion rule for any future SNAP
+  rerun. The strict preflight now guards this contract.
 - Real-reuse LLM ablation plan:
   `benchmarks/real_reuse/llm_ablation_v0.json` and
   `results/real_reuse/llm_ablation_plan.{md,json}` pre-register a stabilized

@@ -1,0 +1,127 @@
+{
+  "schema_version": "0.1",
+  "contract_id": "snapatac2_executable_candidate_contract_v0",
+  "status": "pre_registered",
+  "applies_to_tasks": [
+    "SNAP-T1",
+    "SNAP-T2"
+  ],
+  "conditions": [
+    "summary",
+    "papertoskill"
+  ],
+  "base_model_policy": "Use GPT-family gpt-5.5 unless explicitly running an LLM ablation.",
+  "provider_policy": "Use generous timeout and retry budgets; record provider availability separately from task metrics.",
+  "evidence_boundary": "This contract pre-registers how future SNAP executable-candidate reruns must materialize artifacts before scoring. It does not replace current paper-facing main rows and does not add new task-success evidence.",
+  "candidate_contract": {
+    "model_visible_input": [
+      "locked task prompt",
+      "condition context",
+      "expected artifact schema",
+      "miniature fragment fixture",
+      "resource budget"
+    ],
+    "hidden_from_model": [
+      "reference_labels_or_proxy",
+      "scorer_thresholds",
+      "main_run_selection"
+    ],
+    "accepted_candidate_form": [
+      "single executable Python script",
+      "shell command plan that calls a checked-in script",
+      "structured JSON that points to an executable script and arguments"
+    ],
+    "required_outputs": [
+      "candidate_output.json",
+      "artifact_manifest.json",
+      "resource_record.json"
+    ],
+    "candidate_output_file": "candidate_output.json",
+    "candidate_output_owner": "runner_after_execution",
+    "completed_field_policy": "The runner sets completed=true only after the candidate exits successfully and required artifacts plus runtime/memory records exist. Model-authored completed=true is ignored until execution verifies it."
+  },
+  "runner_contract": {
+    "requirements": [
+      "execute_candidate",
+      "measure_runtime",
+      "measure_peak_memory",
+      "write_candidate_output",
+      "write_artifact_manifest",
+      "write_resource_record",
+      "call_existing_scorer",
+      "append_raw_rows_only_if_explicitly_promoted"
+    ],
+    "sets_completed_true_only_after_execution": true,
+    "execution_workspace_policy": "Run each task-condition pair in an isolated run directory under results/real_reuse/runs/<task>/<condition>/<run_id>/.",
+    "failure_policy": {
+      "provider_or_model_error": "availability metadata; do not create a scored raw row",
+      "candidate_not_executable": "scored task failure only after provider output exists and runner cannot execute it",
+      "missing_required_artifacts": "scored task failure with completed=false",
+      "resource_budget_exceeded": "scored task failure through resource component",
+      "invalid_json": "scored task failure through the existing scorer"
+    }
+  },
+  "task_contracts": [
+    {
+      "task_id": "SNAP-T1",
+      "metric_name": "runtime_memory_quality",
+      "required_candidate_fields": [
+        "completed",
+        "method_steps",
+        "embedding_artifacts",
+        "runtime_seconds",
+        "peak_memory_mb"
+      ],
+      "required_artifacts": [
+        "embedding.csv",
+        "cell_features.csv",
+        "fragment_summary.json"
+      ],
+      "scorer_components": [
+        "completed",
+        "artifacts",
+        "resource",
+        "method_alignment"
+      ]
+    },
+    {
+      "task_id": "SNAP-T2",
+      "metric_name": "ari_nmi_runtime_memory",
+      "required_candidate_fields": [
+        "completed",
+        "method_steps",
+        "clustering_artifacts",
+        "quality_metrics",
+        "runtime_seconds",
+        "peak_memory_mb"
+      ],
+      "required_artifacts": [
+        "clusters.csv",
+        "marker_summary.json",
+        "embedding.csv"
+      ],
+      "scorer_components": [
+        "completed",
+        "artifacts",
+        "resource",
+        "method_alignment",
+        "quality"
+      ],
+      "quality_policy": "Use hidden reference labels when available; otherwise use a pre-registered proxy quality metric declared before execution."
+    }
+  ],
+  "scoring_contract": {
+    "uses_existing_scorer": "scripts/score_real_reuse_snapatac2.py",
+    "success_threshold_source": "benchmarks/real_reuse/assets/<task>/scorer_thresholds.json",
+    "resource_budget_source": "benchmarks/real_reuse/assets/<task>/resource_budget.json",
+    "same_fixture_and_budget_across_conditions": true,
+    "no_mid_run_human_intervention": true
+  },
+  "promotion_policy": {
+    "main_rows_unchanged_by_default": true,
+    "requires_paired_rerun_before_promotion": true,
+    "promotion_requires_pre_registration": true,
+    "paper_facing_selection_file": "results/real_reuse/main_run_selection.json"
+  },
+  "raw_rows_policy": "diagnostic_until_explicit_promotion"
+}

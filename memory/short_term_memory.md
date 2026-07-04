@@ -21,10 +21,16 @@ Current date: 2026-07-04.
   phase108 SNAP executable-artifact follow-up are complete and remain
   diagnostic only.
 - Local non-network continuation after the row-selection phase added
-  `research/real_reuse_stabilization_queue.md`. It pre-registers the next
-  stabilization priorities: SNAP executable-candidate contract first, SWE-T1
-  task-contract decision second, AIDE/REF ceiling rows later if needed, and
-  Claude-family LLM ablation retry only when provider availability recovers.
+  `research/real_reuse_stabilization_queue.md`. The first priority is now
+  completed locally: the SNAP executable-candidate contract is pre-registered
+  in `benchmarks/real_reuse/snapatac2_executable_candidate_contract_v0.json`,
+  summarized in `research/snapatac2_executable_candidate_contract.md`, and
+  covered by strict real-reuse preflight checks. This does not replace the SNAP
+  main rows.
+- Next immediate non-network priority: draft the SWE-T1 task-contract decision
+  note before any further SWE-T1 model calls. AIDE/REF ceiling rows can wait;
+  Claude-family LLM ablation retry remains opportunistic only when provider
+  availability recovers.
 - The current discussion policy is: stabilize the core eight-row real-reuse
   evidence first; collect auxiliary raw data opportunistically; keep LLM
   ablation auxiliary, component ablation appendix-only, and user study
@@ -86,10 +92,12 @@ Current date: 2026-07-04.
   `results/real_reuse/llm_ablation_summary.{md,json}` without changing the
   12/18 scored-row count.
 - Current local core-stabilization change: the real-reuse preflight now treats
-  a separate `domain_robustness` planned output as deprecated/forbidden and
+  a separate `domain_robustness` planned output as deprecated/forbidden,
   checks current planned output paths (`main_results_plan.*`,
-  `failure_analysis.*`, and `llm_ablation_raw_rows.csv`). This keeps the
-  "no separate breadth experiment" decision machine-checkable.
+  `failure_analysis.*`, and `llm_ablation_raw_rows.csv`), and checks the
+  pre-registered SNAP executable-candidate contract. This keeps the "no
+  separate breadth experiment" decision and the SNAP execution-contract
+  boundary machine-checkable.
 - Current row-selection guard change: regenerated
   `results/real_reuse/main_results_plan.{md,json}` and
   `results/real_reuse/failure_analysis.{md,json}` now report that
@@ -207,15 +215,13 @@ Current date: 2026-07-04.
 
 ## Immediate Next Actions
 
-1. Continue local, non-network core real-reuse stabilization first. Read and
-   use `results/real_reuse/failure_analysis.md`,
-   `results/real_reuse/swe_t1_source_context_followup.md`,
-   `results/real_reuse/snapatac2_artifact_followup.md`,
-   `results/real_reuse/snapatac2_executable_artifact_followup.md`, and
-   `research/real_reuse_stabilization_queue.md`; draft the SNAP executable
-   candidate contract before any further SNAP model calls, draft the SWE-T1
-   task-contract decision note before any further SWE-T1 model calls, and do
-   not change paper-facing main rows unless explicitly promoted.
+1. Continue local, non-network core real-reuse stabilization first. The SNAP
+   executable-candidate contract is now pre-registered and guarded by
+   preflight, so the next immediate local action is the SWE-T1 task-contract
+   decision note. Use `results/real_reuse/failure_analysis.md`,
+   `results/real_reuse/swe_t1_source_context_followup.md`, and
+   `research/real_reuse_stabilization_queue.md`; do not change paper-facing
+   main rows unless explicitly promoted.
 2. Retry Claude-family real-reuse LLM ablation rows only opportunistically when
    provider availability recovers. The current collected scored slices are all
    GPT-family and DeepSeek-family rows for REF-T2, AIDE-T2, and SWE-T2; all

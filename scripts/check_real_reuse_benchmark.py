@@ -63,6 +63,13 @@ EXPECTED_PREPARED_ASSET_STATUS = "prepared_assets_ready_for_dry_scoring"
 EXPECTED_REFLEXION_PREPARED_ASSET_TASKS = {"REF-T1", "REF-T2"}
 EXPECTED_SNAPATAC2_PREPARED_ASSET_TASKS = {"SNAP-T1", "SNAP-T2"}
 EXPECTED_PREPARED_ASSET_TASKS = EXPECTED_REFLEXION_PREPARED_ASSET_TASKS | EXPECTED_SNAPATAC2_PREPARED_ASSET_TASKS
+EXPECTED_SNAPATAC2_EXECUTABLE_CONTRACT = Path("benchmarks/real_reuse/snapatac2_executable_candidate_contract_v0.json")
+EXPECTED_SNAPATAC2_SCORER_COMPONENTS = {
+    "completed",
+    "artifacts",
+    "resource",
+    "method_alignment",
+}
 
 
 @dataclass
@@ -213,6 +220,7 @@ def build_report(root: Path, spec_path: Path) -> dict[str, Any]:
     checks.extend(swe_runner_checks(root, spec_path))
     checks.extend(snapatac2_skill_checks(root, spec_path))
     checks.extend(snapatac2_runner_checks(root, spec_path))
+    checks.extend(snapatac2_executable_contract_checks(root, spec_path))
     return report_from_checks(root, spec_path, spec, checks)
 
 
@@ -1517,6 +1525,95 @@ def snapatac2_runner_checks(root: Path, spec_path: Path) -> list[Check]:
         )
     )
     return checks
+
+
+def snapatac2_executable_contract_checks(root: Path, spec_path: Path) -> list[Check]:
+    contract_path = root / EXPECTED_SNAPATAC2_EXECUTABLE_CONTRACT
+    if not contract_path.exists():
+        return [
+            Check(
+                "real_reuse_snapatac2_executable_contract_present",
+                "fail",
+                "missing",
+                relative(root, contract_path),
+            )
+        ]
+
+    contract = load_json(contract_path)
+    task_ids = set(contract.get("applies_to_tasks", []))
+    conditions = set(contract.get("conditions", []))
+    runner_contract = contract.get("runner_contract", {})
+    candidate_contract = contract.get("candidate_contract", {})
+    scoring_contract = contract.get("scoring_contract", {})
+    promotion_policy = contract.get("promotion_policy", {})
+    task_contracts = {
+        str(item.get("task_id")): item
+        for item in contract.get("task_contracts", [])
+        if item.get("task_id")
+    }
+
+    task_components = {
+        task_id: set(task_contract.get("scorer_components", []))
+        for task_id, task_contract in task_contracts.items()
+    }
+    required_outputs = set(candidate_contract.get("required_outputs", []))
+    runner_requirements = set(runner_contract.get("requirements", []))
+
+    return [
+        Check(
+            "real_reuse_snapatac2_executable_contract_present",
+            "ready",
+            "present",
+            relative(root, contract_path),
+        ),
+        Check(
+            "real_reuse_snapatac2_executable_contract_scope",
+            "ready" if task_ids == EXPECTED_SNAPATAC2_PREPARED_ASSET_TASKS and conditions == EXPECTED_PRIMARY_CONDITIONS else "fail",
+            "tasks=" + ",".join(sorted(task_ids)) + "; conditions=" + ",".join(sorted(conditions)),
+            relative(root, contract_path),
+        ),
+        Check(
+            "real_reuse_snapatac2_executable_contract_runner_owns_completion",
+            "ready"
+            if runner_contract.get("sets_completed_true_only_after_execution") is True
+            and {"execute_candidate", "measure_runtime", "measure_peak_memory", "write_candidate_output"}.issubset(runner_requirements)
+            else "fail",
+            "requirements=" + ",".join(sorted(runner_requirements)),
+            relative(root, contract_path),
+        ),
+        Check(
+            "real_reuse_snapatac2_executable_contract_candidate_outputs",
+            "ready"
+            if {"candidate_output.json", "artifact_manifest.json", "resource_record.json"}.issubset(required_outputs)
+            else "fail",
+            "required_outputs=" + ",".join(sorted(required_outputs)),
+            relative(root, contract_path),
+        ),
+        Check(
+            "real_reuse_snapatac2_executable_contract_scoring_components",
+            "ready"
+            if EXPECTED_SNAPATAC2_SCORER_COMPONENTS <= task_components.get("SNAP-T1", set())
+            and EXPECTED_SNAPATAC2_SCORER_COMPONENTS | {"quality"} <= task_components.get("SNAP-T2", set())
+            and scoring_contract.get("uses_existing_scorer") == "scripts/score_real_reuse_snapatac2.py"
+            else "fail",
+            "SNAP-T1="
+            + ",".join(sorted(task_components.get("SNAP-T1", set())))
+            + "; SNAP-T2="
+            + ",".join(sorted(task_components.get("SNAP-T2", set()))),
+            relative(root, contract_path),
+        ),
+        Check(
+            "real_reuse_snapatac2_executable_contract_no_main_replacement",
+            "ready"
+            if promotion_policy.get("main_rows_unchanged_by_default") is True
+            and promotion_policy.get("requires_paired_rerun_before_promotion") is True
+            and contract.get("raw_rows_policy") == "diagnostic_until_explicit_promotion"
+            else "fail",
+            "main_rows_unchanged_by_default="
+            + str(promotion_policy.get("main_rows_unchanged_by_default")),
+            relative(root, contract_path),
+        ),
+    ]
 
 
 def report_from_checks(
