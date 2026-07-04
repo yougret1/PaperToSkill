@@ -38,15 +38,17 @@ recovered. The latest verified remote checkpoint is:
 05b3963 Tighten real-reuse record boundaries
 ```
 
-Latest local phase commit:
+Latest local commits:
 
 ```text
 77e8ada Add SNAP executable candidate runner
+0983fbc Record SNAP runner push blocker
 ```
 
-This local commit is not remote-backed yet. The latest `git push origin main`
-and follow-up `git ls-remote --heads origin main` both failed with
-`Recv failure: Connection was reset`. Treat this as GitHub transport metadata,
+These local commits are not remote-backed yet. `git push origin main` and the
+follow-up `git ls-remote --heads origin main` both failed with `Recv failure:
+Connection was reset`; a later `git push origin main` failed to connect to
+github.com port 443 after 21067 ms. Treat this as GitHub transport metadata,
 not project-correctness evidence. Always inspect `git status -sb` before
 claiming a clean phase save.
 
