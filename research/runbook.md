@@ -35,11 +35,10 @@ GitHub through `ad46201` (`Avoid remote status hash churn`). The earlier HTTPS
 reset around local commit `f54be5b`, and the later reset / port-443 blocker
 around `10ffc10`, `516895a`, `6c5c360`, `9f2e52f`, and the status-sync commits
 before `ad46201`, were recovered by successful pushes. Newer local commits
-`e597fcf` and `1521b72`, plus later uncommitted SWE-T2 LLM-ablation and
-record-sync work, are not remote-backed yet because the latest push attempts hit
-GitHub HTTPS/443 failures. Keep future GitHub transport issues separate from
-experiment correctness, and do not call future phase work remote-backed until a
-new phase-save push is verified.
+`e597fcf`, `1521b72`, and `200419a` are not remote-backed yet because the latest
+push attempts hit GitHub HTTPS/443 failures. Keep future GitHub transport issues
+separate from experiment correctness, and do not call future phase work
+remote-backed until a new phase-save push is verified.
 
 ## Local Text-To-Skill Pipeline
 

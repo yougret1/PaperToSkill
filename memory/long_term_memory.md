@@ -295,12 +295,12 @@ Current supported claims:
   and the status-sync commits before `ad46201` is resolved by successful push.
   Keep future GitHub transport failures separate from experiment correctness
   and verify exact local/remote alignment before claiming a new phase save.
-- Local commits `e597fcf` (`Add AIDE real-reuse LLM ablation row`) and
-  `1521b72` (`Record AIDE ablation push blocker`) are not yet remote-backed
-  because `git push origin main` hit GitHub HTTPS reset / port-443 connection
-  failures. Current uncommitted SWE-T2 LLM-ablation and record-sync work is
-  also not remote-backed until committed and pushed. The exact current blocker
-  is recorded in `C:\Users\19351\Desktop\tem\toHuman.md`.
+- Local commits `e597fcf` (`Add AIDE real-reuse LLM ablation row`),
+  `1521b72` (`Record AIDE ablation push blocker`), and `200419a`
+  (`Add SWE real-reuse LLM ablation row`) are not yet remote-backed because
+  `git push origin main` hit GitHub HTTPS reset / port-443 connection
+  failures. The exact current blocker is recorded in
+  `C:\Users\19351\Desktop\tem\toHuman.md`.
 - SNAP artifact-execution follow-up diagnosis is now materialized in
   `results/real_reuse/snapatac2_artifact_followup.{md,json}` with builder
   `scripts/build_real_reuse_snapatac2_artifact_followup.py`: all selected SNAP

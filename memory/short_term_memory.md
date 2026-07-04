@@ -39,11 +39,12 @@ Current date: 2026-07-04.
   21118 ms`, then another reset. The exact blocker is recorded in
   `C:\Users\19351\Desktop\tem\toHuman.md`; continue non-blocked local work
   while this remote backup is pending.
-- Current uncommitted local work after those commits includes the SWE-T2 /
-  GPT-family / `gpt-5.5` LLM-ablation pair, regenerated
-  `llm_ablation_summary.*`, SWE runner report updates, and record-sync edits.
-  Save and push this as the next phase after verification when connectivity
-  permits.
+- Local commit `200419a` (`Add SWE real-reuse LLM ablation row`) saves the
+  SWE-T2 / GPT-family / `gpt-5.5` LLM-ablation pair, regenerated
+  `llm_ablation_summary.*`, SWE runner report updates, the SWE-T2 aggregation
+  regression test, and record-sync edits. A fresh `git push origin main` also
+  failed with `Recv failure: Connection was reset`, so `e597fcf`, `1521b72`,
+  and `200419a` are all local-only until connectivity recovers.
 - `C:\Users\19351\Desktop\tem\toHuman.md` should say no immediate human action
   is required, and `ok.txt` should only be created for completed human-fidelity
   annotation or a concrete placed core asset.
@@ -168,8 +169,7 @@ Current date: 2026-07-04.
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
 5. Retry `git push origin main` when connectivity recovers; until then, do not
-   claim `e597fcf`, `1521b72`, or later uncommitted SWE-T2/record-sync work is
-   remote-backed.
+   claim `e597fcf`, `1521b72`, or `200419a` is remote-backed.
 
 ## Boundaries
 
