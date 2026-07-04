@@ -36,6 +36,12 @@ Current date: 2026-07-04.
   `llm_ablation_summary.*`, AIDE runner report updates, and an added
   aggregation regression test. Save and push this as the next phase after
   verification.
+- Local commit `e597fcf` (`Add AIDE real-reuse LLM ablation row`) saves the
+  AIDE-T2 / GPT-family ablation row locally, but upload is currently blocked:
+  `git push origin main` failed with `Recv failure: Connection was reset`, then
+  `Failed to connect to github.com port 443 after 21118 ms`. The exact blocker
+  is recorded in `C:\Users\19351\Desktop\tem\toHuman.md`; continue
+  non-blocked local work while this remote backup is pending.
 - `C:\Users\19351\Desktop\tem\toHuman.md` should say no immediate human action
   is required, and `ok.txt` should only be created for completed human-fidelity
   annotation or a concrete placed core asset.
@@ -157,7 +163,8 @@ Current date: 2026-07-04.
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-5. Save and push the next meaningful phase after new core-experiment progress.
+5. Retry `git push origin main` when connectivity recovers; until then, do not
+   claim `e597fcf` is remote-backed.
 
 ## Boundaries
 

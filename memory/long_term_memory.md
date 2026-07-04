@@ -295,6 +295,10 @@ Current supported claims:
   is resolved by successful push. Later status-sync commits may sit on top;
   keep future GitHub transport failures separate from experiment correctness
   and verify exact local/remote alignment before claiming a new phase save.
+- Local commit `e597fcf` (`Add AIDE real-reuse LLM ablation row`) adds the
+  AIDE-T2 / GPT-family LLM-ablation pair, but upload is currently blocked by
+  GitHub HTTPS reset / port-443 connection failure. The exact current blocker
+  is recorded in `C:\Users\19351\Desktop\tem\toHuman.md`.
 - SNAP artifact-execution follow-up diagnosis is now materialized in
   `results/real_reuse/snapatac2_artifact_followup.{md,json}` with builder
   `scripts/build_real_reuse_snapatac2_artifact_followup.py`: all selected SNAP
