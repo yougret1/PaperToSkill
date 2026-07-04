@@ -290,17 +290,14 @@ Current supported claims:
   rows as the paper-facing main rows; report phase107 only as a
   shared-source-context follow-up.
 - Phase109 experiment evidence is confirmed on GitHub through commit
-  `ad46201` (`Avoid remote status hash churn`). The earlier HTTPS reset /
-  port-443 blocker around commits `10ffc10`, `516895a`, `6c5c360`, `9f2e52f`,
-  and the status-sync commits before `ad46201` is resolved by successful push.
-  Keep future GitHub transport failures separate from experiment correctness
-  and verify exact local/remote alignment before claiming a new phase save.
-- Local commits `e597fcf` (`Add AIDE real-reuse LLM ablation row`),
-  `1521b72` (`Record AIDE ablation push blocker`), and `200419a`
-  (`Add SWE real-reuse LLM ablation row`) are not yet remote-backed because
-  `git push origin main` hit GitHub HTTPS reset / port-443 connection
-  failures. The exact current blocker is recorded in
-  `C:\Users\19351\Desktop\tem\toHuman.md`.
+  `cb20cb1` (`Record SWE ablation push blocker`). This remote-backed range
+  includes `e597fcf` (AIDE-T2 GPT-family LLM ablation), `1521b72`
+  (AIDE push-blocker record), `200419a` (SWE-T2 GPT-family LLM ablation), and
+  `cb20cb1` (SWE push-blocker record). The latest verified remote head is
+  `cb20cb123cfa9ce7ac831b02d49bbbe8751e5fbf refs/heads/main`, and
+  `git status -sb` reported `main...origin/main`. Keep future GitHub transport
+  failures separate from experiment correctness and verify exact local/remote
+  alignment before claiming a new phase save.
 - SNAP artifact-execution follow-up diagnosis is now materialized in
   `results/real_reuse/snapatac2_artifact_followup.{md,json}` with builder
   `scripts/build_real_reuse_snapatac2_artifact_followup.py`: all selected SNAP

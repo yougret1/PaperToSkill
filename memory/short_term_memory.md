@@ -16,35 +16,25 @@ Current date: 2026-07-04.
   SWE-T1 source-context reporting, SNAP artifact-execution diagnosis, and the
   phase108 SNAP executable-artifact follow-up are complete and remain
   diagnostic only.
-- The phase109 experiment backup is confirmed on GitHub through the later
-  remote-backed status-sync commit `ad46201` (`Avoid remote status hash churn`).
-  The earlier push blocker for `10ffc10`, `516895a`, `6c5c360`, `9f2e52f`, and
-  related status-sync commits is resolved. Verify the exact current remote head
-  with `git status -sb` and `git ls-remote --heads origin main` before making a
-  fresh phase-save claim.
-- Phase109 REF-T2 GPT-family real-reuse LLM ablation pilot, the LLM-ablation
-  aggregation helper/results, and record-sync edits are locally committed and
-  remote-backed through `9f2e52f`. Verification before phase save passed:
-  181 unit tests, `check_real_reuse_benchmark.py --strict`,
+- The latest phase save is confirmed on GitHub through commit `cb20cb1`
+  (`Record SWE ablation push blocker`). Remote verification:
+  `git ls-remote --heads origin main` returned
+  `cb20cb123cfa9ce7ac831b02d49bbbe8751e5fbf refs/heads/main`, and
+  `git status -sb` reported `main...origin/main`.
+- Commits `e597fcf` (`Add AIDE real-reuse LLM ablation row`), `1521b72`
+  (`Record AIDE ablation push blocker`), `200419a`
+  (`Add SWE real-reuse LLM ablation row`), and `cb20cb1`
+  (`Record SWE ablation push blocker`) are remote-backed. The GitHub HTTPS
+  reset / port-443 blocker is resolved for these commits.
+- Verification before the phase save passed:
+  `python -m unittest tests.test_build_real_reuse_llm_ablation_results -v`
+  (4 tests), `check_real_reuse_benchmark.py --strict`,
   `check_paper_tables.py --strict`, `check_paper_claims.py --strict`,
-  `check_submission_review.py --strict`, `check_aaai_package.py --strict`,
-  `check_goal_completion.py --strict`,
-  `check_reproducibility_package.py --strict`, `git diff --check` with only
-  CRLF warnings, and a raw-key scan with no matches.
-- Local commit `e597fcf` (`Add AIDE real-reuse LLM ablation row`) saves the
-  AIDE-T2 / GPT-family ablation row locally, and local commit `1521b72`
-  (`Record AIDE ablation push blocker`) records the push blocker. Upload is
-  currently blocked: `git push origin main` failed with `Recv failure:
-  Connection was reset`, then `Failed to connect to github.com port 443 after
-  21118 ms`, then another reset. The exact blocker is recorded in
-  `C:\Users\19351\Desktop\tem\toHuman.md`; continue non-blocked local work
-  while this remote backup is pending.
-- Local commit `200419a` (`Add SWE real-reuse LLM ablation row`) saves the
-  SWE-T2 / GPT-family / `gpt-5.5` LLM-ablation pair, regenerated
-  `llm_ablation_summary.*`, SWE runner report updates, the SWE-T2 aggregation
-  regression test, and record-sync edits. A fresh `git push origin main` also
-  failed with `Recv failure: Connection was reset`, so `e597fcf`, `1521b72`,
-  and `200419a` are all local-only until connectivity recovers.
+  `check_goal_completion.py --strict`, `check_reproducibility_package.py
+  --strict`, `check_submission_review.py --strict`,
+  `check_aaai_package.py --strict`, `git diff --check` with only CRLF
+  warnings, and a raw-key scan with no matches in changed/untracked/handoff
+  files.
 - `C:\Users\19351\Desktop\tem\toHuman.md` should say no immediate human action
   is required, and `ok.txt` should only be created for completed human-fidelity
   annotation or a concrete placed core asset.
@@ -168,8 +158,8 @@ Current date: 2026-07-04.
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-5. Retry `git push origin main` when connectivity recovers; until then, do not
-   claim `e597fcf`, `1521b72`, or `200419a` is remote-backed.
+5. No GitHub retry is currently required. Retry `git push origin main` only
+   after future phase commits.
 
 ## Boundaries
 
