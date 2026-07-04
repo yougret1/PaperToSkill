@@ -685,7 +685,10 @@ Use these as entry points instead of searching the whole repo first:
   `results/real_reuse/llm_ablation_summary.md`,
   `results/real_reuse/llm_ablation_summary.json`, and
   `results/real_reuse/llm_ablation_raw_rows.csv` aggregate only
-  pre-registered run IDs; pending rows are not negative evidence.
+  pre-registered run IDs; pending rows are not negative evidence. The
+  aggregator now also carries latest runner-report provider availability
+  metadata for pending rows, so Claude-family HTTP 502 failures remain visible
+  without being counted as scored task failures.
 
 ## Model/API Configuration
 

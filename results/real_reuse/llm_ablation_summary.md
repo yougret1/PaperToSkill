@@ -38,3 +38,14 @@ Evidence boundary: Aggregates only rows whose run_id was pre-registered in the r
 | REF-T2 | GPT-family | gpt-5.5 | papertoskill | 1.000 | True | 1 |
 | REF-T2 | DeepSeek-family | deepseek-v4-flash | summary | 1.000 | True | 1 |
 | REF-T2 | DeepSeek-family | deepseek-v4-flash | papertoskill | 1.000 | True | 1 |
+
+## Pending / Availability Rows
+
+| Task ID | Family | Alias | Condition | Availability | Attempts | Failure |
+| --- | --- | --- | --- | --- | --- | --- |
+| AIDE-T2 | Claude-family | claude-opus-4-8 | summary | error | 5 | {"raw_body": "error code: 502\n", "http_error": 502} |
+| AIDE-T2 | Claude-family | claude-opus-4-8 | papertoskill | error | 5 | {"raw_body": "error code: 502\n", "http_error": 502} |
+| SWE-T2 | Claude-family | claude-opus-4-8 | summary | error | 5 | {"raw_body": "error code: 502\n", "http_error": 502} |
+| SWE-T2 | Claude-family | claude-opus-4-8 | papertoskill | error | 5 | {"raw_body": "error code: 502\n", "http_error": 502} |
+| REF-T2 | Claude-family | claude-opus-4-8 | summary | error | 5 | {"raw_body": "error code: 502\n", "http_error": 502} |
+| REF-T2 | Claude-family | claude-opus-4-8 | papertoskill | error | 5 | {"raw_body": "error code: 502\n", "http_error": 502} |

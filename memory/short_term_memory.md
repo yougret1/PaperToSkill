@@ -52,6 +52,15 @@ Current date: 2026-07-04.
   remote-backup availability, not project correctness; check `git status -sb`,
   `git log -3 --oneline`, and `git ls-remote --heads origin main` before
   claiming remote alignment.
+- New phase checkpoint: record-sync commit `977b2b9`
+  (`Sync experiment planning records`) was pushed to `origin/main` on
+  2026-07-04. After that save, Claude-family REF-T2 was retried from the local
+  Claude API doc key with the v0 300-second / 5-attempt protocol; both Summary
+  and PaperToSkill still returned provider HTTP 502 after 5 attempts. This is
+  availability metadata only. `scripts/build_real_reuse_llm_ablation_results.py`
+  now carries pending-run availability metadata from the latest AIDE/SWE/REF
+  runner reports into `results/real_reuse/llm_ablation_summary.{md,json}`
+  without changing the 12/18 scored-row count.
 
 ## Latest Record Sync Policy
 
@@ -171,7 +180,8 @@ Current date: 2026-07-04.
    Current collected scored slices are all GPT-family and DeepSeek-family rows
    for REF-T2, AIDE-T2, and SWE-T2. Claude-family rows remain pending as scored
    rows; REF-T2, AIDE-T2, and SWE-T2 were all attempted and blocked by provider
-   HTTP 502 after 5 attempts per condition.
+   HTTP 502 after 5 attempts per condition. The latest REF-T2 retry on
+   2026-07-04 was also blocked by HTTP 502.
 2. Keep Summary and PaperToSkill paired under the same task/scorer contract for
    any follow-up. Main SNAP rows remain unchanged unless explicitly promoted.
 3. During core reruns, collect auxiliary raw data where cheap: provider

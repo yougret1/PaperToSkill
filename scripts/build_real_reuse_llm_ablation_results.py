@@ -15,6 +15,11 @@ DEFAULT_RAW_ROWS = Path("results/real_reuse/raw_rows.jsonl")
 DEFAULT_OUTPUT_CSV = Path("results/real_reuse/llm_ablation_raw_rows.csv")
 DEFAULT_OUTPUT_JSON = Path("results/real_reuse/llm_ablation_summary.json")
 DEFAULT_OUTPUT_MD = Path("results/real_reuse/llm_ablation_summary.md")
+DEFAULT_REPORTS = (
+    Path("results/real_reuse/aide_run_report.json"),
+    Path("results/real_reuse/swe_run_report.json"),
+    Path("results/real_reuse/reflexion_run_report.json"),
+)
 
 
 def root_path() -> Path:
@@ -35,6 +40,44 @@ def read_raw_rows(path: Path) -> list[dict[str, Any]]:
     return rows
 
 
+def read_availability_rows(root: Path, report_paths: tuple[Path, ...] = DEFAULT_REPORTS) -> list[dict[str, Any]]:
+    """Read latest runner reports as provider-availability metadata.
+
+    These rows are not scored task results. They only explain why an expected
+    raw row is still pending, for example a provider HTTP 502 after retries.
+    """
+    rows: list[dict[str, Any]] = []
+    for raw_path in report_paths:
+        path = raw_path if raw_path.is_absolute() else root / raw_path
+        if not path.exists():
+            continue
+        try:
+            report = load_json(path)
+        except json.JSONDecodeError:
+            continue
+        for row in report.get("results", []):
+            status = str(row.get("status", ""))
+            if status == "scored":
+                continue
+            call_status = row.get("call_status", {}) if isinstance(row.get("call_status"), dict) else {}
+            rows.append(
+                {
+                    "run_id": row.get("run_id", report.get("run_id", "")),
+                    "task_id": row.get("task_id", ""),
+                    "model_alias": row.get("model_alias", report.get("model_alias", "")),
+                    "condition": row.get("condition", ""),
+                    "availability_status": status,
+                    "attempts": str(call_status.get("attempts", "")),
+                    "failure_reason": row.get("failure_reason", "")
+                    or call_status.get("error_message", "")
+                    or call_status.get("selection_reason", ""),
+                    "prompt_path": row.get("prompt_path", ""),
+                    "report_path": path.relative_to(root).as_posix() if path.is_relative_to(root) else path.as_posix(),
+                }
+            )
+    return rows
+
+
 def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
@@ -47,7 +90,11 @@ def fmt_score(value: Any) -> str:
         return ""
 
 
-def build_summary(plan: dict[str, Any], raw_rows: list[dict[str, Any]]) -> dict[str, Any]:
+def build_summary(
+    plan: dict[str, Any],
+    raw_rows: list[dict[str, Any]],
+    availability_rows: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
     expected: list[dict[str, Any]] = []
     for command in plan["commands"]:
         for condition in command["conditions"]:
@@ -65,13 +112,28 @@ def build_summary(plan: dict[str, Any], raw_rows: list[dict[str, Any]]) -> dict[
         (row.get("run_id"), row.get("task_id"), row.get("model_alias"), row.get("condition")): row
         for row in raw_rows
     }
+    availability_by_key = {
+        (row.get("run_id"), row.get("task_id"), row.get("model_alias"), row.get("condition")): row
+        for row in (availability_rows or [])
+    }
     collected_rows: list[dict[str, Any]] = []
     pending_rows: list[dict[str, Any]] = []
     for item in expected:
         key = (item["run_id"], item["task_id"], item["model_alias"], item["condition"])
         raw = raw_by_key.get(key)
         if not raw:
-            pending_rows.append({**item, "status": "pending"})
+            availability = availability_by_key.get(key, {})
+            pending_rows.append(
+                {
+                    **item,
+                    "status": "pending",
+                    "availability_status": availability.get("availability_status", ""),
+                    "attempts": availability.get("attempts", ""),
+                    "failure_reason": availability.get("failure_reason", ""),
+                    "prompt_path": availability.get("prompt_path", ""),
+                    "report_path": availability.get("report_path", ""),
+                }
+            )
             continue
         collected_rows.append(
             {
@@ -178,6 +240,18 @@ def write_markdown(path: Path, summary: dict[str, Any]) -> None:
         ]
         for row in summary["collected"]
     ]
+    pending_rows = [
+        [
+            row["task_id"],
+            row["model_family"],
+            row["model_alias"],
+            row["condition"],
+            row.get("availability_status", ""),
+            row.get("attempts", ""),
+            str(row.get("failure_reason", ""))[:120],
+        ]
+        for row in summary["pending"]
+    ]
     text = "\n\n".join(
         [
             "# Real-Reuse LLM Ablation Summary",
@@ -194,6 +268,11 @@ def write_markdown(path: Path, summary: dict[str, Any]) -> None:
             md_table(
                 ["Task ID", "Family", "Alias", "Condition", "Score", "Success", "Attempts"],
                 collected_rows,
+            ),
+            "## Pending / Availability Rows",
+            md_table(
+                ["Task ID", "Family", "Alias", "Condition", "Availability", "Attempts", "Failure"],
+                pending_rows,
             ),
         ]
     )
@@ -213,7 +292,11 @@ def main() -> int:
     root = args.root.resolve()
     plan_path = args.plan if args.plan.is_absolute() else root / args.plan
     raw_path = args.raw_rows if args.raw_rows.is_absolute() else root / args.raw_rows
-    summary = build_summary(load_json(plan_path), read_raw_rows(raw_path))
+    summary = build_summary(
+        load_json(plan_path),
+        read_raw_rows(raw_path),
+        read_availability_rows(root),
+    )
     output_csv = args.output_csv if args.output_csv.is_absolute() else root / args.output_csv
     output_json = args.output_json if args.output_json.is_absolute() else root / args.output_json
     output_md = args.output_md if args.output_md.is_absolute() else root / args.output_md

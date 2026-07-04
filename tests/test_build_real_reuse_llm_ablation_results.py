@@ -6,7 +6,7 @@ import unittest
 from pathlib import Path
 
 from scripts.build_real_reuse_llm_ablation_plan import build_plan
-from scripts.build_real_reuse_llm_ablation_results import build_summary
+from scripts.build_real_reuse_llm_ablation_results import build_summary, read_availability_rows
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -107,6 +107,29 @@ class BuildRealReuseLLMAblationResultsTest(unittest.TestCase):
             self.assertEqual("complete", pair["pair_status"])
             self.assertEqual(summary_score, pair["summary_score"])
             self.assertEqual(papertoskill_score, pair["papertoskill_score"])
+
+    def test_pending_claude_rows_keep_availability_metadata(self):
+        plan = build_plan(
+            ROOT,
+            Path("benchmarks/real_reuse/llm_ablation_v0.json"),
+            Path("results/real_reuse/main_results_plan.csv"),
+        )
+        raw_rows = [
+            json.loads(line)
+            for line in (ROOT / "results" / "real_reuse" / "raw_rows.jsonl").read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+        summary = build_summary(plan, raw_rows, read_availability_rows(ROOT))
+        claude_pending = [
+            row
+            for row in summary["pending"]
+            if row["model_slot"] == "claude_opus_4_8" and row["task_id"] == "REF-T2"
+        ]
+        self.assertEqual(2, len(claude_pending))
+        for row in claude_pending:
+            self.assertEqual("error", row["availability_status"])
+            self.assertEqual("5", row["attempts"])
+            self.assertIn("502", row["failure_reason"])
 
     def test_cli_writes_summary_outputs(self):
         with tempfile.TemporaryDirectory() as tmp:
