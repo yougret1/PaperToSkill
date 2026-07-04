@@ -92,6 +92,14 @@ pending live-agent claims.
 
 ## Current Benchmark Snapshot
 
+- Current main experiment: `results/real_reuse/main_results_plan.md` contains
+  the eight-row Summary-vs-PaperToSkill real-reuse first pass over AIDE,
+  SWE-agent, Reflexion, and SnapATAC2. Treat it as mixed downstream
+  stress-test/failure-boundary evidence until the core rows are stabilized.
+- Current real-reuse failure-boundary analysis:
+  `results/real_reuse/failure_analysis.md`.
+- Auxiliary Full Excerpt sanity check:
+  `results/real_reuse/full_excerpt_sanity.md`; this is not a main baseline.
 - Real-paper cases: AI Scientist-v2, Reflexion, AIDE, and Toolformer.
 - Main result tables: `results/tables/`.
 - Generated skills: `generated_skills/ai_scientist_v2/`,
@@ -119,7 +127,7 @@ pending live-agent claims.
   `results/ai_scientist_v2_smoke/run_report.md`.
 - OpenAI-compatible direct provider probe reports:
   `results/openai_compatible_direct_probe/`.
-- Provider-billing evidence handoff:
+- Deferred provider-billing evidence handoff, outside the current claim set:
   `results/provider_billing_evidence/billing_summary.md`.
 - Submission-review handoff:
   `results/reproducibility/submission_review_report.md`.

@@ -7,8 +7,8 @@ Current date: 2026-07-04.
 
 ## Current Task
 
-- Latest user request: update the related current records, including
-  `C:\Users\19351\Desktop\tem\toHuman.md`, but do not modify local logs.
+- Latest user request: save the current record-sync phase to git/GitHub, then
+  continue the main real-reuse experiment.
 - Local logs excluded from this sync: `research/run_logs/**` and
   `research/stage_log.md`.
 - `C:\Users\19351\Desktop\tem\ok.txt` was absent at the latest check.
@@ -16,8 +16,9 @@ Current date: 2026-07-04.
 ## Record Sync Completed This Turn
 
 - Rewrote `C:\Users\19351\Desktop\tem\toHuman.md` so it no longer treats
-  GitHub connectivity, AAAI final-submission advice, provider billing, or a
-  user study as the current human action.
+  GitHub connectivity, AAAI final-submission advice, provider billing,
+  domain-robustness planning, component ablation, or a user study as the
+  current human action.
 - Rewrote `C:\Users\19351\Desktop\tem\nextStep.md` into the current
   experiment plan: core real-reuse first, auxiliary evidence collected
   opportunistically and analyzed later, component ablation appendix-only, and
@@ -25,6 +26,12 @@ Current date: 2026-07-04.
 - Current `toHuman.md` says to create
   `C:\Users\19351\Desktop\tem\ok.txt` only when human-fidelity annotation is
   complete or when a concrete core real-reuse asset has been placed.
+- Updated non-log repository entry records to match the same policy:
+  `README.md`, `research/experiment_queue.md`,
+  `research/real_reuse_experiment_plan.md`, `research/runbook.md`, and
+  `memory/long_term_memory.md`.
+- Local logs remain untouched: `research/run_logs/**` and
+  `research/stage_log.md`.
 
 ## Current Core Experiment State
 
@@ -81,18 +88,19 @@ Current date: 2026-07-04.
 
 ## Immediate Next Actions
 
-1. Finish record sync by refreshing any non-log entry records that still
-   contain stale current-state wording.
-2. Regenerate dependent readiness reports in order so stale fail states from
-   old report dependencies clear:
-   `check_aaai_package`, `check_paper_tables`, `check_paper_claims`,
-   `check_submission_review`, `check_usage_examples`,
-   `check_aaai_submission_decision`, `check_reproducibility_package`,
-   `check_goal_completion`.
-3. Run targeted searches for stale current-state wording around old pending
-   fixture states, stale AI-Scientist-v2 blocked status, and old GitHub-push
-   human-action wording, excluding `research/run_logs/**` and
-   `research/stage_log.md`.
+1. Return to the core real-reuse experiment and inspect failure-heavy or
+   boundary-unclear rows first, especially SWE-T1 patch application and SNAP
+   artifact completion/budget boundaries.
+2. Pre-register any scorer, prompt-contract, budget, or artifact-contract
+   change before rerunning a row.
+3. Rerun affected Summary and PaperToSkill conditions under the same locked
+   task, input/output, scorer, local setting, and no-mid-run-human rule.
+4. During core reruns, collect auxiliary raw data where cheap: provider
+   availability, failure reasons, context/token proxies, and raw rows needed
+   for future real-reuse LLM ablation.
+5. After result changes, regenerate `results/real_reuse/main_results_plan.*`,
+   `results/real_reuse/failure_analysis.*`, affected paper tables, readiness
+   reports, and memory.
 
 ## Boundaries
 

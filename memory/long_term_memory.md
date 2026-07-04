@@ -54,8 +54,11 @@ This file is intentionally compact. Detailed chronological history lives in
   effectiveness until scored raw rows exist. Existing deterministic/offline
   evidence supports quality, grounding, compactness, readiness, and sanity
   claims only.
-- Claude Opus and GPT-family model ablations should be run before the user adds
-  DeepSeek following the same process.
+- The older saved-response Claude/GPT-family/DeepSeek model-ablation protocol
+  is complete as supporting output-contract evidence. Future LLM ablation
+  should attach to the real-reuse task protocol after the core rows stabilize;
+  do not treat the older saved-response protocol as downstream task-success
+  evidence.
 - Do not silently treat unavailable model endpoints as model-quality failures.
   Report provider/model availability problems.
 

@@ -30,12 +30,11 @@ git ls-remote --heads origin main
 Test-NetConnection github.com -Port 443 | Format-List
 ```
 
-Current Phase 64 status: `git push origin main` succeeded and saved the Phase
-62/63 commits through `ad8346b Record GitHub push connectivity diagnostics` to
-`origin/main`. A follow-up `git ls-remote --heads origin main` still failed
-with `Recv failure: Connection was reset`, so treat GitHub HTTPS access as
-intermittent. If future pushes fail, diagnose transport separately from project
-correctness and keep local commits intact until the next successful push.
+Current status as of 2026-07-04: the latest phase save has been pushed to
+`origin/main`; `git ls-remote --heads origin main` confirmed commit
+`825f088 Update AIDE extended real-reuse scoring`. If future pushes fail,
+diagnose transport separately from project correctness and keep local commits
+intact until the next successful push.
 
 ## Local Text-To-Skill Pipeline
 
@@ -219,8 +218,8 @@ python scripts\score_real_reuse_swe.py --task SWE-T1 --patch path\to\candidate.p
 python scripts\score_real_reuse_swe.py --task SWE-T2 --patch path\to\candidate.patch --workspace 'D:\a_work\gitee\astropy__astropy' --test-command-file benchmarks\real_reuse\assets\SWE-T2\target_test_command.txt --test-patch benchmarks\real_reuse\assets\SWE-T2\scorer_only\test.patch --output-json path\to\metric.json
 ```
 
-After SWE fixture manifests exist and are inspected, run Summary and
-PaperToSkill conditions with the same no-mid-run-human rule:
+To rerun SWE rows after a pre-registered scorer/prompt/patch-contract fix, run
+Summary and PaperToSkill conditions with the same no-mid-run-human rule:
 
 ```powershell
 $env:PAPERTOSKILL_GPT_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
@@ -234,8 +233,9 @@ Do not treat missing credentials, provider errors, or missing SWE fixture assets
 as model-quality failures. SWE-T1 and SWE-T2 each have one scored GPT-family
 run; SWE-T1 is a failed patch-apply row for both Summary and PaperToSkill,
 while SWE-T2 is a positive PaperToSkill-vs-Summary row. Do not turn either
-single task into an aggregate SWE-agent or eight-task claim until the remaining
-real-reuse rows are executed.
+single task into an aggregate SWE-agent or eight-task claim. All eight
+real-reuse rows have a first-pass score, but the evidence is mixed and should
+be stabilized before stronger claims.
 
 Run the locked Reflexion Summary-vs-PaperToSkill rows with the GPT-family
 Responses profile. Set the API key only in the shell, never in tracked files:
@@ -252,9 +252,9 @@ The runner writes prompts, raw responses, metric JSON, and raw rows under
 `results/real_reuse/`. It records provider/model errors as availability
 evidence, not model-quality failures.
 
-After AIDE fixtures are prepared and inspected, run the locked AIDE rows with
-the same no-mid-run-human rule. The runner accepts fixture responses for dry
-tests or live API credentials for real model rows:
+To rerun the locked AIDE rows, keep the same no-mid-run-human rule. The runner
+accepts fixture responses for dry tests or live API credentials for real model
+rows:
 
 ```powershell
 $env:PAPERTOSKILL_GPT_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
@@ -270,7 +270,8 @@ Kaggle-derived local fixture: AIDE-T1 is solved by both Summary and
 PaperToSkill under the extended 300-second local scorer, while AIDE-T2 is a
 PaperToSkill-only success with the Summary candidate still timing out.
 
-Validate the planned spec before implementing runners or editing paper claims:
+Validate the real-reuse benchmark after task/spec/scorer edits or before
+editing paper claims:
 
 ```powershell
 python scripts\check_real_reuse_benchmark.py --strict
@@ -285,11 +286,11 @@ results/real_reuse/main_results_plan.csv
 results/real_reuse/main_results_plan.md
 ```
 
-The expected status is `ready_to_implement`. That means the benchmark spec,
-per-task specs, fixture requirement manifests, candidate asset manifests, asset
-locks, the REF prepared-asset/runner layer, the AIDE execution-layer script
-contracts, the SWE-agent skill gate, and the SWE execution-layer script
-contracts are machine-checkable; it is not downstream task-success evidence.
+The expected status is `ready_to_implement` for the benchmark contract. That
+means the benchmark spec, per-task specs, fixture requirement manifests,
+candidate asset manifests, asset locks, prepared assets, skill gates, and
+execution-layer script contracts are machine-checkable; it is not downstream
+task-success evidence by itself.
 
 Planned main task grid:
 
@@ -304,30 +305,25 @@ Planned main task grid:
 | SNAP-T1 | SnapATAC2 | Single-cell omics | Runtime, memory, clustering/embedding metric |
 | SNAP-T2 | SnapATAC2 | Single-cell omics | ARI/NMI/runtime/memory |
 
-Execution order:
+Current execution order:
 
-1. Verify source-paper code, benchmark setup, license, and metric details.
-2. Materialize candidate fixture assets from the locked contracts in
-   `benchmarks/real_reuse/asset_locks/`, including license/provenance, local
-   path/URI, sha256 values, scoring command, and run budget. REF-T1 and REF-T2
-   are the first completed prepared-asset layer; AIDE fixture materialization
-   is complete from the user-provided official Kaggle Spaceship Titanic files.
-3. Create Summary and PaperToSkill context inputs for each task. SWE-agent now
-   has a source-anchored generated skill; task-specific SWE Summary contexts are
-   written by the SWE fixture-preparation layer after local assets are
-   materialized.
-4. Implement the real-reuse runner and scorer. The REF, AIDE, SWE-agent, and
-   SnapATAC2 preparer/scorer/runner paths are implemented and have one
-   GPT-family pass each; AIDE-T2 and SWE-T2 are PaperToSkill-only successes,
-   AIDE-T1 and REF are solved by both conditions, and SWE-T1/SNAP remain
-   boundary rows.
-5. Run agent-only tasks with no mid-run human intervention. The first
-   GPT-family pass over all eight main rows is complete.
-6. Save raw rows under `results/real_reuse/raw_rows.*`.
-7. Update `results/real_reuse/main_results_plan.csv` and the matching
-   `paper/aaai/papertoskill_tables.tex` cells with real scores.
-8. Only after result artifacts exist, revise the AAAI Abstract, Introduction,
-   Experimental Setup, Results, Discussion, Limitations, and Conclusion.
+1. Stabilize the core real-reuse experiment first, focusing on failure-heavy or
+   boundary-unclear rows such as SWE-T1 patch application and SNAP artifact
+   completion.
+2. Pre-register any scorer, prompt-contract, budget, or artifact-contract
+   change before rerunning a row.
+3. Rerun affected Summary and PaperToSkill conditions under the same locked
+   task, input/output, scorer, local setting, and no-mid-run-human rule.
+4. Collect auxiliary data opportunistically during core reruns, including
+   provider availability, failure reasons, context/token proxies, and raw rows
+   needed for future real-reuse LLM ablation.
+5. Regenerate `results/real_reuse/main_results_plan.*`,
+   `results/real_reuse/failure_analysis.*`, any affected paper tables, and
+   readiness reports.
+6. Aggregate LLM ablation, quality/grounding evidence, and optional appendix
+   analyses only after the core rows are stable.
+7. Keep user study last and optional, only for user-efficiency or usability
+   claims.
 
 Required boundaries:
 
@@ -514,15 +510,18 @@ python scripts\run_openai_compatible_direct_probe.py --wire-api openai_responses
   --response-output results\openai_compatible_direct_probe\gpt_family\response.md
 ```
 
-Current Phase 70 direct-probe status:
+Historical direct-probe diagnostic:
 `results/openai_compatible_direct_probe/claude_family/run_report.md` reports
 `wire_api=anthropic_messages`, attempted `claude-opus-4-8`,
 `claude-opus-4-7`, and `claude-opus-4-6`, and is still blocked by HTTP 502
 `Upstream service temporarily unavailable`. The GPT-family report uses
 `wire_api=openai_responses`, attempted `gpt-5.5` and `gpt-5.4`, and is still
 blocked by HTTP 502 `Upstream access forbidden`. This diagnostic bypasses
-`ai_scientist.llm`, so it clarifies the provider blocker but does not complete
-the AI-Scientist-v2 smoke or any BFTS/live research run.
+`ai_scientist.llm`. Keep this as historical provider diagnostics, not a current
+blocker. Before making any new availability claim, rerun the relevant
+protocol-specific probe or use the task runner's recorded call status. Model
+calls should receive generous timeout and retry budget because the third-party
+service is unstable.
 
 ## Model-Ablation Prompt Packets
 
@@ -540,8 +539,8 @@ The current prompt grid includes:
   `claude-opus-4.8`, `claude-opus-4-7`, and `claude-opus-4-6`;
 - `gpt_5_5_or_gpt_family`, using the separate GPT credential profile and
   preferring `gpt-5.5` then `gpt-5.4` when listed;
-- `deepseek_followup_slot`, intentionally left for the user's later DeepSeek
-  endpoint/model configuration.
+- `deepseek_followup_slot`, currently configured in the older two-case
+  saved-response protocol with `deepseek-v4-flash`.
 
 Save live responses only under the `expected_response_path` fields in
 `results/model_ablation_prompts/v0/index.json`. Do not commit raw API keys.
@@ -590,10 +589,12 @@ It compares Paper2Agent's reported MCP workflow with current PaperToSkill
 artifacts. It does not run Paper2Agent, deploy an MCP server, or claim
 end-to-end baseline performance.
 
-## Provider Billing Evidence Handoff
+## Deferred Provider Billing Evidence Handoff
 
-Prepare or refresh the blank provider-billing evidence template and pending
-summary:
+Provider billing and success-per-dollar are outside the current claim set.
+Prefer local token/context proxies for the current paper scope. Only refresh
+the blank provider-billing template if the research policy explicitly reopens
+real provider-billing evidence:
 
 ```powershell
 python scripts\summarize_provider_billing_evidence.py --init-template --strict
@@ -606,15 +607,15 @@ When real provider usage exports or invoices are available, fill
 python scripts\summarize_provider_billing_evidence.py --strict
 ```
 
-Current Phase 43 status:
+Current status:
 `results/provider_billing_evidence/billing_summary.md` reports
 `billing_status=pending`, 6 total rows, 0 measured rows, 6 pending rows, 0
 errors, total billed USD 0, and success per dollar `n/a`. This is an auditable
 handoff for future real billing rows, not provider billing evidence.
 
-For DeepSeek follow-up, configure `deepseek_followup_slot` with the helper
-script so only non-secret metadata is written to
-`benchmarks/model_ablation_v0.json`:
+If the old saved-response DeepSeek slot must be changed, configure
+`deepseek_followup_slot` with the helper script so only non-secret metadata is
+written to `benchmarks/model_ablation_v0.json`:
 
 ```powershell
 python scripts\configure_deepseek_followup.py `

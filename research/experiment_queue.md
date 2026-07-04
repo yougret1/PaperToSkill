@@ -25,8 +25,6 @@
 | E2.20 | Can the paper be packaged in official AAAI LaTeX format with usage examples and model-ablation prompts? | `python scripts\build_model_ablation_prompts.py --task benchmarks\model_ablation_v0.json --output-dir results\model_ablation_prompts\v0` plus reproducibility check | AAAI author-kit provenance, AAAI `.tex` draft, usage examples, model-ablation prompt grid, and updated package report | Writing/Analysis |
 | E2.21 | Can the current extracted-text-to-skill path run as one local command? | `python scripts\papertoskill_pipeline.py --source papers\extracted\aide.txt --output-dir results\pipeline_examples\aide_auto --paper-id aide_auto --title "AIDE: AI-Driven Exploration in the Space of Code" --profile aide --skill-name aide-auto-paper-skill --rubric benchmarks\rubric_aide_v0.json` | manifest, note, source map, skill, and rubric report from one command | Execution |
 | E2.22 | Can the local pipeline accept a PDF source as a smoke-tested input path? | `python scripts\papertoskill_pipeline.py --source paper\aaai\papertoskill_aaai2027.pdf --output-dir results\pipeline_examples\papertoskill_pdf --paper-id papertoskill_pdf --title "PaperToSkill" --skill-name papertoskill-pdf-pipeline` | manifest with PDF source metadata, extracted text path, note, source map, skill, and rubric report | Execution |
-| E4.1 | Do Claude Opus, GPT-family, and DeepSeek differ on PaperToSkill usage tasks? | Protocol-aware runner commands plus `python scripts\evaluate_model_ablation_responses.py --index results\model_ablation_prompts\v0\index.json --output-json results\model_ablation_prompts\v0\evaluation.json --output-md results\model_ablation_prompts\v0\evaluation.md` | 6 scored Claude/GPT-family/DeepSeek rows and 0 pending rows for saved-response scoring | Analysis |
-| E4.2 | How does a compact skill artifact compare with Paper2Agent-style MCP artifacts? | `python scripts\compare_paper2agent_artifacts.py` | `results/tables/paper2agent_artifact_comparison.md` with 7/7 ready criteria | Complete for bounded artifact/workflow comparison |
 
 ## Completed Remote LLM Recovery
 
@@ -34,17 +32,24 @@
 | --- | --- | --- | --- |
 | E3 | Can AI-Scientist-v2 run a tiny PaperToSkill agentic search? | `results/ai_scientist_v2_smoke/run_report.md`; `results/ai_scientist_v2_live_run_handoff/handoff.md`; `research/run_logs/2026-07-02_phase76_ai_scientist_v2_full_live_run.md` | Complete for bounded smoke/full-live synthetic integration evidence; not broad live task success. |
 
-## Pending Remote LLM Recovery
+## Completed Supporting Analyses
+
+| ID | Question | Evidence | Boundary |
+| --- | --- | --- | --- |
+| E4.1 | Do Claude Opus, GPT-family, and DeepSeek differ on PaperToSkill usage-plan tasks? | `results/model_ablation_prompts/v0/evaluation.md`: 6 scored rows and 0 pending rows for the older saved-response protocol. | Supporting evidence only. It is not real-reuse task success and does not replace the next real-reuse LLM ablation. |
+| E4.2 | How does a compact skill artifact compare with Paper2Agent-style MCP artifacts? | `results/tables/paper2agent_artifact_comparison.md` with 7/7 ready criteria. | Bounded source-backed artifact/workflow comparison only; no executable Paper2Agent baseline performance. |
+
+## Deferred Method Work
 
 | ID | Question | Command | Expected Output | Blocker |
 | --- | --- | --- | --- | --- |
-| E4 | Can an LLM-assisted extractor improve method-step fidelity over the deterministic scaffold? | TBD after endpoint works and after a non-synthetic protocol is defined | paired deterministic vs LLM-assisted generated skills | Needs a real-data protocol and claim boundary, not just endpoint access |
+| E4 | Can an LLM-assisted extractor improve method-step fidelity over the deterministic scaffold? | TBD after the core real-reuse evidence is stable and after a non-synthetic protocol is defined | paired deterministic vs LLM-assisted generated skills | Needs a real-data protocol and claim boundary, not just endpoint access |
 
 ## Next Design Work
 
 | ID | Question | Needed Artifact |
 | --- | --- | --- |
-| E5 | Can PaperToSkill help agents reuse paper methods on original-style input/output tasks? | `research/real_reuse_experiment_plan.md`; future `benchmarks/real_reuse/`; future `results/real_reuse/` |
+| E5 | Can PaperToSkill help agents reuse paper methods on original-style input/output tasks? | `research/real_reuse_experiment_plan.md`; `benchmarks/real_reuse/`; `results/real_reuse/` |
 | E5.1 | Are the four main papers and eight tasks feasible under objective metrics? | Complete for planned spec and task contracts: `benchmarks/real_reuse/real_reuse_v0.json`; `benchmarks/real_reuse/tasks/*.json`; `results/real_reuse/spec_preflight.md` reports `ready_to_implement` |
 | E5.2 | Can each task be bound to a concrete fixture and then compared with Summary vs PaperToSkill without mid-run human intervention? | Complete for a first GPT-family single-run pass over all eight rows. AIDE-T1/T2 have official Kaggle-derived local validation fixtures; after rerunning the same saved AIDE outputs with a 300-second local scorer budget, AIDE-T1 scores 0.816/0.817 and AIDE-T2 scores 0.000/0.826. SWE-T1 scores 0.000/0.000 due patch-apply failures; SWE-T2 scores 0.000/1.000; REF-T1/T2 score 1.000/1.000; SNAP-T1/T2 score 0.000/0.500 and 0.200/0.400 but fail the local success threshold. This is mixed downstream/failure-boundary evidence, not aggregate superiority. |
 | E5.3 | Can the main real-reuse table be generated from raw rows? | Complete for the first GPT-family single-run pass: `scripts/build_real_reuse_paper_tables.py` fills all eight `results/real_reuse/main_results_plan.{csv,md,json}` rows from `results/real_reuse/raw_rows.jsonl`. |
@@ -53,7 +58,7 @@
 | E5.6 | Does the PaperToSkill effect hold across Claude-family, GPT-family, and DeepSeek-family models? | Real-reuse LLM ablation raw rows collected on the core task protocol, then aggregated after the core evidence stabilizes; separate from the older saved-response usage-plan protocol |
 | E5.7 | Which PaperToSkill components matter once downstream tasks are stable? | Appendix-only component-ablation task set with pre-registered workflow checklist and unsupported-error rubric |
 | E6 | How should unsupported instruction rate be scored? | Source-map-aware evaluator script, blind annotation rubric, and pre-registered method checklist |
-| E7 | How should live harness transfer be evaluated after remote LLM recovery? | Paired Codex-style and Claude-style task prompts with execution logs, later aligned to real-reuse task specs |
+| E7 | How should live harness transfer be evaluated if reopened? | Paired Codex-style and Claude-style task prompts with execution logs, aligned to real-reuse task specs rather than older saved-response prompt packets |
 | E8 | How should DeepSeek be refreshed if the alias or credential profile changes? | Rerun the DeepSeek slot setup/runner/scorer path while keeping raw keys outside tracked files |
 
 ## Planned Real-Reuse Task Grid

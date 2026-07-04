@@ -78,26 +78,29 @@ Primary source links to verify during execution:
 Purpose: main validity table. It tests whether PaperToSkill helps reproduce or
 reuse a paper method under original-style inputs and outputs.
 
-| Task ID | Source Paper | Domain | Original-style Input | Required Output | Paper Reference / Baseline | Reference Score | Summary Score | PaperToSkill Score | Reproducibility / Fidelity | Metric |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| AIDE-T1 | AIDE | ML engineering | Dataset, objective metric, and starter workspace | Improved ML solution script or submission | Paper baseline or reported reference | TBD | TBD | TBD | TBD | Validation score / Kaggle-style metric |
-| AIDE-T2 | AIDE | ML engineering | Weak or failed ML script plus score/error feedback | Improved debug/search trajectory and final solution | Paper baseline or reported reference | TBD | TBD | TBD | TBD | Validation score / best-node score |
-| SWE-T1 | SWE-agent | Software engineering | GitHub issue, repository, and tests | Patch that passes tests | SWE-bench-style baseline/reference | TBD | TBD | TBD | TBD | Tests passed / resolved |
-| SWE-T2 | SWE-agent | Software engineering | Repository bug plus failing test | Minimal patch and verification log | SWE-bench-style baseline/reference | TBD | TBD | TBD | TBD | Tests passed / resolved |
-| REF-T1 | Reflexion | Reasoning QA | HotPotQA-style question with retrieval context/tools | Final answer after reflection loop | No-reflection or ReAct baseline | TBD | TBD | TBD | TBD | Exact match / F1 / success |
-| REF-T2 | Reflexion | Decision or programming | Failed first attempt plus environment feedback | Corrected second attempt using reflection | No-reflection baseline | TBD | TBD | TBD | TBD | Success / pass rate |
-| SNAP-T1 | SnapATAC2 | Single-cell omics | Small scATAC/scRNA dataset and analysis objective | Runnable analysis pipeline | Scanpy, Seurat, or LSI-style reference | TBD | TBD | TBD | TBD | Runtime, memory, clustering/embedding metric |
-| SNAP-T2 | SnapATAC2 | Single-cell omics | Single-cell dataset and target cell groups | Dimensionality reduction, clustering, or marker output | Paper reference/baseline | TBD | TBD | TBD | TBD | ARI/NMI/runtime/memory |
+Current source table: `results/real_reuse/main_results_plan.md`.
+
+| Task ID | Source Paper | Domain | Original-style Input | Required Output | Metric | Reference | Summary Score | PaperToSkill Score | Status |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| AIDE-T1 | AIDE | ML engineering | Kaggle-style dataset + metric | Runnable solution/submission | validation_score | Reported AIDE ref. | 0.816 | 0.817 | Scored; solved by both |
+| AIDE-T2 | AIDE | ML engineering | Weak ML script + feedback | Improved script + trajectory | best_node_score | Reported AIDE ref. | 0.000 | 0.826 | Scored; PaperToSkill-only success |
+| SWE-T1 | SWE-agent | Software engineering | Repo issue + tests | Patch + test log | resolved | Reported SWE-agent ref. | 0.000 | 0.000 | Scored; both patch apply failed |
+| SWE-T2 | SWE-agent | Software engineering | Failing test + repo | Focused patch + verification | tests_passed | Reported SWE-agent ref. | 0.000 | 1.000 | Scored; PaperToSkill-only success |
+| REF-T1 | Reflexion | Reasoning / QA | Multi-hop QA + feedback | Final answer + reflection trace | exact_match_or_f1 | Reported Reflexion ref. | 1.000 | 1.000 | Scored; solved by both |
+| REF-T2 | Reflexion | Decision / programming | Failed attempt + checker feedback | Corrected second attempt | second_attempt_success | Reported Reflexion ref. | 1.000 | 1.000 | Scored; solved by both |
+| SNAP-T1 | SnapATAC2 | Single-cell omics | Small single-cell dataset | Pipeline + embedding artifacts | runtime_memory_quality | Reported SnapATAC2 ref. | 0.000 | 0.500 | Scored; below success threshold |
+| SNAP-T2 | SnapATAC2 | Single-cell omics | Single-cell labels/proxy task | Clustering/marker artifacts | ari_nmi_runtime_memory | Reported SnapATAC2 ref. | 0.200 | 0.400 | Scored; below success threshold |
 
 Column definitions:
 
-- `Reference Score`: the original paper's reported score or a locally
-  reproduced baseline. Mark the source explicitly.
+- `Reference`: the original paper's reported score/reference or a locally
+  reproduced baseline. Mark the source explicitly and do not treat reported
+  paper scores as a fair same-environment baseline unless the same dataset,
+  input/output, metric, budget, and run setting are reproduced locally.
 - `Summary Score`: score when the agent receives a concise method summary
   instead of a PaperToSkill skill.
 - `PaperToSkill Score`: score when the agent receives the generated skill.
-- `Reproducibility / Fidelity`: whether the run followed the source-paper
-  method without unsupported extra steps. This can be binary plus a short note.
+- `Status`: execution state and current evidence boundary for the row.
 - `Metric`: the task's original metric family wherever possible.
 
 ## Table 2: Full Excerpt Sanity Check
@@ -146,9 +149,9 @@ family. It is not a broad model ranking.
 
 | Model Family | Model Alias | Tasks | Summary Avg Score | PaperToSkill Avg Score | Reuse Success | Unsupported Errors / Task | Token Cost / Task | Availability |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Claude-family | TBD | 8 | TBD | TBD | TBD | TBD | TBD | TBD |
-| GPT-family | TBD | 8 | TBD | TBD | TBD | TBD | TBD | TBD |
-| DeepSeek-family | TBD | 8 | TBD | TBD | TBD | TBD | TBD | TBD |
+| GPT-family | gpt-5.5 or current alias | 8 or stabilized subset | TBD | TBD | TBD | TBD | TBD | TBD |
+| Claude-family | TBD | stabilized subset | TBD | TBD | TBD | TBD | TBD | TBD |
+| DeepSeek-family | TBD | stabilized subset | TBD | TBD | TBD | TBD | TBD | TBD |
 
 ## Table 5: LLM Ablation Raw Rows
 
@@ -182,7 +185,9 @@ supporting role.
 
 Purpose: optional final-stage evidence only. It is needed only for claims about
 user efficiency, user workflow improvement, usability, or reduced human
-intervention. It is not part of the core real-reuse effectiveness table.
+intervention. It is not part of the core real-reuse effectiveness table and
+should not be started before the core experiment and remaining auxiliary
+analyses are stable.
 
 | Condition | Users / Runs | Success Rate | Avg Task Score | Time to Completion | Interventions | Expert Fidelity Score | Token Cost |
 | --- | --- | --- | --- | --- | --- | --- | --- |
