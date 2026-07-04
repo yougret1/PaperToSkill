@@ -159,6 +159,12 @@ Current date: 2026-07-05.
   verified on `origin/main`. `C:\Users\19351\Desktop\tem\toHuman.md` records
   the exact failed commands/errors. Continue non-network work locally and retry
   remote backup later; this is not experiment-correctness evidence.
+- Current non-network claim-boundary cleanup: `research/claim_source_map.md`
+  no longer says the broad "PaperToSkill skills outperform generic summaries"
+  claim is a TBD hypothesis. It now states the evidence-bounded version:
+  PaperToSkill outperforms Summary on selected locked original-style tasks
+  (AIDE-T2 and SWE-T2 in the first GPT-family pass), while current evidence
+  remains mixed and does not support aggregate superiority.
 - Current local core-stabilization change: the real-reuse preflight now treats
   a separate `domain_robustness` planned output as deprecated/forbidden,
   checks current planned output paths (`main_results_plan.*`,
