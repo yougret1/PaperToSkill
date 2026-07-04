@@ -15,10 +15,12 @@ Current date: 2026-07-05.
   executable-candidate runner phase and follow-up memory/queue sync are now
   remote-backed through
   `0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main`
-  (`0832201 Sync memory after GitHub retry`). Earlier push / remote-check
-  attempts failed with `Recv failure: Connection was reset`, and one push
-  failed to connect to github.com port 443 after 21067 ms; those are historical
-  transport metadata, not experiment correctness.
+  (`0832201 Sync memory after GitHub retry`). A later local record commit,
+  `4b216b6 Record recovered SNAP runner backup`, is not remote-backed yet:
+  `git push origin main` failed with `Recv failure: Connection was reset`, and
+  the follow-up `git ls-remote --heads origin main` failed to connect to
+  github.com port 443 after 21115 ms. These are GitHub transport metadata, not
+  experiment correctness.
 - Current local phase commit `77e8ada` implements the SNAP executable-candidate
   runner/checker/test path:
   `scripts/run_real_reuse_snapatac2_executable_candidate.py`,
@@ -94,7 +96,8 @@ Current date: 2026-07-05.
   `0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main`
   (`0832201 Sync memory after GitHub retry`). The previously unbacked local
   commits `77e8ada`, `0983fbc`, `c4b4b99`, `2490a9b`, and `0832201` are now
-  remote-backed.
+  remote-backed. Local commit `4b216b6` is ahead of `origin/main` and awaits
+  remote backup recovery.
 - The current discussion policy is: stabilize the core eight-row real-reuse
   evidence first; collect auxiliary raw data opportunistically; keep LLM
   ablation auxiliary, component ablation appendix-only, and user study
@@ -308,10 +311,14 @@ Current date: 2026-07-05.
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-6. Latest verified remote-backed checkpoint:
+6. Latest local commit:
+   `4b216b6 Record recovered SNAP runner backup` (not remote-backed yet due
+   GitHub HTTPS reset / port 443 connection failure). Latest verified
+   remote-backed checkpoint:
    `0832201 Sync memory after GitHub retry`, verified at
    `0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main`.
-7. No experiment-side human action is required.
+7. No experiment-side human action is required; retry GitHub backup when
+   transport availability recovers.
 
 ## Boundaries
 

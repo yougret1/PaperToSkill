@@ -48,9 +48,18 @@ c4b4b99 Record GitHub push blocker for SNAP runner
 0832201 Sync memory after GitHub retry
 ```
 
-Earlier `Recv failure: Connection was reset` and github.com port 443 failures
-remain historical GitHub transport metadata, not project-correctness evidence.
-Always inspect `git status -sb` before claiming a clean phase save.
+Latest local commit:
+
+```text
+4b216b6 Record recovered SNAP runner backup
+```
+
+This local commit is not remote-backed yet. The latest `git push origin main`
+failed with `Recv failure: Connection was reset`, and the follow-up
+`git ls-remote --heads origin main` failed to connect to github.com port 443
+after 21115 ms. Earlier `Recv failure: Connection was reset` and github.com
+port 443 failures remain GitHub transport metadata, not project-correctness
+evidence. Always inspect `git status -sb` before claiming a clean phase save.
 
 Re-run remote verification before making future remote-backed checkpoint
 claims.

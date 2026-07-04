@@ -322,8 +322,11 @@ Current supported claims:
   records), `2490a9b` (real-reuse stabilization queue sync), and `0832201`
   (memory sync after GitHub retry). The temporary 2026-07-05 GitHub HTTPS
   transport blocker recovered again; the latest verified remote checkpoint is
-  `0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main`. Verify exact
-  local/remote alignment with
+  `0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main`. A later local
+  record commit `4b216b6 Record recovered SNAP runner backup` is not
+  remote-backed yet because push/remote-check attempts hit GitHub HTTPS reset
+  and port 443 connection failure again. Verify exact local/remote alignment
+  with
   `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
   phase save.
@@ -417,8 +420,9 @@ Current supported claims:
   check for the latest exact alignment before each phase-save claim.
 - Latest verified remote-backed phase checkpoint:
   `0832201 Sync memory after GitHub retry`, verified at
-  `0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main`. Rerun remote
-  verification before making later remote-backed claims.
+  `0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main`. Latest local
+  commit `4b216b6 Record recovered SNAP runner backup` is not remote-backed
+  yet. Rerun remote verification before making later remote-backed claims.
 
 Current unsupported claims:
 
