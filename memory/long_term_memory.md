@@ -290,13 +290,14 @@ Current supported claims:
   rows as the paper-facing main rows; report phase107 only as a
   shared-source-context follow-up.
 - Phase109 experiment evidence is confirmed on GitHub through commit
-  `cb20cb1` (`Record SWE ablation push blocker`). This remote-backed range
-  includes `e597fcf` (AIDE-T2 GPT-family LLM ablation), `1521b72`
-  (AIDE push-blocker record), `200419a` (SWE-T2 GPT-family LLM ablation), and
-  `cb20cb1` (SWE push-blocker record). Later status-sync commits may sit on
-  top; do not chase the status-sync hash in memory. Keep future GitHub
-  transport failures separate from experiment correctness and verify exact
-  local/remote alignment with `git status -sb` and `git ls-remote --heads
+  `ea15664` (`Add DeepSeek real-reuse LLM ablation rows`). This remote-backed
+  range includes `e597fcf` (AIDE-T2 GPT-family LLM ablation), `1521b72`
+  (AIDE push-blocker record), `200419a` (SWE-T2 GPT-family LLM ablation),
+  `cb20cb1` (SWE push-blocker record), `bc9644a` (status-hash-churn guard),
+  and `ea15664` (DeepSeek-family LLM ablation rows). Later status-sync commits
+  may sit on top; do not chase the status-sync hash in memory. Keep future
+  GitHub transport failures separate from experiment correctness and verify
+  exact local/remote alignment with `git status -sb` and `git ls-remote --heads
   origin main` before claiming a new phase save.
 - SNAP artifact-execution follow-up diagnosis is now materialized in
   `results/real_reuse/snapatac2_artifact_followup.{md,json}` with builder
