@@ -106,13 +106,17 @@ Current date: 2026-07-04.
   SWE-T2, and REF-T2; uses GPT-family `gpt-5.5`, Claude-family
   `claude-opus-4-8`, and DeepSeek-family `deepseek-v4-flash`; and gives each
   provider call 300 seconds, 5 attempts, and 5-second retry delays. Phase109
-  has collected six GPT-family rows: REF-T2 Summary/PaperToSkill score
-  1.000/1.000 as a ceiling/control pair; AIDE-T2 scores 0.814/0.000 with the
-  PaperToSkill candidate timing out under the 300-second local scorer; SWE-T2
-  scores 0.000/0.000 with both conditions failing `patch_apply_failed`.
-  `results/real_reuse/llm_ablation_summary.md` reports 6 collected rows out of
-  18 expected rows. This is auxiliary model/repetition evidence, not a main-row
-  replacement and not aggregate PaperToSkill advantage.
+  has collected all GPT-family and DeepSeek-family rows for REF-T2, AIDE-T2,
+  and SWE-T2. GPT-family scores are REF-T2 1.000/1.000, AIDE-T2 0.814/0.000
+  with the PaperToSkill candidate timing out under the 300-second local scorer,
+  and SWE-T2 0.000/0.000 with both conditions failing `patch_apply_failed`.
+  DeepSeek-family scores are REF-T2 1.000/1.000, AIDE-T2 0.500/0.500 below the
+  success threshold, and SWE-T2 0.000/0.000 with both conditions failing
+  `patch_apply_failed`. Claude-family REF-T2 was attempted and returned HTTP
+  502 after 5 attempts per condition. `results/real_reuse/llm_ablation_summary.md`
+  reports 12 collected scored rows out of 18 expected rows. This is auxiliary
+  model/repetition evidence, not a main-row replacement and not aggregate
+  PaperToSkill advantage.
 - Human-fidelity annotation supports semantic fidelity and reviewability, not
   main task effectiveness. It remains pending: 0 scored rows and 24 pending
   paper-by-criterion cells.
@@ -146,9 +150,9 @@ Current date: 2026-07-04.
    vars are available, or use the local API docs under
    `C:\Users\19351\Desktop\论文\SelfPaper\LLMAPIDocument` to set them in the
    shell only. Do not commit raw keys.
-   Current collected slices are REF-T2 / GPT-family / `gpt-5.5`, AIDE-T2 /
-   GPT-family / `gpt-5.5`, and SWE-T2 / GPT-family / `gpt-5.5`; Claude and
-   DeepSeek rows remain pending.
+   Current collected slices are all GPT-family and DeepSeek-family rows for
+   REF-T2, AIDE-T2, and SWE-T2. Claude-family rows remain pending; REF-T2 was
+   attempted and blocked by provider HTTP 502 after 5 attempts per condition.
 2. Keep Summary and PaperToSkill paired under the same task/scorer contract for
    any follow-up. Main SNAP rows remain unchanged unless explicitly promoted.
 3. During core reruns, collect auxiliary raw data where cheap: provider

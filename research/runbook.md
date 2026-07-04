@@ -434,14 +434,17 @@ python scripts\build_real_reuse_llm_ablation_results.py
 ```
 
 Current aggregate:
-`results/real_reuse/llm_ablation_summary.md` reports 6 collected rows and 12
-pending rows out of 18 expected rows. REF-T2 / GPT-family / `gpt-5.5` scores
-Summary 1.000 and PaperToSkill 1.000 as a ceiling/control pair. AIDE-T2 /
-GPT-family / `gpt-5.5` scores Summary 0.814 and PaperToSkill 0.000 because the
-PaperToSkill candidate timed out under the 300-second local scorer. SWE-T2 /
-GPT-family / `gpt-5.5` scores Summary 0.000 and PaperToSkill 0.000 because both
-candidate patches fail to apply. These are auxiliary model/repetition rows, not
-main-row replacements and not aggregate PaperToSkill advantage.
+`results/real_reuse/llm_ablation_summary.md` reports 12 collected scored rows
+and 6 pending rows out of 18 expected rows. GPT-family rows are complete:
+REF-T2 1.000/1.000, AIDE-T2 0.814/0.000 because the PaperToSkill candidate
+timed out under the 300-second local scorer, and SWE-T2 0.000/0.000 because
+both candidate patches fail to apply. DeepSeek-family rows are complete:
+REF-T2 1.000/1.000, AIDE-T2 0.500/0.500 below the success threshold, and
+SWE-T2 0.000/0.000 because both candidate patches fail to apply. Claude-family
+REF-T2 was attempted and blocked by provider HTTP 502 after five attempts per
+condition; remaining Claude-family rows are pending. These are auxiliary
+model/repetition rows, not main-row replacements and not aggregate PaperToSkill
+advantage.
 
 ## AI-Scientist-v2 Environment
 

@@ -1,0 +1,135 @@
+import pandas as pd
+import numpy as np
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import accuracy_score
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler, LabelEncoder
+import json
+
+# Load data
+train = pd.read_csv('train.csv')
+val = pd.read_csv('validation_features.csv')
+
+# Load baseline score for reference
+with open('baseline_score.json', 'r') as f:
+    baseline = json.load(f)
+
+# Load feedback (if available) — not strictly required, but improves adaptivity
+try:
+    with open('error_or_score_feedback.md', 'r') as f:
+        feedback = f.read()
+except FileNotFoundError:
+    feedback = ''
+
+# Separate target and features
+target_col = 'Transported'
+id_col = 'PassengerId'
+
+y = train[target_col].astype(int)
+X_train = train.drop(columns=[target_col, id_col])
+X_val = val.drop(columns=[id_col])
+
+# --- Feature Engineering (common improvements for Spaceship Titanic) ---
+
+# Parse Cabin into Deck, CabinNum, Side
+def extract_cabin_features(df):
+    df['Cabin'] = df['Cabin'].fillna('Unknown/0/NaN')
+    parts = df['Cabin'].str.split('/', expand=True)
+    df['Deck'] = parts[0]
+    df['CabinNum'] = pd.to_numeric(parts[1], errors='coerce')
+    df['Side'] = parts[2]
+    return df
+
+X_train = extract_cabin_features(X_train)
+X_val = extract_cabin_features(X_val)
+
+# Group size: number of people in same HomePlanet + CryoSleep group? Instead use passenger group from PassengerId numbers
+def extract_group_size(df, df_train=None):
+    # Group by PassengerId prefix (first 4 digits represent group number in Spaceship Titanic)
+    df['Group'] = df['PassengerId'].str.split('_').str[0]
+    if df_train is not None:
+        group_counts = df_train['Group'].value_counts().to_dict()
+        df['GroupSize'] = df['Group'].map(group_counts).fillna(1)
+    else:
+        # For validation, we need to compute from the train set group counts
+        pass
+    return df
+
+# We need train group counts for validation
+train['Group'] = train['PassengerId'].str.split('_').str[0]
+group_size_map = train['Group'].value_counts().to_dict()
+X_train['GroupSize'] = train['Group'].map(group_size_map)
+
+# For validation
+val['Group'] = val['PassengerId'].str.split('_').str[0]
+X_val['GroupSize'] = val['Group'].map(group_size_map).fillna(1)  # unseen groups default size 1
+
+# Drop Cabin column (original) and PassengerId in features, keep derived
+X_train.drop(columns=['Cabin', 'Group'], inplace=True, errors='ignore')
+X_val.drop(columns=['Cabin', 'Group'], inplace=True, errors='ignore')
+
+# Handle categorical columns
+cat_cols = ['HomePlanet', 'CryoSleep', 'Destination', 'VIP', 'Deck', 'Side']
+# Ensure all expected categories exist in both sets
+for col in cat_cols:
+    if col not in X_train.columns:
+        X_train[col] = 'Unknown'
+    if col not in X_val.columns:
+        X_val[col] = 'Unknown'
+
+# Fill missing categorical with 'Unknown'
+for col in cat_cols:
+    X_train[col] = X_train[col].fillna('Unknown')
+    X_val[col] = X_val[col].fillna('Unknown')
+
+# Label encode categoricals with consistent mapping
+for col in cat_cols:
+    le = LabelEncoder()
+    all_values = pd.concat([X_train[col], X_val[col]]).unique()
+    le.fit(all_values)
+    X_train[col] = le.transform(X_train[col])
+    X_val[col] = le.transform(X_val[col])
+
+# Numeric columns
+num_cols = ['Age', 'RoomService', 'FoodCourt', 'ShoppingMall', 'Spa', 'VRDeck', 'CabinNum']
+# Ensure numeric columns exist, fill and scale
+for col in num_cols:
+    if col not in X_train.columns:
+        X_train[col] = 0
+    if col not in X_val.columns:
+        X_val[col] = 0
+    
+    X_train[col] = pd.to_numeric(X_train[col], errors='coerce').fillna(0)
+    X_val[col] = pd.to_numeric(X_val[col], errors='coerce').fillna(0)
+
+# Scale numeric features
+scaler = StandardScaler()
+X_train[num_cols] = scaler.fit_transform(X_train[num_cols])
+X_val[num_cols] = scaler.transform(X_val[num_cols])
+
+# --- Model Training with cross-validation (optional but good practice) ---
+model = RandomForestClassifier(
+    n_estimators=200,
+    max_depth=12,
+    min_samples_leaf=5,
+    random_state=42,
+    n_jobs=-1
+)
+
+# Train on full training set
+model.fit(X_train, y)
+
+# Predict on validation
+preds = model.predict_proba(X_val)[:, 1]  # probability of Transported
+# Convert to boolean (threshold 0.5)
+predictions_bool = preds >= 0.5
+
+# Create submission
+submission = pd.DataFrame({
+    'PassengerId': val['PassengerId'],
+    'Transported': predictions_bool
+})
+
+submission.to_csv('submission.csv', index=False)
+print(f"Submission saved. Baseline score: {baseline.get('score', 'unknown')}")

@@ -314,13 +314,17 @@ Current supported claims:
   append to `raw_rows.jsonl`, does not replace main SNAP rows, and does not
   show PaperToSkill advantage.
 - Phase109 has started the real-reuse LLM ablation only on the pre-registered
-  stabilized slices. Current collected GPT-family pairs are REF-T2
-  1.000/1.000 as a ceiling/control pair, AIDE-T2 0.814/0.000 with the
-  PaperToSkill candidate timing out under the 300-second local scorer, and
-  SWE-T2 0.000/0.000 with both conditions failing `patch_apply_failed`.
-  `results/real_reuse/llm_ablation_summary.md` reports 6 collected rows and 12
-  pending rows out of 18 expected rows. This is auxiliary model/repetition
-  evidence, not a main-row replacement and not PaperToSkill advantage.
+  stabilized slices. Current collected GPT-family pairs are REF-T2 1.000/1.000,
+  AIDE-T2 0.814/0.000 with the PaperToSkill candidate timing out under the
+  300-second local scorer, and SWE-T2 0.000/0.000 with both conditions failing
+  `patch_apply_failed`. Current collected DeepSeek-family pairs are REF-T2
+  1.000/1.000, AIDE-T2 0.500/0.500 below the success threshold, and SWE-T2
+  0.000/0.000 with both conditions failing `patch_apply_failed`. Claude-family
+  REF-T2 was attempted and returned HTTP 502 after five attempts per condition.
+  `results/real_reuse/llm_ablation_summary.md` reports 12 collected scored rows
+  and 6 pending rows out of 18 expected rows. This is auxiliary
+  model/repetition evidence, not a main-row replacement and not PaperToSkill
+  advantage.
 - Phase 89 and the 2026-07-04 record-sync push both recovered GitHub HTTPS
   transport interruptions. Use `git status -sb` and a successful remote check
   for the latest exact alignment before each phase-save claim.
@@ -666,12 +670,10 @@ Use these as entry points instead of searching the whole repo first:
   `results/real_reuse/llm_ablation_plan.{md,json}` pre-register a stabilized
   AIDE-T2/SWE-T2/REF-T2 pilot over GPT-family `gpt-5.5`, Claude-family
   `claude-opus-4-8`, and DeepSeek-family `deepseek-v4-flash` with 300-second
-  timeouts and 5 attempts. Phase109 has collected GPT-family REF-T2, AIDE-T2,
-  and SWE-T2 pairs: REF-T2 scores 1.000/1.000 as a ceiling/control pair;
-  AIDE-T2 scores Summary 0.814 and PaperToSkill 0.000 because the PaperToSkill
-  candidate timed out under the 300-second local scorer; SWE-T2 scores
-  0.000/0.000 because both patches failed to apply. Claude-family and
-  DeepSeek-family rows remain pending.
+  timeouts and 5 attempts. Phase109 has collected all GPT-family and
+  DeepSeek-family rows for REF-T2, AIDE-T2, and SWE-T2. Claude-family REF-T2
+  was attempted but blocked by provider HTTP 502 after five attempts per
+  condition; remaining Claude-family rows are pending.
 - Real-reuse LLM ablation aggregation:
   `results/real_reuse/llm_ablation_summary.md`,
   `results/real_reuse/llm_ablation_summary.json`, and

@@ -309,7 +309,7 @@
 | `tests/test_build_real_reuse_snapatac2_artifact_followup.py` | Unit test for SNAP artifact-execution follow-up diagnosis over invalid JSON and plan-only candidate outputs | Created |
 | `tests/test_run_real_reuse_snapatac2_executable_followup.py` | Unit test for the paired SNAP executable-artifact follow-up runner and no-main-raw-row policy | Created |
 | `tests/test_build_real_reuse_llm_ablation_plan.py` | Unit tests for the real-reuse LLM ablation plan, selected stabilized subset, long retry budget, and generated command shape | Created |
-| `tests/test_build_real_reuse_llm_ablation_results.py` | Unit tests for real-reuse LLM ablation aggregation and phase109 REF-T2 GPT-family row detection | Created |
+| `tests/test_build_real_reuse_llm_ablation_results.py` | Unit tests for real-reuse LLM ablation aggregation and phase109 GPT-family plus DeepSeek-family row detection | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |
 | `generated_skills/ai_scientist_v2/references/source_map.json` | Source-map evidence for AI Scientist-v2 generated skill | Created |
 | `generated_skills/reflexion/SKILL.md` | Retained generated skill from Reflexion note | Created |
@@ -450,7 +450,7 @@
 | `results/real_reuse/full_excerpt_sanity.json` | Machine-readable Full Excerpt sanity check and evidence boundary | Created |
 | `results/real_reuse/llm_ablation_plan.md` | Human-readable command plan for real-reuse LLM ablation rows using the phase109 run-id prefix; the plan itself does not call models | Created |
 | `results/real_reuse/llm_ablation_plan.json` | Machine-readable real-reuse LLM ablation command plan and environment-presence summary | Created |
-| `results/real_reuse/llm_ablation_summary.md` | Human-readable real-reuse LLM ablation aggregate; currently 6 collected GPT-family rows for AIDE-T2, SWE-T2, and REF-T2, with 12 pending rows | Created |
+| `results/real_reuse/llm_ablation_summary.md` | Human-readable real-reuse LLM ablation aggregate; currently 12 collected GPT-family/DeepSeek-family scored rows for AIDE-T2, SWE-T2, and REF-T2, with 6 Claude-family rows pending | Created |
 | `results/real_reuse/llm_ablation_summary.json` | Machine-readable real-reuse LLM ablation aggregate keyed to pre-registered run IDs | Created |
 | `results/real_reuse/llm_ablation_raw_rows.csv` | CSV export of collected pre-registered real-reuse LLM ablation raw rows | Created |
 | `results/reproducibility/aaai_package_report.md` | Human-readable AAAI package verification report | Created |
@@ -507,7 +507,7 @@
 
 | Artifact | Purpose | Status |
 | --- | --- | --- |
-| Real-reuse LLM ablation response logs | Partially collected Claude/GPT-family/DeepSeek raw rows under the real-reuse task protocol, separate from the older saved-response usage-plan protocol; current completed GPT-family slices are REF-T2, AIDE-T2, and SWE-T2 with `gpt-5.5` | In progress |
+| Real-reuse LLM ablation response logs | Partially collected Claude/GPT-family/DeepSeek raw rows under the real-reuse task protocol, separate from the older saved-response usage-plan protocol; current completed scored slices are all GPT-family and DeepSeek-family AIDE-T2/SWE-T2/REF-T2 rows, while Claude-family REF-T2 is provider-502 availability evidence | In progress |
 | Concrete real-reuse fixture assets | AIDE-T1/T2, REF-T1/T2, SWE-T1/T2, and SNAP-T1/T2 prepared assets plus one GPT-family Summary-vs-PaperToSkill pass are created; AIDE-T2 and SWE-T2 are PaperToSkill-only successes, AIDE-T1 and REF are solved by both conditions, and SWE-T1/SNAP remain boundary rows | Mixed |
 | `results/real_reuse/` | Current AIDE/SWE/REF/SNAP raw rows and table artifacts plus future aggregate tables, sanity checks, cost table, and LLM ablation outputs | Mixed |
 | Paper2Agent executable baseline | Full Paper2Agent/MCP runtime comparison, if setup resources become available | Planned |

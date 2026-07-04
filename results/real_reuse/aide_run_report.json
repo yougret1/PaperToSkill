@@ -1,6 +1,6 @@
 {
   "schema_version": "0.1",
-  "run_id": "phase109_llm_ablation_gpt_5_5_aide_t2",
+  "run_id": "phase109_llm_ablation_deepseek_v4_flash_aide_t2",
   "overall_status": "complete",
   "status_counts": {
     "scored": 2
@@ -12,92 +12,96 @@
     "summary",
     "papertoskill"
   ],
-  "model_family": "GPT-family",
-  "model_alias": "gpt-5.5",
-  "wire_api": "openai_responses",
+  "model_family": "DeepSeek-family",
+  "model_alias": "deepseek-v4-flash",
+  "wire_api": "openai_chat_completions",
   "raw_rows_output": "D:\\a_work\\gitee\\PaperToSkill\\results\\real_reuse\\raw_rows.jsonl",
   "evidence_boundary": "Runner report for locked AIDE real-reuse tasks. It can compare Summary and PaperToSkill for prepared AIDE tasks only when both conditions have scored rows. It does not complete the full eight-task real-reuse benchmark.",
   "results": [
     {
-      "run_id": "phase109_llm_ablation_gpt_5_5_aide_t2",
+      "run_id": "phase109_llm_ablation_deepseek_v4_flash_aide_t2",
       "task_id": "AIDE-T2",
       "source_paper_id": "aide",
       "domain": "ML engineering",
       "condition": "summary",
-      "model_family": "GPT-family",
-      "model_alias": "gpt-5.5",
-      "wire_api": "openai_responses",
+      "model_family": "DeepSeek-family",
+      "model_alias": "deepseek-v4-flash",
+      "wire_api": "openai_chat_completions",
       "status": "scored",
-      "task_score": 0.8142610695802185,
-      "success": true,
-      "workflow_score": 1.0,
+      "task_score": 0.4997124784358827,
+      "success": false,
+      "workflow_score": 0.75,
       "unsupported_errors": null,
       "unsupported_errors_status": "not_automatically_judged",
-      "tokens": 7788,
+      "tokens": 1664,
       "token_source": "provider_usage_or_whitespace_proxy",
-      "time_seconds": 241.2701,
+      "time_seconds": 11.117,
       "interventions": 0,
       "failure_reason": "",
-      "output_path": "results/real_reuse/runs/AIDE-T2/summary/phase109_llm_ablation_gpt_5_5_aide_t2/candidate_solution.py",
-      "prompt_path": "results/real_reuse/runs/AIDE-T2/summary/phase109_llm_ablation_gpt_5_5_aide_t2/prompt.md",
-      "metric_path": "results/real_reuse/runs/AIDE-T2/summary/phase109_llm_ablation_gpt_5_5_aide_t2/metric.json",
-      "call_status": {
-        "status": "success",
-        "selection_reason": "live_endpoint_response",
-        "http_status": 200,
-        "attempts": 2,
-        "usage": {
-          "input_tokens": 4831,
-          "input_tokens_details": {
-            "cached_tokens": 3840
-          },
-          "output_tokens": 2957,
-          "output_tokens_details": {
-            "reasoning_tokens": 590
-          },
-          "total_tokens": 7788
-        }
-      },
-      "evidence_boundary": "Single AIDE real-reuse scored output. This row is not aggregate evidence for all eight planned paper-tasks."
-    },
-    {
-      "run_id": "phase109_llm_ablation_gpt_5_5_aide_t2",
-      "task_id": "AIDE-T2",
-      "source_paper_id": "aide",
-      "domain": "ML engineering",
-      "condition": "papertoskill",
-      "model_family": "GPT-family",
-      "model_alias": "gpt-5.5",
-      "wire_api": "openai_responses",
-      "status": "scored",
-      "task_score": 0.0,
-      "success": false,
-      "workflow_score": 1.0,
-      "unsupported_errors": null,
-      "unsupported_errors_status": "not_automatically_judged",
-      "tokens": 8714,
-      "token_source": "provider_usage_or_whitespace_proxy",
-      "time_seconds": 102.1131,
-      "interventions": 0,
-      "failure_reason": "timeout after 300s",
-      "output_path": "results/real_reuse/runs/AIDE-T2/papertoskill/phase109_llm_ablation_gpt_5_5_aide_t2/candidate_solution.py",
-      "prompt_path": "results/real_reuse/runs/AIDE-T2/papertoskill/phase109_llm_ablation_gpt_5_5_aide_t2/prompt.md",
-      "metric_path": "results/real_reuse/runs/AIDE-T2/papertoskill/phase109_llm_ablation_gpt_5_5_aide_t2/metric.json",
+      "output_path": "results/real_reuse/runs/AIDE-T2/summary/phase109_llm_ablation_deepseek_v4_flash_aide_t2/candidate_solution.py",
+      "prompt_path": "results/real_reuse/runs/AIDE-T2/summary/phase109_llm_ablation_deepseek_v4_flash_aide_t2/prompt.md",
+      "metric_path": "results/real_reuse/runs/AIDE-T2/summary/phase109_llm_ablation_deepseek_v4_flash_aide_t2/metric.json",
       "call_status": {
         "status": "success",
         "selection_reason": "live_endpoint_response",
         "http_status": 200,
         "attempts": 1,
         "usage": {
-          "input_tokens": 5948,
-          "input_tokens_details": {
-            "cached_tokens": 3840
+          "prompt_tokens": 464,
+          "completion_tokens": 1200,
+          "total_tokens": 1664,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
           },
-          "output_tokens": 2766,
-          "output_tokens_details": {
-            "reasoning_tokens": 610
+          "completion_tokens_details": {
+            "reasoning_tokens": 469
           },
-          "total_tokens": 8714
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 464
+        }
+      },
+      "evidence_boundary": "Single AIDE real-reuse scored output. This row is not aggregate evidence for all eight planned paper-tasks."
+    },
+    {
+      "run_id": "phase109_llm_ablation_deepseek_v4_flash_aide_t2",
+      "task_id": "AIDE-T2",
+      "source_paper_id": "aide",
+      "domain": "ML engineering",
+      "condition": "papertoskill",
+      "model_family": "DeepSeek-family",
+      "model_alias": "deepseek-v4-flash",
+      "wire_api": "openai_chat_completions",
+      "status": "scored",
+      "task_score": 0.4997124784358827,
+      "success": false,
+      "workflow_score": 1.0,
+      "unsupported_errors": null,
+      "unsupported_errors_status": "not_automatically_judged",
+      "tokens": 3350,
+      "token_source": "provider_usage_or_whitespace_proxy",
+      "time_seconds": 15.5625,
+      "interventions": 0,
+      "failure_reason": "",
+      "output_path": "results/real_reuse/runs/AIDE-T2/papertoskill/phase109_llm_ablation_deepseek_v4_flash_aide_t2/candidate_solution.py",
+      "prompt_path": "results/real_reuse/runs/AIDE-T2/papertoskill/phase109_llm_ablation_deepseek_v4_flash_aide_t2/prompt.md",
+      "metric_path": "results/real_reuse/runs/AIDE-T2/papertoskill/phase109_llm_ablation_deepseek_v4_flash_aide_t2/metric.json",
+      "call_status": {
+        "status": "success",
+        "selection_reason": "live_endpoint_response",
+        "http_status": 200,
+        "attempts": 1,
+        "usage": {
+          "prompt_tokens": 1590,
+          "completion_tokens": 1760,
+          "total_tokens": 3350,
+          "prompt_tokens_details": {
+            "cached_tokens": 0
+          },
+          "completion_tokens_details": {
+            "reasoning_tokens": 495
+          },
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 1590
         }
       },
       "evidence_boundary": "Single AIDE real-reuse scored output. This row is not aggregate evidence for all eight planned paper-tasks."
