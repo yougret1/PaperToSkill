@@ -1,0 +1,15 @@
+diff --git a/src/sqlfluff/rules/L031.py b/src/sqlfluff/rules/L031.py
+index 2a1f7c7..d12b0d8 100644
+--- a/src/sqlfluff/rules/L031.py
++++ b/src/sqlfluff/rules/L031.py
+@@ -56,6 +56,10 @@ class Rule_L031(BaseRule):
+ 
+             if not from_expression_element:
+                 return None
++
++            if not from_expression.get_child("join_clause"):
++                return None
++
+             from_expression_element = from_expression_element.get_child(
+                 "table_expression"
+             )

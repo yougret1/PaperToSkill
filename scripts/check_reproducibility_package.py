@@ -130,6 +130,7 @@ CORE_FILES = {
     "real_reuse_paper_table_builder": "scripts/build_real_reuse_paper_tables.py",
     "real_reuse_failure_analysis_builder": "scripts/build_real_reuse_failure_analysis.py",
     "real_reuse_full_excerpt_sanity_builder": "scripts/build_real_reuse_full_excerpt_sanity.py",
+    "real_reuse_swe_t1_issue_aligned_followup_builder": "scripts/build_real_reuse_swe_t1_issue_aligned_followup.py",
     "real_reuse_benchmark_checker": "scripts/check_real_reuse_benchmark.py",
     "real_reuse_reflexion_preparer": "scripts/prepare_real_reuse_reflexion_fixture.py",
     "real_reuse_reflexion_scorer": "scripts/score_real_reuse_reflexion.py",
@@ -228,6 +229,9 @@ CORE_FILES = {
     "real_reuse_full_excerpt_sanity_csv": "results/real_reuse/full_excerpt_sanity.csv",
     "real_reuse_full_excerpt_sanity_md": "results/real_reuse/full_excerpt_sanity.md",
     "real_reuse_full_excerpt_sanity_json": "results/real_reuse/full_excerpt_sanity.json",
+    "real_reuse_swe_t1_issue_aligned_followup_csv": "results/real_reuse/swe_t1_issue_aligned_followup.csv",
+    "real_reuse_swe_t1_issue_aligned_followup_md": "results/real_reuse/swe_t1_issue_aligned_followup.md",
+    "real_reuse_swe_t1_issue_aligned_followup_json": "results/real_reuse/swe_t1_issue_aligned_followup.json",
     "artifact_map": "research/artifact_map.md",
     "claim_evidence_matrix": "research/claim_evidence_matrix.md",
     "new_paper_triage": "research/new_paper_triage_2026-07-01.md",
@@ -722,6 +726,7 @@ def paper_table_checks(root: Path) -> list[Check]:
     ready_ids = {check.get("id") for check in report.get("checks", []) if check.get("status") == "ready"}
     required_ready = {
         "paper_table_main_aide_skill_coverage",
+        "paper_table_swe_t1_issue_aligned_followup_summary_issue_aligned_score",
         "paper_table_transfer_toolformer_no_transfer",
         "paper_table_cost_ai_scientist_v2_skill_tokens",
         "paper_table_auto_aide_automatic_extracted_text_note_scaffold_transfer",

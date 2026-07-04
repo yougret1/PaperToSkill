@@ -30,16 +30,14 @@ git ls-remote --heads origin main
 Test-NetConnection github.com -Port 443 | Format-List
 ```
 
-Current status as of 2026-07-05: the latest verified pushed checkpoint before
-the current local SWE-T1 issue-aligned contract work is `ef7dc1b`
-(`Sync memory after contract decisions`). It includes the earlier
-row-selection/stabilization range plus the SNAP executable-candidate contract
-and SWE-T1 task-contract decision commits. Treat this as a phase checkpoint,
-not an experiment result. Some early `git push origin main` attempts failed
-with GitHub/network connectivity errors, but later retries succeeded through
-`ef7dc1b`. Keep future GitHub transport issues separate from experiment
-correctness, and re-run remote verification before making future remote-backed
-checkpoint claims.
+Current status as of 2026-07-05: local `main` is at
+`0f3a499 Support SWE scorer override runs`, after
+`cdf67b9 Pre-register SWE-T1 issue-aligned contract`. Prior thread state
+recorded `0f3a4997badd333f8399c6274659af444997a765` as pushed to
+`origin/main`, but a fresh `git ls-remote --heads origin main` attempt on
+2026-07-05 failed with `Recv failure: Connection was reset`. Treat this as
+GitHub transport availability, not experiment correctness. Re-run remote
+verification before making future remote-backed checkpoint claims.
 
 ## Local Text-To-Skill Pipeline
 
@@ -225,7 +223,12 @@ patches failed to apply. The shared-source-context follow-up has already run as
 `phase107_gpt_swe_t1_source_context_followup`: both Summary and PaperToSkill
 still scored 0.000, but both patches applied and then failed the hidden target
 test. Treat phase107 as diagnostic follow-up evidence about
-task-contract/hidden-objective mismatch, not as a main-table replacement.
+task-contract/hidden-objective mismatch, not as a main-table replacement. The
+issue-aligned revised scorer/test contract is now pre-registered and validated;
+phase110 then ran a paired issue-aligned follow-up and scored Summary 1.000 and
+PaperToSkill 1.000. Treat phase110 as diagnostic issue-aligned contract
+closure for both conditions, not as PaperToSkill advantage and not as a
+main-row replacement unless explicitly promoted later.
 
 To reproduce or refresh the SWE-T1 source-context fixture, expose the same
 locked SQLFluff source slice to both conditions:
@@ -256,12 +259,32 @@ Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_BASE_URL -ErrorAction SilentlyContinue
 Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_API_KEY -ErrorAction SilentlyContinue
 ```
 
+To reproduce the phase110 SWE-T1 issue-aligned diagnostic follow-up, use the
+pre-registered issue-aligned scorer directly as the test command and disable
+the old hidden test patch:
+
+```powershell
+$env:PAPERTOSKILL_GPT_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
+$env:PAPERTOSKILL_GPT_OPENAI_API_KEY = "<set locally>"
+python scripts\run_real_reuse_swe.py --task SWE-T1 --condition summary --condition papertoskill --model-family GPT-family --model-alias gpt-5.5 --wire-api openai_responses --timeout-seconds 300 --max-attempts 5 --retry-delay-seconds 5 --score-timeout-seconds 120 --test-command-override "D:\a_work\gitee\venvs\sqlfluff__sqlfluff-1625\Scripts\python.exe D:\a_work\gitee\PaperToSkill\benchmarks\real_reuse\assets\SWE-T1\scorer_only\issue_aligned_check.py" --disable-test-patch --run-id phase110_gpt_swe_t1_issue_aligned_followup
+Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_BASE_URL -ErrorAction SilentlyContinue
+Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_API_KEY -ErrorAction SilentlyContinue
+```
+
+Then rebuild the dedicated diagnostic table and paper-table consistency report:
+
+```powershell
+python scripts\build_real_reuse_swe_t1_issue_aligned_followup.py
+python scripts\check_paper_tables.py --strict
+```
+
 Do not treat missing credentials, provider errors, or missing SWE fixture assets
 as model-quality failures. SWE-T1 and SWE-T2 each have one scored GPT-family
-main run; SWE-T1 also has the phase107 shared-source-context follow-up. Do not
-turn either single task into an aggregate SWE-agent or eight-task claim. All
-eight real-reuse rows have a first-pass score, but the evidence is mixed and
-should be stabilized before stronger claims.
+main run; SWE-T1 also has the phase107 shared-source-context follow-up and the
+phase110 issue-aligned diagnostic follow-up. Do not turn any single task into
+an aggregate SWE-agent or eight-task claim. All eight real-reuse rows have a
+first-pass score, but the evidence is mixed and should be stabilized before
+stronger claims.
 
 Run the locked Reflexion Summary-vs-PaperToSkill rows with the GPT-family
 Responses profile. Set the API key only in the shell, never in tracked files:
@@ -379,13 +402,17 @@ Planned main task grid:
 
 Current execution order:
 
-1. Treat paper-facing main-row selection and the dedicated SWE-T1 phase107
-   follow-up report as complete. `results/real_reuse/main_run_selection.json`
-   keeps phase107 from overwriting the first-pass SWE-T1 main-table cells, and
-   `results/real_reuse/swe_t1_source_context_followup.{csv,md,json}` reports
-   the paired follow-up.
-2. Continue stabilizing failure-heavy core real-reuse rows, with SNAP
-   artifact-completion / budget boundaries as the next likely inspection area.
+1. Treat paper-facing main-row selection and dedicated SWE-T1 follow-ups as
+   separate from the main table. `results/real_reuse/main_run_selection.json`
+   keeps phase107 and phase110 from overwriting the first-pass SWE-T1
+   main-table cells. `results/real_reuse/swe_t1_source_context_followup.{csv,md,json}`
+   reports phase107; `results/real_reuse/swe_t1_issue_aligned_followup.{csv,md,json}`
+   is the dedicated phase110 diagnostic table, backed by
+   `results/real_reuse/swe_t1_issue_aligned_run_report.{md,json}`.
+2. Continue stabilizing failure-heavy core real-reuse rows and paper-facing
+   diagnostic summaries. SNAP artifact-completion / budget boundaries and the
+   phase110 SWE-T1 issue-aligned follow-up should remain diagnostic unless
+   explicitly promoted.
 3. Pre-register any scorer, prompt-contract, source-context, budget, or
    artifact-contract change before rerunning a row.
 4. Rerun affected Summary and PaperToSkill conditions under the same locked

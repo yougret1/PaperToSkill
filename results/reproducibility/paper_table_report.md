@@ -3,7 +3,7 @@
 Evidence boundary: this report checks that AAAI LaTeX table values match generated CSV result tables. It does not add new empirical evidence.
 
 - Overall status: ready
-- Ready checks: 278
+- Ready checks: 302
 - Failed checks: 0
 
 ## Checks
@@ -154,6 +154,30 @@ Evidence boundary: this report checks that AAAI LaTeX table values match generat
 | paper_table_swe_t1_source_context_followup_papertoskill_followup_test_passed | ready | value=No | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
 | paper_table_swe_t1_source_context_followup_papertoskill_followup_failure | ready | value=test_command_failed | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
 | paper_table_swe_t1_source_context_followup_papertoskill_interpretation | ready | value=Source context fixed patch application; hidden test still failed | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_source_context_followup.csv |
+| paper_table_swe_t1_issue_aligned_followup_summary_task_id | ready | value=SWE-T1 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_issue_aligned_followup.csv |
+| paper_table_swe_t1_issue_aligned_followup_summary_condition | ready | value=Summary | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_issue_aligned_followup.csv |
+| paper_table_swe_t1_issue_aligned_followup_summary_main_run | ready | value=phase97_gpt_swe_t1_summary_retry | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_issue_aligned_followup.csv |
+| paper_table_swe_t1_issue_aligned_followup_summary_main_score | ready | value=0.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_issue_aligned_followup.csv |
+| paper_table_swe_t1_issue_aligned_followup_summary_phase107_run | ready | value=phase107_gpt_swe_t1_source_context_followup | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_issue_aligned_followup.csv |
+| paper_table_swe_t1_issue_aligned_followup_summary_phase107_score | ready | value=0.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_issue_aligned_followup.csv |
+| paper_table_swe_t1_issue_aligned_followup_summary_phase107_test_passed | ready | value=No | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_issue_aligned_followup.csv |
+| paper_table_swe_t1_issue_aligned_followup_summary_issue_aligned_run | ready | value=phase110_gpt_swe_t1_issue_aligned_followup | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_issue_aligned_followup.csv |
+| paper_table_swe_t1_issue_aligned_followup_summary_issue_aligned_score | ready | value=1.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_issue_aligned_followup.csv |
+| paper_table_swe_t1_issue_aligned_followup_summary_issue_aligned_test_passed | ready | value=Yes | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_issue_aligned_followup.csv |
+| paper_table_swe_t1_issue_aligned_followup_summary_issue_aligned_test_patch | ready | value=No | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_issue_aligned_followup.csv |
+| paper_table_swe_t1_issue_aligned_followup_summary_interpretation | ready | value=Issue-aligned scorer passes both conditions; no PaperToSkill advantage | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_issue_aligned_followup.csv |
+| paper_table_swe_t1_issue_aligned_followup_papertoskill_task_id | ready | value=SWE-T1 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_issue_aligned_followup.csv |
+| paper_table_swe_t1_issue_aligned_followup_papertoskill_condition | ready | value=PaperToSkill | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_issue_aligned_followup.csv |
+| paper_table_swe_t1_issue_aligned_followup_papertoskill_main_run | ready | value=phase97_gpt_swe_t1_real_reuse | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_issue_aligned_followup.csv |
+| paper_table_swe_t1_issue_aligned_followup_papertoskill_main_score | ready | value=0.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_issue_aligned_followup.csv |
+| paper_table_swe_t1_issue_aligned_followup_papertoskill_phase107_run | ready | value=phase107_gpt_swe_t1_source_context_followup | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_issue_aligned_followup.csv |
+| paper_table_swe_t1_issue_aligned_followup_papertoskill_phase107_score | ready | value=0.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_issue_aligned_followup.csv |
+| paper_table_swe_t1_issue_aligned_followup_papertoskill_phase107_test_passed | ready | value=No | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_issue_aligned_followup.csv |
+| paper_table_swe_t1_issue_aligned_followup_papertoskill_issue_aligned_run | ready | value=phase110_gpt_swe_t1_issue_aligned_followup | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_issue_aligned_followup.csv |
+| paper_table_swe_t1_issue_aligned_followup_papertoskill_issue_aligned_score | ready | value=1.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_issue_aligned_followup.csv |
+| paper_table_swe_t1_issue_aligned_followup_papertoskill_issue_aligned_test_passed | ready | value=Yes | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_issue_aligned_followup.csv |
+| paper_table_swe_t1_issue_aligned_followup_papertoskill_issue_aligned_test_patch | ready | value=No | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_issue_aligned_followup.csv |
+| paper_table_swe_t1_issue_aligned_followup_papertoskill_interpretation | ready | value=Issue-aligned scorer passes both conditions; no PaperToSkill advantage | paper/aaai/papertoskill_tables.tex vs results/real_reuse/swe_t1_issue_aligned_followup.csv |
 | paper_table_snap_exec_snap_t1_summary_task_id | ready | value=SNAP-T1 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/snapatac2_executable_artifact_followup.csv |
 | paper_table_snap_exec_snap_t1_summary_condition | ready | value=summary | paper/aaai/papertoskill_tables.tex vs results/real_reuse/snapatac2_executable_artifact_followup.csv |
 | paper_table_snap_exec_snap_t1_summary_run_id | ready | value=phase108_snapatac2_executable_artifact_followup | paper/aaai/papertoskill_tables.tex vs results/real_reuse/snapatac2_executable_artifact_followup.csv |

@@ -1,0 +1,16 @@
+I’ll localize the L031 implementation and nearby tests first, then make the smallest behavior change for the no-join TSQL alias case.```diff
+diff --git a/src/sqlfluff/rules/L031.py b/src/sqlfluff/rules/L031.py
+index 14e1a23a3..2d7c81b8e 100644
+--- a/src/sqlfluff/rules/L031.py
++++ b/src/sqlfluff/rules/L031.py
+@@ -130,6 +130,9 @@ class Rule_L031(BaseRule):
+         # A buffer to keep any violations.
+         violation_buff = []
+ 
++        if len(from_expression_elements) == 1:
++            return None
++
+         to_check = list(
+             self._filter_table_expressions(base_table, from_expression_elements)
+         )
+```

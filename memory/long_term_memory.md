@@ -292,11 +292,10 @@ Current supported claims:
   specific L031 message-text change. Preserve the first-pass SWE-T1 0.000/0.000
   rows as the paper-facing main rows; report phase107 only as a
   shared-source-context follow-up.
-- Phase109 substantive experiment and subsequent record-sync evidence is
-  pushed through verified checkpoint `ef7dc1b` (`Sync memory after contract
-  decisions`), subject to fresh remote verification before future
-  remote-backed claims. This range includes `e597fcf` (AIDE-T2 GPT-family LLM
-  ablation),
+- Phase109 substantive experiment and subsequent record-sync evidence was
+  saved through the LLM-ablation, row-selection, SNAP contract, SWE-T1
+  task-contract, SWE-T1 issue-aligned contract, and SWE runner override-support
+  commits. This range includes `e597fcf` (AIDE-T2 GPT-family LLM ablation),
   `1521b72` (AIDE push-blocker record), `200419a` (SWE-T2 GPT-family LLM
   ablation), `cb20cb1` (SWE push-blocker record), `bc9644a`
   (status-hash-churn guard), `ea15664` (DeepSeek-family LLM ablation rows),
@@ -309,13 +308,14 @@ Current supported claims:
   failure-boundary outputs), `43bc1a0` (record of the transient push blocker),
   `a170aa6` (push-status sync), `03b7ca4` (core stabilization queue),
   `25017a8` (SNAP executable-candidate contract), `36ae48e` (SWE-T1
-  task-contract decision), and `ef7dc1b` (memory sync after contract
-  decisions). Some `git push origin main` attempts failed on 2026-07-04 with
-  GitHub/network connectivity errors, but later retries succeeded through
-  `ef7dc1b`. Keep future GitHub transport failures separate from experiment
-  correctness and verify exact local/remote alignment with `git status -sb` and
-  `git ls-remote --heads origin main` before claiming a new remote-backed phase
-  save.
+  task-contract decision), `ef7dc1b` (memory sync after contract decisions),
+  `cdf67b9` (SWE-T1 issue-aligned contract), and `0f3a499` (SWE scorer
+  override support). Prior thread state recorded `0f3a4997badd333f8399c6274659af444997a765`
+  as pushed to `origin/main`, but a fresh `git ls-remote --heads origin main`
+  attempt on 2026-07-05 failed with a connection reset. Keep GitHub transport
+  failures separate from experiment correctness and verify exact local/remote
+  alignment with `git status -sb` and `git ls-remote --heads origin main`
+  before claiming a new remote-backed phase save.
 - Core real-reuse stabilization guard commit `f44da1b` (`Guard real-reuse
   planned outputs`) is pushed after the record-sync save. It removes the
   deprecated `domain_robustness` planned output from
@@ -358,6 +358,22 @@ Current supported claims:
   The validation uses the base SQLFluff workspace and existing phase107
   patches only; it adds no model calls, no raw rows, and no main-row
   replacement.
+- Phase110 executed the paired SWE-T1 issue-aligned follow-up with GPT-family
+  `gpt-5.5` under the pre-registered revised scorer and runner override
+  support. `results/real_reuse/swe_t1_issue_aligned_run_report.{md,json}`
+  reports Summary 1.000 and PaperToSkill 1.000; two raw rows were appended to
+  `results/real_reuse/raw_rows.jsonl`, with run artifacts under
+  `results/real_reuse/runs/SWE-T1/.../phase110_gpt_swe_t1_issue_aligned_followup/`.
+  `scripts/build_real_reuse_swe_t1_issue_aligned_followup.py` now generates
+  the dedicated diagnostic table
+  `results/real_reuse/swe_t1_issue_aligned_followup.{csv,md,json}`, which is
+  included in `paper/aaai/papertoskill_tables.tex` and checked by
+  `scripts/check_paper_tables.py`. The reproducibility package checker has
+  also been updated to require the phase110 builder and outputs.
+  This is diagnostic issue-aligned follow-up evidence showing the revised
+  scorer/contract can close for both conditions. It does not show a
+  PaperToSkill advantage and does not replace the locked first-pass SWE-T1
+  main row unless explicitly promoted later.
 - Phase109 has collected scored real-reuse LLM ablation rows only on the
   pre-registered stabilized slices. Current collected GPT-family pairs are
   REF-T2 1.000/1.000,
@@ -376,9 +392,11 @@ Current supported claims:
 - Phase 89 and the 2026-07-04 record-sync push both recovered GitHub HTTPS
   transport interruptions. Use `git status -sb` and a successful remote check
   for the latest exact alignment before each phase-save claim.
-- Latest verified remote checkpoint after the SNAP executable-candidate
-  contract, SWE-T1 task-contract decision, and memory sync saves:
-  `ef7dc1b43bcbc9ea4b09a2dec5a60523422d6d97 refs/heads/main`.
+- Latest local checkpoint before the current record-sync edits:
+  `0f3a499 Support SWE scorer override runs`. Prior thread state recorded this
+  commit on `origin/main`, but the latest fresh remote check failed with a
+  GitHub connection reset. Rerun remote verification before making
+  remote-backed claims.
 
 Current unsupported claims:
 
@@ -605,7 +623,7 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 427 ready checks, 1 pending
+  reports `ready_with_pending_external_evidence`, 431 ready checks, 1 pending
   check, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
@@ -671,10 +689,10 @@ Use these as entry points instead of searching the whole repo first:
   Toolformer rows score 9/9.
 - Paper tables:
   `results/reproducibility/paper_table_report.md`
-  reports ready, 278 ready checks, 0 failed checks after adding the SNAP
-  executable-artifact follow-up table consistency checks alongside the
-  real-reuse main, failure-boundary, SWE-T1 source-context follow-up, and Full
-  Excerpt sanity checks.
+  reports ready, 302 ready checks, 0 failed checks after adding the SWE-T1
+  issue-aligned follow-up table consistency checks alongside the real-reuse
+  main, failure-boundary, SWE-T1 source-context follow-up, SNAP
+  executable-artifact follow-up, and Full Excerpt sanity checks.
 - Paper claims:
   `results/reproducibility/paper_claim_report.md`
   reports ready, 20 ready checks, 0 failed checks.
@@ -716,9 +734,12 @@ Use these as entry points instead of searching the whole repo first:
   mismatch, not a replacement for the first-pass main row. The issue-aligned
   revised check is now pre-registered and locally validated: the base workspace
   fails the no-join alias check, the phase107 Summary patch passes, and the
-  phase107 PaperToSkill patch fails the join-alias regression guard. This is
-  contract validation only; a future paired rerun would still be required
-  before any promotion.
+  phase107 PaperToSkill patch fails the join-alias regression guard. Phase110
+  then ran a paired issue-aligned follow-up and scored Summary/PaperToSkill
+  1.000/1.000 under the revised scorer. This is diagnostic follow-up evidence:
+  it closes the issue-aligned contract for both conditions, does not show
+  PaperToSkill advantage, and does not replace the first-pass main row unless
+  explicitly promoted later.
 - Full Excerpt sanity check:
   `results/real_reuse/full_excerpt_sanity.md` contains AIDE-T1, SWE-T1, and
   SNAP-T1 rows with Summary/PaperToSkill/Full Excerpt scores and local

@@ -16,6 +16,7 @@ TABLE_SOURCES = {
     "real_reuse_main": "results/real_reuse/main_results_plan.csv",
     "real_reuse_failure_analysis": "results/real_reuse/failure_analysis.csv",
     "real_reuse_swe_t1_source_context_followup": "results/real_reuse/swe_t1_source_context_followup.csv",
+    "real_reuse_swe_t1_issue_aligned_followup": "results/real_reuse/swe_t1_issue_aligned_followup.csv",
     "real_reuse_snapatac2_executable_followup": "results/real_reuse/snapatac2_executable_artifact_followup.csv",
     "real_reuse_full_excerpt_sanity": "results/real_reuse/full_excerpt_sanity.csv",
     "main_results": "results/tables/main_results.csv",
@@ -346,6 +347,60 @@ def real_reuse_swe_t1_source_context_followup_checks(root: Path, tex_rows: list[
     return checks
 
 
+def real_reuse_swe_t1_issue_aligned_followup_checks(root: Path, tex_rows: list[list[str]]) -> list[Check]:
+    source_path = root / TABLE_SOURCES["real_reuse_swe_t1_issue_aligned_followup"]
+    source = by_key(read_csv_rows(source_path), "Condition")
+    actual: dict[str, list[str]] = {}
+    for row in tex_rows:
+        if len(row) != 12:
+            raise ValueError(
+                "Unexpected width in tab:swe-t1-issue-aligned-followup: "
+                f"expected 12, got {len(row)} for {row}"
+            )
+        actual[row[1]] = row
+    evidence = (
+        f"paper/aaai/papertoskill_tables.tex vs "
+        f"{TABLE_SOURCES['real_reuse_swe_t1_issue_aligned_followup']}"
+    )
+    checks: list[Check] = []
+    column_map = [
+        ("task_id", 0, "Task ID"),
+        ("condition", 1, "Condition"),
+        ("main_run", 2, "Main Run"),
+        ("main_score", 3, "Main Score"),
+        ("phase107_run", 4, "Phase107 Run"),
+        ("phase107_score", 5, "Phase107 Score"),
+        ("phase107_test_passed", 6, "Phase107 Test Passed"),
+        ("issue_aligned_run", 7, "Issue-Aligned Run"),
+        ("issue_aligned_score", 8, "Issue-Aligned Score"),
+        ("issue_aligned_test_passed", 9, "Issue-Aligned Test Passed"),
+        ("issue_aligned_test_patch", 10, "Issue-Aligned Test Patch"),
+        ("interpretation", 11, "Interpretation"),
+    ]
+    for condition, expected_row in source.items():
+        actual_row = actual.get(condition)
+        if not actual_row:
+            checks.append(
+                Check(
+                    f"paper_table_swe_t1_issue_aligned_followup_{slug(condition)}_row",
+                    "fail",
+                    "missing row",
+                    evidence,
+                )
+            )
+            continue
+        for suffix, index, column in column_map:
+            checks.append(
+                check_value(
+                    f"paper_table_swe_t1_issue_aligned_followup_{slug(condition)}_{suffix}",
+                    actual_row[index],
+                    expected_row[column],
+                    evidence,
+                )
+            )
+    return checks
+
+
 def real_reuse_snapatac2_executable_followup_checks(root: Path, tex_rows: list[list[str]]) -> list[Check]:
     source_path = root / TABLE_SOURCES["real_reuse_snapatac2_executable_followup"]
     source = {(row["task_id"], row["condition"]): row for row in read_csv_rows(source_path)}
@@ -526,6 +581,12 @@ def build_report(root: Path, tables_tex: Path) -> dict[str, Any]:
             real_reuse_swe_t1_source_context_followup_checks(
                 root,
                 parse_tabular_rows(tex_text, "tab:swe-t1-source-context-followup"),
+            )
+        )
+        checks.extend(
+            real_reuse_swe_t1_issue_aligned_followup_checks(
+                root,
+                parse_tabular_rows(tex_text, "tab:swe-t1-issue-aligned-followup"),
             )
         )
         checks.extend(

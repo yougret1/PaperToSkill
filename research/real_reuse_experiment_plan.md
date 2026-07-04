@@ -2,8 +2,9 @@
 
 Date: 2026-07-04
 
-Status: first GPT-family pass scored; SWE-T1 source-context and SNAP
-executable-artifact diagnostic follow-ups are complete. Next work is to
+Status: first GPT-family pass scored; SWE-T1 source-context, SWE-T1
+issue-aligned, and SNAP executable-artifact diagnostic follow-ups are complete
+or locally recorded. Next work is to
 stabilize or rerun core real-reuse evidence before running remaining auxiliary
 analyses.
 
@@ -125,6 +126,24 @@ rule logic while the hidden scorer expected the specific L031 warning-message
 change. This follow-up must be reported separately and must not silently
 replace the first-pass SWE-T1 main row. The paper-facing main row selection is
 locked by `results/real_reuse/main_run_selection.json`.
+
+### Completed Follow-Up: SWE-T1 Issue-Aligned Contract
+
+The issue-aligned revised scorer/test contract is pre-registered in
+`benchmarks/real_reuse/swe_t1_issue_aligned_contract_v0.json`, implemented as
+`benchmarks/real_reuse/assets/SWE-T1/scorer_only/issue_aligned_check.py`, and
+validated in `results/real_reuse/swe_t1_issue_aligned_contract_validation.{md,json}`.
+
+The paired issue-aligned follow-up then ran as
+`phase110_gpt_swe_t1_issue_aligned_followup` using GPT-family `gpt-5.5` and
+the SWE scorer override support. `results/real_reuse/swe_t1_issue_aligned_run_report.{md,json}`
+reports Summary 1.000 and PaperToSkill 1.000. This result shows that the
+revised issue-aligned scorer/contract can close for both conditions. It does
+not show a PaperToSkill advantage, and it must not replace the locked
+first-pass SWE-T1 main row unless a later explicit promotion updates
+`results/real_reuse/main_run_selection.json`. The dedicated diagnostic table is
+`results/real_reuse/swe_t1_issue_aligned_followup.{csv,md,json}`, and it is
+checked separately from the main real-reuse table.
 
 ### Completed Diagnosis: SNAP Artifact Execution
 
@@ -317,6 +336,11 @@ analyses are stable.
   reported as dedicated diagnostic follow-up evidence in
   `results/real_reuse/swe_t1_source_context_followup.{csv,md,json}` and in the
   AAAI table set.
+- SWE-T1 phase110 is a completed issue-aligned diagnostic follow-up, not a
+  main row replacement. It scores Summary 1.000 and PaperToSkill 1.000 under
+  the revised scorer, so it shows task-contract closure for both conditions
+  rather than PaperToSkill advantage. Its dedicated table is
+  `results/real_reuse/swe_t1_issue_aligned_followup.{csv,md,json}`.
 - The SNAP artifact-execution diagnosis and paired executable-artifact
   follow-up are complete diagnostic evidence, not main-row replacements. The
   phase108 follow-up scores 1.000 for Summary and PaperToSkill on SNAP-T1/T2

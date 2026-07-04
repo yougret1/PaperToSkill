@@ -239,7 +239,7 @@
 | `scripts/run_real_reuse_aide.py` | Runs locked AIDE-T1/T2 Summary-vs-PaperToSkill conditions, saves prompts/responses/metrics/raw rows, and separates provider/data availability from model quality | Created |
 | `scripts/prepare_real_reuse_swe_fixture.py` | Prepares locked SWE-T1/T2 fixtures from local repository snapshots, writes task prompts and Summary contexts, and keeps gold patches scorer-only | Created |
 | `scripts/score_real_reuse_swe.py` | Scores SWE candidate patches by applying unified diffs in an isolated workspace and running the locked test command | Created |
-| `scripts/run_real_reuse_swe.py` | Runs locked SWE-T1/T2 Summary-vs-PaperToSkill conditions, saves prompts/responses/metrics/raw rows, and separates provider/fixture availability from model quality | Created |
+| `scripts/run_real_reuse_swe.py` | Runs locked SWE-T1/T2 Summary-vs-PaperToSkill conditions, saves prompts/responses/metrics/raw rows, separates provider/fixture availability from model quality, and supports pre-registered scorer/test override runs such as SWE-T1 phase110 | Created |
 | `scripts/check_real_reuse_benchmark.py` | Validates the planned real-reuse benchmark spec, main conditions, sanity scope, reference-score boundary, task/fixture/candidate/asset-lock layers, REF prepared assets, REF runner, AIDE execution-layer contract, SWE-agent skill/execution-layer contracts, SnapATAC2 skill/execution-layer contracts, SNAP executable-candidate contract, SWE-T1 task-contract decision, and future output paths | Created |
 | `scripts/prepare_real_reuse_snapatac2_fixture.py` | Prepares locked SNAP-T1/T2 fixture assets from declared SnapATAC2 dataset manifests and expected artifact schemas while keeping scoring labels/thresholds hidden from the model | Created |
 | `scripts/score_real_reuse_snapatac2.py` | Scores SNAP candidate analysis artifacts for runtime/memory/resource-contract completion and ARI/NMI-style labels/proxies when available | Created |
@@ -262,7 +262,8 @@
 | `scripts/check_reproducibility_package.py` | Checks local reproducibility package readiness and pending external evidence | Created |
 | `scripts/check_usage_examples.py` | Verifies usage-example files, prompt/response slots, and an offline auto-note-to-skill example chain | Created |
 | `scripts/build_real_reuse_swe_t1_source_context_followup.py` | Builds the dedicated SWE-T1 shared-source-context follow-up table from first-pass and phase107 raw rows | Created |
-| `scripts/check_paper_tables.py` | Verifies AAAI LaTeX result-table values against generated CSV result tables, including real-reuse main, failure-boundary, SWE-T1 source-context follow-up, and Full Excerpt sanity tables | Created |
+| `scripts/build_real_reuse_swe_t1_issue_aligned_followup.py` | Builds the dedicated phase110 SWE-T1 issue-aligned diagnostic table from first-pass, phase107, and issue-aligned follow-up rows without promoting it to the main table | Created locally |
+| `scripts/check_paper_tables.py` | Verifies AAAI LaTeX result-table values against generated CSV result tables, including real-reuse main, failure-boundary, SWE-T1 source-context, SWE-T1 issue-aligned, SNAP executable-artifact, and Full Excerpt sanity tables | Created |
 | `scripts/check_paper_claims.py` | Verifies paper-facing text avoids unsupported overclaims and includes required evidence boundaries | Created |
 | `scripts/check_submission_review.py` | Verifies review, rebuttal, and submission checklist handoff artifacts against current evidence | Created |
 | `scripts/check_goal_completion.py` | Audits the active user goal against local evidence and exposes remaining pending requirements | Created |
@@ -296,6 +297,7 @@
 | `tests/test_build_failure_case_archive.py` | Smoke test for failure-case archive builder | Created |
 | `tests/test_check_reproducibility_package.py` | Smoke test for reproducibility package checker | Created |
 | `tests/test_check_usage_examples.py` | Smoke test for usage-example checker and offline example chain | Created |
+| `tests/test_build_real_reuse_swe_t1_issue_aligned_followup.py` | Smoke test for the phase110 SWE-T1 issue-aligned diagnostic table builder | Created locally |
 | `tests/test_build_model_ablation_prompts.py` | Smoke test for model-ablation prompt builder | Created |
 | `tests/test_model_ablation_execution.py` | Smoke tests for model-ablation runner alias selection, evaluator scoring, and skip behavior | Created |
 | `tests/test_evaluate_model_response_costs.py` | Smoke test for saved-response output-token proxy evaluator | Created |
@@ -442,7 +444,7 @@
 | `results/real_reuse/aide_run_report.json` | Machine-readable latest AIDE runner report; current default report path reflects phase109 AIDE-T2 LLM-ablation output | Created |
 | `results/real_reuse/aide_t1_baseline_metric.json` | Baseline-submission scorer validation for the locked AIDE-T1 fixture | Created |
 | `results/real_reuse/aide_t2_weak_script_metric.json` | Weak-script scorer validation for the locked AIDE-T2 fixture | Created |
-| `results/real_reuse/main_run_selection.json` | Paper-facing main-row selection file that pins first-pass/pre-registered real-reuse rows so follow-up raw rows such as SWE-T1 phase107 remain auditable without replacing main-table cells | Created |
+| `results/real_reuse/main_run_selection.json` | Paper-facing main-row selection file that pins first-pass/pre-registered real-reuse rows so follow-up raw rows such as SWE-T1 phase107 and phase110 remain auditable without replacing main-table cells | Created |
 | `results/real_reuse/main_results_plan.csv` | Data source for the AAAI real-reuse main experiment table; all eight rows are filled from raw rows | Created |
 | `results/real_reuse/main_results_plan.md` | Human-readable real-reuse main experiment table with all eight rows filled from raw rows | Created |
 | `results/real_reuse/main_results_plan.json` | Machine-readable real-reuse main experiment table generated from raw rows and planned task specs | Created |
@@ -455,6 +457,11 @@
 | `results/real_reuse/swe_t1_source_context_followup.json` | Machine-readable SWE-T1 shared-source-context follow-up report and evidence boundary | Created |
 | `results/real_reuse/swe_t1_issue_aligned_contract_validation.md` | Human-readable validation of the SWE-T1 issue-aligned check against the base workspace and existing phase107 patches; diagnostic contract evidence only | Created |
 | `results/real_reuse/swe_t1_issue_aligned_contract_validation.json` | Machine-readable SWE-T1 issue-aligned contract validation report | Created |
+| `results/real_reuse/swe_t1_issue_aligned_run_report.md` | Human-readable phase110 SWE-T1 issue-aligned paired follow-up report; Summary and PaperToSkill both score 1.000 under the revised scorer, so this is diagnostic contract-closure evidence and not a main-row replacement | Created locally |
+| `results/real_reuse/swe_t1_issue_aligned_run_report.json` | Machine-readable phase110 SWE-T1 issue-aligned paired follow-up report with scorer override metadata, per-condition scores, tokens, and provider call status | Created locally |
+| `results/real_reuse/swe_t1_issue_aligned_followup.csv` | CSV source for the AAAI SWE-T1 issue-aligned follow-up table; phase110 remains diagnostic and not a main-row replacement | Created locally |
+| `results/real_reuse/swe_t1_issue_aligned_followup.md` | Human-readable SWE-T1 issue-aligned follow-up table comparing first-pass, phase107, and phase110 outcomes under the non-promotion boundary | Created locally |
+| `results/real_reuse/swe_t1_issue_aligned_followup.json` | Machine-readable phase110 SWE-T1 issue-aligned diagnostic table and evidence boundary | Created locally |
 | `scripts/build_real_reuse_full_excerpt_sanity.py` | Builds the auxiliary Full Excerpt sanity table from pre-registered tasks, raw rows, and context paths | Created |
 | `results/real_reuse/full_excerpt_sanity.csv` | Data source for the AAAI Full Excerpt sanity table; the pre-registered three-row sanity subset is scored | Created |
 | `results/real_reuse/full_excerpt_sanity.md` | Human-readable Full Excerpt sanity check with local whitespace token proxies | Created |

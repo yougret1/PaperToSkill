@@ -60,6 +60,22 @@ SWE-T1 & PaperToSkill & phase97\_gpt\_swe\_t1\_real\_reuse & 0.000 & patch\_appl
 
 \begin{table*}[t]
 \centering
+\caption{SWE-T1 issue-aligned follow-up. The first-pass SWE-T1 row remains the main-table evidence; this diagnostic uses the pre-registered issue-aligned scorer and shows that both Summary and PaperToSkill pass under the revised contract, so it is not evidence of PaperToSkill advantage.}
+\label{tab:swe-t1-issue-aligned-followup}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{llllllllllll}
+\toprule
+Task & Condition & Main Run & Main Score & Phase107 Run & Phase107 Score & Phase107 Test & Issue Run & Issue Score & Issue Test & Issue Test Patch & Interpretation \\
+\midrule
+SWE-T1 & Summary & phase97\_gpt\_swe\_t1\_summary\_retry & 0.000 & phase107\_gpt\_swe\_t1\_source\_context\_followup & 0.000 & No & phase110\_gpt\_swe\_t1\_issue\_aligned\_followup & 1.000 & Yes & No & Issue-aligned scorer passes both conditions; no PaperToSkill advantage \\
+SWE-T1 & PaperToSkill & phase97\_gpt\_swe\_t1\_real\_reuse & 0.000 & phase107\_gpt\_swe\_t1\_source\_context\_followup & 0.000 & No & phase110\_gpt\_swe\_t1\_issue\_aligned\_followup & 1.000 & Yes & No & Issue-aligned scorer passes both conditions; no PaperToSkill advantage \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
+
+\begin{table*}[t]
+\centering
 \caption{SnapATAC2 executable-artifact follow-up. The main SNAP rows in Table~\ref{tab:real-reuse-main} remain unchanged; this paired diagnostic executes a pre-registered controlled scaffold over the same miniature fixtures to test whether concrete artifacts plus runtime/memory records satisfy the existing scorer.}
 \label{tab:snapatac2-executable-followup}
 \resizebox{\textwidth}{!}{%

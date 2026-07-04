@@ -1,6 +1,6 @@
 # Goal Completion Audit
 
-Date: 2026-07-04
+Date: 2026-07-05
 
 Purpose: audit the active user goal against current repository evidence before
 claiming completion. This is a requirement-by-requirement gate, not a claim that
@@ -35,7 +35,7 @@ effectiveness.
 Current machine reports:
 
 - Package: `results/reproducibility/package_report.md` reports
-  `ready_with_pending_external_evidence`, 427 ready checks, 1 pending check, and
+  `ready_with_pending_external_evidence`, 431 ready checks, 1 pending check, and
   0 failed checks.
 - Goal: `results/reproducibility/goal_completion_report.md` reports
   `not_complete_pending_external_evidence`, 77 ready checks, 3 pending checks,
@@ -51,13 +51,13 @@ Current machine reports:
 | --- | --- | --- | --- |
 | Durable local memory | `memory/long_term_memory.md`; `memory/short_term_memory.md` | Complete locally | Read and update both memory files after every resume/compaction. |
 | Use `ai-scientist-v2` to refine PaperToSkill | Seed idea files, bounded smoke report, full live-run handoff, Phase 76 run log, completion directory | Complete for bounded local evidence | Do not treat the synthetic run as broad live task success. |
-| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. The latest verified pushed checkpoint before the current local issue-aligned SWE-T1 work is `ef7dc1b` (`Sync memory after contract decisions`), after the row-selection/stabilization range and the SNAP/SWE-T1 contract-decision commits. Some early `git push origin main` attempts failed with GitHub/network connectivity errors, but later retries succeeded through `ef7dc1b`. | Complete for the latest saved and pushed phase, subject to fresh remote verification before future checkpoint claims | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim with `git status -sb` and `git ls-remote --heads origin main`; keep transport failures separate from experiment correctness. |
+| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. Local `main` is currently at `0f3a499` (`Support SWE scorer override runs`) after `cdf67b9` (`Pre-register SWE-T1 issue-aligned contract`). Prior thread state recorded `0f3a4997badd333f8399c6274659af444997a765` as pushed to `origin/main`, but a fresh `git ls-remote --heads origin main` attempt on 2026-07-05 failed with a GitHub connection reset. Current phase110 diagnostic table/checker artifacts are local and uncommitted. | Complete for the latest local saved phase; remote-backed status requires fresh verification | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim with `git status -sb` and `git ls-remote --heads origin main`; keep transport failures separate from experiment correctness. |
 | Official AAAI TeX package | `paper/aaai/`; `results/reproducibility/aaai_package_report.md` | Locally ready | Keep draft synchronized with new evidence. |
 | Usage examples | `examples/usage/`; `results/reproducibility/usage_example_report.md` | Complete locally | Re-run after runner or task changes. |
 | Model ablations | `results/model_ablation_prompts/v0/evaluation.md`: 6 scored, 0 pending | Complete for saved-response protocol | Do not claim broad model quality or live task success. |
 | PaperToSkill extraction prototype | Extractor, auto-note scaffold, pipeline, generated skills/source maps | Complete for scoped prototype | Do not claim reliable arbitrary-PDF automation. |
 | Main deterministic experiments | `results/tables/main_results.md`; transfer, cost, source-span, failure archive reports | Complete for offline benchmark | Keep claims bounded to deterministic/local evidence. |
-| Next-stage real-reuse validity experiments | `research/real_reuse_experiment_plan.md`; `benchmarks/real_reuse/real_reuse_v0.json`; `benchmarks/real_reuse/tasks/*.json`; `benchmarks/real_reuse/fixtures/*.json`; `benchmarks/real_reuse/fixture_candidates/*.json`; `benchmarks/real_reuse/asset_locks/*.json`; `benchmarks/real_reuse/assets/AIDE-T1/asset_manifest.json`; `benchmarks/real_reuse/assets/AIDE-T2/asset_manifest.json`; `benchmarks/real_reuse/assets/SWE-T1/asset_manifest.json`; `benchmarks/real_reuse/assets/SWE-T2/asset_manifest.json`; `benchmarks/real_reuse/assets/REF-T1/asset_manifest.json`; `benchmarks/real_reuse/assets/REF-T2/asset_manifest.json`; `benchmarks/real_reuse/assets/SNAP-T1/asset_manifest.json`; `benchmarks/real_reuse/assets/SNAP-T2/asset_manifest.json`; `scripts/score_real_reuse_reflexion.py`; `scripts/run_real_reuse_reflexion.py`; `scripts/prepare_real_reuse_aide_fixture.py`; `scripts/run_real_reuse_aide.py`; `scripts/prepare_real_reuse_swe_fixture.py`; `scripts/run_real_reuse_swe.py`; `scripts/prepare_real_reuse_snapatac2_fixture.py`; `scripts/run_real_reuse_snapatac2.py`; `scripts/run_real_reuse_snapatac2_executable_followup.py`; `results/real_reuse/main_run_selection.json`; `results/real_reuse/raw_rows.jsonl`; `results/real_reuse/aide_run_report.md`; `results/real_reuse/swe_run_report.md`; `results/real_reuse/reflexion_run_report.md`; `results/real_reuse/snapatac2_run_report.md`; `results/real_reuse/spec_preflight.md`; `results/real_reuse/main_results_plan.md`; `results/real_reuse/swe_t1_source_context_followup.md`; `results/real_reuse/snapatac2_artifact_followup.md`; `results/real_reuse/snapatac2_executable_artifact_followup.md`; `paper/aaai/papertoskill_tables.tex` | Complete for one GPT-family single-run pass across all eight rows, but mixed as effectiveness evidence. After rerunning the same saved AIDE outputs with a 300-second local scorer budget, AIDE-T1 scores 0.816/0.817 and is solved by both conditions, while AIDE-T2 scores 0.000/0.826 and is a PaperToSkill-only success. SWE-T1 first-pass scores 0.000/0.000 because generated patches fail to apply; SWE-T2 scores 0.000/1.000; REF-T1/REF-T2 score 1.000/1.000; SNAP-T1/SNAP-T2 score 0.000/0.500 and 0.200/0.400 but fail the local success threshold. SWE-T1 phase107 is a completed shared-source-context diagnostic follow-up. SNAP artifact-execution diagnosis and phase108 executable-artifact follow-up are complete; phase108 scores 1.000 for both Summary and PaperToSkill on SNAP-T1/T2 using a controlled scaffold, validating the artifact/runtime/memory contract path without replacing main rows. | Treat the current main experiment as a first-pass downstream result with failure-boundary analysis; report follow-ups separately and do not claim aggregate PaperToSkill advantage. |
+| Next-stage real-reuse validity experiments | `research/real_reuse_experiment_plan.md`; `benchmarks/real_reuse/real_reuse_v0.json`; `benchmarks/real_reuse/tasks/*.json`; `benchmarks/real_reuse/fixtures/*.json`; `benchmarks/real_reuse/fixture_candidates/*.json`; `benchmarks/real_reuse/asset_locks/*.json`; `benchmarks/real_reuse/assets/AIDE-T1/asset_manifest.json`; `benchmarks/real_reuse/assets/AIDE-T2/asset_manifest.json`; `benchmarks/real_reuse/assets/SWE-T1/asset_manifest.json`; `benchmarks/real_reuse/assets/SWE-T2/asset_manifest.json`; `benchmarks/real_reuse/assets/REF-T1/asset_manifest.json`; `benchmarks/real_reuse/assets/REF-T2/asset_manifest.json`; `benchmarks/real_reuse/assets/SNAP-T1/asset_manifest.json`; `benchmarks/real_reuse/assets/SNAP-T2/asset_manifest.json`; `scripts/score_real_reuse_reflexion.py`; `scripts/run_real_reuse_reflexion.py`; `scripts/prepare_real_reuse_aide_fixture.py`; `scripts/run_real_reuse_aide.py`; `scripts/prepare_real_reuse_swe_fixture.py`; `scripts/run_real_reuse_swe.py`; `scripts/prepare_real_reuse_snapatac2_fixture.py`; `scripts/run_real_reuse_snapatac2.py`; `scripts/run_real_reuse_snapatac2_executable_followup.py`; `scripts/build_real_reuse_swe_t1_issue_aligned_followup.py`; `results/real_reuse/main_run_selection.json`; `results/real_reuse/raw_rows.jsonl`; `results/real_reuse/aide_run_report.md`; `results/real_reuse/swe_run_report.md`; `results/real_reuse/reflexion_run_report.md`; `results/real_reuse/snapatac2_run_report.md`; `results/real_reuse/spec_preflight.md`; `results/real_reuse/main_results_plan.md`; `results/real_reuse/swe_t1_source_context_followup.md`; `results/real_reuse/swe_t1_issue_aligned_run_report.md`; `results/real_reuse/swe_t1_issue_aligned_followup.md`; `results/real_reuse/snapatac2_artifact_followup.md`; `results/real_reuse/snapatac2_executable_artifact_followup.md`; `paper/aaai/papertoskill_tables.tex` | Complete for one GPT-family single-run pass across all eight rows, but mixed as effectiveness evidence. After rerunning the same saved AIDE outputs with a 300-second local scorer budget, AIDE-T1 scores 0.816/0.817 and is solved by both conditions, while AIDE-T2 scores 0.000/0.826 and is a PaperToSkill-only success. SWE-T1 first-pass scores 0.000/0.000 because generated patches fail to apply; SWE-T2 scores 0.000/1.000; REF-T1/REF-T2 score 1.000/1.000; SNAP-T1/SNAP-T2 score 0.000/0.500 and 0.200/0.400 but fail the local success threshold. SWE-T1 phase107 is a completed shared-source-context diagnostic follow-up. SWE-T1 phase110 is a completed issue-aligned diagnostic follow-up with Summary 1.000 and PaperToSkill 1.000, with a dedicated diagnostic table; it shows contract closure for both but no PaperToSkill advantage. SNAP artifact-execution diagnosis and phase108 executable-artifact follow-up are complete; phase108 scores 1.000 for both Summary and PaperToSkill on SNAP-T1/T2 using a controlled scaffold, validating the artifact/runtime/memory contract path without replacing main rows. | Treat the current main experiment as a first-pass downstream result with failure-boundary analysis; report follow-ups separately and do not claim aggregate PaperToSkill advantage. |
 | New-paper triage and Paper2Agent comparison | `research/new_paper_triage_2026-07-01.md`; `results/tables/paper2agent_artifact_comparison.md` | Complete for citation/positioning | Do not claim executable Paper2Agent baseline performance. |
 | Human-fidelity annotation | `results/human_fidelity_packets/annotation_template.csv`; `annotation_guide.md`; packets | Handoff ready; annotation pending | Independent reviewers score all 24 paper-by-criterion cells and rerun the strict summarizer. |
 | AAAI submission decision | `research/aaai_submission_decision.md`; `results/aaai_submission_decision/decision.md` | Decision recorded as wait | Complete named evidence before stronger final-submission claims. |
@@ -86,6 +86,12 @@ task-success claim.
   follow-up. Both Summary and PaperToSkill score 0.000; both patches apply and
   then fail the hidden test. This is diagnostic follow-up evidence and not a
   main-table replacement.
+- `swe_t1_issue_aligned_followup_phase110`: completed locally as a paired
+  follow-up under the revised issue-aligned scorer. Summary and PaperToSkill
+  both score 1.000. This shows the revised task contract can close for both
+  conditions; it is diagnostic evidence, not a main-table replacement and not
+  PaperToSkill advantage. A dedicated diagnostic table now exists at
+  `results/real_reuse/swe_t1_issue_aligned_followup.{csv,md,json}`.
 - `snapatac2_artifact_execution_diagnosis`: completed locally as a follow-up
   contract. It shows the selected SNAP rows are plan/JSON outputs under a
   non-executing runner, while the scorer requires completed artifacts plus
@@ -124,15 +130,16 @@ an aggregate downstream-success claim.
 ## Recommended Next Closure Path
 
 1. Stabilize the core real-reuse experiment first. Main-row selection,
-   dedicated reporting for SWE-T1 phase107, SNAP artifact-execution diagnosis,
-   and phase108 SNAP executable-artifact follow-up are complete. Phase109 has
-   collected the pre-registered GPT-family and DeepSeek-family scored rows on
-   stabilized slices and attempted all Claude-family rows, which remain
-   provider-502 availability evidence. The next focus is local core-task
-   stabilization: review failure-boundary/task-contract diagnostics,
-   pre-register any task-contract fix, and rerun affected paired conditions
-   before promoting any replacement row. Retry Claude-family rows only
-   opportunistically when provider availability recovers.
+   dedicated reporting for SWE-T1 phase107, SWE-T1 issue-aligned contract
+   validation, the phase110 issue-aligned paired follow-up and diagnostic
+   table, SNAP artifact-execution diagnosis, and phase108 SNAP
+   executable-artifact follow-up are complete or locally recorded. Phase109 has collected the pre-registered GPT-family and
+   DeepSeek-family scored rows on stabilized slices and attempted all
+   Claude-family rows, which remain provider-502 availability evidence. The
+   next focus is local core-task stabilization and paper-facing diagnostic
+   summaries: do not promote any replacement row without an explicit
+   row-selection decision. Retry Claude-family rows only opportunistically when
+   provider availability recovers.
 2. Keep provider latency, API timeouts, and retry counts separate from the core
    task metrics; record provider availability only as execution metadata and
    give model calls generous timeout/retry budgets.

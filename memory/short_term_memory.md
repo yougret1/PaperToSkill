@@ -41,29 +41,40 @@ Current date: 2026-07-05.
   `results/real_reuse/swe_t1_issue_aligned_contract_validation.{md,json}`.
   The base workspace fails the alias no-join check as expected; the phase107
   Summary patch passes; the phase107 PaperToSkill patch fails the join
-  regression guard. This is diagnostic contract validation only, not a new raw
-  row and not a main-row replacement.
-- Current remote-backup status: GitHub push recovered. `origin/main` is
-  verified at `ef7dc1b43bcbc9ea4b09a2dec5a60523422d6d97`, which includes
-  `36ae48e` (`Record SWE-T1 task contract decision`), `25017a8`
-  (`Pre-register SNAP executable candidate contract`), and the memory sync
-  `ef7dc1b` (`Sync memory after contract decisions`). Earlier `git push origin
-  main` failures were transport availability only and are recorded in
-  `toHuman.md` as recovered history. Current SWE-T1 issue-aligned contract
-  changes are local until a future explicit phase save.
+  regression guard. This is diagnostic contract validation only and not a
+  main-row replacement. The contract save is in local commit `cdf67b9`
+  (`Pre-register SWE-T1 issue-aligned contract`).
+- SWE runner override support is implemented in local commit `0f3a499`
+  (`Support SWE scorer override runs`): `scripts/run_real_reuse_swe.py` now
+  accepts scorer/test override options, with regression coverage in
+  `tests/test_run_real_reuse_swe.py`.
+- SWE-T1 issue-aligned paired follow-up has run locally as
+  `phase110_gpt_swe_t1_issue_aligned_followup`: Summary scored `1.000` and
+  PaperToSkill scored `1.000` under the revised issue-aligned scorer. This
+  shows the revised scorer/contract can close for both conditions; it does not
+  show PaperToSkill advantage and must not replace the locked first-pass
+  SWE-T1 main row unless explicitly promoted later. The dedicated diagnostic
+  table is now generated at
+  `results/real_reuse/swe_t1_issue_aligned_followup.{csv,md,json}`, included in
+  `paper/aaai/papertoskill_tables.tex`, and covered by the paper-table checker.
+  Current uncommitted artifacts include appended `results/real_reuse/raw_rows.jsonl`, run folders
+  under `results/real_reuse/runs/SWE-T1/.../phase110_gpt_swe_t1_issue_aligned_followup/`,
+  `results/real_reuse/swe_t1_issue_aligned_run_report.{md,json}`, the
+  dedicated follow-up CSV/MD/JSON, the new builder/test, and table/package
+  checker updates.
+- Current remote-backup status: local `main` is at `0f3a499` after
+  `cdf67b9`; prior thread state recorded `0f3a4997badd333f8399c6274659af444997a765`
+  as pushed to `origin/main`. A fresh `git ls-remote --heads origin main`
+  attempt on 2026-07-05 failed with `Recv failure: Connection was reset`, so
+  rerun remote verification before any new remote-backed checkpoint claim.
 - The current discussion policy is: stabilize the core eight-row real-reuse
   evidence first; collect auxiliary raw data opportunistically; keep LLM
   ablation auxiliary, component ablation appendix-only, and user study
   last/optional. Provider latency, timeouts, and retry counts are availability
   metadata, not effectiveness metrics.
-- The latest verified remote backup before the current local issue-aligned
-  SWE-T1 work is `ef7dc1b43bcbc9ea4b09a2dec5a60523422d6d97`
-  (`ef7dc1b Sync memory after contract decisions`). It includes the earlier
-  row-selection/stabilization commits plus `25017a8` (SNAP executable
-  candidate contract) and `36ae48e` (SWE-T1 task-contract decision). Some
-  earlier `git push origin main` attempts failed with GitHub/network
-  connectivity errors, but later retries succeeded. `toHuman.md` now says no
-  immediate human-side action is required. Verify exact remote state with
+- `toHuman.md` now says no immediate human-side action is required and records
+  the current phase110 uncommitted diagnostic table/checker artifacts plus the
+  latest failed remote-verification attempt. Verify exact remote state with
   `git ls-remote --heads origin main` before making future remote-backed
   checkpoint claims.
 - Commits `e597fcf` (`Add AIDE real-reuse LLM ablation row`), `1521b72`
@@ -84,8 +95,10 @@ Current date: 2026-07-05.
   (`Sync row selection push status`), `03b7ca4`
   (`Plan real-reuse stabilization priorities`), `25017a8`
   (`Pre-register SNAP executable candidate contract`), `36ae48e`
-  (`Record SWE-T1 task contract decision`), and `ef7dc1b`
-  (`Sync memory after contract decisions`) are the current saved and pushed
+  (`Record SWE-T1 task contract decision`), `ef7dc1b`
+  (`Sync memory after contract decisions`), `cdf67b9`
+  (`Pre-register SWE-T1 issue-aligned contract`), and `0f3a499`
+  (`Support SWE scorer override runs`) are the current local saved
   phase/checkpoint range, subject to fresh remote verification. The
   earlier GitHub push failures in this turn were transient transport
   availability metadata, not experiment correctness evidence.
@@ -101,11 +114,13 @@ Current date: 2026-07-05.
 - `C:\Users\19351\Desktop\tem\toHuman.md` should say no immediate human action
   is required, and `ok.txt` should only be created for completed human-fidelity
   annotation or a concrete placed core asset.
-- Current GitHub transport note: `git push origin main` eventually succeeded
-  for the row-selection, stabilization-queue, SNAP contract, SWE-T1 decision,
-  and memory-sync phases, updating `main` through `ef7dc1b` in the latest
-  verified successful push. Before claiming any future phase save is
-  remote-backed, rerun `git status -sb`, `git log -3 --oneline`, and
+- Current GitHub transport note: earlier `git push origin main` attempts
+  eventually succeeded for the row-selection, stabilization-queue, SNAP
+  contract, SWE-T1 decision, SWE-T1 issue-aligned contract, and SWE runner
+  override-support phases according to prior thread state. A fresh
+  `git ls-remote --heads origin main` on 2026-07-05 failed with a connection
+  reset, so before claiming any future phase save is remote-backed, rerun
+  `git status -sb`, `git log -3 --oneline`, and
   `git ls-remote --heads origin main`.
 - Latest phase checkpoint: after record-sync commit `977b2b9`
   (`Sync experiment planning records`), Claude-family REF-T2 was retried from
@@ -245,10 +260,10 @@ Current date: 2026-07-05.
 1. Continue local, non-network core real-reuse stabilization first. SNAP
    executable-candidate, SWE-T1 task-contract decision, and SWE-T1
    issue-aligned revised scorer/test contract are now pre-registered and
-   guarded by focused preflight. If a stronger SWE-T1 row is needed later, run
-   a paired Summary/PaperToSkill rerun only under the issue-aligned contract;
-   do not spend more SWE-T1 model calls under the old hidden-test contract,
-   and do not change paper-facing main rows unless explicitly promoted.
+   guarded by focused preflight. The phase110 paired issue-aligned follow-up
+   has already scored Summary/PaperToSkill as `1.000/1.000`, has a dedicated
+   diagnostic table, and must not change paper-facing main rows unless
+   explicitly promoted.
 2. Retry Claude-family real-reuse LLM ablation rows only opportunistically when
    provider availability recovers. The current collected scored slices are all
    GPT-family and DeepSeek-family rows for REF-T2, AIDE-T2, and SWE-T2; all
@@ -263,8 +278,10 @@ Current date: 2026-07-05.
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-6. Latest remote verification:
-   `ef7dc1b43bcbc9ea4b09a2dec5a60523422d6d97 refs/heads/main`.
+6. Latest local HEAD: `0f3a499 Support SWE scorer override runs`. Prior thread
+   state recorded this commit as pushed, but a fresh remote verification on
+   2026-07-05 failed with a GitHub connection reset. Rerun `git ls-remote`
+   before making remote-backed claims.
 7. No immediate human-side action is required.
 
 ## Boundaries
