@@ -138,6 +138,19 @@ Current date: 2026-07-05.
   availability metadata from the latest AIDE/SWE/REF runner reports appears in
   `results/real_reuse/llm_ablation_summary.{md,json}` without changing the
   12/18 scored-row count.
+- Current 2026-07-05 Claude-family retry checkpoint: after the remote backup
+  recovered, Claude-family AIDE-T2, SWE-T2, and REF-T2 were retried from the
+  current local API document path
+  `C:\Users\19351\Desktop\论文\SelfPaper\LLMAPIDocument\Claude大模型接口说明文档.md`
+  using the pre-registered `claude-opus-4-8` slot, 300-second provider
+  timeout, 5 attempts per condition, and the same Summary/PaperToSkill pairing.
+  All six condition rows again returned provider HTTP 502 after 5 attempts.
+  `results/real_reuse/aide_run_report.json`,
+  `results/real_reuse/swe_run_report.json`, and
+  `results/real_reuse/reflexion_run_report.json` now carry this latest
+  availability metadata. `results/real_reuse/llm_ablation_summary.md` remains
+  12 collected scored rows / 18 expected rows, with the 6 Claude-family rows
+  pending; this is provider availability metadata, not method-quality evidence.
 - Current local core-stabilization change: the real-reuse preflight now treats
   a separate `domain_robustness` planned output as deprecated/forbidden,
   checks current planned output paths (`main_results_plan.*`,
