@@ -31,13 +31,11 @@ Test-NetConnection github.com -Port 443 | Format-List
 ```
 
 Current status as of 2026-07-04: the latest confirmed remote backup is
-`6424ba6` (`Sync remote backup status records`). The earlier HTTPS reset around
-local commit `f54be5b` was recovered by a successful push. Keep future GitHub
-transport issues separate from experiment correctness. Local commits
-`10ffc10`, `516895a`, and `6c5c360` are currently beyond that remote backup,
-and current phase109 LLM-ablation/record-sync edits are still uncommitted. Do
-not call later phase work remote-backed until a new phase-save push is
-verified.
+`9f2e52f` (`Aggregate real-reuse LLM ablation pilot`). The earlier HTTPS reset
+around local commit `f54be5b`, and the later reset / port-443 blocker around
+`10ffc10`, `516895a`, and `6c5c360`, were recovered by successful pushes. Keep
+future GitHub transport issues separate from experiment correctness. Do not
+call future phase work remote-backed until a new phase-save push is verified.
 
 ## Local Text-To-Skill Pipeline
 

@@ -16,24 +16,19 @@ Current date: 2026-07-04.
   SWE-T1 source-context reporting, SNAP artifact-execution diagnosis, and the
   phase108 SNAP executable-artifact follow-up are complete and remain
   diagnostic only.
-- Latest confirmed GitHub backup includes commit `6424ba6` (`Sync remote
-  backup status records`). Local commits `10ffc10` (`Add SNAP executable
-  artifact follow-up`), `516895a` (`Pre-register real-reuse LLM ablation
-  plan`), and `6c5c360` (`Sync memory after LLM ablation planning`) are saved
-  locally but not uploaded; `git status -sb` reports
-  `main...origin/main [ahead 3]`. `git push origin main` failed with GitHub
-  HTTPS reset and then port-443 connection failure. The exact commands/errors
-  are recorded in `C:\Users\19351\Desktop\tem\toHuman.md`.
-- Current uncommitted local work includes the phase109 REF-T2 GPT-family
-  real-reuse LLM ablation pilot, the LLM-ablation aggregation helper/results,
-  and the current record-sync edits. Verification before phase save passed:
+- Latest confirmed GitHub backup includes commit `9f2e52f` (`Aggregate
+  real-reuse LLM ablation pilot`). `git push origin main` succeeded and
+  `git ls-remote --heads origin main` returned the same commit, so the earlier
+  push blocker for `10ffc10`, `516895a`, and `6c5c360` is resolved.
+- Phase109 REF-T2 GPT-family real-reuse LLM ablation pilot, the LLM-ablation
+  aggregation helper/results, and record-sync edits are locally committed and
+  remote-backed through `9f2e52f`. Verification before phase save passed:
   181 unit tests, `check_real_reuse_benchmark.py --strict`,
   `check_paper_tables.py --strict`, `check_paper_claims.py --strict`,
   `check_submission_review.py --strict`, `check_aaai_package.py --strict`,
   `check_goal_completion.py --strict`,
   `check_reproducibility_package.py --strict`, `git diff --check` with only
-  CRLF warnings, and a raw-key scan with no matches. Do not describe these as
-  phase-saved or remote-backed until a new commit and successful push exist.
+  CRLF warnings, and a raw-key scan with no matches.
 - `C:\Users\19351\Desktop\tem\toHuman.md` should say no immediate human action
   is required, and `ok.txt` should only be created for completed human-fidelity
   annotation or a concrete placed core asset.
@@ -139,29 +134,22 @@ Current date: 2026-07-04.
 
 ## Immediate Next Actions
 
-1. Commit the verified phase109 LLM-ablation aggregation/record-sync work.
-2. Retry `git push origin main`; do not claim remote backup for `10ffc10`,
-   `516895a`, `6c5c360`, or the next phase commit until `git status -sb` no
-   longer reports ahead of `origin/main`.
-3. If push still fails, update
-   `C:\Users\19351\Desktop\tem\toHuman.md` with the exact command, error, and
-   blocked commits, then continue non-blocked local work.
-4. Continue the pre-registered real-reuse LLM ablation rows when provider env
+1. Continue the pre-registered real-reuse LLM ablation rows when provider env
    vars are available, or use the local API docs under
    `C:\Users\19351\Desktop\论文\SelfPaper\LLMAPIDocument` to set them in the
    shell only. Do not commit raw keys.
    Current collected slice is only REF-T2 / GPT-family / `gpt-5.5`; AIDE-T2,
    SWE-T2, Claude, and DeepSeek rows remain pending.
-5. Keep Summary and PaperToSkill paired under the same task/scorer contract for
+2. Keep Summary and PaperToSkill paired under the same task/scorer contract for
    any follow-up. Main SNAP rows remain unchanged unless explicitly promoted.
-6. During core reruns, collect auxiliary raw data where cheap: provider
+3. During core reruns, collect auxiliary raw data where cheap: provider
    availability, failure reasons, context/token proxies, and raw rows needed
    for real-reuse LLM ablation.
-7. Run broader verification gates before the next phase save:
+4. Run broader verification gates before the next phase save:
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-8. Save and push the next meaningful phase after new core-experiment progress.
+5. Save and push the next meaningful phase after new core-experiment progress.
 
 ## Boundaries
 
