@@ -7,13 +7,19 @@ Current date: 2026-07-04.
 
 ## Current Task
 
-- Latest user request: modify the related project records, including the
-  current `C:\Users\19351\Desktop\tem\toHuman.md`, while leaving local logs
-  unchanged.
+- Latest user request: modify related project records, including the current
+  `C:\Users\19351\Desktop\tem\toHuman.md`, while leaving local logs
+  unchanged. This record-sync pass updates planning/handoff/review records
+  only; it must not touch `research/run_logs/**` or `research/stage_log.md`.
 - Current execution priority remains the core real-reuse main experiment.
   SWE-T1 source-context reporting, SNAP artifact-execution diagnosis, and the
   phase108 SNAP executable-artifact follow-up are complete and remain
   diagnostic only.
+- The current discussion policy is: stabilize the core eight-row real-reuse
+  evidence first; collect auxiliary raw data opportunistically; keep LLM
+  ablation auxiliary, component ablation appendix-only, and user study
+  last/optional. Provider latency, timeouts, and retry counts are availability
+  metadata, not effectiveness metrics.
 - The latest substantive phase save is confirmed on GitHub through commit
   `0d4934b` (`Record Claude LLM ablation availability`). A later status-sync
   commit may sit on top; do not chase the status-sync hash in memory. Verify
@@ -40,12 +46,12 @@ Current date: 2026-07-04.
 - `C:\Users\19351\Desktop\tem\toHuman.md` should say no immediate human action
   is required, and `ok.txt` should only be created for completed human-fidelity
   annotation or a concrete placed core asset.
-- Current GitHub transport note: the runbook/status-sync push blocker was
-  resolved; `origin/main` was verified at `0922119` after a successful
-  `git push origin main`. Treat future transport failures as remote-backup
-  availability, not project correctness; check `git status -sb`, `git log -3
-  --oneline`, and `git ls-remote --heads origin main` before claiming remote
-  alignment.
+- Current GitHub transport note: the runbook/status-sync and goal-audit
+  push blockers are resolved; `origin/main` was verified at `a6ede5d` after a
+  successful `git push origin main`. Treat future transport failures as
+  remote-backup availability, not project correctness; check `git status -sb`,
+  `git log -3 --oneline`, and `git ls-remote --heads origin main` before
+  claiming remote alignment.
 
 ## Latest Record Sync Policy
 

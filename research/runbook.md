@@ -30,17 +30,14 @@ git ls-remote --heads origin main
 Test-NetConnection github.com -Port 443 | Format-List
 ```
 
-Current status as of 2026-07-04: the latest substantive phase109 LLM-ablation
-availability backup is confirmed on GitHub through `0d4934b`
-(`Record Claude LLM ablation availability`). The follow-up status-sync commit
-`8886cf3` was also pushed successfully. Later status-sync commits may sit on
-top; verify the exact current remote head with `git ls-remote --heads origin
-main`. The earlier HTTPS reset around local commit `f54be5b`, and the later
-reset / port-443 blocker around `10ffc10`, `516895a`, `6c5c360`, `9f2e52f`,
-`e597fcf`, `1521b72`, `200419a`, `cb20cb1`, `bc9644a`, and `ea0f016`, were
-recovered by successful pushes. Keep future GitHub transport issues separate
-from experiment correctness, and do not call future phase work remote-backed
-until a new phase-save push is verified.
+Current status as of 2026-07-04: the last verified remote head was
+`a6ede5d0ac0f0e8e37f1c93cf02675a630bf8164` on `origin/main`, which includes
+the phase109 LLM-ablation availability save and later status-sync recovery
+commits. Treat this as a remote-backup checkpoint, not an experiment result.
+Before making any new phase-save claim, verify the exact current remote head
+with `git status -sb` and `git ls-remote --heads origin main`. Keep future
+GitHub transport issues separate from experiment correctness, and do not call
+future phase work remote-backed until a new phase-save push is verified.
 
 ## Local Text-To-Skill Pipeline
 

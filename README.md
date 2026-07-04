@@ -27,7 +27,11 @@ executable-artifact follow-up in
 pre-registered controlled scaffold reaches the existing SNAP
 artifact/runtime/memory scorer contract for both Summary and PaperToSkill
 conditions. This is diagnostic evidence only; the main SNAP rows remain
-unchanged unless explicitly promoted.
+unchanged unless explicitly promoted. The real-reuse LLM ablation is an
+auxiliary stabilized-slice collection, not a main-table replacement: GPT-family
+and DeepSeek-family rows are collected for AIDE-T2, SWE-T2, and REF-T2, while
+Claude-family rows remain pending because all attempted conditions returned
+provider HTTP 502.
 
 The package also contains supporting evidence: deterministic/offline gates,
 source maps and source-span validation, usage examples, saved live-transfer

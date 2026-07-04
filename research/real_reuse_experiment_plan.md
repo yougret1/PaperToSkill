@@ -190,11 +190,11 @@ Scoring rules:
 Purpose: test whether the PaperToSkill benefit depends on a single model
 family. It is not a broad model ranking.
 
-| Model Family | Model Alias | Tasks | Summary Avg Score | PaperToSkill Avg Score | Reuse Success | Unsupported Errors / Task | Token Cost / Task | Availability |
+| Model Family | Model Alias | Tasks | Summary Avg Score | PaperToSkill Avg Score | Reuse Success | Unsupported-Error Audit | Context Tokens / Task | Availability |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| GPT-family | gpt-5.5 | AIDE-T2, SWE-T2, and REF-T2 collected | 0.605 over collected slices | 0.333 over collected slices | REF-T2 tie; AIDE-T2 unfavorable; SWE-T2 joint failure | Not automatically judged | Provider usage / local proxy | All collected rows returned provider output; AIDE summary required 2 attempts |
-| Claude-family | claude-opus-4-8 | AIDE-T2, SWE-T2, and REF-T2 attempted; no scored rows | Pending | Pending | Pending | Not automatically judged | Provider usage / local proxy | Provider HTTP 502 after 5 attempts per condition for all six condition rows |
-| DeepSeek-family | deepseek-v4-flash | AIDE-T2, SWE-T2, and REF-T2 collected | 0.500 over collected slices | 0.500 over collected slices | REF-T2 tie; AIDE-T2 score tie below success threshold; SWE-T2 joint failure | Not automatically judged | Provider usage / local proxy | All collected rows HTTP 200 on attempt 1 |
+| GPT-family | gpt-5.5 | AIDE-T2, SWE-T2, and REF-T2 collected | 0.605 over collected slices | 0.333 over collected slices | REF-T2 tie; AIDE-T2 unfavorable; SWE-T2 joint failure | Not automatically judged | Local prompt-token proxy; not billing | All collected rows returned provider output; AIDE summary required 2 attempts |
+| Claude-family | claude-opus-4-8 | AIDE-T2, SWE-T2, and REF-T2 attempted; no scored rows | Pending | Pending | Pending | Not automatically judged | Pending until provider output exists | Provider HTTP 502 after 5 attempts per condition for all six condition rows |
+| DeepSeek-family | deepseek-v4-flash | AIDE-T2, SWE-T2, and REF-T2 collected | 0.500 over collected slices | 0.500 over collected slices | REF-T2 tie; AIDE-T2 score tie below success threshold; SWE-T2 joint failure | Not automatically judged | Local prompt-token proxy; not billing | All collected rows HTTP 200 on attempt 1 |
 
 Current pre-registered pilot: `benchmarks/real_reuse/llm_ablation_v0.json` and
 `results/real_reuse/llm_ablation_plan.md` select AIDE-T2 and SWE-T2 as
@@ -219,7 +219,10 @@ main-table replacement and not aggregate PaperToSkill advantage.
 
 ## Table 5: LLM Ablation Raw Rows
 
-Purpose: raw `task x model x condition` table for audit and appendix.
+Purpose: raw `task x model x condition` table for audit and appendix. `Tokens`
+are local prompt/context proxies for comparing context burden across Summary
+and PaperToSkill conditions. They are not provider bills, output-token costs,
+or core effectiveness metrics.
 
 | Task ID | Source Paper | Model Family | Model Alias | Condition | Task Score | Success | Unsupported Errors | Tokens | Failure Reason |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -325,10 +328,11 @@ analyses are stable.
   result; it does not prove live downstream task success.
 - The real-reuse LLM ablation pilot is pre-registered and partially collected.
   Current aggregate files report 12 collected scored rows out of 18 expected
-  rows: all GPT-family and DeepSeek-family rows are collected; Claude-family
-  rows remain pending because the attempted REF-T2 control pair returned HTTP
-  502 after five attempts per condition. Pending rows and provider errors are
-  not negative method evidence; they are availability metadata.
+  rows: all GPT-family and DeepSeek-family rows are collected; all
+  Claude-family REF-T2, AIDE-T2, and SWE-T2 Summary/PaperToSkill conditions
+  were attempted and returned HTTP 502 after five attempts per condition.
+  Pending rows and provider errors are not negative method evidence; they are
+  availability metadata.
 - AI-Scientist-v2 evidence remains bounded integration/synthetic sensitivity
   evidence.
 - Do not claim that PaperToSkill beats an original paper method unless the same

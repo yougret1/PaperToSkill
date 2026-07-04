@@ -289,16 +289,17 @@ Current supported claims:
   specific L031 message-text change. Preserve the first-pass SWE-T1 0.000/0.000
   rows as the paper-facing main rows; report phase107 only as a
   shared-source-context follow-up.
-- Phase109 experiment evidence is confirmed on GitHub through commit
-  `0d4934b` (`Record Claude LLM ablation availability`). This remote-backed
-  range includes `e597fcf` (AIDE-T2 GPT-family LLM ablation), `1521b72`
+- Phase109 substantive experiment evidence is remote-backed through commit
+  `0d4934b` (`Record Claude LLM ablation availability`). The latest verified
+  remote-backup checkpoint after later status-sync recovery was `a6ede5d`.
+  This range includes `e597fcf` (AIDE-T2 GPT-family LLM ablation), `1521b72`
   (AIDE push-blocker record), `200419a` (SWE-T2 GPT-family LLM ablation),
   `cb20cb1` (SWE push-blocker record), `bc9644a` (status-hash-churn guard),
   `ea15664` (DeepSeek-family LLM ablation rows), `ea0f016` (memory sync after
   DeepSeek LLM ablation), and `0d4934b` (Claude-family availability evidence).
-  Later status-sync commits may sit on top; do not chase the status-sync hash
-  in memory. Keep future GitHub transport failures separate from experiment
-  correctness and verify exact local/remote alignment with `git status -sb` and
+  Do not chase future status-sync hashes in memory. Keep future GitHub
+  transport failures separate from experiment correctness and verify exact
+  local/remote alignment with `git status -sb` and
   `git ls-remote --heads origin main` before claiming a new phase save.
 - SNAP artifact-execution follow-up diagnosis is now materialized in
   `results/real_reuse/snapatac2_artifact_followup.{md,json}` with builder

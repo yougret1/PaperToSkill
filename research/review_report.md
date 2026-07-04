@@ -89,10 +89,14 @@ used as boundary evidence rather than aggregate downstream-effectiveness proof.
 1. Stabilize the core real-reuse experiment under source-paper objective
    metrics before strengthening downstream-effectiveness claims.
 2. During core reruns, collect auxiliary raw data where cheap: failure reasons,
-   provider availability, token/context proxies, and LLM-ablation rows.
-3. After the core evidence stabilizes, aggregate LLM ablation and update
-   failure-boundary plus quality/grounding evidence. Keep component ablation as
-   an appendix candidate.
+   provider availability, token/context proxies, and real-reuse LLM-ablation
+   rows. Do not treat provider latency or retry counts as effectiveness
+   metrics.
+3. After the core evidence stabilizes, finish or refresh the remaining
+   auxiliary analyses: retry pending Claude-family LLM-ablation rows only when
+   provider availability recovers, update failure-boundary and
+   quality/grounding evidence, and keep component ablation as an appendix
+   candidate.
 4. Score all 24 paper-by-criterion cells in the human-fidelity annotation
    template when reviewers are available; use it for semantic fidelity and
    reviewability, not as the main task-effectiveness experiment.
