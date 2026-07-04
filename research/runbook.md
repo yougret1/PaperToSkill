@@ -30,14 +30,15 @@ git ls-remote --heads origin main
 Test-NetConnection github.com -Port 443 | Format-List
 ```
 
-Current status as of 2026-07-05: local `main` is at
-`0f3a499 Support SWE scorer override runs`, after
-`cdf67b9 Pre-register SWE-T1 issue-aligned contract`. Prior thread state
+Current status as of 2026-07-05: local `main` contains
+`599382d Add SWE-T1 issue-aligned follow-up table`, followed by local
+push-status memory records `12e97df` and `24f8029`. Prior thread state
 recorded `0f3a4997badd333f8399c6274659af444997a765` as pushed to
-`origin/main`, but a fresh `git ls-remote --heads origin main` attempt on
-2026-07-05 failed with `Recv failure: Connection was reset`. Treat this as
-GitHub transport availability, not experiment correctness. Re-run remote
-verification before making future remote-backed checkpoint claims.
+`origin/main`, but fresh `git push origin main` and
+`git ls-remote --heads origin main` attempts on 2026-07-05 failed with GitHub
+HTTPS connection-reset / port-443 transport errors. Treat this as GitHub
+transport availability, not experiment correctness. Re-run remote verification
+before making future remote-backed checkpoint claims.
 
 ## Local Text-To-Skill Pipeline
 
@@ -938,11 +939,12 @@ python scripts\check_paper_tables.py `
 ```
 
 This checker compares `paper/aaai/papertoskill_tables.tex` against the
-real-reuse main, failure-boundary, SWE-T1 source-context follow-up, and Full
-Excerpt sanity CSVs as well as `results/tables/main_results.csv`,
-`transfer_ablation.csv`,
-`context_cost_proxy_tokenizer.csv`, and `auto_note_comparison.csv`. Passing it
-prevents manuscript-table drift, but does not add new empirical evidence.
+real-reuse main, failure-boundary, SWE-T1 source-context follow-up, SWE-T1
+issue-aligned follow-up, SNAP executable-artifact follow-up, and Full Excerpt
+sanity CSVs as well as `results/tables/main_results.csv`,
+`transfer_ablation.csv`, `context_cost_proxy_tokenizer.csv`, and
+`auto_note_comparison.csv`. Passing it prevents manuscript-table drift, but
+does not add new empirical evidence.
 
 Verify that paper-facing text avoids unsupported overclaims and includes the
 required evidence-boundary statements:

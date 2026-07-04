@@ -310,13 +310,15 @@ Current supported claims:
   `25017a8` (SNAP executable-candidate contract), `36ae48e` (SWE-T1
   task-contract decision), `ef7dc1b` (memory sync after contract decisions),
   `cdf67b9` (SWE-T1 issue-aligned contract), `0f3a499` (SWE scorer override
-  support), and `599382d` (SWE-T1 issue-aligned follow-up table). Prior thread
+  support), `599382d` (SWE-T1 issue-aligned follow-up table), `12e97df`
+  (phase110 GitHub push blocker), and `24f8029` (phase110 push-status memory
+  clarification). Prior thread
   state recorded `0f3a4997badd333f8399c6274659af444997a765` as pushed to
   `origin/main`, but fresh `git push origin main` and
   `git ls-remote --heads origin main` attempts on 2026-07-05 failed with
-  GitHub HTTPS connection-reset / port-443 transport errors. Later local
-  commits may only record this push-status state. Keep GitHub transport
-  failures separate from experiment correctness and verify exact local/remote
+  GitHub HTTPS connection-reset / port-443 transport errors. Keep GitHub
+  transport failures separate from experiment correctness and verify exact
+  local/remote
   alignment with `git status -sb`, `git log -3 --oneline`, and
   `git ls-remote --heads origin main` before claiming a new remote-backed phase
   save.
@@ -378,8 +380,9 @@ Current supported claims:
   scorer/contract can close for both conditions. It does not show a
   PaperToSkill advantage and does not replace the locked first-pass SWE-T1
   main row unless explicitly promoted later. Local commit `599382d` saves this
-  table and the rebuilt AAAI PDF locally; it is not remote-backed yet because
-  GitHub push failed with transport errors.
+  table and the rebuilt AAAI PDF locally; follow-up local commits `12e97df` and
+  `24f8029` only record push-status/memory corrections. This range is not
+  remote-backed yet because GitHub push failed with transport errors.
 - Phase109 has collected scored real-reuse LLM ablation rows only on the
   pre-registered stabilized slices. Current collected GPT-family pairs are
   REF-T2 1.000/1.000,
@@ -399,11 +402,12 @@ Current supported claims:
   transport interruptions. Use `git status -sb` and a successful remote check
   for the latest exact alignment before each phase-save claim.
 - Latest phase artifact checkpoint:
-  `599382d Add SWE-T1 issue-aligned follow-up table`; later local commits may
-  only record push-status updates. The branch is ahead of `origin/main`; three
-  `git push origin main` attempts and one `git ls-remote --heads origin main`
-  attempt on 2026-07-05 failed with GitHub HTTPS transport errors. Rerun
-  remote verification before making remote-backed claims.
+  `599382d Add SWE-T1 issue-aligned follow-up table`; later local commits
+  `12e97df` and `24f8029` only record push-status/memory corrections. The
+  branch is ahead of `origin/main`; three `git push origin main` attempts and
+  one `git ls-remote --heads origin main` attempt on 2026-07-05 failed with
+  GitHub HTTPS transport errors. Rerun remote verification before making
+  remote-backed claims.
 
 Current unsupported claims:
 

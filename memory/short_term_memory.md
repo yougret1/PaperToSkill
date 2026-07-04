@@ -11,6 +11,10 @@ Current date: 2026-07-05.
   including `C:\Users\19351\Desktop\tem\toHuman.md`, while leaving local logs
   unchanged. This is record-sync-only work; do not modify
   `research/run_logs/**` or `research/stage_log.md`.
+- This record-sync pass updates the handoff/planning/runbook/memory records to
+  remove stale GitHub-unblocked and phase110-uncommitted wording. It preserves
+  local logs and keeps phase107/phase108/phase110 as diagnostic-only evidence
+  unless explicitly promoted.
 - Row-selection metadata for paper-facing real-reuse outputs is now
   implemented and verified locally: `scripts/build_real_reuse_paper_tables.py`
   and `scripts/build_real_reuse_failure_analysis.py` write row-selection path,
@@ -75,9 +79,10 @@ Current date: 2026-07-05.
   last/optional. Provider latency, timeouts, and retry counts are availability
   metadata, not effectiveness metrics.
 - `toHuman.md` now says no experiment-side human action is required, records
-  local commit `599382d`, and lists the exact GitHub push / remote-check
-  transport errors. If the user fixes network and wants immediate retry, they
-  may create `ok.txt` with a GitHub retry note.
+  local commit `599382d` plus later push-status memory records, and lists the
+  exact GitHub push / remote-check transport errors. It no longer asks the
+  user to create `ok.txt` for GitHub status; `ok.txt` is reserved for completed
+  human-fidelity annotation or a concrete placed core real-reuse asset.
 - Commits `e597fcf` (`Add AIDE real-reuse LLM ablation row`), `1521b72`
   (`Record AIDE ablation push blocker`), `200419a`
   (`Add SWE real-reuse LLM ablation row`), `cb20cb1`
@@ -98,37 +103,41 @@ Current date: 2026-07-05.
   (`Pre-register SNAP executable candidate contract`), `36ae48e`
   (`Record SWE-T1 task contract decision`), `ef7dc1b`
   (`Sync memory after contract decisions`), `cdf67b9`
-  (`Pre-register SWE-T1 issue-aligned contract`), and `0f3a499`
-  (`Support SWE scorer override runs`), plus `599382d`
-  (`Add SWE-T1 issue-aligned follow-up table`), are the current local saved
+  (`Pre-register SWE-T1 issue-aligned contract`), `0f3a499`
+  (`Support SWE scorer override runs`), `599382d`
+  (`Add SWE-T1 issue-aligned follow-up table`), `12e97df`
+  (`Record phase110 GitHub push blocker`), and `24f8029`
+  (`Clarify phase110 push status memory`) are the current local saved
   phase/checkpoint range, subject to fresh remote verification. The
   earlier GitHub push failures in this turn were transient transport
   availability metadata, not experiment correctness evidence.
-- Verification before the phase save passed:
-  `python -m unittest tests.test_build_real_reuse_llm_ablation_results -v`
-  (4 tests), `check_real_reuse_benchmark.py --strict`,
-  `check_paper_tables.py --strict`, `check_paper_claims.py --strict`,
-  `check_goal_completion.py --strict`, `check_reproducibility_package.py
-  --strict`, `check_submission_review.py --strict`,
-  `check_aaai_package.py --strict`, `git diff --check` with only CRLF
-  warnings, and a raw-key scan with no matches in changed/untracked/handoff
-  files.
+- Verification before the `599382d` phase save passed:
+  `python -m unittest tests.test_build_real_reuse_swe_t1_issue_aligned_followup
+  tests.test_check_paper_tables tests.test_check_reproducibility_package -v`,
+  `check_paper_tables.py --strict`,
+  `check_reproducibility_package.py --strict`,
+  `check_real_reuse_benchmark.py --strict`, `check_paper_claims.py --strict`,
+  `check_goal_completion.py --strict`, `check_submission_review.py --strict`,
+  `check_usage_examples.py --strict`, `check_aaai_package.py --strict` after
+  rebuilding the AAAI PDF, `git diff --check` with only CRLF warnings, and a
+  raw-key scan with no matches.
 - `C:\Users\19351\Desktop\tem\toHuman.md` should say no immediate human action
   is required, and `ok.txt` should only be created for completed human-fidelity
   annotation or a concrete placed core asset.
 - Current GitHub transport note: local phase artifact commit `599382d` and
-  later push-status memory records are not yet pushed. Push attempts on
+  later push-status memory records `12e97df` and `24f8029` are not yet
+  verified as pushed. Push attempts on
   2026-07-05 failed with `Recv failure: Connection was reset`, `Failed to
   connect to github.com port 443`, and `Recv failure: Connection was reset`;
   `git ls-remote --heads origin main` also failed with port-443 connection
   failure. Before claiming any future phase save is remote-backed, rerun
   `git status -sb`, `git log -3 --oneline`, and
   `git ls-remote --heads origin main`.
-- Latest phase checkpoint: after record-sync commit `977b2b9`
-  (`Sync experiment planning records`), Claude-family REF-T2 was retried from
-  the local Claude API doc key with the v0 300-second / 5-attempt protocol;
-  both Summary and PaperToSkill still returned provider HTTP 502 after 5
-  attempts. This is availability metadata only. Commit `7ee44ad`
+- Historical Claude-family availability checkpoint: after record-sync commit
+  `977b2b9` (`Sync experiment planning records`), Claude-family REF-T2 was
+  retried from the local Claude API doc key with the v0 300-second / 5-attempt
+  protocol; both Summary and PaperToSkill still returned provider HTTP 502
+  after 5 attempts. This is availability metadata only. Commit `7ee44ad`
   (`Track Claude ablation availability metadata`) then updated
   `scripts/build_real_reuse_llm_ablation_results.py` so pending-run
   availability metadata from the latest AIDE/SWE/REF runner reports appears in
