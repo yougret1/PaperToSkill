@@ -192,7 +192,7 @@ family. It is not a broad model ranking.
 
 | Model Family | Model Alias | Tasks | Summary Avg Score | PaperToSkill Avg Score | Reuse Success | Unsupported Errors / Task | Token Cost / Task | Availability |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| GPT-family | gpt-5.5 | AIDE-T2 and REF-T2 collected; SWE-T2 pending | 0.907 over collected slices | 0.500 over collected slices | 1/2 collected pairs favor/tie PaperToSkill | Not automatically judged | Provider usage / local proxy | AIDE-T2 and REF-T2 HTTP 200; AIDE summary required 2 attempts |
+| GPT-family | gpt-5.5 | AIDE-T2, SWE-T2, and REF-T2 collected | 0.605 over collected slices | 0.333 over collected slices | REF-T2 tie; AIDE-T2 unfavorable; SWE-T2 joint failure | Not automatically judged | Provider usage / local proxy | All collected rows returned provider output; AIDE summary required 2 attempts |
 | Claude-family | TBD | stabilized subset | TBD | TBD | TBD | TBD | TBD | TBD |
 | DeepSeek-family | TBD | stabilized subset | TBD | TBD | TBD | TBD | TBD | TBD |
 
@@ -202,13 +202,15 @@ positive PaperToSkill-only slices plus REF-T2 as a ceiling/control slice. The
 plan uses GPT-family `gpt-5.5`, Claude-family `claude-opus-4-8`, and
 DeepSeek-family `deepseek-v4-flash`, with 300-second provider timeouts, five
 attempts, and five-second retry delays. Phase109 has collected GPT-family
-rows for REF-T2 and AIDE-T2. REF-T2 is a ceiling/control pair with Summary
-1.000 and PaperToSkill 1.000. AIDE-T2 is an unfavorable repetition/robustness
-signal: Summary scores 0.814, while PaperToSkill scores 0.000 because the
-candidate timed out under the 300-second local scorer. The aggregate currently
-has 4 collected rows and 14 pending rows; this is auxiliary model/repetition
-evidence, not a main-table replacement and not aggregate PaperToSkill
-advantage.
+rows for REF-T2, AIDE-T2, and SWE-T2. REF-T2 is a ceiling/control pair with
+Summary 1.000 and PaperToSkill 1.000. AIDE-T2 is an unfavorable
+repetition/robustness signal: Summary scores 0.814, while PaperToSkill scores
+0.000 because the candidate timed out under the 300-second local scorer.
+SWE-T2 is a joint-failure repetition/boundary signal: both Summary and
+PaperToSkill score 0.000 because both candidate patches fail to apply. The
+aggregate currently has 6 collected rows and 12 pending rows; this is
+auxiliary model/repetition evidence, not a main-table replacement and not
+aggregate PaperToSkill advantage.
 
 ## Table 5: LLM Ablation Raw Rows
 
@@ -218,6 +220,8 @@ Purpose: raw `task x model x condition` table for audit and appendix.
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | AIDE-T2 | AIDE | GPT-family | gpt-5.5 | Summary | 0.814 | True | Not automatically judged | 7788 |  |
 | AIDE-T2 | AIDE | GPT-family | gpt-5.5 | PaperToSkill | 0.000 | False | Not automatically judged | 8714 | timeout after 300s |
+| SWE-T2 | SWE-agent | GPT-family | gpt-5.5 | Summary | 0.000 | False | Not automatically judged | 5310 | patch_apply_failed |
+| SWE-T2 | SWE-agent | GPT-family | gpt-5.5 | PaperToSkill | 0.000 | False | Not automatically judged | 8053 | patch_apply_failed |
 | REF-T2 | Reflexion | GPT-family | gpt-5.5 | Summary | 1.000 | True | Not automatically judged | 5171 |  |
 | REF-T2 | Reflexion | GPT-family | gpt-5.5 | PaperToSkill | 1.000 | True | Not automatically judged | 5655 |  |
 | AIDE-T2 | AIDE | Claude-family | claude-opus-4-8 | Summary | TBD | TBD | TBD | TBD | TBD |
@@ -308,12 +312,14 @@ analyses are stable.
 - The older saved-response model ablation remains a usage-plan/output-contract
   result; it does not prove live downstream task success.
 - The real-reuse LLM ablation pilot is pre-registered and partially collected.
-  Current aggregate files report 4 collected rows out of 18 expected rows:
-  REF-T2 / GPT-family / `gpt-5.5` is a ceiling/control pair, and AIDE-T2 /
+  Current aggregate files report 6 collected rows out of 18 expected rows:
+  REF-T2 / GPT-family / `gpt-5.5` is a ceiling/control pair; AIDE-T2 /
   GPT-family / `gpt-5.5` is an unfavorable repetition/robustness pair where
-  PaperToSkill times out under the local scorer. Pending rows are not negative
-  evidence, and missing provider environment variables are availability
-  metadata rather than model-quality evidence.
+  PaperToSkill times out under the local scorer; and SWE-T2 / GPT-family /
+  `gpt-5.5` is a joint-failure repetition/boundary pair where both patches fail
+  to apply. Pending rows are not negative evidence, and missing provider
+  environment variables are availability metadata rather than model-quality
+  evidence.
 - AI-Scientist-v2 evidence remains bounded integration/synthetic sensitivity
   evidence.
 - Do not claim that PaperToSkill beats an original paper method unless the same

@@ -2,7 +2,7 @@
 
 Evidence boundary: this report covers only prepared SWE real-reuse tasks. Provider/model errors are availability evidence, not model-quality failures. Aggregate PaperToSkill claims require the broader real-reuse benchmark.
 
-- Run ID: phase107_gpt_swe_t1_source_context_followup
+- Run ID: phase109_llm_ablation_gpt_5_5_swe_t2
 - Overall status: complete
 - Status counts: {'scored': 2}
 - Model family: GPT-family
@@ -12,5 +12,5 @@ Evidence boundary: this report covers only prepared SWE real-reuse tasks. Provid
 
 | Task | Condition | Status | Score | Success | Failure | Output |
 | --- | --- | --- | --- | --- | --- | --- |
-| SWE-T1 | summary | scored | 0.0 | False | test_command_failed | results/real_reuse/runs/SWE-T1/summary/phase107_gpt_swe_t1_source_context_followup/candidate.patch |
-| SWE-T1 | papertoskill | scored | 0.0 | False | test_command_failed | results/real_reuse/runs/SWE-T1/papertoskill/phase107_gpt_swe_t1_source_context_followup/candidate.patch |
+| SWE-T2 | summary | scored | 0.0 | False | patch_apply_failed | results/real_reuse/runs/SWE-T2/summary/phase109_llm_ablation_gpt_5_5_swe_t2/candidate.patch |
+| SWE-T2 | papertoskill | scored | 0.0 | False | patch_apply_failed | results/real_reuse/runs/SWE-T2/papertoskill/phase109_llm_ablation_gpt_5_5_swe_t2/candidate.patch |

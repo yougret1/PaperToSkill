@@ -1,0 +1,15 @@
+I’ll inspect the separability implementation and the targeted tests first, then make the smallest patch that addresses nested compound handling.```diff
+diff --git a/astropy/modeling/separable.py b/astropy/modeling/separable.py
+index 2f36e4d..c6d1e8a 100644
+--- a/astropy/modeling/separable.py
++++ b/astropy/modeling/separable.py
+@@ -242,7 +242,7 @@ def _cstack(left, right):
+     cright = _coord_matrix(right, 'right', noutp)
+ 
+     if isinstance(left, Model):
+-        cleft = _coord_matrix(left, 'left', noutp)
++        cleft = _separable(left)
+     else:
+         cleft = np.zeros((noutp, left.shape[1]))
+         cleft[: left.shape[0], : left.shape[1]] = left
+```

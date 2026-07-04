@@ -31,12 +31,15 @@ Test-NetConnection github.com -Port 443 | Format-List
 ```
 
 Current status as of 2026-07-04: the phase109 experiment backup is confirmed on
-GitHub through `9f2e52f` (`Aggregate real-reuse LLM ablation pilot`). The
-earlier HTTPS reset around local commit `f54be5b`, and the later reset /
-port-443 blocker around `10ffc10`, `516895a`, and `6c5c360`, were recovered by
-successful pushes. Later status-sync commits may sit on top. Keep future
-GitHub transport issues separate from experiment correctness, and do not call
-future phase work remote-backed until a new phase-save push is verified.
+GitHub through `ad46201` (`Avoid remote status hash churn`). The earlier HTTPS
+reset around local commit `f54be5b`, and the later reset / port-443 blocker
+around `10ffc10`, `516895a`, `6c5c360`, `9f2e52f`, and the status-sync commits
+before `ad46201`, were recovered by successful pushes. Newer local commits
+`e597fcf` and `1521b72`, plus later uncommitted SWE-T2 LLM-ablation and
+record-sync work, are not remote-backed yet because the latest push attempts hit
+GitHub HTTPS/443 failures. Keep future GitHub transport issues separate from
+experiment correctness, and do not call future phase work remote-backed until a
+new phase-save push is verified.
 
 ## Local Text-To-Skill Pipeline
 
@@ -431,13 +434,14 @@ python scripts\build_real_reuse_llm_ablation_results.py
 ```
 
 Current aggregate:
-`results/real_reuse/llm_ablation_summary.md` reports 4 collected rows and 14
+`results/real_reuse/llm_ablation_summary.md` reports 6 collected rows and 12
 pending rows out of 18 expected rows. REF-T2 / GPT-family / `gpt-5.5` scores
 Summary 1.000 and PaperToSkill 1.000 as a ceiling/control pair. AIDE-T2 /
 GPT-family / `gpt-5.5` scores Summary 0.814 and PaperToSkill 0.000 because the
-PaperToSkill candidate timed out under the 300-second local scorer. These are
-auxiliary model/repetition rows, not main-row replacements and not aggregate
-PaperToSkill advantage.
+PaperToSkill candidate timed out under the 300-second local scorer. SWE-T2 /
+GPT-family / `gpt-5.5` scores Summary 0.000 and PaperToSkill 0.000 because both
+candidate patches fail to apply. These are auxiliary model/repetition rows, not
+main-row replacements and not aggregate PaperToSkill advantage.
 
 ## AI-Scientist-v2 Environment
 

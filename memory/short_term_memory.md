@@ -16,12 +16,12 @@ Current date: 2026-07-04.
   SWE-T1 source-context reporting, SNAP artifact-execution diagnosis, and the
   phase108 SNAP executable-artifact follow-up are complete and remain
   diagnostic only.
-- The phase109 experiment backup is confirmed on GitHub through commit
-  `9f2e52f` (`Aggregate real-reuse LLM ablation pilot`). `git push origin main`
-  succeeded, so the earlier push blocker for `10ffc10`, `516895a`, and
-  `6c5c360` is resolved. A later status-sync commit may sit on top; verify the
-  exact current remote head with `git status -sb` and
-  `git ls-remote --heads origin main` before making a fresh phase-save claim.
+- The phase109 experiment backup is confirmed on GitHub through the later
+  remote-backed status-sync commit `ad46201` (`Avoid remote status hash churn`).
+  The earlier push blocker for `10ffc10`, `516895a`, `6c5c360`, `9f2e52f`, and
+  related status-sync commits is resolved. Verify the exact current remote head
+  with `git status -sb` and `git ls-remote --heads origin main` before making a
+  fresh phase-save claim.
 - Phase109 REF-T2 GPT-family real-reuse LLM ablation pilot, the LLM-ablation
   aggregation helper/results, and record-sync edits are locally committed and
   remote-backed through `9f2e52f`. Verification before phase save passed:
@@ -31,17 +31,19 @@ Current date: 2026-07-04.
   `check_goal_completion.py --strict`,
   `check_reproducibility_package.py --strict`, `git diff --check` with only
   CRLF warnings, and a raw-key scan with no matches.
-- Current uncommitted local work after that backup includes the AIDE-T2 /
-  GPT-family / `gpt-5.5` LLM-ablation pair, regenerated
-  `llm_ablation_summary.*`, AIDE runner report updates, and an added
-  aggregation regression test. Save and push this as the next phase after
-  verification.
 - Local commit `e597fcf` (`Add AIDE real-reuse LLM ablation row`) saves the
-  AIDE-T2 / GPT-family ablation row locally, but upload is currently blocked:
-  `git push origin main` failed with `Recv failure: Connection was reset`, then
-  `Failed to connect to github.com port 443 after 21118 ms`. The exact blocker
-  is recorded in `C:\Users\19351\Desktop\tem\toHuman.md`; continue
-  non-blocked local work while this remote backup is pending.
+  AIDE-T2 / GPT-family ablation row locally, and local commit `1521b72`
+  (`Record AIDE ablation push blocker`) records the push blocker. Upload is
+  currently blocked: `git push origin main` failed with `Recv failure:
+  Connection was reset`, then `Failed to connect to github.com port 443 after
+  21118 ms`, then another reset. The exact blocker is recorded in
+  `C:\Users\19351\Desktop\tem\toHuman.md`; continue non-blocked local work
+  while this remote backup is pending.
+- Current uncommitted local work after those commits includes the SWE-T2 /
+  GPT-family / `gpt-5.5` LLM-ablation pair, regenerated
+  `llm_ablation_summary.*`, SWE runner report updates, and record-sync edits.
+  Save and push this as the next phase after verification when connectivity
+  permits.
 - `C:\Users\19351\Desktop\tem\toHuman.md` should say no immediate human action
   is required, and `ok.txt` should only be created for completed human-fidelity
   annotation or a concrete placed core asset.
@@ -113,10 +115,11 @@ Current date: 2026-07-04.
   SWE-T2, and REF-T2; uses GPT-family `gpt-5.5`, Claude-family
   `claude-opus-4-8`, and DeepSeek-family `deepseek-v4-flash`; and gives each
   provider call 300 seconds, 5 attempts, and 5-second retry delays. Phase109
-  has collected four GPT-family rows: REF-T2 Summary/PaperToSkill score
-  1.000/1.000 as a ceiling/control pair, while AIDE-T2 scores 0.814/0.000 with
-  the PaperToSkill candidate timing out under the 300-second local scorer.
-  `results/real_reuse/llm_ablation_summary.md` reports 4 collected rows out of
+  has collected six GPT-family rows: REF-T2 Summary/PaperToSkill score
+  1.000/1.000 as a ceiling/control pair; AIDE-T2 scores 0.814/0.000 with the
+  PaperToSkill candidate timing out under the 300-second local scorer; SWE-T2
+  scores 0.000/0.000 with both conditions failing `patch_apply_failed`.
+  `results/real_reuse/llm_ablation_summary.md` reports 6 collected rows out of
   18 expected rows. This is auxiliary model/repetition evidence, not a main-row
   replacement and not aggregate PaperToSkill advantage.
 - Human-fidelity annotation supports semantic fidelity and reviewability, not
@@ -152,8 +155,9 @@ Current date: 2026-07-04.
    vars are available, or use the local API docs under
    `C:\Users\19351\Desktop\论文\SelfPaper\LLMAPIDocument` to set them in the
    shell only. Do not commit raw keys.
-   Current collected slices are REF-T2 / GPT-family / `gpt-5.5` and AIDE-T2 /
-   GPT-family / `gpt-5.5`; SWE-T2, Claude, and DeepSeek rows remain pending.
+   Current collected slices are REF-T2 / GPT-family / `gpt-5.5`, AIDE-T2 /
+   GPT-family / `gpt-5.5`, and SWE-T2 / GPT-family / `gpt-5.5`; Claude and
+   DeepSeek rows remain pending.
 2. Keep Summary and PaperToSkill paired under the same task/scorer contract for
    any follow-up. Main SNAP rows remain unchanged unless explicitly promoted.
 3. During core reruns, collect auxiliary raw data where cheap: provider
@@ -164,7 +168,8 @@ Current date: 2026-07-04.
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
 5. Retry `git push origin main` when connectivity recovers; until then, do not
-   claim `e597fcf` is remote-backed.
+   claim `e597fcf`, `1521b72`, or later uncommitted SWE-T2/record-sync work is
+   remote-backed.
 
 ## Boundaries
 

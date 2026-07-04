@@ -51,7 +51,7 @@ Current machine reports:
 | --- | --- | --- | --- |
 | Durable local memory | `memory/long_term_memory.md`; `memory/short_term_memory.md` | Complete locally | Read and update both memory files after every resume/compaction. |
 | Use `ai-scientist-v2` to refine PaperToSkill | Seed idea files, bounded smoke report, full live-run handoff, Phase 76 run log, completion directory | Complete for bounded local evidence | Do not treat the synthetic run as broad live task success. |
-| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. The phase109 experiment backup is confirmed through `9f2e52f` (`Aggregate real-reuse LLM ablation pilot`), and the previous GitHub HTTPS blocker for `10ffc10`, `516895a`, and `6c5c360` is resolved by successful push. Later status-sync commits may sit on top; use `git status -sb` and `git ls-remote --heads origin main` for the exact current remote head. | Complete for the latest saved remote phase | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim and keep transport failures separate from experiment correctness. |
+| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. The phase109 experiment backup is confirmed through `ad46201` (`Avoid remote status hash churn`), and the previous GitHub HTTPS blocker for `10ffc10`, `516895a`, `6c5c360`, `9f2e52f`, and the status-sync commits before `ad46201` is resolved by successful push. Newer local commits `e597fcf` and `1521b72`, plus later uncommitted SWE-T2 LLM-ablation and record-sync work, are not remote-backed yet because the latest push attempts hit GitHub HTTPS/443 failures. | Complete for the latest saved remote phase; pending for newer local work | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim and keep transport failures separate from experiment correctness. |
 | Official AAAI TeX package | `paper/aaai/`; `results/reproducibility/aaai_package_report.md` | Locally ready | Keep draft synchronized with new evidence. |
 | Usage examples | `examples/usage/`; `results/reproducibility/usage_example_report.md` | Complete locally | Re-run after runner or task changes. |
 | Model ablations | `results/model_ablation_prompts/v0/evaluation.md`: 6 scored, 0 pending | Complete for saved-response protocol | Do not claim broad model quality or live task success. |
@@ -99,12 +99,14 @@ task-success claim.
   with Summary, PaperToSkill, and Full Excerpt values plus token proxies; the
   result remains auxiliary sanity evidence.
 - `real_reuse_llm_ablation_phase109_partial`: the pre-registered real-reuse
-  LLM ablation has 4 collected rows out of 18 expected rows. REF-T2 /
+  LLM ablation has 6 collected rows out of 18 expected rows. REF-T2 /
   GPT-family / `gpt-5.5` scores Summary 1.000 and PaperToSkill 1.000 as a
   ceiling/control pair. AIDE-T2 / GPT-family / `gpt-5.5` scores Summary 0.814
   and PaperToSkill 0.000 because the PaperToSkill candidate timed out under
-  the 300-second local scorer. This is auxiliary model/repetition evidence,
-  not a main-table replacement and not PaperToSkill advantage.
+  the 300-second local scorer. SWE-T2 / GPT-family / `gpt-5.5` scores Summary
+  0.000 and PaperToSkill 0.000 because both candidate patches fail to apply.
+  This is auxiliary model/repetition evidence, not a main-table replacement
+  and not PaperToSkill advantage.
 
 ## Completion Decision
 

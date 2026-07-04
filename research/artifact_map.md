@@ -450,7 +450,7 @@
 | `results/real_reuse/full_excerpt_sanity.json` | Machine-readable Full Excerpt sanity check and evidence boundary | Created |
 | `results/real_reuse/llm_ablation_plan.md` | Human-readable command plan for real-reuse LLM ablation rows using the phase109 run-id prefix; the plan itself does not call models | Created |
 | `results/real_reuse/llm_ablation_plan.json` | Machine-readable real-reuse LLM ablation command plan and environment-presence summary | Created |
-| `results/real_reuse/llm_ablation_summary.md` | Human-readable real-reuse LLM ablation aggregate; currently 4 collected GPT-family rows for AIDE-T2 and REF-T2, with 14 pending rows | Created |
+| `results/real_reuse/llm_ablation_summary.md` | Human-readable real-reuse LLM ablation aggregate; currently 6 collected GPT-family rows for AIDE-T2, SWE-T2, and REF-T2, with 12 pending rows | Created |
 | `results/real_reuse/llm_ablation_summary.json` | Machine-readable real-reuse LLM ablation aggregate keyed to pre-registered run IDs | Created |
 | `results/real_reuse/llm_ablation_raw_rows.csv` | CSV export of collected pre-registered real-reuse LLM ablation raw rows | Created |
 | `results/reproducibility/aaai_package_report.md` | Human-readable AAAI package verification report | Created |
@@ -507,7 +507,7 @@
 
 | Artifact | Purpose | Status |
 | --- | --- | --- |
-| Real-reuse LLM ablation response logs | Partially collected Claude/GPT-family/DeepSeek raw rows under the real-reuse task protocol, separate from the older saved-response usage-plan protocol; current completed slice is REF-T2 / GPT-family / `gpt-5.5` | In progress |
+| Real-reuse LLM ablation response logs | Partially collected Claude/GPT-family/DeepSeek raw rows under the real-reuse task protocol, separate from the older saved-response usage-plan protocol; current completed GPT-family slices are REF-T2, AIDE-T2, and SWE-T2 with `gpt-5.5` | In progress |
 | Concrete real-reuse fixture assets | AIDE-T1/T2, REF-T1/T2, SWE-T1/T2, and SNAP-T1/T2 prepared assets plus one GPT-family Summary-vs-PaperToSkill pass are created; AIDE-T2 and SWE-T2 are PaperToSkill-only successes, AIDE-T1 and REF are solved by both conditions, and SWE-T1/SNAP remain boundary rows | Mixed |
 | `results/real_reuse/` | Current AIDE/SWE/REF/SNAP raw rows and table artifacts plus future aggregate tables, sanity checks, cost table, and LLM ablation outputs | Mixed |
 | Paper2Agent executable baseline | Full Paper2Agent/MCP runtime comparison, if setup resources become available | Planned |

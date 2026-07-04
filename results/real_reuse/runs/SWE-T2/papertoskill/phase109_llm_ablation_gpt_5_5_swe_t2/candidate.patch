@@ -1,0 +1,24 @@
+diff --git a/astropy/modeling/separable.py b/astropy/modeling/separable.py
+--- a/astropy/modeling/separable.py
++++ b/astropy/modeling/separable.py
+@@ -253,7 +253,7 @@ def _cstack(left, right):
+         cright = _coord_matrix(right, 'right', noutp)
+     else:
+         cright = np.zeros((noutp, right.shape[1]))
+-        cright[-right.shape[0]:, -right.shape[1]:] = 1
++        cright[-right.shape[0]:, -right.shape[1]:] = right
+ 
+     return np.hstack([cleft, cright])
+ 
+diff --git a/astropy/modeling/tests/test_separable.py b/astropy/modeling/tests/test_separable.py
+--- a/astropy/modeling/tests/test_separable.py
++++ b/astropy/modeling/tests/test_separable.py
+@@ -44,8 +44,8 @@ result6 = np.array([[True, True, False, False],
+ result9 = np.array([[True, True, False, False],
+                     [True, True, False, False],
+                     [False, False, True, False],
+-                    [False, False, True, True]])
++                    [False, False, False, True]])
+ 
+ 
+ cm_4d_expected = (np.array([False, False, True, True]),

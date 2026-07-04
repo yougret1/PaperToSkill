@@ -290,14 +290,16 @@ Current supported claims:
   rows as the paper-facing main rows; report phase107 only as a
   shared-source-context follow-up.
 - Phase109 experiment evidence is confirmed on GitHub through commit
-  `9f2e52f` (`Aggregate real-reuse LLM ablation pilot`). The earlier HTTPS
-  reset / port-443 blocker around commits `10ffc10`, `516895a`, and `6c5c360`
-  is resolved by successful push. Later status-sync commits may sit on top;
-  keep future GitHub transport failures separate from experiment correctness
+  `ad46201` (`Avoid remote status hash churn`). The earlier HTTPS reset /
+  port-443 blocker around commits `10ffc10`, `516895a`, `6c5c360`, `9f2e52f`,
+  and the status-sync commits before `ad46201` is resolved by successful push.
+  Keep future GitHub transport failures separate from experiment correctness
   and verify exact local/remote alignment before claiming a new phase save.
-- Local commit `e597fcf` (`Add AIDE real-reuse LLM ablation row`) adds the
-  AIDE-T2 / GPT-family LLM-ablation pair, but upload is currently blocked by
-  GitHub HTTPS reset / port-443 connection failure. The exact current blocker
+- Local commits `e597fcf` (`Add AIDE real-reuse LLM ablation row`) and
+  `1521b72` (`Record AIDE ablation push blocker`) are not yet remote-backed
+  because `git push origin main` hit GitHub HTTPS reset / port-443 connection
+  failures. Current uncommitted SWE-T2 LLM-ablation and record-sync work is
+  also not remote-backed until committed and pushed. The exact current blocker
   is recorded in `C:\Users\19351\Desktop\tem\toHuman.md`.
 - SNAP artifact-execution follow-up diagnosis is now materialized in
   `results/real_reuse/snapatac2_artifact_followup.{md,json}` with builder
@@ -315,10 +317,12 @@ Current supported claims:
   append to `raw_rows.jsonl`, does not replace main SNAP rows, and does not
   show PaperToSkill advantage.
 - Phase109 has started the real-reuse LLM ablation only on the pre-registered
-  stabilized slices. The current collected pair is REF-T2 / GPT-family /
-  `gpt-5.5`: Summary 1.000 and PaperToSkill 1.000, both successful on attempt
-  1. `results/real_reuse/llm_ablation_summary.md` reports 2 collected rows and
-  16 pending rows out of 18 expected rows. This is ceiling/control auxiliary
+  stabilized slices. Current collected GPT-family pairs are REF-T2
+  1.000/1.000 as a ceiling/control pair, AIDE-T2 0.814/0.000 with the
+  PaperToSkill candidate timing out under the 300-second local scorer, and
+  SWE-T2 0.000/0.000 with both conditions failing `patch_apply_failed`.
+  `results/real_reuse/llm_ablation_summary.md` reports 6 collected rows and 12
+  pending rows out of 18 expected rows. This is auxiliary model/repetition
   evidence, not a main-row replacement and not PaperToSkill advantage.
 - Phase 89 and the 2026-07-04 record-sync push both recovered GitHub HTTPS
   transport interruptions. Use `git status -sb` and a successful remote check
@@ -665,11 +669,12 @@ Use these as entry points instead of searching the whole repo first:
   `results/real_reuse/llm_ablation_plan.{md,json}` pre-register a stabilized
   AIDE-T2/SWE-T2/REF-T2 pilot over GPT-family `gpt-5.5`, Claude-family
   `claude-opus-4-8`, and DeepSeek-family `deepseek-v4-flash` with 300-second
-  timeouts and 5 attempts. Phase109 has collected GPT-family REF-T2 and
-  AIDE-T2 pairs: REF-T2 scores 1.000/1.000 as a ceiling/control pair, while
+  timeouts and 5 attempts. Phase109 has collected GPT-family REF-T2, AIDE-T2,
+  and SWE-T2 pairs: REF-T2 scores 1.000/1.000 as a ceiling/control pair;
   AIDE-T2 scores Summary 0.814 and PaperToSkill 0.000 because the PaperToSkill
-  candidate timed out under the 300-second local scorer. SWE-T2,
-  Claude-family, and DeepSeek-family rows remain pending.
+  candidate timed out under the 300-second local scorer; SWE-T2 scores
+  0.000/0.000 because both patches failed to apply. Claude-family and
+  DeepSeek-family rows remain pending.
 - Real-reuse LLM ablation aggregation:
   `results/real_reuse/llm_ablation_summary.md`,
   `results/real_reuse/llm_ablation_summary.json`, and
