@@ -14,7 +14,7 @@ complete with respect to pending external evidence.
 | Paper claims | Ready | `results/reproducibility/paper_claim_report.md` | Unsupported overclaim patterns are absent from paper-facing text. |
 | Paper tables | Ready | `results/reproducibility/paper_table_report.md` | AAAI tables match generated CSV result tables. |
 | Usage examples | Ready | `results/reproducibility/usage_example_report.md`: 55 ready, 0 failed | Local example files, DeepSeek handoff, and offline example chain are synchronized. |
-| Reproducibility package | Ready with pending external evidence | `results/reproducibility/package_report.md`: 423 ready, 1 pending, 0 failed | Local package is coherent; external evidence remains pending. |
+| Reproducibility package | Ready with pending external evidence | `results/reproducibility/package_report.md`: 427 ready, 1 pending, 0 failed | Local package is coherent; external evidence remains pending. |
 | Active goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 77 ready, 3 pending, 0 failed | The overall user goal remains open. |
 | External evidence closure queue | Ready as local queue | `results/external_evidence_closure/closure.md`: 3 ready, 0 pending, 0 failed | Pending evidence is mapped to next actions; evidence itself remains pending. |
 | External evidence execution packets | Ready as local handoff | `results/external_evidence_packets/packets.md`: 7 ready, 0 pending, 0 failed | Pending evidence has runnable handoff packets; evidence itself remains pending. |
@@ -29,6 +29,7 @@ complete with respect to pending external evidence.
 | Main deterministic results | `results/tables/main_results.md` | Operational coverage, not live success. |
 | Transfer readiness | `results/tables/transfer_ablation.md` | Offline readiness, not live outcome proof. |
 | Real-reuse first pass | `results/real_reuse/main_results_plan.md`: eight scored Summary-vs-PaperToSkill rows; `results/real_reuse/failure_analysis.md`: derived failure-boundary modes | Mixed single-run downstream stress-test evidence; not aggregate advantage over Summary. |
+| Full Excerpt sanity scaffold | `results/real_reuse/full_excerpt_sanity.md`: AIDE-T1, SWE-T1, and SNAP-T1 sanity rows | Scaffold only; Full Excerpt scores are pending and token counts are local whitespace context proxies. |
 | Saved live-transfer responses | `results/live_transfer_prompts/evaluation.md`: 24 total, 24 scored, 0 pending, average normalized score 1.0 | Saved-response output-contract scoring is not human semantic fidelity or real live task success. |
 | Model ablation | `results/model_ablation_prompts/v0/evaluation.md`: 6 total, 6 scored, 0 pending | Saved-response scoring is complete for the current two-case Claude/GPT-family/DeepSeek prompt protocol; this is not live downstream task success or provider economics. |
 | DeepSeek handoff | `results/deepseek_followup_handoff/handoff.md`: `responses_present`, 7 ready, 0 pending, 0 failed | DeepSeek response files are saved for the current protocol; keep raw keys out of tracked files. |

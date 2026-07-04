@@ -67,7 +67,7 @@ used as boundary evidence rather than aggregate downstream-effectiveness proof.
 | Gate | Status | Evidence |
 | --- | --- | --- |
 | Claim-evidence consistency | Pass with caveats | `paper/claim_checklist.md`; `research/claim_evidence_matrix.md`; `results/reproducibility/paper_claim_report.md` |
-| Local reproducibility package | Pass locally, external evidence pending | `results/reproducibility/package_report.md`: 423 ready, 1 pending, 0 failed |
+| Local reproducibility package | Pass locally, external evidence pending | `results/reproducibility/package_report.md`: 427 ready, 1 pending, 0 failed |
 | Active-goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 77 ready, 3 pending, 0 failed |
 | External evidence closure queue | Ready as local queue | `results/external_evidence_closure/closure.md`: 3 ready, 0 pending, 0 failed |
 | External evidence execution packets | Ready as local handoff | `results/external_evidence_packets/packets.md`: 7 ready, 0 pending, 0 failed |
@@ -80,6 +80,7 @@ used as boundary evidence rather than aggregate downstream-effectiveness proof.
 | AI-Scientist-v2 LLM-client smoke | Complete for bounded marker contract | `results/ai_scientist_v2_smoke/run_report.md`: `complete`; marker response saved. |
 | AI-Scientist-v2 full live run | Complete for bounded synthetic integration evidence | `results/ai_scientist_v2_live_run_handoff/handoff.md`: `complete`; one completion directory. |
 | Real-reuse first pass | Complete as mixed first-pass stress-test evidence | `results/real_reuse/main_results_plan.md`: eight scored rows; `results/real_reuse/failure_analysis.md`: boundary modes from the same raw rows. |
+| Full Excerpt sanity scaffold | Table scaffold ready, score cells pending | `results/real_reuse/full_excerpt_sanity.md`: three pre-registered rows with existing Summary/PaperToSkill scores and local whitespace token proxies. |
 | Human fidelity | Handoff ready, annotation pending | `results/human_fidelity_packets/annotation_summary.md`: 0 scored, 24 pending |
 | Local token accounting | Complete as current cost evidence | `results/token_accounting/token_accounting_summary.md`: complete local input/output token accounting |
 

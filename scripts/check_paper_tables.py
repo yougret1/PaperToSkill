@@ -15,6 +15,7 @@ from typing import Any
 TABLE_SOURCES = {
     "real_reuse_main": "results/real_reuse/main_results_plan.csv",
     "real_reuse_failure_analysis": "results/real_reuse/failure_analysis.csv",
+    "real_reuse_full_excerpt_sanity": "results/real_reuse/full_excerpt_sanity.csv",
     "main_results": "results/tables/main_results.csv",
     "transfer_ablation": "results/tables/transfer_ablation.csv",
     "cost_proxy": "results/tables/context_cost_proxy_tokenizer.csv",
@@ -254,6 +255,41 @@ def real_reuse_failure_checks(root: Path, tex_rows: list[list[str]]) -> list[Che
     return checks
 
 
+def real_reuse_full_excerpt_sanity_checks(root: Path, tex_rows: list[list[str]]) -> list[Check]:
+    source_path = root / TABLE_SOURCES["real_reuse_full_excerpt_sanity"]
+    source = by_key(read_csv_rows(source_path), "Task ID")
+    actual = table_rows_by_paper(tex_rows, "tab:full-excerpt-sanity", 10)
+    evidence = f"paper/aaai/papertoskill_tables.tex vs {TABLE_SOURCES['real_reuse_full_excerpt_sanity']}"
+    checks: list[Check] = []
+    column_map = [
+        ("task_id", 0, "Task ID"),
+        ("source_paper", 1, "Source Paper"),
+        ("metric", 2, "Metric"),
+        ("summary_score", 3, "Summary Score"),
+        ("papertoskill_score", 4, "PaperToSkill Score"),
+        ("full_excerpt_score", 5, "Full Excerpt Score"),
+        ("summary_tokens", 6, "Summary Tokens"),
+        ("papertoskill_tokens", 7, "PaperToSkill Tokens"),
+        ("full_excerpt_tokens", 8, "Full Excerpt Tokens"),
+        ("status", 9, "Status"),
+    ]
+    for task_id, expected_row in source.items():
+        actual_row = actual.get(task_id)
+        if not actual_row:
+            checks.append(Check(f"paper_table_full_excerpt_sanity_{slug(task_id)}_row", "fail", "missing row", evidence))
+            continue
+        for suffix, index, column in column_map:
+            checks.append(
+                check_value(
+                    f"paper_table_full_excerpt_sanity_{slug(task_id)}_{suffix}",
+                    actual_row[index],
+                    expected_row[column],
+                    evidence,
+                )
+            )
+    return checks
+
+
 def transfer_checks(root: Path, tex_rows: list[list[str]]) -> list[Check]:
     source_path = root / TABLE_SOURCES["transfer_ablation"]
     source_rows = read_csv_rows(source_path)
@@ -386,6 +422,9 @@ def build_report(root: Path, tables_tex: Path) -> dict[str, Any]:
         checks.extend(real_reuse_main_checks(root, parse_tabular_rows(tex_text, "tab:real-reuse-main")))
         checks.extend(
             real_reuse_failure_checks(root, parse_tabular_rows(tex_text, "tab:real-reuse-failure-analysis"))
+        )
+        checks.extend(
+            real_reuse_full_excerpt_sanity_checks(root, parse_tabular_rows(tex_text, "tab:full-excerpt-sanity"))
         )
         checks.extend(main_results_checks(root, parse_tabular_rows(tex_text, "tab:main-results")))
         checks.extend(transfer_checks(root, parse_tabular_rows(tex_text, "tab:transfer-ablation")))

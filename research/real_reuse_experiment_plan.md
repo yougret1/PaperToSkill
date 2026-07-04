@@ -96,9 +96,13 @@ cost.
 
 | Task ID | Source Paper | Summary Score | PaperToSkill Score | Full Excerpt Score | Summary Tokens | PaperToSkill Tokens | Full Excerpt Tokens | Metric |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| AIDE-T1 | AIDE | TBD | TBD | TBD | TBD | TBD | TBD | Validation score |
-| SWE-T1 | SWE-agent | TBD | TBD | TBD | TBD | TBD | TBD | Tests passed |
-| SNAP-T1 | SnapATAC2 | TBD | TBD | TBD | TBD | TBD | TBD | Runtime/memory/quality |
+| AIDE-T1 | AIDE | 0.000 | 0.000 | Pending | 121 | 878 | 7366 | Validation score |
+| SWE-T1 | SWE-agent | 0.000 | 0.000 | Pending | 89 | 1173 | 42048 | Tests passed / resolved |
+| SNAP-T1 | SnapATAC2 | 0.000 | 0.500 | Pending | 72 | 1069 | 10297 | Runtime/memory/quality |
+
+Current status: `results/real_reuse/full_excerpt_sanity.md` is table-ready for
+this scaffold. The Full Excerpt score cells remain pending until matched runs
+are executed; token counts are local whitespace context proxies.
 
 ## Table 3: Component Ablation
 

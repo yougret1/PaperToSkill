@@ -3,7 +3,7 @@
 Evidence boundary: this report checks that AAAI LaTeX table values match generated CSV result tables. It does not add new empirical evidence.
 
 - Overall status: ready
-- Ready checks: 196
+- Ready checks: 226
 - Failed checks: 0
 
 ## Checks
@@ -130,6 +130,36 @@ Evidence boundary: this report checks that AAAI LaTeX table values match generat
 | paper_table_real_reuse_failure_snap_t2_papertoskill_outcome | ready | value=0.400; artifact incomplete | paper/aaai/papertoskill_tables.tex vs results/real_reuse/failure_analysis.csv |
 | paper_table_real_reuse_failure_snap_t2_boundary_mode | ready | value=Artifact completion | paper/aaai/papertoskill_tables.tex vs results/real_reuse/failure_analysis.csv |
 | paper_table_real_reuse_failure_snap_t2_contract_implication | ready | value=required artifact and metric manifest | paper/aaai/papertoskill_tables.tex vs results/real_reuse/failure_analysis.csv |
+| paper_table_full_excerpt_sanity_aide_t1_task_id | ready | value=AIDE-T1 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_aide_t1_source_paper | ready | value=AIDE | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_aide_t1_metric | ready | value=validation_score | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_aide_t1_summary_score | ready | value=0.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_aide_t1_papertoskill_score | ready | value=0.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_aide_t1_full_excerpt_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_aide_t1_summary_tokens | ready | value=121 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_aide_t1_papertoskill_tokens | ready | value=878 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_aide_t1_full_excerpt_tokens | ready | value=7366 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_aide_t1_status | ready | value=Pending full-excerpt run | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_swe_t1_task_id | ready | value=SWE-T1 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_swe_t1_source_paper | ready | value=SWE-agent | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_swe_t1_metric | ready | value=resolved | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_swe_t1_summary_score | ready | value=0.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_swe_t1_papertoskill_score | ready | value=0.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_swe_t1_full_excerpt_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_swe_t1_summary_tokens | ready | value=89 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_swe_t1_papertoskill_tokens | ready | value=1173 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_swe_t1_full_excerpt_tokens | ready | value=42048 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_swe_t1_status | ready | value=Pending full-excerpt run | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_snap_t1_task_id | ready | value=SNAP-T1 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_snap_t1_source_paper | ready | value=SnapATAC2 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_snap_t1_metric | ready | value=runtime_memory_quality | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_snap_t1_summary_score | ready | value=0.000 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_snap_t1_papertoskill_score | ready | value=0.500 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_snap_t1_full_excerpt_score | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_snap_t1_summary_tokens | ready | value=72 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_snap_t1_papertoskill_tokens | ready | value=1069 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_snap_t1_full_excerpt_tokens | ready | value=10297 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_full_excerpt_sanity_snap_t1_status | ready | value=Pending full-excerpt run | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
 | paper_table_main_ai_scientist_v2_rubric | ready | value=20/20 | paper/aaai/papertoskill_tables.tex vs results/tables/main_results.csv |
 | paper_table_main_ai_scientist_v2_skill_coverage | ready | value=7.867/9 | paper/aaai/papertoskill_tables.tex vs results/tables/main_results.csv |
 | paper_table_main_ai_scientist_v2_generic_summary | ready | value=1.733/9 | paper/aaai/papertoskill_tables.tex vs results/tables/main_results.csv |

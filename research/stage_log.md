@@ -3604,3 +3604,44 @@ Evidence boundary:
 
 - This phase improves the independent-review protocol and validator only.
 - It does not complete human annotation or add task-success evidence.
+
+## 2026-07-04 Phase 104
+
+Actions:
+
+- Added the auxiliary Full Excerpt sanity scaffold for AIDE-T1, SWE-T1, and
+  SNAP-T1.
+- Added `scripts/build_real_reuse_full_excerpt_sanity.py` and
+  `tests/test_build_real_reuse_full_excerpt_sanity.py`.
+- Generated `results/real_reuse/full_excerpt_sanity.{csv,md,json}`.
+- Added `tab:full-excerpt-sanity` to the AAAI table file and a short setup
+  paragraph in the AAAI draft.
+- Extended paper-table and reproducibility-package gates for the new table and
+  outputs.
+- Updated research docs, result cards, review handoff files, and memory so the
+  scaffold is not mistaken for completed Full Excerpt task-success evidence.
+- Added `research/run_logs/2026-07-04_phase104_full_excerpt_sanity_scaffold.md`.
+
+Results:
+
+- Focused Full Excerpt/table/package tests passed: 6 tests.
+- Full unit discovery passed: 164 tests.
+- Strict paper table, paper claims, AAAI package, reproducibility package,
+  goal completion, submission review, external evidence closure/packets, AAAI
+  decision, usage examples, DeepSeek handoff, AI-Scientist-v2 live-run handoff,
+  and real-reuse benchmark checks passed.
+- `results/reproducibility/paper_table_report.md`: ready, 226 ready checks, 0
+  failed checks.
+- `results/reproducibility/package_report.md`:
+  `ready_with_pending_external_evidence`, 427 ready checks, 1 pending check, 0
+  failed checks.
+- `git diff --check` passed with only Windows line-ending warnings.
+- Raw-key scan found no matches.
+
+Evidence boundary:
+
+- This phase creates a reviewer-question/cost-context sanity scaffold only.
+- Full Excerpt score cells remain pending; pending cells are not negative
+  evidence.
+- No task-success evidence or aggregate downstream-effectiveness claim is
+  added.

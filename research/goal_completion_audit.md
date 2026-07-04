@@ -35,7 +35,7 @@ effectiveness.
 Current machine reports:
 
 - Package: `results/reproducibility/package_report.md` reports
-  `ready_with_pending_external_evidence`, 415 ready checks, 1 pending check, and
+  `ready_with_pending_external_evidence`, 427 ready checks, 1 pending check, and
   0 failed checks.
 - Goal: `results/reproducibility/goal_completion_report.md` reports
   `not_complete_pending_external_evidence`, 77 ready checks, 3 pending checks,
@@ -51,7 +51,7 @@ Current machine reports:
 | --- | --- | --- | --- |
 | Durable local memory | `memory/long_term_memory.md`; `memory/short_term_memory.md` | Complete locally | Read and update both memory files after every resume/compaction. |
 | Use `ai-scientist-v2` to refine PaperToSkill | Seed idea files, bounded smoke report, full live-run handoff, Phase 76 run log, completion directory | Complete for bounded local evidence | Do not treat the synthetic run as broad live task success. |
-| Save phase-level progress to GitHub | Phase 98 commit `6885aaf Complete AIDE real reuse first pass` pushed to `origin/main`; `git status -sb` reports `main...origin/main` with only ignored local fixture/cache files | Complete for current phase | Continue phase-level commits after meaningful future milestones. |
+| Save phase-level progress to GitHub | Phase 103 commit `b490dd6 Support multi-reviewer human fidelity annotations` pushed to `origin/main`; the current Full Excerpt scaffold is pending its phase save | Complete through Phase 103 | Continue phase-level commits after meaningful future milestones. |
 | Official AAAI TeX package | `paper/aaai/`; `results/reproducibility/aaai_package_report.md` | Locally ready | Keep draft synchronized with new evidence. |
 | Usage examples | `examples/usage/`; `results/reproducibility/usage_example_report.md` | Complete locally | Re-run after runner or task changes. |
 | Model ablations | `results/model_ablation_prompts/v0/evaluation.md`: 6 scored, 0 pending | Complete for saved-response protocol | Do not claim broad model quality or live task success. |
@@ -62,6 +62,10 @@ Current machine reports:
 | Human-fidelity annotation | `results/human_fidelity_packets/annotation_template.csv`; `annotation_guide.md`; packets | Handoff ready; annotation pending | Independent reviewers score all 24 paper-by-criterion cells and rerun the strict summarizer. |
 | AAAI submission decision | `research/aaai_submission_decision.md`; `results/aaai_submission_decision/decision.md` | Decision recorded as wait | Complete named evidence before stronger final-submission claims. |
 | External evidence closure/packets | Closure queue and packets have 2 current items | Complete as local handoff | Use packets for human annotation and final decision. |
+
+Note: the auxiliary Full Excerpt sanity scaffold is table-ready in
+`results/real_reuse/full_excerpt_sanity.md`, but the Full Excerpt score cells
+remain pending and are not task-success evidence.
 
 ## Current Pending Evidence
 
@@ -76,6 +80,9 @@ Current machine reports:
   GPT-family Summary-vs-PaperToSkill run with scored raw rows and paper table
   cells. SWE-T2 and REF rows succeed; AIDE, SWE-T1, and SNAP rows are
   failure-boundary evidence rather than aggregate effectiveness.
+- `full_excerpt_sanity_scaffold`: AIDE-T1, SWE-T1, and SNAP-T1 rows are
+  table-ready with existing Summary/PaperToSkill scores and token proxies, but
+  Full Excerpt scores remain pending.
 
 ## Completion Decision
 

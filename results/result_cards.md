@@ -1212,3 +1212,22 @@
 - Figure/table: `results/real_reuse/failure_analysis.md`;
   `results/real_reuse/failure_analysis.json`;
   `paper/aaai/papertoskill_tables.tex`.
+
+## Full Excerpt Sanity Scaffold
+
+- Experiment: auxiliary three-task scaffold over AIDE-T1, SWE-T1, and SNAP-T1
+  for a future Full Excerpt sanity check.
+- Main result: no Full Excerpt scores have been run yet. The table records the
+  existing Summary/PaperToSkill scores and local whitespace token proxies.
+- Compared baselines: Summary and PaperToSkill cells come from the existing
+  real-reuse raw rows; Full Excerpt cells are pending.
+- Practical significance: the scaffold answers reviewer questions about
+  context-length sanity without reintroducing Full Excerpt as a main baseline.
+- Statistical evidence: none; score cells are pending until matched runs exist.
+- Failure modes: token counts are context proxies, not provider bills or output
+  token costs.
+- Claim impact: does not change the main real-reuse interpretation and does
+  not add task-success evidence.
+- Figure/table: `results/real_reuse/full_excerpt_sanity.md`;
+  `results/real_reuse/full_excerpt_sanity.json`;
+  `paper/aaai/papertoskill_tables.tex`.

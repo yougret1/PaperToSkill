@@ -127,6 +127,14 @@ Regenerate the derived real-reuse failure-boundary analysis table:
 python scripts\build_real_reuse_failure_analysis.py
 ```
 
+Regenerate the auxiliary Full Excerpt sanity scaffold. This fills only existing
+Summary/PaperToSkill scores and local context-token proxies unless matching
+`full_excerpt` raw rows have been appended:
+
+```powershell
+python scripts\build_real_reuse_full_excerpt_sanity.py
+```
+
 Regenerate the SWE-agent skill/readiness gate from extracted paper text:
 
 ```powershell
@@ -775,7 +783,8 @@ python scripts\check_paper_tables.py `
   --strict
 ```
 
-This checker compares `paper/aaai/papertoskill_tables.tex` against
+This checker compares `paper/aaai/papertoskill_tables.tex` against the
+real-reuse main, failure-boundary, and Full Excerpt sanity CSVs as well as
 `results/tables/main_results.csv`, `transfer_ablation.csv`,
 `context_cost_proxy_tokenizer.csv`, and `auto_note_comparison.csv`. Passing it
 prevents manuscript-table drift, but does not add new empirical evidence.

@@ -425,6 +425,10 @@
 | `results/real_reuse/failure_analysis.csv` | Data source for the AAAI real-reuse failure-boundary table | Created |
 | `results/real_reuse/failure_analysis.md` | Human-readable first-pass real-reuse failure-boundary analysis | Created |
 | `results/real_reuse/failure_analysis.json` | Machine-readable first-pass real-reuse failure-boundary analysis | Created |
+| `scripts/build_real_reuse_full_excerpt_sanity.py` | Builds the auxiliary Full Excerpt sanity table from pre-registered tasks, raw rows, and context paths | Created |
+| `results/real_reuse/full_excerpt_sanity.csv` | Data source for the AAAI Full Excerpt sanity table; Full Excerpt score cells are currently pending | Created |
+| `results/real_reuse/full_excerpt_sanity.md` | Human-readable Full Excerpt sanity scaffold with local whitespace token proxies | Created |
+| `results/real_reuse/full_excerpt_sanity.json` | Machine-readable Full Excerpt sanity scaffold and evidence boundary | Created |
 | `results/reproducibility/aaai_package_report.md` | Human-readable AAAI package verification report | Created |
 | `results/reproducibility/aaai_package_report.json` | Machine-readable AAAI package verification report | Created |
 | `results/reproducibility/usage_example_report.md` | Human-readable usage-example verification report | Created |

@@ -235,6 +235,14 @@ Current supported claims:
   `results/real_reuse/main_results_plan.csv`, `.md`, and `.json` are the table
   data source; `paper/aaai/papertoskill_tables.tex` contains
   `tab:real-reuse-main`. Current statuses are all `Scored (GPT-family)`.
+- Phase 104 added the auxiliary Full Excerpt sanity scaffold for AIDE-T1,
+  SWE-T1, and SNAP-T1:
+  `scripts/build_real_reuse_full_excerpt_sanity.py` writes
+  `results/real_reuse/full_excerpt_sanity.{csv,md,json}`, and
+  `paper/aaai/papertoskill_tables.tex` contains
+  `tab:full-excerpt-sanity`. The Full Excerpt score cells are pending until a
+  matched run is executed; token columns are local whitespace context proxies,
+  not provider billing or output-token costs.
 - Phase 89 remote save recovered the earlier GitHub HTTPS blocker:
   `git push origin main` succeeded for the Phase 87/88 stack and the follow-up
   remote-save record was also pushed. Use `git status -sb` for the latest exact
@@ -399,6 +407,11 @@ Use these as entry points instead of searching the whole repo first:
 - `results/real_reuse/failure_analysis.csv`, `.md`, and `.json`: derived
   paper-facing real-reuse failure-boundary table source; it explains first-pass
   boundary modes without adding new task-success evidence.
+- `scripts/build_real_reuse_full_excerpt_sanity.py` and
+  `results/real_reuse/full_excerpt_sanity.csv`, `.md`, and `.json`: auxiliary
+  Full Excerpt sanity scaffold over AIDE-T1, SWE-T1, and SNAP-T1. The current
+  table records existing Summary/PaperToSkill scores and local context-token
+  proxies; Full Excerpt score cells remain pending.
 - `generated_skills/real_reuse/swe_agent/SKILL.md` and
   `generated_skills/real_reuse/swe_agent/references/source_map.json`:
   SWE-agent source-anchored generated skill for the software-engineering
@@ -451,7 +464,7 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 423 ready checks, 1 pending
+  reports `ready_with_pending_external_evidence`, 427 ready checks, 1 pending
   check, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
@@ -517,8 +530,8 @@ Use these as entry points instead of searching the whole repo first:
   Toolformer rows score 9/9.
 - Paper tables:
   `results/reproducibility/paper_table_report.md`
-  reports ready, 196 ready checks, 0 failed checks after adding the
-  real-reuse failure-boundary table consistency checks.
+  reports ready, 226 ready checks, 0 failed checks after adding the
+  real-reuse failure-boundary and Full Excerpt sanity table consistency checks.
 - Paper claims:
   `results/reproducibility/paper_claim_report.md`
   reports ready, 20 ready checks, 0 failed checks.
@@ -544,6 +557,11 @@ Use these as entry points instead of searching the whole repo first:
   downstream stress-test evidence and failure-boundary evidence, not aggregate
   effectiveness. AIDE Kaggle-derived CSV fixture files are kept local and
   ignored by git; committed manifests retain hashes and provenance boundaries.
+- Full Excerpt sanity scaffold:
+  `results/real_reuse/full_excerpt_sanity.md` contains AIDE-T1, SWE-T1, and
+  SNAP-T1 rows with existing Summary/PaperToSkill scores, local whitespace
+  token proxies, and pending Full Excerpt scores. It is reviewer-question and
+  cost/context sanity scaffolding only, not task-success evidence.
 
 ## Model/API Configuration
 

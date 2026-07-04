@@ -72,7 +72,7 @@ human semantic review or real live-task success.
 Evidence to cite:
 
 - `paper/limitations.md`: heuristic metric limitation.
-- `results/reproducibility/package_report.md`: 423 ready checks, 1 pending
+- `results/reproducibility/package_report.md`: 427 ready checks, 1 pending
   checks, and 0 failed checks.
 - `results/human_fidelity_packets/`: prepared independent-review protocol.
 
@@ -254,3 +254,22 @@ Do not say:
 
 - "The package is final."
 - "All validation is complete."
+
+## Q11: Why include a Full Excerpt table if it is not a main baseline?
+
+Short answer: It is a small sanity scaffold for reviewer questions about
+context length, not a completed effectiveness comparison.
+
+Evidence to cite:
+
+- `results/real_reuse/full_excerpt_sanity.md`: AIDE-T1, SWE-T1, and SNAP-T1
+  rows with existing Summary/PaperToSkill scores, pending Full Excerpt scores,
+  and local whitespace token proxies.
+- `paper/aaai/papertoskill_tables.tex`: `tab:full-excerpt-sanity` is labeled
+  as auxiliary and pending.
+
+Do not say:
+
+- "Full Excerpt has been beaten by PaperToSkill."
+- "Pending Full Excerpt cells are negative evidence."
+- "The token columns are provider billing or output-token cost."

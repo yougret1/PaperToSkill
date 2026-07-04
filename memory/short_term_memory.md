@@ -7,6 +7,34 @@ Current date: 2026-07-04.
 
 ## Latest Resume/Completion Note
 
+- 2026-07-04 Phase 104 Full Excerpt sanity scaffold: re-read long/short memory
+  and workflow skills, confirmed `C:\Users\19351\Desktop\tem\ok.txt` absent,
+  and closed the current E5.4 scaffold. Added
+  `scripts/build_real_reuse_full_excerpt_sanity.py`,
+  `tests/test_build_real_reuse_full_excerpt_sanity.py`, and
+  `results/real_reuse/full_excerpt_sanity.{csv,md,json}` for AIDE-T1,
+  SWE-T1, and SNAP-T1. Added `tab:full-excerpt-sanity` to the AAAI table file
+  and a short setup paragraph in the AAAI draft. Extended paper-table and
+  reproducibility-package gates, refreshed reports, and updated research docs,
+  result cards, stage log, runbook, artifact map, goal audit, review handoff,
+  rebuttal bank, claim matrix, long-term memory, and this file. Verification
+  passed: focused 6 tests, full unit discovery 164 tests, strict paper-table,
+  paper-claim, AAAI package, reproducibility-package, goal, submission-review,
+  external-evidence, AAAI-decision, usage, DeepSeek, AI-Scientist-v2 handoff,
+  and real-reuse checks; `git diff --check` had only Windows line-ending
+  warnings; raw-key scan found no matches. Evidence boundary: Full Excerpt
+  score cells remain pending, token counts are local whitespace context
+  proxies, and this phase adds no task-success evidence.
+- 2026-07-04 discussion sync: user asked whether the current experiment-table
+  discussion requires modifying other parts of the original paper. Re-read
+  memory and `C:\Users\19351\Desktop\tem\nextStep.md`, confirmed
+  `C:\Users\19351\Desktop\tem\ok.txt` absent, and spot-checked the AAAI source
+  and table files. Current conclusion: do not make new broad formal-paper
+  edits now. The draft already states that the eight-row real-reuse first pass
+  is mixed/failure-heavy boundary evidence, distinguishes reported reference
+  scores from local reproduced scores, and keeps Full Excerpt as a pending
+  sanity scaffold rather than a main baseline. Updated
+  `C:\Users\19351\Desktop\tem\nextStep.md` with this answer.
 - 2026-07-04 Phase 103 human-fidelity multi-reviewer protocol: re-read
   memory, confirmed `C:\Users\19351\Desktop\tem\ok.txt` absent, and audited
   the human-fidelity annotation path. Fixed a protocol mismatch where the
