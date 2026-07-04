@@ -61,6 +61,11 @@ This file is intentionally compact. Detailed chronological history lives in
   evidence.
 - Do not silently treat unavailable model endpoints as model-quality failures.
   Report provider/model availability problems.
+- Record-sync-only work should update planning/handoff/memory records without
+  touching local logs (`research/run_logs/**` and `research/stage_log.md`).
+  If a network/download problem blocks a core asset or phase save, record the
+  concrete command, error, and blocked artifact in
+  `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
 
 ## Evidence Boundary
 

@@ -7,8 +7,9 @@ Current date: 2026-07-04.
 
 ## Current Task
 
-- Latest user request: save the current record-sync phase to git/GitHub, then
-  continue the main real-reuse experiment.
+- Latest user request: modify the other related planning/record files,
+  including the current `C:\Users\19351\Desktop\tem\toHuman.md`, while
+  excluding local logs.
 - Local logs excluded from this sync: `research/run_logs/**` and
   `research/stage_log.md`.
 - `C:\Users\19351\Desktop\tem\ok.txt` was absent at the latest check.
@@ -19,6 +20,10 @@ Current date: 2026-07-04.
   GitHub connectivity, AAAI final-submission advice, provider billing,
   domain-robustness planning, component ablation, or a user study as the
   current human action.
+- Added the record-sync boundary to `toHuman.md`: do not modify local logs,
+  do not reopen a separate domain-robustness experiment, keep component
+  ablation appendix-only, keep user-study work last/optional, and record
+  only genuinely blocking network/download failures there.
 - Rewrote `C:\Users\19351\Desktop\tem\nextStep.md` into the current
   experiment plan: core real-reuse first, auxiliary evidence collected
   opportunistically and analyzed later, component ablation appendix-only, and
@@ -32,6 +37,9 @@ Current date: 2026-07-04.
   `memory/long_term_memory.md`.
 - Local logs remain untouched: `research/run_logs/**` and
   `research/stage_log.md`.
+- Runbook/queue/review records should point future execution back to the
+  core real-reuse stabilization path and use generous model-call
+  timeout/retry budgets because the third-party service is unstable.
 
 ## Current Core Experiment State
 
@@ -88,17 +96,18 @@ Current date: 2026-07-04.
 
 ## Immediate Next Actions
 
-1. Return to the core real-reuse experiment and inspect failure-heavy or
+1. Finish verifying this record-sync pass without touching local logs.
+2. Return to the core real-reuse experiment and inspect failure-heavy or
    boundary-unclear rows first, especially SWE-T1 patch application and SNAP
    artifact completion/budget boundaries.
-2. Pre-register any scorer, prompt-contract, budget, or artifact-contract
+3. Pre-register any scorer, prompt-contract, budget, or artifact-contract
    change before rerunning a row.
-3. Rerun affected Summary and PaperToSkill conditions under the same locked
+4. Rerun affected Summary and PaperToSkill conditions under the same locked
    task, input/output, scorer, local setting, and no-mid-run-human rule.
-4. During core reruns, collect auxiliary raw data where cheap: provider
+5. During core reruns, collect auxiliary raw data where cheap: provider
    availability, failure reasons, context/token proxies, and raw rows needed
    for future real-reuse LLM ablation.
-5. After result changes, regenerate `results/real_reuse/main_results_plan.*`,
+6. After result changes, regenerate `results/real_reuse/main_results_plan.*`,
    `results/real_reuse/failure_analysis.*`, affected paper tables, readiness
    reports, and memory.
 

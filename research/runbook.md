@@ -30,11 +30,12 @@ git ls-remote --heads origin main
 Test-NetConnection github.com -Port 443 | Format-List
 ```
 
-Current status as of 2026-07-04: the latest phase save has been pushed to
-`origin/main`; `git ls-remote --heads origin main` confirmed commit
-`825f088 Update AIDE extended real-reuse scoring`. If future pushes fail,
-diagnose transport separately from project correctness and keep local commits
-intact until the next successful push.
+Current status as of 2026-07-04: the latest known record-sync phase was pushed
+to `origin/main`. Use `git log -1 --oneline` and
+`git ls-remote --heads origin main` to verify the current exact commit before
+making a new phase-save claim. If future pushes fail, diagnose transport
+separately from project correctness and keep local commits intact until the
+next successful push.
 
 ## Local Text-To-Skill Pipeline
 
@@ -224,7 +225,7 @@ Summary and PaperToSkill conditions with the same no-mid-run-human rule:
 ```powershell
 $env:PAPERTOSKILL_GPT_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
 $env:PAPERTOSKILL_GPT_OPENAI_API_KEY = "<set locally>"
-python scripts\run_real_reuse_swe.py --task SWE-T1 --task SWE-T2 --condition summary --condition papertoskill --model-family GPT-family --model-alias gpt-5.5 --wire-api openai_responses --run-id phaseXX_gpt_swe_real_reuse
+python scripts\run_real_reuse_swe.py --task SWE-T1 --task SWE-T2 --condition summary --condition papertoskill --model-family GPT-family --model-alias gpt-5.5 --wire-api openai_responses --timeout-seconds 300 --max-attempts 5 --retry-delay-seconds 5 --run-id phaseXX_gpt_swe_real_reuse
 Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_BASE_URL -ErrorAction SilentlyContinue
 Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_API_KEY -ErrorAction SilentlyContinue
 ```
@@ -243,7 +244,7 @@ Responses profile. Set the API key only in the shell, never in tracked files:
 ```powershell
 $env:PAPERTOSKILL_GPT_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
 $env:PAPERTOSKILL_GPT_OPENAI_API_KEY = "<set locally>"
-python scripts\run_real_reuse_reflexion.py --task REF-T1 --task REF-T2 --condition summary --condition papertoskill --model-family GPT-family --model-alias gpt-5.5 --wire-api openai_responses --run-id phase87_gpt_reflexion_real_reuse
+python scripts\run_real_reuse_reflexion.py --task REF-T1 --task REF-T2 --condition summary --condition papertoskill --model-family GPT-family --model-alias gpt-5.5 --wire-api openai_responses --timeout-seconds 300 --max-attempts 5 --retry-delay-seconds 5 --run-id phaseXX_gpt_reflexion_real_reuse
 Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_BASE_URL -ErrorAction SilentlyContinue
 Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_API_KEY -ErrorAction SilentlyContinue
 ```
@@ -259,7 +260,7 @@ rows:
 ```powershell
 $env:PAPERTOSKILL_GPT_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
 $env:PAPERTOSKILL_GPT_OPENAI_API_KEY = "<set locally>"
-python scripts\run_real_reuse_aide.py --task AIDE-T1 --task AIDE-T2 --condition summary --condition papertoskill --model-family GPT-family --model-alias gpt-5.5 --wire-api openai_responses --run-id phaseXX_gpt_aide_real_reuse
+python scripts\run_real_reuse_aide.py --task AIDE-T1 --task AIDE-T2 --condition summary --condition papertoskill --model-family GPT-family --model-alias gpt-5.5 --wire-api openai_responses --timeout-seconds 300 --max-attempts 5 --retry-delay-seconds 5 --score-timeout-seconds 300 --run-id phaseXX_gpt_aide_real_reuse
 Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_BASE_URL -ErrorAction SilentlyContinue
 Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_API_KEY -ErrorAction SilentlyContinue
 ```
@@ -269,6 +270,23 @@ model-quality failures. Current AIDE rows are scored from the official
 Kaggle-derived local fixture: AIDE-T1 is solved by both Summary and
 PaperToSkill under the extended 300-second local scorer, while AIDE-T2 is a
 PaperToSkill-only success with the Summary candidate still timing out.
+
+To rerun the locked SnapATAC2 rows after a pre-registered artifact, budget, or
+task-contract follow-up, keep Summary and PaperToSkill paired under the same
+locked fixture and no-mid-run-human rule:
+
+```powershell
+$env:PAPERTOSKILL_GPT_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
+$env:PAPERTOSKILL_GPT_OPENAI_API_KEY = "<set locally>"
+python scripts\run_real_reuse_snapatac2.py --task SNAP-T1 --task SNAP-T2 --condition summary --condition papertoskill --model-family GPT-family --model-alias gpt-5.5 --wire-api openai_responses --timeout-seconds 300 --max-attempts 5 --retry-delay-seconds 5 --run-id phaseXX_gpt_snapatac2_real_reuse
+Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_BASE_URL -ErrorAction SilentlyContinue
+Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_API_KEY -ErrorAction SilentlyContinue
+```
+
+Current SNAP rows are scored over official miniature fixture assets, but both
+tasks remain below the pre-registered success threshold. Treat them as
+artifact-completion and resource-budget boundary evidence unless a
+pre-registered rerun changes the raw rows.
 
 Validate the real-reuse benchmark after task/spec/scorer edits or before
 editing paper claims:

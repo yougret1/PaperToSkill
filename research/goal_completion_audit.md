@@ -51,7 +51,7 @@ Current machine reports:
 | --- | --- | --- | --- |
 | Durable local memory | `memory/long_term_memory.md`; `memory/short_term_memory.md` | Complete locally | Read and update both memory files after every resume/compaction. |
 | Use `ai-scientist-v2` to refine PaperToSkill | Seed idea files, bounded smoke report, full live-run handoff, Phase 76 run log, completion directory | Complete for bounded local evidence | Do not treat the synthetic run as broad live task success. |
-| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history; Phase 104/105 Full Excerpt sanity artifacts are now scored and recorded, not merely pending scaffold work | Complete for the current local record state | Continue phase-level commits after meaningful future milestones. |
+| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history; the latest known record-sync save was pushed before this local record-edit pass. Exact remote state should be verified with `git log -1 --oneline` and `git ls-remote --heads origin main` before making a new phase-save claim. | Complete for the last saved local record state | Continue phase-level commits after meaningful future milestones; keep transport failures separate from experiment correctness. |
 | Official AAAI TeX package | `paper/aaai/`; `results/reproducibility/aaai_package_report.md` | Locally ready | Keep draft synchronized with new evidence. |
 | Usage examples | `examples/usage/`; `results/reproducibility/usage_example_report.md` | Complete locally | Re-run after runner or task changes. |
 | Model ablations | `results/model_ablation_prompts/v0/evaluation.md`: 6 scored, 0 pending | Complete for saved-response protocol | Do not claim broad model quality or live task success. |
@@ -104,15 +104,18 @@ an aggregate downstream-success claim.
    budget/artifact/patch-application follow-ups before rerunning any main-task
    rows.
 2. Keep provider latency, API timeouts, and retry counts separate from the core
-   task metrics; record provider availability only as execution metadata.
+   task metrics; record provider availability only as execution metadata and
+   give model calls generous timeout/retry budgets.
 3. Collect auxiliary data during core runs where cheap, then aggregate LLM
    ablation, failure-boundary, and quality/grounding evidence after the core
    results stabilize.
-4. Keep component ablation as an appendix candidate and user study as a last,
+4. Do not reopen a separate domain-robustness experiment; the current breadth
+   evidence comes from the eight main paper-tasks.
+5. Keep component ablation as an appendix candidate and user study as a last,
    optional step for user-efficiency or usability claims only.
-5. Score all 24 paper-by-criterion cells in the human-fidelity annotation
+6. Score all 24 paper-by-criterion cells in the human-fidelity annotation
    template when reviewers are available; this supports semantic fidelity, not
    the main task-effectiveness claim.
-6. Re-run `check_goal_completion.py`, `check_reproducibility_package.py`, and
+7. Re-run `check_goal_completion.py`, `check_reproducibility_package.py`, and
    `check_submission_review.py`, then revisit the AAAI decision after the
    named external evidence is complete.
