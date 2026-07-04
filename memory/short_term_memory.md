@@ -30,13 +30,14 @@ Current date: 2026-07-04.
   ablation auxiliary, component ablation appendix-only, and user study
   last/optional. Provider latency, timeouts, and retry counts are availability
   metadata, not effectiveness metrics.
-- The latest pushed checkpoint is `43bc1a0` (`Record row selection push
-  blocker`), on top of `4b606f9` (`Document real-reuse row selection
-  metadata`), `641eef0`, `f44da1b`, and `d248878`. Two earlier
-  `git push origin main` attempts failed in this turn with GitHub/network
-  connectivity errors, but a later retry succeeded and updated `origin/main`
-  from `641eef0` to `43bc1a0`. `toHuman.md` now says no immediate human-side
-  action is required.
+- The latest successful remote backup in this turn pushed through at least
+  `03b7ca4` (`Plan real-reuse stabilization priorities`), on top of
+  `a170aa6`, `43bc1a0`, `4b606f9`, `641eef0`, `f44da1b`, and `d248878`. Some
+  earlier `git push origin main` attempts failed with GitHub/network
+  connectivity errors, but later retries succeeded. `toHuman.md` now says no
+  immediate human-side action is required. Verify exact remote state with
+  `git ls-remote --heads origin main` before making future remote-backed
+  checkpoint claims.
 - Commits `e597fcf` (`Add AIDE real-reuse LLM ablation row`), `1521b72`
   (`Record AIDE ablation push blocker`), `200419a`
   (`Add SWE real-reuse LLM ablation row`), `cb20cb1`
@@ -50,11 +51,13 @@ Current date: 2026-07-04.
   (`Sync core real-reuse stabilization records`), `f44da1b`
   (`Guard real-reuse planned outputs`), `641eef0`
   (`Sync memory after real-reuse guard`), `4b606f9`
-  (`Document real-reuse row selection metadata`), and `43bc1a0`
-  (`Record row selection push blocker`) are the current saved and pushed
-  phase/checkpoint range. The earlier GitHub push failures in this turn were
-  transient transport availability metadata, not experiment correctness
-  evidence.
+  (`Document real-reuse row selection metadata`), `43bc1a0`
+  (`Record row selection push blocker`), `a170aa6`
+  (`Sync row selection push status`), and `03b7ca4`
+  (`Plan real-reuse stabilization priorities`) are the current saved and
+  pushed phase/checkpoint range, subject to fresh remote verification. The
+  earlier GitHub push failures in this turn were transient transport
+  availability metadata, not experiment correctness evidence.
 - Verification before the phase save passed:
   `python -m unittest tests.test_build_real_reuse_llm_ablation_results -v`
   (4 tests), `check_real_reuse_benchmark.py --strict`,
@@ -68,10 +71,10 @@ Current date: 2026-07-04.
   is required, and `ok.txt` should only be created for completed human-fidelity
   annotation or a concrete placed core asset.
 - Current GitHub transport note: `git push origin main` eventually succeeded
-  for the row-selection metadata phase, updating `main` from `641eef0` to
-  `43bc1a0`. Before claiming any future phase save is remote-backed, rerun
-  `git status -sb`, `git log -3 --oneline`, and
-  `git ls-remote --heads origin main`.
+  for the row-selection and stabilization-queue phase, updating `main` through
+  `03b7ca4` in the latest observed successful push. Before claiming any future
+  phase save is remote-backed, rerun `git status -sb`, `git log -3 --oneline`,
+  and `git ls-remote --heads origin main`.
 - Latest phase checkpoint: after record-sync commit `977b2b9`
   (`Sync experiment planning records`), Claude-family REF-T2 was retried from
   the local Claude API doc key with the v0 300-second / 5-attempt protocol;
@@ -228,7 +231,8 @@ Current date: 2026-07-04.
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
 6. The row-selection metadata guard has passed focused tests plus strict local
-   gates and is pushed through commit `43bc1a0`.
+   gates and is pushed through the latest observed remote checkpoint
+   `03b7ca4`.
 7. No human-side GitHub action is required. Retry `git push origin main` only
    when doing a phase save or remote-backup sync, and record any blocking
    network error in `toHuman.md`.
