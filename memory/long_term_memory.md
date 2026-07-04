@@ -309,13 +309,16 @@ Current supported claims:
   `a170aa6` (push-status sync), `03b7ca4` (core stabilization queue),
   `25017a8` (SNAP executable-candidate contract), `36ae48e` (SWE-T1
   task-contract decision), `ef7dc1b` (memory sync after contract decisions),
-  `cdf67b9` (SWE-T1 issue-aligned contract), and `0f3a499` (SWE scorer
-  override support). Prior thread state recorded `0f3a4997badd333f8399c6274659af444997a765`
-  as pushed to `origin/main`, but a fresh `git ls-remote --heads origin main`
-  attempt on 2026-07-05 failed with a connection reset. Keep GitHub transport
-  failures separate from experiment correctness and verify exact local/remote
-  alignment with `git status -sb` and `git ls-remote --heads origin main`
-  before claiming a new remote-backed phase save.
+  `cdf67b9` (SWE-T1 issue-aligned contract), `0f3a499` (SWE scorer override
+  support), and `599382d` (SWE-T1 issue-aligned follow-up table). Prior thread
+  state recorded `0f3a4997badd333f8399c6274659af444997a765` as pushed to
+  `origin/main`, but fresh `git push origin main` and
+  `git ls-remote --heads origin main` attempts on 2026-07-05 failed with
+  GitHub HTTPS connection-reset / port-443 transport errors. Keep GitHub
+  transport failures separate from experiment correctness and verify exact
+  local/remote alignment with `git status -sb` and
+  `git ls-remote --heads origin main` before claiming a new remote-backed phase
+  save.
 - Core real-reuse stabilization guard commit `f44da1b` (`Guard real-reuse
   planned outputs`) is pushed after the record-sync save. It removes the
   deprecated `domain_robustness` planned output from
@@ -373,7 +376,9 @@ Current supported claims:
   This is diagnostic issue-aligned follow-up evidence showing the revised
   scorer/contract can close for both conditions. It does not show a
   PaperToSkill advantage and does not replace the locked first-pass SWE-T1
-  main row unless explicitly promoted later.
+  main row unless explicitly promoted later. Local commit `599382d` saves this
+  table and the rebuilt AAAI PDF locally; it is not remote-backed yet because
+  GitHub push failed with transport errors.
 - Phase109 has collected scored real-reuse LLM ablation rows only on the
   pre-registered stabilized slices. Current collected GPT-family pairs are
   REF-T2 1.000/1.000,
@@ -392,10 +397,11 @@ Current supported claims:
 - Phase 89 and the 2026-07-04 record-sync push both recovered GitHub HTTPS
   transport interruptions. Use `git status -sb` and a successful remote check
   for the latest exact alignment before each phase-save claim.
-- Latest local checkpoint before the current record-sync edits:
-  `0f3a499 Support SWE scorer override runs`. Prior thread state recorded this
-  commit on `origin/main`, but the latest fresh remote check failed with a
-  GitHub connection reset. Rerun remote verification before making
+- Latest local checkpoint:
+  `599382d Add SWE-T1 issue-aligned follow-up table`. The branch is ahead of
+  `origin/main`; two `git push origin main` attempts and one
+  `git ls-remote --heads origin main` attempt on 2026-07-05 failed with GitHub
+  HTTPS transport errors. Rerun remote verification before making
   remote-backed claims.
 
 Current unsupported claims:

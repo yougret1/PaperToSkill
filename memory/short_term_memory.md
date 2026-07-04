@@ -57,26 +57,26 @@ Current date: 2026-07-05.
   table is now generated at
   `results/real_reuse/swe_t1_issue_aligned_followup.{csv,md,json}`, included in
   `paper/aaai/papertoskill_tables.tex`, and covered by the paper-table checker.
-  Current uncommitted artifacts include appended `results/real_reuse/raw_rows.jsonl`, run folders
-  under `results/real_reuse/runs/SWE-T1/.../phase110_gpt_swe_t1_issue_aligned_followup/`,
-  `results/real_reuse/swe_t1_issue_aligned_run_report.{md,json}`, the
-  dedicated follow-up CSV/MD/JSON, the new builder/test, and table/package
-  checker updates.
-- Current remote-backup status: local `main` is at `0f3a499` after
-  `cdf67b9`; prior thread state recorded `0f3a4997badd333f8399c6274659af444997a765`
-  as pushed to `origin/main`. A fresh `git ls-remote --heads origin main`
-  attempt on 2026-07-05 failed with `Recv failure: Connection was reset`, so
-  rerun remote verification before any new remote-backed checkpoint claim.
+  Local commit `599382d` (`Add SWE-T1 issue-aligned follow-up table`) now
+  contains the appended phase110 raw rows, run artifacts, run report,
+  dedicated CSV/MD/JSON table, builder/test, paper table, rebuilt AAAI PDF, and
+  table/package checker/report updates.
+- Current remote-backup status: local `main` is at `599382d` and is ahead of
+  `origin/main` by one commit. Two `git push origin main` attempts on
+  2026-07-05 failed with GitHub HTTPS transport errors (`Recv failure:
+  Connection was reset`, then `Failed to connect to github.com port 443`), and
+  `git ls-remote --heads origin main` failed with the same port-443 connection
+  error. Do not claim the phase110 table commit is remote-backed until a future
+  push and `git ls-remote` verification succeed.
 - The current discussion policy is: stabilize the core eight-row real-reuse
   evidence first; collect auxiliary raw data opportunistically; keep LLM
   ablation auxiliary, component ablation appendix-only, and user study
   last/optional. Provider latency, timeouts, and retry counts are availability
   metadata, not effectiveness metrics.
-- `toHuman.md` now says no immediate human-side action is required and records
-  the current phase110 uncommitted diagnostic table/checker artifacts plus the
-  latest failed remote-verification attempt. Verify exact remote state with
-  `git ls-remote --heads origin main` before making future remote-backed
-  checkpoint claims.
+- `toHuman.md` now says no experiment-side human action is required, records
+  local commit `599382d`, and lists the exact GitHub push / remote-check
+  transport errors. If the user fixes network and wants immediate retry, they
+  may create `ok.txt` with a GitHub retry note.
 - Commits `e597fcf` (`Add AIDE real-reuse LLM ablation row`), `1521b72`
   (`Record AIDE ablation push blocker`), `200419a`
   (`Add SWE real-reuse LLM ablation row`), `cb20cb1`
@@ -98,7 +98,8 @@ Current date: 2026-07-05.
   (`Record SWE-T1 task contract decision`), `ef7dc1b`
   (`Sync memory after contract decisions`), `cdf67b9`
   (`Pre-register SWE-T1 issue-aligned contract`), and `0f3a499`
-  (`Support SWE scorer override runs`) are the current local saved
+  (`Support SWE scorer override runs`), plus `599382d`
+  (`Add SWE-T1 issue-aligned follow-up table`), are the current local saved
   phase/checkpoint range, subject to fresh remote verification. The
   earlier GitHub push failures in this turn were transient transport
   availability metadata, not experiment correctness evidence.
@@ -114,14 +115,12 @@ Current date: 2026-07-05.
 - `C:\Users\19351\Desktop\tem\toHuman.md` should say no immediate human action
   is required, and `ok.txt` should only be created for completed human-fidelity
   annotation or a concrete placed core asset.
-- Current GitHub transport note: earlier `git push origin main` attempts
-  eventually succeeded for the row-selection, stabilization-queue, SNAP
-  contract, SWE-T1 decision, SWE-T1 issue-aligned contract, and SWE runner
-  override-support phases according to prior thread state. A fresh
-  `git ls-remote --heads origin main` on 2026-07-05 failed with a connection
-  reset, so before claiming any future phase save is remote-backed, rerun
-  `git status -sb`, `git log -3 --oneline`, and
-  `git ls-remote --heads origin main`.
+- Current GitHub transport note: local commit `599382d` is not yet pushed.
+  Push attempts on 2026-07-05 failed with `Recv failure: Connection was reset`
+  and `Failed to connect to github.com port 443`; `git ls-remote --heads
+  origin main` also failed with port-443 connection failure. Before claiming
+  any future phase save is remote-backed, rerun `git status -sb`,
+  `git log -3 --oneline`, and `git ls-remote --heads origin main`.
 - Latest phase checkpoint: after record-sync commit `977b2b9`
   (`Sync experiment planning records`), Claude-family REF-T2 was retried from
   the local Claude API doc key with the v0 300-second / 5-attempt protocol;
@@ -278,11 +277,11 @@ Current date: 2026-07-05.
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-6. Latest local HEAD: `0f3a499 Support SWE scorer override runs`. Prior thread
-   state recorded this commit as pushed, but a fresh remote verification on
-   2026-07-05 failed with a GitHub connection reset. Rerun `git ls-remote`
-   before making remote-backed claims.
-7. No immediate human-side action is required.
+6. Latest local saved commit: `599382d Add SWE-T1 issue-aligned follow-up
+   table`; it is not remote-backed yet because GitHub HTTPS push and
+   `ls-remote` failed with connection errors. Retry remote backup when network
+   availability recovers.
+7. No experiment-side human action is required.
 
 ## Boundaries
 
