@@ -162,8 +162,8 @@ def write_markdown(path: Path, rows: list[dict[str, str]], raw_row_count: int) -
         "Evidence boundary: this auxiliary table compares the pre-registered "
         "Full Excerpt sanity condition with the same Summary and PaperToSkill "
         "task rows. Token counts are local whitespace context proxies, not "
-        "provider bills or output-token costs. Pending Full Excerpt scores are "
-        "not negative evidence.",
+        "provider bills or output-token costs. Missing Full Excerpt scores, "
+        "if any, are not negative evidence.",
         "",
         f"- Raw scored rows read: {raw_row_count}",
         "",
@@ -179,8 +179,8 @@ def write_json(path: Path, rows: list[dict[str, str]], raw_rows: list[dict[str, 
         "schema_version": "0.1",
         "evidence_boundary": (
             "Auxiliary Full Excerpt sanity table. Token counts are local "
-            "whitespace context proxies. Pending Full Excerpt score cells are "
-            "not downstream task-success evidence."
+            "whitespace context proxies. Missing Full Excerpt score cells, if "
+            "any, are not downstream task-success evidence."
         ),
         "raw_row_count": len(raw_rows),
         "context_paths": {

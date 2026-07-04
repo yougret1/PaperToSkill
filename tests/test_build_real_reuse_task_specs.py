@@ -32,9 +32,20 @@ class BuildRealReuseTaskSpecsTest(unittest.TestCase):
             paths = sorted(output_dir.glob("*.json"))
             self.assertEqual(8, len(paths))
             aide_t1 = json.loads((output_dir / "AIDE-T1.json").read_text(encoding="utf-8"))
+            aide_t2 = json.loads((output_dir / "AIDE-T2.json").read_text(encoding="utf-8"))
+            swe_t1 = json.loads((output_dir / "SWE-T1.json").read_text(encoding="utf-8"))
+            snap_t1 = json.loads((output_dir / "SNAP-T1.json").read_text(encoding="utf-8"))
             self.assertEqual("AIDE-T1", aide_t1["id"])
             self.assertEqual("spec_ready_assets_pending", aide_t1["status"])
-            self.assertEqual({"summary", "papertoskill"}, {condition["id"] for condition in aide_t1["conditions"]})
+            self.assertEqual(
+                {"summary", "papertoskill", "full_excerpt"},
+                {condition["id"] for condition in aide_t1["conditions"]},
+            )
+            self.assertEqual({"summary", "papertoskill"}, {condition["id"] for condition in aide_t2["conditions"]})
+            for task_spec, paper_id in [(aide_t1, "aide"), (swe_t1, "swe_agent"), (snap_t1, "snapatac2")]:
+                full_excerpt = next(condition for condition in task_spec["conditions"] if condition["id"] == "full_excerpt")
+                self.assertEqual("full_paper_excerpt_sanity", full_excerpt["context_kind"])
+                self.assertEqual(f"papers/extracted/{paper_id}.txt", full_excerpt["context_path"])
             self.assertIn("task_score", aide_t1["raw_row_schema"])
             self.assertEqual("none_mid_run", aide_t1["run_controls"]["first_pass_human_intervention"])
             self.assertIn("reported_reference_only_until_local_reproduction", aide_t1["reference_score_policy"]["comparability"])

@@ -6,7 +6,9 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import os
 import shutil
+import signal
 import subprocess
 import sys
 import tempfile
@@ -128,6 +130,48 @@ def copy_workspace(workspace: Path, target: Path) -> None:
             shutil.copy2(item, destination)
 
 
+def terminate_process_tree(process: subprocess.Popen[str]) -> None:
+    if process.poll() is not None:
+        return
+    if os.name == "nt":
+        subprocess.run(
+            ["taskkill", "/F", "/T", "/PID", str(process.pid)],
+            capture_output=True,
+            text=True,
+        )
+        return
+    try:
+        os.killpg(process.pid, signal.SIGKILL)
+    except ProcessLookupError:
+        return
+
+
+def run_python_script(script_name: str, cwd: Path, timeout_seconds: float) -> subprocess.CompletedProcess[str]:
+    command = [sys.executable, script_name]
+    kwargs: dict[str, Any] = {
+        "cwd": cwd,
+        "stdout": subprocess.PIPE,
+        "stderr": subprocess.PIPE,
+        "text": True,
+    }
+    if os.name == "nt":
+        kwargs["creationflags"] = subprocess.CREATE_NEW_PROCESS_GROUP
+    else:
+        kwargs["start_new_session"] = True
+    process = subprocess.Popen(command, **kwargs)
+    try:
+        stdout, stderr = process.communicate(timeout=timeout_seconds)
+    except subprocess.TimeoutExpired as exc:
+        terminate_process_tree(process)
+        try:
+            stdout, stderr = process.communicate(timeout=5)
+        except subprocess.TimeoutExpired:
+            stdout = exc.stdout or ""
+            stderr = exc.stderr or ""
+        raise subprocess.TimeoutExpired(command, timeout_seconds, output=stdout, stderr=stderr) from exc
+    return subprocess.CompletedProcess(command, process.returncode, stdout, stderr)
+
+
 def run_candidate(
     candidate_script: Path,
     workspace: Path,
@@ -139,13 +183,7 @@ def run_candidate(
         script_path = tmp_path / "candidate_solution.py"
         shutil.copy2(candidate_script, script_path)
         try:
-            completed = subprocess.run(
-                [sys.executable, str(script_path.name)],
-                cwd=tmp_path,
-                capture_output=True,
-                text=True,
-                timeout=timeout_seconds,
-            )
+            completed = run_python_script(script_path.name, tmp_path, timeout_seconds)
         except subprocess.TimeoutExpired as exc:
             return None, None, f"timeout after {timeout_seconds:g}s"
         submission_path = tmp_path / "submission.csv"

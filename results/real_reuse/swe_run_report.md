@@ -2,7 +2,7 @@
 
 Evidence boundary: this report covers only prepared SWE real-reuse tasks. Provider/model errors are availability evidence, not model-quality failures. Aggregate PaperToSkill claims require the broader real-reuse benchmark.
 
-- Run ID: phase97_gpt_swe_t1_summary_retry
+- Run ID: phase105_gpt_full_excerpt_sanity_retry240
 - Overall status: complete
 - Status counts: {'scored': 1}
 - Model family: GPT-family
@@ -12,4 +12,4 @@ Evidence boundary: this report covers only prepared SWE real-reuse tasks. Provid
 
 | Task | Condition | Status | Score | Success | Failure | Output |
 | --- | --- | --- | --- | --- | --- | --- |
-| SWE-T1 | summary | scored | 0.0 | False | patch_apply_failed | results/real_reuse/runs/SWE-T1/summary/phase97_gpt_swe_t1_summary_retry/candidate.patch |
+| SWE-T1 | full_excerpt | scored | 0.0 | False | patch_apply_failed | results/real_reuse/runs/SWE-T1/full_excerpt/phase105_gpt_full_excerpt_sanity_retry240/candidate.patch |

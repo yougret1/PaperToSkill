@@ -49,19 +49,24 @@ def write_tiny_repo(path: Path) -> None:
     )
 
 
-def prepare_temp_root(tmp_path: Path) -> Path:
+def prepare_temp_root(tmp_path: Path, task_id: str = "SWE-T2") -> Path:
     root = tmp_path / "root"
     for relative_dir in [
         "benchmarks/real_reuse/tasks",
         "benchmarks/real_reuse/asset_locks",
         "generated_skills/real_reuse/swe_agent",
         "baselines/real_reuse",
+        "papers/extracted",
     ]:
         (root / relative_dir).mkdir(parents=True)
-    shutil.copy2(ROOT / "benchmarks" / "real_reuse" / "tasks" / "SWE-T2.json", root / "benchmarks" / "real_reuse" / "tasks" / "SWE-T2.json")
-    shutil.copy2(ROOT / "benchmarks" / "real_reuse" / "asset_locks" / "SWE-T2.json", root / "benchmarks" / "real_reuse" / "asset_locks" / "SWE-T2.json")
+    shutil.copy2(ROOT / "benchmarks" / "real_reuse" / "tasks" / f"{task_id}.json", root / "benchmarks" / "real_reuse" / "tasks" / f"{task_id}.json")
+    shutil.copy2(ROOT / "benchmarks" / "real_reuse" / "asset_locks" / f"{task_id}.json", root / "benchmarks" / "real_reuse" / "asset_locks" / f"{task_id}.json")
     (root / "generated_skills" / "real_reuse" / "swe_agent" / "SKILL.md").write_text(
         "# SWE-agent Skill\n\nUse search, edit command, linter feedback, and tests.\n",
+        encoding="utf-8",
+    )
+    (root / "papers" / "extracted" / "swe_agent.txt").write_text(
+        "Full SWE-agent paper excerpt with repository inspection, edit commands, and test verification.\n",
         encoding="utf-8",
     )
     repo = tmp_path / "repo"
@@ -73,7 +78,7 @@ def prepare_temp_root(tmp_path: Path) -> Path:
             "--root",
             str(root),
             "--task",
-            "SWE-T2",
+            task_id,
             "--repo-source",
             str(repo),
             "--issue-text",
@@ -81,7 +86,7 @@ def prepare_temp_root(tmp_path: Path) -> Path:
             "--test-command",
             "python -m unittest discover -s .",
             "--output-dir",
-            str(root / "benchmarks" / "real_reuse" / "assets" / "SWE-T2"),
+            str(root / "benchmarks" / "real_reuse" / "assets" / task_id),
             "--condition-dir",
             str(root / "baselines" / "real_reuse"),
         ],
@@ -242,6 +247,52 @@ class RunRealReuseSWETest(unittest.TestCase):
             self.assertIn("unified diff patch", prompt)
             self.assertNotIn("gold_patch", prompt)
             self.assertNotIn("hidden_from_model", prompt)
+
+    def test_full_excerpt_fixture_response_for_sanity_task(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            root = prepare_temp_root(tmp_path, "SWE-T1")
+            fixture_dir = tmp_path / "fixture_responses"
+            fixture_dir.mkdir()
+            (fixture_dir / "SWE-T1_full_excerpt.diff").write_text(PATCH_RESPONSE, encoding="utf-8")
+            raw_rows = tmp_path / "raw_rows.jsonl"
+            output_json = tmp_path / "swe_report.json"
+
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(RUN_SCRIPT),
+                    "--root",
+                    str(root),
+                    "--task",
+                    "SWE-T1",
+                    "--condition",
+                    "full_excerpt",
+                    "--fixture-response-dir",
+                    str(fixture_dir),
+                    "--run-id",
+                    "unit_swe_full_excerpt",
+                    "--output-dir",
+                    str(tmp_path / "runs"),
+                    "--raw-rows-output",
+                    str(raw_rows),
+                    "--output-json",
+                    str(output_json),
+                    "--output-md",
+                    str(tmp_path / "swe_report.md"),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            report = json.loads(output_json.read_text(encoding="utf-8"))
+            self.assertEqual("complete", report["overall_status"])
+            rows = [json.loads(line) for line in raw_rows.read_text(encoding="utf-8").splitlines()]
+            self.assertEqual(["full_excerpt"], [row["condition"] for row in rows])
+            self.assertTrue(rows[0]["success"])
+            prompt = (tmp_path / "runs" / "SWE-T1" / "full_excerpt" / "unit_swe_full_excerpt" / "prompt.md").read_text(encoding="utf-8")
+            self.assertIn("Full SWE-agent paper excerpt", prompt)
 
 
 if __name__ == "__main__":

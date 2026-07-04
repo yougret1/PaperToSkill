@@ -1,0 +1,28 @@
+I’ll inspect the rule implementation and existing tests around L031/TSQL, then make the smallest targeted change and run the requested verification if the environment supports it.```diff
+diff --git a/src/sqlfluff/rules/L031.py b/src/sqlfluff/rules/L031.py
+index 2e508a9..4ea0895 100644
+--- a/src/sqlfluff/rules/L031.py
++++ b/src/sqlfluff/rules/L031.py
+@@ -109,6 +109,9 @@ class Rule_L031(BaseRule):
+         if segment.is_type("select_statement"):
+             table_aliases = segment.get_eventual_aliases()
+ 
++            if not self._has_join_clause(segment):
++                return None
++
+             # We use a buffer here to keep any violations until we have
+             # finished crawling the segment.
+             violation_buff = []
+@@ -159,3 +162,11 @@ class Rule_L031(BaseRule):
+                 fixes=fixes,
+             )
+         return None
++
++    @staticmethod
++    def _has_join_clause(segment):
++        """Return True if the select statement contains any join clauses."""
++        for seg in segment.segments:
++            if seg.is_type("join_clause"):
++                return True
++        return False
+```

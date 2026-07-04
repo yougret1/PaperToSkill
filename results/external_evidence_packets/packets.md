@@ -1,6 +1,6 @@
 # External Evidence Execution Packets
 
-Evidence boundary: these packets define how to finish pending external evidence. They do not collect human annotations, depend on provider bills, AI-Scientist-v2 live-run artifacts, or final submission approval by themselves.
+Evidence boundary: these packets define how to finish pending external evidence. They do not collect human annotations, depend on provider bills, or create final submission approval by themselves. Completed bounded AI-Scientist-v2 artifacts are inputs, not pending packet items.
 
 - Overall status: ready
 - Closure status: pending_external_evidence

@@ -324,8 +324,8 @@ def write_markdown(path: Path, report: dict[str, Any]) -> None:
         "# External Evidence Closure Queue",
         "",
         "Evidence boundary: this is a local closure queue. It does not collect "
-        "human annotations, AI-Scientist-v2 live-run artifacts, "
-        "or final submission approval.",
+        "human annotations or final submission approval. Completed bounded "
+        "AI-Scientist-v2 artifacts are inputs, not pending closure items.",
         "",
         f"- Overall status: {report['overall_status']}",
         f"- Queue item statuses: {report['item_status_counts']}",

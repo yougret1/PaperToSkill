@@ -26,26 +26,40 @@ VALID_SNAP_T2_RESPONSE = """{
 }
 """
 
+VALID_SNAP_T1_RESPONSE = """{
+  "completed": true,
+  "method_steps": ["Use SnapATAC2 spectral embedding before reporting artifacts"],
+  "embedding_artifacts": {"embedding": "embedding.csv"},
+  "runtime_seconds": 10,
+  "peak_memory_mb": 1024
+}
+"""
 
-def prepare_temp_root(tmp_path: Path) -> Path:
+
+def prepare_temp_root(tmp_path: Path, task_id: str = "SNAP-T2") -> Path:
     root = tmp_path / "root"
     for relative_dir in [
         "benchmarks/real_reuse/tasks",
         "benchmarks/real_reuse/asset_locks",
         "generated_skills/real_reuse/snapatac2",
         "baselines/real_reuse",
+        "papers/extracted",
     ]:
         (root / relative_dir).mkdir(parents=True)
     shutil.copy2(
-        ROOT / "benchmarks" / "real_reuse" / "tasks" / "SNAP-T2.json",
-        root / "benchmarks" / "real_reuse" / "tasks" / "SNAP-T2.json",
+        ROOT / "benchmarks" / "real_reuse" / "tasks" / f"{task_id}.json",
+        root / "benchmarks" / "real_reuse" / "tasks" / f"{task_id}.json",
     )
     shutil.copy2(
-        ROOT / "benchmarks" / "real_reuse" / "asset_locks" / "SNAP-T2.json",
-        root / "benchmarks" / "real_reuse" / "asset_locks" / "SNAP-T2.json",
+        ROOT / "benchmarks" / "real_reuse" / "asset_locks" / f"{task_id}.json",
+        root / "benchmarks" / "real_reuse" / "asset_locks" / f"{task_id}.json",
     )
     (root / "generated_skills" / "real_reuse" / "snapatac2" / "SKILL.md").write_text(
         "# SnapATAC2 Skill\n\nUse matrix-free spectral embedding, clustering, ARI, NMI, runtime, and memory.\n",
+        encoding="utf-8",
+    )
+    (root / "papers" / "extracted" / "snapatac2.txt").write_text(
+        "Full SnapATAC2 paper excerpt with matrix-free spectral embedding and resource reporting.\n",
         encoding="utf-8",
     )
     labels = tmp_path / "reference_labels.json"
@@ -57,11 +71,11 @@ def prepare_temp_root(tmp_path: Path) -> Path:
             "--root",
             str(root),
             "--task",
-            "SNAP-T2",
+            task_id,
             "--reference-labels",
             str(labels),
             "--output-dir",
-            str(root / "benchmarks" / "real_reuse" / "assets" / "SNAP-T2"),
+            str(root / "benchmarks" / "real_reuse" / "assets" / task_id),
             "--condition-dir",
             str(root / "baselines" / "real_reuse"),
         ],
@@ -220,6 +234,52 @@ class RunRealReuseSnapATAC2Test(unittest.TestCase):
             self.assertNotIn("reference_labels_or_proxy.json", prompt)
             self.assertNotIn("hidden_from_model", prompt)
             self.assertNotIn("cell_a", prompt)
+
+    def test_full_excerpt_fixture_response_for_sanity_task(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            root = prepare_temp_root(tmp_path, "SNAP-T1")
+            fixture_dir = tmp_path / "fixture_responses"
+            fixture_dir.mkdir()
+            (fixture_dir / "SNAP-T1_full_excerpt.json").write_text(VALID_SNAP_T1_RESPONSE, encoding="utf-8")
+            raw_rows = tmp_path / "raw_rows.jsonl"
+            output_json = tmp_path / "snap_report.json"
+
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(RUN_SCRIPT),
+                    "--root",
+                    str(root),
+                    "--task",
+                    "SNAP-T1",
+                    "--condition",
+                    "full_excerpt",
+                    "--fixture-response-dir",
+                    str(fixture_dir),
+                    "--run-id",
+                    "unit_snap_full_excerpt",
+                    "--output-dir",
+                    str(tmp_path / "runs"),
+                    "--raw-rows-output",
+                    str(raw_rows),
+                    "--output-json",
+                    str(output_json),
+                    "--output-md",
+                    str(tmp_path / "snap_report.md"),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            report = json.loads(output_json.read_text(encoding="utf-8"))
+            self.assertEqual("complete", report["overall_status"])
+            rows = [json.loads(line) for line in raw_rows.read_text(encoding="utf-8").splitlines()]
+            self.assertEqual(["full_excerpt"], [row["condition"] for row in rows])
+            self.assertTrue(rows[0]["success"])
+            prompt = (tmp_path / "runs" / "SNAP-T1" / "full_excerpt" / "unit_snap_full_excerpt" / "prompt.md").read_text(encoding="utf-8")
+            self.assertIn("Full SnapATAC2 paper excerpt", prompt)
 
 
 if __name__ == "__main__":

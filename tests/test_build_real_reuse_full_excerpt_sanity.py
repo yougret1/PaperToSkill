@@ -40,8 +40,10 @@ class BuildRealReuseFullExcerptSanityTest(unittest.TestCase):
             rows_by_id = {row["Task ID"]: row for row in rows}
             self.assertEqual("0.000", rows_by_id["AIDE-T1"]["Summary Score"])
             self.assertEqual("0.000", rows_by_id["AIDE-T1"]["PaperToSkill Score"])
-            self.assertEqual("Pending", rows_by_id["AIDE-T1"]["Full Excerpt Score"])
-            self.assertEqual("Pending full-excerpt run", rows_by_id["AIDE-T1"]["Status"])
+            self.assertEqual("0.000", rows_by_id["AIDE-T1"]["Full Excerpt Score"])
+            self.assertEqual("0.000", rows_by_id["SWE-T1"]["Full Excerpt Score"])
+            self.assertEqual("0.250", rows_by_id["SNAP-T1"]["Full Excerpt Score"])
+            self.assertEqual("Scored (GPT-family)", rows_by_id["AIDE-T1"]["Status"])
             self.assertGreater(
                 int(rows_by_id["SWE-T1"]["Full Excerpt Tokens"]),
                 int(rows_by_id["SWE-T1"]["PaperToSkill Tokens"]),
@@ -49,7 +51,7 @@ class BuildRealReuseFullExcerptSanityTest(unittest.TestCase):
             self.assertIn("Token counts are local whitespace context proxies", output_md.read_text(encoding="utf-8"))
             payload = json.loads(output_json.read_text(encoding="utf-8"))
             self.assertEqual(3, len(payload["rows"]))
-            self.assertIn("Pending Full Excerpt score cells", payload["evidence_boundary"])
+            self.assertIn("Missing Full Excerpt score cells", payload["evidence_boundary"])
 
     def test_full_excerpt_score_is_filled_from_raw_rows(self):
         with tempfile.TemporaryDirectory() as tmp:

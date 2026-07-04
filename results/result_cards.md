@@ -908,31 +908,23 @@
 
 ## DeepSeek Follow-Up Readiness
 
-- Experiment: harden the model-ablation runner and usage docs so the user can
-  add DeepSeek by filling the existing follow-up slot.
-- Main result: the runner now skips `deepseek_followup_slot` only while its
-  alias remains `deepseek-to-be-filled`; once a concrete alias and environment
-  variables are configured, it follows the same availability, response-save, and
-  scoring path as Claude/GPT-family rows.
-- Phase 47 handoff result: `results/deepseek_followup_handoff/handoff.md`
-  reports `pending_user_configuration`, 5 ready checks, 2 pending checks, and
-  0 failed checks. It lists the two DeepSeek prompt rows, expected response
-  paths, and next commands.
-- Latest endpoint recheck: Claude Opus 4.8 and GPT-family rows now complete
-  the current prompt protocol; DeepSeek remains pending user configuration.
-- Compared baselines: previous runner behavior required the placeholder include
-  flag for the DeepSeek slot even after future configuration.
-- Practical significance: the user can add DeepSeek later by editing
-  `benchmarks/model_ablation_v0.json`, rebuilding prompts, setting local env
-  vars, running `--model-id deepseek_followup_slot`, and scoring saved
-  responses with the same evaluator.
-- Statistical evidence: none; this is execution readiness and regression-test
-  evidence, not model output evidence.
-- Failure modes: a configured DeepSeek run can still be blocked by credentials,
-  endpoint availability, or model catalog mismatch.
-- Limitations: no DeepSeek response rows are completed.
-- Claim impact: supports saying the DeepSeek follow-up path is ready and
-  tested, but not that model ablations are complete.
+- Experiment: configure and execute the DeepSeek follow-up slot under the same
+  saved-response model-ablation protocol as Claude/GPT-family rows.
+- Main result: `results/deepseek_followup_handoff/handoff.md` reports
+  `responses_present`, 7 ready checks, 0 pending checks, and 0 failed checks.
+  DeepSeek completed both current prompt rows with `deepseek-v4-flash`, and the
+  six-row saved-response evaluation reports 6 scored rows and 0 pending rows.
+- Compared baselines: Claude, GPT-family, and DeepSeek rows share the same
+  two-case usage-plan prompt protocol and deterministic response evaluator.
+- Practical significance: the DeepSeek slot is no longer a configuration
+  blocker for the saved-response model-ablation protocol.
+- Statistical evidence: deterministic saved-response contract scoring only.
+- Failure modes: future DeepSeek refreshes can still be blocked by credentials,
+  endpoint availability, model catalog changes, or provider instability.
+- Limitations: this does not prove live downstream task success, broad model
+  quality, provider economics, or real-reuse task effectiveness.
+- Claim impact: supports saying the current saved-response model-ablation
+  protocol has Claude/GPT-family/DeepSeek response rows present and scored.
 - Figure/table: `research/run_logs/2026-06-18_phase23_deepseek_followup_readiness.md`;
   `research/run_logs/2026-06-19_phase47_deepseek_followup_handoff.md`;
   `results/deepseek_followup_handoff/handoff.md`;
@@ -944,13 +936,14 @@
   before deciding whether the overall goal is complete.
 - Main result: `research/goal_completion_audit.md` classifies local memory,
   phase-level GitHub saving, deterministic/offline PaperToSkill development,
-  AAAI package preparation, usage examples, failure-branch provenance, and local
+  AAAI package preparation, usage examples, model-ablation saved responses,
+  bounded AI-Scientist-v2 integration, failure-branch provenance, and local
   reproducibility readiness as satisfied for the current artifact package.
-- Remaining blockers: DeepSeek response collection is pending user
-  configuration, human-fidelity annotation is unscored, and
-  provider-billing/success-per-dollar evidence is not collected. Local
-  tokenizer-aware input proxy and saved-response output-token proxy evidence are
-  now available, but real provider economics remain pending.
+- Remaining blockers: human-fidelity annotation is unscored and final AAAI
+  submission readiness remains governed by the recorded
+  `wait_for_external_evidence` policy. The current real-reuse first pass is
+  complete as an execution milestone but mixed as effectiveness evidence, so
+  core real-reuse stabilization remains the next experimental priority.
 - Practical significance: prevents the project from accidentally declaring
   success simply because the local deterministic package is extensive and green.
 - Statistical evidence: none; this is a requirements and evidence audit.
@@ -967,24 +960,25 @@
 
 - Experiment: make the active-goal completion audit machine-checkable.
 - Main result: `results/reproducibility/goal_completion_report.md` reports
-  `overall_status=not_complete_pending_external_evidence`, 67 ready checks, 8
+  `overall_status=not_complete_pending_external_evidence`, 77 ready checks, 3
   pending checks, and 0 failed checks.
 - Checks: durable memory, AI-Scientist-v2 dry-run evidence, PaperToSkill
   prototype and benchmark readiness, bounded AI-Scientist-v2 LLM-client smoke
   attempt/completion status, full AI-Scientist-v2 live-run handoff/completion
   status, AAAI/usage/table/claim gates, Claude/GPT-family ablation attempts
-  and completion status, DeepSeek follow-up readiness, all four live-transfer
-  saved-response sets, human-fidelity annotation, provider-billing handoff,
-  external-evidence execution packets, and provider billing completion
-  evidence.
+  and completion status, DeepSeek saved responses, all four live-transfer
+  saved-response sets, local token accounting, human-fidelity annotation,
+  real-reuse first-pass evidence, Full Excerpt sanity evidence, and
+  external-evidence execution packets.
 - Practical significance: the project now has a reusable gate that prevents
   accidentally marking the full user goal complete while external evidence is
   still missing.
 - Failure modes: the gate must be updated if the user changes the definition of
   completion, adds a new required model, or decides to submit an explicitly
   deterministic/offline paper without waiting for live/human/cost evidence.
-- Limitations: the gate does not fix provider account exhaustion, collect human
-  scores, or collect provider bills.
+- Limitations: the gate does not collect human scores, make provider billing
+  claims, stabilize the real-reuse first pass, or make the paper
+  submission-final.
 - Claim impact: strengthens completion discipline and keeps the current goal
   open with explicit pending requirements.
 - Figure/table: `scripts/check_goal_completion.py`;
@@ -998,10 +992,8 @@
 - Main result: `results/external_evidence_closure/closure.md` reports
   `overall_status=pending_external_evidence`, 3 ready checks, 0 pending checks,
   and 0 failed checks.
-- Queue items: AI-Scientist-v2 smoke completion, AI-Scientist-v2 full
-  live/BFTS run, DeepSeek response collection and model-ablation completion,
-  human-fidelity annotation, provider billing and success-per-dollar evidence,
-  and AAAI submission decision.
+- Queue items: human-fidelity annotation and AAAI final submission readiness
+  under the recorded wait policy.
 - Practical significance: pending external work is now centrally mapped and
   machine-checkable, reducing the chance that one blocker disappears from the
   runbook or completion audit.
@@ -1009,8 +1001,9 @@
   artifact.
 - Failure modes: the queue must be regenerated after any external evidence
   changes, and it cannot substitute for the missing external evidence itself.
-- Limitations: it does not call providers, run BFTS, collect annotations,
-  collect bills, or approve submission.
+- Limitations: it does not collect annotations or approve final submission.
+  Completed bounded AI-Scientist-v2 artifacts are inputs, not pending closure
+  items.
 - Claim impact: supports saying the remaining closure path is auditable, not
   that the remaining evidence is complete.
 - Figure/table: `scripts/check_external_evidence_closure.py`;
@@ -1025,20 +1018,19 @@
 - Main result: `results/external_evidence_packets/packets.md` reports
   `overall_status=ready`, 7 ready checks, 0 pending checks, and 0 failed
   checks.
-- Packet items: AI-Scientist-v2 smoke completion, AI-Scientist-v2 full
-  live/BFTS run, DeepSeek response collection and model-ablation completion,
-  human-fidelity annotation, provider billing and success-per-dollar evidence,
-  and AAAI submission decision.
+- Packet items: human-fidelity annotation and AAAI submission decision/final
+  readiness.
 - Practical significance: the remaining external work is now not only mapped
   but directly executable as a handoff checklist, reducing ambiguity after
   context compaction or agent handoff.
 - Statistical evidence: none; this is a deterministic planning and gate
   artifact.
-- Failure modes: packet commands can still be blocked by provider/model
-  availability, missing DeepSeek configuration, unavailable reviewers,
-  unavailable billing exports, or a pending submission decision.
-- Limitations: it does not call providers, run BFTS, collect annotations,
-  collect bills, or approve submission.
+- Failure modes: packet commands can still be blocked by unavailable reviewers,
+  ambiguous annotation criteria, insufficient evidence strength, or a pending
+  final submission decision.
+- Limitations: it does not collect annotations or approve final submission.
+  Completed bounded AI-Scientist-v2 artifacts are inputs, not pending packet
+  items.
 - Claim impact: supports saying the external-evidence handoff is runnable and
   machine-checked, not that the remaining evidence is complete.
 - Figure/table: `scripts/check_external_evidence_packets.py`;
@@ -1050,18 +1042,18 @@
 - Experiment: keep internal review, rebuttal, and submission checklist handoff
   files synchronized with the current evidence state.
 - Main result: `results/reproducibility/submission_review_report.md` reports
-  `overall_status=ready`, 15 ready checks, and 0 failed checks.
+  `overall_status=ready`, 16 ready checks, and 0 failed checks.
 - Checks: stale HTTP 503/live-transfer pending language is absent; review
   materials include the current 24 scored saved live-transfer response rows,
-  4 scored and 2 pending model-ablation rows, 0 scored and 24 pending
-  human-fidelity rows, 0 measured and 6 pending provider-billing rows, the
-  AI-Scientist-v2 timeout provider blocker, and current goal/package counts.
+  6 scored and 0 pending model-ablation rows, 0 scored and 24 pending
+  human-fidelity cells, local token-accounting evidence, bounded AI-Scientist-v2
+  smoke/full-run completion, and current goal/package counts.
 - Practical significance: prevents reviewer-facing handoff materials from
   lagging behind the evidence package while keeping final submission decisions
   explicit.
 - Failure modes: the checker must be rerun after any future goal/package count
-  change or after DeepSeek, human-fidelity, provider-billing, or
-  AI-Scientist-v2 evidence is updated.
+  change or after real-reuse, LLM-ablation, human-fidelity, or submission
+  evidence is updated.
 - Limitations: this is review-handoff freshness, not new empirical evidence or
   final AAAI submission readiness.
 - Claim impact: supports saying the submission-review handoff is current and
@@ -1075,19 +1067,19 @@
 - Experiment: make the final AAAI submission decision auditable without making
   the decision for the user.
 - Main result: `results/aaai_submission_decision/decision.md` reports
-  `overall_status=pending_human_decision`, 25 ready checks, 1 pending check,
-  and 0 failed checks.
-- Options: the preflight exposes `submit_now_deterministic_offline` and
-  `wait_for_external_evidence`; both are available for a human decision, and no
-  option is selected by the preflight.
-- Practical significance: the `aaai_submission_decision` closure item now has a
-  machine-checkable local report that distinguishes a bounded deterministic
-  system-paper submission from waiting for live, human, DeepSeek, and provider
-  billing evidence.
+  `overall_status=ready`, `decision_status=recorded`,
+  `selected_option=wait_for_external_evidence`, 27 ready checks, 0 pending
+  checks, and 0 failed checks.
+- Options: the preflight still documents `submit_now_deterministic_offline` and
+  `wait_for_external_evidence`, and the current recorded policy is to wait for
+  named external evidence before stronger claims.
+- Practical significance: the decision record prevents the project from
+  drifting into final-submission language while human fidelity and the chosen
+  evidence policy remain unresolved.
 - Statistical evidence: none; this is a decision and claim-boundary preflight.
-- Failure modes: a future decision record can still be invalid if it lacks a
-  selected option, decision owner, decision date, claim boundary, or evidence
-  policy.
+- Failure modes: a future changed decision record can still be invalid if it
+  lacks a selected option, decision owner, decision date, claim boundary, or
+  evidence policy.
 - Limitations: it does not submit the paper, complete external evidence, or
   make the active goal complete.
 - Claim impact: supports saying the final submission decision is locally
@@ -1213,21 +1205,24 @@
   `results/real_reuse/failure_analysis.json`;
   `paper/aaai/papertoskill_tables.tex`.
 
-## Full Excerpt Sanity Scaffold
+## Full Excerpt Sanity Check
 
-- Experiment: auxiliary three-task scaffold over AIDE-T1, SWE-T1, and SNAP-T1
-  for a future Full Excerpt sanity check.
-- Main result: no Full Excerpt scores have been run yet. The table records the
-  existing Summary/PaperToSkill scores and local whitespace token proxies.
+- Experiment: auxiliary three-task Full Excerpt sanity check over AIDE-T1,
+  SWE-T1, and SNAP-T1.
+- Main result: Full Excerpt scores are now filled for the pre-registered
+  subset: AIDE-T1 0.000, SWE-T1 0.000, and SNAP-T1 0.250. These do not reverse
+  the mixed/failure-heavy real-reuse interpretation.
 - Compared baselines: Summary and PaperToSkill cells come from the existing
-  real-reuse raw rows; Full Excerpt cells are pending.
+  real-reuse raw rows; Full Excerpt cells come from the same raw-row path.
 - Practical significance: the scaffold answers reviewer questions about
   context-length sanity without reintroducing Full Excerpt as a main baseline.
-- Statistical evidence: none; score cells are pending until matched runs exist.
+- Statistical evidence: three scored sanity rows only; no aggregate
+  effectiveness claim.
 - Failure modes: token counts are context proxies, not provider bills or output
-  token costs.
-- Claim impact: does not change the main real-reuse interpretation and does
-  not add task-success evidence.
+  token costs. AIDE-T1 times out under the 60-second scorer budget, SWE-T1
+  fails patch application, and SNAP-T1 misses required artifacts or metrics.
+- Claim impact: does not change the main real-reuse interpretation; it is
+  auxiliary sanity evidence over the pre-registered subset.
 - Figure/table: `results/real_reuse/full_excerpt_sanity.md`;
   `results/real_reuse/full_excerpt_sanity.json`;
   `paper/aaai/papertoskill_tables.tex`.

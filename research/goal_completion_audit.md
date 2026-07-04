@@ -51,7 +51,7 @@ Current machine reports:
 | --- | --- | --- | --- |
 | Durable local memory | `memory/long_term_memory.md`; `memory/short_term_memory.md` | Complete locally | Read and update both memory files after every resume/compaction. |
 | Use `ai-scientist-v2` to refine PaperToSkill | Seed idea files, bounded smoke report, full live-run handoff, Phase 76 run log, completion directory | Complete for bounded local evidence | Do not treat the synthetic run as broad live task success. |
-| Save phase-level progress to GitHub | Phase 103 commit `b490dd6 Support multi-reviewer human fidelity annotations` pushed to `origin/main`; the current Full Excerpt scaffold is pending its phase save | Complete through Phase 103 | Continue phase-level commits after meaningful future milestones. |
+| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history; Phase 104/105 Full Excerpt sanity artifacts are now scored and recorded, not merely pending scaffold work | Complete for the current local record state | Continue phase-level commits after meaningful future milestones. |
 | Official AAAI TeX package | `paper/aaai/`; `results/reproducibility/aaai_package_report.md` | Locally ready | Keep draft synchronized with new evidence. |
 | Usage examples | `examples/usage/`; `results/reproducibility/usage_example_report.md` | Complete locally | Re-run after runner or task changes. |
 | Model ablations | `results/model_ablation_prompts/v0/evaluation.md`: 6 scored, 0 pending | Complete for saved-response protocol | Do not claim broad model quality or live task success. |
@@ -63,9 +63,10 @@ Current machine reports:
 | AAAI submission decision | `research/aaai_submission_decision.md`; `results/aaai_submission_decision/decision.md` | Decision recorded as wait | Complete named evidence before stronger final-submission claims. |
 | External evidence closure/packets | Closure queue and packets have 2 current items | Complete as local handoff | Use packets for human annotation and final decision. |
 
-Note: the auxiliary Full Excerpt sanity scaffold is table-ready in
-`results/real_reuse/full_excerpt_sanity.md`, but the Full Excerpt score cells
-remain pending and are not task-success evidence.
+Note: the auxiliary Full Excerpt sanity check is scored for AIDE-T1, SWE-T1,
+and SNAP-T1 in `results/real_reuse/full_excerpt_sanity.md`. It remains
+auxiliary sanity evidence and is not a main baseline or aggregate
+task-success claim.
 
 ## Current Pending Evidence
 
@@ -80,9 +81,9 @@ remain pending and are not task-success evidence.
   GPT-family Summary-vs-PaperToSkill run with scored raw rows and paper table
   cells. SWE-T2 and REF rows succeed; AIDE, SWE-T1, and SNAP rows are
   failure-boundary evidence rather than aggregate effectiveness.
-- `full_excerpt_sanity_scaffold`: AIDE-T1, SWE-T1, and SNAP-T1 rows are
-  table-ready with existing Summary/PaperToSkill scores and token proxies, but
-  Full Excerpt scores remain pending.
+- `full_excerpt_sanity_check`: AIDE-T1, SWE-T1, and SNAP-T1 rows are scored
+  with Summary, PaperToSkill, and Full Excerpt values plus token proxies; the
+  result remains auxiliary sanity evidence.
 
 ## Completion Decision
 
@@ -98,15 +99,19 @@ an aggregate downstream-success claim.
 
 ## Recommended Next Closure Path
 
-1. Keep the first-pass real-reuse result framed as mixed downstream
-   stress-test evidence unless a revised, pre-registered follow-up supports a
-   stronger claim.
-2. If pursuing stronger effectiveness evidence, design a follow-up that fixes
-   budget/artifact/patch-application contracts before rerunning; keep it
-   separate from the completed first-pass table.
-3. Analyze the eight-row real-reuse failure modes before changing the paper's
-   main result claims beyond mixed first-pass evidence.
-4. Score all 24 paper-by-criterion cells in the human-fidelity annotation template and summarize them.
-5. Re-run `check_goal_completion.py`, `check_reproducibility_package.py`, and
-   `check_submission_review.py`.
-6. Revisit the AAAI decision after the named external evidence is complete.
+1. Stabilize the core real-reuse experiment first: fix or pre-register
+   budget/artifact/patch-application follow-ups before rerunning any main-task
+   rows.
+2. Keep provider latency, API timeouts, and retry counts separate from the core
+   task metrics; record provider availability only as execution metadata.
+3. Collect auxiliary data during core runs where cheap, then aggregate LLM
+   ablation, failure-boundary, and quality/grounding evidence after the core
+   results stabilize.
+4. Keep component ablation as an appendix candidate and user study as a last,
+   optional step for user-efficiency or usability claims only.
+5. Score all 24 paper-by-criterion cells in the human-fidelity annotation
+   template when reviewers are available; this supports semantic fidelity, not
+   the main task-effectiveness claim.
+6. Re-run `check_goal_completion.py`, `check_reproducibility_package.py`, and
+   `check_submission_review.py`, then revisit the AAAI decision after the
+   named external evidence is complete.

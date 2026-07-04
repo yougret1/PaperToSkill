@@ -29,7 +29,7 @@ complete with respect to pending external evidence.
 | Main deterministic results | `results/tables/main_results.md` | Operational coverage, not live success. |
 | Transfer readiness | `results/tables/transfer_ablation.md` | Offline readiness, not live outcome proof. |
 | Real-reuse first pass | `results/real_reuse/main_results_plan.md`: eight scored Summary-vs-PaperToSkill rows; `results/real_reuse/failure_analysis.md`: derived failure-boundary modes | Mixed single-run downstream stress-test evidence; not aggregate advantage over Summary. |
-| Full Excerpt sanity scaffold | `results/real_reuse/full_excerpt_sanity.md`: AIDE-T1, SWE-T1, and SNAP-T1 sanity rows | Scaffold only; Full Excerpt scores are pending and token counts are local whitespace context proxies. |
+| Full Excerpt sanity check | `results/real_reuse/full_excerpt_sanity.md`: AIDE-T1, SWE-T1, and SNAP-T1 sanity rows | Scored auxiliary sanity subset; not a main baseline. Token counts are local whitespace context proxies. |
 | Saved live-transfer responses | `results/live_transfer_prompts/evaluation.md`: 24 total, 24 scored, 0 pending, average normalized score 1.0 | Saved-response output-contract scoring is not human semantic fidelity or real live task success. |
 | Model ablation | `results/model_ablation_prompts/v0/evaluation.md`: 6 total, 6 scored, 0 pending | Saved-response scoring is complete for the current two-case Claude/GPT-family/DeepSeek prompt protocol; this is not live downstream task success or provider economics. |
 | DeepSeek handoff | `results/deepseek_followup_handoff/handoff.md`: `responses_present`, 7 ready, 0 pending, 0 failed | DeepSeek response files are saved for the current protocol; keep raw keys out of tracked files. |

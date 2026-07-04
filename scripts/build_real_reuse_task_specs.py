@@ -43,11 +43,11 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
 
 
-def condition_specs(task: dict[str, Any]) -> list[dict[str, Any]]:
+def condition_specs(task: dict[str, Any], sanity_task_ids: set[str]) -> list[dict[str, Any]]:
     task_id = str(task["id"])
     paper_id = str(task["source_paper_id"])
     skill_path = EXISTING_SKILL_PATHS.get(paper_id, f"generated_skills/real_reuse/{paper_id}/SKILL.md")
-    return [
+    conditions = [
         {
             "id": "summary",
             "context_kind": "method_summary_baseline",
@@ -61,12 +61,24 @@ def condition_specs(task: dict[str, Any]) -> list[dict[str, Any]]:
             "asset_status": "existing_or_to_be_verified_before_execution",
         },
     ]
+    task_sanity_conditions = set(task.get("sanity_conditions", []))
+    if task_id in sanity_task_ids or "full_excerpt" in task_sanity_conditions:
+        conditions.append(
+            {
+                "id": "full_excerpt",
+                "context_kind": "full_paper_excerpt_sanity",
+                "context_path": f"papers/extracted/{paper_id}.txt",
+                "asset_status": "existing_or_to_be_verified_before_execution",
+            }
+        )
+    return conditions
 
 
 def build_task_spec(master: dict[str, Any], task: dict[str, Any]) -> dict[str, Any]:
     controls = master.get("execution_controls", {})
     artifacts = task.get("planned_artifacts", {})
     task_id = str(task["id"])
+    sanity_task_ids = {str(item) for item in master.get("full_excerpt_sanity_tasks", [])}
     return {
         "schema_version": "0.1",
         "benchmark_id": "papertoskill_real_reuse_v0",
@@ -92,7 +104,7 @@ def build_task_spec(master: dict[str, Any], task: dict[str, Any]) -> dict[str, A
             "must_log_metric": True,
             "must_preserve_raw_output": True,
         },
-        "conditions": condition_specs(task),
+        "conditions": condition_specs(task, sanity_task_ids),
         "metric_contract": {
             **task["metric"],
             "score_field": "task_score",

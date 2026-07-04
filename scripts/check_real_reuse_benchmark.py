@@ -23,6 +23,7 @@ EXPECTED_MAIN_TASKS = {
 }
 EXPECTED_MAIN_PAPERS = {"aide", "swe_agent", "reflexion", "snapatac2"}
 EXPECTED_PRIMARY_CONDITIONS = {"summary", "papertoskill"}
+EXPECTED_FULL_EXCERPT_CONDITION = "full_excerpt"
 FORBIDDEN_MAIN_CONDITIONS = {"abstract", "full_excerpt"}
 EXPECTED_SANITY_TASKS = {"AIDE-T1", "SWE-T1", "SNAP-T1"}
 EXPECTED_MODEL_FAMILIES = {"Claude-family", "GPT-family", "DeepSeek-family"}
@@ -95,6 +96,13 @@ def task_by_id(spec: dict[str, Any]) -> dict[str, dict[str, Any]]:
 
 def paper_by_id(spec: dict[str, Any]) -> dict[str, dict[str, Any]]:
     return {str(paper.get("id")): paper for paper in spec.get("source_papers", [])}
+
+
+def expected_task_spec_conditions(task_id: str) -> set[str]:
+    conditions = set(EXPECTED_PRIMARY_CONDITIONS)
+    if task_id in EXPECTED_SANITY_TASKS:
+        conditions.add(EXPECTED_FULL_EXCERPT_CONDITION)
+    return conditions
 
 
 def build_report(root: Path, spec_path: Path) -> dict[str, Any]:
@@ -392,7 +400,10 @@ def task_spec_file_checks(root: Path, spec_path: Path, tasks: dict[str, dict[str
             continue
         task_spec = load_json(task_spec_path)
         present_task_specs.add(task_id)
-        conditions = {condition.get("id") for condition in task_spec.get("conditions", [])}
+        condition_items = task_spec.get("conditions", [])
+        conditions = {condition.get("id") for condition in condition_items}
+        condition_by_id = {str(condition.get("id")): condition for condition in condition_items}
+        expected_conditions = expected_task_spec_conditions(task_id)
         raw_fields = set(task_spec.get("raw_row_schema", []))
         checks.extend(
             [
@@ -419,8 +430,27 @@ def task_spec_file_checks(root: Path, spec_path: Path, tasks: dict[str, dict[str
                 ),
                 Check(
                     f"{prefix}_task_spec_conditions",
-                    "ready" if conditions == EXPECTED_PRIMARY_CONDITIONS else "fail",
+                    "ready" if conditions == expected_conditions else "fail",
                     "conditions=" + ",".join(sorted(str(condition) for condition in conditions)),
+                    relative(root, task_spec_path),
+                ),
+                Check(
+                    f"{prefix}_task_spec_full_excerpt_scope",
+                    "ready"
+                    if (
+                        task_id not in EXPECTED_SANITY_TASKS
+                        and EXPECTED_FULL_EXCERPT_CONDITION not in conditions
+                    )
+                    or (
+                        task_id in EXPECTED_SANITY_TASKS
+                        and condition_by_id.get(EXPECTED_FULL_EXCERPT_CONDITION, {}).get("context_kind")
+                        == "full_paper_excerpt_sanity"
+                        and condition_by_id.get(EXPECTED_FULL_EXCERPT_CONDITION, {}).get("context_path")
+                        == f"papers/extracted/{task.get('source_paper_id')}.txt"
+                    )
+                    else "fail",
+                    "full_excerpt="
+                    + str(condition_by_id.get(EXPECTED_FULL_EXCERPT_CONDITION, {}).get("context_path", "absent")),
                     relative(root, task_spec_path),
                 ),
                 Check(

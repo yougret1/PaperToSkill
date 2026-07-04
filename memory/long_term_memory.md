@@ -33,6 +33,21 @@ This file is intentionally compact. Detailed chronological history lives in
   main experiment table structure into the paper before scores are available,
   then update numeric cells promptly after runs complete. Auxiliary experiments
   are secondary and should not delay the main table/results path.
+- Current experiment-design policy: the main experiment is original-paper-style
+  real-reuse over locked paper-tasks using the source papers' core objective
+  metrics, not a real-user study. Do not keep a separate auxiliary experiment
+  for breadth/coverage; coverage breadth is represented by the selected
+  main paper-tasks unless the user explicitly reopens it. Put component
+  ablation only in an appendix candidate. First complete/stabilize the core
+  experiment, collect auxiliary data opportunistically during core runs, then
+  run remaining auxiliary analyses; real-user/user-study evidence comes last
+  and is only needed for user-efficiency or workflow-improvement claims.
+- Third-party LLM service latency, API timeouts, provider retries, and request
+  instability are not core effectiveness metrics. Give model calls more time
+  and retry budget when needed, and record provider availability separately.
+  Only count runtime/resource metrics as core evidence when the selected source
+  paper's own core experiment uses local runtime/resource measures; in that
+  case rerun locally and report comparable time/resource ratios.
 - For the manuscript, real-reuse claims must track evidence state: experiment
   protocols and pending tables may be written before execution, but `Abstract`,
   `Introduction`, `Results`, and `Conclusion` must not claim downstream
@@ -235,14 +250,20 @@ Current supported claims:
   `results/real_reuse/main_results_plan.csv`, `.md`, and `.json` are the table
   data source; `paper/aaai/papertoskill_tables.tex` contains
   `tab:real-reuse-main`. Current statuses are all `Scored (GPT-family)`.
-- Phase 104 added the auxiliary Full Excerpt sanity scaffold for AIDE-T1,
-  SWE-T1, and SNAP-T1:
+- Phase 104/105 added and executed the auxiliary Full Excerpt sanity check for
+  AIDE-T1, SWE-T1, and SNAP-T1:
   `scripts/build_real_reuse_full_excerpt_sanity.py` writes
   `results/real_reuse/full_excerpt_sanity.{csv,md,json}`, and
   `paper/aaai/papertoskill_tables.tex` contains
-  `tab:full-excerpt-sanity`. The Full Excerpt score cells are pending until a
-  matched run is executed; token columns are local whitespace context proxies,
-  not provider billing or output-token costs.
+  `tab:full-excerpt-sanity`. Phase 105 added bounded runner/spec support for
+  `full_excerpt` only on the pre-registered sanity tasks and scored the subset:
+  AIDE-T1 Full Excerpt 0.000 (`timeout after 60s`, scored from a saved live
+  GPT-family response after fixing AIDE scorer timeout handling), SWE-T1 Full
+  Excerpt 0.000 (`patch_apply_failed`, live GPT-family `gpt-5.5`), and
+  SNAP-T1 Full Excerpt 0.250 (`missing_required_artifacts_or_metrics`, live
+  GPT-family `gpt-5.5`). Token columns are local whitespace context proxies,
+  not provider billing or output-token costs. This remains auxiliary sanity
+  evidence, not a main baseline or aggregate effectiveness claim.
 - Phase 89 remote save recovered the earlier GitHub HTTPS blocker:
   `git push origin main` succeeded for the Phase 87/88 stack and the follow-up
   remote-save record was also pushed. Use `git status -sb` for the latest exact
@@ -409,9 +430,9 @@ Use these as entry points instead of searching the whole repo first:
   boundary modes without adding new task-success evidence.
 - `scripts/build_real_reuse_full_excerpt_sanity.py` and
   `results/real_reuse/full_excerpt_sanity.csv`, `.md`, and `.json`: auxiliary
-  Full Excerpt sanity scaffold over AIDE-T1, SWE-T1, and SNAP-T1. The current
-  table records existing Summary/PaperToSkill scores and local context-token
-  proxies; Full Excerpt score cells remain pending.
+  Full Excerpt sanity check over AIDE-T1, SWE-T1, and SNAP-T1. The current
+  table records Summary/PaperToSkill/Full Excerpt scores and local
+  context-token proxies; the Full Excerpt scores are 0.000, 0.000, and 0.250.
 - `generated_skills/real_reuse/swe_agent/SKILL.md` and
   `generated_skills/real_reuse/swe_agent/references/source_map.json`:
   SWE-agent source-anchored generated skill for the software-engineering
@@ -557,11 +578,11 @@ Use these as entry points instead of searching the whole repo first:
   downstream stress-test evidence and failure-boundary evidence, not aggregate
   effectiveness. AIDE Kaggle-derived CSV fixture files are kept local and
   ignored by git; committed manifests retain hashes and provenance boundaries.
-- Full Excerpt sanity scaffold:
+- Full Excerpt sanity check:
   `results/real_reuse/full_excerpt_sanity.md` contains AIDE-T1, SWE-T1, and
-  SNAP-T1 rows with existing Summary/PaperToSkill scores, local whitespace
-  token proxies, and pending Full Excerpt scores. It is reviewer-question and
-  cost/context sanity scaffolding only, not task-success evidence.
+  SNAP-T1 rows with Summary/PaperToSkill/Full Excerpt scores and local
+  whitespace token proxies. It is reviewer-question and cost/context sanity
+  evidence only, not a main baseline or aggregate task-success claim.
 
 ## Model/API Configuration
 

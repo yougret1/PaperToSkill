@@ -1,0 +1,302 @@
+import json
+import warnings
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+
+from sklearn.base import clone
+from sklearn.compose import ColumnTransformer
+from sklearn.ensemble import (
+    ExtraTreesClassifier,
+    GradientBoostingClassifier,
+    HistGradientBoostingClassifier,
+    RandomForestClassifier,
+    VotingClassifier,
+)
+from sklearn.impute import SimpleImputer
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+from sklearn.model_selection import StratifiedKFold
+from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
+
+
+warnings.filterwarnings("ignore")
+
+
+def make_one_hot_encoder():
+    try:
+        return OneHotEncoder(handle_unknown="ignore", sparse_output=False, min_frequency=2)
+    except TypeError:
+        return OneHotEncoder(handle_unknown="ignore", sparse=False)
+
+
+def parse_bool_series(s):
+    if s.dtype == bool:
+        return s.astype(int)
+    return (
+        s.astype(str)
+        .str.strip()
+        .str.lower()
+        .map({"true": 1, "false": 0, "1": 1, "0": 0, "yes": 1, "no": 0})
+        .astype(int)
+    )
+
+
+def add_features(df):
+    df = df.copy()
+
+    if "PassengerId" in df.columns:
+        pid_parts = df["PassengerId"].astype(str).str.split("_", expand=True)
+        df["GroupId"] = pid_parts[0]
+        df["GroupMember"] = pd.to_numeric(pid_parts[1], errors="coerce") if pid_parts.shape[1] > 1 else np.nan
+    else:
+        df["GroupId"] = "unknown"
+        df["GroupMember"] = np.nan
+
+    if "Cabin" in df.columns:
+        cabin_parts = df["Cabin"].astype(str).replace("nan", np.nan).str.split("/", expand=True)
+        df["CabinDeck"] = cabin_parts[0] if cabin_parts.shape[1] > 0 else np.nan
+        df["CabinNum"] = pd.to_numeric(cabin_parts[1], errors="coerce") if cabin_parts.shape[1] > 1 else np.nan
+        df["CabinSide"] = cabin_parts[2] if cabin_parts.shape[1] > 2 else np.nan
+    else:
+        df["CabinDeck"] = np.nan
+        df["CabinNum"] = np.nan
+        df["CabinSide"] = np.nan
+
+    spend_cols = ["RoomService", "FoodCourt", "ShoppingMall", "Spa", "VRDeck"]
+    present_spend_cols = [c for c in spend_cols if c in df.columns]
+    for col in spend_cols:
+        if col not in df.columns:
+            df[col] = np.nan
+
+    spend_filled = df[spend_cols].apply(pd.to_numeric, errors="coerce").fillna(0)
+    df["TotalSpend"] = spend_filled.sum(axis=1)
+    df["LuxurySpend"] = spend_filled[["RoomService", "Spa", "VRDeck"]].sum(axis=1)
+    df["LeisureSpend"] = spend_filled[["FoodCourt", "ShoppingMall"]].sum(axis=1)
+    df["NoSpend"] = (df["TotalSpend"] == 0).astype(int)
+    df["SpendPerService"] = df["TotalSpend"] / max(len(present_spend_cols), 1)
+    df["LogTotalSpend"] = np.log1p(df["TotalSpend"])
+
+    if "Age" in df.columns:
+        df["Age"] = pd.to_numeric(df["Age"], errors="coerce")
+        df["IsChild"] = (df["Age"] < 13).astype(float)
+        df["IsTeen"] = ((df["Age"] >= 13) & (df["Age"] < 20)).astype(float)
+        df["IsAdult"] = ((df["Age"] >= 20) & (df["Age"] < 60)).astype(float)
+        df["IsSenior"] = (df["Age"] >= 60).astype(float)
+    else:
+        df["Age"] = np.nan
+        df["IsChild"] = np.nan
+        df["IsTeen"] = np.nan
+        df["IsAdult"] = np.nan
+        df["IsSenior"] = np.nan
+
+    if "Name" in df.columns:
+        name_split = df["Name"].astype(str).replace("nan", np.nan).str.rsplit(" ", n=1, expand=True)
+        df["Surname"] = name_split[1] if name_split.shape[1] > 1 else np.nan
+        df["HasName"] = df["Name"].notna().astype(int)
+    else:
+        df["Surname"] = np.nan
+        df["HasName"] = 0
+
+    for col in ["CryoSleep", "VIP"]:
+        if col in df.columns:
+            mapped = df[col].astype(str).str.lower().map({"true": 1, "false": 0})
+            df[col + "_num"] = mapped
+        else:
+            df[col + "_num"] = np.nan
+
+    df["MissingCount"] = df.isna().sum(axis=1)
+    return df
+
+
+def add_group_features(train_df, valid_df):
+    combined = pd.concat(
+        [train_df.assign(_part="train"), valid_df.assign(_part="valid")],
+        axis=0,
+        ignore_index=True,
+    )
+
+    combined["GroupSize"] = combined.groupby("GroupId")["GroupId"].transform("size")
+    combined["SurnameSize"] = combined.groupby("Surname")["Surname"].transform("size")
+    combined.loc[combined["Surname"].isna(), "SurnameSize"] = np.nan
+
+    for key in ["GroupId", "Surname"]:
+        if key in combined.columns:
+            spend_mean = combined.groupby(key)["TotalSpend"].transform("mean")
+            combined[key + "_MeanSpend"] = spend_mean
+            age_mean = combined.groupby(key)["Age"].transform("mean")
+            combined[key + "_MeanAge"] = age_mean
+
+    train_out = combined[combined["_part"] == "train"].drop(columns=["_part"]).reset_index(drop=True)
+    valid_out = combined[combined["_part"] == "valid"].drop(columns=["_part"]).reset_index(drop=True)
+    return train_out, valid_out
+
+
+def build_pipeline(X):
+    drop_cols = {"Transported", "PassengerId", "Name", "Cabin"}
+    feature_cols = [c for c in X.columns if c not in drop_cols]
+
+    categorical_cols = [
+        c
+        for c in feature_cols
+        if X[c].dtype == "object" or str(X[c].dtype).startswith("category")
+    ]
+    numeric_cols = [c for c in feature_cols if c not in categorical_cols]
+
+    numeric_pipe = Pipeline(
+        steps=[
+            ("imputer", SimpleImputer(strategy="median")),
+            ("scaler", StandardScaler()),
+        ]
+    )
+    categorical_pipe = Pipeline(
+        steps=[
+            ("imputer", SimpleImputer(strategy="most_frequent")),
+            ("onehot", make_one_hot_encoder()),
+        ]
+    )
+
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ("num", numeric_pipe, numeric_cols),
+            ("cat", categorical_pipe, categorical_cols),
+        ],
+        remainder="drop",
+        verbose_feature_names_out=False,
+    )
+
+    voting = VotingClassifier(
+        estimators=[
+            (
+                "lr",
+                LogisticRegression(
+                    C=1.4,
+                    max_iter=2500,
+                    solver="lbfgs",
+                    class_weight="balanced",
+                    random_state=7,
+                ),
+            ),
+            (
+                "hgb",
+                HistGradientBoostingClassifier(
+                    learning_rate=0.045,
+                    max_iter=260,
+                    max_leaf_nodes=31,
+                    l2_regularization=0.08,
+                    random_state=11,
+                ),
+            ),
+            (
+                "gb",
+                GradientBoostingClassifier(
+                    n_estimators=230,
+                    learning_rate=0.045,
+                    max_depth=3,
+                    subsample=0.86,
+                    random_state=13,
+                ),
+            ),
+            (
+                "rf",
+                RandomForestClassifier(
+                    n_estimators=520,
+                    max_depth=12,
+                    min_samples_leaf=3,
+                    max_features="sqrt",
+                    n_jobs=-1,
+                    random_state=17,
+                ),
+            ),
+            (
+                "et",
+                ExtraTreesClassifier(
+                    n_estimators=620,
+                    max_depth=None,
+                    min_samples_leaf=2,
+                    max_features="sqrt",
+                    class_weight="balanced_subsample",
+                    n_jobs=-1,
+                    random_state=19,
+                ),
+            ),
+        ],
+        voting="soft",
+        weights=[1.1, 1.45, 1.15, 1.0, 1.25],
+        n_jobs=-1,
+    )
+
+    return Pipeline([("prep", preprocessor), ("model", voting)])
+
+
+def best_accuracy_threshold(y_true, probabilities):
+    thresholds = np.linspace(0.35, 0.65, 121)
+    scores = [accuracy_score(y_true, probabilities >= t) for t in thresholds]
+    return float(thresholds[int(np.argmax(scores))]), float(np.max(scores))
+
+
+def main():
+    train_path = Path("train.csv")
+    validation_path = Path("validation_features.csv")
+
+    train_raw = pd.read_csv(train_path)
+    validation_raw = pd.read_csv(validation_path)
+
+    if "Transported" not in train_raw.columns:
+        raise ValueError("train.csv must contain a Transported target column.")
+    if "PassengerId" not in validation_raw.columns:
+        raise ValueError("validation_features.csv must contain PassengerId.")
+
+    y = parse_bool_series(train_raw["Transported"])
+
+    train_fe = add_features(train_raw)
+    validation_fe = add_features(validation_raw)
+    train_fe, validation_fe = add_group_features(train_fe, validation_fe)
+
+    X = train_fe.drop(columns=["Transported"])
+    X_valid = validation_fe.copy()
+
+    base_pipeline = build_pipeline(train_fe)
+
+    oof = np.zeros(len(X), dtype=float)
+    cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+    fold_scores = []
+
+    for fold, (tr_idx, va_idx) in enumerate(cv.split(X, y), start=1):
+        model = clone(base_pipeline)
+        model.fit(X.iloc[tr_idx], y.iloc[tr_idx])
+        fold_prob = model.predict_proba(X.iloc[va_idx])[:, 1]
+        oof[va_idx] = fold_prob
+        fold_scores.append(accuracy_score(y.iloc[va_idx], fold_prob >= 0.5))
+
+    threshold, oof_score = best_accuracy_threshold(y, oof)
+
+    final_model = clone(base_pipeline)
+    final_model.fit(X, y)
+    validation_prob = final_model.predict_proba(X_valid)[:, 1]
+    validation_pred = validation_prob >= threshold
+
+    submission = pd.DataFrame(
+        {
+            "PassengerId": validation_raw["PassengerId"],
+            "Transported": validation_pred.astype(bool),
+        }
+    )
+    submission.to_csv("submission.csv", index=False)
+
+    diagnostics = {
+        "oof_accuracy_at_0_5": float(accuracy_score(y, oof >= 0.5)),
+        "oof_accuracy_best_threshold": oof_score,
+        "best_threshold": threshold,
+        "fold_accuracy_at_0_5": [float(x) for x in fold_scores],
+        "n_train": int(len(train_raw)),
+        "n_validation": int(len(validation_raw)),
+    }
+    with open("model_diagnostics.json", "w") as f:
+        json.dump(diagnostics, f, indent=2)
+
+
+if __name__ == "__main__":
+    main()

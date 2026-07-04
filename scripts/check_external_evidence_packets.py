@@ -388,8 +388,8 @@ def write_markdown(path: Path, report: dict[str, Any]) -> None:
         "",
         "Evidence boundary: these packets define how to finish pending external "
         "evidence. They do not collect human annotations, depend on provider bills, "
-        "AI-Scientist-v2 live-run artifacts, or final submission "
-        "approval by themselves.",
+        "or create final submission approval by themselves. Completed bounded "
+        "AI-Scientist-v2 artifacts are inputs, not pending packet items.",
         "",
         f"- Overall status: {report['overall_status']}",
         f"- Closure status: {report.get('closure_status')}",

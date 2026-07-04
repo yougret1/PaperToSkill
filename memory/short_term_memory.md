@@ -7,6 +7,70 @@ Current date: 2026-07-04.
 
 ## Latest Resume/Completion Note
 
+- 2026-07-04 record-sync request: user asked to update other related records,
+  including `C:\Users\19351\Desktop\tem\toHuman.md`, while excluding local
+  logs. Current sync target is to keep entry-point/status records aligned with
+  the latest experiment policy: core real-reuse stabilization first; auxiliary
+  data collected opportunistically and analyzed after core evidence stabilizes;
+  component ablation appendix-only; user study last/optional; provider latency
+  and retries not core effectiveness metrics; DeepSeek saved-response rows and
+  bounded AI-Scientist-v2 smoke/full-run are no longer current pending
+  blockers. Do not modify `research/run_logs/**` or `research/stage_log.md`
+  for this sync.
+- 2026-07-04 discussion sync on experiment priorities: user clarified that
+  the main experiment should stay focused on selected papers' core objective
+  effectiveness metrics, not real-user scenario metrics, and that third-party
+  LLM service latency/timeouts should not be core validation. Updated
+  `C:\Users\19351\Desktop\tem\nextStep.md` to remove the separate
+  auxiliary breadth/coverage experiment and its tables, move component
+  ablation to an appendix candidate, keep Full Excerpt/LLM ablation/human
+  fidelity/quality-grounding/failure-boundary as auxiliary evidence, and put
+  real-user/user-study last. Updated long-term memory with the stable policy:
+  complete and stabilize the core real-reuse experiment first, collect
+  auxiliary data opportunistically during core runs, run remaining auxiliary
+  analyses afterward, and only do user study for explicit user-efficiency or
+  workflow-improvement claims.
+- 2026-07-04 discussion sync after Phase 105 scoring: user asked again whether
+  the current experiment-design discussion requires modifying other parts of
+  the original paper. Re-read memory, `nextStep.md`, and spot-checked the AAAI
+  source/table text. Current answer: no broad formal-paper rewrite is needed
+  now; the draft already frames the eight-row real-reuse pass and the scored
+  Full Excerpt sanity subset as mixed/failure-boundary or auxiliary sanity
+  evidence, not aggregate downstream effectiveness. Updated
+  `C:\Users\19351\Desktop\tem\nextStep.md` with this boundary. Found
+  `C:\Users\19351\Desktop\tem\ok.txt` present but empty, inspected
+  `toHuman.md`, confirmed human-fidelity annotation is still not complete, and
+  deleted the empty `ok.txt`.
+- 2026-07-04 Phase 105 Full Excerpt sanity execution/support: re-read memory
+  after goal continuation, confirmed `ok.txt` absent, and implemented bounded
+  `full_excerpt` support for the pre-registered AIDE-T1, SWE-T1, and SNAP-T1
+  sanity subset. `scripts/build_real_reuse_task_specs.py` now materializes a
+  `full_paper_excerpt_sanity` condition only for those tasks; AIDE/SWE/SNAP
+  runners accept `--condition full_excerpt` while defaulting to Summary and
+  PaperToSkill. `scripts/check_real_reuse_benchmark.py` now verifies that
+  sanity tasks get the full-excerpt condition and non-sanity tasks do not.
+  Added fixture-response tests for full-excerpt runner paths and a regression
+  for AIDE scorer timeouts. Live/saved-response scoring appended Full Excerpt
+  raw rows: AIDE-T1 0.000 via saved live response scored under the 60-second
+  AIDE budget (`timeout after 60s`), SWE-T1 0.000 with live GPT-family
+  `gpt-5.5` (`patch_apply_failed` after a longer read-timeout retry), and
+  SNAP-T1 0.250 with live GPT-family `gpt-5.5`
+  (`missing_required_artifacts_or_metrics`). Rebuilt
+  `results/real_reuse/full_excerpt_sanity.{csv,md,json}` and updated the AAAI
+  table/text plus current research docs. Evidence boundary: this is an
+  auxiliary three-row sanity subset, not a main baseline and not aggregate
+  effectiveness evidence.
+- 2026-07-04 discussion sync: user asked whether the current experiment-design
+  discussion requires changing other parts of the original paper. Re-read
+  memory and `C:\Users\19351\Desktop\tem\nextStep.md`, checked the AAAI source
+  and tables, and found `C:\Users\19351\Desktop\tem\ok.txt` present but empty.
+  `toHuman.md` did not indicate completed annotation; it said the user is still
+  reviewing `annotation_template` and wants continued iteration on all paper
+  content rather than AAAI final-submission advice. Updated `nextStep.md` to
+  record that no broad formal-paper rewrite is needed now, Phase 104 Full
+  Excerpt sanity scaffold is already committed/pushed, and next priority
+  remains evidence completion rather than submission advice. Deleted the empty
+  `ok.txt` to avoid mistaking it for completed human-fidelity annotation.
 - 2026-07-04 Phase 104 Full Excerpt sanity scaffold: re-read long/short memory
   and workflow skills, confirmed `C:\Users\19351\Desktop\tem\ok.txt` absent,
   and closed the current E5.4 scaffold. Added

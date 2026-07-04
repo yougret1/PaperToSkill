@@ -68,6 +68,8 @@ PROFILE_BY_TASK_KIND = {
     },
 }
 
+PRIMARY_CONTEXT_CONDITIONS = {"summary", "papertoskill"}
+
 
 def load_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
@@ -121,6 +123,7 @@ def build_fixture_manifest(task_spec: dict[str, Any]) -> dict[str, Any]:
                 "asset_status": condition["asset_status"],
             }
             for condition in task_spec.get("conditions", [])
+            if condition.get("id") in PRIMARY_CONTEXT_CONDITIONS
         ],
         "execution_budget": {
             "max_attempts": task_spec["run_controls"]["max_attempts"],

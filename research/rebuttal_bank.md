@@ -257,19 +257,19 @@ Do not say:
 
 ## Q11: Why include a Full Excerpt table if it is not a main baseline?
 
-Short answer: It is a small sanity scaffold for reviewer questions about
-context length, not a completed effectiveness comparison.
+Short answer: It is a small sanity check for reviewer questions about context
+length, not a main effectiveness baseline.
 
 Evidence to cite:
 
 - `results/real_reuse/full_excerpt_sanity.md`: AIDE-T1, SWE-T1, and SNAP-T1
-  rows with existing Summary/PaperToSkill scores, pending Full Excerpt scores,
-  and local whitespace token proxies.
+  rows with Summary, PaperToSkill, and matched Full Excerpt scores plus local
+  whitespace token proxies. Full Excerpt scores are 0.000, 0.000, and 0.250.
 - `paper/aaai/papertoskill_tables.tex`: `tab:full-excerpt-sanity` is labeled
-  as auxiliary and pending.
+  as auxiliary.
 
 Do not say:
 
-- "Full Excerpt has been beaten by PaperToSkill."
-- "Pending Full Excerpt cells are negative evidence."
+- "Full Excerpt has been beaten by PaperToSkill in general."
+- "The three-row sanity subset is a main baseline."
 - "The token columns are provider billing or output-token cost."

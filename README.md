@@ -10,43 +10,28 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Phase 59: Claude Opus 4.8 and GPT-family ablation rows are saved and scored for
-the current two-case protocol, saved model responses have a local output-token
-proxy report, and all four live-transfer saved-response sets are collected and
-scored for the current prompt-packet protocol. A bounded AI-Scientist-v2
-LLM-client smoke runner is present. The latest recheck used a 128-token capped
-marker-contract smoke through the AI-Scientist-v2 OpenAI-compatible client
-path; the latest Claude-family aliases all timed out, and the immediately
-preceding GPT-family capped aliases also timed out. This remains a
-provider/model availability blocker, not a local package failure or
-model-quality result. Phase 59 added a direct OpenAI-compatible endpoint probe
-that bypasses `ai_scientist.llm`; the direct Claude-family probe returned HTTP
-503 `No available accounts`, and the direct GPT-family probe returned HTTP 502
-`Upstream access forbidden`, so the provider blocker is visible outside the
-AI-Scientist-v2 wrapper too. The smoke runner now prints an explicit
-`overall_status` summary, has a script-level `--timeout-seconds`, offers
-repeatable `--model-alias`, supports `--max-tokens` for tiny smoke probes, and
-provides `--require-complete` for checks that should fail unless a response
-satisfying the smoke contract is saved. The
-human-fidelity review handoff now includes an annotation guide, stricter blank
-template metadata, and summary validation, while completed human annotation
-remains pending. Provider-billing evidence collection now has a blank
-invoice/usage template and strict summary validation, while realized bills and
-success-per-dollar evidence remain pending. The submission-review handoff now
-includes updated adversarial review, rebuttal, and checklist files plus a
-checker that prevents stale review claims from drifting behind current evidence.
-The AAAI-27 paper package, usage examples, deterministic/offline experiments,
-model-ablation runner, DeepSeek follow-up path, local DeepSeek
-handoff/preflight report, local external-evidence closure queue, external
-evidence execution packets, AAAI submission-decision preflight, local
-`o200k_base` input/output token proxies, one-command extracted-text-to-skill
-pipeline, local
-`pdftotext -layout` PDF smoke input path, result tables, and
-machine-checkable package/goal gates are prepared. The active goal is not yet
-complete because completed AI-Scientist-v2 LLM-client/full live-run evidence,
-DeepSeek responses, human-fidelity annotation, provider-specific billing or
-success-per-dollar evidence, and a selected final submission decision remain
-pending.
+Current status as of 2026-07-04: the strongest next evidence target is the
+core real-reuse experiment, not a real-user study and not a submission-advice
+loop. The first GPT-family Summary-vs-PaperToSkill pass now covers all eight
+locked paper-task rows across AIDE, SWE-agent, Reflexion, and SnapATAC2, but
+the result is mixed and failure-heavy rather than proof of aggregate
+downstream effectiveness. The next priority is to stabilize or rerun the core
+real-reuse tasks under the selected source papers' objective metrics while
+keeping provider latency, API timeouts, and retry counts out of the core method
+score.
+
+The package also contains supporting evidence: deterministic/offline gates,
+source maps and source-span validation, usage examples, saved live-transfer
+response scoring, saved Claude/GPT-family/DeepSeek model-ablation response
+scoring, local token-accounting proxies, bounded Paper2Agent positioning, and a
+bounded AI-Scientist-v2 smoke/full live run. These are supporting or bounded
+evidence, not substitutes for real-reuse task outcomes.
+
+The active goal is still not complete because human-fidelity annotation is
+pending and final AAAI submission readiness remains gated by the recorded
+`wait_for_external_evidence` policy. Provider billing and success-per-dollar
+claims are outside the current claim set unless a future evidence policy
+explicitly reopens them.
 
 ## Memory
 

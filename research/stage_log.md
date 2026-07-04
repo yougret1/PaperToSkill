@@ -3645,3 +3645,36 @@ Evidence boundary:
   evidence.
 - No task-success evidence or aggregate downstream-effectiveness claim is
   added.
+
+## 2026-07-04 Phase 105
+
+Actions:
+
+- Added bounded `full_excerpt` condition support for the pre-registered
+  AIDE-T1, SWE-T1, and SNAP-T1 sanity subset.
+- Kept Summary/PaperToSkill as the default runner conditions; `full_excerpt`
+  runs only when explicitly requested.
+- Updated the real-reuse preflight so sanity task specs may include
+  `full_excerpt` and non-sanity tasks must not.
+- Fixed AIDE scorer timeout handling on Windows by terminating candidate
+  process trees, then added a timeout regression test.
+- Ran/recorded Full Excerpt sanity rows and rebuilt
+  `results/real_reuse/full_excerpt_sanity.{csv,md,json}`.
+- Updated the AAAI table/text and current research docs.
+- Added `research/run_logs/2026-07-04_phase105_full_excerpt_sanity_execution.md`.
+
+Results:
+
+- AIDE-T1 Full Excerpt: 0.000, `timeout after 60s`; scored from a saved live
+  GPT-family response after the scorer timeout fix.
+- SWE-T1 Full Excerpt: 0.000, `patch_apply_failed`; live GPT-family
+  `gpt-5.5` with a longer single-attempt read window after the first read
+  timeout.
+- SNAP-T1 Full Excerpt: 0.250, `missing_required_artifacts_or_metrics`; live
+  GPT-family `gpt-5.5`.
+
+Evidence boundary:
+
+- This phase completes the auxiliary three-row Full Excerpt sanity subset.
+- It does not make Full Excerpt a main baseline and does not establish
+  aggregate downstream effectiveness.

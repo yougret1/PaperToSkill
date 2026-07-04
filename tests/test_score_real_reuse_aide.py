@@ -109,6 +109,33 @@ with open('submission.csv', 'w', newline='', encoding='utf-8') as handle:
             self.assertTrue(result["success"])
             self.assertTrue((tmp_path / "submission.csv").exists())
 
+    def test_candidate_timeout_is_scored_not_hung(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            workspace = tmp_path / "workspace"
+            workspace.mkdir()
+            labels = tmp_path / "validation_labels.csv"
+            write_labels(labels)
+            (workspace / "validation_features.csv").write_text(
+                "PassengerId,Age\n0001_01,18\n0002_01,44\n0003_01,55\n",
+                encoding="utf-8",
+            )
+            candidate = tmp_path / "candidate.py"
+            candidate.write_text("import time\ntime.sleep(30)\n", encoding="utf-8")
+
+            result = score_candidate(
+                task_id="AIDE-T1",
+                candidate_script=candidate,
+                workspace=workspace,
+                labels_path=labels,
+                baseline_score=0.5,
+                timeout_seconds=0.2,
+            )
+
+            self.assertEqual(0.0, result["task_score"])
+            self.assertFalse(result["success"])
+            self.assertIn("timeout after 0.2s", result["failure_reason"])
+
     def test_cli_writes_metric_json(self):
         with tempfile.TemporaryDirectory() as tmp:
             tmp_path = Path(tmp)

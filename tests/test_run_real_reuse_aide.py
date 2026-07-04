@@ -58,8 +58,10 @@ def prepare_temp_root(tmp_path: Path) -> Path:
     (root / "benchmarks" / "real_reuse" / "tasks").mkdir(parents=True)
     (root / "generated_skills" / "aide").mkdir(parents=True)
     (root / "baselines" / "real_reuse").mkdir(parents=True)
+    (root / "papers" / "extracted").mkdir(parents=True)
     shutil.copy2(ROOT / "benchmarks" / "real_reuse" / "tasks" / "AIDE-T1.json", root / "benchmarks" / "real_reuse" / "tasks" / "AIDE-T1.json")
     (root / "generated_skills" / "aide" / "SKILL.md").write_text("# AIDE Skill\n\nUse measured validation feedback.\n", encoding="utf-8")
+    (root / "papers" / "extracted" / "aide.txt").write_text("Full AIDE paper excerpt with measured code search and validation feedback.\n", encoding="utf-8")
     train_csv = tmp_path / "train.csv"
     write_train_csv(train_csv)
     subprocess.run(
@@ -136,6 +138,95 @@ class RunRealReuseAIDETest(unittest.TestCase):
             self.assertEqual({"summary", "papertoskill"}, {row["condition"] for row in rows})
             self.assertTrue(all(row["success"] for row in rows))
             self.assertTrue((tmp_path / "runs" / "AIDE-T1" / "summary" / "unit_aide_fixture_run" / "metric.json").exists())
+
+    def test_full_excerpt_fixture_response_for_sanity_task(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            root = prepare_temp_root(tmp_path)
+            fixture_dir = tmp_path / "fixture_responses"
+            fixture_dir.mkdir()
+            (fixture_dir / "AIDE-T1_full_excerpt.md").write_text(CANDIDATE_RESPONSE, encoding="utf-8")
+            raw_rows = tmp_path / "raw_rows.jsonl"
+            output_json = tmp_path / "aide_report.json"
+
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(RUN_SCRIPT),
+                    "--root",
+                    str(root),
+                    "--task",
+                    "AIDE-T1",
+                    "--condition",
+                    "full_excerpt",
+                    "--fixture-response-dir",
+                    str(fixture_dir),
+                    "--run-id",
+                    "unit_aide_full_excerpt",
+                    "--output-dir",
+                    str(tmp_path / "runs"),
+                    "--raw-rows-output",
+                    str(raw_rows),
+                    "--output-json",
+                    str(output_json),
+                    "--output-md",
+                    str(tmp_path / "aide_report.md"),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            report = json.loads(output_json.read_text(encoding="utf-8"))
+            self.assertEqual("complete", report["overall_status"])
+            rows = [json.loads(line) for line in raw_rows.read_text(encoding="utf-8").splitlines()]
+            self.assertEqual(["full_excerpt"], [row["condition"] for row in rows])
+            self.assertTrue(rows[0]["success"])
+            prompt = (tmp_path / "runs" / "AIDE-T1" / "full_excerpt" / "unit_aide_full_excerpt" / "prompt.md").read_text(encoding="utf-8")
+            self.assertIn("Full AIDE paper excerpt", prompt)
+            self.assertIn("Real-Reuse Condition: full_excerpt", prompt)
+
+    def test_default_conditions_remain_primary_only(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            root = prepare_temp_root(tmp_path)
+            fixture_dir = tmp_path / "fixture_responses"
+            fixture_dir.mkdir()
+            for condition in ("summary", "papertoskill", "full_excerpt"):
+                (fixture_dir / f"AIDE-T1_{condition}.md").write_text(CANDIDATE_RESPONSE, encoding="utf-8")
+            raw_rows = tmp_path / "raw_rows.jsonl"
+            output_json = tmp_path / "aide_report.json"
+
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(RUN_SCRIPT),
+                    "--root",
+                    str(root),
+                    "--task",
+                    "AIDE-T1",
+                    "--fixture-response-dir",
+                    str(fixture_dir),
+                    "--run-id",
+                    "unit_aide_default_primary",
+                    "--output-dir",
+                    str(tmp_path / "runs"),
+                    "--raw-rows-output",
+                    str(raw_rows),
+                    "--output-json",
+                    str(output_json),
+                    "--output-md",
+                    str(tmp_path / "aide_report.md"),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            report = json.loads(output_json.read_text(encoding="utf-8"))
+            self.assertEqual(["summary", "papertoskill"], report["conditions"])
+            rows = [json.loads(line) for line in raw_rows.read_text(encoding="utf-8").splitlines()]
+            self.assertEqual({"summary", "papertoskill"}, {row["condition"] for row in rows})
 
     def test_missing_credentials_records_pending_without_raw_rows(self):
         with tempfile.TemporaryDirectory() as tmp:

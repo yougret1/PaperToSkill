@@ -91,6 +91,19 @@ score 0.000/0.000 due scorer timeouts, and SNAP rows are below the
 pre-registered success threshold. Do not write the AAAI paper as if this
 single-run pass establishes aggregate superiority over Summary.
 
+Current experiment priority: stabilize the core real-reuse experiment first
+under source-paper objective metrics. Collect auxiliary data during those core
+runs when cheap, but run remaining auxiliary analyses only after the core
+evidence is stable. Component ablation is appendix-only. User study is last and
+only needed for user-efficiency or workflow-improvement claims.
+
+Timing boundary: third-party LLM service latency, API timeouts, provider
+retries, and request instability are not core effectiveness metrics. Give model
+calls enough timeout/retry budget and record provider availability separately.
+Only treat runtime/resource as a core metric when the selected source paper's
+own task metric includes local runtime/resource; in that case rerun locally and
+report comparable time/resource ratios.
+
 Regenerate per-task specs from the master spec:
 
 ```powershell
@@ -127,9 +140,10 @@ Regenerate the derived real-reuse failure-boundary analysis table:
 python scripts\build_real_reuse_failure_analysis.py
 ```
 
-Regenerate the auxiliary Full Excerpt sanity scaffold. This fills only existing
-Summary/PaperToSkill scores and local context-token proxies unless matching
-`full_excerpt` raw rows have been appended:
+Regenerate the auxiliary Full Excerpt sanity check. The current pre-registered
+AIDE-T1, SWE-T1, and SNAP-T1 subset has matched `full_excerpt` raw rows, so the
+table fills Summary, PaperToSkill, Full Excerpt, and local context-token proxy
+columns:
 
 ```powershell
 python scripts\build_real_reuse_full_excerpt_sanity.py
@@ -895,18 +909,19 @@ Build the local preflight for the final AAAI decision:
 python scripts\check_aaai_submission_decision.py --strict
 ```
 
-Current Phase 55 status:
+Current status:
 `results/aaai_submission_decision/decision.md` reports
-`overall_status=pending_human_decision`, 26 ready checks, 1 pending check, and
-0 failed checks. It exposes two options for the research lead:
+`overall_status=ready`, `decision_status=recorded`,
+`selected_option=wait_for_external_evidence`, 27 ready checks, 0 pending
+checks, and 0 failed checks. The two available options remain:
 
 - submit now as a deterministic/offline system paper with explicit limitations;
 - wait for external evidence before making stronger live, human-fidelity,
   provider-economics, or AI-Scientist-v2 live-run claims.
 
-The preflight does not select an option. Record a human decision only by adding
-`research/aaai_submission_decision.md` with a selected option, decision owner,
-decision date, claim boundary, and evidence policy.
+The current recorded policy is to wait for named external evidence before
+stronger final-submission claims. Do not rewrite this decision unless the
+research lead explicitly changes the policy.
 
 Prefer the validated helper when the research lead has made the decision:
 
@@ -921,8 +936,7 @@ python scripts\check_aaai_submission_decision.py --strict
 ```
 
 Use `--selected-option wait_for_external_evidence` instead if the accepted
-policy is to wait for the named external evidence rows. Do not run either
-command until the human research lead has selected a policy.
+policy is to wait for the named external evidence rows.
 
 ## AI-Scientist-v2 Dry Run
 

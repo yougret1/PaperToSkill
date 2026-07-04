@@ -1,0 +1,18 @@
+{
+  "completed": false,
+  "method_steps": [
+    "Use the official miniature SnapATAC2 fixture declared in the manifest: benchmarks/real_reuse/assets/SNAP-T1/miniature_fragment.tsv.gz.",
+    "Load the fragment fixture through a SnapATAC2-style preprocessing path, preserving the source-paper assumption of fragment-derived single-cell chromatin accessibility input.",
+    "Create or load an AnnData-backed count representation suitable for SnapATAC2 dimensionality reduction.",
+    "Run SnapATAC2 spectral embedding with a 30-dimensional output using snapatac2.tl.spectral, matching the paper-described matrix-free spectral embedding workflow.",
+    "Record embedding artifact paths, shape checks, runtime seconds, and peak memory usage in candidate_output.json.",
+    "Do not compute or report hidden scorer labels, scorer thresholds, or unavailable post-run quality metrics."
+  ],
+  "embedding_artifacts": [],
+  "runtime_seconds": null,
+  "peak_memory_mb": null,
+  "notes": "No completed analysis is claimed because this response has no concrete generated embedding artifact path, runtime log, or memory measurement from an executed run.",
+  "commands": [
+    "python - <<'PY'\nimport json, time, tracemalloc\nfrom pathlib import Path\n\nimport snapatac2 as snap\n\nasset = Path('benchmarks/real_reuse/assets/SNAP-T1/miniature_fragment.tsv.gz')\nout_dir = Path('benchmarks/real_reuse/outputs/SNAP-T1')\nout_dir.mkdir(parents=True, exist_ok=True)\n\nstarted = time.perf_counter()\ntracemalloc.start()\n\n# Minimal SnapATAC2-style workflow placeholder; exact import/conversion depends on the local SnapATAC2 API revision.\n# Expected concrete run should materialize an AnnData object and run snap.tl.spectral(..., n_comps=30).\n\ncurrent, peak = tracemalloc.get_traced_memory()\ntracemalloc.stop()\n\ncandidate = {\n    'completed': False,\n    'method_steps': [\n        'Loaded miniature fragment fixture',\n        'Prepared SnapATAC2-style preprocessing workflow',\n        'Spectral embedding step should be run with snapatac2.tl.spectral and n_comps=30'\n    ],\n    'embedding_artifacts': [],\n    'runtime_seconds': round(time.perf_counter() - started, 6),\n    'peak_memory_mb': round(peak / 1024 / 1024, 6),\n    'notes': 'Template command only; mark completed true only after a real embedding artifact is written and validated.'\n}\nPath('candidate_output.json').write_text(json.dumps(candidate, indent=2))\nPY"
+  ]
+}

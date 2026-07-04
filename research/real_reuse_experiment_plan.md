@@ -1,9 +1,9 @@
 # Real Reuse Experiment Plan
 
-Date: 2026-07-03
+Date: 2026-07-04
 
-Status: planned. This file records the next-stage experiment design. It is not
-evidence that the experiments have been run.
+Status: first GPT-family pass scored; next work is to stabilize the core
+real-reuse evidence before running remaining auxiliary analyses.
 
 ## Research Question
 
@@ -20,7 +20,7 @@ study is intended to test downstream usefulness.
 
 ## Design Principles
 
-- Main evidence should use original task metrics where possible, such as
+- Main evidence should use source-paper core objective metrics where possible, such as
   validation score, test pass rate, exact match/F1, ARI/NMI, runtime, or memory.
 - Main rows are `paper-task` rows, not just paper rows.
 - Keep the paper's input/output shape as close as practical: same task kind,
@@ -35,8 +35,20 @@ study is intended to test downstream usefulness.
   reviewer questions about context size and full-text access.
 - Preserve raw rows for every task. Aggregates may be useful, but small samples
   should not hide failure modes.
-- No mid-run human intervention in the first pass. If human usability is tested
-  later, use blind review or a separately logged human-study protocol.
+- Do not keep a separate auxiliary breadth/coverage experiment. Breadth is
+  represented by the selected main paper-tasks unless this design is reopened.
+- No mid-run human intervention in the core task runs. Human usability is not a
+  main-experiment requirement; if tested later, use a separately logged
+  user-study protocol after the core experiment and necessary auxiliary
+  analyses are stable.
+- Third-party LLM service latency, provider timeouts, and retry counts are not
+  core effectiveness metrics. Give model calls enough timeout/retry budget and
+  record provider availability separately. Runtime/resource metrics count only
+  when they are part of the source paper's own local task metric and are rerun
+  in a comparable local setting.
+- Execution order: stabilize the core real-reuse experiment first; collect
+  auxiliary data opportunistically during core runs; aggregate remaining
+  auxiliary analyses afterward; run any real-user/user-study work last.
 
 ## Candidate Papers
 
@@ -96,18 +108,19 @@ cost.
 
 | Task ID | Source Paper | Summary Score | PaperToSkill Score | Full Excerpt Score | Summary Tokens | PaperToSkill Tokens | Full Excerpt Tokens | Metric |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| AIDE-T1 | AIDE | 0.000 | 0.000 | Pending | 121 | 878 | 7366 | Validation score |
-| SWE-T1 | SWE-agent | 0.000 | 0.000 | Pending | 89 | 1173 | 42048 | Tests passed / resolved |
-| SNAP-T1 | SnapATAC2 | 0.000 | 0.500 | Pending | 72 | 1069 | 10297 | Runtime/memory/quality |
+| AIDE-T1 | AIDE | 0.000 | 0.000 | 0.000 | 121 | 878 | 7366 | Validation score |
+| SWE-T1 | SWE-agent | 0.000 | 0.000 | 0.000 | 89 | 1173 | 42048 | Tests passed / resolved |
+| SNAP-T1 | SnapATAC2 | 0.000 | 0.500 | 0.250 | 72 | 1069 | 10297 | Runtime/memory/quality |
 
-Current status: `results/real_reuse/full_excerpt_sanity.md` is table-ready for
-this scaffold. The Full Excerpt score cells remain pending until matched runs
-are executed; token counts are local whitespace context proxies.
+Current status: `results/real_reuse/full_excerpt_sanity.md` is scored for the
+pre-registered sanity subset. Full Excerpt remains auxiliary; token counts are
+local whitespace context proxies.
 
-## Table 3: Component Ablation
+## Table 3: Component Ablation (Appendix Candidate)
 
-Purpose: optional/appendix unless the main experiment is strong enough. It tests
-which skill components matter, not whether the overall approach works.
+Purpose: appendix candidate only. It tests which skill components matter, not
+whether the overall approach works. Do not prioritize this until the core
+real-reuse results are stable.
 
 | Variant | Tasks | Avg Task Success | Workflow Score | Transfer Success | Failure Recovery | Unsupported Errors / Task |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -123,50 +136,10 @@ Scoring rules:
 - `Unsupported Errors / Task` counts unsupported method claims, invented
   evidence, ignored constraints, or steps that contradict the source paper.
 - Token cost should not live in this table unless the ablation specifically
-  argues about context cost. Prefer Table 6 for cost.
+  argues about context cost. Prefer the Full Excerpt sanity table and LLM
+  ablation raw rows for context/cost accounting.
 
-## Table 4: Domain Robustness Aggregate
-
-Purpose: summarize whether results are confined to one domain.
-
-| Domain | Papers | Tasks | Reuse Success | Avg PaperToSkill Score | Avg Reference Score | Main Failure Mode |
-| --- | --- | --- | --- | --- | --- | --- |
-| ML engineering | AIDE | 2 | TBD | TBD | TBD | TBD |
-| Software engineering | SWE-agent | 2 | TBD | TBD | TBD | TBD |
-| Reasoning / decision-making | Reflexion | 2 | TBD | TBD | TBD | TBD |
-| Single-cell data analysis | SnapATAC2 | 2 | TBD | TBD | TBD | TBD |
-
-## Table 5: Domain Robustness Raw Rows
-
-Purpose: preserve raw evidence so small-sample aggregates do not overstate the
-result.
-
-| Task ID | Source Paper | Domain | PaperToSkill Score | Reference Score | Summary Score | Success | Failure Mode |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| AIDE-T1 | AIDE | ML engineering | TBD | TBD | TBD | TBD | TBD |
-| AIDE-T2 | AIDE | ML engineering | TBD | TBD | TBD | TBD | TBD |
-| SWE-T1 | SWE-agent | Software engineering | TBD | TBD | TBD | TBD | TBD |
-| SWE-T2 | SWE-agent | Software engineering | TBD | TBD | TBD | TBD | TBD |
-| REF-T1 | Reflexion | Reasoning / QA | TBD | TBD | TBD | TBD | TBD |
-| REF-T2 | Reflexion | Decision / programming | TBD | TBD | TBD | TBD | TBD |
-| SNAP-T1 | SnapATAC2 | Single-cell data analysis | TBD | TBD | TBD | TBD | TBD |
-| SNAP-T2 | SnapATAC2 | Single-cell data analysis | TBD | TBD | TBD | TBD | TBD |
-
-## Table 6: Agent / User Cost
-
-Purpose: measure whether PaperToSkill reduces practical cost in a real-use
-workflow.
-
-| Condition | Users / Runs | Success Rate | Avg Task Score | Time to Completion | Interventions | Expert Fidelity Score | Token Cost |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Summary | 8 tasks x N runs | TBD | TBD | TBD | TBD | TBD | TBD |
-| PaperToSkill | 8 tasks x N runs | TBD | TBD | TBD | TBD | TBD | TBD |
-| Full Excerpt sanity | 3 tasks x N runs | TBD | TBD | TBD | TBD | TBD | TBD |
-
-First-pass rule: use agent-only execution with no mid-run human intervention.
-Human work, if used, should be blind review after the run.
-
-## Table 7: LLM Ablation Aggregate
+## Table 4: LLM Ablation Aggregate
 
 Purpose: test whether the PaperToSkill benefit depends on a single model
 family. It is not a broad model ranking.
@@ -177,7 +150,7 @@ family. It is not a broad model ranking.
 | GPT-family | TBD | 8 | TBD | TBD | TBD | TBD | TBD | TBD |
 | DeepSeek-family | TBD | 8 | TBD | TBD | TBD | TBD | TBD | TBD |
 
-## Table 8: LLM Ablation Raw Rows
+## Table 5: LLM Ablation Raw Rows
 
 Purpose: raw `task x model x condition` table for audit and appendix.
 
@@ -191,7 +164,7 @@ Purpose: raw `task x model x condition` table for audit and appendix.
 | AIDE-T1 | AIDE | DeepSeek-family | TBD | PaperToSkill | TBD | TBD | TBD | TBD | TBD |
 | ... | Repeat for all eight tasks | ... | ... | ... | ... | ... | ... | ... | ... |
 
-## Table 9: Quality / Grounding Gate
+## Table 6: Quality / Grounding Gate
 
 Purpose: keep existing deterministic/offline evidence in the paper, but in a
 supporting role.
@@ -204,6 +177,17 @@ supporting role.
 | SnapATAC2 | TBD | TBD | TBD | TBD | TBD |
 | Toolformer sanity | Current package value | Current package value | Current package value | Pending unless annotated | Current package gate |
 | AI Scientist-v2 sanity | Current package value | Current package value | Current package value | Pending unless annotated | Current package gate |
+
+## Table 7: User Study (Last / Optional)
+
+Purpose: optional final-stage evidence only. It is needed only for claims about
+user efficiency, user workflow improvement, usability, or reduced human
+intervention. It is not part of the core real-reuse effectiveness table.
+
+| Condition | Users / Runs | Success Rate | Avg Task Score | Time to Completion | Interventions | Expert Fidelity Score | Token Cost |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Summary | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
+| PaperToSkill | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
 
 ## Execution Dependencies
 

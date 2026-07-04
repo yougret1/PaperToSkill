@@ -1,6 +1,6 @@
 # External Evidence Closure Queue
 
-Evidence boundary: this is a local closure queue. It does not collect human annotations, AI-Scientist-v2 live-run artifacts, or final submission approval.
+Evidence boundary: this is a local closure queue. It does not collect human annotations or final submission approval. Completed bounded AI-Scientist-v2 artifacts are inputs, not pending closure items.
 
 - Overall status: pending_external_evidence
 - Queue item statuses: {'pending_reviewers': 1, 'pending_decision': 1}

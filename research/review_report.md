@@ -80,28 +80,27 @@ used as boundary evidence rather than aggregate downstream-effectiveness proof.
 | AI-Scientist-v2 LLM-client smoke | Complete for bounded marker contract | `results/ai_scientist_v2_smoke/run_report.md`: `complete`; marker response saved. |
 | AI-Scientist-v2 full live run | Complete for bounded synthetic integration evidence | `results/ai_scientist_v2_live_run_handoff/handoff.md`: `complete`; one completion directory. |
 | Real-reuse first pass | Complete as mixed first-pass stress-test evidence | `results/real_reuse/main_results_plan.md`: eight scored rows; `results/real_reuse/failure_analysis.md`: boundary modes from the same raw rows. |
-| Full Excerpt sanity scaffold | Table scaffold ready, score cells pending | `results/real_reuse/full_excerpt_sanity.md`: three pre-registered rows with existing Summary/PaperToSkill scores and local whitespace token proxies. |
+| Full Excerpt sanity check | Complete for the three pre-registered sanity rows | `results/real_reuse/full_excerpt_sanity.md`: AIDE-T1 0.000, SWE-T1 0.000, SNAP-T1 0.250, with local whitespace token proxies. |
 | Human fidelity | Handoff ready, annotation pending | `results/human_fidelity_packets/annotation_summary.md`: 0 scored, 24 pending |
 | Local token accounting | Complete as current cost evidence | `results/token_accounting/token_accounting_summary.md`: complete local input/output token accounting |
 
 ## Recommended Next Experiments
 
-1. Score all 24 paper-by-criterion cells in the human-fidelity annotation
-   template with independent reviewer scores, allowing distinct-reviewer
-   duplicate rows when multiple reviewers score the same cell.
-2. Repeat or expand the real-reuse runs if the paper needs a stronger
-   downstream-effectiveness claim; otherwise keep the current real-reuse result
-   as failure-boundary evidence.
-3. Extend the bounded Paper2Agent comparison into a real executable MCP
-   baseline only if the codebase/environment resources are available. Keep the
-   current artifact/workflow table as source-backed positioning evidence.
-4. Use the Phase 76 AI-Scientist-v2 run as bounded integration evidence only;
-   keep the failed HF/semantic-data branch as a negative result, not a main
-   benchmark result.
-5. Keep provider billing, invoices, and success-per-dollar outside the current
-   claim set unless a separate future evidence policy explicitly reopens them.
-6. Follow the recorded AAAI decision: wait for the named human-fidelity and
-   final-submission evidence before stronger claims.
+1. Stabilize the core real-reuse experiment under source-paper objective
+   metrics before strengthening downstream-effectiveness claims.
+2. During core reruns, collect auxiliary raw data where cheap: failure reasons,
+   provider availability, token/context proxies, and LLM-ablation rows.
+3. After the core evidence stabilizes, aggregate LLM ablation and update
+   failure-boundary plus quality/grounding evidence. Keep component ablation as
+   an appendix candidate.
+4. Score all 24 paper-by-criterion cells in the human-fidelity annotation
+   template when reviewers are available; use it for semantic fidelity and
+   reviewability, not as the main task-effectiveness experiment.
+5. Extend the bounded Paper2Agent comparison into a real executable MCP
+   baseline only if the codebase/environment resources are available.
+6. Keep provider billing, invoices, success-per-dollar, and real-user/user-study
+   claims outside the current claim set unless a future evidence policy
+   explicitly reopens them.
 
 ## Decision
 

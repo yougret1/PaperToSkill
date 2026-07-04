@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Run locked SnapATAC2 real-reuse tasks under Summary/PaperToSkill contexts."""
+"""Run locked SnapATAC2 real-reuse tasks under primary and sanity contexts."""
 
 from __future__ import annotations
 
@@ -17,7 +17,8 @@ from score_real_reuse_snapatac2 import score_artifact
 
 SCHEMA_VERSION = "0.1"
 TASK_IDS = ("SNAP-T1", "SNAP-T2")
-CONDITIONS = ("summary", "papertoskill")
+PRIMARY_CONDITIONS = ("summary", "papertoskill")
+CONDITIONS = PRIMARY_CONDITIONS + ("full_excerpt",)
 
 
 def root_path() -> Path:
@@ -464,7 +465,7 @@ def main() -> int:
     if not args.task:
         args.task = list(TASK_IDS)
     if not args.condition:
-        args.condition = list(CONDITIONS)
+        args.condition = list(PRIMARY_CONDITIONS)
     run_id = args.run_id or time.strftime("run_%Y%m%d_%H%M%S")
 
     rows = [run_single(args, task_id, condition, run_id) for task_id in args.task for condition in args.condition]

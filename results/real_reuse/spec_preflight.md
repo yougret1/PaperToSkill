@@ -5,7 +5,7 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 - Overall status: ready_to_implement
 - Spec path: benchmarks/real_reuse/real_reuse_v0.json
 - Task count: 8
-- Ready checks: 462
+- Ready checks: 470
 - Failed checks: 0
 
 ## Checks
@@ -100,7 +100,8 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 | aide_t1_task_spec_file_present | ready | present | benchmarks/real_reuse/tasks/AIDE-T1.json |
 | aide_t1_task_spec_identity | ready | id=AIDE-T1; source_paper_id=aide | benchmarks/real_reuse/tasks/AIDE-T1.json |
 | aide_t1_task_spec_status | ready | status=spec_ready_assets_pending | benchmarks/real_reuse/tasks/AIDE-T1.json |
-| aide_t1_task_spec_conditions | ready | conditions=papertoskill,summary | benchmarks/real_reuse/tasks/AIDE-T1.json |
+| aide_t1_task_spec_conditions | ready | conditions=full_excerpt,papertoskill,summary | benchmarks/real_reuse/tasks/AIDE-T1.json |
+| aide_t1_task_spec_full_excerpt_scope | ready | full_excerpt=papers/extracted/aide.txt | benchmarks/real_reuse/tasks/AIDE-T1.json |
 | aide_t1_task_spec_metric_matches | ready | metric=validation_score | benchmarks/real_reuse/tasks/AIDE-T1.json |
 | aide_t1_task_spec_raw_row_schema | ready | fields=condition,domain,failure_reason,interventions,model_alias,model_family,output_path,run_id,source_paper_id,success,task_id,task_score,time_seconds,tokens,unsupported_errors,workflow_score | benchmarks/real_reuse/tasks/AIDE-T1.json |
 | aide_t1_task_spec_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/tasks/AIDE-T1.json |
@@ -108,6 +109,7 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 | aide_t2_task_spec_identity | ready | id=AIDE-T2; source_paper_id=aide | benchmarks/real_reuse/tasks/AIDE-T2.json |
 | aide_t2_task_spec_status | ready | status=spec_ready_assets_pending | benchmarks/real_reuse/tasks/AIDE-T2.json |
 | aide_t2_task_spec_conditions | ready | conditions=papertoskill,summary | benchmarks/real_reuse/tasks/AIDE-T2.json |
+| aide_t2_task_spec_full_excerpt_scope | ready | full_excerpt=absent | benchmarks/real_reuse/tasks/AIDE-T2.json |
 | aide_t2_task_spec_metric_matches | ready | metric=best_node_score | benchmarks/real_reuse/tasks/AIDE-T2.json |
 | aide_t2_task_spec_raw_row_schema | ready | fields=condition,domain,failure_reason,interventions,model_alias,model_family,output_path,run_id,source_paper_id,success,task_id,task_score,time_seconds,tokens,unsupported_errors,workflow_score | benchmarks/real_reuse/tasks/AIDE-T2.json |
 | aide_t2_task_spec_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/tasks/AIDE-T2.json |
@@ -115,6 +117,7 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 | ref_t1_task_spec_identity | ready | id=REF-T1; source_paper_id=reflexion | benchmarks/real_reuse/tasks/REF-T1.json |
 | ref_t1_task_spec_status | ready | status=spec_ready_assets_pending | benchmarks/real_reuse/tasks/REF-T1.json |
 | ref_t1_task_spec_conditions | ready | conditions=papertoskill,summary | benchmarks/real_reuse/tasks/REF-T1.json |
+| ref_t1_task_spec_full_excerpt_scope | ready | full_excerpt=absent | benchmarks/real_reuse/tasks/REF-T1.json |
 | ref_t1_task_spec_metric_matches | ready | metric=exact_match_or_f1 | benchmarks/real_reuse/tasks/REF-T1.json |
 | ref_t1_task_spec_raw_row_schema | ready | fields=condition,domain,failure_reason,interventions,model_alias,model_family,output_path,run_id,source_paper_id,success,task_id,task_score,time_seconds,tokens,unsupported_errors,workflow_score | benchmarks/real_reuse/tasks/REF-T1.json |
 | ref_t1_task_spec_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/tasks/REF-T1.json |
@@ -122,13 +125,15 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 | ref_t2_task_spec_identity | ready | id=REF-T2; source_paper_id=reflexion | benchmarks/real_reuse/tasks/REF-T2.json |
 | ref_t2_task_spec_status | ready | status=spec_ready_assets_pending | benchmarks/real_reuse/tasks/REF-T2.json |
 | ref_t2_task_spec_conditions | ready | conditions=papertoskill,summary | benchmarks/real_reuse/tasks/REF-T2.json |
+| ref_t2_task_spec_full_excerpt_scope | ready | full_excerpt=absent | benchmarks/real_reuse/tasks/REF-T2.json |
 | ref_t2_task_spec_metric_matches | ready | metric=second_attempt_success | benchmarks/real_reuse/tasks/REF-T2.json |
 | ref_t2_task_spec_raw_row_schema | ready | fields=condition,domain,failure_reason,interventions,model_alias,model_family,output_path,run_id,source_paper_id,success,task_id,task_score,time_seconds,tokens,unsupported_errors,workflow_score | benchmarks/real_reuse/tasks/REF-T2.json |
 | ref_t2_task_spec_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/tasks/REF-T2.json |
 | snap_t1_task_spec_file_present | ready | present | benchmarks/real_reuse/tasks/SNAP-T1.json |
 | snap_t1_task_spec_identity | ready | id=SNAP-T1; source_paper_id=snapatac2 | benchmarks/real_reuse/tasks/SNAP-T1.json |
 | snap_t1_task_spec_status | ready | status=spec_ready_assets_pending | benchmarks/real_reuse/tasks/SNAP-T1.json |
-| snap_t1_task_spec_conditions | ready | conditions=papertoskill,summary | benchmarks/real_reuse/tasks/SNAP-T1.json |
+| snap_t1_task_spec_conditions | ready | conditions=full_excerpt,papertoskill,summary | benchmarks/real_reuse/tasks/SNAP-T1.json |
+| snap_t1_task_spec_full_excerpt_scope | ready | full_excerpt=papers/extracted/snapatac2.txt | benchmarks/real_reuse/tasks/SNAP-T1.json |
 | snap_t1_task_spec_metric_matches | ready | metric=runtime_memory_quality | benchmarks/real_reuse/tasks/SNAP-T1.json |
 | snap_t1_task_spec_raw_row_schema | ready | fields=condition,domain,failure_reason,interventions,model_alias,model_family,output_path,run_id,source_paper_id,success,task_id,task_score,time_seconds,tokens,unsupported_errors,workflow_score | benchmarks/real_reuse/tasks/SNAP-T1.json |
 | snap_t1_task_spec_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/tasks/SNAP-T1.json |
@@ -136,13 +141,15 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 | snap_t2_task_spec_identity | ready | id=SNAP-T2; source_paper_id=snapatac2 | benchmarks/real_reuse/tasks/SNAP-T2.json |
 | snap_t2_task_spec_status | ready | status=spec_ready_assets_pending | benchmarks/real_reuse/tasks/SNAP-T2.json |
 | snap_t2_task_spec_conditions | ready | conditions=papertoskill,summary | benchmarks/real_reuse/tasks/SNAP-T2.json |
+| snap_t2_task_spec_full_excerpt_scope | ready | full_excerpt=absent | benchmarks/real_reuse/tasks/SNAP-T2.json |
 | snap_t2_task_spec_metric_matches | ready | metric=ari_nmi_runtime_memory | benchmarks/real_reuse/tasks/SNAP-T2.json |
 | snap_t2_task_spec_raw_row_schema | ready | fields=condition,domain,failure_reason,interventions,model_alias,model_family,output_path,run_id,source_paper_id,success,task_id,task_score,time_seconds,tokens,unsupported_errors,workflow_score | benchmarks/real_reuse/tasks/SNAP-T2.json |
 | snap_t2_task_spec_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/tasks/SNAP-T2.json |
 | swe_t1_task_spec_file_present | ready | present | benchmarks/real_reuse/tasks/SWE-T1.json |
 | swe_t1_task_spec_identity | ready | id=SWE-T1; source_paper_id=swe_agent | benchmarks/real_reuse/tasks/SWE-T1.json |
 | swe_t1_task_spec_status | ready | status=spec_ready_assets_pending | benchmarks/real_reuse/tasks/SWE-T1.json |
-| swe_t1_task_spec_conditions | ready | conditions=papertoskill,summary | benchmarks/real_reuse/tasks/SWE-T1.json |
+| swe_t1_task_spec_conditions | ready | conditions=full_excerpt,papertoskill,summary | benchmarks/real_reuse/tasks/SWE-T1.json |
+| swe_t1_task_spec_full_excerpt_scope | ready | full_excerpt=papers/extracted/swe_agent.txt | benchmarks/real_reuse/tasks/SWE-T1.json |
 | swe_t1_task_spec_metric_matches | ready | metric=resolved | benchmarks/real_reuse/tasks/SWE-T1.json |
 | swe_t1_task_spec_raw_row_schema | ready | fields=condition,domain,failure_reason,interventions,model_alias,model_family,output_path,run_id,source_paper_id,success,task_id,task_score,time_seconds,tokens,unsupported_errors,workflow_score | benchmarks/real_reuse/tasks/SWE-T1.json |
 | swe_t1_task_spec_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/tasks/SWE-T1.json |
@@ -150,6 +157,7 @@ Evidence boundary: this is a local preflight for the planned real-reuse benchmar
 | swe_t2_task_spec_identity | ready | id=SWE-T2; source_paper_id=swe_agent | benchmarks/real_reuse/tasks/SWE-T2.json |
 | swe_t2_task_spec_status | ready | status=spec_ready_assets_pending | benchmarks/real_reuse/tasks/SWE-T2.json |
 | swe_t2_task_spec_conditions | ready | conditions=papertoskill,summary | benchmarks/real_reuse/tasks/SWE-T2.json |
+| swe_t2_task_spec_full_excerpt_scope | ready | full_excerpt=absent | benchmarks/real_reuse/tasks/SWE-T2.json |
 | swe_t2_task_spec_metric_matches | ready | metric=tests_passed | benchmarks/real_reuse/tasks/SWE-T2.json |
 | swe_t2_task_spec_raw_row_schema | ready | fields=condition,domain,failure_reason,interventions,model_alias,model_family,output_path,run_id,source_paper_id,success,task_id,task_score,time_seconds,tokens,unsupported_errors,workflow_score | benchmarks/real_reuse/tasks/SWE-T2.json |
 | swe_t2_task_spec_no_mid_run_human | ready | first_pass_human_intervention=none_mid_run | benchmarks/real_reuse/tasks/SWE-T2.json |
