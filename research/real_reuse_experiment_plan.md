@@ -193,7 +193,7 @@ family. It is not a broad model ranking.
 | Model Family | Model Alias | Tasks | Summary Avg Score | PaperToSkill Avg Score | Reuse Success | Unsupported Errors / Task | Token Cost / Task | Availability |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | GPT-family | gpt-5.5 | AIDE-T2, SWE-T2, and REF-T2 collected | 0.605 over collected slices | 0.333 over collected slices | REF-T2 tie; AIDE-T2 unfavorable; SWE-T2 joint failure | Not automatically judged | Provider usage / local proxy | All collected rows returned provider output; AIDE summary required 2 attempts |
-| Claude-family | claude-opus-4-8 | REF-T2 attempted; AIDE-T2/SWE-T2 pending | Pending | Pending | Pending | Not automatically judged | Provider usage / local proxy | REF-T2 blocked by provider HTTP 502 after 5 attempts per condition |
+| Claude-family | claude-opus-4-8 | AIDE-T2, SWE-T2, and REF-T2 attempted; no scored rows | Pending | Pending | Pending | Not automatically judged | Provider usage / local proxy | Provider HTTP 502 after 5 attempts per condition for all six condition rows |
 | DeepSeek-family | deepseek-v4-flash | AIDE-T2, SWE-T2, and REF-T2 collected | 0.500 over collected slices | 0.500 over collected slices | REF-T2 tie; AIDE-T2 score tie below success threshold; SWE-T2 joint failure | Not automatically judged | Provider usage / local proxy | All collected rows HTTP 200 on attempt 1 |
 
 Current pre-registered pilot: `benchmarks/real_reuse/llm_ablation_v0.json` and
@@ -202,18 +202,20 @@ positive PaperToSkill-only slices plus REF-T2 as a ceiling/control slice. The
 plan uses GPT-family `gpt-5.5`, Claude-family `claude-opus-4-8`, and
 DeepSeek-family `deepseek-v4-flash`, with 300-second provider timeouts, five
 attempts, and five-second retry delays. Phase109 has collected all GPT-family
-and DeepSeek-family rows for REF-T2, AIDE-T2, and SWE-T2, and attempted the
-Claude-family REF-T2 control pair. GPT-family: REF-T2 is a ceiling/control pair
+and DeepSeek-family scored rows for REF-T2, AIDE-T2, and SWE-T2, and attempted
+all Claude-family REF-T2/AIDE-T2/SWE-T2 Summary/PaperToSkill condition rows.
+GPT-family: REF-T2 is a ceiling/control pair
 with Summary 1.000 and PaperToSkill 1.000; AIDE-T2 is unfavorable
 (0.814/0.000) because the PaperToSkill candidate timed out under the
 300-second local scorer; SWE-T2 is a joint-failure signal (0.000/0.000) because
 both candidate patches fail to apply. DeepSeek-family: REF-T2 is another
 ceiling/control tie (1.000/1.000), AIDE-T2 ties below the success threshold
 (0.500/0.500), and SWE-T2 is another joint-failure signal (0.000/0.000).
-Claude-family REF-T2 is blocked by provider HTTP 502 after five attempts per
-condition. The aggregate currently has 12 collected scored rows and 6 pending
-rows; this is auxiliary model/repetition evidence, not a main-table replacement
-and not aggregate PaperToSkill advantage.
+Claude-family REF-T2, AIDE-T2, and SWE-T2 are all blocked by provider HTTP 502
+after five attempts per condition, so they remain availability metadata and do
+not enter the scored aggregate. The aggregate currently has 12 collected scored
+rows and 6 pending rows; this is auxiliary model/repetition evidence, not a
+main-table replacement and not aggregate PaperToSkill advantage.
 
 ## Table 5: LLM Ablation Raw Rows
 
@@ -235,7 +237,10 @@ Purpose: raw `task x model x condition` table for audit and appendix.
 | REF-T2 | Reflexion | DeepSeek-family | deepseek-v4-flash | PaperToSkill | 1.000 | True | Not automatically judged | 1493 |  |
 | REF-T2 | Reflexion | Claude-family | claude-opus-4-8 | Summary | Provider 502 | Pending | Not automatically judged |  | HTTP 502 after 5 attempts |
 | REF-T2 | Reflexion | Claude-family | claude-opus-4-8 | PaperToSkill | Provider 502 | Pending | Not automatically judged |  | HTTP 502 after 5 attempts |
-| AIDE-T2 / SWE-T2 | Claude-family pending rows | claude-opus-4-8 | Both conditions | Pending | Pending | TBD | TBD | Provider retry after availability recovers |
+| AIDE-T2 | AIDE | Claude-family | claude-opus-4-8 | Summary | Provider 502 | Pending | Not automatically judged |  | HTTP 502 after 5 attempts |
+| AIDE-T2 | AIDE | Claude-family | claude-opus-4-8 | PaperToSkill | Provider 502 | Pending | Not automatically judged |  | HTTP 502 after 5 attempts |
+| SWE-T2 | SWE-agent | Claude-family | claude-opus-4-8 | Summary | Provider 502 | Pending | Not automatically judged |  | HTTP 502 after 5 attempts |
+| SWE-T2 | SWE-agent | Claude-family | claude-opus-4-8 | PaperToSkill | Provider 502 | Pending | Not automatically judged |  | HTTP 502 after 5 attempts |
 
 ## Table 6: Quality / Grounding Gate
 

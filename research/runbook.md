@@ -441,10 +441,11 @@ timed out under the 300-second local scorer, and SWE-T2 0.000/0.000 because
 both candidate patches fail to apply. DeepSeek-family rows are complete:
 REF-T2 1.000/1.000, AIDE-T2 0.500/0.500 below the success threshold, and
 SWE-T2 0.000/0.000 because both candidate patches fail to apply. Claude-family
-REF-T2 was attempted and blocked by provider HTTP 502 after five attempts per
-condition; remaining Claude-family rows are pending. These are auxiliary
-model/repetition rows, not main-row replacements and not aggregate PaperToSkill
-advantage.
+REF-T2, AIDE-T2, and SWE-T2 were all attempted for both Summary and
+PaperToSkill, but every Claude-family condition was blocked by provider HTTP
+502 after five attempts and remains pending as a scored row. These are
+auxiliary model/repetition rows, not main-row replacements and not aggregate
+PaperToSkill advantage.
 
 ## AI-Scientist-v2 Environment
 

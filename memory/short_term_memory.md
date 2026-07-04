@@ -7,11 +7,9 @@ Current date: 2026-07-04.
 
 ## Current Task
 
-- Latest user request: save the current phase, upload to GitHub if possible,
-  then continue the project. If GitHub/network/download blocks progress, write
-  the concrete command, error, and blocked artifact to
-  `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked local
-  work.
+- Latest user request: modify the related project records, including the
+  current `C:\Users\19351\Desktop\tem\toHuman.md`, while leaving local logs
+  unchanged.
 - Current execution priority remains the core real-reuse main experiment.
   SWE-T1 source-context reporting, SNAP artifact-execution diagnosis, and the
   phase108 SNAP executable-artifact follow-up are complete and remain
@@ -45,7 +43,7 @@ Current date: 2026-07-04.
 
 - Keep the main experiment as eight locked paper-task rows comparing Summary
   with PaperToSkill under source-paper-style objective metrics.
-- Do not add a separate domain-robustness experiment; current breadth is the
+- Do not add a separate breadth/coverage experiment; current breadth is the
   eight main paper-tasks.
 - Keep component ablation appendix-only and user study last/optional.
 - Treat Full Excerpt as an auxiliary sanity check, not a main baseline.
@@ -114,9 +112,11 @@ Current date: 2026-07-04.
   and SWE-T2 0.000/0.000 with both conditions failing `patch_apply_failed`.
   DeepSeek-family scores are REF-T2 1.000/1.000, AIDE-T2 0.500/0.500 below the
   success threshold, and SWE-T2 0.000/0.000 with both conditions failing
-  `patch_apply_failed`. Claude-family REF-T2 was attempted and returned HTTP
-  502 after 5 attempts per condition. `results/real_reuse/llm_ablation_summary.md`
-  reports 12 collected scored rows out of 18 expected rows. This is auxiliary
+  `patch_apply_failed`. Claude-family REF-T2, AIDE-T2, and SWE-T2 were all
+  attempted for both Summary and PaperToSkill, but all six condition rows
+  returned provider HTTP 502 after 5 attempts per condition. They remain
+  pending as scored rows. `results/real_reuse/llm_ablation_summary.md` reports
+  12 collected scored rows out of 18 expected rows. This is auxiliary
   model/repetition evidence, not a main-row replacement and not aggregate
   PaperToSkill advantage.
 - Human-fidelity annotation supports semantic fidelity and reviewability, not
@@ -134,8 +134,10 @@ Current date: 2026-07-04.
 - DeepSeek completed both current rows with `deepseek-v4-flash`; the DeepSeek
   handoff reports `responses_present`.
 - Latest Claude protocol refresh used Anthropic Messages but was blocked by
-  provider HTTP 502, so scored Claude rows come from previously saved response
-  files. Treat the 502 as provider availability, not model quality.
+  provider HTTP 502. In the real-reuse LLM ablation, all Claude-family
+  AIDE-T2/SWE-T2/REF-T2 Summary/PaperToSkill condition rows were attempted and
+  all remain unscored for the same provider-availability reason. Treat the 502
+  as provider availability, not model quality.
 - Local token accounting is complete for the current evidence set and replaces
   provider billing/success-per-dollar claims in the current paper scope.
 - AI-Scientist-v2 dry-run succeeded historically. The bounded
@@ -152,9 +154,10 @@ Current date: 2026-07-04.
    vars are available, or use the local API docs under
    `C:\Users\19351\Desktop\论文\SelfPaper\LLMAPIDocument` to set them in the
    shell only. Do not commit raw keys.
-   Current collected slices are all GPT-family and DeepSeek-family rows for
-   REF-T2, AIDE-T2, and SWE-T2. Claude-family rows remain pending; REF-T2 was
-   attempted and blocked by provider HTTP 502 after 5 attempts per condition.
+   Current collected scored slices are all GPT-family and DeepSeek-family rows
+   for REF-T2, AIDE-T2, and SWE-T2. Claude-family rows remain pending as scored
+   rows; REF-T2, AIDE-T2, and SWE-T2 were all attempted and blocked by provider
+   HTTP 502 after 5 attempts per condition.
 2. Keep Summary and PaperToSkill paired under the same task/scorer contract for
    any follow-up. Main SNAP rows remain unchanged unless explicitly promoted.
 3. During core reruns, collect auxiliary raw data where cheap: provider
@@ -164,8 +167,9 @@ Current date: 2026-07-04.
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-5. No GitHub retry is currently required. Retry `git push origin main` only
-   after future phase commits.
+5. The latest local status-sync commit may still be ahead of `origin/main`.
+   Retry `git push origin main` only when doing a phase save or remote-backup
+   sync, and record any concrete network error in `toHuman.md`.
 
 ## Boundaries
 

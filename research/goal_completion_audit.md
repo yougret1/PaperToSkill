@@ -102,10 +102,12 @@ task-success claim.
   LLM ablation has 12 collected scored rows out of 18 expected rows.
   GPT-family rows are complete: REF-T2 1.000/1.000, AIDE-T2 0.814/0.000, and
   SWE-T2 0.000/0.000. DeepSeek-family rows are complete: REF-T2 1.000/1.000,
-  AIDE-T2 0.500/0.500, and SWE-T2 0.000/0.000. Claude-family REF-T2 was
-  attempted and blocked by provider HTTP 502 after five attempts per condition;
-  remaining Claude-family rows are pending. This is auxiliary model/repetition
-  evidence, not a main-table replacement and not PaperToSkill advantage.
+  AIDE-T2 0.500/0.500, and SWE-T2 0.000/0.000. Claude-family REF-T2, AIDE-T2,
+  and SWE-T2 were all attempted for both Summary and PaperToSkill, but all six
+  condition rows were blocked by provider HTTP 502 after five attempts per
+  condition and remain pending as scored rows. This is auxiliary
+  model/repetition evidence, not a main-table replacement and not PaperToSkill
+  advantage.
 
 ## Completion Decision
 
@@ -124,16 +126,18 @@ an aggregate downstream-success claim.
 1. Stabilize the core real-reuse experiment first. Main-row selection,
    dedicated reporting for SWE-T1 phase107, SNAP artifact-execution diagnosis,
    and phase108 SNAP executable-artifact follow-up are complete. Phase109 has
-   started collecting pre-registered real-reuse LLM ablation raw rows on
-   stabilized slices; next focus is continuing those rows or deciding whether
-   to promote a pre-registered task-contract fix.
+   collected the pre-registered GPT-family and DeepSeek-family scored rows on
+   stabilized slices and attempted all Claude-family rows, which remain
+   provider-502 availability evidence; next focus is retrying Claude-family
+   rows when available or deciding whether to promote a pre-registered
+   task-contract fix.
 2. Keep provider latency, API timeouts, and retry counts separate from the core
    task metrics; record provider availability only as execution metadata and
    give model calls generous timeout/retry budgets.
 3. Collect auxiliary data during core runs where cheap, then aggregate LLM
    ablation, failure-boundary, and quality/grounding evidence after the core
    results stabilize.
-4. Do not reopen a separate domain-robustness experiment; the current breadth
+4. Do not reopen a separate breadth/coverage experiment; the current breadth
    evidence comes from the eight main paper-tasks.
 5. Keep component ablation as an appendix candidate and user study as a last,
    optional step for user-efficiency or usability claims only.

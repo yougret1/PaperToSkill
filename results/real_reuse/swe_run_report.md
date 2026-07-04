@@ -2,15 +2,15 @@
 
 Evidence boundary: this report covers only prepared SWE real-reuse tasks. Provider/model errors are availability evidence, not model-quality failures. Aggregate PaperToSkill claims require the broader real-reuse benchmark.
 
-- Run ID: phase109_llm_ablation_deepseek_v4_flash_swe_t2
-- Overall status: complete
-- Status counts: {'scored': 2}
-- Model family: DeepSeek-family
-- Model alias: deepseek-v4-flash
-- Wire API: openai_chat_completions
+- Run ID: phase109_llm_ablation_claude_opus_4_8_swe_t2
+- Overall status: blocked_by_provider_or_model_availability
+- Status counts: {'error': 2}
+- Model family: Claude-family
+- Model alias: claude-opus-4-8
+- Wire API: anthropic_messages
 - Raw rows: D:\a_work\gitee\PaperToSkill\results\real_reuse\raw_rows.jsonl
 
 | Task | Condition | Status | Score | Success | Failure | Output |
 | --- | --- | --- | --- | --- | --- | --- |
-| SWE-T2 | summary | scored | 0.0 | False | patch_apply_failed | results/real_reuse/runs/SWE-T2/summary/phase109_llm_ablation_deepseek_v4_flash_swe_t2/candidate.patch |
-| SWE-T2 | papertoskill | scored | 0.0 | False | patch_apply_failed | results/real_reuse/runs/SWE-T2/papertoskill/phase109_llm_ablation_deepseek_v4_flash_swe_t2/candidate.patch |
+| SWE-T2 | summary | error |  |  | {"raw_body": "error code: 502\n", "http_error": 502} |  |
+| SWE-T2 | papertoskill | error |  |  | {"raw_body": "error code: 502\n", "http_error": 502} |  |

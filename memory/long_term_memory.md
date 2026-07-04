@@ -91,11 +91,11 @@ Current supported claims:
   output-token proxy summaries are present, and the composite local token
   proxy is ready for reuse.
 - Claude Opus 4.8, GPT-family, and DeepSeek model-ablation prompt rows are
-  saved and scored for the current two-case protocol. GPT-family protocol
+  saved and scored for the older two-case protocol. GPT-family protocol
   refresh completed both rows with `gpt-5.5`; DeepSeek completed both rows with
   `deepseek-v4-flash`. The latest Claude protocol refresh used Anthropic
-  Messages but was blocked by provider HTTP 502, so scored Claude rows come
-  from previously saved response files.
+  Messages but was blocked by provider HTTP 502, so scored Claude rows in that
+  older protocol come from previously saved response files.
 - DeepSeek follow-up handoff now reports `responses_present`: the slot, prompt
   rows, response paths, env names, and saved response files are checked for the
   current two-row protocol.
@@ -314,14 +314,17 @@ Current supported claims:
   scorer. It validates the artifact/runtime/memory contract path, does not
   append to `raw_rows.jsonl`, does not replace main SNAP rows, and does not
   show PaperToSkill advantage.
-- Phase109 has started the real-reuse LLM ablation only on the pre-registered
-  stabilized slices. Current collected GPT-family pairs are REF-T2 1.000/1.000,
+- Phase109 has collected scored real-reuse LLM ablation rows only on the
+  pre-registered stabilized slices. Current collected GPT-family pairs are
+  REF-T2 1.000/1.000,
   AIDE-T2 0.814/0.000 with the PaperToSkill candidate timing out under the
   300-second local scorer, and SWE-T2 0.000/0.000 with both conditions failing
   `patch_apply_failed`. Current collected DeepSeek-family pairs are REF-T2
   1.000/1.000, AIDE-T2 0.500/0.500 below the success threshold, and SWE-T2
   0.000/0.000 with both conditions failing `patch_apply_failed`. Claude-family
-  REF-T2 was attempted and returned HTTP 502 after five attempts per condition.
+  REF-T2, AIDE-T2, and SWE-T2 were all attempted for both Summary and
+  PaperToSkill, but all six condition rows returned provider HTTP 502 after
+  five attempts per condition and remain pending as scored rows.
   `results/real_reuse/llm_ablation_summary.md` reports 12 collected scored rows
   and 6 pending rows out of 18 expected rows. This is auxiliary
   model/repetition evidence, not a main-row replacement and not PaperToSkill
@@ -672,9 +675,10 @@ Use these as entry points instead of searching the whole repo first:
   AIDE-T2/SWE-T2/REF-T2 pilot over GPT-family `gpt-5.5`, Claude-family
   `claude-opus-4-8`, and DeepSeek-family `deepseek-v4-flash` with 300-second
   timeouts and 5 attempts. Phase109 has collected all GPT-family and
-  DeepSeek-family rows for REF-T2, AIDE-T2, and SWE-T2. Claude-family REF-T2
-  was attempted but blocked by provider HTTP 502 after five attempts per
-  condition; remaining Claude-family rows are pending.
+  DeepSeek-family scored rows for REF-T2, AIDE-T2, and SWE-T2. Claude-family
+  REF-T2, AIDE-T2, and SWE-T2 were all attempted for both Summary and
+  PaperToSkill, but every Claude-family condition returned provider HTTP 502
+  after five attempts and remains pending as a scored row.
 - Real-reuse LLM ablation aggregation:
   `results/real_reuse/llm_ablation_summary.md`,
   `results/real_reuse/llm_ablation_summary.json`, and
