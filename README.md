@@ -10,7 +10,7 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Current status as of 2026-07-04: the strongest next evidence target is the
+Current status as of 2026-07-05: the strongest next evidence target is the
 core real-reuse experiment, not a real-user study and not a submission-advice
 loop. The first GPT-family Summary-vs-PaperToSkill pass now covers all eight
 locked paper-task rows across AIDE, SWE-agent, Reflexion, and SnapATAC2, but
@@ -20,18 +20,16 @@ real-reuse tasks under the selected source papers' objective metrics while
 keeping provider latency, API timeouts, and retry counts out of the core method
 score.
 
-Immediate stabilization focus: SWE-T1 source-context reporting and the SNAP
-artifact-execution diagnosis are complete. Phase 108 added a paired SNAP
-executable-artifact follow-up in
-`results/real_reuse/snapatac2_executable_artifact_followup.md`: a
-pre-registered controlled scaffold reaches the existing SNAP
-artifact/runtime/memory scorer contract for both Summary and PaperToSkill
-conditions. This is diagnostic evidence only; the main SNAP rows remain
-unchanged unless explicitly promoted. The real-reuse LLM ablation is an
-auxiliary stabilized-slice collection, not a main-table replacement: GPT-family
-and DeepSeek-family rows are collected for AIDE-T2, SWE-T2, and REF-T2, while
-Claude-family rows remain pending because all attempted conditions returned
-provider HTTP 502.
+Immediate stabilization focus: SWE-T1 source-context reporting, the SNAP
+artifact-execution diagnosis, the SNAP executable-artifact follow-up, the
+SWE-T1 task-contract decision, and the paired SWE-T1 issue-aligned follow-up
+are complete as diagnostic evidence. Phase107 and phase110 do not replace the
+locked first-pass SWE-T1 main row; phase108 does not replace the locked SNAP
+main rows. The real-reuse LLM ablation is an auxiliary stabilized-slice
+collection, not a main-table replacement: GPT-family and DeepSeek-family rows
+are collected for AIDE-T2, SWE-T2, and REF-T2, while Claude-family rows remain
+pending because all attempted conditions returned provider HTTP 502 after five
+attempts per condition.
 
 The package also contains supporting evidence: deterministic/offline gates,
 source maps and source-span validation, usage examples, saved live-transfer

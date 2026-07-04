@@ -39,8 +39,10 @@ remote checkpoint is:
 c7d55b7dc867935be65f5e104ed4da6e72e91939 refs/heads/main
 ```
 
-The later local commit `2a61d42 Record Claude ablation retry availability` is
-not remote-backed yet: two `git push origin main` attempts failed with
+The later local commits `2a61d42 Record Claude ablation retry availability`,
+`12fab77 Record Claude retry push blocker`, and
+`9888f17 Bound summary comparison claim` are not remote-backed yet: three
+`git push origin main` attempts for the current local HEAD failed with
 `Recv failure: Connection was reset`.
 
 Re-run remote verification before making future remote-backed checkpoint
