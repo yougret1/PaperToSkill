@@ -233,6 +233,7 @@
 | `scripts/prepare_real_reuse_snapatac2_fixture.py` | Prepares locked SNAP-T1/T2 fixture assets from declared SnapATAC2 dataset manifests and expected artifact schemas while keeping scoring labels/thresholds hidden from the model | Created |
 | `scripts/score_real_reuse_snapatac2.py` | Scores SNAP candidate analysis artifacts for runtime/memory/resource-contract completion and ARI/NMI-style labels/proxies when available | Created |
 | `scripts/run_real_reuse_snapatac2.py` | Runs locked SNAP-T1/T2 Summary-vs-PaperToSkill conditions, saves prompts/responses/metrics/raw rows when scorable, and separates provider/fixture availability from model quality | Created |
+| `scripts/build_real_reuse_snapatac2_artifact_followup.py` | Builds the SNAP artifact-execution diagnosis and pre-registered follow-up contract from selected main rows, candidate outputs, fixture readability, and local dependency state | Created |
 | `scripts/evaluate_skill.py` | Deterministic v0 evaluator for generated skills | Created |
 | `scripts/evaluate_context_baselines.py` | Deterministic evaluator for context baseline coverage | Created |
 | `scripts/audit_skill_source_map.py` | Deterministic source-map-aware unsupported-instruction audit | Created |
@@ -301,6 +302,7 @@
 | `tests/test_prepare_real_reuse_aide_fixture.py` | Unit tests for AIDE-T1/T2 fixture preparation and scorer-only validation-label separation | Created |
 | `tests/test_score_real_reuse_aide.py` | Unit tests for AIDE validation scoring and isolated candidate-script execution | Created |
 | `tests/test_run_real_reuse_aide.py` | Unit tests for AIDE fixture-response execution, missing-credential pending behavior, and hidden-label prompt separation | Created |
+| `tests/test_build_real_reuse_snapatac2_artifact_followup.py` | Unit test for SNAP artifact-execution follow-up diagnosis over invalid JSON and plan-only candidate outputs | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |
 | `generated_skills/ai_scientist_v2/references/source_map.json` | Source-map evidence for AI Scientist-v2 generated skill | Created |
 | `generated_skills/reflexion/SKILL.md` | Retained generated skill from Reflexion note | Created |
@@ -415,6 +417,8 @@
 | `results/real_reuse/swe_t2_gold_metric.json` | Gold-patch scorer validation for the locked SWE-T2 fixture and hidden test patch | Created |
 | `results/real_reuse/snapatac2_run_report.md` | Human-readable run report for the locked SNAP-T1/SNAP-T2 GPT-family real-reuse execution over prepared official miniature fixtures | Created |
 | `results/real_reuse/snapatac2_run_report.json` | Machine-readable run report for the locked SNAP-T1/SNAP-T2 GPT-family real-reuse execution over prepared official miniature fixtures | Created |
+| `results/real_reuse/snapatac2_artifact_followup.md` | Human-readable SNAP artifact-execution diagnosis and pre-registered follow-up contract; does not replace the main SNAP rows | Created |
+| `results/real_reuse/snapatac2_artifact_followup.json` | Machine-readable SNAP artifact-execution diagnosis, fixture probe, and follow-up contract | Created |
 | `results/real_reuse/aide_run_report.md` | Human-readable run report for the locked AIDE-T1/AIDE-T2 GPT-family real-reuse execution over official Kaggle-derived local validation fixtures | Created |
 | `results/real_reuse/aide_run_report.json` | Machine-readable run report for the locked AIDE-T1/AIDE-T2 GPT-family real-reuse execution | Created |
 | `results/real_reuse/aide_t1_baseline_metric.json` | Baseline-submission scorer validation for the locked AIDE-T1 fixture | Created |

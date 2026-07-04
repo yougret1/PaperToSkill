@@ -297,6 +297,17 @@ Current supported claims:
   (`Sync post-push memory state`) was pushed to `origin/main`, and the local
   `main` branch was aligned with `origin/main` at that commit on the latest
   record-sync check.
+- Local record-sync commit `a4d2831` (`Sync record state after planning
+  update`) exists, but the first push attempt failed with GitHub HTTPS
+  `OpenSSL SSL_read: SSL_ERROR_SYSCALL`; this is recorded in
+  `C:\Users\19351\Desktop\tem\toHuman.md` and should be retried later.
+- SNAP artifact-execution follow-up diagnosis is now materialized in
+  `results/real_reuse/snapatac2_artifact_followup.{md,json}` with builder
+  `scripts/build_real_reuse_snapatac2_artifact_followup.py`: all selected SNAP
+  main rows have an execution gap because the current runner collects plan/JSON
+  outputs rather than executed artifacts; miniature fixtures are readable;
+  `snapatac2` is not importable in the current Python environment. This is a
+  pre-registered follow-up contract, not a main-row replacement.
 - Phase 89 remote save recovered the earlier GitHub HTTPS blocker:
   `git push origin main` succeeded for the Phase 87/88 stack and the follow-up
   remote-save record was also pushed. Use `git status -sb` for the latest exact

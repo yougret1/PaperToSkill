@@ -1,0 +1,141 @@
+{
+  "schema_version": "0.1",
+  "followup_id": "snapatac2_artifact_execution_followup_v0",
+  "overall_status": "pre_registered_followup_needed",
+  "evidence_boundary": "SNAP artifact-execution diagnosis and follow-up contract. This does not replace the paper-facing main SNAP rows and does not add new task-success evidence.",
+  "raw_rows": "results/real_reuse/raw_rows.jsonl",
+  "row_selection": "results/real_reuse/main_run_selection.json",
+  "selected_row_count": 4,
+  "environment": {
+    "snapatac2_importable": false,
+    "local_repository": {
+      "path": "D:/a_work/gitee/SnapATAC2",
+      "exists": true,
+      "revision": "7be57442708694217e27c8654ecd38a0de194aa4",
+      "status_short": ""
+    },
+    "fixture_probes": [
+      {
+        "task_id": "SNAP-T1",
+        "status": "readable",
+        "path": "benchmarks/real_reuse/assets/SNAP-T1/miniature_fragment.tsv.gz",
+        "size_bytes": 315693,
+        "sha256": "c810f5e906de001def93b8fd58397f42a4f31f4a9e500d1245d469a68376c612",
+        "sample_line_count": 3,
+        "sample_field_counts": [
+          6,
+          6,
+          6
+        ]
+      },
+      {
+        "task_id": "SNAP-T2",
+        "status": "readable",
+        "path": "benchmarks/real_reuse/assets/SNAP-T2/miniature_fragment.tsv.gz",
+        "size_bytes": 309344,
+        "sha256": "95922648e50db7f47246f588ec38eafe9cbe4b42972d6e3a064916a2689d2251",
+        "sample_line_count": 3,
+        "sample_field_counts": [
+          5,
+          5,
+          5
+        ]
+      }
+    ]
+  },
+  "rows": [
+    {
+      "task_id": "SNAP-T1",
+      "condition": "summary",
+      "run_id": "phase95_snapatac2_gpt55_live",
+      "score": 0.0,
+      "success": false,
+      "failure_reason": "Extra data: line 1 column 149 (char 148)",
+      "candidate_probe": {
+        "status": "invalid_json",
+        "path": "results/real_reuse/runs/SNAP-T1/summary/phase95_snapatac2_gpt55_live/candidate_output.json",
+        "error": "Extra data: line 1 column 149 (char 148)",
+        "starts_with_command_probe": true
+      }
+    },
+    {
+      "task_id": "SNAP-T1",
+      "condition": "papertoskill",
+      "run_id": "phase95_snapatac2_gpt55_live",
+      "score": 0.5,
+      "success": false,
+      "failure_reason": "missing_required_artifacts_or_metrics",
+      "candidate_probe": {
+        "status": "parsed",
+        "path": "results/real_reuse/runs/SNAP-T1/papertoskill/phase95_snapatac2_gpt55_live/candidate_output.json",
+        "completed": false,
+        "artifact_key": "embedding_artifacts",
+        "artifact_present": true,
+        "artifact_count": 3,
+        "runtime_recorded": false,
+        "memory_recorded": false,
+        "commands_count": 2,
+        "execution_gap": true
+      }
+    },
+    {
+      "task_id": "SNAP-T2",
+      "condition": "summary",
+      "run_id": "phase95_snapatac2_gpt55_live",
+      "score": 0.2,
+      "success": false,
+      "failure_reason": "missing_required_artifacts_or_metrics",
+      "candidate_probe": {
+        "status": "parsed",
+        "path": "results/real_reuse/runs/SNAP-T2/summary/phase95_snapatac2_gpt55_live/candidate_output.json",
+        "completed": false,
+        "artifact_key": "clustering_artifacts",
+        "artifact_present": true,
+        "artifact_count": 5,
+        "runtime_recorded": false,
+        "memory_recorded": false,
+        "commands_count": 0,
+        "execution_gap": true
+      }
+    },
+    {
+      "task_id": "SNAP-T2",
+      "condition": "papertoskill",
+      "run_id": "phase95_snapatac2_gpt55_live",
+      "score": 0.4,
+      "success": false,
+      "failure_reason": "missing_required_artifacts_or_metrics",
+      "candidate_probe": {
+        "status": "parsed",
+        "path": "results/real_reuse/runs/SNAP-T2/papertoskill/phase95_snapatac2_gpt55_live/candidate_output.json",
+        "completed": false,
+        "artifact_key": "clustering_artifacts",
+        "artifact_present": true,
+        "artifact_count": 3,
+        "runtime_recorded": false,
+        "memory_recorded": false,
+        "commands_count": 0,
+        "execution_gap": true
+      }
+    }
+  ],
+  "diagnosis": [
+    "Current SNAP rows ask the model for a JSON artifact record but the runner does not execute candidate scripts or commands.",
+    "The scorer requires completed=true plus concrete artifacts and runtime/memory records, so plan-only outputs cannot reach the pre-registered success threshold.",
+    "The local miniature fixtures are readable, but the Python package `snapatac2` is not importable in the current environment."
+  ],
+  "followup_contract": {
+    "main_rows_unchanged": true,
+    "conditions": [
+      "summary",
+      "papertoskill"
+    ],
+    "paired_conditions_required": true,
+    "base_model": "gpt-5.5 unless explicitly running LLM ablation",
+    "provider_policy": "Use longer timeout/retry budgets; record provider availability separately from task metrics.",
+    "execution_requirement": "A follow-up runner must execute a controlled candidate script or a pre-registered scaffold that materializes artifacts and measures runtime/memory before setting completed=true.",
+    "scoring_requirement": "Use the same locked fixture, resource budget, hidden labels/proxy policy, and scorer for Summary and PaperToSkill.",
+    "human_intervention": "none_mid_run",
+    "blocked_if": "SnapATAC2 installation or required data download fails; record the command, error, and blocked artifact in toHuman.md and continue other non-blocked work."
+  }
+}

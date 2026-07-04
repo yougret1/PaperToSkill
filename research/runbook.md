@@ -310,6 +310,23 @@ tasks remain below the pre-registered success threshold. Treat them as
 artifact-completion and resource-budget boundary evidence unless a
 pre-registered rerun changes the raw rows.
 
+Build the SNAP artifact-execution follow-up diagnosis before changing the SNAP
+runner/scorer contract:
+
+```powershell
+python scripts\build_real_reuse_snapatac2_artifact_followup.py
+```
+
+Current diagnosis:
+`results/real_reuse/snapatac2_artifact_followup.md` reports
+`pre_registered_followup_needed`. The selected SNAP main rows are plan/JSON
+outputs without executed artifacts and runtime/memory records; the miniature
+fixtures are readable; `snapatac2` is not importable in the current Python
+environment. A future paired Summary/PaperToSkill follow-up must execute a
+controlled candidate script or pre-registered scaffold before setting
+`completed=true`, and it must preserve the same locked fixture, resource
+budget, hidden labels/proxy policy, scorer, and no-mid-run-human rule.
+
 Validate the real-reuse benchmark after task/spec/scorer edits or before
 editing paper claims:
 

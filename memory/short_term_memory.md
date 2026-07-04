@@ -7,13 +7,12 @@ Current date: 2026-07-04.
 
 ## Current Task
 
-- Latest user request / active goal: update related planning/handoff/memory
-  records, including the current `C:\Users\19351\Desktop\tem\toHuman.md`,
-  while excluding local logs. The scientific priority remains to continue the
-  core real-reuse main experiment after this records-only sync. Use generous
-  timeout/retry budgets for LLM service calls, keep provider instability
-  separate from method quality, and record network/download blockers in
-  `C:\Users\19351\Desktop\tem\toHuman.md` before continuing other work.
+- Latest user request / active goal: save work with git/GitHub where possible,
+  then continue the core real-reuse main experiment. The latest local phase
+  save commit `a4d2831` exists, but `git push origin main` failed with GitHub
+  HTTPS `OpenSSL SSL_read: SSL_ERROR_SYSCALL`; the blocker is recorded in
+  `C:\Users\19351\Desktop\tem\toHuman.md`. Continue non-blocked core
+  experiment work and retry remote backup later.
 - Local logs remain excluded unless explicitly doing a phase log:
   `research/run_logs/**` and `research/stage_log.md`.
 - `C:\Users\19351\Desktop\tem\ok.txt` was absent at the latest check.
@@ -130,20 +129,25 @@ Current date: 2026-07-04.
 
 ## Immediate Next Actions
 
-1. Phase save and remote backup are complete: `main` and `origin/main` are
-   aligned at `bdf0144`, so commits `8b50758`, `4040f56`, and `bdf0144` are
-   backed up remotely.
-2. Continue SNAP artifact-completion/budget inspection or the next
-   pre-registered failure-heavy real-reuse follow-up, keeping Summary and
-   PaperToSkill paired under the same task/scorer contract.
-3. During core reruns, collect auxiliary raw data where cheap: provider
+1. Retry `git push origin main` later. Local commit `a4d2831` is not backed up
+   remotely yet; preserve it and keep transport failures separate from
+   experiment correctness.
+2. SNAP artifact-completion/budget inspection has produced
+   `results/real_reuse/snapatac2_artifact_followup.{md,json}` via
+   `scripts/build_real_reuse_snapatac2_artifact_followup.py`. The diagnosis is
+   that current SNAP rows are plan/JSON outputs under a non-executing runner;
+   fixtures are readable; `snapatac2` is not importable. Next SNAP progress
+   should implement or preflight a paired executable-artifact follow-up.
+3. Keep Summary and PaperToSkill paired under the same task/scorer contract for
+   any follow-up. Main SNAP rows remain unchanged unless explicitly promoted.
+4. During core reruns, collect auxiliary raw data where cheap: provider
    availability, failure reasons, context/token proxies, and raw rows needed
    for future real-reuse LLM ablation.
-4. Run broader verification gates before the next phase save:
+5. Run broader verification gates before the next phase save:
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-5. Save and push the next meaningful phase after new core-experiment progress.
+6. Save and push the next meaningful phase after new core-experiment progress.
 
 ## Boundaries
 
