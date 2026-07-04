@@ -9,9 +9,10 @@ Current date: 2026-07-04.
 
 - Latest user request: save the record-sync work, upload it to GitHub, then
   continue the project. Record-sync commit `d248878` (`Sync core real-reuse
-  stabilization records`) was pushed to `origin/main`. Current local work
-  continues core real-reuse stabilization without touching local logs
-  (`research/run_logs/**` and `research/stage_log.md`).
+  stabilization records`) and core-stabilization guard commit `f44da1b`
+  (`Guard real-reuse planned outputs`) were pushed to `origin/main`. Current
+  local work continues without touching local logs (`research/run_logs/**` and
+  `research/stage_log.md`).
 - Current execution priority remains the core real-reuse main experiment.
   SWE-T1 source-context reporting, SNAP artifact-execution diagnosis, and the
   phase108 SNAP executable-artifact follow-up are complete and remain
@@ -21,10 +22,11 @@ Current date: 2026-07-04.
   ablation auxiliary, component ablation appendix-only, and user study
   last/optional. Provider latency, timeouts, and retry counts are availability
   metadata, not effectiveness metrics.
-- The latest confirmed pushed checkpoint is `d248878` (`Sync core real-reuse
-  stabilization records`), which was pushed after `7ee44ad` and `977b2b9`.
-  Verify the exact current remote head with `git status -sb` and
-  `git ls-remote --heads origin main` before making any fresh phase-save claim.
+- The latest substantive pushed checkpoint is `f44da1b` (`Guard real-reuse
+  planned outputs`), which was pushed after `d248878`, `7ee44ad`, and
+  `977b2b9`. A later memory-sync commit may sit on top; verify the exact
+  current remote head with `git status -sb` and `git ls-remote --heads origin
+  main` before making any fresh phase-save claim.
 - Commits `e597fcf` (`Add AIDE real-reuse LLM ablation row`), `1521b72`
   (`Record AIDE ablation push blocker`), `200419a`
   (`Add SWE real-reuse LLM ablation row`), `cb20cb1`
@@ -34,10 +36,11 @@ Current date: 2026-07-04.
   (`Sync memory after DeepSeek LLM ablation`), `0d4934b`
   (`Record Claude LLM ablation availability`), `977b2b9`
   (`Sync experiment planning records`), `7ee44ad`
-  (`Track Claude ablation availability metadata`), and `d248878`
-  (`Sync core real-reuse stabilization records`) are the current saved
-  phase/checkpoint range. The earlier GitHub HTTPS reset / port-443 blocker is
-  resolved for the previously pushed commits.
+  (`Track Claude ablation availability metadata`), `d248878`
+  (`Sync core real-reuse stabilization records`), and `f44da1b`
+  (`Guard real-reuse planned outputs`) are the current saved phase/checkpoint
+  range. The earlier GitHub HTTPS reset / port-443 blocker is resolved for the
+  previously pushed commits.
 - Verification before the phase save passed:
   `python -m unittest tests.test_build_real_reuse_llm_ablation_results -v`
   (4 tests), `check_real_reuse_benchmark.py --strict`,
@@ -51,8 +54,9 @@ Current date: 2026-07-04.
   is required, and `ok.txt` should only be created for completed human-fidelity
   annotation or a concrete placed core asset.
 - Current GitHub transport note: `git push origin main` succeeded for
-  `d248878`, updating `main` from `7ee44ad` to `d248878`. Before claiming any
-  future remote-backed phase save, rerun `git status -sb`,
+  `d248878`, updating `main` from `7ee44ad` to `d248878`, then succeeded again
+  for `f44da1b`, updating `main` from `d248878` to `f44da1b`. Before claiming
+  any future remote-backed phase save, rerun `git status -sb`,
   `git log -3 --oneline`, and `git ls-remote --heads origin main`.
 - Latest phase checkpoint: after record-sync commit `977b2b9`
   (`Sync experiment planning records`), Claude-family REF-T2 was retried from

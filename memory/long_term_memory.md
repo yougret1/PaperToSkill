@@ -302,6 +302,13 @@ Current supported claims:
   experiment correctness and verify exact local/remote alignment with
   `git status -sb` and `git ls-remote --heads origin main` before claiming a
   new remote-backed phase save.
+- Core real-reuse stabilization guard commit `f44da1b` (`Guard real-reuse
+  planned outputs`) is pushed after the record-sync save. It removes the
+  deprecated `domain_robustness` planned output from
+  `benchmarks/real_reuse/real_reuse_v0.json`, checks current real-reuse output
+  paths in `scripts/check_real_reuse_benchmark.py`, and adds a regression test
+  so a separate domain-robustness/breadth experiment cannot silently re-enter
+  the main spec.
 - SNAP artifact-execution follow-up diagnosis is now materialized in
   `results/real_reuse/snapatac2_artifact_followup.{md,json}` with builder
   `scripts/build_real_reuse_snapatac2_artifact_followup.py`: all selected SNAP
