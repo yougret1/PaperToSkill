@@ -364,6 +364,9 @@ Current supported claims:
 - Phase 89 and the 2026-07-04 record-sync push both recovered GitHub HTTPS
   transport interruptions. Use `git status -sb` and a successful remote check
   for the latest exact alignment before each phase-save claim.
+- Latest verified remote checkpoint after the SNAP executable-candidate
+  contract and SWE-T1 task-contract decision saves:
+  `36ae48ea4ab6f4213b7e31b7e796e853c4f867de refs/heads/main`.
 
 Current unsupported claims:
 

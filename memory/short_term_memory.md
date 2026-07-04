@@ -33,10 +33,11 @@ Current date: 2026-07-04.
   row as boundary evidence, forbid more model calls under the current hidden
   test contract, and require issue-aligned hidden tests before any future
   paired rerun.
-- Current remote-backup status: local commit `25017a8` exists for the SNAP
-  contract/preflight checkpoint, but `git push origin main` failed three times
-  with GitHub HTTPS transport errors. `toHuman.md` records the exact command
-  and errors. Continue non-network work and retry push later.
+- Current remote-backup status: GitHub push recovered. `origin/main` is
+  verified at `36ae48e` (`Record SWE-T1 task contract decision`), after
+  `25017a8` (`Pre-register SNAP executable candidate contract`). Earlier
+  `git push origin main` failures were transport availability only and are
+  recorded in `toHuman.md` as recovered history.
 - The current discussion policy is: stabilize the core eight-row real-reuse
   evidence first; collect auxiliary raw data opportunistically; keep LLM
   ablation auxiliary, component ablation appendix-only, and user study
@@ -243,11 +244,9 @@ Current date: 2026-07-04.
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-6. Retry `git push origin main` when GitHub HTTPS availability recovers. The
-   current branch is locally ahead of origin; the push blocker is recorded in
-   `toHuman.md`.
-7. No immediate human-side action is required unless the user wants to handle
-   the GitHub network issue externally.
+6. Latest remote verification:
+   `36ae48ea4ab6f4213b7e31b7e796e853c4f867de refs/heads/main`.
+7. No immediate human-side action is required.
 
 ## Boundaries
 
