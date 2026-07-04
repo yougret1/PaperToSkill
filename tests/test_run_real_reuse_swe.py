@@ -341,6 +341,64 @@ class RunRealReuseSWETest(unittest.TestCase):
             self.assertNotIn("gold.patch", prompt)
             self.assertNotIn("test.patch", prompt)
 
+    def test_scorer_override_can_disable_manifest_test_patch(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            root = prepare_temp_root_with_source_context(tmp_path)
+            fixture_dir = tmp_path / "fixture_responses"
+            fixture_dir.mkdir()
+            (fixture_dir / "SWE-T2_summary.diff").write_text(PATCH_RESPONSE, encoding="utf-8")
+            raw_rows = tmp_path / "raw_rows.jsonl"
+            output_json = tmp_path / "swe_report.json"
+            scorer_command = f'"{sys.executable}" -c "from buggy import add; assert add(2, 3) == 5"'
+
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(RUN_SCRIPT),
+                    "--root",
+                    str(root),
+                    "--task",
+                    "SWE-T2",
+                    "--condition",
+                    "summary",
+                    "--fixture-response-dir",
+                    str(fixture_dir),
+                    "--run-id",
+                    "unit_swe_scorer_override",
+                    "--test-command-override",
+                    scorer_command,
+                    "--disable-test-patch",
+                    "--output-dir",
+                    str(tmp_path / "runs"),
+                    "--raw-rows-output",
+                    str(raw_rows),
+                    "--output-json",
+                    str(output_json),
+                    "--output-md",
+                    str(tmp_path / "swe_report.md"),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            rows = [json.loads(line) for line in raw_rows.read_text(encoding="utf-8").splitlines()]
+            self.assertEqual(1, len(rows))
+            self.assertTrue(rows[0]["success"])
+            self.assertEqual("cli_override", rows[0]["scorer_config"]["test_command_source"])
+            self.assertEqual("disabled", rows[0]["scorer_config"]["test_patch_source"])
+            metric = json.loads(
+                (tmp_path / "runs" / "SWE-T2" / "summary" / "unit_swe_scorer_override" / "metric.json").read_text(
+                    encoding="utf-8"
+                )
+            )
+            self.assertTrue(metric["success"])
+            self.assertFalse(metric["test_patch_applied"])
+            report = json.loads(output_json.read_text(encoding="utf-8"))
+            self.assertTrue(report["scorer_override"]["test_command_override"])
+            self.assertTrue(report["scorer_override"]["disable_test_patch"])
+
     def test_full_excerpt_fixture_response_for_sanity_task(self):
         with tempfile.TemporaryDirectory() as tmp:
             tmp_path = Path(tmp)

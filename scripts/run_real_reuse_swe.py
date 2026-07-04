@@ -61,6 +61,50 @@ def asset_file(manifest: dict[str, Any], slot: str) -> str:
     raise KeyError(f"missing asset slot {slot}")
 
 
+def scorer_test_command(root: Path, args: argparse.Namespace, manifest: dict[str, Any]) -> tuple[str, dict[str, str]]:
+    if args.test_command_override:
+        return args.test_command_override, {
+            "test_command_source": "cli_override",
+            "test_command_path": "",
+        }
+    if args.test_command_override_file:
+        path = resolve(root, args.test_command_override_file)
+        return path.read_text(encoding="utf-8").strip(), {
+            "test_command_source": "cli_override_file",
+            "test_command_path": relative(root, path),
+        }
+    path = resolve(root, asset_file(manifest, "target_test_command"))
+    return path.read_text(encoding="utf-8").strip(), {
+        "test_command_source": "asset_manifest",
+        "test_command_path": relative(root, path),
+    }
+
+
+def scorer_test_patch(root: Path, args: argparse.Namespace, manifest: dict[str, Any]) -> tuple[Path | None, dict[str, str]]:
+    if args.disable_test_patch:
+        return None, {
+            "test_patch_source": "disabled",
+            "test_patch_path": "",
+        }
+    if args.test_patch_override:
+        path = resolve(root, args.test_patch_override)
+        return path, {
+            "test_patch_source": "cli_override",
+            "test_patch_path": relative(root, path),
+        }
+    try:
+        path = resolve(root, asset_file(manifest, "test_patch"))
+    except KeyError:
+        return None, {
+            "test_patch_source": "absent",
+            "test_patch_path": "",
+        }
+    return path, {
+        "test_patch_source": "asset_manifest",
+        "test_patch_path": relative(root, path),
+    }
+
+
 def optional_asset_text(
     root: Path,
     manifest: dict[str, Any],
@@ -325,17 +369,14 @@ def run_single(args: argparse.Namespace, task_id: str, condition: str, run_id: s
     response_path.write_text(response_text.strip() + "\n", encoding="utf-8")
     patch_path.write_text(extract_patch(response_text).rstrip() + "\n", encoding="utf-8")
     workspace_dir = resolve(root, manifest["workspace_dir"])
-    test_command_file = resolve(root, asset_file(manifest, "target_test_command"))
-    test_patch_path = None
-    try:
-        test_patch_path = resolve(root, asset_file(manifest, "test_patch"))
-    except KeyError:
-        test_patch_path = None
+    test_command, test_command_config = scorer_test_command(root, args, manifest)
+    test_patch_path, test_patch_config = scorer_test_patch(root, args, manifest)
+    scorer_config = {**test_command_config, **test_patch_config}
     metric = score_patch(
         task_id=task_id,
         patch_path=patch_path,
         workspace=workspace_dir,
-        test_command=test_command_file.read_text(encoding="utf-8").strip(),
+        test_command=test_command,
         timeout_seconds=args.score_timeout_seconds,
         test_patch_path=test_patch_path,
     )
@@ -368,6 +409,7 @@ def run_single(args: argparse.Namespace, task_id: str, condition: str, run_id: s
         "prompt_path": relative(root, prompt_path),
         "metric_path": relative(root, metric_path),
         "call_status": call_status,
+        "scorer_config": scorer_config,
         "evidence_boundary": (
             "Single SWE real-reuse scored output. This row is not aggregate "
             "evidence for all eight planned paper-tasks."
@@ -426,6 +468,12 @@ def build_report(args: argparse.Namespace, run_id: str, rows: list[dict[str, Any
         "model_alias": args.model_alias,
         "wire_api": args.wire_api,
         "raw_rows_output": str(args.raw_rows_output),
+        "scorer_override": {
+            "test_command_override": bool(args.test_command_override),
+            "test_command_override_file": "" if args.test_command_override_file is None else str(args.test_command_override_file),
+            "test_patch_override": "" if args.test_patch_override is None else str(args.test_patch_override),
+            "disable_test_patch": bool(args.disable_test_patch),
+        },
         "evidence_boundary": (
             "Runner report for locked SWE real-reuse tasks. It can compare "
             "Summary and PaperToSkill for prepared SWE tasks only when both "
@@ -476,6 +524,25 @@ def main() -> int:
     parser.add_argument("--max-tokens", type=int, default=1800)
     parser.add_argument("--timeout-seconds", type=float, default=120.0)
     parser.add_argument("--score-timeout-seconds", type=float, default=60.0)
+    parser.add_argument(
+        "--test-command-override",
+        help="Optional scorer command override for pre-registered diagnostic contracts.",
+    )
+    parser.add_argument(
+        "--test-command-override-file",
+        type=Path,
+        help="Optional file containing a scorer command override.",
+    )
+    parser.add_argument(
+        "--test-patch-override",
+        type=Path,
+        help="Optional hidden test patch override for pre-registered diagnostic contracts.",
+    )
+    parser.add_argument(
+        "--disable-test-patch",
+        action="store_true",
+        help="Do not apply the manifest hidden test patch before scoring.",
+    )
     parser.add_argument("--max-attempts", type=int, default=2)
     parser.add_argument("--retry-delay-seconds", type=float, default=2.0)
     parser.add_argument("--anthropic-version", default="2023-06-01")
