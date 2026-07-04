@@ -1,15 +1,17 @@
 {
   "schema_version": "0.1",
-  "run_id": "phase105_gpt_full_excerpt_sanity_saved_response_60s",
+  "run_id": "phase106_extended_score_300s",
   "overall_status": "complete",
   "status_counts": {
-    "scored": 1
+    "scored": 4
   },
   "tasks": [
-    "AIDE-T1"
+    "AIDE-T1",
+    "AIDE-T2"
   ],
   "conditions": [
-    "full_excerpt"
+    "summary",
+    "papertoskill"
   ],
   "model_family": "GPT-family",
   "model_alias": "gpt-5.5",
@@ -18,11 +20,71 @@
   "evidence_boundary": "Runner report for locked AIDE real-reuse tasks. It can compare Summary and PaperToSkill for prepared AIDE tasks only when both conditions have scored rows. It does not complete the full eight-task real-reuse benchmark.",
   "results": [
     {
-      "run_id": "phase105_gpt_full_excerpt_sanity_saved_response_60s",
+      "run_id": "phase106_extended_score_300s",
       "task_id": "AIDE-T1",
       "source_paper_id": "aide",
       "domain": "ML engineering",
-      "condition": "full_excerpt",
+      "condition": "summary",
+      "model_family": "GPT-family",
+      "model_alias": "gpt-5.5",
+      "wire_api": "openai_responses",
+      "status": "scored",
+      "task_score": 0.8159861989649224,
+      "success": true,
+      "workflow_score": 1.0,
+      "unsupported_errors": null,
+      "unsupported_errors_status": "not_automatically_judged",
+      "tokens": 887,
+      "token_source": "provider_usage_or_whitespace_proxy",
+      "time_seconds": 0.0094,
+      "interventions": 0,
+      "failure_reason": "",
+      "output_path": "results/real_reuse/runs/AIDE-T1/summary/phase106_extended_score_300s/candidate_solution.py",
+      "prompt_path": "results/real_reuse/runs/AIDE-T1/summary/phase106_extended_score_300s/prompt.md",
+      "metric_path": "results/real_reuse/runs/AIDE-T1/summary/phase106_extended_score_300s/metric.json",
+      "call_status": {
+        "status": "success",
+        "selection_reason": "fixture_response",
+        "fixture_response_path": "C:\\Users\\19351\\AppData\\Local\\Temp\\papertoskill_aide_phase106_fixtures\\AIDE-T1_summary.txt"
+      },
+      "evidence_boundary": "Single AIDE real-reuse scored output. This row is not aggregate evidence for all eight planned paper-tasks."
+    },
+    {
+      "run_id": "phase106_extended_score_300s",
+      "task_id": "AIDE-T1",
+      "source_paper_id": "aide",
+      "domain": "ML engineering",
+      "condition": "papertoskill",
+      "model_family": "GPT-family",
+      "model_alias": "gpt-5.5",
+      "wire_api": "openai_responses",
+      "status": "scored",
+      "task_score": 0.8171362852213916,
+      "success": true,
+      "workflow_score": 1.0,
+      "unsupported_errors": null,
+      "unsupported_errors_status": "not_automatically_judged",
+      "tokens": 1767,
+      "token_source": "provider_usage_or_whitespace_proxy",
+      "time_seconds": 0.0112,
+      "interventions": 0,
+      "failure_reason": "",
+      "output_path": "results/real_reuse/runs/AIDE-T1/papertoskill/phase106_extended_score_300s/candidate_solution.py",
+      "prompt_path": "results/real_reuse/runs/AIDE-T1/papertoskill/phase106_extended_score_300s/prompt.md",
+      "metric_path": "results/real_reuse/runs/AIDE-T1/papertoskill/phase106_extended_score_300s/metric.json",
+      "call_status": {
+        "status": "success",
+        "selection_reason": "fixture_response",
+        "fixture_response_path": "C:\\Users\\19351\\AppData\\Local\\Temp\\papertoskill_aide_phase106_fixtures\\AIDE-T1_papertoskill.txt"
+      },
+      "evidence_boundary": "Single AIDE real-reuse scored output. This row is not aggregate evidence for all eight planned paper-tasks."
+    },
+    {
+      "run_id": "phase106_extended_score_300s",
+      "task_id": "AIDE-T2",
+      "source_paper_id": "aide",
+      "domain": "ML engineering",
+      "condition": "summary",
       "model_family": "GPT-family",
       "model_alias": "gpt-5.5",
       "wire_api": "openai_responses",
@@ -32,18 +94,48 @@
       "workflow_score": 1.0,
       "unsupported_errors": null,
       "unsupported_errors_status": "not_automatically_judged",
-      "tokens": 8275,
+      "tokens": 1088,
       "token_source": "provider_usage_or_whitespace_proxy",
-      "time_seconds": 0.0003,
+      "time_seconds": 0.012,
       "interventions": 0,
-      "failure_reason": "timeout after 60s",
-      "output_path": "results/real_reuse/runs/AIDE-T1/full_excerpt/phase105_gpt_full_excerpt_sanity_saved_response_60s/candidate_solution.py",
-      "prompt_path": "results/real_reuse/runs/AIDE-T1/full_excerpt/phase105_gpt_full_excerpt_sanity_saved_response_60s/prompt.md",
-      "metric_path": "results/real_reuse/runs/AIDE-T1/full_excerpt/phase105_gpt_full_excerpt_sanity_saved_response_60s/metric.json",
+      "failure_reason": "timeout after 300s",
+      "output_path": "results/real_reuse/runs/AIDE-T2/summary/phase106_extended_score_300s/candidate_solution.py",
+      "prompt_path": "results/real_reuse/runs/AIDE-T2/summary/phase106_extended_score_300s/prompt.md",
+      "metric_path": "results/real_reuse/runs/AIDE-T2/summary/phase106_extended_score_300s/metric.json",
       "call_status": {
         "status": "success",
         "selection_reason": "fixture_response",
-        "fixture_response_path": "C:\\Users\\19351\\AppData\\Local\\Temp\\papertoskill_phase105_aide_full_excerpt_fixture\\AIDE-T1_full_excerpt.md"
+        "fixture_response_path": "C:\\Users\\19351\\AppData\\Local\\Temp\\papertoskill_aide_phase106_fixtures\\AIDE-T2_summary.txt"
+      },
+      "evidence_boundary": "Single AIDE real-reuse scored output. This row is not aggregate evidence for all eight planned paper-tasks."
+    },
+    {
+      "run_id": "phase106_extended_score_300s",
+      "task_id": "AIDE-T2",
+      "source_paper_id": "aide",
+      "domain": "ML engineering",
+      "condition": "papertoskill",
+      "model_family": "GPT-family",
+      "model_alias": "gpt-5.5",
+      "wire_api": "openai_responses",
+      "status": "scored",
+      "task_score": 0.8263369752731455,
+      "success": true,
+      "workflow_score": 1.0,
+      "unsupported_errors": null,
+      "unsupported_errors_status": "not_automatically_judged",
+      "tokens": 1614,
+      "token_source": "provider_usage_or_whitespace_proxy",
+      "time_seconds": 0.0119,
+      "interventions": 0,
+      "failure_reason": "",
+      "output_path": "results/real_reuse/runs/AIDE-T2/papertoskill/phase106_extended_score_300s/candidate_solution.py",
+      "prompt_path": "results/real_reuse/runs/AIDE-T2/papertoskill/phase106_extended_score_300s/prompt.md",
+      "metric_path": "results/real_reuse/runs/AIDE-T2/papertoskill/phase106_extended_score_300s/metric.json",
+      "call_status": {
+        "status": "success",
+        "selection_reason": "fixture_response",
+        "fixture_response_path": "C:\\Users\\19351\\AppData\\Local\\Temp\\papertoskill_aide_phase106_fixtures\\AIDE-T2_papertoskill.txt"
       },
       "evidence_boundary": "Single AIDE real-reuse scored output. This row is not aggregate evidence for all eight planned paper-tasks."
     }

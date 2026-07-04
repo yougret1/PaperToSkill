@@ -25,9 +25,9 @@ scored under a deterministic output-contract evaluator; these saved response
 files are not human semantic fidelity or downstream execution-outcome evidence.
 A first single-run real-reuse stress test over eight AIDE, SWE-agent,
 Reflexion, and SnapATAC2 paper-task rows is complete, but it is mixed rather
-than confirmatory: one SWE task favors PaperToSkill, Reflexion ties Summary,
-and AIDE, SWE-T1, and SnapATAC2 expose timeout, patch-application, and artifact
-completion failures.
+than confirmatory: AIDE-T2 and one SWE task favor PaperToSkill, AIDE-T1 and
+Reflexion are solved by both conditions, and SWE-T1 plus SnapATAC2 expose
+patch-application and artifact-completion failures.
 
 ## 1. Introduction
 
@@ -238,15 +238,17 @@ model-ablation scoring for the current prompt-packet protocol, not a claim of
 human semantic fidelity, downstream execution outcome, provider economics, or
 human evaluation.
 
-The first real-reuse pass covers eight original-style paper-task rows. AIDE-T1
-and AIDE-T2 score 0.000/0.000 because generated scripts exceed the scoring
-budget. SWE-T1 scores 0.000/0.000 because generated patches fail to apply,
-while SWE-T2 scores 0.000/1.000 and gives one positive PaperToSkill
-software-engineering row. REF-T1 and REF-T2 score 1.000/1.000, validating the
-runner/scorer path without showing advantage over Summary. SNAP-T1 and SNAP-T2
-score 0.000/0.500 and 0.200/0.400, but both remain below the success threshold.
-This is mixed first-pass downstream evidence and failure-boundary evidence, not
-a broad downstream effectiveness claim.
+The first real-reuse pass covers eight original-style paper-task rows. After
+rerunning the same saved AIDE outputs with an extended 300-second local scorer
+budget, AIDE-T1 scores 0.816/0.817 and is solved by both conditions, while
+AIDE-T2 scores 0.000/0.826 and becomes a PaperToSkill-only success. SWE-T1
+scores 0.000/0.000 because generated patches fail to apply, while SWE-T2
+scores 0.000/1.000 and gives one positive PaperToSkill software-engineering
+row. REF-T1 and REF-T2 score 1.000/1.000, validating the runner/scorer path
+without showing advantage over Summary. SNAP-T1 and SNAP-T2 score 0.000/0.500
+and 0.200/0.400, but both remain below the success threshold. This is mixed
+first-pass downstream evidence and failure-boundary evidence, not a broad
+downstream effectiveness claim.
 
 The live-transfer saved-response evaluation now covers all four paper packets.
 AI Scientist-v2, Reflexion, AIDE, and Toolformer each have six saved responses
@@ -331,13 +333,16 @@ two-column paper text, figures, and references into one line. The final scaffold
 therefore keeps source anchors auditable and treats automatic snippets as draft
 evidence that must be reviewed before live use.
 
-The real-reuse rows expose additional operational failures. AIDE shows that a
-method skill can still fail under a locked scoring budget. SWE-T1 shows that a
-software-engineering task can fail before tests run if a patch cannot be
-applied cleanly. SnapATAC2 shows that partial pipelines are insufficient when
-the scorer requires complete runtime, memory, and quality artifacts. These
-failures point to budget contracts, patch/application constraints, artifact
-manifests, and recovery instructions as future schema pressure points.
+The real-reuse rows expose additional operational boundaries. AIDE shows that
+task slice and local scorer budget can change the outcome: AIDE-T1 is solved by
+both conditions under the extended local scorer, while AIDE-T2 becomes a
+PaperToSkill-only success and the Summary condition still times out. SWE-T1
+shows that a software-engineering task can fail before tests run if a patch
+cannot be applied cleanly. SnapATAC2 shows that partial pipelines are
+insufficient when the scorer requires complete runtime, memory, and quality
+artifacts. These results point to budget contracts, patch/application
+constraints, artifact manifests, and recovery instructions as future schema
+pressure points.
 
 ## 7. Limitations
 

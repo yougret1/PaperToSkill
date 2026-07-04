@@ -73,9 +73,9 @@ Current supported claims:
 - Failure-case archive with paper-reported and project-level cases.
 - Real-reuse failure-boundary analysis is derived from the same first-pass raw
   rows and is now included in the AAAI table set. It maps row-level outcomes to
-  budget timeout, patch application, PaperToSkill-only success, solved-by-both
-  ceiling, and artifact completion modes. This is explanatory boundary
-  analysis, not new task-success evidence.
+  PaperToSkill-only success, patch application, solved-by-both ceiling, and
+  artifact completion modes. This is explanatory boundary analysis, not new
+  task-success evidence.
 - Human-fidelity annotation handoff is ready: review packets, annotation guide,
   reviewer bundle zip, checksum manifest, stricter blank template metadata,
   and strict summarizer validation are present for 24 paper-by-criterion cells;
@@ -230,11 +230,15 @@ Current supported claims:
   `C:\Users\19351\Desktop\tem\real_reuse_assets\spaceship-titanic\`, validated
   the local scorer with baseline/weak-script scores around
   `0.4997124784358827`, and ran AIDE-T1/T2 Summary/PaperToSkill with
-  GPT-family `gpt-5.5`. AIDE-T1 and AIDE-T2 both scored 0.000/0.000 because
-  all generated scripts exceeded the 60-second scorer budget. The first
-  single-run GPT-family pass now covers all eight real-reuse rows. It is mixed
-  and failure-heavy: SWE-T2 is one positive row, REF ties Summary at 1.000,
-  AIDE and SWE-T1 are scored failures, and SNAP rows remain below success
+  GPT-family `gpt-5.5`. In Phase 98, AIDE-T1 and AIDE-T2 both scored
+  0.000/0.000 because all generated scripts exceeded the 60-second scorer
+  budget. Phase 106 later reused the same saved model outputs with a
+  300-second local scorer budget: AIDE-T1 scored 0.816/0.817 and was solved by
+  both conditions; AIDE-T2 scored 0.000/0.826 and became a
+  PaperToSkill-only success. The first single-run GPT-family pass covers all
+  eight real-reuse rows. It is mixed: AIDE-T2 and SWE-T2 are positive
+  PaperToSkill-only rows, AIDE-T1 and REF are solved by both conditions,
+  SWE-T1 is a scored patch-apply failure, and SNAP rows remain below success
   threshold. This does not establish aggregate PaperToSkill advantage over
   Summary. Phase 91 targeted verification passed
   for 18 SWE/table/preflight/package tests, refreshed the AAAI PDF/table gates,
@@ -273,11 +277,12 @@ Current unsupported claims:
 
 - PaperToSkill improves real original-style task outcomes across AIDE,
   SWE-agent, Reflexion, SnapATAC2, or other domains. The first single-run
-  GPT-family pass covers all eight rows, but it is mixed/failure-heavy rather
-  than confirmatory. AIDE-T1/T2 score 0.000/0.000 due scorer timeouts, SWE-T1
-  scores 0.000/0.000 due patch-apply failures, SWE-T2 scores 0.000/1.000 and
-  is one positive PaperToSkill row, REF-T1/REF-T2 score 1.000/1.000 and show no
-  advantage, and SNAP-T1/T2 score 0.000/0.500 and 0.200/0.400 while failing
+  GPT-family pass covers all eight rows, but it is mixed rather than
+  confirmatory. AIDE-T1 scores 0.816/0.817 and is solved by both conditions;
+  AIDE-T2 scores 0.000/0.826 and is PaperToSkill-only success; SWE-T1 scores
+  0.000/0.000 due patch-apply failures; SWE-T2 scores 0.000/1.000 and is a
+  PaperToSkill-only success; REF-T1/REF-T2 score 1.000/1.000 and show no
+  advantage; and SNAP-T1/T2 score 0.000/0.500 and 0.200/0.400 while failing
   the success threshold. This is downstream stress-test and failure-boundary
   evidence, not broad effectiveness.
 - Saved-response model-ablation scoring as proof of live downstream task
@@ -570,11 +575,11 @@ Use these as entry points instead of searching the whole repo first:
   `results/real_reuse/main_results_plan.md` contain one GPT-family `gpt-5.5`
   Summary-vs-PaperToSkill pass for all eight rows. The derived
   `results/real_reuse/failure_analysis.md` maps the first-pass rows to
-  boundary modes and follow-up method contracts. AIDE-T1/T2 score
-  0.000/0.000 due 60-second scorer timeouts; SWE-T1 scores 0.000/0.000 due
-  patch-apply failures; SWE-T2 scores 0.000/1.000 and is one positive
-  PaperToSkill row; REF-T1/T2 score 1.000/1.000; SNAP-T1/T2 score 0.000/0.500
-  and 0.200/0.400 while failing the local success threshold. This is mixed
+  boundary modes and follow-up method contracts. Latest main-table scores:
+  AIDE-T1 0.816/0.817 (solved by both), AIDE-T2 0.000/0.826
+  (PaperToSkill-only success), SWE-T1 0.000/0.000 due patch-apply failures,
+  SWE-T2 0.000/1.000, REF-T1/T2 1.000/1.000, SNAP-T1/T2 0.000/0.500 and
+  0.200/0.400 while failing the local success threshold. This is mixed
   downstream stress-test evidence and failure-boundary evidence, not aggregate
   effectiveness. AIDE Kaggle-derived CSV fixture files are kept local and
   ignored by git; committed manifests retain hashes and provenance boundaries.

@@ -47,10 +47,10 @@ deterministic output-contract evaluator; these saved response files are not
 human semantic fidelity or downstream execution-outcome evidence. A first
 single-run real-reuse stress test over eight AIDE, SWE-agent, Reflexion, and
 SnapATAC2 paper-task rows is complete, but the outcome is mixed rather than
-confirmatory: one SWE task favors PaperToSkill, Reflexion ties Summary, and
-AIDE, SWE-T1, and SnapATAC2 expose timeout, patch-application, and artifact
-completion failures. We therefore treat these rows as downstream boundary
-evidence, not aggregate effectiveness.
+confirmatory: AIDE-T2 and one SWE task favor PaperToSkill, AIDE-T1 and
+Reflexion are solved by both conditions, and SWE-T1 plus SnapATAC2 expose
+patch-application and artifact-completion failures. We therefore treat these
+rows as downstream boundary evidence, not aggregate effectiveness.
 \end{abstract}
 
 \section{Introduction}
@@ -189,9 +189,11 @@ auxiliary sanity evidence rather than a main baseline.
 The completed results below are deterministic/offline quality and grounding
 evidence for the current PaperToSkill artifacts, plus first-pass real-reuse
 execution evidence. AIDE-T1 and AIDE-T2 are scored for one GPT-family run on a
-locked Kaggle Spaceship Titanic validation split; both Summary and PaperToSkill
-produce scripts that exceed the 60-second scoring budget and score 0.000. SWE-T1
-is scored for one GPT-family run on a locked
+locked Kaggle Spaceship Titanic validation split using the same saved model
+outputs and an extended 300-second local scorer budget. AIDE-T1 is solved by
+both Summary and PaperToSkill with nearly tied validation scores (0.816 and
+0.817), while AIDE-T2 is a PaperToSkill-only success (0.826 versus a Summary
+timeout). SWE-T1 is scored for one GPT-family run on a locked
 SWE-Bench Lite SQLFluff instance: both Summary and PaperToSkill produce patches
 that fail to apply and score 0.000. SWE-T2 is scored for one GPT-family run on
 a locked SWE-Bench Verified-style Astropy instance: the Summary patch fails to
@@ -204,10 +206,11 @@ scores above Summary on these two SnapATAC2 dry-run tasks (0.500 vs. 0.000 and
 0.400 vs. 0.200), but all SNAP scores remain below the success threshold,
 mainly because the responses did not produce complete runtime, memory, and
 quality artifacts. Across the eight filled tasks, the runner, scorer, and
-table-update paths are live. The outcome is mixed: SWE-T2 is a positive
-PaperToSkill row, REF shows no advantage because both conditions solve the
-fixtures, and AIDE/SWE-T1/SNAP primarily expose budget, patch-application, and
-artifact-completion failure boundaries. These results do not establish
+table-update paths are live. The outcome is mixed: AIDE-T2 and SWE-T2 are
+positive PaperToSkill rows, AIDE-T1 and REF show little or no advantage because
+both conditions solve the fixtures, and SWE-T1/SNAP primarily expose
+patch-application and artifact-completion failure boundaries. These results do
+not establish
 aggregate advantage over Summary. Table~\ref{tab:real-reuse-failure-analysis}
 summarizes the row-level boundary modes and the method contracts they suggest
 for follow-up work. The auxiliary Full Excerpt sanity subset does not reverse
@@ -322,14 +325,17 @@ preserve: not just final successes, but the ways extraction, evaluation, or
 external dependencies can lose important operational content.
 
 The real-reuse rows add a harsher version of the same lesson. The AIDE rows
-show that a method skill can still fail when the generated script exceeds a
-locked scoring budget. SWE-T1 shows that software-engineering reuse can fail
-before tests run if a patch cannot be applied cleanly. The SnapATAC2 rows show
-that partial pipelines are not enough when the scorer requires complete
-runtime, memory, and quality artifacts. These failures point to the next method
-pressure points: budget contracts, patch/application constraints, required
-artifact manifests, and recovery instructions should be explicit when a source
-paper's method is converted into a reusable skill.
+show that task slice and local scorer budget can change the apparent boundary:
+with a longer scorer budget AIDE-T1 is solved by both conditions and AIDE-T2
+becomes a PaperToSkill-only success, while the Summary AIDE-T2 timeout still
+argues for explicit runtime and fallback contracts. SWE-T1 shows that
+software-engineering reuse can fail before tests run if a patch cannot be
+applied cleanly. The SnapATAC2 rows show that partial pipelines are not enough
+when the scorer requires complete runtime, memory, and quality artifacts. These
+results point to the next method pressure points: budget contracts,
+patch/application constraints, required artifact manifests, and recovery
+instructions should be explicit when a source paper's method is converted into
+a reusable skill.
 
 \section{Limitations}
 

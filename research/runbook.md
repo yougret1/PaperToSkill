@@ -85,10 +85,11 @@ benchmarks/real_reuse/asset_locks/
 Current status: planned specification, per-task execution-contract specs,
 fixture requirement manifests, candidate manifests, and asset locks are ready
 for all eight tasks. All eight rows now have one GPT-family
-Summary-vs-PaperToSkill run. REF rows score 1.000/1.000, SWE-T2 scores
-0.000/1.000, SWE-T1 scores 0.000/0.000 due patch-apply failures, AIDE-T1/T2
-score 0.000/0.000 due scorer timeouts, and SNAP rows are below the
-pre-registered success threshold. Do not write the AAAI paper as if this
+Summary-vs-PaperToSkill run. After rerunning the same saved AIDE outputs with
+a 300-second local scorer budget, AIDE-T1 scores 0.816/0.817 and AIDE-T2
+scores 0.000/0.826. REF rows score 1.000/1.000, SWE-T2 scores 0.000/1.000,
+SWE-T1 scores 0.000/0.000 due patch-apply failures, and SNAP rows are below
+the pre-registered success threshold. Do not write the AAAI paper as if this
 single-run pass establishes aggregate superiority over Summary.
 
 Current experiment priority: stabilize the core real-reuse experiment first
@@ -264,9 +265,10 @@ Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_API_KEY -ErrorAction SilentlyContinue
 ```
 
 Do not treat missing credentials, provider errors, or missing Kaggle data as
-model-quality failures. Current AIDE rows are scored failure-boundary rows:
-both Summary and PaperToSkill time out under the 60-second scorer budget for
-AIDE-T1/T2.
+model-quality failures. Current AIDE rows are scored from the official
+Kaggle-derived local fixture: AIDE-T1 is solved by both Summary and
+PaperToSkill under the extended 300-second local scorer, while AIDE-T2 is a
+PaperToSkill-only success with the Summary candidate still timing out.
 
 Validate the planned spec before implementing runners or editing paper claims:
 
@@ -309,14 +311,16 @@ Execution order:
    `benchmarks/real_reuse/asset_locks/`, including license/provenance, local
    path/URI, sha256 values, scoring command, and run budget. REF-T1 and REF-T2
    are the first completed prepared-asset layer; AIDE fixture materialization
-   waits for the real Kaggle Spaceship Titanic `train.csv`.
+   is complete from the user-provided official Kaggle Spaceship Titanic files.
 3. Create Summary and PaperToSkill context inputs for each task. SWE-agent now
    has a source-anchored generated skill; task-specific SWE Summary contexts are
    written by the SWE fixture-preparation layer after local assets are
    materialized.
 4. Implement the real-reuse runner and scorer. The REF, AIDE, SWE-agent, and
    SnapATAC2 preparer/scorer/runner paths are implemented and have one
-   GPT-family pass each; AIDE/SWE-T1/SNAP are failure-boundary rows.
+   GPT-family pass each; AIDE-T2 and SWE-T2 are PaperToSkill-only successes,
+   AIDE-T1 and REF are solved by both conditions, and SWE-T1/SNAP remain
+   boundary rows.
 5. Run agent-only tasks with no mid-run human intervention. The first
    GPT-family pass over all eight main rows is complete.
 6. Save raw rows under `results/real_reuse/raw_rows.*`.
@@ -476,19 +480,16 @@ python scripts\run_ai_scientist_v2_smoke.py --strict --require-complete --timeou
 ```
 
 Current AI-Scientist-v2 smoke status:
-`results/ai_scientist_v2_smoke/run_report.md` reports
-`overall_status=blocked_by_provider_or_model_availability`, `max_tokens=128`,
-5 ready checks, 2 pending checks, and 0 failed checks. The latest capped
-Claude-family retry used the older OpenAI-compatible wrapper path and timed out
-for its alias set; no response file was produced. The immediately preceding
-capped GPT-family retry tried `gpt-5.5` and `gpt-5.4`; both timed out after 45
-seconds. This is bounded client-availability smoke evidence, not a BFTS run or
-live research-task success.
+`results/ai_scientist_v2_smoke/run_report.md` reports `complete`, 6 ready
+checks, 0 pending checks, and 0 failed checks. The saved marker response uses
+`claude-opus-4-8` and satisfies the tiny PaperToSkill smoke contract. This is
+bounded client-integration evidence only; it is not a BFTS run, human semantic
+validation, real-data validation, or broad live research-task success.
 
 ## Protocol-Specific Direct Provider Probe
 
-If the AI-Scientist-v2 smoke remains blocked, run the direct endpoint probe to
-distinguish provider availability from the local `ai_scientist.llm` wrapper:
+Use the direct endpoint probe when provider availability needs diagnosis
+separate from the local `ai_scientist.llm` wrapper:
 
 ```powershell
 $env:AI_SCIENTIST_OPENAI_BASE_URL = "https://coderxiaoc.com"

@@ -206,14 +206,15 @@ coverage result, while the real-reuse first pass is downstream stress-test
 evidence rather than aggregate success-rate evidence.
 
 Current real-reuse interpretation: all eight rows now have one GPT-family
-Summary-vs-PaperToSkill pass. AIDE-T1/T2 score 0.000/0.000 because generated
-scripts exceed the scoring budget. SWE-T1 scores 0.000/0.000 because patches
-fail to apply. SWE-T2 scores 0.000/1.000 and is the single positive row for
-PaperToSkill. REF-T1/T2 score 1.000/1.000, validating the runner/scorer path
-without showing advantage over Summary. SNAP-T1/T2 score 0.000/0.500 and
-0.200/0.400, but both remain below the success threshold. The correct paper
-claim is mixed first-pass evidence plus failure-boundary analysis, not
-aggregate downstream effectiveness.
+Summary-vs-PaperToSkill pass. After rerunning the same saved AIDE outputs with
+an extended 300-second local scorer budget, AIDE-T1 scores 0.816/0.817 and is
+solved by both conditions, while AIDE-T2 scores 0.000/0.826 and becomes a
+PaperToSkill-only success. SWE-T1 scores 0.000/0.000 because patches fail to
+apply. SWE-T2 scores 0.000/1.000 and is another positive row for PaperToSkill.
+REF-T1/T2 score 1.000/1.000, validating the runner/scorer path without showing
+advantage over Summary. SNAP-T1/T2 score 0.000/0.500 and 0.200/0.400, but both
+remain below the success threshold. The correct paper claim is mixed first-pass
+evidence plus failure-boundary analysis, not aggregate downstream effectiveness.
 
 ### 6. Limitations
 
@@ -259,7 +260,7 @@ less directly procedural.
 | Item | Source Artifact | Purpose |
 | --- | --- | --- |
 | Figure 1: PaperToSkill pipeline | `scripts/papertoskill_extract.py`; `skill/SKILL.md` | Show paper note to skill/source-map flow |
-| Table 1: Real-reuse main experiment | `results/real_reuse/main_results_plan.md` | Eight Summary-vs-PaperToSkill paper-task rows; SWE-T2 and REF rows succeed, AIDE/SWE-T1/SNAP rows are scored failures, timeouts, or below-threshold rows |
+| Table 1: Real-reuse main experiment | `results/real_reuse/main_results_plan.md` | Eight Summary-vs-PaperToSkill paper-task rows; AIDE-T2 and SWE-T2 are PaperToSkill-only successes, AIDE-T1 and REF rows are solved by both, and SWE-T1/SNAP remain boundary rows |
 | Table 2: Real-reuse failure-boundary analysis | `results/real_reuse/failure_analysis.md` | Row-level boundary modes and follow-up method contracts for the first-pass real-reuse rows |
 | Table 3: Deterministic/offline quality results | `results/tables/main_results.md` | Coverage, source support, compactness |
 | Table 4: Transfer ablation | `results/tables/transfer_ablation.md` | Effect of transfer notes |

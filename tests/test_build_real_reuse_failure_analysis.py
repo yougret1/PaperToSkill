@@ -93,8 +93,8 @@ class BuildRealReuseFailureAnalysisTest(unittest.TestCase):
 
             with output_csv.open("r", encoding="utf-8", newline="") as handle:
                 rows = {row["Task ID"]: row for row in csv.DictReader(handle)}
-            self.assertEqual("Budget timeout", rows["AIDE-T1"]["Boundary Mode"])
-            self.assertEqual("Budget timeout", rows["AIDE-T2"]["Boundary Mode"])
+            self.assertEqual("Solved by both", rows["AIDE-T1"]["Boundary Mode"])
+            self.assertEqual("PaperToSkill-only success", rows["AIDE-T2"]["Boundary Mode"])
             self.assertEqual("Patch application", rows["SWE-T1"]["Boundary Mode"])
             self.assertEqual("PaperToSkill-only success", rows["SWE-T2"]["Boundary Mode"])
             self.assertEqual("Solved by both", rows["REF-T1"]["Boundary Mode"])

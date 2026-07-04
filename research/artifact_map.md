@@ -484,6 +484,6 @@
 | Artifact | Purpose | Status |
 | --- | --- | --- |
 | Model-ablation response logs | Claude/GPT-family/DeepSeek response files and scores after endpoint/model availability | Created |
-| Concrete real-reuse fixture assets | AIDE-T1/T2, REF-T1/T2, SWE-T1/T2, and SNAP-T1/T2 prepared assets plus one GPT-family Summary-vs-PaperToSkill pass are created; AIDE/SWE-T1/SNAP are failure-boundary rows, SWE-T2 is one positive PaperToSkill row, and REF shows no advantage | Mixed |
+| Concrete real-reuse fixture assets | AIDE-T1/T2, REF-T1/T2, SWE-T1/T2, and SNAP-T1/T2 prepared assets plus one GPT-family Summary-vs-PaperToSkill pass are created; AIDE-T2 and SWE-T2 are PaperToSkill-only successes, AIDE-T1 and REF are solved by both conditions, and SWE-T1/SNAP remain boundary rows | Mixed |
 | `results/real_reuse/` | Current AIDE/SWE/REF/SNAP raw rows and table artifacts plus future aggregate tables, sanity checks, cost table, and LLM ablation outputs | Mixed |
 | Paper2Agent executable baseline | Full Paper2Agent/MCP runtime comparison, if setup resources become available | Planned |

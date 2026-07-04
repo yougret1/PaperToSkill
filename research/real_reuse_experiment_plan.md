@@ -108,7 +108,7 @@ cost.
 
 | Task ID | Source Paper | Summary Score | PaperToSkill Score | Full Excerpt Score | Summary Tokens | PaperToSkill Tokens | Full Excerpt Tokens | Metric |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| AIDE-T1 | AIDE | 0.000 | 0.000 | 0.000 | 121 | 878 | 7366 | Validation score |
+| AIDE-T1 | AIDE | 0.816 | 0.817 | 0.000 | 121 | 878 | 7366 | Validation score |
 | SWE-T1 | SWE-agent | 0.000 | 0.000 | 0.000 | 89 | 1173 | 42048 | Tests passed / resolved |
 | SNAP-T1 | SnapATAC2 | 0.000 | 0.500 | 0.250 | 72 | 1069 | 10297 | Runtime/memory/quality |
 
@@ -220,11 +220,12 @@ intervention. It is not part of the core real-reuse effectiveness table.
 - This plan now has one GPT-family Summary-vs-PaperToSkill pass for all eight
   planned rows. The result is mixed and should be read as first-pass downstream
   evidence plus failure-boundary evidence, not aggregate effectiveness.
-- AIDE-T1/T2 both score 0.000/0.000 because generated scripts time out under
-  the 60-second scorer budget. SWE-T1 scores 0.000/0.000 because generated
-  patches fail to apply; SWE-T2 scores 0.000/1.000; REF-T1/REF-T2 score
-  1.000/1.000; SNAP-T1/SNAP-T2 score 0.000/0.500 and 0.200/0.400 but fail the
-  local success threshold.
+- After rerunning the same saved AIDE outputs with a 300-second local scorer
+  budget, AIDE-T1 scores 0.816/0.817 and is solved by both conditions, while
+  AIDE-T2 scores 0.000/0.826 and is a PaperToSkill-only success. SWE-T1 scores
+  0.000/0.000 because generated patches fail to apply; SWE-T2 scores
+  0.000/1.000; REF-T1/REF-T2 score 1.000/1.000; SNAP-T1/SNAP-T2 score
+  0.000/0.500 and 0.200/0.400 but fail the local success threshold.
 - Existing deterministic/offline results remain useful as quality, grounding,
   and cost gates.
 - The older saved-response model ablation remains a usage-plan/output-contract

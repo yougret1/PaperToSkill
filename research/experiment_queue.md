@@ -46,7 +46,7 @@
 | --- | --- | --- |
 | E5 | Can PaperToSkill help agents reuse paper methods on original-style input/output tasks? | `research/real_reuse_experiment_plan.md`; future `benchmarks/real_reuse/`; future `results/real_reuse/` |
 | E5.1 | Are the four main papers and eight tasks feasible under objective metrics? | Complete for planned spec and task contracts: `benchmarks/real_reuse/real_reuse_v0.json`; `benchmarks/real_reuse/tasks/*.json`; `results/real_reuse/spec_preflight.md` reports `ready_to_implement` |
-| E5.2 | Can each task be bound to a concrete fixture and then compared with Summary vs PaperToSkill without mid-run human intervention? | Complete for a first GPT-family single-run pass over all eight rows. AIDE-T1/T2 have official Kaggle-derived local validation fixtures and score 0.000/0.000 because generated scripts time out under the 60-second scorer budget. SWE-T1 scores 0.000/0.000 due patch-apply failures; SWE-T2 scores 0.000/1.000; REF-T1/T2 score 1.000/1.000; SNAP-T1/T2 score 0.000/0.500 and 0.200/0.400 but fail the local success threshold. This is mixed downstream/failure-boundary evidence, not aggregate superiority. |
+| E5.2 | Can each task be bound to a concrete fixture and then compared with Summary vs PaperToSkill without mid-run human intervention? | Complete for a first GPT-family single-run pass over all eight rows. AIDE-T1/T2 have official Kaggle-derived local validation fixtures; after rerunning the same saved AIDE outputs with a 300-second local scorer budget, AIDE-T1 scores 0.816/0.817 and AIDE-T2 scores 0.000/0.826. SWE-T1 scores 0.000/0.000 due patch-apply failures; SWE-T2 scores 0.000/1.000; REF-T1/T2 score 1.000/1.000; SNAP-T1/T2 score 0.000/0.500 and 0.200/0.400 but fail the local success threshold. This is mixed downstream/failure-boundary evidence, not aggregate superiority. |
 | E5.3 | Can the main real-reuse table be generated from raw rows? | Complete for the first GPT-family single-run pass: `scripts/build_real_reuse_paper_tables.py` fills all eight `results/real_reuse/main_results_plan.{csv,md,json}` rows from `results/real_reuse/raw_rows.jsonl`. |
 | E5.4 | Does a small Full Excerpt sanity check change the interpretation? | Complete for the pre-registered AIDE-T1, SWE-T1, and SNAP-T1 subset. `scripts/build_real_reuse_full_excerpt_sanity.py` writes `results/real_reuse/full_excerpt_sanity.{csv,md,json}` and the AAAI `tab:full-excerpt-sanity`; Full Excerpt scores are AIDE-T1 0.000, SWE-T1 0.000, and SNAP-T1 0.250. This remains auxiliary sanity evidence, not a main baseline. |
 | E5.5 | Can the core real-reuse tasks be stabilized under source-paper objective metrics? | Refined/repeated main-task raw rows using the same Summary vs PaperToSkill conditions, longer provider timeout/retry budget, and clear separation between provider availability and task metric failures |
@@ -60,8 +60,8 @@
 
 | Task ID | Source Paper | Domain | Planned Metric | Status |
 | --- | --- | --- | --- | --- |
-| AIDE-T1 | AIDE | ML engineering | Validation score / Kaggle-style metric | Scored once: Summary 0.000, PaperToSkill 0.000; both scorer timeouts |
-| AIDE-T2 | AIDE | ML engineering | Validation score / best-node score | Scored once: Summary 0.000, PaperToSkill 0.000; both scorer timeouts |
+| AIDE-T1 | AIDE | ML engineering | Validation score / Kaggle-style metric | Scored with extended local scorer: Summary 0.816, PaperToSkill 0.817; solved by both |
+| AIDE-T2 | AIDE | ML engineering | Validation score / best-node score | Scored with extended local scorer: Summary 0.000 timeout, PaperToSkill 0.826 success |
 | SWE-T1 | SWE-agent | Software engineering | Tests passed / resolved | Scored once: Summary 0.000, PaperToSkill 0.000; both patch-apply failures |
 | SWE-T2 | SWE-agent | Software engineering | Tests passed / resolved | Scored once: Summary 0.000, PaperToSkill 1.000 |
 | REF-T1 | Reflexion | Reasoning / QA | Exact match / F1 / success | Scored once: Summary 1.000, PaperToSkill 1.000 |

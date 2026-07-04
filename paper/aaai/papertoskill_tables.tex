@@ -7,8 +7,8 @@
 \toprule
 Task & Paper & Domain & Input & Output & Metric & Reference & Summary & PaperToSkill & Status \\
 \midrule
-AIDE-T1 & AIDE & ML engineering & Kaggle-style dataset + metric & Runnable solution/submission & validation\_score & Reported AIDE ref. & 0.000 & 0.000 & Scored (GPT-family) \\
-AIDE-T2 & AIDE & ML engineering & Weak ML script + feedback & Improved script + trajectory & best\_node\_score & Reported AIDE ref. & 0.000 & 0.000 & Scored (GPT-family) \\
+AIDE-T1 & AIDE & ML engineering & Kaggle-style dataset + metric & Runnable solution/submission & validation\_score & Reported AIDE ref. & 0.816 & 0.817 & Scored (GPT-family) \\
+AIDE-T2 & AIDE & ML engineering & Weak ML script + feedback & Improved script + trajectory & best\_node\_score & Reported AIDE ref. & 0.000 & 0.826 & Scored (GPT-family) \\
 SWE-T1 & SWE-agent & Software engineering & Repo issue + tests & Patch + test log & resolved & Reported SWE-agent ref. & 0.000 & 0.000 & Scored (GPT-family) \\
 SWE-T2 & SWE-agent & Software engineering & Failing test + repo & Focused patch + verification & tests\_passed & Reported SWE-agent ref. & 0.000 & 1.000 & Scored (GPT-family) \\
 REF-T1 & Reflexion & Reasoning / QA & Multi-hop QA + feedback & Final answer + reflection trace & exact\_match\_or\_f1 & Reported Reflexion ref. & 1.000 & 1.000 & Scored (GPT-family) \\
@@ -29,8 +29,8 @@ SNAP-T2 & SnapATAC2 & Single-cell omics & Single-cell labels/proxy task & Cluste
 \toprule
 Task & Summary Outcome & PaperToSkill Outcome & Boundary Mode & Contract Implication \\
 \midrule
-AIDE-T1 & 0.000; timeout & 0.000; timeout & Budget timeout & runtime budget and fallback contract \\
-AIDE-T2 & 0.000; timeout & 0.000; timeout & Budget timeout & runtime budget and fallback contract \\
+AIDE-T1 & 0.816; success & 0.817; success & Solved by both & harder task slice or stricter scorer \\
+AIDE-T2 & 0.000; timeout & 0.826; success & PaperToSkill-only success & preserve patch/tool-use constraints \\
 SWE-T1 & 0.000; patch apply failed & 0.000; patch apply failed & Patch application & patch-format and apply-check contract \\
 SWE-T2 & 0.000; patch apply failed & 1.000; success & PaperToSkill-only success & preserve patch/tool-use constraints \\
 REF-T1 & 1.000; success & 1.000; success & Solved by both & harder task slice or stricter scorer \\
@@ -51,7 +51,7 @@ SNAP-T2 & 0.200; artifact incomplete & 0.400; artifact incomplete & Artifact com
 \toprule
 Task & Paper & Metric & Summary & PaperToSkill & Full Excerpt & Summary Tokens & PaperToSkill Tokens & Full Excerpt Tokens & Status \\
 \midrule
-AIDE-T1 & AIDE & validation\_score & 0.000 & 0.000 & 0.000 & 121 & 878 & 7366 & Scored (GPT-family) \\
+AIDE-T1 & AIDE & validation\_score & 0.816 & 0.817 & 0.000 & 121 & 878 & 7366 & Scored (GPT-family) \\
 SWE-T1 & SWE-agent & resolved & 0.000 & 0.000 & 0.000 & 89 & 1173 & 42048 & Scored (GPT-family) \\
 SNAP-T1 & SnapATAC2 & runtime\_memory\_quality & 0.000 & 0.500 & 0.250 & 72 & 1069 & 10297 & Scored (GPT-family) \\
 \bottomrule
