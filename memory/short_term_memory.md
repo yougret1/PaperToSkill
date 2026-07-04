@@ -15,7 +15,7 @@ Current date: 2026-07-04.
   phase108 SNAP executable-artifact follow-up are complete and remain
   diagnostic only.
 - The latest substantive phase save is confirmed on GitHub through commit
-  `ea15664` (`Add DeepSeek real-reuse LLM ablation rows`). A later status-sync
+  `0d4934b` (`Record Claude LLM ablation availability`). A later status-sync
   commit may sit on top; do not chase the status-sync hash in memory. Verify
   the exact current remote head with `git status -sb` and
   `git ls-remote --heads origin main` before making a fresh phase-save claim.
@@ -23,8 +23,10 @@ Current date: 2026-07-04.
   (`Record AIDE ablation push blocker`), `200419a`
   (`Add SWE real-reuse LLM ablation row`), `cb20cb1`
   (`Record SWE ablation push blocker`), `bc9644a`
-  (`Avoid remote status hash churn after SWE ablation`), and `ea15664`
-  (`Add DeepSeek real-reuse LLM ablation rows`) are remote-backed. The GitHub
+  (`Avoid remote status hash churn after SWE ablation`), `ea15664`
+  (`Add DeepSeek real-reuse LLM ablation rows`), `ea0f016`
+  (`Sync memory after DeepSeek LLM ablation`), and `0d4934b`
+  (`Record Claude LLM ablation availability`) are remote-backed. The GitHub
   HTTPS reset / port-443 blocker is resolved for these commits.
 - Verification before the phase save passed:
   `python -m unittest tests.test_build_real_reuse_llm_ablation_results -v`
@@ -167,9 +169,9 @@ Current date: 2026-07-04.
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-5. The latest local status-sync commit may still be ahead of `origin/main`.
-   Retry `git push origin main` only when doing a phase save or remote-backup
-   sync, and record any concrete network error in `toHuman.md`.
+5. No current GitHub retry item is open. Retry `git push origin main` only when
+   doing a phase save or remote-backup sync, and record any concrete network
+   error in `toHuman.md`.
 
 ## Boundaries
 
