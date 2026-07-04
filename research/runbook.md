@@ -30,12 +30,13 @@ git ls-remote --heads origin main
 Test-NetConnection github.com -Port 443 | Format-List
 ```
 
-Current status as of 2026-07-04: the latest confirmed remote backup is
-`9f2e52f` (`Aggregate real-reuse LLM ablation pilot`). The earlier HTTPS reset
-around local commit `f54be5b`, and the later reset / port-443 blocker around
-`10ffc10`, `516895a`, and `6c5c360`, were recovered by successful pushes. Keep
-future GitHub transport issues separate from experiment correctness. Do not
-call future phase work remote-backed until a new phase-save push is verified.
+Current status as of 2026-07-04: the phase109 experiment backup is confirmed on
+GitHub through `9f2e52f` (`Aggregate real-reuse LLM ablation pilot`). The
+earlier HTTPS reset around local commit `f54be5b`, and the later reset /
+port-443 blocker around `10ffc10`, `516895a`, and `6c5c360`, were recovered by
+successful pushes. Later status-sync commits may sit on top. Keep future
+GitHub transport issues separate from experiment correctness, and do not call
+future phase work remote-backed until a new phase-save push is verified.
 
 ## Local Text-To-Skill Pipeline
 

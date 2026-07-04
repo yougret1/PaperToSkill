@@ -16,10 +16,12 @@ Current date: 2026-07-04.
   SWE-T1 source-context reporting, SNAP artifact-execution diagnosis, and the
   phase108 SNAP executable-artifact follow-up are complete and remain
   diagnostic only.
-- Latest confirmed GitHub backup includes commit `9f2e52f` (`Aggregate
-  real-reuse LLM ablation pilot`). `git push origin main` succeeded and
-  `git ls-remote --heads origin main` returned the same commit, so the earlier
-  push blocker for `10ffc10`, `516895a`, and `6c5c360` is resolved.
+- The phase109 experiment backup is confirmed on GitHub through commit
+  `9f2e52f` (`Aggregate real-reuse LLM ablation pilot`). `git push origin main`
+  succeeded, so the earlier push blocker for `10ffc10`, `516895a`, and
+  `6c5c360` is resolved. A later status-sync commit may sit on top; verify the
+  exact current remote head with `git status -sb` and
+  `git ls-remote --heads origin main` before making a fresh phase-save claim.
 - Phase109 REF-T2 GPT-family real-reuse LLM ablation pilot, the LLM-ablation
   aggregation helper/results, and record-sync edits are locally committed and
   remote-backed through `9f2e52f`. Verification before phase save passed:

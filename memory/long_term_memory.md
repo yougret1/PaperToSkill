@@ -289,13 +289,12 @@ Current supported claims:
   specific L031 message-text change. Preserve the first-pass SWE-T1 0.000/0.000
   rows as the paper-facing main rows; report phase107 only as a
   shared-source-context follow-up.
-- Latest confirmed GitHub backup includes commit `9f2e52f` (`Aggregate
-  real-reuse LLM ablation pilot`). The earlier HTTPS reset / port-443 blocker
-  around commits `10ffc10`, `516895a`, and `6c5c360` is resolved: `git push
-  origin main` succeeded, and `git ls-remote --heads origin main` returned
-  `9f2e52f`. Keep future GitHub transport failures separate from experiment
-  correctness and verify local/remote alignment before claiming a new phase
-  save.
+- Phase109 experiment evidence is confirmed on GitHub through commit
+  `9f2e52f` (`Aggregate real-reuse LLM ablation pilot`). The earlier HTTPS
+  reset / port-443 blocker around commits `10ffc10`, `516895a`, and `6c5c360`
+  is resolved by successful push. Later status-sync commits may sit on top;
+  keep future GitHub transport failures separate from experiment correctness
+  and verify exact local/remote alignment before claiming a new phase save.
 - SNAP artifact-execution follow-up diagnosis is now materialized in
   `results/real_reuse/snapatac2_artifact_followup.{md,json}` with builder
   `scripts/build_real_reuse_snapatac2_artifact_followup.py`: all selected SNAP
