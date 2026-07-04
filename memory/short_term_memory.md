@@ -151,6 +151,14 @@ Current date: 2026-07-05.
   availability metadata. `results/real_reuse/llm_ablation_summary.md` remains
   12 collected scored rows / 18 expected rows, with the 6 Claude-family rows
   pending; this is provider availability metadata, not method-quality evidence.
+- Latest local phase checkpoint: `2a61d42 Record Claude ablation retry
+  availability` commits the latest Claude-family retry availability metadata
+  and short-memory update. Remote backup for this latest commit is currently
+  blocked by GitHub HTTPS transport: `git push origin main` failed twice with
+  `Recv failure: Connection was reset` after `c7d55b7` had previously been
+  verified on `origin/main`. `C:\Users\19351\Desktop\tem\toHuman.md` records
+  the exact failed commands/errors. Continue non-network work locally and retry
+  remote backup later; this is not experiment-correctness evidence.
 - Current local core-stabilization change: the real-reuse preflight now treats
   a separate `domain_robustness` planned output as deprecated/forbidden,
   checks current planned output paths (`main_results_plan.*`,
@@ -297,9 +305,11 @@ Current date: 2026-07-05.
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-6. Latest remote-backed phase checkpoint:
-   `cdeab1f Clarify phase110 diagnostics in paper and memory`, verified on
-   `origin/main` by `git ls-remote --heads origin main`.
+6. Latest local phase checkpoint:
+   `2a61d42 Record Claude ablation retry availability`. It is not
+   remote-backed yet because `git push origin main` failed twice with
+   connection-reset transport errors. Latest verified remote checkpoint remains
+   `c7d55b7 Record recovered GitHub backup status`.
 7. No experiment-side human action is required.
 
 ## Boundaries
