@@ -14,8 +14,11 @@ Current date: 2026-07-04.
   next practical focus is the SNAP executable-artifact follow-up; SWE-T1
   source-context reporting is complete and remains diagnostic only.
 - Latest confirmed GitHub backup includes commit `bcf6db6` (`Record SNAP
-  memory push recovery`); `main` and `origin/main` were aligned at the latest
-  status check.
+  memory push recovery`). The newest local commit `f54be5b` (`Sync SNAP
+  follow-up planning records`) is not yet confirmed on `origin/main`; the
+  latest local status check showed `main...origin/main [ahead 1]` after GitHub
+  HTTPS reset failures. This is a phase-save transport issue, not an
+  experiment-correctness blocker.
 - `C:\Users\19351\Desktop\tem\toHuman.md` should say no immediate human action
   is required, and `ok.txt` should only be created for completed human-fidelity
   annotation or a concrete placed core asset.
@@ -104,9 +107,11 @@ Current date: 2026-07-04.
 
 ## Immediate Next Actions
 
-1. Check `git status -sb` before the next phase save. The latest verified
-   remote backup includes `bcf6db6`; preserve local commits and keep any future
-   GitHub transport failures separate from experiment correctness.
+1. Retry the remote backup for local commit `f54be5b` when GitHub HTTPS
+   connectivity allows. Before claiming a phase save, check `git status -sb`
+   and verify whether `origin/main` contains the newest local commit. Preserve
+   local commits and keep GitHub transport failures separate from experiment
+   correctness.
 2. SNAP artifact-completion/budget inspection has produced
    `results/real_reuse/snapatac2_artifact_followup.{md,json}` via
    `scripts/build_real_reuse_snapatac2_artifact_followup.py`. The diagnosis is

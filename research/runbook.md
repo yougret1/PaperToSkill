@@ -30,14 +30,13 @@ git ls-remote --heads origin main
 Test-NetConnection github.com -Port 443 | Format-List
 ```
 
-Current status as of 2026-07-04: the earlier GitHub HTTPS connectivity blocker
-has been resolved. The latest confirmed local/remote alignment is commit
-`bcf6db6` (`Record SNAP memory push recovery`), which includes the SWE-T1
-source-context follow-up, the SNAP artifact-execution diagnosis, and the
-post-SNAP memory sync. Use
-`git status -sb`, `git log -1 --oneline`, and
-`git ls-remote --heads origin main` before future phase-save claims, and keep
-any future transport failures separate from experiment correctness.
+Current status as of 2026-07-04: the latest confirmed remote backup is
+`bcf6db6` (`Record SNAP memory push recovery`). A newer local commit,
+`f54be5b` (`Sync SNAP follow-up planning records`), exists but is not yet
+confirmed on `origin/main` because the last `git push origin main` and
+`git ls-remote --heads origin main` attempts failed with `Recv failure:
+Connection was reset`. Retry the push when network connectivity allows, and
+keep this GitHub transport issue separate from experiment correctness.
 
 ## Local Text-To-Skill Pipeline
 

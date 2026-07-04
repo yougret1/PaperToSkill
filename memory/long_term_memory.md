@@ -291,10 +291,12 @@ Current supported claims:
   rows as the paper-facing main rows; report phase107 only as a
   shared-source-context follow-up.
 - Latest confirmed GitHub backup includes commit `bcf6db6` (`Record SNAP
-  memory push recovery`). Earlier GitHub transport failures in this phase were
-  recovered. Keep any future GitHub transport failures separate from experiment
-  correctness and verify local/remote alignment before claiming a new phase
-  save.
+  memory push recovery`). A newer local commit `f54be5b` (`Sync SNAP follow-up
+  planning records`) exists but is not yet confirmed on `origin/main` because
+  the last GitHub HTTPS push/ls-remote attempts failed with `Recv failure:
+  Connection was reset`. Treat this as a phase-save transport issue, not an
+  experiment-correctness blocker, and verify local/remote alignment before
+  claiming a new phase save.
 - SNAP artifact-execution follow-up diagnosis is now materialized in
   `results/real_reuse/snapatac2_artifact_followup.{md,json}` with builder
   `scripts/build_real_reuse_snapatac2_artifact_followup.py`: all selected SNAP
@@ -302,10 +304,10 @@ Current supported claims:
   outputs rather than executed artifacts; miniature fixtures are readable;
   `snapatac2` is not importable in the current Python environment. This is a
   pre-registered follow-up contract, not a main-row replacement.
-- Phase 89 remote save recovered the earlier GitHub HTTPS blocker:
-  `git push origin main` succeeded for the Phase 87/88 stack and the follow-up
-  remote-save record was also pushed. Use `git status -sb` for the latest exact
-  remote alignment.
+- Phase 89 remote save recovered an earlier GitHub HTTPS blocker for the Phase
+  87/88 stack. That historical recovery does not imply the newest local commit
+  is backed up; use `git status -sb` and a successful remote check for the
+  latest exact alignment.
 
 Current unsupported claims:
 
