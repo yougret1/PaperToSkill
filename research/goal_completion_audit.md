@@ -51,7 +51,7 @@ Current machine reports:
 | --- | --- | --- | --- |
 | Durable local memory | `memory/long_term_memory.md`; `memory/short_term_memory.md` | Complete locally | Read and update both memory files after every resume/compaction. |
 | Use `ai-scientist-v2` to refine PaperToSkill | Seed idea files, bounded smoke report, full live-run handoff, Phase 76 run log, completion directory | Complete for bounded local evidence | Do not treat the synthetic run as broad live task success. |
-| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. Latest confirmed remote backup is `6424ba6` (`Sync remote backup status records`). The earlier GitHub HTTPS reset around `f54be5b` has been recovered. Current phase108 follow-up and record-sync edits are newer than that confirmed remote backup until the next phase save succeeds. | Complete for the latest saved phase only | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim and keep transport failures separate from experiment correctness. |
+| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. Latest confirmed remote backup is `6424ba6` (`Sync remote backup status records`). Local commits `10ffc10`, `516895a`, and `6c5c360` are saved locally but not uploaded because GitHub HTTPS push is failing; phase109 LLM-ablation pilot artifacts and current record-sync edits are still uncommitted. | Complete for the latest saved remote phase only | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim and keep transport failures separate from experiment correctness. |
 | Official AAAI TeX package | `paper/aaai/`; `results/reproducibility/aaai_package_report.md` | Locally ready | Keep draft synchronized with new evidence. |
 | Usage examples | `examples/usage/`; `results/reproducibility/usage_example_report.md` | Complete locally | Re-run after runner or task changes. |
 | Model ablations | `results/model_ablation_prompts/v0/evaluation.md`: 6 scored, 0 pending | Complete for saved-response protocol | Do not claim broad model quality or live task success. |
@@ -98,6 +98,11 @@ task-success claim.
 - `full_excerpt_sanity_check`: AIDE-T1, SWE-T1, and SNAP-T1 rows are scored
   with Summary, PaperToSkill, and Full Excerpt values plus token proxies; the
   result remains auxiliary sanity evidence.
+- `real_reuse_llm_ablation_phase109_partial`: the pre-registered real-reuse
+  LLM ablation has 2 collected rows out of 18 expected rows. REF-T2 /
+  GPT-family / `gpt-5.5` scores Summary 1.000 and PaperToSkill 1.000, both on
+  attempt 1. This is ceiling/control auxiliary evidence, not a main-table
+  replacement and not PaperToSkill advantage.
 
 ## Completion Decision
 
@@ -115,9 +120,10 @@ an aggregate downstream-success claim.
 
 1. Stabilize the core real-reuse experiment first. Main-row selection,
    dedicated reporting for SWE-T1 phase107, SNAP artifact-execution diagnosis,
-   and phase108 SNAP executable-artifact follow-up are complete. Next focus is
-   deciding whether to promote a pre-registered task-contract fix or to collect
-   real-reuse LLM ablation raw rows on stabilized slices.
+   and phase108 SNAP executable-artifact follow-up are complete. Phase109 has
+   started collecting pre-registered real-reuse LLM ablation raw rows on
+   stabilized slices; next focus is continuing those rows or deciding whether
+   to promote a pre-registered task-contract fix.
 2. Keep provider latency, API timeouts, and retry counts separate from the core
    task metrics; record provider availability only as execution metadata and
    give model calls generous timeout/retry budgets.

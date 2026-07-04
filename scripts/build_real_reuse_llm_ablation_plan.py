@@ -47,8 +47,8 @@ def task_prefix(task_id: str) -> str:
     raise ValueError(f"unsupported task id: {task_id}")
 
 
-def run_id(model_slot: dict[str, Any], task_id: str) -> str:
-    return f"phaseXX_llm_ablation_{model_slot['id']}_{task_id.lower().replace('-', '_')}"
+def run_id(model_slot: dict[str, Any], task_id: str, prefix: str) -> str:
+    return f"{prefix}_{model_slot['id']}_{task_id.lower().replace('-', '_')}"
 
 
 def env_status(*names: str) -> dict[str, str]:
@@ -62,6 +62,7 @@ def build_command(
     model_slot: dict[str, Any],
     runner_defaults: dict[str, Any],
     conditions: list[str],
+    run_id_prefix: str,
 ) -> str:
     parts = [
         "python",
@@ -92,7 +93,7 @@ def build_command(
             "--max-tokens",
             str(runner_defaults["max_tokens"]),
             "--run-id",
-            run_id(model_slot, task_id),
+            run_id(model_slot, task_id, run_id_prefix),
         ]
     )
     if "score_timeout_seconds" in runner_defaults:
@@ -107,6 +108,7 @@ def build_plan(root: Path, spec_path: Path, main_table_path: Path) -> dict[str, 
     model_slots = list(spec["model_slots"])
     runner_defaults = dict(spec["runner_defaults"])
     selected_tasks = list(spec["selection_policy"]["primary_subset"])
+    run_id_prefix = str(spec.get("run_id_prefix", "phaseXX_llm_ablation"))
 
     tasks: list[dict[str, Any]] = []
     commands: list[dict[str, Any]] = []
@@ -142,13 +144,14 @@ def build_plan(root: Path, spec_path: Path, main_table_path: Path) -> dict[str, 
                     "wire_api": slot["wire_api"],
                     "conditions": conditions,
                     "expected_raw_rows": len(conditions),
-                    "run_id": run_id(slot, task_id),
+                    "run_id": run_id(slot, task_id, run_id_prefix),
                     "command": build_command(
                         script=runner_defaults[prefix]["script"],
                         task_id=task_id,
                         model_slot=slot,
                         runner_defaults=runner_defaults[prefix],
                         conditions=conditions,
+                        run_id_prefix=run_id_prefix,
                     ),
                 }
             )
@@ -157,6 +160,7 @@ def build_plan(root: Path, spec_path: Path, main_table_path: Path) -> dict[str, 
         "schema_version": "0.1",
         "spec_path": spec_path.as_posix(),
         "main_table_path": main_table_path.as_posix(),
+        "run_id_prefix": run_id_prefix,
         "purpose": spec["purpose"],
         "evidence_boundary": spec["evidence_boundary"],
         "tasks": tasks,

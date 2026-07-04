@@ -55,10 +55,9 @@ This file is intentionally compact. Detailed chronological history lives in
   evidence supports quality, grounding, compactness, readiness, and sanity
   claims only.
 - The older saved-response Claude/GPT-family/DeepSeek model-ablation protocol
-  is complete as supporting output-contract evidence. Future LLM ablation
-  should attach to the real-reuse task protocol after the core rows stabilize;
-  do not treat the older saved-response protocol as downstream task-success
-  evidence.
+  is complete as supporting output-contract evidence. Real-reuse LLM ablation
+  should attach to the real-reuse task protocol; do not treat the older
+  saved-response protocol as downstream task-success evidence.
 - Do not silently treat unavailable model endpoints as model-quality failures.
   Report provider/model availability problems.
 - Record-sync-only work should update planning/handoff/memory records without
@@ -295,9 +294,9 @@ Current supported claims:
   `f54be5b` was recovered by a successful push to `origin/main`. Keep future
   GitHub transport failures separate from experiment correctness and verify
   local/remote alignment before claiming a new phase save. Local commits
-  `10ffc10` and `516895a` currently exist beyond that remote commit; upload is
-  blocked by GitHub HTTPS reset / port-443 connection failure and is recorded
-  in `C:\Users\19351\Desktop\tem\toHuman.md`.
+  `10ffc10`, `516895a`, and `6c5c360` currently exist beyond that remote
+  commit; upload is blocked by GitHub HTTPS reset / port-443 connection
+  failure and is recorded in `C:\Users\19351\Desktop\tem\toHuman.md`.
 - SNAP artifact-execution follow-up diagnosis is now materialized in
   `results/real_reuse/snapatac2_artifact_followup.{md,json}` with builder
   `scripts/build_real_reuse_snapatac2_artifact_followup.py`: all selected SNAP
@@ -313,6 +312,12 @@ Current supported claims:
   scorer. It validates the artifact/runtime/memory contract path, does not
   append to `raw_rows.jsonl`, does not replace main SNAP rows, and does not
   show PaperToSkill advantage.
+- Phase109 has started the real-reuse LLM ablation only on the pre-registered
+  stabilized slices. The current collected pair is REF-T2 / GPT-family /
+  `gpt-5.5`: Summary 1.000 and PaperToSkill 1.000, both successful on attempt
+  1. `results/real_reuse/llm_ablation_summary.md` reports 2 collected rows and
+  16 pending rows out of 18 expected rows. This is ceiling/control auxiliary
+  evidence, not a main-row replacement and not PaperToSkill advantage.
 - Phase 89 and the 2026-07-04 record-sync push both recovered GitHub HTTPS
   transport interruptions. Use `git status -sb` and a successful remote check
   for the latest exact alignment before each phase-save claim.
@@ -658,8 +663,14 @@ Use these as entry points instead of searching the whole repo first:
   `results/real_reuse/llm_ablation_plan.{md,json}` pre-register a stabilized
   AIDE-T2/SWE-T2/REF-T2 pilot over GPT-family `gpt-5.5`, Claude-family
   `claude-opus-4-8`, and DeepSeek-family `deepseek-v4-flash` with 300-second
-  timeouts and 5 attempts. This is a command/environment plan only; no new
-  model responses or raw rows have been collected under it.
+  timeouts and 5 attempts. Phase109 has collected the GPT-family REF-T2
+  ceiling/control pair; AIDE-T2, SWE-T2, Claude-family, and DeepSeek-family
+  rows remain pending.
+- Real-reuse LLM ablation aggregation:
+  `results/real_reuse/llm_ablation_summary.md`,
+  `results/real_reuse/llm_ablation_summary.json`, and
+  `results/real_reuse/llm_ablation_raw_rows.csv` aggregate only
+  pre-registered run IDs; pending rows are not negative evidence.
 
 ## Model/API Configuration
 

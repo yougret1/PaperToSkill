@@ -222,6 +222,7 @@
 | `scripts/build_real_reuse_asset_locks.py` | Materializes preparation-time asset locks for the eight real-reuse tasks from task, fixture, and candidate manifests | Created |
 | `scripts/build_real_reuse_paper_tables.py` | Materializes the paper-facing real-reuse main-results table from the benchmark spec and raw rows, using `results/real_reuse/main_run_selection.json` to keep follow-up rows from silently replacing pre-registered main rows | Created |
 | `scripts/build_real_reuse_llm_ablation_plan.py` | Builds the pre-registered real-reuse LLM ablation task/model command plan without calling models or adding raw rows | Created |
+| `scripts/build_real_reuse_llm_ablation_results.py` | Aggregates collected real-reuse LLM ablation raw rows against pre-registered run IDs while treating pending rows as pending rather than negative evidence | Created |
 | `scripts/prepare_real_reuse_reflexion_fixture.py` | Prepares locked REF-T1/REF-T2 local fixture assets, condition contexts, sha256 manifest entries, and scorer-only answer/checker separation | Created |
 | `scripts/score_real_reuse_reflexion.py` | Scores REF-T1 answer-key outputs with EM/F1 and REF-T2 HumanEval candidates with the hidden objective checker | Created |
 | `scripts/run_real_reuse_reflexion.py` | Runs locked REF-T1/REF-T2 Summary-vs-PaperToSkill conditions, saves prompts/responses/metrics/raw rows, and separates provider availability from model quality | Created |
@@ -308,6 +309,7 @@
 | `tests/test_build_real_reuse_snapatac2_artifact_followup.py` | Unit test for SNAP artifact-execution follow-up diagnosis over invalid JSON and plan-only candidate outputs | Created |
 | `tests/test_run_real_reuse_snapatac2_executable_followup.py` | Unit test for the paired SNAP executable-artifact follow-up runner and no-main-raw-row policy | Created |
 | `tests/test_build_real_reuse_llm_ablation_plan.py` | Unit tests for the real-reuse LLM ablation plan, selected stabilized subset, long retry budget, and generated command shape | Created |
+| `tests/test_build_real_reuse_llm_ablation_results.py` | Unit tests for real-reuse LLM ablation aggregation and phase109 REF-T2 GPT-family row detection | Created |
 | `generated_skills/ai_scientist_v2/SKILL.md` | Retained generated skill from real paper note | Created |
 | `generated_skills/ai_scientist_v2/references/source_map.json` | Source-map evidence for AI Scientist-v2 generated skill | Created |
 | `generated_skills/reflexion/SKILL.md` | Retained generated skill from Reflexion note | Created |
@@ -414,8 +416,8 @@
 | `results/real_reuse/spec_preflight.md` | Human-readable preflight for the planned real-reuse benchmark spec; not a task-result table | Created |
 | `results/real_reuse/spec_preflight.json` | Machine-readable preflight for the planned real-reuse benchmark spec; not a task-result table | Created |
 | `results/real_reuse/raw_rows.jsonl` | Raw scored rows for currently executed real-reuse conditions; current rows cover AIDE-T1/AIDE-T2, SWE-T1/SWE-T2, REF-T1/REF-T2, and SNAP-T1/SNAP-T2 Summary and PaperToSkill with GPT-family | Created |
-| `results/real_reuse/reflexion_run_report.md` | Human-readable run report for the locked REF-T1/REF-T2 GPT-family real-reuse execution | Created |
-| `results/real_reuse/reflexion_run_report.json` | Machine-readable run report for the locked REF-T1/REF-T2 GPT-family real-reuse execution | Created |
+| `results/real_reuse/reflexion_run_report.md` | Human-readable latest REF runner report; raw scored REF evidence and paper-facing row selection are authoritative in `results/real_reuse/raw_rows.jsonl` and `results/real_reuse/main_run_selection.json` because phase109 REF-T2 LLM-ablation output overwrote the default report path | Created |
+| `results/real_reuse/reflexion_run_report.json` | Machine-readable latest REF runner report; current default report path reflects phase109 REF-T2 LLM-ablation output | Created |
 | `results/real_reuse/swe_run_report.md` | Human-readable latest SWE runner report; raw scored SWE evidence is authoritative in `results/real_reuse/raw_rows.jsonl` because the later SWE-T1 Summary retry overwrote the default report path | Created |
 | `results/real_reuse/swe_run_report.json` | Machine-readable latest SWE runner report; raw scored SWE evidence is authoritative in `results/real_reuse/raw_rows.jsonl` | Created |
 | `results/real_reuse/swe_t1_gold_metric.json` | Gold-patch scorer validation for the locked SWE-T1 fixture and hidden test patch | Created |
@@ -446,8 +448,11 @@
 | `results/real_reuse/full_excerpt_sanity.csv` | Data source for the AAAI Full Excerpt sanity table; the pre-registered three-row sanity subset is scored | Created |
 | `results/real_reuse/full_excerpt_sanity.md` | Human-readable Full Excerpt sanity check with local whitespace token proxies | Created |
 | `results/real_reuse/full_excerpt_sanity.json` | Machine-readable Full Excerpt sanity check and evidence boundary | Created |
-| `results/real_reuse/llm_ablation_plan.md` | Human-readable command plan for future real-reuse LLM ablation rows; no model calls or scores | Created |
+| `results/real_reuse/llm_ablation_plan.md` | Human-readable command plan for real-reuse LLM ablation rows using the phase109 run-id prefix; the plan itself does not call models | Created |
 | `results/real_reuse/llm_ablation_plan.json` | Machine-readable real-reuse LLM ablation command plan and environment-presence summary | Created |
+| `results/real_reuse/llm_ablation_summary.md` | Human-readable real-reuse LLM ablation aggregate; currently 2 collected REF-T2 GPT-family rows and 16 pending rows | Created |
+| `results/real_reuse/llm_ablation_summary.json` | Machine-readable real-reuse LLM ablation aggregate keyed to pre-registered run IDs | Created |
+| `results/real_reuse/llm_ablation_raw_rows.csv` | CSV export of collected pre-registered real-reuse LLM ablation raw rows | Created |
 | `results/reproducibility/aaai_package_report.md` | Human-readable AAAI package verification report | Created |
 | `results/reproducibility/aaai_package_report.json` | Machine-readable AAAI package verification report | Created |
 | `results/reproducibility/usage_example_report.md` | Human-readable usage-example verification report | Created |
@@ -502,7 +507,7 @@
 
 | Artifact | Purpose | Status |
 | --- | --- | --- |
-| Real-reuse LLM ablation response logs | Future Claude/GPT-family/DeepSeek raw rows collected under the real-reuse task protocol, separate from the older saved-response usage-plan protocol | Planned |
+| Real-reuse LLM ablation response logs | Partially collected Claude/GPT-family/DeepSeek raw rows under the real-reuse task protocol, separate from the older saved-response usage-plan protocol; current completed slice is REF-T2 / GPT-family / `gpt-5.5` | In progress |
 | Concrete real-reuse fixture assets | AIDE-T1/T2, REF-T1/T2, SWE-T1/T2, and SNAP-T1/T2 prepared assets plus one GPT-family Summary-vs-PaperToSkill pass are created; AIDE-T2 and SWE-T2 are PaperToSkill-only successes, AIDE-T1 and REF are solved by both conditions, and SWE-T1/SNAP remain boundary rows | Mixed |
 | `results/real_reuse/` | Current AIDE/SWE/REF/SNAP raw rows and table artifacts plus future aggregate tables, sanity checks, cost table, and LLM ablation outputs | Mixed |
 | Paper2Agent executable baseline | Full Paper2Agent/MCP runtime comparison, if setup resources become available | Planned |

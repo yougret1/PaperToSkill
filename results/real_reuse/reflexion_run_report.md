@@ -2,9 +2,9 @@
 
 Evidence boundary: this report covers only locked Reflexion real-reuse tasks. Provider/model errors are availability evidence, not model-quality failures. Aggregate PaperToSkill claims require the broader real-reuse benchmark.
 
-- Run ID: phase87_gpt_reflexion_real_reuse
+- Run ID: phase109_llm_ablation_gpt_5_5_ref_t2
 - Overall status: complete
-- Status counts: {'scored': 4}
+- Status counts: {'scored': 2}
 - Model family: GPT-family
 - Model alias: gpt-5.5
 - Wire API: openai_responses
@@ -12,7 +12,5 @@ Evidence boundary: this report covers only locked Reflexion real-reuse tasks. Pr
 
 | Task | Condition | Status | Score | Success | Failure | Output |
 | --- | --- | --- | --- | --- | --- | --- |
-| REF-T1 | summary | scored | 1.0 | True |  | results/real_reuse/runs/REF-T1/summary/phase87_gpt_reflexion_real_reuse/response.txt |
-| REF-T1 | papertoskill | scored | 1.0 | True |  | results/real_reuse/runs/REF-T1/papertoskill/phase87_gpt_reflexion_real_reuse/response.txt |
-| REF-T2 | summary | scored | 1.0 | True |  | results/real_reuse/runs/REF-T2/summary/phase87_gpt_reflexion_real_reuse/response.txt |
-| REF-T2 | papertoskill | scored | 1.0 | True |  | results/real_reuse/runs/REF-T2/papertoskill/phase87_gpt_reflexion_real_reuse/response.txt |
+| REF-T2 | summary | scored | 1.0 | True |  | results/real_reuse/runs/REF-T2/summary/phase109_llm_ablation_gpt_5_5_ref_t2/response.txt |
+| REF-T2 | papertoskill | scored | 1.0 | True |  | results/real_reuse/runs/REF-T2/papertoskill/phase109_llm_ablation_gpt_5_5_ref_t2/response.txt |

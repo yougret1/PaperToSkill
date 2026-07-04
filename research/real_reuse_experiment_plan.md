@@ -192,7 +192,7 @@ family. It is not a broad model ranking.
 
 | Model Family | Model Alias | Tasks | Summary Avg Score | PaperToSkill Avg Score | Reuse Success | Unsupported Errors / Task | Token Cost / Task | Availability |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| GPT-family | gpt-5.5 or current alias | 8 or stabilized subset | TBD | TBD | TBD | TBD | TBD | TBD |
+| GPT-family | gpt-5.5 | REF-T2 collected; AIDE-T2/SWE-T2 pending | 1.000 on collected control slice | 1.000 on collected control slice | Control pair complete | Not automatically judged | Provider usage / local proxy | REF-T2 HTTP 200 attempt 1 |
 | Claude-family | TBD | stabilized subset | TBD | TBD | TBD | TBD | TBD | TBD |
 | DeepSeek-family | TBD | stabilized subset | TBD | TBD | TBD | TBD | TBD | TBD |
 
@@ -201,8 +201,11 @@ Current pre-registered pilot: `benchmarks/real_reuse/llm_ablation_v0.json` and
 positive PaperToSkill-only slices plus REF-T2 as a ceiling/control slice. The
 plan uses GPT-family `gpt-5.5`, Claude-family `claude-opus-4-8`, and
 DeepSeek-family `deepseek-v4-flash`, with 300-second provider timeouts, five
-attempts, and five-second retry delays. It is a command plan only; no new model
-responses or raw rows have been collected under this protocol yet.
+attempts, and five-second retry delays. Phase109 has collected the REF-T2 /
+GPT-family / `gpt-5.5` ceiling/control pair: Summary 1.000 and PaperToSkill
+1.000, both successful on attempt 1. The aggregate currently has 2 collected
+rows and 16 pending rows; this is auxiliary control evidence, not a main-table
+replacement and not PaperToSkill advantage.
 
 ## Table 5: LLM Ablation Raw Rows
 
@@ -210,8 +213,10 @@ Purpose: raw `task x model x condition` table for audit and appendix.
 
 | Task ID | Source Paper | Model Family | Model Alias | Condition | Task Score | Success | Unsupported Errors | Tokens | Failure Reason |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| AIDE-T2 | AIDE | GPT-family | gpt-5.5 | Summary | TBD | TBD | TBD | TBD | TBD |
-| AIDE-T2 | AIDE | GPT-family | gpt-5.5 | PaperToSkill | TBD | TBD | TBD | TBD | TBD |
+| REF-T2 | Reflexion | GPT-family | gpt-5.5 | Summary | 1.000 | True | Not automatically judged | 5171 |  |
+| REF-T2 | Reflexion | GPT-family | gpt-5.5 | PaperToSkill | 1.000 | True | Not automatically judged | 5655 |  |
+| AIDE-T2 | AIDE | GPT-family | gpt-5.5 | Summary | Pending | Pending | Pending | Pending | Pending |
+| AIDE-T2 | AIDE | GPT-family | gpt-5.5 | PaperToSkill | Pending | Pending | Pending | Pending | Pending |
 | AIDE-T2 | AIDE | Claude-family | claude-opus-4-8 | Summary | TBD | TBD | TBD | TBD | TBD |
 | AIDE-T2 | AIDE | Claude-family | claude-opus-4-8 | PaperToSkill | TBD | TBD | TBD | TBD | TBD |
 | AIDE-T2 | AIDE | DeepSeek-family | deepseek-v4-flash | Summary | TBD | TBD | TBD | TBD | TBD |
@@ -299,10 +304,11 @@ analyses are stable.
   and cost gates.
 - The older saved-response model ablation remains a usage-plan/output-contract
   result; it does not prove live downstream task success.
-- The real-reuse LLM ablation pilot is pre-registered but not run. Its current
-  artifact is a command/environment plan only, and missing provider
-  environment variables are availability metadata rather than model-quality
-  evidence.
+- The real-reuse LLM ablation pilot is pre-registered and partially collected.
+  Current aggregate files report 2 collected rows out of 18 expected rows: the
+  REF-T2 / GPT-family / `gpt-5.5` ceiling/control pair. Pending rows are not
+  negative evidence, and missing provider environment variables are
+  availability metadata rather than model-quality evidence.
 - AI-Scientist-v2 evidence remains bounded integration/synthetic sensitivity
   evidence.
 - Do not claim that PaperToSkill beats an original paper method unless the same

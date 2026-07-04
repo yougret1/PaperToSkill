@@ -7,20 +7,33 @@ Current date: 2026-07-04.
 
 ## Current Task
 
-- Latest user request: save, upload to GitHub, then continue the project; if
-  network/upload blocks progress, write exact details to
-  `C:\Users\19351\Desktop\tem\toHuman.md` and continue non-blocked local work.
+- Latest user request: save the current phase, upload to GitHub if possible,
+  then continue the project. If GitHub/network/download blocks progress, write
+  the concrete command, error, and blocked artifact to
+  `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked local
+  work.
 - Current execution priority remains the core real-reuse main experiment.
   SWE-T1 source-context reporting, SNAP artifact-execution diagnosis, and the
   phase108 SNAP executable-artifact follow-up are complete and remain
   diagnostic only.
 - Latest confirmed GitHub backup includes commit `6424ba6` (`Sync remote
   backup status records`). Local commits `10ffc10` (`Add SNAP executable
-  artifact follow-up`) and `516895a` (`Pre-register real-reuse LLM ablation
-  plan`) are saved locally but not uploaded; `git status -sb` reports
-  `main...origin/main [ahead 2]`. `git push origin main` failed with GitHub
+  artifact follow-up`), `516895a` (`Pre-register real-reuse LLM ablation
+  plan`), and `6c5c360` (`Sync memory after LLM ablation planning`) are saved
+  locally but not uploaded; `git status -sb` reports
+  `main...origin/main [ahead 3]`. `git push origin main` failed with GitHub
   HTTPS reset and then port-443 connection failure. The exact commands/errors
   are recorded in `C:\Users\19351\Desktop\tem\toHuman.md`.
+- Current uncommitted local work includes the phase109 REF-T2 GPT-family
+  real-reuse LLM ablation pilot, the LLM-ablation aggregation helper/results,
+  and the current record-sync edits. Verification before phase save passed:
+  181 unit tests, `check_real_reuse_benchmark.py --strict`,
+  `check_paper_tables.py --strict`, `check_paper_claims.py --strict`,
+  `check_submission_review.py --strict`, `check_aaai_package.py --strict`,
+  `check_goal_completion.py --strict`,
+  `check_reproducibility_package.py --strict`, `git diff --check` with only
+  CRLF warnings, and a raw-key scan with no matches. Do not describe these as
+  phase-saved or remote-backed until a new commit and successful push exist.
 - `C:\Users\19351\Desktop\tem\toHuman.md` should say no immediate human action
   is required, and `ok.txt` should only be created for completed human-fidelity
   annotation or a concrete placed core asset.
@@ -33,9 +46,8 @@ Current date: 2026-07-04.
   eight main paper-tasks.
 - Keep component ablation appendix-only and user study last/optional.
 - Treat Full Excerpt as an auxiliary sanity check, not a main baseline.
-- Attach future LLM ablation to the real-reuse task protocol after the core
-  rows stabilize; do not use older saved-response usage-plan scoring as
-  downstream task-success evidence.
+- Attach LLM ablation to the real-reuse task protocol; do not use older
+  saved-response usage-plan scoring as downstream task-success evidence.
 - Provider latency, API timeout, and retry counts are availability metadata,
   not core effectiveness metrics. Give third-party LLM calls longer timeout and
   more retries.
@@ -84,16 +96,20 @@ Current date: 2026-07-04.
 
 - Full Excerpt sanity is scored for AIDE-T1, SWE-T1, and SNAP-T1, but it is
   auxiliary sanity/cost/context evidence only, not a main baseline.
-- LLM ablation should be attached to the real-reuse task protocol after the
-  core rows stabilize; it should not rely on the older saved-response
-  usage-plan protocol as downstream task evidence.
+- LLM ablation should be attached to the real-reuse task protocol and should
+  not rely on the older saved-response usage-plan protocol as downstream task
+  evidence.
 - A pre-registered real-reuse LLM ablation command plan now exists in
   `benchmarks/real_reuse/llm_ablation_v0.json` and
   `results/real_reuse/llm_ablation_plan.{md,json}`. It selects AIDE-T2,
   SWE-T2, and REF-T2; uses GPT-family `gpt-5.5`, Claude-family
   `claude-opus-4-8`, and DeepSeek-family `deepseek-v4-flash`; and gives each
-  provider call 300 seconds, 5 attempts, and 5-second retry delays. It has not
-  run models or added raw rows.
+  provider call 300 seconds, 5 attempts, and 5-second retry delays. Phase109
+  has collected the REF-T2 / GPT-family / `gpt-5.5` Summary/PaperToSkill pair:
+  both rows score 1.000, both succeeded on attempt 1, and
+  `results/real_reuse/llm_ablation_summary.md` reports 2 collected rows out of
+  18 expected rows. This is ceiling/control auxiliary evidence, not a main-row
+  replacement and not PaperToSkill advantage.
 - Human-fidelity annotation supports semantic fidelity and reviewability, not
   main task effectiveness. It remains pending: 0 scored rows and 24 pending
   paper-by-criterion cells.
@@ -123,23 +139,24 @@ Current date: 2026-07-04.
 
 ## Immediate Next Actions
 
-1. Finish the current record-sync pass without touching local logs, then
-   verify the updated handoff/memory/planning records are internally
-   consistent.
-2. Before the next phase save, check `git status -sb`, commit meaningful
-   progress, and push when GitHub connectivity allows.
-3. Retry `git push origin main` when GitHub connectivity returns; do not claim
-   remote backup for `10ffc10` or `516895a` until `git status -sb` no longer
-   reports `ahead 2`.
-4. Execute the pre-registered real-reuse LLM ablation plan after provider env
+1. Commit the verified phase109 LLM-ablation aggregation/record-sync work.
+2. Retry `git push origin main`; do not claim remote backup for `10ffc10`,
+   `516895a`, `6c5c360`, or the next phase commit until `git status -sb` no
+   longer reports ahead of `origin/main`.
+3. If push still fails, update
+   `C:\Users\19351\Desktop\tem\toHuman.md` with the exact command, error, and
+   blocked commits, then continue non-blocked local work.
+4. Continue the pre-registered real-reuse LLM ablation rows when provider env
    vars are available, or use the local API docs under
    `C:\Users\19351\Desktop\论文\SelfPaper\LLMAPIDocument` to set them in the
    shell only. Do not commit raw keys.
+   Current collected slice is only REF-T2 / GPT-family / `gpt-5.5`; AIDE-T2,
+   SWE-T2, Claude, and DeepSeek rows remain pending.
 5. Keep Summary and PaperToSkill paired under the same task/scorer contract for
    any follow-up. Main SNAP rows remain unchanged unless explicitly promoted.
 6. During core reruns, collect auxiliary raw data where cheap: provider
    availability, failure reasons, context/token proxies, and raw rows needed
-   for future real-reuse LLM ablation.
+   for real-reuse LLM ablation.
 7. Run broader verification gates before the next phase save:
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,

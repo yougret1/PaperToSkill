@@ -33,9 +33,10 @@ Test-NetConnection github.com -Port 443 | Format-List
 Current status as of 2026-07-04: the latest confirmed remote backup is
 `6424ba6` (`Sync remote backup status records`). The earlier HTTPS reset around
 local commit `f54be5b` was recovered by a successful push. Keep future GitHub
-transport issues separate from experiment correctness. If the working tree
-contains later phase work, such as phase108 follow-up artifacts or record-sync
-edits, do not call that work remote-backed until a new phase-save push is
+transport issues separate from experiment correctness. Local commits
+`10ffc10`, `516895a`, and `6c5c360` are currently beyond that remote backup,
+and current phase109 LLM-ablation/record-sync edits are still uncommitted. Do
+not call later phase work remote-backed until a new phase-save push is
 verified.
 
 ## Local Text-To-Skill Pipeline
@@ -389,7 +390,7 @@ Current execution order:
    task, input/output, scorer, local setting, and no-mid-run-human rule.
 5. Collect auxiliary data opportunistically during core reruns, including
    provider availability, failure reasons, context/token proxies, and raw rows
-   needed for future real-reuse LLM ablation.
+   needed for real-reuse LLM ablation.
 6. Regenerate `results/real_reuse/main_results_plan.*`,
    `results/real_reuse/failure_analysis.*`, any affected paper tables, and
    readiness reports.
@@ -406,8 +407,8 @@ Required boundaries:
 - Original paper scores are `reported references` unless the same environment,
   data, input/output, metric, model/tool budget, and runtime setting are
   reproduced.
-- The older saved-response model ablation is not a real-reuse result. Future
-  LLM ablation must run on the real `paper-task` rows.
+- The older saved-response model ablation is not a real-reuse result. LLM
+  ablation must run on the real `paper-task` rows.
 
 Build the pre-registered real-reuse LLM ablation command plan:
 
@@ -420,9 +421,22 @@ Current plan:
 positive PaperToSkill-only slices plus REF-T2 as a ceiling/control slice. It
 uses GPT-family `gpt-5.5`, Claude-family `claude-opus-4-8`, and
 DeepSeek-family `deepseek-v4-flash`, with 300-second provider timeouts, five
-attempts, and five-second retry delays. The plan is not a model run and does
-not add raw rows. Set provider environment variables locally before executing
-any listed command, and never commit raw keys.
+attempts, and five-second retry delays. Set provider environment variables
+locally before executing any listed command, and never commit raw keys.
+
+Aggregate collected real-reuse LLM ablation rows against the pre-registered
+run IDs:
+
+```powershell
+python scripts\build_real_reuse_llm_ablation_results.py
+```
+
+Current aggregate:
+`results/real_reuse/llm_ablation_summary.md` reports 2 collected rows and 16
+pending rows out of 18 expected rows. The completed REF-T2 / GPT-family /
+`gpt-5.5` ceiling/control pair scores Summary 1.000 and PaperToSkill 1.000,
+both on attempt 1. This is auxiliary control evidence, not a main-row
+replacement and not PaperToSkill advantage.
 
 ## AI-Scientist-v2 Environment
 
