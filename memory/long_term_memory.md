@@ -317,15 +317,12 @@ Current supported claims:
   ablation retry availability), `12fab77` (Claude retry push blocker),
   `9888f17` (bounded summary-comparison claim cleanup), `1ab714f` (current
   project record sync), `2b5d9d0` (GitHub backup recovery record), and
-  `05b3963` (real-reuse record-boundary tightening). The temporary 2026-07-05
-  GitHub HTTPS transport blocker later recovered through `05b3963`. Later
-  local commits, `77e8ada Add SNAP executable candidate runner`, `0983fbc
-  Record SNAP runner push blocker`, `c4b4b99 Record GitHub push blocker for
-  SNAP runner`, and `2490a9b Update real-reuse stabilization queue`, are not
-  remote-backed yet because push / remote-check attempts failed with `Recv
-  failure: Connection was reset`, and one push failed to connect to github.com
-  port 443 after 21067 ms. The latest verified remote checkpoint remains
-  `05b3963560cb5553233fe2da1afd3e927ec386ef refs/heads/main`. Verify exact
+  `05b3963` (real-reuse record-boundary tightening), `77e8ada` (SNAP
+  executable-candidate runner), `0983fbc` and `c4b4b99` (GitHub push-blocker
+  records), `2490a9b` (real-reuse stabilization queue sync), and `0832201`
+  (memory sync after GitHub retry). The temporary 2026-07-05 GitHub HTTPS
+  transport blocker recovered again; the latest verified remote checkpoint is
+  `0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main`. Verify exact
   local/remote alignment with
   `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
@@ -397,9 +394,9 @@ Current supported claims:
   main row unless explicitly promoted later. Local commit `599382d` saves this
   table and the rebuilt AAAI PDF locally; follow-up commits `12e97df`,
   `24f8029`, `cdeab1f`, `c7d55b7`, `2a61d42`, `12fab77`, `9888f17`,
-  `1ab714f`, `2b5d9d0`, and `05b3963` are remote-backed in the latest verified
-  checkpoint
-  `05b3963560cb5553233fe2da1afd3e927ec386ef refs/heads/main`.
+  `1ab714f`, `2b5d9d0`, `05b3963`, `77e8ada`, `0983fbc`, `c4b4b99`,
+  `2490a9b`, and `0832201` are remote-backed in the latest verified checkpoint
+  `0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main`.
 - Phase109 has collected scored real-reuse LLM ablation rows only on the
   pre-registered stabilized slices. Current collected GPT-family pairs are
   REF-T2 1.000/1.000,
@@ -418,13 +415,9 @@ Current supported claims:
 - Phase 89 and the 2026-07-04/2026-07-05 record-sync pushes recovered GitHub
   HTTPS transport interruptions. Use `git status -sb` and a successful remote
   check for the latest exact alignment before each phase-save claim.
-- Latest local commits:
-  `77e8ada Add SNAP executable candidate runner`, `0983fbc Record SNAP runner
-  push blocker`, `c4b4b99 Record GitHub push blocker for SNAP runner`, and
-  `2490a9b Update real-reuse stabilization queue`. Latest verified
-  remote-backed checkpoint remains `05b3963 Tighten real-reuse record
-  boundaries`, verified at
-  `05b3963560cb5553233fe2da1afd3e927ec386ef refs/heads/main`. Rerun remote
+- Latest verified remote-backed phase checkpoint:
+  `0832201 Sync memory after GitHub retry`, verified at
+  `0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main`. Rerun remote
   verification before making later remote-backed claims.
 
 Current unsupported claims:

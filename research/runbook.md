@@ -31,26 +31,26 @@ Test-NetConnection github.com -Port 443 | Format-List
 ```
 
 Current status as of 2026-07-05: the temporary GitHub HTTPS transport blocker
-recovered. The latest verified remote checkpoint is:
+recovered again. The latest verified remote checkpoint is:
 
 ```text
-05b3963560cb5553233fe2da1afd3e927ec386ef refs/heads/main
-05b3963 Tighten real-reuse record boundaries
+0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main
+0832201 Sync memory after GitHub retry
 ```
 
-Latest local commits:
+The previously unbacked local commits are now remote-backed:
 
 ```text
 77e8ada Add SNAP executable candidate runner
 0983fbc Record SNAP runner push blocker
+c4b4b99 Record GitHub push blocker for SNAP runner
+2490a9b Update real-reuse stabilization queue
+0832201 Sync memory after GitHub retry
 ```
 
-These local commits are not remote-backed yet. `git push origin main` and the
-follow-up `git ls-remote --heads origin main` both failed with `Recv failure:
-Connection was reset`; a later `git push origin main` failed to connect to
-github.com port 443 after 21067 ms. Treat this as GitHub transport metadata,
-not project-correctness evidence. Always inspect `git status -sb` before
-claiming a clean phase save.
+Earlier `Recv failure: Connection was reset` and github.com port 443 failures
+remain historical GitHub transport metadata, not project-correctness evidence.
+Always inspect `git status -sb` before claiming a clean phase save.
 
 Re-run remote verification before making future remote-backed checkpoint
 claims.
