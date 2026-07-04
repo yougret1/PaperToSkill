@@ -61,6 +61,22 @@ def asset_file(manifest: dict[str, Any], slot: str) -> str:
     raise KeyError(f"missing asset slot {slot}")
 
 
+def optional_asset_text(
+    root: Path,
+    manifest: dict[str, Any],
+    slot: str,
+    *,
+    required_visibility: str | None = None,
+) -> str:
+    for item in manifest.get("files", []):
+        if item.get("slot") == slot:
+            if required_visibility is not None and item.get("visibility") != required_visibility:
+                return ""
+            path = resolve(root, item["path"])
+            return path.read_text(encoding="utf-8") if path.exists() else ""
+    return ""
+
+
 def condition_path(task_spec: dict[str, Any], condition: str) -> str:
     for item in task_spec.get("conditions", []):
         if item.get("id") == condition:
@@ -85,21 +101,32 @@ def build_prompt(root: Path, task_id: str, condition: str) -> str:
     manifest = load_json(asset_manifest_path(root, task_id))
     context = resolve(root, condition_path(task_spec, condition)).read_text(encoding="utf-8")
     task_prompt = resolve(root, asset_file(manifest, "task_prompt")).read_text(encoding="utf-8")
-    return "\n\n".join(
+    source_context = optional_asset_text(
+        root,
+        manifest,
+        "source_context",
+        required_visibility="model_visible",
+    ).strip()
+    parts = [
+        f"# Real-Reuse Condition: {condition}",
+        "You are running a locked SWE-agent PaperToSkill real-reuse task. "
+        "Use only the model-visible context and task prompt below. Do not "
+        "request gold patches, hidden test patches, or scorer-only assets.",
+        "# Condition Context",
+        context.strip(),
+    ]
+    if source_context:
+        parts.extend(["# Shared Source Context", source_context])
+    parts.extend(
         [
-            f"# Real-Reuse Condition: {condition}",
-            "You are running a locked SWE-agent PaperToSkill real-reuse task. "
-            "Use only the model-visible context and task prompt below. Do not "
-            "request gold patches, hidden test patches, or scorer-only assets.",
-            "# Condition Context",
-            context.strip(),
             "# Locked Task Prompt",
             task_prompt.strip(),
             "# Output Contract",
             "Return exactly one unified diff patch. The patch must apply from "
             "the starter workspace root and should be minimal.",
         ]
-    ).strip() + "\n"
+    )
+    return "\n\n".join(parts).strip() + "\n"
 
 
 def fixture_response_path(fixture_dir: Path, task_id: str, condition: str) -> Path | None:

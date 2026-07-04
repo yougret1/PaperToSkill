@@ -172,6 +172,53 @@ class PrepareRealReuseSWEFixtureTest(unittest.TestCase):
             visible_slots = {item["slot"] for item in manifest["files"] if item["visibility"] == "model_visible"}
             self.assertIn("workspace_readme", visible_slots)
 
+    def test_source_context_is_model_visible_when_declared(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_path = Path(tmp)
+            root = prepare_temp_root(tmp_path)
+            repo = tmp_path / "repo"
+            write_tiny_repo(repo)
+            output_dir = root / "benchmarks" / "real_reuse" / "assets" / "SWE-T2"
+
+            subprocess.run(
+                [
+                    sys.executable,
+                    str(SCRIPT),
+                    "--root",
+                    str(root),
+                    "--task",
+                    "SWE-T2",
+                    "--repo-source",
+                    str(repo),
+                    "--issue-text",
+                    "The add helper fails the target unit test.",
+                    "--test-command",
+                    "python -m unittest discover -s .",
+                    "--source-context-file",
+                    str(repo / "buggy.py"),
+                    "--source-context-label",
+                    "buggy.py",
+                    "--output-dir",
+                    str(output_dir),
+                    "--condition-dir",
+                    str(root / "baselines" / "real_reuse"),
+                ],
+                check=True,
+                capture_output=True,
+                text=True,
+            )
+
+            manifest = json.loads((output_dir / "asset_manifest.json").read_text(encoding="utf-8"))
+            files = {item["slot"]: item for item in manifest["files"]}
+            self.assertIn("source_context", files)
+            self.assertEqual("model_visible", files["source_context"]["visibility"])
+            self.assertNotIn(files["source_context"]["path"], manifest["hidden_from_model"])
+            source_context = (output_dir / "source_context.md").read_text(encoding="utf-8")
+            self.assertIn("# Model-Visible Source Context", source_context)
+            self.assertIn("## buggy.py", source_context)
+            self.assertIn("return a - b", source_context)
+            self.assertIn("excludes scorer-only gold patches", source_context)
+
     def test_prepare_from_swe_bench_parquet_keeps_gold_assets_hidden(self):
         with tempfile.TemporaryDirectory() as tmp:
             import pandas as pd

@@ -20,6 +20,11 @@ real-reuse tasks under the selected source papers' objective metrics while
 keeping provider latency, API timeouts, and retry counts out of the core method
 score.
 
+Immediate stabilization focus: SWE-T1 is being treated as a pre-registered
+source-context follow-up candidate. The first-pass 0.000/0.000 patch-apply row
+must remain intact; any follow-up should expose the same locked source context
+to Summary and PaperToSkill and rerun both conditions under the same scorer.
+
 The package also contains supporting evidence: deterministic/offline gates,
 source maps and source-span validation, usage examples, saved live-transfer
 response scoring, saved Claude/GPT-family/DeepSeek model-ablation response

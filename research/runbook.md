@@ -211,6 +211,20 @@ python scripts\prepare_real_reuse_swe_fixture.py --task SWE-T1 --workspace-mode 
 python scripts\prepare_real_reuse_swe_fixture.py --task SWE-T2 --repo-source path\to\local_repo_snapshot --issue-file path\to\failing_test.md --test-command "python -m pytest path\to\tests" --output-dir benchmarks\real_reuse\assets\SWE-T2
 ```
 
+Current SWE-T1 follow-up boundary: the first-pass SWE-T1 row remains scored as
+0.000/0.000 because both generated patches failed to apply. A follow-up may
+expose the same locked SQLFluff source context to both Summary and PaperToSkill
+because the one-shot runner did not actually provide repository-inspection
+tools despite the prompt's wording. Do not overwrite the first-pass evidence;
+label any rerun as a shared-source-context follow-up.
+
+Prepare the SWE-T1 source-context follow-up fixture after the source-context
+preparer support is present:
+
+```powershell
+python scripts\prepare_real_reuse_swe_fixture.py --task SWE-T1 --workspace-mode external --repo-source 'D:\a_work\gitee\sqlfluff__sqlfluff' --swe-bench-parquet 'D:\a_work\gitee\SWE-bench_Lite\data\dev-00000-of-00001.parquet' --test-command 'D:\a_work\gitee\venvs\sqlfluff__sqlfluff-1625\Scripts\python.exe -m pytest test/cli/commands_test.py::test__cli__command_directed -q' --source-context-file 'D:\a_work\gitee\sqlfluff__sqlfluff\src\sqlfluff\rules\L031.py' --source-context-label 'src/sqlfluff/rules/L031.py @ 14e1a23a3166b9a645a16de96f694c77a5d4abb7' --output-dir benchmarks\real_reuse\assets\SWE-T1
+```
+
 Score a SWE patch locally by applying the candidate unified diff in an isolated
 temporary copy of the prepared workspace and running the locked test command:
 
@@ -325,11 +339,11 @@ Planned main task grid:
 
 Current execution order:
 
-1. Stabilize the core real-reuse experiment first, focusing on failure-heavy or
-   boundary-unclear rows such as SWE-T1 patch application and SNAP artifact
-   completion.
-2. Pre-register any scorer, prompt-contract, budget, or artifact-contract
-   change before rerunning a row.
+1. Stabilize the core real-reuse experiment first, starting with the SWE-T1
+   shared-source-context follow-up while preserving the scored 0.000/0.000
+   first-pass row.
+2. Pre-register any scorer, prompt-contract, source-context, budget, or
+   artifact-contract change before rerunning a row.
 3. Rerun affected Summary and PaperToSkill conditions under the same locked
    task, input/output, scorer, local setting, and no-mid-run-human rule.
 4. Collect auxiliary data opportunistically during core reruns, including

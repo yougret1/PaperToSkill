@@ -97,6 +97,85 @@ def prepare_temp_root(tmp_path: Path, task_id: str = "SWE-T2") -> Path:
     return root
 
 
+def prepare_temp_root_with_source_context(tmp_path: Path, task_id: str = "SWE-T2") -> Path:
+    root = tmp_path / "root"
+    for relative_dir in [
+        "benchmarks/real_reuse/tasks",
+        "benchmarks/real_reuse/asset_locks",
+        "generated_skills/real_reuse/swe_agent",
+        "baselines/real_reuse",
+        "papers/extracted",
+    ]:
+        (root / relative_dir).mkdir(parents=True)
+    shutil.copy2(ROOT / "benchmarks" / "real_reuse" / "tasks" / f"{task_id}.json", root / "benchmarks" / "real_reuse" / "tasks" / f"{task_id}.json")
+    shutil.copy2(ROOT / "benchmarks" / "real_reuse" / "asset_locks" / f"{task_id}.json", root / "benchmarks" / "real_reuse" / "asset_locks" / f"{task_id}.json")
+    (root / "generated_skills" / "real_reuse" / "swe_agent" / "SKILL.md").write_text(
+        "# SWE-agent Skill\n\nUse search, edit command, linter feedback, and tests.\n",
+        encoding="utf-8",
+    )
+    (root / "papers" / "extracted" / "swe_agent.txt").write_text(
+        "Full SWE-agent paper excerpt with repository inspection, edit commands, and test verification.\n",
+        encoding="utf-8",
+    )
+    repo = tmp_path / "repo"
+    write_tiny_repo(repo)
+    gold_patch = tmp_path / "gold.patch"
+    gold_patch.write_text(
+        "diff --git a/buggy.py b/buggy.py\n"
+        "--- a/buggy.py\n"
+        "+++ b/buggy.py\n"
+        "@@ -1,2 +1,2 @@\n"
+        " def add(a, b):\n"
+        "-    return a - b\n"
+        "+    return a + b\n",
+        encoding="utf-8",
+    )
+    test_patch = tmp_path / "test.patch"
+    test_patch.write_text(
+        "diff --git a/test_buggy.py b/test_buggy.py\n"
+        "--- a/test_buggy.py\n"
+        "+++ b/test_buggy.py\n"
+        "@@ -4,6 +4,7 @@ from buggy import add\n"
+        " class BuggyTest(unittest.TestCase):\n"
+        "     def test_add(self):\n"
+        "         self.assertEqual(add(2, 3), 5)\n"
+        "+        self.assertEqual(add(1, 1), 2)\n",
+        encoding="utf-8",
+    )
+    subprocess.run(
+        [
+            sys.executable,
+            str(PREP_SCRIPT),
+            "--root",
+            str(root),
+            "--task",
+            task_id,
+            "--repo-source",
+            str(repo),
+            "--issue-text",
+            "The add helper fails the target unit test.",
+            "--test-command",
+            "python -m unittest discover -s .",
+            "--gold-patch",
+            str(gold_patch),
+            "--test-patch",
+            str(test_patch),
+            "--source-context-file",
+            str(repo / "buggy.py"),
+            "--source-context-label",
+            "buggy.py",
+            "--output-dir",
+            str(root / "benchmarks" / "real_reuse" / "assets" / task_id),
+            "--condition-dir",
+            str(root / "baselines" / "real_reuse"),
+        ],
+        check=True,
+        capture_output=True,
+        text=True,
+    )
+    return root
+
+
 class RunRealReuseSWETest(unittest.TestCase):
     def test_fixture_response_produces_scored_raw_rows(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -247,6 +326,20 @@ class RunRealReuseSWETest(unittest.TestCase):
             self.assertIn("unified diff patch", prompt)
             self.assertNotIn("gold_patch", prompt)
             self.assertNotIn("hidden_from_model", prompt)
+
+    def test_prompt_includes_shared_source_context_without_scorer_assets(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = prepare_temp_root_with_source_context(Path(tmp))
+            prompt = build_prompt(root, "SWE-T2", "summary")
+
+            self.assertIn("# Shared Source Context", prompt)
+            self.assertIn("# Model-Visible Source Context", prompt)
+            self.assertIn("## buggy.py", prompt)
+            self.assertIn("return a - b", prompt)
+            self.assertIn("SWE-T2 Locked SWE-agent Task Prompt", prompt)
+            self.assertNotIn("return a + b", prompt)
+            self.assertNotIn("gold.patch", prompt)
+            self.assertNotIn("test.patch", prompt)
 
     def test_full_excerpt_fixture_response_for_sanity_task(self):
         with tempfile.TemporaryDirectory() as tmp:

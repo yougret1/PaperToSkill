@@ -103,6 +103,25 @@ Column definitions:
 - `Status`: execution state and current evidence boundary for the row.
 - `Metric`: the task's original metric family wherever possible.
 
+### Current Pre-Registered Follow-Up Candidate: SWE-T1 Source Context
+
+SWE-T1 is the immediate failure-boundary row under inspection. The first-pass
+row scored Summary 0.000 and PaperToSkill 0.000 because both generated patches
+failed to apply. That row should remain in the raw evidence.
+
+The current follow-up diagnosis is a task-contract mismatch: the prompt asks
+the agent to inspect the repository before editing, but the one-shot runner did
+not actually provide an interactive repository-inspection tool. The follow-up
+therefore may expose the same locked SQLFluff source slice to both conditions
+as model-visible source context, then rerun Summary and PaperToSkill with the
+same scorer, local workspace, hidden test patch, model family, timeout/retry
+policy, and no-mid-run-human rule.
+
+This follow-up tests whether the SWE-T1 failure was caused by missing
+task-local source context. It must not be described as replacing the first
+SWE-T1 row, and any improved score should be labeled as a shared-source-context
+follow-up.
+
 ## Table 2: Full Excerpt Sanity Check
 
 Purpose: small sanity check only. It asks whether full excerpts dominate the

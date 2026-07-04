@@ -13,6 +13,13 @@ Current date: 2026-07-04.
 - Local logs excluded from this sync: `research/run_logs/**` and
   `research/stage_log.md`.
 - `C:\Users\19351\Desktop\tem\ok.txt` was absent at the latest check.
+- Preserve the pre-existing in-progress SWE-T1 source-context code changes in
+  `scripts/prepare_real_reuse_swe_fixture.py`,
+  `scripts/run_real_reuse_swe.py`,
+  `tests/test_prepare_real_reuse_swe_fixture.py`, and
+  `tests/test_run_real_reuse_swe.py`. They were already dirty before this
+  records-only pass and should not be reverted or silently folded into a
+  records-only commit.
 
 ## Record Sync Completed This Turn
 
@@ -40,6 +47,10 @@ Current date: 2026-07-04.
 - Runbook/queue/review records should point future execution back to the
   core real-reuse stabilization path and use generous model-call
   timeout/retry budgets because the third-party service is unstable.
+- Current records should mention the immediate SWE-T1 source-context follow-up
+  boundary: preserve the original first-pass 0.000/0.000 evidence,
+  pre-register the shared source-context change, and rerun Summary and
+  PaperToSkill under the same locked scorer/no-mid-run-human rule.
 
 ## Current Core Experiment State
 
@@ -97,13 +108,15 @@ Current date: 2026-07-04.
 ## Immediate Next Actions
 
 1. Finish verifying this record-sync pass without touching local logs.
-2. Return to the core real-reuse experiment and inspect failure-heavy or
-   boundary-unclear rows first, especially SWE-T1 patch application and SNAP
-   artifact completion/budget boundaries.
-3. Pre-register any scorer, prompt-contract, budget, or artifact-contract
-   change before rerunning a row.
-4. Rerun affected Summary and PaperToSkill conditions under the same locked
+2. Return to the SWE-T1 source-context follow-up: materialize the shared
+   model-visible source context from the locked SQLFluff source file, confirm
+   the manifest exposes it as model-visible context only, and document the
+   follow-up as paired Summary vs PaperToSkill rather than a replacement for
+   the first-pass row.
+3. Rerun affected Summary and PaperToSkill conditions under the same locked
    task, input/output, scorer, local setting, and no-mid-run-human rule.
+4. Continue SNAP artifact-completion/budget inspection after SWE-T1 or in
+   parallel only when it does not disrupt the core rerun record.
 5. During core reruns, collect auxiliary raw data where cheap: provider
    availability, failure reasons, context/token proxies, and raw rows needed
    for future real-reuse LLM ablation.

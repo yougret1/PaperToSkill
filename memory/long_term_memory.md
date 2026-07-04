@@ -591,6 +591,14 @@ Use these as entry points instead of searching the whole repo first:
   downstream stress-test evidence and failure-boundary evidence, not aggregate
   effectiveness. AIDE Kaggle-derived CSV fixture files are kept local and
   ignored by git; committed manifests retain hashes and provenance boundaries.
+- Current SWE-T1 stabilization boundary: preserve the first-pass SWE-T1
+  0.000/0.000 patch-apply result as scored failure-boundary evidence. A
+  follow-up may expose the same locked SQLFluff source context to both Summary
+  and PaperToSkill because the original one-shot runner did not actually let
+  the model inspect the repository despite the task prompt's wording. That
+  follow-up must be pre-registered, paired across conditions, and reported as
+  a shared-source-context follow-up rather than a silent replacement of the
+  first-pass row.
 - Full Excerpt sanity check:
   `results/real_reuse/full_excerpt_sanity.md` contains AIDE-T1, SWE-T1, and
   SNAP-T1 rows with Summary/PaperToSkill/Full Excerpt scores and local

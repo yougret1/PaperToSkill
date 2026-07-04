@@ -100,9 +100,11 @@ an aggregate downstream-success claim.
 
 ## Recommended Next Closure Path
 
-1. Stabilize the core real-reuse experiment first: fix or pre-register
-   budget/artifact/patch-application follow-ups before rerunning any main-task
-   rows.
+1. Stabilize the core real-reuse experiment first. Immediate focus is the
+   SWE-T1 source-context follow-up: preserve the scored 0.000/0.000 first-pass
+   row, pre-register the shared model-visible SQLFluff source context, and
+   rerun Summary and PaperToSkill under the same locked scorer/no-mid-run-human
+   rule.
 2. Keep provider latency, API timeouts, and retry counts separate from the core
    task metrics; record provider availability only as execution metadata and
    give model calls generous timeout/retry budgets.

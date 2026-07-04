@@ -174,6 +174,48 @@ def write_summary_context(task_id: str, condition_dir: Path) -> Path:
     return path
 
 
+def source_context_entries(paths: list[Path] | None, labels: list[str] | None) -> list[tuple[str, Path]]:
+    if not paths:
+        return []
+    labels = labels or []
+    if labels and len(labels) != len(paths):
+        raise ValueError("--source-context-label must be supplied once per --source-context-file")
+    entries: list[tuple[str, Path]] = []
+    for index, path in enumerate(paths):
+        label = labels[index] if labels else path.as_posix()
+        entries.append((label, path))
+    return entries
+
+
+def write_source_context(root: Path, output_dir: Path, entries: list[tuple[str, Path]]) -> Path | None:
+    if not entries:
+        return None
+    blocks = [
+        "# Model-Visible Source Context",
+        "",
+        "Evidence boundary: this source slice is model-visible and is provided "
+        "equally to all primary conditions for a pre-registered source-context "
+        "follow-up. It excludes scorer-only gold patches and hidden test patches.",
+    ]
+    for label, path in entries:
+        resolved = resolve(root, path)
+        if not resolved.exists() or not resolved.is_file():
+            raise ValueError(f"source context file does not exist: {resolved}")
+        blocks.extend(
+            [
+                "",
+                f"## {label}",
+                "",
+                "```python",
+                resolved.read_text(encoding="utf-8").rstrip(),
+                "```",
+            ]
+        )
+    source_context_path = output_dir / "source_context.md"
+    write_text(source_context_path, "\n".join(blocks))
+    return source_context_path
+
+
 def prepare(args: argparse.Namespace) -> Path:
     root = args.root.resolve()
     task_id = args.task.upper()
@@ -211,6 +253,11 @@ def prepare(args: argparse.Namespace) -> Path:
     test_command_path = output_dir / "target_test_command.txt"
     task_prompt_path = output_dir / "task_prompt.md"
     summary_path = write_summary_context(task_id, condition_dir)
+    source_context_path = write_source_context(
+        root,
+        output_dir,
+        source_context_entries(args.source_context_file, args.source_context_label),
+    )
 
     instance_payload = {
         "schema_version": SCHEMA_VERSION,
@@ -251,6 +298,8 @@ Do not expose scorer-only gold patches or hidden test patches to the model.
         file_entry(root, readme_path, "workspace_readme", "model_visible"),
         file_entry(root, summary_path, "summary_context", "condition_context"),
     ]
+    if source_context_path is not None:
+        files.append(file_entry(root, source_context_path, "source_context", "model_visible"))
     hidden_from_model: list[str] = []
     gold_patch_text = str(swe_bench_instance.get("patch", "")).strip() if swe_bench_instance else ""
     test_patch_text = str(swe_bench_instance.get("test_patch", "")).strip() if swe_bench_instance else ""
@@ -325,6 +374,8 @@ def main() -> int:
     parser.add_argument("--test-command")
     parser.add_argument("--gold-patch", type=Path)
     parser.add_argument("--test-patch", type=Path)
+    parser.add_argument("--source-context-file", type=Path, action="append")
+    parser.add_argument("--source-context-label", action="append")
     parser.add_argument("--swe-bench-parquet", type=Path)
     parser.add_argument("--instance-id")
     parser.add_argument("--root", type=Path, default=ROOT)
