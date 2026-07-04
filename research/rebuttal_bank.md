@@ -201,14 +201,21 @@ Evidence to cite:
 - `results/real_reuse/swe_t1_source_context_followup.md`: SWE-T1 phase107
   shared-source-context follow-up where both patches applied but both failed
   the hidden test, clarifying a task-contract / hidden-objective boundary.
+- `results/real_reuse/swe_t1_issue_aligned_followup.md`: SWE-T1 phase110
+  issue-aligned follow-up where both Summary and PaperToSkill score 1.000
+  under the revised scorer, showing contract closure for both conditions but
+  no PaperToSkill advantage.
 - `results/real_reuse/snapatac2_artifact_followup.md`: SNAP artifact-execution
   diagnosis showing that current SNAP rows are plan/JSON outputs under a
   non-executing runner, while the scorer requires completed artifacts plus
   runtime/memory records.
+- `results/real_reuse/snapatac2_executable_artifact_followup.md`: SNAP
+  phase108 controlled executable-artifact follow-up where both Summary and
+  PaperToSkill score 1.000 on SNAP-T1/T2, validating the artifact/runtime/memory
+  contract path without replacing the main rows.
 - `paper/aaai/papertoskill_tables.tex`: the AAAI draft includes both the main
-  real-reuse table, the derived failure-boundary table, and the SWE-T1
-  follow-up table; the SNAP diagnosis remains a follow-up record rather than a
-  main-table replacement.
+  real-reuse table, the derived failure-boundary table, the SWE-T1 diagnostic
+  follow-up tables, and the SNAP executable-artifact diagnostic table.
 
 Do not say:
 

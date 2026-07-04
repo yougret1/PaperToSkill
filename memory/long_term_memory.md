@@ -318,8 +318,10 @@ Current supported claims:
   `9888f17` (bounded summary-comparison claim cleanup), and `1ab714f` (current
   project record sync). The temporary 2026-07-05 GitHub HTTPS transport
   blocker recovered long enough to push and verify
-  `1ab714faa73eb68eb259c23d7208fd685af5f3a7 refs/heads/main` before this
-  follow-up memory update. Verify exact local/remote alignment with
+  `1ab714faa73eb68eb259c23d7208fd685af5f3a7 refs/heads/main`. Later local
+  commits after `1ab714f`, starting with `2b5d9d0`, are not remote-backed yet
+  because the next push reset and a follow-up remote check could not connect to
+  github.com port 443. Verify exact local/remote alignment with
   `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
   phase save.
@@ -404,9 +406,11 @@ Current supported claims:
 - Phase 89 and the 2026-07-04 record-sync push both recovered GitHub HTTPS
   transport interruptions. Use `git status -sb` and a successful remote check
   for the latest exact alignment before each phase-save claim.
-- Latest verified remote-backed phase checkpoint before this follow-up memory
-  update: `1ab714f Sync current project records`, verified at
-  `1ab714faa73eb68eb259c23d7208fd685af5f3a7 refs/heads/main`. Rerun remote
+- Latest verified remote-backed phase checkpoint:
+  `1ab714f Sync current project records`, verified at
+  `1ab714faa73eb68eb259c23d7208fd685af5f3a7 refs/heads/main`. Later local
+  commits after `1ab714f` are not remote-backed yet because the latest
+  push/remote-check attempts hit GitHub HTTPS transport failures. Rerun remote
   verification before making later remote-backed claims.
 
 Current unsupported claims:

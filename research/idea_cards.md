@@ -11,17 +11,22 @@
   code; it can encode method, constraints, validation, and failure branches.
 - Difference from prior work: unlike paper summarization, PaperToSkill targets
   executable procedural transfer and cross-harness reuse.
-- Falsifiable claim: paper-derived skills outperform generic summaries on
-  downstream reproduction/adaptation tasks at comparable or lower context cost.
-- Minimum viable experiment: convert 3-5 agent/LLM papers into skills, ask agents
-  to solve tasks using either skill, summary, or paper excerpt, then compare task
-  success and token cost.
-- Baselines: no paper context, abstract-only summary, full paper excerpt, generic
-  LLM summary.
+- Falsifiable claim: on selected original-style paper tasks, paper-derived
+  skills can enable better method reuse than generic summaries, while current
+  evidence must be reported as mixed until paired task rows are stable.
+- Minimum viable experiment: convert the selected main-paper set into skills,
+  run the locked eight `paper-task` Summary-vs-PaperToSkill grid under the
+  same input/output/scorer contracts, and report task success plus
+  failure-boundary modes before making any aggregate-effectiveness claim.
+- Baselines: generic paper Summary for the main table; paper-reported reference
+  scores where available; a small Full Excerpt sanity check only as auxiliary
+  context/cost evidence.
 - Ablations: remove failure cases, remove validation checks, remove transfer
   notes, vary compression level.
-- Data and compute: small paper set, LLM-based task execution, manual or
-  rubric-based evaluation.
+- Data and compute: locked AIDE, SWE-agent, Reflexion, and SnapATAC2
+  paper-tasks; LLM-based task execution with generous timeout/retry budgets;
+  task-specific automatic scorers plus bounded human-fidelity review as
+  supporting evidence.
 - Risks: novelty overlap with paper summarization, subjective evaluation,
   endpoint/tool instability, generated skills may overfit examples.
 - Decision: primary idea.
@@ -67,4 +72,3 @@
 - Data and compute: small tasks and cross-agent transcripts.
 - Risks: access to equivalent harnesses, noisy comparisons.
 - Decision: main ablation/experiment family.
-

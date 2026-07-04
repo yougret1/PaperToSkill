@@ -33,11 +33,17 @@ Test-NetConnection github.com -Port 443 | Format-List
 Current status as of 2026-07-05: the temporary GitHub HTTPS transport blocker
 recovered long enough to push the previously unbacked local chain through
 `1ab714f Sync current project records`. The latest verified remote checkpoint
-before this follow-up record update is:
+is:
 
 ```text
 1ab714faa73eb68eb259c23d7208fd685af5f3a7 refs/heads/main
 ```
+
+Later local commits after `1ab714f`, starting with
+`2b5d9d0 Record GitHub backup recovery`, are not remote-backed yet:
+`git push origin main` failed with `Recv failure: Connection was reset`, and a
+follow-up `git ls-remote --heads origin main` failed to connect to github.com
+port 443.
 
 Re-run remote verification before making future remote-backed checkpoint
 claims.
