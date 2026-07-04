@@ -293,11 +293,11 @@ Current supported claims:
   `cb20cb1` (`Record SWE ablation push blocker`). This remote-backed range
   includes `e597fcf` (AIDE-T2 GPT-family LLM ablation), `1521b72`
   (AIDE push-blocker record), `200419a` (SWE-T2 GPT-family LLM ablation), and
-  `cb20cb1` (SWE push-blocker record). The latest verified remote head is
-  `cb20cb123cfa9ce7ac831b02d49bbbe8751e5fbf refs/heads/main`, and
-  `git status -sb` reported `main...origin/main`. Keep future GitHub transport
-  failures separate from experiment correctness and verify exact local/remote
-  alignment before claiming a new phase save.
+  `cb20cb1` (SWE push-blocker record). Later status-sync commits may sit on
+  top; do not chase the status-sync hash in memory. Keep future GitHub
+  transport failures separate from experiment correctness and verify exact
+  local/remote alignment with `git status -sb` and `git ls-remote --heads
+  origin main` before claiming a new phase save.
 - SNAP artifact-execution follow-up diagnosis is now materialized in
   `results/real_reuse/snapatac2_artifact_followup.{md,json}` with builder
   `scripts/build_real_reuse_snapatac2_artifact_followup.py`: all selected SNAP

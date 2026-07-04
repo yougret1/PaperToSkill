@@ -16,11 +16,11 @@ Current date: 2026-07-04.
   SWE-T1 source-context reporting, SNAP artifact-execution diagnosis, and the
   phase108 SNAP executable-artifact follow-up are complete and remain
   diagnostic only.
-- The latest phase save is confirmed on GitHub through commit `cb20cb1`
-  (`Record SWE ablation push blocker`). Remote verification:
-  `git ls-remote --heads origin main` returned
-  `cb20cb123cfa9ce7ac831b02d49bbbe8751e5fbf refs/heads/main`, and
-  `git status -sb` reported `main...origin/main`.
+- The latest substantive phase save is confirmed on GitHub through commit
+  `cb20cb1` (`Record SWE ablation push blocker`). A later status-sync commit
+  may sit on top; do not chase the status-sync hash in memory. Verify the exact
+  current remote head with `git status -sb` and
+  `git ls-remote --heads origin main` before making a fresh phase-save claim.
 - Commits `e597fcf` (`Add AIDE real-reuse LLM ablation row`), `1521b72`
   (`Record AIDE ablation push blocker`), `200419a`
   (`Add SWE real-reuse LLM ablation row`), and `cb20cb1`

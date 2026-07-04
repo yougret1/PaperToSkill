@@ -30,13 +30,14 @@ git ls-remote --heads origin main
 Test-NetConnection github.com -Port 443 | Format-List
 ```
 
-Current status as of 2026-07-04: the phase109/SWE-ablation experiment backup is
-confirmed on GitHub through `cb20cb1` (`Record SWE ablation push blocker`). The
-earlier HTTPS reset around local commit `f54be5b`, and the later reset /
+Current status as of 2026-07-04: the latest substantive
+phase109/SWE-ablation experiment backup is confirmed on GitHub through
+`cb20cb1` (`Record SWE ablation push blocker`). Later status-sync commits may
+sit on top; verify the exact current remote head with `git ls-remote --heads
+origin main`. The earlier HTTPS reset around local commit `f54be5b`, and the
+later reset /
 port-443 blocker around `10ffc10`, `516895a`, `6c5c360`, `9f2e52f`,
-`e597fcf`, `1521b72`, and `200419a`, were recovered by successful pushes. The
-latest verified remote head is
-`cb20cb123cfa9ce7ac831b02d49bbbe8751e5fbf refs/heads/main`. Keep future GitHub
+`e597fcf`, `1521b72`, and `200419a`, were recovered by successful pushes. Keep future GitHub
 transport issues separate from experiment correctness, and do not call future
 phase work remote-backed until a new phase-save push is verified.
 
