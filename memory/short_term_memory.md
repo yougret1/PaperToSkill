@@ -35,6 +35,10 @@ Current date: 2026-07-05.
   `candidate_output.json`, `artifact_manifest.json`, and
   `resource_record.json`, calls the existing SNAP scorer, does not append to
   main raw rows, and does not replace paper-facing main rows by default.
+- `research/real_reuse_stabilization_queue.md` now marks the SNAP P1 local
+  action as runner-implemented: future SNAP reruns should use the executable
+  candidate runner only when paired Summary/PaperToSkill candidate scripts
+  exist, and must not fabricate executable evidence from old plan/JSON outputs.
 - Row-selection metadata for paper-facing real-reuse outputs is now
   implemented and verified locally: `scripts/build_real_reuse_paper_tables.py`
   and `scripts/build_real_reuse_failure_analysis.py` write row-selection path,
@@ -151,9 +155,10 @@ Current date: 2026-07-05.
 - Latest remote-backed chain: Claude retry availability, bounded
   summary-comparison claim cleanup, current project record sync, GitHub backup
   recovery, and real-reuse record-boundary tightening are remote-backed through
-  `05b3963`. Local commits `77e8ada` and `0983fbc` add the tested SNAP
-  executable-candidate runner plus the push-blocker record; they still need a
-  successful GitHub push before they are remote-backed.
+  `05b3963`. Local commits after that include the tested SNAP
+  executable-candidate runner, push-blocker records, and the stabilization
+  queue sync; they still need a successful GitHub push before they are
+  remote-backed.
 - Current non-network claim-boundary cleanup: `research/claim_source_map.md`
   no longer says the broad "PaperToSkill skills outperform generic summaries"
   claim is a TBD hypothesis. It now states the evidence-bounded version:
