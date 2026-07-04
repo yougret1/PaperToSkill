@@ -290,6 +290,9 @@ Current supported claims:
   specific L031 message-text change. Preserve the first-pass SWE-T1 0.000/0.000
   rows as the paper-facing main rows; report phase107 only as a
   shared-source-context follow-up.
+- Phase 107 reporting save is complete on GitHub: commit `4040f56`
+  (`Report SWE-T1 source-context follow-up`) was pushed to `origin/main` after
+  commit `8b50758`, advancing the remote from `cf7b54e` to `4040f56`.
 - Phase 89 remote save recovered the earlier GitHub HTTPS blocker:
   `git push origin main` succeeded for the Phase 87/88 stack and the follow-up
   remote-save record was also pushed. Use `git status -sb` for the latest exact

@@ -125,9 +125,9 @@ Current date: 2026-07-04.
 
 ## Immediate Next Actions
 
-1. Commit and push the verified phase107 row-selection / follow-up-reporting
-   and record-sync work. If GitHub push fails again, update `toHuman.md` with
-   command, error, and blocked remote-backup artifact, then continue local work.
+1. Phase save and remote backup are complete: `git push origin main` advanced
+   GitHub from `cf7b54e` to `4040f56`, so commits `8b50758` and `4040f56` are
+   backed up remotely.
 2. Continue SNAP artifact-completion/budget inspection or the next
    pre-registered failure-heavy real-reuse follow-up, keeping Summary and
    PaperToSkill paired under the same task/scorer contract.
@@ -138,9 +138,7 @@ Current date: 2026-07-04.
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-5. Retry `git push origin main` later for local commit `8b50758` and the next
-   phase commit; GitHub HTTPS failure is a remote-backup blocker, not an
-   experiment failure.
+5. Save and push the next meaningful phase after new core-experiment progress.
 
 ## Boundaries
 
