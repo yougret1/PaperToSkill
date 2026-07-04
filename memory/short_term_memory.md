@@ -20,6 +20,11 @@ Current date: 2026-07-04.
   SWE-T1 source-context reporting, SNAP artifact-execution diagnosis, and the
   phase108 SNAP executable-artifact follow-up are complete and remain
   diagnostic only.
+- Local non-network continuation after the row-selection phase added
+  `research/real_reuse_stabilization_queue.md`. It pre-registers the next
+  stabilization priorities: SNAP executable-candidate contract first, SWE-T1
+  task-contract decision second, AIDE/REF ceiling rows later if needed, and
+  Claude-family LLM ablation retry only when provider availability recovers.
 - The current discussion policy is: stabilize the core eight-row real-reuse
   evidence first; collect auxiliary raw data opportunistically; keep LLM
   ablation auxiliary, component ablation appendix-only, and user study
@@ -204,9 +209,10 @@ Current date: 2026-07-04.
    `results/real_reuse/swe_t1_source_context_followup.md`,
    `results/real_reuse/snapatac2_artifact_followup.md`,
    `results/real_reuse/snapatac2_executable_artifact_followup.md`, and
-   `research/runbook.md`; pre-register any task-contract fix before rerunning
-   affected paired conditions, and do not change paper-facing main rows unless
-   explicitly promoted.
+   `research/real_reuse_stabilization_queue.md`; draft the SNAP executable
+   candidate contract before any further SNAP model calls, draft the SWE-T1
+   task-contract decision note before any further SWE-T1 model calls, and do
+   not change paper-facing main rows unless explicitly promoted.
 2. Retry Claude-family real-reuse LLM ablation rows only opportunistically when
    provider availability recovers. The current collected scored slices are all
    GPT-family and DeepSeek-family rows for REF-T2, AIDE-T2, and SWE-T2; all
