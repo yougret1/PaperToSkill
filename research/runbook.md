@@ -31,19 +31,13 @@ Test-NetConnection github.com -Port 443 | Format-List
 ```
 
 Current status as of 2026-07-05: the temporary GitHub HTTPS transport blocker
-recovered long enough to push the phase110 diagnostic paper/memory
-clarification and the recovered-backup status record. The latest verified
-remote checkpoint is:
+recovered long enough to push the previously unbacked local chain through
+`1ab714f Sync current project records`. The latest verified remote checkpoint
+before this follow-up record update is:
 
 ```text
-c7d55b7dc867935be65f5e104ed4da6e72e91939 refs/heads/main
+1ab714faa73eb68eb259c23d7208fd685af5f3a7 refs/heads/main
 ```
-
-The later local commits `2a61d42 Record Claude ablation retry availability`,
-`12fab77 Record Claude retry push blocker`, and
-`9888f17 Bound summary comparison claim` are not remote-backed yet: three
-`git push origin main` attempts for the current local HEAD failed with
-`Recv failure: Connection was reset`.
 
 Re-run remote verification before making future remote-backed checkpoint
 claims.

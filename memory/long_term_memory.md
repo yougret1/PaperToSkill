@@ -313,14 +313,13 @@ Current supported claims:
   support), `599382d` (SWE-T1 issue-aligned follow-up table), `12e97df`
   (phase110 GitHub push blocker), `24f8029` (phase110 push-status memory
   clarification), `cdeab1f` (phase110 diagnostic paper/memory clarification),
-  and `c7d55b7` (recovered GitHub backup status). The temporary 2026-07-05
-  GitHub HTTPS transport blocker recovered long enough to push and verify
-  `c7d55b7dc867935be65f5e104ed4da6e72e91939 refs/heads/main`. The local
-  branch later advanced by `2a61d42` (Claude-family ablation retry
-  availability), `12fab77` (Claude retry push blocker), and `9888f17` (bounded
-  summary-comparison claim cleanup). Three later `git push origin main`
-  attempts failed with `Recv failure: Connection was reset`, so these three
-  commits are not remote-backed yet. Verify exact local/remote alignment with
+  `c7d55b7` (recovered GitHub backup status), `2a61d42` (Claude-family
+  ablation retry availability), `12fab77` (Claude retry push blocker),
+  `9888f17` (bounded summary-comparison claim cleanup), and `1ab714f` (current
+  project record sync). The temporary 2026-07-05 GitHub HTTPS transport
+  blocker recovered long enough to push and verify
+  `1ab714faa73eb68eb259c23d7208fd685af5f3a7 refs/heads/main` before this
+  follow-up memory update. Verify exact local/remote alignment with
   `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
   phase save.
@@ -384,8 +383,9 @@ Current supported claims:
   main row unless explicitly promoted later. Local commit `599382d` saves this
   table and the rebuilt AAAI PDF locally; follow-up commits `12e97df`,
   `24f8029`, and `cdeab1f` record push-status and paper/memory boundary
-  clarifications. The recovered remote-backed checkpoint is now
-  `c7d55b7dc867935be65f5e104ed4da6e72e91939 refs/heads/main`.
+  clarifications. The recovered remote-backed checkpoint after the later
+  record-sync save is
+  `1ab714faa73eb68eb259c23d7208fd685af5f3a7 refs/heads/main`.
 - Phase109 has collected scored real-reuse LLM ablation rows only on the
   pre-registered stabilized slices. Current collected GPT-family pairs are
   REF-T2 1.000/1.000,
@@ -404,15 +404,10 @@ Current supported claims:
 - Phase 89 and the 2026-07-04 record-sync push both recovered GitHub HTTPS
   transport interruptions. Use `git status -sb` and a successful remote check
   for the latest exact alignment before each phase-save claim.
-- Latest local phase checkpoint: local `main` currently ends at
-  `9888f17 Bound summary comparison claim`, after
-  `12fab77 Record Claude retry push blocker` and
-  `2a61d42 Record Claude ablation retry availability`. These three commits are
-  not remote-backed yet because three `git push origin main` attempts failed
-  with GitHub HTTPS connection-reset transport errors. Latest verified remote
-  checkpoint remains `c7d55b7dc867935be65f5e104ed4da6e72e91939
-  refs/heads/main`. Rerun remote verification before making later
-  remote-backed claims.
+- Latest verified remote-backed phase checkpoint before this follow-up memory
+  update: `1ab714f Sync current project records`, verified at
+  `1ab714faa73eb68eb259c23d7208fd685af5f3a7 refs/heads/main`. Rerun remote
+  verification before making later remote-backed claims.
 
 Current unsupported claims:
 

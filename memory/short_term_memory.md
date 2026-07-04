@@ -12,11 +12,12 @@ Current date: 2026-07-05.
   the existing policy that local logs are not edited unless explicitly needed:
   do not modify `research/run_logs/**` or `research/stage_log.md` during
   record-sync-only work.
-- Current save target: commit the updated handoff/planning/runbook/memory
-  records that remove stale GitHub-unblocked and phase110-uncommitted wording,
-  then retry `git push origin main`. If GitHub transport fails again, record
-  the exact command/error in `C:\Users\19351\Desktop\tem\toHuman.md` and
-  continue non-network core real-reuse work locally.
+- Current save target status: the updated handoff/planning/runbook/memory
+  records were committed as `1ab714f Sync current project records`, pushed to
+  GitHub, and verified with `git ls-remote --heads origin main` returning
+  `1ab714faa73eb68eb259c23d7208fd685af5f3a7 refs/heads/main` before this
+  follow-up memory update. Any later record-sync commit still needs a fresh
+  remote check.
 - Row-selection metadata for paper-facing real-reuse outputs is now
   implemented and verified locally: `scripts/build_real_reuse_paper_tables.py`
   and `scripts/build_real_reuse_failure_analysis.py` write row-selection path,
@@ -67,11 +68,11 @@ Current date: 2026-07-05.
   contains the appended phase110 raw rows, run artifacts, run report,
   dedicated CSV/MD/JSON table, builder/test, paper table, rebuilt AAAI PDF, and
   table/package checker/report updates.
-- Current remote-backup status: GitHub backup recovered through
-  `c7d55b7dc867935be65f5e104ed4da6e72e91939 refs/heads/main`, then the
-  local branch advanced by three commits. Local `main` is currently ahead of
-  `origin/main` by `2a61d42`, `12fab77`, and `9888f17`; later push attempts
-  failed with GitHub HTTPS connection resets.
+- Current remote-backup status: GitHub backup recovered. The previously
+  unpushed chain through `1ab714f Sync current project records` was pushed and
+  verified at
+  `1ab714faa73eb68eb259c23d7208fd685af5f3a7 refs/heads/main` before this
+  follow-up memory update.
 - The current discussion policy is: stabilize the core eight-row real-reuse
   evidence first; collect auxiliary raw data opportunistically; keep LLM
   ablation auxiliary, component ablation appendix-only, and user study
@@ -107,12 +108,16 @@ Current date: 2026-07-05.
   (`Add SWE-T1 issue-aligned follow-up table`), `12e97df`
   (`Record phase110 GitHub push blocker`), `24f8029`
   (`Clarify phase110 push status memory`), `cdeab1f`
-  (`Clarify phase110 diagnostics in paper and memory`), and `c7d55b7`
-  (`Record recovered GitHub backup status`) are pushed to `origin/main` and
-  verified by `git ls-remote --heads origin main`. The later local commits
-  `2a61d42`, `12fab77`, and `9888f17` are not remote-backed yet because GitHub
-  HTTPS push attempts failed with connection resets. These transport failures
-  are availability metadata, not experiment correctness evidence.
+  (`Clarify phase110 diagnostics in paper and memory`), `c7d55b7`
+  (`Record recovered GitHub backup status`), `2a61d42`
+  (`Record Claude ablation retry availability`), `12fab77`
+  (`Record Claude retry push blocker`), `9888f17`
+  (`Bound summary comparison claim`), and `1ab714f`
+  (`Sync current project records`) are pushed to `origin/main` and verified by
+  `git ls-remote --heads origin main` as of
+  `1ab714faa73eb68eb259c23d7208fd685af5f3a7 refs/heads/main`. Earlier GitHub
+  HTTPS transport failures were availability metadata, not experiment
+  correctness evidence.
 - Verification before the `599382d` phase save passed:
   `python -m unittest tests.test_build_real_reuse_swe_t1_issue_aligned_followup
   tests.test_check_paper_tables tests.test_check_reproducibility_package -v`,
@@ -128,11 +133,9 @@ Current date: 2026-07-05.
   annotation or a concrete placed core asset.
 - Current GitHub transport note: previous 2026-07-05 connection-reset /
   port-443 failures recovered long enough to push and verify
-  `c7d55b7dc867935be65f5e104ed4da6e72e91939 refs/heads/main`. Later pushes
-  for the current local HEAD failed with `Recv failure: Connection was reset`.
-  Before claiming any later phase save is remote-backed, rerun
-  `git status -sb`, `git log -5 --oneline`, and
-  `git ls-remote --heads origin main`.
+  `1ab714faa73eb68eb259c23d7208fd685af5f3a7 refs/heads/main`. Before claiming
+  any later phase save is remote-backed, rerun `git status -sb`,
+  `git log -5 --oneline`, and `git ls-remote --heads origin main`.
 - Historical Claude-family availability checkpoint: after record-sync commit
   `977b2b9` (`Sync experiment planning records`), Claude-family REF-T2 was
   retried from the local Claude API doc key with the v0 300-second / 5-attempt
@@ -156,14 +159,12 @@ Current date: 2026-07-05.
   availability metadata. `results/real_reuse/llm_ablation_summary.md` remains
   12 collected scored rows / 18 expected rows, with the 6 Claude-family rows
   pending; this is provider availability metadata, not method-quality evidence.
-- Latest local unpushed chain: Claude retry availability, Claude retry push
-  blocker, and the bounded summary-comparison claim cleanup are committed
-  locally after `c7d55b7`. Remote backup for this local HEAD is currently
-  blocked by GitHub HTTPS transport: `git push origin main` has failed three
-  times with `Recv failure: Connection was reset` after `c7d55b7` had
-  previously been verified on `origin/main`. `C:\Users\19351\Desktop\tem\toHuman.md`
-  records the exact failed commands/errors. Continue non-network work locally
-  and retry remote backup later; this is not experiment-correctness evidence.
+- Latest remote-backed chain: Claude retry availability, Claude retry push
+  blocker, bounded summary-comparison claim cleanup, and current project
+  record sync are remote-backed through `1ab714f`. The earlier connection-reset
+  failures remain recorded in `C:\Users\19351\Desktop\tem\toHuman.md` as
+  historical GitHub transport availability evidence, not experiment-correctness
+  evidence.
 - Current non-network claim-boundary cleanup: `research/claim_source_map.md`
   no longer says the broad "PaperToSkill skills outperform generic summaries"
   claim is a TBD hypothesis. It now states the evidence-bounded version:
@@ -316,11 +317,9 @@ Current date: 2026-07-05.
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-6. Latest local phase checkpoint: the current unpushed HEAD contains the
-   Claude retry availability record and bounded summary-comparison claim
-   cleanup. It is not remote-backed yet because `git push origin main` failed
-   three times with connection-reset transport errors. Latest verified remote
-   checkpoint remains `c7d55b7 Record recovered GitHub backup status`.
+6. Latest remote-backed phase checkpoint before this follow-up memory update:
+   `1ab714f Sync current project records`, verified at
+   `1ab714faa73eb68eb259c23d7208fd685af5f3a7 refs/heads/main`.
 7. No experiment-side human action is required.
 
 ## Boundaries
