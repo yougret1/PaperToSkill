@@ -40,6 +40,11 @@ Current date: 2026-07-04.
 - `C:\Users\19351\Desktop\tem\toHuman.md` should say no immediate human action
   is required, and `ok.txt` should only be created for completed human-fidelity
   annotation or a concrete placed core asset.
+- Current GitHub transport note: a later runbook status-sync commit may be
+  local-only after repeated `git push origin main` failures with `Recv
+  failure: Connection was reset`. Treat this as remote-backup availability,
+  not project correctness; check `git status -sb`, `git log -3 --oneline`, and
+  `git ls-remote --heads origin main` before claiming remote alignment.
 
 ## Latest Record Sync Policy
 
@@ -169,9 +174,10 @@ Current date: 2026-07-04.
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-5. No current GitHub retry item is open. Retry `git push origin main` only when
-   doing a phase save or remote-backup sync, and record any concrete network
-   error in `toHuman.md`.
+5. A GitHub retry item may be open for the latest local status-sync commit if
+   `git status -sb` reports `main...origin/main [ahead N]`. Retry
+   `git push origin main` only when doing a phase save or remote-backup sync,
+   and record any concrete network error in `toHuman.md`.
 
 ## Boundaries
 
