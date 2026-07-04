@@ -290,19 +290,11 @@ Current supported claims:
   specific L031 message-text change. Preserve the first-pass SWE-T1 0.000/0.000
   rows as the paper-facing main rows; report phase107 only as a
   shared-source-context follow-up.
-- Phase 107 reporting save is complete on GitHub: commit `4040f56`
-  (`Report SWE-T1 source-context follow-up`) was pushed to `origin/main` after
-  commit `8b50758`, advancing the remote from `cf7b54e` to `4040f56`.
-- Post-push memory sync is also complete on GitHub: commit `bdf0144`
-  (`Sync post-push memory state`) was pushed to `origin/main`, and the local
-  `main` branch was aligned with `origin/main` at that commit on the latest
-  record-sync check.
-- Local record-sync commit `a4d2831` (`Sync record state after planning
-  update`) initially hit a GitHub HTTPS `OpenSSL SSL_read: SSL_ERROR_SYSCALL`
-  push failure, but a later `git push origin main` succeeded and advanced
-  GitHub from `bdf0144` to `95f0c3f`. A later post-SNAP memory-sync push also
-  initially failed with `Recv failure: Connection was reset`, then succeeded
-  and advanced GitHub to `159903d`.
+- Latest confirmed GitHub backup includes commit `bcf6db6` (`Record SNAP
+  memory push recovery`). Earlier GitHub transport failures in this phase were
+  recovered. Keep any future GitHub transport failures separate from experiment
+  correctness and verify local/remote alignment before claiming a new phase
+  save.
 - SNAP artifact-execution follow-up diagnosis is now materialized in
   `results/real_reuse/snapatac2_artifact_followup.{md,json}` with builder
   `scripts/build_real_reuse_snapatac2_artifact_followup.py`: all selected SNAP

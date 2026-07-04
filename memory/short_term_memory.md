@@ -7,65 +7,35 @@ Current date: 2026-07-04.
 
 ## Current Task
 
-- Latest user request / active goal: save work with git/GitHub where possible,
-  then continue the core real-reuse main experiment. Remote backup succeeded
-  through post-SNAP memory-sync commit `159903d` after an intermittent GitHub
-  HTTPS reset; `C:\Users\19351\Desktop\tem\toHuman.md` currently has no human
-  action needed for GitHub connectivity.
-- Local logs remain excluded unless explicitly doing a phase log:
-  `research/run_logs/**` and `research/stage_log.md`.
-- `C:\Users\19351\Desktop\tem\ok.txt` was absent at the latest check.
-- Preserve the completed phase107 row-selection and follow-up-reporting changes
-  already in the worktree. They include appended SWE-T1 follow-up raw rows and
-  run outputs, row-selection support in
-  `scripts/build_real_reuse_paper_tables.py` and
-  `scripts/build_real_reuse_failure_analysis.py`,
-  `results/real_reuse/main_run_selection.json`, and
-  `results/real_reuse/swe_t1_source_context_followup.{csv,md,json}`. Do not
-  revert them during this records-only sync.
+- Latest user request: update the related planning/handoff/memory records,
+  including `C:\Users\19351\Desktop\tem\toHuman.md`, without touching local
+  logs (`research/run_logs/**` and `research/stage_log.md`).
+- Current execution priority remains the core real-reuse main experiment. The
+  next practical focus is the SNAP executable-artifact follow-up; SWE-T1
+  source-context reporting is complete and remains diagnostic only.
+- Latest confirmed GitHub backup includes commit `bcf6db6` (`Record SNAP
+  memory push recovery`); `main` and `origin/main` were aligned at the latest
+  status check.
+- `C:\Users\19351\Desktop\tem\toHuman.md` should say no immediate human action
+  is required, and `ok.txt` should only be created for completed human-fidelity
+  annotation or a concrete placed core asset.
 
-## Record Sync Completed This Turn
+## Latest Record Sync Policy
 
-- Rewrote `C:\Users\19351\Desktop\tem\toHuman.md` so it no longer treats
-  GitHub connectivity, AAAI final-submission advice, provider billing,
-  domain-robustness planning, component ablation, or a user study as the
-  current human action.
-- Updated `toHuman.md`, `research/runbook.md`, and
-  `research/goal_completion_audit.md` so they no longer say commit `8b50758`
-  is awaiting remote backup. The remote is aligned at `bdf0144`.
-- Added the record-sync boundary to `toHuman.md`: do not modify local logs,
-  do not reopen a separate domain-robustness experiment, keep component
-  ablation appendix-only, keep user-study work last/optional, and record
-  only genuinely blocking network/download failures there.
-- Rewrote `C:\Users\19351\Desktop\tem\nextStep.md` into the current
-  experiment plan: core real-reuse first, auxiliary evidence collected
-  opportunistically and analyzed later, component ablation appendix-only, and
-  user study last/optional.
-- Current `toHuman.md` says to create
-  `C:\Users\19351\Desktop\tem\ok.txt` only when human-fidelity annotation is
-  complete or when a concrete core real-reuse asset has been placed.
-- Updated non-log repository entry records to match the same policy:
-  `README.md`, `research/experiment_queue.md`,
-  `research/real_reuse_experiment_plan.md`, `research/runbook.md`, and
-  `memory/long_term_memory.md`.
-- Local logs remain untouched: `research/run_logs/**` and
-  `research/stage_log.md`.
-- Runbook/queue/review records should point future execution back to the
-  core real-reuse stabilization path and use generous model-call
-  timeout/retry budgets because the third-party service is unstable.
-- Current records should mention the completed SWE-T1 source-context follow-up
-  boundary: phase107 exposed the same locked SQLFluff source slice to Summary
-  and PaperToSkill; both calls succeeded; both patches applied; both hidden
-  tests failed; both task scores remain 0.000. Preserve the original
-  first-pass SWE-T1 rows as the paper-facing main rows and report phase107 only
-  as shared-source-context follow-up evidence.
-- Current records should mention that `results/real_reuse/main_run_selection.json`
-  locks paper-facing main-table rows so follow-up raw rows do not silently
-  replace the pre-registered main experiment cells.
-- Current records should mention that the dedicated SWE-T1 source-context
-  follow-up table/report has been generated and that
-  `scripts/check_paper_tables.py --strict` passed with 250 ready checks and 0
-  failed checks after adding the follow-up table consistency checks.
+- Keep the main experiment as eight locked paper-task rows comparing Summary
+  with PaperToSkill under source-paper-style objective metrics.
+- Do not add a separate domain-robustness experiment; current breadth is the
+  eight main paper-tasks.
+- Keep component ablation appendix-only and user study last/optional.
+- Treat Full Excerpt as an auxiliary sanity check, not a main baseline.
+- Attach future LLM ablation to the real-reuse task protocol after the core
+  rows stabilize; do not use older saved-response usage-plan scoring as
+  downstream task-success evidence.
+- Provider latency, API timeout, and retry counts are availability metadata,
+  not core effectiveness metrics. Give third-party LLM calls longer timeout and
+  more retries.
+- Preserve `results/real_reuse/main_run_selection.json` so follow-up rows such
+  as SWE-T1 phase107 do not silently replace paper-facing main-table cells.
 
 ## Current Core Experiment State
 
@@ -91,6 +61,12 @@ Current date: 2026-07-04.
   because the hidden test expected the specific L031 warning-message change
   while both candidates edited rule logic. This is diagnostic follow-up
   evidence, not a main-table replacement.
+- SNAP artifact-execution diagnosis is complete in
+  `results/real_reuse/snapatac2_artifact_followup.{md,json}`. It found that
+  selected SNAP rows are plan/JSON outputs under a non-executing runner, while
+  the scorer requires completed artifacts plus runtime/memory records. Fixtures
+  are readable; `snapatac2` is not importable in the current Python
+  environment. Main SNAP rows remain unchanged.
 
 ## Current Auxiliary Evidence Policy
 
@@ -129,7 +105,7 @@ Current date: 2026-07-04.
 ## Immediate Next Actions
 
 1. Check `git status -sb` before the next phase save. The latest verified
-   remote backup includes `159903d`; preserve local commits and keep any future
+   remote backup includes `bcf6db6`; preserve local commits and keep any future
    GitHub transport failures separate from experiment correctness.
 2. SNAP artifact-completion/budget inspection has produced
    `results/real_reuse/snapatac2_artifact_followup.{md,json}` via

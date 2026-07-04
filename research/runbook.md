@@ -31,9 +31,10 @@ Test-NetConnection github.com -Port 443 | Format-List
 ```
 
 Current status as of 2026-07-04: the earlier GitHub HTTPS connectivity blocker
-has been resolved. `main` and `origin/main` are aligned at commit `bdf0144`
-(`Sync post-push memory state`), after pushing the SWE-T1 source-context asset
-commit `8b50758` and the phase107 reporting commit `4040f56`. Use
+has been resolved. The latest confirmed local/remote alignment is commit
+`bcf6db6` (`Record SNAP memory push recovery`), which includes the SWE-T1
+source-context follow-up, the SNAP artifact-execution diagnosis, and the
+post-SNAP memory sync. Use
 `git status -sb`, `git log -1 --oneline`, and
 `git ls-remote --heads origin main` before future phase-save claims, and keep
 any future transport failures separate from experiment correctness.

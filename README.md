@@ -20,15 +20,14 @@ real-reuse tasks under the selected source papers' objective metrics while
 keeping provider latency, API timeouts, and retry counts out of the core method
 score.
 
-Immediate stabilization focus: the SWE-T1 shared-source-context follow-up has
-now run locally as `phase107_gpt_swe_t1_source_context_followup`. Both Summary
-and PaperToSkill still scored 0.000, but both patches applied and then failed
-the hidden target test. This follow-up is diagnostic evidence only; the
-first-pass SWE-T1 row remains the paper-facing main-table row, and
-`results/real_reuse/main_run_selection.json` now prevents follow-up raw rows
-from silently replacing main experiment cells. The dedicated follow-up report is
-`results/real_reuse/swe_t1_source_context_followup.md`, and the paper-table
-consistency gate now includes that follow-up table.
+Immediate stabilization focus: SWE-T1 source-context reporting is complete, so
+the next core boundary is SNAP artifact execution. The SNAP diagnosis in
+`results/real_reuse/snapatac2_artifact_followup.md` shows that the selected
+SNAP rows are plan/JSON outputs under a non-executing runner, while the scorer
+requires completed artifacts plus runtime/memory records. A future SNAP
+follow-up must remain paired Summary vs PaperToSkill, execute a controlled
+candidate script or pre-registered scaffold, and report separately unless it is
+explicitly promoted into the main table.
 
 The package also contains supporting evidence: deterministic/offline gates,
 source maps and source-span validation, usage examples, saved live-transfer
@@ -111,6 +110,8 @@ pending live-agent claims.
   as SWE-T1 phase107 out of the main table unless they are explicitly promoted.
 - Current real-reuse failure-boundary analysis:
   `results/real_reuse/failure_analysis.md`.
+- SNAP artifact-execution diagnosis:
+  `results/real_reuse/snapatac2_artifact_followup.md`.
 - Auxiliary Full Excerpt sanity check:
   `results/real_reuse/full_excerpt_sanity.md`; this is not a main baseline.
 - Real-paper cases: AI Scientist-v2, Reflexion, AIDE, and Toolformer.

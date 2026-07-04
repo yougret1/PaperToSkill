@@ -124,6 +124,23 @@ change. This follow-up must be reported separately and must not silently
 replace the first-pass SWE-T1 main row. The paper-facing main row selection is
 locked by `results/real_reuse/main_run_selection.json`.
 
+### Completed Diagnosis: SNAP Artifact Execution
+
+SNAP-T1 and SNAP-T2 remain below the pre-registered success threshold in the
+main table. The SNAP artifact-execution diagnosis in
+`results/real_reuse/snapatac2_artifact_followup.{md,json}` found that the
+selected SNAP rows are plan/JSON outputs under a non-executing runner, while
+the scorer requires completed artifacts plus runtime/memory records. The
+miniature fixtures are readable, but `snapatac2` is not importable in the
+current Python environment.
+
+The next SNAP step should be a paired executable-artifact follow-up that keeps
+Summary and PaperToSkill under the same fixture, scorer, resource budget,
+hidden labels/proxy policy, and no-mid-run-human rule. It should execute a
+controlled candidate script or pre-registered scaffold before setting
+`completed=true`. This follow-up should not replace the main SNAP rows unless
+explicitly promoted.
+
 ## Table 2: Full Excerpt Sanity Check
 
 Purpose: small sanity check only. It asks whether full excerpts dominate the
@@ -260,6 +277,9 @@ analyses are stable.
   reported as dedicated diagnostic follow-up evidence in
   `results/real_reuse/swe_t1_source_context_followup.{csv,md,json}` and in the
   AAAI table set.
+- The SNAP artifact-execution diagnosis is a completed follow-up contract, not
+  a main-row replacement. It identifies an execution gap in the current SNAP
+  runner and pre-registers the next paired executable-artifact follow-up.
 - Existing deterministic/offline results remain useful as quality, grounding,
   and cost gates.
 - The older saved-response model ablation remains a usage-plan/output-contract
