@@ -11,14 +11,13 @@ Current date: 2026-07-05.
   core work toward `C:\Users\19351\Desktop\tem\nextStep.md`. Preserve the
   existing local-log boundary: do not modify `research/run_logs/**` or
   `research/stage_log.md` during record-sync-only work.
-- Current save target status: the SNAP executable-candidate runner phase is
-  committed locally as `77e8ada Add SNAP executable candidate runner`, followed
-  by local record commit `0983fbc Record SNAP runner push blocker`. GitHub
-  upload is not verified: `git push origin main` failed with `Recv failure:
-  Connection was reset`, the follow-up `git ls-remote --heads origin main`
-  failed with the same reset, and a later `git push origin main` failed to
-  connect to github.com port 443 after 21067 ms. Latest verified remote
-  checkpoint remains
+- Current save target status: local commits after the latest verified remote
+  are `77e8ada Add SNAP executable candidate runner`, `0983fbc Record SNAP
+  runner push blocker`, `c4b4b99 Record GitHub push blocker for SNAP runner`,
+  and `2490a9b Update real-reuse stabilization queue`. GitHub upload is not
+  verified: push / remote-check attempts failed with `Recv failure: Connection
+  was reset`, and one push failed to connect to github.com port 443 after 21067
+  ms. Latest verified remote checkpoint remains
   `05b3963560cb5553233fe2da1afd3e927ec386ef refs/heads/main`
   (`05b3963 Tighten real-reuse record boundaries`). Treat this as GitHub HTTPS
   transport availability, not experiment correctness.
@@ -39,6 +38,10 @@ Current date: 2026-07-05.
   action as runner-implemented: future SNAP reruns should use the executable
   candidate runner only when paired Summary/PaperToSkill candidate scripts
   exist, and must not fabricate executable evidence from old plan/JSON outputs.
+- After the latest GitHub retry failed, local non-network checks were rerun:
+  `python scripts\check_paper_tables.py --strict` and
+  `python scripts\check_usage_examples.py --strict` both passed without
+  producing tracked report changes.
 - Row-selection metadata for paper-facing real-reuse outputs is now
   implemented and verified locally: `scripts/build_real_reuse_paper_tables.py`
   and `scripts/build_real_reuse_failure_analysis.py` write row-selection path,
@@ -91,9 +94,10 @@ Current date: 2026-07-05.
   table/package checker/report updates.
 - Current remote-backup status: GitHub backup is verified through
   `05b3963560cb5553233fe2da1afd3e927ec386ef refs/heads/main`
-  (`05b3963 Tighten real-reuse record boundaries`). Local commits `77e8ada`
-  and `0983fbc` are ahead of `origin/main` and are not remote-backed because
-  GitHub HTTPS failed during push and remote-check attempts.
+  (`05b3963 Tighten real-reuse record boundaries`). Local commits `77e8ada`,
+  `0983fbc`, `c4b4b99`, and `2490a9b` are ahead of `origin/main` and are not
+  remote-backed because GitHub HTTPS failed during push and remote-check
+  attempts.
 - The current discussion policy is: stabilize the core eight-row real-reuse
   evidence first; collect auxiliary raw data opportunistically; keep LLM
   ablation auxiliary, component ablation appendix-only, and user study
@@ -308,8 +312,10 @@ Current date: 2026-07-05.
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-6. Latest local commits: `77e8ada Add SNAP executable candidate runner` and
-   `0983fbc Record SNAP runner push blocker`.
+6. Latest local commits: `77e8ada Add SNAP executable candidate runner`,
+   `0983fbc Record SNAP runner push blocker`, `c4b4b99 Record GitHub push
+   blocker for SNAP runner`, and `2490a9b Update real-reuse stabilization
+   queue`.
    Latest verified remote-backed checkpoint remains `05b3963`, verified at
    `05b3963560cb5553233fe2da1afd3e927ec386ef refs/heads/main`; push and
    follow-up remote checks failed with GitHub HTTPS connection reset / port
