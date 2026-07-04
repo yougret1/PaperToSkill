@@ -1469,6 +1469,7 @@ def snapatac2_runner_checks(root: Path, spec_path: Path) -> list[Check]:
     preparer_path = root / "scripts" / "prepare_real_reuse_snapatac2_fixture.py"
     scorer_path = root / "scripts" / "score_real_reuse_snapatac2.py"
     runner_path = root / "scripts" / "run_real_reuse_snapatac2.py"
+    executable_runner_path = root / "scripts" / "run_real_reuse_snapatac2_executable_candidate.py"
     checks = [
         Check(
             "real_reuse_snapatac2_preparer_present",
@@ -1488,8 +1489,14 @@ def snapatac2_runner_checks(root: Path, spec_path: Path) -> list[Check]:
             "present" if runner_path.exists() else "missing",
             relative(root, runner_path),
         ),
+        Check(
+            "real_reuse_snapatac2_executable_candidate_runner_present",
+            "ready" if executable_runner_path.exists() else "fail",
+            "present" if executable_runner_path.exists() else "missing",
+            relative(root, executable_runner_path),
+        ),
     ]
-    if not runner_path.exists() or not preparer_path.exists() or not scorer_path.exists():
+    if not runner_path.exists() or not preparer_path.exists() or not scorer_path.exists() or not executable_runner_path.exists():
         checks.append(
             Check(
                 "real_reuse_snapatac2_runner_contract_ready",
@@ -1501,6 +1508,7 @@ def snapatac2_runner_checks(root: Path, spec_path: Path) -> list[Check]:
         return checks
 
     runner_text = runner_path.read_text(encoding="utf-8")
+    executable_runner_text = executable_runner_path.read_text(encoding="utf-8")
     preparer_text = preparer_path.read_text(encoding="utf-8")
     scorer_text = scorer_path.read_text(encoding="utf-8")
     required_snippets = {
@@ -1511,6 +1519,10 @@ def snapatac2_runner_checks(root: Path, spec_path: Path) -> list[Check]:
         "provider_or_model_error": runner_text,
         "missing_fixture_assets": runner_text,
         "candidate_output.json": runner_text,
+        "runner_after_execution": executable_runner_text,
+        "artifact_manifest.json": executable_runner_text,
+        "resource_record.json": executable_runner_text,
+        "not_appended_to_main_raw_rows": executable_runner_text,
         "reference_labels_or_proxy": preparer_text,
         "hidden_from_model": preparer_text,
         "expected_artifact_schema": preparer_text,

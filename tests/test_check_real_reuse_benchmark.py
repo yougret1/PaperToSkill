@@ -61,6 +61,7 @@ class CheckRealReuseBenchmarkTest(unittest.TestCase):
             self.assertIn("real_reuse_swe_runner_contract_ready", ready_ids)
             self.assertIn("real_reuse_snapatac2_skill_contract_ready", ready_ids)
             self.assertIn("real_reuse_snapatac2_runner_contract_ready", ready_ids)
+            self.assertIn("real_reuse_snapatac2_executable_candidate_runner_present", ready_ids)
             self.assertIn("real_reuse_snapatac2_executable_contract_present", ready_ids)
             self.assertIn("real_reuse_snapatac2_executable_contract_scope", ready_ids)
             self.assertIn("real_reuse_snapatac2_executable_contract_runner_owns_completion", ready_ids)

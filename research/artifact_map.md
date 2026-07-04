@@ -246,6 +246,7 @@
 | `scripts/run_real_reuse_snapatac2.py` | Runs locked SNAP-T1/T2 Summary-vs-PaperToSkill conditions, saves prompts/responses/metrics/raw rows when scorable, and separates provider/fixture availability from model quality | Created |
 | `scripts/build_real_reuse_snapatac2_artifact_followup.py` | Builds the SNAP artifact-execution diagnosis and pre-registered follow-up contract from selected main rows, candidate outputs, fixture readability, and local dependency state | Created |
 | `scripts/run_real_reuse_snapatac2_executable_followup.py` | Runs the paired SNAP executable-artifact diagnostic follow-up with a pre-registered controlled scaffold, concrete artifacts, runtime/memory records, and no main raw-row replacement | Created |
+| `scripts/run_real_reuse_snapatac2_executable_candidate.py` | Executes SNAP executable-candidate scripts under the pre-registered contract, writes runner-owned candidate output/artifact/resource records, calls the existing SNAP scorer, and keeps rows diagnostic unless explicitly promoted | Created |
 | `scripts/evaluate_skill.py` | Deterministic v0 evaluator for generated skills | Created |
 | `scripts/evaluate_context_baselines.py` | Deterministic evaluator for context baseline coverage | Created |
 | `scripts/audit_skill_source_map.py` | Deterministic source-map-aware unsupported-instruction audit | Created |
@@ -318,6 +319,7 @@
 | `tests/test_run_real_reuse_aide.py` | Unit tests for AIDE fixture-response execution, missing-credential pending behavior, and hidden-label prompt separation | Created |
 | `tests/test_build_real_reuse_snapatac2_artifact_followup.py` | Unit test for SNAP artifact-execution follow-up diagnosis over invalid JSON and plan-only candidate outputs | Created |
 | `tests/test_run_real_reuse_snapatac2_executable_followup.py` | Unit test for the paired SNAP executable-artifact follow-up runner and no-main-raw-row policy | Created |
+| `tests/test_run_real_reuse_snapatac2_executable_candidate.py` | Unit tests for SNAP executable-candidate runner execution, runner-owned completion, artifact manifest/resource records, and no-main-raw-row policy | Created |
 | `tests/test_build_real_reuse_llm_ablation_plan.py` | Unit tests for the real-reuse LLM ablation plan, selected stabilized subset, long retry budget, and generated command shape | Created |
 | `tests/test_build_real_reuse_llm_ablation_results.py` | Unit tests for real-reuse LLM ablation aggregation and phase109 GPT-family plus DeepSeek-family row detection | Created |
 | `tests/test_check_real_reuse_benchmark.py` | Unit tests for real-reuse preflight guards, including SNAP executable-candidate and SWE-T1 task-contract decision requirements | Created |

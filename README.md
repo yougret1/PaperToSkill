@@ -117,6 +117,10 @@ pending live-agent claims.
 - SNAP executable-artifact follow-up:
   `results/real_reuse/snapatac2_executable_artifact_followup.md`; this is a
   diagnostic follow-up and not a main-table replacement.
+- SNAP executable-candidate runner:
+  `scripts/run_real_reuse_snapatac2_executable_candidate.py`; this is a
+  diagnostic runner for future paired SNAP candidate reruns and does not update
+  main rows by default.
 - Auxiliary Full Excerpt sanity check:
   `results/real_reuse/full_excerpt_sanity.md`; this is not a main baseline.
 - Real-paper cases: AI Scientist-v2, Reflexion, AIDE, and Toolformer.

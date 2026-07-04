@@ -7,21 +7,29 @@ Current date: 2026-07-05.
 
 ## Current Task
 
-- Latest user request: save the current phase, upload to GitHub, then continue
-  core work toward the overall `nextStep.md` implementation target. Preserve
-  the existing policy that local logs are not edited unless explicitly needed:
-  do not modify `research/run_logs/**` or `research/stage_log.md` during
-  record-sync-only work.
-- Current save target status: the updated handoff/planning/runbook/memory
-  records were committed as `1ab714f Sync current project records`, pushed to
-  GitHub, and verified with `git ls-remote --heads origin main` returning
-  `1ab714faa73eb68eb259c23d7208fd685af5f3a7 refs/heads/main`. Later local
-  commits after `1ab714f`, starting with
-  `2b5d9d0 Record GitHub backup recovery`, are not remote-backed yet because
-  the next push failed with `Recv failure: Connection was reset`, and a
-  subsequent `git ls-remote --heads origin main` failed to connect to
-  github.com port 443. Treat this as GitHub transport availability, not
-  experiment correctness.
+- Latest user request: save the current phase, upload to GitHub, and continue
+  core work toward `C:\Users\19351\Desktop\tem\nextStep.md`. Preserve the
+  existing local-log boundary: do not modify `research/run_logs/**` or
+  `research/stage_log.md` during record-sync-only work.
+- Current save target status: local `main` and `origin/main` are aligned at
+  `05b3963 Tighten real-reuse record boundaries`, verified with
+  `git ls-remote --heads origin main` returning
+  `05b3963560cb5553233fe2da1afd3e927ec386ef refs/heads/main`. Earlier GitHub
+  HTTPS connection resets are historical transport metadata, not a current
+  human blocker or experiment-correctness issue.
+- Current local change set implements the SNAP executable-candidate
+  runner/checker/test path:
+  `scripts/run_real_reuse_snapatac2_executable_candidate.py`,
+  `tests/test_run_real_reuse_snapatac2_executable_candidate.py`,
+  `scripts/check_real_reuse_benchmark.py`, and
+  `tests/test_check_real_reuse_benchmark.py`. Focused verification passed:
+  `python -m unittest tests.test_run_real_reuse_snapatac2_executable_candidate
+  tests.test_check_real_reuse_benchmark -v` and
+  `python scripts\check_real_reuse_benchmark.py --strict`. The runner is
+  diagnostic only: it executes candidate scripts, writes runner-owned
+  `candidate_output.json`, `artifact_manifest.json`, and
+  `resource_record.json`, calls the existing SNAP scorer, does not append to
+  main raw rows, and does not replace paper-facing main rows by default.
 - Row-selection metadata for paper-facing real-reuse outputs is now
   implemented and verified locally: `scripts/build_real_reuse_paper_tables.py`
   and `scripts/build_real_reuse_failure_analysis.py` write row-selection path,
@@ -72,10 +80,10 @@ Current date: 2026-07-05.
   contains the appended phase110 raw rows, run artifacts, run report,
   dedicated CSV/MD/JSON table, builder/test, paper table, rebuilt AAAI PDF, and
   table/package checker/report updates.
-- Current remote-backup status: GitHub backup recovered through
-  `1ab714faa73eb68eb259c23d7208fd685af5f3a7 refs/heads/main`. Later local
-  commits after `1ab714f`, starting with `2b5d9d0`, are not remote-backed yet
-  because the next push and remote check hit GitHub HTTPS transport failures.
+- Current remote-backup status: GitHub backup is verified through
+  `05b3963560cb5553233fe2da1afd3e927ec386ef refs/heads/main`
+  (`05b3963 Tighten real-reuse record boundaries`). Re-run remote verification
+  before claiming any later phase save is remote-backed.
 - The current discussion policy is: stabilize the core eight-row real-reuse
   evidence first; collect auxiliary raw data opportunistically; keep LLM
   ablation auxiliary, component ablation appendix-only, and user study
@@ -86,42 +94,13 @@ Current date: 2026-07-05.
   exact GitHub push / remote-check transport errors. It no longer asks the
   user to create `ok.txt` for GitHub status; `ok.txt` is reserved for completed
   human-fidelity annotation or a concrete placed core real-reuse asset.
-- Commits `e597fcf` (`Add AIDE real-reuse LLM ablation row`), `1521b72`
-  (`Record AIDE ablation push blocker`), `200419a`
-  (`Add SWE real-reuse LLM ablation row`), `cb20cb1`
-  (`Record SWE ablation push blocker`), `bc9644a`
-  (`Avoid remote status hash churn after SWE ablation`), `ea15664`
-  (`Add DeepSeek real-reuse LLM ablation rows`), `ea0f016`
-  (`Sync memory after DeepSeek LLM ablation`), `0d4934b`
-  (`Record Claude LLM ablation availability`), `977b2b9`
-  (`Sync experiment planning records`), `7ee44ad`
-  (`Track Claude ablation availability metadata`), `d248878`
-  (`Sync core real-reuse stabilization records`), `f44da1b`
-  (`Guard real-reuse planned outputs`), `641eef0`
-  (`Sync memory after real-reuse guard`), `4b606f9`
-  (`Document real-reuse row selection metadata`), `43bc1a0`
-  (`Record row selection push blocker`), `a170aa6`
-  (`Sync row selection push status`), `03b7ca4`
-  (`Plan real-reuse stabilization priorities`), `25017a8`
-  (`Pre-register SNAP executable candidate contract`), `36ae48e`
-  (`Record SWE-T1 task contract decision`), `ef7dc1b`
-  (`Sync memory after contract decisions`), `cdf67b9`
-  (`Pre-register SWE-T1 issue-aligned contract`), `0f3a499`
-  (`Support SWE scorer override runs`), `599382d`
-  (`Add SWE-T1 issue-aligned follow-up table`), `12e97df`
-  (`Record phase110 GitHub push blocker`), `24f8029`
-  (`Clarify phase110 push status memory`), `cdeab1f`
-  (`Clarify phase110 diagnostics in paper and memory`), `c7d55b7`
-  (`Record recovered GitHub backup status`), `2a61d42`
-  (`Record Claude ablation retry availability`), `12fab77`
-  (`Record Claude retry push blocker`), `9888f17`
-  (`Bound summary comparison claim`), and `1ab714f`
-  (`Sync current project records`) are pushed to `origin/main` and verified by
-  `git ls-remote --heads origin main` as of
-  `1ab714faa73eb68eb259c23d7208fd685af5f3a7 refs/heads/main`. Later local
-  commits after `1ab714f` are not remote-backed yet. Earlier and latest GitHub
-  HTTPS transport failures are availability metadata, not experiment
-  correctness evidence.
+- The committed chain through `05b3963 Tighten real-reuse record boundaries`
+  is pushed to `origin/main` and verified by `git ls-remote --heads origin
+  main` as
+  `05b3963560cb5553233fe2da1afd3e927ec386ef refs/heads/main`. This includes
+  the earlier recovered GitHub backup records and the later real-reuse boundary
+  tightening. Earlier GitHub HTTPS transport failures are availability
+  metadata, not experiment-correctness evidence.
 - Verification before the `599382d` phase save passed:
   `python -m unittest tests.test_build_real_reuse_swe_t1_issue_aligned_followup
   tests.test_check_paper_tables tests.test_check_reproducibility_package -v`,
@@ -136,13 +115,10 @@ Current date: 2026-07-05.
   is required, and `ok.txt` should only be created for completed human-fidelity
   annotation or a concrete placed core asset.
 - Current GitHub transport note: previous 2026-07-05 connection-reset /
-  port-443 failures recovered long enough to push and verify
-  `1ab714faa73eb68eb259c23d7208fd685af5f3a7 refs/heads/main`. A later push
-  for the later local commit chain failed with `Recv failure: Connection was
-  reset`, and a later remote check failed to connect to github.com port 443.
-  Before claiming any later phase save is remote-backed, rerun
-  `git status -sb`, `git log -5 --oneline`, and
-  `git ls-remote --heads origin main`.
+  port-443 failures recovered. Current verified remote state is
+  `05b3963560cb5553233fe2da1afd3e927ec386ef refs/heads/main`. Before claiming
+  any later phase save is remote-backed, rerun `git status -sb`,
+  `git log -5 --oneline`, and `git ls-remote --heads origin main`.
 - Historical Claude-family availability checkpoint: after record-sync commit
   `977b2b9` (`Sync experiment planning records`), Claude-family REF-T2 was
   retried from the local Claude API doc key with the v0 300-second / 5-attempt
@@ -166,12 +142,12 @@ Current date: 2026-07-05.
   availability metadata. `results/real_reuse/llm_ablation_summary.md` remains
   12 collected scored rows / 18 expected rows, with the 6 Claude-family rows
   pending; this is provider availability metadata, not method-quality evidence.
-- Latest remote-backed chain: Claude retry availability, Claude retry push
-  blocker, bounded summary-comparison claim cleanup, and current project
-  record sync are remote-backed through `1ab714f`. Later local commits after
-  `1ab714f` remain unverified on GitHub because of a fresh transport failure.
-  The exact failed commands/errors are recorded in
-  `C:\Users\19351\Desktop\tem\toHuman.md`.
+- Latest remote-backed chain: Claude retry availability, bounded
+  summary-comparison claim cleanup, current project record sync, GitHub backup
+  recovery, and real-reuse record-boundary tightening are remote-backed through
+  `05b3963`. The current local change set adds the tested SNAP
+  executable-candidate runner and record updates; it still needs phase-save
+  commit/push before it is remote-backed.
 - Current non-network claim-boundary cleanup: `research/claim_source_map.md`
   no longer says the broad "PaperToSkill skills outperform generic summaries"
   claim is a TBD hypothesis. It now states the evidence-bounded version:
@@ -303,13 +279,10 @@ Current date: 2026-07-05.
 
 ## Immediate Next Actions
 
-1. Continue local, non-network core real-reuse stabilization first. SNAP
-   executable-candidate, SWE-T1 task-contract decision, and SWE-T1
-   issue-aligned revised scorer/test contract are now pre-registered and
-   guarded by focused preflight. The phase110 paired issue-aligned follow-up
-   has already scored Summary/PaperToSkill as `1.000/1.000`, has a dedicated
-   diagnostic table, and must not change paper-facing main rows unless
-   explicitly promoted.
+1. Save the current local phase after broader verification: the SNAP
+   executable-candidate runner is implemented and focused tests/preflight pass.
+   It remains diagnostic and must not change paper-facing main rows unless
+   explicitly promoted through `results/real_reuse/main_run_selection.json`.
 2. Retry Claude-family real-reuse LLM ablation rows only opportunistically when
    provider availability recovers. The current collected scored slices are all
    GPT-family and DeepSeek-family rows for REF-T2, AIDE-T2, and SWE-T2; all
@@ -325,10 +298,11 @@ Current date: 2026-07-05.
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
 6. Latest verified remote-backed phase checkpoint:
-   `1ab714f Sync current project records`, verified at
-   `1ab714faa73eb68eb259c23d7208fd685af5f3a7 refs/heads/main`. Later local
-   commits after `1ab714f` are not remote-backed yet.
-7. No experiment-side human action is required.
+   `05b3963 Tighten real-reuse record boundaries`, verified at
+   `05b3963560cb5553233fe2da1afd3e927ec386ef refs/heads/main`.
+7. No experiment-side human action is required; current uncommitted SNAP
+   executable-candidate runner/checker/test edits are agent-side work pending
+   phase-save commit and push.
 
 ## Boundaries
 

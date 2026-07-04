@@ -315,13 +315,13 @@ Current supported claims:
   clarification), `cdeab1f` (phase110 diagnostic paper/memory clarification),
   `c7d55b7` (recovered GitHub backup status), `2a61d42` (Claude-family
   ablation retry availability), `12fab77` (Claude retry push blocker),
-  `9888f17` (bounded summary-comparison claim cleanup), and `1ab714f` (current
-  project record sync). The temporary 2026-07-05 GitHub HTTPS transport
-  blocker recovered long enough to push and verify
-  `1ab714faa73eb68eb259c23d7208fd685af5f3a7 refs/heads/main`. Later local
-  commits after `1ab714f`, starting with `2b5d9d0`, are not remote-backed yet
-  because the next push reset and a follow-up remote check could not connect to
-  github.com port 443. Verify exact local/remote alignment with
+  `9888f17` (bounded summary-comparison claim cleanup), `1ab714f` (current
+  project record sync), `2b5d9d0` (GitHub backup recovery record), and
+  `05b3963` (real-reuse record-boundary tightening). The temporary 2026-07-05
+  GitHub HTTPS transport blocker later recovered; the latest verified remote
+  checkpoint is
+  `05b3963560cb5553233fe2da1afd3e927ec386ef refs/heads/main`. Verify exact
+  local/remote alignment with
   `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
   phase save.
@@ -357,6 +357,13 @@ Current supported claims:
   unchanged unless a future paired rerun is explicitly promoted through
   `results/real_reuse/main_run_selection.json`. This is a future-rerun
   contract, not new task-success evidence.
+- The SNAP executable-candidate runner is implemented in
+  `scripts/run_real_reuse_snapatac2_executable_candidate.py` with focused
+  coverage in `tests/test_run_real_reuse_snapatac2_executable_candidate.py`.
+  It executes candidate scripts, writes runner-owned `candidate_output.json`,
+  `artifact_manifest.json`, and `resource_record.json`, calls the existing
+  SNAP scorer, does not append to main raw rows, and does not replace
+  paper-facing main rows by default.
 - The SWE-T1 issue-aligned revised scorer/test contract is now
   pre-registered in
   `benchmarks/real_reuse/swe_t1_issue_aligned_contract_v0.json`, implemented
@@ -384,10 +391,10 @@ Current supported claims:
   PaperToSkill advantage and does not replace the locked first-pass SWE-T1
   main row unless explicitly promoted later. Local commit `599382d` saves this
   table and the rebuilt AAAI PDF locally; follow-up commits `12e97df`,
-  `24f8029`, and `cdeab1f` record push-status and paper/memory boundary
-  clarifications. The recovered remote-backed checkpoint after the later
-  record-sync save is
-  `1ab714faa73eb68eb259c23d7208fd685af5f3a7 refs/heads/main`.
+  `24f8029`, `cdeab1f`, `c7d55b7`, `2a61d42`, `12fab77`, `9888f17`,
+  `1ab714f`, `2b5d9d0`, and `05b3963` are remote-backed in the latest verified
+  checkpoint
+  `05b3963560cb5553233fe2da1afd3e927ec386ef refs/heads/main`.
 - Phase109 has collected scored real-reuse LLM ablation rows only on the
   pre-registered stabilized slices. Current collected GPT-family pairs are
   REF-T2 1.000/1.000,
@@ -403,14 +410,12 @@ Current supported claims:
   and 6 pending rows out of 18 expected rows. This is auxiliary
   model/repetition evidence, not a main-row replacement and not PaperToSkill
   advantage.
-- Phase 89 and the 2026-07-04 record-sync push both recovered GitHub HTTPS
-  transport interruptions. Use `git status -sb` and a successful remote check
-  for the latest exact alignment before each phase-save claim.
+- Phase 89 and the 2026-07-04/2026-07-05 record-sync pushes recovered GitHub
+  HTTPS transport interruptions. Use `git status -sb` and a successful remote
+  check for the latest exact alignment before each phase-save claim.
 - Latest verified remote-backed phase checkpoint:
-  `1ab714f Sync current project records`, verified at
-  `1ab714faa73eb68eb259c23d7208fd685af5f3a7 refs/heads/main`. Later local
-  commits after `1ab714f` are not remote-backed yet because the latest
-  push/remote-check attempts hit GitHub HTTPS transport failures. Rerun remote
+  `05b3963 Tighten real-reuse record boundaries`, verified at
+  `05b3963560cb5553233fe2da1afd3e927ec386ef refs/heads/main`. Rerun remote
   verification before making later remote-backed claims.
 
 Current unsupported claims:
@@ -716,14 +721,14 @@ Use these as entry points instead of searching the whole repo first:
   reports ready, 16 ready checks, 0 failed checks.
 - Real-reuse preflight:
   `results/real_reuse/spec_preflight.md`
-  reports `ready_to_implement`, 8 tasks, 489 ready checks, and 0 failed checks
+  reports `ready_to_implement`, 8 tasks, 490 ready checks, and 0 failed checks
   after validating the REF prepared asset/runner layer, AIDE execution-layer
   contract, SWE-agent skill/execution-layer contracts, SnapATAC2
   skill/execution-layer/prepared-asset contracts, current real-reuse planned
   output paths, the guard that forbids reintroducing a separate
   `domain_robustness` planned output, the SNAP executable-candidate contract,
-  the SWE-T1 task-contract decision, and the SWE-T1 issue-aligned revised
-  scorer/test contract.
+  the SNAP executable-candidate runner, the SWE-T1 task-contract decision, and
+  the SWE-T1 issue-aligned revised scorer/test contract.
 - Real-reuse first-pass run:
   `results/real_reuse/raw_rows.jsonl` and
   `results/real_reuse/main_results_plan.md` contain one GPT-family `gpt-5.5`
@@ -770,7 +775,8 @@ Use these as entry points instead of searching the whole repo first:
   `research/snapatac2_executable_candidate_contract.md` define the required
   executable candidate outputs, runner-owned runtime/memory/artifact records,
   scorer components, failure handling, and promotion rule for any future SNAP
-  rerun. The strict preflight now guards this contract.
+  rerun. The strict preflight now guards this contract and the corresponding
+  executable-candidate runner.
 - SWE-T1 task-contract decision:
   `benchmarks/real_reuse/swe_t1_task_contract_decision_v0.json` and
   `research/swe_t1_task_contract_decision.md` freeze the current SWE-T1 main

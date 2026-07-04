@@ -31,19 +31,17 @@ Test-NetConnection github.com -Port 443 | Format-List
 ```
 
 Current status as of 2026-07-05: the temporary GitHub HTTPS transport blocker
-recovered long enough to push the previously unbacked local chain through
-`1ab714f Sync current project records`. The latest verified remote checkpoint
-is:
+recovered. The latest verified remote checkpoint is:
 
 ```text
-1ab714faa73eb68eb259c23d7208fd685af5f3a7 refs/heads/main
+05b3963560cb5553233fe2da1afd3e927ec386ef refs/heads/main
+05b3963 Tighten real-reuse record boundaries
 ```
 
-Later local commits after `1ab714f`, starting with
-`2b5d9d0 Record GitHub backup recovery`, are not remote-backed yet:
-`git push origin main` failed with `Recv failure: Connection was reset`, and a
-follow-up `git ls-remote --heads origin main` failed to connect to github.com
-port 443.
+Earlier failed pushes with `Recv failure: Connection was reset` are historical
+transport metadata, not current project-correctness evidence. Current working
+tree edits may still be uncommitted; always inspect `git status -sb` before
+claiming a clean phase save.
 
 Re-run remote verification before making future remote-backed checkpoint
 claims.
@@ -373,6 +371,21 @@ controlled scaffold over the same miniature fixtures, records concrete
 artifacts plus runtime/memory, and does not append to `raw_rows.jsonl`. Treat
 this as diagnostic evidence that the artifact/runtime/memory contract can
 close, not as a main-row replacement or PaperToSkill advantage.
+
+Run executable SNAP candidate scripts under the pre-registered contract without
+replacing the main rows:
+
+```powershell
+python scripts\run_real_reuse_snapatac2_executable_candidate.py --candidate-dir path\to\candidate_scripts --task SNAP-T1 --task SNAP-T2 --condition summary --condition papertoskill --timeout-seconds 300 --run-id phaseXX_snapatac2_executable_candidate
+```
+
+Candidate scripts should accept `--task-id`, `--condition`, `--fragment`,
+`--artifact-dir`, and `--result-json`. The runner writes runner-owned
+`candidate_output.json`, `artifact_manifest.json`, `resource_record.json`, and
+metric files before calling `scripts/score_real_reuse_snapatac2.py`. It does
+not append to `results/real_reuse/raw_rows.jsonl` and does not replace
+paper-facing main rows unless a later explicit promotion updates
+`results/real_reuse/main_run_selection.json`.
 
 Validate the real-reuse benchmark after task/spec/scorer edits or before
 editing paper claims:
