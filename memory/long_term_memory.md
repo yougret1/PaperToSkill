@@ -80,9 +80,10 @@ This file is intentionally compact. Detailed chronological history lives in
   main-results boundary cleanup, real-reuse LLM-ablation handoff guard,
   recovered checkpoint-sync records, outline evidence-boundary sync,
   limitations-claim gate, model-response cost-boundary sync, stale cost-scope
-  claim guard, checkpoint-record guard sync, and pre-submission gate rerun is
-  `bd3fe6e5906411dc23d712d33fabb10a26c6c164 refs/heads/main`
-  (`bd3fe6e Record pre-submission gate rerun`). This checkpoint includes the
+  claim guard, checkpoint-record guard sync, pre-submission gate rerun, and
+  paper-conclusion boundary sync is
+  `e57df723bb8bc147626a6769cb2e765311ad6e13 refs/heads/main`
+  (`e57df72 Align paper conclusion with locked-row evidence`). This checkpoint includes the
   limitations claim gate that covers `paper/limitations.md` with 51 ready
   paper-claim checks / 0 failed checks, the full 209-test verification for
   that gate, and
@@ -92,8 +93,10 @@ This file is intentionally compact. Detailed chronological history lives in
   stale cost-scope guard with 56 ready paper-claim checks / 0 failed checks,
   full unit discovery at 210 tests OK, and the checkpoint-record guard sync
   that moves current remote-checkpoint reports from stale `5786d7d` wording to
-  `43f9092`, plus the recovered checkpoint blocker records and pre-submission
-  gate rerun record. It also includes the earlier outline
+  `43f9092`, plus the recovered checkpoint blocker records, pre-submission
+  gate rerun record, and paper-conclusion boundary sync that keeps future-work
+  wording aligned with locked real-reuse rows and pre-registered paired
+  follow-ups. It also includes the earlier outline
   update that distinguishes collected/scored saved-response rows from
   unsupported human semantic fidelity, provider billing, and live downstream
   task-success claims; the submission-review handoff guard that separates the
@@ -190,6 +193,14 @@ This file is intentionally compact. Detailed chronological history lives in
   `bd3fe6e5906411dc23d712d33fabb10a26c6c164 refs/heads/main`. This recovery
   includes `a72c6d2`, `dfd5602`, and `bd3fe6e`; earlier reset and port-443
   failures remain GitHub transport metadata only.
+- Paper-conclusion boundary sync checkpoint `e57df72 Align paper conclusion
+  with locked-row evidence` updates the AAAI conclusion, Markdown draft,
+  submission checklist, review report, memory, runbook, goal audit, rebuilt
+  PDF, and refreshed goal/AAAI reports so future work says to stabilize locked
+  rows with pre-registered paired follow-ups rather than generically repeat or
+  expand real-reuse runs. `git push origin main` succeeded, and `git ls-remote
+  --heads origin main` verified
+  `e57df723bb8bc147626a6769cb2e765311ad6e13 refs/heads/main`.
 - Follow-up record-sync commit `45ef25b Sync remote checkpoint after LLM handoff
   guard` and blocker note `0538ef1 Record checkpoint sync push blocker`
   initially failed to back up because GitHub HTTPS transport was unavailable.

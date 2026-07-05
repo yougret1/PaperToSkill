@@ -183,6 +183,16 @@ Current date: 2026-07-06.
   `bd3fe6e5906411dc23d712d33fabb10a26c6c164 refs/heads/main`. This recovery
   includes `a72c6d2`, `dfd5602`, and `bd3fe6e`; earlier reset and port-443
   failures remain GitHub transport metadata only.
+- Current paper-conclusion boundary sync is saved and remote-verified as
+  `e57df72 Align paper conclusion with locked-row evidence`; `git push origin
+  main` advanced `main` from `bd3fe6e` to `e57df72`, and `git ls-remote --heads
+  origin main` verified
+  `e57df723bb8bc147626a6769cb2e765311ad6e13 refs/heads/main`. The AAAI
+  conclusion and Markdown draft now say the next stage is to stabilize locked
+  real-reuse rows with pre-registered paired follow-ups rather than to
+  generically repeat/expand real-reuse runs. The AAAI PDF was rebuilt to 8
+  pages; strict paper-claim, AAAI-package, paper-table, submission-review,
+  package, and goal-completion gates passed.
 - Current main-results boundary cleanup removes stale "future unfilled cells /
   planning placeholders" wording from `scripts/build_real_reuse_paper_tables.py`
   and regenerated `results/real_reuse/main_results_plan.{md,json}`. It also
@@ -410,18 +420,19 @@ Current date: 2026-07-06.
   GitHub retry pushed the follow-up record-sync and Claude availability
   commits, and `git ls-remote --heads origin main` verified
   `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`.
-- Current local/remote status override after the pre-submission gate rerun:
+- Current local/remote status override after the paper-conclusion boundary sync:
   the latest locally recorded remote checkpoint is
-  `bd3fe6e5906411dc23d712d33fabb10a26c6c164 refs/heads/main`
-  (`bd3fe6e Record pre-submission gate rerun`). This checkpoint includes the
+  `e57df723bb8bc147626a6769cb2e765311ad6e13 refs/heads/main`
+  (`e57df72 Align paper conclusion with locked-row evidence`). This checkpoint includes the
   recovered checkpoint-sync commits after the real-reuse LLM-ablation handoff
   guard, the outline update that distinguishes collected/scored saved-response
   rows from unsupported human semantic fidelity, provider billing, and live
   downstream task-success claims, the limitations claim gate, the
   paper-facing saved-response cost-boundary sync, and the stale cost-scope
   regression guard with 56 ready paper-claim checks / 0 failures, plus the
-  checkpoint-record guard sync, checkpoint blocker records, and
-  pre-submission gate rerun record. Older current-status bullets in this file are historical
+  checkpoint-record guard sync, checkpoint blocker records, pre-submission
+  gate rerun record, and the paper-conclusion boundary sync. Older
+  current-status bullets in this file are historical
   checkpoints only; use fresh `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
   phase.
@@ -1002,8 +1013,8 @@ Current date: 2026-07-06.
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
 6. Latest substantive remote-backed checkpoint before further edits:
-   `bd3fe6e Record pre-submission gate rerun`, verified at
-   `bd3fe6e5906411dc23d712d33fabb10a26c6c164 refs/heads/main`.
+   `e57df72 Align paper conclusion with locked-row evidence`, verified at
+   `e57df723bb8bc147626a6769cb2e765311ad6e13 refs/heads/main`.
 7. No experiment-side human action is required for GitHub status right now.
    Continue non-network paper/evidence work and verify remote alignment again
    before claiming any later phase save is remote-backed.
