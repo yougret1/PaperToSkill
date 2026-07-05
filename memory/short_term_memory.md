@@ -62,6 +62,15 @@ Current date: 2026-07-05.
   `python scripts/check_reproducibility_package.py --strict`, and
   `python scripts/check_goal_completion.py --strict`. The phase is saved and
   remote-backed in `b550a26 Clarify SNAP executable candidate results`.
+- Current auxiliary paper-record sync updates `paper/draft.md` and
+  `paper/outline.md` so they match the AAAI manuscript's phase108/phase112
+  SNAP diagnostic boundary: the controlled scaffold and model-generated
+  SNAP-T1 executable-candidate scripts close artifact/execution contracts for
+  both Summary and PaperToSkill, but do not replace main rows or show
+  PaperToSkill advantage. Verification passed:
+  `python scripts/check_paper_claims.py --strict`,
+  `python scripts/check_reproducibility_package.py --strict`, and
+  `python scripts/check_goal_completion.py --strict`.
 - Current local phase commit `77e8ada` implements the SNAP executable-candidate
   runner/checker/test path:
   `scripts/run_real_reuse_snapatac2_executable_candidate.py`,

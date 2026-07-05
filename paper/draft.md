@@ -250,6 +250,16 @@ and 0.200/0.400, but both remain below the success threshold. This is mixed
 first-pass downstream evidence and failure-boundary evidence, not a broad
 downstream effectiveness claim.
 
+The SNAP follow-ups are diagnostic rather than main-table replacements. A
+phase108 controlled executable-artifact scaffold reaches 1.000 for both Summary
+and PaperToSkill on SNAP-T1/T2, showing that the existing scorer can be
+satisfied when concrete artifacts plus runtime/memory records are materialized.
+A later phase112 model-generated SNAP-T1 executable-candidate diagnostic also
+reaches 1.000 for both Summary and PaperToSkill under the pre-registered
+candidate-script contract. These follow-ups close execution/artifact contracts
+for both conditions; they do not show PaperToSkill advantage or replace the
+first-pass SNAP rows.
+
 The live-transfer saved-response evaluation now covers all four paper packets.
 AI Scientist-v2, Reflexion, AIDE, and Toolformer each have six saved responses
 across Codex-style and Claude-style harness prompts and three context variants.
@@ -340,9 +350,12 @@ PaperToSkill-only success and the Summary condition still times out. SWE-T1
 shows that a software-engineering task can fail before tests run if a patch
 cannot be applied cleanly. SnapATAC2 shows that partial pipelines are
 insufficient when the scorer requires complete runtime, memory, and quality
-artifacts. These results point to budget contracts, patch/application
-constraints, artifact manifests, and recovery instructions as future schema
-pressure points.
+artifacts. The phase108 and phase112 SNAP diagnostics show that the artifact
+contract can close when execution and candidate-script requirements are made
+explicit, but they close for both Summary and PaperToSkill rather than proving
+an advantage. These results point to budget contracts, patch/application
+constraints, artifact manifests, executable candidate-script contracts, and
+recovery instructions as future schema pressure points.
 
 ## 7. Limitations
 

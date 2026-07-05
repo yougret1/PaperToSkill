@@ -215,6 +215,10 @@ REF-T1/T2 score 1.000/1.000, validating the runner/scorer path without showing
 advantage over Summary. SNAP-T1/T2 score 0.000/0.500 and 0.200/0.400, but both
 remain below the success threshold. The correct paper claim is mixed first-pass
 evidence plus failure-boundary analysis, not aggregate downstream effectiveness.
+SNAP phase108 and phase112 follow-ups are diagnostic: the controlled scaffold
+and the model-generated SNAP-T1 executable-candidate scripts both close the
+artifact/execution contract for Summary and PaperToSkill, so they do not
+replace the locked main rows or show PaperToSkill advantage.
 
 ### 6. Limitations
 
@@ -262,6 +266,7 @@ less directly procedural.
 | Figure 1: PaperToSkill pipeline | `scripts/papertoskill_extract.py`; `skill/SKILL.md` | Show paper note to skill/source-map flow |
 | Table 1: Real-reuse main experiment | `results/real_reuse/main_results_plan.md` | Eight Summary-vs-PaperToSkill paper-task rows; AIDE-T2 and SWE-T2 are PaperToSkill-only successes, AIDE-T1 and REF rows are solved by both, and SWE-T1/SNAP remain boundary rows |
 | Table 2: Real-reuse failure-boundary analysis | `results/real_reuse/failure_analysis.md` | Row-level boundary modes and follow-up method contracts for the first-pass real-reuse rows |
+| Diagnostic tables: SWE-T1 and SNAP follow-ups | `results/real_reuse/swe_t1_source_context_followup.md`; `results/real_reuse/swe_t1_issue_aligned_followup.md`; `results/real_reuse/snapatac2_executable_artifact_followup.md`; `results/real_reuse/snapatac2_executable_candidate_run_report.md` | Paired diagnostic follow-ups; they clarify task/artifact contracts without replacing main rows or showing aggregate advantage |
 | Table 3: Deterministic/offline quality results | `results/tables/main_results.md` | Coverage, source support, compactness |
 | Table 4: Transfer ablation | `results/tables/transfer_ablation.md` | Effect of transfer notes |
 | Table 5: Source grounding | `results/tables/compactness_source_grounding.md` | Source support and compactness |
