@@ -36,6 +36,14 @@ Current date: 2026-07-05.
   pushed `5d11adc Mark deferred study tables explicitly`; `git ls-remote
   --heads origin main` verified
   `5d11adc7418762e3e416ccda798f30ca4faf041f refs/heads/main`.
+  Follow-up record-sync commit
+  `591a3f1 Record recovered deferred-table backup` updated memory/runbook/goal
+  audit to that recovered checkpoint, but its first `git push origin main`
+  failed with `Recv failure: Connection was reset`; the immediate
+  `git ls-remote --heads origin main` also failed with `Failed to connect to
+  github.com port 443 after 21089 ms`. As of this note, `591a3f1` is local-only
+  and the latest verified remote remains `5d11adc`; this is GitHub transport
+  metadata only and does not require a human `ok.txt`.
 - Current local claim-boundary continuation updates
   `research/claim_source_map.md` so the failure-branch claim no longer says
   "improves reproducibility" as a TBD hypothesis. It now says PaperToSkill
