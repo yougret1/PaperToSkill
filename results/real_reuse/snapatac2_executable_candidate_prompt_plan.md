@@ -2,6 +2,8 @@
 
 Evidence boundary: This is a local prompt-packet plan only. It does not execute model calls, does not score task outputs, does not append raw rows, and does not replace main rows.
 
+- Prompt mode: `full`
+
 | Task | Condition | Prompt | Expected Script | Required Artifacts |
 | --- | --- | --- | --- | --- |
 | SNAP-T1 | summary | results/real_reuse/snapatac2_executable_candidate_prompts/SNAP-T1_summary.md | SNAP-T1_summary.py | embedding.csv, cell_features.csv, fragment_summary.json |

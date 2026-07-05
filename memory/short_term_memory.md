@@ -13,6 +13,16 @@ Current date: 2026-07-06.
   Preserve the existing local-log boundary: do not modify
   `research/run_logs/**` or `research/stage_log.md` during record-sync-only
   work.
+- Current local SNAP-T2 prompt-contract continuation: the SNAP
+  executable-candidate prompt builder now has a compact mode and generated
+  `results/real_reuse/snapatac2_executable_candidate_compact_prompt_plan.{md,json}`
+  plus four compact packets under
+  `results/real_reuse/snapatac2_executable_candidate_compact_prompts/`.
+  This is non-network planning/contract work only: it does not call a model,
+  score outputs, append raw rows, replace main rows, or alter
+  `results/real_reuse/main_run_selection.json`. The compact SNAP-T2 Summary
+  prompt is 5,150 bytes versus 7,111 for the full packet, and compact SNAP-T2
+  PaperToSkill is 5,553 bytes versus 14,122.
 - Current pre-submission gate rerun after the checkpoint-record sync passed
   without repository diff drift: full unit discovery reported 211 tests OK, and
   strict submission-review, AAAI submission-decision, external-evidence packet,
@@ -50,7 +60,7 @@ Current date: 2026-07-06.
   goal, paper-claim, AAAI-package, paper-table, real-reuse preflight,
   usage-example, external-evidence packets, external-evidence closure, and
   AAAI submission-decision gates passed. `submission_review_report` is now
-  `18 ready / 0 failed`; package remains `468 ready / 1 pending / 0 failed`,
+  `18 ready / 0 failed`; package remains `474 ready / 1 pending / 0 failed`,
   and goal completion remains `78 ready / 3 pending / 0 failed`. This does not
   change experiment scores, main-row selection, or any paper claim strength.
   The phase was saved and pushed as `905899c Guard real-reuse LLM ablation
@@ -74,7 +84,7 @@ Current date: 2026-07-06.
   `check_aaai_submission_decision.py --strict`, `git diff --check` with only
   CRLF warnings, a long `sk-...` raw-key scan with no matches, and no diff
   under `research/run_logs/**` or `research/stage_log.md`. Latest refreshed
-  report counts: paper claims `56 ready / 0 failed`, package `468 ready / 1 pending /
+  report counts: paper claims `56 ready / 0 failed`, package `474 ready / 1 pending /
   0 failed`, AAAI package `20 ready / 0 failed`, paper tables `343 ready / 0
   failed`, submission review `18 ready / 0 failed`, goal completion `78 ready /
   3 pending / 0 failed`. Human-fidelity annotation remains pending; `ok.txt`
@@ -242,8 +252,8 @@ Current date: 2026-07-06.
   `python -m unittest discover -s tests -v`. The first run exposed one stale
   regression-test fixture in `tests/test_check_submission_review.py`: the
   negative test still replaced `467 ready` even though the current package
-  report is `468 ready`, so it no longer simulated stale package counts. The
-  fixture now replaces `468 ready` with `459 ready`; focused
+  report is now `474 ready`, so it no longer simulated stale package counts. The
+  fixture now replaces `474 ready` with `459 ready`; focused
   `tests.test_check_submission_review` passes, and the full suite now passes
   206/206 tests. Strict checks also passed after the fix:
   `check_submission_review.py --strict`, `check_goal_completion.py --strict`,
@@ -1031,6 +1041,10 @@ Current date: 2026-07-06.
    phase112 save. The SNAP executable-candidate diagnostic is complete and
    must not change paper-facing main rows unless explicitly promoted through
    `results/real_reuse/main_run_selection.json`.
+   A compact SNAP executable-candidate prompt contract is now prepared for a
+   future paired SNAP-T2 retry when provider large-context availability looks
+   healthier; do not use it to replace the locked SNAP main rows without an
+   explicit `main_run_selection.json` promotion.
 2. Retry Claude-family real-reuse LLM ablation rows only opportunistically when
    provider availability recovers. The current collected scored slices are all
    GPT-family and DeepSeek-family rows for REF-T2, AIDE-T2, and SWE-T2; all

@@ -35,7 +35,7 @@ effectiveness.
 Current machine reports:
 
 - Package: `results/reproducibility/package_report.md` reports
-  `ready_with_pending_external_evidence`, 468 ready checks, 1 pending check, and
+  `ready_with_pending_external_evidence`, 474 ready checks, 1 pending check, and
   0 failed checks.
 - Goal: `results/reproducibility/goal_completion_report.md` reports
   `not_complete_pending_external_evidence`, 78 ready checks, 3 pending checks,

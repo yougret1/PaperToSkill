@@ -148,7 +148,7 @@ class CheckSubmissionReviewTest(unittest.TestCase):
             ]:
                 path = tmp_root / relative
                 text = path.read_text(encoding="utf-8")
-                text = text.replace("468 ready", "459 ready")
+                text = text.replace("474 ready", "459 ready")
                 text = text.replace("343 ready", "316 ready")
                 path.write_text(text, encoding="utf-8")
 

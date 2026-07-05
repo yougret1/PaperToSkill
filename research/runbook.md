@@ -549,6 +549,21 @@ four task/condition prompt packets under
 `results/real_reuse/snapatac2_executable_candidate_prompts/`. These packets are
 for future model calls that should return Python candidate scripts; the builder
 does not call a model, score outputs, append raw rows, or replace main rows.
+After phase113/115/116 SNAP-T2 Summary requests returned provider HTTP 524,
+prefer the compact prompt contract before any future SNAP-T2 retry:
+
+```powershell
+python scripts\build_real_reuse_snapatac2_executable_candidate_prompts.py --compact
+```
+
+The compact builder writes
+`results/real_reuse/snapatac2_executable_candidate_compact_prompt_plan.{md,json}`
+and four shorter task/condition packets under
+`results/real_reuse/snapatac2_executable_candidate_compact_prompts/`. Compact
+packets keep the same runner interface, required artifacts, no-network rule,
+scorer-only boundary, and main-row non-replacement policy, while using
+deterministic summaries plus local paths and hashes instead of inlining every
+visible asset.
 
 To ask the default GPT-family model to generate paired candidate scripts from
 the prompt packets, use a generous timeout/retry budget:

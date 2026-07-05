@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 468
+- Ready checks: 474
 - Pending checks: 1
 - Failed checks: 0
 
@@ -200,6 +200,12 @@ Evidence boundary: this report checks local package completeness and separates p
 | real_reuse_snapatac2_executable_candidate_prompt_snap_t1_papertoskill | ready | present | results/real_reuse/snapatac2_executable_candidate_prompts/SNAP-T1_papertoskill.md |
 | real_reuse_snapatac2_executable_candidate_prompt_snap_t2_summary | ready | present | results/real_reuse/snapatac2_executable_candidate_prompts/SNAP-T2_summary.md |
 | real_reuse_snapatac2_executable_candidate_prompt_snap_t2_papertoskill | ready | present | results/real_reuse/snapatac2_executable_candidate_prompts/SNAP-T2_papertoskill.md |
+| real_reuse_snapatac2_executable_candidate_compact_prompt_plan_md | ready | present | results/real_reuse/snapatac2_executable_candidate_compact_prompt_plan.md |
+| real_reuse_snapatac2_executable_candidate_compact_prompt_plan_json | ready | present | results/real_reuse/snapatac2_executable_candidate_compact_prompt_plan.json |
+| real_reuse_snapatac2_executable_candidate_compact_prompt_snap_t1_summary | ready | present | results/real_reuse/snapatac2_executable_candidate_compact_prompts/SNAP-T1_summary.md |
+| real_reuse_snapatac2_executable_candidate_compact_prompt_snap_t1_papertoskill | ready | present | results/real_reuse/snapatac2_executable_candidate_compact_prompts/SNAP-T1_papertoskill.md |
+| real_reuse_snapatac2_executable_candidate_compact_prompt_snap_t2_summary | ready | present | results/real_reuse/snapatac2_executable_candidate_compact_prompts/SNAP-T2_summary.md |
+| real_reuse_snapatac2_executable_candidate_compact_prompt_snap_t2_papertoskill | ready | present | results/real_reuse/snapatac2_executable_candidate_compact_prompts/SNAP-T2_papertoskill.md |
 | real_reuse_snapatac2_executable_candidate_script_generation_report_md | ready | present | results/real_reuse/snapatac2_executable_candidate_script_generation_report.md |
 | real_reuse_snapatac2_executable_candidate_script_generation_report_json | ready | present | results/real_reuse/snapatac2_executable_candidate_script_generation_report.json |
 | real_reuse_snapatac2_executable_candidate_phase113_t2_partial_md | ready | present | results/real_reuse/snapatac2_executable_candidate_script_generation_phase113_t2_partial.md |
