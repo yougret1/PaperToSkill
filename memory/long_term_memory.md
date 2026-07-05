@@ -91,6 +91,10 @@ This file is intentionally compact. Detailed chronological history lives in
   checkpoint notes in this memory are historical recovery checkpoints; the
   earlier failed pushes for `501ffc8`, `48aabac`, and `8bdd394` are historical
   GitHub transport metadata now that `6c5e6a2` is verified remote-backed.
+  Follow-up local record-sync commit `95f1af3 Record recovered submission test
+  backup` currently remains local-only after `git push origin main` failed with
+  `Recv failure: Connection was reset`; treat that as GitHub transport metadata,
+  not experiment or paper-content failure.
   Verify the exact current local/remote state with `git status -sb`,
   `git log -5 --oneline`, and a successful `git ls-remote --heads origin main`
   before claiming any later phase is remote-backed.

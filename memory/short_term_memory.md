@@ -270,6 +270,13 @@ Current date: 2026-07-06.
   fresh `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
   phase.
+- Current local-only follow-up after that verified remote backup:
+  `95f1af3 Record recovered submission test backup` synchronizes long-term
+  memory, runbook, goal audit, short-term memory, and the goal-completion
+  report to the verified `6c5e6a2` checkpoint. Its first `git push origin main`
+  failed with `Recv failure: Connection was reset`. This is GitHub transport
+  metadata only and does not require a human `ok.txt`; retry remote backup
+  later while continuing non-blocked local paper/evidence work.
 - Recovered record-sync note: `b3441d5 Sync phase115 checkpoint records`,
   `cea43eb Record checkpoint sync push blocker`, and `96fce87 Record SNAP-T2
   phase116 provider block` are now remote-backed through the verified phase116

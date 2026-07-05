@@ -45,6 +45,16 @@ The earlier failed remote-backup attempts for `501ffc8`, `48aabac`, and
 succeeded, and `git ls-remote --heads origin main` verified the checkpoint
 above. Do not create `ok.txt` for GitHub status.
 
+Current local-only follow-up after that verified remote backup:
+
+```text
+95f1af3 Record recovered submission test backup
+```
+
+Its first `git push origin main` failed with `Recv failure: Connection was
+reset`. Treat this as GitHub transport metadata and retry later; do not create
+`ok.txt` for GitHub status.
+
 The previously unbacked local commits are now remote-backed through the latest
 AAAI page-limit checkpoint:
 
