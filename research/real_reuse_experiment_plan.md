@@ -3,8 +3,8 @@
 Date: 2026-07-04
 
 Status: first GPT-family pass scored; SWE-T1 source-context, SWE-T1
-issue-aligned, and SNAP executable-artifact diagnostic follow-ups are complete
-or locally recorded. Next work is to
+issue-aligned, SNAP executable-artifact, and SNAP executable-candidate
+diagnostic follow-ups are complete or locally recorded. Next work is to
 stabilize or rerun core real-reuse evidence before running remaining auxiliary
 analyses.
 

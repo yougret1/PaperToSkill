@@ -37,7 +37,7 @@ class CheckPaperTablesTest(unittest.TestCase):
 
             report = json.loads(output_json.read_text(encoding="utf-8"))
             self.assertEqual("ready", report["overall_status"])
-            self.assertEqual(302, report["status_counts"]["ready"])
+            self.assertEqual(316, report["status_counts"]["ready"])
             self.assertEqual(0, report["status_counts"]["fail"])
             ready_ids = {check["id"] for check in report["checks"] if check["status"] == "ready"}
             self.assertIn("paper_table_real_reuse_aide_t1_papertoskill_score", ready_ids)
@@ -48,6 +48,8 @@ class CheckPaperTablesTest(unittest.TestCase):
             self.assertIn("paper_table_swe_t1_issue_aligned_followup_papertoskill_interpretation", ready_ids)
             self.assertIn("paper_table_snap_exec_snap_t1_summary_task_score", ready_ids)
             self.assertIn("paper_table_snap_exec_snap_t2_papertoskill_peak_memory_mb", ready_ids)
+            self.assertIn("paper_table_snap_exec_candidate_snap_t1_summary_task_score", ready_ids)
+            self.assertIn("paper_table_snap_exec_candidate_snap_t1_papertoskill_peak_memory_mb", ready_ids)
             self.assertIn("paper_table_full_excerpt_sanity_swe_t1_full_excerpt_tokens", ready_ids)
             self.assertIn("paper_table_full_excerpt_sanity_aide_t1_full_excerpt_score", ready_ids)
             self.assertIn("paper_table_main_aide_skill_coverage", ready_ids)

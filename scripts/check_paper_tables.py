@@ -18,6 +18,9 @@ TABLE_SOURCES = {
     "real_reuse_swe_t1_source_context_followup": "results/real_reuse/swe_t1_source_context_followup.csv",
     "real_reuse_swe_t1_issue_aligned_followup": "results/real_reuse/swe_t1_issue_aligned_followup.csv",
     "real_reuse_snapatac2_executable_followup": "results/real_reuse/snapatac2_executable_artifact_followup.csv",
+    "real_reuse_snapatac2_executable_candidate_followup": (
+        "results/real_reuse/snapatac2_executable_candidate_run_report.csv"
+    ),
     "real_reuse_full_excerpt_sanity": "results/real_reuse/full_excerpt_sanity.csv",
     "main_results": "results/tables/main_results.csv",
     "transfer_ablation": "results/tables/transfer_ablation.csv",
@@ -444,6 +447,51 @@ def real_reuse_snapatac2_executable_followup_checks(root: Path, tex_rows: list[l
     return checks
 
 
+def real_reuse_snapatac2_executable_candidate_followup_checks(
+    root: Path, tex_rows: list[list[str]]
+) -> list[Check]:
+    source_path = root / TABLE_SOURCES["real_reuse_snapatac2_executable_candidate_followup"]
+    source = {(row["task_id"], row["condition"]): row for row in read_csv_rows(source_path)}
+    actual: dict[tuple[str, str], list[str]] = {}
+    for row in tex_rows:
+        if len(row) != 7:
+            raise ValueError(
+                "Unexpected width in tab:snapatac2-executable-candidate-followup: "
+                f"expected 7, got {len(row)} for {row}"
+            )
+        actual[(row[0], row[1])] = row
+    evidence = (
+        f"paper/aaai/papertoskill_tables.tex vs "
+        f"{TABLE_SOURCES['real_reuse_snapatac2_executable_candidate_followup']}"
+    )
+    checks: list[Check] = []
+    column_map = [
+        ("task_id", 0, "task_id"),
+        ("condition", 1, "condition"),
+        ("run_id", 2, "run_id"),
+        ("task_score", 3, "task_score"),
+        ("success", 4, "success"),
+        ("runtime_seconds", 5, "runtime_seconds"),
+        ("peak_memory_mb", 6, "peak_memory_mb"),
+    ]
+    for key, expected_row in source.items():
+        actual_row = actual.get(key)
+        row_slug = slug("_".join(key))
+        if not actual_row:
+            checks.append(Check(f"paper_table_snap_exec_candidate_{row_slug}_row", "fail", "missing row", evidence))
+            continue
+        for suffix, index, column in column_map:
+            checks.append(
+                check_value(
+                    f"paper_table_snap_exec_candidate_{row_slug}_{suffix}",
+                    actual_row[index],
+                    expected_row[column],
+                    evidence,
+                )
+            )
+    return checks
+
+
 def transfer_checks(root: Path, tex_rows: list[list[str]]) -> list[Check]:
     source_path = root / TABLE_SOURCES["transfer_ablation"]
     source_rows = read_csv_rows(source_path)
@@ -593,6 +641,12 @@ def build_report(root: Path, tables_tex: Path) -> dict[str, Any]:
             real_reuse_snapatac2_executable_followup_checks(
                 root,
                 parse_tabular_rows(tex_text, "tab:snapatac2-executable-followup"),
+            )
+        )
+        checks.extend(
+            real_reuse_snapatac2_executable_candidate_followup_checks(
+                root,
+                parse_tabular_rows(tex_text, "tab:snapatac2-executable-candidate-followup"),
             )
         )
         checks.extend(

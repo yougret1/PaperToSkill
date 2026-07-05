@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 448
+- Ready checks: 450
 - Pending checks: 1
 - Failed checks: 0
 
@@ -200,6 +200,8 @@ Evidence boundary: this report checks local package completeness and separates p
 | real_reuse_snapatac2_executable_candidate_phase111_snap_t1_papertoskill_script | ready | present | results/real_reuse/snapatac2_executable_candidate_scripts/phase111_gpt_snapatac2_executable_candidate_scripts/SNAP-T1_papertoskill.py |
 | real_reuse_snapatac2_executable_candidate_phase112_snap_t1_summary_script | ready | present | results/real_reuse/snapatac2_executable_candidate_scripts/phase112_gpt_snapatac2_executable_candidate_scripts_v2/SNAP-T1_summary.py |
 | real_reuse_snapatac2_executable_candidate_phase112_snap_t1_summary_response | ready | present | results/real_reuse/snapatac2_executable_candidate_script_responses/phase112_gpt_snapatac2_executable_candidate_scripts_v2/SNAP-T1_summary.txt |
+| real_reuse_snapatac2_executable_candidate_phase112_snap_t1_papertoskill_script | ready | present | results/real_reuse/snapatac2_executable_candidate_scripts/phase112_gpt_snapatac2_executable_candidate_scripts_v2/SNAP-T1_papertoskill.py |
+| real_reuse_snapatac2_executable_candidate_phase112_snap_t1_papertoskill_response | ready | present | results/real_reuse/snapatac2_executable_candidate_script_responses/phase112_gpt_snapatac2_executable_candidate_scripts_v2/SNAP-T1_papertoskill.txt |
 | artifact_map | ready | present | research/artifact_map.md |
 | claim_evidence_matrix | ready | present | research/claim_evidence_matrix.md |
 | new_paper_triage | ready | present | research/new_paper_triage_2026-07-01.md |
@@ -337,7 +339,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | failure_archive_counts | ready | total=27; paper=21; project=6 | results\failure_cases\failure_case_archive.json |
 | aaai_package_report_ready | ready | overall=ready; counts={'ready': 17, 'fail': 0} | results\reproducibility\aaai_package_report.json |
 | aaai_package_core_checks_ready | ready | core checks ready | results\reproducibility\aaai_package_report.json |
-| paper_table_report_ready | ready | overall=ready; counts={'ready': 302, 'fail': 0} | results\reproducibility\paper_table_report.json |
+| paper_table_report_ready | ready | overall=ready; counts={'ready': 316, 'fail': 0} | results\reproducibility\paper_table_report.json |
 | paper_table_core_checks_ready | ready | core checks ready | results\reproducibility\paper_table_report.json |
 | paper_claim_report_ready | ready | overall=ready; counts={'ready': 20, 'fail': 0} | results\reproducibility\paper_claim_report.json |
 | paper_claim_core_checks_ready | ready | core checks ready | results\reproducibility\paper_claim_report.json |

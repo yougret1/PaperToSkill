@@ -3,7 +3,7 @@
 Evidence boundary: this report checks that AAAI LaTeX table values match generated CSV result tables. It does not add new empirical evidence.
 
 - Overall status: ready
-- Ready checks: 302
+- Ready checks: 316
 - Failed checks: 0
 
 ## Checks
@@ -206,6 +206,20 @@ Evidence boundary: this report checks that AAAI LaTeX table values match generat
 | paper_table_snap_exec_snap_t2_papertoskill_success | ready | value=True | paper/aaai/papertoskill_tables.tex vs results/real_reuse/snapatac2_executable_artifact_followup.csv |
 | paper_table_snap_exec_snap_t2_papertoskill_runtime_seconds | ready | value=1.756513 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/snapatac2_executable_artifact_followup.csv |
 | paper_table_snap_exec_snap_t2_papertoskill_peak_memory_mb | ready | value=24.758577 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/snapatac2_executable_artifact_followup.csv |
+| paper_table_snap_exec_candidate_snap_t1_summary_task_id | ready | value=SNAP-T1 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/snapatac2_executable_candidate_run_report.csv |
+| paper_table_snap_exec_candidate_snap_t1_summary_condition | ready | value=summary | paper/aaai/papertoskill_tables.tex vs results/real_reuse/snapatac2_executable_candidate_run_report.csv |
+| paper_table_snap_exec_candidate_snap_t1_summary_run_id | ready | value=phase112_gpt_snapatac2_executable_candidate_t1 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/snapatac2_executable_candidate_run_report.csv |
+| paper_table_snap_exec_candidate_snap_t1_summary_task_score | ready | value=1.0 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/snapatac2_executable_candidate_run_report.csv |
+| paper_table_snap_exec_candidate_snap_t1_summary_success | ready | value=True | paper/aaai/papertoskill_tables.tex vs results/real_reuse/snapatac2_executable_candidate_run_report.csv |
+| paper_table_snap_exec_candidate_snap_t1_summary_runtime_seconds | ready | value=9.362002 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/snapatac2_executable_candidate_run_report.csv |
+| paper_table_snap_exec_candidate_snap_t1_summary_peak_memory_mb | ready | value=0.0 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/snapatac2_executable_candidate_run_report.csv |
+| paper_table_snap_exec_candidate_snap_t1_papertoskill_task_id | ready | value=SNAP-T1 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/snapatac2_executable_candidate_run_report.csv |
+| paper_table_snap_exec_candidate_snap_t1_papertoskill_condition | ready | value=papertoskill | paper/aaai/papertoskill_tables.tex vs results/real_reuse/snapatac2_executable_candidate_run_report.csv |
+| paper_table_snap_exec_candidate_snap_t1_papertoskill_run_id | ready | value=phase112_gpt_snapatac2_executable_candidate_t1 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/snapatac2_executable_candidate_run_report.csv |
+| paper_table_snap_exec_candidate_snap_t1_papertoskill_task_score | ready | value=1.0 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/snapatac2_executable_candidate_run_report.csv |
+| paper_table_snap_exec_candidate_snap_t1_papertoskill_success | ready | value=True | paper/aaai/papertoskill_tables.tex vs results/real_reuse/snapatac2_executable_candidate_run_report.csv |
+| paper_table_snap_exec_candidate_snap_t1_papertoskill_runtime_seconds | ready | value=2.010309 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/snapatac2_executable_candidate_run_report.csv |
+| paper_table_snap_exec_candidate_snap_t1_papertoskill_peak_memory_mb | ready | value=164.615443 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/snapatac2_executable_candidate_run_report.csv |
 | paper_table_full_excerpt_sanity_aide_t1_task_id | ready | value=AIDE-T1 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
 | paper_table_full_excerpt_sanity_aide_t1_source_paper | ready | value=AIDE | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
 | paper_table_full_excerpt_sanity_aide_t1_metric | ready | value=validation_score | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |

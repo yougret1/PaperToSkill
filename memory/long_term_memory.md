@@ -807,11 +807,14 @@ Use these as entry points instead of searching the whole repo first:
   SNAP-T1 scripts but both failed execution on Windows because they imported
   POSIX-only `resource`, so the paired diagnostic scored 0.500/0.500 with
   missing artifacts and does not replace main rows. The prompt packets were
-  tightened for cross-platform Python; phase112 then produced only
-  `SNAP-T1_summary.py` before the next provider request stalled and was
-  stopped as partial-generation/provider-availability metadata. Do not execute
-  a SNAP executable-candidate task unless paired Summary/PaperToSkill scripts
-  exist for the same generation phase.
+  tightened for cross-platform Python; phase112 then produced paired revised
+  SNAP-T1 Summary/PaperToSkill scripts after a long hung provider request and
+  repeated HTTP 524 responses were treated as availability metadata. The
+  paired phase112 executable-candidate diagnostic run scored both Summary and
+  PaperToSkill 1.000 under the existing SNAP-T1 scorer, showing contract
+  closure for both conditions rather than PaperToSkill advantage. Do not
+  execute a SNAP executable-candidate task unless paired Summary/PaperToSkill
+  scripts exist for the same generation phase.
 - SWE-T1 task-contract decision:
   `benchmarks/real_reuse/swe_t1_task_contract_decision_v0.json` and
   `research/swe_t1_task_contract_decision.md` freeze the current SWE-T1 main

@@ -438,12 +438,18 @@ Current checkpoint:
 - The prompt packets were tightened to require cross-platform Python and to
   avoid `resource`, network access, package installation, and writes outside
   `--artifact-dir` / `--result-json`.
-- `phase112_gpt_snapatac2_executable_candidate_scripts_v2` produced only
-  `SNAP-T1_summary.py` from the revised prompt. The following provider request
-  did not return after an extended wait, so the matching long-running Python
-  generation process was stopped and the default generation report records a
-  partial run. Do not execute phase112 as a paired diagnostic until the
-  matching PaperToSkill script exists.
+- `phase112_gpt_snapatac2_executable_candidate_scripts_v2` now has paired
+  revised `SNAP-T1_summary.py` and `SNAP-T1_papertoskill.py` scripts. The
+  first long prompt-runner request hung and a direct curl request with a larger
+  output budget returned repeated provider HTTP 524, both treated as
+  availability metadata. A no-BOM direct Responses request with a shorter
+  output budget produced the PaperToSkill script, after which the
+  prompt-runner report was rebuilt with both scripts cached.
+- The paired phase112 executable-candidate diagnostic run
+  `phase112_gpt_snapatac2_executable_candidate_t1` scored both Summary and
+  PaperToSkill 1.000 under the existing SNAP-T1 scorer. This is diagnostic
+  contract-closure evidence for both conditions, not a main-row replacement or
+  PaperToSkill advantage.
 
 After paired Summary/PaperToSkill candidate scripts exist, run:
 

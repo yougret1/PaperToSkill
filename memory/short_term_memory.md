@@ -65,20 +65,31 @@ Current date: 2026-07-05.
   SNAP rows. The prompt builder was then tightened to require cross-platform
   Python, no `resource`, no network/package installation, and writes only under
   `--artifact-dir` / `--result-json`. Phase112
-  `phase112_gpt_snapatac2_executable_candidate_scripts_v2` produced only
-  `SNAP-T1_summary.py`; the next provider request did not return after an
-  extended wait, so the matching long-running Python process was stopped and
-  `results/real_reuse/snapatac2_executable_candidate_script_generation_report.{md,json}`
-  records a partial run. Do not execute phase112 as a paired diagnostic until
-  the matching PaperToSkill script exists.
-  Verification for this uncommitted checkpoint passed: focused SNAP
-  prompt/prompt-runner/candidate-runner/repro-package unit tests,
+  `phase112_gpt_snapatac2_executable_candidate_scripts_v2` now has paired
+  revised `SNAP-T1_summary.py` and `SNAP-T1_papertoskill.py` scripts. The
+  first long prompt-runner request hung; direct curl retries with a larger
+  output budget returned provider HTTP 524; a no-BOM direct Responses request
+  with a shorter output budget produced the PaperToSkill script. The
+  generation report was rebuilt with both scripts cached. The paired
+  executable-candidate diagnostic run
+  `phase112_gpt_snapatac2_executable_candidate_t1` scored Summary and
+  PaperToSkill 1.000/1.000 under the existing SNAP-T1 scorer. This is
+  diagnostic contract-closure evidence for both conditions, not a main-row
+  replacement or PaperToSkill advantage. After rebuilding the AAAI PDF/log
+  from the updated TeX tables, verification passed:
+  `python -m unittest tests.test_check_paper_tables
+  tests.test_check_reproducibility_package -v`,
+  `python -m py_compile
+  results/real_reuse/snapatac2_executable_candidate_scripts/phase112_gpt_snapatac2_executable_candidate_scripts_v2/SNAP-T1_papertoskill.py`,
+  `check_aaai_package.py --strict`, `check_paper_tables.py --strict`,
+  `check_real_reuse_benchmark.py --strict`,
+  `check_paper_claims.py --strict`,
   `check_reproducibility_package.py --strict`,
-  `check_real_reuse_benchmark.py --strict`, `check_paper_tables.py --strict`,
-  `check_paper_claims.py --strict`, `check_usage_examples.py --strict`,
-  `check_aaai_package.py --strict`, `check_submission_review.py --strict`,
-  `check_goal_completion.py --strict`, `git diff --check` with only CRLF
-  warnings, and a raw-key scan with no matches.
+  `check_goal_completion.py --strict`, `check_usage_examples.py --strict`,
+  `check_submission_review.py --strict`,
+  `check_aaai_submission_decision.py --strict`, `git diff --check` with only
+  CRLF warnings, and a changed-file raw-key scan with no matches. A narrow
+  static scan found no actual `resource` imports in the phase112 scripts.
 - `research/real_reuse_stabilization_queue.md` now marks the SNAP P1 local
   action as runner-implemented: future SNAP reruns should use the executable
   candidate runner only when paired Summary/PaperToSkill candidate scripts
@@ -348,9 +359,9 @@ Current date: 2026-07-05.
    HTTP 502 after 5 attempts per condition. Do not commit raw keys.
 3. Keep Summary and PaperToSkill paired under the same task/scorer contract for
    any follow-up. Main SNAP rows remain unchanged unless explicitly promoted.
-   For SNAP executable-candidate reruns, execute/interpret a task only when
-   paired Summary/PaperToSkill candidate scripts exist for the same prompt
-   generation phase; phase112 currently has only `SNAP-T1_summary.py`.
+   Phase112 SNAP-T1 now has paired executable-candidate scripts and a paired
+   diagnostic execution with both conditions scoring 1.000; keep it
+   diagnostic unless explicitly promoted.
 4. During core reruns, collect auxiliary raw data where cheap: provider
    availability, failure reasons, context/token proxies, and raw rows needed
    for real-reuse LLM ablation.

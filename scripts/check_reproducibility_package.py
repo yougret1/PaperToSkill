@@ -249,6 +249,8 @@ CORE_FILES = {
     "real_reuse_snapatac2_executable_candidate_phase111_snap_t1_papertoskill_script": "results/real_reuse/snapatac2_executable_candidate_scripts/phase111_gpt_snapatac2_executable_candidate_scripts/SNAP-T1_papertoskill.py",
     "real_reuse_snapatac2_executable_candidate_phase112_snap_t1_summary_script": "results/real_reuse/snapatac2_executable_candidate_scripts/phase112_gpt_snapatac2_executable_candidate_scripts_v2/SNAP-T1_summary.py",
     "real_reuse_snapatac2_executable_candidate_phase112_snap_t1_summary_response": "results/real_reuse/snapatac2_executable_candidate_script_responses/phase112_gpt_snapatac2_executable_candidate_scripts_v2/SNAP-T1_summary.txt",
+    "real_reuse_snapatac2_executable_candidate_phase112_snap_t1_papertoskill_script": "results/real_reuse/snapatac2_executable_candidate_scripts/phase112_gpt_snapatac2_executable_candidate_scripts_v2/SNAP-T1_papertoskill.py",
+    "real_reuse_snapatac2_executable_candidate_phase112_snap_t1_papertoskill_response": "results/real_reuse/snapatac2_executable_candidate_script_responses/phase112_gpt_snapatac2_executable_candidate_scripts_v2/SNAP-T1_papertoskill.txt",
     "artifact_map": "research/artifact_map.md",
     "claim_evidence_matrix": "research/claim_evidence_matrix.md",
     "new_paper_triage": "research/new_paper_triage_2026-07-01.md",

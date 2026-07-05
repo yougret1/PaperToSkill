@@ -172,6 +172,8 @@ class CheckReproducibilityPackageTest(unittest.TestCase):
             self.assertIn("real_reuse_snapatac2_executable_candidate_phase111_snap_t1_papertoskill_script", ready_ids)
             self.assertIn("real_reuse_snapatac2_executable_candidate_phase112_snap_t1_summary_script", ready_ids)
             self.assertIn("real_reuse_snapatac2_executable_candidate_phase112_snap_t1_summary_response", ready_ids)
+            self.assertIn("real_reuse_snapatac2_executable_candidate_phase112_snap_t1_papertoskill_script", ready_ids)
+            self.assertIn("real_reuse_snapatac2_executable_candidate_phase112_snap_t1_papertoskill_response", ready_ids)
             self.assertIn("real_reuse_spec_preflight_ready", ready_ids)
             self.assertIn("real_reuse_core_checks_ready", ready_ids)
             self.assertIn("real_reuse_reflexion_runner_contract_ready", ready_ids)
