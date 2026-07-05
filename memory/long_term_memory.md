@@ -65,6 +65,12 @@ This file is intentionally compact. Detailed chronological history lives in
   If a network/download problem blocks a core asset or phase save, record the
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
+- Current remote-backed checkpoint remains
+  `0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main`; local commits
+  after that checkpoint, including `ef8cbe0 Prepare SNAP executable candidate
+  prompts`, may be ahead of `origin/main` when GitHub HTTPS transport is
+  unavailable. Verify with `git status -sb` and `git ls-remote --heads origin
+  main` before claiming a later phase is remote-backed.
 
 ## Evidence Boundary
 

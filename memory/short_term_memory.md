@@ -16,11 +16,13 @@ Current date: 2026-07-05.
   remote-backed through
   `0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main`
   (`0832201 Sync memory after GitHub retry`). A later local record commit,
-  `4b216b6 Record recovered SNAP runner backup`, is not remote-backed yet:
-  `git push origin main` failed with `Recv failure: Connection was reset`, and
-  the follow-up `git ls-remote --heads origin main` failed to connect to
-  github.com port 443 after 21115 ms. These are GitHub transport metadata, not
-  experiment correctness.
+  `4b216b6 Record recovered SNAP runner backup`, local record commit
+  `0734bb9 Record renewed GitHub push blocker`, and local SNAP prompt-packet
+  commit `ef8cbe0 Prepare SNAP executable candidate prompts` are not
+  remote-backed yet: the latest `git push origin main` and follow-up
+  `git ls-remote --heads origin main` both failed with `Recv failure:
+  Connection was reset`. These are GitHub transport metadata, not experiment
+  correctness.
 - Current local phase commit `77e8ada` implements the SNAP executable-candidate
   runner/checker/test path:
   `scripts/run_real_reuse_snapatac2_executable_candidate.py`,
@@ -45,7 +47,9 @@ Current date: 2026-07-05.
   replace main rows. Verification passed for the new prompt-packet test,
   SNAP runner/preflight tests, strict real-reuse/paper-table/paper-claim/usage/
   AAAI/submission/goal/package gates, `git diff --check` with only CRLF
-  warnings, and a raw-key scan with no matches.
+  warnings, and a raw-key scan with no matches. This phase is saved locally as
+  `ef8cbe0 Prepare SNAP executable candidate prompts`; GitHub backup failed
+  with connection resets and is recorded in `toHuman.md`.
 - `research/real_reuse_stabilization_queue.md` now marks the SNAP P1 local
   action as runner-implemented: future SNAP reruns should use the executable
   candidate runner only when paired Summary/PaperToSkill candidate scripts
@@ -108,8 +112,8 @@ Current date: 2026-07-05.
   `0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main`
   (`0832201 Sync memory after GitHub retry`). The previously unbacked local
   commits `77e8ada`, `0983fbc`, `c4b4b99`, `2490a9b`, and `0832201` are now
-  remote-backed. Local commit `4b216b6` is ahead of `origin/main` and awaits
-  remote backup recovery.
+  remote-backed. Local commits `4b216b6`, `0734bb9`, and `ef8cbe0` are ahead
+  of `origin/main` and await remote backup recovery.
 - The current discussion policy is: stabilize the core eight-row real-reuse
   evidence first; collect auxiliary raw data opportunistically; keep LLM
   ablation auxiliary, component ablation appendix-only, and user study
@@ -324,8 +328,8 @@ Current date: 2026-07-05.
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
 6. Latest local commit:
-   `4b216b6 Record recovered SNAP runner backup` (not remote-backed yet due
-   GitHub HTTPS reset / port 443 connection failure). Latest verified
+   `ef8cbe0 Prepare SNAP executable candidate prompts` (not remote-backed yet
+   due GitHub HTTPS reset). Latest verified
    remote-backed checkpoint:
    `0832201 Sync memory after GitHub retry`, verified at
    `0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main`.
