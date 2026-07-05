@@ -41,9 +41,12 @@ Current date: 2026-07-05.
   audit to that recovered checkpoint, but its first `git push origin main`
   failed with `Recv failure: Connection was reset`; the immediate
   `git ls-remote --heads origin main` also failed with `Failed to connect to
-  github.com port 443 after 21089 ms`. As of this note, `591a3f1` is local-only
-  and the latest verified remote remains `5d11adc`; this is GitHub transport
-  metadata only and does not require a human `ok.txt`.
+  github.com port 443 after 21089 ms`. The local blocker record
+  `34542ec Record deferred backup push blocker` was then created. A later
+  `git push origin main` recovered and `git ls-remote --heads origin main`
+  verified
+  `34542eca0fc4a758cae071193f4327870d6f2867 refs/heads/main`. This is GitHub
+  transport metadata only and does not require a human `ok.txt`.
 - Current local claim-boundary continuation updates
   `research/claim_source_map.md` so the failure-branch claim no longer says
   "improves reproducibility" as a TBD hypothesis. It now says PaperToSkill
@@ -72,14 +75,15 @@ Current date: 2026-07-05.
   `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`.
 - Current local/remote status after this resume check: the latest verified
   remote backup is
-  `5d11adc7418762e3e416ccda798f30ca4faf041f refs/heads/main`
-  (`5d11adc Mark deferred study tables explicitly`). The earlier
+  `34542eca0fc4a758cae071193f4327870d6f2867 refs/heads/main`
+  (`34542ec Record deferred backup push blocker`). The earlier
   checkpoint-detail/blocker records, grounding-gate evidence sync,
   quality-grounding table completion, blocker record, failure-branch
   claim-source cleanup, claim-evidence-matrix boundary sync, recovered
   checkpoint record, push-blocker record, Claude direct availability recheck,
-  recovered Claude backup checkpoint, and deferred-study table marking are now
-  included in the verified remote chain. Earlier
+  recovered Claude backup checkpoint, deferred-study table marking, recovered
+  deferred-table backup record, and the deferred-backup push-blocker record are
+  now included in the verified remote chain. Earlier
   `git ls-remote --heads origin main` failures on 2026-07-05 remain historical
   transport metadata; use `git status -sb`, `git log -5 --oneline`, and a fresh
   `git ls-remote --heads origin main` before making any later remote-backed
@@ -87,8 +91,8 @@ Current date: 2026-07-05.
 - Current resume baseline: GitHub backup had recovered and was verified
   through the resume-memory baseline clarification before this continuation's
   record-sync edits. The latest locally recorded remote checkpoint is:
-  `5d11adc7418762e3e416ccda798f30ca4faf041f refs/heads/main`
-  (`5d11adc Mark deferred study tables explicitly`). That remote-backed chain
+  `34542eca0fc4a758cae071193f4327870d6f2867 refs/heads/main`
+  (`34542ec Record deferred backup push blocker`). That remote-backed chain
   includes the SNAP executable-candidate prompt packets, phase111/phase112
   diagnostic generation/execution artifacts, the tightened submission-review
   count-check gate, the updated AAAI phase112 SNAP-T1 executable-candidate
@@ -101,7 +105,8 @@ Current date: 2026-07-05.
   failure-branch claim-source cleanup, the claim-evidence-matrix boundary
   sync, the recovered checkpoint record, the push-blocker record, and the
   Claude direct availability recheck, plus the recovered Claude backup
-  checkpoint and deferred-study table marking. Earlier `Recv failure: Connection was reset` and port-443 failures
+  checkpoint, deferred-study table marking, recovered deferred-table backup
+  record, and deferred-backup push-blocker record. Earlier `Recv failure: Connection was reset` and port-443 failures
   remain historical GitHub transport metadata, not experiment correctness.
   Treat a future successful `git ls-remote` as the authority before claiming
   any new remote-backed phase.
