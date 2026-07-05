@@ -52,6 +52,12 @@ verified auxiliary real-reuse LLM-ablation family-table checkpoint
 checkpoint syncs first hit `Recv failure: Connection was reset`, but later
 pushes recovered. This is GitHub transport metadata only.
 
+Local backup note: `896456b Enforce AAAI main page limit` is committed locally
+after that verified remote checkpoint, but its first `git push origin main` and
+immediate `git ls-remote --heads origin main` both failed with `Recv failure:
+Connection was reset`. This is GitHub transport metadata only and does not
+change the local evidence status.
+
 ## Requirement Audit
 
 | Requirement | Current Evidence | Status | Next Action |

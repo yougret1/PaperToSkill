@@ -37,8 +37,13 @@ Current date: 2026-07-05.
   Current refreshed counts after that repair: package `468 ready / 1 pending /
   0 failed`, AAAI package `20 ready / 0 failed`, paper tables `343 ready / 0
   failed`, submission review `17 ready / 0 failed`, goal completion `78 ready /
-  3 pending / 0 failed`.
-- Current record-sync continuation corrected the current remote-checkpoint
+  3 pending / 0 failed`. Local phase commit `896456b Enforce AAAI main page
+  limit` records this repair, but its first `git push origin main` and
+  immediate `git ls-remote --heads origin main` both failed with
+  `Recv failure: Connection was reset`. This is GitHub transport metadata only;
+  remote backup remains unchanged until a future push succeeds; see
+  `C:\Users\19351\Desktop\tem\toHuman.md` for the exact transport note.
+- Historical record-sync continuation corrected the current remote-checkpoint
   records from the phase114 checkpoint to the verified phase116 provider-block
   checkpoint. `scripts/check_goal_completion.py --strict` now reports
   `current_remote_checkpoint_records` as `declared=96fce87 Record SNAP-T2

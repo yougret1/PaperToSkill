@@ -85,6 +85,12 @@ This file is intentionally compact. Detailed chronological history lives in
   Verify the exact current local/remote state with `git status -sb`,
   `git log -5 --oneline`, and a successful `git ls-remote --heads origin main`
   before claiming any later phase is remote-backed.
+- Local unbacked checkpoint after that verified remote: `896456b Enforce AAAI
+  main page limit` moves two supporting tables out of the main AAAI PDF,
+  rebuilds the PDF to 8 pages, and adds the page-limit guard. Its first
+  `git push origin main` and immediate `git ls-remote --heads origin main`
+  both failed with `Recv failure: Connection was reset`. Treat this as GitHub
+  transport metadata; do not count it as experiment or paper-content failure.
 - Recovered record-only checkpoints after that verification:
   `b3441d5 Sync phase115 checkpoint records` and `cea43eb Record checkpoint
   sync push blocker` initially followed a GitHub reset, but the later phase116

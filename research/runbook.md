@@ -107,6 +107,18 @@ cea43eb Record checkpoint sync push blocker
 5ad6b54 Add real-reuse LLM ablation family table
 ```
 
+Latest local-only checkpoint after that verified remote:
+
+```text
+896456b Enforce AAAI main page limit
+```
+
+The first `git push origin main` for `896456b` failed with
+`Recv failure: Connection was reset`, and the immediate
+`git ls-remote --heads origin main` failed with the same reset error. This is
+GitHub transport metadata only; keep the local commit and retry remote backup
+later instead of changing experiment or paper claims.
+
 Earlier `Recv failure: Connection was reset` and github.com port 443 failures
 remain GitHub transport metadata, not project-correctness evidence. The
 previously local-only record-sync commit after `db535e7` is now remote-backed.
