@@ -52,6 +52,20 @@ Current date: 2026-07-05.
   `ready_with_pending_external_evidence`; ready count is now
   `453 ready / 1 pending / 0 failed`. This does not change paper-facing main
   rows, execute SNAP-T2, or complete human-fidelity evidence.
+- Current SNAP-T2 retry continuation ran phase115 with GPT-family `gpt-5.5`,
+  OpenAI Responses, 420-second timeout, 7 attempts, and 8-second retry delay
+  from shell-only credentials loaded from the local GPT API document. The
+  SNAP-T2 Summary condition still returned provider HTTP 524 after seven
+  attempts, no script or response was saved, and the PaperToSkill condition did
+  not produce a row after the Summary-side provider block. The phase-specific
+  reports are
+  `results/real_reuse/snapatac2_executable_candidate_script_generation_phase115_t2_retry.{md,json}`;
+  the run log is
+  `research/run_logs/2026-07-05_phase115_snap_t2_retry_provider_blocked.md`.
+  These three artifacts are now package-gated, bringing the package report to
+  `456 ready / 1 pending / 0 failed`. This is provider availability metadata
+  only and does not execute SNAP-T2, append raw rows, replace main rows, or show
+  PaperToSkill advantage.
 - Current Claude-family availability continuation rechecked the local Claude
   API document key with Anthropic Messages, aliases `claude-opus-4-8`,
   `claude-opus-4-7`, and `claude-opus-4-6`, 120-second timeout, and
