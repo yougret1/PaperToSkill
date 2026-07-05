@@ -416,7 +416,10 @@ Current date: 2026-07-05.
   `max_tokens=16`, and a 120-second request timeout. All three aliases
   returned provider HTTP 502, so the full real-reuse Claude-family ablation
   rerun remains deferred as provider availability metadata rather than
-  method-quality evidence. Report:
+  method-quality evidence. A same-session opportunistic recheck on 2026-07-05
+  reused the local Claude API document key with the same wire API, aliases,
+  `max_tokens=16`, and 120-second timeout; all three aliases again returned
+  provider HTTP 502, and only the direct-probe JSON timestamp changed. Report:
   `results/openai_compatible_direct_probe/claude_family/run_report.md`.
 - Historical remote-backed chain through `0832201`: Claude retry availability, bounded
   summary-comparison claim cleanup, current project record sync, GitHub backup
