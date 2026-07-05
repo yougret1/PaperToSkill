@@ -31,29 +31,19 @@ Test-NetConnection github.com -Port 443 | Format-List
 ```
 
 Current status as of 2026-07-06: the temporary GitHub HTTPS transport blocker
-recovered through the AAAI page-limit backup and then through the later
-paper-finalization/submission-review chain. The latest verified remote
+recovered through the AAAI page-limit backup, the later
+paper-finalization/submission-review chain, and the paper-outline sync. The latest verified remote
 checkpoint before claiming any later phase save is:
 
 ```text
-6c5e6a29dfd4ba585101233b41ca819d25b7c17d refs/heads/main
-6c5e6a2 Fix submission review stale count test
+055566e515e430e3a6abc849ec09ff8bbc7b4b41 refs/heads/main
+055566e Sync outline LLM ablation status
 ```
 
-The earlier failed remote-backup attempts for `501ffc8`, `48aabac`, and
-`8bdd394` remain GitHub transport metadata only. A later `git push origin main`
-succeeded, and `git ls-remote --heads origin main` verified the checkpoint
-above. Do not create `ok.txt` for GitHub status.
-
-Current local-only follow-up after that verified remote backup:
-
-```text
-95f1af3 Record recovered submission test backup
-```
-
-Its first `git push origin main` failed with `Recv failure: Connection was
-reset`. Treat this as GitHub transport metadata and retry later; do not create
-`ok.txt` for GitHub status.
+The earlier failed remote-backup attempts for `501ffc8`, `48aabac`, `8bdd394`,
+`95f1af3`, and `66e4763` remain GitHub transport metadata only. A later
+`git push origin main` succeeded, and `git ls-remote --heads origin main`
+verified the checkpoint above. Do not create `ok.txt` for GitHub status.
 
 The previously unbacked local commits are now remote-backed through the latest
 AAAI page-limit checkpoint:
@@ -128,6 +118,9 @@ ad14de5 Record AAAI page-limit push blocker
 48aabac Record draft-language gate push blocker
 8bdd394 Sync submission records with claim gate
 6c5e6a2 Fix submission review stale count test
+95f1af3 Record recovered submission test backup
+66e4763 Record submission backup push blocker
+055566e Sync outline LLM ablation status
 ```
 
 The first remote backup attempt for the AAAI page-limit repair failed with
