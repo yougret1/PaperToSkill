@@ -186,7 +186,9 @@ Current supported claims:
   completing any external evidence. The AAAI submission-decision packet uses
   the validated decision-record helper and requires a validated
   `research/aaai_submission_decision.md` record before final goal/package
-  checks can clear `aaai_final_submission_ready`.
+  checks can clear `aaai_final_submission_ready`. The human-fidelity packet
+  must also declare the desktop `toHuman.md` / `ok.txt` workflow and agent-side
+  `ok.txt` cleanup after processing completed annotations.
 - AAAI submission decision is recorded as `wait_for_external_evidence` in
   `research/aaai_submission_decision.md`. The local decision gate is ready, but
   final submission readiness remains pending until the named external evidence
@@ -714,7 +716,7 @@ Use these as entry points instead of searching the whole repo first:
   final submission readiness under the recorded wait policy.
 - External evidence execution packets:
   `results/external_evidence_packets/packets.md`
-  reports `ready`, 7 ready checks, 0 pending checks, and 0 failed checks. The
+  reports `ready`, 8 ready checks, 0 pending checks, and 0 failed checks. The
   packets cover the same two queue items and are local handoffs, not completed
   evidence.
 - AAAI submission-decision preflight:
@@ -949,7 +951,7 @@ DeepSeek:
 | Paper claims | Draft/AAAI text could overclaim pending evidence. | `scripts/check_paper_claims.py` checks unsupported positive claims and required boundary statements. |
 | Goal completion | Narrative completion audit could stale. | `scripts/check_goal_completion.py` makes the active-goal status machine-checkable. |
 | External evidence closure | Pending requirements were spread across multiple reports and docs. | `scripts/check_external_evidence_closure.py` maps current pending goal requirements to concrete queue items without claiming evidence completion. |
-| External evidence execution | Closure queue items still required manual interpretation before handoff. | `scripts/check_external_evidence_packets.py` turns each queue item into inputs, commands, completion criteria, and escalation boundaries without claiming evidence completion; the AAAI decision packet now routes final-decision recording through `scripts/generate_aaai_submission_decision.py`. |
+| External evidence execution | Closure queue items still required manual interpretation before handoff, and the human-fidelity packet could drift from the desktop `toHuman.md` / `ok.txt` workflow. | `scripts/check_external_evidence_packets.py` turns each queue item into inputs, commands, completion criteria, and escalation boundaries without claiming evidence completion; the AAAI decision packet now routes final-decision recording through `scripts/generate_aaai_submission_decision.py`; the human-fidelity packet now declares `C:\Users\19351\Desktop\tem\toHuman.md`, `C:\Users\19351\Desktop\tem\ok.txt`, and agent-side `ok.txt` cleanup after annotation processing. |
 | AAAI submission decision | The final submission item was only a checklist row. | `scripts/check_aaai_submission_decision.py` creates a preflight report with submit-now vs wait-for-evidence options while keeping the human decision pending. |
 | AAAI decision record | A human decision record could be hand-written with drift, unavailable options, or secret-like fields. | `scripts/generate_aaai_submission_decision.py` writes the record only after an explicit option, owner, date, claim boundary, and evidence policy; it validates option availability and rejects raw API-key-like material. |
 | AAAI gate recursion | The decision preflight and goal/package gates can read each other during report refreshes, causing self-referential intermediate failures. | `scripts/check_aaai_submission_decision.py` treats only the known self-referential failure set as pending during its own preflight; regression covered by `tests/test_check_aaai_submission_decision.py`. |

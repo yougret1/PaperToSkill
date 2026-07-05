@@ -4,7 +4,7 @@ Evidence boundary: these packets define how to finish pending external evidence.
 
 - Overall status: ready
 - Closure status: pending_external_evidence
-- Ready checks: 7
+- Ready checks: 8
 - Pending checks: 0
 - Failed checks: 0
 
@@ -21,18 +21,25 @@ Evidence boundary: these packets define how to finish pending external evidence.
 - results/human_fidelity_packets/annotation_guide.md
 - results/human_fidelity_packets/annotation_template.csv
 - results/human_fidelity_packets/*_human_fidelity_packet.md
+- results/human_fidelity_packets/human_fidelity_reviewer_bundle.zip
+- C:\Users\19351\Desktop\tem\toHuman.md
 
 ### Setup
 
+- Write the reviewer request and completed-file placement instructions to C:\Users\19351\Desktop\tem\toHuman.md.
 - Send the packet files and annotation guide to independent reviewers.
 - Keep blank rows blank; do not convert missing review rows into zero scores.
 - Collect reviewer-filled rows in the existing annotation_template.csv schema; multiple reviewers may add rows for the same paper-by-criterion cell when reviewer_id values are distinct.
+- After reviewers fill the annotation CSV, the human creates C:\Users\19351\Desktop\tem\ok.txt and records the completed annotation-file path in C:\Users\19351\Desktop\tem\toHuman.md.
+- The agent should read C:\Users\19351\Desktop\tem\toHuman.md when C:\Users\19351\Desktop\tem\ok.txt appears, process the completed annotation file, answer any blocking human questions, and delete C:\Users\19351\Desktop\tem\ok.txt after handling it.
 
 ### Commands
 
 ```powershell
 python scripts\summarize_human_fidelity_annotations.py --strict
 python scripts\check_goal_completion.py --strict
+python scripts\check_reproducibility_package.py --strict
+if (Test-Path -LiteralPath 'C:\Users\19351\Desktop\tem\ok.txt') { Remove-Item -LiteralPath 'C:\Users\19351\Desktop\tem\ok.txt' }
 ```
 
 ### Completion Criteria
@@ -40,6 +47,7 @@ python scripts\check_goal_completion.py --strict
 - results/human_fidelity_packets/annotation_summary.json reports annotation_status=complete.
 - All 24 paper-by-criterion cells have at least one scored annotation with no validation errors.
 - Reviewer notes and confidence fields are preserved for audit.
+- C:\Users\19351\Desktop\tem\ok.txt has been deleted by the agent after the completed annotation file is processed.
 
 ### Escalation
 
@@ -117,4 +125,5 @@ Execution packet only. This packet does not complete external evidence until its
 | external_evidence_packets_commands_declared | ready | commands and validation commands declared | results/external_evidence_packets/packets.json |
 | external_evidence_packets_completion_criteria_declared | ready | completion criteria declared | results/external_evidence_packets/packets.json |
 | external_evidence_packets_boundaries_declared | ready | evidence boundaries declared | results/external_evidence_packets/packets.json |
+| external_evidence_packets_human_handoff_declared | ready | human packet declares C:\Users\19351\Desktop\tem\toHuman.md, C:\Users\19351\Desktop\tem\ok.txt, and ok.txt cleanup | results/external_evidence_packets/packets.json |
 | external_evidence_packets_no_secret_material | ready | no raw API-key-like strings found | results/external_evidence_packets/packets.json |

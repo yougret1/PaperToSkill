@@ -3,7 +3,7 @@
   "evidence_boundary": "Local execution packets for remaining external evidence. They define inputs, commands, criteria, and escalation paths without collecting the evidence themselves.",
   "overall_status": "ready",
   "status_counts": {
-    "ready": 7,
+    "ready": 8,
     "pending": 0,
     "fail": 0
   },
@@ -21,25 +21,35 @@
       "inputs": [
         "results/human_fidelity_packets/annotation_guide.md",
         "results/human_fidelity_packets/annotation_template.csv",
-        "results/human_fidelity_packets/*_human_fidelity_packet.md"
+        "results/human_fidelity_packets/*_human_fidelity_packet.md",
+        "results/human_fidelity_packets/human_fidelity_reviewer_bundle.zip",
+        "C:\\Users\\19351\\Desktop\\tem\\toHuman.md"
       ],
       "setup": [
+        "Write the reviewer request and completed-file placement instructions to C:\\Users\\19351\\Desktop\\tem\\toHuman.md.",
         "Send the packet files and annotation guide to independent reviewers.",
         "Keep blank rows blank; do not convert missing review rows into zero scores.",
-        "Collect reviewer-filled rows in the existing annotation_template.csv schema; multiple reviewers may add rows for the same paper-by-criterion cell when reviewer_id values are distinct."
+        "Collect reviewer-filled rows in the existing annotation_template.csv schema; multiple reviewers may add rows for the same paper-by-criterion cell when reviewer_id values are distinct.",
+        "After reviewers fill the annotation CSV, the human creates C:\\Users\\19351\\Desktop\\tem\\ok.txt and records the completed annotation-file path in C:\\Users\\19351\\Desktop\\tem\\toHuman.md.",
+        "The agent should read C:\\Users\\19351\\Desktop\\tem\\toHuman.md when C:\\Users\\19351\\Desktop\\tem\\ok.txt appears, process the completed annotation file, answer any blocking human questions, and delete C:\\Users\\19351\\Desktop\\tem\\ok.txt after handling it."
       ],
       "run_commands": [
         "python scripts\\summarize_human_fidelity_annotations.py --strict",
-        "python scripts\\check_goal_completion.py --strict"
+        "python scripts\\check_goal_completion.py --strict",
+        "python scripts\\check_reproducibility_package.py --strict",
+        "if (Test-Path -LiteralPath 'C:\\Users\\19351\\Desktop\\tem\\ok.txt') { Remove-Item -LiteralPath 'C:\\Users\\19351\\Desktop\\tem\\ok.txt' }"
       ],
       "validation_commands": [
         "python scripts\\summarize_human_fidelity_annotations.py --strict",
-        "python scripts\\check_goal_completion.py --strict"
+        "python scripts\\check_goal_completion.py --strict",
+        "python scripts\\check_reproducibility_package.py --strict",
+        "if (Test-Path -LiteralPath 'C:\\Users\\19351\\Desktop\\tem\\ok.txt') { Remove-Item -LiteralPath 'C:\\Users\\19351\\Desktop\\tem\\ok.txt' }"
       ],
       "completion_criteria": [
         "results/human_fidelity_packets/annotation_summary.json reports annotation_status=complete.",
         "All 24 paper-by-criterion cells have at least one scored annotation with no validation errors.",
-        "Reviewer notes and confidence fields are preserved for audit."
+        "Reviewer notes and confidence fields are preserved for audit.",
+        "C:\\Users\\19351\\Desktop\\tem\\ok.txt has been deleted by the agent after the completed annotation file is processed."
       ],
       "blocker_escalation": "Escalate if independent reviewers are unavailable or scoring criteria are ambiguous.",
       "evidence_boundary": "Execution packet only. This packet does not complete external evidence until its completion criteria are satisfied by fresh artifacts."
@@ -144,6 +154,12 @@
       "id": "external_evidence_packets_boundaries_declared",
       "status": "ready",
       "detail": "evidence boundaries declared",
+      "evidence": "results/external_evidence_packets/packets.json"
+    },
+    {
+      "id": "external_evidence_packets_human_handoff_declared",
+      "status": "ready",
+      "detail": "human packet declares C:\\Users\\19351\\Desktop\\tem\\toHuman.md, C:\\Users\\19351\\Desktop\\tem\\ok.txt, and ok.txt cleanup",
       "evidence": "results/external_evidence_packets/packets.json"
     },
     {

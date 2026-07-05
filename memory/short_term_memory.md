@@ -198,6 +198,26 @@ Current date: 2026-07-05.
   `python scripts\check_goal_completion.py --strict`, and
   `python scripts\check_reproducibility_package.py --strict`, then revisit the
   AAAI submission decision currently recorded as `wait_for_external_evidence`.
+- Current external-evidence packet sync makes that human handoff workflow
+  machine-checkable: `scripts/check_external_evidence_packets.py` now requires
+  the human-fidelity packet to declare
+  `C:\Users\19351\Desktop\tem\toHuman.md`,
+  `C:\Users\19351\Desktop\tem\ok.txt`, and the agent-side `ok.txt` cleanup
+  command after processing completed annotation. The generated
+  `results/external_evidence_packets/packets.{json,md}` now report 8 ready
+  checks / 0 pending / 0 failed, and
+  `results/reproducibility/package_report.{json,md}` reflects that count.
+  This does not complete human-fidelity evidence or change the
+  `wait_for_external_evidence` AAAI decision. Local verification passed:
+  `python -m unittest tests.test_check_external_evidence_packets
+  tests.test_check_reproducibility_package tests.test_check_goal_completion -v`,
+  `python scripts\check_external_evidence_packets.py --strict`,
+  `python scripts\check_reproducibility_package.py --strict`,
+  `python scripts\check_goal_completion.py --strict`,
+  `python scripts\check_aaai_submission_decision.py --strict`,
+  `git diff --check` with only CRLF warnings, a changed-file raw-key scan with
+  no matches, and no diff under `research/run_logs/**` or
+  `research/stage_log.md`.
 - Current record-drift guard continuation adds
   `current_remote_checkpoint_records` to `scripts/check_goal_completion.py`.
   The first implementation compared current-status records directly to the

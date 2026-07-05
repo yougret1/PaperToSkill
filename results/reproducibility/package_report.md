@@ -353,7 +353,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | external_evidence_closure_report_ready | ready | overall=pending_external_evidence; counts={'ready': 3, 'pending': 0, 'fail': 0}; item_counts={'pending_reviewers': 1, 'pending_decision': 1} | results\external_evidence_closure\closure.json |
 | external_evidence_closure_core_checks_ready | ready | core closure checks ready | results\external_evidence_closure\closure.json |
 | external_evidence_closure_queue_items_ready | ready | closure queue items declared | results\external_evidence_closure\closure.json |
-| external_evidence_packets_report_ready | ready | overall=ready; counts={'ready': 7, 'pending': 0, 'fail': 0}; packets=2 | results\external_evidence_packets\packets.json |
+| external_evidence_packets_report_ready | ready | overall=ready; counts={'ready': 8, 'pending': 0, 'fail': 0}; packets=2 | results\external_evidence_packets\packets.json |
 | external_evidence_packets_core_checks_ready | ready | core packet checks ready | results\external_evidence_packets\packets.json |
 | external_evidence_packets_items_ready | ready | execution packets declared | results\external_evidence_packets\packets.json |
 | ai_scientist_v2_smoke_cli_status_summary | ready | status_summary=True; require_complete=True; timeout=True; alias_fallback=True; max_tokens=True | scripts\run_ai_scientist_v2_smoke.py |

@@ -80,6 +80,25 @@ class CheckExternalEvidencePacketsTest(unittest.TestCase):
                 aaai_packet["run_commands"].index("# Final validation after the selected decision record exists"),
             )
 
+            human_packet = next(
+                packet for packet in report["packets"] if packet["id"] == "human_fidelity_annotation"
+            )
+            human_text = "\n".join(packets.iter_strings(human_packet))
+            self.assertIn(packets.HUMAN_HANDOFF_PATH, human_text)
+            self.assertIn(packets.HUMAN_OK_PATH, human_text)
+            self.assertIn("human_fidelity_reviewer_bundle.zip", human_text)
+            self.assertIn("python scripts\\check_reproducibility_package.py --strict", human_text)
+            self.assertIn(
+                f"if (Test-Path -LiteralPath '{packets.HUMAN_OK_PATH}') {{ Remove-Item -LiteralPath '{packets.HUMAN_OK_PATH}' }}",
+                human_packet["run_commands"],
+            )
+
+            checks = {check["id"]: check for check in report["checks"]}
+            self.assertEqual(
+                "ready",
+                checks["external_evidence_packets_human_handoff_declared"]["status"],
+            )
+
     def test_missing_closure_report_fails(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)

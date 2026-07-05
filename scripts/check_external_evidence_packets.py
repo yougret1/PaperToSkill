@@ -13,6 +13,8 @@ from typing import Any
 
 CLOSURE_REPORT = "results/external_evidence_closure/closure.json"
 SECRET_PATTERN = re.compile(r"sk-[A-Za-z0-9]{20,}")
+HUMAN_HANDOFF_PATH = r"C:\Users\19351\Desktop\tem\toHuman.md"
+HUMAN_OK_PATH = r"C:\Users\19351\Desktop\tem\ok.txt"
 
 
 @dataclass
@@ -143,20 +145,28 @@ PACKET_DETAILS: dict[str, dict[str, Any]] = {
             "results/human_fidelity_packets/annotation_guide.md",
             "results/human_fidelity_packets/annotation_template.csv",
             "results/human_fidelity_packets/*_human_fidelity_packet.md",
+            "results/human_fidelity_packets/human_fidelity_reviewer_bundle.zip",
+            HUMAN_HANDOFF_PATH,
         ],
         "setup": [
+            f"Write the reviewer request and completed-file placement instructions to {HUMAN_HANDOFF_PATH}.",
             "Send the packet files and annotation guide to independent reviewers.",
             "Keep blank rows blank; do not convert missing review rows into zero scores.",
             "Collect reviewer-filled rows in the existing annotation_template.csv schema; multiple reviewers may add rows for the same paper-by-criterion cell when reviewer_id values are distinct.",
+            f"After reviewers fill the annotation CSV, the human creates {HUMAN_OK_PATH} and records the completed annotation-file path in {HUMAN_HANDOFF_PATH}.",
+            f"The agent should read {HUMAN_HANDOFF_PATH} when {HUMAN_OK_PATH} appears, process the completed annotation file, answer any blocking human questions, and delete {HUMAN_OK_PATH} after handling it.",
         ],
         "validation_commands": [
             "python scripts\\summarize_human_fidelity_annotations.py --strict",
             "python scripts\\check_goal_completion.py --strict",
+            "python scripts\\check_reproducibility_package.py --strict",
+            f"if (Test-Path -LiteralPath '{HUMAN_OK_PATH}') {{ Remove-Item -LiteralPath '{HUMAN_OK_PATH}' }}",
         ],
         "completion_criteria": [
             "results/human_fidelity_packets/annotation_summary.json reports annotation_status=complete.",
             "All 24 paper-by-criterion cells have at least one scored annotation with no validation errors.",
             "Reviewer notes and confidence fields are preserved for audit.",
+            f"{HUMAN_OK_PATH} has been deleted by the agent after the completed annotation file is processed.",
         ],
         "blocker_escalation": "Escalate if independent reviewers are unavailable or scoring criteria are ambiguous.",
     },
@@ -246,6 +256,22 @@ def status_counts(checks: list[Check]) -> dict[str, int]:
     return counts
 
 
+def iter_strings(value: Any) -> list[str]:
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, dict):
+        strings: list[str] = []
+        for item in value.values():
+            strings.extend(iter_strings(item))
+        return strings
+    if isinstance(value, list):
+        strings = []
+        for item in value:
+            strings.extend(iter_strings(item))
+        return strings
+    return []
+
+
 def commands_for_item(item: dict[str, Any], detail: dict[str, Any]) -> list[str]:
     if detail.get("use_validation_commands_as_run_commands"):
         return [str(command) for command in detail.get("validation_commands", []) if str(command).strip()]
@@ -300,6 +326,12 @@ def build_report(root: Path) -> dict[str, Any]:
     no_criteria = sorted(packet["id"] for packet in packets if not packet.get("completion_criteria"))
     no_boundary = sorted(packet["id"] for packet in packets if not packet.get("evidence_boundary"))
     secret_like = sorted(set(SECRET_PATTERN.findall(serialized_packets + "\n" + serialized_closure)))
+    human_packet = next((packet for packet in packets if packet["id"] == "human_fidelity_annotation"), None)
+    human_packet_text = "\n".join(iter_strings(human_packet)) if human_packet else ""
+    human_handoff_terms = [HUMAN_HANDOFF_PATH, HUMAN_OK_PATH, "Remove-Item"]
+    missing_human_handoff_terms = [
+        term for term in human_handoff_terms if term not in human_packet_text
+    ]
 
     checks = [
         Check(
@@ -344,6 +376,18 @@ def build_report(root: Path) -> dict[str, Any]:
             "external_evidence_packets_boundaries_declared",
             "ready" if not no_boundary else "fail",
             "evidence boundaries declared" if not no_boundary else "missing=" + ",".join(no_boundary),
+            "results/external_evidence_packets/packets.json",
+        ),
+        Check(
+            "external_evidence_packets_human_handoff_declared",
+            "ready" if not human_packet or not missing_human_handoff_terms else "fail",
+            (
+                f"human packet declares {HUMAN_HANDOFF_PATH}, {HUMAN_OK_PATH}, and ok.txt cleanup"
+                if human_packet and not missing_human_handoff_terms
+                else "human_fidelity_annotation not pending in closure"
+                if not human_packet
+                else "missing=" + ",".join(missing_human_handoff_terms)
+            ),
             "results/external_evidence_packets/packets.json",
         ),
         Check(
