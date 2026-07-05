@@ -165,6 +165,8 @@ class CheckReproducibilityPackageTest(unittest.TestCase):
             self.assertIn("real_reuse_snapatac2_executable_candidate_prompt_snap_t2_papertoskill", ready_ids)
             self.assertIn("real_reuse_snapatac2_executable_candidate_script_generation_report_md", ready_ids)
             self.assertIn("real_reuse_snapatac2_executable_candidate_script_generation_report_json", ready_ids)
+            self.assertIn("real_reuse_snapatac2_executable_candidate_phase113_t2_partial_md", ready_ids)
+            self.assertIn("real_reuse_snapatac2_executable_candidate_phase113_t2_partial_json", ready_ids)
             self.assertIn("real_reuse_snapatac2_executable_candidate_run_report_md", ready_ids)
             self.assertIn("real_reuse_snapatac2_executable_candidate_run_report_json", ready_ids)
             self.assertIn("real_reuse_snapatac2_executable_candidate_run_report_csv", ready_ids)
@@ -190,6 +192,7 @@ class CheckReproducibilityPackageTest(unittest.TestCase):
             self.assertIn("openai_direct_probe_claude_family_contract_consistent", ready_ids)
             self.assertIn("openai_direct_probe_gpt_family_report_ready", ready_ids)
             self.assertIn("openai_direct_probe_gpt_family_contract_consistent", ready_ids)
+            self.assertIn("phase113_snap_t2_executable_candidate_partial_run_log", ready_ids)
             smoke_cli = {
                 check["id"]: check
                 for check in report["checks"]

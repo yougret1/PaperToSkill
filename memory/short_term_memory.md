@@ -45,6 +45,13 @@ Current date: 2026-07-05.
   the immediate `git ls-remote --heads origin main` failed with
   `Failed to connect to github.com port 443 after 21069 ms`. This is GitHub
   transport metadata only and does not require a human `ok.txt`.
+- Current reproducibility-package continuation registers the phase113 SNAP-T2
+  partial availability evidence in `scripts/check_reproducibility_package.py`
+  and `tests/test_check_reproducibility_package.py`: the two partial reports
+  plus the phase113 run log are now package-gated. Package status remains
+  `ready_with_pending_external_evidence`; ready count is now
+  `453 ready / 1 pending / 0 failed`. This does not change paper-facing main
+  rows, execute SNAP-T2, or complete human-fidelity evidence.
 - Current non-network continuation after the resume/thread review updates
   `research/real_reuse_experiment_plan.md` Table 6 with existing quality and
   grounding evidence for AIDE, SWE-agent, Reflexion, SnapATAC2, Toolformer
@@ -186,7 +193,7 @@ Current date: 2026-07-05.
   `results/reproducibility/submission_review_report.{json,md}` to
   `17 ready / 0 failed` and
   `results/reproducibility/package_report.{json,md}` to
-  `450 ready / 1 pending / 0 failed`, and updates review/rebuttal/checklist,
+  `453 ready / 1 pending / 0 failed`, and updates review/rebuttal/checklist,
   runbook, goal audit, and memory wording to include phase112 SNAP
   executable-candidate diagnostic evidence without promoting it into main
   rows. Verification passed locally:
@@ -288,7 +295,7 @@ Current date: 2026-07-05.
   stale-current detection, declared-checkpoint extraction, historical-hash
   allowance, and the current report boundary. The goal report now has
   `78 ready / 3 pending / 0 failed`; package count remains
-  `450 ready / 1 pending / 0 failed`; submission-review remains
+  `453 ready / 1 pending / 0 failed`; submission-review remains
   `17 ready / 0 failed`.
 - Current local phase commit `77e8ada` implements the SNAP executable-candidate
   runner/checker/test path:
