@@ -123,8 +123,10 @@ Current date: 2026-07-06.
   updates current paper-claim records to 56 ready checks and 0 failed checks,
   and full unit discovery now reports 210 tests OK. This follow-up does not
   change experiment scores, main-row selection,
-  `results/real_reuse/main_run_selection.json`, or local logs; verify the
-  exact commit and remote state before calling it remote-backed.
+  `results/real_reuse/main_run_selection.json`, or local logs. The phase was
+  saved and pushed as `43f9092 Guard model response cost scope`;
+  `git ls-remote --heads origin main` verified
+  `43f9092c32a614d882199d5111fe21cc5cb19f8e refs/heads/main`.
 - Current main-results boundary cleanup removes stale "future unfilled cells /
   planning placeholders" wording from `scripts/build_real_reuse_paper_tables.py`
   and regenerated `results/real_reuse/main_results_plan.{md,json}`. It also

@@ -79,15 +79,18 @@ This file is intentionally compact. Detailed chronological history lives in
   paper-finalization, outline-sync recovery, outline claim-drift gate,
   main-results boundary cleanup, real-reuse LLM-ablation handoff guard,
   recovered checkpoint-sync records, outline evidence-boundary sync,
-  limitations-claim gate, and model-response cost-boundary sync is
-  `5aa4195f4636c1d8c5994ee1eb6c4f6949279eb8 refs/heads/main`
-  (`5aa4195 Sync model response cost boundary`). This checkpoint includes the
+  limitations-claim gate, model-response cost-boundary sync, and stale
+  cost-scope claim guard is
+  `43f9092c32a614d882199d5111fe21cc5cb19f8e refs/heads/main`
+  (`43f9092 Guard model response cost scope`). This checkpoint includes the
   limitations claim gate that covers `paper/limitations.md` with 51 ready
   paper-claim checks / 0 failed checks, the full 209-test verification for
   that gate, and
   the follow-up paper-facing cost-boundary sync that states the saved-response
   output-token proxy covers six Claude/GPT-family/DeepSeek model-ablation rows
-  with 9,594 `o200k_base` output tokens. It also includes the earlier outline
+  with 9,594 `o200k_base` output tokens. It also includes the follow-up
+  stale cost-scope guard with 56 ready paper-claim checks / 0 failed checks
+  and full unit discovery at 210 tests OK. It also includes the earlier outline
   update that distinguishes collected/scored saved-response rows from
   unsupported human semantic fidelity, provider billing, and live downstream
   task-success claims; the submission-review handoff guard that separates the
@@ -128,13 +131,14 @@ This file is intentionally compact. Detailed chronological history lives in
   `git ls-remote --heads origin main` verified
   `5aa4195f4636c1d8c5994ee1eb6c4f6949279eb8 refs/heads/main`. Treat the
   earlier failures as GitHub transport metadata only.
-- Current follow-up guard phase extends the paper-claim checker with a stale
-  saved-response cost-scope pattern so paper-facing text cannot revert to
-  Claude/GPT-family-only wording for evidence that now covers
-  Claude/GPT-family/DeepSeek rows. It refreshes the paper-claim/package/
-  submission-review records to 56 ready paper-claim checks and 0 failures, and
-  full unit discovery now reports 210 tests OK. Verify the exact current
-  commit and remote state before calling this follow-up phase remote-backed.
+- Follow-up guard checkpoint `43f9092 Guard model response cost scope` extends
+  the paper-claim checker with a stale saved-response cost-scope pattern so
+  paper-facing text cannot revert to Claude/GPT-family-only wording for
+  evidence that now covers Claude/GPT-family/DeepSeek rows. It refreshes the
+  paper-claim/package/submission-review records to 56 ready paper-claim checks
+  and 0 failures, and full unit discovery reports 210 tests OK. `git push
+  origin main` succeeded, and `git ls-remote --heads origin main` verified
+  `43f9092c32a614d882199d5111fe21cc5cb19f8e refs/heads/main`.
 - Follow-up record-sync commit `45ef25b Sync remote checkpoint after LLM handoff
   guard` and blocker note `0538ef1 Record checkpoint sync push blocker`
   initially failed to back up because GitHub HTTPS transport was unavailable.
