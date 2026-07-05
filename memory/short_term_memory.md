@@ -79,8 +79,8 @@ Current date: 2026-07-05.
   `results/real_reuse/snapatac2_executable_candidate_script_generation_phase115_t2_retry.{md,json}`;
   the run log is
   `research/run_logs/2026-07-05_phase115_snap_t2_retry_provider_blocked.md`.
-  These three artifacts are now package-gated, bringing the package report to
-  `456 ready / 1 pending / 0 failed`. This is provider availability metadata
+  These three artifacts are package-gated; phase116 later raises the current
+  package report count further. This is provider availability metadata
   only and does not execute SNAP-T2, append raw rows, replace main rows, or show
   PaperToSkill advantage. The phase-save commit
   `d8d968d Record SNAP-T2 retry provider block` initially hit a GitHub
@@ -91,6 +91,22 @@ Current date: 2026-07-05.
   `git ls-remote --heads origin main` verified
   `583db16033980f982cda5ee250edf8a0de405ba9 refs/heads/main`. This is GitHub
   transport metadata only and does not require a human `ok.txt`.
+- Current SNAP-T2 Summary retry continuation ran phase116 after a temporary
+  small GPT-family direct probe returned HTTP 200 in `%TEMP%` but did not pass
+  the custom marker check. The real SNAP-T2 Summary executable-candidate
+  generation used GPT-family `gpt-5.5`, OpenAI Responses, 600-second timeout,
+  10 attempts, 10-second retry delay, and `--max-tokens 2200`. The Summary
+  condition still returned provider HTTP 524 after ten attempts, no candidate
+  script or response was saved, and PaperToSkill was not run because the paired
+  diagnostic cannot proceed without the Summary-side script. The phase-specific
+  reports are
+  `results/real_reuse/snapatac2_executable_candidate_script_generation_phase116_t2_summary_retry.{md,json}`;
+  the run log is
+  `research/run_logs/2026-07-05_phase116_snap_t2_summary_retry_provider_blocked.md`.
+  These three phase116 artifacts are now package-gated, bringing the package
+  report to `459 ready / 1 pending / 0 failed`.
+  This is provider availability metadata only and does not execute SNAP-T2,
+  append raw rows, replace main rows, or show PaperToSkill advantage.
 - Current Claude-family availability continuation rechecked the local Claude
   API document key with Anthropic Messages, aliases `claude-opus-4-8`,
   `claude-opus-4-7`, and `claude-opus-4-6`, 120-second timeout, and

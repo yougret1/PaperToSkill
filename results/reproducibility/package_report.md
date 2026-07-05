@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 456
+- Ready checks: 459
 - Pending checks: 1
 - Failed checks: 0
 
@@ -197,6 +197,8 @@ Evidence boundary: this report checks local package completeness and separates p
 | real_reuse_snapatac2_executable_candidate_phase113_t2_partial_json | ready | present | results/real_reuse/snapatac2_executable_candidate_script_generation_phase113_t2_partial.json |
 | real_reuse_snapatac2_executable_candidate_phase115_t2_retry_md | ready | present | results/real_reuse/snapatac2_executable_candidate_script_generation_phase115_t2_retry.md |
 | real_reuse_snapatac2_executable_candidate_phase115_t2_retry_json | ready | present | results/real_reuse/snapatac2_executable_candidate_script_generation_phase115_t2_retry.json |
+| real_reuse_snapatac2_executable_candidate_phase116_t2_summary_retry_md | ready | present | results/real_reuse/snapatac2_executable_candidate_script_generation_phase116_t2_summary_retry.md |
+| real_reuse_snapatac2_executable_candidate_phase116_t2_summary_retry_json | ready | present | results/real_reuse/snapatac2_executable_candidate_script_generation_phase116_t2_summary_retry.json |
 | real_reuse_snapatac2_executable_candidate_run_report_md | ready | present | results/real_reuse/snapatac2_executable_candidate_run_report.md |
 | real_reuse_snapatac2_executable_candidate_run_report_json | ready | present | results/real_reuse/snapatac2_executable_candidate_run_report.json |
 | real_reuse_snapatac2_executable_candidate_run_report_csv | ready | present | results/real_reuse/snapatac2_executable_candidate_run_report.csv |
@@ -218,6 +220,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | phase27_aaai_package_gate_run_log | ready | present | research/run_logs/2026-06-18_phase27_aaai_package_gate.md |
 | phase113_snap_t2_executable_candidate_partial_run_log | ready | present | research/run_logs/2026-07-05_phase113_snap_t2_executable_candidate_partial.md |
 | phase115_snap_t2_retry_provider_blocked_run_log | ready | present | research/run_logs/2026-07-05_phase115_snap_t2_retry_provider_blocked.md |
+| phase116_snap_t2_summary_retry_provider_blocked_run_log | ready | present | research/run_logs/2026-07-05_phase116_snap_t2_summary_retry_provider_blocked.md |
 | phase28_usage_example_gate_run_log | ready | present | research/run_logs/2026-06-18_phase28_usage_example_gate.md |
 | phase29_paper_table_gate_run_log | ready | present | research/run_logs/2026-06-18_phase29_paper_table_gate.md |
 | phase30_paper_claim_gate_run_log | ready | present | research/run_logs/2026-06-18_phase30_paper_claim_gate.md |
