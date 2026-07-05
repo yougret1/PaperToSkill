@@ -13,6 +13,7 @@ from typing import Any
 
 TARGET_FILES = {
     "aaai_tex": "paper/aaai/papertoskill_aaai2027.tex",
+    "aaai_tables": "paper/aaai/papertoskill_tables.tex",
     "draft_md": "paper/draft.md",
 }
 
@@ -77,6 +78,14 @@ FORBIDDEN_PATTERNS = [
         "id": "submission_final",
         "pattern": r"\b(submission-final|accepted by AAAI|AAAI acceptance|camera-ready)\b",
         "detail": "Do not claim submission-final or acceptance status.",
+    },
+]
+
+DRAFT_LANGUAGE_PATTERNS = [
+    {
+        "id": "draft_planning_language",
+        "pattern": r"\b(future reruns or additional rows may be added|additional rows may be added|future reruns[^.\n]{0,80}additional rows|TBD|to be filled|will be updated after|placeholder)\b",
+        "detail": "Do not leave draft/planning wording in paper-facing text.",
     },
 ]
 
@@ -206,6 +215,25 @@ def forbidden_claim_checks(root: Path, loaded: dict[str, tuple[Path, str]]) -> l
     return checks
 
 
+def draft_language_checks(root: Path, loaded: dict[str, tuple[Path, str]]) -> list[Check]:
+    checks: list[Check] = []
+    for target_id, (path, text) in loaded.items():
+        for spec in DRAFT_LANGUAGE_PATTERNS:
+            matches = []
+            for match in re.finditer(spec["pattern"], text, flags=re.IGNORECASE | re.DOTALL):
+                excerpt = re.sub(r"\s+", " ", match.group(0)).strip()
+                matches.append(f"line {line_number(text, match.start())}: {excerpt}")
+            checks.append(
+                Check(
+                    f"paper_claim_no_{target_id}_{spec['id']}",
+                    "ready" if not matches else "fail",
+                    spec["detail"] if not matches else "; ".join(matches[:3]),
+                    display_path(root, path),
+                )
+            )
+    return checks
+
+
 def required_boundary_checks(root: Path, loaded: dict[str, tuple[Path, str]]) -> list[Check]:
     combined = "\n".join(text for _, text in loaded.values())
     evidence = ", ".join(display_path(root, path) for path, _ in loaded.values())
@@ -232,6 +260,7 @@ def build_report(root: Path, targets: dict[str, str] | None = None) -> dict[str,
     loaded = {} if missing else target_texts(root, targets)
     if not missing:
         checks.extend(forbidden_claim_checks(root, loaded))
+        checks.extend(draft_language_checks(root, loaded))
         checks.extend(required_boundary_checks(root, loaded))
 
     status_counts = {"ready": 0, "fail": 0}

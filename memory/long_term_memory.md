@@ -33,6 +33,11 @@ This file is intentionally compact. Detailed chronological history lives in
   cost-proxy and auto-note tables are retained in
   `paper/aaai/papertoskill_supporting_tables.tex` for package/table drift
   checks, but they are not included as main-PDF floats.
+- Paper-facing claim discipline includes AAAI table files, not only the main
+  TeX body. The main real-reuse caption must keep the eight locked
+  `main_run_selection.json` rows as the paper-facing scope and must not use
+  draft/planning language such as "future reruns or additional rows may be
+  added".
 - Experiments must include usage examples.
 - Experiment work should prioritize the main real-reuse experiment. Put the
   main experiment table structure into the paper before scores are available,

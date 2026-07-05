@@ -13,6 +13,29 @@ Current date: 2026-07-05.
   Preserve the existing local-log boundary: do not modify
   `research/run_logs/**` or `research/stage_log.md` during record-sync-only
   work.
+- Current paper-finalization continuation removed draft/planning wording from
+  the AAAI main real-reuse table caption: Table 1 now says scores come from the
+  eight locked local raw rows selected by `main_run_selection.json`. The claim
+  checker now treats `paper/aaai/papertoskill_tables.tex` as paper-facing text
+  and fails on draft language such as "future reruns or additional rows may be
+  added", `TBD`, placeholders, or "to be filled". This does not change the
+  locked eight main rows or any experiment score. The AAAI PDF was rebuilt and
+  remains 8 pages. Local verification passed `python -m unittest
+  tests.test_check_paper_claims tests.test_check_paper_tables
+  tests.test_check_aaai_package tests.test_check_reproducibility_package -v`,
+  `check_paper_claims.py --strict`, `check_paper_tables.py --strict`,
+  `check_aaai_package.py --strict`, `check_reproducibility_package.py
+  --strict`, `check_usage_examples.py --strict`,
+  `check_real_reuse_benchmark.py --strict`, `check_goal_completion.py
+  --strict`, `check_submission_review.py --strict`,
+  `check_aaai_submission_decision.py --strict`, `git diff --check` with only
+  CRLF warnings, a long `sk-...` raw-key scan with no matches, and no diff
+  under `research/run_logs/**` or `research/stage_log.md`. Refreshed report
+  counts: paper claims `30 ready / 0 failed`, package `468 ready / 1 pending /
+  0 failed`, AAAI package `20 ready / 0 failed`, paper tables `343 ready / 0
+  failed`, submission review `17 ready / 0 failed`, goal completion `78 ready /
+  3 pending / 0 failed`. Human-fidelity annotation remains pending; `ok.txt`
+  was absent at resume.
 - Current auxiliary real-reuse LLM-ablation family-summary continuation
   aggregates existing phase109 evidence into
   `results/real_reuse/llm_ablation_family_summary.csv` and the AAAI
