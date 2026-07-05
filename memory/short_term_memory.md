@@ -870,6 +870,15 @@ Current date: 2026-07-06.
   backup`; `git ls-remote --heads origin main` verified
   `5d2b98c8e2f9f2c3498a11103830ef775257bfdd refs/heads/main`. Report:
   `results/openai_compatible_direct_probe/claude_family/run_report.md`.
+- 2026-07-06 opportunistic Claude direct availability recheck after the
+  pre-submission gate rerun used the local Claude API document key in
+  shell-only `PAPERTOSKILL_CLAUDE_BASE_URL`/`PAPERTOSKILL_CLAUDE_API_KEY`
+  variables, Anthropic Messages at `https://coderxiaoc.com/v1/messages`,
+  aliases `claude-opus-4-8`, `claude-opus-4-7`, and `claude-opus-4-6`,
+  `max_tokens=16`, and a 120-second request timeout. All three aliases again
+  returned provider HTTP 502; only the direct-probe JSON timestamp changed.
+  This remains provider availability metadata, not method-quality evidence, so
+  the full Claude-family real-reuse LLM ablation rows remain deferred.
 - Historical remote-backed chain through `0832201`: Claude retry availability, bounded
   summary-comparison claim cleanup, current project record sync, GitHub backup
   recovery, real-reuse record-boundary tightening, the tested SNAP
