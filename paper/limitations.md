@@ -86,8 +86,9 @@ benchmark still should not be described as human-validated.
 
 Generated skills are under a 1200-word budget and have both a deterministic
 character-based input-token proxy and a local `o200k_base` tokenizer-aware proxy
-that are much smaller than full extracted paper text. Phase 38 also adds a local
-output-token proxy over saved Claude/GPT-family model-ablation responses.
+that are much smaller than full extracted paper text. The current local
+token-accounting path also adds an output-token proxy over the six saved
+Claude/GPT-family/DeepSeek model-ablation responses.
 However, the project has not computed provider-specific prices, live invoices,
 realized provider output bills, or success-per-dollar. Cost claims should
 therefore remain framed as local input/output token proxies. Provider billing

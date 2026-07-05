@@ -104,6 +104,16 @@ Current date: 2026-07-06.
   `73f4d83`, and the follow-up checkpoint record was pushed as `fe499e5`;
   `git ls-remote --heads origin main` verified
   `fe499e555723786ce8aba63f7bb3c028ba5c91bc refs/heads/main`.
+- Current paper finalization audit sync fixes a smaller cost-proxy wording
+  drift: paper-facing and result-card records now say the saved-response
+  output-token proxy covers six Claude/GPT-family/DeepSeek model-ablation rows
+  with 9,594 `o200k_base` output tokens, rather than the earlier
+  Claude/GPT-family-only intermediate state. This touches only
+  `paper/limitations.md`, `paper/outline.md`, `paper/claim_checklist.md`,
+  `results/result_cards.md`, and long memory; it does not change experiments,
+  raw rows, `results/real_reuse/main_run_selection.json`, or local logs. Strict
+  paper-claim, paper-table, package, goal-completion, and submission-review
+  gates passed after the wording sync.
 - Current main-results boundary cleanup removes stale "future unfilled cells /
   planning placeholders" wording from `scripts/build_real_reuse_paper_tables.py`
   and regenerated `results/real_reuse/main_results_plan.{md,json}`. It also

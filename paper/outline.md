@@ -280,7 +280,7 @@ less directly procedural.
 | Appendix: Review/rebuttal package | `research/review_report.md`; `research/rebuttal_bank.md` | Adversarial risks and evidence-bounded responses |
 | Appendix: Prompt packets | `results/live_transfer_prompts/` | Live prompt packets, run reports, saved responses, and deterministic output-contract scoring |
 | Appendix: Model ablation prompts | `results/model_ablation_prompts/v0/` | Claude/GPT-family/DeepSeek prompt grid, live-attempt reports, and saved/scored rows under the current protocol |
-| Appendix: Model response cost proxy | `results/tables/model_response_cost_proxy.md` | Local output-token proxy for saved Claude/GPT-family model-ablation responses |
+| Appendix: Model response cost proxy | `results/tables/model_response_cost_proxy.md` | Local output-token proxy for saved Claude/GPT-family/DeepSeek model-ablation responses |
 | Appendix: AAAI package | `paper/aaai/` | Official AAAI-27 template provenance and LaTeX draft |
 | Appendix: Paper2Agent artifact comparison | `results/tables/paper2agent_artifact_comparison.md` | Source-backed skill-vs-MCP artifact/workflow positioning table |
 | Real reuse main results | `results/real_reuse/main_results_plan.md`; `results/real_reuse/raw_rows.jsonl` | Eight first-pass Summary-vs-PaperToSkill paper-task rows; mixed downstream and failure-boundary evidence |

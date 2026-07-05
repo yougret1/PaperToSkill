@@ -58,7 +58,8 @@ exists.
    invalid ranges in the current benchmark.
 4. Generated skills are compact relative to full extracted papers under word
    count, character-proxy, and local tokenizer-aware measurements; saved
-   Claude/GPT-family responses also have local output-token proxy accounting.
+   Claude/GPT-family/DeepSeek responses also have local output-token proxy
+   accounting.
 5. Transfer notes improve offline transfer-readiness in a consistent ablation;
    all four live-transfer saved-response sets are collected and scored under a
    deterministic output-contract evaluator, while human semantic fidelity and

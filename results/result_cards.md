@@ -820,29 +820,32 @@
   `gpt-5.5`/`gpt-5.4`, but the Phase 37 retry completed both current prompt
   rows. The Toolformer row timed out on `gpt-5.5` and then succeeded with
   `gpt-5.4`; the AIDE row succeeded with `gpt-5.5`.
-- DeepSeek result: not attempted; the follow-up slot remains ready for the
-  user's later configuration.
+- DeepSeek result: the follow-up slot is now configured as
+  `deepseek-v4-flash`, and both current prompt rows are saved and scored under
+  the same deterministic output-contract evaluator.
 - Response evaluation: `results/model_ablation_prompts/v0/evaluation.md`
-  reports 6 total rows, 4 scored rows, 2 pending rows, and 1.0 average
+  reports 6 total rows, 6 scored rows, 0 pending rows, and 1.0 average
   normalized score over scored rows.
 - Output-token proxy: `results/tables/model_response_cost_proxy.md` reports
-  four measured saved responses, two pending DeepSeek rows, and 8,710
-  `o200k_base` output tokens across the measured Claude/GPT-family rows.
+  six measured saved responses, 0 pending rows, and 9,594 `o200k_base`
+  output tokens across the measured Claude/GPT-family/DeepSeek rows.
 - Latest recheck: Phase 37 reran the GPT-family slot with the separate GPT
   credential profile and produced the current GPT-family saved responses.
 - Practical significance: the project now has a reusable runner/evaluator path
   for Claude/GPT/DeepSeek model ablations, records provider availability
-  without committing raw credentials, and has saved/scored live model response
-  evidence for Claude and GPT-family rows.
-- Statistical evidence: four Claude/GPT-family rows scored by a deterministic
-  rubric; not a broad model comparison because DeepSeek rows remain pending.
+  without committing raw credentials, and has saved/scored model response
+  evidence for Claude, GPT-family, and DeepSeek rows.
+- Statistical evidence: six Claude/GPT-family/DeepSeek rows scored by a
+  deterministic rubric; this remains saved-response output-contract evidence,
+  not a broad model comparison or live downstream task-success result.
 - Failure modes: provider account pool and model catalog availability can block
   a live run independently of PaperToSkill prompt quality.
-- Limitations: this completes only the Claude Opus 4.8 and GPT-family portions
-  of the current two-case protocol; it is not a completed DeepSeek comparison.
-- Claim impact: supports saying Claude Opus 4.8 and GPT-family completed the
-  current PaperToSkill usage prompt protocol, while preserving the boundary
-  that DeepSeek results remain pending.
+- Limitations: this completes the current two-case saved-response protocol for
+  Claude Opus 4.8, GPT-family, and DeepSeek, but it is not a real-reuse task
+  result, provider-economics result, or broad model-quality ranking.
+- Claim impact: supports saying Claude Opus 4.8, GPT-family, and DeepSeek
+  completed the current PaperToSkill usage prompt protocol, while preserving
+  the boundary that saved-response scoring is not live downstream task success.
 - Figure/table: `scripts/run_model_ablation_prompts.py`;
   `scripts/evaluate_model_ablation_responses.py`;
   `scripts/evaluate_model_response_costs.py`;
