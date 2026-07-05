@@ -207,6 +207,10 @@ Current date: 2026-07-06.
   this as GitHub verification-transport metadata: the local tracking ref is
   synchronized, but the independently verified remote-backed baseline remains
   `e57df72` until a later `ls-remote` succeeds.
+- The follow-up verification-blocker record commit is local-only after its
+  first `git push origin main` failed with `Failed to connect to github.com
+  port 443 after 21107 ms`. This is GitHub transport metadata only; do not ask
+  for human `ok.txt` for GitHub status.
 - Pre-submission gate rerun after that local record-sync/blocker chain passed:
   full unit discovery reported 211 tests OK, and strict submission-review,
   AAAI submission-decision, external-evidence packet, external-evidence
