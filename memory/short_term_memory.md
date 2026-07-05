@@ -14,16 +14,16 @@ Current date: 2026-07-05.
   `research/run_logs/**` or `research/stage_log.md` during record-sync-only
   work.
 - Current non-network continuation after the resume/thread review updates
-  `research/real_reuse_experiment_plan.md` Table 6 with existing SWE-agent and
-  SnapATAC2 quality/grounding evidence: both rubric scores are 20/20, source
-  support is 1.000, invalid ranges are 0, human fidelity remains pending, and
-  the package gate is ready. It also clarifies `research/experiment_queue.md`
+  `research/real_reuse_experiment_plan.md` Table 6 with existing quality and
+  grounding evidence for AIDE, SWE-agent, Reflexion, SnapATAC2, Toolformer
+  sanity, and AI Scientist-v2 sanity. All six rows now cite concrete rubric and
+  source-span evidence paths, keep invalid source ranges at 0, keep human
+  fidelity pending unless annotated, and point package status to the current
+  reproducibility package gate. It also clarifies `research/experiment_queue.md`
   E4 as deferred future method work, not a current main-paper priority. This
   does not change `results/real_reuse/main_run_selection.json`, promote any
   diagnostic follow-up, or touch `research/run_logs/**` /
-  `research/stage_log.md`. The phase is saved and remote-verified in
-  `951a7b2 Fill real-reuse grounding gate evidence`
-  (`951a7b23e9755d89c644bdc09ef692ee1700263d refs/heads/main`).
+  `research/stage_log.md`.
 - Current local/remote status after this resume check: the latest verified
   remote backup is
   `951a7b23e9755d89c644bdc09ef692ee1700263d refs/heads/main`

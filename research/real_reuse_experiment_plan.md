@@ -271,12 +271,12 @@ supporting role.
 
 | Source Paper | Skill Rubric | Source Support Rate | Invalid Source Ranges | Human Fidelity Status | Package Gate |
 | --- | --- | --- | --- | --- | --- |
-| AIDE | Current package value | Current package value | Current package value | Pending unless annotated | Current package gate |
+| AIDE | 20/20; 927 words; 22 anchors (`results/evaluations/aide_rubric_v0.json`) | 1.000 over 21 checked claims (`results/evaluations/aide_source_span_validation_v0.json`) | 0 | Pending unless annotated | Package gate ready (`results/reproducibility/package_report.md`) |
 | SWE-agent | 20/20; 1186 words; 21 anchors (`results/evaluations/swe_agent_rubric_v0.json`) | 1.000 over 20 checked claims (`results/evaluations/swe_agent_auto_source_span_validation_v0.json`) | 0 | Pending unless annotated | Package gate ready (`results/reproducibility/package_report.md`) |
-| Reflexion | Current package value | Current package value | Current package value | Pending unless annotated | Current package gate |
+| Reflexion | 20/20; 479 words; 12 anchors (`results/evaluations/reflexion_rubric_v0.json`) | 1.000 over 11 checked claims (`results/evaluations/reflexion_source_span_validation_v0.json`) | 0 | Pending unless annotated | Package gate ready (`results/reproducibility/package_report.md`) |
 | SnapATAC2 | 20/20; 1091 words; 19 anchors (`results/evaluations/snapatac2_rubric_v0.json`) | 1.000 over 18 checked claims (`results/evaluations/snapatac2_auto_source_span_validation_v0.json`) | 0 | Pending unless annotated | Package gate ready (`results/reproducibility/package_report.md`) |
-| Toolformer sanity | Current package value | Current package value | Current package value | Pending unless annotated | Current package gate |
-| AI Scientist-v2 sanity | Current package value | Current package value | Current package value | Pending unless annotated | Current package gate |
+| Toolformer sanity | 20/20; 943 words; 23 anchors (`results/evaluations/toolformer_rubric_v0.json`) | 1.000 over 22 checked claims (`results/evaluations/toolformer_source_span_validation_v0.json`) | 0 | Pending unless annotated | Package gate ready (`results/reproducibility/package_report.md`) |
+| AI Scientist-v2 sanity | 20/20; 782 words; 16 anchors (`results/evaluations/ai_scientist_v2_rubric_v0.json`) | 0.938 over 16 checked claims (`results/evaluations/ai_scientist_v2_source_span_validation_v0.json`) | 0 | Pending unless annotated | Package gate ready (`results/reproducibility/package_report.md`) |
 
 ## Table 7: User Study (Last / Optional)
 
