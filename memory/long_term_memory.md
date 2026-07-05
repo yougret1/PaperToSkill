@@ -109,6 +109,17 @@ This file is intentionally compact. Detailed chronological history lives in
   Verify the exact current local/remote state with `git status -sb`,
   `git log -5 --oneline`, and a successful `git ls-remote --heads origin main`
   before claiming any later phase is remote-backed.
+- Local-only follow-up phase-save checkpoint after that remote baseline:
+  `8449799 Guard limitations claim boundary` extends the paper-claim gate to
+  `paper/limitations.md`, refreshes the paper-claim/package/submission-review
+  records to 51 ready paper-claim checks and 0 failures, and records full unit
+  discovery at 209 tests OK. Its first `git push origin main` failed with
+  `Recv failure: Connection was reset`, and the immediate `git ls-remote
+  --heads origin main` failed with `Failed to connect to github.com port 443
+  after 21108 ms`. A push retry after the blocker-record commit also failed
+  with `Failed to connect to github.com port 443 after 21094 ms`. Treat this as
+  GitHub transport metadata only until a later push verifies the phase-save and
+  blocker-record commits.
 - Follow-up record-sync commit `45ef25b Sync remote checkpoint after LLM handoff
   guard` and blocker note `0538ef1 Record checkpoint sync push blocker`
   initially failed to back up because GitHub HTTPS transport was unavailable.

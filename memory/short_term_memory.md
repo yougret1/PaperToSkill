@@ -80,7 +80,15 @@ Current date: 2026-07-06.
   measured-cost protocols. This does not change experiment scores, main-row
   selection, or paper claims. Focused claim/package/submission/goal tests,
   related strict gates, protected-log/main-selection scans, raw-key scan, and
-  full unit discovery passed; full unit discovery reports 209 tests OK.
+  full unit discovery passed; full unit discovery reports 209 tests OK. The
+  phase-save commit is `8449799 Guard limitations claim boundary`. Its first
+  `git push origin main` failed with `Recv failure: Connection was reset`, and
+  the immediate `git ls-remote --heads origin main` failed with `Failed to
+  connect to github.com port 443 after 21108 ms`; treat this as GitHub
+  transport metadata only. A push retry after the blocker-record commit also
+  failed with `Failed to connect to github.com port 443 after 21094 ms`. The
+  local branch is currently ahead of `origin/main` by the phase-save commit and
+  its blocker-record commit until a later push succeeds.
 - Historical outline-claim gate sync extended `scripts/check_paper_claims.py` to
   cover `paper/outline.md` in addition to the AAAI body, AAAI table file, and
   Markdown draft. That stage produced the earlier 38-check report
