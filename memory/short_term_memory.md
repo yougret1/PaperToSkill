@@ -419,7 +419,11 @@ Current date: 2026-07-05.
   method-quality evidence. A same-session opportunistic recheck on 2026-07-05
   reused the local Claude API document key with the same wire API, aliases,
   `max_tokens=16`, and 120-second timeout; all three aliases again returned
-  provider HTTP 502, and only the direct-probe JSON timestamp changed. Report:
+  provider HTTP 502, and only the direct-probe JSON timestamp changed. The
+  recheck is saved locally in `54b6780 Refresh Claude availability probe
+  metadata`; its first `git push origin main` and immediate
+  `git ls-remote --heads origin main` both failed with `Recv failure:
+  Connection was reset`, so `54b6780` is local-only as of this note. Report:
   `results/openai_compatible_direct_probe/claude_family/run_report.md`.
 - Historical remote-backed chain through `0832201`: Claude retry availability, bounded
   summary-comparison claim cleanup, current project record sync, GitHub backup
