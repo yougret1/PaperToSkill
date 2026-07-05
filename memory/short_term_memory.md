@@ -3,7 +3,7 @@
 Read this file after any context compaction or session resume. Also read
 `memory/long_term_memory.md` before taking project actions.
 
-Current date: 2026-07-05.
+Current date: 2026-07-06.
 
 ## Current Task
 
@@ -49,6 +49,19 @@ Current date: 2026-07-05.
   `check_usage_examples.py --strict`. A fresh `git push origin main` retry
   still failed with `Recv failure: Connection was reset`, so local commits
   remain ahead of `origin/main` until GitHub transport recovers.
+- Current pre-submission full-test continuation ran
+  `python -m unittest discover -s tests -v`. The first run exposed one stale
+  regression-test fixture in `tests/test_check_submission_review.py`: the
+  negative test still replaced `467 ready` even though the current package
+  report is `468 ready`, so it no longer simulated stale package counts. The
+  fixture now replaces `468 ready` with `459 ready`; focused
+  `tests.test_check_submission_review` passes, and the full suite now passes
+  206/206 tests. Strict checks also passed after the fix:
+  `check_submission_review.py --strict`, `check_goal_completion.py --strict`,
+  `check_reproducibility_package.py --strict`,
+  `check_external_evidence_packets.py --strict`,
+  `check_external_evidence_closure.py --strict`, and
+  `check_aaai_submission_decision.py --strict`.
 - Current auxiliary real-reuse LLM-ablation family-summary continuation
   aggregates existing phase109 evidence into
   `results/real_reuse/llm_ablation_family_summary.csv` and the AAAI
