@@ -31,25 +31,19 @@ Test-NetConnection github.com -Port 443 | Format-List
 ```
 
 Current status as of 2026-07-06: the temporary GitHub HTTPS transport blocker
-recovered through the AAAI page-limit backup, then recurred for the later
-paper-finalization commit. The latest verified remote checkpoint before
-claiming any later phase save is:
+recovered through the AAAI page-limit backup and then through the later
+paper-finalization/submission-review chain. The latest verified remote
+checkpoint before claiming any later phase save is:
 
 ```text
-2bc10bdfadf5456f1cce463194b681c5280bfebb refs/heads/main
-2bc10bd Record recovered AAAI page-limit backup
+6c5e6a29dfd4ba585101233b41ca819d25b7c17d refs/heads/main
+6c5e6a2 Fix submission review stale count test
 ```
 
-Current local-only checkpoint after that verified remote backup:
-
-```text
-501ffc8 Remove draft wording from real-reuse table
-```
-
-Its first remote backup attempt failed with `Recv failure: Connection was
-reset` for both `git push origin main` and `git ls-remote --heads origin main`.
-Treat this as GitHub transport metadata and retry later; do not create
-`ok.txt` for GitHub status.
+The earlier failed remote-backup attempts for `501ffc8`, `48aabac`, and
+`8bdd394` remain GitHub transport metadata only. A later `git push origin main`
+succeeded, and `git ls-remote --heads origin main` verified the checkpoint
+above. Do not create `ok.txt` for GitHub status.
 
 The previously unbacked local commits are now remote-backed through the latest
 AAAI page-limit checkpoint:
@@ -120,6 +114,10 @@ cea43eb Record checkpoint sync push blocker
 896456b Enforce AAAI main page limit
 ad14de5 Record AAAI page-limit push blocker
 2bc10bd Record recovered AAAI page-limit backup
+501ffc8 Remove draft wording from real-reuse table
+48aabac Record draft-language gate push blocker
+8bdd394 Sync submission records with claim gate
+6c5e6a2 Fix submission review stale count test
 ```
 
 The first remote backup attempt for the AAAI page-limit repair failed with

@@ -75,21 +75,22 @@ This file is intentionally compact. Detailed chronological history lives in
   If a network/download problem blocks a core asset or phase save, record the
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
-- Latest verified remote checkpoint after the AAAI page-limit backup is
-  `2bc10bdfadf5456f1cce463194b681c5280bfebb refs/heads/main`
-  (`2bc10bd Record recovered AAAI page-limit backup`). This checkpoint includes
+- Latest verified remote checkpoint after the AAAI page-limit and
+  paper-finalization recovery is
+  `6c5e6a29dfd4ba585101233b41ca819d25b7c17d refs/heads/main`
+  (`6c5e6a2 Fix submission review stale count test`). This checkpoint includes
   the phase116 SNAP-T2 provider-block chain, the auxiliary family summary table,
-  the AAAI page-limit repair, refreshed paper/package/submission reports, and
-  memory/artifact map synchronization. Claude-family real-reuse LLM-ablation rows remain
+  the AAAI page-limit repair, the draft-language claim gate over the AAAI table
+  file, the submission-record sync, the full pre-submission unit-test regression
+  fix, refreshed paper/package/submission reports, and memory/runbook
+  synchronization. Claude-family real-reuse LLM-ablation rows remain
   provider-pending because `claude-opus-4-8`, `claude-opus-4-7`, and
   `claude-opus-4-6` all still returned provider HTTP 502 in the latest direct
   availability rechecks. Treat those 502s as provider availability metadata,
   not model-quality evidence or scored real-reuse failures. Older named
-  checkpoint notes in this memory are historical recovery checkpoints.
-  The later paper-finalization commit `501ffc8 Remove draft wording from
-  real-reuse table` is currently local-only after GitHub HTTPS push and
-  `ls-remote` both failed with `Recv failure: Connection was reset`; treat that
-  as transport metadata until a later push verifies it.
+  checkpoint notes in this memory are historical recovery checkpoints; the
+  earlier failed pushes for `501ffc8`, `48aabac`, and `8bdd394` are historical
+  GitHub transport metadata now that `6c5e6a2` is verified remote-backed.
   Verify the exact current local/remote state with `git status -sb`,
   `git log -5 --oneline`, and a successful `git ls-remote --heads origin main`
   before claiming any later phase is remote-backed.
