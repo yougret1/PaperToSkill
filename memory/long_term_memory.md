@@ -66,13 +66,13 @@ This file is intentionally compact. Detailed chronological history lives in
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
 - Latest verified remote checkpoint after the current resume recovery is
-  `5d2b98c8e2f9f2c3498a11103830ef775257bfdd refs/heads/main`
-  (`5d2b98c Record recovered Claude probe backup`). The previous local-only
+  `e1709d3bb965df9df8768271c419467266902474 refs/heads/main`
+  (`e1709d3 Record SNAP-T2 availability push blocker`). The previous local-only
   record-sync commits after the SNAP diagnostic phase, the submission-review count-check save,
   the AAAI phase112 SNAP-T1 paper-text synchronization, the draft/outline
   sync, the human-fidelity annotation request, and the resume-memory
   checkpoint/blocker/recovery/baseline records are now remote-backed in the
-  local `origin/main` tracking ref through `5d2b98c`. This includes the
+  local `origin/main` tracking ref through `e1709d3`. This includes the
   checkpoint-detail/blocker records, grounding-gate evidence sync,
   quality-grounding table completion, blocker-record continuation,
   failure-branch claim-boundary cleanup, claim-evidence-matrix boundary
@@ -81,7 +81,9 @@ This file is intentionally compact. Detailed chronological history lives in
   table marking, recovered deferred-table backup record, and the
   deferred-backup push-blocker record, recovered deferred backup push record,
   refreshed Claude availability probe metadata, and Claude-probe push-blocker
-  record, plus the recovered Claude-probe backup record. Earlier connection-reset and
+  record, plus the recovered Claude-probe backup record, the real-reuse
+  claim-checklist boundary sync, the SNAP-T2 executable-candidate availability
+  record, and the SNAP-T2 availability push-blocker record. Earlier connection-reset and
   port-443 failures remain GitHub transport metadata, not
   experiment-correctness evidence. Verify the exact current local/remote state
   with `git status -sb`, `git log -5 --oneline`, and a successful

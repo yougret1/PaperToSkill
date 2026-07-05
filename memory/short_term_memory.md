@@ -109,8 +109,8 @@ Current date: 2026-07-05.
   `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`.
 - Current local/remote status after this resume check: the latest verified
   remote backup is
-  `5d2b98c8e2f9f2c3498a11103830ef775257bfdd refs/heads/main`
-  (`5d2b98c Record recovered Claude probe backup`). The earlier
+  `e1709d3bb965df9df8768271c419467266902474 refs/heads/main`
+  (`e1709d3 Record SNAP-T2 availability push blocker`). The earlier
   checkpoint-detail/blocker records, grounding-gate evidence sync,
   quality-grounding table completion, blocker record, failure-branch
   claim-source cleanup, claim-evidence-matrix boundary sync, recovered
@@ -119,7 +119,9 @@ Current date: 2026-07-05.
   deferred-table backup record, the deferred-backup push-blocker record,
   recovered deferred backup push record, refreshed Claude availability probe
   metadata, Claude-probe push-blocker record, and recovered Claude-probe
-  backup record are now included in the verified remote chain. Earlier
+  backup record, the real-reuse claim-checklist boundary sync, the SNAP-T2
+  executable-candidate availability record, and the SNAP-T2 availability
+  push-blocker record are now included in the verified remote chain. Earlier
   `git ls-remote --heads origin main` failures on 2026-07-05 remain historical
   transport metadata; use `git status -sb`, `git log -5 --oneline`, and a fresh
   `git ls-remote --heads origin main` before making any later remote-backed
@@ -127,8 +129,8 @@ Current date: 2026-07-05.
 - Current resume baseline: GitHub backup had recovered and was verified
   through the resume-memory baseline clarification before this continuation's
   record-sync edits. The latest locally recorded remote checkpoint is:
-  `5d2b98c8e2f9f2c3498a11103830ef775257bfdd refs/heads/main`
-  (`5d2b98c Record recovered Claude probe backup`). That remote-backed chain
+  `e1709d3bb965df9df8768271c419467266902474 refs/heads/main`
+  (`e1709d3 Record SNAP-T2 availability push blocker`). That remote-backed chain
   includes the SNAP executable-candidate prompt packets, phase111/phase112
   diagnostic generation/execution artifacts, the tightened submission-review
   count-check gate, the updated AAAI phase112 SNAP-T1 executable-candidate
@@ -144,7 +146,9 @@ Current date: 2026-07-05.
   checkpoint, deferred-study table marking, recovered deferred-table backup
   record, deferred-backup push-blocker record, recovered deferred backup push
   record, refreshed Claude availability probe metadata, Claude-probe
-  push-blocker record, and recovered Claude-probe backup record. Earlier `Recv failure: Connection was reset` and port-443 failures
+  push-blocker record, recovered Claude-probe backup record, the real-reuse
+  claim-checklist boundary sync, the SNAP-T2 executable-candidate availability
+  record, and the SNAP-T2 availability push-blocker record. Earlier `Recv failure: Connection was reset` and port-443 failures
   remain historical GitHub transport metadata, not experiment correctness.
   Treat a future successful `git ls-remote` as the authority before claiming
   any new remote-backed phase.

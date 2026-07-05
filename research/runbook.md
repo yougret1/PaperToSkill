@@ -35,8 +35,8 @@ recovered again. The latest verified remote checkpoint before claiming any
 later phase save is:
 
 ```text
-5d2b98c8e2f9f2c3498a11103830ef775257bfdd refs/heads/main
-5d2b98c Record recovered Claude probe backup
+e1709d3bb965df9df8768271c419467266902474 refs/heads/main
+e1709d3 Record SNAP-T2 availability push blocker
 ```
 
 The previously unbacked local commits are now remote-backed through the SNAP
@@ -68,6 +68,9 @@ b550a26 Clarify SNAP executable candidate results
 4532dd9 Sync resume checkpoint memory
 bf95213 Record resume memory push blocker
 69d23b1 Record recovered resume memory backup
+abbd547 Record real-reuse claim checklist boundary
+c030015 Record SNAP-T2 executable candidate availability
+e1709d3 Record SNAP-T2 availability push blocker
 f1c50d5 Sync resume baseline memory
 4d2e040 Clarify resume remote memory baseline
 ac3926c Guard current remote checkpoint records
