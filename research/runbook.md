@@ -34,12 +34,13 @@ Current status as of 2026-07-06: the temporary GitHub HTTPS transport blocker
 recovered through the AAAI page-limit backup, the later
 paper-finalization/submission-review chain, the paper-outline sync, the outline
 claim-drift gate, the main-results boundary cleanup, and the real-reuse
-LLM-ablation handoff guard. The latest verified substantive checkpoint before
-claiming any later phase save is:
+LLM-ablation handoff guard. A later push also recovered the checkpoint-sync
+records and the outline evidence-boundary sync. The latest verified substantive
+checkpoint before claiming any later phase save is:
 
 ```text
-905899cc8d1a5071ac9b26f8c4e927f266445a35 refs/heads/main
-905899c Guard real-reuse LLM ablation handoff
+5786d7d8538a3fd856d98f09619fbc5447c9ebed refs/heads/main
+5786d7d Sync outline evidence boundary
 ```
 
 The earlier failed remote-backup attempts for `501ffc8`, `48aabac`, `8bdd394`,
@@ -47,12 +48,11 @@ The earlier failed remote-backup attempts for `501ffc8`, `48aabac`, `8bdd394`,
 `git push origin main` succeeded, and `git ls-remote --heads origin main`
 verified the checkpoint above. Do not create `ok.txt` for GitHub status.
 
-Follow-up local commit `45ef25b Sync remote checkpoint after LLM handoff guard`
-records that checkpoint in repo memory/runbook/goal-audit files. Its first
-`git push origin main` and immediate `git ls-remote --heads origin main` both
-failed with `Recv failure: Connection was reset`, so it remains local-only
-until GitHub transport recovers. This is transport metadata, not project
-correctness evidence.
+Follow-up commits `45ef25b Sync remote checkpoint after LLM handoff guard` and
+`0538ef1 Record checkpoint sync push blocker` first failed to back up because
+GitHub HTTPS transport was unavailable. They are now included in the verified
+`5786d7d` remote checkpoint; the earlier failures remain transport metadata,
+not project correctness evidence.
 
 The previously unbacked local commits are now remote-backed through the latest
 AAAI page-limit checkpoint:

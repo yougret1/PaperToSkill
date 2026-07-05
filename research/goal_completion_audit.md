@@ -50,21 +50,14 @@ Current machine reports:
 
 Record-sync note: the current remote-checkpoint records now point to the
 verified paper-finalization, submission-review, outline-sync, outline
-claim-drift, main-results boundary, and real-reuse LLM-ablation handoff
-checkpoint:
-`905899cc8d1a5071ac9b26f8c4e927f266445a35 refs/heads/main`
-(`905899c Guard real-reuse LLM ablation handoff`). Earlier record-only
-checkpoint syncs, the first page-limit backup attempt, the first
-paper-finalization backup attempts, and the first `95f1af3`/`66e4763` backup
-attempts hit GitHub transport errors, but later pushes recovered. This is
-GitHub transport metadata only.
-
-Follow-up local commit `45ef25b Sync remote checkpoint after LLM handoff guard`
-updates these checkpoint records to `905899c`, but its first
-`git push origin main` and immediate `git ls-remote --heads origin main` both
-failed with `Recv failure: Connection was reset`. It remains local-only until
-GitHub transport recovers; this does not change experiment correctness or the
-latest verified remote checkpoint.
+claim-drift, main-results boundary, real-reuse LLM-ablation handoff, recovered
+checkpoint-sync, and outline evidence-boundary sync checkpoint:
+`5786d7d8538a3fd856d98f09619fbc5447c9ebed refs/heads/main`
+(`5786d7d Sync outline evidence boundary`). Earlier record-only checkpoint
+syncs, the first page-limit backup attempt, the first paper-finalization backup
+attempts, the first `95f1af3`/`66e4763` backup attempts, and the first
+`45ef25b`/`0538ef1` backup attempts hit GitHub transport errors, but later
+pushes recovered. This is GitHub transport metadata only.
 
 ## Requirement Audit
 
@@ -72,7 +65,7 @@ latest verified remote checkpoint.
 | --- | --- | --- | --- |
 | Durable local memory | `memory/long_term_memory.md`; `memory/short_term_memory.md` | Complete locally | Read and update both memory files after every resume/compaction. |
 | Use `ai-scientist-v2` to refine PaperToSkill | Seed idea files, bounded smoke report, full live-run handoff, Phase 76 run log, completion directory | Complete for bounded local evidence | Do not treat the synthetic run as broad live task success. |
-| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. The latest verified remote-backed checkpoint is `905899cc8d1a5071ac9b26f8c4e927f266445a35 refs/heads/main` (`905899c Guard real-reuse LLM ablation handoff`). It includes the real-reuse LLM-ablation handoff guard, refreshed submission-review report, memory/runbook/result-card synchronization, the AAAI page-limit repair, the draft-language claim gate over AAAI table text, submission-record sync, the full pre-submission unit-test regression fix, the paper-outline LLM-ablation status sync, the paper-outline claim gate reporting 38 ready checks / 0 failed checks, and the main-results/failure-analysis raw-row provenance refresh to 40 raw rows. Earlier connection-reset and port-443 failures remain GitHub transport metadata rather than experiment-correctness evidence. | Complete locally; latest remote-backed checkpoint is `905899c` as of the 2026-07-06 verification | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim with `git status -sb`, `git log -5 --oneline`, and `git ls-remote --heads origin main`; keep transport failures separate from experiment correctness and record exact failures in `C:\Users\19351\Desktop\tem\toHuman.md` if they recur. |
+| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. The latest verified substantive remote-backed checkpoint is `5786d7d8538a3fd856d98f09619fbc5447c9ebed refs/heads/main` (`5786d7d Sync outline evidence boundary`). It includes the recovered checkpoint-sync commits after the real-reuse LLM-ablation handoff guard and the outline evidence-boundary sync that distinguishes collected saved-response rows from unsupported human semantic fidelity, provider billing, and live downstream task-success claims. The previous LLM-ablation handoff checkpoint remains historical evidence for the refreshed submission-review report, memory/runbook/result-card synchronization, the AAAI page-limit repair, the draft-language claim gate over AAAI table text, submission-record sync, the full pre-submission unit-test regression fix, the paper-outline LLM-ablation status sync, the paper-outline claim gate reporting 38 ready checks / 0 failed checks, and the main-results/failure-analysis raw-row provenance refresh to 40 raw rows. Earlier connection-reset and port-443 failures remain GitHub transport metadata rather than experiment-correctness evidence. | Complete locally; latest substantive remote-backed checkpoint is `5786d7d` as of the 2026-07-06 verification | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim with `git status -sb`, `git log -5 --oneline`, and `git ls-remote --heads origin main`; keep transport failures separate from experiment correctness and record exact failures in `C:\Users\19351\Desktop\tem\toHuman.md` if they recur. |
 | Official AAAI TeX package | `paper/aaai/`; `results/reproducibility/aaai_package_report.md` | Locally ready | Keep draft synchronized with new evidence. |
 | Usage examples | `examples/usage/`; `results/reproducibility/usage_example_report.md` | Complete locally | Re-run after runner or task changes. |
 | Model ablations | `results/model_ablation_prompts/v0/evaluation.md`: 6 scored, 0 pending | Complete for saved-response protocol | Do not claim broad model quality or live task success. |

@@ -77,18 +77,22 @@ This file is intentionally compact. Detailed chronological history lives in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
 - Latest verified substantive checkpoint after the AAAI page-limit,
   paper-finalization, outline-sync recovery, outline claim-drift gate,
-  main-results boundary cleanup, and real-reuse LLM-ablation handoff guard is
-  `905899cc8d1a5071ac9b26f8c4e927f266445a35 refs/heads/main`
-  (`905899c Guard real-reuse LLM ablation handoff`). This checkpoint includes
-  the submission-review handoff guard that separates the older saved-response
-  model ablation from the auxiliary real-reuse LLM ablation, the refreshed
-  `18 ready / 0 failed` submission-review report, memory/runbook/result-card
-  synchronization, and the previous recovered checkpoint chain through
-  `1a7ae8c` and `00d32cd`. The earlier `00d32cd` checkpoint includes
-  the phase116 SNAP-T2 provider-block chain, the auxiliary family summary table,
-  the AAAI page-limit repair, the draft-language claim gate over the AAAI table
-  file, the submission-record sync, the full pre-submission unit-test regression
-  fix, refreshed paper/package/submission reports, and memory/runbook
+  main-results boundary cleanup, real-reuse LLM-ablation handoff guard,
+  recovered checkpoint-sync records, and outline evidence-boundary sync is
+  `5786d7d8538a3fd856d98f09619fbc5447c9ebed refs/heads/main`
+  (`5786d7d Sync outline evidence boundary`). This checkpoint includes the
+  outline update that distinguishes collected/scored saved-response rows from
+  unsupported human semantic fidelity, provider billing, and live downstream
+  task-success claims. It also includes the submission-review handoff guard
+  that separates the older saved-response model ablation from the auxiliary
+  real-reuse LLM ablation, the refreshed `18 ready / 0 failed`
+  submission-review report, memory/runbook/result-card synchronization, and the
+  previous recovered checkpoint chain through `905899c`, `1a7ae8c`, and
+  `00d32cd`. The earlier `00d32cd` checkpoint includes the phase116 SNAP-T2
+  provider-block chain, the auxiliary family summary table, the AAAI
+  page-limit repair, the draft-language claim gate over the AAAI table file,
+  the submission-record sync, the full pre-submission unit-test regression fix,
+  refreshed paper/package/submission reports, and memory/runbook
   synchronization, the paper-outline LLM-ablation status sync, and the new
   paper-outline claim gate reporting 38 ready checks / 0 failed checks, the
   main-results/failure-analysis raw-row provenance refresh to 40 raw rows, and
@@ -99,18 +103,19 @@ This file is intentionally compact. Detailed chronological history lives in
   availability rechecks. Treat those 502s as provider availability metadata,
   not model-quality evidence or scored real-reuse failures. Older named
   checkpoint notes in this memory are historical recovery checkpoints; the
-  earlier failed pushes for `501ffc8`, `48aabac`, `8bdd394`, `95f1af3`, and
-  `66e4763` are historical GitHub transport metadata now that `905899c` is
-  verified remote-backed.
+  earlier failed pushes for `501ffc8`, `48aabac`, `8bdd394`, `95f1af3`,
+  `66e4763`, `45ef25b`, and `0538ef1` are historical GitHub transport
+  metadata now that `5786d7d` is verified remote-backed.
   Verify the exact current local/remote state with `git status -sb`,
   `git log -5 --oneline`, and a successful `git ls-remote --heads origin main`
   before claiming any later phase is remote-backed.
 - Follow-up record-sync commit `45ef25b Sync remote checkpoint after LLM handoff
-  guard` updates repo memory/runbook/goal-audit records to that verified
-  `905899c` checkpoint, but its first `git push origin main` and immediate
-  `git ls-remote --heads origin main` failed with `Recv failure: Connection was
-  reset`. Treat this as GitHub transport metadata only; the latest verified
-  remote backup remains `905899c` until a later push/remote check succeeds.
+  guard` and blocker note `0538ef1 Record checkpoint sync push blocker`
+  initially failed to back up because GitHub HTTPS transport was unavailable.
+  A later push recovered those commits along with `5786d7d Sync outline
+  evidence boundary`, and `git ls-remote --heads origin main` verified
+  `5786d7d8538a3fd856d98f09619fbc5447c9ebed refs/heads/main`. Treat the
+  earlier failures as GitHub transport metadata only.
 - Recovered AAAI page-limit backup note: the first push for the page-limit
   repair and its immediate remote check both failed with `Recv failure:
   Connection was reset`, but a later push recovered and verified the current

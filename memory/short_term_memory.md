@@ -22,15 +22,14 @@ Current date: 2026-07-06.
   saved-response model-ablation protocol from the current real-reuse LLM
   ablation, which is still 12/18 scored with Claude-family rows
   provider-pending.
-- Current checkpoint-sync push blocker: local commit
-  `45ef25b Sync remote checkpoint after LLM handoff guard` updates repo memory,
-  runbook, goal audit, and goal-completion report so the current checkpoint
-  records point to the verified `905899c` remote backup. Its first
-  `git push origin main` failed with `Recv failure: Connection was reset`, and
-  the immediate `git ls-remote --heads origin main` failed with the same reset
-  error. The repo is currently ahead of `origin/main` by this local
-  record-sync commit until GitHub transport recovers. This is GitHub transport
-  metadata only; no human `ok.txt` is required for GitHub status.
+- Current GitHub backup recovery: the earlier checkpoint-sync commits
+  `45ef25b Sync remote checkpoint after LLM handoff guard` and
+  `0538ef1 Record checkpoint sync push blocker` first failed to back up because
+  GitHub HTTPS transport was unavailable. A later `git push origin main`
+  recovered those commits together with `5786d7d Sync outline evidence
+  boundary`, and `git ls-remote --heads origin main` verified
+  `5786d7d8538a3fd856d98f09619fbc5447c9ebed refs/heads/main`. This is GitHub
+  transport metadata only; no human `ok.txt` is required for GitHub status.
 - Current submission-review LLM-ablation distinction separates the older
   saved-response model ablation from the auxiliary real-reuse LLM ablation in
   `research/rebuttal_bank.md`, `research/submission_checklist.md`, and
@@ -314,16 +313,20 @@ Current date: 2026-07-06.
   GitHub retry pushed the follow-up record-sync and Claude availability
   commits, and `git ls-remote --heads origin main` verified
   `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`.
-- Current local/remote status override after the real-reuse LLM-ablation
-  handoff guard: the latest locally recorded remote checkpoint is
-  `905899cc8d1a5071ac9b26f8c4e927f266445a35 refs/heads/main`
-  (`905899c Guard real-reuse LLM ablation handoff`). This checkpoint includes
-  the submission-review handoff guard that separates older saved-response model
+- Current local/remote status override after the outline evidence-boundary
+  sync: the latest locally recorded remote checkpoint is
+  `5786d7d8538a3fd856d98f09619fbc5447c9ebed refs/heads/main`
+  (`5786d7d Sync outline evidence boundary`). This checkpoint includes the
+  recovered checkpoint-sync commits after the real-reuse LLM-ablation handoff
+  guard and the outline update that distinguishes collected/scored
+  saved-response rows from unsupported human semantic fidelity, provider
+  billing, and live downstream task-success claims. It also includes the
+  submission-review handoff guard that separates older saved-response model
   ablation from auxiliary real-reuse LLM ablation, the refreshed
   `18 ready / 0 failed` submission-review report, memory/runbook/result-card
-  synchronization, and the previous recovered chain through `1a7ae8c`,
-  `00d32cd`, and the AAAI page-limit / outline / main-results boundary
-  backups. Older current-status bullets in this file are historical
+  synchronization, and the previous recovered chain through `905899c`,
+  `1a7ae8c`, `00d32cd`, and the AAAI page-limit / outline / main-results
+  boundary backups. Older current-status bullets in this file are historical
   checkpoints only; use fresh `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
   phase.
@@ -903,9 +906,9 @@ Current date: 2026-07-06.
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-6. Latest remote-backed checkpoint before further edits:
-   `905899c Guard real-reuse LLM ablation handoff`, verified at
-   `905899cc8d1a5071ac9b26f8c4e927f266445a35 refs/heads/main`.
+6. Latest substantive remote-backed checkpoint before further edits:
+   `5786d7d Sync outline evidence boundary`, verified at
+   `5786d7d8538a3fd856d98f09619fbc5447c9ebed refs/heads/main`.
 7. No experiment-side human action is required for GitHub status right now.
    Continue non-network paper/evidence work and verify remote alignment again
    before claiming any later phase save is remote-backed.
