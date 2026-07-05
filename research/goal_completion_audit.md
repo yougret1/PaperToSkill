@@ -59,6 +59,13 @@ paper-finalization backup attempts, and the first `95f1af3`/`66e4763` backup
 attempts hit GitHub transport errors, but later pushes recovered. This is
 GitHub transport metadata only.
 
+Follow-up local commit `45ef25b Sync remote checkpoint after LLM handoff guard`
+updates these checkpoint records to `905899c`, but its first
+`git push origin main` and immediate `git ls-remote --heads origin main` both
+failed with `Recv failure: Connection was reset`. It remains local-only until
+GitHub transport recovers; this does not change experiment correctness or the
+latest verified remote checkpoint.
+
 ## Requirement Audit
 
 | Requirement | Current Evidence | Status | Next Action |

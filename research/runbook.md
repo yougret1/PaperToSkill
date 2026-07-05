@@ -47,6 +47,13 @@ The earlier failed remote-backup attempts for `501ffc8`, `48aabac`, `8bdd394`,
 `git push origin main` succeeded, and `git ls-remote --heads origin main`
 verified the checkpoint above. Do not create `ok.txt` for GitHub status.
 
+Follow-up local commit `45ef25b Sync remote checkpoint after LLM handoff guard`
+records that checkpoint in repo memory/runbook/goal-audit files. Its first
+`git push origin main` and immediate `git ls-remote --heads origin main` both
+failed with `Recv failure: Connection was reset`, so it remains local-only
+until GitHub transport recovers. This is transport metadata, not project
+correctness evidence.
+
 The previously unbacked local commits are now remote-backed through the latest
 AAAI page-limit checkpoint:
 

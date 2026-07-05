@@ -105,6 +105,12 @@ This file is intentionally compact. Detailed chronological history lives in
   Verify the exact current local/remote state with `git status -sb`,
   `git log -5 --oneline`, and a successful `git ls-remote --heads origin main`
   before claiming any later phase is remote-backed.
+- Follow-up record-sync commit `45ef25b Sync remote checkpoint after LLM handoff
+  guard` updates repo memory/runbook/goal-audit records to that verified
+  `905899c` checkpoint, but its first `git push origin main` and immediate
+  `git ls-remote --heads origin main` failed with `Recv failure: Connection was
+  reset`. Treat this as GitHub transport metadata only; the latest verified
+  remote backup remains `905899c` until a later push/remote check succeeds.
 - Recovered AAAI page-limit backup note: the first push for the page-limit
   repair and its immediate remote check both failed with `Recv failure:
   Connection was reset`, but a later push recovered and verified the current

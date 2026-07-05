@@ -13,6 +13,15 @@ Current date: 2026-07-06.
   Preserve the existing local-log boundary: do not modify
   `research/run_logs/**` or `research/stage_log.md` during record-sync-only
   work.
+- Current checkpoint-sync push blocker: local commit
+  `45ef25b Sync remote checkpoint after LLM handoff guard` updates repo memory,
+  runbook, goal audit, and goal-completion report so the current checkpoint
+  records point to the verified `905899c` remote backup. Its first
+  `git push origin main` failed with `Recv failure: Connection was reset`, and
+  the immediate `git ls-remote --heads origin main` failed with the same reset
+  error. The repo is currently ahead of `origin/main` by this local
+  record-sync commit until GitHub transport recovers. This is GitHub transport
+  metadata only; no human `ok.txt` is required for GitHub status.
 - Current submission-review LLM-ablation distinction separates the older
   saved-response model ablation from the auxiliary real-reuse LLM ablation in
   `research/rebuttal_bank.md`, `research/submission_checklist.md`, and
