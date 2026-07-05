@@ -327,9 +327,10 @@ Current date: 2026-07-05.
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-6. Latest local commit:
+6. Latest substantive local SNAP prompt phase commit:
    `ef8cbe0 Prepare SNAP executable candidate prompts` (not remote-backed yet
-   due GitHub HTTPS reset). Latest verified
+   due GitHub HTTPS reset). A follow-up local record commit may exist only to
+   preserve the push-blocker status. Latest verified
    remote-backed checkpoint:
    `0832201 Sync memory after GitHub retry`, verified at
    `0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main`.
