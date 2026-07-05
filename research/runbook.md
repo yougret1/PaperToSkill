@@ -31,12 +31,13 @@ Test-NetConnection github.com -Port 443 | Format-List
 ```
 
 Current status as of 2026-07-05: the temporary GitHub HTTPS transport blocker
-recovered again, and the phase112 SNAP executable-candidate completion is
-remote-backed. The latest verified remote checkpoint is:
+recovered again, and the phase112 SNAP executable-candidate completion,
+submission-review count-check save, and AAAI paper-text synchronization are
+remote-backed. The latest verified substantive phase checkpoint is:
 
 ```text
-b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main
-b6dc061 Complete SNAP executable candidate diagnostic
+b550a26504311eb8d82ea8fdbabc1a3e6983abe4 refs/heads/main
+b550a26 Clarify SNAP executable candidate results
 ```
 
 The previously unbacked local commits are now remote-backed through the SNAP
@@ -57,17 +58,20 @@ c3f9f05 Clarify SNAP prompt backup status
 db535e7 Record SNAP diagnostic checkpoint
 fb0baed Sync SNAP diagnostic remote status
 b6dc061 Complete SNAP executable candidate diagnostic
+a976bbc Record SNAP diagnostic backup recovery
+1c8098b Record SNAP backup recovery push blocker
+2b823f6 Tighten submission review count checks
+ef2bcf7 Record submission review push blocker
+b550a26 Clarify SNAP executable candidate results
 ```
 
 Earlier `Recv failure: Connection was reset` and github.com port 443 failures
 remain GitHub transport metadata, not project-correctness evidence. The
 previously local-only record-sync commit after `db535e7` is now remote-backed.
 The later local record-sync commit after `fb0baed` and the phase112 completion
-commit are now remote-backed. Later local record-sync commits after `b6dc061`
-are not remote-backed yet because both `git push origin main` and
-`git ls-remote --heads origin main` failed with `Recv failure: Connection was
-reset`. Always inspect `git status -sb` and `git log -5 --oneline` before
-claiming a clean phase save.
+commit are now remote-backed. The later submission-review and AAAI paper-text
+sync commits are also remote-backed through `b550a26`. Always inspect
+`git status -sb` and `git log -5 --oneline` before claiming a clean phase save.
 
 Re-run remote verification before making future remote-backed checkpoint
 claims.

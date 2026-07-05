@@ -12,27 +12,19 @@ Current date: 2026-07-05.
   existing local-log boundary: do not modify `research/run_logs/**` or
   `research/stage_log.md` during record-sync-only work.
 - Current save target status: GitHub backup recovered again and was verified
-  after the phase112 completion commit. The latest verified remote checkpoint is
-  `b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main`
-  (`b6dc061 Complete SNAP executable candidate diagnostic`). This
-  remote-backed chain now includes the SNAP executable-candidate prompt
-  packets, phase111/phase112 diagnostic generation/execution artifacts, memory
-  checkpoint records, the prior remote-status sync, and the refreshed AAAI
-  PDF/table/package reports. Earlier `Recv failure: Connection was reset` and
-  port-443 failures remain historical GitHub transport metadata, not
-  experiment correctness. After the verified push, local record-sync commits
-  were created to record the recovered backup and the renewed GitHub transport
-  blocker; their `git push origin main` and follow-up
-  `git ls-remote --heads origin main` attempts failed with `Recv failure:
-  Connection was reset`. Current local status should be checked with
-  `git status -sb` and `git log -5 --oneline`; after the
-  submission-review count-check save, the local-only chain includes
-  `a976bbc Record SNAP diagnostic backup recovery`,
-  `1c8098b Record SNAP backup recovery push blocker`, and
-  `2b823f6 Tighten submission review count checks`. The attempted
-  `git push origin main` for this chain failed with `Recv failure: Connection
-  was reset`, and the follow-up `git ls-remote --heads origin main` failed
-  with the same reset. Continue non-network work and retry backup later.
+  after the submission-review and AAAI paper-text synchronization saves. The
+  latest verified substantive phase checkpoint is
+  `b550a26504311eb8d82ea8fdbabc1a3e6983abe4 refs/heads/main`
+  (`b550a26 Clarify SNAP executable candidate results`). This remote-backed
+  chain now includes the SNAP executable-candidate prompt packets,
+  phase111/phase112 diagnostic generation/execution artifacts, the tightened
+  submission-review count-check gate, the updated AAAI phase112 SNAP-T1
+  executable-candidate prose/table caption, and the rebuilt AAAI PDF/package
+  report. Earlier `Recv failure: Connection was reset` and port-443 failures
+  remain historical GitHub transport metadata, not experiment correctness.
+  Before claiming any later phase save is remote-backed, rerun
+  `git status -sb`, `git log -5 --oneline`, and
+  `git ls-remote --heads origin main`.
 - Current record-sync continuation tightens
   `scripts/check_submission_review.py` so review/rebuttal/submission handoff
   files must carry exact current gate counts for goal/package, AAAI package,
@@ -53,9 +45,7 @@ Current date: 2026-07-05.
   `python scripts/check_aaai_package.py --strict`, `git diff --check`
   with only CRLF warnings, a changed-file raw-key scan with no matches, and
   `research/run_logs/**` / `research/stage_log.md` unchanged. The phase is
-  saved locally as `2b823f6 Tighten submission review count checks` but is not
-  remote-backed yet because GitHub transport reset during push and remote-head
-  verification.
+  saved and remote-backed in `2b823f6 Tighten submission review count checks`.
 - Current paper-text synchronization after the submission-review save adds an
   explicit AAAI Results paragraph for the phase112 SNAP-T1 model-generated
   executable-candidate diagnostic and clarifies the corresponding table
@@ -70,7 +60,8 @@ Current date: 2026-07-05.
   `python scripts/check_aaai_package.py --strict`,
   `python scripts/check_usage_examples.py --strict`,
   `python scripts/check_reproducibility_package.py --strict`, and
-  `python scripts/check_goal_completion.py --strict`.
+  `python scripts/check_goal_completion.py --strict`. The phase is saved and
+  remote-backed in `b550a26 Clarify SNAP executable candidate results`.
 - Current local phase commit `77e8ada` implements the SNAP executable-candidate
   runner/checker/test path:
   `scripts/run_real_reuse_snapatac2_executable_candidate.py`,
@@ -198,10 +189,11 @@ Current date: 2026-07-05.
   dedicated CSV/MD/JSON table, builder/test, paper table, rebuilt AAAI PDF, and
   table/package checker/report updates.
 - Current remote-backup status: GitHub backup is verified through
-  `b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main`
-  (`b6dc061 Complete SNAP executable candidate diagnostic`). The previously
+  `b550a26504311eb8d82ea8fdbabc1a3e6983abe4 refs/heads/main`
+  (`b550a26 Clarify SNAP executable candidate results`). The previously
   unbacked local commits from `4b216b6` through the SNAP diagnostic record,
-  the follow-up remote-status sync, and the phase112 completion commit are now
+  the follow-up remote-status sync, the phase112 completion commit, the
+  submission-review count-check save, and the AAAI paper-text sync are now
   remote-backed.
 - The current discussion policy is: stabilize the core eight-row real-reuse
   evidence first; collect auxiliary raw data opportunistically; keep LLM
@@ -213,15 +205,17 @@ Current date: 2026-07-05.
   exact GitHub push / remote-check transport errors. It no longer asks the
   user to create `ok.txt` for GitHub status; `ok.txt` is reserved for completed
   human-fidelity annotation or a concrete placed core real-reuse asset.
-- The committed chain through `b6dc061 Complete SNAP executable candidate diagnostic`
+- The committed chain through `b550a26 Clarify SNAP executable candidate results`
   is pushed to `origin/main` and verified by `git ls-remote --heads origin
   main` as
-  `b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main`. This includes
+  `b550a26504311eb8d82ea8fdbabc1a3e6983abe4 refs/heads/main`. This includes
   the earlier recovered GitHub backup records, real-reuse boundary tightening,
   SNAP executable-candidate runner, prompt packets, phase111/phase112
-  diagnostic artifacts, memory/queue sync, and the refreshed AAAI
-  diagnostic-table/PDF/package reports. Earlier GitHub HTTPS transport
-  failures are availability metadata, not experiment-correctness evidence.
+  diagnostic artifacts, memory/queue sync, refreshed AAAI diagnostic-table/
+  PDF/package reports, tightened submission-review count checks, and the
+  phase112 SNAP-T1 executable-candidate paper-text clarification. Earlier
+  GitHub HTTPS transport failures are availability metadata, not
+  experiment-correctness evidence.
 - Verification before the `599382d` phase save passed:
   `python -m unittest tests.test_build_real_reuse_swe_t1_issue_aligned_followup
   tests.test_check_paper_tables tests.test_check_reproducibility_package -v`,
@@ -237,7 +231,7 @@ Current date: 2026-07-05.
   annotation or a concrete placed core asset.
 - Current GitHub transport note: previous 2026-07-05 connection-reset /
   port-443 failures recovered again. Current verified remote state is
-  `b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main`. Before claiming
+  `b550a26504311eb8d82ea8fdbabc1a3e6983abe4 refs/heads/main`. Before claiming
   any later phase save is remote-backed, rerun `git status -sb`,
   `git log -5 --oneline`, and `git ls-remote --heads origin main`.
 - Historical Claude-family availability checkpoint: after record-sync commit
@@ -420,14 +414,12 @@ Current date: 2026-07-05.
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-6. Latest verified remote-backed checkpoint:
-   `b6dc061 Complete SNAP executable candidate diagnostic`, verified at
-   `b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main`.
-7. Current local-only commits after that checkpoint include backup-recovery
-   records plus `2b823f6 Tighten submission review count checks`. Their push
-   and remote check attempts failed with `Recv failure: Connection was reset`.
-   No experiment-side human action is required; continue non-network work and
-   retry backup later.
+6. Latest verified substantive phase checkpoint:
+   `b550a26 Clarify SNAP executable candidate results`, verified at
+   `b550a26504311eb8d82ea8fdbabc1a3e6983abe4 refs/heads/main`.
+7. No experiment-side human action is required for GitHub status right now.
+   Continue non-network paper/evidence work and verify remote alignment again
+   before claiming any later phase save is remote-backed.
 
 ## Boundaries
 

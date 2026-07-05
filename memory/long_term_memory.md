@@ -65,18 +65,16 @@ This file is intentionally compact. Detailed chronological history lives in
   If a network/download problem blocks a core asset or phase save, record the
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
-- Current remote-backed checkpoint is
-  `b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main`
-  (`b6dc061 Complete SNAP executable candidate diagnostic`). The previous
-  local-only record-sync commit after `fb0baed` and the phase112 SNAP
-  diagnostic/table/package completion are now remote-backed. Earlier
-  connection-reset and port-443 failures remain GitHub transport metadata, not
-  experiment-correctness evidence. Later local record-sync commits after
-  `b6dc061` are not remote-backed yet because `git push origin main` and
-  `git ls-remote --heads origin main` both failed with `Recv failure:
-  Connection was reset`. Verify with `git status -sb`,
-  `git log -5 --oneline`, and `git ls-remote --heads origin main` before
-  claiming a later phase is remote-backed.
+- Latest verified substantive phase checkpoint is
+  `b550a26504311eb8d82ea8fdbabc1a3e6983abe4 refs/heads/main`
+  (`b550a26 Clarify SNAP executable candidate results`). The previous
+  local-only record-sync commits after `b6dc061`, the submission-review
+  count-check save, and the AAAI phase112 SNAP-T1 paper-text synchronization
+  are now remote-backed. Earlier connection-reset and port-443 failures remain
+  GitHub transport metadata, not experiment-correctness evidence. Verify with
+  `git status -sb`, `git log -5 --oneline`, and
+  `git ls-remote --heads origin main` before claiming a later phase is
+  remote-backed.
 
 ## Evidence Boundary
 
@@ -335,10 +333,13 @@ Current supported claims:
   (memory sync after GitHub retry), `ef8cbe0` (SNAP executable-candidate
   prompt packets), `9829123` (SNAP executable-candidate live diagnostics), and
   `db535e7` (SNAP diagnostic checkpoint record), `fb0baed` (remote-status
-  sync), and `b6dc061` (phase112 SNAP executable-candidate diagnostic/table/
-  package completion). The temporary 2026-07-05 GitHub HTTPS transport blocker
-  recovered again; the latest verified remote checkpoint is
-  `b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main`. Verify exact
+  sync), `b6dc061` (phase112 SNAP executable-candidate diagnostic/table/
+  package completion), `2b823f6` (tightened submission-review count checks),
+  `ef2bcf7` (submission-review push blocker record), and `b550a26` (AAAI
+  paper-text synchronization for the SNAP executable-candidate diagnostic).
+  The temporary 2026-07-05 GitHub HTTPS transport blocker recovered again; the
+  latest verified remote checkpoint is
+  `b550a26504311eb8d82ea8fdbabc1a3e6983abe4 refs/heads/main`. Verify exact
   local/remote alignment with
   `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
@@ -412,9 +413,9 @@ Current supported claims:
   `24f8029`, `cdeab1f`, `c7d55b7`, `2a61d42`, `12fab77`, `9888f17`,
   `1ab714f`, `2b5d9d0`, `05b3963`, `77e8ada`, `0983fbc`, `c4b4b99`,
   `2490a9b`, `0832201`, `4b216b6`, `0734bb9`, `ef8cbe0`, `10a3d1d`,
-  `c3f9f05`, `9829123`, `db535e7`, `fb0baed`, and `b6dc061` are remote-backed
-  in the latest verified checkpoint
-  `b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main`.
+  `c3f9f05`, `9829123`, `db535e7`, `fb0baed`, `b6dc061`, `2b823f6`,
+  `ef2bcf7`, and `b550a26` are remote-backed in the latest verified checkpoint
+  `b550a26504311eb8d82ea8fdbabc1a3e6983abe4 refs/heads/main`.
 - Phase109 has collected scored real-reuse LLM ablation rows only on the
   pre-registered stabilized slices. Current collected GPT-family pairs are
   REF-T2 1.000/1.000,
@@ -433,12 +434,10 @@ Current supported claims:
 - Phase 89 and the 2026-07-04/2026-07-05 record-sync pushes recovered GitHub
   HTTPS transport interruptions. Use `git status -sb` and a successful remote
   check for the latest exact alignment before each phase-save claim.
-- Latest verified remote-backed phase checkpoint:
-  `b6dc061 Complete SNAP executable candidate diagnostic`, verified at
-  `b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main`. Later local
-  record-sync commits are ahead of that checkpoint and not remote-backed due
-  GitHub connection resets. Rerun remote verification before making later
-  remote-backed claims.
+- Latest verified substantive phase checkpoint:
+  `b550a26 Clarify SNAP executable candidate results`, verified at
+  `b550a26504311eb8d82ea8fdbabc1a3e6983abe4 refs/heads/main`. Rerun remote
+  verification before making later remote-backed claims.
 
 Current unsupported claims:
 
