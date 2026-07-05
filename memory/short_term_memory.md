@@ -60,7 +60,12 @@ Current date: 2026-07-06.
   now says score cells come from row-selection-selected raw rows, and any
   `Pending` scaffold/pre-run cells indicate missing scored raw rows rather than
   task-success evidence. This does not change the locked eight main rows, any
-  score, or `results/real_reuse/main_run_selection.json`.
+  score, or `results/real_reuse/main_run_selection.json`. Local commit
+  `21009eb Clarify real-reuse main table boundary` records this phase, but its
+  first `git push origin main` failed with `Recv failure: Connection was reset`
+  and the immediate `git ls-remote --heads origin main` failed with
+  `Failed to connect to github.com port 443 after 21115 ms`. This is GitHub
+  transport metadata only; no human `ok.txt` is required for GitHub status.
 - Current pre-submission full-test continuation ran
   `python -m unittest discover -s tests -v`. The first run exposed one stale
   regression-test fixture in `tests/test_check_submission_review.py`: the
