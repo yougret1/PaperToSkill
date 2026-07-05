@@ -95,6 +95,10 @@ This file is intentionally compact. Detailed chronological history lives in
   completion, claim-boundary cleanup, blocker-record continuation, and
   claim-evidence-matrix boundary sync are now verified as remote-backed through
   that checkpoint.
+- Follow-up record-sync commit `e2f070e Record recovered claim matrix backup`
+  is local-only after `git push origin main` failed with `Recv failure:
+  Connection was reset`; retry GitHub transport later before claiming that
+  record-sync commit is remote-backed.
 
 ## Evidence Boundary
 

@@ -97,9 +97,11 @@ remain transport history.
 Always inspect `git status -sb` and `git log -5 --oneline` before claiming a
 clean phase save.
 
-Local-only continuation note: no repository commit is local-only at the
-`eab454d` checkpoint. If a later record-sync commit is made, verify it with a
-fresh push and `git ls-remote` before claiming it as remote-backed.
+Local-only continuation note: follow-up record-sync commit `e2f070e Record
+recovered claim matrix backup` is local-only after `git push origin main`
+failed with `Recv failure: Connection was reset`. Retry GitHub transport later
+and verify with `git ls-remote` before claiming that record-sync commit as
+remote-backed.
 
 Re-run remote verification before making future remote-backed checkpoint
 claims.

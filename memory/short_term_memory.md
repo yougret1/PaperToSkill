@@ -103,6 +103,11 @@ Current date: 2026-07-05.
   cleanup, and the claim-evidence-matrix boundary sync through `eab454d`.
   Goal status remains externally blocked on
   human-fidelity annotation and the follow-on AAAI final decision.
+- Follow-up record-sync commit `e2f070e Record recovered claim matrix backup`
+  records the recovered `eab454d` remote checkpoint in memory/runbook/goal
+  reports. Its push attempt failed with `Recv failure: Connection was reset`,
+  so `e2f070e` is local-only until a later GitHub transport retry succeeds.
+  This is transport metadata only and does not require a human `ok.txt`.
 - Current record-sync continuation tightens
   `scripts/check_submission_review.py` so review/rebuttal/submission handoff
   files must carry exact current gate counts for goal/package, AAAI package,
