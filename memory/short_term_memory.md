@@ -230,12 +230,14 @@ Current date: 2026-07-05.
   `git ls-remote --heads origin main` failed with the same reset error. A
   follow-up local blocker-record commit captured this state; its first
   `git push origin main` failed with
-  `Failed to connect to github.com port 443 after 21085 ms`, while a fresh
-  `git ls-remote --heads origin main` returned
+  `Failed to connect to github.com port 443 after 21085 ms`. A later retry
+  pushed `db7a0f4` plus the amended blocker-record commit
+  `9749539 Record external packet sync push blocker`; `git ls-remote --heads
+  origin main` returned
   `e038930412867996f63f248c4795eee219d2d20a refs/heads/main`
-  (`e038930 Clarify human evidence handoff packets`). Local `git status -sb`
-  reports `main...origin/main [ahead 2]`. This is GitHub transport metadata
-  only and does not require `ok.txt`.
+  before that recovery and later returned
+  `9749539c7a0e558e0d249aba0af40aaa54290024 refs/heads/main`.
+  This is GitHub transport metadata only and does not require `ok.txt`.
 - Current record-drift guard continuation adds
   `current_remote_checkpoint_records` to `scripts/check_goal_completion.py`.
   The first implementation compared current-status records directly to the
