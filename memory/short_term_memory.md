@@ -127,6 +127,12 @@ Current date: 2026-07-06.
   saved and pushed as `43f9092 Guard model response cost scope`;
   `git ls-remote --heads origin main` verified
   `43f9092c32a614d882199d5111fe21cc5cb19f8e refs/heads/main`.
+- Follow-up record-sync commit `93a2abf Record model cost guard backup`
+  updates memory to the verified `43f9092` checkpoint, but its first
+  `git push origin main` failed with `Recv failure: Connection was reset`, and
+  the immediate `git ls-remote --heads origin main` failed with the same reset
+  error. This is GitHub transport metadata only and does not require human
+  `ok.txt`; the latest verified substantive remote backup remains `43f9092`.
 - Current main-results boundary cleanup removes stale "future unfilled cells /
   planning placeholders" wording from `scripts/build_real_reuse_paper_tables.py`
   and regenerated `results/real_reuse/main_results_plan.{md,json}`. It also

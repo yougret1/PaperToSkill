@@ -139,6 +139,13 @@ This file is intentionally compact. Detailed chronological history lives in
   and 0 failures, and full unit discovery reports 210 tests OK. `git push
   origin main` succeeded, and `git ls-remote --heads origin main` verified
   `43f9092c32a614d882199d5111fe21cc5cb19f8e refs/heads/main`.
+- Follow-up record-sync commit `93a2abf Record model cost guard backup`
+  updates memory to the verified `43f9092` remote-backed checkpoint. Its first
+  `git push origin main` failed with `Recv failure: Connection was reset`, and
+  the immediate `git ls-remote --heads origin main` failed with the same reset
+  error. Treat this as GitHub transport metadata only; no human `ok.txt` is
+  required, and the latest verified substantive remote backup remains
+  `43f9092c32a614d882199d5111fe21cc5cb19f8e refs/heads/main`.
 - Follow-up record-sync commit `45ef25b Sync remote checkpoint after LLM handoff
   guard` and blocker note `0538ef1 Record checkpoint sync push blocker`
   initially failed to back up because GitHub HTTPS transport was unavailable.
