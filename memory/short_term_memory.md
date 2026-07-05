@@ -14,8 +14,9 @@ Current date: 2026-07-05.
   `research/run_logs/**` or `research/stage_log.md` during record-sync-only
   work.
 - Current save target status: GitHub backup recovered again and was verified
-  through the human-fidelity handoff save. The latest verified substantive
-  phase checkpoint is
+  through the human-fidelity handoff save, but the latest resume-memory sync
+  commit is local-only after a new GitHub transport failure. The latest
+  verified remote substantive phase checkpoint is
   `206fa5c8eb6ec32855f5d2b3b932129b33cada33 refs/heads/main`
   (`206fa5c Request human fidelity annotation`). This remote-backed chain now
   includes the SNAP executable-candidate prompt packets, phase111/phase112
@@ -28,12 +29,15 @@ Current date: 2026-07-05.
   later phase save is remote-backed, rerun `git status -sb`,
   `git log -5 --oneline`, and `git ls-remote --heads origin main`.
 - Current resume verification on 2026-07-05: `ok.txt` is absent, local
-  `main` is aligned with `origin/main` at `206fa5c`, and strict gates passed
-  for real-reuse benchmark, paper tables, paper claims, usage examples, AAAI
-  package, submission review, reproducibility package, goal completion, and
-  AAAI submission decision. The working tree was clean before this memory
-  sync. Goal status remains externally blocked on human-fidelity annotation
-  and the follow-on AAAI final decision.
+  strict gates passed for real-reuse benchmark, paper tables, paper claims,
+  usage examples, AAAI package, submission review, reproducibility package,
+  goal completion, and AAAI submission decision. The memory-sync commit is
+  `4532dd9 Sync resume checkpoint memory`; `git push origin main` then failed
+  with `Recv failure: Connection was reset`, and `git ls-remote --heads origin
+  main` failed with `Failed to connect to github.com port 443 after 21100 ms`.
+  Current local state is `main...origin/main [ahead 1]`. Goal status remains
+  externally blocked on human-fidelity annotation and the follow-on AAAI final
+  decision.
 - Current record-sync continuation tightens
   `scripts/check_submission_review.py` so review/rebuttal/submission handoff
   files must carry exact current gate counts for goal/package, AAAI package,

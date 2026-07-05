@@ -76,6 +76,13 @@ This file is intentionally compact. Detailed chronological history lives in
   `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming a later phase is
   remote-backed.
+- Current local-only checkpoint after the latest resume is `4532dd9 Sync
+  resume checkpoint memory`. It records the current resume verification and
+  memory cleanup, but `git push origin main` failed with `Recv failure:
+  Connection was reset`, and `git ls-remote --heads origin main` failed with
+  `Failed to connect to github.com port 443 after 21100 ms`. Current local
+  state is `main...origin/main [ahead 1]`; remote remains verified only through
+  `206fa5c` until a later push succeeds.
 
 ## Evidence Boundary
 
