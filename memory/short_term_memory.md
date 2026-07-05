@@ -49,13 +49,18 @@ Current date: 2026-07-05.
   `git ls-remote --heads origin main` failed with
   `Failed to connect to github.com port 443 after 21087 ms`. This is GitHub
   transport metadata only, not experiment correctness, and it does not require
-  a human `ok.txt`.
+  a human `ok.txt`. A later push recovered after local phase commit
+  `eab454d Align failure branch claim evidence matrix`, and
+  `git ls-remote --heads origin main` verified
+  `eab454dfb8699d25636b8c9fafdaa2cb010b5db5 refs/heads/main`.
 - Current local/remote status after this resume check: the latest verified
   remote backup is
-  `bcd210429b4e82a7aa8016a3d82283966728c604 refs/heads/main`
-  (`bcd2104 Record grounding gate backup checkpoint`). The earlier
-  checkpoint-detail/blocker records and the grounding-gate evidence sync are
-  now included in the verified remote chain. Earlier and current
+  `eab454dfb8699d25636b8c9fafdaa2cb010b5db5 refs/heads/main`
+  (`eab454d Align failure branch claim evidence matrix`). The earlier
+  checkpoint-detail/blocker records, grounding-gate evidence sync,
+  quality-grounding table completion, blocker record, failure-branch
+  claim-source cleanup, and claim-evidence-matrix boundary sync are now
+  included in the verified remote chain. Earlier
   `git ls-remote --heads origin main` failures on 2026-07-05 remain historical
   transport metadata; use `git status -sb`, `git log -5 --oneline`, and a fresh
   `git ls-remote --heads origin main` before making any later remote-backed
@@ -63,8 +68,8 @@ Current date: 2026-07-05.
 - Current resume baseline: GitHub backup had recovered and was verified
   through the resume-memory baseline clarification before this continuation's
   record-sync edits. The latest locally recorded remote checkpoint is:
-  `bcd210429b4e82a7aa8016a3d82283966728c604 refs/heads/main`
-  (`bcd2104 Record grounding gate backup checkpoint`). That remote-backed chain
+  `eab454dfb8699d25636b8c9fafdaa2cb010b5db5 refs/heads/main`
+  (`eab454d Align failure branch claim evidence matrix`). That remote-backed chain
   includes the SNAP executable-candidate prompt packets, phase111/phase112
   diagnostic generation/execution artifacts, the tightened submission-review
   count-check gate, the updated AAAI phase112 SNAP-T1 executable-candidate
@@ -72,8 +77,10 @@ Current date: 2026-07-05.
   SNAP diagnostic sync, the human-fidelity annotation request, and the current
   resume-memory checkpoint/blocker/recovery/baseline records plus the
   checkpoint-record guard commits, the checkpoint-detail and blocker-record
-  commits, the grounding-gate evidence sync, and the follow-up checkpoint
-  record. Earlier `Recv failure: Connection was reset` and port-443 failures
+  commits, the grounding-gate evidence sync, the follow-up checkpoint record,
+  the quality-grounding table completion, the push-blocker record, the
+  failure-branch claim-source cleanup, and the claim-evidence-matrix boundary
+  sync. Earlier `Recv failure: Connection was reset` and port-443 failures
   remain historical GitHub transport metadata, not experiment correctness.
   Treat a future successful `git ls-remote` as the authority before claiming
   any new remote-backed phase.
@@ -91,10 +98,10 @@ Current date: 2026-07-05.
   `4d2e040 Clarify resume remote memory baseline`, followed by
   `ac3926c Guard current remote checkpoint records` and the guard-baseline fix;
   later push verification now includes the checkpoint-detail/blocker records,
-  the grounding-gate evidence sync, and the follow-up checkpoint record. Current
-  local state is ahead of `origin/main` by the quality-grounding table
-  completion, claim-boundary cleanup, and blocker-record continuation until a
-  future push succeeds. Goal status remains externally blocked on
+  the grounding-gate evidence sync, the follow-up checkpoint record, the
+  quality-grounding table completion, the failure-branch claim-boundary
+  cleanup, and the claim-evidence-matrix boundary sync through `eab454d`.
+  Goal status remains externally blocked on
   human-fidelity annotation and the follow-on AAAI final decision.
 - Current record-sync continuation tightens
   `scripts/check_submission_review.py` so review/rebuttal/submission handoff

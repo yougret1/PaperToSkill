@@ -35,8 +35,8 @@ recovered again. The latest verified remote checkpoint before claiming any
 later phase save is:
 
 ```text
-bcd210429b4e82a7aa8016a3d82283966728c604 refs/heads/main
-bcd2104 Record grounding gate backup checkpoint
+eab454dfb8699d25636b8c9fafdaa2cb010b5db5 refs/heads/main
+eab454d Align failure branch claim evidence matrix
 ```
 
 The previously unbacked local commits are now remote-backed through the SNAP
@@ -76,6 +76,10 @@ ac3926c Guard current remote checkpoint records
 7c611f3 Record checkpoint guard push blocker
 951a7b2 Fill real-reuse grounding gate evidence
 bcd2104 Record grounding gate backup checkpoint
+a04c757 Fill quality grounding table evidence
+3ef89a6 Record quality table push blocker
+cb52fe2 Bound failure branch reproducibility claim
+eab454d Align failure branch claim evidence matrix
 ```
 
 Earlier `Recv failure: Connection was reset` and github.com port 443 failures
@@ -85,17 +89,17 @@ The later local record-sync commit after `fb0baed` and the phase112 completion
 commit are now remote-backed. The later submission-review and AAAI paper-text
 sync commits, auxiliary draft/outline sync, human-fidelity request,
 resume-memory records, and checkpoint-record guard baseline are also
-remote-backed through `bcd2104`, including the checkpoint-detail,
-blocker-record, grounding-gate evidence-sync, and follow-up checkpoint-record
-commits. Earlier `git ls-remote --heads origin main` failures remain transport
-history.
+remote-backed through `eab454d`, including the checkpoint-detail,
+blocker-record, grounding-gate evidence-sync, follow-up checkpoint-record,
+quality-grounding table, claim-boundary cleanup, and claim-evidence-matrix
+boundary-sync commits. Earlier `git ls-remote --heads origin main` failures
+remain transport history.
 Always inspect `git status -sb` and `git log -5 --oneline` before claiming a
 clean phase save.
 
-Local-only continuation note: the quality-grounding table completion,
-claim-boundary cleanup, and blocker-record continuation are pending remote
-backup after GitHub HTTPS transport failed with connection-reset and port-443
-errors.
+Local-only continuation note: no repository commit is local-only at the
+`eab454d` checkpoint. If a later record-sync commit is made, verify it with a
+fresh push and `git ls-remote` before claiming it as remote-backed.
 
 Re-run remote verification before making future remote-backed checkpoint
 claims.
