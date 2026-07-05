@@ -60,7 +60,10 @@ Current date: 2026-07-05.
   `research/run_logs/2026-07-05_phase114_claude_direct_availability_recheck.md`
   records the command boundary. This is provider availability metadata only;
   do not score the six pending Claude-family real-reuse LLM-ablation rows as
-  negative.
+  negative. The phase-save commit
+  `a9857b1 Record Claude availability recheck` was pushed, and
+  `git ls-remote --heads origin main` verified
+  `a9857b1c296c6e866fe41a9aa8422b69e2bb4f0a refs/heads/main`.
 - Current non-network continuation after the resume/thread review updates
   `research/real_reuse_experiment_plan.md` Table 6 with existing quality and
   grounding evidence for AIDE, SWE-agent, Reflexion, SnapATAC2, Toolformer
@@ -123,7 +126,15 @@ Current date: 2026-07-05.
   GitHub retry pushed the follow-up record-sync and Claude availability
   commits, and `git ls-remote --heads origin main` verified
   `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`.
-- Current local/remote status after this resume check: the latest verified
+- Current local/remote status override after phase114: the latest locally recorded remote checkpoint is
+  `a9857b1c296c6e866fe41a9aa8422b69e2bb4f0a refs/heads/main`
+  (`a9857b1 Record Claude availability recheck`). The working tree was clean
+  against `origin/main` immediately after that push/verify. Older current-status
+  bullets in this file are historical checkpoints only; use fresh
+  `git status -sb`, `git log -5 --oneline`, and
+  `git ls-remote --heads origin main` before claiming any later remote-backed
+  phase.
+- Historical local/remote status after the resume check: the then-latest verified
   remote backup is
   `e1709d3bb965df9df8768271c419467266902474 refs/heads/main`
   (`e1709d3 Record SNAP-T2 availability push blocker`). The earlier
@@ -142,9 +153,9 @@ Current date: 2026-07-05.
   transport metadata; use `git status -sb`, `git log -5 --oneline`, and a fresh
   `git ls-remote --heads origin main` before making any later remote-backed
   claim.
-- Current resume baseline: GitHub backup had recovered and was verified
+- Historical resume baseline: GitHub backup had recovered and was verified
   through the resume-memory baseline clarification before this continuation's
-  record-sync edits. The latest locally recorded remote checkpoint is:
+  record-sync edits. The then-recorded remote checkpoint was:
   `e1709d3bb965df9df8768271c419467266902474 refs/heads/main`
   (`e1709d3 Record SNAP-T2 availability push blocker`). That remote-backed chain
   includes the SNAP executable-candidate prompt packets, phase111/phase112

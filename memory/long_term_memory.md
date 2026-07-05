@@ -65,30 +65,20 @@ This file is intentionally compact. Detailed chronological history lives in
   If a network/download problem blocks a core asset or phase save, record the
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
-- Latest verified remote checkpoint after the current resume recovery is
-  `e1709d3bb965df9df8768271c419467266902474 refs/heads/main`
-  (`e1709d3 Record SNAP-T2 availability push blocker`). The previous local-only
-  record-sync commits after the SNAP diagnostic phase, the submission-review count-check save,
-  the AAAI phase112 SNAP-T1 paper-text synchronization, the draft/outline
-  sync, the human-fidelity annotation request, and the resume-memory
-  checkpoint/blocker/recovery/baseline records are now remote-backed in the
-  local `origin/main` tracking ref through `e1709d3`. This includes the
-  checkpoint-detail/blocker records, grounding-gate evidence sync,
-  quality-grounding table completion, blocker-record continuation,
-  failure-branch claim-boundary cleanup, claim-evidence-matrix boundary
-  sync, recovered checkpoint record, push-blocker record, Claude direct
-  availability recheck, recovered Claude backup checkpoint, deferred-study
-  table marking, recovered deferred-table backup record, and the
-  deferred-backup push-blocker record, recovered deferred backup push record,
-  refreshed Claude availability probe metadata, and Claude-probe push-blocker
-  record, plus the recovered Claude-probe backup record, the real-reuse
-  claim-checklist boundary sync, the SNAP-T2 executable-candidate availability
-  record, and the SNAP-T2 availability push-blocker record. Earlier connection-reset and
-  port-443 failures remain GitHub transport metadata, not
-  experiment-correctness evidence. Verify the exact current local/remote state
-  with `git status -sb`, `git log -5 --oneline`, and a successful
-  `git ls-remote --heads origin main` before claiming any later phase is
-  remote-backed.
+- Latest verified remote checkpoint after the phase114 Claude availability
+  recheck is
+  `a9857b1c296c6e866fe41a9aa8422b69e2bb4f0a refs/heads/main`
+  (`a9857b1 Record Claude availability recheck`). The working tree was clean
+  against `origin/main` immediately after that push/verify. This checkpoint
+  includes the earlier SNAP-T2 availability/package-gate artifacts plus the
+  Claude-family direct availability recheck in which `claude-opus-4-8`,
+  `claude-opus-4-7`, and `claude-opus-4-6` all still returned provider HTTP
+  502. Treat those 502s as provider availability metadata, not model-quality
+  evidence or scored real-reuse failures. Older named checkpoint notes in this
+  memory are historical recovery checkpoints.
+  Verify the exact current local/remote state with `git status -sb`,
+  `git log -5 --oneline`, and a successful `git ls-remote --heads origin main`
+  before claiming any later phase is remote-backed.
 - Current resume checkpoint commits are `4532dd9 Sync resume checkpoint
   memory`, `bf95213 Record resume memory push blocker`, `69d23b1 Record
   recovered resume memory backup`, `f1c50d5 Sync resume baseline memory`, and
