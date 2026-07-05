@@ -61,6 +61,13 @@ origin main` verified that recovery. The later paper-conclusion boundary sync
 advanced and verified `e57df72`, the checkpoint above. Treat the earlier
 failures as transport metadata only.
 
+A follow-up record-sync/blocker chain records the verified `e57df72`
+paper-conclusion boundary checkpoint in memory/runbook/goal-audit reports. Its
+first `git push origin main` and immediate `git ls-remote --heads origin main`
+both failed with `Recv failure: Connection was reset`. Treat this as GitHub
+transport metadata only; keep the remote-backed baseline at `e57df72` until a
+later push and remote check succeed.
+
 Follow-up commits `45ef25b Sync remote checkpoint after LLM handoff guard` and
 `0538ef1 Record checkpoint sync push blocker` first failed to back up because
 GitHub HTTPS transport was unavailable. They are now included in the verified

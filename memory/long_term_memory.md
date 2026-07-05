@@ -201,6 +201,13 @@ This file is intentionally compact. Detailed chronological history lives in
   expand real-reuse runs. `git push origin main` succeeded, and `git ls-remote
   --heads origin main` verified
   `e57df723bb8bc147626a6769cb2e765311ad6e13 refs/heads/main`.
+- A follow-up record-sync/blocker chain updates memory, runbook, goal audit, and
+  goal-completion report records to the verified `e57df72` paper-conclusion
+  boundary checkpoint. Its first `git push origin main` and immediate
+  `git ls-remote --heads origin main` both failed with `Recv failure:
+  Connection was reset`. Treat this as GitHub transport metadata only; keep the
+  remote-backed baseline at `e57df72` until a later push and independent remote
+  check succeed.
 - Follow-up record-sync commit `45ef25b Sync remote checkpoint after LLM handoff
   guard` and blocker note `0538ef1 Record checkpoint sync push blocker`
   initially failed to back up because GitHub HTTPS transport was unavailable.

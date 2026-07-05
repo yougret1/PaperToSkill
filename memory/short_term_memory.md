@@ -193,6 +193,13 @@ Current date: 2026-07-06.
   generically repeat/expand real-reuse runs. The AAAI PDF was rebuilt to 8
   pages; strict paper-claim, AAAI-package, paper-table, submission-review,
   package, and goal-completion gates passed.
+- A follow-up local record-sync/blocker chain updates memory/runbook/goal-audit/
+  goal-completion reports to the verified `e57df72` paper-conclusion boundary
+  checkpoint. Its first `git push origin main` failed with `Recv failure:
+  Connection was reset`, and the immediate `git ls-remote --heads origin main`
+  failed with the same reset error. Treat this as GitHub transport metadata
+  only; do not advance the remote-backed baseline beyond `e57df72` until a
+  later push/remote check succeeds.
 - Current main-results boundary cleanup removes stale "future unfilled cells /
   planning placeholders" wording from `scripts/build_real_reuse_paper_tables.py`
   and regenerated `results/real_reuse/main_results_plan.{md,json}`. It also
@@ -1015,7 +1022,11 @@ Current date: 2026-07-06.
 6. Latest substantive remote-backed checkpoint before further edits:
    `e57df72 Align paper conclusion with locked-row evidence`, verified at
    `e57df723bb8bc147626a6769cb2e765311ad6e13 refs/heads/main`.
-7. No experiment-side human action is required for GitHub status right now.
+7. A local record-sync/blocker chain is currently ahead of `origin/main`
+   because both `git push origin main` and `git ls-remote --heads origin main`
+   hit `Recv failure: Connection was reset`; this is GitHub transport metadata
+   only.
+8. No experiment-side human action is required for GitHub status right now.
    Continue non-network paper/evidence work and verify remote alignment again
    before claiming any later phase save is remote-backed.
 
