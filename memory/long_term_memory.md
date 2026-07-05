@@ -83,7 +83,8 @@ This file is intentionally compact. Detailed chronological history lives in
   `5aa4195f4636c1d8c5994ee1eb6c4f6949279eb8 refs/heads/main`
   (`5aa4195 Sync model response cost boundary`). This checkpoint includes the
   limitations claim gate that covers `paper/limitations.md` with 51 ready
-  checks / 0 failed checks, the full 209-test verification for that gate, and
+  paper-claim checks / 0 failed checks, the full 209-test verification for
+  that gate, and
   the follow-up paper-facing cost-boundary sync that states the saved-response
   output-token proxy covers six Claude/GPT-family/DeepSeek model-ablation rows
   with 9,594 `o200k_base` output tokens. It also includes the earlier outline
@@ -127,6 +128,13 @@ This file is intentionally compact. Detailed chronological history lives in
   `git ls-remote --heads origin main` verified
   `5aa4195f4636c1d8c5994ee1eb6c4f6949279eb8 refs/heads/main`. Treat the
   earlier failures as GitHub transport metadata only.
+- Current follow-up guard phase extends the paper-claim checker with a stale
+  saved-response cost-scope pattern so paper-facing text cannot revert to
+  Claude/GPT-family-only wording for evidence that now covers
+  Claude/GPT-family/DeepSeek rows. It refreshes the paper-claim/package/
+  submission-review records to 56 ready paper-claim checks and 0 failures, and
+  full unit discovery now reports 210 tests OK. Verify the exact current
+  commit and remote state before calling this follow-up phase remote-backed.
 - Follow-up record-sync commit `45ef25b Sync remote checkpoint after LLM handoff
   guard` and blocker note `0538ef1 Record checkpoint sync push blocker`
   initially failed to back up because GitHub HTTPS transport was unavailable.
@@ -833,10 +841,11 @@ Use these as entry points instead of searching the whole repo first:
   consistency checks.
 - Paper claims:
   `results/reproducibility/paper_claim_report.md`
-  reports ready, 51 ready checks, 0 failed checks. It checks the AAAI body,
+  reports ready, 56 ready checks, 0 failed checks. It checks the AAAI body,
   AAAI table file, Markdown draft, paper outline, and limitations text for
-  overclaims, required boundaries, and draft/planning language, including stale
-  Claude-family completion wording in limitations.
+  overclaims, required boundaries, draft/planning language, stale
+  Claude-family completion wording in limitations, and stale model-response
+  cost-scope wording.
 - Submission-review handoff:
   `results/reproducibility/submission_review_report.md`
   reports ready, 18 ready checks, 0 failed checks after adding a current

@@ -69,7 +69,7 @@ used as boundary evidence rather than aggregate downstream-effectiveness proof.
 
 | Gate | Status | Evidence |
 | --- | --- | --- |
-| Claim-evidence consistency | Pass with caveats | `paper/claim_checklist.md`; `research/claim_evidence_matrix.md`; `results/reproducibility/paper_claim_report.md`: 51 ready, 0 failed; includes AAAI table-file, outline, and limitations checks |
+| Claim-evidence consistency | Pass with caveats | `paper/claim_checklist.md`; `research/claim_evidence_matrix.md`; `results/reproducibility/paper_claim_report.md`: 56 ready, 0 failed; includes AAAI table-file, outline, limitations, and stale cost-scope checks |
 | Local reproducibility package | Pass locally, external evidence pending | `results/reproducibility/package_report.md`: 468 ready, 1 pending, 0 failed |
 | Active-goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 78 ready, 3 pending, 0 failed |
 | External evidence closure queue | Ready as local queue | `results/external_evidence_closure/closure.md`: 3 ready, 0 pending, 0 failed |

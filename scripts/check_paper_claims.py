@@ -82,6 +82,11 @@ FORBIDDEN_PATTERNS = [
         "detail": "Do not claim the latest Claude-family recheck completed; current Claude-family refreshes are provider-blocked and scored rows come from earlier saved responses.",
     },
     {
+        "id": "stale_model_response_cost_scope",
+        "pattern": r"\b(saved-response\s+)?output-token\s+proxy[^.\n]{0,180}\bsaved\s+Claude/GPT-family\s+model-ablation\s+responses\b",
+        "detail": "Do not describe the current saved-response output-token proxy as Claude/GPT-family-only; current evidence covers Claude/GPT-family/DeepSeek rows.",
+    },
+    {
         "id": "submission_final",
         "pattern": r"\b(submission-final|accepted by AAAI|AAAI acceptance|camera-ready)\b",
         "detail": "Do not claim submission-final or acceptance status.",

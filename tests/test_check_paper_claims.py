@@ -41,7 +41,7 @@ class CheckPaperClaimsTest(unittest.TestCase):
 
             report = json.loads(output_json.read_text(encoding="utf-8"))
             self.assertEqual("ready", report["overall_status"])
-            self.assertEqual(51, report["status_counts"]["ready"])
+            self.assertEqual(56, report["status_counts"]["ready"])
             self.assertEqual(0, report["status_counts"]["fail"])
             ready_ids = {check["id"] for check in report["checks"] if check["status"] == "ready"}
             self.assertIn("paper_claim_boundary_curated_scope", ready_ids)
@@ -51,6 +51,7 @@ class CheckPaperClaimsTest(unittest.TestCase):
             self.assertIn("paper_claim_no_outline_md_draft_planning_language", ready_ids)
             self.assertIn("paper_claim_target_limitations_md", ready_ids)
             self.assertIn("paper_claim_no_limitations_md_stale_claude_completion", ready_ids)
+            self.assertIn("paper_claim_no_outline_md_stale_model_response_cost_scope", ready_ids)
             self.assertTrue(output_md.exists())
 
     def test_unbounded_live_transfer_claim_fails(self):
@@ -168,6 +169,35 @@ class CheckPaperClaimsTest(unittest.TestCase):
             statuses = {check["id"]: check["status"] for check in report["checks"]}
             self.assertEqual("fail", report["overall_status"])
             self.assertEqual("fail", statuses["paper_claim_no_limitations_md_stale_claude_completion"])
+
+    def test_stale_model_response_cost_scope_in_outline_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_root = Path(tmp)
+            tmp_aaai = tmp_root / "paper" / "aaai" / "papertoskill_aaai2027.tex"
+            tmp_tables = tmp_root / "paper" / "aaai" / "papertoskill_tables.tex"
+            tmp_draft = tmp_root / "paper" / "draft.md"
+            tmp_outline = tmp_root / "paper" / "outline.md"
+            tmp_limitations = tmp_root / "paper" / "limitations.md"
+            tmp_aaai.parent.mkdir(parents=True)
+            shutil.copyfile(AAAI_TEX, tmp_aaai)
+            shutil.copyfile(AAAI_TABLES, tmp_tables)
+            shutil.copyfile(DRAFT_MD, tmp_draft)
+            shutil.copyfile(OUTLINE_MD, tmp_outline)
+            shutil.copyfile(LIMITATIONS_MD, tmp_limitations)
+
+            text = tmp_outline.read_text(encoding="utf-8")
+            text = text.replace(
+                "Local output-token proxy for saved Claude/GPT-family/DeepSeek model-ablation responses",
+                "Local output-token proxy for saved Claude/GPT-family model-ablation responses",
+                1,
+            )
+            tmp_outline.write_text(text, encoding="utf-8")
+
+            report = build_report(tmp_root)
+
+            statuses = {check["id"]: check["status"] for check in report["checks"]}
+            self.assertEqual("fail", report["overall_status"])
+            self.assertEqual("fail", statuses["paper_claim_no_outline_md_stale_model_response_cost_scope"])
 
 
 if __name__ == "__main__":

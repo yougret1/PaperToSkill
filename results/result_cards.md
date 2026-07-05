@@ -691,10 +691,11 @@
 - Experiment: add an automated local gate that scans paper-facing text for
   unsupported overclaims and required evidence-boundary statements.
 - Main result: `results/reproducibility/paper_claim_report.md` reports
-  `overall_status=ready`, 51 ready checks, and 0 failed checks.
+  `overall_status=ready`, 56 ready checks, and 0 failed checks.
 - Checks: absence of unsupported positive claims about arbitrary-PDF
   automation, live transfer success, human validation, provider billing,
-  completed model ablations, and submission-final status; absence of
+  completed model ablations, stale model-response cost scope, and
+  submission-final status; absence of
   paper-facing draft/planning language in the AAAI body, AAAI table file,
   Markdown draft, paper outline, and limitations text; presence of required boundaries for
   curated scope, PDF automation, live transfer, human fidelity, cost proxy, and

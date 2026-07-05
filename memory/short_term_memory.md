@@ -66,7 +66,7 @@ Current date: 2026-07-06.
   `check_aaai_submission_decision.py --strict`, `git diff --check` with only
   CRLF warnings, a long `sk-...` raw-key scan with no matches, and no diff
   under `research/run_logs/**` or `research/stage_log.md`. Latest refreshed
-  report counts: paper claims `51 ready / 0 failed`, package `468 ready / 1 pending /
+  report counts: paper claims `56 ready / 0 failed`, package `468 ready / 1 pending /
   0 failed`, AAAI package `20 ready / 0 failed`, paper tables `343 ready / 0
   failed`, submission review `18 ready / 0 failed`, goal completion `78 ready /
   3 pending / 0 failed`. Human-fidelity annotation remains pending; `ok.txt`
@@ -80,7 +80,7 @@ Current date: 2026-07-06.
   measured-cost protocols. This does not change experiment scores, main-row
   selection, or paper claims. Focused claim/package/submission/goal tests,
   related strict gates, protected-log/main-selection scans, raw-key scan, and
-  full unit discovery passed; full unit discovery reports 209 tests OK. The
+  full unit discovery passed; full unit discovery reported 209 tests OK. The
   phase-save commit is `8449799 Guard limitations claim boundary`. Its first
   `git push origin main` failed with `Recv failure: Connection was reset`, and
   the immediate `git ls-remote --heads origin main` failed with `Failed to
@@ -118,6 +118,13 @@ Current date: 2026-07-06.
   gates passed after the wording sync. The phase was saved and pushed as
   `5aa4195 Sync model response cost boundary`; `git ls-remote --heads origin
   main` verified `5aa4195f4636c1d8c5994ee1eb6c4f6949279eb8`.
+- Current follow-up paper-claim regression guard fails if paper-facing text
+  reverts to the stale Claude/GPT-family-only model-response cost scope. It
+  updates current paper-claim records to 56 ready checks and 0 failed checks,
+  and full unit discovery now reports 210 tests OK. This follow-up does not
+  change experiment scores, main-row selection,
+  `results/real_reuse/main_run_selection.json`, or local logs; verify the
+  exact commit and remote state before calling it remote-backed.
 - Current main-results boundary cleanup removes stale "future unfilled cells /
   planning placeholders" wording from `scripts/build_real_reuse_paper_tables.py`
   and regenerated `results/real_reuse/main_results_plan.{md,json}`. It also
