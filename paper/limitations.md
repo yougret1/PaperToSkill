@@ -49,17 +49,21 @@ fidelity, real-data validation, or broad live research-task success. The
 HF/semantic-data branch remains a failed branch because dataset loading was
 invalid and `sentence_transformers` was missing.
 
-### Model Ablations Partially Completed
+### Model Ablations Are Bounded Evidence
 
-Claude/GPT-family/DeepSeek model-ablation prompt packets, a runner, and a
-response evaluator are prepared. The latest live recheck completed both Claude
-Opus 4.8 prompt rows, saved response files, and scored both rows 6/6. A later
-GPT-family protocol refresh saved both rows with `gpt-5.5`, and DeepSeek saved
-both rows with `deepseek-v4-flash`; all six saved rows score 6/6. The latest
-Claude protocol refresh used Anthropic Messages but was blocked by provider
-HTTP 502, so the scored Claude rows come from earlier saved response files.
-These rows are saved-response evidence for the current two-case prompt
-protocol; provider errors are availability history, not model-quality evidence.
+Claude-family/GPT-family/DeepSeek model-ablation prompt packets, a runner, and
+a response evaluator are prepared for the older two-case saved-response
+protocol. GPT-family refreshed both rows with `gpt-5.5`, DeepSeek saved both
+rows with `deepseek-v4-flash`, and the six saved rows score 6/6 in the
+deterministic output-contract evaluator. The latest Claude-family protocol
+refresh used Anthropic Messages but was blocked by provider HTTP 502, so the
+scored Claude-family rows come from earlier saved response files. Separately,
+the real-reuse LLM ablation is only partially collected: GPT-family and
+DeepSeek-family rows are scored for AIDE-T2, SWE-T2, and REF-T2, while the six
+Claude-family real-reuse rows remain provider-pending after HTTP 502. These
+rows are bounded saved-response or auxiliary model-slice evidence; provider
+errors are availability history, not model-quality evidence, and neither
+protocol proves live downstream task success or provider economics.
 
 ### Limited Benchmark Diversity
 
@@ -114,9 +118,9 @@ package should therefore be described as locally ready, not submission-final.
 2. Extend extraction from curated notes toward raw PDF ingestion with stronger
    section detection, table handling, citation-aware source maps, and
    multi-paper auto-note validation.
-3. If future economics claims are desired, define a separate billing protocol
-   with provider-specific prices, live invoices, realized output-token bills,
-   and success-per-dollar accounting before making those claims.
+3. If future economics claims are desired, define a separate measured-cost
+   protocol with real provider usage exports, explicit denominators, and
+   task-success linkage before making those claims.
 4. Extend the bounded Paper2Agent artifact/workflow comparison into a real
    executable MCP baseline if Paper2Agent setup resources are available.
 5. Expand the benchmark with less procedural papers to test failure modes.

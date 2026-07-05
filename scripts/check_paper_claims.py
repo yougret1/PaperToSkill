@@ -16,6 +16,7 @@ TARGET_FILES = {
     "aaai_tables": "paper/aaai/papertoskill_tables.tex",
     "draft_md": "paper/draft.md",
     "outline_md": "paper/outline.md",
+    "limitations_md": "paper/limitations.md",
 }
 
 NEGATION_CUES = (
@@ -74,6 +75,11 @@ FORBIDDEN_PATTERNS = [
         "id": "unbounded_model_ablation_quality",
         "pattern": r"\b(model[- ]ablation[^.\n]{0,120}(proves|demonstrates)[^.\n]{0,120}(live task success|downstream execution|model quality|provider economics)|all model[- ]ablation experiments are complete)\b",
         "detail": "Do not treat saved-response model-ablation scoring as live task, model-quality, or provider-economics proof.",
+    },
+    {
+        "id": "stale_claude_completion",
+        "pattern": r"\blatest\s+live\s+recheck[^.\n]{0,180}\bcompleted[^.\n]{0,180}\bClaude\b",
+        "detail": "Do not claim the latest Claude-family recheck completed; current Claude-family refreshes are provider-blocked and scored rows come from earlier saved responses.",
     },
     {
         "id": "submission_final",

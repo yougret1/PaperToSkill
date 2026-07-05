@@ -66,14 +66,24 @@ Current date: 2026-07-06.
   `check_aaai_submission_decision.py --strict`, `git diff --check` with only
   CRLF warnings, a long `sk-...` raw-key scan with no matches, and no diff
   under `research/run_logs/**` or `research/stage_log.md`. Latest refreshed
-  report counts: paper claims `38 ready / 0 failed`, package `468 ready / 1 pending /
+  report counts: paper claims `51 ready / 0 failed`, package `468 ready / 1 pending /
   0 failed`, AAAI package `20 ready / 0 failed`, paper tables `343 ready / 0
   failed`, submission review `18 ready / 0 failed`, goal completion `78 ready /
   3 pending / 0 failed`. Human-fidelity annotation remains pending; `ok.txt`
   was absent at resume.
-- Current outline-claim gate sync extends `scripts/check_paper_claims.py` to
+- Current limitations-claim gate sync extends `scripts/check_paper_claims.py` to
+  cover `paper/limitations.md` in addition to the AAAI body, AAAI table file,
+  Markdown draft, and paper outline. `paper_claim_report.md` is now `ready`
+  with 51 ready checks and 0 failed checks. It fails on stale limitations
+  wording that says the latest Claude-family live recheck completed, and it
+  keeps provider-economics claims bounded to local token proxies or future
+  measured-cost protocols. This does not change experiment scores, main-row
+  selection, or paper claims. Focused claim/package/submission/goal tests,
+  related strict gates, protected-log/main-selection scans, raw-key scan, and
+  full unit discovery passed; full unit discovery reports 209 tests OK.
+- Historical outline-claim gate sync extended `scripts/check_paper_claims.py` to
   cover `paper/outline.md` in addition to the AAAI body, AAAI table file, and
-  Markdown draft. `paper_claim_report.md` is now `ready` with 38 ready checks
+  Markdown draft. That stage produced the earlier 38-check report
   and 0 failed checks, and it fails on stale outline planning wording such as
   `Planned: LLM real-reuse ablation` or future `results/real_reuse/` language.
   This does not change experiment scores, main-row selection, or paper claims.

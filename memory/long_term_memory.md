@@ -93,8 +93,8 @@ This file is intentionally compact. Detailed chronological history lives in
   page-limit repair, the draft-language claim gate over the AAAI table file,
   the submission-record sync, the full pre-submission unit-test regression fix,
   refreshed paper/package/submission reports, and memory/runbook
-  synchronization, the paper-outline LLM-ablation status sync, and the new
-  paper-outline claim gate reporting 38 ready checks / 0 failed checks, the
+  synchronization, the paper-outline LLM-ablation status sync, and the earlier
+  38-check paper-outline claim gate, the
   main-results/failure-analysis raw-row provenance refresh to 40 raw rows, and
   the recovered GitHub transport record for `21009eb`.
   Claude-family real-reuse LLM-ablation rows remain
@@ -815,9 +815,10 @@ Use these as entry points instead of searching the whole repo first:
   consistency checks.
 - Paper claims:
   `results/reproducibility/paper_claim_report.md`
-  reports ready, 38 ready checks, 0 failed checks. It checks the AAAI body,
-  AAAI table file, Markdown draft, and paper outline for overclaims, required
-  boundaries, and draft/planning language.
+  reports ready, 51 ready checks, 0 failed checks. It checks the AAAI body,
+  AAAI table file, Markdown draft, paper outline, and limitations text for
+  overclaims, required boundaries, and draft/planning language, including stale
+  Claude-family completion wording in limitations.
 - Submission-review handoff:
   `results/reproducibility/submission_review_report.md`
   reports ready, 18 ready checks, 0 failed checks after adding a current

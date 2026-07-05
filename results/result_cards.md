@@ -691,16 +691,16 @@
 - Experiment: add an automated local gate that scans paper-facing text for
   unsupported overclaims and required evidence-boundary statements.
 - Main result: `results/reproducibility/paper_claim_report.md` reports
-  `overall_status=ready`, 38 ready checks, and 0 failed checks.
+  `overall_status=ready`, 51 ready checks, and 0 failed checks.
 - Checks: absence of unsupported positive claims about arbitrary-PDF
   automation, live transfer success, human validation, provider billing,
   completed model ablations, and submission-final status; absence of
   paper-facing draft/planning language in the AAAI body, AAAI table file,
-  Markdown draft, and paper outline; presence of required boundaries for
+  Markdown draft, paper outline, and limitations text; presence of required boundaries for
   curated scope, PDF automation, live transfer, human fidelity, cost proxy, and
   model-ablation availability.
 - Practical significance: the AAAI manuscript, AAAI table file, Markdown
-  draft, and paper outline can now fail a local gate if future edits
+  draft, paper outline, and limitations text can now fail a local gate if future edits
   accidentally claim evidence that has not been collected or reintroduce
   planning placeholders.
 - Failure modes: this is pattern-based text checking and should be updated if
