@@ -43,7 +43,7 @@
 
 | ID | Question | Command | Expected Output | Blocker |
 | --- | --- | --- | --- | --- |
-| E4 | Can an LLM-assisted extractor improve method-step fidelity over the deterministic scaffold? | TBD after the core real-reuse evidence is stable and after a non-synthetic protocol is defined | paired deterministic vs LLM-assisted generated skills | Needs a real-data protocol and claim boundary, not just endpoint access |
+| E4 | Can an LLM-assisted extractor improve method-step fidelity over the deterministic scaffold? | Deferred future work after paper-facing real-reuse and external-evidence closure; not a current main-paper priority | Future paired deterministic vs LLM-assisted generated skills under a real-data protocol | Needs explicit promotion, a real-data protocol, and a claim boundary; endpoint access alone is insufficient |
 
 ## Next Design Work
 

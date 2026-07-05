@@ -272,9 +272,9 @@ supporting role.
 | Source Paper | Skill Rubric | Source Support Rate | Invalid Source Ranges | Human Fidelity Status | Package Gate |
 | --- | --- | --- | --- | --- | --- |
 | AIDE | Current package value | Current package value | Current package value | Pending unless annotated | Current package gate |
-| SWE-agent | TBD | TBD | TBD | TBD | TBD |
+| SWE-agent | 20/20; 1186 words; 21 anchors (`results/evaluations/swe_agent_rubric_v0.json`) | 1.000 over 20 checked claims (`results/evaluations/swe_agent_auto_source_span_validation_v0.json`) | 0 | Pending unless annotated | Package gate ready (`results/reproducibility/package_report.md`) |
 | Reflexion | Current package value | Current package value | Current package value | Pending unless annotated | Current package gate |
-| SnapATAC2 | TBD | TBD | TBD | TBD | TBD |
+| SnapATAC2 | 20/20; 1091 words; 19 anchors (`results/evaluations/snapatac2_rubric_v0.json`) | 1.000 over 18 checked claims (`results/evaluations/snapatac2_auto_source_span_validation_v0.json`) | 0 | Pending unless annotated | Package gate ready (`results/reproducibility/package_report.md`) |
 | Toolformer sanity | Current package value | Current package value | Current package value | Pending unless annotated | Current package gate |
 | AI Scientist-v2 sanity | Current package value | Current package value | Current package value | Pending unless annotated | Current package gate |
 

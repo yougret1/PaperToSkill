@@ -13,6 +13,15 @@ Current date: 2026-07-05.
   Preserve the existing local-log boundary: do not modify
   `research/run_logs/**` or `research/stage_log.md` during record-sync-only
   work.
+- Current non-network continuation after the resume/thread review updates
+  `research/real_reuse_experiment_plan.md` Table 6 with existing SWE-agent and
+  SnapATAC2 quality/grounding evidence: both rubric scores are 20/20, source
+  support is 1.000, invalid ranges are 0, human fidelity remains pending, and
+  the package gate is ready. It also clarifies `research/experiment_queue.md`
+  E4 as deferred future method work, not a current main-paper priority. This
+  does not change `results/real_reuse/main_run_selection.json`, promote any
+  diagnostic follow-up, or touch `research/run_logs/**` /
+  `research/stage_log.md`.
 - Current local/remote status after this resume check: the latest verified
   remote backup remains
   `3040ce3d4d3a91733f814c6d6fdb412760a77c5f refs/heads/main`
