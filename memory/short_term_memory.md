@@ -222,6 +222,20 @@ Current date: 2026-07-05.
   `git diff --check` with only CRLF warnings, a changed-file raw-key scan with
   no matches, and no diff under `research/run_logs/**` or
   `research/stage_log.md`.
+- Follow-up record-sync commit `db7a0f4 Sync external packet readiness records`
+  updated `research/submission_checklist.md`, `research/runbook.md`,
+  `research/review_report.md`, and `results/result_cards.md` to the 8-ready
+  external-packet count. Its first `git push origin main` failed with
+  `Recv failure: Connection was reset`, and the immediate
+  `git ls-remote --heads origin main` failed with the same reset error. A
+  follow-up local blocker-record commit captured this state; its first
+  `git push origin main` failed with
+  `Failed to connect to github.com port 443 after 21085 ms`, while a fresh
+  `git ls-remote --heads origin main` returned
+  `e038930412867996f63f248c4795eee219d2d20a refs/heads/main`
+  (`e038930 Clarify human evidence handoff packets`). Local `git status -sb`
+  reports `main...origin/main [ahead 2]`. This is GitHub transport metadata
+  only and does not require `ok.txt`.
 - Current record-drift guard continuation adds
   `current_remote_checkpoint_records` to `scripts/check_goal_completion.py`.
   The first implementation compared current-status records directly to the
