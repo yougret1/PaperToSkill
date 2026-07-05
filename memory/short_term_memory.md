@@ -47,9 +47,20 @@ Current date: 2026-07-06.
   `check_submission_review.py --strict`, `check_goal_completion.py --strict`,
   `check_reproducibility_package.py --strict`, `check_aaai_package.py
   --strict`, `check_paper_tables.py --strict`, and
-  `check_usage_examples.py --strict`. A fresh `git push origin main` retry
-  still failed with `Recv failure: Connection was reset`, so local commits
-  remain ahead of `origin/main` until GitHub transport recovers.
+  `check_usage_examples.py --strict`. The outline claim gate was pushed as
+  `73f4d83`, and the follow-up checkpoint record was pushed as `fe499e5`;
+  `git ls-remote --heads origin main` verified
+  `fe499e555723786ce8aba63f7bb3c028ba5c91bc refs/heads/main`.
+- Current main-results boundary cleanup removes stale "future unfilled cells /
+  planning placeholders" wording from `scripts/build_real_reuse_paper_tables.py`
+  and regenerated `results/real_reuse/main_results_plan.{md,json}`. It also
+  refreshes `results/real_reuse/failure_analysis.{md,json}` from the current
+  40-row raw-row ledger while keeping the selected 16 Summary/PaperToSkill main
+  entries locked by `results/real_reuse/main_run_selection.json`. The boundary
+  now says score cells come from row-selection-selected raw rows, and any
+  `Pending` scaffold/pre-run cells indicate missing scored raw rows rather than
+  task-success evidence. This does not change the locked eight main rows, any
+  score, or `results/real_reuse/main_run_selection.json`.
 - Current pre-submission full-test continuation ran
   `python -m unittest discover -s tests -v`. The first run exposed one stale
   regression-test fixture in `tests/test_check_submission_review.py`: the

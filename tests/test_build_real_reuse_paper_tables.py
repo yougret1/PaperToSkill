@@ -58,11 +58,15 @@ class BuildRealReusePaperTablesTest(unittest.TestCase):
             self.assertTrue(output_md.exists())
             self.assertTrue(output_json.exists())
             output_md_text = output_md.read_text(encoding="utf-8")
-            self.assertIn("future unfilled cells are planning placeholders", output_md_text)
-            self.assertNotIn("pending cells", output_md_text.lower())
+            self.assertIn("selected by the row-selection file", output_md_text)
+            self.assertIn("Pending scaffold/pre-run cells mark missing scored raw rows", output_md_text)
+            self.assertNotIn("future unfilled cells", output_md_text)
+            self.assertNotIn("planning placeholders", output_md_text)
             output_json_payload = json.loads(output_json.read_text(encoding="utf-8"))
-            self.assertIn("future unfilled cells are planning placeholders", output_json_payload["evidence_boundary"])
-            self.assertNotIn("pending cells", output_json_payload["evidence_boundary"].lower())
+            self.assertIn("selected by the row-selection file", output_json_payload["evidence_boundary"])
+            self.assertIn("Pending scaffold/pre-run cells mark missing scored raw rows", output_json_payload["evidence_boundary"])
+            self.assertNotIn("future unfilled cells", output_json_payload["evidence_boundary"])
+            self.assertNotIn("planning placeholders", output_json_payload["evidence_boundary"])
 
     def test_cli_marks_swe_runner_pending_after_skill_exists(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -1,8 +1,8 @@
 # Real-Reuse Main Results Table
 
-Evidence boundary: this table defines the main real-reuse experiment rows for the paper. Score cells are generated from local raw rows when available; any future unfilled cells are planning placeholders, not downstream task-success evidence.
+Evidence boundary: this table defines the main real-reuse experiment rows for the paper. Score cells are generated from local raw rows selected by the row-selection file; any Pending scaffold/pre-run cells mark missing scored raw rows, not downstream task-success evidence.
 
-- Raw scored rows read: 38
+- Raw scored rows read: 40
 - Row selection file: D:\a_work\gitee\PaperToSkill\results\real_reuse\main_run_selection.json
 - Row selection entries: 16
 - Row selection boundary: Selected run_id values pin paper-facing main rows so diagnostic follow-up rows remain auditable without replacing the main table.

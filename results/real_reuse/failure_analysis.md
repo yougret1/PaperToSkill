@@ -2,7 +2,7 @@
 
 Evidence boundary: this table is derived from scored raw rows and summarizes first-pass boundary modes. It does not add new task success evidence or support aggregate downstream effectiveness.
 
-- Raw scored rows read: 38
+- Raw scored rows read: 40
 - Row selection file: D:\a_work\gitee\PaperToSkill\results\real_reuse\main_run_selection.json
 - Row selection entries: 16
 - Row selection boundary: Selected run_id values pin the paper-facing failure-boundary table to the same main rows as the main real-reuse table.

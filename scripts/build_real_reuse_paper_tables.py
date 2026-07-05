@@ -283,9 +283,10 @@ def write_markdown(
         "# Real-Reuse Main Results Table",
         "",
         "Evidence boundary: this table defines the main real-reuse experiment "
-        "rows for the paper. Score cells are generated from local raw rows when "
-        "available; any future unfilled cells are planning placeholders, not "
-        "downstream task-success evidence.",
+        "rows for the paper. Score cells are generated from local raw rows "
+        "selected by the row-selection file; any Pending scaffold/pre-run "
+        "cells mark missing scored raw rows, not downstream task-success "
+        "evidence.",
         "",
         f"- Raw scored rows read: {raw_row_count}",
         f"- Row selection file: {row_selection_info['path'] or 'not applied'}",
@@ -309,8 +310,9 @@ def write_json(
         "schema_version": "0.1",
         "evidence_boundary": (
             "Paper-facing real-reuse table. Score cells are generated from "
-            "raw_rows.jsonl when available; any future unfilled cells are "
-            "planning placeholders, not task-success evidence."
+            "raw_rows.jsonl rows selected by the row-selection file; any "
+            "Pending scaffold/pre-run cells mark missing scored raw rows, "
+            "not task-success evidence."
         ),
         "raw_row_count": len(raw_rows),
         "row_selection": row_selection_info,
