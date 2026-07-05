@@ -277,6 +277,11 @@ Current date: 2026-07-06.
   failed with `Recv failure: Connection was reset`. This is GitHub transport
   metadata only and does not require a human `ok.txt`; retry remote backup
   later while continuing non-blocked local paper/evidence work.
+- Current non-network paper-outline audit fixed one stale figure/table-plan row
+  in `paper/outline.md`: the real-reuse LLM ablation is now described as an
+  auxiliary collected/pending slice (`llm_ablation_summary.md` and
+  `llm_ablation_family_summary.csv`) rather than as a future planned result.
+  This does not change experiment scores, main-row selection, or paper claims.
 - Recovered record-sync note: `b3441d5 Sync phase115 checkpoint records`,
   `cea43eb Record checkpoint sync push blocker`, and `96fce87 Record SNAP-T2
   phase116 provider block` are now remote-backed through the verified phase116

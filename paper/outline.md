@@ -284,4 +284,4 @@ less directly procedural.
 | Appendix: Paper2Agent artifact comparison | `results/tables/paper2agent_artifact_comparison.md` | Source-backed skill-vs-MCP artifact/workflow positioning table |
 | Real reuse main results | `results/real_reuse/main_results_plan.md`; `results/real_reuse/raw_rows.jsonl` | Eight first-pass Summary-vs-PaperToSkill paper-task rows; mixed downstream and failure-boundary evidence |
 | Real reuse failure analysis | `results/real_reuse/failure_analysis.md`; `results/real_reuse/raw_rows.jsonl` | Derived first-pass boundary modes; not new task-success evidence |
-| Planned: LLM real-reuse ablation | `research/real_reuse_experiment_plan.md`; future `results/real_reuse/` | Cross-model stability of Summary vs PaperToSkill on real tasks |
+| Auxiliary: real-reuse LLM ablation | `results/real_reuse/llm_ablation_summary.md`; `results/real_reuse/llm_ablation_family_summary.csv`; `research/real_reuse_experiment_plan.md` | Cross-model stability slice with GPT-family and DeepSeek-family scored rows and Claude-family provider-pending rows; auxiliary evidence only, not a main-table replacement |
