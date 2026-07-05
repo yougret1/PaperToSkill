@@ -39,6 +39,12 @@ Current date: 2026-07-05.
   `research/run_logs/2026-07-05_phase113_snap_t2_executable_candidate_partial.md`.
   This is provider availability metadata only: it does not execute SNAP-T2,
   append raw rows, replace main rows, or show PaperToSkill advantage.
+  The phase-save commit is
+  `c030015 Record SNAP-T2 executable candidate availability`; its first
+  `git push origin main` failed with `Recv failure: Connection was reset`, and
+  the immediate `git ls-remote --heads origin main` failed with
+  `Failed to connect to github.com port 443 after 21069 ms`. This is GitHub
+  transport metadata only and does not require a human `ok.txt`.
 - Current non-network continuation after the resume/thread review updates
   `research/real_reuse_experiment_plan.md` Table 6 with existing quality and
   grounding evidence for AIDE, SWE-agent, Reflexion, SnapATAC2, Toolformer
