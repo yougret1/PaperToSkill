@@ -28,6 +28,9 @@ Current date: 2026-07-06.
   `18 ready / 0 failed`; package remains `468 ready / 1 pending / 0 failed`,
   and goal completion remains `78 ready / 3 pending / 0 failed`. This does not
   change experiment scores, main-row selection, or any paper claim strength.
+  The phase was saved and pushed as `905899c Guard real-reuse LLM ablation
+  handoff`; `git ls-remote --heads origin main` verified
+  `905899cc8d1a5071ac9b26f8c4e927f266445a35 refs/heads/main`.
 - Current paper-finalization continuation removed draft/planning wording from
   the AAAI main real-reuse table caption: Table 1 now says scores come from the
   eight locked local raw rows selected by `main_run_selection.json`. The claim
@@ -293,18 +296,16 @@ Current date: 2026-07-06.
   GitHub retry pushed the follow-up record-sync and Claude availability
   commits, and `git ls-remote --heads origin main` verified
   `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`.
-- Current local/remote status override after the main-results boundary backup:
-  the latest locally recorded remote checkpoint is
-  `00d32cdab3a35b01ed6cd016de23e21e870b15c7 refs/heads/main`
-  (`00d32cd Record main table boundary push blocker`). This checkpoint includes
-  the AAAI main-page-limit repair, the recovered backup of that repair, the
-  draft-language claim gate over AAAI table text, submission-record sync, the
-  full pre-submission unit-test regression fix, refreshed
-  package/table/submission reports, memory/runbook sync, the record of the
-  temporary `95f1af3`/`66e4763` push blocker, and the paper-outline LLM-ablation
-  status sync, the paper-outline claim-drift gate and 38-check paper-claim
-  report, and the main-results/failure-analysis raw-row provenance refresh to
-  40 raw rows. Older current-status bullets in this file are historical
+- Current local/remote status override after the real-reuse LLM-ablation
+  handoff guard: the latest locally recorded remote checkpoint is
+  `905899cc8d1a5071ac9b26f8c4e927f266445a35 refs/heads/main`
+  (`905899c Guard real-reuse LLM ablation handoff`). This checkpoint includes
+  the submission-review handoff guard that separates older saved-response model
+  ablation from auxiliary real-reuse LLM ablation, the refreshed
+  `18 ready / 0 failed` submission-review report, memory/runbook/result-card
+  synchronization, and the previous recovered chain through `1a7ae8c`,
+  `00d32cd`, and the AAAI page-limit / outline / main-results boundary
+  backups. Older current-status bullets in this file are historical
   checkpoints only; use fresh `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
   phase.
@@ -884,9 +885,9 @@ Current date: 2026-07-06.
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-6. Resume-baseline remote checkpoint before this continuation's memory edits:
-   `69d23b1 Record recovered resume memory backup`, verified at
-   `69d23b1ed7f0bb9e3c3ca4b58fd50796d7f5ab4f refs/heads/main`.
+6. Latest remote-backed checkpoint before further edits:
+   `905899c Guard real-reuse LLM ablation handoff`, verified at
+   `905899cc8d1a5071ac9b26f8c4e927f266445a35 refs/heads/main`.
 7. No experiment-side human action is required for GitHub status right now.
    Continue non-network paper/evidence work and verify remote alignment again
    before claiming any later phase save is remote-backed.

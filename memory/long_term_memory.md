@@ -76,10 +76,15 @@ This file is intentionally compact. Detailed chronological history lives in
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
 - Latest verified substantive checkpoint after the AAAI page-limit,
-  paper-finalization, outline-sync recovery, outline claim-drift gate, and
-  main-results boundary cleanup is
-  `00d32cdab3a35b01ed6cd016de23e21e870b15c7 refs/heads/main`
-  (`00d32cd Record main table boundary push blocker`). This checkpoint includes
+  paper-finalization, outline-sync recovery, outline claim-drift gate,
+  main-results boundary cleanup, and real-reuse LLM-ablation handoff guard is
+  `905899cc8d1a5071ac9b26f8c4e927f266445a35 refs/heads/main`
+  (`905899c Guard real-reuse LLM ablation handoff`). This checkpoint includes
+  the submission-review handoff guard that separates the older saved-response
+  model ablation from the auxiliary real-reuse LLM ablation, the refreshed
+  `18 ready / 0 failed` submission-review report, memory/runbook/result-card
+  synchronization, and the previous recovered checkpoint chain through
+  `1a7ae8c` and `00d32cd`. The earlier `00d32cd` checkpoint includes
   the phase116 SNAP-T2 provider-block chain, the auxiliary family summary table,
   the AAAI page-limit repair, the draft-language claim gate over the AAAI table
   file, the submission-record sync, the full pre-submission unit-test regression
@@ -95,7 +100,7 @@ This file is intentionally compact. Detailed chronological history lives in
   not model-quality evidence or scored real-reuse failures. Older named
   checkpoint notes in this memory are historical recovery checkpoints; the
   earlier failed pushes for `501ffc8`, `48aabac`, `8bdd394`, `95f1af3`, and
-  `66e4763` are historical GitHub transport metadata now that `00d32cd` is
+  `66e4763` are historical GitHub transport metadata now that `905899c` is
   verified remote-backed.
   Verify the exact current local/remote state with `git status -sb`,
   `git log -5 --oneline`, and a successful `git ls-remote --heads origin main`
