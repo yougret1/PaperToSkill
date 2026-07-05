@@ -11,18 +11,17 @@ Current date: 2026-07-05.
   core work toward `C:\Users\19351\Desktop\tem\nextStep.md`. Preserve the
   existing local-log boundary: do not modify `research/run_logs/**` or
   `research/stage_log.md` during record-sync-only work.
-- Current save target status: GitHub backup recovered. The SNAP
-  executable-candidate runner phase and follow-up memory/queue sync are now
-  remote-backed through
-  `0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main`
-  (`0832201 Sync memory after GitHub retry`). A later local record commit,
-  `4b216b6 Record recovered SNAP runner backup`, local record commit
-  `0734bb9 Record renewed GitHub push blocker`, and local SNAP prompt-packet
-  commit `ef8cbe0 Prepare SNAP executable candidate prompts` are not
-  remote-backed yet: the latest `git push origin main` and follow-up
-  `git ls-remote --heads origin main` both failed with `Recv failure:
-  Connection was reset`. These are GitHub transport metadata, not experiment
-  correctness.
+- Current save target status: GitHub backup recovered again. The latest
+  verified remote checkpoint is
+  `db535e7eb344b4aed97f7ba9c3accb266f309d68 refs/heads/main`
+  (`db535e7 Record SNAP diagnostic checkpoint`). This remote-backed chain now
+  includes the SNAP executable-candidate prompt packets, phase111/phase112
+  diagnostic generation/execution artifacts, and memory checkpoint records.
+  A later local record-sync commit after `db535e7` is not remote-backed yet:
+  `git push origin main` and the follow-up `git ls-remote --heads origin main`
+  both failed to connect to github.com port 443 after about 211xx ms.
+  Earlier `Recv failure: Connection was reset` failures remain historical
+  GitHub transport metadata, not experiment correctness.
 - Current local phase commit `77e8ada` implements the SNAP executable-candidate
   runner/checker/test path:
   `scripts/run_real_reuse_snapatac2_executable_candidate.py`,
@@ -137,11 +136,10 @@ Current date: 2026-07-05.
   dedicated CSV/MD/JSON table, builder/test, paper table, rebuilt AAAI PDF, and
   table/package checker/report updates.
 - Current remote-backup status: GitHub backup is verified through
-  `0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main`
-  (`0832201 Sync memory after GitHub retry`). The previously unbacked local
-  commits `77e8ada`, `0983fbc`, `c4b4b99`, `2490a9b`, and `0832201` are now
-  remote-backed. Local commits `4b216b6`, `0734bb9`, and `ef8cbe0` are ahead
-  of `origin/main` and await remote backup recovery.
+  `db535e7eb344b4aed97f7ba9c3accb266f309d68 refs/heads/main`
+  (`db535e7 Record SNAP diagnostic checkpoint`). The previously unbacked local
+  commits from `4b216b6` through the SNAP diagnostic record are now
+  remote-backed.
 - The current discussion policy is: stabilize the core eight-row real-reuse
   evidence first; collect auxiliary raw data opportunistically; keep LLM
   ablation auxiliary, component ablation appendix-only, and user study
@@ -152,14 +150,14 @@ Current date: 2026-07-05.
   exact GitHub push / remote-check transport errors. It no longer asks the
   user to create `ok.txt` for GitHub status; `ok.txt` is reserved for completed
   human-fidelity annotation or a concrete placed core real-reuse asset.
-- The committed chain through `0832201 Sync memory after GitHub retry`
+- The committed chain through `db535e7 Record SNAP diagnostic checkpoint`
   is pushed to `origin/main` and verified by `git ls-remote --heads origin
   main` as
-  `0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main`. This includes
+  `db535e7eb344b4aed97f7ba9c3accb266f309d68 refs/heads/main`. This includes
   the earlier recovered GitHub backup records, real-reuse boundary tightening,
-  SNAP executable-candidate runner, and memory/queue sync. Earlier GitHub HTTPS
-  transport failures are availability metadata, not experiment-correctness
-  evidence.
+  SNAP executable-candidate runner, prompt packets, phase111/phase112
+  diagnostic artifacts, and memory/queue sync. Earlier GitHub HTTPS transport
+  failures are availability metadata, not experiment-correctness evidence.
 - Verification before the `599382d` phase save passed:
   `python -m unittest tests.test_build_real_reuse_swe_t1_issue_aligned_followup
   tests.test_check_paper_tables tests.test_check_reproducibility_package -v`,
@@ -175,7 +173,7 @@ Current date: 2026-07-05.
   annotation or a concrete placed core asset.
 - Current GitHub transport note: previous 2026-07-05 connection-reset /
   port-443 failures recovered again. Current verified remote state is
-  `0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main`. Before claiming
+  `db535e7eb344b4aed97f7ba9c3accb266f309d68 refs/heads/main`. Before claiming
   any later phase save is remote-backed, rerun `git status -sb`,
   `git log -5 --oneline`, and `git ls-remote --heads origin main`.
 - Historical Claude-family availability checkpoint: after record-sync commit
@@ -358,15 +356,12 @@ Current date: 2026-07-05.
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-6. Latest substantive local SNAP prompt phase commit:
-   `ef8cbe0 Prepare SNAP executable candidate prompts` (not remote-backed yet
-   due GitHub HTTPS reset). A follow-up local record commit may exist only to
-   preserve the push-blocker status. Latest verified
-   remote-backed checkpoint:
-   `0832201 Sync memory after GitHub retry`, verified at
-   `0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main`.
-7. No experiment-side human action is required; retry GitHub backup when
-   transport availability recovers.
+6. Latest verified remote-backed checkpoint:
+   `db535e7 Record SNAP diagnostic checkpoint`, verified at
+   `db535e7eb344b4aed97f7ba9c3accb266f309d68 refs/heads/main`.
+7. Latest local record-sync commit after `db535e7` is not remote-backed yet due
+   GitHub port-443 connection failure. No experiment-side human action is
+   required.
 
 ## Boundaries
 

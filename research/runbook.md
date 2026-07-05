@@ -34,11 +34,12 @@ Current status as of 2026-07-05: the temporary GitHub HTTPS transport blocker
 recovered again. The latest verified remote checkpoint is:
 
 ```text
-0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main
-0832201 Sync memory after GitHub retry
+db535e7eb344b4aed97f7ba9c3accb266f309d68 refs/heads/main
+db535e7 Record SNAP diagnostic checkpoint
 ```
 
-The previously unbacked local commits are now remote-backed:
+The previously unbacked local commits are now remote-backed through the SNAP
+diagnostic checkpoint:
 
 ```text
 77e8ada Add SNAP executable candidate runner
@@ -46,20 +47,21 @@ The previously unbacked local commits are now remote-backed:
 c4b4b99 Record GitHub push blocker for SNAP runner
 2490a9b Update real-reuse stabilization queue
 0832201 Sync memory after GitHub retry
-```
-
-Latest local commit:
-
-```text
 4b216b6 Record recovered SNAP runner backup
+0734bb9 Record renewed GitHub push blocker
+ef8cbe0 Prepare SNAP executable candidate prompts
+10a3d1d Record SNAP prompt push blocker
+c3f9f05 Clarify SNAP prompt backup status
+9829123 Run SNAP executable candidate diagnostics
+db535e7 Record SNAP diagnostic checkpoint
 ```
 
-This local commit is not remote-backed yet. The latest `git push origin main`
-failed with `Recv failure: Connection was reset`, and the follow-up
-`git ls-remote --heads origin main` failed to connect to github.com port 443
-after 21115 ms. Earlier `Recv failure: Connection was reset` and github.com
-port 443 failures remain GitHub transport metadata, not project-correctness
-evidence. Always inspect `git status -sb` before claiming a clean phase save.
+Earlier `Recv failure: Connection was reset` and github.com port 443 failures
+remain GitHub transport metadata, not project-correctness evidence. A later
+local record-sync commit after `db535e7` is not remote-backed yet because the
+latest `git push origin main` and follow-up `git ls-remote --heads origin main`
+both failed to connect to github.com port 443 after about 211xx ms. Always
+inspect `git status -sb` before claiming a clean phase save.
 
 Re-run remote verification before making future remote-backed checkpoint
 claims.

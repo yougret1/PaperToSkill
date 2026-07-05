@@ -65,12 +65,14 @@ This file is intentionally compact. Detailed chronological history lives in
   If a network/download problem blocks a core asset or phase save, record the
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
-- Current remote-backed checkpoint remains
-  `0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main`; local commits
-  after that checkpoint, including `ef8cbe0 Prepare SNAP executable candidate
-  prompts`, may be ahead of `origin/main` when GitHub HTTPS transport is
-  unavailable. Verify with `git status -sb` and `git ls-remote --heads origin
-  main` before claiming a later phase is remote-backed.
+- Current remote-backed checkpoint is
+  `db535e7eb344b4aed97f7ba9c3accb266f309d68 refs/heads/main`
+  (`db535e7 Record SNAP diagnostic checkpoint`). A later local record-sync
+  commit after `db535e7` is not remote-backed yet because the latest
+  `git push origin main` and follow-up `git ls-remote --heads origin main`
+  both failed to connect to github.com port 443 after about 211xx ms. Verify
+  with `git status -sb` and `git ls-remote --heads origin main` before
+  claiming a later phase is remote-backed.
 
 ## Evidence Boundary
 
@@ -325,14 +327,14 @@ Current supported claims:
   project record sync), `2b5d9d0` (GitHub backup recovery record), and
   `05b3963` (real-reuse record-boundary tightening), `77e8ada` (SNAP
   executable-candidate runner), `0983fbc` and `c4b4b99` (GitHub push-blocker
-  records), `2490a9b` (real-reuse stabilization queue sync), and `0832201`
-  (memory sync after GitHub retry). The temporary 2026-07-05 GitHub HTTPS
-  transport blocker recovered again; the latest verified remote checkpoint is
-  `0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main`. A later local
-  record commit `4b216b6 Record recovered SNAP runner backup` is not
-  remote-backed yet because push/remote-check attempts hit GitHub HTTPS reset
-  and port 443 connection failure again. Verify exact local/remote alignment
-  with
+  records), `2490a9b` (real-reuse stabilization queue sync), `0832201`
+  (memory sync after GitHub retry), `ef8cbe0` (SNAP executable-candidate
+  prompt packets), `9829123` (SNAP executable-candidate live diagnostics), and
+  `db535e7` (SNAP diagnostic checkpoint record). The temporary 2026-07-05
+  GitHub HTTPS transport blocker recovered again; the latest verified remote
+  checkpoint is
+  `db535e7eb344b4aed97f7ba9c3accb266f309d68 refs/heads/main`. Verify exact
+  local/remote alignment with
   `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
   phase save.
@@ -404,8 +406,10 @@ Current supported claims:
   table and the rebuilt AAAI PDF locally; follow-up commits `12e97df`,
   `24f8029`, `cdeab1f`, `c7d55b7`, `2a61d42`, `12fab77`, `9888f17`,
   `1ab714f`, `2b5d9d0`, `05b3963`, `77e8ada`, `0983fbc`, `c4b4b99`,
-  `2490a9b`, and `0832201` are remote-backed in the latest verified checkpoint
-  `0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main`.
+  `2490a9b`, `0832201`, `4b216b6`, `0734bb9`, `ef8cbe0`, `10a3d1d`,
+  `c3f9f05`, `9829123`, and `db535e7` are remote-backed in the latest
+  verified checkpoint
+  `db535e7eb344b4aed97f7ba9c3accb266f309d68 refs/heads/main`.
 - Phase109 has collected scored real-reuse LLM ablation rows only on the
   pre-registered stabilized slices. Current collected GPT-family pairs are
   REF-T2 1.000/1.000,
@@ -425,10 +429,11 @@ Current supported claims:
   HTTPS transport interruptions. Use `git status -sb` and a successful remote
   check for the latest exact alignment before each phase-save claim.
 - Latest verified remote-backed phase checkpoint:
-  `0832201 Sync memory after GitHub retry`, verified at
-  `0832201d3804857f61ae047a7d0bf97f0931ffbf refs/heads/main`. Latest local
-  commit `4b216b6 Record recovered SNAP runner backup` is not remote-backed
-  yet. Rerun remote verification before making later remote-backed claims.
+  `db535e7 Record SNAP diagnostic checkpoint`, verified at
+  `db535e7eb344b4aed97f7ba9c3accb266f309d68 refs/heads/main`. A later local
+  record-sync commit after `db535e7` is not remote-backed yet due GitHub
+  port-443 connection failure. Rerun remote verification before making later
+  remote-backed claims.
 
 Current unsupported claims:
 
