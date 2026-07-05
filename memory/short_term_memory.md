@@ -13,6 +13,18 @@ Current date: 2026-07-05.
   Preserve the existing local-log boundary: do not modify
   `research/run_logs/**` or `research/stage_log.md` during record-sync-only
   work.
+- Current claim-checklist sync adds a `Real-reuse first pass` row to
+  `paper/claim_checklist.md` and an abstract downgrade bullet that says the
+  eight-row real-reuse stress test is mixed boundary evidence, not aggregate
+  downstream advantage. It keeps SWE-T1 phase107/phase110 and SNAP
+  phase108/phase112 as diagnostic/contract evidence, not paper-facing main-row
+  replacements. Local verification passed:
+  `python scripts\check_paper_claims.py --strict`,
+  `python scripts\check_goal_completion.py --strict`,
+  `python scripts\check_reproducibility_package.py --strict`,
+  `python scripts\check_submission_review.py --strict`, `git diff --check`
+  with only CRLF warnings, a changed-file secret scan with no matches, and no
+  diff under `research/run_logs/**` or `research/stage_log.md`.
 - Current non-network continuation after the resume/thread review updates
   `research/real_reuse_experiment_plan.md` Table 6 with existing quality and
   grounding evidence for AIDE, SWE-agent, Reflexion, SnapATAC2, Toolformer
