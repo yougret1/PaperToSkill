@@ -207,6 +207,10 @@ Current date: 2026-07-05.
   `results/external_evidence_packets/packets.{json,md}` now report 8 ready
   checks / 0 pending / 0 failed, and
   `results/reproducibility/package_report.{json,md}` reflects that count.
+  Follow-up record sync updates `research/submission_checklist.md`,
+  `research/runbook.md`, `research/review_report.md`, and
+  `results/result_cards.md` from the old 7-ready packet count to 8-ready while
+  keeping the evidence pending.
   This does not complete human-fidelity evidence or change the
   `wait_for_external_evidence` AAAI decision. Local verification passed:
   `python -m unittest tests.test_check_external_evidence_packets

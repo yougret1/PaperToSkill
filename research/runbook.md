@@ -1181,9 +1181,12 @@ python scripts\check_external_evidence_packets.py --strict
 
 Current status:
 `results/external_evidence_packets/packets.md` reports
-`overall_status=ready`, 7 ready checks, 0 pending checks, and 0 failed checks.
+`overall_status=ready`, 8 ready checks, 0 pending checks, and 0 failed checks.
 The two packets cover human-fidelity annotation and the AAAI submission
 decision.
+The human-fidelity packet now explicitly records the desktop `toHuman.md` /
+`ok.txt` handoff workflow and the agent-side `ok.txt` cleanup command after
+completed annotations are processed.
 
 These packets list inputs, setup notes, run commands, validation commands,
 completion criteria, escalation rules, and evidence boundaries. They do not

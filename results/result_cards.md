@@ -1013,8 +1013,9 @@
   handoff packet with inputs, setup notes, commands, validation commands,
   completion criteria, escalation rules, and evidence boundaries.
 - Main result: `results/external_evidence_packets/packets.md` reports
-  `overall_status=ready`, 7 ready checks, 0 pending checks, and 0 failed
-  checks.
+  `overall_status=ready`, 8 ready checks, 0 pending checks, and 0 failed
+  checks. The extra check makes the human-fidelity `toHuman.md` / `ok.txt`
+  handoff and cleanup workflow explicit.
 - Packet items: human-fidelity annotation and AAAI submission decision/final
   readiness.
 - Practical significance: the remaining external work is now not only mapped

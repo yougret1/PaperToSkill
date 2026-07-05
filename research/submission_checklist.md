@@ -17,7 +17,7 @@ complete with respect to pending external evidence.
 | Reproducibility package | Ready with pending external evidence | `results/reproducibility/package_report.md`: 450 ready, 1 pending, 0 failed | Local package is coherent; external evidence remains pending. |
 | Active goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 78 ready, 3 pending, 0 failed | The overall user goal remains open. |
 | External evidence closure queue | Ready as local queue | `results/external_evidence_closure/closure.md`: 3 ready, 0 pending, 0 failed | Pending evidence is mapped to next actions; evidence itself remains pending. |
-| External evidence execution packets | Ready as local handoff | `results/external_evidence_packets/packets.md`: 7 ready, 0 pending, 0 failed | Pending evidence has runnable handoff packets; evidence itself remains pending. |
+| External evidence execution packets | Ready as local handoff | `results/external_evidence_packets/packets.md`: 8 ready, 0 pending, 0 failed | Pending evidence has runnable handoff packets, including the `toHuman.md` / `ok.txt` handoff cleanup guard; evidence itself remains pending. |
 | AAAI submission decision | Recorded wait decision | `results/aaai_submission_decision/decision.md`: `selected_option=wait_for_external_evidence`, 27 ready, 0 pending, 0 failed | The current decision is to wait for named external evidence before stronger claims. |
 
 ## Evidence Ready To Use
