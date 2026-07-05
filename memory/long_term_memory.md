@@ -785,14 +785,15 @@ Use these as entry points instead of searching the whole repo first:
   Toolformer rows score 9/9.
 - Paper tables:
   `results/reproducibility/paper_table_report.md`
-  reports ready, 316 ready checks, 0 failed checks after adding the SWE-T1
-  issue-aligned follow-up table consistency checks alongside the real-reuse
-  main, failure-boundary, SWE-T1 source-context follow-up, SNAP
-  executable-artifact follow-up, SNAP executable-candidate follow-up, and Full
-  Excerpt sanity checks.
+  reports ready, 343 ready checks, 0 failed checks after adding the current
+  real-reuse main, failure-boundary, SWE-T1 diagnostic, SNAP diagnostic, Full
+  Excerpt sanity, LLM-ablation, deterministic/offline, and supporting-table
+  consistency checks.
 - Paper claims:
   `results/reproducibility/paper_claim_report.md`
-  reports ready, 20 ready checks, 0 failed checks.
+  reports ready, 30 ready checks, 0 failed checks. It checks the AAAI body,
+  AAAI table file, and Markdown draft for overclaims, required boundaries, and
+  draft/planning language.
 - Submission-review handoff:
   `results/reproducibility/submission_review_report.md`
   reports ready, 17 ready checks, 0 failed checks.

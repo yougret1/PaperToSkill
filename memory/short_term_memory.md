@@ -36,6 +36,19 @@ Current date: 2026-07-05.
   failed`, submission review `17 ready / 0 failed`, goal completion `78 ready /
   3 pending / 0 failed`. Human-fidelity annotation remains pending; `ok.txt`
   was absent at resume.
+- Current submission-record sync updated long-term memory, `results/result_cards.md`,
+  `research/submission_checklist.md`, and `research/review_report.md` to the
+  current paper-claim gate: `paper_claim_report.md` is `ready` with 30 ready
+  checks and 0 failed checks, now covering the AAAI body, AAAI table file, and
+  Markdown draft for overclaims, required boundaries, and draft/planning
+  language. It also updates the paper-table memory count to 343 ready / 0
+  failed. Verification passed `check_paper_claims.py --strict`,
+  `check_submission_review.py --strict`, `check_goal_completion.py --strict`,
+  `check_reproducibility_package.py --strict`, `check_aaai_package.py
+  --strict`, `check_paper_tables.py --strict`, and
+  `check_usage_examples.py --strict`. A fresh `git push origin main` retry
+  still failed with `Recv failure: Connection was reset`, so local commits
+  remain ahead of `origin/main` until GitHub transport recovers.
 - Current auxiliary real-reuse LLM-ablation family-summary continuation
   aggregates existing phase109 evidence into
   `results/real_reuse/llm_ablation_family_summary.csv` and the AAAI
