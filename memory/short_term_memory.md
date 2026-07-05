@@ -50,7 +50,8 @@ Current date: 2026-07-05.
   warnings, and a raw-key scan with no matches. This phase is saved locally as
   `ef8cbe0 Prepare SNAP executable candidate prompts`; GitHub backup failed
   with connection resets and is recorded in `toHuman.md`.
-- Current uncommitted SNAP executable-candidate live checkpoint:
+- Current local SNAP executable-candidate live checkpoint is saved in
+  substantive phase commit `9829123 Run SNAP executable candidate diagnostics`:
   `scripts/run_real_reuse_snapatac2_executable_candidate_prompts.py` generates
   candidate scripts from the prompt packets and now writes incremental reports
   after each packet so provider stalls preserve partial provenance. Phase111
