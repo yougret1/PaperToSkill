@@ -40,6 +40,7 @@ class CheckSubmissionReviewTest(unittest.TestCase):
             ready_ids = {check["id"] for check in report["checks"] if check["status"] == "ready"}
             self.assertIn("submission_review_live_transfer_current", ready_ids)
             self.assertIn("submission_review_model_ablation_current", ready_ids)
+            self.assertIn("submission_review_real_reuse_llm_ablation_current", ready_ids)
             self.assertIn("submission_review_human_fidelity_current", ready_ids)
             self.assertIn("submission_review_token_accounting_current", ready_ids)
             self.assertIn("submission_review_ai_scientist_smoke_current", ready_ids)
@@ -56,6 +57,7 @@ class CheckSubmissionReviewTest(unittest.TestCase):
                 "research/submission_checklist.md",
                 "results/live_transfer_prompts/evaluation.json",
                 "results/model_ablation_prompts/v0/evaluation.json",
+                "results/real_reuse/llm_ablation_summary.json",
                 "results/human_fidelity_packets/annotation_summary.json",
                 "results/token_accounting/token_accounting_summary.json",
                 "results/ai_scientist_v2_smoke/run_report.json",
@@ -90,6 +92,7 @@ class CheckSubmissionReviewTest(unittest.TestCase):
                 "research/submission_checklist.md",
                 "results/live_transfer_prompts/evaluation.json",
                 "results/model_ablation_prompts/v0/evaluation.json",
+                "results/real_reuse/llm_ablation_summary.json",
                 "results/human_fidelity_packets/annotation_summary.json",
                 "results/token_accounting/token_accounting_summary.json",
                 "results/ai_scientist_v2_smoke/run_report.json",
@@ -122,6 +125,7 @@ class CheckSubmissionReviewTest(unittest.TestCase):
                 "research/submission_checklist.md",
                 "results/live_transfer_prompts/evaluation.json",
                 "results/model_ablation_prompts/v0/evaluation.json",
+                "results/real_reuse/llm_ablation_summary.json",
                 "results/human_fidelity_packets/annotation_summary.json",
                 "results/token_accounting/token_accounting_summary.json",
                 "results/ai_scientist_v2_smoke/run_report.json",
@@ -153,6 +157,46 @@ class CheckSubmissionReviewTest(unittest.TestCase):
             self.assertEqual("fail", report["overall_status"])
             self.assertEqual("fail", statuses["submission_review_goal_package_counts_current"])
             self.assertEqual("fail", statuses["submission_review_local_gate_counts_current"])
+
+    def test_stale_real_reuse_llm_ablation_text_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_root = Path(tmp)
+            for relative in [
+                "research/review_report.md",
+                "research/rebuttal_bank.md",
+                "research/submission_checklist.md",
+                "results/live_transfer_prompts/evaluation.json",
+                "results/model_ablation_prompts/v0/evaluation.json",
+                "results/real_reuse/llm_ablation_summary.json",
+                "results/human_fidelity_packets/annotation_summary.json",
+                "results/token_accounting/token_accounting_summary.json",
+                "results/ai_scientist_v2_smoke/run_report.json",
+                "results/ai_scientist_v2_live_run_handoff/handoff.json",
+                "results/reproducibility/goal_completion_report.json",
+                "results/reproducibility/package_report.json",
+                "results/reproducibility/aaai_package_report.json",
+                "results/reproducibility/paper_table_report.json",
+                "results/reproducibility/usage_example_report.json",
+            ]:
+                source = ROOT / relative
+                target = tmp_root / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(source, target)
+
+            for relative in [
+                "research/review_report.md",
+                "research/rebuttal_bank.md",
+                "research/submission_checklist.md",
+            ]:
+                path = tmp_root / relative
+                text = path.read_text(encoding="utf-8")
+                text = text.replace("12/18", "18/18")
+                path.write_text(text, encoding="utf-8")
+
+            report = build_report(tmp_root)
+            statuses = {check["id"]: check["status"] for check in report["checks"]}
+            self.assertEqual("fail", report["overall_status"])
+            self.assertEqual("fail", statuses["submission_review_real_reuse_llm_ablation_current"])
 
 
 if __name__ == "__main__":

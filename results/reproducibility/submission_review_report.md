@@ -3,7 +3,7 @@
 Evidence boundary: this report checks internal review, rebuttal, and submission-checklist handoff artifacts against current repository evidence. It does not claim final submission readiness.
 
 - Overall status: ready
-- Ready checks: 17
+- Ready checks: 18
 - Failed checks: 0
 
 ## Checks
@@ -21,6 +21,7 @@ Evidence boundary: this report checks internal review, rebuttal, and submission-
 | submission_review_no_unbounded_provider_billing_complete | ready | Do not claim provider billing or success-per-dollar completion. | research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md |
 | submission_review_live_transfer_current | ready | live_total=24; scored=24; pending=0 | results/live_transfer_prompts/evaluation.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md |
 | submission_review_model_ablation_current | ready | total=6; scored=6; pending=0 | results/model_ablation_prompts/v0/evaluation.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md |
+| submission_review_real_reuse_llm_ablation_current | ready | expected=18; collected=12; pending=6; families=['GPT-family', 'Claude-family', 'DeepSeek-family'] | results/real_reuse/llm_ablation_summary.json; results/real_reuse/llm_ablation_summary.md; results/real_reuse/llm_ablation_family_summary.csv; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md |
 | submission_review_human_fidelity_current | ready | status=pending; scored=0; scored_cells=0; pending=24 | results/human_fidelity_packets/annotation_summary.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md |
 | submission_review_token_accounting_current | ready | status=complete; input_tokens=4322; output_tokens=9594 | results/token_accounting/token_accounting_summary.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md |
 | submission_review_ai_scientist_smoke_current | ready | overall=complete; detail=; aliases=claude-opus-4-8 | results/ai_scientist_v2_smoke/run_report.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md |

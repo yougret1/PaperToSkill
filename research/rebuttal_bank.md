@@ -144,7 +144,10 @@ Do not say:
 
 Short answer: Claude Opus 4.8, GPT-family, and DeepSeek rows are saved and
 scored for the current two-case protocol, but this is saved-response
-output-contract evidence only.
+output-contract evidence only. The separate real-reuse LLM ablation is a
+different auxiliary protocol: it uses locked real-reuse tasks, has 12/18 scored
+rows, and keeps the six Claude-family rows provider-pending after HTTP 502
+availability failures.
 
 Evidence to cite:
 
@@ -157,11 +160,20 @@ Evidence to cite:
 - `results/model_ablation_prompts/v0/claude_protocol_run_report.md`: latest
   Claude protocol refresh used Anthropic Messages but was blocked by provider
   HTTP 502; scored Claude rows come from earlier saved response files.
+- `results/real_reuse/llm_ablation_summary.md`: 18 expected real-reuse
+  auxiliary rows, 12 collected scored rows, and 6 Claude-family rows pending
+  after provider HTTP 502 availability failures.
+- `results/real_reuse/llm_ablation_family_summary.csv`: GPT-family `gpt-5.5`
+  is 6/6 scored with Summary/PaperToSkill averages 0.605/0.333; DeepSeek-family
+  `deepseek-v4-flash` is 6/6 scored with 0.500/0.500; Claude-family
+  `claude-opus-4-8` is 0/6 scored and provider-pending.
 
 Do not say:
 
 - "Saved-response model-ablation scoring proves live task success."
 - "The provider failures are negative model-quality evidence."
+- "The real-reuse LLM ablation replaces the locked main rows."
+- "The 12/18 auxiliary slice proves aggregate PaperToSkill advantage."
 
 ## Q8.5: How does PaperToSkill compare with Paper2Agent?
 

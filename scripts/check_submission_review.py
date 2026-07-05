@@ -237,6 +237,7 @@ def local_gate_counts_current(root: Path, combined_text: str) -> tuple[bool, str
 def evidence_alignment_checks(root: Path, combined_text: str) -> list[Check]:
     live = load_json(root / "results/live_transfer_prompts/evaluation.json").get("summary", {})
     model = load_json(root / "results/model_ablation_prompts/v0/evaluation.json").get("summary", {})
+    real_reuse_llm = load_json(root / "results/real_reuse/llm_ablation_summary.json")
     human = load_json(root / "results/human_fidelity_packets/annotation_summary.json")
     token_accounting = load_json(root / "results/token_accounting/token_accounting_summary.json")
     smoke = load_json(root / "results/ai_scientist_v2_smoke/run_report.json")
@@ -265,6 +266,46 @@ def evidence_alignment_checks(root: Path, combined_text: str) -> list[Check]:
         and human_cells >= 24
         and contains_all(combined_text, ["human", "complete"])
     )
+    real_reuse_llm_families = {
+        str(row.get("Model Family", "")): row
+        for row in real_reuse_llm.get("family_summary", [])
+    }
+    gpt_family = real_reuse_llm_families.get("GPT-family", {})
+    deepseek_family = real_reuse_llm_families.get("DeepSeek-family", {})
+    claude_family = real_reuse_llm_families.get("Claude-family", {})
+    real_reuse_llm_counts_current = (
+        int(real_reuse_llm.get("expected_rows", 0)) == 18
+        and int(real_reuse_llm.get("collected_rows", 0)) == 12
+        and int(real_reuse_llm.get("pending_rows", 0)) == 6
+        and gpt_family.get("Model Alias") == "gpt-5.5"
+        and gpt_family.get("Scored Rows") == "6"
+        and gpt_family.get("Pending Rows") == "0"
+        and gpt_family.get("Summary Avg") == "0.605"
+        and gpt_family.get("PaperToSkill Avg") == "0.333"
+        and deepseek_family.get("Model Alias") == "deepseek-v4-flash"
+        and deepseek_family.get("Scored Rows") == "6"
+        and deepseek_family.get("Pending Rows") == "0"
+        and deepseek_family.get("Summary Avg") == "0.500"
+        and deepseek_family.get("PaperToSkill Avg") == "0.500"
+        and claude_family.get("Model Alias") == "claude-opus-4-8"
+        and claude_family.get("Scored Rows") == "0"
+        and claude_family.get("Pending Rows") == "6"
+    )
+    real_reuse_llm_text_current = contains_all(
+        combined_text,
+        [
+            "real-reuse LLM ablation",
+            "12/18",
+            "GPT-family",
+            "0.605/0.333",
+            "DeepSeek-family",
+            "0.500/0.500",
+            "Claude-family",
+            "provider-pending",
+            "HTTP 502",
+            "not a main-row replacement",
+        ],
+    )
 
     checks = [
         Check(
@@ -288,6 +329,19 @@ def evidence_alignment_checks(root: Path, combined_text: str) -> list[Check]:
             else "fail",
             f"total={model.get('total_rows')}; scored={model.get('scored_rows')}; pending={model.get('pending_rows')}",
             "results/model_ablation_prompts/v0/evaluation.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md",
+        ),
+        Check(
+            "submission_review_real_reuse_llm_ablation_current",
+            "ready"
+            if real_reuse_llm_counts_current and real_reuse_llm_text_current
+            else "fail",
+            (
+                f"expected={real_reuse_llm.get('expected_rows')}; "
+                f"collected={real_reuse_llm.get('collected_rows')}; "
+                f"pending={real_reuse_llm.get('pending_rows')}; "
+                f"families={list(real_reuse_llm_families)}"
+            ),
+            "results/real_reuse/llm_ablation_summary.json; results/real_reuse/llm_ablation_summary.md; results/real_reuse/llm_ablation_family_summary.csv; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md",
         ),
         Check(
             "submission_review_human_fidelity_current",

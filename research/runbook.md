@@ -1175,12 +1175,15 @@ python scripts\check_submission_review.py `
 ```
 
 Current status:
-`results/reproducibility/submission_review_report.md` reports ready, 17 ready
+`results/reproducibility/submission_review_report.md` reports ready, 18 ready
 checks, and 0 failed checks. It verifies that review handoff files describe the
 24 scored saved live-transfer response rows, 6 scored and 0 pending
 model-ablation rows, 0 scored and 24 pending human-fidelity cells, local token
 accounting, the bounded AI-Scientist-v2 smoke/full live-run completion, and the
-mixed eight-row real-reuse first pass.
+mixed eight-row real-reuse first pass. It also verifies that the auxiliary
+real-reuse LLM ablation is described as 12/18 scored rows with Claude-family
+provider-pending HTTP 502 rows, not as saved-response evidence or a main-row
+replacement.
 Passing this gate does not mean the AAAI paper is submission-final.
 
 ## Goal Completion Gate

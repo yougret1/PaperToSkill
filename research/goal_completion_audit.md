@@ -40,6 +40,9 @@ Current machine reports:
 - Goal: `results/reproducibility/goal_completion_report.md` reports
   `not_complete_pending_external_evidence`, 78 ready checks, 3 pending checks,
   and 0 failed checks.
+- Submission review: `results/reproducibility/submission_review_report.md`
+  reports `ready`, 18 ready checks, and 0 failed checks after adding the
+  current real-reuse LLM-ablation handoff check.
 - Closure queue: `results/external_evidence_closure/closure.md` reports
   `pending_external_evidence`, 2 queue items, and 0 failed checks.
 - Execution packets: `results/external_evidence_packets/packets.md` reports

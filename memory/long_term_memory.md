@@ -555,7 +555,8 @@ Use these as entry points instead of searching the whole repo first:
 - `scripts/check_paper_tables.py`: AAAI result-table consistency gate.
 - `scripts/check_paper_claims.py`: paper overclaim/boundary gate.
 - `scripts/check_submission_review.py`: submission-review handoff freshness
-  gate.
+  gate; it also guards the distinction between the older saved-response model
+  ablation and the auxiliary real-reuse LLM ablation.
 - `scripts/check_goal_completion.py`: active-goal completion gate.
 - `scripts/check_external_evidence_closure.py`: no-network closure queue for
   pending external evidence and final-decision items.
@@ -803,7 +804,8 @@ Use these as entry points instead of searching the whole repo first:
   boundaries, and draft/planning language.
 - Submission-review handoff:
   `results/reproducibility/submission_review_report.md`
-  reports ready, 17 ready checks, 0 failed checks.
+  reports ready, 18 ready checks, 0 failed checks after adding a current
+  real-reuse LLM-ablation handoff check.
 - Real-reuse preflight:
   `results/real_reuse/spec_preflight.md`
   reports `ready_to_implement`, 8 tasks, 490 ready checks, and 0 failed checks

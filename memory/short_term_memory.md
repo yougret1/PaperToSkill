@@ -13,6 +13,21 @@ Current date: 2026-07-06.
   Preserve the existing local-log boundary: do not modify
   `research/run_logs/**` or `research/stage_log.md` during record-sync-only
   work.
+- Current submission-review LLM-ablation distinction separates the older
+  saved-response model ablation from the auxiliary real-reuse LLM ablation in
+  `research/rebuttal_bank.md`, `research/submission_checklist.md`, and
+  `research/review_report.md`. `scripts/check_submission_review.py` now checks
+  `results/real_reuse/llm_ablation_summary.json` and requires the current
+  12/18 scored-row real-reuse slice, GPT-family 0.605/0.333, DeepSeek-family
+  0.500/0.500, and Claude-family 0/6 provider-pending HTTP 502 boundary.
+  Full unit discovery passed 208/208 tests. Focused
+  `tests.test_check_submission_review` and strict submission-review, package,
+  goal, paper-claim, AAAI-package, paper-table, real-reuse preflight,
+  usage-example, external-evidence packets, external-evidence closure, and
+  AAAI submission-decision gates passed. `submission_review_report` is now
+  `18 ready / 0 failed`; package remains `468 ready / 1 pending / 0 failed`,
+  and goal completion remains `78 ready / 3 pending / 0 failed`. This does not
+  change experiment scores, main-row selection, or any paper claim strength.
 - Current paper-finalization continuation removed draft/planning wording from
   the AAAI main real-reuse table caption: Table 1 now says scores come from the
   eight locked local raw rows selected by `main_run_selection.json`. The claim
@@ -33,7 +48,7 @@ Current date: 2026-07-06.
   under `research/run_logs/**` or `research/stage_log.md`. Latest refreshed
   report counts: paper claims `38 ready / 0 failed`, package `468 ready / 1 pending /
   0 failed`, AAAI package `20 ready / 0 failed`, paper tables `343 ready / 0
-  failed`, submission review `17 ready / 0 failed`, goal completion `78 ready /
+  failed`, submission review `18 ready / 0 failed`, goal completion `78 ready /
   3 pending / 0 failed`. Human-fidelity annotation remains pending; `ok.txt`
   was absent at resume.
 - Current outline-claim gate sync extends `scripts/check_paper_claims.py` to
@@ -106,7 +121,7 @@ Current date: 2026-07-06.
   `paper/aaai/papertoskill_supporting_tables.tex`, kept them under the
   paper-table drift checker, rebuilt the AAAI PDF to 8 pages, and added an
   AAAI package check that verifies non-reference content ends by page 7.
-  Current refreshed counts after that repair: package `468 ready / 1 pending /
+  At that repair, refreshed counts were: package `468 ready / 1 pending /
   0 failed`, AAAI package `20 ready / 0 failed`, paper tables `343 ready / 0
   failed`, submission review `17 ready / 0 failed`, goal completion `78 ready /
   3 pending / 0 failed`. Its first remote backup attempt failed with

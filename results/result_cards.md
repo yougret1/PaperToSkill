@@ -1043,12 +1043,14 @@
 - Experiment: keep internal review, rebuttal, and submission checklist handoff
   files synchronized with the current evidence state.
 - Main result: `results/reproducibility/submission_review_report.md` reports
-  `overall_status=ready`, 16 ready checks, and 0 failed checks.
+  `overall_status=ready`, 18 ready checks, and 0 failed checks.
 - Checks: stale HTTP 503/live-transfer pending language is absent; review
   materials include the current 24 scored saved live-transfer response rows,
   6 scored and 0 pending model-ablation rows, 0 scored and 24 pending
   human-fidelity cells, local token-accounting evidence, bounded AI-Scientist-v2
-  smoke/full-run completion, and current goal/package counts.
+  smoke/full-run completion, the 12/18 scored auxiliary real-reuse LLM ablation
+  slice with Claude-family provider-pending rows, and current goal/package
+  counts.
 - Practical significance: prevents reviewer-facing handoff materials from
   lagging behind the evidence package while keeping final submission decisions
   explicit.

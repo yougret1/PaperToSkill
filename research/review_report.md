@@ -19,7 +19,9 @@ handoff, local token-accounting evidence, a local external-evidence closure
 queue, external-evidence execution packets, a bounded Paper2Agent
 artifact/workflow comparison, a bounded AI-Scientist-v2 marker smoke/full live
 run, a first eight-row real-reuse stress test with a derived failure-boundary
-table, a recorded AAAI submission decision, and an AAAI-27 LaTeX package.
+table, an auxiliary real-reuse LLM-ablation slice with 12/18 scored rows and
+Claude-family rows still provider-pending, a recorded AAAI submission decision,
+and an AAAI-27 LaTeX package.
 
 The strongest current framing remains:
 
@@ -50,6 +52,7 @@ used as boundary evidence rather than aggregate downstream-effectiveness proof.
 | R8 | AI-Scientist-v2 integration may be overread as broad live task success. | Medium | Bounded LLM-client smoke is `complete`, and the full live-run handoff is `complete` with one completion directory. The run's positive result is synthetic; the HF/semantic-data branch remains a failed branch due invalid dataset loading/synthetic padding and missing `sentence_transformers`. | Treat this as bounded integration and synthetic sensitivity evidence only; do not claim human fidelity, real-data validation, or broad live research-task success. |
 | R9 | Paper2Agent positioning may be overread as a baseline win. | Medium | `results/tables/paper2agent_artifact_comparison.md` reports 7/7 ready source-backed criteria for artifact/workflow comparison. It does not run Paper2Agent or deploy an MCP server. | Use this as positioning evidence only; do not claim runtime superiority or baseline performance. |
 | R10 | The real-reuse table may be mistaken for broad downstream effectiveness. | High | All eight AIDE/SWE/REF/SNAP paper-task rows have one GPT-family `gpt-5.5` Summary-vs-PaperToSkill pass. The result is mixed: AIDE-T2 and SWE-T2 favor PaperToSkill, AIDE-T1 and REF are solved by both conditions, SWE-T1 fails, and SNAP remains below success threshold. SWE-T1 phase107 is reported separately: both patches apply but both fail the hidden test. SWE-T1 phase110 is also separate in `results/real_reuse/swe_t1_issue_aligned_followup.md`: under the revised issue-aligned scorer, Summary and PaperToSkill both score 1.000, so it shows contract closure for both conditions but no PaperToSkill advantage. SNAP artifact-execution diagnosis is separate, phase108 shows a controlled scaffold can satisfy the SNAP artifact/runtime/memory scorer for both Summary and PaperToSkill, and phase112 shows paired model-generated SNAP-T1 executable-candidate scripts also score 1.000/1.000. | Present the table as a first-pass stress test and failure-boundary analysis; do not claim aggregate advantage over Summary. Treat phase107, phase110, phase112, and SNAP follow-ups as diagnostic evidence, not main-table replacements. |
+| R11 | The real-reuse LLM ablation may be mistaken for a main experiment or a model-quality ranking. | Medium | `results/real_reuse/llm_ablation_summary.md` reports 12/18 collected scored rows over AIDE-T2, SWE-T2, and REF-T2. GPT-family `gpt-5.5` is 6/6 scored with Summary/PaperToSkill averages 0.605/0.333; DeepSeek-family `deepseek-v4-flash` is 6/6 scored with 0.500/0.500; Claude-family `claude-opus-4-8` is 0/6 scored and provider-pending after HTTP 502 availability failures. | Treat this as auxiliary model-slice evidence only; pending Claude rows are provider availability metadata, and the slice does not replace locked main rows or prove aggregate PaperToSkill advantage. |
 
 ## Claim Tightening Recommendations
 
@@ -78,6 +81,7 @@ used as boundary evidence rather than aggregate downstream-effectiveness proof.
 | Live-transfer saved responses | Complete for saved-response scoring | `results/live_transfer_prompts/evaluation.md`: 24 scored, 0 pending |
 | Real live task success | Partial and mixed | Saved-response scoring is not human semantic or real task-success evidence; the eight-row real-reuse pass is single-run, mixed, and failure-heavy rather than an aggregate success result. |
 | Model ablation | Complete for saved-response scoring | `results/model_ablation_prompts/v0/evaluation.md`: 6 scored rows, 0 pending; `results/deepseek_followup_handoff/handoff.md`: `responses_present` |
+| Real-reuse LLM ablation | Partial auxiliary slice | `results/real_reuse/llm_ablation_summary.md`: 12/18 scored rows, with GPT-family and DeepSeek-family complete and Claude-family provider-pending after HTTP 502; `results/real_reuse/llm_ablation_family_summary.csv`: family summary. |
 | Paper2Agent artifact comparison | Complete for bounded positioning evidence | `results/tables/paper2agent_artifact_comparison.md`: 7 ready criteria, 0 failed |
 | AI-Scientist-v2 LLM-client smoke | Complete for bounded marker contract | `results/ai_scientist_v2_smoke/run_report.md`: `complete`; marker response saved. |
 | AI-Scientist-v2 full live run | Complete for bounded synthetic integration evidence | `results/ai_scientist_v2_live_run_handoff/handoff.md`: `complete`; one completion directory. |
@@ -95,8 +99,8 @@ used as boundary evidence rather than aggregate downstream-effectiveness proof.
    rows. Do not treat provider latency or retry counts as effectiveness
    metrics.
 3. After the core evidence stabilizes, finish or refresh the remaining
-   auxiliary analyses: retry pending Claude-family LLM-ablation rows only when
-   provider availability recovers, update failure-boundary and
+   auxiliary analyses: retry pending Claude-family real-reuse LLM-ablation rows
+   only when provider availability recovers, update failure-boundary and
    quality/grounding evidence, and keep component ablation as an appendix
    candidate.
 4. Score all 24 paper-by-criterion cells in the human-fidelity annotation
