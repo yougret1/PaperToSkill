@@ -34,8 +34,8 @@ Current status as of 2026-07-05: the temporary GitHub HTTPS transport blocker
 recovered again. The latest verified remote checkpoint is:
 
 ```text
-db535e7eb344b4aed97f7ba9c3accb266f309d68 refs/heads/main
-db535e7 Record SNAP diagnostic checkpoint
+fb0baed4c88c8d6bf157fe1bb1155461d0d9289c refs/heads/main
+fb0baed Sync SNAP diagnostic remote status
 ```
 
 The previously unbacked local commits are now remote-backed through the SNAP
@@ -54,14 +54,17 @@ ef8cbe0 Prepare SNAP executable candidate prompts
 c3f9f05 Clarify SNAP prompt backup status
 9829123 Run SNAP executable candidate diagnostics
 db535e7 Record SNAP diagnostic checkpoint
+fb0baed Sync SNAP diagnostic remote status
 ```
 
 Earlier `Recv failure: Connection was reset` and github.com port 443 failures
-remain GitHub transport metadata, not project-correctness evidence. A later
-local record-sync commit after `db535e7` is not remote-backed yet because the
-latest `git push origin main` and follow-up `git ls-remote --heads origin main`
-both failed to connect to github.com port 443 after about 211xx ms. Always
-inspect `git status -sb` before claiming a clean phase save.
+remain GitHub transport metadata, not project-correctness evidence. The
+previously local-only record-sync commit after `db535e7` is now remote-backed.
+A current local record-sync commit after `fb0baed` is not remote-backed yet
+because two `git push origin main` attempts failed with `Recv failure:
+Connection was reset`, and the follow-up remote check failed to connect to
+github.com port 443 after about 21065 ms. Always inspect `git status -sb`
+before claiming a clean phase save.
 
 Re-run remote verification before making future remote-backed checkpoint
 claims.
