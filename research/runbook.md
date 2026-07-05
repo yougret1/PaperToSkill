@@ -35,8 +35,8 @@ recovered again. The latest verified remote checkpoint before claiming any
 later phase save is:
 
 ```text
-bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main
-bddd900 Record Claude direct availability recheck
+5d11adc7418762e3e416ccda798f30ca4faf041f refs/heads/main
+5d11adc Mark deferred study tables explicitly
 ```
 
 The previously unbacked local commits are now remote-backed through the SNAP
@@ -83,6 +83,8 @@ eab454d Align failure branch claim evidence matrix
 e2f070e Record recovered claim matrix backup
 e110a03 Record claim matrix backup push blocker
 bddd900 Record Claude direct availability recheck
+9cc0683 Record recovered Claude backup checkpoint
+5d11adc Mark deferred study tables explicitly
 ```
 
 Earlier `Recv failure: Connection was reset` and github.com port 443 failures
@@ -92,11 +94,12 @@ The later local record-sync commit after `fb0baed` and the phase112 completion
 commit are now remote-backed. The later submission-review and AAAI paper-text
 sync commits, auxiliary draft/outline sync, human-fidelity request,
 resume-memory records, and checkpoint-record guard baseline are also
-remote-backed through `bddd900`, including the checkpoint-detail,
+remote-backed through `5d11adc`, including the checkpoint-detail,
 blocker-record, grounding-gate evidence-sync, follow-up checkpoint-record,
 quality-grounding table, claim-boundary cleanup, and claim-evidence-matrix
 boundary-sync commits, plus the recovered checkpoint record, push-blocker
-record, and Claude direct availability recheck. Earlier `git ls-remote --heads
+record, Claude direct availability recheck, recovered Claude backup checkpoint,
+and deferred-study table marking. Earlier `git ls-remote --heads
 origin main` failures remain transport history.
 Always inspect `git status -sb` and `git log -5 --oneline` before claiming a
 clean phase save.
@@ -104,7 +107,7 @@ clean phase save.
 Local-only continuation note: follow-up record-sync commit `e2f070e Record
 recovered claim matrix backup` initially remained local-only after `git push
 origin main` failed with `Recv failure: Connection was reset`. A later push
-recovered and verified `bddd900`, so no repository commit is currently
+recovered and verified `5d11adc`, so no repository commit is currently
 local-only at this checkpoint.
 
 Re-run remote verification before making future remote-backed checkpoint

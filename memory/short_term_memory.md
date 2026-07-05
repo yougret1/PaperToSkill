@@ -32,7 +32,10 @@ Current date: 2026-07-05.
   Connection was reset`, followed by `git ls-remote --heads origin main`
   failing with `Failed to connect to github.com port 443 after 21111 ms`.
   Later GitHub recovery verified these commits as remote-backed through
-  `bddd900` and then pushed the checkpoint record sync as `9cc0683`.
+  `bddd900`, pushed the checkpoint record sync as `9cc0683`, and then
+  pushed `5d11adc Mark deferred study tables explicitly`; `git ls-remote
+  --heads origin main` verified
+  `5d11adc7418762e3e416ccda798f30ca4faf041f refs/heads/main`.
 - Current local claim-boundary continuation updates
   `research/claim_source_map.md` so the failure-branch claim no longer says
   "improves reproducibility" as a TBD hypothesis. It now says PaperToSkill
@@ -61,13 +64,14 @@ Current date: 2026-07-05.
   `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`.
 - Current local/remote status after this resume check: the latest verified
   remote backup is
-  `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`
-  (`bddd900 Record Claude direct availability recheck`). The earlier
+  `5d11adc7418762e3e416ccda798f30ca4faf041f refs/heads/main`
+  (`5d11adc Mark deferred study tables explicitly`). The earlier
   checkpoint-detail/blocker records, grounding-gate evidence sync,
   quality-grounding table completion, blocker record, failure-branch
   claim-source cleanup, claim-evidence-matrix boundary sync, recovered
-  checkpoint record, push-blocker record, and Claude direct availability
-  recheck are now included in the verified remote chain. Earlier
+  checkpoint record, push-blocker record, Claude direct availability recheck,
+  recovered Claude backup checkpoint, and deferred-study table marking are now
+  included in the verified remote chain. Earlier
   `git ls-remote --heads origin main` failures on 2026-07-05 remain historical
   transport metadata; use `git status -sb`, `git log -5 --oneline`, and a fresh
   `git ls-remote --heads origin main` before making any later remote-backed
@@ -75,8 +79,8 @@ Current date: 2026-07-05.
 - Current resume baseline: GitHub backup had recovered and was verified
   through the resume-memory baseline clarification before this continuation's
   record-sync edits. The latest locally recorded remote checkpoint is:
-  `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`
-  (`bddd900 Record Claude direct availability recheck`). That remote-backed chain
+  `5d11adc7418762e3e416ccda798f30ca4faf041f refs/heads/main`
+  (`5d11adc Mark deferred study tables explicitly`). That remote-backed chain
   includes the SNAP executable-candidate prompt packets, phase111/phase112
   diagnostic generation/execution artifacts, the tightened submission-review
   count-check gate, the updated AAAI phase112 SNAP-T1 executable-candidate
@@ -88,7 +92,8 @@ Current date: 2026-07-05.
   the quality-grounding table completion, the push-blocker record, the
   failure-branch claim-source cleanup, the claim-evidence-matrix boundary
   sync, the recovered checkpoint record, the push-blocker record, and the
-  Claude direct availability recheck. Earlier `Recv failure: Connection was reset` and port-443 failures
+  Claude direct availability recheck, plus the recovered Claude backup
+  checkpoint and deferred-study table marking. Earlier `Recv failure: Connection was reset` and port-443 failures
   remain historical GitHub transport metadata, not experiment correctness.
   Treat a future successful `git ls-remote` as the authority before claiming
   any new remote-backed phase.
