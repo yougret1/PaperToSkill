@@ -71,6 +71,15 @@ Current date: 2026-07-05.
   `python scripts/check_paper_claims.py --strict`,
   `python scripts/check_reproducibility_package.py --strict`, and
   `python scripts/check_goal_completion.py --strict`.
+- Current external-evidence boundary: local paper writing/checking is
+  synchronized, but active goal completion still has pending external evidence.
+  `C:\Users\19351\Desktop\tem\toHuman.md` now asks for independent
+  human-fidelity annotation over the prepared 24 paper-by-criterion cells. When
+  the completed annotation CSV is placed and `ok.txt` appears, run
+  `python scripts\summarize_human_fidelity_annotations.py --strict`,
+  `python scripts\check_goal_completion.py --strict`, and
+  `python scripts\check_reproducibility_package.py --strict`, then revisit the
+  AAAI submission decision currently recorded as `wait_for_external_evidence`.
 - Current local phase commit `77e8ada` implements the SNAP executable-candidate
   runner/checker/test path:
   `scripts/run_real_reuse_snapatac2_executable_candidate.py`,
