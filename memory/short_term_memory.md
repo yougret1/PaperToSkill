@@ -65,7 +65,12 @@ Current date: 2026-07-05.
   These three artifacts are now package-gated, bringing the package report to
   `456 ready / 1 pending / 0 failed`. This is provider availability metadata
   only and does not execute SNAP-T2, append raw rows, replace main rows, or show
-  PaperToSkill advantage.
+  PaperToSkill advantage. The phase-save commit
+  `d8d968d Record SNAP-T2 retry provider block` is currently local-only:
+  `git push origin main` failed with `Recv failure: Connection was reset`, and
+  the immediate `git ls-remote --heads origin main` failed with the same reset
+  error. This is GitHub transport metadata only and does not require a human
+  `ok.txt`.
 - Current Claude-family availability continuation rechecked the local Claude
   API document key with Anthropic Messages, aliases `claude-opus-4-8`,
   `claude-opus-4-7`, and `claude-opus-4-6`, 120-second timeout, and
