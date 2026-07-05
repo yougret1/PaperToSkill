@@ -33,20 +33,26 @@ Test-NetConnection github.com -Port 443 | Format-List
 Current status as of 2026-07-06: the temporary GitHub HTTPS transport blocker
 recovered through the AAAI page-limit backup, the later
 paper-finalization/submission-review chain, the paper-outline sync, the outline
-claim-drift gate, the main-results boundary cleanup, and the real-reuse
-LLM-ablation handoff guard. A later push also recovered the checkpoint-sync
-records and the outline evidence-boundary sync. The latest verified substantive
-checkpoint before claiming any later phase save is:
+claim-drift gate, the main-results boundary cleanup, the real-reuse
+LLM-ablation handoff guard, the checkpoint-sync records, the outline
+evidence-boundary sync, the limitations claim gate, the paper-facing
+cost-boundary sync, and the stale cost-scope claim guard. The latest verified
+substantive checkpoint before claiming any later phase save is:
 
 ```text
-5786d7d8538a3fd856d98f09619fbc5447c9ebed refs/heads/main
-5786d7d Sync outline evidence boundary
+43f9092c32a614d882199d5111fe21cc5cb19f8e refs/heads/main
+43f9092 Guard model response cost scope
 ```
 
 The earlier failed remote-backup attempts for `501ffc8`, `48aabac`, `8bdd394`,
 `95f1af3`, and `66e4763` remain GitHub transport metadata only. A later
 `git push origin main` succeeded, and `git ls-remote --heads origin main`
 verified the checkpoint above. Do not create `ok.txt` for GitHub status.
+
+Follow-up record-only commits `93a2abf`, `af3ba31`, and `4a85147` remain
+local-only because GitHub HTTPS transport failed after the verified `43f9092`
+phase save. Treat those failures as transport metadata only; the latest
+verified substantive remote backup remains `43f9092`.
 
 Follow-up commits `45ef25b Sync remote checkpoint after LLM handoff guard` and
 `0538ef1 Record checkpoint sync push blocker` first failed to back up because

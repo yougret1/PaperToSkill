@@ -153,6 +153,8 @@ def declared_remote_checkpoint(text: str) -> str:
     patterns = [
         r"latest locally recorded remote checkpoint(?: before this continuation's edits)? is:?(.{0,300}?)\b([0-9a-f]{40})\b",
         r"resume-baseline remote checkpoint(?: before this continuation's record-sync\s+edits)? is:?(.{0,300}?)\b([0-9a-f]{40})\b",
+        r"latest verified substantive(?: remote-backed)? checkpoint(?: after [^.\n]+)? is:?(.{0,300}?)\b([0-9a-f]{40})\b",
+        r"latest substantive remote-backed checkpoint before further edits:?(.{0,300}?)\b([0-9a-f]{40})\b",
     ]
     for pattern in patterns:
         match = re.search(pattern, text, flags=re.IGNORECASE | re.DOTALL)

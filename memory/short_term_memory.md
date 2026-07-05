@@ -138,6 +138,14 @@ Current date: 2026-07-06.
   `Failed to connect to github.com port 443 after 21063 ms`; the immediate
   `git ls-remote --heads origin main` failed with port-443 connectivity after
   21117 ms. This is GitHub transport metadata only.
+- Current checkpoint-record guard sync updates the short-memory declared
+  checkpoint, runbook, goal-completion audit, and generated goal-completion
+  report from stale `5786d7d` current-status wording to the verified
+  `43f9092 Guard model response cost scope` checkpoint. It also extends
+  `scripts/check_goal_completion.py` so the guard accepts the newer "latest
+  verified substantive checkpoint" wording. This is record/guard work only; it
+  does not change experiments, raw rows,
+  `results/real_reuse/main_run_selection.json`, or local logs.
 - Current main-results boundary cleanup removes stale "future unfilled cells /
   planning placeholders" wording from `scripts/build_real_reuse_paper_tables.py`
   and regenerated `results/real_reuse/main_results_plan.{md,json}`. It also
@@ -365,20 +373,20 @@ Current date: 2026-07-06.
   GitHub retry pushed the follow-up record-sync and Claude availability
   commits, and `git ls-remote --heads origin main` verified
   `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`.
-- Current local/remote status override after the outline evidence-boundary
-  sync: the latest locally recorded remote checkpoint is
-  `5786d7d8538a3fd856d98f09619fbc5447c9ebed refs/heads/main`
-  (`5786d7d Sync outline evidence boundary`). This checkpoint includes the
+- Current local/remote status override after the model-response cost-scope
+  guard: the latest locally recorded remote checkpoint is
+  `43f9092c32a614d882199d5111fe21cc5cb19f8e refs/heads/main`
+  (`43f9092 Guard model response cost scope`). This checkpoint includes the
   recovered checkpoint-sync commits after the real-reuse LLM-ablation handoff
-  guard and the outline update that distinguishes collected/scored
-  saved-response rows from unsupported human semantic fidelity, provider
-  billing, and live downstream task-success claims. It also includes the
-  submission-review handoff guard that separates older saved-response model
-  ablation from auxiliary real-reuse LLM ablation, the refreshed
-  `18 ready / 0 failed` submission-review report, memory/runbook/result-card
-  synchronization, and the previous recovered chain through `905899c`,
-  `1a7ae8c`, `00d32cd`, and the AAAI page-limit / outline / main-results
-  boundary backups. Older current-status bullets in this file are historical
+  guard, the outline update that distinguishes collected/scored saved-response
+  rows from unsupported human semantic fidelity, provider billing, and live
+  downstream task-success claims, the limitations claim gate, the
+  paper-facing saved-response cost-boundary sync, and the stale cost-scope
+  regression guard with 56 ready paper-claim checks / 0 failures. Local
+  record-only commits `93a2abf`, `af3ba31`, and `4a85147` remain unpushed
+  because GitHub HTTPS transport failed after `43f9092`; these are transport
+  metadata only and require no human `ok.txt`. Older current-status bullets in
+  this file are historical
   checkpoints only; use fresh `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
   phase.
@@ -959,8 +967,8 @@ Current date: 2026-07-06.
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
 6. Latest substantive remote-backed checkpoint before further edits:
-   `5786d7d Sync outline evidence boundary`, verified at
-   `5786d7d8538a3fd856d98f09619fbc5447c9ebed refs/heads/main`.
+   `43f9092 Guard model response cost scope`, verified at
+   `43f9092c32a614d882199d5111fe21cc5cb19f8e refs/heads/main`.
 7. No experiment-side human action is required for GitHub status right now.
    Continue non-network paper/evidence work and verify remote alignment again
    before claiming any later phase save is remote-backed.

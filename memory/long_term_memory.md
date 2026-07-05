@@ -151,6 +151,14 @@ This file is intentionally compact. Detailed chronological history lives in
   `Failed to connect to github.com port 443 after 21063 ms`, and the immediate
   `git ls-remote --heads origin main` failed with port-443 connectivity after
   21117 ms. Treat this as GitHub transport metadata only.
+- Current checkpoint-record guard sync refreshes the short-memory declared
+  checkpoint, runbook, goal-completion audit, and generated goal-completion
+  report so the current remote checkpoint is `43f9092 Guard model response
+  cost scope` rather than stale `5786d7d` wording. It also extends
+  `scripts/check_goal_completion.py` to parse the newer "latest verified
+  substantive checkpoint" wording. This is record/guard work only and does not
+  change experiments, raw rows, `results/real_reuse/main_run_selection.json`,
+  or local logs.
 - Follow-up record-sync commit `45ef25b Sync remote checkpoint after LLM handoff
   guard` and blocker note `0538ef1 Record checkpoint sync push blocker`
   initially failed to back up because GitHub HTTPS transport was unavailable.

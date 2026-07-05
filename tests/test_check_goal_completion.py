@@ -134,6 +134,14 @@ class CheckGoalCompletionTest(unittest.TestCase):
         )
         self.assertEqual("4d2e040fb587e9b8124b756094de9996f4409481", declared)
 
+    def test_declared_remote_checkpoint_accepts_latest_verified_wording(self):
+        declared = declared_remote_checkpoint(
+            "Latest verified substantive checkpoint after the paper-claim guard is\n"
+            "`43f9092c32a614d882199d5111fe21cc5cb19f8e refs/heads/main`\n"
+            "(`43f9092 Guard model response cost scope`)."
+        )
+        self.assertEqual("43f9092c32a614d882199d5111fe21cc5cb19f8e", declared)
+
     def test_remote_checkpoint_record_issues_allow_historical_hashes(self):
         issues = remote_checkpoint_record_issues(
             {
