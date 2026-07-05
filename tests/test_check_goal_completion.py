@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "check_goal_completion.py"
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from check_goal_completion import build_report, remote_checkpoint_record_issues, required_file_checks  # noqa: E402
+from check_goal_completion import build_report, declared_remote_checkpoint, remote_checkpoint_record_issues, required_file_checks  # noqa: E402
 
 
 class CheckGoalCompletionTest(unittest.TestCase):
@@ -125,6 +125,14 @@ class CheckGoalCompletionTest(unittest.TestCase):
         )
         self.assertEqual(1, len(issues))
         self.assertIn("b550a26", issues[0])
+
+    def test_declared_remote_checkpoint_comes_from_short_memory_wording(self):
+        declared = declared_remote_checkpoint(
+            "The latest locally recorded remote checkpoint is:\n"
+            "`4d2e040fb587e9b8124b756094de9996f4409481 refs/heads/main`\n"
+            "A later phase commit may exist locally."
+        )
+        self.assertEqual("4d2e040fb587e9b8124b756094de9996f4409481", declared)
 
     def test_remote_checkpoint_record_issues_allow_historical_hashes(self):
         issues = remote_checkpoint_record_issues(

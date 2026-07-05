@@ -102,12 +102,18 @@ Current date: 2026-07-05.
   AAAI submission decision currently recorded as `wait_for_external_evidence`.
 - Current record-drift guard continuation adds
   `current_remote_checkpoint_records` to `scripts/check_goal_completion.py`.
-  The check reads the local `refs/remotes/origin/main` tracking ref, requires
-  current checkpoint records in short memory, long memory, runbook, and goal
-  audit to mention `4d2e040`, and fails on stale current-status windows such
-  as `b550a26` being presented as the latest remote checkpoint. Focused unit
-  tests cover both stale-current detection and historical-hash allowance. The
-  goal report now has `78 ready / 3 pending / 0 failed`; package count remains
+  The first implementation compared current-status records directly to the
+  local `refs/remotes/origin/main` hash; after the guard commit was pushed,
+  that made the checker self-invalidating because the documents could not
+  contain the hash of their own just-created commit. The follow-up fix uses the
+  short-term-memory declared checkpoint as the consistency baseline for short
+  memory, long memory, runbook, and goal audit, while reporting the local
+  `origin/main` hash only as diagnostic detail. It still fails on stale
+  current-status windows such as `b550a26` being presented as the latest
+  checkpoint, and it allows clearly historical hashes. Focused unit tests cover
+  stale-current detection, declared-checkpoint extraction, historical-hash
+  allowance, and the current report boundary. The goal report now has
+  `78 ready / 3 pending / 0 failed`; package count remains
   `450 ready / 1 pending / 0 failed`; submission-review remains
   `17 ready / 0 failed`.
 - Current local phase commit `77e8ada` implements the SNAP executable-candidate

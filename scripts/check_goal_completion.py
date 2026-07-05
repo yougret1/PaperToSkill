@@ -149,6 +149,18 @@ def remote_checkpoint_record_issues(texts: dict[str, str], expected_full_hash: s
     return issues
 
 
+def declared_remote_checkpoint(text: str) -> str:
+    patterns = [
+        r"latest locally recorded remote checkpoint(?: before this continuation's edits)? is:?(.{0,300}?)\b([0-9a-f]{40})\b",
+        r"resume-baseline remote checkpoint(?: before this continuation's record-sync\s+edits)? is:?(.{0,300}?)\b([0-9a-f]{40})\b",
+    ]
+    for pattern in patterns:
+        match = re.search(pattern, text, flags=re.IGNORECASE | re.DOTALL)
+        if match:
+            return match.group(2)
+    return ""
+
+
 def required_file_checks(root: Path) -> list[Check]:
     checks = []
     for check_id, raw_path in REQUIRED_FILES.items():
@@ -215,29 +227,33 @@ def memory_checks(root: Path) -> list[Check]:
 
 
 def remote_checkpoint_record_checks(root: Path) -> list[Check]:
-    remote_full = git_output(root, ["rev-parse", "refs/remotes/origin/main"])
-    remote_subject = git_output(root, ["log", "-1", "--format=%s", "refs/remotes/origin/main"])
-    if not remote_full:
+    texts = {label: read_text(root / raw_path) for label, raw_path in REMOTE_CHECKPOINT_FILES.items()}
+    declared_full = declared_remote_checkpoint(texts["short_memory"])
+    if not declared_full:
         return [
             Check(
                 "current_remote_checkpoint_records",
                 "fail",
-                "refs/remotes/origin/main is unavailable; cannot audit current checkpoint records",
+                "short-term memory does not declare the latest locally recorded remote checkpoint",
                 "; ".join(REMOTE_CHECKPOINT_FILES.values()),
             )
         ]
 
-    texts = {label: read_text(root / raw_path) for label, raw_path in REMOTE_CHECKPOINT_FILES.items()}
+    remote_full = git_output(root, ["rev-parse", "refs/remotes/origin/main"])
+    remote_subject = git_output(root, ["log", "-1", "--format=%s", "refs/remotes/origin/main"])
+    declared_subject = git_output(root, ["log", "-1", "--format=%s", declared_full])
+    remote_detail = f"; origin/main={remote_full[:7]} {remote_subject}" if remote_full else "; origin/main=unavailable"
+
     missing_expected = [
         raw_path
         for raw_path in REMOTE_CHECKPOINT_FILES.values()
-        if remote_full[:7] not in read_text(root / raw_path)
+        if declared_full[:7] not in read_text(root / raw_path)
     ]
-    stale_issues = remote_checkpoint_record_issues(texts, remote_full)
+    stale_issues = remote_checkpoint_record_issues(texts, declared_full)
     if missing_expected or stale_issues:
         details = []
         if missing_expected:
-            details.append(f"missing current origin/main {remote_full[:7]} in {','.join(missing_expected)}")
+            details.append(f"missing declared checkpoint {declared_full[:7]} in {','.join(missing_expected)}")
         details.extend(stale_issues[:3])
         return [
             Check(
@@ -252,7 +268,7 @@ def remote_checkpoint_record_checks(root: Path) -> list[Check]:
         Check(
             "current_remote_checkpoint_records",
             "ready",
-            f"origin/main={remote_full[:7]} {remote_subject}",
+            f"declared={declared_full[:7]} {declared_subject}{remote_detail}",
             "; ".join(REMOTE_CHECKPOINT_FILES.values()),
         )
     ]
