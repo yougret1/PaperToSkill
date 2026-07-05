@@ -52,6 +52,15 @@ Current date: 2026-07-05.
   `ready_with_pending_external_evidence`; ready count is now
   `453 ready / 1 pending / 0 failed`. This does not change paper-facing main
   rows, execute SNAP-T2, or complete human-fidelity evidence.
+- Current Claude-family availability continuation rechecked the local Claude
+  API document key with Anthropic Messages, aliases `claude-opus-4-8`,
+  `claude-opus-4-7`, and `claude-opus-4-6`, 120-second timeout, and
+  `max_tokens=16`. All three aliases still returned provider HTTP 502. The
+  direct-probe JSON timestamp was refreshed and
+  `research/run_logs/2026-07-05_phase114_claude_direct_availability_recheck.md`
+  records the command boundary. This is provider availability metadata only;
+  do not score the six pending Claude-family real-reuse LLM-ablation rows as
+  negative.
 - Current non-network continuation after the resume/thread review updates
   `research/real_reuse_experiment_plan.md` Table 6 with existing quality and
   grounding evidence for AIDE, SWE-agent, Reflexion, SnapATAC2, Toolformer
