@@ -13,6 +13,15 @@ Current date: 2026-07-06.
   Preserve the existing local-log boundary: do not modify
   `research/run_logs/**` or `research/stage_log.md` during record-sync-only
   work.
+- Current paper-outline evidence-boundary sync: `paper/outline.md` no longer
+  says live-transfer prompt packets are waiting to be executed. The saved
+  live-transfer and older saved model-ablation rows are already collected and
+  scored under output-contract evaluators, while human semantic fidelity,
+  provider billing, and live downstream task success remain unsupported by
+  those saved responses. The outline now also distinguishes the older 6/6
+  saved-response model-ablation protocol from the current real-reuse LLM
+  ablation, which is still 12/18 scored with Claude-family rows
+  provider-pending.
 - Current checkpoint-sync push blocker: local commit
   `45ef25b Sync remote checkpoint after LLM handoff guard` updates repo memory,
   runbook, goal audit, and goal-completion report so the current checkpoint

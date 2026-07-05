@@ -1,26 +1,27 @@
 # PaperToSkill Paper Outline
 
-Evidence boundary: this outline is grounded in deterministic/offline artifacts
-from four curated real-paper notes. It should not be read as evidence of live
-cross-harness agent task success until the prepared prompt packets are executed.
-Phases 19-20 additionally include deterministic extracted-text-to-note
-scaffolds for Toolformer and AIDE; these are separate from the curated-note main
-benchmark. Phase 21 adds an AAAI-27 LaTeX package and usage examples. Phases
-22, 36, and 37 add model-ablation runner/evaluator evidence: Claude Opus 4.8
-and GPT-family rows are saved and scored for the current two-case protocol,
-with DeepSeek later completed for saved-response scoring. A local output-token
-proxy now covers all six saved model-ablation responses; it is not provider
-billing evidence. Phase 40 completes saved and scored live-transfer
-responses for all four paper packets under the deterministic output-contract
-evaluator. Phase 73 adds the current GPT and DeepSeek model-ablation saves and
-Phase 74 adds a bounded source-backed Paper2Agent artifact/workflow comparison;
-these are saved-response and artifact-positioning results, not live success or
-MCP baseline evidence. Phase 79 starts a next-stage real-reuse experiment plan
-in `research/real_reuse_experiment_plan.md`; Phase 87 partially executes the
-Reflexion slice with one GPT-family Summary-vs-PaperToSkill run, and later
-phases complete a first GPT-family pass over all eight real-reuse rows. The
-first pass is mixed and failure-heavy, so it must not be described as aggregate
-downstream effectiveness.
+Evidence boundary: this outline is grounded in deterministic/offline artifacts,
+saved-response output-contract rows, and the current first-pass real-reuse
+stress test. The saved live-transfer and saved model-ablation rows have been
+collected and scored, but they are not evidence of human semantic fidelity,
+provider billing, or live downstream task success. Phases 19-20 additionally
+include deterministic extracted-text-to-note scaffolds for Toolformer and AIDE;
+these are separate from the curated-note main benchmark. Phase 21 adds an
+AAAI-27 LaTeX package and usage examples. Phases 22, 36, 37, and 73 add
+model-ablation runner/evaluator evidence: Claude-family, GPT-family, and
+DeepSeek rows are saved and scored for the older two-case protocol, while the
+current real-reuse LLM ablation remains 12/18 scored with Claude-family rows
+provider-pending. A local output-token proxy covers the six saved older
+model-ablation responses; it is not provider billing evidence. Phase 40
+completes saved and scored live-transfer responses for all four paper packets
+under the deterministic output-contract evaluator. Phase 74 adds a bounded
+source-backed Paper2Agent artifact/workflow comparison; this is positioning
+evidence, not a live MCP baseline. Phase 79 starts the next-stage real-reuse
+experiment plan in `research/real_reuse_experiment_plan.md`; Phase 87 partially
+executes the Reflexion slice with one GPT-family Summary-vs-PaperToSkill run,
+and later phases complete a first GPT-family pass over all eight real-reuse
+rows. The first pass is mixed and failure-heavy, so it must not be described as
+aggregate downstream effectiveness.
 
 ## Working Title
 
