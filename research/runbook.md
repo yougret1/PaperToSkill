@@ -35,12 +35,12 @@ recovered again. The latest verified remote checkpoint before claiming any
 later phase save is:
 
 ```text
-5ad6b5438d50e5bbd31190a42f158400e3cb7bb4 refs/heads/main
-5ad6b54 Add real-reuse LLM ablation family table
+ad14de50db540f4798a6bc0409bac8be239e1617 refs/heads/main
+ad14de5 Record AAAI page-limit push blocker
 ```
 
 The previously unbacked local commits are now remote-backed through the latest
-real-reuse LLM-ablation family-table checkpoint:
+AAAI page-limit checkpoint:
 
 ```text
 77e8ada Add SNAP executable candidate runner
@@ -105,19 +105,15 @@ cea43eb Record checkpoint sync push blocker
 96fce87 Record SNAP-T2 phase116 provider block
 2575adc Record recovered phase116 backup
 5ad6b54 Add real-reuse LLM ablation family table
-```
-
-Latest local-only checkpoint after that verified remote:
-
-```text
 896456b Enforce AAAI main page limit
+ad14de5 Record AAAI page-limit push blocker
 ```
 
-The first `git push origin main` for `896456b` failed with
-`Recv failure: Connection was reset`, and the immediate
-`git ls-remote --heads origin main` failed with the same reset error. This is
-GitHub transport metadata only; keep the local commit and retry remote backup
-later instead of changing experiment or paper claims.
+The first remote backup attempt for the AAAI page-limit repair failed with
+`Recv failure: Connection was reset`, and the immediate remote check failed
+with the same reset error. A later `git push origin main` recovered and
+`git ls-remote --heads origin main` verified the current remote checkpoint.
+This is GitHub transport metadata only.
 
 Earlier `Recv failure: Connection was reset` and github.com port 443 failures
 remain GitHub transport metadata, not project-correctness evidence. The

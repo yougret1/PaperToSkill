@@ -70,13 +70,12 @@ This file is intentionally compact. Detailed chronological history lives in
   If a network/download problem blocks a core asset or phase save, record the
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
-- Latest verified remote checkpoint after the auxiliary real-reuse LLM-ablation
-  family-table phase is
-  `5ad6b5438d50e5bbd31190a42f158400e3cb7bb4 refs/heads/main`
-  (`5ad6b54 Add real-reuse LLM ablation family table`). This checkpoint
-  includes the phase116 SNAP-T2 provider-block chain, the auxiliary family
-  summary table, refreshed paper/package/submission reports, and memory/artifact
-  map synchronization. Claude-family real-reuse LLM-ablation rows remain
+- Latest verified remote checkpoint after the AAAI page-limit backup is
+  `ad14de50db540f4798a6bc0409bac8be239e1617 refs/heads/main`
+  (`ad14de5 Record AAAI page-limit push blocker`). This checkpoint includes
+  the phase116 SNAP-T2 provider-block chain, the auxiliary family summary table,
+  the AAAI page-limit repair, refreshed paper/package/submission reports, and
+  memory/artifact map synchronization. Claude-family real-reuse LLM-ablation rows remain
   provider-pending because `claude-opus-4-8`, `claude-opus-4-7`, and
   `claude-opus-4-6` all still returned provider HTTP 502 in the latest direct
   availability rechecks. Treat those 502s as provider availability metadata,
@@ -85,12 +84,11 @@ This file is intentionally compact. Detailed chronological history lives in
   Verify the exact current local/remote state with `git status -sb`,
   `git log -5 --oneline`, and a successful `git ls-remote --heads origin main`
   before claiming any later phase is remote-backed.
-- Local unbacked checkpoint after that verified remote: `896456b Enforce AAAI
-  main page limit` moves two supporting tables out of the main AAAI PDF,
-  rebuilds the PDF to 8 pages, and adds the page-limit guard. Its first
-  `git push origin main` and immediate `git ls-remote --heads origin main`
-  both failed with `Recv failure: Connection was reset`. Treat this as GitHub
-  transport metadata; do not count it as experiment or paper-content failure.
+- Recovered AAAI page-limit backup note: the first push for the page-limit
+  repair and its immediate remote check both failed with `Recv failure:
+  Connection was reset`, but a later push recovered and verified the current
+  remote checkpoint. Treat the earlier reset as GitHub transport metadata; do
+  not count it as experiment or paper-content failure.
 - Recovered record-only checkpoints after that verification:
   `b3441d5 Sync phase115 checkpoint records` and `cea43eb Record checkpoint
   sync push blocker` initially followed a GitHub reset, but the later phase116

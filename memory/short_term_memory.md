@@ -37,12 +37,10 @@ Current date: 2026-07-05.
   Current refreshed counts after that repair: package `468 ready / 1 pending /
   0 failed`, AAAI package `20 ready / 0 failed`, paper tables `343 ready / 0
   failed`, submission review `17 ready / 0 failed`, goal completion `78 ready /
-  3 pending / 0 failed`. Local phase commit `896456b Enforce AAAI main page
-  limit` records this repair, but its first `git push origin main` and
-  immediate `git ls-remote --heads origin main` both failed with
-  `Recv failure: Connection was reset`. This is GitHub transport metadata only;
-  remote backup remains unchanged until a future push succeeds; see
-  `C:\Users\19351\Desktop\tem\toHuman.md` for the exact transport note.
+  3 pending / 0 failed`. Its first remote backup attempt failed with
+  `Recv failure: Connection was reset`, but a later `git push origin main`
+  succeeded and `git ls-remote --heads origin main` verified the recovered
+  checkpoint now recorded below.
 - Historical record-sync continuation corrected the current remote-checkpoint
   records from the phase114 checkpoint to the verified phase116 provider-block
   checkpoint. `scripts/check_goal_completion.py --strict` now reports
@@ -208,14 +206,13 @@ Current date: 2026-07-05.
   GitHub retry pushed the follow-up record-sync and Claude availability
   commits, and `git ls-remote --heads origin main` verified
   `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`.
-- Current local/remote status override after the LLM-ablation family-table save:
+- Current local/remote status override after the AAAI page-limit backup:
   the latest locally recorded remote checkpoint is
-  `5ad6b5438d50e5bbd31190a42f158400e3cb7bb4 refs/heads/main`
-  (`5ad6b54 Add real-reuse LLM ablation family table`). This checkpoint
-  includes the auxiliary real-reuse LLM-ablation family summary, the AAAI
-  `tab:real-reuse-llm-ablation` table, refreshed paper/package/submission
-  reports, and the memory/artifact-map sync. Older current-status bullets in
-  this file are historical checkpoints only; use fresh
+  `ad14de50db540f4798a6bc0409bac8be239e1617 refs/heads/main`
+  (`ad14de5 Record AAAI page-limit push blocker`). This checkpoint includes
+  the AAAI main-page-limit repair, the recovered remote backup of that repair,
+  refreshed package/table/submission reports, and memory/runbook sync. Older
+  current-status bullets in this file are historical checkpoints only; use fresh
   `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
   phase.

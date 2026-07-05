@@ -46,17 +46,12 @@ Current machine reports:
   `ready`, 2 packets, and 0 failed checks.
 
 Record-sync note: the current remote-checkpoint records now point to the
-verified auxiliary real-reuse LLM-ablation family-table checkpoint
-`5ad6b5438d50e5bbd31190a42f158400e3cb7bb4 refs/heads/main`
-(`5ad6b54 Add real-reuse LLM ablation family table`). Earlier record-only
-checkpoint syncs first hit `Recv failure: Connection was reset`, but later
-pushes recovered. This is GitHub transport metadata only.
-
-Local backup note: `896456b Enforce AAAI main page limit` is committed locally
-after that verified remote checkpoint, but its first `git push origin main` and
-immediate `git ls-remote --heads origin main` both failed with `Recv failure:
-Connection was reset`. This is GitHub transport metadata only and does not
-change the local evidence status.
+verified AAAI page-limit checkpoint:
+`ad14de50db540f4798a6bc0409bac8be239e1617 refs/heads/main`
+(`ad14de5 Record AAAI page-limit push blocker`). Earlier record-only
+checkpoint syncs and the first page-limit backup attempt hit `Recv failure:
+Connection was reset`, but later pushes recovered. This is GitHub transport
+metadata only.
 
 ## Requirement Audit
 
@@ -64,7 +59,7 @@ change the local evidence status.
 | --- | --- | --- | --- |
 | Durable local memory | `memory/long_term_memory.md`; `memory/short_term_memory.md` | Complete locally | Read and update both memory files after every resume/compaction. |
 | Use `ai-scientist-v2` to refine PaperToSkill | Seed idea files, bounded smoke report, full live-run handoff, Phase 76 run log, completion directory | Complete for bounded local evidence | Do not treat the synthetic run as broad live task success. |
-| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. The latest verified remote-backed checkpoint is `5ad6b5438d50e5bbd31190a42f158400e3cb7bb4 refs/heads/main` (`5ad6b54 Add real-reuse LLM ablation family table`). It includes the auxiliary real-reuse LLM-ablation family table and keeps earlier SNAP-T2/Claude provider failures as availability metadata. Earlier connection-reset and port-443 failures remain GitHub transport metadata rather than experiment-correctness evidence. | Complete for the latest locally recorded remote-backed phase | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim with `git status -sb`, `git log -5 --oneline`, and `git ls-remote --heads origin main`; keep transport failures separate from experiment correctness and record exact failures in `C:\Users\19351\Desktop\tem\toHuman.md` if they recur. |
+| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. The latest verified remote-backed checkpoint is `ad14de50db540f4798a6bc0409bac8be239e1617 refs/heads/main` (`ad14de5 Record AAAI page-limit push blocker`). It includes the AAAI page-limit repair and keeps earlier SNAP-T2/Claude provider failures as availability metadata. Earlier connection-reset and port-443 failures remain GitHub transport metadata rather than experiment-correctness evidence. | Complete for the latest locally recorded remote-backed phase | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim with `git status -sb`, `git log -5 --oneline`, and `git ls-remote --heads origin main`; keep transport failures separate from experiment correctness and record exact failures in `C:\Users\19351\Desktop\tem\toHuman.md` if they recur. |
 | Official AAAI TeX package | `paper/aaai/`; `results/reproducibility/aaai_package_report.md` | Locally ready | Keep draft synchronized with new evidence. |
 | Usage examples | `examples/usage/`; `results/reproducibility/usage_example_report.md` | Complete locally | Re-run after runner or task changes. |
 | Model ablations | `results/model_ablation_prompts/v0/evaluation.md`: 6 scored, 0 pending | Complete for saved-response protocol | Do not claim broad model quality or live task success. |
