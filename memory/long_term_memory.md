@@ -65,18 +65,18 @@ This file is intentionally compact. Detailed chronological history lives in
   If a network/download problem blocks a core asset or phase save, record the
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
-- Latest verified remote checkpoint after the phase116 SNAP-T2 provider-block
-  record is
-  `96fce87967b207e1cd0a0b9b36ba8fb8795eff33 refs/heads/main`
-  (`96fce87 Record SNAP-T2 phase116 provider block`). The working tree was clean
-  against `origin/main` immediately after that push/verify. This checkpoint
-  includes the SNAP-T2 availability/package-gate artifacts, the phase115 and
-  phase116 retry provider-block records, and the Claude-family direct
-  availability recheck in which `claude-opus-4-8`,
-  `claude-opus-4-7`, and `claude-opus-4-6` all still returned provider HTTP
-  502. Treat those 502s as provider availability metadata, not model-quality
-  evidence or scored real-reuse failures. Older named checkpoint notes in this
-  memory are historical recovery checkpoints.
+- Latest verified remote checkpoint after the auxiliary real-reuse LLM-ablation
+  family-table phase is
+  `5ad6b5438d50e5bbd31190a42f158400e3cb7bb4 refs/heads/main`
+  (`5ad6b54 Add real-reuse LLM ablation family table`). This checkpoint
+  includes the phase116 SNAP-T2 provider-block chain, the auxiliary family
+  summary table, refreshed paper/package/submission reports, and memory/artifact
+  map synchronization. Claude-family real-reuse LLM-ablation rows remain
+  provider-pending because `claude-opus-4-8`, `claude-opus-4-7`, and
+  `claude-opus-4-6` all still returned provider HTTP 502 in the latest direct
+  availability rechecks. Treat those 502s as provider availability metadata,
+  not model-quality evidence or scored real-reuse failures. Older named
+  checkpoint notes in this memory are historical recovery checkpoints.
   Verify the exact current local/remote state with `git status -sb`,
   `git log -5 --oneline`, and a successful `git ls-remote --heads origin main`
   before claiming any later phase is remote-backed.

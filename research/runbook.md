@@ -35,12 +35,12 @@ recovered again. The latest verified remote checkpoint before claiming any
 later phase save is:
 
 ```text
-96fce87967b207e1cd0a0b9b36ba8fb8795eff33 refs/heads/main
-96fce87 Record SNAP-T2 phase116 provider block
+5ad6b5438d50e5bbd31190a42f158400e3cb7bb4 refs/heads/main
+5ad6b54 Add real-reuse LLM ablation family table
 ```
 
 The previously unbacked local commits are now remote-backed through the latest
-recovered SNAP-T2 retry backup checkpoint:
+real-reuse LLM-ablation family-table checkpoint:
 
 ```text
 77e8ada Add SNAP executable candidate runner
@@ -103,6 +103,8 @@ d8d968d Record SNAP-T2 retry provider block
 b3441d5 Sync phase115 checkpoint records
 cea43eb Record checkpoint sync push blocker
 96fce87 Record SNAP-T2 phase116 provider block
+2575adc Record recovered phase116 backup
+5ad6b54 Add real-reuse LLM ablation family table
 ```
 
 Earlier `Recv failure: Connection was reset` and github.com port 443 failures

@@ -199,11 +199,14 @@ Current date: 2026-07-05.
   GitHub retry pushed the follow-up record-sync and Claude availability
   commits, and `git ls-remote --heads origin main` verified
   `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`.
-- Current local/remote status override after phase116: the latest locally recorded remote checkpoint is
-  `96fce87967b207e1cd0a0b9b36ba8fb8795eff33 refs/heads/main`
-  (`96fce87 Record SNAP-T2 phase116 provider block`). The working tree was clean
-  against `origin/main` immediately after that push/verify. Older current-status
-  bullets in this file are historical checkpoints only; use fresh
+- Current local/remote status override after the LLM-ablation family-table save:
+  the latest locally recorded remote checkpoint is
+  `5ad6b5438d50e5bbd31190a42f158400e3cb7bb4 refs/heads/main`
+  (`5ad6b54 Add real-reuse LLM ablation family table`). This checkpoint
+  includes the auxiliary real-reuse LLM-ablation family summary, the AAAI
+  `tab:real-reuse-llm-ablation` table, refreshed paper/package/submission
+  reports, and the memory/artifact-map sync. Older current-status bullets in
+  this file are historical checkpoints only; use fresh
   `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
   phase.
