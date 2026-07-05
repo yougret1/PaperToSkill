@@ -31,11 +31,12 @@ Test-NetConnection github.com -Port 443 | Format-List
 ```
 
 Current status as of 2026-07-05: the temporary GitHub HTTPS transport blocker
-recovered again. The latest verified remote checkpoint is:
+recovered again, and the phase112 SNAP executable-candidate completion is
+remote-backed. The latest verified remote checkpoint is:
 
 ```text
-fb0baed4c88c8d6bf157fe1bb1155461d0d9289c refs/heads/main
-fb0baed Sync SNAP diagnostic remote status
+b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main
+b6dc061 Complete SNAP executable candidate diagnostic
 ```
 
 The previously unbacked local commits are now remote-backed through the SNAP
@@ -55,16 +56,15 @@ c3f9f05 Clarify SNAP prompt backup status
 9829123 Run SNAP executable candidate diagnostics
 db535e7 Record SNAP diagnostic checkpoint
 fb0baed Sync SNAP diagnostic remote status
+b6dc061 Complete SNAP executable candidate diagnostic
 ```
 
 Earlier `Recv failure: Connection was reset` and github.com port 443 failures
 remain GitHub transport metadata, not project-correctness evidence. The
 previously local-only record-sync commit after `db535e7` is now remote-backed.
-A current local record-sync commit after `fb0baed` is not remote-backed yet
-because two `git push origin main` attempts failed with `Recv failure:
-Connection was reset`, and the follow-up remote check failed to connect to
-github.com port 443 after about 21065 ms. Always inspect `git status -sb`
-before claiming a clean phase save.
+The later local record-sync commit after `fb0baed` and the phase112 completion
+commit are now remote-backed. Always inspect `git status -sb` before claiming a
+clean phase save.
 
 Re-run remote verification before making future remote-backed checkpoint
 claims.

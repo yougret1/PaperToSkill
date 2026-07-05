@@ -66,15 +66,12 @@ This file is intentionally compact. Detailed chronological history lives in
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
 - Current remote-backed checkpoint is
-  `fb0baed4c88c8d6bf157fe1bb1155461d0d9289c refs/heads/main`
-  (`fb0baed Sync SNAP diagnostic remote status`). The prior local-only
-  record-sync commit after `db535e7` is now remote-backed. Earlier
+  `b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main`
+  (`b6dc061 Complete SNAP executable candidate diagnostic`). The previous
+  local-only record-sync commit after `fb0baed` and the phase112 SNAP
+  diagnostic/table/package completion are now remote-backed. Earlier
   connection-reset and port-443 failures remain GitHub transport metadata, not
-  experiment-correctness evidence. A current local record-sync commit after
-  `fb0baed` is not remote-backed yet because two `git push origin main`
-  attempts failed with `Recv failure: Connection was reset`, and the follow-up
-  `git ls-remote --heads origin main` failed to connect to github.com port 443
-  after about 21065 ms. Verify with `git status -sb` and
+  experiment-correctness evidence. Verify with `git status -sb` and
   `git ls-remote --heads origin main` before claiming a later phase is
   remote-backed.
 
@@ -334,10 +331,11 @@ Current supported claims:
   records), `2490a9b` (real-reuse stabilization queue sync), `0832201`
   (memory sync after GitHub retry), `ef8cbe0` (SNAP executable-candidate
   prompt packets), `9829123` (SNAP executable-candidate live diagnostics), and
-  `db535e7` (SNAP diagnostic checkpoint record), and `fb0baed` (remote-status
-  sync). The temporary 2026-07-05 GitHub HTTPS transport blocker recovered
-  again; the latest verified remote checkpoint is
-  `fb0baed4c88c8d6bf157fe1bb1155461d0d9289c refs/heads/main`. Verify exact
+  `db535e7` (SNAP diagnostic checkpoint record), `fb0baed` (remote-status
+  sync), and `b6dc061` (phase112 SNAP executable-candidate diagnostic/table/
+  package completion). The temporary 2026-07-05 GitHub HTTPS transport blocker
+  recovered again; the latest verified remote checkpoint is
+  `b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main`. Verify exact
   local/remote alignment with
   `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
@@ -411,9 +409,9 @@ Current supported claims:
   `24f8029`, `cdeab1f`, `c7d55b7`, `2a61d42`, `12fab77`, `9888f17`,
   `1ab714f`, `2b5d9d0`, `05b3963`, `77e8ada`, `0983fbc`, `c4b4b99`,
   `2490a9b`, `0832201`, `4b216b6`, `0734bb9`, `ef8cbe0`, `10a3d1d`,
-  `c3f9f05`, `9829123`, `db535e7`, and `fb0baed` are remote-backed in the latest
-  verified checkpoint
-  `fb0baed4c88c8d6bf157fe1bb1155461d0d9289c refs/heads/main`.
+  `c3f9f05`, `9829123`, `db535e7`, `fb0baed`, and `b6dc061` are remote-backed
+  in the latest verified checkpoint
+  `b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main`.
 - Phase109 has collected scored real-reuse LLM ablation rows only on the
   pre-registered stabilized slices. Current collected GPT-family pairs are
   REF-T2 1.000/1.000,
@@ -433,11 +431,9 @@ Current supported claims:
   HTTPS transport interruptions. Use `git status -sb` and a successful remote
   check for the latest exact alignment before each phase-save claim.
 - Latest verified remote-backed phase checkpoint:
-  `fb0baed Sync SNAP diagnostic remote status`, verified at
-  `fb0baed4c88c8d6bf157fe1bb1155461d0d9289c refs/heads/main`. A current local
-  record-sync commit after `fb0baed` is not remote-backed yet due GitHub HTTPS
-  transport failure. Rerun remote verification before making later
-  remote-backed claims.
+  `b6dc061 Complete SNAP executable candidate diagnostic`, verified at
+  `b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main`. Rerun remote
+  verification before making later remote-backed claims.
 
 Current unsupported claims:
 

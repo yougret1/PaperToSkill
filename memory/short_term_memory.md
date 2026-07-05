@@ -11,19 +11,17 @@ Current date: 2026-07-05.
   core work toward `C:\Users\19351\Desktop\tem\nextStep.md`. Preserve the
   existing local-log boundary: do not modify `research/run_logs/**` or
   `research/stage_log.md` during record-sync-only work.
-- Current save target status: GitHub backup recovered again. The latest
-  verified remote checkpoint is
-  `fb0baed4c88c8d6bf157fe1bb1155461d0d9289c refs/heads/main`
-  (`fb0baed Sync SNAP diagnostic remote status`). This remote-backed chain now
-  includes the SNAP executable-candidate prompt packets, phase111/phase112
-  diagnostic generation/execution artifacts, memory checkpoint records, and
-  the remote-status sync after the prior port-443 blocker. Earlier
-  `Recv failure: Connection was reset` and port-443 failures remain historical
-  GitHub transport metadata, not experiment correctness. A current local
-  record-sync commit after `fb0baed` is not remote-backed yet: two
-  `git push origin main` attempts failed with `Recv failure: Connection was
-  reset`, and the follow-up `git ls-remote --heads origin main` failed to
-  connect to github.com port 443 after about 21065 ms.
+- Current save target status: GitHub backup recovered again and was verified
+  after the phase112 completion commit. The latest verified remote checkpoint is
+  `b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main`
+  (`b6dc061 Complete SNAP executable candidate diagnostic`). This
+  remote-backed chain now includes the SNAP executable-candidate prompt
+  packets, phase111/phase112 diagnostic generation/execution artifacts, memory
+  checkpoint records, the prior remote-status sync, and the refreshed AAAI
+  PDF/table/package reports. Earlier `Recv failure: Connection was reset` and
+  port-443 failures remain historical GitHub transport metadata, not
+  experiment correctness. After the verified push, `git status -sb` reported
+  `## main...origin/main`.
 - Current local phase commit `77e8ada` implements the SNAP executable-candidate
   runner/checker/test path:
   `scripts/run_real_reuse_snapatac2_executable_candidate.py`,
@@ -89,7 +87,9 @@ Current date: 2026-07-05.
   `check_submission_review.py --strict`,
   `check_aaai_submission_decision.py --strict`, `git diff --check` with only
   CRLF warnings, and a changed-file raw-key scan with no matches. A narrow
-  static scan found no actual `resource` imports in the phase112 scripts.
+  static scan found no actual `resource` imports in the phase112 scripts. This
+  completed phase is saved and remote-backed in `b6dc061 Complete SNAP
+  executable candidate diagnostic`.
 - `research/real_reuse_stabilization_queue.md` now marks the SNAP P1 local
   action as runner-implemented: future SNAP reruns should use the executable
   candidate runner only when paired Summary/PaperToSkill candidate scripts
@@ -149,10 +149,11 @@ Current date: 2026-07-05.
   dedicated CSV/MD/JSON table, builder/test, paper table, rebuilt AAAI PDF, and
   table/package checker/report updates.
 - Current remote-backup status: GitHub backup is verified through
-  `fb0baed4c88c8d6bf157fe1bb1155461d0d9289c refs/heads/main`
-  (`fb0baed Sync SNAP diagnostic remote status`). The previously unbacked
-  local commits from `4b216b6` through the SNAP diagnostic record and the
-  follow-up remote-status sync are now remote-backed.
+  `b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main`
+  (`b6dc061 Complete SNAP executable candidate diagnostic`). The previously
+  unbacked local commits from `4b216b6` through the SNAP diagnostic record,
+  the follow-up remote-status sync, and the phase112 completion commit are now
+  remote-backed.
 - The current discussion policy is: stabilize the core eight-row real-reuse
   evidence first; collect auxiliary raw data opportunistically; keep LLM
   ablation auxiliary, component ablation appendix-only, and user study
@@ -163,13 +164,14 @@ Current date: 2026-07-05.
   exact GitHub push / remote-check transport errors. It no longer asks the
   user to create `ok.txt` for GitHub status; `ok.txt` is reserved for completed
   human-fidelity annotation or a concrete placed core real-reuse asset.
-- The committed chain through `fb0baed Sync SNAP diagnostic remote status`
+- The committed chain through `b6dc061 Complete SNAP executable candidate diagnostic`
   is pushed to `origin/main` and verified by `git ls-remote --heads origin
   main` as
-  `fb0baed4c88c8d6bf157fe1bb1155461d0d9289c refs/heads/main`. This includes
+  `b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main`. This includes
   the earlier recovered GitHub backup records, real-reuse boundary tightening,
   SNAP executable-candidate runner, prompt packets, phase111/phase112
-  diagnostic artifacts, and memory/queue sync. Earlier GitHub HTTPS transport
+  diagnostic artifacts, memory/queue sync, and the refreshed AAAI
+  diagnostic-table/PDF/package reports. Earlier GitHub HTTPS transport
   failures are availability metadata, not experiment-correctness evidence.
 - Verification before the `599382d` phase save passed:
   `python -m unittest tests.test_build_real_reuse_swe_t1_issue_aligned_followup
@@ -186,7 +188,7 @@ Current date: 2026-07-05.
   annotation or a concrete placed core asset.
 - Current GitHub transport note: previous 2026-07-05 connection-reset /
   port-443 failures recovered again. Current verified remote state is
-  `fb0baed4c88c8d6bf157fe1bb1155461d0d9289c refs/heads/main`. Before claiming
+  `b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main`. Before claiming
   any later phase save is remote-backed, rerun `git status -sb`,
   `git log -5 --oneline`, and `git ls-remote --heads origin main`.
 - Historical Claude-family availability checkpoint: after record-sync commit
@@ -348,10 +350,10 @@ Current date: 2026-07-05.
 
 ## Immediate Next Actions
 
-1. Save the current local phase after broader verification: the SNAP
-   executable-candidate runner is implemented and focused tests/preflight pass.
-   It remains diagnostic and must not change paper-facing main rows unless
-   explicitly promoted through `results/real_reuse/main_run_selection.json`.
+1. Continue non-network core real-reuse stabilization after the remote-backed
+   phase112 save. The SNAP executable-candidate diagnostic is complete and
+   must not change paper-facing main rows unless explicitly promoted through
+   `results/real_reuse/main_run_selection.json`.
 2. Retry Claude-family real-reuse LLM ablation rows only opportunistically when
    provider availability recovers. The current collected scored slices are all
    GPT-family and DeepSeek-family rows for REF-T2, AIDE-T2, and SWE-T2; all
@@ -370,11 +372,10 @@ Current date: 2026-07-05.
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
 6. Latest verified remote-backed checkpoint:
-   `fb0baed Sync SNAP diagnostic remote status`, verified at
-   `fb0baed4c88c8d6bf157fe1bb1155461d0d9289c refs/heads/main`.
-7. A current local record-sync commit after `fb0baed` is not remote-backed yet
-   due GitHub HTTPS transport failure. No experiment-side human action is
-   required; continue non-network work.
+   `b6dc061 Complete SNAP executable candidate diagnostic`, verified at
+   `b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main`.
+7. No experiment-side human action is required; continue non-network work and
+   retry provider-dependent Claude-family rows only opportunistically.
 
 ## Boundaries
 
