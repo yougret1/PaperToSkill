@@ -27,6 +27,16 @@ Current date: 2026-07-05.
   GitHub transport recovers: `git push origin main` failed with
   `Recv failure: Connection was reset`, and `git ls-remote --heads origin main`
   then failed with `Failed to connect to github.com port 443 after 21124 ms`.
+  A later retry in this continuation failed again with `Recv failure:
+  Connection was reset`, followed by `git ls-remote --heads origin main`
+  failing with `Failed to connect to github.com port 443 after 21111 ms`.
+- Current local claim-boundary continuation updates
+  `research/claim_source_map.md` so the failure-branch claim no longer says
+  "improves reproducibility" as a TBD hypothesis. It now says PaperToSkill
+  preserves failure branches as auditable reproducibility-supporting evidence,
+  while causal reproducibility improvement remains untested. Supporting files
+  are `results/failure_cases/failure_case_archive.md` and
+  `results/reproducibility/package_report.md`.
 - Current local/remote status after this resume check: the latest verified
   remote backup is
   `bcd210429b4e82a7aa8016a3d82283966728c604 refs/heads/main`
@@ -70,9 +80,9 @@ Current date: 2026-07-05.
   later push verification now includes the checkpoint-detail/blocker records,
   the grounding-gate evidence sync, and the follow-up checkpoint record. Current
   local state is ahead of `origin/main` by the quality-grounding table
-  completion and the blocker-record continuation until a future push succeeds.
-  Goal status remains externally blocked on human-fidelity annotation and the
-  follow-on AAAI final decision.
+  completion, claim-boundary cleanup, and blocker-record continuation until a
+  future push succeeds. Goal status remains externally blocked on
+  human-fidelity annotation and the follow-on AAAI final decision.
 - Current record-sync continuation tightens
   `scripts/check_submission_review.py` so review/rebuttal/submission handoff
   files must carry exact current gate counts for goal/package, AAAI package,

@@ -75,8 +75,9 @@ This file is intentionally compact. Detailed chronological history lives in
   checkpoint/blocker/recovery/baseline records are now remote-backed in the
   local `origin/main` tracking ref through `bcd2104`. This includes the
   checkpoint-detail/blocker records and the grounding-gate evidence sync.
-  The later quality-grounding table completion remains local-only until
-  GitHub transport recovers. Earlier connection-reset and
+  The later quality-grounding table completion, claim-boundary cleanup, and
+  blocker-record continuation remain local-only until GitHub transport
+  recovers. Earlier connection-reset and
   port-443 failures remain GitHub transport metadata, not
   experiment-correctness evidence. Verify the exact current local/remote state
   with `git status -sb`, `git log -5 --oneline`, and a successful
@@ -91,8 +92,9 @@ This file is intentionally compact. Detailed chronological history lives in
   `git ls-remote --heads origin main` failed with `Failed to connect to
   github.com port 443 after 21100 ms`. Later pushes succeeded and the local
   tracking ref later advanced through `bcd2104`; current local state is ahead
-  of that verified remote by the quality-grounding table completion and
-  blocker-record continuation until a future push succeeds.
+  of that verified remote by the quality-grounding table completion,
+  claim-boundary cleanup, and blocker-record continuation until a future push
+  succeeds.
 
 ## Evidence Boundary
 
@@ -106,6 +108,8 @@ Current supported claims:
   executability, AAAI package readiness, table consistency, paper claim
   discipline, and active-goal completion auditing.
 - Failure-case archive with paper-reported and project-level cases.
+  Paper-facing claim records treat this as auditable traceability evidence, not
+  proof of a causal reproducibility improvement.
 - Real-reuse failure-boundary analysis is derived from the same first-pass raw
   rows and is now included in the AAAI table set. It maps row-level outcomes to
   PaperToSkill-only success, patch application, solved-by-both ceiling, and

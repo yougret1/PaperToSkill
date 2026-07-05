@@ -92,9 +92,10 @@ history.
 Always inspect `git status -sb` and `git log -5 --oneline` before claiming a
 clean phase save.
 
-Local-only continuation note: the quality-grounding table completion and its
-blocker-record continuation are pending remote backup after GitHub HTTPS
-transport failed with connection-reset and port-443 errors.
+Local-only continuation note: the quality-grounding table completion,
+claim-boundary cleanup, and blocker-record continuation are pending remote
+backup after GitHub HTTPS transport failed with connection-reset and port-443
+errors.
 
 Re-run remote verification before making future remote-backed checkpoint
 claims.
