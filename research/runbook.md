@@ -63,11 +63,11 @@ Earlier `Recv failure: Connection was reset` and github.com port 443 failures
 remain GitHub transport metadata, not project-correctness evidence. The
 previously local-only record-sync commit after `db535e7` is now remote-backed.
 The later local record-sync commit after `fb0baed` and the phase112 completion
-commit are now remote-backed. A later local record-sync commit
-`a976bbc Record SNAP diagnostic backup recovery` is not remote-backed yet
-because both `git push origin main` and `git ls-remote --heads origin main`
-failed with `Recv failure: Connection was reset`. Always inspect
-`git status -sb` before claiming a clean phase save.
+commit are now remote-backed. Later local record-sync commits after `b6dc061`
+are not remote-backed yet because both `git push origin main` and
+`git ls-remote --heads origin main` failed with `Recv failure: Connection was
+reset`. Always inspect `git status -sb` and `git log -5 --oneline` before
+claiming a clean phase save.
 
 Re-run remote verification before making future remote-backed checkpoint
 claims.
@@ -1075,7 +1075,7 @@ python scripts\check_submission_review.py `
 ```
 
 Current status:
-`results/reproducibility/submission_review_report.md` reports ready, 16 ready
+`results/reproducibility/submission_review_report.md` reports ready, 17 ready
 checks, and 0 failed checks. It verifies that review handoff files describe the
 24 scored saved live-transfer response rows, 6 scored and 0 pending
 model-ablation rows, 0 scored and 24 pending human-fidelity cells, local token

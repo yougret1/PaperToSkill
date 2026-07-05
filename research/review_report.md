@@ -1,6 +1,6 @@
 # PaperToSkill Review Report
 
-Date: 2026-07-04
+Date: 2026-07-05
 
 Evidence boundary: this is an internal adversarial review of the current
 PaperToSkill draft and artifact package. It updates the review handoff to match
@@ -67,12 +67,14 @@ used as boundary evidence rather than aggregate downstream-effectiveness proof.
 | Gate | Status | Evidence |
 | --- | --- | --- |
 | Claim-evidence consistency | Pass with caveats | `paper/claim_checklist.md`; `research/claim_evidence_matrix.md`; `results/reproducibility/paper_claim_report.md` |
-| Local reproducibility package | Pass locally, external evidence pending | `results/reproducibility/package_report.md`: 431 ready, 1 pending, 0 failed |
+| Local reproducibility package | Pass locally, external evidence pending | `results/reproducibility/package_report.md`: 450 ready, 1 pending, 0 failed |
 | Active-goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 77 ready, 3 pending, 0 failed |
 | External evidence closure queue | Ready as local queue | `results/external_evidence_closure/closure.md`: 3 ready, 0 pending, 0 failed |
 | External evidence execution packets | Ready as local handoff | `results/external_evidence_packets/packets.md`: 7 ready, 0 pending, 0 failed |
 | AAAI submission decision | Recorded wait decision | `results/aaai_submission_decision/decision.md`: `selected_option=wait_for_external_evidence`, 27 ready, 0 pending, 0 failed |
-| AAAI local package | Pass locally, not submission-final | `results/reproducibility/aaai_package_report.md` |
+| AAAI local package | Pass locally, not submission-final | `results/reproducibility/aaai_package_report.md`: 17 ready, 0 failed |
+| Paper table synchronization | Pass locally | `results/reproducibility/paper_table_report.md`: 316 ready, 0 failed |
+| Usage examples | Pass locally | `results/reproducibility/usage_example_report.md`: 55 ready, 0 failed |
 | Live-transfer saved responses | Complete for saved-response scoring | `results/live_transfer_prompts/evaluation.md`: 24 scored, 0 pending |
 | Real live task success | Partial and mixed | Saved-response scoring is not human semantic or real task-success evidence; the eight-row real-reuse pass is single-run, mixed, and failure-heavy rather than an aggregate success result. |
 | Model ablation | Complete for saved-response scoring | `results/model_ablation_prompts/v0/evaluation.md`: 6 scored rows, 0 pending; `results/deepseek_followup_handoff/handoff.md`: `responses_present` |

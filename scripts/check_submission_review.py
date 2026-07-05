@@ -202,7 +202,7 @@ def smoke_blocker_terms(smoke: dict[str, Any]) -> list[str]:
 def aggregate_handoff_current(goal_counts: dict[str, Any], package_counts: dict[str, Any], combined_text: str) -> bool:
     boundary_terms_present = contains_all(combined_text, ["active goal", "not complete", "pending external evidence"])
     if goal_counts.get("fail") == 0 and package_counts.get("fail") == 0:
-        count_terms_present = contains_all(
+        return contains_all(
             combined_text,
             [
                 f"{goal_counts.get('ready')} ready",
@@ -211,10 +211,27 @@ def aggregate_handoff_current(goal_counts: dict[str, Any], package_counts: dict[
                 f"{package_counts.get('pending')} pending",
             ],
         )
-        return count_terms_present or boundary_terms_present
     # Avoid a self-referential failure loop when stale aggregate reports failed
     # only because the submission-review gate was generated before this check.
     return boundary_terms_present
+
+
+def local_gate_counts_current(root: Path, combined_text: str) -> tuple[bool, str]:
+    gate_paths = {
+        "aaai": root / "results/reproducibility/aaai_package_report.json",
+        "paper_table": root / "results/reproducibility/paper_table_report.json",
+        "usage": root / "results/reproducibility/usage_example_report.json",
+    }
+    details: list[str] = []
+    required_terms: list[str] = []
+    for name, path in gate_paths.items():
+        report = load_json(path)
+        counts = report.get("status_counts", {})
+        ready = counts.get("ready")
+        failed = counts.get("fail")
+        details.append(f"{name}={counts}")
+        required_terms.extend([f"{ready} ready", f"{failed} failed"])
+    return contains_all(combined_text, required_terms), "; ".join(details)
 
 
 def evidence_alignment_checks(root: Path, combined_text: str) -> list[Check]:
@@ -231,6 +248,7 @@ def evidence_alignment_checks(root: Path, combined_text: str) -> list[Check]:
     package = load_json(root / "results/reproducibility/package_report.json")
     goal_counts = goal.get("status_counts", {})
     package_counts = package.get("status_counts", {})
+    local_gate_counts_ready, local_gate_counts_detail = local_gate_counts_current(root, combined_text)
     human_status = human.get("annotation_status")
     human_scored = int(human.get("scored_rows", -1))
     human_pending = int(human.get("pending_rows", 0))
@@ -341,6 +359,12 @@ def evidence_alignment_checks(root: Path, combined_text: str) -> list[Check]:
                 f"package={package_counts}"
             ),
             "results/reproducibility/goal_completion_report.json; results/reproducibility/package_report.json; research/submission_checklist.md",
+        ),
+        Check(
+            "submission_review_local_gate_counts_current",
+            "ready" if local_gate_counts_ready else "fail",
+            local_gate_counts_detail,
+            "results/reproducibility/aaai_package_report.json; results/reproducibility/paper_table_report.json; results/reproducibility/usage_example_report.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md",
         ),
     ]
     return checks

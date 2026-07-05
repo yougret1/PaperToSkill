@@ -3,7 +3,7 @@
 Evidence boundary: this report checks internal review, rebuttal, and submission-checklist handoff artifacts against current repository evidence. It does not claim final submission readiness.
 
 - Overall status: ready
-- Ready checks: 16
+- Ready checks: 17
 - Failed checks: 0
 
 ## Checks
@@ -26,3 +26,4 @@ Evidence boundary: this report checks internal review, rebuttal, and submission-
 | submission_review_ai_scientist_smoke_current | ready | overall=complete; detail=; aliases=claude-opus-4-8 | results/ai_scientist_v2_smoke/run_report.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md |
 | submission_review_ai_scientist_live_run_current | ready | overall=complete; completion_dirs=1 | results/ai_scientist_v2_live_run_handoff/handoff.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md |
 | submission_review_goal_package_counts_current | ready | goal={'ready': 77, 'pending': 3, 'fail': 0}; package={'ready': 450, 'pending': 1, 'fail': 0} | results/reproducibility/goal_completion_report.json; results/reproducibility/package_report.json; research/submission_checklist.md |
+| submission_review_local_gate_counts_current | ready | aaai={'ready': 17, 'fail': 0}; paper_table={'ready': 316, 'fail': 0}; usage={'ready': 55, 'fail': 0} | results/reproducibility/aaai_package_report.json; results/reproducibility/paper_table_report.json; results/reproducibility/usage_example_report.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md |

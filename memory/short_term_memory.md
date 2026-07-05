@@ -20,12 +20,34 @@ Current date: 2026-07-05.
   checkpoint records, the prior remote-status sync, and the refreshed AAAI
   PDF/table/package reports. Earlier `Recv failure: Connection was reset` and
   port-443 failures remain historical GitHub transport metadata, not
-  experiment correctness. After the verified push, a local record-sync commit
-  `a976bbc Record SNAP diagnostic backup recovery` was created; its
-  `git push origin main` and follow-up `git ls-remote --heads origin main`
-  attempts both failed with `Recv failure: Connection was reset`. Current
-  local status is `main...origin/main [ahead 1]`; continue non-network work and
-  retry backup later.
+  experiment correctness. After the verified push, local record-sync commits
+  were created to record the recovered backup and the renewed GitHub transport
+  blocker; their `git push origin main` and follow-up
+  `git ls-remote --heads origin main` attempts failed with `Recv failure:
+  Connection was reset`. Current local status should be checked with
+  `git status -sb` and `git log -5 --oneline`; as of the latest resume it was
+  `main...origin/main [ahead 2]`. Continue non-network work and retry backup
+  later.
+- Current record-sync continuation tightens
+  `scripts/check_submission_review.py` so review/rebuttal/submission handoff
+  files must carry exact current gate counts for goal/package, AAAI package,
+  paper-table, and usage-example reports. It refreshes
+  `results/reproducibility/submission_review_report.{json,md}` to
+  `17 ready / 0 failed` and
+  `results/reproducibility/package_report.{json,md}` to
+  `450 ready / 1 pending / 0 failed`, and updates review/rebuttal/checklist,
+  runbook, goal audit, and memory wording to include phase112 SNAP
+  executable-candidate diagnostic evidence without promoting it into main
+  rows. Verification passed locally:
+  `python -m unittest tests.test_check_submission_review -v`,
+  `python scripts/check_submission_review.py --strict`,
+  `python scripts/check_reproducibility_package.py --strict`,
+  `python scripts/check_goal_completion.py --strict`,
+  `python scripts/check_paper_claims.py --strict`,
+  `python scripts/check_paper_tables.py --strict`,
+  `python scripts/check_aaai_package.py --strict`, `git diff --check`
+  with only CRLF warnings, a changed-file raw-key scan with no matches, and
+  `research/run_logs/**` / `research/stage_log.md` unchanged.
 - Current local phase commit `77e8ada` implements the SNAP executable-candidate
   runner/checker/test path:
   `scripts/run_real_reuse_snapatac2_executable_candidate.py`,
@@ -378,10 +400,10 @@ Current date: 2026-07-05.
 6. Latest verified remote-backed checkpoint:
    `b6dc061 Complete SNAP executable candidate diagnostic`, verified at
    `b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main`.
-7. Current local-only record-sync commit after that checkpoint:
-   `a976bbc Record SNAP diagnostic backup recovery`. Its push and remote check
-   both failed with `Recv failure: Connection was reset`. No experiment-side
-   human action is required; continue non-network work and retry backup later.
+7. Current local-only record-sync commits after that checkpoint record backup
+   recovery and the renewed push blocker. Their push and remote check attempts
+   failed with `Recv failure: Connection was reset`. No experiment-side human
+   action is required; continue non-network work and retry backup later.
 
 ## Boundaries
 

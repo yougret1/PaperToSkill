@@ -1,6 +1,6 @@
 # PaperToSkill Submission Checklist
 
-Date: 2026-07-04
+Date: 2026-07-05
 
 Evidence boundary: this checklist prepares an AAAI submission-review handoff. It
 does not declare the paper submission-final, accepted, human-validated, or
@@ -10,11 +10,11 @@ complete with respect to pending external evidence.
 
 | Gate | Current Status | Evidence | Submission Meaning |
 | --- | --- | --- | --- |
-| AAAI local package | Ready | `results/reproducibility/aaai_package_report.md` | Local TeX/PDF package is internally consistent; not final submission approval. |
+| AAAI local package | Ready | `results/reproducibility/aaai_package_report.md`: 17 ready, 0 failed | Local TeX/PDF package is internally consistent; not final submission approval. |
 | Paper claims | Ready | `results/reproducibility/paper_claim_report.md` | Unsupported overclaim patterns are absent from paper-facing text. |
-| Paper tables | Ready | `results/reproducibility/paper_table_report.md` | AAAI tables match generated CSV result tables. |
+| Paper tables | Ready | `results/reproducibility/paper_table_report.md`: 316 ready, 0 failed | AAAI tables match generated CSV result tables. |
 | Usage examples | Ready | `results/reproducibility/usage_example_report.md`: 55 ready, 0 failed | Local example files, DeepSeek handoff, and offline example chain are synchronized. |
-| Reproducibility package | Ready with pending external evidence | `results/reproducibility/package_report.md`: 431 ready, 1 pending, 0 failed | Local package is coherent; external evidence remains pending. |
+| Reproducibility package | Ready with pending external evidence | `results/reproducibility/package_report.md`: 450 ready, 1 pending, 0 failed | Local package is coherent; external evidence remains pending. |
 | Active goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 77 ready, 3 pending, 0 failed | The overall user goal remains open. |
 | External evidence closure queue | Ready as local queue | `results/external_evidence_closure/closure.md`: 3 ready, 0 pending, 0 failed | Pending evidence is mapped to next actions; evidence itself remains pending. |
 | External evidence execution packets | Ready as local handoff | `results/external_evidence_packets/packets.md`: 7 ready, 0 pending, 0 failed | Pending evidence has runnable handoff packets; evidence itself remains pending. |
@@ -28,7 +28,7 @@ complete with respect to pending external evidence.
 | Paper2Agent comparison | `results/tables/paper2agent_artifact_comparison.md`: 7/7 source-backed criteria ready | Positioning evidence only; not an executable MCP baseline. |
 | Main deterministic results | `results/tables/main_results.md` | Operational coverage, not live success. |
 | Transfer readiness | `results/tables/transfer_ablation.md` | Offline readiness, not live outcome proof. |
-| Real-reuse first pass | `results/real_reuse/main_results_plan.md`: eight scored Summary-vs-PaperToSkill rows; `results/real_reuse/failure_analysis.md`: derived failure-boundary modes; `results/real_reuse/swe_t1_source_context_followup.md`: dedicated SWE-T1 phase107 follow-up; `results/real_reuse/swe_t1_issue_aligned_followup.md`: dedicated phase110 issue-aligned diagnostic table with Summary and PaperToSkill both scoring 1.000; `results/real_reuse/snapatac2_artifact_followup.md`: SNAP artifact-execution diagnosis; `results/real_reuse/snapatac2_executable_artifact_followup.md`: phase108 executable-artifact diagnostic | Mixed single-run downstream stress-test evidence; not aggregate advantage over Summary. Phase107, phase110, and SNAP follow-ups are diagnostic evidence and do not replace main rows. |
+| Real-reuse first pass | `results/real_reuse/main_results_plan.md`: eight scored Summary-vs-PaperToSkill rows; `results/real_reuse/failure_analysis.md`: derived failure-boundary modes; `results/real_reuse/swe_t1_source_context_followup.md`: dedicated SWE-T1 phase107 follow-up; `results/real_reuse/swe_t1_issue_aligned_followup.md`: dedicated phase110 issue-aligned diagnostic table with Summary and PaperToSkill both scoring 1.000; `results/real_reuse/snapatac2_artifact_followup.md`: SNAP artifact-execution diagnosis; `results/real_reuse/snapatac2_executable_artifact_followup.md`: phase108 executable-artifact diagnostic; `results/real_reuse/snapatac2_executable_candidate_run_report.md`: phase112 model-generated executable-candidate diagnostic with Summary and PaperToSkill both scoring 1.000 | Mixed single-run downstream stress-test evidence; not aggregate advantage over Summary. Phase107, phase110, phase112, and SNAP follow-ups are diagnostic evidence and do not replace main rows. |
 | Full Excerpt sanity check | `results/real_reuse/full_excerpt_sanity.md`: AIDE-T1, SWE-T1, and SNAP-T1 sanity rows | Scored auxiliary sanity subset; not a main baseline. Token counts are local whitespace context proxies. |
 | Saved live-transfer responses | `results/live_transfer_prompts/evaluation.md`: 24 total, 24 scored, 0 pending, average normalized score 1.0 | Saved-response output-contract scoring is not human semantic fidelity or real live task success. |
 | Model ablation | `results/model_ablation_prompts/v0/evaluation.md`: 6 total, 6 scored, 0 pending | Saved-response scoring is complete for the current two-case Claude/GPT-family/DeepSeek prompt protocol; this is not live downstream task success or provider economics. |

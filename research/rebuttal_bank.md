@@ -1,6 +1,6 @@
 # PaperToSkill Rebuttal Bank
 
-Date: 2026-07-04
+Date: 2026-07-05
 
 Use this file to answer likely reviewer objections without exceeding the current
 evidence boundary. This is a reviewer-response handoff, not new evidence.
@@ -72,7 +72,7 @@ human semantic review or real live-task success.
 Evidence to cite:
 
 - `paper/limitations.md`: heuristic metric limitation.
-- `results/reproducibility/package_report.md`: 431 ready checks, 1 pending
+- `results/reproducibility/package_report.md`: 450 ready checks, 1 pending
   checks, and 0 failed checks.
 - `results/human_fidelity_packets/`: prepared independent-review protocol.
 
@@ -215,7 +215,8 @@ Evidence to cite:
   contract path without replacing the main rows.
 - `paper/aaai/papertoskill_tables.tex`: the AAAI draft includes both the main
   real-reuse table, the derived failure-boundary table, the SWE-T1 diagnostic
-  follow-up tables, and the SNAP executable-artifact diagnostic table.
+  follow-up tables, the SNAP executable-artifact diagnostic table, and the
+  phase112 SNAP executable-candidate diagnostic table.
 
 Do not say:
 
