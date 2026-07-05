@@ -163,6 +163,12 @@ Current date: 2026-07-06.
   GitHub transport metadata only; do not create human `ok.txt` for this status,
   and do not claim `4ae3e76` as independently remote-verified until a later
   `git ls-remote` succeeds.
+- Follow-up local blocker-record commit `a72c6d2 Record checkpoint guard
+  verification blocker` records those failed independent remote-verification
+  checks. Its first `git push origin main` failed with
+  `Failed to connect to github.com port 443 after 21060 ms`. Treat this as
+  GitHub transport metadata only; do not create human `ok.txt` for GitHub
+  status and do not keep retrying GitHub in a tight loop.
 - Current main-results boundary cleanup removes stale "future unfilled cells /
   planning placeholders" wording from `scripts/build_real_reuse_paper_tables.py`
   and regenerated `results/real_reuse/main_results_plan.{md,json}`. It also
@@ -988,7 +994,10 @@ Current date: 2026-07-06.
    independent `ls-remote` verification failed twice due GitHub transport
    errors. Treat it as transport metadata only and retry remote verification
    opportunistically before claiming `4ae3e76` is independently remote-backed.
-8. No experiment-side human action is required for GitHub status right now.
+8. Follow-up local blocker record `a72c6d2` captures the verification failure;
+   its first push failed with port-443 connectivity after 21060 ms. Do not
+   create human `ok.txt` for GitHub status.
+9. No experiment-side human action is required for GitHub status right now.
    Continue non-network paper/evidence work and verify remote alignment again
    before claiming any later phase save is remote-backed.
 

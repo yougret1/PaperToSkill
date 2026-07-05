@@ -177,6 +177,12 @@ This file is intentionally compact. Detailed chronological history lives in
   21095 ms. Treat this as GitHub transport metadata only; do not create
   human `ok.txt` for GitHub status, and do not claim `4ae3e76` is
   independently remote-verified until a later `ls-remote` succeeds.
+- Follow-up blocker-record commit `a72c6d2 Record checkpoint guard verification
+  blocker` records the failed independent remote-verification checks after the
+  successful `4ae3e76` push. Its first `git push origin main` failed with
+  `Failed to connect to github.com port 443 after 21060 ms`. Treat this as
+  GitHub transport metadata only and do not create human `ok.txt` for GitHub
+  status.
 - Follow-up record-sync commit `45ef25b Sync remote checkpoint after LLM handoff
   guard` and blocker note `0538ef1 Record checkpoint sync push blocker`
   initially failed to back up because GitHub HTTPS transport was unavailable.
