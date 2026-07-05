@@ -75,9 +75,9 @@ This file is intentionally compact. Detailed chronological history lives in
   checkpoint/blocker/recovery/baseline records are now remote-backed in the
   local `origin/main` tracking ref through `bcd2104`. This includes the
   checkpoint-detail/blocker records and the grounding-gate evidence sync.
-  The later quality-grounding table completion, claim-boundary cleanup, and
-  blocker-record continuation remain local-only until GitHub transport
-  recovers. Earlier connection-reset and
+  The later quality-grounding table completion, claim-boundary cleanup,
+  blocker-record continuation, and claim-evidence-matrix boundary sync remain
+  local-only until GitHub transport recovers. Earlier connection-reset and
   port-443 failures remain GitHub transport metadata, not
   experiment-correctness evidence. Verify the exact current local/remote state
   with `git status -sb`, `git log -5 --oneline`, and a successful
@@ -93,8 +93,8 @@ This file is intentionally compact. Detailed chronological history lives in
   github.com port 443 after 21100 ms`. Later pushes succeeded and the local
   tracking ref later advanced through `bcd2104`; current local state is ahead
   of that verified remote by the quality-grounding table completion,
-  claim-boundary cleanup, and blocker-record continuation until a future push
-  succeeds.
+  claim-boundary cleanup, blocker-record continuation, and the later
+  claim-evidence-matrix boundary sync until a future push succeeds.
 
 ## Evidence Boundary
 

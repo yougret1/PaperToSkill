@@ -37,6 +37,19 @@ Current date: 2026-07-05.
   while causal reproducibility improvement remains untested. Supporting files
   are `results/failure_cases/failure_case_archive.md` and
   `results/reproducibility/package_report.md`.
+- Current local claim-matrix continuation applies the same boundary to
+  `research/claim_evidence_matrix.md`: failure branches are now described as
+  provenance and claim-discipline evidence, with no causal reproducibility or
+  task-outcome improvement claimed. Local checks passed after the edit:
+  `python scripts\check_paper_claims.py --strict`,
+  `python scripts\check_goal_completion.py --strict`, and
+  `python scripts\check_reproducibility_package.py --strict`. A fresh
+  `git push origin main` retry failed with
+  `Failed to connect to github.com port 443 after 21083 ms`, and
+  `git ls-remote --heads origin main` failed with
+  `Failed to connect to github.com port 443 after 21087 ms`. This is GitHub
+  transport metadata only, not experiment correctness, and it does not require
+  a human `ok.txt`.
 - Current local/remote status after this resume check: the latest verified
   remote backup is
   `bcd210429b4e82a7aa8016a3d82283966728c604 refs/heads/main`
