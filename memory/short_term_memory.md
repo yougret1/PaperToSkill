@@ -25,9 +25,14 @@ Current date: 2026-07-05.
   blocker; their `git push origin main` and follow-up
   `git ls-remote --heads origin main` attempts failed with `Recv failure:
   Connection was reset`. Current local status should be checked with
-  `git status -sb` and `git log -5 --oneline`; as of the latest resume it was
-  `main...origin/main [ahead 2]`. Continue non-network work and retry backup
-  later.
+  `git status -sb` and `git log -5 --oneline`; after the
+  submission-review count-check save, the local-only chain includes
+  `a976bbc Record SNAP diagnostic backup recovery`,
+  `1c8098b Record SNAP backup recovery push blocker`, and
+  `2b823f6 Tighten submission review count checks`. The attempted
+  `git push origin main` for this chain failed with `Recv failure: Connection
+  was reset`, and the follow-up `git ls-remote --heads origin main` failed
+  with the same reset. Continue non-network work and retry backup later.
 - Current record-sync continuation tightens
   `scripts/check_submission_review.py` so review/rebuttal/submission handoff
   files must carry exact current gate counts for goal/package, AAAI package,
@@ -47,7 +52,10 @@ Current date: 2026-07-05.
   `python scripts/check_paper_tables.py --strict`,
   `python scripts/check_aaai_package.py --strict`, `git diff --check`
   with only CRLF warnings, a changed-file raw-key scan with no matches, and
-  `research/run_logs/**` / `research/stage_log.md` unchanged.
+  `research/run_logs/**` / `research/stage_log.md` unchanged. The phase is
+  saved locally as `2b823f6 Tighten submission review count checks` but is not
+  remote-backed yet because GitHub transport reset during push and remote-head
+  verification.
 - Current local phase commit `77e8ada` implements the SNAP executable-candidate
   runner/checker/test path:
   `scripts/run_real_reuse_snapatac2_executable_candidate.py`,
@@ -400,10 +408,11 @@ Current date: 2026-07-05.
 6. Latest verified remote-backed checkpoint:
    `b6dc061 Complete SNAP executable candidate diagnostic`, verified at
    `b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main`.
-7. Current local-only record-sync commits after that checkpoint record backup
-   recovery and the renewed push blocker. Their push and remote check attempts
-   failed with `Recv failure: Connection was reset`. No experiment-side human
-   action is required; continue non-network work and retry backup later.
+7. Current local-only commits after that checkpoint include backup-recovery
+   records plus `2b823f6 Tighten submission review count checks`. Their push
+   and remote check attempts failed with `Recv failure: Connection was reset`.
+   No experiment-side human action is required; continue non-network work and
+   retry backup later.
 
 ## Boundaries
 
