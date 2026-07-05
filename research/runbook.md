@@ -125,8 +125,14 @@ clean phase save.
 Local-only continuation note: follow-up record-sync commit `e2f070e Record
 recovered claim matrix backup` initially remained local-only after `git push
 origin main` failed with `Recv failure: Connection was reset`. A later push
-recovered and verified `5d2b98c`, so no repository commit is currently
-local-only at this checkpoint.
+recovered and verified `5d2b98c`; that specific historical local-only state
+was resolved.
+
+Unpushed record-sync note: `b3441d5 Sync phase115 checkpoint records` corrected
+the current checkpoint records and refreshed the goal-completion report after
+`9eaeee7` was verified. Its first `git push origin main` failed with `Recv
+failure: Connection was reset`, and the immediate `git ls-remote --heads origin
+main` failed with the same reset error. This is GitHub transport metadata only.
 
 Re-run remote verification before making future remote-backed checkpoint
 claims.

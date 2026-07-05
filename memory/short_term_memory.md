@@ -13,6 +13,23 @@ Current date: 2026-07-05.
   Preserve the existing local-log boundary: do not modify
   `research/run_logs/**` or `research/stage_log.md` during record-sync-only
   work.
+- Current record-sync continuation corrected the current remote-checkpoint
+  records from the phase114 checkpoint to the verified phase115 recovered
+  backup checkpoint. `scripts/check_goal_completion.py --strict` now reports
+  `current_remote_checkpoint_records` as `declared=9eaeee7 Record recovered
+  SNAP-T2 retry backup`, with 78 ready / 3 pending / 0 failed. Verification
+  also passed `check_reproducibility_package.py --strict`,
+  `check_paper_claims.py --strict`, `check_paper_tables.py --strict`,
+  `check_aaai_package.py --strict`, `check_usage_examples.py --strict`,
+  `check_submission_review.py --strict`, `git diff --check` with only CRLF
+  warnings, a changed-file raw-key scan with no matches, and no diff under
+  `research/run_logs/**` or `research/stage_log.md`. The local record-sync
+  commit is `b3441d5 Sync phase115 checkpoint records`; its first
+  `git push origin main` failed with `Recv failure: Connection was reset`, and
+  the immediate `git ls-remote --heads origin main` also failed with the same
+  reset error. This is GitHub transport metadata only; the latest previously
+  verified remote checkpoint remains `9eaeee7` until a future successful
+  remote verification.
 - Current claim-checklist sync adds a `Real-reuse first pass` row to
   `paper/claim_checklist.md` and an abstract downgrade bullet that says the
   eight-row real-reuse stress test is mixed boundary evidence, not aggregate
@@ -156,6 +173,10 @@ Current date: 2026-07-05.
   `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
   phase.
+- Unpushed record-sync note: `b3441d5 Sync phase115 checkpoint records` is a
+  local record-only commit after the latest verified remote checkpoint; its
+  push and immediate remote check both failed with `Recv failure: Connection
+  was reset`.
 - Historical local/remote status after the resume check: the then-latest verified
   remote backup is
   `e1709d3bb965df9df8768271c419467266902474 refs/heads/main`

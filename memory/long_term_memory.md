@@ -78,6 +78,11 @@ This file is intentionally compact. Detailed chronological history lives in
   Verify the exact current local/remote state with `git status -sb`,
   `git log -5 --oneline`, and a successful `git ls-remote --heads origin main`
   before claiming any later phase is remote-backed.
+- Unpushed record-only checkpoint after that verification:
+  `b3441d5 Sync phase115 checkpoint records` corrected the current checkpoint
+  records and refreshed the goal-completion report locally. Its push and
+  immediate remote check failed with `Recv failure: Connection was reset`;
+  treat this as GitHub transport metadata, not experiment correctness.
 - Current resume checkpoint commits are `4532dd9 Sync resume checkpoint
   memory`, `bf95213 Record resume memory push blocker`, `69d23b1 Record
   recovered resume memory backup`, `f1c50d5 Sync resume baseline memory`, and

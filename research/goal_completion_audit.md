@@ -45,6 +45,12 @@ Current machine reports:
 - Execution packets: `results/external_evidence_packets/packets.md` reports
   `ready`, 2 packets, and 0 failed checks.
 
+Record-sync note: the current remote-checkpoint records now point to the
+verified phase115 recovered backup checkpoint. The follow-up local record-only
+commit `b3441d5 Sync phase115 checkpoint records` refreshed the goal-completion
+report, but its first push and immediate remote check failed with `Recv
+failure: Connection was reset`; this is GitHub transport metadata only.
+
 ## Requirement Audit
 
 | Requirement | Current Evidence | Status | Next Action |
