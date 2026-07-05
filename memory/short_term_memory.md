@@ -231,14 +231,19 @@ Current date: 2026-07-05.
   `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`.
 - Current local/remote status override after the AAAI page-limit backup:
   the latest locally recorded remote checkpoint is
-  `ad14de50db540f4798a6bc0409bac8be239e1617 refs/heads/main`
-  (`ad14de5 Record AAAI page-limit push blocker`). This checkpoint includes
-  the AAAI main-page-limit repair, the recovered remote backup of that repair,
-  refreshed package/table/submission reports, and memory/runbook sync. Older
-  current-status bullets in this file are historical checkpoints only; use fresh
-  `git status -sb`, `git log -5 --oneline`, and
-  `git ls-remote --heads origin main` before claiming any later remote-backed
-  phase.
+  `2bc10bdfadf5456f1cce463194b681c5280bfebb refs/heads/main`
+  (`2bc10bd Record recovered AAAI page-limit backup`). This checkpoint includes
+  the AAAI main-page-limit repair, the recovered backup of that repair,
+  refreshed package/table/submission reports, and memory/runbook sync.
+
+  The later paper-finalization commit `501ffc8 Remove draft wording from
+  real-reuse table` is currently local-only because `git push origin main` and
+  `git ls-remote --heads origin main` both failed with `Recv failure:
+  Connection was reset`. This is GitHub transport metadata only and does not
+  require a human `ok.txt`. Older current-status bullets in this file are
+  historical checkpoints only; use fresh `git status -sb`, `git log -5
+  --oneline`, and `git ls-remote --heads origin main` before claiming any
+  later remote-backed phase.
 - Recovered record-sync note: `b3441d5 Sync phase115 checkpoint records`,
   `cea43eb Record checkpoint sync push blocker`, and `96fce87 Record SNAP-T2
   phase116 provider block` are now remote-backed through the verified phase116

@@ -76,8 +76,8 @@ This file is intentionally compact. Detailed chronological history lives in
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
 - Latest verified remote checkpoint after the AAAI page-limit backup is
-  `ad14de50db540f4798a6bc0409bac8be239e1617 refs/heads/main`
-  (`ad14de5 Record AAAI page-limit push blocker`). This checkpoint includes
+  `2bc10bdfadf5456f1cce463194b681c5280bfebb refs/heads/main`
+  (`2bc10bd Record recovered AAAI page-limit backup`). This checkpoint includes
   the phase116 SNAP-T2 provider-block chain, the auxiliary family summary table,
   the AAAI page-limit repair, refreshed paper/package/submission reports, and
   memory/artifact map synchronization. Claude-family real-reuse LLM-ablation rows remain
@@ -86,6 +86,10 @@ This file is intentionally compact. Detailed chronological history lives in
   availability rechecks. Treat those 502s as provider availability metadata,
   not model-quality evidence or scored real-reuse failures. Older named
   checkpoint notes in this memory are historical recovery checkpoints.
+  The later paper-finalization commit `501ffc8 Remove draft wording from
+  real-reuse table` is currently local-only after GitHub HTTPS push and
+  `ls-remote` both failed with `Recv failure: Connection was reset`; treat that
+  as transport metadata until a later push verifies it.
   Verify the exact current local/remote state with `git status -sb`,
   `git log -5 --oneline`, and a successful `git ls-remote --heads origin main`
   before claiming any later phase is remote-backed.

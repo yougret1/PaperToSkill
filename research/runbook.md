@@ -30,14 +30,26 @@ git ls-remote --heads origin main
 Test-NetConnection github.com -Port 443 | Format-List
 ```
 
-Current status as of 2026-07-05: the temporary GitHub HTTPS transport blocker
-recovered again. The latest verified remote checkpoint before claiming any
-later phase save is:
+Current status as of 2026-07-06: the temporary GitHub HTTPS transport blocker
+recovered through the AAAI page-limit backup, then recurred for the later
+paper-finalization commit. The latest verified remote checkpoint before
+claiming any later phase save is:
 
 ```text
-ad14de50db540f4798a6bc0409bac8be239e1617 refs/heads/main
-ad14de5 Record AAAI page-limit push blocker
+2bc10bdfadf5456f1cce463194b681c5280bfebb refs/heads/main
+2bc10bd Record recovered AAAI page-limit backup
 ```
+
+Current local-only checkpoint after that verified remote backup:
+
+```text
+501ffc8 Remove draft wording from real-reuse table
+```
+
+Its first remote backup attempt failed with `Recv failure: Connection was
+reset` for both `git push origin main` and `git ls-remote --heads origin main`.
+Treat this as GitHub transport metadata and retry later; do not create
+`ok.txt` for GitHub status.
 
 The previously unbacked local commits are now remote-backed through the latest
 AAAI page-limit checkpoint:
@@ -107,6 +119,7 @@ cea43eb Record checkpoint sync push blocker
 5ad6b54 Add real-reuse LLM ablation family table
 896456b Enforce AAAI main page limit
 ad14de5 Record AAAI page-limit push blocker
+2bc10bd Record recovered AAAI page-limit backup
 ```
 
 The first remote backup attempt for the AAAI page-limit repair failed with
