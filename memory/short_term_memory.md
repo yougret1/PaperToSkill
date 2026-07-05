@@ -200,6 +200,15 @@ Current date: 2026-07-06.
   failed with the same reset error. Treat this as GitHub transport metadata
   only; do not advance the remote-backed baseline beyond `e57df72` until a
   later push/remote check succeeds.
+- Pre-submission gate rerun after that local record-sync/blocker chain passed:
+  full unit discovery reported 211 tests OK, and strict submission-review,
+  AAAI submission-decision, external-evidence packet, external-evidence
+  closure, paper-claim, goal-completion, reproducibility-package, AAAI-package,
+  paper-table, usage-example, and real-reuse preflight checks all passed.
+  `git diff --check` and changed-file raw-key scan had no findings beyond the
+  usual CRLF notices, protected paths had no diff, and the tracked working tree
+  remained clean with the local branch ahead of `origin/main` by the
+  record-sync/blocker chain.
 - Current main-results boundary cleanup removes stale "future unfilled cells /
   planning placeholders" wording from `scripts/build_real_reuse_paper_tables.py`
   and regenerated `results/real_reuse/main_results_plan.{md,json}`. It also
