@@ -997,3 +997,10 @@ DeepSeek:
   with visible `ok`. The same regular key also worked with the Claude
   Code/Desktop beta header. The Desktop direct provider token still returned
   HTTP 502 after five attempts for all three aliases.
+- 2026-07-05 Claude direct availability recheck after the claim-matrix sync:
+  using the current local Claude API document key in shell-only environment
+  variables, Anthropic Messages at `https://coderxiaoc.com/v1/messages`, and
+  aliases `claude-opus-4-8`, `claude-opus-4-7`, and `claude-opus-4-6`, all
+  aliases returned provider HTTP 502 with a 120-second timeout and
+  `max_tokens=16`. Treat this as provider availability metadata; do not count
+  it as model-quality evidence or a real-reuse task failure.

@@ -380,6 +380,15 @@ Current date: 2026-07-05.
   availability metadata. `results/real_reuse/llm_ablation_summary.md` remains
   12 collected scored rows / 18 expected rows, with the 6 Claude-family rows
   pending; this is provider availability metadata, not method-quality evidence.
+- Current Claude-family direct availability recheck after the claim-matrix
+  sync used the local Claude API document key in shell-only environment
+  variables, Anthropic Messages at `https://coderxiaoc.com/v1/messages`,
+  aliases `claude-opus-4-8`, `claude-opus-4-7`, and `claude-opus-4-6`,
+  `max_tokens=16`, and a 120-second request timeout. All three aliases
+  returned provider HTTP 502, so the full real-reuse Claude-family ablation
+  rerun remains deferred as provider availability metadata rather than
+  method-quality evidence. Report:
+  `results/openai_compatible_direct_probe/claude_family/run_report.md`.
 - Historical remote-backed chain through `0832201`: Claude retry availability, bounded
   summary-comparison claim cleanup, current project record sync, GitHub backup
   recovery, real-reuse record-boundary tightening, the tested SNAP

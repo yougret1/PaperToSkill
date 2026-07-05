@@ -8,8 +8,8 @@ Evidence boundary: this direct provider diagnostic bypasses `ai_scientist.llm`; 
 - Attempted models: claude-opus-4-8, claude-opus-4-7, claude-opus-4-6
 - Base URL env: PAPERTOSKILL_CLAUDE_BASE_URL
 - Auth env: PAPERTOSKILL_CLAUDE_API_KEY
-- Max tokens: 128
-- Timeout seconds: 60.0
+- Max tokens: 16
+- Timeout seconds: 120.0
 - Ready checks: 4
 - Pending checks: 2
 - Failed checks: 0
