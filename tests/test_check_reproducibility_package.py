@@ -229,6 +229,7 @@ class CheckReproducibilityPackageTest(unittest.TestCase):
             self.assertIn("aide_auto_source_span_support", ready_ids)
             self.assertIn("aaai_package_report_ready", ready_ids)
             self.assertIn("aaai_package_core_checks_ready", ready_ids)
+            self.assertIn("aaai_papertoskill_supporting_tables", ready_ids)
             self.assertIn("paper_table_report_ready", ready_ids)
             self.assertIn("paper_table_core_checks_ready", ready_ids)
             self.assertIn("paper_claim_report_ready", ready_ids)

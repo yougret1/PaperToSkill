@@ -29,6 +29,8 @@ TABLE_SOURCES = {
     "auto_note": "results/tables/auto_note_comparison.csv",
 }
 
+DEFAULT_SUPPORTING_TABLES_TEX = Path("paper") / "aaai" / "papertoskill_supporting_tables.tex"
+
 
 @dataclass
 class Check:
@@ -558,11 +560,12 @@ def transfer_checks(root: Path, tex_rows: list[list[str]]) -> list[Check]:
     return checks
 
 
-def cost_proxy_checks(root: Path, tex_rows: list[list[str]]) -> list[Check]:
+def cost_proxy_checks(root: Path, tex_rows: list[list[str]], tex_path: Path | None = None) -> list[Check]:
     source_path = root / TABLE_SOURCES["cost_proxy"]
     source_rows = read_csv_rows(source_path)
     actual = table_rows_by_paper(tex_rows, "tab:cost-proxy", 5)
-    evidence = f"paper/aaai/papertoskill_tables.tex vs {TABLE_SOURCES['cost_proxy']}"
+    table_path = tex_path or root / "paper" / "aaai" / "papertoskill_tables.tex"
+    evidence = f"{display_path(root, table_path)} vs {TABLE_SOURCES['cost_proxy']}"
     by_paper_variant = {(row["Paper"], row["Variant"]): row for row in source_rows}
     checks: list[Check] = []
     for paper in sorted({row["Paper"] for row in source_rows}):
@@ -607,10 +610,11 @@ def cost_proxy_checks(root: Path, tex_rows: list[list[str]]) -> list[Check]:
     return checks
 
 
-def auto_note_checks(root: Path, tex_rows: list[list[str]]) -> list[Check]:
+def auto_note_checks(root: Path, tex_rows: list[list[str]], tex_path: Path | None = None) -> list[Check]:
     source_path = root / TABLE_SOURCES["auto_note"]
     source_rows = read_csv_rows(source_path)
-    evidence = f"paper/aaai/papertoskill_tables.tex vs {TABLE_SOURCES['auto_note']}"
+    table_path = tex_path or root / "paper" / "aaai" / "papertoskill_tables.tex"
+    evidence = f"{display_path(root, table_path)} vs {TABLE_SOURCES['auto_note']}"
     input_aliases = {
         "Curated note": "Curated source-anchored note",
         "Auto note scaffold": "Automatic extracted-text note scaffold",
@@ -649,51 +653,69 @@ def slug(value: str) -> str:
     return text.strip("_")
 
 
-def build_report(root: Path, tables_tex: Path) -> dict[str, Any]:
+def build_report(root: Path, tables_tex: Path, supporting_tables_tex: Path | None = None) -> dict[str, Any]:
     root = root.resolve()
     tables_tex = tables_tex.resolve()
     tex_text = tables_tex.read_text(encoding="utf-8")
+    if supporting_tables_tex is None:
+        supporting_tables_tex = root / DEFAULT_SUPPORTING_TABLES_TEX
+    supporting_tables_tex = supporting_tables_tex.resolve()
+    supporting_tex_text = (
+        supporting_tables_tex.read_text(encoding="utf-8")
+        if supporting_tables_tex.exists()
+        else ""
+    )
+
+    def parse_table(label: str) -> tuple[list[list[str]], Path]:
+        label_marker = rf"\label{{{label}}}"
+        if label_marker in tex_text:
+            return parse_tabular_rows(tex_text, label), tables_tex
+        if label_marker in supporting_tex_text:
+            return parse_tabular_rows(supporting_tex_text, label), supporting_tables_tex
+        return parse_tabular_rows(tex_text, label), tables_tex
 
     checks: list[Check] = []
     try:
-        checks.extend(real_reuse_main_checks(root, parse_tabular_rows(tex_text, "tab:real-reuse-main")))
+        checks.extend(real_reuse_main_checks(root, parse_table("tab:real-reuse-main")[0]))
         checks.extend(
-            real_reuse_failure_checks(root, parse_tabular_rows(tex_text, "tab:real-reuse-failure-analysis"))
+            real_reuse_failure_checks(root, parse_table("tab:real-reuse-failure-analysis")[0])
         )
         checks.extend(
             real_reuse_swe_t1_source_context_followup_checks(
                 root,
-                parse_tabular_rows(tex_text, "tab:swe-t1-source-context-followup"),
+                parse_table("tab:swe-t1-source-context-followup")[0],
             )
         )
         checks.extend(
             real_reuse_swe_t1_issue_aligned_followup_checks(
                 root,
-                parse_tabular_rows(tex_text, "tab:swe-t1-issue-aligned-followup"),
+                parse_table("tab:swe-t1-issue-aligned-followup")[0],
             )
         )
         checks.extend(
             real_reuse_snapatac2_executable_followup_checks(
                 root,
-                parse_tabular_rows(tex_text, "tab:snapatac2-executable-followup"),
+                parse_table("tab:snapatac2-executable-followup")[0],
             )
         )
         checks.extend(
             real_reuse_snapatac2_executable_candidate_followup_checks(
                 root,
-                parse_tabular_rows(tex_text, "tab:snapatac2-executable-candidate-followup"),
+                parse_table("tab:snapatac2-executable-candidate-followup")[0],
             )
         )
         checks.extend(
-            real_reuse_full_excerpt_sanity_checks(root, parse_tabular_rows(tex_text, "tab:full-excerpt-sanity"))
+            real_reuse_full_excerpt_sanity_checks(root, parse_table("tab:full-excerpt-sanity")[0])
         )
         checks.extend(
-            real_reuse_llm_ablation_family_checks(root, parse_tabular_rows(tex_text, "tab:real-reuse-llm-ablation"))
+            real_reuse_llm_ablation_family_checks(root, parse_table("tab:real-reuse-llm-ablation")[0])
         )
-        checks.extend(main_results_checks(root, parse_tabular_rows(tex_text, "tab:main-results")))
-        checks.extend(transfer_checks(root, parse_tabular_rows(tex_text, "tab:transfer-ablation")))
-        checks.extend(cost_proxy_checks(root, parse_tabular_rows(tex_text, "tab:cost-proxy")))
-        checks.extend(auto_note_checks(root, parse_tabular_rows(tex_text, "tab:auto-note")))
+        checks.extend(main_results_checks(root, parse_table("tab:main-results")[0]))
+        checks.extend(transfer_checks(root, parse_table("tab:transfer-ablation")[0]))
+        cost_rows, cost_tex = parse_table("tab:cost-proxy")
+        checks.extend(cost_proxy_checks(root, cost_rows, cost_tex))
+        auto_rows, auto_tex = parse_table("tab:auto-note")
+        checks.extend(auto_note_checks(root, auto_rows, auto_tex))
     except ValueError as exc:
         checks.append(Check("paper_table_parse", "fail", str(exc), display_path(root, tables_tex)))
 
@@ -708,6 +730,7 @@ def build_report(root: Path, tables_tex: Path) -> dict[str, Any]:
             "A ready report prevents manuscript-table drift; it does not add new empirical evidence."
         ),
         "tables_tex": str(tables_tex),
+        "supporting_tables_tex": str(supporting_tables_tex) if supporting_tables_tex.exists() else "",
         "table_sources": TABLE_SOURCES,
         "overall_status": "fail" if status_counts.get("fail", 0) else "ready",
         "status_counts": status_counts,
@@ -759,6 +782,12 @@ def main() -> int:
     parser.add_argument("--root", type=Path, default=root)
     parser.add_argument("--tables-tex", type=Path, default=root / "paper" / "aaai" / "papertoskill_tables.tex")
     parser.add_argument(
+        "--supporting-tables-tex",
+        type=Path,
+        default=root / DEFAULT_SUPPORTING_TABLES_TEX,
+        help="Optional non-PDF supporting tables kept under package/table drift checks.",
+    )
+    parser.add_argument(
         "--output-json",
         type=Path,
         default=root / "results" / "reproducibility" / "paper_table_report.json",
@@ -771,7 +800,7 @@ def main() -> int:
     parser.add_argument("--strict", action="store_true", help="Exit non-zero if any table consistency check fails.")
     args = parser.parse_args()
 
-    report = build_report(args.root, args.tables_tex)
+    report = build_report(args.root, args.tables_tex, args.supporting_tables_tex)
     write_json(args.output_json, report)
     write_markdown(args.output_md, report)
     print(args.output_json)

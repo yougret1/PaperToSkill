@@ -69,6 +69,7 @@ CORE_FILES = {
     "aaai_package_readme": "paper/aaai/README.md",
     "aaai_papertoskill_tex": "paper/aaai/papertoskill_aaai2027.tex",
     "aaai_papertoskill_tables": "paper/aaai/papertoskill_tables.tex",
+    "aaai_papertoskill_supporting_tables": "paper/aaai/papertoskill_supporting_tables.tex",
     "aaai_papertoskill_refs": "paper/aaai/papertoskill_refs.bib",
     "aaai_build_style": "paper/aaai/aaai2027.sty",
     "aaai_build_bst": "paper/aaai/aaai2027.bst",

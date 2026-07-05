@@ -19,6 +19,7 @@ downloaded kit:
 
 - `papertoskill_aaai2027.tex`
 - `papertoskill_tables.tex`
+- `papertoskill_supporting_tables.tex`
 - `papertoskill_refs.bib`
 - `aaai2027.sty`
 - `aaai2027.bst`
@@ -28,3 +29,5 @@ downloaded kit:
 The LaTeX paper reflects the current deterministic/offline artifact state. It
 does not claim completed live cross-harness model ablations, human semantic
 fidelity annotation, provider billing, or arbitrary-PDF automation.
+Supporting tables are retained for package/table-drift checks while the main
+PDF keeps non-reference content within the AAAI page-limit guard.

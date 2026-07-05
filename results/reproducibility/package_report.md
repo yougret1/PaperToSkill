@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 467
+- Ready checks: 468
 - Pending checks: 1
 - Failed checks: 0
 
@@ -20,6 +20,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | aaai_package_readme | ready | present | paper/aaai/README.md |
 | aaai_papertoskill_tex | ready | present | paper/aaai/papertoskill_aaai2027.tex |
 | aaai_papertoskill_tables | ready | present | paper/aaai/papertoskill_tables.tex |
+| aaai_papertoskill_supporting_tables | ready | present | paper/aaai/papertoskill_supporting_tables.tex |
 | aaai_papertoskill_refs | ready | present | paper/aaai/papertoskill_refs.bib |
 | aaai_build_style | ready | present | paper/aaai/aaai2027.sty |
 | aaai_build_bst | ready | present | paper/aaai/aaai2027.bst |
@@ -354,7 +355,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | failure_archive_md | ready | present | results/failure_cases/failure_case_archive.md |
 | failure_archive_csv | ready | present | results/failure_cases/failure_case_archive.csv |
 | failure_archive_counts | ready | total=27; paper=21; project=6 | results\failure_cases\failure_case_archive.json |
-| aaai_package_report_ready | ready | overall=ready; counts={'ready': 17, 'fail': 0} | results\reproducibility\aaai_package_report.json |
+| aaai_package_report_ready | ready | overall=ready; counts={'ready': 20, 'fail': 0} | results\reproducibility\aaai_package_report.json |
 | aaai_package_core_checks_ready | ready | core checks ready | results\reproducibility\aaai_package_report.json |
 | paper_table_report_ready | ready | overall=ready; counts={'ready': 343, 'fail': 0} | results\reproducibility\paper_table_report.json |
 | paper_table_core_checks_ready | ready | core checks ready | results\reproducibility\paper_table_report.json |

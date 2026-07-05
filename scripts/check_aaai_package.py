@@ -21,6 +21,7 @@ REQUIRED_FILES = {
     "bibtex_style": "aaai2027.bst",
     "main_tex": "papertoskill_aaai2027.tex",
     "tables_tex": "papertoskill_tables.tex",
+    "supporting_tables_tex": "papertoskill_supporting_tables.tex",
     "refs_bib": "papertoskill_refs.bib",
     "compiled_pdf": "papertoskill_aaai2027.pdf",
     "compiled_log": "papertoskill_aaai2027.log",
@@ -145,10 +146,80 @@ def log_checks(aaai_dir: Path) -> list[Check]:
     ]
 
 
+def pdf_page_limit_checks(aaai_dir: Path) -> list[Check]:
+    pdf_path = aaai_dir / "papertoskill_aaai2027.pdf"
+    if not pdf_path.exists():
+        return [
+            Check("aaai_pdf_page_count_limit", "fail", "missing PDF", evidence_path(aaai_dir, pdf_path)),
+            Check("aaai_pdf_main_content_page_limit", "fail", "missing PDF", evidence_path(aaai_dir, pdf_path)),
+        ]
+
+    try:
+        from pypdf import PdfReader
+    except ImportError as exc:
+        detail = f"pypdf unavailable: {exc}"
+        return [
+            Check("aaai_pdf_page_count_limit", "fail", detail, evidence_path(aaai_dir, pdf_path)),
+            Check("aaai_pdf_main_content_page_limit", "fail", detail, evidence_path(aaai_dir, pdf_path)),
+        ]
+
+    try:
+        reader = PdfReader(str(pdf_path))
+        pages = len(reader.pages)
+        overflow_text = "\n".join((page.extract_text() or "") for page in reader.pages[7:])
+    except Exception as exc:  # pragma: no cover - defensive corruption path.
+        detail = f"PDF read failed: {exc}"
+        return [
+            Check("aaai_pdf_page_count_limit", "fail", detail, evidence_path(aaai_dir, pdf_path)),
+            Check("aaai_pdf_main_content_page_limit", "fail", detail, evidence_path(aaai_dir, pdf_path)),
+        ]
+
+    overflow_main_markers = [
+        marker
+        for marker in [
+            "Table",
+            "Introduction",
+            "Related Work",
+            "Method",
+            "Experimental Setup",
+            "Results",
+            "Discussion",
+            "Limitations",
+            "Conclusion",
+        ]
+        if re.search(rf"\b{re.escape(marker)}\b", overflow_text)
+    ]
+    references_after_main = pages <= 7 or "References" in overflow_text
+    page_count_status = "ready" if pages <= 9 else "fail"
+    main_content_status = (
+        "ready" if pages <= 7 or (references_after_main and not overflow_main_markers) else "fail"
+    )
+    main_detail = (
+        "non-reference content ends by page 7"
+        if main_content_status == "ready"
+        else "post-page-7 main-content markers=" + ",".join(overflow_main_markers or ["missing References"])
+    )
+    return [
+        Check(
+            "aaai_pdf_page_count_limit",
+            page_count_status,
+            f"pages={pages}; limit=9",
+            evidence_path(aaai_dir, pdf_path),
+        ),
+        Check(
+            "aaai_pdf_main_content_page_limit",
+            main_content_status,
+            main_detail,
+            evidence_path(aaai_dir, pdf_path),
+        ),
+    ]
+
+
 def freshness_checks(aaai_dir: Path) -> list[Check]:
     tex_inputs = [
         aaai_dir / "papertoskill_aaai2027.tex",
         aaai_dir / "papertoskill_tables.tex",
+        aaai_dir / "papertoskill_supporting_tables.tex",
         aaai_dir / "papertoskill_refs.bib",
     ]
     pdf_path = aaai_dir / "papertoskill_aaai2027.pdf"
@@ -192,6 +263,7 @@ def build_report(aaai_dir: Path) -> dict[str, Any]:
     checks.append(author_kit_sha_check(aaai_dir))
     checks.append(tex_declares_aaai_style_check(aaai_dir))
     checks.extend(log_checks(aaai_dir))
+    checks.extend(pdf_page_limit_checks(aaai_dir))
     checks.extend(freshness_checks(aaai_dir))
 
     status_counts = {"ready": 0, "fail": 0}

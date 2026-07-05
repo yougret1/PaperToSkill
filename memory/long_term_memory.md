@@ -28,6 +28,11 @@ This file is intentionally compact. Detailed chronological history lives in
 - Use `ai-scientist-v2` to refine and develop the idea where useful.
 - Final paper artifacts must use an official AAAI TeX template downloaded from
   the web. Current package is AAAI-27 under `paper/aaai/`.
+- AAAI package checks now include the local page-limit guard: total PDF pages
+  must stay at or below 9 and non-reference content must end by page 7. The
+  cost-proxy and auto-note tables are retained in
+  `paper/aaai/papertoskill_supporting_tables.tex` for package/table drift
+  checks, but they are not included as main-PDF floats.
 - Experiments must include usage examples.
 - Experiment work should prioritize the main real-reuse experiment. Put the
   main experiment table structure into the paper before scores are available,

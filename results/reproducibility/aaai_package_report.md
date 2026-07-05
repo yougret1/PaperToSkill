@@ -3,7 +3,7 @@
 Evidence boundary: this report checks the local AAAI LaTeX package and build artifacts. It does not claim the paper is submission-final.
 
 - Overall status: ready
-- Ready checks: 17
+- Ready checks: 20
 - Failed checks: 0
 
 ## Checks
@@ -16,6 +16,7 @@ Evidence boundary: this report checks the local AAAI LaTeX package and build art
 | aaai_bibtex_style | ready | present | paper/aaai/aaai2027.bst |
 | aaai_main_tex | ready | present | paper/aaai/papertoskill_aaai2027.tex |
 | aaai_tables_tex | ready | present | paper/aaai/papertoskill_tables.tex |
+| aaai_supporting_tables_tex | ready | present | paper/aaai/papertoskill_supporting_tables.tex |
 | aaai_refs_bib | ready | present | paper/aaai/papertoskill_refs.bib |
 | aaai_compiled_pdf | ready | present | paper/aaai/papertoskill_aaai2027.pdf |
 | aaai_compiled_log | ready | present | paper/aaai/papertoskill_aaai2027.log |
@@ -24,6 +25,8 @@ Evidence boundary: this report checks the local AAAI LaTeX package and build art
 | aaai_tex_declares_style | ready | uses aaai2027 package | paper/aaai/papertoskill_aaai2027.tex |
 | aaai_log_loads_style | ready | aaai2027 loaded | paper/aaai/papertoskill_aaai2027.log |
 | aaai_log_no_unresolved_items | ready | no unresolved citation/reference/build markers | paper/aaai/papertoskill_aaai2027.log |
-| aaai_log_reports_pdf_output | ready | pages=9; bytes=174788 | paper/aaai/papertoskill_aaai2027.log |
+| aaai_log_reports_pdf_output | ready | pages=8; bytes=173859 | paper/aaai/papertoskill_aaai2027.log |
+| aaai_pdf_page_count_limit | ready | pages=8; limit=9 | paper/aaai/papertoskill_aaai2027.pdf |
+| aaai_pdf_main_content_page_limit | ready | non-reference content ends by page 7 | paper/aaai/papertoskill_aaai2027.pdf |
 | aaai_pdf_is_fresh | ready | pdf/log newer than tex inputs | paper/aaai/papertoskill_aaai2027.pdf |
 | aaai_bbl_is_fresh | ready | bbl newer than bibliography | paper/aaai/papertoskill_aaai2027.bbl |

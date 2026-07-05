@@ -29,11 +29,15 @@ Current date: 2026-07-05.
   --strict`, `check_paper_tables.py --strict`, `check_paper_claims.py
   --strict`, `check_aaai_package.py --strict`, `git diff --check` with only
   CRLF warnings, a changed-file raw-key scan with no matches, and no diff under
-  `research/run_logs/**` or `research/stage_log.md`. Current refreshed counts:
-  package `467 ready / 1 pending / 0 failed`, paper tables `343 ready / 0
+  `research/run_logs/**` or `research/stage_log.md`. A later AAAI page-limit
+  repair moved the cost-proxy and auto-note tables out of the main PDF into
+  `paper/aaai/papertoskill_supporting_tables.tex`, kept them under the
+  paper-table drift checker, rebuilt the AAAI PDF to 8 pages, and added an
+  AAAI package check that verifies non-reference content ends by page 7.
+  Current refreshed counts after that repair: package `468 ready / 1 pending /
+  0 failed`, AAAI package `20 ready / 0 failed`, paper tables `343 ready / 0
   failed`, submission review `17 ready / 0 failed`, goal completion `78 ready /
-  3 pending / 0 failed`; the rebuilt AAAI PDF is 9 pages and the local AAAI
-  package checker still passes.
+  3 pending / 0 failed`.
 - Current record-sync continuation corrected the current remote-checkpoint
   records from the phase114 checkpoint to the verified phase116 provider-block
   checkpoint. `scripts/check_goal_completion.py --strict` now reports

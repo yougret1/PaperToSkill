@@ -42,6 +42,8 @@ class CheckAAAIPackageTest(unittest.TestCase):
             self.assertIn("aaai_author_kit_sha256", ready_ids)
             self.assertIn("aaai_tex_declares_style", ready_ids)
             self.assertIn("aaai_log_no_unresolved_items", ready_ids)
+            self.assertIn("aaai_pdf_page_count_limit", ready_ids)
+            self.assertIn("aaai_pdf_main_content_page_limit", ready_ids)
             self.assertIn("aaai_pdf_is_fresh", ready_ids)
             self.assertTrue(output_md.exists())
 

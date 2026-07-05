@@ -249,12 +249,13 @@ recorded as a boundary case rather than treated as fully verified.
 
 The tokenizer-aware context proxy shows the same compactness pattern relative
 to full paper contexts. Under \texttt{o200k\_base}, generated skills use between
-2.39\% and 9.65\% of the input tokens required by full extracted paper text
-(Table~\ref{tab:cost-proxy}). A separate character-proxy report preserves the
-earlier $\lceil\mathrm{characters}/4\rceil$ estimate for reproducibility. We
-interpret both as coverage-preserving compression relative to full-paper
-context, not as provider billing evidence or a claim that skills are the
-shortest possible context.
+2.39\% and 9.65\% of the input tokens required by full extracted paper text,
+with the full tokenizer table retained in the package artifacts. A separate
+character-proxy report preserves the earlier
+$\lceil\mathrm{characters}/4\rceil$ estimate for reproducibility. We interpret
+both as coverage-preserving compression relative to full-paper context, not as
+provider billing evidence or a claim that skills are the shortest possible
+context.
 
 Transfer-note ablations show a consistent offline readiness pattern. Full
 skills score 10/10 on the readiness metric across all four curated papers.
@@ -279,9 +280,10 @@ Toolformer auto-note-derived skill scores 20/20 on the deterministic rubric,
 9.3/10 on context coverage, 10/10 on offline transfer readiness, and 1.0
 source-span support with zero invalid ranges. The AIDE auto-note-derived skill
 scores 20/20, 8.467/10 on context coverage, 9.5/10 on offline transfer
-readiness, and 1.0 source-span support with zero invalid ranges
-(Table~\ref{tab:auto-note}). These results support the narrower claim that
-extracted text can seed auditable note scaffolds. The local pipeline also
+readiness, and 1.0 source-span support with zero invalid ranges. The full
+auto-note comparison table is retained in the package artifacts. These results
+support the narrower claim that extracted text can seed auditable note
+scaffolds. The local pipeline also
 includes a direct-PDF smoke path through \texttt{pdftotext -layout} that records
 the generated text source in the manifest, but this does not establish robust
 arbitrary-PDF automation.
