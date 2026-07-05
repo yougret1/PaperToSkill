@@ -793,9 +793,9 @@ Use these as entry points instead of searching the whole repo first:
   consistency checks.
 - Paper claims:
   `results/reproducibility/paper_claim_report.md`
-  reports ready, 30 ready checks, 0 failed checks. It checks the AAAI body,
-  AAAI table file, and Markdown draft for overclaims, required boundaries, and
-  draft/planning language.
+  reports ready, 38 ready checks, 0 failed checks. It checks the AAAI body,
+  AAAI table file, Markdown draft, and paper outline for overclaims, required
+  boundaries, and draft/planning language.
 - Submission-review handoff:
   `results/reproducibility/submission_review_report.md`
   reports ready, 17 ready checks, 0 failed checks.

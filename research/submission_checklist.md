@@ -11,7 +11,7 @@ complete with respect to pending external evidence.
 | Gate | Current Status | Evidence | Submission Meaning |
 | --- | --- | --- | --- |
 | AAAI local package | Ready | `results/reproducibility/aaai_package_report.md`: 20 ready, 0 failed | Local TeX/PDF package is internally consistent; not final submission approval. |
-| Paper claims | Ready | `results/reproducibility/paper_claim_report.md`: 30 ready, 0 failed | Unsupported overclaim and draft/planning patterns are absent from paper-facing body, table, and draft text. |
+| Paper claims | Ready | `results/reproducibility/paper_claim_report.md`: 38 ready, 0 failed | Unsupported overclaim and draft/planning patterns are absent from the paper-facing body, table, draft, and outline text. |
 | Paper tables | Ready | `results/reproducibility/paper_table_report.md`: 343 ready, 0 failed | AAAI tables match generated CSV result tables. |
 | Usage examples | Ready | `results/reproducibility/usage_example_report.md`: 55 ready, 0 failed | Local example files, DeepSeek handoff, and offline example chain are synchronized. |
 | Reproducibility package | Ready with pending external evidence | `results/reproducibility/package_report.md`: 468 ready, 1 pending, 0 failed | Local package is coherent; external evidence remains pending. |

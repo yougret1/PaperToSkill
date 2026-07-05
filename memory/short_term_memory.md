@@ -30,18 +30,19 @@ Current date: 2026-07-06.
   --strict`, `check_submission_review.py --strict`,
   `check_aaai_submission_decision.py --strict`, `git diff --check` with only
   CRLF warnings, a long `sk-...` raw-key scan with no matches, and no diff
-  under `research/run_logs/**` or `research/stage_log.md`. Refreshed report
-  counts: paper claims `30 ready / 0 failed`, package `468 ready / 1 pending /
+  under `research/run_logs/**` or `research/stage_log.md`. Latest refreshed
+  report counts: paper claims `38 ready / 0 failed`, package `468 ready / 1 pending /
   0 failed`, AAAI package `20 ready / 0 failed`, paper tables `343 ready / 0
   failed`, submission review `17 ready / 0 failed`, goal completion `78 ready /
   3 pending / 0 failed`. Human-fidelity annotation remains pending; `ok.txt`
   was absent at resume.
-- Current submission-record sync updated long-term memory, `results/result_cards.md`,
-  `research/submission_checklist.md`, and `research/review_report.md` to the
-  current paper-claim gate: `paper_claim_report.md` is `ready` with 30 ready
-  checks and 0 failed checks, now covering the AAAI body, AAAI table file, and
-  Markdown draft for overclaims, required boundaries, and draft/planning
-  language. It also updates the paper-table memory count to 343 ready / 0
+- Current outline-claim gate sync extends `scripts/check_paper_claims.py` to
+  cover `paper/outline.md` in addition to the AAAI body, AAAI table file, and
+  Markdown draft. `paper_claim_report.md` is now `ready` with 38 ready checks
+  and 0 failed checks, and it fails on stale outline planning wording such as
+  `Planned: LLM real-reuse ablation` or future `results/real_reuse/` language.
+  This does not change experiment scores, main-row selection, or paper claims.
+  It also keeps the paper-table memory count at 343 ready / 0
   failed. Verification passed `check_paper_claims.py --strict`,
   `check_submission_review.py --strict`, `check_goal_completion.py --strict`,
   `check_reproducibility_package.py --strict`, `check_aaai_package.py

@@ -15,6 +15,7 @@ TARGET_FILES = {
     "aaai_tex": "paper/aaai/papertoskill_aaai2027.tex",
     "aaai_tables": "paper/aaai/papertoskill_tables.tex",
     "draft_md": "paper/draft.md",
+    "outline_md": "paper/outline.md",
 }
 
 NEGATION_CUES = (
@@ -84,7 +85,7 @@ FORBIDDEN_PATTERNS = [
 DRAFT_LANGUAGE_PATTERNS = [
     {
         "id": "draft_planning_language",
-        "pattern": r"\b(future reruns or additional rows may be added|additional rows may be added|future reruns[^.\n]{0,80}additional rows|TBD|to be filled|will be updated after|placeholder)\b",
+        "pattern": r"(future reruns or additional rows may be added|additional rows may be added|future reruns[^.\n]{0,80}additional rows|TBD|to be filled|will be updated after|placeholder|\bPlanned:\s*LLM real-reuse ablation\b|future\s+`?results/real_reuse/?`?)",
         "detail": "Do not leave draft/planning wording in paper-facing text.",
     },
 ]
