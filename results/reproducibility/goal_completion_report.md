@@ -52,7 +52,7 @@ Evidence boundary: this report audits the active user goal against local reposit
 | goal_completion_audit | ready | present | research/goal_completion_audit.md |
 | memory_resume_rule_present | ready | long-term and short-term resume rules present | memory/long_term_memory.md; memory/short_term_memory.md |
 | memory_current_blockers_recorded | ready | current model-availability blockers recorded | memory/short_term_memory.md |
-| current_remote_checkpoint_records | ready | declared=3040ce3 Fix checkpoint record guard baseline | memory/short_term_memory.md; memory/long_term_memory.md; research/runbook.md; research/goal_completion_audit.md |
+| current_remote_checkpoint_records | ready | declared=951a7b2 Fill real-reuse grounding gate evidence | memory/short_term_memory.md; memory/long_term_memory.md; research/runbook.md; research/goal_completion_audit.md |
 | ai_scientist_v2_local_dry_run_recorded | ready | dry-run recorded in memory | memory/short_term_memory.md |
 | ai_scientist_v2_live_llm_smoke_complete | ready | overall_status=complete | results/ai_scientist_v2_smoke/run_report.json |
 | ai_scientist_v2_live_llm_smoke_attempted | ready | overall_status=complete | results/ai_scientist_v2_smoke/run_report.json |

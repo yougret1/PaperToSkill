@@ -65,27 +65,22 @@ This file is intentionally compact. Detailed chronological history lives in
   If a network/download problem blocks a core asset or phase save, record the
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
-- Latest verified remote checkpoint before this continuation's next phase save
-  is
-  `3040ce3d4d3a91733f814c6d6fdb412760a77c5f refs/heads/main`
-  (`3040ce3 Fix checkpoint record guard baseline`). The branch is ahead with
-  local-only checkpoint-detail/blocker-record commits until a later successful push and
-  `git ls-remote` verification. The previous local-only
-  record-sync commits after `b6dc061`, the submission-review count-check save,
+- Latest verified remote checkpoint after this continuation's grounding-gate
+  evidence sync is
+  `951a7b23e9755d89c644bdc09ef692ee1700263d refs/heads/main`
+  (`951a7b2 Fill real-reuse grounding gate evidence`). The previous local-only
+  record-sync commits after the SNAP diagnostic phase, the submission-review count-check save,
   the AAAI phase112 SNAP-T1 paper-text synchronization, the draft/outline
   sync, the human-fidelity annotation request, and the resume-memory
   checkpoint/blocker/recovery/baseline records are now remote-backed in the
-  local `origin/main` tracking ref through `3040ce3`. Earlier connection-reset and port-443
-  failures remain GitHub transport metadata, not experiment-correctness
-  evidence. A fresh `git ls-remote --heads origin main` retry during this
-  continuation failed again with
-  `Failed to connect to github.com port 443 after 21087 ms`; verify
-  the exact current local/remote state with `git status -sb`,
-  `git log -5 --oneline`, and a successful `git ls-remote --heads origin main`
-  before claiming a later phase is remote-backed.
-- Local-only continuation note: `2eb5cd2 Stabilize checkpoint guard report
-  detail` and follow-up blocker-record commits after that remote baseline
-  have not been verified as remote-backed yet.
+  local `origin/main` tracking ref through `951a7b2`. This includes
+  `2eb5cd2 Stabilize checkpoint guard report detail` and
+  `7c611f3 Record checkpoint guard push blocker`. Earlier connection-reset and
+  port-443 failures remain GitHub transport metadata, not
+  experiment-correctness evidence. Verify the exact current local/remote state
+  with `git status -sb`, `git log -5 --oneline`, and a successful
+  `git ls-remote --heads origin main` before claiming any later phase is
+  remote-backed.
 - Current resume checkpoint commits are `4532dd9 Sync resume checkpoint
   memory`, `bf95213 Record resume memory push blocker`, `69d23b1 Record
   recovered resume memory backup`, `f1c50d5 Sync resume baseline memory`, and
@@ -94,9 +89,8 @@ This file is intentionally compact. Detailed chronological history lives in
   `git push origin main` failed with `Recv failure: Connection was reset`, and
   `git ls-remote --heads origin main` failed with `Failed to connect to
   github.com port 443 after 21100 ms`. Later pushes succeeded and the local
-  tracking ref later advanced through `3040ce3`; current local state is ahead
-  of that verified remote until the checkpoint-detail/blocker-record
-  continuation is pushed and verified.
+  tracking ref later advanced through `951a7b2`; current local state is aligned
+  with that verified remote after the grounding-gate evidence sync.
 
 ## Evidence Boundary
 

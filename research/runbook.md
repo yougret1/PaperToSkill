@@ -31,14 +31,12 @@ Test-NetConnection github.com -Port 443 | Format-List
 ```
 
 Current status as of 2026-07-05: the temporary GitHub HTTPS transport blocker
-recovered again through the checkpoint-record guard baseline, but a later
-remote check failed again. The branch is ahead with local-only
-checkpoint-detail/blocker-record commits. The latest verified remote
-checkpoint before claiming any later phase save is:
+recovered again. The latest verified remote checkpoint before claiming any
+later phase save is:
 
 ```text
-3040ce3d4d3a91733f814c6d6fdb412760a77c5f refs/heads/main
-3040ce3 Fix checkpoint record guard baseline
+951a7b23e9755d89c644bdc09ef692ee1700263d refs/heads/main
+951a7b2 Fill real-reuse grounding gate evidence
 ```
 
 The previously unbacked local commits are now remote-backed through the SNAP
@@ -74,6 +72,9 @@ f1c50d5 Sync resume baseline memory
 4d2e040 Clarify resume remote memory baseline
 ac3926c Guard current remote checkpoint records
 3040ce3 Fix checkpoint record guard baseline
+2eb5cd2 Stabilize checkpoint guard report detail
+7c611f3 Record checkpoint guard push blocker
+951a7b2 Fill real-reuse grounding gate evidence
 ```
 
 Earlier `Recv failure: Connection was reset` and github.com port 443 failures
@@ -83,16 +84,13 @@ The later local record-sync commit after `fb0baed` and the phase112 completion
 commit are now remote-backed. The later submission-review and AAAI paper-text
 sync commits, auxiliary draft/outline sync, human-fidelity request,
 resume-memory records, and checkpoint-record guard baseline are also
-remote-backed through `3040ce3`. A later `git ls-remote --heads origin main`
-failed with `Failed to connect to github.com port 443 after 21087 ms`, so
-the local checkpoint-guard-detail/blocker-record continuation remains
-local-only until a future push and remote verification.
+remote-backed through `951a7b2`, including the checkpoint-detail,
+blocker-record, and grounding-gate evidence-sync commits. Earlier
+`git ls-remote --heads origin main` failures remain transport history.
 Always inspect `git status -sb` and `git log -5 --oneline` before claiming a
 clean phase save.
 
-Local-only continuation note: `2eb5cd2 Stabilize checkpoint guard report
-detail` and follow-up blocker-record commits after that remote baseline
-have not been verified as remote-backed yet.
+Local-only continuation note: none as of the verified `951a7b2` checkpoint.
 
 Re-run remote verification before making future remote-backed checkpoint
 claims.
