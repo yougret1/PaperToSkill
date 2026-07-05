@@ -168,6 +168,15 @@ This file is intentionally compact. Detailed chronological history lives in
   or local logs. `git push origin main` succeeded, and `git ls-remote --heads
   origin main` verified
   `3e18fc5d58ebcf8f791e82c737d3f64457e886e1 refs/heads/main`.
+- Follow-up record-sync commit `4ae3e76 Record recovered checkpoint guard
+  backup` saves the recovered checkpoint-record state after the current resume.
+  `git push origin main` reported success and advanced `main` from `3e18fc5`
+  to `4ae3e76`, and local status was clean against `origin/main`. Independent
+  `git ls-remote --heads origin main` verification failed twice afterward
+  with a connection reset and then port-443 connectivity failure after
+  21095 ms. Treat this as GitHub transport metadata only; do not create
+  human `ok.txt` for GitHub status, and do not claim `4ae3e76` is
+  independently remote-verified until a later `ls-remote` succeeds.
 - Follow-up record-sync commit `45ef25b Sync remote checkpoint after LLM handoff
   guard` and blocker note `0538ef1 Record checkpoint sync push blocker`
   initially failed to back up because GitHub HTTPS transport was unavailable.

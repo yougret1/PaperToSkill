@@ -152,6 +152,17 @@ Current date: 2026-07-06.
   `results/real_reuse/main_run_selection.json`, or local logs. The phase was
   pushed and verified at
   `3e18fc5d58ebcf8f791e82c737d3f64457e886e1 refs/heads/main`.
+- Follow-up local record-sync commit `4ae3e76 Record recovered checkpoint guard
+  backup` saves the recovered checkpoint-record state after reading memory,
+  logs, and the referenced Codex thread. `git push origin main` reported
+  success and advanced `main` from `3e18fc5` to `4ae3e76`, and local
+  `git status -sb` then reported clean against `origin/main`. Two independent
+  `git ls-remote --heads origin main` verification attempts failed afterward,
+  first with `Recv failure: Connection was reset` and then with
+  `Failed to connect to github.com port 443 after 21095 ms`. Treat this as
+  GitHub transport metadata only; do not create human `ok.txt` for this status,
+  and do not claim `4ae3e76` as independently remote-verified until a later
+  `git ls-remote` succeeds.
 - Current main-results boundary cleanup removes stale "future unfilled cells /
   planning placeholders" wording from `scripts/build_real_reuse_paper_tables.py`
   and regenerated `results/real_reuse/main_results_plan.{md,json}`. It also
@@ -973,7 +984,11 @@ Current date: 2026-07-06.
 6. Latest substantive remote-backed checkpoint before further edits:
    `3e18fc5 Sync checkpoint record guard`, verified at
    `3e18fc5d58ebcf8f791e82c737d3f64457e886e1 refs/heads/main`.
-7. No experiment-side human action is required for GitHub status right now.
+7. Follow-up record-sync commit `4ae3e76` was pushed by command, but
+   independent `ls-remote` verification failed twice due GitHub transport
+   errors. Treat it as transport metadata only and retry remote verification
+   opportunistically before claiming `4ae3e76` is independently remote-backed.
+8. No experiment-side human action is required for GitHub status right now.
    Continue non-network paper/evidence work and verify remote alignment again
    before claiming any later phase save is remote-backed.
 
