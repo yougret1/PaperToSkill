@@ -13,23 +13,32 @@ Current date: 2026-07-05.
   Preserve the existing local-log boundary: do not modify
   `research/run_logs/**` or `research/stage_log.md` during record-sync-only
   work.
+- Current local/remote status after this resume check: the latest verified
+  remote backup remains
+  `3040ce3d4d3a91733f814c6d6fdb412760a77c5f refs/heads/main`
+  (`3040ce3 Fix checkpoint record guard baseline`). The checkpoint-guard-detail
+  continuation beginning at `2eb5cd2 Stabilize checkpoint guard report detail`
+  and any follow-up blocker-record commits are local-only until a later push
+  and remote check succeed. A fresh `git ls-remote --heads origin main` on
+  2026-07-05 failed with `Failed to connect to github.com port 443 after
+  21087 ms`, so use `git status -sb` and `git log -5 --oneline` for the exact
+  local ahead count and HEAD before making any remote-backed claim.
 - Current resume baseline: GitHub backup had recovered and was verified
   through the resume-memory baseline clarification before this continuation's
-  record-sync edits. The latest locally recorded remote checkpoint is
-  `4d2e040fb587e9b8124b756094de9996f4409481 refs/heads/main`
-  (`4d2e040 Clarify resume remote memory baseline`). That remote-backed chain
+  record-sync edits. The latest locally recorded remote checkpoint is:
+  `3040ce3d4d3a91733f814c6d6fdb412760a77c5f refs/heads/main`
+  (`3040ce3 Fix checkpoint record guard baseline`). That remote-backed chain
   includes the SNAP executable-candidate prompt packets, phase111/phase112
   diagnostic generation/execution artifacts, the tightened submission-review
   count-check gate, the updated AAAI phase112 SNAP-T1 executable-candidate
   prose/table caption, the rebuilt AAAI PDF/package report, the draft/outline
   SNAP diagnostic sync, the human-fidelity annotation request, and the current
-  resume-memory checkpoint/blocker/recovery/baseline records. Earlier
+  resume-memory checkpoint/blocker/recovery/baseline records plus the
+  checkpoint-record guard commits through `3040ce3`. Earlier
   `Recv failure: Connection was reset` and port-443 failures remain historical
-  GitHub transport metadata, not experiment correctness. A fresh
-  `git ls-remote --heads origin main` retry during this continuation failed
-  again with `Recv failure: Connection was reset`, so treat the local Git
-  tracking ref plus a future successful `git ls-remote` as the authority
-  before claiming any new remote-backed phase.
+  GitHub transport metadata, not experiment correctness. Treat a future
+  successful `git ls-remote` as the authority before claiming any new
+  remote-backed phase.
 - Current resume verification on 2026-07-05: `ok.txt` is absent, local
   strict gates passed for real-reuse benchmark, paper tables, paper claims,
   usage examples, AAAI package, submission review, reproducibility package,
@@ -41,10 +50,13 @@ Current date: 2026-07-05.
   that transport failure; later retries pushed and verified `bf95213`,
   `69d23b1 Record recovered resume memory backup`,
   `f1c50d5 Sync resume baseline memory`, and
-  `4d2e040 Clarify resume remote memory baseline`. Current local state is
-  `main...origin/main` with local `origin/main` at
-  `4d2e040fb587e9b8124b756094de9996f4409481`. Goal status remains externally
-  blocked on human-fidelity annotation and the follow-on AAAI final decision.
+  `4d2e040 Clarify resume remote memory baseline`, followed by
+  `ac3926c Guard current remote checkpoint records` and
+  `3040ce3 Fix checkpoint record guard baseline`. Current local state is ahead
+  of that remote baseline by the checkpoint-guard-detail/blocker-record
+  continuation; use `git status -sb` and `git log -5 --oneline` for the exact
+  count and HEAD. Goal status remains externally blocked on human-fidelity
+  annotation and the follow-on AAAI final decision.
 - Current record-sync continuation tightens
   `scripts/check_submission_review.py` so review/rebuttal/submission handoff
   files must carry exact current gate counts for goal/package, AAAI package,
