@@ -56,6 +56,21 @@ Current date: 2026-07-05.
   saved locally as `2b823f6 Tighten submission review count checks` but is not
   remote-backed yet because GitHub transport reset during push and remote-head
   verification.
+- Current paper-text synchronization after the submission-review save adds an
+  explicit AAAI Results paragraph for the phase112 SNAP-T1 model-generated
+  executable-candidate diagnostic and clarifies the corresponding table
+  caption. The paper now says the phase112 diagnostic reaches 1.000 for both
+  Summary and PaperToSkill under the pre-registered executable-candidate
+  contract, but it closes the candidate-script artifact contract for both
+  conditions rather than replacing main SNAP rows or showing PaperToSkill
+  advantage. The AAAI PDF was rebuilt with `pdflatex`, `bibtex`, `pdflatex`,
+  `pdflatex`; it remains 8 pages. Verification passed:
+  `python scripts/check_paper_claims.py --strict`,
+  `python scripts/check_paper_tables.py --strict`,
+  `python scripts/check_aaai_package.py --strict`,
+  `python scripts/check_usage_examples.py --strict`,
+  `python scripts/check_reproducibility_package.py --strict`, and
+  `python scripts/check_goal_completion.py --strict`.
 - Current local phase commit `77e8ada` implements the SNAP executable-candidate
   runner/checker/test path:
   `scripts/run_real_reuse_snapatac2_executable_candidate.py`,
