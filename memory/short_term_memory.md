@@ -224,13 +224,14 @@ Current date: 2026-07-05.
   contains the appended phase110 raw rows, run artifacts, run report,
   dedicated CSV/MD/JSON table, builder/test, paper table, rebuilt AAAI PDF, and
   table/package checker/report updates.
-- Current remote-backup status: GitHub backup is verified through
-  `206fa5c8eb6ec32855f5d2b3b932129b33cada33 refs/heads/main`
-  (`206fa5c Request human fidelity annotation`). The previously unbacked local
-  commits from `4b216b6` through the SNAP diagnostic record, the follow-up
-  remote-status sync, the phase112 completion commit, the submission-review
-  count-check save, the AAAI paper-text sync, the draft/outline sync, and the
-  human-fidelity handoff request are now remote-backed.
+- Resume-baseline remote-backup status: GitHub backup is verified through
+  `69d23b1ed7f0bb9e3c3ca4b58fd50796d7f5ab4f refs/heads/main`
+  (`69d23b1 Record recovered resume memory backup`). The previously unbacked
+  local commits from `4b216b6` through the SNAP diagnostic record, the
+  follow-up remote-status sync, the phase112 completion commit, the
+  submission-review count-check save, the AAAI paper-text sync, the
+  draft/outline sync, the human-fidelity handoff request, and the
+  resume-memory records through `69d23b1` are remote-backed at that baseline.
 - The current discussion policy is: stabilize the core eight-row real-reuse
   evidence first; collect auxiliary raw data opportunistically; keep LLM
   ablation auxiliary, component ablation appendix-only, and user study
@@ -242,16 +243,17 @@ Current date: 2026-07-05.
   the user to create `ok.txt` for GitHub status; `ok.txt` is reserved for
   completed human-fidelity annotation or a concrete placed core real-reuse
   asset.
-- The committed chain through `206fa5c Request human fidelity annotation` is
+- The committed chain through `69d23b1 Record recovered resume memory backup` is
   pushed to `origin/main` and verified by `git ls-remote --heads origin main`
   as
-  `206fa5c8eb6ec32855f5d2b3b932129b33cada33 refs/heads/main`. This includes
+  `69d23b1ed7f0bb9e3c3ca4b58fd50796d7f5ab4f refs/heads/main`. This includes
   the earlier recovered GitHub backup records, real-reuse boundary tightening,
   SNAP executable-candidate runner, prompt packets, phase111/phase112
   diagnostic artifacts, memory/queue sync, refreshed AAAI diagnostic-table/
   PDF/package reports, tightened submission-review count checks, and the
   phase112 SNAP-T1 executable-candidate paper-text clarification, auxiliary
-  draft/outline synchronization, and the human-fidelity annotation request.
+  draft/outline synchronization, the human-fidelity annotation request, and
+  resume-memory recovery records through `69d23b1`.
   Earlier GitHub HTTPS transport failures are availability metadata, not
   experiment-correctness evidence.
 - Verification before the `599382d` phase save passed:
@@ -269,10 +271,11 @@ Current date: 2026-07-05.
   created for completed human-fidelity annotation or a concrete placed core
   asset, not for GitHub status or diagnostic follow-ups.
 - Current GitHub transport note: previous 2026-07-05 connection-reset /
-  port-443 failures recovered again. Current verified remote state is
-  `206fa5c8eb6ec32855f5d2b3b932129b33cada33 refs/heads/main`. Before claiming
-  any later phase save is remote-backed, rerun `git status -sb`,
-  `git log -5 --oneline`, and `git ls-remote --heads origin main`.
+  port-443 failures recovered again. The resume-baseline verified remote state
+  is `69d23b1ed7f0bb9e3c3ca4b58fd50796d7f5ab4f refs/heads/main`. Before
+  claiming any later phase save is remote-backed, rerun `git status -sb`,
+  `git log -5 --oneline`, and `git ls-remote --heads origin main`; those
+  command outputs are authoritative for the latest exact alignment.
 - Historical Claude-family availability checkpoint: after record-sync commit
   `977b2b9` (`Sync experiment planning records`), Claude-family REF-T2 was
   retried from the local Claude API doc key with the v0 300-second / 5-attempt
@@ -296,11 +299,12 @@ Current date: 2026-07-05.
   availability metadata. `results/real_reuse/llm_ablation_summary.md` remains
   12 collected scored rows / 18 expected rows, with the 6 Claude-family rows
   pending; this is provider availability metadata, not method-quality evidence.
-- Latest remote-backed chain: Claude retry availability, bounded
+- Historical remote-backed chain through `0832201`: Claude retry availability, bounded
   summary-comparison claim cleanup, current project record sync, GitHub backup
   recovery, real-reuse record-boundary tightening, the tested SNAP
   executable-candidate runner, push-blocker records, stabilization-queue sync,
-  and memory retry sync are remote-backed through `0832201`.
+  and memory retry sync were remote-backed through `0832201`; later resume
+  baseline records are tracked separately above.
 - Current non-network claim-boundary cleanup: `research/claim_source_map.md`
   no longer says the broad "PaperToSkill skills outperform generic summaries"
   claim is a TBD hypothesis. It now states the evidence-bounded version:
