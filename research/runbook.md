@@ -68,6 +68,14 @@ both failed with `Recv failure: Connection was reset`. Treat this as GitHub
 transport metadata only; keep the remote-backed baseline at `e57df72` until a
 later push and remote check succeed.
 
+A later `git push origin main` reported success for that local
+record-sync/blocker/Claude-availability chain and local `origin/main` equals
+`HEAD`, but two immediate independent `git ls-remote --heads origin main`
+checks both failed with `Recv failure: Connection was reset`. Treat this as
+GitHub verification-transport metadata only; keep `e57df72` as the latest
+independently verified remote-backed baseline until a later remote check
+succeeds.
+
 Follow-up commits `45ef25b Sync remote checkpoint after LLM handoff guard` and
 `0538ef1 Record checkpoint sync push blocker` first failed to back up because
 GitHub HTTPS transport was unavailable. They are now included in the verified
