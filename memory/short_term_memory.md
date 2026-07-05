@@ -23,13 +23,16 @@ Current date: 2026-07-05.
   E4 as deferred future method work, not a current main-paper priority. This
   does not change `results/real_reuse/main_run_selection.json`, promote any
   diagnostic follow-up, or touch `research/run_logs/**` /
-  `research/stage_log.md`. The table-completion commit is local-only until
-  GitHub transport recovers: `git push origin main` failed with
+  `research/stage_log.md`. The table-completion commit was initially
+  local-only while GitHub transport was unavailable: `git push origin main`
+  failed with
   `Recv failure: Connection was reset`, and `git ls-remote --heads origin main`
   then failed with `Failed to connect to github.com port 443 after 21124 ms`.
   A later retry in this continuation failed again with `Recv failure:
   Connection was reset`, followed by `git ls-remote --heads origin main`
   failing with `Failed to connect to github.com port 443 after 21111 ms`.
+  Later GitHub recovery verified these commits as remote-backed through
+  `bddd900` and then pushed the checkpoint record sync as `9cc0683`.
 - Current local claim-boundary continuation updates
   `research/claim_source_map.md` so the failure-branch claim no longer says
   "improves reproducibility" as a TBD hypothesis. It now says PaperToSkill

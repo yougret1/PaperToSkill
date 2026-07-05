@@ -189,10 +189,10 @@ real-reuse results are stable.
 
 | Variant | Tasks | Avg Task Success | Workflow Score | Transfer Success | Failure Recovery | Unsupported Errors / Task |
 | --- | --- | --- | --- | --- | --- | --- |
-| Full PaperToSkill | 8 | TBD | TBD | TBD | TBD | TBD |
-| No Transfer Notes | 8 or subset | TBD | TBD | TBD | TBD | TBD |
-| No Failure Cases | 8 or subset | TBD | TBD | TBD | TBD | TBD |
-| No Source Anchors | Optional subset | TBD | TBD | TBD | TBD | TBD |
+| Full PaperToSkill | 8 | Deferred | Deferred | Deferred | Deferred | Deferred |
+| No Transfer Notes | 8 or subset | Deferred | Deferred | Deferred | Deferred | Deferred |
+| No Failure Cases | 8 or subset | Deferred | Deferred | Deferred | Deferred | Deferred |
+| No Source Anchors | Optional subset | Deferred | Deferred | Deferred | Deferred | Deferred |
 
 Scoring rules:
 
@@ -288,8 +288,8 @@ analyses are stable.
 
 | Condition | Users / Runs | Success Rate | Avg Task Score | Time to Completion | Interventions | Expert Fidelity Score | Token Cost |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| Summary | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
-| PaperToSkill | TBD | TBD | TBD | TBD | TBD | TBD | TBD |
+| Summary | Deferred | Deferred | Deferred | Deferred | Deferred | Deferred | Deferred |
+| PaperToSkill | Deferred | Deferred | Deferred | Deferred | Deferred | Deferred | Deferred |
 
 ## Execution Dependencies
 
