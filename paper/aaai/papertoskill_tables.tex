@@ -127,6 +127,23 @@ SNAP-T1 & SnapATAC2 & runtime\_memory\_quality & 0.000 & 0.500 & 0.250 & 72 & 10
 
 \begin{table*}[t]
 \centering
+\caption{Auxiliary real-reuse LLM ablation over the pre-registered AIDE-T2, SWE-T2, and REF-T2 slice. Pending Claude-family rows are provider-availability metadata, not negative task evidence; this table is not a main-row replacement.}
+\label{tab:real-reuse-llm-ablation}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lllllllll}
+\toprule
+Family & Alias & Task Slice & Scored & Expected & Pending & Summary Avg & PaperToSkill Avg & Boundary \\
+\midrule
+GPT-family & gpt-5.5 & AIDE-T2/SWE-T2/REF-T2 & 6 & 6 & 0 & 0.605 & 0.333 & Auxiliary model-slice evidence; not main-row replacement \\
+Claude-family & claude-opus-4-8 & AIDE-T2/SWE-T2/REF-T2 & 0 & 6 & 6 & Pending & Pending & Provider availability pending; not negative evidence \\
+DeepSeek-family & deepseek-v4-flash & AIDE-T2/SWE-T2/REF-T2 & 6 & 6 & 0 & 0.500 & 0.500 & Auxiliary model-slice evidence; not main-row replacement \\
+\bottomrule
+\end{tabular}%
+}
+\end{table*}
+
+\begin{table*}[t]
+\centering
 \caption{Main deterministic/offline PaperToSkill results. Coverage scores are task-rubric scores; transfer readiness is an offline artifact-readiness metric.}
 \label{tab:main-results}
 \begin{tabular}{lrrrrrrrr}

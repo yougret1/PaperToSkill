@@ -491,6 +491,7 @@
 | `results/real_reuse/llm_ablation_summary.md` | Human-readable real-reuse LLM ablation aggregate; currently 12 collected GPT-family/DeepSeek-family scored rows for AIDE-T2, SWE-T2, and REF-T2, with 6 Claude-family rows pending | Created |
 | `results/real_reuse/llm_ablation_summary.json` | Machine-readable real-reuse LLM ablation aggregate keyed to pre-registered run IDs | Created |
 | `results/real_reuse/llm_ablation_raw_rows.csv` | CSV export of collected pre-registered real-reuse LLM ablation raw rows | Created |
+| `results/real_reuse/llm_ablation_family_summary.csv` | CSV source for the AAAI auxiliary real-reuse LLM-ablation family table; pending Claude-family rows remain provider availability metadata, not negative evidence | Created locally |
 | `results/reproducibility/aaai_package_report.md` | Human-readable AAAI package verification report | Created |
 | `results/reproducibility/aaai_package_report.json` | Machine-readable AAAI package verification report | Created |
 | `results/reproducibility/usage_example_report.md` | Human-readable usage-example verification report | Created |

@@ -37,7 +37,7 @@ class CheckPaperTablesTest(unittest.TestCase):
 
             report = json.loads(output_json.read_text(encoding="utf-8"))
             self.assertEqual("ready", report["overall_status"])
-            self.assertEqual(316, report["status_counts"]["ready"])
+            self.assertEqual(343, report["status_counts"]["ready"])
             self.assertEqual(0, report["status_counts"]["fail"])
             ready_ids = {check["id"] for check in report["checks"] if check["status"] == "ready"}
             self.assertIn("paper_table_real_reuse_aide_t1_papertoskill_score", ready_ids)
@@ -52,6 +52,9 @@ class CheckPaperTablesTest(unittest.TestCase):
             self.assertIn("paper_table_snap_exec_candidate_snap_t1_papertoskill_peak_memory_mb", ready_ids)
             self.assertIn("paper_table_full_excerpt_sanity_swe_t1_full_excerpt_tokens", ready_ids)
             self.assertIn("paper_table_full_excerpt_sanity_aide_t1_full_excerpt_score", ready_ids)
+            self.assertIn("paper_table_real_reuse_llm_ablation_gpt_family_summary_avg", ready_ids)
+            self.assertIn("paper_table_real_reuse_llm_ablation_claude_family_pending_rows", ready_ids)
+            self.assertIn("paper_table_real_reuse_llm_ablation_deepseek_family_papertoskill_avg", ready_ids)
             self.assertIn("paper_table_main_aide_skill_coverage", ready_ids)
             self.assertIn("paper_table_cost_toolformer_reduction", ready_ids)
             self.assertIn("paper_table_auto_aide_automatic_extracted_text_note_scaffold_transfer", ready_ids)

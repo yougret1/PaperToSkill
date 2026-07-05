@@ -3,7 +3,7 @@
 Evidence boundary: this report checks that AAAI LaTeX table values match generated CSV result tables. It does not add new empirical evidence.
 
 - Overall status: ready
-- Ready checks: 316
+- Ready checks: 343
 - Failed checks: 0
 
 ## Checks
@@ -250,6 +250,33 @@ Evidence boundary: this report checks that AAAI LaTeX table values match generat
 | paper_table_full_excerpt_sanity_snap_t1_papertoskill_tokens | ready | value=1069 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
 | paper_table_full_excerpt_sanity_snap_t1_full_excerpt_tokens | ready | value=10297 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
 | paper_table_full_excerpt_sanity_snap_t1_status | ready | value=Scored (GPT-family) | paper/aaai/papertoskill_tables.tex vs results/real_reuse/full_excerpt_sanity.csv |
+| paper_table_real_reuse_llm_ablation_gpt_family_model_family | ready | value=GPT-family | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_gpt_family_model_alias | ready | value=gpt-5.5 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_gpt_family_task_slice | ready | value=AIDE-T2/SWE-T2/REF-T2 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_gpt_family_scored_rows | ready | value=6 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_gpt_family_expected_rows | ready | value=6 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_gpt_family_pending_rows | ready | value=0 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_gpt_family_summary_avg | ready | value=0.605 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_gpt_family_papertoskill_avg | ready | value=0.333 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_gpt_family_boundary | ready | value=Auxiliary model-slice evidence; not main-row replacement | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_claude_family_model_family | ready | value=Claude-family | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_claude_family_model_alias | ready | value=claude-opus-4-8 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_claude_family_task_slice | ready | value=AIDE-T2/SWE-T2/REF-T2 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_claude_family_scored_rows | ready | value=0 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_claude_family_expected_rows | ready | value=6 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_claude_family_pending_rows | ready | value=6 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_claude_family_summary_avg | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_claude_family_papertoskill_avg | ready | value=Pending | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_claude_family_boundary | ready | value=Provider availability pending; not negative evidence | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_deepseek_family_model_family | ready | value=DeepSeek-family | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_deepseek_family_model_alias | ready | value=deepseek-v4-flash | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_deepseek_family_task_slice | ready | value=AIDE-T2/SWE-T2/REF-T2 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_deepseek_family_scored_rows | ready | value=6 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_deepseek_family_expected_rows | ready | value=6 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_deepseek_family_pending_rows | ready | value=0 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_deepseek_family_summary_avg | ready | value=0.500 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_deepseek_family_papertoskill_avg | ready | value=0.500 | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
+| paper_table_real_reuse_llm_ablation_deepseek_family_boundary | ready | value=Auxiliary model-slice evidence; not main-row replacement | paper/aaai/papertoskill_tables.tex vs results/real_reuse/llm_ablation_family_summary.csv |
 | paper_table_main_ai_scientist_v2_rubric | ready | value=20/20 | paper/aaai/papertoskill_tables.tex vs results/tables/main_results.csv |
 | paper_table_main_ai_scientist_v2_skill_coverage | ready | value=7.867/9 | paper/aaai/papertoskill_tables.tex vs results/tables/main_results.csv |
 | paper_table_main_ai_scientist_v2_generic_summary | ready | value=1.733/9 | paper/aaai/papertoskill_tables.tex vs results/tables/main_results.csv |

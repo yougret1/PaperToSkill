@@ -15,6 +15,7 @@ DEFAULT_RAW_ROWS = Path("results/real_reuse/raw_rows.jsonl")
 DEFAULT_OUTPUT_CSV = Path("results/real_reuse/llm_ablation_raw_rows.csv")
 DEFAULT_OUTPUT_JSON = Path("results/real_reuse/llm_ablation_summary.json")
 DEFAULT_OUTPUT_MD = Path("results/real_reuse/llm_ablation_summary.md")
+DEFAULT_FAMILY_CSV = Path("results/real_reuse/llm_ablation_family_summary.csv")
 DEFAULT_REPORTS = (
     Path("results/real_reuse/aide_run_report.json"),
     Path("results/real_reuse/swe_run_report.json"),
@@ -88,6 +89,66 @@ def fmt_score(value: Any) -> str:
         return f"{float(value):.3f}"
     except (TypeError, ValueError):
         return ""
+
+
+def avg_score(values: list[str]) -> str:
+    scores: list[float] = []
+    for value in values:
+        try:
+            scores.append(float(value))
+        except (TypeError, ValueError):
+            continue
+    if not scores:
+        return "Pending"
+    return f"{sum(scores) / len(scores):.3f}"
+
+
+def build_family_summary(summary: dict[str, Any]) -> list[dict[str, str]]:
+    rows: list[dict[str, str]] = []
+    families: dict[tuple[str, str], dict[str, Any]] = {}
+    for pair in summary["pairs"]:
+        key = (pair["model_family"], pair["model_alias"])
+        family = families.setdefault(
+            key,
+            {
+                "tasks": [],
+                "expected_rows": 0,
+                "scored_rows": 0,
+                "pending_rows": 0,
+                "summary_scores": [],
+                "papertoskill_scores": [],
+            },
+        )
+        family["tasks"].append(pair["task_id"])
+        family["expected_rows"] += 2
+        if pair["pair_status"] == "complete":
+            family["scored_rows"] += 2
+            family["summary_scores"].append(pair["summary_score"])
+            family["papertoskill_scores"].append(pair["papertoskill_score"])
+        else:
+            family["pending_rows"] += 2
+
+    for (model_family, model_alias), family in families.items():
+        scored = family["scored_rows"]
+        pending = family["pending_rows"]
+        if pending and not scored:
+            evidence_boundary = "Provider availability pending; not negative evidence"
+        else:
+            evidence_boundary = "Auxiliary model-slice evidence; not main-row replacement"
+        rows.append(
+            {
+                "Model Family": model_family,
+                "Model Alias": model_alias,
+                "Task Slice": "/".join(dict.fromkeys(family["tasks"])),
+                "Scored Rows": str(scored),
+                "Expected Rows": str(family["expected_rows"]),
+                "Pending Rows": str(pending),
+                "Summary Avg": avg_score(family["summary_scores"]),
+                "PaperToSkill Avg": avg_score(family["papertoskill_scores"]),
+                "Evidence Boundary": evidence_boundary,
+            }
+        )
+    return rows
 
 
 def build_summary(
@@ -171,7 +232,7 @@ def build_summary(
             }
         )
 
-    return {
+    summary = {
         "schema_version": "0.1",
         "evidence_boundary": (
             "Aggregates only rows whose run_id was pre-registered in the real-reuse "
@@ -184,6 +245,8 @@ def build_summary(
         "pending": pending_rows,
         "pairs": pairs,
     }
+    summary["family_summary"] = build_family_summary(summary)
+    return summary
 
 
 def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
@@ -200,6 +263,26 @@ def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
         "failure_reason",
         "run_id",
         "output_path",
+    ]
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({field: row.get(field, "") for field in fieldnames})
+
+
+def write_family_csv(path: Path, rows: list[dict[str, str]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fieldnames = [
+        "Model Family",
+        "Model Alias",
+        "Task Slice",
+        "Scored Rows",
+        "Expected Rows",
+        "Pending Rows",
+        "Summary Avg",
+        "PaperToSkill Avg",
+        "Evidence Boundary",
     ]
     with path.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=fieldnames)
@@ -252,6 +335,20 @@ def write_markdown(path: Path, summary: dict[str, Any]) -> None:
         ]
         for row in summary["pending"]
     ]
+    family_rows = [
+        [
+            row["Model Family"],
+            row["Model Alias"],
+            row["Task Slice"],
+            row["Scored Rows"],
+            row["Expected Rows"],
+            row["Pending Rows"],
+            row["Summary Avg"],
+            row["PaperToSkill Avg"],
+            row["Evidence Boundary"],
+        ]
+        for row in summary["family_summary"]
+    ]
     text = "\n\n".join(
         [
             "# Real-Reuse LLM Ablation Summary",
@@ -263,6 +360,21 @@ def write_markdown(path: Path, summary: dict[str, Any]) -> None:
             md_table(
                 ["Task ID", "Family", "Alias", "Summary", "PaperToSkill", "Status"],
                 pair_rows,
+            ),
+            "## Family Summary",
+            md_table(
+                [
+                    "Family",
+                    "Alias",
+                    "Task Slice",
+                    "Scored",
+                    "Expected",
+                    "Pending",
+                    "Summary Avg",
+                    "PaperToSkill Avg",
+                    "Boundary",
+                ],
+                family_rows,
             ),
             "## Collected Raw Rows",
             md_table(
@@ -287,6 +399,7 @@ def main() -> int:
     parser.add_argument("--output-csv", type=Path, default=DEFAULT_OUTPUT_CSV)
     parser.add_argument("--output-json", type=Path, default=DEFAULT_OUTPUT_JSON)
     parser.add_argument("--output-md", type=Path, default=DEFAULT_OUTPUT_MD)
+    parser.add_argument("--family-csv", type=Path, default=DEFAULT_FAMILY_CSV)
     args = parser.parse_args()
 
     root = args.root.resolve()
@@ -300,10 +413,13 @@ def main() -> int:
     output_csv = args.output_csv if args.output_csv.is_absolute() else root / args.output_csv
     output_json = args.output_json if args.output_json.is_absolute() else root / args.output_json
     output_md = args.output_md if args.output_md.is_absolute() else root / args.output_md
+    family_csv = args.family_csv if args.family_csv.is_absolute() else root / args.family_csv
     write_csv(output_csv, summary["collected"])
+    write_family_csv(family_csv, summary["family_summary"])
     write_json(output_json, summary)
     write_markdown(output_md, summary)
     print(output_csv)
+    print(family_csv)
     print(output_json)
     print(output_md)
     return 0

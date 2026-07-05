@@ -22,6 +22,7 @@ TABLE_SOURCES = {
         "results/real_reuse/snapatac2_executable_candidate_run_report.csv"
     ),
     "real_reuse_full_excerpt_sanity": "results/real_reuse/full_excerpt_sanity.csv",
+    "real_reuse_llm_ablation_family": "results/real_reuse/llm_ablation_family_summary.csv",
     "main_results": "results/tables/main_results.csv",
     "transfer_ablation": "results/tables/transfer_ablation.csv",
     "cost_proxy": "results/tables/context_cost_proxy_tokenizer.csv",
@@ -288,6 +289,40 @@ def real_reuse_full_excerpt_sanity_checks(root: Path, tex_rows: list[list[str]])
             checks.append(
                 check_value(
                     f"paper_table_full_excerpt_sanity_{slug(task_id)}_{suffix}",
+                    actual_row[index],
+                    expected_row[column],
+                    evidence,
+                )
+            )
+    return checks
+
+
+def real_reuse_llm_ablation_family_checks(root: Path, tex_rows: list[list[str]]) -> list[Check]:
+    source_path = root / TABLE_SOURCES["real_reuse_llm_ablation_family"]
+    source = by_key(read_csv_rows(source_path), "Model Family")
+    actual = table_rows_by_paper(tex_rows, "tab:real-reuse-llm-ablation", 9)
+    evidence = f"paper/aaai/papertoskill_tables.tex vs {TABLE_SOURCES['real_reuse_llm_ablation_family']}"
+    checks: list[Check] = []
+    column_map = [
+        ("model_family", 0, "Model Family"),
+        ("model_alias", 1, "Model Alias"),
+        ("task_slice", 2, "Task Slice"),
+        ("scored_rows", 3, "Scored Rows"),
+        ("expected_rows", 4, "Expected Rows"),
+        ("pending_rows", 5, "Pending Rows"),
+        ("summary_avg", 6, "Summary Avg"),
+        ("papertoskill_avg", 7, "PaperToSkill Avg"),
+        ("boundary", 8, "Evidence Boundary"),
+    ]
+    for family, expected_row in source.items():
+        actual_row = actual.get(family)
+        if not actual_row:
+            checks.append(Check(f"paper_table_real_reuse_llm_ablation_{slug(family)}_row", "fail", "missing row", evidence))
+            continue
+        for suffix, index, column in column_map:
+            checks.append(
+                check_value(
+                    f"paper_table_real_reuse_llm_ablation_{slug(family)}_{suffix}",
                     actual_row[index],
                     expected_row[column],
                     evidence,
@@ -651,6 +686,9 @@ def build_report(root: Path, tables_tex: Path) -> dict[str, Any]:
         )
         checks.extend(
             real_reuse_full_excerpt_sanity_checks(root, parse_tabular_rows(tex_text, "tab:full-excerpt-sanity"))
+        )
+        checks.extend(
+            real_reuse_llm_ablation_family_checks(root, parse_tabular_rows(tex_text, "tab:real-reuse-llm-ablation"))
         )
         checks.extend(main_results_checks(root, parse_tabular_rows(tex_text, "tab:main-results")))
         checks.extend(transfer_checks(root, parse_tabular_rows(tex_text, "tab:transfer-ablation")))

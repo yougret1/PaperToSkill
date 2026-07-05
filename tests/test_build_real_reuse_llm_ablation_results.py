@@ -131,9 +131,41 @@ class BuildRealReuseLLMAblationResultsTest(unittest.TestCase):
             self.assertEqual("5", row["attempts"])
             self.assertIn("502", row["failure_reason"])
 
+    def test_family_summary_reports_collected_and_pending_slices(self):
+        plan = build_plan(
+            ROOT,
+            Path("benchmarks/real_reuse/llm_ablation_v0.json"),
+            Path("results/real_reuse/main_results_plan.csv"),
+        )
+        raw_rows = [
+            json.loads(line)
+            for line in (ROOT / "results" / "real_reuse" / "raw_rows.jsonl").read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
+        summary = build_summary(plan, raw_rows, read_availability_rows(ROOT))
+        family_rows = {(row["Model Family"], row["Model Alias"]): row for row in summary["family_summary"]}
+
+        gpt = family_rows[("GPT-family", "gpt-5.5")]
+        self.assertEqual("6", gpt["Scored Rows"])
+        self.assertEqual("0", gpt["Pending Rows"])
+        self.assertEqual("0.605", gpt["Summary Avg"])
+        self.assertEqual("0.333", gpt["PaperToSkill Avg"])
+
+        deepseek = family_rows[("DeepSeek-family", "deepseek-v4-flash")]
+        self.assertEqual("6", deepseek["Scored Rows"])
+        self.assertEqual("0.500", deepseek["Summary Avg"])
+        self.assertEqual("0.500", deepseek["PaperToSkill Avg"])
+
+        claude = family_rows[("Claude-family", "claude-opus-4-8")]
+        self.assertEqual("0", claude["Scored Rows"])
+        self.assertEqual("6", claude["Pending Rows"])
+        self.assertEqual("Pending", claude["Summary Avg"])
+        self.assertIn("Provider availability pending", claude["Evidence Boundary"])
+
     def test_cli_writes_summary_outputs(self):
         with tempfile.TemporaryDirectory() as tmp:
             output_csv = Path(tmp) / "rows.csv"
+            family_csv = Path(tmp) / "family.csv"
             output_json = Path(tmp) / "summary.json"
             output_md = Path(tmp) / "summary.md"
             subprocess.run(
@@ -142,6 +174,8 @@ class BuildRealReuseLLMAblationResultsTest(unittest.TestCase):
                     str(ROOT / "scripts" / "build_real_reuse_llm_ablation_results.py"),
                     "--output-csv",
                     str(output_csv),
+                    "--family-csv",
+                    str(family_csv),
                     "--output-json",
                     str(output_json),
                     "--output-md",
@@ -154,8 +188,10 @@ class BuildRealReuseLLMAblationResultsTest(unittest.TestCase):
             )
             payload = json.loads(output_json.read_text(encoding="utf-8"))
             self.assertIn("pending_rows", payload)
+            self.assertIn("family_summary", payload)
             self.assertIn("Real-Reuse LLM Ablation Summary", output_md.read_text(encoding="utf-8"))
             self.assertIn("task_id", output_csv.read_text(encoding="utf-8").splitlines()[0])
+            self.assertIn("Model Family", family_csv.read_text(encoding="utf-8").splitlines()[0])
 
 
 if __name__ == "__main__":

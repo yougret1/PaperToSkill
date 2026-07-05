@@ -881,7 +881,15 @@ Use these as entry points instead of searching the whole repo first:
   pre-registered run IDs; pending rows are not negative evidence. The
   aggregator now also carries latest runner-report provider availability
   metadata for pending rows, so Claude-family HTTP 502 failures remain visible
-  without being counted as scored task failures.
+  without being counted as scored task failures. The paper-facing auxiliary
+  family summary is in
+  `results/real_reuse/llm_ablation_family_summary.csv` and
+  `tab:real-reuse-llm-ablation`: GPT-family `gpt-5.5` reports 6/6 scored rows
+  with Summary/PaperToSkill averages `0.605/0.333`, DeepSeek-family
+  `deepseek-v4-flash` reports 6/6 scored rows with `0.500/0.500`, and
+  Claude-family `claude-opus-4-8` remains 0/6 scored and provider-pending.
+  This is auxiliary model-slice evidence, not a main-row replacement and not
+  aggregate PaperToSkill advantage.
 
 ## Model/API Configuration
 

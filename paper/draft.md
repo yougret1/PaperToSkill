@@ -283,6 +283,16 @@ ablation responses reports 9,594 `o200k_base` output tokens. This is local
 saved-response accounting, not provider billing, success-per-dollar evidence,
 live downstream task success, or a broad model-quality comparison.
 
+The real-reuse LLM ablation is tracked separately from this older saved-response
+protocol. It uses the pre-registered AIDE-T2, SWE-T2, and REF-T2 paper-task
+slice under the same Summary/PaperToSkill pairing. GPT-family and DeepSeek-family
+rows are collected, while the Claude-family rows remain pending after provider
+HTTP 502 responses. The family-level table reports GPT-family 0.605/0.333
+average Summary/PaperToSkill scores over collected slices, Claude-family pending
+with six provider-availability rows, and DeepSeek-family 0.500/0.500. This is
+auxiliary model-slice evidence, not a main-row replacement or aggregate
+PaperToSkill advantage.
+
 The bounded AI-Scientist-v2 integration path is now complete for the local
 marker smoke and one full live run. The smoke report records a complete marker
 contract response, and the live-run handoff records one completion directory

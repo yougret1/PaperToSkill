@@ -22,6 +22,14 @@ Evidence boundary: Aggregates only rows whose run_id was pre-registered in the r
 | REF-T2 | Claude-family | claude-opus-4-8 |  |  | pending |
 | REF-T2 | DeepSeek-family | deepseek-v4-flash | 1.000 | 1.000 | complete |
 
+## Family Summary
+
+| Family | Alias | Task Slice | Scored | Expected | Pending | Summary Avg | PaperToSkill Avg | Boundary |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| GPT-family | gpt-5.5 | AIDE-T2/SWE-T2/REF-T2 | 6 | 6 | 0 | 0.605 | 0.333 | Auxiliary model-slice evidence; not main-row replacement |
+| Claude-family | claude-opus-4-8 | AIDE-T2/SWE-T2/REF-T2 | 0 | 6 | 6 | Pending | Pending | Provider availability pending; not negative evidence |
+| DeepSeek-family | deepseek-v4-flash | AIDE-T2/SWE-T2/REF-T2 | 6 | 6 | 0 | 0.500 | 0.500 | Auxiliary model-slice evidence; not main-row replacement |
+
 ## Collected Raw Rows
 
 | Task ID | Family | Alias | Condition | Score | Success | Attempts |

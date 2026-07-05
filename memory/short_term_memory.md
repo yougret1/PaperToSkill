@@ -13,6 +13,27 @@ Current date: 2026-07-05.
   Preserve the existing local-log boundary: do not modify
   `research/run_logs/**` or `research/stage_log.md` during record-sync-only
   work.
+- Current auxiliary real-reuse LLM-ablation family-summary continuation
+  aggregates existing phase109 evidence into
+  `results/real_reuse/llm_ablation_family_summary.csv` and the AAAI
+  `tab:real-reuse-llm-ablation` table. GPT-family `gpt-5.5` has 6/6 scored
+  rows with Summary/PaperToSkill averages `0.605/0.333`; DeepSeek-family
+  `deepseek-v4-flash` has 6/6 scored rows with `0.500/0.500`; Claude-family
+  `claude-opus-4-8` remains 0/6 scored and 6 pending because provider HTTP 502
+  availability persists. This is auxiliary model-slice evidence only: it does
+  not replace the locked eight main rows and does not support aggregate
+  PaperToSkill advantage. Local verification passed focused LLM/table/package/
+  submission-review unit tests, `check_goal_completion.py --strict`,
+  `check_submission_review.py --strict`, `check_usage_examples.py --strict`,
+  `check_real_reuse_benchmark.py --strict`, `check_reproducibility_package.py
+  --strict`, `check_paper_tables.py --strict`, `check_paper_claims.py
+  --strict`, `check_aaai_package.py --strict`, `git diff --check` with only
+  CRLF warnings, a changed-file raw-key scan with no matches, and no diff under
+  `research/run_logs/**` or `research/stage_log.md`. Current refreshed counts:
+  package `467 ready / 1 pending / 0 failed`, paper tables `343 ready / 0
+  failed`, submission review `17 ready / 0 failed`, goal completion `78 ready /
+  3 pending / 0 failed`; the rebuilt AAAI PDF is 9 pages and the local AAAI
+  package checker still passes.
 - Current record-sync continuation corrected the current remote-checkpoint
   records from the phase114 checkpoint to the verified phase116 provider-block
   checkpoint. `scripts/check_goal_completion.py --strict` now reports
