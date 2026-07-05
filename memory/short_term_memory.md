@@ -50,6 +50,33 @@ Current date: 2026-07-05.
   warnings, and a raw-key scan with no matches. This phase is saved locally as
   `ef8cbe0 Prepare SNAP executable candidate prompts`; GitHub backup failed
   with connection resets and is recorded in `toHuman.md`.
+- Current uncommitted SNAP executable-candidate live checkpoint:
+  `scripts/run_real_reuse_snapatac2_executable_candidate_prompts.py` generates
+  candidate scripts from the prompt packets and now writes incremental reports
+  after each packet so provider stalls preserve partial provenance. Phase111
+  GPT-family `gpt-5.5` generation produced paired SNAP-T1 scripts, but both
+  candidate scripts imported Windows-incompatible POSIX `resource`; executing
+  them with `scripts/run_real_reuse_snapatac2_executable_candidate.py` under
+  run id `phase111_gpt_snapatac2_executable_candidate_t1` scored both rows
+  0.500 with `missing_required_artifacts_or_metrics` and
+  `execution_status=error`. This is diagnostic only and does not replace main
+  SNAP rows. The prompt builder was then tightened to require cross-platform
+  Python, no `resource`, no network/package installation, and writes only under
+  `--artifact-dir` / `--result-json`. Phase112
+  `phase112_gpt_snapatac2_executable_candidate_scripts_v2` produced only
+  `SNAP-T1_summary.py`; the next provider request did not return after an
+  extended wait, so the matching long-running Python process was stopped and
+  `results/real_reuse/snapatac2_executable_candidate_script_generation_report.{md,json}`
+  records a partial run. Do not execute phase112 as a paired diagnostic until
+  the matching PaperToSkill script exists.
+  Verification for this uncommitted checkpoint passed: focused SNAP
+  prompt/prompt-runner/candidate-runner/repro-package unit tests,
+  `check_reproducibility_package.py --strict`,
+  `check_real_reuse_benchmark.py --strict`, `check_paper_tables.py --strict`,
+  `check_paper_claims.py --strict`, `check_usage_examples.py --strict`,
+  `check_aaai_package.py --strict`, `check_submission_review.py --strict`,
+  `check_goal_completion.py --strict`, `git diff --check` with only CRLF
+  warnings, and a raw-key scan with no matches.
 - `research/real_reuse_stabilization_queue.md` now marks the SNAP P1 local
   action as runner-implemented: future SNAP reruns should use the executable
   candidate runner only when paired Summary/PaperToSkill candidate scripts
@@ -320,6 +347,9 @@ Current date: 2026-07-05.
    HTTP 502 after 5 attempts per condition. Do not commit raw keys.
 3. Keep Summary and PaperToSkill paired under the same task/scorer contract for
    any follow-up. Main SNAP rows remain unchanged unless explicitly promoted.
+   For SNAP executable-candidate reruns, execute/interpret a task only when
+   paired Summary/PaperToSkill candidate scripts exist for the same prompt
+   generation phase; phase112 currently has only `SNAP-T1_summary.py`.
 4. During core reruns, collect auxiliary raw data where cheap: provider
    availability, failure reasons, context/token proxies, and raw rows needed
    for real-reuse LLM ablation.

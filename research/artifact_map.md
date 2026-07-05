@@ -248,6 +248,7 @@
 | `scripts/run_real_reuse_snapatac2_executable_followup.py` | Runs the paired SNAP executable-artifact diagnostic follow-up with a pre-registered controlled scaffold, concrete artifacts, runtime/memory records, and no main raw-row replacement | Created |
 | `scripts/run_real_reuse_snapatac2_executable_candidate.py` | Executes SNAP executable-candidate scripts under the pre-registered contract, writes runner-owned candidate output/artifact/resource records, calls the existing SNAP scorer, and keeps rows diagnostic unless explicitly promoted | Created |
 | `scripts/build_real_reuse_snapatac2_executable_candidate_prompts.py` | Builds paired SNAP-T1/T2 Summary/PaperToSkill prompt packets for future executable-candidate scripts without calling a model, scoring outputs, appending raw rows, or replacing main rows | Created |
+| `scripts/run_real_reuse_snapatac2_executable_candidate_prompts.py` | Calls a configured model over SNAP executable-candidate prompt packets to generate paired Python candidate scripts, while recording provider availability and not executing/scoring/replacing rows | Created |
 | `scripts/evaluate_skill.py` | Deterministic v0 evaluator for generated skills | Created |
 | `scripts/evaluate_context_baselines.py` | Deterministic evaluator for context baseline coverage | Created |
 | `scripts/audit_skill_source_map.py` | Deterministic source-map-aware unsupported-instruction audit | Created |
@@ -322,6 +323,7 @@
 | `tests/test_run_real_reuse_snapatac2_executable_followup.py` | Unit test for the paired SNAP executable-artifact follow-up runner and no-main-raw-row policy | Created |
 | `tests/test_run_real_reuse_snapatac2_executable_candidate.py` | Unit tests for SNAP executable-candidate runner execution, runner-owned completion, artifact manifest/resource records, and no-main-raw-row policy | Created |
 | `tests/test_build_real_reuse_snapatac2_executable_candidate_prompts.py` | Unit test for SNAP executable-candidate prompt packets, runner interface requirements, required artifacts, and scorer-threshold non-exposure | Created |
+| `tests/test_run_real_reuse_snapatac2_executable_candidate_prompts.py` | Unit tests for generating SNAP executable-candidate scripts from prompt packets using fixture responses and for missing-env availability reporting | Created |
 | `tests/test_build_real_reuse_llm_ablation_plan.py` | Unit tests for the real-reuse LLM ablation plan, selected stabilized subset, long retry budget, and generated command shape | Created |
 | `tests/test_build_real_reuse_llm_ablation_results.py` | Unit tests for real-reuse LLM ablation aggregation and phase109 GPT-family plus DeepSeek-family row detection | Created |
 | `tests/test_check_real_reuse_benchmark.py` | Unit tests for real-reuse preflight guards, including SNAP executable-candidate and SWE-T1 task-contract decision requirements | Created |
@@ -447,6 +449,14 @@
 | `results/real_reuse/snapatac2_executable_candidate_prompt_plan.md` | Human-readable SNAP executable-candidate prompt-packet plan for future paired Summary/PaperToSkill candidate scripts; local planning artifact only, not scored evidence | Created |
 | `results/real_reuse/snapatac2_executable_candidate_prompt_plan.json` | Machine-readable SNAP executable-candidate prompt-packet plan with expected script names, visible assets, required artifacts, and runner boundary | Created |
 | `results/real_reuse/snapatac2_executable_candidate_prompts/` | Four generated SNAP-T1/T2 Summary/PaperToSkill prompt packets for future executable candidate scripts; does not call models or replace main rows | Created |
+| `results/real_reuse/snapatac2_executable_candidate_script_generation_report.md` | Human-readable report for model-based SNAP executable-candidate script generation; provider failures are availability metadata | Created |
+| `results/real_reuse/snapatac2_executable_candidate_script_generation_report.json` | Machine-readable report for SNAP executable-candidate script generation from prompt packets | Created |
+| `results/real_reuse/snapatac2_executable_candidate_scripts/` | Model-generated SNAP executable-candidate Python scripts; phase111 produced paired SNAP-T1 scripts that failed on Windows due POSIX-only `resource`, and phase112 currently has only a revised SNAP-T1 Summary script | Created |
+| `results/real_reuse/snapatac2_executable_candidate_script_responses/` | Raw model responses for SNAP executable-candidate script generation; contains phase111 T1 responses and the phase112 revised SNAP-T1 Summary response | Created |
+| `results/real_reuse/snapatac2_executable_candidate_run_report.md` | Human-readable report for executing available SNAP executable-candidate scripts under the pre-registered diagnostic runner; not a main-row replacement | Created |
+| `results/real_reuse/snapatac2_executable_candidate_run_report.json` | Machine-readable SNAP executable-candidate execution report | Created |
+| `results/real_reuse/snapatac2_executable_candidate_run_report.csv` | CSV SNAP executable-candidate execution report for diagnostic table construction if later needed | Created |
+| `results/real_reuse/runs/SNAP-T1/*/phase111_gpt_snapatac2_executable_candidate_t1/` | Runner-owned artifacts for the phase111 SNAP-T1 executable-candidate paired diagnostic attempt; both conditions scored 0.500 with missing artifacts after candidate script `resource` import failures | Created |
 | `results/real_reuse/aide_run_report.md` | Human-readable latest AIDE runner report; raw scored AIDE evidence and paper-facing row selection are authoritative in `results/real_reuse/raw_rows.jsonl` and `results/real_reuse/main_run_selection.json` because phase109 AIDE-T2 LLM-ablation output overwrote the default report path | Created |
 | `results/real_reuse/aide_run_report.json` | Machine-readable latest AIDE runner report; current default report path reflects phase109 AIDE-T2 LLM-ablation output | Created |
 | `results/real_reuse/aide_t1_baseline_metric.json` | Baseline-submission scorer validation for the locked AIDE-T1 fixture | Created |

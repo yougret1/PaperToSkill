@@ -20,6 +20,9 @@ Use the `--fragment` path for the locked miniature fixture. The current fixture 
 Create these required artifacts under `--artifact-dir`: clusters.csv, marker_summary.json, embedding.csv.
 Write optional candidate-side notes and quality metrics to `--result-json` as JSON.
 Do not set final task completion by yourself; the runner owns `completed=true` only after execution and artifact checks.
+Use cross-platform Python that runs on the current Windows runner and Linux; do not import POSIX-only modules such as `resource`.
+The runner records final runtime and peak-memory metadata, so your script should not depend on platform-specific resource APIs.
+Do not use network access, package installation, subprocess package managers, or writes outside `--artifact-dir` and `--result-json`.
 
 ## Evidence Boundary
 
@@ -229,3 +232,4 @@ Return valid Python code only.
 The code should be deterministic on the provided miniature fixture.
 Prefer lightweight standard-library or widely available scientific Python logic.
 If SnapATAC2 is unavailable, write a transparent fallback that still materializes the required artifacts and records what happened in `--result-json`.
+Do not import `resource`; use only cross-platform modules or guard optional scientific dependencies behind fallbacks.

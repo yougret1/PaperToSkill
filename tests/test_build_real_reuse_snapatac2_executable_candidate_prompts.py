@@ -47,6 +47,10 @@ class BuildSnapATAC2ExecutableCandidatePromptsTest(unittest.TestCase):
                 self.assertIn("--task-id", prompt)
                 self.assertIn("--artifact-dir", prompt)
                 self.assertIn("--result-json", prompt)
+                self.assertIn("cross-platform Python", prompt)
+                self.assertIn("do not import POSIX-only modules such as `resource`", prompt)
+                self.assertIn("Do not import `resource`", prompt)
+                self.assertIn("Do not use network access", prompt)
                 self.assertIn(packet["expected_script_name"], prompt)
                 for artifact in packet["required_artifacts"]:
                     self.assertIn(artifact, prompt)

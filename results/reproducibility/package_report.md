@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 438
+- Ready checks: 448
 - Pending checks: 1
 - Failed checks: 0
 
@@ -83,6 +83,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | real_reuse_full_excerpt_sanity_builder | ready | present | scripts/build_real_reuse_full_excerpt_sanity.py |
 | real_reuse_swe_t1_issue_aligned_followup_builder | ready | present | scripts/build_real_reuse_swe_t1_issue_aligned_followup.py |
 | real_reuse_snapatac2_executable_candidate_prompt_builder | ready | present | scripts/build_real_reuse_snapatac2_executable_candidate_prompts.py |
+| real_reuse_snapatac2_executable_candidate_prompt_runner | ready | present | scripts/run_real_reuse_snapatac2_executable_candidate_prompts.py |
 | real_reuse_benchmark_checker | ready | present | scripts/check_real_reuse_benchmark.py |
 | real_reuse_reflexion_preparer | ready | present | scripts/prepare_real_reuse_reflexion_fixture.py |
 | real_reuse_reflexion_scorer | ready | present | scripts/score_real_reuse_reflexion.py |
@@ -190,6 +191,15 @@ Evidence boundary: this report checks local package completeness and separates p
 | real_reuse_snapatac2_executable_candidate_prompt_snap_t1_papertoskill | ready | present | results/real_reuse/snapatac2_executable_candidate_prompts/SNAP-T1_papertoskill.md |
 | real_reuse_snapatac2_executable_candidate_prompt_snap_t2_summary | ready | present | results/real_reuse/snapatac2_executable_candidate_prompts/SNAP-T2_summary.md |
 | real_reuse_snapatac2_executable_candidate_prompt_snap_t2_papertoskill | ready | present | results/real_reuse/snapatac2_executable_candidate_prompts/SNAP-T2_papertoskill.md |
+| real_reuse_snapatac2_executable_candidate_script_generation_report_md | ready | present | results/real_reuse/snapatac2_executable_candidate_script_generation_report.md |
+| real_reuse_snapatac2_executable_candidate_script_generation_report_json | ready | present | results/real_reuse/snapatac2_executable_candidate_script_generation_report.json |
+| real_reuse_snapatac2_executable_candidate_run_report_md | ready | present | results/real_reuse/snapatac2_executable_candidate_run_report.md |
+| real_reuse_snapatac2_executable_candidate_run_report_json | ready | present | results/real_reuse/snapatac2_executable_candidate_run_report.json |
+| real_reuse_snapatac2_executable_candidate_run_report_csv | ready | present | results/real_reuse/snapatac2_executable_candidate_run_report.csv |
+| real_reuse_snapatac2_executable_candidate_phase111_snap_t1_summary_script | ready | present | results/real_reuse/snapatac2_executable_candidate_scripts/phase111_gpt_snapatac2_executable_candidate_scripts/SNAP-T1_summary.py |
+| real_reuse_snapatac2_executable_candidate_phase111_snap_t1_papertoskill_script | ready | present | results/real_reuse/snapatac2_executable_candidate_scripts/phase111_gpt_snapatac2_executable_candidate_scripts/SNAP-T1_papertoskill.py |
+| real_reuse_snapatac2_executable_candidate_phase112_snap_t1_summary_script | ready | present | results/real_reuse/snapatac2_executable_candidate_scripts/phase112_gpt_snapatac2_executable_candidate_scripts_v2/SNAP-T1_summary.py |
+| real_reuse_snapatac2_executable_candidate_phase112_snap_t1_summary_response | ready | present | results/real_reuse/snapatac2_executable_candidate_script_responses/phase112_gpt_snapatac2_executable_candidate_scripts_v2/SNAP-T1_summary.txt |
 | artifact_map | ready | present | research/artifact_map.md |
 | claim_evidence_matrix | ready | present | research/claim_evidence_matrix.md |
 | new_paper_triage | ready | present | research/new_paper_triage_2026-07-01.md |

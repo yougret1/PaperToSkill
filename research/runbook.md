@@ -404,6 +404,42 @@ four task/condition prompt packets under
 for future model calls that should return Python candidate scripts; the builder
 does not call a model, score outputs, append raw rows, or replace main rows.
 
+To ask the default GPT-family model to generate paired candidate scripts from
+the prompt packets, use a generous timeout/retry budget:
+
+```powershell
+$env:PAPERTOSKILL_GPT_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
+$env:PAPERTOSKILL_GPT_OPENAI_API_KEY = "<set locally>"
+python scripts\run_real_reuse_snapatac2_executable_candidate_prompts.py --model-family GPT-family --model-alias gpt-5.5 --wire-api openai_responses --timeout-seconds 300 --max-attempts 5 --retry-delay-seconds 5 --run-id phaseXX_snapatac2_executable_candidate_scripts
+Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_BASE_URL -ErrorAction SilentlyContinue
+Remove-Item Env:\PAPERTOSKILL_GPT_OPENAI_API_KEY -ErrorAction SilentlyContinue
+```
+
+This script generates candidate `.py` files and a provider-availability report.
+It still does not execute candidates, score outputs, append raw rows, or replace
+main rows. The script now rewrites the report after each prompt packet so a
+provider stall or interrupted long call preserves completed rows as a partial
+generation record.
+
+Current checkpoint:
+
+- `phase111_gpt_snapatac2_executable_candidate_scripts` generated paired
+  SNAP-T1 Summary/PaperToSkill scripts, but both scripts imported the
+  POSIX-only `resource` module and failed on the Windows runner. The paired
+  executable-candidate diagnostic run
+  `phase111_gpt_snapatac2_executable_candidate_t1` scored both rows 0.500 with
+  `missing_required_artifacts_or_metrics` because no artifacts were produced.
+  This is diagnostic evidence only and does not replace the main SNAP rows.
+- The prompt packets were tightened to require cross-platform Python and to
+  avoid `resource`, network access, package installation, and writes outside
+  `--artifact-dir` / `--result-json`.
+- `phase112_gpt_snapatac2_executable_candidate_scripts_v2` produced only
+  `SNAP-T1_summary.py` from the revised prompt. The following provider request
+  did not return after an extended wait, so the matching long-running Python
+  generation process was stopped and the default generation report records a
+  partial run. Do not execute phase112 as a paired diagnostic until the
+  matching PaperToSkill script exists.
+
 After paired Summary/PaperToSkill candidate scripts exist, run:
 
 ```powershell
