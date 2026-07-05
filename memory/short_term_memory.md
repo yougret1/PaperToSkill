@@ -25,6 +25,20 @@ Current date: 2026-07-05.
   `python scripts\check_submission_review.py --strict`, `git diff --check`
   with only CRLF warnings, a changed-file secret scan with no matches, and no
   diff under `research/run_logs/**` or `research/stage_log.md`.
+- Current SNAP-T2 executable-candidate continuation attempted to generate
+  paired SNAP-T2 candidate scripts under the pre-registered executable-candidate
+  contract with GPT-family `gpt-5.5`, 300-second request timeout, 5 attempts,
+  and shell-only credentials loaded from the local GPT API document. The
+  Summary condition returned provider HTTP 524 after five attempts and produced
+  no script; the PaperToSkill condition was not completed in this phase. The
+  default phase112 SNAP-T1 script-generation report was restored with
+  `--skip-existing` so the existing paper-facing diagnostic evidence remains
+  intact. The partial provider-availability record is saved separately in
+  `results/real_reuse/snapatac2_executable_candidate_script_generation_phase113_t2_partial.{md,json}`
+  and logged at
+  `research/run_logs/2026-07-05_phase113_snap_t2_executable_candidate_partial.md`.
+  This is provider availability metadata only: it does not execute SNAP-T2,
+  append raw rows, replace main rows, or show PaperToSkill advantage.
 - Current non-network continuation after the resume/thread review updates
   `research/real_reuse_experiment_plan.md` Table 6 with existing quality and
   grounding evidence for AIDE, SWE-agent, Reflexion, SnapATAC2, Toolformer
