@@ -92,13 +92,15 @@ used as boundary evidence rather than aggregate downstream-effectiveness proof.
 
 ## Recommended Next Experiments
 
-1. Stabilize the core real-reuse experiment under source-paper objective
-   metrics before strengthening downstream-effectiveness claims.
+1. Stabilize the locked core real-reuse rows under source-paper objective
+   metrics before strengthening downstream-effectiveness claims; add only
+   pre-registered paired follow-ups unless `main_run_selection.json` is
+   explicitly changed.
 2. During core reruns, collect auxiliary raw data where cheap: failure reasons,
    provider availability, token/context proxies, and real-reuse LLM-ablation
    rows. Do not treat provider latency or retry counts as effectiveness
    metrics.
-3. After the core evidence stabilizes, finish or refresh the remaining
+3. After the locked-row evidence stabilizes, finish or refresh the remaining
    auxiliary analyses: retry pending Claude-family real-reuse LLM-ablation rows
    only when provider availability recovers, update failure-boundary and
    quality/grounding evidence, and keep component ablation as an appendix

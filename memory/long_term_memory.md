@@ -80,9 +80,9 @@ This file is intentionally compact. Detailed chronological history lives in
   main-results boundary cleanup, real-reuse LLM-ablation handoff guard,
   recovered checkpoint-sync records, outline evidence-boundary sync,
   limitations-claim gate, model-response cost-boundary sync, stale cost-scope
-  claim guard, and checkpoint-record guard sync is
-  `3e18fc5d58ebcf8f791e82c737d3f64457e886e1 refs/heads/main`
-  (`3e18fc5 Sync checkpoint record guard`). This checkpoint includes the
+  claim guard, checkpoint-record guard sync, and pre-submission gate rerun is
+  `bd3fe6e5906411dc23d712d33fabb10a26c6c164 refs/heads/main`
+  (`bd3fe6e Record pre-submission gate rerun`). This checkpoint includes the
   limitations claim gate that covers `paper/limitations.md` with 51 ready
   paper-claim checks / 0 failed checks, the full 209-test verification for
   that gate, and
@@ -92,7 +92,8 @@ This file is intentionally compact. Detailed chronological history lives in
   stale cost-scope guard with 56 ready paper-claim checks / 0 failed checks,
   full unit discovery at 210 tests OK, and the checkpoint-record guard sync
   that moves current remote-checkpoint reports from stale `5786d7d` wording to
-  `43f9092`. It also includes the earlier outline
+  `43f9092`, plus the recovered checkpoint blocker records and pre-submission
+  gate rerun record. It also includes the earlier outline
   update that distinguishes collected/scored saved-response rows from
   unsupported human semantic fidelity, provider billing, and live downstream
   task-success claims; the submission-review handoff guard that separates the
@@ -183,6 +184,12 @@ This file is intentionally compact. Detailed chronological history lives in
   `Failed to connect to github.com port 443 after 21060 ms`. Treat this as
   GitHub transport metadata only and do not create human `ok.txt` for GitHub
   status.
+- Remote backup later recovered through `bd3fe6e Record pre-submission gate
+  rerun`: `git push origin main` advanced `main` from `4ae3e76` to `bd3fe6e`,
+  and `git ls-remote --heads origin main` verified
+  `bd3fe6e5906411dc23d712d33fabb10a26c6c164 refs/heads/main`. This recovery
+  includes `a72c6d2`, `dfd5602`, and `bd3fe6e`; earlier reset and port-443
+  failures remain GitHub transport metadata only.
 - Follow-up record-sync commit `45ef25b Sync remote checkpoint after LLM handoff
   guard` and blocker note `0538ef1 Record checkpoint sync push blocker`
   initially failed to back up because GitHub HTTPS transport was unavailable.

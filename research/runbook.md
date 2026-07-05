@@ -37,12 +37,13 @@ claim-drift gate, the main-results boundary cleanup, the real-reuse
 LLM-ablation handoff guard, the checkpoint-sync records, the outline
 evidence-boundary sync, the limitations claim gate, the paper-facing
 cost-boundary sync, the stale cost-scope claim guard, and the
-checkpoint-record guard sync. The latest verified substantive checkpoint
+checkpoint-record guard sync and the recovered pre-submission gate rerun
+record. The latest verified substantive checkpoint
 before claiming any later phase save is:
 
 ```text
-3e18fc5d58ebcf8f791e82c737d3f64457e886e1 refs/heads/main
-3e18fc5 Sync checkpoint record guard
+bd3fe6e5906411dc23d712d33fabb10a26c6c164 refs/heads/main
+bd3fe6e Record pre-submission gate rerun
 ```
 
 The earlier failed remote-backup attempts for `501ffc8`, `48aabac`, `8bdd394`,
@@ -53,8 +54,10 @@ verified the checkpoint above. Do not create `ok.txt` for GitHub status.
 Follow-up record-only commits `93a2abf`, `af3ba31`, and `4a85147` initially
 remained local-only because GitHub HTTPS transport failed after the verified
 `43f9092` phase save. A later `git push origin main` recovered them together
-with `3e18fc5`, and `git ls-remote --heads origin main` verified the
-checkpoint above. Treat the earlier failures as transport metadata only.
+with `3e18fc5`. A subsequent recovery push also advanced `main` through
+`4ae3e76`, `a72c6d2`, `dfd5602`, and `bd3fe6e`, and `git ls-remote --heads
+origin main` verified the checkpoint above. Treat the earlier failures as
+transport metadata only.
 
 Follow-up commits `45ef25b Sync remote checkpoint after LLM handoff guard` and
 `0538ef1 Record checkpoint sync push blocker` first failed to back up because

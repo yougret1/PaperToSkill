@@ -52,16 +52,17 @@ Record-sync note: the current remote-checkpoint records now point to the
 verified paper-finalization, submission-review, outline-sync, outline
 claim-drift, main-results boundary, real-reuse LLM-ablation handoff, recovered
 checkpoint-sync, outline evidence-boundary sync, limitations-claim gate,
-paper-facing cost-boundary sync, stale cost-scope claim guard, and
-checkpoint-record guard sync checkpoint:
-`3e18fc5d58ebcf8f791e82c737d3f64457e886e1 refs/heads/main`
-(`3e18fc5 Sync checkpoint record guard`). Earlier record-only checkpoint
+paper-facing cost-boundary sync, stale cost-scope claim guard,
+checkpoint-record guard sync, and recovered pre-submission gate rerun
+checkpoint:
+`bd3fe6e5906411dc23d712d33fabb10a26c6c164 refs/heads/main`
+(`bd3fe6e Record pre-submission gate rerun`). Earlier record-only checkpoint
 syncs, the first page-limit backup attempt, the first paper-finalization backup
 attempts, the first `95f1af3`/`66e4763` backup attempts, and the first
 `45ef25b`/`0538ef1` backup attempts hit GitHub transport errors, but later
 pushes recovered. Follow-up record-only commits after `43f9092` initially hit
-GitHub HTTPS transport failures, but a later push recovered them through
-`3e18fc5`. This is GitHub transport metadata only.
+GitHub HTTPS transport failures, but later pushes recovered them through
+`bd3fe6e`. This is GitHub transport metadata only.
 
 ## Requirement Audit
 
@@ -69,7 +70,7 @@ GitHub HTTPS transport failures, but a later push recovered them through
 | --- | --- | --- | --- |
 | Durable local memory | `memory/long_term_memory.md`; `memory/short_term_memory.md` | Complete locally | Read and update both memory files after every resume/compaction. |
 | Use `ai-scientist-v2` to refine PaperToSkill | Seed idea files, bounded smoke report, full live-run handoff, Phase 76 run log, completion directory | Complete for bounded local evidence | Do not treat the synthetic run as broad live task success. |
-| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. The latest verified substantive remote-backed checkpoint is `3e18fc5d58ebcf8f791e82c737d3f64457e886e1 refs/heads/main` (`3e18fc5 Sync checkpoint record guard`). It includes the recovered checkpoint-sync commits after the real-reuse LLM-ablation handoff guard, the outline evidence-boundary sync that distinguishes collected saved-response rows from unsupported human semantic fidelity, provider billing, and live downstream task-success claims, the limitations claim gate, the paper-facing saved-response cost-boundary sync, the stale cost-scope regression guard, and the checkpoint-record guard sync. Earlier connection-reset and port-443 failures remain GitHub transport metadata rather than experiment-correctness evidence. | Complete locally; latest substantive remote-backed checkpoint is `3e18fc5` as of the 2026-07-06 verification | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim with `git status -sb`, `git log -5 --oneline`, and `git ls-remote --heads origin main`; keep transport failures separate from experiment correctness and record exact failures in `C:\Users\19351\Desktop\tem\toHuman.md` if they recur. |
+| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. The latest verified substantive remote-backed checkpoint is `bd3fe6e5906411dc23d712d33fabb10a26c6c164 refs/heads/main` (`bd3fe6e Record pre-submission gate rerun`). It includes the recovered checkpoint-sync commits after the real-reuse LLM-ablation handoff guard, the outline evidence-boundary sync that distinguishes collected saved-response rows from unsupported human semantic fidelity, provider billing, and live downstream task-success claims, the limitations claim gate, the paper-facing saved-response cost-boundary sync, the stale cost-scope regression guard, the checkpoint-record guard sync, the checkpoint blocker records, and the pre-submission gate rerun record. Earlier connection-reset and port-443 failures remain GitHub transport metadata rather than experiment-correctness evidence. | Complete locally; latest substantive remote-backed checkpoint is `bd3fe6e` as of the 2026-07-06 verification | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim with `git status -sb`, `git log -5 --oneline`, and `git ls-remote --heads origin main`; keep transport failures separate from experiment correctness and record exact failures in `C:\Users\19351\Desktop\tem\toHuman.md` if they recur. |
 | Official AAAI TeX package | `paper/aaai/`; `results/reproducibility/aaai_package_report.md` | Locally ready | Keep draft synchronized with new evidence. |
 | Usage examples | `examples/usage/`; `results/reproducibility/usage_example_report.md` | Complete locally | Re-run after runner or task changes. |
 | Model ablations | `results/model_ablation_prompts/v0/evaluation.md`: 6 scored, 0 pending | Complete for saved-response protocol | Do not claim broad model quality or live task success. |

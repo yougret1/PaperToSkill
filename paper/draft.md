@@ -411,9 +411,10 @@ source-grounded, structurally valid, and more operationally complete than short
 summary baselines under deterministic evaluation. A first eight-row real-reuse
 stress test is complete, but it is mixed and failure-heavy rather than a proof
 of aggregate downstream effectiveness. The next stage is to add human fidelity
-review, repeat and expand real-reuse runs, extend the bounded Paper2Agent
-artifact/workflow comparison into a real executable MCP baseline if resources
-permit, and test papers whose contributions are less naturally procedural.
+review, stabilize the locked real-reuse rows with pre-registered paired
+follow-ups where needed, extend the bounded Paper2Agent artifact/workflow
+comparison into a real executable MCP baseline if resources permit, and test
+papers whose contributions are less naturally procedural.
 
 ## Reproducibility Pointers
 

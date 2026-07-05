@@ -177,6 +177,12 @@ Current date: 2026-07-06.
   `Failed to connect to github.com port 443 after 21060 ms`. Treat this as
   GitHub transport metadata only; do not create human `ok.txt` for GitHub
   status and do not keep retrying GitHub in a tight loop.
+- Remote backup later recovered through `bd3fe6e Record pre-submission gate
+  rerun`: `git push origin main` advanced `main` from `4ae3e76` to `bd3fe6e`,
+  and `git ls-remote --heads origin main` verified
+  `bd3fe6e5906411dc23d712d33fabb10a26c6c164 refs/heads/main`. This recovery
+  includes `a72c6d2`, `dfd5602`, and `bd3fe6e`; earlier reset and port-443
+  failures remain GitHub transport metadata only.
 - Current main-results boundary cleanup removes stale "future unfilled cells /
   planning placeholders" wording from `scripts/build_real_reuse_paper_tables.py`
   and regenerated `results/real_reuse/main_results_plan.{md,json}`. It also
@@ -404,18 +410,18 @@ Current date: 2026-07-06.
   GitHub retry pushed the follow-up record-sync and Claude availability
   commits, and `git ls-remote --heads origin main` verified
   `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`.
-- Current local/remote status override after the checkpoint-record guard sync:
+- Current local/remote status override after the pre-submission gate rerun:
   the latest locally recorded remote checkpoint is
-  `3e18fc5d58ebcf8f791e82c737d3f64457e886e1 refs/heads/main`
-  (`3e18fc5 Sync checkpoint record guard`). This checkpoint includes the
+  `bd3fe6e5906411dc23d712d33fabb10a26c6c164 refs/heads/main`
+  (`bd3fe6e Record pre-submission gate rerun`). This checkpoint includes the
   recovered checkpoint-sync commits after the real-reuse LLM-ablation handoff
   guard, the outline update that distinguishes collected/scored saved-response
   rows from unsupported human semantic fidelity, provider billing, and live
   downstream task-success claims, the limitations claim gate, the
   paper-facing saved-response cost-boundary sync, and the stale cost-scope
   regression guard with 56 ready paper-claim checks / 0 failures, plus the
-  checkpoint-record guard sync that updates goal-completion checkpoint records
-  to `43f9092`. Older current-status bullets in this file are historical
+  checkpoint-record guard sync, checkpoint blocker records, and
+  pre-submission gate rerun record. Older current-status bullets in this file are historical
   checkpoints only; use fresh `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
   phase.
@@ -996,16 +1002,9 @@ Current date: 2026-07-06.
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
 6. Latest substantive remote-backed checkpoint before further edits:
-   `3e18fc5 Sync checkpoint record guard`, verified at
-   `3e18fc5d58ebcf8f791e82c737d3f64457e886e1 refs/heads/main`.
-7. Follow-up record-sync commit `4ae3e76` was pushed by command, but
-   independent `ls-remote` verification failed twice due GitHub transport
-   errors. Treat it as transport metadata only and retry remote verification
-   opportunistically before claiming `4ae3e76` is independently remote-backed.
-8. Follow-up local blocker record `a72c6d2` captures the verification failure;
-   its first push failed with port-443 connectivity after 21060 ms. Do not
-   create human `ok.txt` for GitHub status.
-9. No experiment-side human action is required for GitHub status right now.
+   `bd3fe6e Record pre-submission gate rerun`, verified at
+   `bd3fe6e5906411dc23d712d33fabb10a26c6c164 refs/heads/main`.
+7. No experiment-side human action is required for GitHub status right now.
    Continue non-network paper/evidence work and verify remote alignment again
    before claiming any later phase save is remote-backed.
 
