@@ -23,35 +23,37 @@ Current date: 2026-07-05.
   E4 as deferred future method work, not a current main-paper priority. This
   does not change `results/real_reuse/main_run_selection.json`, promote any
   diagnostic follow-up, or touch `research/run_logs/**` /
-  `research/stage_log.md`.
+  `research/stage_log.md`. The table-completion commit is local-only until
+  GitHub transport recovers: `git push origin main` failed with
+  `Recv failure: Connection was reset`, and `git ls-remote --heads origin main`
+  then failed with `Failed to connect to github.com port 443 after 21124 ms`.
 - Current local/remote status after this resume check: the latest verified
   remote backup is
-  `951a7b23e9755d89c644bdc09ef692ee1700263d refs/heads/main`
-  (`951a7b2 Fill real-reuse grounding gate evidence`). The earlier
-  checkpoint-guard-detail continuation beginning at
-  `2eb5cd2 Stabilize checkpoint guard report detail` and the follow-up blocker
-  record `7c611f3 Record checkpoint guard push blocker` are now included in the
-  verified remote chain. Earlier `git ls-remote --heads origin main` failures
-  on 2026-07-05 remain historical transport metadata; use `git status -sb`,
-  `git log -5 --oneline`, and a fresh `git ls-remote --heads origin main`
-  before making any later remote-backed claim.
+  `bcd210429b4e82a7aa8016a3d82283966728c604 refs/heads/main`
+  (`bcd2104 Record grounding gate backup checkpoint`). The earlier
+  checkpoint-detail/blocker records and the grounding-gate evidence sync are
+  now included in the verified remote chain. Earlier and current
+  `git ls-remote --heads origin main` failures on 2026-07-05 remain historical
+  transport metadata; use `git status -sb`, `git log -5 --oneline`, and a fresh
+  `git ls-remote --heads origin main` before making any later remote-backed
+  claim.
 - Current resume baseline: GitHub backup had recovered and was verified
   through the resume-memory baseline clarification before this continuation's
   record-sync edits. The latest locally recorded remote checkpoint is:
-  `951a7b23e9755d89c644bdc09ef692ee1700263d refs/heads/main`
-  (`951a7b2 Fill real-reuse grounding gate evidence`). That remote-backed chain
+  `bcd210429b4e82a7aa8016a3d82283966728c604 refs/heads/main`
+  (`bcd2104 Record grounding gate backup checkpoint`). That remote-backed chain
   includes the SNAP executable-candidate prompt packets, phase111/phase112
   diagnostic generation/execution artifacts, the tightened submission-review
   count-check gate, the updated AAAI phase112 SNAP-T1 executable-candidate
   prose/table caption, the rebuilt AAAI PDF/package report, the draft/outline
   SNAP diagnostic sync, the human-fidelity annotation request, and the current
   resume-memory checkpoint/blocker/recovery/baseline records plus the
-  checkpoint-record guard commits through `3040ce3`, the checkpoint-detail and
-  blocker-record commits, and the current grounding-gate evidence sync. Earlier
-  `Recv failure: Connection was reset` and port-443 failures remain historical
-  GitHub transport metadata, not experiment correctness. Treat a future
-  successful `git ls-remote` as the authority before claiming any new
-  remote-backed phase.
+  checkpoint-record guard commits, the checkpoint-detail and blocker-record
+  commits, the grounding-gate evidence sync, and the follow-up checkpoint
+  record. Earlier `Recv failure: Connection was reset` and port-443 failures
+  remain historical GitHub transport metadata, not experiment correctness.
+  Treat a future successful `git ls-remote` as the authority before claiming
+  any new remote-backed phase.
 - Current resume verification on 2026-07-05: `ok.txt` is absent, local
   strict gates passed for real-reuse benchmark, paper tables, paper claims,
   usage examples, AAAI package, submission review, reproducibility package,
@@ -64,12 +66,13 @@ Current date: 2026-07-05.
   `69d23b1 Record recovered resume memory backup`,
   `f1c50d5 Sync resume baseline memory`, and
   `4d2e040 Clarify resume remote memory baseline`, followed by
-  `ac3926c Guard current remote checkpoint records` and
-  `3040ce3 Fix checkpoint record guard baseline`; later push verification now
-  includes `2eb5cd2`, `7c611f3`, and `951a7b2`. Current local state is aligned
-  with `origin/main` after the grounding-gate evidence sync. Goal status
-  remains externally blocked on human-fidelity annotation and the follow-on
-  AAAI final decision.
+  `ac3926c Guard current remote checkpoint records` and the guard-baseline fix;
+  later push verification now includes the checkpoint-detail/blocker records,
+  the grounding-gate evidence sync, and the follow-up checkpoint record. Current
+  local state is ahead of `origin/main` by the quality-grounding table
+  completion and the blocker-record continuation until a future push succeeds.
+  Goal status remains externally blocked on human-fidelity annotation and the
+  follow-on AAAI final decision.
 - Current record-sync continuation tightens
   `scripts/check_submission_review.py` so review/rebuttal/submission handoff
   files must carry exact current gate counts for goal/package, AAAI package,
