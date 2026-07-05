@@ -32,13 +32,13 @@ Test-NetConnection github.com -Port 443 | Format-List
 
 Current status as of 2026-07-06: the temporary GitHub HTTPS transport blocker
 recovered through the AAAI page-limit backup, the later
-paper-finalization/submission-review chain, the paper-outline sync, and the
-outline claim-drift gate. The latest verified remote checkpoint before
-claiming any later phase save is:
+paper-finalization/submission-review chain, the paper-outline sync, the outline
+claim-drift gate, and the main-results boundary cleanup. The latest verified
+substantive checkpoint before claiming any later phase save is:
 
 ```text
-73f4d83814b91489718ae441b5d86200ae805fbd refs/heads/main
-73f4d83 Gate outline paper claim drift
+00d32cdab3a35b01ed6cd016de23e21e870b15c7 refs/heads/main
+00d32cd Record main table boundary push blocker
 ```
 
 The earlier failed remote-backup attempts for `501ffc8`, `48aabac`, `8bdd394`,
@@ -124,6 +124,9 @@ ad14de5 Record AAAI page-limit push blocker
 055566e Sync outline LLM ablation status
 71f841b Record recovered outline sync backup
 73f4d83 Gate outline paper claim drift
+fe499e5 Record outline claim gate checkpoint
+21009eb Clarify real-reuse main table boundary
+00d32cd Record main table boundary push blocker
 ```
 
 The first remote backup attempt for the AAAI page-limit repair failed with

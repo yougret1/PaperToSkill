@@ -46,10 +46,10 @@ Current machine reports:
   `ready`, 2 packets, and 0 failed checks.
 
 Record-sync note: the current remote-checkpoint records now point to the
-verified paper-finalization, submission-review, outline-sync, and outline
-claim-drift checkpoint:
-`73f4d83814b91489718ae441b5d86200ae805fbd refs/heads/main`
-(`73f4d83 Gate outline paper claim drift`). Earlier record-only checkpoint
+verified paper-finalization, submission-review, outline-sync, outline
+claim-drift, and main-results boundary checkpoint:
+`00d32cdab3a35b01ed6cd016de23e21e870b15c7 refs/heads/main`
+(`00d32cd Record main table boundary push blocker`). Earlier record-only checkpoint
 syncs, the first page-limit backup attempt, the first paper-finalization backup
 attempts, and the first `95f1af3`/`66e4763` backup attempts hit GitHub
 transport errors, but later pushes recovered. This is GitHub transport metadata
@@ -61,7 +61,7 @@ only.
 | --- | --- | --- | --- |
 | Durable local memory | `memory/long_term_memory.md`; `memory/short_term_memory.md` | Complete locally | Read and update both memory files after every resume/compaction. |
 | Use `ai-scientist-v2` to refine PaperToSkill | Seed idea files, bounded smoke report, full live-run handoff, Phase 76 run log, completion directory | Complete for bounded local evidence | Do not treat the synthetic run as broad live task success. |
-| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. The latest verified remote-backed checkpoint is `73f4d83814b91489718ae441b5d86200ae805fbd refs/heads/main` (`73f4d83 Gate outline paper claim drift`). It includes the AAAI page-limit repair, the draft-language claim gate over AAAI table text, submission-record sync, the full pre-submission unit-test regression fix, the paper-outline LLM-ablation status sync, and the paper-outline claim gate reporting 38 ready checks / 0 failed checks. Earlier connection-reset and port-443 failures remain GitHub transport metadata rather than experiment-correctness evidence. | Complete locally; latest remote-backed checkpoint is `73f4d83` as of the 2026-07-06 verification | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim with `git status -sb`, `git log -5 --oneline`, and `git ls-remote --heads origin main`; keep transport failures separate from experiment correctness and record exact failures in `C:\Users\19351\Desktop\tem\toHuman.md` if they recur. |
+| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. The latest verified remote-backed checkpoint is `00d32cdab3a35b01ed6cd016de23e21e870b15c7 refs/heads/main` (`00d32cd Record main table boundary push blocker`). It includes the AAAI page-limit repair, the draft-language claim gate over AAAI table text, submission-record sync, the full pre-submission unit-test regression fix, the paper-outline LLM-ablation status sync, the paper-outline claim gate reporting 38 ready checks / 0 failed checks, and the main-results/failure-analysis raw-row provenance refresh to 40 raw rows. Earlier connection-reset and port-443 failures remain GitHub transport metadata rather than experiment-correctness evidence. | Complete locally; latest remote-backed checkpoint is `00d32cd` as of the 2026-07-06 verification | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim with `git status -sb`, `git log -5 --oneline`, and `git ls-remote --heads origin main`; keep transport failures separate from experiment correctness and record exact failures in `C:\Users\19351\Desktop\tem\toHuman.md` if they recur. |
 | Official AAAI TeX package | `paper/aaai/`; `results/reproducibility/aaai_package_report.md` | Locally ready | Keep draft synchronized with new evidence. |
 | Usage examples | `examples/usage/`; `results/reproducibility/usage_example_report.md` | Complete locally | Re-run after runner or task changes. |
 | Model ablations | `results/model_ablation_prompts/v0/evaluation.md`: 6 scored, 0 pending | Complete for saved-response protocol | Do not claim broad model quality or live task success. |

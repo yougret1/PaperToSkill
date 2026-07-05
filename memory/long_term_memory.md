@@ -75,16 +75,19 @@ This file is intentionally compact. Detailed chronological history lives in
   If a network/download problem blocks a core asset or phase save, record the
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
-- Latest verified remote checkpoint after the AAAI page-limit,
-  paper-finalization, outline-sync recovery, and outline claim-drift gate is
-  `73f4d83814b91489718ae441b5d86200ae805fbd refs/heads/main`
-  (`73f4d83 Gate outline paper claim drift`). This checkpoint includes
+- Latest verified substantive checkpoint after the AAAI page-limit,
+  paper-finalization, outline-sync recovery, outline claim-drift gate, and
+  main-results boundary cleanup is
+  `00d32cdab3a35b01ed6cd016de23e21e870b15c7 refs/heads/main`
+  (`00d32cd Record main table boundary push blocker`). This checkpoint includes
   the phase116 SNAP-T2 provider-block chain, the auxiliary family summary table,
   the AAAI page-limit repair, the draft-language claim gate over the AAAI table
   file, the submission-record sync, the full pre-submission unit-test regression
   fix, refreshed paper/package/submission reports, and memory/runbook
   synchronization, the paper-outline LLM-ablation status sync, and the new
-  paper-outline claim gate reporting 38 ready checks / 0 failed checks.
+  paper-outline claim gate reporting 38 ready checks / 0 failed checks, the
+  main-results/failure-analysis raw-row provenance refresh to 40 raw rows, and
+  the recovered GitHub transport record for `21009eb`.
   Claude-family real-reuse LLM-ablation rows remain
   provider-pending because `claude-opus-4-8`, `claude-opus-4-7`, and
   `claude-opus-4-6` all still returned provider HTTP 502 in the latest direct
@@ -92,7 +95,7 @@ This file is intentionally compact. Detailed chronological history lives in
   not model-quality evidence or scored real-reuse failures. Older named
   checkpoint notes in this memory are historical recovery checkpoints; the
   earlier failed pushes for `501ffc8`, `48aabac`, `8bdd394`, `95f1af3`, and
-  `66e4763` are historical GitHub transport metadata now that `73f4d83` is
+  `66e4763` are historical GitHub transport metadata now that `00d32cd` is
   verified remote-backed.
   Verify the exact current local/remote state with `git status -sb`,
   `git log -5 --oneline`, and a successful `git ls-remote --heads origin main`
