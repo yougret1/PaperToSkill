@@ -394,6 +394,19 @@ Run executable SNAP candidate scripts under the pre-registered contract without
 replacing the main rows:
 
 ```powershell
+python scripts\build_real_reuse_snapatac2_executable_candidate_prompts.py
+```
+
+The prompt-packet builder writes
+`results/real_reuse/snapatac2_executable_candidate_prompt_plan.{md,json}` and
+four task/condition prompt packets under
+`results/real_reuse/snapatac2_executable_candidate_prompts/`. These packets are
+for future model calls that should return Python candidate scripts; the builder
+does not call a model, score outputs, append raw rows, or replace main rows.
+
+After paired Summary/PaperToSkill candidate scripts exist, run:
+
+```powershell
 python scripts\run_real_reuse_snapatac2_executable_candidate.py --candidate-dir path\to\candidate_scripts --task SNAP-T1 --task SNAP-T2 --condition summary --condition papertoskill --timeout-seconds 300 --run-id phaseXX_snapatac2_executable_candidate
 ```
 

@@ -1,0 +1,66 @@
+{
+  "schema_version": "0.1",
+  "purpose": "Prepare future SNAP executable-candidate rerun prompt packets without calling a model.",
+  "evidence_boundary": "This is a local prompt-packet plan only. It does not execute model calls, does not score task outputs, does not append raw rows, and does not replace main rows.",
+  "runner": "scripts/run_real_reuse_snapatac2_executable_candidate.py",
+  "model_default": "gpt-5.5 for non-ablation future model calls",
+  "provider_policy": "Use generous timeout/retry budgets; provider timing is availability metadata.",
+  "packets": [
+    {
+      "task_id": "SNAP-T1",
+      "condition": "summary",
+      "expected_script_name": "SNAP-T1_summary.py",
+      "asset_manifest": "benchmarks/real_reuse/assets/SNAP-T1/asset_manifest.json",
+      "condition_context": "baselines/real_reuse/SNAP-T1_summary.md",
+      "fragment": "benchmarks/real_reuse/assets/SNAP-T1/miniature_fragment.tsv.gz",
+      "required_artifacts": [
+        "embedding.csv",
+        "cell_features.csv",
+        "fragment_summary.json"
+      ],
+      "prompt_path": "results/real_reuse/snapatac2_executable_candidate_prompts/SNAP-T1_summary.md"
+    },
+    {
+      "task_id": "SNAP-T1",
+      "condition": "papertoskill",
+      "expected_script_name": "SNAP-T1_papertoskill.py",
+      "asset_manifest": "benchmarks/real_reuse/assets/SNAP-T1/asset_manifest.json",
+      "condition_context": "generated_skills/real_reuse/snapatac2/SKILL.md",
+      "fragment": "benchmarks/real_reuse/assets/SNAP-T1/miniature_fragment.tsv.gz",
+      "required_artifacts": [
+        "embedding.csv",
+        "cell_features.csv",
+        "fragment_summary.json"
+      ],
+      "prompt_path": "results/real_reuse/snapatac2_executable_candidate_prompts/SNAP-T1_papertoskill.md"
+    },
+    {
+      "task_id": "SNAP-T2",
+      "condition": "summary",
+      "expected_script_name": "SNAP-T2_summary.py",
+      "asset_manifest": "benchmarks/real_reuse/assets/SNAP-T2/asset_manifest.json",
+      "condition_context": "baselines/real_reuse/SNAP-T2_summary.md",
+      "fragment": "benchmarks/real_reuse/assets/SNAP-T2/miniature_fragment.tsv.gz",
+      "required_artifacts": [
+        "clusters.csv",
+        "marker_summary.json",
+        "embedding.csv"
+      ],
+      "prompt_path": "results/real_reuse/snapatac2_executable_candidate_prompts/SNAP-T2_summary.md"
+    },
+    {
+      "task_id": "SNAP-T2",
+      "condition": "papertoskill",
+      "expected_script_name": "SNAP-T2_papertoskill.py",
+      "asset_manifest": "benchmarks/real_reuse/assets/SNAP-T2/asset_manifest.json",
+      "condition_context": "generated_skills/real_reuse/snapatac2/SKILL.md",
+      "fragment": "benchmarks/real_reuse/assets/SNAP-T2/miniature_fragment.tsv.gz",
+      "required_artifacts": [
+        "clusters.csv",
+        "marker_summary.json",
+        "embedding.csv"
+      ],
+      "prompt_path": "results/real_reuse/snapatac2_executable_candidate_prompts/SNAP-T2_papertoskill.md"
+    }
+  ]
+}

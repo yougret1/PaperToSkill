@@ -34,6 +34,18 @@ Current date: 2026-07-05.
   `candidate_output.json`, `artifact_manifest.json`, and
   `resource_record.json`, calls the existing SNAP scorer, does not append to
   main raw rows, and does not replace paper-facing main rows by default.
+- Current local SNAP continuation adds executable-candidate prompt packets for
+  future paired Summary/PaperToSkill candidate scripts:
+  `scripts/build_real_reuse_snapatac2_executable_candidate_prompts.py`,
+  `tests/test_build_real_reuse_snapatac2_executable_candidate_prompts.py`,
+  `results/real_reuse/snapatac2_executable_candidate_prompt_plan.{md,json}`,
+  and four prompt files under
+  `results/real_reuse/snapatac2_executable_candidate_prompts/`. The builder is
+  local-only: it does not call a model, score outputs, append raw rows, or
+  replace main rows. Verification passed for the new prompt-packet test,
+  SNAP runner/preflight tests, strict real-reuse/paper-table/paper-claim/usage/
+  AAAI/submission/goal/package gates, `git diff --check` with only CRLF
+  warnings, and a raw-key scan with no matches.
 - `research/real_reuse_stabilization_queue.md` now marks the SNAP P1 local
   action as runner-implemented: future SNAP reruns should use the executable
   candidate runner only when paired Summary/PaperToSkill candidate scripts
