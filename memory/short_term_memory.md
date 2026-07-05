@@ -13,6 +13,14 @@ Current date: 2026-07-06.
   Preserve the existing local-log boundary: do not modify
   `research/run_logs/**` or `research/stage_log.md` during record-sync-only
   work.
+- Current pre-submission gate rerun after the checkpoint-record sync passed
+  without repository diff drift: full unit discovery reported 211 tests OK, and
+  strict submission-review, AAAI submission-decision, external-evidence packet,
+  paper-claim, reproducibility-package, AAAI-package, paper-table,
+  usage-example, and real-reuse preflight checks all passed. `git diff
+  --check` returned only the usual Windows line-ending warnings, and protected
+  paths (`research/run_logs/**`, `research/stage_log.md`, and
+  `results/real_reuse/main_run_selection.json`) had no diff.
 - Current paper-outline evidence-boundary sync: `paper/outline.md` no longer
   says live-transfer prompt packets are waiting to be executed. The saved
   live-transfer and older saved model-ablation rows are already collected and
