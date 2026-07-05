@@ -68,7 +68,7 @@ used as boundary evidence rather than aggregate downstream-effectiveness proof.
 | --- | --- | --- |
 | Claim-evidence consistency | Pass with caveats | `paper/claim_checklist.md`; `research/claim_evidence_matrix.md`; `results/reproducibility/paper_claim_report.md` |
 | Local reproducibility package | Pass locally, external evidence pending | `results/reproducibility/package_report.md`: 450 ready, 1 pending, 0 failed |
-| Active-goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 77 ready, 3 pending, 0 failed |
+| Active-goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 78 ready, 3 pending, 0 failed |
 | External evidence closure queue | Ready as local queue | `results/external_evidence_closure/closure.md`: 3 ready, 0 pending, 0 failed |
 | External evidence execution packets | Ready as local handoff | `results/external_evidence_packets/packets.md`: 7 ready, 0 pending, 0 failed |
 | AAAI submission decision | Recorded wait decision | `results/aaai_submission_decision/decision.md`: `selected_option=wait_for_external_evidence`, 27 ready, 0 pending, 0 failed |

@@ -6,6 +6,8 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import re
+import subprocess
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -53,6 +55,24 @@ REQUIRED_FILES = {
     "goal_completion_audit": "research/goal_completion_audit.md",
 }
 
+REMOTE_CHECKPOINT_FILES = {
+    "short_memory": "memory/short_term_memory.md",
+    "long_memory": "memory/long_term_memory.md",
+    "runbook": "research/runbook.md",
+    "goal_completion_audit": "research/goal_completion_audit.md",
+}
+
+CURRENT_REMOTE_ANCHORS = (
+    "latest verified remote",
+    "latest verified substantive phase checkpoint",
+    "current status as of",
+    "github remote backup is currently",
+    "remote backup recovered through",
+    "current local head",
+    "current local and remote state",
+    "save phase-level progress to github",
+)
+
 
 @dataclass
 class Check:
@@ -85,6 +105,48 @@ def read_text(path: Path) -> str:
     if not path.exists():
         return ""
     return path.read_text(encoding="utf-8", errors="ignore")
+
+
+def git_output(root: Path, args: list[str]) -> str:
+    try:
+        result = subprocess.run(
+            ["git", "-C", str(root), *args],
+            check=True,
+            capture_output=True,
+            text=True,
+            timeout=10,
+        )
+    except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError):
+        return ""
+    return result.stdout.strip()
+
+
+def paragraph_windows(text: str, lookahead: int = 4) -> list[str]:
+    lines = text.splitlines()
+    windows = []
+    for index, line in enumerate(lines):
+        lowered = line.lower()
+        if not any(anchor in lowered for anchor in CURRENT_REMOTE_ANCHORS):
+            continue
+        windows.append("\n".join(lines[index : index + lookahead + 1]))
+    return windows
+
+
+def remote_checkpoint_record_issues(texts: dict[str, str], expected_full_hash: str) -> list[str]:
+    expected_prefixes = {expected_full_hash.lower(), expected_full_hash[:7].lower()}
+    issues: list[str] = []
+    for label, text in texts.items():
+        for window in paragraph_windows(text):
+            tokens = re.findall(r"\b[0-9a-f]{7,40}\b", window, flags=re.IGNORECASE)
+            unexpected = [
+                token
+                for token in tokens
+                if not any(expected.startswith(token.lower()) or token.lower().startswith(expected) for expected in expected_prefixes)
+            ]
+            if unexpected:
+                compact = re.sub(r"\s+", " ", window).strip()
+                issues.append(f"{label}: unexpected checkpoint {','.join(sorted(set(unexpected)))} in current-status window: {compact}")
+    return issues
 
 
 def required_file_checks(root: Path) -> list[Check]:
@@ -150,6 +212,50 @@ def memory_checks(root: Path) -> list[Check]:
         ),
     ]
     return checks
+
+
+def remote_checkpoint_record_checks(root: Path) -> list[Check]:
+    remote_full = git_output(root, ["rev-parse", "refs/remotes/origin/main"])
+    remote_subject = git_output(root, ["log", "-1", "--format=%s", "refs/remotes/origin/main"])
+    if not remote_full:
+        return [
+            Check(
+                "current_remote_checkpoint_records",
+                "fail",
+                "refs/remotes/origin/main is unavailable; cannot audit current checkpoint records",
+                "; ".join(REMOTE_CHECKPOINT_FILES.values()),
+            )
+        ]
+
+    texts = {label: read_text(root / raw_path) for label, raw_path in REMOTE_CHECKPOINT_FILES.items()}
+    missing_expected = [
+        raw_path
+        for raw_path in REMOTE_CHECKPOINT_FILES.values()
+        if remote_full[:7] not in read_text(root / raw_path)
+    ]
+    stale_issues = remote_checkpoint_record_issues(texts, remote_full)
+    if missing_expected or stale_issues:
+        details = []
+        if missing_expected:
+            details.append(f"missing current origin/main {remote_full[:7]} in {','.join(missing_expected)}")
+        details.extend(stale_issues[:3])
+        return [
+            Check(
+                "current_remote_checkpoint_records",
+                "fail",
+                "; ".join(details),
+                "; ".join(REMOTE_CHECKPOINT_FILES.values()),
+            )
+        ]
+
+    return [
+        Check(
+            "current_remote_checkpoint_records",
+            "ready",
+            f"origin/main={remote_full[:7]} {remote_subject}",
+            "; ".join(REMOTE_CHECKPOINT_FILES.values()),
+        )
+    ]
 
 
 def ai_scientist_checks(root: Path) -> list[Check]:
@@ -572,6 +678,7 @@ def build_report(root: Path) -> dict[str, Any]:
     checks: list[Check] = []
     checks.extend(required_file_checks(root))
     checks.extend(memory_checks(root))
+    checks.extend(remote_checkpoint_record_checks(root))
     checks.extend(ai_scientist_checks(root))
     checks.extend(system_and_experiment_checks(root))
     checks.extend(paper_package_checks(root))

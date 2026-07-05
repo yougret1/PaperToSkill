@@ -348,7 +348,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | aaai_submission_decision_preflight_ready | ready | overall=ready; decision_status=recorded; counts={'ready': 27, 'pending': 0, 'fail': 0} | results\aaai_submission_decision\decision.json |
 | aaai_submission_decision_core_checks_ready | ready | core decision preflight checks ready | results\aaai_submission_decision\decision.json |
 | aaai_submission_decision_options_available | ready | both decision options available for human decision | results\aaai_submission_decision\decision.json |
-| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 77, 'pending': 3, 'fail': 0} | results\reproducibility\goal_completion_report.json |
+| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 78, 'pending': 3, 'fail': 0} | results\reproducibility\goal_completion_report.json |
 | goal_completion_core_checks_ready | ready | core completion boundaries ready | results\reproducibility\goal_completion_report.json |
 | external_evidence_closure_report_ready | ready | overall=pending_external_evidence; counts={'ready': 3, 'pending': 0, 'fail': 0}; item_counts={'pending_reviewers': 1, 'pending_decision': 1} | results\external_evidence_closure\closure.json |
 | external_evidence_closure_core_checks_ready | ready | core closure checks ready | results\external_evidence_closure\closure.json |

@@ -14,21 +14,22 @@ Current date: 2026-07-05.
   `research/run_logs/**` or `research/stage_log.md` during record-sync-only
   work.
 - Current resume baseline: GitHub backup had recovered and was verified
-  through the recovered resume-memory backup record before this continuation's
-  record-sync edits. The resume-baseline remote checkpoint is
-  `69d23b1ed7f0bb9e3c3ca4b58fd50796d7f5ab4f refs/heads/main`
-  (`69d23b1 Record recovered resume memory backup`). That remote-backed chain
+  through the resume-memory baseline clarification before this continuation's
+  record-sync edits. The latest locally recorded remote checkpoint is
+  `4d2e040fb587e9b8124b756094de9996f4409481 refs/heads/main`
+  (`4d2e040 Clarify resume remote memory baseline`). That remote-backed chain
   includes the SNAP executable-candidate prompt packets, phase111/phase112
   diagnostic generation/execution artifacts, the tightened submission-review
   count-check gate, the updated AAAI phase112 SNAP-T1 executable-candidate
   prose/table caption, the rebuilt AAAI PDF/package report, the draft/outline
   SNAP diagnostic sync, the human-fidelity annotation request, and the current
-  resume-memory checkpoint/blocker records. Earlier `Recv failure: Connection
-  was reset` and port-443 failures remain historical GitHub transport
-  metadata, not experiment correctness. Because this file may itself be edited
-  in later record-sync commits, treat `git status -sb`, `git log -5 --oneline`,
-  and `git ls-remote --heads origin main` as the authority for the exact
-  current HEAD/remote alignment.
+  resume-memory checkpoint/blocker/recovery/baseline records. Earlier
+  `Recv failure: Connection was reset` and port-443 failures remain historical
+  GitHub transport metadata, not experiment correctness. A fresh
+  `git ls-remote --heads origin main` retry during this continuation failed
+  again with `Recv failure: Connection was reset`, so treat the local Git
+  tracking ref plus a future successful `git ls-remote` as the authority
+  before claiming any new remote-backed phase.
 - Current resume verification on 2026-07-05: `ok.txt` is absent, local
   strict gates passed for real-reuse benchmark, paper tables, paper claims,
   usage examples, AAAI package, submission review, reproducibility package,
@@ -37,12 +38,13 @@ Current date: 2026-07-05.
   with `Recv failure: Connection was reset`, and `git ls-remote --heads origin
   main` failed with `Failed to connect to github.com port 443 after 21100 ms`.
   The follow-up commit `bf95213 Record resume memory push blocker` recorded
-  that transport failure; a later `git push origin main` succeeded and
-  `git ls-remote --heads origin main` verified `bf95213`. The recovery record
-  `69d23b1 Record recovered resume memory backup` was then pushed and verified
-  at `69d23b1ed7f0bb9e3c3ca4b58fd50796d7f5ab4f refs/heads/main`. Current
-  local state is `main...origin/main`. Goal status remains externally blocked
-  on human-fidelity annotation and the follow-on AAAI final decision.
+  that transport failure; later retries pushed and verified `bf95213`,
+  `69d23b1 Record recovered resume memory backup`,
+  `f1c50d5 Sync resume baseline memory`, and
+  `4d2e040 Clarify resume remote memory baseline`. Current local state is
+  `main...origin/main` with local `origin/main` at
+  `4d2e040fb587e9b8124b756094de9996f4409481`. Goal status remains externally
+  blocked on human-fidelity annotation and the follow-on AAAI final decision.
 - Current record-sync continuation tightens
   `scripts/check_submission_review.py` so review/rebuttal/submission handoff
   files must carry exact current gate counts for goal/package, AAAI package,
@@ -98,6 +100,16 @@ Current date: 2026-07-05.
   `python scripts\check_goal_completion.py --strict`, and
   `python scripts\check_reproducibility_package.py --strict`, then revisit the
   AAAI submission decision currently recorded as `wait_for_external_evidence`.
+- Current record-drift guard continuation adds
+  `current_remote_checkpoint_records` to `scripts/check_goal_completion.py`.
+  The check reads the local `refs/remotes/origin/main` tracking ref, requires
+  current checkpoint records in short memory, long memory, runbook, and goal
+  audit to mention `4d2e040`, and fails on stale current-status windows such
+  as `b550a26` being presented as the latest remote checkpoint. Focused unit
+  tests cover both stale-current detection and historical-hash allowance. The
+  goal report now has `78 ready / 3 pending / 0 failed`; package count remains
+  `450 ready / 1 pending / 0 failed`; submission-review remains
+  `17 ready / 0 failed`.
 - Current local phase commit `77e8ada` implements the SNAP executable-candidate
   runner/checker/test path:
   `scripts/run_real_reuse_snapatac2_executable_candidate.py`,

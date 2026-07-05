@@ -3,7 +3,7 @@
 Evidence boundary: this report audits the active user goal against local repository evidence. Pending checks are remaining requirements, not negative evidence and not local package failures.
 
 - Overall status: not_complete_pending_external_evidence
-- Ready checks: 77
+- Ready checks: 78
 - Pending checks: 3
 - Failed checks: 0
 
@@ -52,6 +52,7 @@ Evidence boundary: this report audits the active user goal against local reposit
 | goal_completion_audit | ready | present | research/goal_completion_audit.md |
 | memory_resume_rule_present | ready | long-term and short-term resume rules present | memory/long_term_memory.md; memory/short_term_memory.md |
 | memory_current_blockers_recorded | ready | current model-availability blockers recorded | memory/short_term_memory.md |
+| current_remote_checkpoint_records | ready | origin/main=4d2e040 Clarify resume remote memory baseline | memory/short_term_memory.md; memory/long_term_memory.md; research/runbook.md; research/goal_completion_audit.md |
 | ai_scientist_v2_local_dry_run_recorded | ready | dry-run recorded in memory | memory/short_term_memory.md |
 | ai_scientist_v2_live_llm_smoke_complete | ready | overall_status=complete | results/ai_scientist_v2_smoke/run_report.json |
 | ai_scientist_v2_live_llm_smoke_attempted | ready | overall_status=complete | results/ai_scientist_v2_smoke/run_report.json |

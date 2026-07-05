@@ -67,26 +67,29 @@ This file is intentionally compact. Detailed chronological history lives in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
 - Resume-baseline remote checkpoint before this continuation's record-sync
   edits is
-  `69d23b1ed7f0bb9e3c3ca4b58fd50796d7f5ab4f refs/heads/main`
-  (`69d23b1 Record recovered resume memory backup`). The previous local-only
+  `4d2e040fb587e9b8124b756094de9996f4409481 refs/heads/main`
+  (`4d2e040 Clarify resume remote memory baseline`). The previous local-only
   record-sync commits after `b6dc061`, the submission-review count-check save,
   the AAAI phase112 SNAP-T1 paper-text synchronization, the draft/outline
   sync, the human-fidelity annotation request, and the resume-memory
-  checkpoint/blocker records are now remote-backed. Earlier connection-reset
-  and port-443 failures remain GitHub transport metadata, not
-  experiment-correctness evidence. Because this file may itself be edited in a
-  later record-sync commit, verify the exact current local/remote state with
-  `git status -sb`, `git log -5 --oneline`, and
-  `git ls-remote --heads origin main` before claiming a later phase is
-  remote-backed.
+  checkpoint/blocker/recovery/baseline records are now remote-backed in the
+  local `origin/main` tracking ref. Earlier connection-reset and port-443
+  failures remain GitHub transport metadata, not experiment-correctness
+  evidence. A fresh `git ls-remote --heads origin main` retry during this
+  continuation failed again with `Recv failure: Connection was reset`; verify
+  the exact current local/remote state with `git status -sb`,
+  `git log -5 --oneline`, and a successful `git ls-remote --heads origin main`
+  before claiming a later phase is remote-backed.
 - Current resume checkpoint commits are `4532dd9 Sync resume checkpoint
-  memory`, `bf95213 Record resume memory push blocker`, and `69d23b1 Record
-  recovered resume memory backup`. They record the
+  memory`, `bf95213 Record resume memory push blocker`, `69d23b1 Record
+  recovered resume memory backup`, `f1c50d5 Sync resume baseline memory`, and
+  `4d2e040 Clarify resume remote memory baseline`. They record the
   current resume verification and a temporary GitHub transport failure:
   `git push origin main` failed with `Recv failure: Connection was reset`, and
   `git ls-remote --heads origin main` failed with `Failed to connect to
-  github.com port 443 after 21100 ms`. Later pushes succeeded and remote is
-  now verified through `69d23b1`; current local state is `main...origin/main`.
+  github.com port 443 after 21100 ms`. Later pushes succeeded and the local
+  tracking ref is now aligned through `4d2e040`; current local state is
+  `main...origin/main`.
 
 ## Evidence Boundary
 
@@ -685,7 +688,7 @@ Use these as entry points instead of searching the whole repo first:
   check, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
-  reports `not_complete_pending_external_evidence`, 77 ready checks, 3 pending
+  reports `not_complete_pending_external_evidence`, 78 ready checks, 3 pending
   checks, and 0 failed checks.
 - External evidence closure queue:
   `results/external_evidence_closure/closure.md`
@@ -934,6 +937,7 @@ DeepSeek:
 | AAAI decision record | A human decision record could be hand-written with drift, unavailable options, or secret-like fields. | `scripts/generate_aaai_submission_decision.py` writes the record only after an explicit option, owner, date, claim boundary, and evidence policy; it validates option availability and rejects raw API-key-like material. |
 | AAAI gate recursion | The decision preflight and goal/package gates can read each other during report refreshes, causing self-referential intermediate failures. | `scripts/check_aaai_submission_decision.py` treats only the known self-referential failure set as pending during its own preflight; regression covered by `tests/test_check_aaai_submission_decision.py`. |
 | Model evidence state | GPT retry evidence was saved separately from the older Phase 36 failure report. | `scripts/check_goal_completion.py` reads both `run_report.json` and `gpt_retry_run_report.json` so historical GPT 502 evidence and current GPT-family success both remain visible. |
+| Remote checkpoint records | Handoff/runbook/memory text could present an older remote checkpoint as current after resume/push recovery. | `scripts/check_goal_completion.py` now checks current checkpoint records in memory, runbook, and goal audit against local `refs/remotes/origin/main`, while allowing historical hashes. |
 | Output-token accounting | Cost section had input-token proxies but no saved-response output-token accounting. | `scripts/evaluate_model_response_costs.py` reports local output-token proxies for saved Claude/GPT-family responses while preserving the no-provider-billing boundary. |
 | AI-Scientist-v2 smoke boundary | AI-Scientist-v2 dry-run and live-transfer saved responses could be confused with a full live run. | `scripts/run_ai_scientist_v2_smoke.py` records bounded client smoke attempts with alias fallback, script-level timeout, and a tiny-request `--max-tokens` cap; the current marker-contract smoke is complete, but it remains separate from human fidelity and broad live task success. |
 | Direct provider diagnosis | AI-Scientist-v2 smoke timeouts could be misread as only a wrapper bug or as only a model-name issue. | `scripts/run_openai_compatible_direct_probe.py` is protocol-aware: Claude-family direct diagnostics use Anthropic Messages (`/v1/messages`) and GPT-family direct diagnostics use OpenAI Responses (`/v1/responses`) with the same marker contract. Historical provider blockers are diagnostics; the bounded smoke/full live-run evidence is now complete. |

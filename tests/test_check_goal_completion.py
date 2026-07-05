@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "check_goal_completion.py"
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from check_goal_completion import build_report, required_file_checks  # noqa: E402
+from check_goal_completion import build_report, remote_checkpoint_record_issues, required_file_checks  # noqa: E402
 
 
 class CheckGoalCompletionTest(unittest.TestCase):
@@ -80,6 +80,8 @@ class CheckGoalCompletionTest(unittest.TestCase):
     def test_current_report_build_has_expected_boundaries(self):
         report = build_report(ROOT)
         checks = {check["id"]: check for check in report["checks"]}
+        self.assertIn("current_remote_checkpoint_records", checks)
+        self.assertEqual("ready", checks["current_remote_checkpoint_records"]["status"])
         self.assertIn("token_accounting_complete", checks)
         self.assertEqual("ready", checks["token_accounting_complete"]["status"])
         self.assertIn("token_accounting_handoff_ready", checks)
@@ -109,6 +111,34 @@ class CheckGoalCompletionTest(unittest.TestCase):
         self.assertEqual("ready", checks["external_evidence_closure_queue_ready"]["status"])
         self.assertIn("external_evidence_execution_packets_ready", checks)
         self.assertEqual("ready", checks["external_evidence_execution_packets_ready"]["status"])
+
+    def test_remote_checkpoint_record_issues_flag_current_stale_hashes(self):
+        issues = remote_checkpoint_record_issues(
+            {
+                "runbook": (
+                    "The latest verified remote checkpoint is:\n\n"
+                    "b550a26504311eb8d82ea8fdbabc1a3e6983abe4 refs/heads/main\n"
+                    "b550a26 Clarify SNAP executable candidate results\n"
+                )
+            },
+            "4d2e040fb587e9b8124b756094de9996f4409481",
+        )
+        self.assertEqual(1, len(issues))
+        self.assertIn("b550a26", issues[0])
+
+    def test_remote_checkpoint_record_issues_allow_historical_hashes(self):
+        issues = remote_checkpoint_record_issues(
+            {
+                "memory": (
+                    "Historical remote-backed chain through `0832201`: Claude retry "
+                    "availability and bounded claim cleanup were remote-backed there.\n"
+                    "The latest verified remote checkpoint is:\n"
+                    "4d2e040fb587e9b8124b756094de9996f4409481 refs/heads/main\n"
+                )
+            },
+            "4d2e040fb587e9b8124b756094de9996f4409481",
+        )
+        self.assertEqual([], issues)
 
 
 if __name__ == "__main__":
