@@ -146,6 +146,11 @@ This file is intentionally compact. Detailed chronological history lives in
   error. Treat this as GitHub transport metadata only; no human `ok.txt` is
   required, and the latest verified substantive remote backup remains
   `43f9092c32a614d882199d5111fe21cc5cb19f8e refs/heads/main`.
+- Follow-up blocker-record commit `af3ba31 Record model cost guard push blocker`
+  records that transport failure. Its first push retry failed with
+  `Failed to connect to github.com port 443 after 21063 ms`, and the immediate
+  `git ls-remote --heads origin main` failed with port-443 connectivity after
+  21117 ms. Treat this as GitHub transport metadata only.
 - Follow-up record-sync commit `45ef25b Sync remote checkpoint after LLM handoff
   guard` and blocker note `0538ef1 Record checkpoint sync push blocker`
   initially failed to back up because GitHub HTTPS transport was unavailable.

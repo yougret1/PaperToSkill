@@ -133,6 +133,11 @@ Current date: 2026-07-06.
   the immediate `git ls-remote --heads origin main` failed with the same reset
   error. This is GitHub transport metadata only and does not require human
   `ok.txt`; the latest verified substantive remote backup remains `43f9092`.
+- Follow-up blocker-record commit `af3ba31 Record model cost guard push blocker`
+  records that transport failure, but its first push retry also failed with
+  `Failed to connect to github.com port 443 after 21063 ms`; the immediate
+  `git ls-remote --heads origin main` failed with port-443 connectivity after
+  21117 ms. This is GitHub transport metadata only.
 - Current main-results boundary cleanup removes stale "future unfilled cells /
   planning placeholders" wording from `scripts/build_real_reuse_paper_tables.py`
   and regenerated `results/real_reuse/main_results_plan.{md,json}`. It also
