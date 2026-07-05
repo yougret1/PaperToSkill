@@ -65,19 +65,20 @@ This file is intentionally compact. Detailed chronological history lives in
   If a network/download problem blocks a core asset or phase save, record the
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
-- Latest verified remote checkpoint after this continuation's claim-evidence
-  matrix boundary sync is
-  `eab454dfb8699d25636b8c9fafdaa2cb010b5db5 refs/heads/main`
-  (`eab454d Align failure branch claim evidence matrix`). The previous local-only
+- Latest verified remote checkpoint after this continuation's Claude
+  availability recheck is
+  `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`
+  (`bddd900 Record Claude direct availability recheck`). The previous local-only
   record-sync commits after the SNAP diagnostic phase, the submission-review count-check save,
   the AAAI phase112 SNAP-T1 paper-text synchronization, the draft/outline
   sync, the human-fidelity annotation request, and the resume-memory
   checkpoint/blocker/recovery/baseline records are now remote-backed in the
-  local `origin/main` tracking ref through `eab454d`. This includes the
+  local `origin/main` tracking ref through `bddd900`. This includes the
   checkpoint-detail/blocker records, grounding-gate evidence sync,
   quality-grounding table completion, blocker-record continuation,
-  failure-branch claim-boundary cleanup, and claim-evidence-matrix boundary
-  sync. Earlier connection-reset and
+  failure-branch claim-boundary cleanup, claim-evidence-matrix boundary
+  sync, recovered checkpoint record, push-blocker record, and Claude direct
+  availability recheck. Earlier connection-reset and
   port-443 failures remain GitHub transport metadata, not
   experiment-correctness evidence. Verify the exact current local/remote state
   with `git status -sb`, `git log -5 --oneline`, and a successful
@@ -91,14 +92,16 @@ This file is intentionally compact. Detailed chronological history lives in
   `git push origin main` failed with `Recv failure: Connection was reset`, and
   `git ls-remote --heads origin main` failed with `Failed to connect to
   github.com port 443 after 21100 ms`. Later pushes succeeded and the local
-  tracking ref later advanced through `eab454d`; the quality-grounding table
+  tracking ref later advanced through `bddd900`; the quality-grounding table
   completion, claim-boundary cleanup, blocker-record continuation, and
-  claim-evidence-matrix boundary sync are now verified as remote-backed through
-  that checkpoint.
+  claim-evidence-matrix boundary sync, plus the follow-up record-sync and
+  Claude direct availability recheck commits, are now verified as
+  remote-backed through that checkpoint.
 - Follow-up record-sync commit `e2f070e Record recovered claim matrix backup`
-  is local-only after `git push origin main` failed with `Recv failure:
-  Connection was reset`; retry GitHub transport later before claiming that
-  record-sync commit is remote-backed.
+  initially remained local-only after `git push origin main` failed with
+  `Recv failure: Connection was reset`; a later GitHub retry pushed it along
+  with `e110a03` and `bddd900`, verified by `git ls-remote --heads origin
+  main` at `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`.
 
 ## Evidence Boundary
 

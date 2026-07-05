@@ -52,15 +52,19 @@ Current date: 2026-07-05.
   a human `ok.txt`. A later push recovered after local phase commit
   `eab454d Align failure branch claim evidence matrix`, and
   `git ls-remote --heads origin main` verified
-  `eab454dfb8699d25636b8c9fafdaa2cb010b5db5 refs/heads/main`.
+  `eab454dfb8699d25636b8c9fafdaa2cb010b5db5 refs/heads/main`. A later
+  GitHub retry pushed the follow-up record-sync and Claude availability
+  commits, and `git ls-remote --heads origin main` verified
+  `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`.
 - Current local/remote status after this resume check: the latest verified
   remote backup is
-  `eab454dfb8699d25636b8c9fafdaa2cb010b5db5 refs/heads/main`
-  (`eab454d Align failure branch claim evidence matrix`). The earlier
+  `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`
+  (`bddd900 Record Claude direct availability recheck`). The earlier
   checkpoint-detail/blocker records, grounding-gate evidence sync,
   quality-grounding table completion, blocker record, failure-branch
-  claim-source cleanup, and claim-evidence-matrix boundary sync are now
-  included in the verified remote chain. Earlier
+  claim-source cleanup, claim-evidence-matrix boundary sync, recovered
+  checkpoint record, push-blocker record, and Claude direct availability
+  recheck are now included in the verified remote chain. Earlier
   `git ls-remote --heads origin main` failures on 2026-07-05 remain historical
   transport metadata; use `git status -sb`, `git log -5 --oneline`, and a fresh
   `git ls-remote --heads origin main` before making any later remote-backed
@@ -68,8 +72,8 @@ Current date: 2026-07-05.
 - Current resume baseline: GitHub backup had recovered and was verified
   through the resume-memory baseline clarification before this continuation's
   record-sync edits. The latest locally recorded remote checkpoint is:
-  `eab454dfb8699d25636b8c9fafdaa2cb010b5db5 refs/heads/main`
-  (`eab454d Align failure branch claim evidence matrix`). That remote-backed chain
+  `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`
+  (`bddd900 Record Claude direct availability recheck`). That remote-backed chain
   includes the SNAP executable-candidate prompt packets, phase111/phase112
   diagnostic generation/execution artifacts, the tightened submission-review
   count-check gate, the updated AAAI phase112 SNAP-T1 executable-candidate
@@ -79,8 +83,9 @@ Current date: 2026-07-05.
   checkpoint-record guard commits, the checkpoint-detail and blocker-record
   commits, the grounding-gate evidence sync, the follow-up checkpoint record,
   the quality-grounding table completion, the push-blocker record, the
-  failure-branch claim-source cleanup, and the claim-evidence-matrix boundary
-  sync. Earlier `Recv failure: Connection was reset` and port-443 failures
+  failure-branch claim-source cleanup, the claim-evidence-matrix boundary
+  sync, the recovered checkpoint record, the push-blocker record, and the
+  Claude direct availability recheck. Earlier `Recv failure: Connection was reset` and port-443 failures
   remain historical GitHub transport metadata, not experiment correctness.
   Treat a future successful `git ls-remote` as the authority before claiming
   any new remote-backed phase.
@@ -100,14 +105,17 @@ Current date: 2026-07-05.
   later push verification now includes the checkpoint-detail/blocker records,
   the grounding-gate evidence sync, the follow-up checkpoint record, the
   quality-grounding table completion, the failure-branch claim-boundary
-  cleanup, and the claim-evidence-matrix boundary sync through `eab454d`.
+  cleanup, the claim-evidence-matrix boundary sync, and the Claude direct
+  availability recheck through `bddd900`.
   Goal status remains externally blocked on
   human-fidelity annotation and the follow-on AAAI final decision.
 - Follow-up record-sync commit `e2f070e Record recovered claim matrix backup`
   records the recovered `eab454d` remote checkpoint in memory/runbook/goal
-  reports. Its push attempt failed with `Recv failure: Connection was reset`,
-  so `e2f070e` is local-only until a later GitHub transport retry succeeds.
-  This is transport metadata only and does not require a human `ok.txt`.
+  reports. Its first push attempt failed with `Recv failure: Connection was
+  reset`, but a later GitHub retry pushed `e2f070e`, `e110a03`, and `bddd900`;
+  `git ls-remote --heads origin main` verified `bddd9006523a30b152da69a75f002d7948ff0269`.
+  The earlier failure remains transport metadata only and does not require a
+  human `ok.txt`.
 - Current record-sync continuation tightens
   `scripts/check_submission_review.py` so review/rebuttal/submission handoff
   files must carry exact current gate counts for goal/package, AAAI package,
