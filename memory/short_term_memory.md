@@ -20,8 +20,12 @@ Current date: 2026-07-05.
   checkpoint records, the prior remote-status sync, and the refreshed AAAI
   PDF/table/package reports. Earlier `Recv failure: Connection was reset` and
   port-443 failures remain historical GitHub transport metadata, not
-  experiment correctness. After the verified push, `git status -sb` reported
-  `## main...origin/main`.
+  experiment correctness. After the verified push, a local record-sync commit
+  `a976bbc Record SNAP diagnostic backup recovery` was created; its
+  `git push origin main` and follow-up `git ls-remote --heads origin main`
+  attempts both failed with `Recv failure: Connection was reset`. Current
+  local status is `main...origin/main [ahead 1]`; continue non-network work and
+  retry backup later.
 - Current local phase commit `77e8ada` implements the SNAP executable-candidate
   runner/checker/test path:
   `scripts/run_real_reuse_snapatac2_executable_candidate.py`,
@@ -374,8 +378,10 @@ Current date: 2026-07-05.
 6. Latest verified remote-backed checkpoint:
    `b6dc061 Complete SNAP executable candidate diagnostic`, verified at
    `b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main`.
-7. No experiment-side human action is required; continue non-network work and
-   retry provider-dependent Claude-family rows only opportunistically.
+7. Current local-only record-sync commit after that checkpoint:
+   `a976bbc Record SNAP diagnostic backup recovery`. Its push and remote check
+   both failed with `Recv failure: Connection was reset`. No experiment-side
+   human action is required; continue non-network work and retry backup later.
 
 ## Boundaries
 

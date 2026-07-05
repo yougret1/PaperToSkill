@@ -63,8 +63,11 @@ Earlier `Recv failure: Connection was reset` and github.com port 443 failures
 remain GitHub transport metadata, not project-correctness evidence. The
 previously local-only record-sync commit after `db535e7` is now remote-backed.
 The later local record-sync commit after `fb0baed` and the phase112 completion
-commit are now remote-backed. Always inspect `git status -sb` before claiming a
-clean phase save.
+commit are now remote-backed. A later local record-sync commit
+`a976bbc Record SNAP diagnostic backup recovery` is not remote-backed yet
+because both `git push origin main` and `git ls-remote --heads origin main`
+failed with `Recv failure: Connection was reset`. Always inspect
+`git status -sb` before claiming a clean phase save.
 
 Re-run remote verification before making future remote-backed checkpoint
 claims.

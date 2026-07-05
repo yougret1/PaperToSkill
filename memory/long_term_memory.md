@@ -71,9 +71,12 @@ This file is intentionally compact. Detailed chronological history lives in
   local-only record-sync commit after `fb0baed` and the phase112 SNAP
   diagnostic/table/package completion are now remote-backed. Earlier
   connection-reset and port-443 failures remain GitHub transport metadata, not
-  experiment-correctness evidence. Verify with `git status -sb` and
-  `git ls-remote --heads origin main` before claiming a later phase is
-  remote-backed.
+  experiment-correctness evidence. A later local record-sync commit
+  `a976bbc Record SNAP diagnostic backup recovery` is not remote-backed yet
+  because `git push origin main` and `git ls-remote --heads origin main` both
+  failed with `Recv failure: Connection was reset`. Verify with
+  `git status -sb` and `git ls-remote --heads origin main` before claiming a
+  later phase is remote-backed.
 
 ## Evidence Boundary
 
@@ -432,8 +435,10 @@ Current supported claims:
   check for the latest exact alignment before each phase-save claim.
 - Latest verified remote-backed phase checkpoint:
   `b6dc061 Complete SNAP executable candidate diagnostic`, verified at
-  `b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main`. Rerun remote
-  verification before making later remote-backed claims.
+  `b6dc06149c1bd5b25f3b73fedd5268e44a01be80 refs/heads/main`. Local
+  record-sync commit `a976bbc` is ahead of that checkpoint and not
+  remote-backed due a GitHub connection reset. Rerun remote verification before
+  making later remote-backed claims.
 
 Current unsupported claims:
 
