@@ -107,8 +107,8 @@ Current date: 2026-07-05.
   that made the checker self-invalidating because the documents could not
   contain the hash of their own just-created commit. The follow-up fix uses the
   short-term-memory declared checkpoint as the consistency baseline for short
-  memory, long memory, runbook, and goal audit, while reporting the local
-  `origin/main` hash only as diagnostic detail. It still fails on stale
+  memory, long memory, runbook, and goal audit, and keeps dynamic
+  `origin/main` hashes out of tracked regenerated reports. It still fails on stale
   current-status windows such as `b550a26` being presented as the latest
   checkpoint, and it allows clearly historical hashes. Focused unit tests cover
   stale-current detection, declared-checkpoint extraction, historical-hash

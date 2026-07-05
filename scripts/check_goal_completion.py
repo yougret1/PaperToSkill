@@ -239,10 +239,7 @@ def remote_checkpoint_record_checks(root: Path) -> list[Check]:
             )
         ]
 
-    remote_full = git_output(root, ["rev-parse", "refs/remotes/origin/main"])
-    remote_subject = git_output(root, ["log", "-1", "--format=%s", "refs/remotes/origin/main"])
     declared_subject = git_output(root, ["log", "-1", "--format=%s", declared_full])
-    remote_detail = f"; origin/main={remote_full[:7]} {remote_subject}" if remote_full else "; origin/main=unavailable"
 
     missing_expected = [
         raw_path
@@ -268,7 +265,7 @@ def remote_checkpoint_record_checks(root: Path) -> list[Check]:
         Check(
             "current_remote_checkpoint_records",
             "ready",
-            f"declared={declared_full[:7]} {declared_subject}{remote_detail}",
+            f"declared={declared_full[:7]} {declared_subject}",
             "; ".join(REMOTE_CHECKPOINT_FILES.values()),
         )
     ]
