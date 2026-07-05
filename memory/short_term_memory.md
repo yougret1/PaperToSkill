@@ -259,16 +259,17 @@ Current date: 2026-07-06.
   GitHub retry pushed the follow-up record-sync and Claude availability
   commits, and `git ls-remote --heads origin main` verified
   `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`.
-- Current local/remote status override after the AAAI page-limit backup:
+- Current local/remote status override after the outline claim-drift backup:
   the latest locally recorded remote checkpoint is
-  `055566e515e430e3a6abc849ec09ff8bbc7b4b41 refs/heads/main`
-  (`055566e Sync outline LLM ablation status`). This checkpoint includes
+  `73f4d83814b91489718ae441b5d86200ae805fbd refs/heads/main`
+  (`73f4d83 Gate outline paper claim drift`). This checkpoint includes
   the AAAI main-page-limit repair, the recovered backup of that repair, the
   draft-language claim gate over AAAI table text, submission-record sync, the
   full pre-submission unit-test regression fix, refreshed
   package/table/submission reports, memory/runbook sync, the record of the
   temporary `95f1af3`/`66e4763` push blocker, and the paper-outline LLM-ablation
-  status sync. Older current-status bullets in this file are historical
+  status sync, plus the paper-outline claim-drift gate and 38-check
+  paper-claim report. Older current-status bullets in this file are historical
   checkpoints only; use fresh `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
   phase.
@@ -276,7 +277,7 @@ Current date: 2026-07-06.
   test backup` and `66e4763 Record submission backup push blocker` initially
   remained local-only after GitHub reset/port-443 failures. A later `git push
   origin main` succeeded, and `git ls-remote --heads origin main` verified the
-  `055566e` checkpoint above. This is GitHub transport metadata only and does
+  later checkpoint above. This is GitHub transport metadata only and does
   not require a human `ok.txt`.
 - Current non-network paper-outline audit fixed one stale figure/table-plan row
   in `paper/outline.md`: the real-reuse LLM ablation is now described as an
