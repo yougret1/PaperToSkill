@@ -86,9 +86,11 @@ Current date: 2026-07-06.
   the immediate `git ls-remote --heads origin main` failed with `Failed to
   connect to github.com port 443 after 21108 ms`; treat this as GitHub
   transport metadata only. A push retry after the blocker-record commit also
-  failed with `Failed to connect to github.com port 443 after 21094 ms`. The
-  local branch is currently ahead of `origin/main` by the phase-save commit and
-  its blocker-record commit until a later push succeeds.
+  failed with `Failed to connect to github.com port 443 after 21094 ms`. A
+  later push recovered both `8449799` and `6823179` together with the
+  follow-up `5aa4195 Sync model response cost boundary` commit, and
+  `git ls-remote --heads origin main` verified
+  `5aa4195f4636c1d8c5994ee1eb6c4f6949279eb8 refs/heads/main`.
 - Historical outline-claim gate sync extended `scripts/check_paper_claims.py` to
   cover `paper/outline.md` in addition to the AAAI body, AAAI table file, and
   Markdown draft. That stage produced the earlier 38-check report
@@ -113,7 +115,9 @@ Current date: 2026-07-06.
   `results/result_cards.md`, and long memory; it does not change experiments,
   raw rows, `results/real_reuse/main_run_selection.json`, or local logs. Strict
   paper-claim, paper-table, package, goal-completion, and submission-review
-  gates passed after the wording sync.
+  gates passed after the wording sync. The phase was saved and pushed as
+  `5aa4195 Sync model response cost boundary`; `git ls-remote --heads origin
+  main` verified `5aa4195f4636c1d8c5994ee1eb6c4f6949279eb8`.
 - Current main-results boundary cleanup removes stale "future unfilled cells /
   planning placeholders" wording from `scripts/build_real_reuse_paper_tables.py`
   and regenerated `results/real_reuse/main_results_plan.{md,json}`. It also

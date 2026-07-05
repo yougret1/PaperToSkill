@@ -78,25 +78,30 @@ This file is intentionally compact. Detailed chronological history lives in
 - Latest verified substantive checkpoint after the AAAI page-limit,
   paper-finalization, outline-sync recovery, outline claim-drift gate,
   main-results boundary cleanup, real-reuse LLM-ablation handoff guard,
-  recovered checkpoint-sync records, and outline evidence-boundary sync is
-  `5786d7d8538a3fd856d98f09619fbc5447c9ebed refs/heads/main`
-  (`5786d7d Sync outline evidence boundary`). This checkpoint includes the
-  outline update that distinguishes collected/scored saved-response rows from
+  recovered checkpoint-sync records, outline evidence-boundary sync,
+  limitations-claim gate, and model-response cost-boundary sync is
+  `5aa4195f4636c1d8c5994ee1eb6c4f6949279eb8 refs/heads/main`
+  (`5aa4195 Sync model response cost boundary`). This checkpoint includes the
+  limitations claim gate that covers `paper/limitations.md` with 51 ready
+  checks / 0 failed checks, the full 209-test verification for that gate, and
+  the follow-up paper-facing cost-boundary sync that states the saved-response
+  output-token proxy covers six Claude/GPT-family/DeepSeek model-ablation rows
+  with 9,594 `o200k_base` output tokens. It also includes the earlier outline
+  update that distinguishes collected/scored saved-response rows from
   unsupported human semantic fidelity, provider billing, and live downstream
-  task-success claims. It also includes the submission-review handoff guard
-  that separates the older saved-response model ablation from the auxiliary
-  real-reuse LLM ablation, the refreshed `18 ready / 0 failed`
-  submission-review report, memory/runbook/result-card synchronization, and the
-  previous recovered checkpoint chain through `905899c`, `1a7ae8c`, and
-  `00d32cd`. The earlier `00d32cd` checkpoint includes the phase116 SNAP-T2
-  provider-block chain, the auxiliary family summary table, the AAAI
-  page-limit repair, the draft-language claim gate over the AAAI table file,
-  the submission-record sync, the full pre-submission unit-test regression fix,
-  refreshed paper/package/submission reports, and memory/runbook
-  synchronization, the paper-outline LLM-ablation status sync, and the earlier
-  38-check paper-outline claim gate, the
-  main-results/failure-analysis raw-row provenance refresh to 40 raw rows, and
-  the recovered GitHub transport record for `21009eb`.
+  task-success claims; the submission-review handoff guard that separates the
+  older saved-response model ablation from the auxiliary real-reuse LLM
+  ablation; the refreshed `18 ready / 0 failed` submission-review report;
+  memory/runbook/result-card synchronization; and the previous recovered
+  checkpoint chain through `905899c`, `1a7ae8c`, and `00d32cd`. The earlier
+  `00d32cd` checkpoint includes the phase116 SNAP-T2 provider-block chain, the
+  auxiliary family summary table, the AAAI page-limit repair, the
+  draft-language claim gate over the AAAI table file, submission-record sync,
+  the full pre-submission unit-test regression fix, refreshed paper/package/
+  submission reports, paper-outline LLM-ablation status sync, the earlier
+  38-check paper-outline claim gate, the main-results/failure-analysis raw-row
+  provenance refresh to 40 raw rows, and the recovered GitHub transport record
+  for `21009eb`.
   Claude-family real-reuse LLM-ablation rows remain
   provider-pending because `claude-opus-4-8`, `claude-opus-4-7`, and
   `claude-opus-4-6` all still returned provider HTTP 502 in the latest direct
@@ -109,7 +114,7 @@ This file is intentionally compact. Detailed chronological history lives in
   Verify the exact current local/remote state with `git status -sb`,
   `git log -5 --oneline`, and a successful `git ls-remote --heads origin main`
   before claiming any later phase is remote-backed.
-- Local-only follow-up phase-save checkpoint after that remote baseline:
+- Recovered follow-up phase-save checkpoint after the `5786d7d` remote baseline:
   `8449799 Guard limitations claim boundary` extends the paper-claim gate to
   `paper/limitations.md`, refreshes the paper-claim/package/submission-review
   records to 51 ready paper-claim checks and 0 failures, and records full unit
@@ -117,9 +122,11 @@ This file is intentionally compact. Detailed chronological history lives in
   `Recv failure: Connection was reset`, and the immediate `git ls-remote
   --heads origin main` failed with `Failed to connect to github.com port 443
   after 21108 ms`. A push retry after the blocker-record commit also failed
-  with `Failed to connect to github.com port 443 after 21094 ms`. Treat this as
-  GitHub transport metadata only until a later push verifies the phase-save and
-  blocker-record commits.
+  with `Failed to connect to github.com port 443 after 21094 ms`. A later
+  `git push origin main` recovered `8449799`, `6823179`, and `5aa4195`, and
+  `git ls-remote --heads origin main` verified
+  `5aa4195f4636c1d8c5994ee1eb6c4f6949279eb8 refs/heads/main`. Treat the
+  earlier failures as GitHub transport metadata only.
 - Follow-up record-sync commit `45ef25b Sync remote checkpoint after LLM handoff
   guard` and blocker note `0538ef1 Record checkpoint sync push blocker`
   initially failed to back up because GitHub HTTPS transport was unavailable.
