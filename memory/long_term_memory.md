@@ -65,25 +65,28 @@ This file is intentionally compact. Detailed chronological history lives in
   If a network/download problem blocks a core asset or phase save, record the
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
-- Latest verified substantive phase checkpoint is
-  `bf952139ea01996424e54e60869ee3f595f5c4e5 refs/heads/main`
-  (`bf95213 Record resume memory push blocker`). The previous local-only
+- Resume-baseline remote checkpoint before this continuation's record-sync
+  edits is
+  `69d23b1ed7f0bb9e3c3ca4b58fd50796d7f5ab4f refs/heads/main`
+  (`69d23b1 Record recovered resume memory backup`). The previous local-only
   record-sync commits after `b6dc061`, the submission-review count-check save,
   the AAAI phase112 SNAP-T1 paper-text synchronization, the draft/outline
   sync, the human-fidelity annotation request, and the resume-memory
   checkpoint/blocker records are now remote-backed. Earlier connection-reset
   and port-443 failures remain GitHub transport metadata, not
-  experiment-correctness evidence. Verify with
+  experiment-correctness evidence. Because this file may itself be edited in a
+  later record-sync commit, verify the exact current local/remote state with
   `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming a later phase is
   remote-backed.
 - Current resume checkpoint commits are `4532dd9 Sync resume checkpoint
-  memory` and `bf95213 Record resume memory push blocker`. They record the
+  memory`, `bf95213 Record resume memory push blocker`, and `69d23b1 Record
+  recovered resume memory backup`. They record the
   current resume verification and a temporary GitHub transport failure:
   `git push origin main` failed with `Recv failure: Connection was reset`, and
   `git ls-remote --heads origin main` failed with `Failed to connect to
-  github.com port 443 after 21100 ms`. A later push succeeded and remote is
-  now verified through `bf95213`; current local state is `main...origin/main`.
+  github.com port 443 after 21100 ms`. Later pushes succeeded and remote is
+  now verified through `69d23b1`; current local state is `main...origin/main`.
 
 ## Evidence Boundary
 
@@ -349,10 +352,10 @@ Current supported claims:
   `1727615` (recovered submission-review backup), `01dfa6e` (draft/outline
   SNAP diagnostic sync), `206fa5c` (human-fidelity annotation request),
   `4532dd9` (resume checkpoint memory sync), and `bf95213` (resume memory
-  push-blocker record).
+  push-blocker record), and `69d23b1` (recovered resume-memory backup).
   The temporary 2026-07-05 GitHub HTTPS transport blocker recovered again; the
-  latest verified remote checkpoint is
-  `bf952139ea01996424e54e60869ee3f595f5c4e5 refs/heads/main`. Verify exact
+  resume-baseline remote checkpoint for this continuation is
+  `69d23b1ed7f0bb9e3c3ca4b58fd50796d7f5ab4f refs/heads/main`. Verify exact
   local/remote alignment with
   `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
@@ -427,9 +430,9 @@ Current supported claims:
   `1ab714f`, `2b5d9d0`, `05b3963`, `77e8ada`, `0983fbc`, `c4b4b99`,
   `2490a9b`, `0832201`, `4b216b6`, `0734bb9`, `ef8cbe0`, `10a3d1d`,
   `c3f9f05`, `9829123`, `db535e7`, `fb0baed`, `b6dc061`, `2b823f6`,
-  `ef2bcf7`, `b550a26`, `1727615`, `01dfa6e`, `206fa5c`, `4532dd9`, and
-  `bf95213` are remote-backed in the latest verified checkpoint
-  `bf952139ea01996424e54e60869ee3f595f5c4e5 refs/heads/main`.
+  `ef2bcf7`, `b550a26`, `1727615`, `01dfa6e`, `206fa5c`, `4532dd9`,
+  `bf95213`, and `69d23b1` are remote-backed in the resume-baseline checkpoint
+  `69d23b1ed7f0bb9e3c3ca4b58fd50796d7f5ab4f refs/heads/main`.
 - Phase109 has collected scored real-reuse LLM ablation rows only on the
   pre-registered stabilized slices. Current collected GPT-family pairs are
   REF-T2 1.000/1.000,
@@ -448,9 +451,9 @@ Current supported claims:
 - Phase 89 and the 2026-07-04/2026-07-05 record-sync pushes recovered GitHub
   HTTPS transport interruptions. Use `git status -sb` and a successful remote
   check for the latest exact alignment before each phase-save claim.
-- Latest verified substantive phase checkpoint:
-  `bf95213 Record resume memory push blocker`, verified at
-  `bf952139ea01996424e54e60869ee3f595f5c4e5 refs/heads/main`. Rerun remote
+- Resume-baseline substantive checkpoint before this continuation's memory edits:
+  `69d23b1 Record recovered resume memory backup`, verified at
+  `69d23b1ed7f0bb9e3c3ca4b58fd50796d7f5ab4f refs/heads/main`. Rerun remote
   verification before making later remote-backed claims.
 
 Current unsupported claims:

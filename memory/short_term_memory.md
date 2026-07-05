@@ -13,11 +13,11 @@ Current date: 2026-07-05.
   Preserve the existing local-log boundary: do not modify
   `research/run_logs/**` or `research/stage_log.md` during record-sync-only
   work.
-- Current save target status: GitHub backup recovered again and was verified
-  through the resume-memory push-blocker record. The latest verified remote
-  substantive phase checkpoint is
-  `bf952139ea01996424e54e60869ee3f595f5c4e5 refs/heads/main`
-  (`bf95213 Record resume memory push blocker`). This remote-backed chain now
+- Current resume baseline: GitHub backup had recovered and was verified
+  through the recovered resume-memory backup record before this continuation's
+  record-sync edits. The resume-baseline remote checkpoint is
+  `69d23b1ed7f0bb9e3c3ca4b58fd50796d7f5ab4f refs/heads/main`
+  (`69d23b1 Record recovered resume memory backup`). That remote-backed chain
   includes the SNAP executable-candidate prompt packets, phase111/phase112
   diagnostic generation/execution artifacts, the tightened submission-review
   count-check gate, the updated AAAI phase112 SNAP-T1 executable-candidate
@@ -25,9 +25,10 @@ Current date: 2026-07-05.
   SNAP diagnostic sync, the human-fidelity annotation request, and the current
   resume-memory checkpoint/blocker records. Earlier `Recv failure: Connection
   was reset` and port-443 failures remain historical GitHub transport
-  metadata, not experiment correctness. Before claiming any later phase save is
-  remote-backed, rerun `git status -sb`,
-  `git log -5 --oneline`, and `git ls-remote --heads origin main`.
+  metadata, not experiment correctness. Because this file may itself be edited
+  in later record-sync commits, treat `git status -sb`, `git log -5 --oneline`,
+  and `git ls-remote --heads origin main` as the authority for the exact
+  current HEAD/remote alignment.
 - Current resume verification on 2026-07-05: `ok.txt` is absent, local
   strict gates passed for real-reuse benchmark, paper tables, paper claims,
   usage examples, AAAI package, submission review, reproducibility package,
@@ -37,9 +38,11 @@ Current date: 2026-07-05.
   main` failed with `Failed to connect to github.com port 443 after 21100 ms`.
   The follow-up commit `bf95213 Record resume memory push blocker` recorded
   that transport failure; a later `git push origin main` succeeded and
-  `git ls-remote --heads origin main` verified `bf95213`. Current local state
-  is `main...origin/main`. Goal status remains externally blocked on
-  human-fidelity annotation and the follow-on AAAI final decision.
+  `git ls-remote --heads origin main` verified `bf95213`. The recovery record
+  `69d23b1 Record recovered resume memory backup` was then pushed and verified
+  at `69d23b1ed7f0bb9e3c3ca4b58fd50796d7f5ab4f refs/heads/main`. Current
+  local state is `main...origin/main`. Goal status remains externally blocked
+  on human-fidelity annotation and the follow-on AAAI final decision.
 - Current record-sync continuation tightens
   `scripts/check_submission_review.py` so review/rebuttal/submission handoff
   files must carry exact current gate counts for goal/package, AAAI package,
@@ -450,9 +453,9 @@ Current date: 2026-07-05.
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-6. Latest verified substantive phase checkpoint:
-   `bf95213 Record resume memory push blocker`, verified at
-   `bf952139ea01996424e54e60869ee3f595f5c4e5 refs/heads/main`.
+6. Resume-baseline remote checkpoint before this continuation's memory edits:
+   `69d23b1 Record recovered resume memory backup`, verified at
+   `69d23b1ed7f0bb9e3c3ca4b58fd50796d7f5ab4f refs/heads/main`.
 7. No experiment-side human action is required for GitHub status right now.
    Continue non-network paper/evidence work and verify remote alignment again
    before claiming any later phase save is remote-backed.
