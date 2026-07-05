@@ -65,13 +65,12 @@ This file is intentionally compact. Detailed chronological history lives in
   If a network/download problem blocks a core asset or phase save, record the
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
-- Latest verified remote checkpoint after the phase114 Claude availability
-  recheck is
-  `a9857b1c296c6e866fe41a9aa8422b69e2bb4f0a refs/heads/main`
-  (`a9857b1 Record Claude availability recheck`). The working tree was clean
-  against `origin/main` immediately after that push/verify. This checkpoint
-  includes the earlier SNAP-T2 availability/package-gate artifacts plus the
-  Claude-family direct availability recheck in which `claude-opus-4-8`,
+- Latest verified remote checkpoint after the phase115 SNAP-T2 retry backup is
+  `9eaeee74c1e7200442b7ced2184cf5ec33c15237 refs/heads/main`
+  (`9eaeee7 Record recovered SNAP-T2 retry backup`). The working tree was clean
+  against `origin/main` during the resume check after that push/verify. This checkpoint
+  includes the SNAP-T2 availability/package-gate artifacts, the phase115 retry
+  provider-block record, and the Claude-family direct availability recheck in which `claude-opus-4-8`,
   `claude-opus-4-7`, and `claude-opus-4-6` all still returned provider HTTP
   502. Treat those 502s as provider availability metadata, not model-quality
   evidence or scored real-reuse failures. Older named checkpoint notes in this

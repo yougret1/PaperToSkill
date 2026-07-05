@@ -35,12 +35,12 @@ recovered again. The latest verified remote checkpoint before claiming any
 later phase save is:
 
 ```text
-a9857b1c296c6e866fe41a9aa8422b69e2bb4f0a refs/heads/main
-a9857b1 Record Claude availability recheck
+9eaeee74c1e7200442b7ced2184cf5ec33c15237 refs/heads/main
+9eaeee7 Record recovered SNAP-T2 retry backup
 ```
 
-The previously unbacked local commits are now remote-backed through the SNAP
-diagnostic checkpoint:
+The previously unbacked local commits are now remote-backed through the latest
+recovered SNAP-T2 retry backup checkpoint:
 
 ```text
 77e8ada Add SNAP executable candidate runner
@@ -96,6 +96,10 @@ bddd900 Record Claude direct availability recheck
 5d2b98c Record recovered Claude probe backup
 6b344fd Gate SNAP-T2 availability artifacts
 a9857b1 Record Claude availability recheck
+febe844 Sync Claude checkpoint records
+d8d968d Record SNAP-T2 retry provider block
+583db16 Record SNAP-T2 retry push blocker
+9eaeee7 Record recovered SNAP-T2 retry backup
 ```
 
 Earlier `Recv failure: Connection was reset` and github.com port 443 failures

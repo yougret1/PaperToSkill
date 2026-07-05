@@ -148,10 +148,10 @@ Current date: 2026-07-05.
   GitHub retry pushed the follow-up record-sync and Claude availability
   commits, and `git ls-remote --heads origin main` verified
   `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`.
-- Current local/remote status override after phase114: the latest locally recorded remote checkpoint is
-  `a9857b1c296c6e866fe41a9aa8422b69e2bb4f0a refs/heads/main`
-  (`a9857b1 Record Claude availability recheck`). The working tree was clean
-  against `origin/main` immediately after that push/verify. Older current-status
+- Current local/remote status override after phase115: the latest locally recorded remote checkpoint is
+  `9eaeee74c1e7200442b7ced2184cf5ec33c15237 refs/heads/main`
+  (`9eaeee7 Record recovered SNAP-T2 retry backup`). The working tree was clean
+  against `origin/main` during the resume check after that push/verify. Older current-status
   bullets in this file are historical checkpoints only; use fresh
   `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
