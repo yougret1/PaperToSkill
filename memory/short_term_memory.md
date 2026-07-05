@@ -75,15 +75,17 @@ Current date: 2026-07-05.
   `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`.
 - Current local/remote status after this resume check: the latest verified
   remote backup is
-  `34542eca0fc4a758cae071193f4327870d6f2867 refs/heads/main`
-  (`34542ec Record deferred backup push blocker`). The earlier
+  `7a39bfbe1655549fcf3cad6f64bc7dfcd45ba37c refs/heads/main`
+  (`7a39bfb Record Claude probe push blocker`). The earlier
   checkpoint-detail/blocker records, grounding-gate evidence sync,
   quality-grounding table completion, blocker record, failure-branch
   claim-source cleanup, claim-evidence-matrix boundary sync, recovered
   checkpoint record, push-blocker record, Claude direct availability recheck,
   recovered Claude backup checkpoint, deferred-study table marking, recovered
-  deferred-table backup record, and the deferred-backup push-blocker record are
-  now included in the verified remote chain. Earlier
+  deferred-table backup record, the deferred-backup push-blocker record,
+  recovered deferred backup push record, refreshed Claude availability probe
+  metadata, and Claude-probe push-blocker record are now included in the
+  verified remote chain. Earlier
   `git ls-remote --heads origin main` failures on 2026-07-05 remain historical
   transport metadata; use `git status -sb`, `git log -5 --oneline`, and a fresh
   `git ls-remote --heads origin main` before making any later remote-backed
@@ -91,8 +93,8 @@ Current date: 2026-07-05.
 - Current resume baseline: GitHub backup had recovered and was verified
   through the resume-memory baseline clarification before this continuation's
   record-sync edits. The latest locally recorded remote checkpoint is:
-  `34542eca0fc4a758cae071193f4327870d6f2867 refs/heads/main`
-  (`34542ec Record deferred backup push blocker`). That remote-backed chain
+  `7a39bfbe1655549fcf3cad6f64bc7dfcd45ba37c refs/heads/main`
+  (`7a39bfb Record Claude probe push blocker`). That remote-backed chain
   includes the SNAP executable-candidate prompt packets, phase111/phase112
   diagnostic generation/execution artifacts, the tightened submission-review
   count-check gate, the updated AAAI phase112 SNAP-T1 executable-candidate
@@ -106,7 +108,9 @@ Current date: 2026-07-05.
   sync, the recovered checkpoint record, the push-blocker record, and the
   Claude direct availability recheck, plus the recovered Claude backup
   checkpoint, deferred-study table marking, recovered deferred-table backup
-  record, and deferred-backup push-blocker record. Earlier `Recv failure: Connection was reset` and port-443 failures
+  record, deferred-backup push-blocker record, recovered deferred backup push
+  record, refreshed Claude availability probe metadata, and Claude-probe
+  push-blocker record. Earlier `Recv failure: Connection was reset` and port-443 failures
   remain historical GitHub transport metadata, not experiment correctness.
   Treat a future successful `git ls-remote` as the authority before claiming
   any new remote-backed phase.
@@ -420,11 +424,18 @@ Current date: 2026-07-05.
   reused the local Claude API document key with the same wire API, aliases,
   `max_tokens=16`, and 120-second timeout; all three aliases again returned
   provider HTTP 502, and only the direct-probe JSON timestamp changed. The
-  recheck is saved locally in `54b6780 Refresh Claude availability probe
-  metadata`; its first `git push origin main` and immediate
-  `git ls-remote --heads origin main` both failed with `Recv failure:
-  Connection was reset`, so `54b6780` is local-only as of this note. Report:
+  recheck was saved in `54b6780 Refresh Claude availability probe metadata`;
+  its first `git push origin main` and immediate `git ls-remote --heads origin
+  main` both failed with `Recv failure: Connection was reset`. The follow-up
+  blocker record `7a39bfb Record Claude probe push blocker` was then pushed,
+  and `git ls-remote --heads origin main` verified
+  `7a39bfbe1655549fcf3cad6f64bc7dfcd45ba37c refs/heads/main`. Report:
   `results/openai_compatible_direct_probe/claude_family/run_report.md`.
+  The follow-up record-sync commit that declares this recovered checkpoint is
+  local-only after `git push origin main` failed with `Recv failure:
+  Connection was reset` and `git ls-remote --heads origin main` failed to
+  connect to github.com port 443; check `git log -1 --oneline` for its exact
+  local hash before claiming a newer remote-backed checkpoint.
 - Historical remote-backed chain through `0832201`: Claude retry availability, bounded
   summary-comparison claim cleanup, current project record sync, GitHub backup
   recovery, real-reuse record-boundary tightening, the tested SNAP

@@ -66,20 +66,22 @@ This file is intentionally compact. Detailed chronological history lives in
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
 - Latest verified remote checkpoint after the current resume recovery is
-  `34542eca0fc4a758cae071193f4327870d6f2867 refs/heads/main`
-  (`34542ec Record deferred backup push blocker`). The previous local-only
+  `7a39bfbe1655549fcf3cad6f64bc7dfcd45ba37c refs/heads/main`
+  (`7a39bfb Record Claude probe push blocker`). The previous local-only
   record-sync commits after the SNAP diagnostic phase, the submission-review count-check save,
   the AAAI phase112 SNAP-T1 paper-text synchronization, the draft/outline
   sync, the human-fidelity annotation request, and the resume-memory
   checkpoint/blocker/recovery/baseline records are now remote-backed in the
-  local `origin/main` tracking ref through `34542ec`. This includes the
+  local `origin/main` tracking ref through `7a39bfb`. This includes the
   checkpoint-detail/blocker records, grounding-gate evidence sync,
   quality-grounding table completion, blocker-record continuation,
   failure-branch claim-boundary cleanup, claim-evidence-matrix boundary
   sync, recovered checkpoint record, push-blocker record, Claude direct
   availability recheck, recovered Claude backup checkpoint, deferred-study
   table marking, recovered deferred-table backup record, and the
-  deferred-backup push-blocker record. Earlier connection-reset and
+  deferred-backup push-blocker record, recovered deferred backup push record,
+  refreshed Claude availability probe metadata, and Claude-probe push-blocker
+  record. Earlier connection-reset and
   port-443 failures remain GitHub transport metadata, not
   experiment-correctness evidence. Verify the exact current local/remote state
   with `git status -sb`, `git log -5 --oneline`, and a successful
