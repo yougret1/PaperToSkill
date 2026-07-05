@@ -35,8 +35,8 @@ recovered again. The latest verified remote checkpoint before claiming any
 later phase save is:
 
 ```text
-7a39bfbe1655549fcf3cad6f64bc7dfcd45ba37c refs/heads/main
-7a39bfb Record Claude probe push blocker
+5d2b98c8e2f9f2c3498a11103830ef775257bfdd refs/heads/main
+5d2b98c Record recovered Claude probe backup
 ```
 
 The previously unbacked local commits are now remote-backed through the SNAP
@@ -90,6 +90,7 @@ bddd900 Record Claude direct availability recheck
 317bdbe Record recovered deferred backup push
 54b6780 Refresh Claude availability probe metadata
 7a39bfb Record Claude probe push blocker
+5d2b98c Record recovered Claude probe backup
 ```
 
 Earlier `Recv failure: Connection was reset` and github.com port 443 failures
@@ -99,7 +100,7 @@ The later local record-sync commit after `fb0baed` and the phase112 completion
 commit are now remote-backed. The later submission-review and AAAI paper-text
 sync commits, auxiliary draft/outline sync, human-fidelity request,
 resume-memory records, and checkpoint-record guard baseline are also
-remote-backed through `7a39bfb`, including the checkpoint-detail,
+remote-backed through `5d2b98c`, including the checkpoint-detail,
 blocker-record, grounding-gate evidence-sync, follow-up checkpoint-record,
 quality-grounding table, claim-boundary cleanup, and claim-evidence-matrix
 boundary-sync commits, plus the recovered checkpoint record, push-blocker
@@ -107,7 +108,7 @@ record, Claude direct availability recheck, recovered Claude backup checkpoint,
 deferred-study table marking, recovered deferred-table backup record, and
 deferred-backup push-blocker record, recovered deferred backup push record,
 refreshed Claude availability probe metadata, and Claude-probe push-blocker
-record. Earlier `git ls-remote --heads
+record, plus the recovered Claude-probe backup record. Earlier `git ls-remote --heads
 origin main` failures remain transport history.
 Always inspect `git status -sb` and `git log -5 --oneline` before claiming a
 clean phase save.
@@ -115,7 +116,7 @@ clean phase save.
 Local-only continuation note: follow-up record-sync commit `e2f070e Record
 recovered claim matrix backup` initially remained local-only after `git push
 origin main` failed with `Recv failure: Connection was reset`. A later push
-recovered and verified `7a39bfb`, so no repository commit is currently
+recovered and verified `5d2b98c`, so no repository commit is currently
 local-only at this checkpoint.
 
 Re-run remote verification before making future remote-backed checkpoint
