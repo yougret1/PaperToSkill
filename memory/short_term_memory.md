@@ -131,21 +131,27 @@ Current date: 2026-07-06.
   updates memory to the verified `43f9092` checkpoint, but its first
   `git push origin main` failed with `Recv failure: Connection was reset`, and
   the immediate `git ls-remote --heads origin main` failed with the same reset
-  error. This is GitHub transport metadata only and does not require human
-  `ok.txt`; the latest verified substantive remote backup remains `43f9092`.
+  error. A later `git push origin main` recovered `93a2abf`, `af3ba31`,
+  `4a85147`, and `3e18fc5`; `git ls-remote --heads origin main` verified
+  `3e18fc5d58ebcf8f791e82c737d3f64457e886e1 refs/heads/main`. This is GitHub
+  transport metadata only and does not require human `ok.txt`.
 - Follow-up blocker-record commit `af3ba31 Record model cost guard push blocker`
   records that transport failure, but its first push retry also failed with
   `Failed to connect to github.com port 443 after 21063 ms`; the immediate
   `git ls-remote --heads origin main` failed with port-443 connectivity after
-  21117 ms. This is GitHub transport metadata only.
-- Current checkpoint-record guard sync updates the short-memory declared
+  21117 ms. A later push recovered this blocker record; this is GitHub
+  transport metadata only.
+- Checkpoint-record guard sync checkpoint `3e18fc5 Sync checkpoint record guard`
+  updates the short-memory declared
   checkpoint, runbook, goal-completion audit, and generated goal-completion
   report from stale `5786d7d` current-status wording to the verified
   `43f9092 Guard model response cost scope` checkpoint. It also extends
   `scripts/check_goal_completion.py` so the guard accepts the newer "latest
   verified substantive checkpoint" wording. This is record/guard work only; it
   does not change experiments, raw rows,
-  `results/real_reuse/main_run_selection.json`, or local logs.
+  `results/real_reuse/main_run_selection.json`, or local logs. The phase was
+  pushed and verified at
+  `3e18fc5d58ebcf8f791e82c737d3f64457e886e1 refs/heads/main`.
 - Current main-results boundary cleanup removes stale "future unfilled cells /
   planning placeholders" wording from `scripts/build_real_reuse_paper_tables.py`
   and regenerated `results/real_reuse/main_results_plan.{md,json}`. It also
@@ -373,20 +379,18 @@ Current date: 2026-07-06.
   GitHub retry pushed the follow-up record-sync and Claude availability
   commits, and `git ls-remote --heads origin main` verified
   `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`.
-- Current local/remote status override after the model-response cost-scope
-  guard: the latest locally recorded remote checkpoint is
-  `43f9092c32a614d882199d5111fe21cc5cb19f8e refs/heads/main`
-  (`43f9092 Guard model response cost scope`). This checkpoint includes the
+- Current local/remote status override after the checkpoint-record guard sync:
+  the latest locally recorded remote checkpoint is
+  `3e18fc5d58ebcf8f791e82c737d3f64457e886e1 refs/heads/main`
+  (`3e18fc5 Sync checkpoint record guard`). This checkpoint includes the
   recovered checkpoint-sync commits after the real-reuse LLM-ablation handoff
   guard, the outline update that distinguishes collected/scored saved-response
   rows from unsupported human semantic fidelity, provider billing, and live
   downstream task-success claims, the limitations claim gate, the
   paper-facing saved-response cost-boundary sync, and the stale cost-scope
-  regression guard with 56 ready paper-claim checks / 0 failures. Local
-  record-only commits `93a2abf`, `af3ba31`, and `4a85147` remain unpushed
-  because GitHub HTTPS transport failed after `43f9092`; these are transport
-  metadata only and require no human `ok.txt`. Older current-status bullets in
-  this file are historical
+  regression guard with 56 ready paper-claim checks / 0 failures, plus the
+  checkpoint-record guard sync that updates goal-completion checkpoint records
+  to `43f9092`. Older current-status bullets in this file are historical
   checkpoints only; use fresh `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
   phase.
@@ -967,8 +971,8 @@ Current date: 2026-07-06.
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
 6. Latest substantive remote-backed checkpoint before further edits:
-   `43f9092 Guard model response cost scope`, verified at
-   `43f9092c32a614d882199d5111fe21cc5cb19f8e refs/heads/main`.
+   `3e18fc5 Sync checkpoint record guard`, verified at
+   `3e18fc5d58ebcf8f791e82c737d3f64457e886e1 refs/heads/main`.
 7. No experiment-side human action is required for GitHub status right now.
    Continue non-network paper/evidence work and verify remote alignment again
    before claiming any later phase save is remote-backed.

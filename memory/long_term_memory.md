@@ -79,18 +79,20 @@ This file is intentionally compact. Detailed chronological history lives in
   paper-finalization, outline-sync recovery, outline claim-drift gate,
   main-results boundary cleanup, real-reuse LLM-ablation handoff guard,
   recovered checkpoint-sync records, outline evidence-boundary sync,
-  limitations-claim gate, model-response cost-boundary sync, and stale
-  cost-scope claim guard is
-  `43f9092c32a614d882199d5111fe21cc5cb19f8e refs/heads/main`
-  (`43f9092 Guard model response cost scope`). This checkpoint includes the
+  limitations-claim gate, model-response cost-boundary sync, stale cost-scope
+  claim guard, and checkpoint-record guard sync is
+  `3e18fc5d58ebcf8f791e82c737d3f64457e886e1 refs/heads/main`
+  (`3e18fc5 Sync checkpoint record guard`). This checkpoint includes the
   limitations claim gate that covers `paper/limitations.md` with 51 ready
   paper-claim checks / 0 failed checks, the full 209-test verification for
   that gate, and
   the follow-up paper-facing cost-boundary sync that states the saved-response
   output-token proxy covers six Claude/GPT-family/DeepSeek model-ablation rows
   with 9,594 `o200k_base` output tokens. It also includes the follow-up
-  stale cost-scope guard with 56 ready paper-claim checks / 0 failed checks
-  and full unit discovery at 210 tests OK. It also includes the earlier outline
+  stale cost-scope guard with 56 ready paper-claim checks / 0 failed checks,
+  full unit discovery at 210 tests OK, and the checkpoint-record guard sync
+  that moves current remote-checkpoint reports from stale `5786d7d` wording to
+  `43f9092`. It also includes the earlier outline
   update that distinguishes collected/scored saved-response rows from
   unsupported human semantic fidelity, provider billing, and live downstream
   task-success claims; the submission-review handoff guard that separates the
@@ -143,22 +145,29 @@ This file is intentionally compact. Detailed chronological history lives in
   updates memory to the verified `43f9092` remote-backed checkpoint. Its first
   `git push origin main` failed with `Recv failure: Connection was reset`, and
   the immediate `git ls-remote --heads origin main` failed with the same reset
-  error. Treat this as GitHub transport metadata only; no human `ok.txt` is
-  required, and the latest verified substantive remote backup remains
-  `43f9092c32a614d882199d5111fe21cc5cb19f8e refs/heads/main`.
+  error. A later `git push origin main` recovered this record-sync commit
+  together with `af3ba31`, `4a85147`, and `3e18fc5`; `git ls-remote --heads
+  origin main` verified
+  `3e18fc5d58ebcf8f791e82c737d3f64457e886e1 refs/heads/main`. Treat the
+  earlier failure as GitHub transport metadata only; no human `ok.txt` is
+  required.
 - Follow-up blocker-record commit `af3ba31 Record model cost guard push blocker`
   records that transport failure. Its first push retry failed with
   `Failed to connect to github.com port 443 after 21063 ms`, and the immediate
   `git ls-remote --heads origin main` failed with port-443 connectivity after
-  21117 ms. Treat this as GitHub transport metadata only.
-- Current checkpoint-record guard sync refreshes the short-memory declared
+  21117 ms. A later push recovered this blocker record; treat the earlier
+  failure as GitHub transport metadata only.
+- Checkpoint-record guard sync checkpoint `3e18fc5 Sync checkpoint record guard`
+  refreshes the short-memory declared
   checkpoint, runbook, goal-completion audit, and generated goal-completion
   report so the current remote checkpoint is `43f9092 Guard model response
   cost scope` rather than stale `5786d7d` wording. It also extends
   `scripts/check_goal_completion.py` to parse the newer "latest verified
-  substantive checkpoint" wording. This is record/guard work only and does not
-  change experiments, raw rows, `results/real_reuse/main_run_selection.json`,
-  or local logs.
+  substantive checkpoint" wording. This is record/guard work only and does
+  not change experiments, raw rows, `results/real_reuse/main_run_selection.json`,
+  or local logs. `git push origin main` succeeded, and `git ls-remote --heads
+  origin main` verified
+  `3e18fc5d58ebcf8f791e82c737d3f64457e886e1 refs/heads/main`.
 - Follow-up record-sync commit `45ef25b Sync remote checkpoint after LLM handoff
   guard` and blocker note `0538ef1 Record checkpoint sync push blocker`
   initially failed to back up because GitHub HTTPS transport was unavailable.
