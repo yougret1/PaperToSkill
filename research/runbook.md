@@ -35,8 +35,8 @@ recovered again. The latest verified remote checkpoint before claiming any
 later phase save is:
 
 ```text
-9eaeee74c1e7200442b7ced2184cf5ec33c15237 refs/heads/main
-9eaeee7 Record recovered SNAP-T2 retry backup
+96fce87967b207e1cd0a0b9b36ba8fb8795eff33 refs/heads/main
+96fce87 Record SNAP-T2 phase116 provider block
 ```
 
 The previously unbacked local commits are now remote-backed through the latest
@@ -100,6 +100,9 @@ febe844 Sync Claude checkpoint records
 d8d968d Record SNAP-T2 retry provider block
 583db16 Record SNAP-T2 retry push blocker
 9eaeee7 Record recovered SNAP-T2 retry backup
+b3441d5 Sync phase115 checkpoint records
+cea43eb Record checkpoint sync push blocker
+96fce87 Record SNAP-T2 phase116 provider block
 ```
 
 Earlier `Recv failure: Connection was reset` and github.com port 443 failures
@@ -128,11 +131,13 @@ origin main` failed with `Recv failure: Connection was reset`. A later push
 recovered and verified `5d2b98c`; that specific historical local-only state
 was resolved.
 
-Unpushed record-sync note: `b3441d5 Sync phase115 checkpoint records` corrected
-the current checkpoint records and refreshed the goal-completion report after
-`9eaeee7` was verified. Its first `git push origin main` failed with `Recv
-failure: Connection was reset`, and the immediate `git ls-remote --heads origin
-main` failed with the same reset error. This is GitHub transport metadata only.
+Recovered record-sync note: `b3441d5 Sync phase115 checkpoint records`
+corrected the current checkpoint records after `9eaeee7` was verified. Its
+first `git push origin main` failed with `Recv failure: Connection was reset`,
+and the immediate `git ls-remote --heads origin main` failed with the same
+reset error. The follow-up blocker record and phase116 provider-block record
+were later pushed successfully, and `git ls-remote --heads origin main`
+verified `96fce87967b207e1cd0a0b9b36ba8fb8795eff33 refs/heads/main`.
 
 Re-run remote verification before making future remote-backed checkpoint
 claims.

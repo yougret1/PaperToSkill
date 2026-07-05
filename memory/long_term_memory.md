@@ -65,12 +65,14 @@ This file is intentionally compact. Detailed chronological history lives in
   If a network/download problem blocks a core asset or phase save, record the
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
-- Latest verified remote checkpoint after the phase115 SNAP-T2 retry backup is
-  `9eaeee74c1e7200442b7ced2184cf5ec33c15237 refs/heads/main`
-  (`9eaeee7 Record recovered SNAP-T2 retry backup`). The working tree was clean
-  against `origin/main` during the resume check after that push/verify. This checkpoint
-  includes the SNAP-T2 availability/package-gate artifacts, the phase115 retry
-  provider-block record, and the Claude-family direct availability recheck in which `claude-opus-4-8`,
+- Latest verified remote checkpoint after the phase116 SNAP-T2 provider-block
+  record is
+  `96fce87967b207e1cd0a0b9b36ba8fb8795eff33 refs/heads/main`
+  (`96fce87 Record SNAP-T2 phase116 provider block`). The working tree was clean
+  against `origin/main` immediately after that push/verify. This checkpoint
+  includes the SNAP-T2 availability/package-gate artifacts, the phase115 and
+  phase116 retry provider-block records, and the Claude-family direct
+  availability recheck in which `claude-opus-4-8`,
   `claude-opus-4-7`, and `claude-opus-4-6` all still returned provider HTTP
   502. Treat those 502s as provider availability metadata, not model-quality
   evidence or scored real-reuse failures. Older named checkpoint notes in this
@@ -78,11 +80,11 @@ This file is intentionally compact. Detailed chronological history lives in
   Verify the exact current local/remote state with `git status -sb`,
   `git log -5 --oneline`, and a successful `git ls-remote --heads origin main`
   before claiming any later phase is remote-backed.
-- Unpushed record-only checkpoint after that verification:
-  `b3441d5 Sync phase115 checkpoint records` corrected the current checkpoint
-  records and refreshed the goal-completion report locally. Its push and
-  immediate remote check failed with `Recv failure: Connection was reset`;
-  treat this as GitHub transport metadata, not experiment correctness.
+- Recovered record-only checkpoints after that verification:
+  `b3441d5 Sync phase115 checkpoint records` and `cea43eb Record checkpoint
+  sync push blocker` initially followed a GitHub reset, but the later phase116
+  push recovered and verified `96fce87`. Treat earlier reset errors as GitHub
+  transport metadata, not experiment correctness.
 - Current resume checkpoint commits are `4532dd9 Sync resume checkpoint
   memory`, `bf95213 Record resume memory push blocker`, `69d23b1 Record
   recovered resume memory backup`, `f1c50d5 Sync resume baseline memory`, and
