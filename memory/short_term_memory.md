@@ -7,24 +7,33 @@ Current date: 2026-07-05.
 
 ## Current Task
 
-- Latest user request: save the current phase, upload to GitHub, and continue
-  core work toward `C:\Users\19351\Desktop\tem\nextStep.md`. Preserve the
-  existing local-log boundary: do not modify `research/run_logs/**` or
-  `research/stage_log.md` during record-sync-only work.
+- Latest user request: resume after the previous agent, read memory/logs and
+  the referenced thread, restate the current task and boundaries, then continue
+  the non-blocked work toward `C:\Users\19351\Desktop\tem\nextStep.md`.
+  Preserve the existing local-log boundary: do not modify
+  `research/run_logs/**` or `research/stage_log.md` during record-sync-only
+  work.
 - Current save target status: GitHub backup recovered again and was verified
-  after the submission-review and AAAI paper-text synchronization saves. The
-  latest verified substantive phase checkpoint is
-  `b550a26504311eb8d82ea8fdbabc1a3e6983abe4 refs/heads/main`
-  (`b550a26 Clarify SNAP executable candidate results`). This remote-backed
-  chain now includes the SNAP executable-candidate prompt packets,
-  phase111/phase112 diagnostic generation/execution artifacts, the tightened
-  submission-review count-check gate, the updated AAAI phase112 SNAP-T1
-  executable-candidate prose/table caption, and the rebuilt AAAI PDF/package
-  report. Earlier `Recv failure: Connection was reset` and port-443 failures
-  remain historical GitHub transport metadata, not experiment correctness.
-  Before claiming any later phase save is remote-backed, rerun
-  `git status -sb`, `git log -5 --oneline`, and
-  `git ls-remote --heads origin main`.
+  through the human-fidelity handoff save. The latest verified substantive
+  phase checkpoint is
+  `206fa5c8eb6ec32855f5d2b3b932129b33cada33 refs/heads/main`
+  (`206fa5c Request human fidelity annotation`). This remote-backed chain now
+  includes the SNAP executable-candidate prompt packets, phase111/phase112
+  diagnostic generation/execution artifacts, the tightened submission-review
+  count-check gate, the updated AAAI phase112 SNAP-T1 executable-candidate
+  prose/table caption, the rebuilt AAAI PDF/package report, the draft/outline
+  SNAP diagnostic sync, and the human-fidelity annotation request. Earlier
+  `Recv failure: Connection was reset` and port-443 failures remain historical
+  GitHub transport metadata, not experiment correctness. Before claiming any
+  later phase save is remote-backed, rerun `git status -sb`,
+  `git log -5 --oneline`, and `git ls-remote --heads origin main`.
+- Current resume verification on 2026-07-05: `ok.txt` is absent, local
+  `main` is aligned with `origin/main` at `206fa5c`, and strict gates passed
+  for real-reuse benchmark, paper tables, paper claims, usage examples, AAAI
+  package, submission review, reproducibility package, goal completion, and
+  AAAI submission decision. The working tree was clean before this memory
+  sync. Goal status remains externally blocked on human-fidelity annotation
+  and the follow-on AAAI final decision.
 - Current record-sync continuation tightens
   `scripts/check_submission_review.py` so review/rebuttal/submission handoff
   files must carry exact current gate counts for goal/package, AAAI package,
@@ -207,32 +216,34 @@ Current date: 2026-07-05.
   dedicated CSV/MD/JSON table, builder/test, paper table, rebuilt AAAI PDF, and
   table/package checker/report updates.
 - Current remote-backup status: GitHub backup is verified through
-  `b550a26504311eb8d82ea8fdbabc1a3e6983abe4 refs/heads/main`
-  (`b550a26 Clarify SNAP executable candidate results`). The previously
-  unbacked local commits from `4b216b6` through the SNAP diagnostic record,
-  the follow-up remote-status sync, the phase112 completion commit, the
-  submission-review count-check save, and the AAAI paper-text sync are now
-  remote-backed.
+  `206fa5c8eb6ec32855f5d2b3b932129b33cada33 refs/heads/main`
+  (`206fa5c Request human fidelity annotation`). The previously unbacked local
+  commits from `4b216b6` through the SNAP diagnostic record, the follow-up
+  remote-status sync, the phase112 completion commit, the submission-review
+  count-check save, the AAAI paper-text sync, the draft/outline sync, and the
+  human-fidelity handoff request are now remote-backed.
 - The current discussion policy is: stabilize the core eight-row real-reuse
   evidence first; collect auxiliary raw data opportunistically; keep LLM
   ablation auxiliary, component ablation appendix-only, and user study
   last/optional. Provider latency, timeouts, and retry counts are availability
   metadata, not effectiveness metrics.
-- `toHuman.md` now says no experiment-side human action is required, records
-  local commit `599382d` plus later push-status memory records, and lists the
-  exact GitHub push / remote-check transport errors. It no longer asks the
-  user to create `ok.txt` for GitHub status; `ok.txt` is reserved for completed
-  human-fidelity annotation or a concrete placed core real-reuse asset.
-- The committed chain through `b550a26 Clarify SNAP executable candidate results`
-  is pushed to `origin/main` and verified by `git ls-remote --heads origin
-  main` as
-  `b550a26504311eb8d82ea8fdbabc1a3e6983abe4 refs/heads/main`. This includes
+- `toHuman.md` now asks for independent human-fidelity annotation and records
+  the latest remote-backed checkpoint. It lists historical GitHub push /
+  remote-check transport errors as transport metadata only. It no longer asks
+  the user to create `ok.txt` for GitHub status; `ok.txt` is reserved for
+  completed human-fidelity annotation or a concrete placed core real-reuse
+  asset.
+- The committed chain through `206fa5c Request human fidelity annotation` is
+  pushed to `origin/main` and verified by `git ls-remote --heads origin main`
+  as
+  `206fa5c8eb6ec32855f5d2b3b932129b33cada33 refs/heads/main`. This includes
   the earlier recovered GitHub backup records, real-reuse boundary tightening,
   SNAP executable-candidate runner, prompt packets, phase111/phase112
   diagnostic artifacts, memory/queue sync, refreshed AAAI diagnostic-table/
   PDF/package reports, tightened submission-review count checks, and the
-  phase112 SNAP-T1 executable-candidate paper-text clarification. Earlier
-  GitHub HTTPS transport failures are availability metadata, not
+  phase112 SNAP-T1 executable-candidate paper-text clarification, auxiliary
+  draft/outline synchronization, and the human-fidelity annotation request.
+  Earlier GitHub HTTPS transport failures are availability metadata, not
   experiment-correctness evidence.
 - Verification before the `599382d` phase save passed:
   `python -m unittest tests.test_build_real_reuse_swe_t1_issue_aligned_followup
@@ -244,12 +255,13 @@ Current date: 2026-07-05.
   `check_usage_examples.py --strict`, `check_aaai_package.py --strict` after
   rebuilding the AAAI PDF, `git diff --check` with only CRLF warnings, and a
   raw-key scan with no matches.
-- `C:\Users\19351\Desktop\tem\toHuman.md` should say no immediate human action
-  is required, and `ok.txt` should only be created for completed human-fidelity
-  annotation or a concrete placed core asset.
+- `C:\Users\19351\Desktop\tem\toHuman.md` should keep the current human action
+  focused on independent human-fidelity annotation. `ok.txt` should only be
+  created for completed human-fidelity annotation or a concrete placed core
+  asset, not for GitHub status or diagnostic follow-ups.
 - Current GitHub transport note: previous 2026-07-05 connection-reset /
   port-443 failures recovered again. Current verified remote state is
-  `b550a26504311eb8d82ea8fdbabc1a3e6983abe4 refs/heads/main`. Before claiming
+  `206fa5c8eb6ec32855f5d2b3b932129b33cada33 refs/heads/main`. Before claiming
   any later phase save is remote-backed, rerun `git status -sb`,
   `git log -5 --oneline`, and `git ls-remote --heads origin main`.
 - Historical Claude-family availability checkpoint: after record-sync commit
@@ -433,8 +445,8 @@ Current date: 2026-07-05.
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
 6. Latest verified substantive phase checkpoint:
-   `b550a26 Clarify SNAP executable candidate results`, verified at
-   `b550a26504311eb8d82ea8fdbabc1a3e6983abe4 refs/heads/main`.
+   `206fa5c Request human fidelity annotation`, verified at
+   `206fa5c8eb6ec32855f5d2b3b932129b33cada33 refs/heads/main`.
 7. No experiment-side human action is required for GitHub status right now.
    Continue non-network paper/evidence work and verify remote alignment again
    before claiming any later phase save is remote-backed.
