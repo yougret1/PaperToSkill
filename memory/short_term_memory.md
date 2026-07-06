@@ -83,6 +83,10 @@ Current date: 2026-07-06.
   errno 0`; treat this as GitHub transport metadata only. The latest
   independently verified remote checkpoint remains `ffb25f3` until a later
   push and `git ls-remote --heads origin main` recover `0013ea1`.
+  Follow-up local blocker-record commit `8d960a9 Record full gate backup push
+  blocker` records that failed backup attempt. Its first `git push origin main`
+  failed with `Failed to connect to github.com port 443 after 21111 ms`. Treat
+  this as GitHub transport metadata only; no human `ok.txt` is required.
 - Current paper-boundary continuation: `paper/outline.md` conclusion no longer
   says the next stage is to "repeat and expand the original-style paper
   tasks." It now matches the AAAI paper and draft wording: add human-fidelity
