@@ -82,9 +82,10 @@ This file is intentionally compact. Detailed chronological history lives in
   limitations-claim gate, model-response cost-boundary sync, stale cost-scope
   claim guard, checkpoint-record guard sync, pre-submission gate rerun,
   paper-conclusion boundary sync, compact SNAP executable-candidate prompt
-  contract, and follow-up record-sync/blocker metadata is
-  `b770e2005bd881c4afa31be2571cfb01d5207971 refs/heads/main`
-  (`b770e20 Record verified compact checkpoint recovery`). The latest substantive
+  contract, follow-up record-sync/blocker metadata, and recovered Claude
+  availability metadata is
+  `39c4e0ff7a5d500d3250ea7f6dd177a00672fa95 refs/heads/main`
+  (`39c4e0f Record Claude availability push blocker`). The latest substantive
   content checkpoint inside that chain is `245c2b2 Prepare compact SNAP
   candidate prompts`; it includes the compact SNAP prompt plan and
   package/checker records. It is non-network contract work only: no model
@@ -140,13 +141,18 @@ This file is intentionally compact. Detailed chronological history lives in
   earlier failure as GitHub transport metadata only.
 - Follow-up record-sync commit `b770e20 Record verified compact checkpoint
   recovery` was pushed and independently verified at
-  `b770e2005bd881c4afa31be2571cfb01d5207971 refs/heads/main`. Later local
-  commit `8ac4ddf Refresh Claude availability metadata` records a 2026-07-06
+  `b770e2005bd881c4afa31be2571cfb01d5207971 refs/heads/main`. Later commits
+  `8ac4ddf Refresh Claude availability metadata` and `39c4e0f Record Claude
+  availability push blocker` are now independently remote-verified at
+  `39c4e0ff7a5d500d3250ea7f6dd177a00672fa95 refs/heads/main`. `8ac4ddf`
+  records a 2026-07-06
   Claude direct availability probe where all three Claude aliases again
   returned provider HTTP 502 with `max_tokens=16` and a 180-second timeout.
   Its first `git push origin main` and immediate `git ls-remote --heads origin
-  main` both failed with `Recv failure: Connection was reset`; treat this as
-  GitHub transport metadata and provider availability metadata only.
+  main` both failed with `Recv failure: Connection was reset`, but the later
+  push and independent remote check recovered the backup; treat the earlier
+  failure as GitHub transport metadata and the HTTP 502s as provider
+  availability metadata only.
 - Recovered follow-up phase-save checkpoint after the `5786d7d` remote baseline:
   `8449799 Guard limitations claim boundary` extends the paper-claim gate to
   `paper/limitations.md`, refreshes the paper-claim/package/submission-review

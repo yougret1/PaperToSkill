@@ -43,14 +43,18 @@ Current date: 2026-07-06.
   `b770e2005bd881c4afa31be2571cfb01d5207971 refs/heads/main`. It records the
   recovered `a7a9e3e` checkpoint state and does not add experiment scores,
   raw rows, or paper-facing main-row changes.
-- Local commit `8ac4ddf Refresh Claude availability metadata` records a
+- Follow-up commits `8ac4ddf Refresh Claude availability metadata` and
+  `39c4e0f Record Claude availability push blocker` are now independently
+  remote-verified:
+  `39c4e0ff7a5d500d3250ea7f6dd177a00672fa95 refs/heads/main`. They record a
   2026-07-06 Claude direct availability probe with the local Claude API
   document key, Anthropic Messages, `max_tokens=16`, and a 180-second timeout;
-  all three Claude aliases again returned provider HTTP 502. Its first `git
-  push origin main` and immediate `git ls-remote --heads origin main` both
-  failed with `Recv failure: Connection was reset`. Treat this as GitHub
-  transport metadata plus provider availability metadata only; no human
-  `ok.txt` is required for GitHub or provider status.
+  all three Claude aliases again returned provider HTTP 502. The first `git
+  push origin main` and immediate `git ls-remote --heads origin main` failed
+  with `Recv failure: Connection was reset`, but a later push and independent
+  remote check recovered the backup. Treat this as GitHub transport metadata
+  plus provider availability metadata only; no human `ok.txt` is required for
+  GitHub or provider status.
 - Current pre-submission gate rerun after the checkpoint-record sync passed
   without repository diff drift: full unit discovery reported 211 tests OK, and
   strict submission-review, AAAI submission-decision, external-evidence packet,
@@ -485,10 +489,10 @@ Current date: 2026-07-06.
   GitHub retry pushed the follow-up record-sync and Claude availability
   commits, and `git ls-remote --heads origin main` verified
   `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`.
-- Current local/remote status override after the compact SNAP prompt checkpoint:
+- Current local/remote status override after the Claude availability recovery:
   the latest locally recorded remote checkpoint is
-  `b770e2005bd881c4afa31be2571cfb01d5207971 refs/heads/main`
-  (`b770e20 Record verified compact checkpoint recovery`). This checkpoint includes
+  `39c4e0ff7a5d500d3250ea7f6dd177a00672fa95 refs/heads/main`
+  (`39c4e0f Record Claude availability push blocker`). This checkpoint includes
   the recovered checkpoint-sync commits after the real-reuse LLM-ablation handoff
   guard, the outline update that distinguishes collected/scored saved-response
   rows from unsupported human semantic fidelity, provider billing, and live
@@ -496,8 +500,9 @@ Current date: 2026-07-06.
   paper-facing saved-response cost-boundary sync, and the stale cost-scope
   regression guard with 56 ready paper-claim checks / 0 failures, plus the
   checkpoint-record guard sync, checkpoint blocker records, pre-submission
-  gate rerun record, the paper-conclusion boundary sync, and the compact SNAP
-  executable-candidate prompt contract. Older
+  gate rerun record, the paper-conclusion boundary sync, the compact SNAP
+  executable-candidate prompt contract, and the recovered Claude availability
+  metadata/push-blocker commits. Older
   current-status bullets in this file are historical
   checkpoints only; use fresh `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
@@ -1100,15 +1105,15 @@ Current date: 2026-07-06.
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
 6. Latest remote-backed checkpoint before further edits:
-   `b770e20 Record verified compact checkpoint recovery`, verified at
-   `b770e2005bd881c4afa31be2571cfb01d5207971 refs/heads/main`. The latest
+   `39c4e0f Record Claude availability push blocker`, verified at
+   `39c4e0ff7a5d500d3250ea7f6dd177a00672fa95 refs/heads/main`. The latest
    substantive content checkpoint inside that chain remains `245c2b2 Prepare
    compact SNAP candidate prompts`: it adds the compact SNAP
    executable-candidate prompt contract and package/checker records, but does
    not call a model, score outputs, append raw rows, or replace main rows.
 7. Earlier record-sync/blocker/Claude-availability transport failures recovered
    through the successful push and independent remote verification of
-   `b770e20`; treat the earlier connection resets as GitHub transport metadata
+   `39c4e0f`; treat the earlier connection resets as GitHub transport metadata
    only.
 8. No experiment-side human action is required for GitHub status right now.
    Continue non-network paper/evidence work and verify remote alignment again

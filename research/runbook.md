@@ -39,12 +39,13 @@ evidence-boundary sync, the limitations claim gate, the paper-facing
 cost-boundary sync, the stale cost-scope claim guard, the checkpoint-record
 guard sync, the recovered pre-submission gate rerun, the paper-conclusion
 boundary sync record, the compact SNAP executable-candidate prompt contract,
-and the follow-up record-sync/blocker metadata. The latest verified remote
+and the follow-up record-sync/blocker metadata. The later Claude availability
+metadata/push-blocker commits also recovered. The latest verified remote
 checkpoint before claiming any later phase save is:
 
 ```text
-b770e2005bd881c4afa31be2571cfb01d5207971 refs/heads/main
-b770e20 Record verified compact checkpoint recovery
+39c4e0ff7a5d500d3250ea7f6dd177a00672fa95 refs/heads/main
+39c4e0f Record Claude availability push blocker
 ```
 
 The earlier failed remote-backup attempts for `501ffc8`, `48aabac`, `8bdd394`,
@@ -81,8 +82,11 @@ The follow-up record-sync backup for that recovered checkpoint was later
 pushed and independently verified at
 `b770e2005bd881c4afa31be2571cfb01d5207971 refs/heads/main`. A later Claude
 availability metadata commit `8ac4ddf Refresh Claude availability metadata`
-is local-only after its first push and immediate remote check both failed with
-`Recv failure: Connection was reset`; treat that as transport metadata only.
+and blocker-record commit `39c4e0f Record Claude availability push blocker`
+were then pushed and independently verified at
+`39c4e0ff7a5d500d3250ea7f6dd177a00672fa95 refs/heads/main`. Their first push
+and immediate remote check failed with `Recv failure: Connection was reset`;
+treat that earlier failure as transport metadata only.
 
 Follow-up commits `45ef25b Sync remote checkpoint after LLM handoff guard` and
 `0538ef1 Record checkpoint sync push blocker` first failed to back up because
