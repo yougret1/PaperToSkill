@@ -50,6 +50,12 @@ effectiveness claims. Earlier GitHub connection-reset and port-443 failures
 for that chain are transport metadata only. No human `ok.txt` is required for
 GitHub status.
 
+Follow-up local record-sync commit `9712985 Record recovered Claude metadata
+backup` updates records to this verified checkpoint. Its first `git push
+origin main` and immediate independent `git ls-remote --heads origin main`
+both failed with GitHub port-443 connectivity errors. Treat this as GitHub
+transport metadata only and avoid a tight retry loop.
+
 Earlier on 2026-07-06, the temporary GitHub HTTPS transport blocker
 recovered through the AAAI page-limit backup, the later
 paper-finalization/submission-review chain, the paper-outline sync, the outline

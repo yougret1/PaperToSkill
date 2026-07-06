@@ -66,6 +66,12 @@ push-blocker chain plus the paper-facing ambiguity cleanup in the draft and
 AAAI TeX. Earlier GitHub connection-reset and port-443 failures are transport
 metadata only and do not require human `ok.txt`.
 
+Follow-up local record-sync commit `9712985 Record recovered Claude metadata
+backup` updates records to this verified checkpoint. Its first remote backup
+and immediate remote check both failed with GitHub port-443 connectivity
+errors. This is GitHub transport metadata only and does not require human
+`ok.txt`.
+
 The earlier substantive checkpoint records point to the
 verified paper-finalization, submission-review, outline-sync, outline
 claim-drift, main-results boundary, real-reuse LLM-ablation handoff, recovered

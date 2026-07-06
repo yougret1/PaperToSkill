@@ -151,6 +151,11 @@ This file is intentionally compact. Detailed chronological history lives in
   provider availability metadata` are now remote-backed through the verified
   `65b7976` checkpoint. Their earlier GitHub connection-reset failures are
   transport metadata only; no human `ok.txt` is required for GitHub status.
+- Follow-up local record-sync commit `9712985 Record recovered Claude metadata
+  backup` updates records to the verified `65b7976` checkpoint. Its first
+  remote backup and immediate remote check both failed with GitHub port-443
+  connectivity errors. Treat this as GitHub transport metadata only; no human
+  `ok.txt` is required for GitHub status.
 - Historical follow-up local record-sync commits `a9740f7 Record verified GPT
   probe checkpoint`, `1e32f5f Record GPT checkpoint push blocker`, and
   `51c91bb Record renewed GPT checkpoint push blocker` recorded failed backup
