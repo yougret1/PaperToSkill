@@ -89,6 +89,14 @@ Current date: 2026-07-06.
   latest independently verified remote checkpoint remains `5063eed` until a
   later push and remote check recover the local record-sync commit. No human
   `ok.txt` is required for GitHub status.
+- Current continuation reran a tiny Claude-family direct availability probe
+  using the local Claude API document key in shell-only environment variables,
+  Anthropic Messages, aliases `claude-opus-4-8`, `claude-opus-4-7`, and
+  `claude-opus-4-6`, `max_tokens=16`, and a 240-second timeout. All three
+  aliases again returned provider HTTP 502; only the direct-probe JSON
+  timestamp changed. This is provider availability metadata only. Do not run
+  the full six Claude-family real-reuse LLM-ablation rows until a small direct
+  probe returns a usable response.
 - Phase118 package/checker sync verification is complete locally: focused
   `tests.test_check_reproducibility_package` and
   `tests.test_check_submission_review` passed, full unit discovery passed
