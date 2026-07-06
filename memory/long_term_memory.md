@@ -191,6 +191,11 @@ This file is intentionally compact. Detailed chronological history lives in
   as the declared substantive checkpoint for paper/package/goal gates, and
   rerun `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any newer backup state.
+- Local phase-save commit `c659519 Record resume checkpoint baseline` records
+  the `d3f7cb2` resume baseline while keeping `7efa4b7` as the substantive
+  checkpoint. Its first `git push origin main` failed with
+  `Failed to connect to github.com port 443 after 21115 ms`; this is GitHub
+  transport metadata only and does not require human `ok.txt`.
 - Recovered follow-up phase-save checkpoint after the `5786d7d` remote baseline:
   `8449799 Guard limitations claim boundary` extends the paper-claim gate to
   `paper/limitations.md`, refreshes the paper-claim/package/submission-review

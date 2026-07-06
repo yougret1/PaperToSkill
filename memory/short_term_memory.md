@@ -108,6 +108,13 @@ Current date: 2026-07-06.
   paper-facing claim change. The declared substantive checkpoint remains
   `7efa4b7 Guard external evidence handoff boundary`; rerun git status/log/
   remote verification before claiming any newer phase backup.
+- Local phase-save commit `c659519 Record resume checkpoint baseline` records
+  this resume-baseline distinction in memory, runbook, and goal-audit files.
+  Its first `git push origin main` failed with
+  `Failed to connect to github.com port 443 after 21115 ms`. Treat this as
+  GitHub transport metadata only; no human `ok.txt` is required for GitHub
+  status. The local branch remains ahead until a later push and independent
+  `git ls-remote --heads origin main` check succeeds.
 - Current pre-submission gate rerun after the checkpoint-record sync passed
   without repository diff drift: full unit discovery reported 211 tests OK, and
   strict submission-review, AAAI submission-decision, external-evidence packet,
@@ -1179,6 +1186,10 @@ Current date: 2026-07-06.
 8. No experiment-side human action is required for GitHub status right now.
    Continue non-network paper/evidence work and verify remote alignment again
    before claiming any later phase save is remote-backed.
+9. Local commit `c659519 Record resume checkpoint baseline` is a record-sync
+   phase save only. Its first `git push origin main` hit a GitHub port-443
+   connectivity failure; keep it as local backup metadata until transport
+   recovers.
 
 ## Boundaries
 

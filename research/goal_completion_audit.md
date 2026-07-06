@@ -107,6 +107,11 @@ raw rows, main-row selection changes, local-log changes, or paper-facing claim
 strength. The substantive checkpoint used by claim and goal gates remains
 `7efa4b7 Guard external evidence handoff boundary`.
 
+Local phase-save commit `c659519 Record resume checkpoint baseline` records
+that distinction. Its first `git push origin main` failed with `Failed to
+connect to github.com port 443 after 21115 ms`; this is GitHub transport
+metadata only, not a goal or package failure.
+
 ## Requirement Audit
 
 | Requirement | Current Evidence | Status | Next Action |

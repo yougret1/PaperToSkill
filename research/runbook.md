@@ -129,6 +129,12 @@ strength. Keep `7efa4b7 Guard external evidence handoff boundary` as the
 substantive paper/package/goal checkpoint, and rerun git status/log/remote
 verification before making any later backup claim.
 
+Local phase-save commit `c659519 Record resume checkpoint baseline` records the
+resume-baseline distinction in repository memory/runbook/goal-audit files. Its
+first `git push origin main` failed with `Failed to connect to github.com port
+443 after 21115 ms`; keep this as GitHub transport metadata only and retry
+remote backup later rather than treating it as experiment or paper failure.
+
 Follow-up commits `45ef25b Sync remote checkpoint after LLM handoff guard` and
 `0538ef1 Record checkpoint sync push blocker` first failed to back up because
 GitHub HTTPS transport was unavailable. They are now included in the verified
