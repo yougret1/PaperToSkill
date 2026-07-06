@@ -64,6 +64,11 @@ push-blocker chain plus the paper-facing ambiguity cleanup in the draft and
 AAAI TeX. Earlier GitHub connection-reset and port-443 failures are transport
 metadata only and do not require human `ok.txt`.
 
+Follow-up local record-sync commit `cc13abb Record verified human boundary
+backup` updates records to this verified backup. Its first remote backup and
+immediate remote check both failed with `Recv failure: Connection was reset`.
+This is GitHub transport metadata only and does not require human `ok.txt`.
+
 The earlier substantive checkpoint records point to the
 verified paper-finalization, submission-review, outline-sync, outline
 claim-drift, main-results boundary, real-reuse LLM-ablation handoff, recovered

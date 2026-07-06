@@ -145,6 +145,11 @@ This file is intentionally compact. Detailed chronological history lives in
   Verify the exact current local/remote state with `git status -sb`,
   `git log -5 --oneline`, and a successful `git ls-remote --heads origin main`
   before claiming any later phase is remote-backed.
+- Follow-up local record-sync commit `cc13abb Record verified human boundary
+  backup` updates records to the verified human-boundary backup. Its first
+  remote backup and immediate remote check both failed with `Recv failure:
+  Connection was reset`. Treat this as GitHub transport metadata only; no
+  human `ok.txt` is required for GitHub status.
 - Historical follow-up local record-sync commits `a9740f7 Record verified GPT
   probe checkpoint`, `1e32f5f Record GPT checkpoint push blocker`, and
   `51c91bb Record renewed GPT checkpoint push blocker` recorded failed backup
