@@ -6,27 +6,22 @@
   "attempted_models": [
     {
       "model": "gpt-5.5",
-      "status": "blocked",
-      "detail": "{\"raw_body\": \"error code: 502\\n\", \"http_error\": 502}"
-    },
-    {
-      "model": "gpt-5.4",
-      "status": "blocked",
-      "detail": "{\"raw_body\": \"error code: 502\\n\", \"http_error\": 502}"
+      "status": "success",
+      "detail": "response_chars=54; http_status=200"
     }
   ],
   "base_url_env": "PAPERTOSKILL_GPT_BASE_URL",
   "base_url": "https://coderxiaoc.com/v1",
   "auth_env": "PAPERTOSKILL_GPT_API_KEY",
   "api_key_present": true,
-  "max_tokens": 128,
-  "timeout_seconds": 60.0,
-  "started_at_unix": 1782911096,
-  "completed_at_unix": 1782911107,
-  "overall_status": "blocked_by_provider_or_model_availability",
+  "max_tokens": 16,
+  "timeout_seconds": 240.0,
+  "started_at_unix": 1783326527,
+  "completed_at_unix": 1783326532,
+  "overall_status": "complete",
   "status_counts": {
-    "ready": 3,
-    "pending": 2,
+    "ready": 6,
+    "pending": 0,
     "fail": 0
   },
   "checks": [
@@ -38,26 +33,32 @@
     },
     {
       "id": "direct_probe_response_saved",
-      "status": "pending",
-      "detail": "response_chars=0",
+      "status": "ready",
+      "detail": "response_chars=54",
       "evidence": "results\\openai_compatible_direct_probe\\gpt_family\\response.md"
     },
     {
-      "id": "direct_probe_error",
-      "status": "pending",
-      "detail": "gpt-5.5: {\"raw_body\": \"error code: 502\\n\", \"http_error\": 502}; gpt-5.4: {\"raw_body\": \"error code: 502\\n\", \"http_error\": 502}",
-      "evidence": "provider/model availability"
+      "id": "direct_probe_marker_papertoskill_smoke_ok",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results\\openai_compatible_direct_probe\\gpt_family\\response.md"
+    },
+    {
+      "id": "direct_probe_marker_ai_scientist_v2",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results\\openai_compatible_direct_probe\\gpt_family\\response.md"
+    },
+    {
+      "id": "direct_probe_marker_paper_to_skill",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "results\\openai_compatible_direct_probe\\gpt_family\\response.md"
     },
     {
       "id": "direct_probe_alias_attempt_1",
       "status": "ready",
-      "detail": "gpt-5.5: blocked; {\"raw_body\": \"error code: 502\\n\", \"http_error\": 502}",
-      "evidence": "provider/model availability"
-    },
-    {
-      "id": "direct_probe_alias_attempt_2",
-      "status": "ready",
-      "detail": "gpt-5.4: blocked; {\"raw_body\": \"error code: 502\\n\", \"http_error\": 502}",
+      "detail": "gpt-5.5: success; response_chars=54; http_status=200",
       "evidence": "provider/model availability"
     }
   ]

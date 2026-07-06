@@ -48,6 +48,15 @@ Current date: 2026-07-06.
   `results/real_reuse/snapatac2_executable_candidate_script_generation_phase118_t2_compact.{md,json}`;
   this is provider availability metadata only and does not execute SNAP-T2,
   append raw rows, replace main rows, or show PaperToSkill advantage.
+- Current GPT-family direct provider probe recovered for the tiny marker
+  contract only: `results/openai_compatible_direct_probe/gpt_family/run_report.{json,md}`
+  now reports OpenAI Responses, model `gpt-5.5`, a 240-second timeout,
+  `max_tokens=16`, `overall_status=complete`, 6 ready checks, 0 pending
+  checks, and 0 failed checks, with the saved marker response in
+  `results/openai_compatible_direct_probe/gpt_family/response.md`. This is
+  provider availability metadata only. It does not complete SNAP-T2,
+  Claude-family rows, human fidelity, AI-Scientist-v2 broad live research
+  success, or paper-facing effectiveness claims.
 - Phase118 package/checker sync verification is complete locally: focused
   `tests.test_check_reproducibility_package` and
   `tests.test_check_submission_review` passed, full unit discovery passed

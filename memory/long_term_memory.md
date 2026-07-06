@@ -976,7 +976,7 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 459 ready checks, 1 pending
+  reports `ready_with_pending_external_evidence`, 477 ready checks, 1 pending
   check, and 0 failed checks.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
@@ -1005,9 +1005,11 @@ Use these as entry points instead of searching the whole repo first:
   `wire_api=anthropic_messages`, 4 ready checks, 2 pending checks, and 0 failed
   checks; `claude-opus-4-8`, `claude-opus-4-7`, and `claude-opus-4-6` returned
   HTTP 502 `Upstream service temporarily unavailable`. The GPT-family report
-  uses `wire_api=openai_responses`, has 3 ready checks, 2 pending checks, and 0
-  failed checks; `gpt-5.5` and `gpt-5.4` returned HTTP 502
-  `Upstream access forbidden`.
+  uses `wire_api=openai_responses`, model `gpt-5.5`, `timeout_seconds=240.0`,
+  and `max_tokens=16`; it is now `overall_status=complete` with 6 ready checks,
+  0 pending checks, 0 failed checks, and a saved marker response. This is
+  provider availability metadata only, not SNAP-T2, Claude-family, human
+  fidelity, or paper-facing effectiveness evidence.
 - AI-Scientist-v2 live-run handoff:
   `results/ai_scientist_v2_live_run_handoff/handoff.md`
   reports `complete`, 16 ready checks, 0 pending checks, 0 failed checks, and
@@ -1219,10 +1221,15 @@ GPT-family profile:
 
 - Direct GPT diagnostics use OpenAI Responses at base URL
   `https://coderxiaoc.com/v1` and request path `/responses`.
-- Key source: local environment variable, e.g.
-  `PAPERTOSKILL_GPT_OPENAI_API_KEY`.
+- Key source for direct probes: local environment variables
+  `PAPERTOSKILL_GPT_BASE_URL` and `PAPERTOSKILL_GPT_API_KEY`. Real-reuse
+  runners still use their `PAPERTOSKILL_GPT_OPENAI_*` environment profile.
 - Latest catalog evidence with the separate GPT key lists `gpt-5.5`,
   `gpt-5.4`, and other GPT-family models.
+- Latest direct tiny-marker probe on 2026-07-06 used `gpt-5.5`, OpenAI
+  Responses, `max_tokens=16`, and a 240-second timeout; it returned HTTP 200
+  with the required PaperToSkill/AI-Scientist-v2 markers. Treat this as
+  provider availability metadata only.
 - Current protocol-refresh evidence: GPT-family completed both current prompt
   rows with `gpt-5.5` through OpenAI Responses and both saved responses score
   6/6. Older Phase 37 fallback evidence remains historical only.

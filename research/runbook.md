@@ -975,23 +975,26 @@ Use the direct endpoint probe when provider availability needs diagnosis
 separate from the local `ai_scientist.llm` wrapper:
 
 ```powershell
-$env:AI_SCIENTIST_OPENAI_BASE_URL = "https://coderxiaoc.com"
-$env:AI_SCIENTIST_OPENAI_API_KEY = "<set Claude-family token locally>"
-python scripts\run_openai_compatible_direct_probe.py --wire-api anthropic_messages --strict --require-complete --timeout-seconds 30 --max-tokens 128 `
+$env:PAPERTOSKILL_CLAUDE_BASE_URL = "https://coderxiaoc.com"
+$env:PAPERTOSKILL_CLAUDE_API_KEY = "<set Claude-family token locally>"
+python scripts\run_openai_compatible_direct_probe.py --wire-api anthropic_messages --strict --require-complete --timeout-seconds 240 --max-tokens 16 `
   --model-alias claude-opus-4-8 `
   --model-alias claude-opus-4-7 `
   --model-alias claude-opus-4-6 `
+  --base-url-env PAPERTOSKILL_CLAUDE_BASE_URL `
+  --auth-env PAPERTOSKILL_CLAUDE_API_KEY `
   --output-json results\openai_compatible_direct_probe\claude_family\run_report.json `
   --output-md results\openai_compatible_direct_probe\claude_family\run_report.md `
   --response-output results\openai_compatible_direct_probe\claude_family\response.md
 ```
 
 ```powershell
-$env:AI_SCIENTIST_OPENAI_BASE_URL = "https://coderxiaoc.com/v1"
-$env:AI_SCIENTIST_OPENAI_API_KEY = "<set GPT-family key locally>"
-python scripts\run_openai_compatible_direct_probe.py --wire-api openai_responses --strict --require-complete --timeout-seconds 60 --max-tokens 128 `
+$env:PAPERTOSKILL_GPT_BASE_URL = "https://coderxiaoc.com/v1"
+$env:PAPERTOSKILL_GPT_API_KEY = "<set GPT-family key locally>"
+python scripts\run_openai_compatible_direct_probe.py --wire-api openai_responses --strict --require-complete --timeout-seconds 240 --max-tokens 16 `
   --model-alias gpt-5.5 `
-  --model-alias gpt-5.4 `
+  --base-url-env PAPERTOSKILL_GPT_BASE_URL `
+  --auth-env PAPERTOSKILL_GPT_API_KEY `
   --output-json results\openai_compatible_direct_probe\gpt_family\run_report.json `
   --output-md results\openai_compatible_direct_probe\gpt_family\run_report.md `
   --response-output results\openai_compatible_direct_probe\gpt_family\response.md
@@ -1002,8 +1005,9 @@ Latest direct-probe diagnostic:
 `wire_api=anthropic_messages`, attempted `claude-opus-4-8`,
 `claude-opus-4-7`, and `claude-opus-4-6`, `timeout_seconds=240.0`, and is still
 blocked by provider HTTP 502. The GPT-family report uses
-`wire_api=openai_responses`, attempted `gpt-5.5` and `gpt-5.4`, and is still
-blocked by HTTP 502 `Upstream access forbidden`. This diagnostic bypasses
+`wire_api=openai_responses`, attempted `gpt-5.5`, `timeout_seconds=240.0`,
+and returned the saved marker response with 6 ready checks, 0 pending checks,
+and 0 failed checks. This diagnostic bypasses
 `ai_scientist.llm`. Keep this as provider availability metadata, not
 model-quality or task-success evidence. Before making any new availability claim, rerun the relevant
 protocol-specific probe or use the task runner's recorded call status. Model
