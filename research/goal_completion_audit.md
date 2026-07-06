@@ -68,6 +68,12 @@ first remote backup attempt failed with `Failed to connect to github.com port
 `Failed to connect to github.com port 443 after 21096 ms`. Treat this as
 GitHub transport metadata only; it does not require human `ok.txt`.
 
+Follow-up local blocker-record commit `1e32f5f Record GPT checkpoint push
+blocker` records that first failed backup attempt. Its first remote backup
+attempt also failed with `Failed to connect to github.com port 443 after
+21133 ms`. This is continued GitHub transport metadata only and does not
+require human `ok.txt`.
+
 The earlier substantive checkpoint records point to the
 verified paper-finalization, submission-review, outline-sync, outline
 claim-drift, main-results boundary, real-reuse LLM-ablation handoff, recovered

@@ -54,6 +54,12 @@ goal-audit records. Its first `git push origin main` failed with
 GitHub transport metadata only. No human `ok.txt` is required for GitHub
 status.
 
+Follow-up local blocker-record commit `1e32f5f Record GPT checkpoint push
+blocker` records that first failed backup attempt. Its first remote backup
+attempt also failed with `Failed to connect to github.com port 443 after
+21133 ms`. Treat this as continued GitHub transport metadata only and avoid a
+tight retry loop.
+
 Earlier on 2026-07-06, the temporary GitHub HTTPS transport blocker
 recovered through the AAAI page-limit backup, the later
 paper-finalization/submission-review chain, the paper-outline sync, the outline

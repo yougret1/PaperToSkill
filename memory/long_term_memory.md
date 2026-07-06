@@ -152,6 +152,11 @@ This file is intentionally compact. Detailed chronological history lives in
   `Failed to connect to github.com port 443 after 21096 ms`. Treat this as
   GitHub transport metadata only, not an experiment or paper-content failure,
   and do not create human `ok.txt` for GitHub status.
+- Follow-up local blocker-record commit `1e32f5f Record GPT checkpoint push
+  blocker` records the first failed backup attempt after `a9740f7`. Its first
+  remote backup attempt also failed with `Failed to connect to github.com port
+  443 after 21133 ms`. Treat this as continued GitHub transport metadata only;
+  do not create human `ok.txt` for GitHub status.
 - Recovered outline-guard backup: `fd49a53 Guard outline real-reuse future
   work`, `12f676b Record outline guard push blocker`, and `b20eaa7 Record
   renewed outline guard push blocker` are now remote-backed. `git push origin
