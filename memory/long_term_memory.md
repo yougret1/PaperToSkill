@@ -1024,8 +1024,9 @@ Use these as entry points instead of searching the whole repo first:
   reports `ready_with_pending_external_evidence`, records SHA256 hashes for the
   AAAI paper package and key gate reports, and does not claim final submission
   readiness or completed external evidence. The manifest phase and its
-  artifact-map/provenance sync chain are independently remote-verified through
-  `0b0bf33845a4d696dc00439460c9415342b2bb75 refs/heads/main`.
+  artifact-map/documentation/provenance sync chain are independently
+  remote-verified through
+  `cdad88e3fe2c05c34c5b5c761887e14c5e89023d refs/heads/main`.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
   reports `not_complete_pending_external_evidence`, 78 ready checks, 3 pending
