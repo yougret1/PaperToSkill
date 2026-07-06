@@ -102,6 +102,15 @@ evidence handoff boundary` was pushed and independently verified at
 `pending_external_evidence` visible in submission-review handoffs and does not
 change experiment scores, raw rows, main-row selection, or local logs.
 
+Follow-up local record-sync commit
+`3e71736 Record external boundary checkpoint backup` updates checkpoint records
+to the verified `7efa4b7` phase. Its first `git push origin main` failed with
+`Recv failure: Connection was reset`, and the immediate
+`git ls-remote --heads origin main` failed with
+`Failed to connect to github.com port 443 after 21087 ms`. Treat this as
+GitHub transport metadata only; no human `ok.txt` is required for GitHub
+status.
+
 Follow-up commits `45ef25b Sync remote checkpoint after LLM handoff guard` and
 `0538ef1 Record checkpoint sync push blocker` first failed to back up because
 GitHub HTTPS transport was unavailable. They are now included in the verified

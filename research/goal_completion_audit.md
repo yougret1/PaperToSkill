@@ -81,6 +81,14 @@ the later Claude availability metadata/push-blocker commits were verified at
 `7efa4b7`. Earlier connection resets remain
 GitHub transport metadata only.
 
+Follow-up local record-sync commit
+`3e71736 Record external boundary checkpoint backup` records the verified
+`7efa4b7` checkpoint in memory/runbook/goal-audit reports. Its first
+`git push origin main` failed with `Recv failure: Connection was reset`, and
+the immediate `git ls-remote --heads origin main` failed with
+`Failed to connect to github.com port 443 after 21087 ms`. Treat this as
+GitHub transport metadata only.
+
 ## Requirement Audit
 
 | Requirement | Current Evidence | Status | Next Action |

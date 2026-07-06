@@ -166,6 +166,15 @@ This file is intentionally compact. Detailed chronological history lives in
   metadata checkpoint and record the first failed retry. Their earlier
   `Recv failure: Connection was reset` push failures are GitHub transport
   metadata only.
+- Follow-up local record-sync commit
+  `3e71736 Record external boundary checkpoint backup` records the verified
+  `7efa4b7` checkpoint in memory/runbook/goal-audit reports. Its first
+  `git push origin main` failed with `Recv failure: Connection was reset`, and
+  the immediate `git ls-remote --heads origin main` failed with
+  `Failed to connect to github.com port 443 after 21087 ms`. Treat this as
+  GitHub transport metadata only; no human `ok.txt` is required. Until a later
+  push/remote check succeeds, the latest independently verified remote-backed
+  checkpoint remains `7efa4b7`.
 - Recovered follow-up phase-save checkpoint after the `5786d7d` remote baseline:
   `8449799 Guard limitations claim boundary` extends the paper-claim gate to
   `paper/limitations.md`, refreshes the paper-claim/package/submission-review

@@ -85,6 +85,15 @@ Current date: 2026-07-06.
   `7efa4b72d41c61be8c0b0139e2ae76317fb84413 refs/heads/main`
   (`7efa4b7 Guard external evidence handoff boundary`). It adds no experiment
   scores, raw rows, main-row selection changes, or local-log changes.
+- Follow-up local record-sync commit
+  `3e71736 Record external boundary checkpoint backup` updates memory/runbook/
+  goal-audit records to the verified `7efa4b7` checkpoint. Its first
+  `git push origin main` failed with `Recv failure: Connection was reset`, and
+  the immediate `git ls-remote --heads origin main` failed with
+  `Failed to connect to github.com port 443 after 21087 ms`. Treat this as
+  GitHub transport metadata only; no human `ok.txt` is required for GitHub
+  status. Until a later push/remote check succeeds, the latest independently
+  verified remote-backed checkpoint remains `7efa4b7`.
 - Current pre-submission gate rerun after the checkpoint-record sync passed
   without repository diff drift: full unit discovery reported 211 tests OK, and
   strict submission-review, AAAI submission-decision, external-evidence packet,
