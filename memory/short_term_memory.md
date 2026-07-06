@@ -55,6 +55,15 @@ Current date: 2026-07-06.
   remote check recovered the backup. Treat this as GitHub transport metadata
   plus provider availability metadata only; no human `ok.txt` is required for
   GitHub or provider status.
+- Local record-sync commit `3ee014a Record recovered Claude metadata backup`
+  updates memory/runbook/goal/submission records to the verified `39c4e0f`
+  remote checkpoint. Its first `git push origin main` failed with
+  `Recv failure: Connection was reset`; treat this as GitHub transport
+  metadata only. A follow-up local HEAD blocker-record commit records this
+  failed backup; its first push retry also failed with `Recv failure:
+  Connection was reset`. The latest independently verified remote checkpoint
+  remains `39c4e0ff7a5d500d3250ea7f6dd177a00672fa95 refs/heads/main` until a
+  later push and remote check succeed.
 - Current pre-submission gate rerun after the checkpoint-record sync passed
   without repository diff drift: full unit discovery reported 211 tests OK, and
   strict submission-review, AAAI submission-decision, external-evidence packet,
