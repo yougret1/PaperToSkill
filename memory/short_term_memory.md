@@ -66,7 +66,9 @@ Current date: 2026-07-06.
   `research/goal_completion_audit.md`; `README.md` and `research/runbook.md`
   now describe that handoff/provenance coverage. This is package-integrity
   evidence only and does not change experiments, raw rows, main-row selection,
-  local logs, or claim strength.
+  local logs, or claim strength. This phase is committed and independently
+  remote-verified as
+  `ea89f7db8adeaaac3415f28b6d2879bf703581a6 refs/heads/main`.
 - Current paper-boundary continuation: `paper/outline.md` conclusion no longer
   says the next stage is to "repeat and expand the original-style paper
   tasks." It now matches the AAAI paper and draft wording: add human-fidelity
