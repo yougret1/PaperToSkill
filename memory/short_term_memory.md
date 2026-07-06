@@ -69,6 +69,12 @@ Current date: 2026-07-06.
   local logs, or claim strength. This phase is committed and independently
   remote-verified as
   `ea89f7db8adeaaac3415f28b6d2879bf703581a6 refs/heads/main`.
+  Follow-up verification after the remote backup ran full unit discovery
+  (`217/217` tests passed) plus the strict pre-submission local gate sequence:
+  submission review, AAAI decision, external-evidence packets, submission
+  bundle manifest, paper claims, goal completion, reproducibility package,
+  AAAI package, paper tables, usage examples, real-reuse preflight, and final
+  manifest refresh. The repository had no diff afterward.
 - Current paper-boundary continuation: `paper/outline.md` conclusion no longer
   says the next stage is to "repeat and expand the original-style paper
   tasks." It now matches the AAAI paper and draft wording: add human-fidelity
