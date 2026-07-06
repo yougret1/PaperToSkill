@@ -46,6 +46,9 @@ Current date: 2026-07-06.
   verified `0b0bf33845a4d696dc00439460c9415342b2bb75 refs/heads/main`. Treat
   the earlier failures as GitHub transport metadata only; no human `ok.txt` is
   required.
+  Follow-up documentation sync updates `README.md` and `research/runbook.md`
+  with the submission-bundle manifest location, command, status, and
+  package-integrity-only boundary.
 - Current paper-boundary continuation: `paper/outline.md` conclusion no longer
   says the next stage is to "repeat and expand the original-style paper
   tasks." It now matches the AAAI paper and draft wording: add human-fidelity

@@ -1365,6 +1365,24 @@ external-evidence items remain pending under `pending_external_evidence`:
 human-fidelity annotation and the AAAI final decision.
 Passing this gate does not mean the AAAI paper is submission-final.
 
+## Submission Bundle Manifest
+
+Build the local file-integrity manifest for the AAAI paper package and key gate
+reports:
+
+```powershell
+python scripts\build_submission_bundle_manifest.py --strict
+```
+
+Current status:
+`results/reproducibility/submission_bundle_manifest.md` reports
+`ready_with_pending_external_evidence`, 11 ready checks, and 0 failed checks.
+It records SHA256 hashes for the AAAI paper package, submission-review report,
+reproducibility package report, goal-completion report, external-evidence
+handoff reports, AAAI submission-decision record, and human-fidelity summary.
+This is a local package-integrity index; it does not complete human-fidelity
+annotation or final AAAI submission readiness.
+
 ## Goal Completion Gate
 
 Verify the active user goal against current local evidence before deciding

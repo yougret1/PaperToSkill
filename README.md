@@ -10,7 +10,7 @@ idea with `ai-scientist-v2`.
 
 ## Current Phase
 
-Current status as of 2026-07-05: the strongest next evidence target is the
+Current status as of 2026-07-06: the strongest next evidence target is the
 core real-reuse experiment, not a real-user study and not a submission-advice
 loop. The first GPT-family Summary-vs-PaperToSkill pass now covers all eight
 locked paper-task rows across AIDE, SWE-agent, Reflexion, and SnapATAC2, but
@@ -35,8 +35,10 @@ The package also contains supporting evidence: deterministic/offline gates,
 source maps and source-span validation, usage examples, saved live-transfer
 response scoring, saved Claude/GPT-family/DeepSeek model-ablation response
 scoring, local token-accounting proxies, bounded Paper2Agent positioning, and a
-bounded AI-Scientist-v2 smoke/full live run. These are supporting or bounded
-evidence, not substitutes for real-reuse task outcomes.
+bounded AI-Scientist-v2 smoke/full live run. The local submission-bundle
+manifest records hashes for the AAAI paper package and key gate reports. These
+are supporting, bounded, or package-integrity evidence, not substitutes for
+real-reuse task outcomes.
 
 The active goal is still not complete because human-fidelity annotation is
 pending and final AAAI submission readiness remains gated by the recorded
@@ -134,6 +136,8 @@ pending live-agent claims.
   `results/human_fidelity_packets/`.
 - Failure-case archive: `results/failure_cases/`.
 - Reproducibility package report: `results/reproducibility/`.
+- Submission bundle manifest:
+  `results/reproducibility/submission_bundle_manifest.md`.
 - AAAI package report: `results/reproducibility/aaai_package_report.md`.
 - Usage-example report: `results/reproducibility/usage_example_report.md`.
 - Auto-note comparison: `results/tables/auto_note_comparison.md`.
