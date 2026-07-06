@@ -107,6 +107,17 @@ Current date: 2026-07-06.
   AAAI/usage/real-reuse gates passed after the change. This does not change
   experiment scores, raw rows, main-row selection, local logs, human-fidelity
   completion, Claude-family scored rows, or paper-facing claim strength.
+- Follow-up local commit `63ad6cf Tighten pre-submission secret scanning`
+  records that safety hardening after a resume verification in this thread:
+  full unit discovery passed 215/215 tests, strict external-evidence,
+  AAAI-decision/package, paper-table/claim, usage, real-reuse,
+  reproducibility-package, submission-review, and goal gates passed, the broad
+  raw-key scan returned no matches, and protected main-experiment/log paths
+  had no diff. Its first `git push origin main` failed with `Recv failure:
+  Connection was reset`, and the immediate `git ls-remote --heads origin main`
+  failed with GitHub port-443 connectivity after 21095 ms. Treat this as
+  GitHub transport metadata only; no human `ok.txt` is required for GitHub
+  status.
 - Phase118 package/checker sync verification is complete locally: focused
   `tests.test_check_reproducibility_package` and
   `tests.test_check_submission_review` passed, full unit discovery passed

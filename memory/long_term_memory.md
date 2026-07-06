@@ -156,6 +156,15 @@ This file is intentionally compact. Detailed chronological history lives in
   remote backup and immediate remote check both failed with GitHub port-443
   connectivity errors. Treat this as GitHub transport metadata only; no human
   `ok.txt` is required for GitHub status.
+- Follow-up local commit `63ad6cf Tighten pre-submission secret scanning`
+  expands pre-submission secret scans to catch raw Bearer tokens, AWS
+  `AKIA...` keys, and Google `AIza...` keys in addition to `sk-*` keys across
+  reproducibility, external-evidence, AAAI-decision, decision-generation, and
+  DeepSeek configuration checks. Full unit discovery passed 215/215 tests and
+  the strict paper/package/goal gates passed after the change. Its first push
+  and immediate remote check failed with GitHub transport errors, so it is
+  local-only until a later push and independent remote check recover it; no
+  human `ok.txt` is required for GitHub status.
 - Historical follow-up local record-sync commits `a9740f7 Record verified GPT
   probe checkpoint`, `1e32f5f Record GPT checkpoint push blocker`, and
   `51c91bb Record renewed GPT checkpoint push blocker` recorded failed backup
