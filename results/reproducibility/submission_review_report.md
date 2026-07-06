@@ -3,7 +3,7 @@
 Evidence boundary: this report checks internal review, rebuttal, and submission-checklist handoff artifacts against current repository evidence. It does not claim final submission readiness.
 
 - Overall status: ready
-- Ready checks: 18
+- Ready checks: 19
 - Failed checks: 0
 
 ## Checks
@@ -28,3 +28,4 @@ Evidence boundary: this report checks internal review, rebuttal, and submission-
 | submission_review_ai_scientist_live_run_current | ready | overall=complete; completion_dirs=1 | results/ai_scientist_v2_live_run_handoff/handoff.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md |
 | submission_review_goal_package_counts_current | ready | goal={'ready': 78, 'pending': 3, 'fail': 0}; package={'ready': 474, 'pending': 1, 'fail': 0} | results/reproducibility/goal_completion_report.json; results/reproducibility/package_report.json; research/submission_checklist.md |
 | submission_review_local_gate_counts_current | ready | aaai={'ready': 20, 'fail': 0}; paper_table={'ready': 343, 'fail': 0}; usage={'ready': 55, 'fail': 0} | results/reproducibility/aaai_package_report.json; results/reproducibility/paper_table_report.json; results/reproducibility/usage_example_report.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md |
+| submission_review_external_evidence_pending_current | ready | closure=pending_external_evidence; item_status_counts={'pending_reviewers': 1, 'pending_decision': 1}; packets=ready; closure_status=pending_external_evidence; decision=wait_for_external_evidence; human=pending | results/external_evidence_closure/closure.json; results/external_evidence_packets/packets.json; results/aaai_submission_decision/decision.json; results/human_fidelity_packets/annotation_summary.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md |

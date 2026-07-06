@@ -1,6 +1,6 @@
 # PaperToSkill Rebuttal Bank
 
-Date: 2026-07-05
+Date: 2026-07-06
 
 Use this file to answer likely reviewer objections without exceeding the current
 evidence boundary. This is a reviewer-response handoff, not new evidence.
@@ -261,9 +261,11 @@ Do not say:
 
 ## Q10: What must be done before a stronger submission?
 
-Short answer: Resolve the remaining external evidence decisions or submit
+Short answer: Resolve the two pending-external-evidence items or submit
 explicitly as a deterministic/offline system paper with those limitations
-prominent.
+prominent. The local closure queue and execution packets are ready handoffs,
+but `pending_external_evidence` remains the active status until human fidelity
+annotation and the AAAI final decision are closed.
 
 Evidence to cite:
 

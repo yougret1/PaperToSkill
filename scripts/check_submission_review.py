@@ -161,6 +161,11 @@ def contains_all(text: str, terms: list[str]) -> bool:
     return all(term.lower() in lowered for term in terms)
 
 
+def contains_any(text: str, terms: list[str]) -> bool:
+    lowered = text.lower()
+    return any(term.lower() in lowered for term in terms)
+
+
 def smoke_blocker_detail(smoke: dict[str, Any]) -> str:
     for check in smoke.get("checks", []):
         if check.get("id") == "ai_scientist_v2_llm_error":
@@ -234,6 +239,61 @@ def local_gate_counts_current(root: Path, combined_text: str) -> tuple[bool, str
     return contains_all(combined_text, required_terms), "; ".join(details)
 
 
+def external_evidence_pending_current(root: Path, combined_text: str) -> tuple[bool, str]:
+    closure = load_json(root / "results/external_evidence_closure/closure.json")
+    packets = load_json(root / "results/external_evidence_packets/packets.json")
+    decision = load_json(root / "results/aaai_submission_decision/decision.json")
+    human = load_json(root / "results/human_fidelity_packets/annotation_summary.json")
+    closure_items = closure.get("items", [])
+    packet_items = packets.get("packets", [])
+    item_status_counts = closure.get("item_status_counts", {})
+    data_current = (
+        closure.get("overall_status") == "pending_external_evidence"
+        and item_status_counts.get("pending_reviewers") == 1
+        and item_status_counts.get("pending_decision") == 1
+        and len(closure_items) == 2
+        and packets.get("overall_status") == "ready"
+        and packets.get("closure_status") == "pending_external_evidence"
+        and len(packet_items) == 2
+        and decision.get("selected_option") == "wait_for_external_evidence"
+        and human.get("annotation_status") == "pending"
+        and int(human.get("scored_cells", -1)) == 0
+        and int(human.get("pending_cells", 0)) == 24
+    )
+    text_current = (
+        contains_all(
+            combined_text,
+            [
+                "pending_external_evidence",
+                "human-fidelity annotation",
+                "AAAI final decision",
+                "wait_for_external_evidence",
+                "local queue",
+                "local handoff",
+            ],
+        )
+        and contains_any(
+            combined_text,
+            [
+                "two pending-external-evidence items",
+                "2 pending external-evidence items",
+                "pending_goal_requirements=2",
+            ],
+        )
+        and contains_any(combined_text, ["0 scored", "scored_rows=0"])
+        and contains_any(combined_text, ["24 pending", "pending_rows=24", "pending_cells=24"])
+    )
+    detail = (
+        f"closure={closure.get('overall_status')}; "
+        f"item_status_counts={item_status_counts}; "
+        f"packets={packets.get('overall_status')}; "
+        f"closure_status={packets.get('closure_status')}; "
+        f"decision={decision.get('selected_option')}; "
+        f"human={human.get('annotation_status')}"
+    )
+    return data_current and text_current, detail
+
+
 def evidence_alignment_checks(root: Path, combined_text: str) -> list[Check]:
     live = load_json(root / "results/live_transfer_prompts/evaluation.json").get("summary", {})
     model = load_json(root / "results/model_ablation_prompts/v0/evaluation.json").get("summary", {})
@@ -250,6 +310,9 @@ def evidence_alignment_checks(root: Path, combined_text: str) -> list[Check]:
     goal_counts = goal.get("status_counts", {})
     package_counts = package.get("status_counts", {})
     local_gate_counts_ready, local_gate_counts_detail = local_gate_counts_current(root, combined_text)
+    external_evidence_pending_ready, external_evidence_pending_detail = external_evidence_pending_current(
+        root, combined_text
+    )
     human_status = human.get("annotation_status")
     human_scored = int(human.get("scored_rows", -1))
     human_pending = int(human.get("pending_rows", 0))
@@ -419,6 +482,12 @@ def evidence_alignment_checks(root: Path, combined_text: str) -> list[Check]:
             "ready" if local_gate_counts_ready else "fail",
             local_gate_counts_detail,
             "results/reproducibility/aaai_package_report.json; results/reproducibility/paper_table_report.json; results/reproducibility/usage_example_report.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md",
+        ),
+        Check(
+            "submission_review_external_evidence_pending_current",
+            "ready" if external_evidence_pending_ready else "fail",
+            external_evidence_pending_detail,
+            "results/external_evidence_closure/closure.json; results/external_evidence_packets/packets.json; results/aaai_submission_decision/decision.json; results/human_fidelity_packets/annotation_summary.json; research/review_report.md; research/rebuttal_bank.md; research/submission_checklist.md",
         ),
     ]
     return checks

@@ -367,7 +367,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | paper_table_core_checks_ready | ready | core checks ready | results\reproducibility\paper_table_report.json |
 | paper_claim_report_ready | ready | overall=ready; counts={'ready': 56, 'fail': 0} | results\reproducibility\paper_claim_report.json |
 | paper_claim_core_checks_ready | ready | core checks ready | results\reproducibility\paper_claim_report.json |
-| submission_review_report_ready | ready | overall=ready; counts={'ready': 18, 'fail': 0} | results\reproducibility\submission_review_report.json |
+| submission_review_report_ready | ready | overall=ready; counts={'ready': 19, 'fail': 0} | results\reproducibility\submission_review_report.json |
 | submission_review_core_checks_ready | ready | core checks ready | results\reproducibility\submission_review_report.json |
 | aaai_submission_decision_preflight_ready | ready | overall=ready; decision_status=recorded; counts={'ready': 27, 'pending': 0, 'fail': 0} | results\aaai_submission_decision\decision.json |
 | aaai_submission_decision_core_checks_ready | ready | core decision preflight checks ready | results\aaai_submission_decision\decision.json |

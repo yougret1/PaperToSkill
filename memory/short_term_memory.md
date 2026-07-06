@@ -55,15 +55,31 @@ Current date: 2026-07-06.
   remote check recovered the backup. Treat this as GitHub transport metadata
   plus provider availability metadata only; no human `ok.txt` is required for
   GitHub or provider status.
-- Local record-sync commit `3ee014a Record recovered Claude metadata backup`
+- Follow-up local commits `3ee014a Record recovered Claude metadata backup` and
+  `91261dd Record Claude metadata backup push blocker` are now independently
+  remote-verified:
+  `91261dd145771f3325ed398d5d773d57b791ddb6 refs/heads/main`. `3ee014a`
   updates memory/runbook/goal/submission records to the verified `39c4e0f`
   remote checkpoint. Its first `git push origin main` failed with
   `Recv failure: Connection was reset`; treat this as GitHub transport
-  metadata only. A follow-up local HEAD blocker-record commit records this
-  failed backup; its first push retry also failed with `Recv failure:
-  Connection was reset`. The latest independently verified remote checkpoint
-  remains `39c4e0ff7a5d500d3250ea7f6dd177a00672fa95 refs/heads/main` until a
-  later push and remote check succeed.
+  metadata only. `91261dd` records that failed backup; its first push retry
+  also failed with `Recv failure: Connection was reset`, but a later push and
+  independent remote check recovered both commits.
+- Current submission-review external-evidence boundary sync clarifies that the
+  external closure queue and execution packets are local handoff/checking
+  artifacts while the evidence itself remains pending. `research/review_report.md`,
+  `research/submission_checklist.md`, and `research/rebuttal_bank.md` now
+  state that `overall_status=pending_external_evidence` covers two pending
+  external-evidence items: human-fidelity annotation and the AAAI final
+  decision. `scripts/check_submission_review.py` adds
+  `submission_review_external_evidence_pending_current`, requiring the handoff
+  text to mention the two pending items, human-fidelity pending state, and the
+  `wait_for_external_evidence` AAAI decision. The refreshed
+  `results/reproducibility/submission_review_report.{json,md}` now reports
+  `19 ready / 0 failed`, and `results/reproducibility/package_report.{json,md}`
+  reflects that 19-ready submission-review count. This does not change
+  experiment scores, raw rows, `results/real_reuse/main_run_selection.json`,
+  local logs, or the pending goal state.
 - Current pre-submission gate rerun after the checkpoint-record sync passed
   without repository diff drift: full unit discovery reported 211 tests OK, and
   strict submission-review, AAAI submission-decision, external-evidence packet,
@@ -101,7 +117,7 @@ Current date: 2026-07-06.
   goal, paper-claim, AAAI-package, paper-table, real-reuse preflight,
   usage-example, external-evidence packets, external-evidence closure, and
   AAAI submission-decision gates passed. `submission_review_report` is now
-  `18 ready / 0 failed`; package remains `474 ready / 1 pending / 0 failed`,
+  `19 ready / 0 failed`; package remains `474 ready / 1 pending / 0 failed`,
   and goal completion remains `78 ready / 3 pending / 0 failed`. This does not
   change experiment scores, main-row selection, or any paper claim strength.
   The phase was saved and pushed as `905899c Guard real-reuse LLM ablation
@@ -127,7 +143,7 @@ Current date: 2026-07-06.
   under `research/run_logs/**` or `research/stage_log.md`. Latest refreshed
   report counts: paper claims `56 ready / 0 failed`, package `474 ready / 1 pending /
   0 failed`, AAAI package `20 ready / 0 failed`, paper tables `343 ready / 0
-  failed`, submission review `18 ready / 0 failed`, goal completion `78 ready /
+  failed`, submission review `19 ready / 0 failed`, goal completion `78 ready /
   3 pending / 0 failed`. Human-fidelity annotation remains pending; `ok.txt`
   was absent at resume.
 - Current limitations-claim gate sync extends `scripts/check_paper_claims.py` to
@@ -498,10 +514,10 @@ Current date: 2026-07-06.
   GitHub retry pushed the follow-up record-sync and Claude availability
   commits, and `git ls-remote --heads origin main` verified
   `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`.
-- Current local/remote status override after the Claude availability recovery:
+- Current local/remote status override after the Claude metadata backup recovery:
   the latest locally recorded remote checkpoint is
-  `39c4e0ff7a5d500d3250ea7f6dd177a00672fa95 refs/heads/main`
-  (`39c4e0f Record Claude availability push blocker`). This checkpoint includes
+  `91261dd145771f3325ed398d5d773d57b791ddb6 refs/heads/main`
+  (`91261dd Record Claude metadata backup push blocker`). This checkpoint includes
   the recovered checkpoint-sync commits after the real-reuse LLM-ablation handoff
   guard, the outline update that distinguishes collected/scored saved-response
   rows from unsupported human semantic fidelity, provider billing, and live
@@ -510,8 +526,9 @@ Current date: 2026-07-06.
   regression guard with 56 ready paper-claim checks / 0 failures, plus the
   checkpoint-record guard sync, checkpoint blocker records, pre-submission
   gate rerun record, the paper-conclusion boundary sync, the compact SNAP
-  executable-candidate prompt contract, and the recovered Claude availability
-  metadata/push-blocker commits. Older
+  executable-candidate prompt contract, the recovered Claude availability
+  metadata/push-blocker commits, and the recovered Claude metadata backup
+  record-sync/blocker commits. Older
   current-status bullets in this file are historical
   checkpoints only; use fresh `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
@@ -1114,15 +1131,15 @@ Current date: 2026-07-06.
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
 6. Latest remote-backed checkpoint before further edits:
-   `39c4e0f Record Claude availability push blocker`, verified at
-   `39c4e0ff7a5d500d3250ea7f6dd177a00672fa95 refs/heads/main`. The latest
+   `91261dd Record Claude metadata backup push blocker`, verified at
+   `91261dd145771f3325ed398d5d773d57b791ddb6 refs/heads/main`. The latest
    substantive content checkpoint inside that chain remains `245c2b2 Prepare
    compact SNAP candidate prompts`: it adds the compact SNAP
    executable-candidate prompt contract and package/checker records, but does
    not call a model, score outputs, append raw rows, or replace main rows.
 7. Earlier record-sync/blocker/Claude-availability transport failures recovered
    through the successful push and independent remote verification of
-   `39c4e0f`; treat the earlier connection resets as GitHub transport metadata
+   `91261dd`; treat the earlier connection resets as GitHub transport metadata
    only.
 8. No experiment-side human action is required for GitHub status right now.
    Continue non-network paper/evidence work and verify remote alignment again

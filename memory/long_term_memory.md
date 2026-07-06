@@ -82,10 +82,10 @@ This file is intentionally compact. Detailed chronological history lives in
   limitations-claim gate, model-response cost-boundary sync, stale cost-scope
   claim guard, checkpoint-record guard sync, pre-submission gate rerun,
   paper-conclusion boundary sync, compact SNAP executable-candidate prompt
-  contract, follow-up record-sync/blocker metadata, and recovered Claude
-  availability metadata is
-  `39c4e0ff7a5d500d3250ea7f6dd177a00672fa95 refs/heads/main`
-  (`39c4e0f Record Claude availability push blocker`). The latest substantive
+  contract, follow-up record-sync/blocker metadata, recovered Claude
+  availability metadata, and recovered Claude metadata backup records is
+  `91261dd145771f3325ed398d5d773d57b791ddb6 refs/heads/main`
+  (`91261dd Record Claude metadata backup push blocker`). The latest substantive
   content checkpoint inside that chain is `245c2b2 Prepare compact SNAP
   candidate prompts`; it includes the compact SNAP prompt plan and
   package/checker records. It is non-network contract work only: no model
@@ -108,8 +108,10 @@ This file is intentionally compact. Detailed chronological history lives in
   unsupported human semantic fidelity, provider billing, and live downstream
   task-success claims; the submission-review handoff guard that separates the
   older saved-response model ablation from the auxiliary real-reuse LLM
-  ablation; the refreshed `18 ready / 0 failed` submission-review report;
-  memory/runbook/result-card synchronization; and the previous recovered
+  ablation; the refreshed submission-review guard that also requires the two
+  pending-external-evidence items, human-fidelity pending state, and
+  `wait_for_external_evidence` decision; the current `19 ready / 0 failed`
+  submission-review report; memory/runbook/result-card synchronization; and the previous recovered
   checkpoint chain through `905899c`, `1a7ae8c`, and `00d32cd`. The earlier
   `00d32cd` checkpoint includes the phase116 SNAP-T2 provider-block chain, the
   auxiliary family summary table, the AAAI page-limit repair, the
@@ -153,6 +155,14 @@ This file is intentionally compact. Detailed chronological history lives in
   push and independent remote check recovered the backup; treat the earlier
   failure as GitHub transport metadata and the HTTP 502s as provider
   availability metadata only.
+- Follow-up local commits `3ee014a Record recovered Claude metadata backup` and
+  `91261dd Record Claude metadata backup push blocker` were later pushed and
+  independently remote-verified at
+  `91261dd145771f3325ed398d5d773d57b791ddb6 refs/heads/main`. They update
+  current checkpoint records to the verified `39c4e0f` Claude availability
+  metadata checkpoint and record the first failed retry. Their earlier
+  `Recv failure: Connection was reset` push failures are GitHub transport
+  metadata only.
 - Recovered follow-up phase-save checkpoint after the `5786d7d` remote baseline:
   `8449799 Guard limitations claim boundary` extends the paper-claim gate to
   `paper/limitations.md`, refreshes the paper-claim/package/submission-review
@@ -353,7 +363,9 @@ Current supported claims:
   artifact: it maps all current pending goal requirements to two next-action
   items, human-fidelity annotation and AAAI submission decision. Provider
   billing and AI-Scientist-v2 smoke/full live-run evidence are no longer pending
-  queue items for the current policy.
+  queue items for the current policy. The closure queue still reports
+  `overall_status=pending_external_evidence` because both next-action items
+  remain external evidence, even though the local queue checks are ready.
 - External evidence execution packets are ready as a local handoff artifact:
   each closure item has inputs, setup notes, commands, validation commands,
   completion criteria, escalation rules, and evidence boundaries without
@@ -957,8 +969,9 @@ Use these as entry points instead of searching the whole repo first:
   cost-scope wording.
 - Submission-review handoff:
   `results/reproducibility/submission_review_report.md`
-  reports ready, 18 ready checks, 0 failed checks after adding a current
-  real-reuse LLM-ablation handoff check.
+  reports ready, 19 ready checks, 0 failed checks after adding the current
+  real-reuse LLM-ablation handoff check and the external-evidence pending
+  boundary check.
 - Real-reuse preflight:
   `results/real_reuse/spec_preflight.md`
   reports `ready_to_implement`, 8 tasks, 490 ready checks, and 0 failed checks
