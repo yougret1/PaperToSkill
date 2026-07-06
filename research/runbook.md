@@ -34,25 +34,21 @@ Current status as of 2026-07-06: the latest locally recorded remote checkpoint
 is:
 
 ```text
-5063eed45499c204c85b72d15850b9cf7d359fea refs/heads/main
-5063eed Clarify human fidelity study boundary
+65b7976a6cf5e856cb339dd193514929298112cb refs/heads/main
+65b7976 Refresh Claude provider availability metadata
 ```
 
 This latest checkpoint recovers the earlier human-boundary record-sync /
-push-blocker chain, then records a paper-facing wording cleanup in
-`paper/draft.md` and the AAAI TeX so the pending independent human-fidelity
-study is not described as completed. It does not call SNAP-T2, append raw
-rows, replace `results/real_reuse/main_run_selection.json`, touch local logs,
-complete Claude-family rows, complete human fidelity, or strengthen
-paper-facing effectiveness claims. Earlier GitHub connection-reset and
-port-443 failures for that chain are transport metadata only. No human
-`ok.txt` is required for GitHub status.
-
-Follow-up local record-sync commit `cc13abb Record verified human boundary
-backup` updates records to this verified backup. Its first `git push origin
-main` and immediate independent `git ls-remote --heads origin main` both
-failed with `Recv failure: Connection was reset`. Treat this as GitHub
-transport metadata only and avoid a tight retry loop.
+push-blocker chain, records the verified backup state, and refreshes Claude
+direct-provider availability metadata only. It also includes the paper-facing
+wording cleanup in `paper/draft.md` and the AAAI TeX so the pending
+independent human-fidelity study is not described as completed. It does not
+call SNAP-T2, append raw rows, replace
+`results/real_reuse/main_run_selection.json`, touch local logs, complete
+Claude-family rows, complete human fidelity, or strengthen paper-facing
+effectiveness claims. Earlier GitHub connection-reset and port-443 failures
+for that chain are transport metadata only. No human `ok.txt` is required for
+GitHub status.
 
 Earlier on 2026-07-06, the temporary GitHub HTTPS transport blocker
 recovered through the AAAI page-limit backup, the later

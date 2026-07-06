@@ -53,21 +53,18 @@ Current machine reports:
   they do not complete the external evidence by themselves.
 
 Record-sync note: the latest locally recorded remote checkpoint is
-`5063eed45499c204c85b72d15850b9cf7d359fea refs/heads/main`
-(`5063eed Clarify human fidelity study boundary`). This phase is
-independently remote-verified as of the 2026-07-06 retry. It does not call
-SNAP-T2, append raw rows, replace
+`65b7976a6cf5e856cb339dd193514929298112cb refs/heads/main`
+(`65b7976 Refresh Claude provider availability metadata`). This phase is
+independently remote-verified as of the 2026-07-06 retry. It recovers the
+human-boundary record-sync/push-blocker chain, records the verified backup
+state, and refreshes Claude direct-provider availability metadata only. It
+does not call SNAP-T2, append raw rows, replace
 `main_run_selection.json`, touch local logs, complete Claude-family rows,
 complete human fidelity, or strengthen paper-facing effectiveness claims.
 The recovered backup includes the earlier human-boundary record-sync /
 push-blocker chain plus the paper-facing ambiguity cleanup in the draft and
 AAAI TeX. Earlier GitHub connection-reset and port-443 failures are transport
 metadata only and do not require human `ok.txt`.
-
-Follow-up local record-sync commit `cc13abb Record verified human boundary
-backup` updates records to this verified backup. Its first remote backup and
-immediate remote check both failed with `Recv failure: Connection was reset`.
-This is GitHub transport metadata only and does not require human `ok.txt`.
 
 The earlier substantive checkpoint records point to the
 verified paper-finalization, submission-review, outline-sync, outline
@@ -148,7 +145,7 @@ evidence, local-log changes, or paper-facing claim strength.
 | --- | --- | --- | --- |
 | Durable local memory | `memory/long_term_memory.md`; `memory/short_term_memory.md` | Complete locally | Read and update both memory files after every resume/compaction. |
 | Use `ai-scientist-v2` to refine PaperToSkill | Seed idea files, bounded smoke report, full live-run handoff, Phase 76 run log, completion directory | Complete for bounded local evidence | Do not treat the synthetic run as broad live task success. |
-| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. The latest independently verified remote checkpoint is `5063eed45499c204c85b72d15850b9cf7d359fea refs/heads/main` (`5063eed Clarify human fidelity study boundary`). It recovers the earlier human-boundary record-sync / push-blocker chain and adds a paper-facing wording cleanup only. Historical substantive checkpoints, compact prompt work, external-evidence guards, and Claude HTTP 502 probes remain bounded to their recorded evidence roles; earlier connection-reset and port-443 failures remain GitHub transport metadata rather than experiment-correctness evidence. | Complete locally; latest verified phase-save checkpoint is `5063eed` as of the 2026-07-06 verification | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim with `git status -sb`, `git log -5 --oneline`, and `git ls-remote --heads origin main`; keep transport failures separate from experiment correctness and record exact failures in `C:\Users\19351\Desktop\tem\toHuman.md` if they recur. |
+| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. The latest independently verified remote checkpoint is `65b7976a6cf5e856cb339dd193514929298112cb refs/heads/main` (`65b7976 Refresh Claude provider availability metadata`). It recovers the earlier human-boundary record-sync / push-blocker chain, records the verified backup state, and refreshes Claude direct-provider availability metadata only. Historical substantive checkpoints, compact prompt work, external-evidence guards, and Claude HTTP 502 probes remain bounded to their recorded evidence roles; earlier connection-reset and port-443 failures remain GitHub transport metadata rather than experiment-correctness evidence. | Complete locally; latest verified phase-save checkpoint is `65b7976` as of the 2026-07-06 verification | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim with `git status -sb`, `git log -5 --oneline`, and `git ls-remote --heads origin main`; keep transport failures separate from experiment correctness and record exact failures in `C:\Users\19351\Desktop\tem\toHuman.md` if they recur. |
 | Official AAAI TeX package | `paper/aaai/`; `results/reproducibility/aaai_package_report.md` | Locally ready | Keep draft synchronized with new evidence. |
 | Usage examples | `examples/usage/`; `results/reproducibility/usage_example_report.md` | Complete locally | Re-run after runner or task changes. |
 | Model ablations | `results/model_ablation_prompts/v0/evaluation.md`: 6 scored, 0 pending | Complete for saved-response protocol | Do not claim broad model quality or live task success. |

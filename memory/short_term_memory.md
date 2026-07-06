@@ -66,14 +66,15 @@ Current date: 2026-07-06.
   Claude-family rows, human fidelity, AI-Scientist-v2 broad live research
   success, or paper-facing effectiveness claims.
 - Latest locally recorded remote checkpoint is
-  `5063eed45499c204c85b72d15850b9cf7d359fea refs/heads/main`
-  (`5063eed Clarify human fidelity study boundary`). This phase is
-  independently remote-verified as of the 2026-07-06 retry. It does not call
-  SNAP-T2, append raw rows, replace `main_run_selection.json`, touch local
-  logs, complete Claude-family rows, complete human fidelity, or strengthen
-  paper-facing effectiveness claims.
-- The recovered backup includes the earlier human-boundary record-sync and
-  push-blocker commits plus the paper-facing ambiguity cleanup in
+  `65b7976a6cf5e856cb339dd193514929298112cb refs/heads/main`
+  (`65b7976 Refresh Claude provider availability metadata`). This phase is
+  independently remote-verified as of the 2026-07-06 retry. It recovers the
+  human-boundary record-sync/push-blocker chain, records the verified backup
+  state, and refreshes Claude direct-provider availability metadata only. It
+  does not call SNAP-T2, append raw rows, replace `main_run_selection.json`,
+  touch local logs, complete Claude-family rows, complete human fidelity, or
+  strengthen paper-facing effectiveness claims.
+- The recovered backup includes the paper-facing ambiguity cleanup in
   `paper/draft.md` and `paper/aaai/papertoskill_aaai2027.tex`, changing
   "completed human fidelity annotation" to "an independent human-fidelity
   annotation study"; the AAAI PDF was rebuilt successfully at 8 pages, and
@@ -81,14 +82,6 @@ Current date: 2026-07-06.
   package checks passed before the phase save. Earlier GitHub connection-reset
   and port-443 failures are transport metadata only; no human `ok.txt` is
   required for GitHub status.
-- Follow-up local record-sync commit `cc13abb Record verified human boundary
-  backup` updates repo memory/runbook/goal records to the verified human-
-  boundary backup. Its first `git push origin main` and immediate independent
-  `git ls-remote --heads origin main` both failed with `Recv failure:
-  Connection was reset`. Treat this as GitHub transport metadata only; the
-  latest independently verified remote checkpoint remains `5063eed` until a
-  later push and remote check recover the local record-sync commit. No human
-  `ok.txt` is required for GitHub status.
 - Current continuation reran a tiny Claude-family direct availability probe
   using the local Claude API document key in shell-only environment variables,
   Anthropic Messages, aliases `claude-opus-4-8`, `claude-opus-4-7`, and

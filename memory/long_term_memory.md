@@ -76,14 +76,15 @@ This file is intentionally compact. Detailed chronological history lives in
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
 - Latest locally recorded remote checkpoint is
-  `5063eed45499c204c85b72d15850b9cf7d359fea refs/heads/main`
-  (`5063eed Clarify human fidelity study boundary`). It is independently
-  remote-verified as of the 2026-07-06 retry. It does not call SNAP-T2,
-  append raw rows, replace `main_run_selection.json`, touch local logs,
-  complete Claude-family rows, complete human fidelity, or strengthen
-  paper-facing effectiveness claims. The recovered backup includes the earlier
-  human-boundary record-sync/push-blocker chain plus the paper-facing
-  ambiguity cleanup in `paper/draft.md` and the AAAI TeX. The earlier substantive paper/package
+  `65b7976a6cf5e856cb339dd193514929298112cb refs/heads/main`
+  (`65b7976 Refresh Claude provider availability metadata`). It is
+  independently remote-verified as of the 2026-07-06 retry. It recovers the
+  human-boundary record-sync/push-blocker chain, records the verified backup
+  state, and refreshes Claude direct-provider availability metadata only. It
+  does not call SNAP-T2, append raw rows, replace `main_run_selection.json`,
+  touch local logs, complete Claude-family rows, complete human fidelity, or
+  strengthen paper-facing effectiveness claims. The recovered backup includes
+  the paper-facing ambiguity cleanup in `paper/draft.md` and the AAAI TeX. The earlier substantive paper/package
   gate checkpoint after the AAAI page-limit,
   paper-finalization, outline-sync recovery, outline claim-drift gate,
   main-results boundary cleanup, real-reuse LLM-ablation handoff guard,
@@ -145,11 +146,11 @@ This file is intentionally compact. Detailed chronological history lives in
   Verify the exact current local/remote state with `git status -sb`,
   `git log -5 --oneline`, and a successful `git ls-remote --heads origin main`
   before claiming any later phase is remote-backed.
-- Follow-up local record-sync commit `cc13abb Record verified human boundary
-  backup` updates records to the verified human-boundary backup. Its first
-  remote backup and immediate remote check both failed with `Recv failure:
-  Connection was reset`. Treat this as GitHub transport metadata only; no
-  human `ok.txt` is required for GitHub status.
+- Follow-up commits `cc13abb Record verified human boundary backup`,
+  `92ba071 Record human backup push blocker`, and `65b7976 Refresh Claude
+  provider availability metadata` are now remote-backed through the verified
+  `65b7976` checkpoint. Their earlier GitHub connection-reset failures are
+  transport metadata only; no human `ok.txt` is required for GitHub status.
 - Historical follow-up local record-sync commits `a9740f7 Record verified GPT
   probe checkpoint`, `1e32f5f Record GPT checkpoint push blocker`, and
   `51c91bb Record renewed GPT checkpoint push blocker` recorded failed backup
