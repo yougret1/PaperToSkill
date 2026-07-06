@@ -616,7 +616,8 @@ four task/condition prompt packets under
 for future model calls that should return Python candidate scripts; the builder
 does not call a model, score outputs, append raw rows, or replace main rows.
 After phase113/115/116 SNAP-T2 Summary requests returned provider HTTP 524,
-prefer the compact prompt contract before any future SNAP-T2 retry:
+the compact prompt contract was prepared to reduce request size before a
+future paired retry:
 
 ```powershell
 python scripts\build_real_reuse_snapatac2_executable_candidate_prompts.py --compact
@@ -648,6 +649,15 @@ main rows. The script now rewrites the report after each prompt packet so a
 provider stall or interrupted long call preserves completed rows as a partial
 generation record.
 
+For SNAP-T2, do not repeat the same large-context generation path just by
+raising attempts. Phase118 already attempted the compact SNAP-T2 Summary and
+PaperToSkill prompt packets with GPT-family `gpt-5.5`, OpenAI Responses, a
+600-second timeout, 6 attempts, 10-second retry delay, and `max_tokens=2200`.
+The Summary compact condition still returned provider HTTP 524 after six
+attempts; no Summary script or response was saved, and the remaining
+PaperToSkill-side call was stopped because paired execution could not proceed.
+This is provider availability metadata only.
+
 Current checkpoint:
 
 - `phase111_gpt_snapatac2_executable_candidate_scripts` generated paired
@@ -672,6 +682,11 @@ Current checkpoint:
   PaperToSkill 1.000 under the existing SNAP-T1 scorer. This is diagnostic
   contract-closure evidence for both conditions, not a main-row replacement or
   PaperToSkill advantage.
+- The phase118 compact SNAP-T2 executable-candidate retry produced only a
+  provider-blocked generation report:
+  `results/real_reuse/snapatac2_executable_candidate_script_generation_phase118_t2_compact.{md,json}`.
+  No candidate scripts were executed, no SNAP-T2 score was produced, and no
+  main raw rows were appended.
 
 After paired Summary/PaperToSkill candidate scripts exist, run:
 
