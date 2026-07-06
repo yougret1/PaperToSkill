@@ -43,8 +43,8 @@ and the follow-up record-sync/blocker metadata. The latest verified remote
 checkpoint before claiming any later phase save is:
 
 ```text
-a7a9e3e772883e76404ee217a9ed51278c4c2477 refs/heads/main
-a7a9e3e Record compact checkpoint push blocker
+b770e2005bd881c4afa31be2571cfb01d5207971 refs/heads/main
+b770e20 Record verified compact checkpoint recovery
 ```
 
 The earlier failed remote-backup attempts for `501ffc8`, `48aabac`, `8bdd394`,
@@ -76,6 +76,13 @@ The follow-up compact checkpoint record-sync/blocker chain was later pushed
 and independently verified at
 `a7a9e3e772883e76404ee217a9ed51278c4c2477 refs/heads/main`. Treat earlier
 connection resets as GitHub verification-transport metadata only.
+
+The follow-up record-sync backup for that recovered checkpoint was later
+pushed and independently verified at
+`b770e2005bd881c4afa31be2571cfb01d5207971 refs/heads/main`. A later Claude
+availability metadata commit `8ac4ddf Refresh Claude availability metadata`
+is local-only after its first push and immediate remote check both failed with
+`Recv failure: Connection was reset`; treat that as transport metadata only.
 
 Follow-up commits `45ef25b Sync remote checkpoint after LLM handoff guard` and
 `0538ef1 Record checkpoint sync push blocker` first failed to back up because
