@@ -172,9 +172,16 @@ This file is intentionally compact. Detailed chronological history lives in
   `git push origin main` failed with `Recv failure: Connection was reset`, and
   the immediate `git ls-remote --heads origin main` failed with
   `Failed to connect to github.com port 443 after 21087 ms`. Treat this as
-  GitHub transport metadata only; no human `ok.txt` is required. Until a later
-  push/remote check succeeds, the latest independently verified remote-backed
-  checkpoint remains `7efa4b7`.
+  GitHub transport metadata only; no human `ok.txt` is required.
+- Record-only push recovery after that blocker: `deeb84e Record external
+  checkpoint push blocker` was later pushed and `git ls-remote --heads origin
+  main` verified
+  `deeb84e77d2baa409b369281a0fdc07556a5edcd refs/heads/main`. This recovered
+  the `3e71736` backup record and the `deeb84e` blocker record as transport/
+  checkpoint metadata only. The declared substantive checkpoint for paper,
+  package, and goal gates remains `7efa4b7 Guard external evidence handoff
+  boundary`; `deeb84e` does not add experiment scores, raw rows, main-row
+  selection changes, model calls, or local-log changes.
 - Recovered follow-up phase-save checkpoint after the `5786d7d` remote baseline:
   `8449799 Guard limitations claim boundary` extends the paper-claim gate to
   `paper/limitations.md`, refreshes the paper-claim/package/submission-review

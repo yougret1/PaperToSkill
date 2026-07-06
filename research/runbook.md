@@ -111,6 +111,15 @@ to the verified `7efa4b7` phase. Its first `git push origin main` failed with
 GitHub transport metadata only; no human `ok.txt` is required for GitHub
 status.
 
+Record-only push recovery after that blocker: `deeb84e Record external
+checkpoint push blocker` was later pushed and `git ls-remote --heads origin
+main` verified
+`deeb84e77d2baa409b369281a0fdc07556a5edcd refs/heads/main`. This records
+GitHub transport/checkpoint recovery only. The substantive checkpoint used by
+the paper, package, and goal gates remains `7efa4b7 Guard external evidence
+handoff boundary`; `deeb84e` adds no model calls, scores, raw rows, main-row
+selection changes, or local-log changes.
+
 Follow-up commits `45ef25b Sync remote checkpoint after LLM handoff guard` and
 `0538ef1 Record checkpoint sync push blocker` first failed to back up because
 GitHub HTTPS transport was unavailable. They are now included in the verified

@@ -92,8 +92,15 @@ Current date: 2026-07-06.
   the immediate `git ls-remote --heads origin main` failed with
   `Failed to connect to github.com port 443 after 21087 ms`. Treat this as
   GitHub transport metadata only; no human `ok.txt` is required for GitHub
-  status. Until a later push/remote check succeeds, the latest independently
-  verified remote-backed checkpoint remains `7efa4b7`.
+  status.
+- Record-only push recovery after that blocker: `deeb84e Record external
+  checkpoint push blocker` was later pushed and `git ls-remote --heads origin
+  main` verified
+  `deeb84e77d2baa409b369281a0fdc07556a5edcd refs/heads/main`. This recovered
+  `3e71736` and `deeb84e` as GitHub transport/checkpoint metadata only. The
+  short-memory declared substantive checkpoint for claim and goal gates remains
+  `7efa4b7 Guard external evidence handoff boundary`; `deeb84e` adds no model
+  call, score, raw row, main-row replacement, or local-log change.
 - Current pre-submission gate rerun after the checkpoint-record sync passed
   without repository diff drift: full unit discovery reported 211 tests OK, and
   strict submission-review, AAAI submission-decision, external-evidence packet,

@@ -89,6 +89,16 @@ the immediate `git ls-remote --heads origin main` failed with
 `Failed to connect to github.com port 443 after 21087 ms`. Treat this as
 GitHub transport metadata only.
 
+Record-only push recovery after that blocker: `deeb84e Record external
+checkpoint push blocker` was later pushed and `git ls-remote --heads origin
+main` verified
+`deeb84e77d2baa409b369281a0fdc07556a5edcd refs/heads/main`. This recovered
+the `3e71736` backup record and the `deeb84e` blocker record as GitHub
+transport/checkpoint metadata only. The substantive checkpoint used by the
+paper, package, and goal gates remains `7efa4b7 Guard external evidence
+handoff boundary`; `deeb84e` adds no new experiment evidence or paper-facing
+claim strength.
+
 ## Requirement Audit
 
 | Requirement | Current Evidence | Status | Next Action |
