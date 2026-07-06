@@ -74,7 +74,9 @@ Current date: 2026-07-06.
   submission review, AAAI decision, external-evidence packets, submission
   bundle manifest, paper claims, goal completion, reproducibility package,
   AAAI package, paper tables, usage examples, real-reuse preflight, and final
-  manifest refresh. The repository had no diff afterward.
+  manifest refresh. The repository had no diff afterward. This verification
+  record is committed and independently remote-verified as
+  `ffb25f35a7e5ea67dabe8106e4a092fb16a81978 refs/heads/main`.
 - Current paper-boundary continuation: `paper/outline.md` conclusion no longer
   says the next stage is to "repeat and expand the original-style paper
   tasks." It now matches the AAAI paper and draft wording: add human-fidelity
