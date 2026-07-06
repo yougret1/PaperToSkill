@@ -106,6 +106,13 @@ Current date: 2026-07-06.
   record-sync/GitHub recovery metadata only and does not change experiment
   scores, raw rows, `results/real_reuse/main_run_selection.json`, local logs,
   or paper-facing claim strength.
+- Current local record-sync commit `c09850d Sync verified outline backup
+  records` propagates the verified `3b0b8a5` checkpoint into repo runbook and
+  goal-audit records. Its first `git push origin main` failed with `Failed to
+  connect to github.com port 443 after 21094 ms`, and the immediate
+  `git ls-remote --heads origin main` failed with port-443 connectivity after
+  21133 ms. Treat this as GitHub transport metadata only; no human `ok.txt` is
+  required for GitHub status.
 - Follow-up record-sync commit `0a25da3 Record compact prompt checkpoint backup`
   updates memory/runbook/goal-audit records to the verified `245c2b2`
   checkpoint. Its first `git push origin main` failed with `Recv failure:
