@@ -26,6 +26,12 @@ Current date: 2026-07-06.
   independently remote-verified as
   `245c2b276842de657103f89b5227b8fe53fa9f10 refs/heads/main`
   (`245c2b2 Prepare compact SNAP candidate prompts`).
+- Follow-up record-sync commit `0a25da3 Record compact prompt checkpoint backup`
+  updates memory/runbook/goal-audit records to the verified `245c2b2`
+  checkpoint. Its first `git push origin main` failed with `Recv failure:
+  Connection was reset`, and the immediate `git ls-remote --heads origin main`
+  failed with the same reset. Treat this as GitHub transport metadata only;
+  no human `ok.txt` is required for GitHub status.
 - Current pre-submission gate rerun after the checkpoint-record sync passed
   without repository diff drift: full unit discovery reported 211 tests OK, and
   strict submission-review, AAAI submission-decision, external-evidence packet,
