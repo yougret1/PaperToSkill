@@ -83,6 +83,18 @@ Current date: 2026-07-06.
   strength. Earlier port-443 and connection-reset failures are historical
   GitHub transport metadata only. No human `ok.txt` is required for GitHub
   status.
+- Follow-up record-sync commit `a667264 Record recovered outline guard backup`
+  records the recovered `b20eaa7` outline-guard backup in repo memory. Its
+  `git push origin main` reported success and advanced local `origin/main` to
+  `a667264`, but two immediate independent `git ls-remote --heads origin main`
+  checks failed (`Failed to connect to github.com port 443 after 21080 ms`,
+  then `Recv failure: Connection was reset`). Treat this as GitHub transport
+  verification metadata only: local git state is clean against `origin/main`,
+  but do not claim independent remote verification of `a667264` until a later
+  `ls-remote` succeeds. The current local verification-blocker record commit
+  also failed its first `git push origin main` attempt with `Recv failure:
+  Connection was reset`; treat that as GitHub transport metadata only. No
+  human `ok.txt` is required for GitHub status.
 - Follow-up record-sync commit `0a25da3 Record compact prompt checkpoint backup`
   updates memory/runbook/goal-audit records to the verified `245c2b2`
   checkpoint. Its first `git push origin main` failed with `Recv failure:

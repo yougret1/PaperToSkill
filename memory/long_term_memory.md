@@ -147,6 +147,16 @@ This file is intentionally compact. Detailed chronological history lives in
   local logs, or paper-facing claim strength. Earlier port-443 and
   connection-reset failures are historical GitHub transport metadata only; no
   human `ok.txt` is required for GitHub status.
+- Follow-up record-sync commit `a667264 Record recovered outline guard backup`
+  records the recovered `b20eaa7` outline-guard backup in repo memory. Its
+  `git push origin main` reported success and local `origin/main` now points
+  to `a667264`, but two immediate independent `git ls-remote --heads origin
+  main` checks failed with port-443 connectivity and then connection reset.
+  Treat this as GitHub transport verification metadata only; do not claim
+  independent remote verification of `a667264` until a later `ls-remote`
+  succeeds. The current local verification-blocker record commit also failed
+  its first `git push origin main` attempt with `Recv failure: Connection was
+  reset`. No human `ok.txt` is required for GitHub status.
 - Follow-up record-sync commit `0a25da3 Record compact prompt checkpoint
   backup` updates checkpoint records to the verified `245c2b2` compact SNAP
   prompt checkpoint. Its first `git push origin main` and immediate
