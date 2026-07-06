@@ -916,6 +916,14 @@ Current date: 2026-07-06.
   returned provider HTTP 502; only the direct-probe JSON timestamp changed.
   This remains provider availability metadata, not method-quality evidence, so
   the full Claude-family real-reuse LLM ablation rows remain deferred.
+- 2026-07-06 follow-up Claude direct availability recheck after checkpoint
+  recovery used the same local Claude API document key and shell-only
+  `PAPERTOSKILL_CLAUDE_BASE_URL`/`PAPERTOSKILL_CLAUDE_API_KEY` variables, the
+  same Anthropic Messages endpoint and aliases, `max_tokens=16`, and a
+  longer 180-second request timeout. All three aliases again returned provider
+  HTTP 502. This is provider availability metadata only; do not run the full
+  six Claude-family real-reuse LLM ablation rows until a small direct probe
+  returns a usable response.
 - Historical remote-backed chain through `0832201`: Claude retry availability, bounded
   summary-comparison claim cleanup, current project record sync, GitHub backup
   recovery, real-reuse record-boundary tightening, the tested SNAP

@@ -1085,9 +1085,9 @@ Claude-family profile:
   `PAPERTOSKILL_CLAUDE_API_KEY`, Anthropic Messages, and aliases
   `claude-opus-4-8`, `claude-opus-4-7`, and `claude-opus-4-6`; all returned
   HTTP 502, so no fresh direct-probe response file exists. The latest
-  opportunistic recheck was on 2026-07-06 after the pre-submission gate rerun,
-  with `max_tokens=16` and a 120-second timeout; it changed only the
-  direct-probe JSON timestamp.
+  opportunistic recheck was on 2026-07-06 after checkpoint recovery, with
+  `max_tokens=16` and a 180-second timeout; all three aliases again returned
+  HTTP 502, and no response file exists.
 - Scored Claude model-ablation rows come from previously saved responses; do
   not describe the latest Claude protocol refresh as a fresh success.
 
@@ -1195,3 +1195,10 @@ DeepSeek:
   aliases returned provider HTTP 502 with a 120-second timeout and
   `max_tokens=16`. Treat this as provider availability metadata; do not count
   it as model-quality evidence or a real-reuse task failure.
+- 2026-07-06 Claude direct availability recheck after checkpoint recovery:
+  using the same local Claude API document key, shell-only environment
+  variables, Anthropic Messages endpoint, and aliases, all three aliases again
+  returned provider HTTP 502 with a 180-second timeout and `max_tokens=16`.
+  Treat this as provider availability metadata; do not run the full
+  Claude-family real-reuse LLM ablation rows until a small direct probe returns
+  a usable response.
