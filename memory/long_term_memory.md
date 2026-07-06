@@ -146,6 +146,14 @@ This file is intentionally compact. Detailed chronological history lives in
   metadata only; do not create human `ok.txt` for GitHub status, and do not
   claim `fd49a53` is remote-backed until a later push and independent remote
   check succeed.
+- Follow-up local blocker-record commit `12f676b Record outline guard push
+  blocker` records the `fd49a53` local-only backup blocker in repo memory. Its
+  backup attempt failed with `Failed to connect to github.com port 443 after
+  21139 ms`, and the immediate `git ls-remote --heads origin main` failed with
+  `Recv failure: Connection was reset`. Treat this as GitHub transport
+  metadata only; the local branch remains ahead of `origin/main` by 2 until a
+  later push and independent remote check succeed. Do not create human
+  `ok.txt` for GitHub status.
 - Follow-up record-sync commit `0a25da3 Record compact prompt checkpoint
   backup` updates checkpoint records to the verified `245c2b2` compact SNAP
   prompt checkpoint. Its first `git push origin main` and immediate
