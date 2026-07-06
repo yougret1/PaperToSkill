@@ -13,6 +13,16 @@ Current date: 2026-07-06.
   Preserve the existing local-log boundary: do not modify
   `research/run_logs/**` or `research/stage_log.md` during record-sync-only
   work.
+- Current resume check in this thread found no `ok.txt`, a clean worktree
+  before edits, and local `main` ahead of `origin/main` by three record-sync /
+  push-blocker commits (`a9740f7`, `1e32f5f`, `51c91bb`). The referenced
+  historical Codex thread was not visible to the local thread-list tool, so use
+  this memory, `toHuman.md`, and repo reports as the authoritative handoff.
+  A small paper-boundary cleanup changed `paper/limitations.md` from "completed
+  human-fidelity annotation" to "human-fidelity annotation" when describing the
+  pending external-evidence gate; strict paper-claim, package, and goal checks
+  passed afterward. This does not change experiment scores, raw rows, main-row
+  selection, local logs, or claim strength.
 - Current paper-boundary continuation: `paper/outline.md` conclusion no longer
   says the next stage is to "repeat and expand the original-style paper
   tasks." It now matches the AAAI paper and draft wording: add human-fidelity

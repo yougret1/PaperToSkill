@@ -108,7 +108,7 @@ reproduction success.
 The reproducibility checker reports that local artifacts, deterministic results,
 prompt packets, saved live-transfer responses, failure archive, human-fidelity
 protocol, and secret scan are ready with zero failed checks. However, the same
-report still marks completed human-fidelity annotation as pending external
+report still marks human-fidelity annotation as pending external
 evidence. The AAAI decision is recorded as `wait_for_external_evidence`, so the
 package should therefore be described as locally ready, not submission-final.
 
