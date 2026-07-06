@@ -94,6 +94,20 @@ Current date: 2026-07-06.
   This is record-sync/GitHub recovery metadata only; it does not change
   experiments, raw rows, main-row selection, local logs, human-fidelity
   completion, the AAAI final decision, or paper-facing claim strength.
+  Follow-up local record-sync commit `0117c2b Record recovered full gate
+  backup` updates memory/runbook/goal-audit records to the verified `d6c163a`
+  checkpoint and refreshes the goal-completion report plus submission-bundle
+  manifest hashes. Its first `git push origin main` failed with `Failed to
+  connect to github.com port 443 after 21077 ms`, and the immediate
+  `git ls-remote --heads origin main` failed with port-443 connectivity after
+  21115 ms. Treat this as GitHub transport metadata only; no human `ok.txt` is
+  required. The latest independently verified remote checkpoint remains
+  `d6c163a` until a later push and independent remote check recover `0117c2b`.
+  The follow-up blocker-record commit with subject `Record recovered backup
+  push blocker` is local-only after its first `git push origin main` also
+  failed with `Failed to connect to github.com port 443 after 21139 ms`. Treat
+  this as GitHub transport metadata only; do not create `ok.txt` for GitHub
+  status.
 - Current paper-boundary continuation: `paper/outline.md` conclusion no longer
   says the next stage is to "repeat and expand the original-style paper
   tasks." It now matches the AAAI paper and draft wording: add human-fidelity
