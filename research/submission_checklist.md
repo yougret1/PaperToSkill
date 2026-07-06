@@ -14,11 +14,12 @@ complete with respect to pending external evidence.
 | Paper claims | Ready | `results/reproducibility/paper_claim_report.md`: 56 ready, 0 failed | Unsupported overclaim, stale cost-scope, and draft/planning patterns are absent from the paper-facing body, table, draft, outline, and limitations text. |
 | Paper tables | Ready | `results/reproducibility/paper_table_report.md`: 343 ready, 0 failed | AAAI tables match generated CSV result tables. |
 | Usage examples | Ready | `results/reproducibility/usage_example_report.md`: 55 ready, 0 failed | Local example files, DeepSeek handoff, and offline example chain are synchronized. |
-| Reproducibility package | Ready with pending external evidence | `results/reproducibility/package_report.md`: 477 ready, 1 pending, 0 failed | Local package is coherent; external evidence remains pending. |
+| Reproducibility package | Ready with pending external evidence | `results/reproducibility/package_report.md`: 483 ready, 1 pending, 0 failed | Local package is coherent; external evidence remains pending. |
 | Active goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 78 ready, 3 pending, 0 failed | The overall user goal remains open. |
 | External evidence closure queue | Ready local queue; external evidence still pending | `results/external_evidence_closure/closure.md`: `overall_status=pending_external_evidence`; two pending-external-evidence items remain (`pending_reviewers=1`, `pending_decision=1`), while the local queue checks are 3 ready, 0 pending, 0 failed | Local queue only: pending evidence is mapped to next actions, but human-fidelity annotation and the AAAI final decision remain external evidence to complete. |
 | External evidence execution packets | Ready local handoff; external evidence still pending | `results/external_evidence_packets/packets.md`: `closure_status=pending_external_evidence`; packets cover the same two pending-external-evidence items, while the local packet checks are 8 ready, 0 pending, 0 failed | Local handoff only: runnable packets and the `toHuman.md` / `ok.txt` cleanup guard are ready, but evidence itself remains pending. |
 | AAAI submission decision | Recorded wait decision | `results/aaai_submission_decision/decision.md`: `selected_option=wait_for_external_evidence`, 27 ready, 0 pending, 0 failed | The current decision is to wait for named external evidence before stronger claims. |
+| Submission bundle manifest | Ready with pending external evidence | `results/reproducibility/submission_bundle_manifest.md`: records hashes for the AAAI paper package and key gate reports | Local final-package index only; external evidence remains pending. |
 
 ## Evidence Ready To Use
 
@@ -36,6 +37,7 @@ complete with respect to pending external evidence.
 | DeepSeek handoff | `results/deepseek_followup_handoff/handoff.md`: `responses_present`, 7 ready, 0 pending, 0 failed | DeepSeek response files are saved for the current protocol; keep raw keys out of tracked files. |
 | External closure queue | `results/external_evidence_closure/closure.md`: two pending-external-evidence items | Local queue only; not evidence completion. |
 | External execution packets | `results/external_evidence_packets/packets.md`: two pending-external-evidence execution packets | Local handoff only; not evidence completion. |
+| Submission bundle manifest | `results/reproducibility/submission_bundle_manifest.md`: local hashes for AAAI paper files, gate reports, and pending-evidence summaries | Local file-integrity index only; not final submission readiness. |
 | AI-Scientist-v2 bounded smoke/full live run | `results/ai_scientist_v2_smoke/run_report.md`: `complete`; `results/ai_scientist_v2_live_run_handoff/handoff.md`: `complete` with one completion directory | Bounded integration and synthetic sensitivity evidence only; not human fidelity, real-data validation, or broad live task success. |
 | AAAI submission decision | `results/aaai_submission_decision/decision.md`: `selected_option=wait_for_external_evidence` | Recorded decision; not final submission readiness. |
 | Local token accounting | `results/token_accounting/token_accounting_summary.md`: 4,322 generated-skill input tokens, 95,303 full-extracted input tokens, 9,594 saved-response output tokens | Current cost evidence; not provider bills or success-per-dollar. |
@@ -60,6 +62,7 @@ python -m unittest discover -s tests -v
 python scripts\check_submission_review.py --strict
 python scripts\check_aaai_submission_decision.py --strict
 python scripts\check_external_evidence_packets.py --strict
+python scripts\build_submission_bundle_manifest.py --strict
 python scripts\check_paper_claims.py --strict
 python scripts\check_goal_completion.py --strict
 python scripts\check_reproducibility_package.py --strict

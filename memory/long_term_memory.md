@@ -1017,8 +1017,13 @@ Use these as entry points instead of searching the whole repo first:
 
 - Reproducibility package:
   `results/reproducibility/package_report.md`
-  reports `ready_with_pending_external_evidence`, 477 ready checks, 1 pending
+  reports `ready_with_pending_external_evidence`, 483 ready checks, 1 pending
   check, and 0 failed checks.
+- Submission bundle manifest:
+  `results/reproducibility/submission_bundle_manifest.md`
+  reports `ready_with_pending_external_evidence`, records SHA256 hashes for the
+  AAAI paper package and key gate reports, and does not claim final submission
+  readiness or completed external evidence.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
   reports `not_complete_pending_external_evidence`, 78 ready checks, 3 pending

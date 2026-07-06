@@ -87,6 +87,9 @@ CORE_FILES = {
     "submission_review_checklist": "research/submission_checklist.md",
     "submission_review_report_json": "results/reproducibility/submission_review_report.json",
     "submission_review_report_md": "results/reproducibility/submission_review_report.md",
+    "submission_bundle_manifest_builder": "scripts/build_submission_bundle_manifest.py",
+    "submission_bundle_manifest_json": "results/reproducibility/submission_bundle_manifest.json",
+    "submission_bundle_manifest_md": "results/reproducibility/submission_bundle_manifest.md",
     "aaai_submission_decision_checker": "scripts/check_aaai_submission_decision.py",
     "aaai_submission_decision_generator": "scripts/generate_aaai_submission_decision.py",
     "aaai_submission_decision_report_json": "results/aaai_submission_decision/decision.json",
@@ -848,6 +851,75 @@ def submission_review_checks(root: Path) -> list[Check]:
             "submission_review_core_checks_ready",
             "ready" if not missing else "fail",
             "core checks ready" if not missing else "missing=" + ",".join(missing),
+            str(report_path.relative_to(root)),
+        )
+    )
+    return checks
+
+
+def submission_bundle_manifest_checks(root: Path) -> list[Check]:
+    checks: list[Check] = []
+    report_path = root / "results/reproducibility/submission_bundle_manifest.json"
+    if not report_path.exists():
+        return [
+            Check(
+                "submission_bundle_manifest_report_ready",
+                "fail",
+                "missing",
+                str(report_path.relative_to(root)),
+            )
+        ]
+    report = load_json(report_path)
+    failed = [check for check in report.get("checks", []) if check.get("status") == "fail"]
+    status = "ready" if report.get("overall_status") == "ready_with_pending_external_evidence" and not failed else "fail"
+    counts = report.get("status_counts", {})
+    checks.append(
+        Check(
+            "submission_bundle_manifest_report_ready",
+            status,
+            f"overall={report.get('overall_status')}; counts={counts}",
+            str(report_path.relative_to(root)),
+        )
+    )
+    check_statuses = {check.get("id"): check.get("status") for check in report.get("checks", [])}
+    required_ready = {
+        "submission_bundle_files_present",
+        "submission_bundle_aaai_package_report_status",
+        "submission_bundle_paper_claim_report_status",
+        "submission_bundle_paper_table_report_status",
+        "submission_bundle_submission_review_report_status",
+        "submission_bundle_package_report_status",
+        "submission_bundle_goal_completion_report_status",
+        "submission_bundle_external_evidence_boundary_current",
+    }
+    missing = sorted(check_id for check_id in required_ready if check_statuses.get(check_id) != "ready")
+    checks.append(
+        Check(
+            "submission_bundle_manifest_core_checks_ready",
+            "ready" if not missing else "fail",
+            "core submission-bundle checks ready" if not missing else "missing=" + ",".join(missing),
+            str(report_path.relative_to(root)),
+        )
+    )
+    file_ids = {entry.get("id") for entry in report.get("files", []) if entry.get("present") and entry.get("sha256")}
+    required_files = {
+        "aaai_pdf",
+        "aaai_tex",
+        "aaai_tables",
+        "aaai_package_report",
+        "paper_claim_report",
+        "paper_table_report",
+        "submission_review_report",
+        "package_report",
+        "goal_completion_report",
+        "human_fidelity_summary",
+    }
+    missing_files = sorted(required_files - file_ids)
+    checks.append(
+        Check(
+            "submission_bundle_manifest_hashes_ready",
+            "ready" if not missing_files else "fail",
+            "required file hashes recorded" if not missing_files else "missing_hashes=" + ",".join(missing_files),
             str(report_path.relative_to(root)),
         )
     )
@@ -1760,6 +1832,7 @@ def build_report(root: Path) -> dict[str, Any]:
     checks.extend(paper_table_checks(root))
     checks.extend(paper_claim_checks(root))
     checks.extend(submission_review_checks(root))
+    checks.extend(submission_bundle_manifest_checks(root))
     checks.extend(aaai_submission_decision_checks(root))
     checks.extend(goal_completion_checks(root))
     checks.extend(external_evidence_closure_checks(root))

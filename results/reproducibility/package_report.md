@@ -3,7 +3,7 @@
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
 - Overall status: ready_with_pending_external_evidence
-- Ready checks: 477
+- Ready checks: 483
 - Pending checks: 1
 - Failed checks: 0
 
@@ -38,6 +38,9 @@ Evidence boundary: this report checks local package completeness and separates p
 | submission_review_checklist | ready | present | research/submission_checklist.md |
 | submission_review_report_json | ready | present | results/reproducibility/submission_review_report.json |
 | submission_review_report_md | ready | present | results/reproducibility/submission_review_report.md |
+| submission_bundle_manifest_builder | ready | present | scripts/build_submission_bundle_manifest.py |
+| submission_bundle_manifest_json | ready | present | results/reproducibility/submission_bundle_manifest.json |
+| submission_bundle_manifest_md | ready | present | results/reproducibility/submission_bundle_manifest.md |
 | aaai_submission_decision_checker | ready | present | scripts/check_aaai_submission_decision.py |
 | aaai_submission_decision_generator | ready | present | scripts/generate_aaai_submission_decision.py |
 | aaai_submission_decision_report_json | ready | present | results/aaai_submission_decision/decision.json |
@@ -372,6 +375,9 @@ Evidence boundary: this report checks local package completeness and separates p
 | paper_claim_core_checks_ready | ready | core checks ready | results\reproducibility\paper_claim_report.json |
 | submission_review_report_ready | ready | overall=ready; counts={'ready': 19, 'fail': 0} | results\reproducibility\submission_review_report.json |
 | submission_review_core_checks_ready | ready | core checks ready | results\reproducibility\submission_review_report.json |
+| submission_bundle_manifest_report_ready | ready | overall=ready_with_pending_external_evidence; counts={'ready': 11, 'fail': 0} | results\reproducibility\submission_bundle_manifest.json |
+| submission_bundle_manifest_core_checks_ready | ready | core submission-bundle checks ready | results\reproducibility\submission_bundle_manifest.json |
+| submission_bundle_manifest_hashes_ready | ready | required file hashes recorded | results\reproducibility\submission_bundle_manifest.json |
 | aaai_submission_decision_preflight_ready | ready | overall=ready; decision_status=recorded; counts={'ready': 27, 'pending': 0, 'fail': 0} | results\aaai_submission_decision\decision.json |
 | aaai_submission_decision_core_checks_ready | ready | core decision preflight checks ready | results\aaai_submission_decision\decision.json |
 | aaai_submission_decision_options_available | ready | both decision options available for human decision | results\aaai_submission_decision\decision.json |

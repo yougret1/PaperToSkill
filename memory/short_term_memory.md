@@ -21,6 +21,14 @@ Current date: 2026-07-06.
   pending external-evidence gate; strict paper-claim, package, and goal checks
   passed afterward. This does not change experiment scores, raw rows,
   main-row selection, local logs, or claim strength.
+- Current submission-bundle manifest phase: `scripts/build_submission_bundle_manifest.py`
+  now writes `results/reproducibility/submission_bundle_manifest.{json,md}` with
+  hashes for the AAAI paper package and key gate reports. Strict
+  submission-review, manifest, reproducibility-package, goal, AAAI-decision,
+  paper-claim, AAAI-package, paper-table, usage-example, and real-reuse gates
+  passed after refresh, and focused manifest/package/submission-review tests
+  passed 11/11. This is local package integrity evidence only: human-fidelity
+  annotation and the final AAAI decision remain pending external evidence.
 - Current paper-boundary continuation: `paper/outline.md` conclusion no longer
   says the next stage is to "repeat and expand the original-style paper
   tasks." It now matches the AAAI paper and draft wording: add human-fidelity
@@ -124,7 +132,7 @@ Current date: 2026-07-06.
   213/213 tests, and strict goal, real-reuse, paper-claim, paper-table,
   AAAI-package, usage-example, external-evidence closure/packet,
   AAAI-decision, reproducibility-package, and submission-review gates passed.
-  Package readiness is now `477 ready / 1 pending / 0 failed`, submission
+  Package readiness is now `483 ready / 1 pending / 0 failed`, submission
   review remains `19 ready / 0 failed`, protected files
   `results/real_reuse/main_run_selection.json`,
   `results/real_reuse/raw_rows.jsonl`, and `research/stage_log.md` have no
@@ -325,7 +333,7 @@ Current date: 2026-07-06.
   goal, paper-claim, AAAI-package, paper-table, real-reuse preflight,
   usage-example, external-evidence packets, external-evidence closure, and
   AAAI submission-decision gates passed. `submission_review_report` is now
-  `19 ready / 0 failed`; package remains `477 ready / 1 pending / 0 failed`,
+  `19 ready / 0 failed`; package remains `483 ready / 1 pending / 0 failed`,
   and goal completion remains `78 ready / 3 pending / 0 failed`. This does not
   change experiment scores, main-row selection, or any paper claim strength.
   The phase was saved and pushed as `905899c Guard real-reuse LLM ablation
@@ -349,7 +357,7 @@ Current date: 2026-07-06.
   `check_aaai_submission_decision.py --strict`, `git diff --check` with only
   CRLF warnings, a long `sk-...` raw-key scan with no matches, and no diff
   under `research/run_logs/**` or `research/stage_log.md`. Latest refreshed
-  report counts: paper claims `56 ready / 0 failed`, package `477 ready / 1 pending /
+  report counts: paper claims `56 ready / 0 failed`, package `483 ready / 1 pending /
   0 failed`, AAAI package `20 ready / 0 failed`, paper tables `343 ready / 0
   failed`, submission review `19 ready / 0 failed`, goal completion `78 ready /
   3 pending / 0 failed`. Human-fidelity annotation remains pending; `ok.txt`
@@ -517,8 +525,8 @@ Current date: 2026-07-06.
   `python -m unittest discover -s tests -v`. The first run exposed one stale
   regression-test fixture in `tests/test_check_submission_review.py`: the
   negative test still replaced `467 ready` even though the current package
-  report is now `477 ready`, so it no longer simulated stale package counts. The
-  fixture now replaces `477 ready` with `459 ready`; focused
+  report is now `483 ready`, so it no longer simulated stale package counts. The
+  fixture now replaces `483 ready` with `459 ready`; focused
   `tests.test_check_submission_review` passes, and the full suite now passes
   206/206 tests. Strict checks also passed after the fix:
   `check_submission_review.py --strict`, `check_goal_completion.py --strict`,

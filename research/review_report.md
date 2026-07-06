@@ -70,7 +70,7 @@ used as boundary evidence rather than aggregate downstream-effectiveness proof.
 | Gate | Status | Evidence |
 | --- | --- | --- |
 | Claim-evidence consistency | Pass with caveats | `paper/claim_checklist.md`; `research/claim_evidence_matrix.md`; `results/reproducibility/paper_claim_report.md`: 56 ready, 0 failed; includes AAAI table-file, outline, limitations, and stale cost-scope checks |
-| Local reproducibility package | Pass locally, external evidence pending | `results/reproducibility/package_report.md`: 477 ready, 1 pending, 0 failed |
+| Local reproducibility package | Pass locally, external evidence pending | `results/reproducibility/package_report.md`: 483 ready, 1 pending, 0 failed |
 | Active-goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 78 ready, 3 pending, 0 failed |
 | External evidence closure queue | Ready local queue; external evidence still pending | `results/external_evidence_closure/closure.md`: `overall_status=pending_external_evidence`; two pending-external-evidence items remain (`pending_reviewers=1`, `pending_decision=1`), while the local queue checks are 3 ready, 0 pending, 0 failed |
 | External evidence execution packets | Ready local handoff; external evidence still pending | `results/external_evidence_packets/packets.md`: `closure_status=pending_external_evidence`; packets cover the same two pending-external-evidence items, while the local packet checks are 8 ready, 0 pending, 0 failed and include the `toHuman.md` / `ok.txt` handoff cleanup guard |
