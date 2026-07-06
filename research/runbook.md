@@ -102,6 +102,18 @@ evidence handoff boundary` was pushed and independently verified at
 `pending_external_evidence` visible in submission-review handoffs and does not
 change experiment scores, raw rows, main-row selection, or local logs.
 
+The outline-guard backup chain after the phase118 memory sync is recovered and
+verified through `3b0b8a5 Record verified outline backup recovery`:
+
+```text
+3b0b8a50aa032bb68c9cec55ec3acb599c69548c refs/heads/main
+```
+
+This includes `fd49a53 Guard outline real-reuse future work`, the
+outline-guard push-blocker records, and their recovery records. It updates
+paper-outline/checker and memory state only; it does not change experiment
+scores, raw rows, `results/real_reuse/main_run_selection.json`, or local logs.
+
 Follow-up local record-sync commit
 `3e71736 Record external boundary checkpoint backup` updates checkpoint records
 to the verified `7efa4b7` phase. Its first `git push origin main` failed with

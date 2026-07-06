@@ -98,6 +98,14 @@ Current date: 2026-07-06.
   verified `f677bb2e2270b5289ace02b6509e13e3ece20e66 refs/heads/main`.
   This is GitHub transport/recovery metadata only. No human `ok.txt` is
   required for GitHub status.
+- Follow-up record-sync commit `3b0b8a5 Record verified outline backup
+  recovery` records the verified `f677bb2` recovery in repo memory. `git push
+  origin main` advanced `main` from `f677bb2` to `3b0b8a5`, and `git
+  ls-remote --heads origin main` verified
+  `3b0b8a50aa032bb68c9cec55ec3acb599c69548c refs/heads/main`. This is
+  record-sync/GitHub recovery metadata only and does not change experiment
+  scores, raw rows, `results/real_reuse/main_run_selection.json`, local logs,
+  or paper-facing claim strength.
 - Follow-up record-sync commit `0a25da3 Record compact prompt checkpoint backup`
   updates memory/runbook/goal-audit records to the verified `245c2b2`
   checkpoint. Its first `git push origin main` failed with `Recv failure:

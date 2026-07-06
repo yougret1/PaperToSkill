@@ -81,6 +81,13 @@ the later Claude availability metadata/push-blocker commits were verified at
 `7efa4b7`. Earlier connection resets remain
 GitHub transport metadata only.
 
+After the phase118 memory sync, the outline-guard backup chain was recovered
+and independently verified through
+`3b0b8a50aa032bb68c9cec55ec3acb599c69548c refs/heads/main`
+(`3b0b8a5 Record verified outline backup recovery`). This is record-sync and
+GitHub recovery metadata only; it does not add experiment evidence, local-log
+changes, main-row selection changes, or paper-facing claim strength.
+
 Follow-up local record-sync commit
 `3e71736 Record external boundary checkpoint backup` records the verified
 `7efa4b7` checkpoint in memory/runbook/goal-audit reports. Its first
