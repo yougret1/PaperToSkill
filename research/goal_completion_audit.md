@@ -112,6 +112,12 @@ that distinction. Its first `git push origin main` failed with `Failed to
 connect to github.com port 443 after 21115 ms`; this is GitHub transport
 metadata only, not a goal or package failure.
 
+A later push recovered `c659519 Record resume checkpoint baseline` and
+`fff973d Record resume checkpoint push blocker`; `git ls-remote --heads origin
+main` verified `fff973d72bf88a7ba7b0a57f70c8ece5028d2aae refs/heads/main`.
+This is record-only checkpoint/transport metadata and does not add experiment
+evidence, local-log changes, or paper-facing claim strength.
+
 ## Requirement Audit
 
 | Requirement | Current Evidence | Status | Next Action |

@@ -196,6 +196,13 @@ This file is intentionally compact. Detailed chronological history lives in
   checkpoint. Its first `git push origin main` failed with
   `Failed to connect to github.com port 443 after 21115 ms`; this is GitHub
   transport metadata only and does not require human `ok.txt`.
+- A later push recovered `c659519 Record resume checkpoint baseline` and
+  `fff973d Record resume checkpoint push blocker`; `git ls-remote --heads
+  origin main` verified
+  `fff973d72bf88a7ba7b0a57f70c8ece5028d2aae refs/heads/main`. This is
+  record-only checkpoint/transport metadata and does not change experiments,
+  raw rows, main-row selection, model calls, local logs, or paper-facing claim
+  strength.
 - Recovered follow-up phase-save checkpoint after the `5786d7d` remote baseline:
   `8449799 Guard limitations claim boundary` extends the paper-claim gate to
   `paper/limitations.md`, refreshes the paper-claim/package/submission-review

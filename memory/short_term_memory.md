@@ -115,6 +115,14 @@ Current date: 2026-07-06.
   GitHub transport metadata only; no human `ok.txt` is required for GitHub
   status. The local branch remains ahead until a later push and independent
   `git ls-remote --heads origin main` check succeeds.
+- A later `git push origin main` recovered both local record-sync commits
+  `c659519 Record resume checkpoint baseline` and
+  `fff973d Record resume checkpoint push blocker`; `git ls-remote --heads
+  origin main` verified
+  `fff973d72bf88a7ba7b0a57f70c8ece5028d2aae refs/heads/main`. This is
+  record-only checkpoint/transport metadata and does not add experiment
+  scores, raw rows, main-row selection changes, model calls, or local-log
+  changes.
 - Current pre-submission gate rerun after the checkpoint-record sync passed
   without repository diff drift: full unit discovery reported 211 tests OK, and
   strict submission-review, AAAI submission-decision, external-evidence packet,
@@ -1186,10 +1194,11 @@ Current date: 2026-07-06.
 8. No experiment-side human action is required for GitHub status right now.
    Continue non-network paper/evidence work and verify remote alignment again
    before claiming any later phase save is remote-backed.
-9. Local commit `c659519 Record resume checkpoint baseline` is a record-sync
-   phase save only. Its first `git push origin main` hit a GitHub port-443
-   connectivity failure; keep it as local backup metadata until transport
-   recovers.
+9. The resume checkpoint baseline and its blocker record have now been pushed
+   and independently verified through
+   `fff973d72bf88a7ba7b0a57f70c8ece5028d2aae refs/heads/main`. Treat this as
+   record-only checkpoint/transport metadata; it does not change experiments,
+   raw rows, main-row selection, or claim strength.
 
 ## Boundaries
 
