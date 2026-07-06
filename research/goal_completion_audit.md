@@ -53,26 +53,15 @@ Current machine reports:
   they do not complete the external evidence by themselves.
 
 Record-sync note: the latest locally recorded remote checkpoint is
-`ba366e3f8dba1d46a6a7ed415c749833b1f39e9f refs/heads/main`
-(`ba366e3 Refresh GPT direct provider metadata`). This phase records GPT-family
-direct tiny-marker provider availability metadata, refreshed package-report
-state, and direct-probe command/runbook hygiene. It does not call SNAP-T2,
-append raw rows, replace `main_run_selection.json`, touch local logs, complete
-Claude-family rows, complete human fidelity, or strengthen paper-facing
-effectiveness claims.
-
-Follow-up local record-sync commit `a9740f7 Record verified GPT probe
-checkpoint` records the verified `ba366e3` checkpoint in repo records. Its
-first remote backup attempt failed with `Failed to connect to github.com port
-443 after 21124 ms`, and the immediate independent remote check failed with
-`Failed to connect to github.com port 443 after 21096 ms`. Treat this as
-GitHub transport metadata only; it does not require human `ok.txt`.
-
-Follow-up local blocker-record commit `1e32f5f Record GPT checkpoint push
-blocker` records that first failed backup attempt. Its first remote backup
-attempt also failed with `Failed to connect to github.com port 443 after
-21133 ms`. This is continued GitHub transport metadata only and does not
-require human `ok.txt`.
+`98ba9433b6b48b060e398135108df27f9974ae47 refs/heads/main`
+(`98ba943 Clarify pending human fidelity boundary`). This phase recovers the
+earlier local GPT checkpoint record-sync / push-blocker chain, then records a
+small human-fidelity wording cleanup in `paper/limitations.md` and short-memory
+sync. It does not call SNAP-T2, append raw rows, replace
+`main_run_selection.json`, touch local logs, complete Claude-family rows,
+complete human fidelity, or strengthen paper-facing effectiveness claims.
+Earlier GitHub port-443 failures for the recovered record-sync chain are
+transport metadata only and do not require human `ok.txt`.
 
 The earlier substantive checkpoint records point to the
 verified paper-finalization, submission-review, outline-sync, outline
@@ -153,7 +142,7 @@ evidence, local-log changes, or paper-facing claim strength.
 | --- | --- | --- | --- |
 | Durable local memory | `memory/long_term_memory.md`; `memory/short_term_memory.md` | Complete locally | Read and update both memory files after every resume/compaction. |
 | Use `ai-scientist-v2` to refine PaperToSkill | Seed idea files, bounded smoke report, full live-run handoff, Phase 76 run log, completion directory | Complete for bounded local evidence | Do not treat the synthetic run as broad live task success. |
-| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. The latest independently verified remote checkpoint is `ba366e3f8dba1d46a6a7ed415c749833b1f39e9f refs/heads/main` (`ba366e3 Refresh GPT direct provider metadata`). It records GPT-family direct tiny-marker provider availability metadata, refreshed package-report state, and direct-probe command/runbook hygiene only. The earlier substantive paper/package gate checkpoint remains recorded in the historical checkpoint notes; compact prompt work remains non-network planning evidence, external-evidence guards remain review/checker evidence, and Claude HTTP 502 probes remain provider availability metadata. Earlier connection-reset and port-443 failures remain GitHub transport metadata rather than experiment-correctness evidence. | Complete locally; latest verified phase-save checkpoint is `ba366e3` as of the 2026-07-06 verification | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim with `git status -sb`, `git log -5 --oneline`, and `git ls-remote --heads origin main`; keep transport failures separate from experiment correctness and record exact failures in `C:\Users\19351\Desktop\tem\toHuman.md` if they recur. |
+| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. The latest independently verified remote checkpoint is `98ba9433b6b48b060e398135108df27f9974ae47 refs/heads/main` (`98ba943 Clarify pending human fidelity boundary`). It recovers the earlier local GPT checkpoint record-sync / push-blocker chain and adds a paper-boundary wording cleanup only. Historical substantive checkpoints, compact prompt work, external-evidence guards, and Claude HTTP 502 probes remain bounded to their recorded evidence roles; earlier connection-reset and port-443 failures remain GitHub transport metadata rather than experiment-correctness evidence. | Complete locally; latest verified phase-save checkpoint is `98ba943` as of the 2026-07-06 verification | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim with `git status -sb`, `git log -5 --oneline`, and `git ls-remote --heads origin main`; keep transport failures separate from experiment correctness and record exact failures in `C:\Users\19351\Desktop\tem\toHuman.md` if they recur. |
 | Official AAAI TeX package | `paper/aaai/`; `results/reproducibility/aaai_package_report.md` | Locally ready | Keep draft synchronized with new evidence. |
 | Usage examples | `examples/usage/`; `results/reproducibility/usage_example_report.md` | Complete locally | Re-run after runner or task changes. |
 | Model ablations | `results/model_ablation_prompts/v0/evaluation.md`: 6 scored, 0 pending | Complete for saved-response protocol | Do not claim broad model quality or live task success. |

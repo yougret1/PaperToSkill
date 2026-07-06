@@ -34,31 +34,18 @@ Current status as of 2026-07-06: the latest locally recorded remote checkpoint
 is:
 
 ```text
-ba366e3f8dba1d46a6a7ed415c749833b1f39e9f refs/heads/main
-ba366e3 Refresh GPT direct provider metadata
+98ba9433b6b48b060e398135108df27f9974ae47 refs/heads/main
+98ba943 Clarify pending human fidelity boundary
 ```
 
-This latest checkpoint records GPT-family direct tiny-marker provider metadata,
-the refreshed package report state, and direct-probe command/runbook hygiene.
-It does not call SNAP-T2, append raw rows, replace
-`results/real_reuse/main_run_selection.json`, touch local logs, complete
-Claude-family rows, complete human fidelity, or strengthen paper-facing
-effectiveness claims.
-
-Follow-up local record-sync commit `a9740f7 Record verified GPT probe
-checkpoint` records the verified `ba366e3` checkpoint in repo memory/runbook/
-goal-audit records. Its first `git push origin main` failed with
-`Failed to connect to github.com port 443 after 21124 ms`, and the immediate
-`git ls-remote --heads origin main` failed with
-`Failed to connect to github.com port 443 after 21096 ms`. Treat this as
-GitHub transport metadata only. No human `ok.txt` is required for GitHub
-status.
-
-Follow-up local blocker-record commit `1e32f5f Record GPT checkpoint push
-blocker` records that first failed backup attempt. Its first remote backup
-attempt also failed with `Failed to connect to github.com port 443 after
-21133 ms`. Treat this as continued GitHub transport metadata only and avoid a
-tight retry loop.
+This latest checkpoint recovers the earlier local GPT checkpoint record-sync /
+push-blocker chain, then records a small human-fidelity wording cleanup in
+`paper/limitations.md` and short-memory sync. It does not call SNAP-T2, append
+raw rows, replace `results/real_reuse/main_run_selection.json`, touch local
+logs, complete Claude-family rows, complete human fidelity, or strengthen
+paper-facing effectiveness claims. Earlier GitHub port-443 failures for the
+recovered record-sync chain are transport metadata only. No human `ok.txt` is
+required for GitHub status.
 
 Earlier on 2026-07-06, the temporary GitHub HTTPS transport blocker
 recovered through the AAAI page-limit backup, the later

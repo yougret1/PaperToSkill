@@ -76,11 +76,12 @@ This file is intentionally compact. Detailed chronological history lives in
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
 - Latest locally recorded remote checkpoint is
-  `ba366e3f8dba1d46a6a7ed415c749833b1f39e9f refs/heads/main`
-  (`ba366e3 Refresh GPT direct provider metadata`). It records only the
-  recovered GPT-family direct tiny-marker provider metadata, refreshed package
-  report state, and direct-probe command/runbook hygiene. It does not call
-  SNAP-T2, append raw rows, replace `main_run_selection.json`, touch local
+  `98ba9433b6b48b060e398135108df27f9974ae47 refs/heads/main`
+  (`98ba943 Clarify pending human fidelity boundary`). It recovers the earlier
+  local record-sync and push-blocker commits after the GPT direct-provider
+  metadata checkpoint, then adds a small `paper/limitations.md` wording cleanup
+  and short-memory sync for the pending human-fidelity boundary. It does not
+  call SNAP-T2, append raw rows, replace `main_run_selection.json`, touch local
   logs, complete Claude-family rows, complete human fidelity, or strengthen
   paper-facing effectiveness claims. The earlier substantive paper/package
   gate checkpoint after the AAAI page-limit,
@@ -140,23 +141,17 @@ This file is intentionally compact. Detailed chronological history lives in
   checkpoint notes in this memory are historical recovery checkpoints; the
   earlier failed pushes for `501ffc8`, `48aabac`, `8bdd394`, `95f1af3`,
   `66e4763`, `45ef25b`, and `0538ef1` are historical GitHub transport
-  metadata now that `5786d7d` is verified remote-backed.
+  metadata now that later recovery checkpoints are verified remote-backed.
   Verify the exact current local/remote state with `git status -sb`,
   `git log -5 --oneline`, and a successful `git ls-remote --heads origin main`
   before claiming any later phase is remote-backed.
-- Follow-up local record-sync commit `a9740f7 Record verified GPT probe
-  checkpoint` records the verified `ba366e3` checkpoint in repo records. Its
-  first remote backup attempt failed with
-  `Failed to connect to github.com port 443 after 21124 ms`, and the immediate
-  independent remote check failed with
-  `Failed to connect to github.com port 443 after 21096 ms`. Treat this as
-  GitHub transport metadata only, not an experiment or paper-content failure,
-  and do not create human `ok.txt` for GitHub status.
-- Follow-up local blocker-record commit `1e32f5f Record GPT checkpoint push
-  blocker` records the first failed backup attempt after `a9740f7`. Its first
-  remote backup attempt also failed with `Failed to connect to github.com port
-  443 after 21133 ms`. Treat this as continued GitHub transport metadata only;
-  do not create human `ok.txt` for GitHub status.
+- Historical follow-up local record-sync commits `a9740f7 Record verified GPT
+  probe checkpoint`, `1e32f5f Record GPT checkpoint push blocker`, and
+  `51c91bb Record renewed GPT checkpoint push blocker` recorded failed backup
+  attempts after the GPT direct-provider metadata checkpoint. Their earlier
+  port-443 errors are GitHub transport metadata only, not experiment or
+  paper-content failures. The later `98ba943` push recovered that chain; do not
+  create human `ok.txt` for GitHub status.
 - Recovered outline-guard backup: `fd49a53 Guard outline real-reuse future
   work`, `12f676b Record outline guard push blocker`, and `b20eaa7 Record
   renewed outline guard push blocker` are now remote-backed. `git push origin

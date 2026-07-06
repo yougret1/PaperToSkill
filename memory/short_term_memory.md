@@ -13,16 +13,14 @@ Current date: 2026-07-06.
   Preserve the existing local-log boundary: do not modify
   `research/run_logs/**` or `research/stage_log.md` during record-sync-only
   work.
-- Current resume check in this thread found no `ok.txt`, a clean worktree
-  before edits, and local `main` ahead of `origin/main` by three record-sync /
-  push-blocker commits (`a9740f7`, `1e32f5f`, `51c91bb`). The referenced
+- Current resume check in this thread found no `ok.txt`; the referenced
   historical Codex thread was not visible to the local thread-list tool, so use
-  this memory, `toHuman.md`, and repo reports as the authoritative handoff.
-  A small paper-boundary cleanup changed `paper/limitations.md` from "completed
+  this memory, `toHuman.md`, and repo reports as the authoritative handoff. A
+  small paper-boundary cleanup changed `paper/limitations.md` from "completed
   human-fidelity annotation" to "human-fidelity annotation" when describing the
   pending external-evidence gate; strict paper-claim, package, and goal checks
-  passed afterward. This does not change experiment scores, raw rows, main-row
-  selection, local logs, or claim strength.
+  passed afterward. This does not change experiment scores, raw rows,
+  main-row selection, local logs, or claim strength.
 - Current paper-boundary continuation: `paper/outline.md` conclusion no longer
   says the next stage is to "repeat and expand the original-style paper
   tasks." It now matches the AAAI paper and draft wording: add human-fidelity
@@ -68,32 +66,16 @@ Current date: 2026-07-06.
   Claude-family rows, human fidelity, AI-Scientist-v2 broad live research
   success, or paper-facing effectiveness claims.
 - Latest locally recorded remote checkpoint is
-  `ba366e3f8dba1d46a6a7ed415c749833b1f39e9f refs/heads/main`
-  (`ba366e3 Refresh GPT direct provider metadata`). This phase records the
-  recovered GPT-family direct tiny-marker provider availability metadata,
-  refreshes the reproducibility package report to the new GPT direct-probe
-  state, and updates direct-probe runbook/packet commands to use longer
-  timeout and shell-only provider-specific environment variables. It does not
-  call SNAP-T2, append raw rows, replace `main_run_selection.json`, touch local
-  logs, complete Claude-family rows, complete human fidelity, or strengthen
-  paper-facing effectiveness claims. The earlier substantive paper/package
-  gate checkpoint remains `7efa4b7 Guard external evidence handoff boundary`.
-- Follow-up local record-sync commit `a9740f7 Record verified GPT probe
-  checkpoint` records the verified `ba366e3` checkpoint in memory/runbook/
-  goal-audit records. Its first `git push origin main` failed with
-  `Failed to connect to github.com port 443 after 21124 ms`, and the immediate
-  `git ls-remote --heads origin main` failed with
-  `Failed to connect to github.com port 443 after 21096 ms`. Treat this as
-  GitHub transport metadata only; no human `ok.txt` is required for GitHub
-  status. The latest independently verified remote checkpoint remains
-  `ba366e3f8dba1d46a6a7ed415c749833b1f39e9f refs/heads/main` until a later
-  push and remote check recover the local record-sync commit.
-- Follow-up local blocker-record commit `1e32f5f Record GPT checkpoint push
-  blocker` records the first failed backup attempt after `a9740f7`. Its first
-  remote backup attempt also failed with `Failed to connect to github.com port
-  443 after 21133 ms`. Treat this as continued GitHub transport metadata only;
-  do not create `ok.txt` for GitHub status, and do not spend the turn in a
-  tight GitHub retry loop.
+  `98ba9433b6b48b060e398135108df27f9974ae47 refs/heads/main`
+  (`98ba943 Clarify pending human fidelity boundary`). This verified push
+  recovered the earlier local record-sync and push-blocker commits on top of
+  the GPT direct-provider metadata checkpoint, then added the small
+  human-fidelity wording cleanup and memory sync. It does not call SNAP-T2,
+  append raw rows, replace `main_run_selection.json`, touch local logs,
+  complete Claude-family rows, complete human fidelity, or strengthen
+  paper-facing effectiveness claims. Earlier GitHub port-443 failures for the
+  recovered record-sync chain are transport metadata only; no human `ok.txt` is
+  required for GitHub status.
 - Phase118 package/checker sync verification is complete locally: focused
   `tests.test_check_reproducibility_package` and
   `tests.test_check_submission_review` passed, full unit discovery passed
