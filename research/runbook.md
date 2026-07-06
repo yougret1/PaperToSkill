@@ -34,25 +34,19 @@ Current status as of 2026-07-06: the latest locally recorded remote checkpoint
 is:
 
 ```text
-98ba9433b6b48b060e398135108df27f9974ae47 refs/heads/main
-98ba943 Clarify pending human fidelity boundary
+5063eed45499c204c85b72d15850b9cf7d359fea refs/heads/main
+5063eed Clarify human fidelity study boundary
 ```
 
-This latest checkpoint recovers the earlier local GPT checkpoint record-sync /
-push-blocker chain, then records a small human-fidelity wording cleanup in
-`paper/limitations.md` and short-memory sync. It does not call SNAP-T2, append
-raw rows, replace `results/real_reuse/main_run_selection.json`, touch local
-logs, complete Claude-family rows, complete human fidelity, or strengthen
-paper-facing effectiveness claims. Earlier GitHub port-443 failures for the
-recovered record-sync chain are transport metadata only. No human `ok.txt` is
-required for GitHub status.
-
-Follow-up local record-sync commit `ce70e04 Record verified human boundary
-checkpoint` updates repo records to the verified `98ba943` checkpoint. Its
-first `git push origin main` failed with `Recv failure: Connection was reset`,
-and the immediate independent `git ls-remote --heads origin main` failed with
-the same reset error. Treat this as GitHub transport metadata only and avoid a
-tight retry loop.
+This latest checkpoint recovers the earlier human-boundary record-sync /
+push-blocker chain, then records a paper-facing wording cleanup in
+`paper/draft.md` and the AAAI TeX so the pending independent human-fidelity
+study is not described as completed. It does not call SNAP-T2, append raw
+rows, replace `results/real_reuse/main_run_selection.json`, touch local logs,
+complete Claude-family rows, complete human fidelity, or strengthen
+paper-facing effectiveness claims. Earlier GitHub connection-reset and
+port-443 failures for that chain are transport metadata only. No human
+`ok.txt` is required for GitHub status.
 
 Earlier on 2026-07-06, the temporary GitHub HTTPS transport blocker
 recovered through the AAAI page-limit backup, the later

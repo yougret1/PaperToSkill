@@ -76,14 +76,14 @@ This file is intentionally compact. Detailed chronological history lives in
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
 - Latest locally recorded remote checkpoint is
-  `98ba9433b6b48b060e398135108df27f9974ae47 refs/heads/main`
-  (`98ba943 Clarify pending human fidelity boundary`). It recovers the earlier
-  local record-sync and push-blocker commits after the GPT direct-provider
-  metadata checkpoint, then adds a small `paper/limitations.md` wording cleanup
-  and short-memory sync for the pending human-fidelity boundary. It does not
-  call SNAP-T2, append raw rows, replace `main_run_selection.json`, touch local
-  logs, complete Claude-family rows, complete human fidelity, or strengthen
-  paper-facing effectiveness claims. The earlier substantive paper/package
+  `5063eed45499c204c85b72d15850b9cf7d359fea refs/heads/main`
+  (`5063eed Clarify human fidelity study boundary`). It is independently
+  remote-verified as of the 2026-07-06 retry. It does not call SNAP-T2,
+  append raw rows, replace `main_run_selection.json`, touch local logs,
+  complete Claude-family rows, complete human fidelity, or strengthen
+  paper-facing effectiveness claims. The recovered backup includes the earlier
+  human-boundary record-sync/push-blocker chain plus the paper-facing
+  ambiguity cleanup in `paper/draft.md` and the AAAI TeX. The earlier substantive paper/package
   gate checkpoint after the AAAI page-limit,
   paper-finalization, outline-sync recovery, outline claim-drift gate,
   main-results boundary cleanup, real-reuse LLM-ablation handoff guard,
@@ -152,12 +152,11 @@ This file is intentionally compact. Detailed chronological history lives in
   port-443 errors are GitHub transport metadata only, not experiment or
   paper-content failures. The later `98ba943` push recovered that chain; do not
   create human `ok.txt` for GitHub status.
-- Follow-up local record-sync commit `ce70e04 Record verified human boundary
-  checkpoint` updates repo records to the verified `98ba943` checkpoint. Its
-  first `git push origin main` failed with `Recv failure: Connection was
-  reset`, and the immediate independent `git ls-remote --heads origin main`
-  failed with the same reset error. Treat this as GitHub transport metadata
-  only; do not create human `ok.txt` for GitHub status.
+- The earlier human-boundary record-sync and push-blocker commits first hit
+  GitHub connection-reset / port-443 transport failures, but the later
+  2026-07-06 push and independent remote check recovered the chain through
+  `5063eed`. Treat those failures as GitHub transport metadata only; do not
+  create human `ok.txt` for GitHub status.
 - Recovered outline-guard backup: `fd49a53 Guard outline real-reuse future
   work`, `12f676b Record outline guard push blocker`, and `b20eaa7 Record
   renewed outline guard push blocker` are now remote-backed. `git push origin

@@ -66,34 +66,21 @@ Current date: 2026-07-06.
   Claude-family rows, human fidelity, AI-Scientist-v2 broad live research
   success, or paper-facing effectiveness claims.
 - Latest locally recorded remote checkpoint is
-  `98ba9433b6b48b060e398135108df27f9974ae47 refs/heads/main`
-  (`98ba943 Clarify pending human fidelity boundary`). This verified push
-  recovered the earlier local record-sync and push-blocker commits on top of
-  the GPT direct-provider metadata checkpoint, then added the small
-  human-fidelity wording cleanup and memory sync. It does not call SNAP-T2,
-  append raw rows, replace `main_run_selection.json`, touch local logs,
-  complete Claude-family rows, complete human fidelity, or strengthen
-  paper-facing effectiveness claims. Earlier GitHub port-443 failures for the
-  recovered record-sync chain are transport metadata only; no human `ok.txt` is
+  `5063eed45499c204c85b72d15850b9cf7d359fea refs/heads/main`
+  (`5063eed Clarify human fidelity study boundary`). This phase is
+  independently remote-verified as of the 2026-07-06 retry. It does not call
+  SNAP-T2, append raw rows, replace `main_run_selection.json`, touch local
+  logs, complete Claude-family rows, complete human fidelity, or strengthen
+  paper-facing effectiveness claims.
+- The recovered backup includes the earlier human-boundary record-sync and
+  push-blocker commits plus the paper-facing ambiguity cleanup in
+  `paper/draft.md` and `paper/aaai/papertoskill_aaai2027.tex`, changing
+  "completed human fidelity annotation" to "an independent human-fidelity
+  annotation study"; the AAAI PDF was rebuilt successfully at 8 pages, and
+  strict AAAI-package, paper-claim, paper-table, goal, and reproducibility-
+  package checks passed before the phase save. Earlier GitHub connection-reset
+  and port-443 failures are transport metadata only; no human `ok.txt` is
   required for GitHub status.
-- Follow-up local record-sync commit `ce70e04 Record verified human boundary
-  checkpoint` updates repo records to the verified `98ba943` checkpoint. Its
-  first `git push origin main` failed with `Recv failure: Connection was
-  reset`, and the immediate independent `git ls-remote --heads origin main`
-  failed with the same reset error. Treat this as GitHub transport metadata
-  only; the latest independently verified remote checkpoint remains `98ba943`
-  until a later push and remote check recover the local record-sync commit.
-- Current continuation retried `git push origin main` once; GitHub still failed
-  with `Failed to connect to github.com port 443 after 21138 ms`, so local
-  commits `ce70e04` and `2d98173` remain ahead of `origin/main`. This is
-  transport metadata only and does not require human `ok.txt`. The same
-  continuation cleaned a paper-facing ambiguity in `paper/draft.md` and
-  `paper/aaai/papertoskill_aaai2027.tex`, changing "completed human fidelity
-  annotation" to "an independent human-fidelity annotation study"; the AAAI
-  PDF was rebuilt successfully at 8 pages, and strict AAAI-package,
-  paper-claim, paper-table, goal, and reproducibility-package checks passed.
-  This does not change experiment scores, raw rows, main-row selection, local
-  logs, human-fidelity completion state, or claim strength.
 - Phase118 package/checker sync verification is complete locally: focused
   `tests.test_check_reproducibility_package` and
   `tests.test_check_submission_review` passed, full unit discovery passed
@@ -698,9 +685,9 @@ Current date: 2026-07-06.
   GitHub retry pushed the follow-up record-sync and Claude availability
   commits, and `git ls-remote --heads origin main` verified
   `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`.
-- Current local/remote status override after the external-evidence boundary
+- Historical local/remote status note after the external-evidence boundary
   guard:
-  the latest locally recorded remote checkpoint is
+  the then-latest locally recorded remote checkpoint was
   `7efa4b72d41c61be8c0b0139e2ae76317fb84413 refs/heads/main`
   (`7efa4b7 Guard external evidence handoff boundary`). This checkpoint includes
   the recovered checkpoint-sync commits after the real-reuse LLM-ablation handoff
