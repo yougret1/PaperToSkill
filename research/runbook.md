@@ -970,15 +970,15 @@ python scripts\run_openai_compatible_direct_probe.py --wire-api openai_responses
   --response-output results\openai_compatible_direct_probe\gpt_family\response.md
 ```
 
-Historical direct-probe diagnostic:
+Latest direct-probe diagnostic:
 `results/openai_compatible_direct_probe/claude_family/run_report.md` reports
 `wire_api=anthropic_messages`, attempted `claude-opus-4-8`,
-`claude-opus-4-7`, and `claude-opus-4-6`, and is still blocked by HTTP 502
-`Upstream service temporarily unavailable`. The GPT-family report uses
+`claude-opus-4-7`, and `claude-opus-4-6`, `timeout_seconds=240.0`, and is still
+blocked by provider HTTP 502. The GPT-family report uses
 `wire_api=openai_responses`, attempted `gpt-5.5` and `gpt-5.4`, and is still
 blocked by HTTP 502 `Upstream access forbidden`. This diagnostic bypasses
-`ai_scientist.llm`. Keep this as historical provider diagnostics, not a current
-blocker. Before making any new availability claim, rerun the relevant
+`ai_scientist.llm`. Keep this as provider availability metadata, not
+model-quality or task-success evidence. Before making any new availability claim, rerun the relevant
 protocol-specific probe or use the task runner's recorded call status. Model
 calls should receive generous timeout and retry budget because the third-party
 service is unstable.

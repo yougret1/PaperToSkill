@@ -1270,3 +1270,9 @@ DeepSeek:
   Treat this as provider availability metadata; do not run the full
   Claude-family real-reuse LLM ablation rows until a small direct probe returns
   a usable response.
+- 2026-07-06 phase117 Claude direct availability recheck: using the same local
+  Claude API document key, shell-only environment variables, Anthropic Messages
+  endpoint, and aliases, all three aliases again returned provider HTTP 502
+  with a 240-second timeout and `max_tokens=16`. Treat this as provider
+  availability metadata; do not run the full Claude-family real-reuse LLM
+  ablation rows until a small direct probe returns a usable response.
