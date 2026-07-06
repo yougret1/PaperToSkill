@@ -42,8 +42,8 @@ boundary sync record, the compact SNAP executable-candidate prompt contract,
 and the follow-up record-sync/blocker metadata. The later Claude availability
 metadata/push-blocker commits and their checkpoint-record backup also
 recovered, and the external-evidence handoff-boundary guard was saved and
-independently verified. The latest verified remote
-checkpoint before claiming any later phase save is:
+independently verified. The latest verified substantive phase checkpoint
+before claiming any later phase save is:
 
 ```text
 7efa4b72d41c61be8c0b0139e2ae76317fb84413 refs/heads/main
@@ -119,6 +119,15 @@ GitHub transport/checkpoint recovery only. The substantive checkpoint used by
 the paper, package, and goal gates remains `7efa4b7 Guard external evidence
 handoff boundary`; `deeb84e` adds no model calls, scores, raw rows, main-row
 selection changes, or local-log changes.
+
+Resume git check on 2026-07-06 before this continuation observed
+`d3f7cb299221923501fa9ccd6897c5f9d664daed refs/heads/main`
+(`d3f7cb2 Record external checkpoint recovery`) on `origin/main`. This is
+record-only recovery metadata after `deeb84e`; it does not change experiments,
+raw rows, main-row selection, model calls, local logs, or paper-facing claim
+strength. Keep `7efa4b7 Guard external evidence handoff boundary` as the
+substantive paper/package/goal checkpoint, and rerun git status/log/remote
+verification before making any later backup claim.
 
 Follow-up commits `45ef25b Sync remote checkpoint after LLM handoff guard` and
 `0538ef1 Record checkpoint sync push blocker` first failed to back up because

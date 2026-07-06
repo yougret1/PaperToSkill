@@ -75,7 +75,7 @@ This file is intentionally compact. Detailed chronological history lives in
   If a network/download problem blocks a core asset or phase save, record the
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
-- Latest verified remote checkpoint after the AAAI page-limit,
+- Latest verified substantive phase checkpoint after the AAAI page-limit,
   paper-finalization, outline-sync recovery, outline claim-drift gate,
   main-results boundary cleanup, real-reuse LLM-ablation handoff guard,
   recovered checkpoint-sync records, outline evidence-boundary sync,
@@ -182,6 +182,15 @@ This file is intentionally compact. Detailed chronological history lives in
   package, and goal gates remains `7efa4b7 Guard external evidence handoff
   boundary`; `deeb84e` does not add experiment scores, raw rows, main-row
   selection changes, model calls, or local-log changes.
+- Resume git check on 2026-07-06 before this continuation observed
+  `d3f7cb299221923501fa9ccd6897c5f9d664daed refs/heads/main`
+  (`d3f7cb2 Record external checkpoint recovery`) on `origin/main`. That
+  commit is record-only recovery metadata on top of `deeb84e`; it does not add
+  experiment scores, raw rows, main-row selection changes, model calls, or
+  local-log changes. Keep `7efa4b7 Guard external evidence handoff boundary`
+  as the declared substantive checkpoint for paper/package/goal gates, and
+  rerun `git status -sb`, `git log -5 --oneline`, and
+  `git ls-remote --heads origin main` before claiming any newer backup state.
 - Recovered follow-up phase-save checkpoint after the `5786d7d` remote baseline:
   `8449799 Guard limitations claim boundary` extends the paper-claim gate to
   `paper/limitations.md`, refreshes the paper-claim/package/submission-review

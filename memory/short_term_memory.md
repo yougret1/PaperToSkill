@@ -101,6 +101,13 @@ Current date: 2026-07-06.
   short-memory declared substantive checkpoint for claim and goal gates remains
   `7efa4b7 Guard external evidence handoff boundary`; `deeb84e` adds no model
   call, score, raw row, main-row replacement, or local-log change.
+- Resume git check on 2026-07-06 before this continuation observed
+  `d3f7cb299221923501fa9ccd6897c5f9d664daed refs/heads/main`
+  (`d3f7cb2 Record external checkpoint recovery`) on `origin/main`. This is
+  record-only recovery metadata after `deeb84e`, not experiment evidence or a
+  paper-facing claim change. The declared substantive checkpoint remains
+  `7efa4b7 Guard external evidence handoff boundary`; rerun git status/log/
+  remote verification before claiming any newer phase backup.
 - Current pre-submission gate rerun after the checkpoint-record sync passed
   without repository diff drift: full unit discovery reported 211 tests OK, and
   strict submission-review, AAAI submission-decision, external-evidence packet,
@@ -1154,8 +1161,12 @@ Current date: 2026-07-06.
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-6. Latest remote-backed checkpoint before further edits:
-   `7efa4b7 Guard external evidence handoff boundary`, verified at
+6. Resume git check before these edits observed
+   `d3f7cb299221923501fa9ccd6897c5f9d664daed refs/heads/main`
+   (`d3f7cb2 Record external checkpoint recovery`) on `origin/main`. Treat
+   `d3f7cb2` as record-only recovery metadata; the declared substantive
+   checkpoint remains `7efa4b7 Guard external evidence handoff boundary`,
+   verified at
    `7efa4b72d41c61be8c0b0139e2ae76317fb84413 refs/heads/main`. The latest
    experiment-facing content checkpoint inside that chain remains
    `245c2b2 Prepare compact SNAP candidate prompts`; `7efa4b7` is a

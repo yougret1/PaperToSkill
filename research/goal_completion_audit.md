@@ -52,7 +52,7 @@ Current machine reports:
   `ready`, 2 packets, and 0 failed checks. The packets are local handoffs only;
   they do not complete the external evidence by themselves.
 
-Record-sync note: the current remote-checkpoint records now point to the
+Record-sync note: the current substantive checkpoint records now point to the
 verified paper-finalization, submission-review, outline-sync, outline
 claim-drift, main-results boundary, real-reuse LLM-ablation handoff, recovered
 checkpoint-sync, outline evidence-boundary sync, limitations-claim gate,
@@ -99,13 +99,21 @@ paper, package, and goal gates remains `7efa4b7 Guard external evidence
 handoff boundary`; `deeb84e` adds no new experiment evidence or paper-facing
 claim strength.
 
+Resume git check on 2026-07-06 before this continuation observed
+`d3f7cb299221923501fa9ccd6897c5f9d664daed refs/heads/main`
+(`d3f7cb2 Record external checkpoint recovery`) on `origin/main`. This is a
+record-only recovery head after `deeb84e`; it does not add model calls, scores,
+raw rows, main-row selection changes, local-log changes, or paper-facing claim
+strength. The substantive checkpoint used by claim and goal gates remains
+`7efa4b7 Guard external evidence handoff boundary`.
+
 ## Requirement Audit
 
 | Requirement | Current Evidence | Status | Next Action |
 | --- | --- | --- | --- |
 | Durable local memory | `memory/long_term_memory.md`; `memory/short_term_memory.md` | Complete locally | Read and update both memory files after every resume/compaction. |
 | Use `ai-scientist-v2` to refine PaperToSkill | Seed idea files, bounded smoke report, full live-run handoff, Phase 76 run log, completion directory | Complete for bounded local evidence | Do not treat the synthetic run as broad live task success. |
-| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. The latest independently verified remote checkpoint is `7efa4b72d41c61be8c0b0139e2ae76317fb84413 refs/heads/main` (`7efa4b7 Guard external evidence handoff boundary`). It includes the compact SNAP executable-candidate prompt contract plus follow-up checkpoint record-sync/blocker metadata, recovered Claude availability metadata/push-blocker commits, recovered Claude metadata backup records, and the external-evidence handoff-boundary guard; the compact prompt work remains non-network planning evidence, the external-evidence guard remains review/checker evidence, and the Claude HTTP 502 probe remains provider availability metadata. Earlier connection-reset and port-443 failures remain GitHub transport metadata rather than experiment-correctness evidence. | Complete locally; latest independently verified remote-backed checkpoint is `7efa4b7` as of the 2026-07-06 verification | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim with `git status -sb`, `git log -5 --oneline`, and `git ls-remote --heads origin main`; keep transport failures separate from experiment correctness and record exact failures in `C:\Users\19351\Desktop\tem\toHuman.md` if they recur. |
+| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. The latest independently verified substantive checkpoint is `7efa4b72d41c61be8c0b0139e2ae76317fb84413 refs/heads/main` (`7efa4b7 Guard external evidence handoff boundary`). It includes the compact SNAP executable-candidate prompt contract plus follow-up checkpoint record-sync/blocker metadata, recovered Claude availability metadata/push-blocker commits, recovered Claude metadata backup records, and the external-evidence handoff-boundary guard; the compact prompt work remains non-network planning evidence, the external-evidence guard remains review/checker evidence, and the Claude HTTP 502 probe remains provider availability metadata. Earlier connection-reset and port-443 failures remain GitHub transport metadata rather than experiment-correctness evidence. | Complete locally; substantive checkpoint remains `7efa4b7` as of the 2026-07-06 verification | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim with `git status -sb`, `git log -5 --oneline`, and `git ls-remote --heads origin main`; keep transport failures separate from experiment correctness and record exact failures in `C:\Users\19351\Desktop\tem\toHuman.md` if they recur. |
 | Official AAAI TeX package | `paper/aaai/`; `results/reproducibility/aaai_package_report.md` | Locally ready | Keep draft synchronized with new evidence. |
 | Usage examples | `examples/usage/`; `results/reproducibility/usage_example_report.md` | Complete locally | Re-run after runner or task changes. |
 | Model ablations | `results/model_ablation_prompts/v0/evaluation.md`: 6 scored, 0 pending | Complete for saved-response protocol | Do not claim broad model quality or live task success. |
