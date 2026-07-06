@@ -38,7 +38,10 @@ Current date: 2026-07-06.
   failures as GitHub transport metadata only; no human `ok.txt` is required for
   GitHub status.
   Follow-up provenance sync added the manifest builder, its unit test, and the
-  JSON/Markdown manifest outputs to `research/artifact_map.md`.
+  JSON/Markdown manifest outputs to `research/artifact_map.md`; this is
+  committed locally as `70f5bdf Sync submission manifest artifact map`. Its
+  first remote backup attempts failed with GitHub connection reset / port-443
+  errors. Treat this as transport metadata only; no human `ok.txt` is required.
 - Current paper-boundary continuation: `paper/outline.md` conclusion no longer
   says the next stage is to "repeat and expand the original-style paper
   tasks." It now matches the AAAI paper and draft wording: add human-fidelity
