@@ -34,21 +34,23 @@ Current status as of 2026-07-06: the latest locally recorded remote checkpoint
 is:
 
 ```text
-65b7976a6cf5e856cb339dd193514929298112cb refs/heads/main
-65b7976 Refresh Claude provider availability metadata
+d6c163a48747edfd906b1f793f93fc82cb58e6ee refs/heads/main
+d6c163a Record renewed full gate backup blocker
 ```
 
-This latest checkpoint recovers the earlier human-boundary record-sync /
-push-blocker chain, records the verified backup state, and refreshes Claude
-direct-provider availability metadata only. It also includes the paper-facing
-wording cleanup in `paper/draft.md` and the AAAI TeX so the pending
-independent human-fidelity study is not described as completed. It does not
-call SNAP-T2, append raw rows, replace
+This latest checkpoint recovers the verified full-gate backup record and the
+temporary GitHub push-blocker records only. It does not call SNAP-T2, append raw rows, replace
 `results/real_reuse/main_run_selection.json`, touch local logs, complete
-Claude-family rows, complete human fidelity, or strengthen paper-facing
-effectiveness claims. Earlier GitHub connection-reset and port-443 failures
-for that chain are transport metadata only. No human `ok.txt` is required for
-GitHub status.
+Claude-family rows, complete human fidelity, make the final AAAI decision, or
+strengthen paper-facing effectiveness claims. Earlier GitHub connection-reset,
+SSL read, and port-443 failures for that chain are transport metadata only. No
+human `ok.txt` is required for GitHub status.
+
+Historical checkpoint `65b7976 Refresh Claude provider availability metadata`
+recovered the earlier human-boundary record-sync / push-blocker chain,
+refreshed Claude direct-provider availability metadata, and included the
+paper-facing wording cleanup in `paper/draft.md` and the AAAI TeX so the
+pending independent human-fidelity study is not described as completed.
 
 Follow-up local record-sync commit `9712985 Record recovered Claude metadata
 backup` updates records to this verified checkpoint. Its first `git push

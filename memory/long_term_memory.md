@@ -76,15 +76,17 @@ This file is intentionally compact. Detailed chronological history lives in
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
 - Latest locally recorded remote checkpoint is
-  `65b7976a6cf5e856cb339dd193514929298112cb refs/heads/main`
-  (`65b7976 Refresh Claude provider availability metadata`). It is
-  independently remote-verified as of the 2026-07-06 retry. It recovers the
-  human-boundary record-sync/push-blocker chain, records the verified backup
-  state, and refreshes Claude direct-provider availability metadata only. It
+  `d6c163a48747edfd906b1f793f93fc82cb58e6ee refs/heads/main`
+  (`d6c163a Record renewed full gate backup blocker`). It is independently
+  remote-verified as of the 2026-07-06 retry. It recovers the verified
+  full-gate backup record and temporary GitHub push-blocker records only. It
   does not call SNAP-T2, append raw rows, replace `main_run_selection.json`,
-  touch local logs, complete Claude-family rows, complete human fidelity, or
-  strengthen paper-facing effectiveness claims. The recovered backup includes
-  the paper-facing ambiguity cleanup in `paper/draft.md` and the AAAI TeX. The earlier substantive paper/package
+  touch local logs, complete Claude-family rows, complete human fidelity, make
+  the final AAAI decision, or strengthen paper-facing effectiveness claims.
+  Historical `65b7976 Refresh Claude provider availability metadata` recovered
+  the human-boundary record-sync/push-blocker chain, refreshed Claude direct
+  provider availability metadata, and included the paper-facing ambiguity
+  cleanup in `paper/draft.md` and the AAAI TeX. The earlier substantive paper/package
   gate checkpoint after the AAAI page-limit,
   paper-finalization, outline-sync recovery, outline claim-drift gate,
   main-results boundary cleanup, real-reuse LLM-ablation handoff guard,

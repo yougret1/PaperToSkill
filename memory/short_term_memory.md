@@ -87,6 +87,13 @@ Current date: 2026-07-06.
   blocker` records that failed backup attempt. Its first `git push origin main`
   failed with `Failed to connect to github.com port 443 after 21111 ms`. Treat
   this as GitHub transport metadata only; no human `ok.txt` is required.
+  A later retry recovered the local record-sync chain: `git push origin main`
+  advanced `main` from `ffb25f3` to `d6c163a`, and
+  `git ls-remote --heads origin main` verified
+  `d6c163a48747edfd906b1f793f93fc82cb58e6ee refs/heads/main`.
+  This is record-sync/GitHub recovery metadata only; it does not change
+  experiments, raw rows, main-row selection, local logs, human-fidelity
+  completion, the AAAI final decision, or paper-facing claim strength.
 - Current paper-boundary continuation: `paper/outline.md` conclusion no longer
   says the next stage is to "repeat and expand the original-style paper
   tasks." It now matches the AAAI paper and draft wording: add human-fidelity
@@ -132,15 +139,16 @@ Current date: 2026-07-06.
   Claude-family rows, human fidelity, AI-Scientist-v2 broad live research
   success, or paper-facing effectiveness claims.
 - Latest locally recorded remote checkpoint is
-  `65b7976a6cf5e856cb339dd193514929298112cb refs/heads/main`
-  (`65b7976 Refresh Claude provider availability metadata`). This phase is
-  independently remote-verified as of the 2026-07-06 retry. It recovers the
-  human-boundary record-sync/push-blocker chain, records the verified backup
-  state, and refreshes Claude direct-provider availability metadata only. It
-  does not call SNAP-T2, append raw rows, replace `main_run_selection.json`,
-  touch local logs, complete Claude-family rows, complete human fidelity, or
-  strengthen paper-facing effectiveness claims.
-- The recovered backup includes the paper-facing ambiguity cleanup in
+  `d6c163a48747edfd906b1f793f93fc82cb58e6ee refs/heads/main`
+  (`d6c163a Record renewed full gate backup blocker`). This record-only
+  checkpoint recovers the verified full-gate backup record and its temporary
+  GitHub push-blocker records. It does not call SNAP-T2, append raw rows,
+  replace `main_run_selection.json`, touch local logs, complete Claude-family
+  rows, complete human fidelity, make the final AAAI decision, or strengthen
+  paper-facing effectiveness claims.
+- Historical `65b7976 Refresh Claude provider availability metadata` recovered
+  the human-boundary record-sync/push-blocker chain and includes the
+  paper-facing ambiguity cleanup in
   `paper/draft.md` and `paper/aaai/papertoskill_aaai2027.tex`, changing
   "completed human fidelity annotation" to "an independent human-fidelity
   annotation study"; the AAAI PDF was rebuilt successfully at 8 pages, and
