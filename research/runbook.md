@@ -38,13 +38,13 @@ LLM-ablation handoff guard, the checkpoint-sync records, the outline
 evidence-boundary sync, the limitations claim gate, the paper-facing
 cost-boundary sync, the stale cost-scope claim guard, the checkpoint-record
 guard sync, the recovered pre-submission gate rerun, the paper-conclusion
-boundary sync record, and the compact SNAP executable-candidate prompt
-contract. The latest verified substantive checkpoint before claiming any later
-phase save is:
+boundary sync record, the compact SNAP executable-candidate prompt contract,
+and the follow-up record-sync/blocker metadata. The latest verified remote
+checkpoint before claiming any later phase save is:
 
 ```text
-245c2b276842de657103f89b5227b8fe53fa9f10 refs/heads/main
-245c2b2 Prepare compact SNAP candidate prompts
+a7a9e3e772883e76404ee217a9ed51278c4c2477 refs/heads/main
+a7a9e3e Record compact checkpoint push blocker
 ```
 
 The earlier failed remote-backup attempts for `501ffc8`, `48aabac`, `8bdd394`,
@@ -72,7 +72,10 @@ A later `git push origin main` recovered the local
 record-sync/blocker/Claude-availability chain. The compact SNAP prompt
 checkpoint then pushed successfully, and `git ls-remote --heads origin main`
 verified `245c2b276842de657103f89b5227b8fe53fa9f10 refs/heads/main`.
-Treat earlier connection resets as GitHub verification-transport metadata only.
+The follow-up compact checkpoint record-sync/blocker chain was later pushed
+and independently verified at
+`a7a9e3e772883e76404ee217a9ed51278c4c2477 refs/heads/main`. Treat earlier
+connection resets as GitHub verification-transport metadata only.
 
 Follow-up commits `45ef25b Sync remote checkpoint after LLM handoff guard` and
 `0538ef1 Record checkpoint sync push blocker` first failed to back up because

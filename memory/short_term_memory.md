@@ -32,6 +32,12 @@ Current date: 2026-07-06.
   Connection was reset`, and the immediate `git ls-remote --heads origin main`
   failed with the same reset. Treat this as GitHub transport metadata only;
   no human `ok.txt` is required for GitHub status.
+- Follow-up blocker-record commit `a7a9e3e Record compact checkpoint push
+  blocker` is now independently remote-verified:
+  `a7a9e3e772883e76404ee217a9ed51278c4c2477 refs/heads/main`. This remote
+  HEAD includes the compact prompt checkpoint plus record-sync/blocker
+  metadata only; it does not add experiment scores, raw rows, or paper-facing
+  main-row changes.
 - Current pre-submission gate rerun after the checkpoint-record sync passed
   without repository diff drift: full unit discovery reported 211 tests OK, and
   strict submission-review, AAAI submission-decision, external-evidence packet,
@@ -468,9 +474,9 @@ Current date: 2026-07-06.
   `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`.
 - Current local/remote status override after the compact SNAP prompt checkpoint:
   the latest locally recorded remote checkpoint is
-  `245c2b276842de657103f89b5227b8fe53fa9f10 refs/heads/main`
-  (`245c2b2 Prepare compact SNAP candidate prompts`). This checkpoint includes the
-  recovered checkpoint-sync commits after the real-reuse LLM-ablation handoff
+  `a7a9e3e772883e76404ee217a9ed51278c4c2477 refs/heads/main`
+  (`a7a9e3e Record compact checkpoint push blocker`). This checkpoint includes
+  the recovered checkpoint-sync commits after the real-reuse LLM-ablation handoff
   guard, the outline update that distinguishes collected/scored saved-response
   rows from unsupported human semantic fidelity, provider billing, and live
   downstream task-success claims, the limitations claim gate, the
@@ -1072,15 +1078,16 @@ Current date: 2026-07-06.
    `check_real_reuse_benchmark.py`, `check_paper_tables.py`,
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
-6. Latest substantive remote-backed checkpoint before further edits:
-   `245c2b2 Prepare compact SNAP candidate prompts`, verified at
-   `245c2b276842de657103f89b5227b8fe53fa9f10 refs/heads/main`. It adds the
-   compact SNAP executable-candidate prompt contract and package/checker
-   records, but does not call a model, score outputs, append raw rows, or
-   replace main rows.
+6. Latest remote-backed checkpoint before further edits:
+   `a7a9e3e Record compact checkpoint push blocker`, verified at
+   `a7a9e3e772883e76404ee217a9ed51278c4c2477 refs/heads/main`. The latest
+   substantive content checkpoint inside that chain remains `245c2b2 Prepare
+   compact SNAP candidate prompts`: it adds the compact SNAP
+   executable-candidate prompt contract and package/checker records, but does
+   not call a model, score outputs, append raw rows, or replace main rows.
 7. Earlier record-sync/blocker/Claude-availability transport failures recovered
    through the successful push and independent remote verification of
-   `245c2b2`; treat the earlier connection resets as GitHub transport metadata
+   `a7a9e3e`; treat the earlier connection resets as GitHub transport metadata
    only.
 8. No experiment-side human action is required for GitHub status right now.
    Continue non-network paper/evidence work and verify remote alignment again

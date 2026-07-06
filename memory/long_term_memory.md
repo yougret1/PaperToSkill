@@ -75,19 +75,21 @@ This file is intentionally compact. Detailed chronological history lives in
   If a network/download problem blocks a core asset or phase save, record the
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
-- Latest verified substantive checkpoint after the AAAI page-limit,
+- Latest verified remote checkpoint after the AAAI page-limit,
   paper-finalization, outline-sync recovery, outline claim-drift gate,
   main-results boundary cleanup, real-reuse LLM-ablation handoff guard,
   recovered checkpoint-sync records, outline evidence-boundary sync,
   limitations-claim gate, model-response cost-boundary sync, stale cost-scope
   claim guard, checkpoint-record guard sync, pre-submission gate rerun,
-  paper-conclusion boundary sync, and compact SNAP executable-candidate prompt
-  contract is
-  `245c2b276842de657103f89b5227b8fe53fa9f10 refs/heads/main`
-  (`245c2b2 Prepare compact SNAP candidate prompts`). This checkpoint includes the
-  compact SNAP prompt plan and package/checker records. It is non-network
-  contract work only: no model calls, no scoring, no raw-row append, and no
-  main-row replacement. The earlier `e57df72` checkpoint includes the
+  paper-conclusion boundary sync, compact SNAP executable-candidate prompt
+  contract, and follow-up record-sync/blocker metadata is
+  `a7a9e3e772883e76404ee217a9ed51278c4c2477 refs/heads/main`
+  (`a7a9e3e Record compact checkpoint push blocker`). The latest substantive
+  content checkpoint inside that chain is `245c2b2 Prepare compact SNAP
+  candidate prompts`; it includes the compact SNAP prompt plan and
+  package/checker records. It is non-network contract work only: no model
+  calls, no scoring, no raw-row append, and no main-row replacement. The
+  earlier `e57df72` checkpoint includes the
   limitations claim gate that covers `paper/limitations.md` with 51 ready
   paper-claim checks / 0 failed checks, the full 209-test verification for
   that gate, and
@@ -132,9 +134,10 @@ This file is intentionally compact. Detailed chronological history lives in
   backup` updates checkpoint records to the verified `245c2b2` compact SNAP
   prompt checkpoint. Its first `git push origin main` and immediate
   `git ls-remote --heads origin main` both failed with `Recv failure:
-  Connection was reset`. Treat this as GitHub transport metadata only; keep
-  `245c2b2` as the latest independently verified substantive checkpoint until
-  a later push and remote check succeed.
+  Connection was reset`. Follow-up blocker-record commit `a7a9e3e Record
+  compact checkpoint push blocker` was later pushed and independently verified
+  at `a7a9e3e772883e76404ee217a9ed51278c4c2477 refs/heads/main`. Treat the
+  earlier failure as GitHub transport metadata only.
 - Recovered follow-up phase-save checkpoint after the `5786d7d` remote baseline:
   `8449799 Guard limitations claim boundary` extends the paper-claim gate to
   `paper/limitations.md`, refreshes the paper-claim/package/submission-review
