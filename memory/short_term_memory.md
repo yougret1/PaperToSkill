@@ -48,7 +48,10 @@ Current date: 2026-07-06.
   required.
   Follow-up documentation sync updates `README.md` and `research/runbook.md`
   with the submission-bundle manifest location, command, status, and
-  package-integrity-only boundary.
+  package-integrity-only boundary. This is committed locally as `e8eb400
+  Document submission bundle manifest workflow`; its first remote backup
+  attempts failed with GitHub connection reset / port-443 errors. Treat this as
+  transport metadata only; no human `ok.txt` is required.
 - Current paper-boundary continuation: `paper/outline.md` conclusion no longer
   says the next stage is to "repeat and expand the original-style paper
   tasks." It now matches the AAAI paper and draft wording: add human-fidelity
