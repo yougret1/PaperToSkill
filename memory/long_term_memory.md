@@ -152,11 +152,13 @@ This file is intentionally compact. Detailed chronological history lives in
   `git push origin main` reported success and local `origin/main` now points
   to `a667264`, but two immediate independent `git ls-remote --heads origin
   main` checks failed with port-443 connectivity and then connection reset.
-  Treat this as GitHub transport verification metadata only; do not claim
-  independent remote verification of `a667264` until a later `ls-remote`
-  succeeds. The current local verification-blocker record commit also failed
-  its first `git push origin main` attempt with `Recv failure: Connection was
-  reset`. No human `ok.txt` is required for GitHub status.
+  Treat this as GitHub transport verification metadata only. Follow-up
+  verification-blocker commit `f677bb2 Record outline backup verification
+  blocker` first failed to push with `Recv failure: Connection was reset`, but
+  a later retry recovered the chain: `git push origin main` advanced `main`
+  from `a667264` to `f677bb2`, and `git ls-remote --heads origin main`
+  verified `f677bb2e2270b5289ace02b6509e13e3ece20e66 refs/heads/main`. No
+  human `ok.txt` is required for GitHub status.
 - Follow-up record-sync commit `0a25da3 Record compact prompt checkpoint
   backup` updates checkpoint records to the verified `245c2b2` compact SNAP
   prompt checkpoint. Its first `git push origin main` and immediate
