@@ -144,6 +144,14 @@ This file is intentionally compact. Detailed chronological history lives in
   Verify the exact current local/remote state with `git status -sb`,
   `git log -5 --oneline`, and a successful `git ls-remote --heads origin main`
   before claiming any later phase is remote-backed.
+- Follow-up local record-sync commit `a9740f7 Record verified GPT probe
+  checkpoint` records the verified `ba366e3` checkpoint in repo records. Its
+  first remote backup attempt failed with
+  `Failed to connect to github.com port 443 after 21124 ms`, and the immediate
+  independent remote check failed with
+  `Failed to connect to github.com port 443 after 21096 ms`. Treat this as
+  GitHub transport metadata only, not an experiment or paper-content failure,
+  and do not create human `ok.txt` for GitHub status.
 - Recovered outline-guard backup: `fd49a53 Guard outline real-reuse future
   work`, `12f676b Record outline guard push blocker`, and `b20eaa7 Record
   renewed outline guard push blocker` are now remote-backed. `git push origin

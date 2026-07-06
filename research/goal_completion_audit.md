@@ -61,6 +61,13 @@ append raw rows, replace `main_run_selection.json`, touch local logs, complete
 Claude-family rows, complete human fidelity, or strengthen paper-facing
 effectiveness claims.
 
+Follow-up local record-sync commit `a9740f7 Record verified GPT probe
+checkpoint` records the verified `ba366e3` checkpoint in repo records. Its
+first remote backup attempt failed with `Failed to connect to github.com port
+443 after 21124 ms`, and the immediate independent remote check failed with
+`Failed to connect to github.com port 443 after 21096 ms`. Treat this as
+GitHub transport metadata only; it does not require human `ok.txt`.
+
 The earlier substantive checkpoint records point to the
 verified paper-finalization, submission-review, outline-sync, outline
 claim-drift, main-results boundary, real-reuse LLM-ablation handoff, recovered

@@ -45,6 +45,15 @@ It does not call SNAP-T2, append raw rows, replace
 Claude-family rows, complete human fidelity, or strengthen paper-facing
 effectiveness claims.
 
+Follow-up local record-sync commit `a9740f7 Record verified GPT probe
+checkpoint` records the verified `ba366e3` checkpoint in repo memory/runbook/
+goal-audit records. Its first `git push origin main` failed with
+`Failed to connect to github.com port 443 after 21124 ms`, and the immediate
+`git ls-remote --heads origin main` failed with
+`Failed to connect to github.com port 443 after 21096 ms`. Treat this as
+GitHub transport metadata only. No human `ok.txt` is required for GitHub
+status.
+
 Earlier on 2026-07-06, the temporary GitHub HTTPS transport blocker
 recovered through the AAAI page-limit backup, the later
 paper-finalization/submission-review chain, the paper-outline sync, the outline
