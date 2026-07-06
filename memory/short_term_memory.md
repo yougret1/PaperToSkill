@@ -113,6 +113,14 @@ Current date: 2026-07-06.
   `git ls-remote --heads origin main` failed with port-443 connectivity after
   21133 ms. Treat this as GitHub transport metadata only; no human `ok.txt` is
   required for GitHub status.
+- Follow-up blocker-record commit `259f708 Record verified outline records
+  push blocker` is now recovered and remote-verified. A later `git push origin
+  main` advanced `main` from `3b0b8a5` to `259f708`, and `git ls-remote
+  --heads origin main` verified
+  `259f708a8d9ed42e390566f38ca027a748b15e9f refs/heads/main`. This is
+  GitHub transport/recovery metadata only and does not change experiments,
+  raw rows, `results/real_reuse/main_run_selection.json`, local logs, or
+  paper-facing claim strength.
 - Follow-up record-sync commit `0a25da3 Record compact prompt checkpoint backup`
   updates memory/runbook/goal-audit records to the verified `245c2b2`
   checkpoint. Its first `git push origin main` failed with `Recv failure:
