@@ -263,6 +263,7 @@
 | `scripts/summarize_human_fidelity_annotations.py` | Summarizes and validates human-fidelity annotation CSV rows with paper-by-criterion cell completion and distinct-reviewer duplicate support | Created |
 | `scripts/build_failure_case_archive.py` | Builds failure-case archive JSON, Markdown, and CSV outputs | Created |
 | `scripts/check_reproducibility_package.py` | Checks local reproducibility package readiness and pending external evidence | Created |
+| `scripts/build_submission_bundle_manifest.py` | Builds a hash-verifiable local submission-bundle manifest for the AAAI paper package and key gate reports without claiming final external-evidence completion | Created |
 | `scripts/check_usage_examples.py` | Verifies usage-example files, prompt/response slots, and an offline auto-note-to-skill example chain | Created |
 | `scripts/build_real_reuse_swe_t1_source_context_followup.py` | Builds the dedicated SWE-T1 shared-source-context follow-up table from first-pass and phase107 raw rows | Created |
 | `scripts/build_real_reuse_swe_t1_issue_aligned_followup.py` | Builds the dedicated phase110 SWE-T1 issue-aligned diagnostic table from first-pass, phase107, and issue-aligned follow-up rows without promoting it to the main table | Created locally |
@@ -299,6 +300,7 @@
 | `tests/test_summarize_human_fidelity_annotations.py` | Smoke test for human-fidelity annotation summarizer | Created |
 | `tests/test_build_failure_case_archive.py` | Smoke test for failure-case archive builder | Created |
 | `tests/test_check_reproducibility_package.py` | Smoke test for reproducibility package checker | Created |
+| `tests/test_build_submission_bundle_manifest.py` | Smoke test for submission-bundle manifest hashing and pending-external-evidence boundary checks | Created |
 | `tests/test_check_usage_examples.py` | Smoke test for usage-example checker and offline example chain | Created |
 | `tests/test_build_real_reuse_swe_t1_issue_aligned_followup.py` | Smoke test for the phase110 SWE-T1 issue-aligned diagnostic table builder | Created locally |
 | `tests/test_build_model_ablation_prompts.py` | Smoke test for model-ablation prompt builder | Created |
@@ -507,6 +509,8 @@
 | `results/reproducibility/paper_claim_report.json` | Machine-readable paper claim-discipline report | Created |
 | `results/reproducibility/submission_review_report.md` | Human-readable submission-review handoff freshness report | Created |
 | `results/reproducibility/submission_review_report.json` | Machine-readable submission-review handoff freshness report | Created |
+| `results/reproducibility/submission_bundle_manifest.md` | Human-readable local submission-bundle manifest with file hashes and pending-evidence boundaries | Created |
+| `results/reproducibility/submission_bundle_manifest.json` | Machine-readable local submission-bundle manifest with SHA256 hashes for the AAAI package and key gate reports | Created |
 | `results/reproducibility/goal_completion_report.md` | Human-readable active-goal completion report with pending evidence boundaries | Created |
 | `results/reproducibility/goal_completion_report.json` | Machine-readable active-goal completion report | Created |
 | `results/external_evidence_closure/closure.md` | Human-readable closure queue for pending external evidence | Created |

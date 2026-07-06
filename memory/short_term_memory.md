@@ -37,6 +37,8 @@ Current date: 2026-07-06.
   `7b847a972f762eca893c8ba9d109102858d8ed4a refs/heads/main`. Treat the earlier
   failures as GitHub transport metadata only; no human `ok.txt` is required for
   GitHub status.
+  Follow-up provenance sync added the manifest builder, its unit test, and the
+  JSON/Markdown manifest outputs to `research/artifact_map.md`.
 - Current paper-boundary continuation: `paper/outline.md` conclusion no longer
   says the next stage is to "repeat and expand the original-style paper
   tasks." It now matches the AAAI paper and draft wording: add human-fidelity
