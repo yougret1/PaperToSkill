@@ -67,7 +67,7 @@ python scripts\check_aaai_package.py --strict
 python scripts\check_paper_tables.py --strict
 python scripts\check_usage_examples.py --strict
 git diff --check
-rg -n "sk-[A-Za-z0-9]{20,}" .
+rg -n "(sk-[A-Za-z0-9]{20,}|Bearer\s+[A-Za-z0-9._-]{20,}|AKIA[0-9A-Z]{16}|AIza[0-9A-Za-z_-]{20,})" .
 ```
 
 If the raw-key scan exits 1 with no matches, that means no raw API-key-like

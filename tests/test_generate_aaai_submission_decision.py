@@ -79,7 +79,7 @@ class GenerateAAAISubmissionDecisionTest(unittest.TestCase):
                 selected_option="wait_for_external_evidence",
                 decision_owner="Research Lead",
                 decision_date="2026-06-20",
-                claim_boundary="sk-" + "a" * 24,
+                claim_boundary="AKIA" + "A" * 16,
                 evidence_policy="wait for evidence",
             )
 

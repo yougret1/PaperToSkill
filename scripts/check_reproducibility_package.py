@@ -460,7 +460,12 @@ TEXT_SUFFIXES = {
     ".yml",
 }
 
-SECRET_PATTERN = re.compile(r"sk-[A-Za-z0-9]{20,}")
+SECRET_PATTERN = re.compile(
+    r"sk-[A-Za-z0-9]{20,}"
+    r"|Bearer\s+[A-Za-z0-9._-]{20,}"
+    r"|AKIA[0-9A-Z]{16}"
+    r"|AIza[0-9A-Za-z_-]{20,}"
+)
 
 
 @dataclass

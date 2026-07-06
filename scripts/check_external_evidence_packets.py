@@ -12,7 +12,12 @@ from typing import Any
 
 
 CLOSURE_REPORT = "results/external_evidence_closure/closure.json"
-SECRET_PATTERN = re.compile(r"sk-[A-Za-z0-9]{20,}")
+SECRET_PATTERN = re.compile(
+    r"sk-[A-Za-z0-9]{20,}"
+    r"|Bearer\s+[A-Za-z0-9._-]{20,}"
+    r"|AKIA[0-9A-Z]{16}"
+    r"|AIza[0-9A-Za-z_-]{20,}"
+)
 HUMAN_HANDOFF_PATH = r"C:\Users\19351\Desktop\tem\toHuman.md"
 HUMAN_OK_PATH = r"C:\Users\19351\Desktop\tem\ok.txt"
 

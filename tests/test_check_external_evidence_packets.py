@@ -151,7 +151,7 @@ class CheckExternalEvidencePacketsTest(unittest.TestCase):
             root = Path(tmp)
             closure_path = root / packets.CLOSURE_REPORT
             closure_path.parent.mkdir(parents=True, exist_ok=True)
-            fake_secret = "sk-" + ("1" * 24)
+            fake_secret = "Bearer " + ("A" * 32)
             closure_path.write_text(
                 json.dumps(
                     {

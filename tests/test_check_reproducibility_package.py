@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "check_reproducibility_package.py"
 sys.path.insert(0, str(ROOT / "scripts"))
 
-from check_reproducibility_package import required_file_checks  # noqa: E402
+from check_reproducibility_package import required_file_checks, secret_scan_check  # noqa: E402
 
 
 class CheckReproducibilityPackageTest(unittest.TestCase):
@@ -23,6 +23,19 @@ class CheckReproducibilityPackageTest(unittest.TestCase):
         statuses = {check.id: check.status for check in checks}
         self.assertEqual("ready", statuses["present"])
         self.assertEqual("fail", statuses["missing"])
+
+    def test_secret_scan_flags_bearer_tokens(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "leak.md").write_text(
+                "Authorization: Bearer " + ("A" * 32),
+                encoding="utf-8",
+            )
+
+            check = secret_scan_check(root)
+
+        self.assertEqual("fail", check.status)
+        self.assertIn("leak.md:1", check.detail)
 
     def test_current_package_is_ready_with_pending_external_evidence(self):
         with tempfile.TemporaryDirectory() as tmp:

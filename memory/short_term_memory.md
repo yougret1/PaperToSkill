@@ -98,6 +98,15 @@ Current date: 2026-07-06.
   verified remote checkpoint remains `65b7976` until a later push and remote
   check recover the local record-sync commit. No human `ok.txt` is required for
   GitHub status.
+- Current non-network submission-safety hardening expands raw-secret checks in
+  the reproducibility package, external-evidence packet, AAAI decision, AAAI
+  decision generator, and DeepSeek configuration paths beyond `sk-*` to also
+  catch raw Bearer tokens, AWS `AKIA...` keys, and Google `AIza...` keys. The
+  submission checklist now uses the broader pre-submission scan. Focused tests
+  and strict package/external-evidence/decision/submission/goal/paper/table/
+  AAAI/usage/real-reuse gates passed after the change. This does not change
+  experiment scores, raw rows, main-row selection, local logs, human-fidelity
+  completion, Claude-family scored rows, or paper-facing claim strength.
 - Phase118 package/checker sync verification is complete locally: focused
   `tests.test_check_reproducibility_package` and
   `tests.test_check_submission_review` passed, full unit discovery passed

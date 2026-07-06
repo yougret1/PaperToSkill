@@ -49,7 +49,7 @@ class ConfigureDeepSeekFollowupTest(unittest.TestCase):
             configure.configure_slot(
                 copy.deepcopy(BASE_TASK),
                 model_alias="deepseek-reasoner",
-                auth_env="sk-" + "1" * 24,
+                auth_env="Bearer " + "1" * 32,
                 base_url_env="DEEPSEEK_BASE_URL",
                 provider_status="configured_pending_live_run",
             )
