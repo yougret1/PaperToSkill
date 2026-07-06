@@ -1081,7 +1081,12 @@ Use these as entry points instead of searching the whole repo first:
   They summarize context/assets with local paths and hashes after phase113,
   phase115, and phase116 SNAP-T2 Summary generations hit provider HTTP 524;
   they do not call a model, score outputs, append raw rows, or replace main
-  rows. Local substantive commit
+  rows. Phase118 then attempted the compact SNAP-T2 Summary/PaperToSkill
+  generation path with GPT-family `gpt-5.5`, a 600-second timeout, 6 attempts,
+  and `max_tokens=2200`; Summary still returned provider HTTP 524 after six
+  attempts, no script or response was saved, and the remaining PaperToSkill
+  side was stopped because paired execution could not proceed. This remains
+  provider availability metadata only. Local substantive commit
   `9829123 Run SNAP executable candidate diagnostics` records the first live
   script-generation/execution checkpoint: Phase111 generated paired
   SNAP-T1 scripts but both failed execution on Windows because they imported
