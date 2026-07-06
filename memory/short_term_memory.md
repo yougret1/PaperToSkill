@@ -85,11 +85,11 @@ Current date: 2026-07-06.
 - Current continuation reran a tiny Claude-family direct availability probe
   using the local Claude API document key in shell-only environment variables,
   Anthropic Messages, aliases `claude-opus-4-8`, `claude-opus-4-7`, and
-  `claude-opus-4-6`, `max_tokens=16`, and a 240-second timeout. All three
-  aliases again returned provider HTTP 502; only the direct-probe JSON
-  timestamp changed. This is provider availability metadata only. Do not run
-  the full six Claude-family real-reuse LLM-ablation rows until a small direct
-  probe returns a usable response.
+  `claude-opus-4-6`, `max_tokens=16`, and a 300-second timeout. All three
+  aliases again returned provider HTTP 502; only the direct-probe report
+  timeout/timestamps changed. This is provider availability metadata only. Do
+  not run the full six Claude-family real-reuse LLM-ablation rows until a
+  small direct probe returns a usable response.
 - Follow-up local record-sync commit `9712985 Record recovered Claude metadata
   backup` updates repo records to the verified `65b7976` checkpoint. Its first
   `git push origin main` and immediate independent `git ls-remote --heads
@@ -1188,6 +1188,16 @@ Current date: 2026-07-06.
   2 pending checks, and 0 failed checks. This is provider availability
   metadata only; the full six Claude-family real-reuse LLM-ablation rows remain
   deferred until a small direct probe returns a usable response.
+- 2026-07-06 continuation Claude direct availability recheck used the same
+  local Claude API document key in shell-only environment variables,
+  Anthropic Messages endpoint, aliases `claude-opus-4-8`,
+  `claude-opus-4-7`, and `claude-opus-4-6`, `max_tokens=16`, and a
+  300-second request timeout. All three aliases again returned provider HTTP
+  502, and the direct-probe report remains
+  `blocked_by_provider_or_model_availability` with 4 ready checks,
+  2 pending checks, and 0 failed checks. This is provider availability
+  metadata only; do not run the full Claude-family real-reuse LLM ablation
+  rows until a small direct probe returns a usable response.
 - Historical remote-backed chain through `0832201`: Claude retry availability, bounded
   summary-comparison claim cleanup, current project record sync, GitHub backup
   recovery, real-reuse record-boundary tightening, the tested SNAP

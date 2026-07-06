@@ -9,7 +9,7 @@ Evidence boundary: this direct provider diagnostic bypasses `ai_scientist.llm`; 
 - Base URL env: PAPERTOSKILL_CLAUDE_BASE_URL
 - Auth env: PAPERTOSKILL_CLAUDE_API_KEY
 - Max tokens: 16
-- Timeout seconds: 240.0
+- Timeout seconds: 300.0
 - Ready checks: 4
 - Pending checks: 2
 - Failed checks: 0

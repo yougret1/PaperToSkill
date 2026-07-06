@@ -1385,8 +1385,8 @@ DeepSeek:
 - 2026-07-06 continuation Claude direct availability recheck: using the same
   local Claude API document key in shell-only environment variables, Anthropic
   Messages endpoint, aliases `claude-opus-4-8`, `claude-opus-4-7`, and
-  `claude-opus-4-6`, `max_tokens=16`, and a 240-second timeout, all three
-  aliases again returned provider HTTP 502. Only the direct-probe JSON
-  timestamp changed. Treat this as provider availability metadata; do not run
-  the full Claude-family real-reuse LLM ablation rows until a small direct
-  probe returns a usable response.
+  `claude-opus-4-6`, `max_tokens=16`, and a 300-second timeout, all three
+  aliases again returned provider HTTP 502. Only the direct-probe report
+  timeout/timestamps changed. Treat this as provider availability metadata; do
+  not run the full Claude-family real-reuse LLM ablation rows until a small
+  direct probe returns a usable response.
