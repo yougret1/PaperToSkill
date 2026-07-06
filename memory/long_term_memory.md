@@ -136,24 +136,17 @@ This file is intentionally compact. Detailed chronological history lives in
   Verify the exact current local/remote state with `git status -sb`,
   `git log -5 --oneline`, and a successful `git ls-remote --heads origin main`
   before claiming any later phase is remote-backed.
-- Local follow-up phase-save commit `fd49a53 Guard outline real-reuse future
-  work` updates the paper outline conclusion to the locked-row stabilization
-  policy and extends the paper-claim guard against stale "repeat and expand
-  the original-style paper tasks" future-work wording. Its first `git push
-  origin main` failed with `Failed to connect to github.com port 443 after
-  21119 ms`, and the immediate `git ls-remote --heads origin main` failed with
-  port-443 connectivity after 21089 ms. Treat this as GitHub transport
-  metadata only; do not create human `ok.txt` for GitHub status, and do not
-  claim `fd49a53` is remote-backed until a later push and independent remote
-  check succeed.
-- Follow-up local blocker-record commit `12f676b Record outline guard push
-  blocker` records the `fd49a53` local-only backup blocker in repo memory. Its
-  backup attempt failed with `Failed to connect to github.com port 443 after
-  21139 ms`, and the immediate `git ls-remote --heads origin main` failed with
-  `Recv failure: Connection was reset`. Treat this as GitHub transport
-  metadata only; the local branch remains ahead of `origin/main` by 2 until a
-  later push and independent remote check succeed. Do not create human
-  `ok.txt` for GitHub status.
+- Recovered outline-guard backup: `fd49a53 Guard outline real-reuse future
+  work`, `12f676b Record outline guard push blocker`, and `b20eaa7 Record
+  renewed outline guard push blocker` are now remote-backed. `git push origin
+  main` advanced `main` from `6cef41e` to `b20eaa7`, and `git ls-remote
+  --heads origin main` verified
+  `b20eaa7c96003523f41140a5c15a6f8ae91daa41 refs/heads/main`. This is
+  paper-outline boundary and GitHub transport/recovery metadata only; it does
+  not change experiments, raw rows, `results/real_reuse/main_run_selection.json`,
+  local logs, or paper-facing claim strength. Earlier port-443 and
+  connection-reset failures are historical GitHub transport metadata only; no
+  human `ok.txt` is required for GitHub status.
 - Follow-up record-sync commit `0a25da3 Record compact prompt checkpoint
   backup` updates checkpoint records to the verified `245c2b2` compact SNAP
   prompt checkpoint. Its first `git push origin main` and immediate

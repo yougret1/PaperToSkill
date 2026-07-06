@@ -71,28 +71,17 @@ Current date: 2026-07-06.
   resume-time `git ls-remote --heads origin main` attempt failed with GitHub
   port-443 connectivity, so recheck before making any new remote-alignment
   claim.
-- Current local phase-save commit `fd49a53 Guard outline real-reuse future
-  work` updates `paper/outline.md` so the conclusion matches the AAAI/draft
-  locked-row stabilization wording and adds a paper-claim regression guard for
-  stale "repeat and expand the original-style paper tasks" wording. Focused
-  claim/package/goal tests and strict paper-claim, package, goal, submission
-  review, AAAI-decision, and paper-table gates passed before this save. The
-  first `git push origin main` failed with `Failed to connect to github.com
-  port 443 after 21119 ms`, and immediate `git ls-remote --heads origin main`
-  failed with port-443 connectivity after 21089 ms. Treat this as GitHub
-  transport metadata only; the local branch is ahead by 1 until a later push
-  and independent remote check succeed. No human `ok.txt` is required for
-  GitHub status.
-- Follow-up local blocker-record commit `12f676b Record outline guard push
-  blocker` records the `fd49a53` local-only backup blocker in repo memory. The
-  pre-save verification rerun passed focused paper-claim/package/goal tests,
-  strict paper-claim, package, goal, submission-review, AAAI-decision, and
-  paper-table gates, protected-path diff checks, and a bounded raw-key scan.
-  A later `git push origin main` failed with `Failed to connect to github.com
-  port 443 after 21139 ms`, and `git ls-remote --heads origin main` failed
-  with `Recv failure: Connection was reset`. Treat this as GitHub transport
-  metadata only; the local branch is ahead by 2 until a later push and
-  independent remote check succeed. No human `ok.txt` is required for GitHub
+- Recovered outline-guard backup: `fd49a53 Guard outline real-reuse future
+  work`, `12f676b Record outline guard push blocker`, and `b20eaa7 Record
+  renewed outline guard push blocker` are now remote-backed. `git push origin
+  main` advanced `main` from `6cef41e` to `b20eaa7`, and `git ls-remote
+  --heads origin main` verified
+  `b20eaa7c96003523f41140a5c15a6f8ae91daa41 refs/heads/main`. This chain
+  updates the outline future-work boundary and records/recovers the temporary
+  GitHub transport blocker only; it does not change experiment scores, raw
+  rows, `results/real_reuse/main_run_selection.json`, local logs, or claim
+  strength. Earlier port-443 and connection-reset failures are historical
+  GitHub transport metadata only. No human `ok.txt` is required for GitHub
   status.
 - Follow-up record-sync commit `0a25da3 Record compact prompt checkpoint backup`
   updates memory/runbook/goal-audit records to the verified `245c2b2`
