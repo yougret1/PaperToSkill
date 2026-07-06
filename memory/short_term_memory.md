@@ -94,20 +94,25 @@ Current date: 2026-07-06.
   This is record-sync/GitHub recovery metadata only; it does not change
   experiments, raw rows, main-row selection, local logs, human-fidelity
   completion, the AAAI final decision, or paper-facing claim strength.
-  Follow-up local record-sync commit `0117c2b Record recovered full gate
-  backup` updates memory/runbook/goal-audit records to the verified `d6c163a`
-  checkpoint and refreshes the goal-completion report plus submission-bundle
-  manifest hashes. Its first `git push origin main` failed with `Failed to
-  connect to github.com port 443 after 21077 ms`, and the immediate
-  `git ls-remote --heads origin main` failed with port-443 connectivity after
-  21115 ms. Treat this as GitHub transport metadata only; no human `ok.txt` is
-  required. The latest independently verified remote checkpoint remains
-  `d6c163a` until a later push and independent remote check recover `0117c2b`.
+  A follow-up local record-sync commit updated memory/runbook/goal-audit
+  records to the verified `d6c163a` checkpoint and refreshed the
+  goal-completion report plus submission-bundle manifest hashes. Its first
+  `git push origin main` failed with `Failed to connect to github.com port 443
+  after 21077 ms`, and the immediate `git ls-remote --heads origin main`
+  failed with port-443 connectivity after 21115 ms. Treat this as GitHub
+  transport metadata only; no human `ok.txt` is required.
   The follow-up blocker-record commit with subject `Record recovered backup
   push blocker` is local-only after its first `git push origin main` also
   failed with `Failed to connect to github.com port 443 after 21139 ms`. Treat
   this as GitHub transport metadata only; do not create `ok.txt` for GitHub
   status.
+  A later retry recovered both local commits: `git push origin main` advanced
+  `main` from `d6c163a` to `22b254f`, and
+  `git ls-remote --heads origin main` verified
+  `22b254f142e323b19a12f077981c5a2e8e491319 refs/heads/main`.
+  This is record-sync/GitHub recovery metadata only and does not change
+  experiments, raw rows, main-row selection, local logs, human-fidelity
+  completion, the AAAI final decision, or paper-facing claim strength.
 - Current paper-boundary continuation: `paper/outline.md` conclusion no longer
   says the next stage is to "repeat and expand the original-style paper
   tasks." It now matches the AAAI paper and draft wording: add human-fidelity
@@ -153,13 +158,13 @@ Current date: 2026-07-06.
   Claude-family rows, human fidelity, AI-Scientist-v2 broad live research
   success, or paper-facing effectiveness claims.
 - Latest locally recorded remote checkpoint is
-  `d6c163a48747edfd906b1f793f93fc82cb58e6ee refs/heads/main`
-  (`d6c163a Record renewed full gate backup blocker`). This record-only
-  checkpoint recovers the verified full-gate backup record and its temporary
-  GitHub push-blocker records. It does not call SNAP-T2, append raw rows,
-  replace `main_run_selection.json`, touch local logs, complete Claude-family
-  rows, complete human fidelity, make the final AAAI decision, or strengthen
-  paper-facing effectiveness claims.
+  `22b254f142e323b19a12f077981c5a2e8e491319 refs/heads/main`
+  (`22b254f Record recovered backup push blocker`). This record-only
+  checkpoint recovers the previous record-sync commit and the temporary
+  recovered-backup push-blocker record. It does not call SNAP-T2, append raw
+  rows, replace `main_run_selection.json`, touch local logs, complete
+  Claude-family rows, complete human fidelity, make the final AAAI decision,
+  or strengthen paper-facing effectiveness claims.
 - Historical `65b7976 Refresh Claude provider availability metadata` recovered
   the human-boundary record-sync/push-blocker chain and includes the
   paper-facing ambiguity cleanup in

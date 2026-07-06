@@ -34,17 +34,17 @@ Current status as of 2026-07-06: the latest locally recorded remote checkpoint
 is:
 
 ```text
-d6c163a48747edfd906b1f793f93fc82cb58e6ee refs/heads/main
-d6c163a Record renewed full gate backup blocker
+22b254f142e323b19a12f077981c5a2e8e491319 refs/heads/main
+22b254f Record recovered backup push blocker
 ```
 
-This latest checkpoint recovers the verified full-gate backup record and the
-temporary GitHub push-blocker records only. It does not call SNAP-T2, append raw rows, replace
-`results/real_reuse/main_run_selection.json`, touch local logs, complete
-Claude-family rows, complete human fidelity, make the final AAAI decision, or
-strengthen paper-facing effectiveness claims. Earlier GitHub connection-reset,
-SSL read, and port-443 failures for that chain are transport metadata only. No
-human `ok.txt` is required for GitHub status.
+This latest checkpoint recovers the previous record-sync commit and the
+temporary recovered-backup push-blocker record only. It does not call SNAP-T2,
+append raw rows, replace `results/real_reuse/main_run_selection.json`, touch
+local logs, complete Claude-family rows, complete human fidelity, make the
+final AAAI decision, or strengthen paper-facing effectiveness claims. Earlier
+GitHub connection-reset, SSL read, and port-443 failures for that chain are
+transport metadata only. No human `ok.txt` is required for GitHub status.
 
 Historical checkpoint `65b7976 Refresh Claude provider availability metadata`
 recovered the earlier human-boundary record-sync / push-blocker chain,

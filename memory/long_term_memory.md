@@ -76,13 +76,14 @@ This file is intentionally compact. Detailed chronological history lives in
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
 - Latest locally recorded remote checkpoint is
-  `d6c163a48747edfd906b1f793f93fc82cb58e6ee refs/heads/main`
-  (`d6c163a Record renewed full gate backup blocker`). It is independently
-  remote-verified as of the 2026-07-06 retry. It recovers the verified
-  full-gate backup record and temporary GitHub push-blocker records only. It
-  does not call SNAP-T2, append raw rows, replace `main_run_selection.json`,
-  touch local logs, complete Claude-family rows, complete human fidelity, make
-  the final AAAI decision, or strengthen paper-facing effectiveness claims.
+  `22b254f142e323b19a12f077981c5a2e8e491319 refs/heads/main`
+  (`22b254f Record recovered backup push blocker`). It is independently
+  remote-verified as of the 2026-07-06 retry. It recovers the previous
+  record-sync commit and the temporary recovered-backup push-blocker record
+  only. It does not call SNAP-T2, append raw rows, replace
+  `main_run_selection.json`, touch local logs, complete Claude-family rows,
+  complete human fidelity, make the final AAAI decision, or strengthen
+  paper-facing effectiveness claims.
   Historical `65b7976 Refresh Claude provider availability metadata` recovered
   the human-boundary record-sync/push-blocker chain, refreshed Claude direct
   provider availability metadata, and included the paper-facing ambiguity
