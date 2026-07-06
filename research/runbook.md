@@ -47,6 +47,13 @@ paper-facing effectiveness claims. Earlier GitHub port-443 failures for the
 recovered record-sync chain are transport metadata only. No human `ok.txt` is
 required for GitHub status.
 
+Follow-up local record-sync commit `ce70e04 Record verified human boundary
+checkpoint` updates repo records to the verified `98ba943` checkpoint. Its
+first `git push origin main` failed with `Recv failure: Connection was reset`,
+and the immediate independent `git ls-remote --heads origin main` failed with
+the same reset error. Treat this as GitHub transport metadata only and avoid a
+tight retry loop.
+
 Earlier on 2026-07-06, the temporary GitHub HTTPS transport blocker
 recovered through the AAAI page-limit backup, the later
 paper-finalization/submission-review chain, the paper-outline sync, the outline

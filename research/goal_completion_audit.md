@@ -63,6 +63,13 @@ complete human fidelity, or strengthen paper-facing effectiveness claims.
 Earlier GitHub port-443 failures for the recovered record-sync chain are
 transport metadata only and do not require human `ok.txt`.
 
+Follow-up local record-sync commit `ce70e04 Record verified human boundary
+checkpoint` updates repo records to the verified `98ba943` checkpoint. Its
+first `git push origin main` failed with `Recv failure: Connection was reset`,
+and the immediate independent `git ls-remote --heads origin main` failed with
+the same reset error. Treat this as GitHub transport metadata only and do not
+create human `ok.txt` for GitHub status.
+
 The earlier substantive checkpoint records point to the
 verified paper-finalization, submission-review, outline-sync, outline
 claim-drift, main-results boundary, real-reuse LLM-ablation handoff, recovered

@@ -152,6 +152,12 @@ This file is intentionally compact. Detailed chronological history lives in
   port-443 errors are GitHub transport metadata only, not experiment or
   paper-content failures. The later `98ba943` push recovered that chain; do not
   create human `ok.txt` for GitHub status.
+- Follow-up local record-sync commit `ce70e04 Record verified human boundary
+  checkpoint` updates repo records to the verified `98ba943` checkpoint. Its
+  first `git push origin main` failed with `Recv failure: Connection was
+  reset`, and the immediate independent `git ls-remote --heads origin main`
+  failed with the same reset error. Treat this as GitHub transport metadata
+  only; do not create human `ok.txt` for GitHub status.
 - Recovered outline-guard backup: `fd49a53 Guard outline real-reuse future
   work`, `12f676b Record outline guard push blocker`, and `b20eaa7 Record
   renewed outline guard push blocker` are now remote-backed. `git push origin

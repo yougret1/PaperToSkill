@@ -76,6 +76,13 @@ Current date: 2026-07-06.
   paper-facing effectiveness claims. Earlier GitHub port-443 failures for the
   recovered record-sync chain are transport metadata only; no human `ok.txt` is
   required for GitHub status.
+- Follow-up local record-sync commit `ce70e04 Record verified human boundary
+  checkpoint` updates repo records to the verified `98ba943` checkpoint. Its
+  first `git push origin main` failed with `Recv failure: Connection was
+  reset`, and the immediate independent `git ls-remote --heads origin main`
+  failed with the same reset error. Treat this as GitHub transport metadata
+  only; the latest independently verified remote checkpoint remains `98ba943`
+  until a later push and remote check recover the local record-sync commit.
 - Phase118 package/checker sync verification is complete locally: focused
   `tests.test_check_reproducibility_package` and
   `tests.test_check_submission_review` passed, full unit discovery passed
