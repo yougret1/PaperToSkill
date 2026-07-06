@@ -169,8 +169,8 @@ The metrics are deterministic:
   `o200k_base` when available and the same character proxy as a fallback.
 
 These metrics are reproducible gates. They do not replace live agent execution,
-real billing records, invoice evidence, success-per-dollar accounting, or
-completed human fidelity annotation. The current package uses local token
+real billing records, invoice evidence, success-per-dollar accounting, or an
+independent human-fidelity annotation study. The current package uses local token
 accounting over input-token and saved-response output-token proxies. To support
 later human review, we also
 prepare a six-criterion fidelity protocol, paper-specific review packets, a
