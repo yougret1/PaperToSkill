@@ -22,7 +22,10 @@ Current date: 2026-07-06.
   score outputs, append raw rows, replace main rows, or alter
   `results/real_reuse/main_run_selection.json`. The compact SNAP-T2 Summary
   prompt is 5,150 bytes versus 7,111 for the full packet, and compact SNAP-T2
-  PaperToSkill is 5,553 bytes versus 14,122.
+  PaperToSkill is 5,553 bytes versus 14,122. The phase is committed and
+  independently remote-verified as
+  `245c2b276842de657103f89b5227b8fe53fa9f10 refs/heads/main`
+  (`245c2b2 Prepare compact SNAP candidate prompts`).
 - Current pre-submission gate rerun after the checkpoint-record sync passed
   without repository diff drift: full unit discovery reported 211 tests OK, and
   strict submission-review, AAAI submission-decision, external-evidence packet,
@@ -457,10 +460,10 @@ Current date: 2026-07-06.
   GitHub retry pushed the follow-up record-sync and Claude availability
   commits, and `git ls-remote --heads origin main` verified
   `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`.
-- Current local/remote status override after the paper-conclusion boundary sync:
+- Current local/remote status override after the compact SNAP prompt checkpoint:
   the latest locally recorded remote checkpoint is
-  `e57df723bb8bc147626a6769cb2e765311ad6e13 refs/heads/main`
-  (`e57df72 Align paper conclusion with locked-row evidence`). This checkpoint includes the
+  `245c2b276842de657103f89b5227b8fe53fa9f10 refs/heads/main`
+  (`245c2b2 Prepare compact SNAP candidate prompts`). This checkpoint includes the
   recovered checkpoint-sync commits after the real-reuse LLM-ablation handoff
   guard, the outline update that distinguishes collected/scored saved-response
   rows from unsupported human semantic fidelity, provider billing, and live
@@ -468,7 +471,8 @@ Current date: 2026-07-06.
   paper-facing saved-response cost-boundary sync, and the stale cost-scope
   regression guard with 56 ready paper-claim checks / 0 failures, plus the
   checkpoint-record guard sync, checkpoint blocker records, pre-submission
-  gate rerun record, and the paper-conclusion boundary sync. Older
+  gate rerun record, the paper-conclusion boundary sync, and the compact SNAP
+  executable-candidate prompt contract. Older
   current-status bullets in this file are historical
   checkpoints only; use fresh `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
@@ -1063,13 +1067,15 @@ Current date: 2026-07-06.
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
 6. Latest substantive remote-backed checkpoint before further edits:
-   `e57df72 Align paper conclusion with locked-row evidence`, verified at
-   `e57df723bb8bc147626a6769cb2e765311ad6e13 refs/heads/main`.
-7. The local record-sync/blocker/Claude-availability chain was pushed with a
-   success message and local `origin/main` equals `HEAD`, but independent
-   `git ls-remote --heads origin main` verification failed twice with `Recv
-   failure: Connection was reset`; this is GitHub verification-transport
-   metadata only.
+   `245c2b2 Prepare compact SNAP candidate prompts`, verified at
+   `245c2b276842de657103f89b5227b8fe53fa9f10 refs/heads/main`. It adds the
+   compact SNAP executable-candidate prompt contract and package/checker
+   records, but does not call a model, score outputs, append raw rows, or
+   replace main rows.
+7. Earlier record-sync/blocker/Claude-availability transport failures recovered
+   through the successful push and independent remote verification of
+   `245c2b2`; treat the earlier connection resets as GitHub transport metadata
+   only.
 8. No experiment-side human action is required for GitHub status right now.
    Continue non-network paper/evidence work and verify remote alignment again
    before claiming any later phase save is remote-backed.

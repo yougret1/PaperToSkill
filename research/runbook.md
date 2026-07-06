@@ -37,14 +37,14 @@ claim-drift gate, the main-results boundary cleanup, the real-reuse
 LLM-ablation handoff guard, the checkpoint-sync records, the outline
 evidence-boundary sync, the limitations claim gate, the paper-facing
 cost-boundary sync, the stale cost-scope claim guard, the checkpoint-record
-guard sync, the recovered pre-submission gate rerun, and the paper-conclusion
-boundary sync
-record. The latest verified substantive checkpoint
-before claiming any later phase save is:
+guard sync, the recovered pre-submission gate rerun, the paper-conclusion
+boundary sync record, and the compact SNAP executable-candidate prompt
+contract. The latest verified substantive checkpoint before claiming any later
+phase save is:
 
 ```text
-e57df723bb8bc147626a6769cb2e765311ad6e13 refs/heads/main
-e57df72 Align paper conclusion with locked-row evidence
+245c2b276842de657103f89b5227b8fe53fa9f10 refs/heads/main
+245c2b2 Prepare compact SNAP candidate prompts
 ```
 
 The earlier failed remote-backup attempts for `501ffc8`, `48aabac`, `8bdd394`,
@@ -68,13 +68,11 @@ both failed with `Recv failure: Connection was reset`. Treat this as GitHub
 transport metadata only; keep the remote-backed baseline at `e57df72` until a
 later push and remote check succeed.
 
-A later `git push origin main` reported success for that local
-record-sync/blocker/Claude-availability chain and local `origin/main` equals
-`HEAD`, but two immediate independent `git ls-remote --heads origin main`
-checks both failed with `Recv failure: Connection was reset`. Treat this as
-GitHub verification-transport metadata only; keep `e57df72` as the latest
-independently verified remote-backed baseline until a later remote check
-succeeds.
+A later `git push origin main` recovered the local
+record-sync/blocker/Claude-availability chain. The compact SNAP prompt
+checkpoint then pushed successfully, and `git ls-remote --heads origin main`
+verified `245c2b276842de657103f89b5227b8fe53fa9f10 refs/heads/main`.
+Treat earlier connection resets as GitHub verification-transport metadata only.
 
 Follow-up commits `45ef25b Sync remote checkpoint after LLM handoff guard` and
 `0538ef1 Record checkpoint sync push blocker` first failed to back up because

@@ -80,10 +80,14 @@ This file is intentionally compact. Detailed chronological history lives in
   main-results boundary cleanup, real-reuse LLM-ablation handoff guard,
   recovered checkpoint-sync records, outline evidence-boundary sync,
   limitations-claim gate, model-response cost-boundary sync, stale cost-scope
-  claim guard, checkpoint-record guard sync, pre-submission gate rerun, and
-  paper-conclusion boundary sync is
-  `e57df723bb8bc147626a6769cb2e765311ad6e13 refs/heads/main`
-  (`e57df72 Align paper conclusion with locked-row evidence`). This checkpoint includes the
+  claim guard, checkpoint-record guard sync, pre-submission gate rerun,
+  paper-conclusion boundary sync, and compact SNAP executable-candidate prompt
+  contract is
+  `245c2b276842de657103f89b5227b8fe53fa9f10 refs/heads/main`
+  (`245c2b2 Prepare compact SNAP candidate prompts`). This checkpoint includes the
+  compact SNAP prompt plan and package/checker records. It is non-network
+  contract work only: no model calls, no scoring, no raw-row append, and no
+  main-row replacement. The earlier `e57df72` checkpoint includes the
   limitations claim gate that covers `paper/limitations.md` with 51 ready
   paper-claim checks / 0 failed checks, the full 209-test verification for
   that gate, and

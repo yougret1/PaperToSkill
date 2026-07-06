@@ -54,25 +54,21 @@ claim-drift, main-results boundary, real-reuse LLM-ablation handoff, recovered
 checkpoint-sync, outline evidence-boundary sync, limitations-claim gate,
 paper-facing cost-boundary sync, stale cost-scope claim guard,
 checkpoint-record guard sync, recovered pre-submission gate rerun, and
-paper-conclusion boundary sync
+paper-conclusion boundary sync, plus the compact SNAP executable-candidate
+prompt contract
 checkpoint:
-`e57df723bb8bc147626a6769cb2e765311ad6e13 refs/heads/main`
-(`e57df72 Align paper conclusion with locked-row evidence`). Earlier record-only checkpoint
+`245c2b276842de657103f89b5227b8fe53fa9f10 refs/heads/main`
+(`245c2b2 Prepare compact SNAP candidate prompts`). Earlier record-only checkpoint
 syncs, the first page-limit backup attempt, the first paper-finalization backup
 attempts, the first `95f1af3`/`66e4763` backup attempts, and the first
 `45ef25b`/`0538ef1` backup attempts hit GitHub transport errors, but later
 pushes recovered. Follow-up record-only commits after `43f9092` initially hit
 GitHub HTTPS transport failures, but later pushes recovered them through
 `bd3fe6e`, and the later paper-conclusion boundary sync was verified through
-`e57df72`. A follow-up record-sync/blocker chain is local-only as of this audit
-because both `git push origin main` and `git ls-remote --heads origin main`
-failed with `Recv failure: Connection was reset`. This is GitHub transport
-metadata only.
-After that audit, a later `git push origin main` reported success for the local
-record-sync/blocker/Claude-availability chain and local `origin/main` equals
-`HEAD`, but two immediate independent `git ls-remote --heads origin main`
-checks both failed with `Recv failure: Connection was reset`. This is GitHub
-verification-transport metadata only.
+`e57df72`. Later pushes recovered the local record-sync/blocker/
+Claude-availability chain, and the compact SNAP prompt checkpoint was pushed
+and independently verified at `245c2b2`. Earlier connection resets remain
+GitHub transport metadata only.
 
 ## Requirement Audit
 
@@ -80,7 +76,7 @@ verification-transport metadata only.
 | --- | --- | --- | --- |
 | Durable local memory | `memory/long_term_memory.md`; `memory/short_term_memory.md` | Complete locally | Read and update both memory files after every resume/compaction. |
 | Use `ai-scientist-v2` to refine PaperToSkill | Seed idea files, bounded smoke report, full live-run handoff, Phase 76 run log, completion directory | Complete for bounded local evidence | Do not treat the synthetic run as broad live task success. |
-| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. The latest verified substantive remote-backed checkpoint is `e57df723bb8bc147626a6769cb2e765311ad6e13 refs/heads/main` (`e57df72 Align paper conclusion with locked-row evidence`). It includes the recovered checkpoint-sync commits after the real-reuse LLM-ablation handoff guard, the outline evidence-boundary sync that distinguishes collected saved-response rows from unsupported human semantic fidelity, provider billing, and live downstream task-success claims, the limitations claim gate, the paper-facing saved-response cost-boundary sync, the stale cost-scope regression guard, the checkpoint-record guard sync, the checkpoint blocker records, the pre-submission gate rerun record, and the paper-conclusion boundary sync. A follow-up local chain received a successful push message and local `origin/main` equals `HEAD`, but independent remote verification is still pending after connection-reset failures. Earlier connection-reset and port-443 failures remain GitHub transport metadata rather than experiment-correctness evidence. | Complete locally; latest independently verified substantive remote-backed checkpoint is `e57df72` as of the 2026-07-06 verification; later local tracking is synchronized but awaits independent `ls-remote` verification | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim with `git status -sb`, `git log -5 --oneline`, and `git ls-remote --heads origin main`; keep transport failures separate from experiment correctness and record exact failures in `C:\Users\19351\Desktop\tem\toHuman.md` if they recur. |
+| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. The latest verified substantive remote-backed checkpoint is `245c2b276842de657103f89b5227b8fe53fa9f10 refs/heads/main` (`245c2b2 Prepare compact SNAP candidate prompts`). It includes the recovered checkpoint-sync commits after the real-reuse LLM-ablation handoff guard, the outline evidence-boundary sync that distinguishes collected saved-response rows from unsupported human semantic fidelity, provider billing, and live downstream task-success claims, the limitations claim gate, the paper-facing saved-response cost-boundary sync, the stale cost-scope regression guard, the checkpoint-record guard sync, the checkpoint blocker records, the pre-submission gate rerun record, the paper-conclusion boundary sync, and the compact SNAP executable-candidate prompt contract. Earlier connection-reset and port-443 failures remain GitHub transport metadata rather than experiment-correctness evidence. | Complete locally; latest independently verified substantive remote-backed checkpoint is `245c2b2` as of the 2026-07-06 verification | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim with `git status -sb`, `git log -5 --oneline`, and `git ls-remote --heads origin main`; keep transport failures separate from experiment correctness and record exact failures in `C:\Users\19351\Desktop\tem\toHuman.md` if they recur. |
 | Official AAAI TeX package | `paper/aaai/`; `results/reproducibility/aaai_package_report.md` | Locally ready | Keep draft synchronized with new evidence. |
 | Usage examples | `examples/usage/`; `results/reproducibility/usage_example_report.md` | Complete locally | Re-run after runner or task changes. |
 | Model ablations | `results/model_ablation_prompts/v0/evaluation.md`: 6 scored, 0 pending | Complete for saved-response protocol | Do not claim broad model quality or live task success. |
