@@ -36,9 +36,9 @@ source maps and source-span validation, usage examples, saved live-transfer
 response scoring, saved Claude/GPT-family/DeepSeek model-ablation response
 scoring, local token-accounting proxies, bounded Paper2Agent positioning, and a
 bounded AI-Scientist-v2 smoke/full live run. The local submission-bundle
-manifest records hashes for the AAAI paper package and key gate reports. These
-are supporting, bounded, or package-integrity evidence, not substitutes for
-real-reuse task outcomes.
+manifest records hashes for the AAAI paper package, key gate reports, and
+handoff/provenance documents. These are supporting, bounded, or
+package-integrity evidence, not substitutes for real-reuse task outcomes.
 
 The active goal is still not complete because human-fidelity annotation is
 pending and final AAAI submission readiness remains gated by the recorded

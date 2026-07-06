@@ -60,6 +60,13 @@ Current date: 2026-07-06.
   origin main` and immediate `git ls-remote --heads origin main` both failed
   with GitHub connection reset. Treat this as transport metadata only; no human
   `ok.txt` is required.
+  Current local manifest-coverage hardening extends
+  `scripts/build_submission_bundle_manifest.py` so the manifest also hashes
+  `README.md`, `research/artifact_map.md`, `research/runbook.md`, and
+  `research/goal_completion_audit.md`; `README.md` and `research/runbook.md`
+  now describe that handoff/provenance coverage. This is package-integrity
+  evidence only and does not change experiments, raw rows, main-row selection,
+  local logs, or claim strength.
 - Current paper-boundary continuation: `paper/outline.md` conclusion no longer
   says the next stage is to "repeat and expand the original-style paper
   tasks." It now matches the AAAI paper and draft wording: add human-fidelity

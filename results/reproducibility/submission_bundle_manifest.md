@@ -29,6 +29,10 @@ Evidence boundary: this manifest records local package files, hashes, and gate s
 | external_packets_report | yes | 10446 | 5687838eee38e09f22d95cfd0f37605369c0dfdfa3bb68264be31543e9c50669 | results/external_evidence_packets/packets.json |
 | aaai_submission_decision_report | yes | 10306 | 80b42507176e3ccba3fb497e01a58a47c4ec769119a2df1cf0ce6a37cdf60321 | results/aaai_submission_decision/decision.json |
 | human_fidelity_summary | yes | 2629 | 9c17a037adff51537a5a1428576dcc4bddefc9e658ded7f423b825147de92bc4 | results/human_fidelity_packets/annotation_summary.json |
+| repo_readme | yes | 7392 | 0c8da6c030f47e272af3c7f8ec2df170fa861511e6de140f8203dae476667c57 | README.md |
+| artifact_map | yes | 79969 | ee5584a68a93722c7ed6689192b20b1d36b1436832f36fc1e76fd44f8b92c1ff | research/artifact_map.md |
+| runbook | yes | 71407 | 22f3635043efc9f843e0040c1160de2586c999b1d2f1c6019d8825fbf976c95d | research/runbook.md |
+| goal_completion_audit | yes | 21101 | 075e99f41b1a926e3befcb016f4efaa8e613770830ca32fab2d1f8b99e1cc49a | research/goal_completion_audit.md |
 | submission_checklist | yes | 11067 | 1fe8073157d2e3e10e4a48e139c6ae80273f42104b6a39679d52eeb2227a498c | research/submission_checklist.md |
 | review_report | yes | 15178 | 3f9791bfd0f0b6f0b0210a31f0fe30020180f3013252e1b675109d4868ac03a2 | research/review_report.md |
 | rebuttal_bank | yes | 12820 | 5d82b4781b0fb7a2355f7e876f5cffe3294f8ef7372420eb466d54da13577435 | research/rebuttal_bank.md |

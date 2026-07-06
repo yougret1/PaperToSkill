@@ -1022,11 +1022,14 @@ Use these as entry points instead of searching the whole repo first:
 - Submission bundle manifest:
   `results/reproducibility/submission_bundle_manifest.md`
   reports `ready_with_pending_external_evidence`, records SHA256 hashes for the
-  AAAI paper package and key gate reports, and does not claim final submission
+  AAAI paper package, key gate reports, and current handoff/provenance entry
+  points (`README.md`, `research/artifact_map.md`, `research/runbook.md`, and
+  `research/goal_completion_audit.md`). It does not claim final submission
   readiness or completed external evidence. The manifest phase and its
   artifact-map/documentation/provenance sync chain are independently
   remote-verified through
-  `cdad88e3fe2c05c34c5b5c761887e14c5e89023d refs/heads/main`.
+  `cdad88e3fe2c05c34c5b5c761887e14c5e89023d refs/heads/main`; the expanded
+  manifest coverage is a newer local hardening step until saved and backed up.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
   reports `not_complete_pending_external_evidence`, 78 ready checks, 3 pending

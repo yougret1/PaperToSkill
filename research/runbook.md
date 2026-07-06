@@ -1380,8 +1380,10 @@ Current status:
 It records SHA256 hashes for the AAAI paper package, submission-review report,
 reproducibility package report, goal-completion report, external-evidence
 handoff reports, AAAI submission-decision record, and human-fidelity summary.
-This is a local package-integrity index; it does not complete human-fidelity
-annotation or final AAAI submission readiness.
+It also hashes the repository README, artifact map, runbook, and
+goal-completion audit so the review entry points are covered by the same local
+manifest. This is a local package-integrity index; it does not complete
+human-fidelity annotation or final AAAI submission readiness.
 
 ## Goal Completion Gate
 

@@ -29,6 +29,10 @@ class BuildSubmissionBundleManifestTest(unittest.TestCase):
                 "paper/aaai/aaai2027.sty",
                 "paper/aaai/aaai2027.bst",
                 "paper/aaai/AuthorKit27.zip",
+                "README.md",
+                "research/artifact_map.md",
+                "research/runbook.md",
+                "research/goal_completion_audit.md",
                 "research/submission_checklist.md",
                 "research/review_report.md",
                 "research/rebuttal_bank.md",
@@ -87,6 +91,7 @@ class BuildSubmissionBundleManifestTest(unittest.TestCase):
             self.assertEqual("ready_with_pending_external_evidence", report["overall_status"])
             file_by_id = {entry["id"]: entry for entry in report["files"]}
             self.assertIn("sha256", file_by_id["aaai_pdf"])
+            self.assertIn("sha256", file_by_id["runbook"])
             checks = {check["id"]: check for check in report["checks"]}
             self.assertEqual("ready", checks["submission_bundle_external_evidence_boundary_current"]["status"])
             self.assertTrue(output_md.exists())
@@ -115,6 +120,7 @@ class BuildSubmissionBundleManifestTest(unittest.TestCase):
             file_ids = {entry["id"] for entry in report["files"] if entry.get("present")}
             self.assertIn("aaai_pdf", file_ids)
             self.assertIn("human_fidelity_summary", file_ids)
+            self.assertIn("runbook", file_ids)
 
 
 if __name__ == "__main__":

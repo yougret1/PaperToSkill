@@ -913,6 +913,10 @@ def submission_bundle_manifest_checks(root: Path) -> list[Check]:
         "package_report",
         "goal_completion_report",
         "human_fidelity_summary",
+        "repo_readme",
+        "artifact_map",
+        "runbook",
+        "goal_completion_audit",
     }
     missing_files = sorted(required_files - file_ids)
     checks.append(
