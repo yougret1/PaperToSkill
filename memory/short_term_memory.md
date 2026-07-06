@@ -39,9 +39,13 @@ Current date: 2026-07-06.
   GitHub status.
   Follow-up provenance sync added the manifest builder, its unit test, and the
   JSON/Markdown manifest outputs to `research/artifact_map.md`; this is
-  committed locally as `70f5bdf Sync submission manifest artifact map`. Its
-  first remote backup attempts failed with GitHub connection reset / port-443
-  errors. Treat this as transport metadata only; no human `ok.txt` is required.
+  committed as `70f5bdf Sync submission manifest artifact map`. Its first
+  remote backup attempts failed with GitHub connection reset / port-443 errors,
+  so `0b0bf33 Record artifact map push blocker` recorded the transport blocker.
+  A later push recovered the chain, and `git ls-remote --heads origin main`
+  verified `0b0bf33845a4d696dc00439460c9415342b2bb75 refs/heads/main`. Treat
+  the earlier failures as GitHub transport metadata only; no human `ok.txt` is
+  required.
 - Current paper-boundary continuation: `paper/outline.md` conclusion no longer
   says the next stage is to "repeat and expand the original-style paper
   tasks." It now matches the AAAI paper and draft wording: add human-fidelity
