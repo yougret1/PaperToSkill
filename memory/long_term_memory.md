@@ -1086,7 +1086,12 @@ Use these as entry points instead of searching the whole repo first:
   and `max_tokens=2200`; Summary still returned provider HTTP 524 after six
   attempts, no script or response was saved, and the remaining PaperToSkill
   side was stopped because paired execution could not proceed. This remains
-  provider availability metadata only. Local substantive commit
+  provider availability metadata only. The phase118 provider-block package
+  sync and follow-up record synchronization were saved in `6879611 Record
+  SNAP-T2 compact provider blocker` and `c43d8b5 Sync phase118 SNAP records`;
+  a same-turn remote check confirmed
+  `c43d8b5e9c7534bf98479b3357ec9fd2acd59438 refs/heads/main`. Treat that as
+  backup/provenance metadata, not new task-success evidence. Local substantive commit
   `9829123 Run SNAP executable candidate diagnostics` records the first live
   script-generation/execution checkpoint: Phase111 generated paired
   SNAP-T1 scripts but both failed execution on Windows because they imported

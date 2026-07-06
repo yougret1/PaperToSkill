@@ -50,6 +50,16 @@ Current date: 2026-07-06.
   diff, and the changed-file raw-key scan returned no hits. A pre-commit
   independent `git ls-remote --heads origin main` check failed with GitHub
   port-443 connectivity; treat that as transport metadata only.
+- Phase118 save state after the follow-up record sync: local commits
+  `6879611 Record SNAP-T2 compact provider blocker` and
+  `c43d8b5 Sync phase118 SNAP records` were pushed, and a same-turn
+  independent remote check confirmed
+  `c43d8b5e9c7534bf98479b3357ec9fd2acd59438 refs/heads/main`. This is
+  backup/provenance metadata for provider-block and record-sync work only; it
+  does not change raw rows, main-row selection, or claim strength. A later
+  resume-time `git ls-remote --heads origin main` attempt failed with GitHub
+  port-443 connectivity, so recheck before making any new remote-alignment
+  claim.
 - Follow-up record-sync commit `0a25da3 Record compact prompt checkpoint backup`
   updates memory/runbook/goal-audit records to the verified `245c2b2`
   checkpoint. Its first `git push origin main` failed with `Recv failure:
@@ -1185,13 +1195,14 @@ Current date: 2026-07-06.
 ## Immediate Next Actions
 
 1. Continue non-network core real-reuse stabilization after the remote-backed
-   phase112 save. The SNAP executable-candidate diagnostic is complete and
-   must not change paper-facing main rows unless explicitly promoted through
-   `results/real_reuse/main_run_selection.json`.
-   A compact SNAP executable-candidate prompt contract is now prepared for a
-   future paired SNAP-T2 retry when provider large-context availability looks
-   healthier; do not use it to replace the locked SNAP main rows without an
-   explicit `main_run_selection.json` promotion.
+   phase112 save and phase118 provider-block record. The SNAP
+   executable-candidate diagnostic is complete and must not change
+   paper-facing main rows unless explicitly promoted through
+   `results/real_reuse/main_run_selection.json`. Phase118 already attempted
+   the compact SNAP-T2 retry and still hit provider HTTP 524 on Summary after
+   six attempts; do not retry SNAP-T2 again merely by increasing attempts or
+   shortening prompts. Wait for healthier provider behavior before any paired
+   Summary/PaperToSkill compact rerun.
 2. Retry Claude-family real-reuse LLM ablation rows only opportunistically when
    provider availability recovers. The current collected scored slices are all
    GPT-family and DeepSeek-family rows for REF-T2, AIDE-T2, and SWE-T2; all
