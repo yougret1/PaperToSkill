@@ -57,6 +57,17 @@ Current date: 2026-07-06.
   provider availability metadata only. It does not complete SNAP-T2,
   Claude-family rows, human fidelity, AI-Scientist-v2 broad live research
   success, or paper-facing effectiveness claims.
+- Latest locally recorded remote checkpoint is
+  `ba366e3f8dba1d46a6a7ed415c749833b1f39e9f refs/heads/main`
+  (`ba366e3 Refresh GPT direct provider metadata`). This phase records the
+  recovered GPT-family direct tiny-marker provider availability metadata,
+  refreshes the reproducibility package report to the new GPT direct-probe
+  state, and updates direct-probe runbook/packet commands to use longer
+  timeout and shell-only provider-specific environment variables. It does not
+  call SNAP-T2, append raw rows, replace `main_run_selection.json`, touch local
+  logs, complete Claude-family rows, complete human fidelity, or strengthen
+  paper-facing effectiveness claims. The earlier substantive paper/package
+  gate checkpoint remains `7efa4b7 Guard external evidence handoff boundary`.
 - Phase118 package/checker sync verification is complete locally: focused
   `tests.test_check_reproducibility_package` and
   `tests.test_check_submission_review` passed, full unit discovery passed

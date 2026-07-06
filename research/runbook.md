@@ -30,7 +30,22 @@ git ls-remote --heads origin main
 Test-NetConnection github.com -Port 443 | Format-List
 ```
 
-Current status as of 2026-07-06: the temporary GitHub HTTPS transport blocker
+Current status as of 2026-07-06: the latest locally recorded remote checkpoint
+is:
+
+```text
+ba366e3f8dba1d46a6a7ed415c749833b1f39e9f refs/heads/main
+ba366e3 Refresh GPT direct provider metadata
+```
+
+This latest checkpoint records GPT-family direct tiny-marker provider metadata,
+the refreshed package report state, and direct-probe command/runbook hygiene.
+It does not call SNAP-T2, append raw rows, replace
+`results/real_reuse/main_run_selection.json`, touch local logs, complete
+Claude-family rows, complete human fidelity, or strengthen paper-facing
+effectiveness claims.
+
+Earlier on 2026-07-06, the temporary GitHub HTTPS transport blocker
 recovered through the AAAI page-limit backup, the later
 paper-finalization/submission-review chain, the paper-outline sync, the outline
 claim-drift gate, the main-results boundary cleanup, the real-reuse
@@ -42,8 +57,8 @@ boundary sync record, the compact SNAP executable-candidate prompt contract,
 and the follow-up record-sync/blocker metadata. The later Claude availability
 metadata/push-blocker commits and their checkpoint-record backup also
 recovered, and the external-evidence handoff-boundary guard was saved and
-independently verified. The latest verified substantive phase checkpoint
-before claiming any later phase save is:
+independently verified. The earlier substantive paper/package gate checkpoint
+before this provider-metadata phase was:
 
 ```text
 7efa4b72d41c61be8c0b0139e2ae76317fb84413 refs/heads/main

@@ -75,7 +75,15 @@ This file is intentionally compact. Detailed chronological history lives in
   If a network/download problem blocks a core asset or phase save, record the
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
-- Latest verified substantive phase checkpoint after the AAAI page-limit,
+- Latest locally recorded remote checkpoint is
+  `ba366e3f8dba1d46a6a7ed415c749833b1f39e9f refs/heads/main`
+  (`ba366e3 Refresh GPT direct provider metadata`). It records only the
+  recovered GPT-family direct tiny-marker provider metadata, refreshed package
+  report state, and direct-probe command/runbook hygiene. It does not call
+  SNAP-T2, append raw rows, replace `main_run_selection.json`, touch local
+  logs, complete Claude-family rows, complete human fidelity, or strengthen
+  paper-facing effectiveness claims. The earlier substantive paper/package
+  gate checkpoint after the AAAI page-limit,
   paper-finalization, outline-sync recovery, outline claim-drift gate,
   main-results boundary cleanup, real-reuse LLM-ablation handoff guard,
   recovered checkpoint-sync records, outline evidence-boundary sync,
