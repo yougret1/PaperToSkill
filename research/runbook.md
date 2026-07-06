@@ -41,12 +41,13 @@ guard sync, the recovered pre-submission gate rerun, the paper-conclusion
 boundary sync record, the compact SNAP executable-candidate prompt contract,
 and the follow-up record-sync/blocker metadata. The later Claude availability
 metadata/push-blocker commits and their checkpoint-record backup also
-recovered. The latest verified remote
+recovered, and the external-evidence handoff-boundary guard was saved and
+independently verified. The latest verified remote
 checkpoint before claiming any later phase save is:
 
 ```text
-91261dd145771f3325ed398d5d773d57b791ddb6 refs/heads/main
-91261dd Record Claude metadata backup push blocker
+7efa4b72d41c61be8c0b0139e2ae76317fb84413 refs/heads/main
+7efa4b7 Guard external evidence handoff boundary
 ```
 
 The earlier failed remote-backup attempts for `501ffc8`, `48aabac`, `8bdd394`,
@@ -94,6 +95,12 @@ metadata backup` and blocker-record commit `91261dd Record Claude metadata
 backup push blocker` were later pushed and independently verified at
 `91261dd145771f3325ed398d5d773d57b791ddb6 refs/heads/main`. Their earlier
 connection resets are GitHub transport metadata only.
+
+The external-evidence handoff-boundary guard commit `7efa4b7 Guard external
+evidence handoff boundary` was pushed and independently verified at
+`7efa4b72d41c61be8c0b0139e2ae76317fb84413 refs/heads/main`. It keeps
+`pending_external_evidence` visible in submission-review handoffs and does not
+change experiment scores, raw rows, main-row selection, or local logs.
 
 Follow-up commits `45ef25b Sync remote checkpoint after LLM handoff guard` and
 `0538ef1 Record checkpoint sync push blocker` first failed to back up because

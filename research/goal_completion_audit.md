@@ -60,11 +60,11 @@ paper-facing cost-boundary sync, stale cost-scope claim guard,
 checkpoint-record guard sync, recovered pre-submission gate rerun, and
 paper-conclusion boundary sync, plus the compact SNAP executable-candidate
 prompt contract, follow-up record-sync/blocker metadata, recovered Claude
-availability metadata/push-blocker commits, and recovered Claude metadata
-backup records
+availability metadata/push-blocker commits, recovered Claude metadata backup
+records, and the external-evidence handoff-boundary guard
 checkpoint:
-`91261dd145771f3325ed398d5d773d57b791ddb6 refs/heads/main`
-(`91261dd Record Claude metadata backup push blocker`). Earlier record-only checkpoint
+`7efa4b72d41c61be8c0b0139e2ae76317fb84413 refs/heads/main`
+(`7efa4b7 Guard external evidence handoff boundary`). Earlier record-only checkpoint
 syncs, the first page-limit backup attempt, the first paper-finalization backup
 attempts, the first `95f1af3`/`66e4763` backup attempts, and the first
 `45ef25b`/`0538ef1` backup attempts hit GitHub transport errors, but later
@@ -76,8 +76,9 @@ Claude-availability chain, and the compact SNAP prompt checkpoint was pushed
 and independently verified; the follow-up record-sync/blocker chain was
 verified at `a7a9e3e`, the next record-sync backup was verified at `b770e20`,
 the later Claude availability metadata/push-blocker commits were verified at
-`39c4e0f`, and the follow-up Claude metadata backup records were verified at
-`91261dd`. Earlier connection resets remain
+`39c4e0f`, the follow-up Claude metadata backup records were verified at
+`91261dd`, and the external-evidence handoff-boundary guard was verified at
+`7efa4b7`. Earlier connection resets remain
 GitHub transport metadata only.
 
 ## Requirement Audit
@@ -86,7 +87,7 @@ GitHub transport metadata only.
 | --- | --- | --- | --- |
 | Durable local memory | `memory/long_term_memory.md`; `memory/short_term_memory.md` | Complete locally | Read and update both memory files after every resume/compaction. |
 | Use `ai-scientist-v2` to refine PaperToSkill | Seed idea files, bounded smoke report, full live-run handoff, Phase 76 run log, completion directory | Complete for bounded local evidence | Do not treat the synthetic run as broad live task success. |
-| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. The latest independently verified remote checkpoint is `91261dd145771f3325ed398d5d773d57b791ddb6 refs/heads/main` (`91261dd Record Claude metadata backup push blocker`). It includes the compact SNAP executable-candidate prompt contract plus follow-up checkpoint record-sync/blocker metadata, recovered Claude availability metadata/push-blocker commits, and recovered Claude metadata backup records; the compact prompt work remains non-network planning evidence, not scored task evidence, and the Claude HTTP 502 probe remains provider availability metadata. Earlier connection-reset and port-443 failures remain GitHub transport metadata rather than experiment-correctness evidence. | Complete locally; latest independently verified remote-backed checkpoint is `91261dd` as of the 2026-07-06 verification | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim with `git status -sb`, `git log -5 --oneline`, and `git ls-remote --heads origin main`; keep transport failures separate from experiment correctness and record exact failures in `C:\Users\19351\Desktop\tem\toHuman.md` if they recur. |
+| Save phase-level progress to GitHub | Phase-level saves are tracked in Git history. The latest independently verified remote checkpoint is `7efa4b72d41c61be8c0b0139e2ae76317fb84413 refs/heads/main` (`7efa4b7 Guard external evidence handoff boundary`). It includes the compact SNAP executable-candidate prompt contract plus follow-up checkpoint record-sync/blocker metadata, recovered Claude availability metadata/push-blocker commits, recovered Claude metadata backup records, and the external-evidence handoff-boundary guard; the compact prompt work remains non-network planning evidence, the external-evidence guard remains review/checker evidence, and the Claude HTTP 502 probe remains provider availability metadata. Earlier connection-reset and port-443 failures remain GitHub transport metadata rather than experiment-correctness evidence. | Complete locally; latest independently verified remote-backed checkpoint is `7efa4b7` as of the 2026-07-06 verification | Continue phase-level commits after meaningful future milestones; verify local/remote alignment before each phase-save claim with `git status -sb`, `git log -5 --oneline`, and `git ls-remote --heads origin main`; keep transport failures separate from experiment correctness and record exact failures in `C:\Users\19351\Desktop\tem\toHuman.md` if they recur. |
 | Official AAAI TeX package | `paper/aaai/`; `results/reproducibility/aaai_package_report.md` | Locally ready | Keep draft synchronized with new evidence. |
 | Usage examples | `examples/usage/`; `results/reproducibility/usage_example_report.md` | Complete locally | Re-run after runner or task changes. |
 | Model ablations | `results/model_ablation_prompts/v0/evaluation.md`: 6 scored, 0 pending | Complete for saved-response protocol | Do not claim broad model quality or live task success. |

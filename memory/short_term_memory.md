@@ -80,6 +80,11 @@ Current date: 2026-07-06.
   reflects that 19-ready submission-review count. This does not change
   experiment scores, raw rows, `results/real_reuse/main_run_selection.json`,
   local logs, or the pending goal state.
+- This external-evidence boundary phase is committed and independently
+  remote-verified as
+  `7efa4b72d41c61be8c0b0139e2ae76317fb84413 refs/heads/main`
+  (`7efa4b7 Guard external evidence handoff boundary`). It adds no experiment
+  scores, raw rows, main-row selection changes, or local-log changes.
 - Current pre-submission gate rerun after the checkpoint-record sync passed
   without repository diff drift: full unit discovery reported 211 tests OK, and
   strict submission-review, AAAI submission-decision, external-evidence packet,
@@ -514,10 +519,11 @@ Current date: 2026-07-06.
   GitHub retry pushed the follow-up record-sync and Claude availability
   commits, and `git ls-remote --heads origin main` verified
   `bddd9006523a30b152da69a75f002d7948ff0269 refs/heads/main`.
-- Current local/remote status override after the Claude metadata backup recovery:
+- Current local/remote status override after the external-evidence boundary
+  guard:
   the latest locally recorded remote checkpoint is
-  `91261dd145771f3325ed398d5d773d57b791ddb6 refs/heads/main`
-  (`91261dd Record Claude metadata backup push blocker`). This checkpoint includes
+  `7efa4b72d41c61be8c0b0139e2ae76317fb84413 refs/heads/main`
+  (`7efa4b7 Guard external evidence handoff boundary`). This checkpoint includes
   the recovered checkpoint-sync commits after the real-reuse LLM-ablation handoff
   guard, the outline update that distinguishes collected/scored saved-response
   rows from unsupported human semantic fidelity, provider billing, and live
@@ -528,7 +534,9 @@ Current date: 2026-07-06.
   gate rerun record, the paper-conclusion boundary sync, the compact SNAP
   executable-candidate prompt contract, the recovered Claude availability
   metadata/push-blocker commits, and the recovered Claude metadata backup
-  record-sync/blocker commits. Older
+  record-sync/blocker commits, plus the submission-review guard requiring the
+  two pending-external-evidence items and the updated 19-ready handoff report.
+  Older
   current-status bullets in this file are historical
   checkpoints only; use fresh `git status -sb`, `git log -5 --oneline`, and
   `git ls-remote --heads origin main` before claiming any later remote-backed
@@ -1131,15 +1139,15 @@ Current date: 2026-07-06.
    `check_reproducibility_package.py`, `check_goal_completion.py`,
    `check_paper_claims.py`, `git diff --check`, and a raw-key scan.
 6. Latest remote-backed checkpoint before further edits:
-   `91261dd Record Claude metadata backup push blocker`, verified at
-   `91261dd145771f3325ed398d5d773d57b791ddb6 refs/heads/main`. The latest
-   substantive content checkpoint inside that chain remains `245c2b2 Prepare
-   compact SNAP candidate prompts`: it adds the compact SNAP
-   executable-candidate prompt contract and package/checker records, but does
-   not call a model, score outputs, append raw rows, or replace main rows.
+   `7efa4b7 Guard external evidence handoff boundary`, verified at
+   `7efa4b72d41c61be8c0b0139e2ae76317fb84413 refs/heads/main`. The latest
+   experiment-facing content checkpoint inside that chain remains
+   `245c2b2 Prepare compact SNAP candidate prompts`; `7efa4b7` is a
+   paper/review/checker boundary guard and does not call a model, score
+   outputs, append raw rows, or replace main rows.
 7. Earlier record-sync/blocker/Claude-availability transport failures recovered
-   through the successful push and independent remote verification of
-   `91261dd`; treat the earlier connection resets as GitHub transport metadata
+   through the successful push and independent remote verification through
+   `7efa4b7`; treat the earlier connection resets as GitHub transport metadata
    only.
 8. No experiment-side human action is required for GitHub status right now.
    Continue non-network paper/evidence work and verify remote alignment again

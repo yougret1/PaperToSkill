@@ -83,13 +83,16 @@ This file is intentionally compact. Detailed chronological history lives in
   claim guard, checkpoint-record guard sync, pre-submission gate rerun,
   paper-conclusion boundary sync, compact SNAP executable-candidate prompt
   contract, follow-up record-sync/blocker metadata, recovered Claude
-  availability metadata, and recovered Claude metadata backup records is
-  `91261dd145771f3325ed398d5d773d57b791ddb6 refs/heads/main`
-  (`91261dd Record Claude metadata backup push blocker`). The latest substantive
-  content checkpoint inside that chain is `245c2b2 Prepare compact SNAP
-  candidate prompts`; it includes the compact SNAP prompt plan and
-  package/checker records. It is non-network contract work only: no model
-  calls, no scoring, no raw-row append, and no main-row replacement. The
+  availability metadata, recovered Claude metadata backup records, and the
+  external-evidence handoff-boundary guard is
+  `7efa4b72d41c61be8c0b0139e2ae76317fb84413 refs/heads/main`
+  (`7efa4b7 Guard external evidence handoff boundary`). The latest
+  experiment-facing content checkpoint inside that chain remains
+  `245c2b2 Prepare compact SNAP candidate prompts`; it includes the compact
+  SNAP prompt plan and package/checker records. The `7efa4b7` phase adds a
+  submission-review guard for two pending-external-evidence items and keeps
+  the 19-ready review handoff synchronized; it does not call a model, score
+  outputs, append raw rows, or replace main rows. The
   earlier `e57df72` checkpoint includes the
   limitations claim gate that covers `paper/limitations.md` with 51 ready
   paper-claim checks / 0 failed checks, the full 209-test verification for
