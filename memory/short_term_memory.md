@@ -77,6 +77,12 @@ Current date: 2026-07-06.
   manifest refresh. The repository had no diff afterward. This verification
   record is committed and independently remote-verified as
   `ffb25f35a7e5ea67dabe8106e4a092fb16a81978 refs/heads/main`.
+  Follow-up local record-sync commit `0013ea1 Record verified full gate backup`
+  records that verified full-gate checkpoint in repo memory. Its first
+  `git push origin main` failed with `OpenSSL SSL_read: SSL_ERROR_SYSCALL,
+  errno 0`; treat this as GitHub transport metadata only. The latest
+  independently verified remote checkpoint remains `ffb25f3` until a later
+  push and `git ls-remote --heads origin main` recover `0013ea1`.
 - Current paper-boundary continuation: `paper/outline.md` conclusion no longer
   says the next stage is to "repeat and expand the original-style paper
   tasks." It now matches the AAAI paper and draft wording: add human-fidelity
