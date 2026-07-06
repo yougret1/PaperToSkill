@@ -255,10 +255,11 @@ Current limitations:
 
 PaperToSkill shows that papers can be translated into compact, source-grounded
 skills with measurable offline advantages over summaries and a completed
-first-pass real-reuse stress test. The next stage is to repeat and expand the
-original-style paper tasks, add human fidelity review, run a full executable
-Paper2Agent/MCP baseline if feasible, and stress test papers whose methods are
-less directly procedural.
+first-pass real-reuse stress test. The next stage is to add human fidelity
+review, stabilize the locked real-reuse rows with pre-registered paired
+follow-ups where needed, extend the bounded Paper2Agent artifact/workflow
+comparison into a real executable MCP baseline if resources permit, and test
+papers whose contributions are less naturally procedural.
 
 ## Figure And Table Plan
 

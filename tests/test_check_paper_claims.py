@@ -141,6 +141,35 @@ class CheckPaperClaimsTest(unittest.TestCase):
             self.assertEqual("fail", report["overall_status"])
             self.assertEqual("fail", statuses["paper_claim_no_outline_md_draft_planning_language"])
 
+    def test_stale_real_reuse_expansion_outline_future_work_fails(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            tmp_root = Path(tmp)
+            tmp_aaai = tmp_root / "paper" / "aaai" / "papertoskill_aaai2027.tex"
+            tmp_tables = tmp_root / "paper" / "aaai" / "papertoskill_tables.tex"
+            tmp_draft = tmp_root / "paper" / "draft.md"
+            tmp_outline = tmp_root / "paper" / "outline.md"
+            tmp_limitations = tmp_root / "paper" / "limitations.md"
+            tmp_aaai.parent.mkdir(parents=True)
+            shutil.copyfile(AAAI_TEX, tmp_aaai)
+            shutil.copyfile(AAAI_TABLES, tmp_tables)
+            shutil.copyfile(DRAFT_MD, tmp_draft)
+            shutil.copyfile(OUTLINE_MD, tmp_outline)
+            shutil.copyfile(LIMITATIONS_MD, tmp_limitations)
+
+            text = tmp_outline.read_text(encoding="utf-8")
+            text = text.replace(
+                "add human fidelity\nreview, stabilize the locked real-reuse rows",
+                "repeat and expand the original-style paper tasks, add human fidelity\nreview",
+                1,
+            )
+            tmp_outline.write_text(text, encoding="utf-8")
+
+            report = build_report(tmp_root)
+
+            statuses = {check["id"]: check["status"] for check in report["checks"]}
+            self.assertEqual("fail", report["overall_status"])
+            self.assertEqual("fail", statuses["paper_claim_no_outline_md_draft_planning_language"])
+
     def test_stale_claude_completion_in_limitations_fails(self):
         with tempfile.TemporaryDirectory() as tmp:
             tmp_root = Path(tmp)

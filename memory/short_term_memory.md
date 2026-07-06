@@ -13,6 +13,17 @@ Current date: 2026-07-06.
   Preserve the existing local-log boundary: do not modify
   `research/run_logs/**` or `research/stage_log.md` during record-sync-only
   work.
+- Current paper-boundary continuation: `paper/outline.md` conclusion no longer
+  says the next stage is to "repeat and expand the original-style paper
+  tasks." It now matches the AAAI paper and draft wording: add human-fidelity
+  review, stabilize the locked real-reuse rows with pre-registered paired
+  follow-ups where needed, extend the bounded Paper2Agent artifact/workflow
+  comparison into an executable MCP baseline only if resources permit, and
+  test less procedural papers. `scripts/check_paper_claims.py` now treats that
+  stale "repeat and expand" outline wording as draft/planning language, with a
+  regression test in `tests/test_check_paper_claims.py`. This does not change
+  experiment scores, raw rows, main-row selection, local logs, or claim
+  strength.
 - Current local SNAP-T2 prompt-contract continuation: the SNAP
   executable-candidate prompt builder now has a compact mode and generated
   `results/real_reuse/snapatac2_executable_candidate_compact_prompt_plan.{md,json}`
