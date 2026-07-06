@@ -1023,7 +1023,10 @@ Use these as entry points instead of searching the whole repo first:
   `results/reproducibility/submission_bundle_manifest.md`
   reports `ready_with_pending_external_evidence`, records SHA256 hashes for the
   AAAI paper package and key gate reports, and does not claim final submission
-  readiness or completed external evidence.
+  readiness or completed external evidence. The local commit
+  `6e324d7 Add submission bundle manifest` is not yet independently
+  remote-verified because the first push and same-turn `ls-remote` check hit
+  GitHub port-443 connectivity failures.
 - Active-goal completion:
   `results/reproducibility/goal_completion_report.md`
   reports `not_complete_pending_external_evidence`, 78 ready checks, 3 pending
