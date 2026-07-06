@@ -29,10 +29,14 @@ Current date: 2026-07-06.
   passed after refresh, and focused manifest/package/submission-review tests
   passed 11/11. This is local package integrity evidence only: human-fidelity
   annotation and the final AAAI decision remain pending external evidence.
-  The phase is committed locally as `6e324d7 Add submission bundle manifest`;
-  its first `git push origin main` and immediate `git ls-remote --heads origin
-  main` both failed with GitHub port-443 connectivity. Treat this as transport
-  metadata only; no human `ok.txt` is required for GitHub status.
+  The phase was committed as `6e324d7 Add submission bundle manifest`; its
+  first `git push origin main` and immediate `git ls-remote --heads origin
+  main` both failed with GitHub port-443 connectivity, so `7b847a9 Record
+  submission manifest push blocker` recorded the transport blocker. A later
+  push recovered the chain, and `git ls-remote --heads origin main` verified
+  `7b847a972f762eca893c8ba9d109102858d8ed4a refs/heads/main`. Treat the earlier
+  failures as GitHub transport metadata only; no human `ok.txt` is required for
+  GitHub status.
 - Current paper-boundary continuation: `paper/outline.md` conclusion no longer
   says the next stage is to "repeat and expand the original-style paper
   tasks." It now matches the AAAI paper and draft wording: add human-fidelity
