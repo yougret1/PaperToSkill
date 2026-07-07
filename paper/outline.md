@@ -236,16 +236,15 @@ Current limitations:
   task success, provider economics, or broad model-quality proof;
 - the bounded Paper2Agent comparison is source-backed artifact/workflow
   positioning, not an executable MCP baseline run;
-- no human fidelity annotation or inter-rater agreement yet;
-- human-fidelity review packets, a reviewer handoff guide, a stricter blank
-  annotation template, and a summarizer are prepared, but annotation remains
-  pending;
+- the current human-fidelity annotation is bounded to one 24-cell review pass
+  with 24 scored cells, mean score 4.75/5, mean confidence 0.946, and four
+  discussion-marked rows; it is not broad human validation;
 - cost evidence includes local input/output token proxies, not provider bills
   or a full token-price study;
 - the failure-case archive is provenance evidence, not an outcome study showing
   that recording failures improves final task success;
-- the reproducibility package is ready locally but still lacks completed human
-  annotations and final submission readiness under the recorded wait policy;
+- the reproducibility package is ready locally, but final submission readiness
+  still depends on the recorded AAAI decision policy;
   provider billing remains outside the current claim set, and the completed
   bounded AI-Scientist-v2 smoke/full-run evidence is not human fidelity,
   real-data validation, or broad live task-success evidence;
@@ -255,8 +254,8 @@ Current limitations:
 
 PaperToSkill shows that papers can be translated into compact, source-grounded
 skills with measurable offline advantages over summaries and a completed
-first-pass real-reuse stress test. The next stage is to add human fidelity
-review, stabilize the locked real-reuse rows with pre-registered paired
+first-pass real-reuse stress test. The next stage is to use the bounded
+human-fidelity review evidence, stabilize the locked real-reuse rows with pre-registered paired
 follow-ups where needed, extend the bounded Paper2Agent artifact/workflow
 comparison into a real executable MCP baseline if resources permit, and test
 papers whose contributions are less naturally procedural.
@@ -274,8 +273,8 @@ papers whose contributions are less naturally procedural.
 | Table 5: Source grounding | `results/tables/compactness_source_grounding.md` | Source support and compactness |
 | Table 6: Context cost proxy | `results/tables/context_cost_proxy.md`; `results/tables/model_response_cost_proxy.md` | Full paper vs skill context size plus saved-response output-token proxy |
 | Table 7: Auto-note comparison | `results/tables/auto_note_comparison.md` | Curated vs extracted-text Toolformer and AIDE note scaffolds |
-| Appendix: Human-fidelity packets | `results/human_fidelity_packets/` | Prepared review packets, handoff guide, and blank annotation template |
-| Appendix: Human-fidelity summary | `results/human_fidelity_packets/annotation_summary.md` | Pending annotation status and validation summary |
+| Appendix: Human-fidelity packets | `results/human_fidelity_packets/` | Review packets, handoff guide, and completed annotation template |
+| Appendix: Human-fidelity summary | `results/human_fidelity_packets/annotation_summary.md` | annotation_status=complete; 24 scored cells; bounded validation summary |
 | Appendix: Failure-case archive | `results/failure_cases/failure_case_archive.md` | Paper-reported and project-level failure/limitation cases |
 | Appendix: Reproducibility package | `results/reproducibility/package_report.md` | Local package readiness and pending external evidence |
 | Appendix: Review/rebuttal package | `research/review_report.md`; `research/rebuttal_bank.md` | Adversarial risks and evidence-bounded responses |

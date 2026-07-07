@@ -48,7 +48,7 @@ class BuildSubmissionBundleManifestTest(unittest.TestCase):
             write_json(root / "results/reproducibility/submission_review_report.json", ready_report)
             write_json(
                 root / "results/reproducibility/package_report.json",
-                {"overall_status": "ready_with_pending_external_evidence", "status_counts": {}, "checks": []},
+                {"overall_status": "ready", "status_counts": {}, "checks": []},
             )
             write_json(
                 root / "results/reproducibility/goal_completion_report.json",
@@ -65,7 +65,7 @@ class BuildSubmissionBundleManifestTest(unittest.TestCase):
             )
             write_json(
                 root / "results/human_fidelity_packets/annotation_summary.json",
-                {"annotation_status": "pending"},
+                {"annotation_status": "complete"},
             )
 
             output_json = root / "results/reproducibility/submission_bundle_manifest.json"

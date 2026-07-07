@@ -27,7 +27,7 @@ downloaded kit:
 ## Evidence Boundary
 
 The LaTeX paper reflects the current deterministic/offline artifact state. It
-does not claim completed live cross-harness model ablations, human semantic
-fidelity annotation, provider billing, or arbitrary-PDF automation.
+does not claim completed live cross-harness model ablations, broad human
+validation, provider billing, or arbitrary-PDF automation.
 Supporting tables are retained for package/table-drift checks while the main
 PDF keeps non-reference content within the AAAI page-limit guard.

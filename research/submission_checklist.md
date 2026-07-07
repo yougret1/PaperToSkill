@@ -1,10 +1,10 @@
 # PaperToSkill Submission Checklist
 
-Date: 2026-07-06
+Date: 2026-07-07
 
 Evidence boundary: this checklist prepares an AAAI submission-review handoff. It
 does not declare the paper submission-final, accepted, human-validated, or
-complete with respect to pending external evidence.
+complete with respect to the remaining final submission decision.
 
 ## Current Local Gate Status
 
@@ -14,12 +14,12 @@ complete with respect to pending external evidence.
 | Paper claims | Ready | `results/reproducibility/paper_claim_report.md`: 56 ready, 0 failed | Unsupported overclaim, stale cost-scope, and draft/planning patterns are absent from the paper-facing body, table, draft, outline, and limitations text. |
 | Paper tables | Ready | `results/reproducibility/paper_table_report.md`: 343 ready, 0 failed | AAAI tables match generated CSV result tables. |
 | Usage examples | Ready | `results/reproducibility/usage_example_report.md`: 55 ready, 0 failed | Local example files, DeepSeek handoff, and offline example chain are synchronized. |
-| Reproducibility package | Ready with pending external evidence | `results/reproducibility/package_report.md`: 483 ready, 1 pending, 0 failed | Local package is coherent; external evidence remains pending. |
-| Active goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 78 ready, 3 pending, 0 failed | The overall user goal remains open. |
-| External evidence closure queue | Ready local queue; external evidence still pending | `results/external_evidence_closure/closure.md`: `overall_status=pending_external_evidence`; two pending-external-evidence items remain (`pending_reviewers=1`, `pending_decision=1`), while the local queue checks are 3 ready, 0 pending, 0 failed | Local queue only: pending evidence is mapped to next actions, but human-fidelity annotation and the AAAI final decision remain external evidence to complete. |
-| External evidence execution packets | Ready local handoff; external evidence still pending | `results/external_evidence_packets/packets.md`: `closure_status=pending_external_evidence`; packets cover the same two pending-external-evidence items, while the local packet checks are 8 ready, 0 pending, 0 failed | Local handoff only: runnable packets and the `toHuman.md` / `ok.txt` cleanup guard are ready, but evidence itself remains pending. |
-| AAAI submission decision | Recorded wait decision | `results/aaai_submission_decision/decision.md`: `selected_option=wait_for_external_evidence`, 27 ready, 0 pending, 0 failed | The current decision is to wait for named external evidence before stronger claims. |
-| Submission bundle manifest | Ready with pending external evidence | `results/reproducibility/submission_bundle_manifest.md`: records hashes for the AAAI paper package and key gate reports | Local final-package index only; external evidence remains pending. |
+| Reproducibility package | Ready | `results/reproducibility/package_report.md`: 484 ready, 0 pending, 0 failed | Local package is coherent; this is not final submission approval. |
+| Active goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 79 ready, 2 pending, 0 failed | The overall user goal remains open because the final AAAI submission decision is still pending. |
+| External evidence closure queue | Ready local queue; final decision still pending | `results/external_evidence_closure/closure.md`: `overall_status=pending_external_evidence`; one pending-external-evidence item remains (`pending_decision=1`), while the local queue checks are 3 ready, 0 pending, 0 failed | Local queue only: pending_goal_requirements=1 is mapped to the AAAI final decision. |
+| External evidence execution packets | Ready local handoff; final decision still pending | `results/external_evidence_packets/packets.md`: `closure_status=pending_external_evidence`; packets cover the same one pending-external-evidence item, while the local packet checks are 8 ready, 0 pending, 0 failed | Local handoff only: runnable final-decision packet is ready; human-fidelity annotation_status=complete with 24 scored and 0 pending cells. |
+| AAAI submission decision | Recorded wait decision | `results/aaai_submission_decision/decision.md`: `selected_option=wait_for_external_evidence`, 27 ready, 0 pending, 0 failed | The current decision is still to wait until the Research Lead records the final submission choice. |
+| Submission bundle manifest | Ready with final-decision boundary | `results/reproducibility/submission_bundle_manifest.md`: records hashes for the AAAI paper package and key gate reports | Local final-package index only; not final submission approval. |
 
 ## Evidence Ready To Use
 
@@ -36,7 +36,9 @@ complete with respect to pending external evidence.
 | Real-reuse LLM ablation | `results/real_reuse/llm_ablation_summary.md`: 12/18 collected scored rows; `results/real_reuse/llm_ablation_family_summary.csv`: GPT-family 6/6 scored at 0.605/0.333, DeepSeek-family 6/6 scored at 0.500/0.500, Claude-family 0/6 scored and provider-pending after HTTP 502 | Auxiliary model-slice evidence on AIDE-T2/SWE-T2/REF-T2 only; not a main-row replacement, not provider-quality evidence, and not aggregate PaperToSkill advantage. |
 | DeepSeek handoff | `results/deepseek_followup_handoff/handoff.md`: `responses_present`, 7 ready, 0 pending, 0 failed | DeepSeek response files are saved for the current protocol; keep raw keys out of tracked files. |
 | External closure queue | `results/external_evidence_closure/closure.md`: two pending-external-evidence items | Local queue only; not evidence completion. |
-| External execution packets | `results/external_evidence_packets/packets.md`: two pending-external-evidence execution packets | Local handoff only; not evidence completion. |
+| External closure queue | `results/external_evidence_closure/closure.md`: one pending-external-evidence item, the AAAI final decision | Local queue only; not final submission approval. |
+| External execution packets | `results/external_evidence_packets/packets.md`: one pending-external-evidence execution packet | Local handoff only; not final submission approval. |
+| Human fidelity annotation | `results/human_fidelity_packets/annotation_summary.md`: annotation_status=complete; 24 scored rows, 24 scored cells, 0 pending rows, 0 pending cells | Bounded annotation evidence for semantic fidelity and reviewability; do not call the whole system human-validated. |
 | Submission bundle manifest | `results/reproducibility/submission_bundle_manifest.md`: local hashes for AAAI paper files, gate reports, and pending-evidence summaries | Local file-integrity index only; not final submission readiness. |
 | AI-Scientist-v2 bounded smoke/full live run | `results/ai_scientist_v2_smoke/run_report.md`: `complete`; `results/ai_scientist_v2_live_run_handoff/handoff.md`: `complete` with one completion directory | Bounded integration and synthetic sensitivity evidence only; not human fidelity, real-data validation, or broad live task success. |
 | AAAI submission decision | `results/aaai_submission_decision/decision.md`: `selected_option=wait_for_external_evidence` | Recorded decision; not final submission readiness. |
@@ -49,9 +51,8 @@ complete with respect to pending external evidence.
 
 | Pending Item | Current Evidence | Required Before Stronger Claim |
 | --- | --- | --- |
-| Human fidelity | `results/human_fidelity_packets/annotation_summary.md`: 0 scored rows, 24 pending paper-by-criterion cells | Independent reviewers score all 24 cells and strict summarizer reports complete with no errors. |
 | Strong aggregate downstream-effectiveness claim | `results/real_reuse/main_results_plan.md`: first pass is mixed and failure-heavy | Stabilize the locked real-reuse rows with pre-registered paired follow-ups and resolve failure boundaries before claiming broad effectiveness. |
-| Final AAAI submission readiness | Local package and decision record are ready, but the selected policy waits for external evidence | Complete the human-fidelity evidence and then revisit the final submission decision. |
+| Final AAAI submission readiness | Local package and human-fidelity annotation are ready, but the selected policy still waits for the final Research Lead decision | Record either `submit_now_deterministic_offline` or an updated wait policy with `scripts/generate_aaai_submission_decision.py`, then rerun strict gates. |
 
 ## Pre-Submission Commands
 
@@ -81,7 +82,7 @@ strings were found.
 | Option | When It Is Defensible | Required Wording |
 | --- | --- | --- |
 | Submit now as deterministic/offline system paper | Human accepts pending live/human/evidence limitations as explicit limitations | Keep abstract, experiments, and limitations framed around deterministic gates and handoff readiness. |
-| Wait for stronger evidence | Human wants claims about semantic fidelity or live success | Complete human annotations and any separate downstream live-task evaluation first. |
+| Wait for stronger evidence | Human wants broader live-task, user-study, or stronger downstream evidence beyond the current bounded paper | State exactly which stronger evidence is being deferred. |
 
 Current selected option: `wait_for_external_evidence`.
 
@@ -89,8 +90,9 @@ Current selected option: `wait_for_external_evidence`.
 
 - Do not claim robust arbitrary-PDF automation.
 - Do not claim live task success from saved-response output-contract scoring.
-- Do not claim human validation while there are 0 scored and 24 pending
-  annotation rows.
+- Do not claim human validation beyond the bounded 24-cell annotation study;
+  report annotation_status=complete, scored_cells=24, and pending_cells=0
+  without calling the whole system human-validated.
 - Do not claim provider billing, invoices, or success per dollar while the
   project uses local token accounting instead.
 - Do not claim saved-response model-ablation scoring proves live task success,
@@ -100,4 +102,5 @@ Current selected option: `wait_for_external_evidence`.
 - Do not claim the bounded AI-Scientist-v2 smoke/full live run proves human
   fidelity, real-data validation, or broad live task success.
 - Do not claim the AAAI paper is submission-final while the recorded
-  `wait_for_external_evidence` policy still has pending named evidence.
+  `wait_for_external_evidence` policy still awaits the final Research Lead
+  submission choice.

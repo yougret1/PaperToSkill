@@ -1,6 +1,6 @@
 # PaperToSkill Review Report
 
-Date: 2026-07-06
+Date: 2026-07-07
 
 Evidence boundary: this is an internal adversarial review of the current
 PaperToSkill draft and artifact package. It updates the review handoff to match
@@ -14,8 +14,8 @@ curated note-to-skill conversion over four real papers, deterministic
 extracted-text-to-note scaffolds for Toolformer and AIDE, source maps,
 source-span validation, compactness and local token-proxy accounting, usage
 examples, saved model-ablation responses for Claude Opus 4.8, GPT-family, and
-DeepSeek slots, all four live-transfer saved-response sets, human-fidelity annotation
-handoff, local token-accounting evidence, a local external-evidence closure
+DeepSeek slots, all four live-transfer saved-response sets, a 24-cell
+human-fidelity annotation summary, local token-accounting evidence, a local external-evidence closure
 queue, external-evidence execution packets, a bounded Paper2Agent
 artifact/workflow comparison, a bounded AI-Scientist-v2 marker smoke/full live
 run, a first eight-row real-reuse stress test with a derived failure-boundary
@@ -31,7 +31,7 @@ The strongest current framing remains:
 > and evidence-boundary discipline.
 
 The paper should not be positioned as a completed live-agent study,
-human-validated semantic-fidelity study, provider-billing study, or reliable
+unbounded human-validation study, provider-billing study, or reliable
 arbitrary-PDF-to-skill system. The 24 live-transfer rows are saved-response
 output-contract evidence, not proof of live task success. The first real-reuse
 pass is stronger than the saved-response evidence because it executes locked
@@ -43,11 +43,11 @@ used as boundary evidence rather than aggregate downstream-effectiveness proof.
 | ID | Risk | Severity | Current Evidence | Required Response |
 | --- | --- | --- | --- | --- |
 | R1 | Reviewers may call PaperToSkill "just summarization." | High | Generated skills beat generic-summary and abstract-only baselines on deterministic operational coverage across AI Scientist-v2, Reflexion, AIDE, and Toolformer. Transfer notes, source maps, validation checks, and failure branches are first-class artifacts. | Emphasize executable workflow structure, source anchoring, failure provenance, and transfer-boundary discipline; avoid claiming real task success. |
-| R2 | Reviewers may reject deterministic metrics as too heuristic. | High | Rubric, context coverage, source-span validation, and transfer readiness are reproducible but not human semantic scoring. | Present metrics as auditable gates; keep human-fidelity annotation as prepared but pending. |
+| R2 | Reviewers may reject deterministic metrics as too heuristic. | High | Rubric, context coverage, source-span validation, transfer readiness, and the bounded 24-cell human-fidelity annotation are reproducible. | Present metrics as auditable gates; report the annotation as bounded review evidence, not broad human validation. |
 | R3 | Curated notes weaken automation claims. | High | Main benchmark uses curated source-anchored notes; Toolformer and AIDE have deterministic extracted-text scaffolds. | Keep the main claim as paper-note-to-skill conversion; describe extracted-text scaffolds as bounded automation, not arbitrary-PDF reliability. |
 | R4 | Four papers may be too narrow and procedural. | Medium | Benchmark covers agent research automation, verbal reinforcement, ML-engineering agents, and tool-use data generation. | Describe this as a focused first benchmark; propose theory-heavy/interface-heavy stress cases as future work. |
 | R5 | Saved live-transfer responses can be overread as real live success. | High | `results/live_transfer_prompts/evaluation.md` reports 24 total rows, 24 scored rows, 0 pending rows, and average normalized score 1.0 under deterministic output-contract scoring. | Say "saved live-transfer response files were scored"; do not say the system proves live task success, human semantics, or cross-harness outcome gains. |
-| R6 | Human fidelity is prepared but unscored. | High | `results/human_fidelity_packets/annotation_summary.md` reports 0 scored rows, 24 pending paper-by-criterion cells, and 0 errors. | Say "human-fidelity handoff ready"; do not say "human-validated" or "expert-validated." |
+| R6 | Human fidelity evidence can be overread. | Medium | `results/human_fidelity_packets/annotation_summary.md` reports annotation_status=complete, 24 scored rows, 24 scored cells, 0 pending rows, 0 errors, and average confidence 0.946. | Say "bounded human-fidelity annotation"; do not say the system is "human-validated" or "expert-validated." |
 | R7 | Cost/economic claims can be overread. | Medium | Context and response costs are local token proxies. `results/token_accounting/token_accounting_summary.md` reports 4,322 generated-skill input tokens, 95,303 full-extracted input tokens, and 9,594 saved-response output tokens. | Call these local input/output token proxies; they are not provider billing, invoices, or success-per-dollar claims. |
 | R8 | AI-Scientist-v2 integration may be overread as broad live task success. | Medium | Bounded LLM-client smoke is `complete`, and the full live-run handoff is `complete` with one completion directory. The run's positive result is synthetic; the HF/semantic-data branch remains a failed branch due invalid dataset loading/synthetic padding and missing `sentence_transformers`. | Treat this as bounded integration and synthetic sensitivity evidence only; do not claim human fidelity, real-data validation, or broad live research-task success. |
 | R9 | Paper2Agent positioning may be overread as a baseline win. | Medium | `results/tables/paper2agent_artifact_comparison.md` reports 7/7 ready source-backed criteria for artifact/workflow comparison. It does not run Paper2Agent or deploy an MCP server. | Use this as positioning evidence only; do not claim runtime superiority or baseline performance. |
@@ -70,10 +70,10 @@ used as boundary evidence rather than aggregate downstream-effectiveness proof.
 | Gate | Status | Evidence |
 | --- | --- | --- |
 | Claim-evidence consistency | Pass with caveats | `paper/claim_checklist.md`; `research/claim_evidence_matrix.md`; `results/reproducibility/paper_claim_report.md`: 56 ready, 0 failed; includes AAAI table-file, outline, limitations, and stale cost-scope checks |
-| Local reproducibility package | Pass locally, external evidence pending | `results/reproducibility/package_report.md`: 483 ready, 1 pending, 0 failed |
-| Active-goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 78 ready, 3 pending, 0 failed |
-| External evidence closure queue | Ready local queue; external evidence still pending | `results/external_evidence_closure/closure.md`: `overall_status=pending_external_evidence`; two pending-external-evidence items remain (`pending_reviewers=1`, `pending_decision=1`), while the local queue checks are 3 ready, 0 pending, 0 failed |
-| External evidence execution packets | Ready local handoff; external evidence still pending | `results/external_evidence_packets/packets.md`: `closure_status=pending_external_evidence`; packets cover the same two pending-external-evidence items, while the local packet checks are 8 ready, 0 pending, 0 failed and include the `toHuman.md` / `ok.txt` handoff cleanup guard |
+| Local reproducibility package | Pass locally | `results/reproducibility/package_report.md`: 484 ready, 0 pending, 0 failed |
+| Active-goal completion | Not complete | `results/reproducibility/goal_completion_report.md`: 79 ready, 2 pending, 0 failed |
+| External evidence closure queue | Ready local queue; final decision still pending | `results/external_evidence_closure/closure.md`: `overall_status=pending_external_evidence`; one pending-external-evidence item remains (`pending_decision=1`), while the local queue checks are 3 ready, 0 pending, 0 failed |
+| External evidence execution packets | Ready local handoff; final decision still pending | `results/external_evidence_packets/packets.md`: `closure_status=pending_external_evidence`; packets cover the same one pending-external-evidence item, while the local packet checks are 8 ready, 0 pending, 0 failed; human-fidelity annotation_status=complete with 24 scored and 0 pending cells |
 | AAAI submission decision | Recorded wait decision | `results/aaai_submission_decision/decision.md`: `selected_option=wait_for_external_evidence`, 27 ready, 0 pending, 0 failed |
 | AAAI local package | Pass locally, not submission-final | `results/reproducibility/aaai_package_report.md`: 20 ready, 0 failed |
 | Paper table synchronization | Pass locally | `results/reproducibility/paper_table_report.md`: 343 ready, 0 failed |
@@ -87,7 +87,7 @@ used as boundary evidence rather than aggregate downstream-effectiveness proof.
 | AI-Scientist-v2 full live run | Complete for bounded synthetic integration evidence | `results/ai_scientist_v2_live_run_handoff/handoff.md`: `complete`; one completion directory. |
 | Real-reuse first pass | Complete as mixed first-pass stress-test evidence | `results/real_reuse/main_results_plan.md`: eight scored rows; `results/real_reuse/failure_analysis.md`: boundary modes from the same raw rows; `results/real_reuse/swe_t1_source_context_followup.md`: diagnostic phase107 follow-up; `results/real_reuse/swe_t1_issue_aligned_followup.md`: diagnostic phase110 issue-aligned table with both conditions scoring 1.000; `results/real_reuse/swe_t1_issue_aligned_run_report.md`: run report backing the phase110 table; `results/real_reuse/snapatac2_artifact_followup.md`: SNAP artifact-execution diagnosis; `results/real_reuse/snapatac2_executable_artifact_followup.md`: phase108 executable-artifact diagnostic; `results/real_reuse/snapatac2_executable_candidate_run_report.md`: phase112 model-generated executable-candidate diagnostic with both conditions scoring 1.000. |
 | Full Excerpt sanity check | Complete for the three pre-registered sanity rows | `results/real_reuse/full_excerpt_sanity.md`: AIDE-T1 0.000, SWE-T1 0.000, SNAP-T1 0.250, with local whitespace token proxies. |
-| Human fidelity | Handoff ready, annotation pending | `results/human_fidelity_packets/annotation_summary.md`: 0 scored, 24 pending |
+| Human fidelity | Bounded annotation summary ready | `results/human_fidelity_packets/annotation_summary.md`: 24 scored, 0 pending, scored_cells=24, pending_cells=0 |
 | Local token accounting | Complete as current cost evidence | `results/token_accounting/token_accounting_summary.md`: complete local input/output token accounting |
 
 ## Recommended Next Experiments
@@ -105,9 +105,9 @@ used as boundary evidence rather than aggregate downstream-effectiveness proof.
    only when provider availability recovers, update failure-boundary and
    quality/grounding evidence, and keep component ablation as an appendix
    candidate.
-4. Score all 24 paper-by-criterion cells in the human-fidelity annotation
-   template when reviewers are available; use it for semantic fidelity and
-   reviewability, not as the main task-effectiveness experiment.
+4. Use the 24-cell human-fidelity annotation as bounded semantic-fidelity and
+   reviewability evidence; do not use it as the main task-effectiveness
+   experiment.
 5. Extend the bounded Paper2Agent comparison into a real executable MCP
    baseline only if the codebase/environment resources are available.
 6. Keep provider billing, invoices, success-per-dollar, and real-user/user-study
@@ -116,9 +116,9 @@ used as boundary evidence rather than aggregate downstream-effectiveness proof.
 
 ## Decision
 
-Do not mark the project or paper submission as complete. The current package is
-ready for internal review and reviewer-question preparation, and the AAAI
-submission-decision record selects `wait_for_external_evidence`, but it is not
-a submission-final AAAI paper and it does not establish human validation, real
-live task success, real-data AI-Scientist-v2 validation, or real provider
-economics.
+Do not mark the paper submission as final until the Research Lead records the
+final AAAI choice. The current package is ready for internal review and
+reviewer-question preparation, and the AAAI submission-decision record still
+selects `wait_for_external_evidence`, but it is not a submission-final AAAI
+paper and it does not establish broad human validation, real live task success,
+real-data AI-Scientist-v2 validation, or real provider economics.

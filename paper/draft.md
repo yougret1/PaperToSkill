@@ -169,14 +169,13 @@ The metrics are deterministic:
   `o200k_base` when available and the same character proxy as a fallback.
 
 These metrics are reproducible gates. They do not replace live agent execution,
-real billing records, invoice evidence, success-per-dollar accounting, or an
-independent human-fidelity annotation study. The current package uses local token
-accounting over input-token and saved-response output-token proxies. To support
-later human review, we also
-prepare a six-criterion fidelity protocol, paper-specific review packets, a
-reviewer handoff guide, and a stricter blank annotation template, but those
-packets remain unscored until independent annotators fill them. The annotation
-summarizer currently reports 24 pending rows and no completed scores.
+real billing records, invoice evidence, or success-per-dollar accounting. They
+are complemented by a bounded six-criterion human-fidelity annotation summary:
+24/24 paper-by-criterion cells are scored, the mean score is 4.75/5, mean
+confidence is 0.946, and four rows are marked for discussion. This supports
+semantic-fidelity and reviewability claims, not live downstream task success.
+The current package uses local token accounting over input-token and
+saved-response output-token proxies.
 
 We also prepare model-ablation prompt packets, a runner, and a response
 evaluator for Claude Opus 4.8, a GPT-family slot requested as GPT 5.5, and a
@@ -229,14 +228,14 @@ claim that failed branches are preserved as inspectable provenance. It is not
 evidence that failure recording improves live task outcomes.
 
 The reproducibility package checker reports local artifact readiness while
-separating pending external evidence from package failures. The remaining
-pending checks correspond to human-fidelity annotation and final AAAI
-submission readiness under the recorded wait policy. This supports a local
-artifact-readiness claim, complete
-saved-response live-transfer coverage, and complete saved-response
-model-ablation scoring for the current prompt-packet protocol, not a claim of
-human semantic fidelity, downstream execution outcome, provider economics, or
-human evaluation.
+separating pending external evidence from package failures. The bounded
+human-fidelity annotation is complete, while final AAAI submission readiness
+still follows the recorded wait policy. This supports a local
+artifact-readiness claim, complete saved-response live-transfer coverage,
+complete saved-response model-ablation scoring for the current prompt-packet
+protocol, and bounded semantic-fidelity/reviewability evidence, not a claim of
+broad human validation, downstream execution outcome, provider economics, or
+live user evaluation.
 
 The first real-reuse pass covers eight original-style paper-task rows. After
 rerunning the same saved AIDE outputs with an extended 300-second local scorer
@@ -383,17 +382,16 @@ Claude protocol refresh was blocked by provider HTTP 502, although earlier
 Claude saved responses are scored. Fifth, the bounded AI-Scientist-v2 smoke and
 full live run is complete for local integration evidence, but its positive
 result is synthetic and includes a failed real-data branch; it should not be
-read as broad live task success. Sixth,
-human-fidelity packets, a reviewer handoff guide, a stricter blank annotation
-template, and a summary script are prepared, but no independent annotations have
-been completed. Seventh, compactness is measured by word count, deterministic
+read as broad live task success. Sixth, the 24-cell human-fidelity annotation is
+scored and summarized, but it is bounded review evidence rather than broad
+human validation or live task-success evidence. Seventh, compactness is measured by word count, deterministic
 character proxy, local tokenizer-aware input-token proxy, and local output-token
 proxy for saved model responses, not by provider-specific prices, live
 invoices, or live success per dollar. Eighth,
 the failure-case archive is an evidence and
 provenance artifact rather than a controlled outcome study. Ninth, the
-reproducibility package is locally ready but still has pending external evidence
-for human annotations and final AAAI readiness under the recorded wait policy.
+reproducibility package is locally ready, while final AAAI readiness still
+depends on the recorded submission decision policy.
 Tenth, real-reuse rows are single-run GPT-family measurements; original-paper
 reference scores are reported references unless the same data, input/output
 contract, metric, budget, and runtime setting are reproduced locally.
@@ -410,8 +408,9 @@ human-editable skills. In a four-paper benchmark, generated skills are compact,
 source-grounded, structurally valid, and more operationally complete than short
 summary baselines under deterministic evaluation. A first eight-row real-reuse
 stress test is complete, but it is mixed and failure-heavy rather than a proof
-of aggregate downstream effectiveness. The next stage is to add human fidelity
-review, stabilize the locked real-reuse rows with pre-registered paired
+of aggregate downstream effectiveness. The next stage is to use the
+human-fidelity annotations as bounded review evidence, stabilize the locked
+real-reuse rows with pre-registered paired
 follow-ups where needed, extend the bounded Paper2Agent artifact/workflow
 comparison into a real executable MCP baseline if resources permit, and test
 papers whose contributions are less naturally procedural.

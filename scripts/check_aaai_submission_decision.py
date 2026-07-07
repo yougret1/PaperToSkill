@@ -44,9 +44,19 @@ LOCAL_READY_REPORTS = {
     "submission_review",
 }
 
-EXPECTED_PENDING_REQUIREMENTS = {
+LEGACY_PENDING_REQUIREMENTS = {
     "aaai_final_submission_ready",
     "human_fidelity_annotation_complete",
+}
+
+FINAL_DECISION_PENDING_REQUIREMENTS = {
+    "aaai_final_submission_ready",
+}
+
+ALLOWED_PENDING_REQUIREMENT_SETS = {
+    frozenset(LEGACY_PENDING_REQUIREMENTS),
+    frozenset(FINAL_DECISION_PENDING_REQUIREMENTS),
+    frozenset(),
 }
 
 DECISION_RECORD = "research/aaai_submission_decision.md"
@@ -204,7 +214,7 @@ def parse_decision_record(root: Path) -> dict[str, Any]:
 def build_options(reports: dict[str, dict[str, Any]], combined_text: str) -> list[dict[str, Any]]:
     local_ready = all(reports[key].get("overall_status") == "ready" for key in LOCAL_READY_REPORTS)
     pending = effective_pending_goal_requirements(reports["goal_completion"])
-    expected_pending_present = EXPECTED_PENDING_REQUIREMENTS <= pending
+    wait_decision_available = bool(pending & (LEGACY_PENDING_REQUIREMENTS | FINAL_DECISION_PENDING_REQUIREMENTS))
     boundary_ready = contains_all(
         combined_text,
         [
@@ -218,7 +228,7 @@ def build_options(reports: dict[str, dict[str, Any]], combined_text: str) -> lis
     )
 
     submit_status = "available_for_human_decision" if local_ready and boundary_ready else "blocked_by_local_gate"
-    wait_status = "available_for_human_decision" if expected_pending_present else "blocked_by_missing_pending_map"
+    wait_status = "available_for_human_decision" if wait_decision_available else "blocked_by_missing_pending_map"
 
     return [
         {
@@ -314,19 +324,20 @@ def pending_state_check(reports: dict[str, dict[str, Any]]) -> Check:
     goal = reports["goal_completion"]
     package = reports["reproducibility_package"]
     pending = effective_pending_goal_requirements(goal)
-    missing = sorted(EXPECTED_PENDING_REQUIREMENTS - pending)
     goal_status_ready = (
         goal.get("overall_status") == "not_complete_pending_external_evidence"
+        or goal.get("overall_status") == "complete"
         or self_referential_goal_failure(goal)
     )
     package_status_ready = (
         package.get("overall_status") == "ready_with_pending_external_evidence"
+        or package.get("overall_status") == "ready"
         or self_referential_package_failure(package)
     )
     ready = (
         goal_status_ready
         and package_status_ready
-        and not missing
+        and frozenset(pending) in ALLOWED_PENDING_REQUIREMENT_SETS
     )
     return Check(
         "aaai_submission_decision_pending_evidence_state_current",
@@ -335,7 +346,7 @@ def pending_state_check(reports: dict[str, dict[str, Any]]) -> Check:
             f"goal={goal.get('overall_status')}; package={package.get('overall_status')}; "
             f"pending={len(pending)}"
             if ready
-            else "missing_pending=" + ",".join(missing)
+            else "unexpected_pending=" + ",".join(sorted(pending))
         ),
         f"{REQUIRED_REPORTS['goal_completion']}; {REQUIRED_REPORTS['reproducibility_package']}",
     )

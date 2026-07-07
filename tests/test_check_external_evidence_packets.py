@@ -45,8 +45,9 @@ class CheckExternalEvidencePacketsTest(unittest.TestCase):
             self.assertNotIn("deepseek_followup_responses", packet_ids)
             self.assertNotIn("ai_scientist_v2_smoke_completion", packet_ids)
             self.assertNotIn("ai_scientist_v2_full_live_run", packet_ids)
-            self.assertIn("human_fidelity_annotation", packet_ids)
+            self.assertNotIn("human_fidelity_annotation", packet_ids)
             self.assertIn("aaai_submission_decision", packet_ids)
+            self.assertEqual({"aaai_submission_decision"}, packet_ids)
             self.assertTrue(output_md.exists())
 
             for packet in report["packets"]:
@@ -80,23 +81,14 @@ class CheckExternalEvidencePacketsTest(unittest.TestCase):
                 aaai_packet["run_commands"].index("# Final validation after the selected decision record exists"),
             )
 
-            human_packet = next(
-                packet for packet in report["packets"] if packet["id"] == "human_fidelity_annotation"
-            )
-            human_text = "\n".join(packets.iter_strings(human_packet))
-            self.assertIn(packets.HUMAN_HANDOFF_PATH, human_text)
-            self.assertIn(packets.HUMAN_OK_PATH, human_text)
-            self.assertIn("human_fidelity_reviewer_bundle.zip", human_text)
-            self.assertIn("python scripts\\check_reproducibility_package.py --strict", human_text)
-            self.assertIn(
-                f"if (Test-Path -LiteralPath '{packets.HUMAN_OK_PATH}') {{ Remove-Item -LiteralPath '{packets.HUMAN_OK_PATH}' }}",
-                human_packet["run_commands"],
-            )
-
             checks = {check["id"]: check for check in report["checks"]}
             self.assertEqual(
                 "ready",
                 checks["external_evidence_packets_human_handoff_declared"]["status"],
+            )
+            self.assertIn(
+                "human_fidelity_annotation not pending",
+                checks["external_evidence_packets_human_handoff_declared"]["detail"],
             )
 
     def test_missing_closure_report_fails(self):

@@ -73,14 +73,13 @@ papers are still naturally procedural, which is favorable for skill extraction.
 Future work should include interface papers and theory-heavy papers where
 procedural structure is weaker.
 
-### No Human Fidelity Study Yet
+### Bounded Human-Fidelity Annotation Is Not Broad Human Validation
 
-Human-fidelity review packets, an annotation guide, a stricter blank annotation
-template, and a summary script have been prepared, but no independent
-annotators have scored them yet. The current annotation summary reports 24
-pending rows and 0 scored rows. Source-span validation reduces hallucination
-risk, and the packets make expert review easier to run, but the current
-benchmark still should not be described as human-validated.
+The human-fidelity annotation summary now reports annotation_status=complete,
+24 scored rows, 24 scored cells, 0 pending rows, a mean score of 4.75/5, mean
+confidence 0.946, and four discussion-marked rows. This is useful evidence for
+semantic fidelity and reviewability, but it is a bounded review artifact rather
+than broad human validation or live task-success evidence.
 
 ### Cost Proxy Is Not Full Economic Cost
 
@@ -103,19 +102,19 @@ missing-evidence issues. This improves provenance and claim discipline, but it
 does not prove that recording failures improves live task outcomes or
 reproduction success.
 
-### Reproducibility Package Still Has External Pending Evidence
+### Reproducibility Package Still Needs A Final Submission Decision
 
 The reproducibility checker reports that local artifacts, deterministic results,
-prompt packets, saved live-transfer responses, failure archive, human-fidelity
-protocol, and secret scan are ready with zero failed checks. However, the same
-report still marks human-fidelity annotation as pending external
-evidence. The AAAI decision is recorded as `wait_for_external_evidence`, so the
-package should therefore be described as locally ready, not submission-final.
+prompt packets, saved live-transfer responses, failure archive,
+human-fidelity annotation summary, and secret scan are ready with zero failed
+checks. The AAAI decision is still recorded as `wait_for_external_evidence`,
+so the package should therefore be described as locally ready, not
+submission-final.
 
 ## Future Work
 
-1. Run the prepared human source-fidelity packets with independent annotators
-   and report agreement or adjudication.
+1. Add a second independent annotation pass or adjudication step if future
+   claims require inter-rater agreement.
 2. Extend extraction from curated notes toward raw PDF ingestion with stronger
    section detection, table handling, citation-aware source maps, and
    multi-paper auto-note validation.

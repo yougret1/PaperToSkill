@@ -1269,14 +1269,14 @@ python scripts\summarize_human_fidelity_annotations.py --strict
 
 Current status:
 `results/human_fidelity_packets/annotation_guide.md` provides the reviewer
-handoff, `annotation_template.csv` has 24 blank paper-by-criterion rows, and
-`annotation_summary.md` reports `annotation_status=pending`, 0 scored rows, 24
-pending paper-by-criterion cells, average confidence `n/a`, and 0 validation
-errors. Multiple reviewers may append rows for the same paper-by-criterion cell
-when `reviewer_id` values are distinct. The package
-gate marks `human_fidelity_annotation_handoff_ready` and
-`human_fidelity_reviewer_bundle_ready` ready, while completed human-fidelity
-annotation remains pending.
+handoff, `annotation_template.csv` now contains the completed 24-cell 1-5
+Likert annotation pass, and `annotation_summary.md` reports
+`annotation_status=complete`, 24 scored rows, 24 scored paper-by-criterion
+cells, 0 pending cells, mean score 4.75/5, average confidence 0.946, 4
+discussion-marked rows, and 0 validation errors. Multiple reviewers may append
+rows for the same paper-by-criterion cell when `reviewer_id` values are
+distinct. This is bounded semantic-fidelity/reviewability evidence, not broad
+human validation or live task-success evidence.
 
 ## AAAI Paper Package
 
@@ -1356,15 +1356,15 @@ Current status:
 `results/reproducibility/submission_review_report.md` reports ready, 19 ready
 checks, and 0 failed checks. It verifies that review handoff files describe the
 24 scored saved live-transfer response rows, 6 scored and 0 pending
-model-ablation rows, 0 scored and 24 pending human-fidelity cells, local token
+model-ablation rows, 24 scored and 0 pending human-fidelity cells, local token
 accounting, the bounded AI-Scientist-v2 smoke/full live-run completion, and the
 mixed eight-row real-reuse first pass. It also verifies that the auxiliary
 real-reuse LLM ablation is described as 12/18 scored rows with Claude-family
 provider-pending HTTP 502 rows, not as saved-response evidence or a main-row
 replacement. It also verifies that the external-evidence closure queue and
-execution packets are described as local handoff/checking artifacts while two
-external-evidence items remain pending under `pending_external_evidence`:
-human-fidelity annotation and the AAAI final decision.
+execution packets are described as local handoff/checking artifacts while one
+external-evidence item remains pending under `pending_external_evidence`: the
+AAAI final decision.
 Passing this gate does not mean the AAAI paper is submission-final.
 
 ## Submission Bundle Manifest

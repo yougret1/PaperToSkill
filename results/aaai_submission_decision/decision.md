@@ -118,7 +118,7 @@ Evidence policy: <submit now with limitations, or wait for named evidence>
 | aaai_submission_decision_input_rebuttal_bank | ready | present | research/rebuttal_bank.md |
 | aaai_submission_decision_input_aaai_tex | ready | present | paper/aaai/papertoskill_aaai2027.tex |
 | aaai_submission_decision_local_gates_ready | ready | local submission gates ready | results/reproducibility/aaai_package_report.json; results/reproducibility/paper_claim_report.json; results/reproducibility/paper_table_report.json; results/reproducibility/submission_review_report.json; results/reproducibility/usage_example_report.json |
-| aaai_submission_decision_pending_evidence_state_current | ready | goal=not_complete_pending_external_evidence; package=ready_with_pending_external_evidence; pending=2 | results/reproducibility/goal_completion_report.json; results/reproducibility/package_report.json |
+| aaai_submission_decision_pending_evidence_state_current | ready | goal=not_complete_pending_external_evidence; package=ready; pending=1 | results/reproducibility/goal_completion_report.json; results/reproducibility/package_report.json |
 | aaai_submission_decision_external_packet_ready | ready | packet_status=pending_decision; criteria=4 | results/external_evidence_packets/packets.json |
 | aaai_submission_decision_boundaries_declared | ready | submission options and non-negotiable boundaries declared | research/submission_checklist.md; research/review_report.md; paper/aaai/papertoskill_aaai2027.tex |
 | aaai_submission_decision_options_declared | ready | options=submit_now_deterministic_offline,wait_for_external_evidence | results/aaai_submission_decision/decision.json |

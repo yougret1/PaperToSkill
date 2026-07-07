@@ -37,7 +37,7 @@ class CheckReproducibilityPackageTest(unittest.TestCase):
         self.assertEqual("fail", check.status)
         self.assertIn("leak.md:1", check.detail)
 
-    def test_current_package_is_ready_with_pending_external_evidence(self):
+    def test_current_package_is_ready(self):
         with tempfile.TemporaryDirectory() as tmp:
             output_json = Path(tmp) / "package_report.json"
             output_md = Path(tmp) / "package_report.md"
@@ -57,11 +57,11 @@ class CheckReproducibilityPackageTest(unittest.TestCase):
             )
 
             report = json.loads(output_json.read_text(encoding="utf-8"))
-            self.assertEqual("ready_with_pending_external_evidence", report["overall_status"])
+            self.assertEqual("ready", report["overall_status"])
             self.assertEqual(0, report["status_counts"]["fail"])
             self.assertGreaterEqual(report["status_counts"]["ready"], 164)
             pending_ids = {check["id"] for check in report["checks"] if check["status"] == "pending"}
-            self.assertIn("human_fidelity_annotation_complete", pending_ids)
+            self.assertNotIn("human_fidelity_annotation_complete", pending_ids)
             self.assertIn("token_accounting_complete", {check["id"] for check in report["checks"] if check["status"] == "ready"})
             ready_ids = {check["id"] for check in report["checks"] if check["status"] == "ready"}
             self.assertIn("ai_scientist_v2_llm_smoke_complete", ready_ids)
@@ -73,6 +73,7 @@ class CheckReproducibilityPackageTest(unittest.TestCase):
             self.assertIn("human_fidelity_reviewer_bundle_zip", ready_ids)
             self.assertIn("human_fidelity_annotation_handoff_ready", ready_ids)
             self.assertIn("human_fidelity_reviewer_bundle_ready", ready_ids)
+            self.assertIn("human_fidelity_annotation_complete", ready_ids)
             self.assertIn("token_accounting_summary_valid", ready_ids)
             self.assertIn("token_accounting_handoff_ready", ready_ids)
             self.assertIn("ai_scientist_smoke_runner", ready_ids)

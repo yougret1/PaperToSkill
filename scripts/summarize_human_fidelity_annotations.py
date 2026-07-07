@@ -17,7 +17,7 @@ REQUIRED_COLUMNS = [
     "packet_path",
     "criterion_id",
     "criterion_label",
-    "score_0_to_3",
+    "score_1_to_5",
     "evidence_locator",
     "evidence_note",
     "confidence_0_to_1",
@@ -43,9 +43,9 @@ def parse_score(value: str, row_number: int) -> int | None:
     try:
         score = int(value)
     except ValueError as exc:
-        raise ValueError(f"Row {row_number}: score_0_to_3 must be an integer 0-3 or blank") from exc
-    if score < 0 or score > 3:
-        raise ValueError(f"Row {row_number}: score_0_to_3 must be between 0 and 3")
+        raise ValueError(f"Row {row_number}: score_1_to_5 must be an integer 1-5 or blank") from exc
+    if score < 1 or score > 5:
+        raise ValueError(f"Row {row_number}: score_1_to_5 must be between 1 and 5")
     return score
 
 
@@ -97,7 +97,7 @@ def summarize(rows: list[dict[str, str]]) -> dict[str, Any]:
     scored_reviewers_by_cell: dict[tuple[str, str], set[str]] = defaultdict(set)
 
     for index, row in enumerate(rows, start=2):
-        score = parse_score(row["score_0_to_3"], index)
+        score = parse_score(row["score_1_to_5"], index)
         confidence = parse_confidence(row["confidence_0_to_1"], index)
         needs_discussion = parse_needs_discussion(row["needs_discussion"], index)
         paper_id = row["paper_id"].strip()
@@ -158,7 +158,7 @@ def summarize(rows: list[dict[str, str]]) -> dict[str, Any]:
             "scored_rows": len(scores),
             "scored_cells": completed_cells,
             "average_score": round(sum(scores) / len(scores), 3) if scores else None,
-            "max_score": 3,
+            "max_score": 5,
             "status": "complete" if completed_cells == len(criterion_labels) else "pending",
         }
 
@@ -170,7 +170,7 @@ def summarize(rows: list[dict[str, str]]) -> dict[str, Any]:
             "scored_rows": len(scores),
             "scored_cells": completed_cells,
             "average_score": round(sum(scores) / len(scores), 3) if scores else None,
-            "max_score": 3,
+            "max_score": 5,
             "status": "complete" if completed_cells == len(paper_labels) else "pending",
         }
 

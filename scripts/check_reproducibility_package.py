@@ -871,7 +871,12 @@ def submission_bundle_manifest_checks(root: Path) -> list[Check]:
         ]
     report = load_json(report_path)
     failed = [check for check in report.get("checks", []) if check.get("status") == "fail"]
-    status = "ready" if report.get("overall_status") == "ready_with_pending_external_evidence" and not failed else "fail"
+    status = (
+        "ready"
+        if report.get("overall_status") in {"ready_with_pending_external_evidence", "ready"}
+        and not failed
+        else "fail"
+    )
     counts = report.get("status_counts", {})
     checks.append(
         Check(
@@ -1017,7 +1022,7 @@ def goal_completion_checks(root: Path) -> list[Check]:
         "deepseek_followup_process_ready": "ready",
         "deepseek_followup_response_complete": "ready",
         "model_ablation_evaluation_complete": "ready",
-        "human_fidelity_annotation_complete": "pending",
+        "human_fidelity_annotation_complete": "ready",
         "token_accounting_complete": "ready",
         "external_evidence_closure_queue_ready": "ready",
         "external_evidence_execution_packets_ready": "ready",

@@ -63,8 +63,8 @@ FORBIDDEN_PATTERNS = [
     },
     {
         "id": "human_validated",
-        "pattern": r"\b(human[- ]validated|expert[- ]validated|human fidelity annotation has been completed|completed human[- ]fidelity)\b",
-        "detail": "Do not claim completed human validation.",
+        "pattern": r"\b(human[- ]validated|expert[- ]validated|human validation|expert validation|validated by human experts?)\b",
+        "detail": "Do not claim broad human or expert validation; bounded annotation evidence is allowed.",
     },
     {
         "id": "provider_billing",
@@ -118,9 +118,9 @@ REQUIRED_BOUNDARIES = [
         "detail": "Paper text should distinguish saved-response scoring from live task success or human semantic fidelity.",
     },
     {
-        "id": "human_fidelity_pending",
-        "pattern": r"(human fidelity[^.\n]{0,80}future work|no independent annotations|human-fidelity[^.\n]{0,80}unscored)",
-        "detail": "Paper text should keep human-fidelity annotation pending.",
+        "id": "human_fidelity_bounded_complete",
+        "pattern": r"(?=.*\bbounded\b)(?=.*\bhuman[- ]fidelity\b)(?=.*(?:24/24|24\s+(?:scored|paper-by-criterion|cells?|rows?)))(?=.*\b0\s+pending\b)(?=.*(?:semantic[- ]fidelity|semantic fidelity|reviewability))(?=.*(?:rather than|not|do not|does not)[^.\n]{0,160}(?:broad human validation|human[- ]validated|expert[- ]validated|live task[- ]success))",
+        "detail": "Paper text should state bounded-complete human-fidelity annotation evidence without claiming broad validation.",
     },
     {
         "id": "cost_proxy_boundary",

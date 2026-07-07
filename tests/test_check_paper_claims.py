@@ -45,6 +45,7 @@ class CheckPaperClaimsTest(unittest.TestCase):
             self.assertEqual(0, report["status_counts"]["fail"])
             ready_ids = {check["id"] for check in report["checks"] if check["status"] == "ready"}
             self.assertIn("paper_claim_boundary_curated_scope", ready_ids)
+            self.assertIn("paper_claim_boundary_human_fidelity_bounded_complete", ready_ids)
             self.assertIn("paper_claim_boundary_live_transfer_saved_response_boundary", ready_ids)
             self.assertIn("paper_claim_boundary_model_ablation_saved_response_boundary", ready_ids)
             self.assertIn("paper_claim_no_aaai_tables_draft_planning_language", ready_ids)
@@ -157,11 +158,7 @@ class CheckPaperClaimsTest(unittest.TestCase):
             shutil.copyfile(LIMITATIONS_MD, tmp_limitations)
 
             text = tmp_outline.read_text(encoding="utf-8")
-            text = text.replace(
-                "add human fidelity\nreview, stabilize the locked real-reuse rows",
-                "repeat and expand the original-style paper tasks, add human fidelity\nreview",
-                1,
-            )
+            text += "\nThe next stage is to repeat and expand the original-style paper tasks.\n"
             tmp_outline.write_text(text, encoding="utf-8")
 
             report = build_report(tmp_root)

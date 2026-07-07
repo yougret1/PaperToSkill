@@ -2,9 +2,9 @@
 
 Evidence boundary: this report checks local package completeness and separates pending external evidence from local failures.
 
-- Overall status: ready_with_pending_external_evidence
-- Ready checks: 483
-- Pending checks: 1
+- Overall status: ready
+- Ready checks: 484
+- Pending checks: 0
 - Failed checks: 0
 
 ## Checks
@@ -361,7 +361,7 @@ Evidence boundary: this report checks local package completeness and separates p
 | human_fidelity_summary_valid | ready | errors=0 | results\human_fidelity_packets\annotation_summary.json |
 | human_fidelity_annotation_handoff_ready | ready | expected_cells=24; template_rows=24; summary_rows=24; summary_cells=24 | results/human_fidelity_packets/index.json; results/human_fidelity_packets/annotation_guide.md |
 | human_fidelity_reviewer_bundle_ready | ready | files=7; required_rows=24; zip_exists=True | results\human_fidelity_packets\reviewer_bundle_manifest.json |
-| human_fidelity_annotation_complete | pending | status=pending; scored_rows=0; pending_rows=24 | results\human_fidelity_packets\annotation_summary.json |
+| human_fidelity_annotation_complete | ready | status=complete; scored_rows=24; pending_rows=0 | results\human_fidelity_packets\annotation_summary.json |
 | failure_archive_config | ready | present | benchmarks/failure_case_archive_v0.json |
 | failure_archive_json | ready | present | results/failure_cases/failure_case_archive.json |
 | failure_archive_md | ready | present | results/failure_cases/failure_case_archive.md |
@@ -381,12 +381,12 @@ Evidence boundary: this report checks local package completeness and separates p
 | aaai_submission_decision_preflight_ready | ready | overall=ready; decision_status=recorded; counts={'ready': 27, 'pending': 0, 'fail': 0} | results\aaai_submission_decision\decision.json |
 | aaai_submission_decision_core_checks_ready | ready | core decision preflight checks ready | results\aaai_submission_decision\decision.json |
 | aaai_submission_decision_options_available | ready | both decision options available for human decision | results\aaai_submission_decision\decision.json |
-| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 78, 'pending': 3, 'fail': 0} | results\reproducibility\goal_completion_report.json |
+| goal_completion_report_ready | ready | overall=not_complete_pending_external_evidence; counts={'ready': 79, 'pending': 2, 'fail': 0} | results\reproducibility\goal_completion_report.json |
 | goal_completion_core_checks_ready | ready | core completion boundaries ready | results\reproducibility\goal_completion_report.json |
-| external_evidence_closure_report_ready | ready | overall=pending_external_evidence; counts={'ready': 3, 'pending': 0, 'fail': 0}; item_counts={'pending_reviewers': 1, 'pending_decision': 1} | results\external_evidence_closure\closure.json |
+| external_evidence_closure_report_ready | ready | overall=pending_external_evidence; counts={'ready': 3, 'pending': 0, 'fail': 0}; item_counts={'pending_decision': 1} | results\external_evidence_closure\closure.json |
 | external_evidence_closure_core_checks_ready | ready | core closure checks ready | results\external_evidence_closure\closure.json |
 | external_evidence_closure_queue_items_ready | ready | closure queue items declared | results\external_evidence_closure\closure.json |
-| external_evidence_packets_report_ready | ready | overall=ready; counts={'ready': 8, 'pending': 0, 'fail': 0}; packets=2 | results\external_evidence_packets\packets.json |
+| external_evidence_packets_report_ready | ready | overall=ready; counts={'ready': 8, 'pending': 0, 'fail': 0}; packets=1 | results\external_evidence_packets\packets.json |
 | external_evidence_packets_core_checks_ready | ready | core packet checks ready | results\external_evidence_packets\packets.json |
 | external_evidence_packets_items_ready | ready | execution packets declared | results\external_evidence_packets\packets.json |
 | ai_scientist_v2_smoke_cli_status_summary | ready | status_summary=True; require_complete=True; timeout=True; alias_fallback=True; max_tokens=True | scripts\run_ai_scientist_v2_smoke.py |

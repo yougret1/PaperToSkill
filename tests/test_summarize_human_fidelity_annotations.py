@@ -10,11 +10,36 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "summarize_human_fidelity_annotations.py"
 TEMPLATE = ROOT / "results" / "human_fidelity_packets" / "annotation_template.csv"
+ANNOTATION_METADATA_COLUMNS = [
+    "score_1_to_5",
+    "evidence_locator",
+    "evidence_note",
+    "confidence_0_to_1",
+    "reviewer_id",
+    "review_date",
+    "needs_discussion",
+]
+
+
+def blank_template_rows():
+    with TEMPLATE.open(encoding="utf-8", newline="") as handle:
+        rows = list(csv.DictReader(handle))
+        fieldnames = list(rows[0].keys())
+    for row in rows:
+        for column in ANNOTATION_METADATA_COLUMNS:
+            row[column] = ""
+    return rows, fieldnames
 
 
 class SummarizeHumanFidelityAnnotationsTest(unittest.TestCase):
     def test_pending_template_summarizes_without_scores(self):
         with tempfile.TemporaryDirectory() as tmp:
+            annotations = Path(tmp) / "annotations.csv"
+            rows, fieldnames = blank_template_rows()
+            with annotations.open("w", encoding="utf-8", newline="") as handle:
+                writer = csv.DictWriter(handle, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows(rows)
             output_json = Path(tmp) / "summary.json"
             output_md = Path(tmp) / "summary.md"
             subprocess.run(
@@ -22,7 +47,7 @@ class SummarizeHumanFidelityAnnotationsTest(unittest.TestCase):
                     sys.executable,
                     str(SCRIPT),
                     "--annotations",
-                    str(TEMPLATE),
+                    str(annotations),
                     "--output-json",
                     str(output_json),
                     "--output-md",
@@ -46,26 +71,10 @@ class SummarizeHumanFidelityAnnotationsTest(unittest.TestCase):
     def test_scored_rows_require_required_metadata(self):
         with tempfile.TemporaryDirectory() as tmp:
             annotations = Path(tmp) / "annotations.csv"
-            rows = []
-            with TEMPLATE.open(encoding="utf-8", newline="") as handle:
-                rows = list(csv.DictReader(handle))
-                fieldnames = handle.readline()
-            rows[0]["score_0_to_3"] = "3"
+            rows, fieldnames = blank_template_rows()
+            rows[0]["score_1_to_5"] = "5"
             with annotations.open("w", encoding="utf-8", newline="") as handle:
-                writer = csv.DictWriter(handle, fieldnames=[
-                    "paper_id",
-                    "paper",
-                    "packet_path",
-                    "criterion_id",
-                    "criterion_label",
-                    "score_0_to_3",
-                    "evidence_locator",
-                    "evidence_note",
-                    "confidence_0_to_1",
-                    "reviewer_id",
-                    "review_date",
-                    "needs_discussion",
-                ])
+                writer = csv.DictWriter(handle, fieldnames=fieldnames)
                 writer.writeheader()
                 writer.writerows(rows)
 
@@ -94,11 +103,9 @@ class SummarizeHumanFidelityAnnotationsTest(unittest.TestCase):
     def test_complete_scored_rows_compute_confidence_and_discussion(self):
         with tempfile.TemporaryDirectory() as tmp:
             annotations = Path(tmp) / "annotations.csv"
-            with TEMPLATE.open(encoding="utf-8", newline="") as handle:
-                rows = list(csv.DictReader(handle))
-                fieldnames = list(rows[0].keys())
+            rows, fieldnames = blank_template_rows()
             for row in rows:
-                row["score_0_to_3"] = "3"
+                row["score_1_to_5"] = "5"
                 row["evidence_locator"] = "source note line 1"
                 row["evidence_note"] = "faithful to source"
                 row["confidence_0_to_1"] = "0.8"
@@ -142,11 +149,9 @@ class SummarizeHumanFidelityAnnotationsTest(unittest.TestCase):
     def test_multiple_reviewers_can_append_duplicate_cells(self):
         with tempfile.TemporaryDirectory() as tmp:
             annotations = Path(tmp) / "annotations.csv"
-            with TEMPLATE.open(encoding="utf-8", newline="") as handle:
-                rows = list(csv.DictReader(handle))
-                fieldnames = list(rows[0].keys())
+            rows, fieldnames = blank_template_rows()
             for row in rows:
-                row["score_0_to_3"] = "3"
+                row["score_1_to_5"] = "5"
                 row["evidence_locator"] = "source note line 1"
                 row["evidence_note"] = "faithful to source"
                 row["confidence_0_to_1"] = "0.8"
@@ -156,7 +161,7 @@ class SummarizeHumanFidelityAnnotationsTest(unittest.TestCase):
             duplicate_reviewer_rows = []
             for row in rows:
                 duplicate = dict(row)
-                duplicate["score_0_to_3"] = "2"
+                duplicate["score_1_to_5"] = "4"
                 duplicate["evidence_note"] = "mostly faithful"
                 duplicate["confidence_0_to_1"] = "0.7"
                 duplicate["reviewer_id"] = "R2"
@@ -197,12 +202,10 @@ class SummarizeHumanFidelityAnnotationsTest(unittest.TestCase):
     def test_duplicate_reviewer_for_same_cell_is_error(self):
         with tempfile.TemporaryDirectory() as tmp:
             annotations = Path(tmp) / "annotations.csv"
-            with TEMPLATE.open(encoding="utf-8", newline="") as handle:
-                rows = list(csv.DictReader(handle))
-                fieldnames = list(rows[0].keys())
+            rows, fieldnames = blank_template_rows()
             first = rows[0]
             for row in [first]:
-                row["score_0_to_3"] = "3"
+                row["score_1_to_5"] = "5"
                 row["evidence_locator"] = "source note line 1"
                 row["evidence_note"] = "faithful to source"
                 row["confidence_0_to_1"] = "0.8"

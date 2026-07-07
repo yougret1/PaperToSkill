@@ -72,7 +72,7 @@ class CheckGoalCompletionTest(unittest.TestCase):
             self.assertEqual("ready", statuses["deepseek_followup_response_complete"])
             self.assertEqual("ready", statuses["paper2agent_artifact_comparison_ready"])
             self.assertEqual("ready", statuses["live_cross_harness_responses_complete"])
-            self.assertEqual("pending", statuses["human_fidelity_annotation_complete"])
+            self.assertEqual("ready", statuses["human_fidelity_annotation_complete"])
             self.assertEqual("ready", statuses["external_evidence_closure_queue_ready"])
             self.assertEqual("ready", statuses["external_evidence_execution_packets_ready"])
             self.assertTrue(output_md.exists())

@@ -5,7 +5,7 @@ Evidence boundary: this guide prepares independent human review. It does not con
 ## Workflow
 
 1. Open the packet for one paper and read the generated skill, source-note excerpt, and artifact summary.
-2. Score each criterion from 0 to 3 using the protocol scale.
+2. Score each criterion using the Likert scale: 5 = Strongly Agree, 4 = Agree, 3 = Neutral / Neither agree nor disagree, 2 = Disagree, 1 = Strongly Disagree.
 3. Fill `evidence_locator` with a source-note line, source-map entry, generated-skill section, or packet section that supports the judgment.
 4. Fill `evidence_note` with the shortest explanation needed to justify the score.
 5. Fill `confidence_0_to_1`, `reviewer_id`, `review_date`, and `needs_discussion` (`true` or `false`).
@@ -14,7 +14,7 @@ Evidence boundary: this guide prepares independent human review. It does not con
 
 ## Completion Requirements
 
-- All 24 paper-by-criterion cells must have at least one score from 0 to 3.
+- All 24 paper-by-criterion cells must have at least one score from 1 to 5.
 - Every scored row must include an evidence_locator and evidence_note.
 - Every scored row must include reviewer_id, review_date, and confidence_0_to_1.
 - Every scored row must include needs_discussion as true or false; use true when the score depends on ambiguous source support or inferred transfer guidance.

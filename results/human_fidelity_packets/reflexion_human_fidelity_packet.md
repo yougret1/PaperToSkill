@@ -11,14 +11,15 @@ Evidence boundary: this packet is an input for human review. It is not a complet
 
 ## Score Scale
 
-- 0: Missing or contradicts the paper.
-- 1: Present but vague, materially incomplete, or weakly grounded.
-- 2: Mostly faithful with minor omissions or wording issues.
-- 3: Faithful, operationally useful, and source-supported.
+- 5 = Strongly Agree: Faithful, operationally useful, and source-supported.
+- 4 = Agree: Mostly faithful with minor omissions or wording issues.
+- 3 = Neutral / Neither agree nor disagree: Present but partial; notable gaps exist.
+- 2 = Disagree: Present but vague, materially incomplete, or weakly grounded.
+- 1 = Strongly Disagree: Missing or contradicts the paper.
 
 ## Completion Requirements
 
-- All 24 paper-by-criterion cells must have at least one score from 0 to 3.
+- All 24 paper-by-criterion cells must have at least one score from 1 to 5 (Likert scale).
 - Every scored row must include an evidence_locator and evidence_note.
 - Every scored row must include reviewer_id, review_date, and confidence_0_to_1.
 - Every scored row must include needs_discussion as true or false; use true when the score depends on ambiguous source support or inferred transfer guidance.

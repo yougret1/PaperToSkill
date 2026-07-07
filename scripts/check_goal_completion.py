@@ -428,11 +428,19 @@ def paper_package_checks(root: Path) -> list[Check]:
             "results/aaai_submission_decision/decision.json",
         )
     )
+    selected_option = decision_report.get("selected_option")
+    submit_now_ready = (
+        ready
+        and decision_ready
+        and selected_option == "submit_now_deterministic_offline"
+    )
     checks.append(
         Check(
             "aaai_final_submission_ready",
-            "pending" if ready and decision_ready else "fail",
-            "AAAI package and submission-decision preflight are locally verified, but final human decision and selected evidence policy remain pending"
+            "ready" if submit_now_ready else ("pending" if ready and decision_ready else "fail"),
+            "bounded submit-now decision recorded; AAAI package and submission-decision preflight are locally verified"
+            if submit_now_ready
+            else "AAAI package and submission-decision preflight are locally verified, but final human decision and selected evidence policy remain pending"
             if ready and decision_ready
             else "one or more paper-package gates failed",
             "paper/aaai/; results/reproducibility/; results/aaai_submission_decision/decision.json",

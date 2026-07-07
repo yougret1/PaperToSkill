@@ -249,25 +249,25 @@ def external_evidence_pending_current(root: Path, combined_text: str) -> tuple[b
     item_status_counts = closure.get("item_status_counts", {})
     data_current = (
         closure.get("overall_status") == "pending_external_evidence"
-        and item_status_counts.get("pending_reviewers") == 1
+        and item_status_counts.get("pending_reviewers", 0) == 0
         and item_status_counts.get("pending_decision") == 1
-        and len(closure_items) == 2
+        and len(closure_items) == 1
         and packets.get("overall_status") == "ready"
         and packets.get("closure_status") == "pending_external_evidence"
-        and len(packet_items) == 2
+        and len(packet_items) == 1
         and decision.get("selected_option") == "wait_for_external_evidence"
-        and human.get("annotation_status") == "pending"
-        and int(human.get("scored_cells", -1)) == 0
-        and int(human.get("pending_cells", 0)) == 24
+        and human.get("annotation_status") == "complete"
+        and int(human.get("scored_cells", 0)) >= 24
+        and int(human.get("pending_cells", -1)) == 0
     )
     text_current = (
         contains_all(
             combined_text,
             [
                 "pending_external_evidence",
-                "human-fidelity annotation",
                 "AAAI final decision",
                 "wait_for_external_evidence",
+                "annotation_status=complete",
                 "local queue",
                 "local handoff",
             ],
@@ -275,13 +275,13 @@ def external_evidence_pending_current(root: Path, combined_text: str) -> tuple[b
         and contains_any(
             combined_text,
             [
-                "two pending-external-evidence items",
-                "2 pending external-evidence items",
-                "pending_goal_requirements=2",
+                "one pending-external-evidence item",
+                "1 pending external-evidence item",
+                "pending_goal_requirements=1",
             ],
         )
-        and contains_any(combined_text, ["0 scored", "scored_rows=0"])
-        and contains_any(combined_text, ["24 pending", "pending_rows=24", "pending_cells=24"])
+        and contains_any(combined_text, ["24 scored", "scored_rows=24", "scored_cells=24"])
+        and contains_any(combined_text, ["0 pending", "pending_rows=0", "pending_cells=0"])
     )
     detail = (
         f"closure={closure.get('overall_status')}; "
@@ -321,7 +321,7 @@ def evidence_alignment_checks(root: Path, combined_text: str) -> list[Check]:
         human_status == "pending"
         and human_scored == 0
         and human_pending == 24
-        and contains_all(combined_text, ["0 scored", "24 pending", "human"])
+        and contains_all(combined_text, [f"{human_scored} scored", f"{human_pending} pending", "human"])
     )
     human_complete_current = (
         human_status == "complete"

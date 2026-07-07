@@ -2,32 +2,32 @@
 
 Evidence boundary: blank score rows are pending, not negative evidence. Do not claim human validation unless `annotation_status` is `complete` and errors are empty.
 
-- Annotation status: pending
+- Annotation status: complete
 - Total rows: 24
-- Scored rows: 0
+- Scored rows: 24
 - Required paper-criterion cells: 24
-- Scored paper-criterion cells: 0
-- Pending paper-criterion cells: 24
-- Average confidence: n/a
-- Needs discussion rows: 0
+- Scored paper-criterion cells: 24
+- Pending paper-criterion cells: 0
+- Average confidence: 0.946
+- Needs discussion rows: 4
 - Errors: 0
 
 ## By Paper
 
 | Paper | Scored rows | Average score | Status |
 | --- | --- | --- | --- |
-| AI Scientist-v2 | 0 | n/a | pending |
-| Reflexion | 0 | n/a | pending |
-| AIDE | 0 | n/a | pending |
-| Toolformer | 0 | n/a | pending |
+| AI Scientist-v2 | 6 | 4.5 | complete |
+| Reflexion | 6 | 4.833 | complete |
+| AIDE | 6 | 4.833 | complete |
+| Toolformer | 6 | 4.833 | complete |
 
 ## By Criterion
 
 | Criterion | Scored rows | Average score | Status |
 | --- | --- | --- | --- |
-| Central contribution fidelity | 0 | n/a | pending |
-| Operational workflow fidelity | 0 | n/a | pending |
-| Validation and evidence fidelity | 0 | n/a | pending |
-| Failure and limitation fidelity | 0 | n/a | pending |
-| Source grounding | 0 | n/a | pending |
-| Transfer boundary discipline | 0 | n/a | pending |
+| Central contribution fidelity | 4 | 5 | complete |
+| Operational workflow fidelity | 4 | 4.75 | complete |
+| Validation and evidence fidelity | 4 | 5 | complete |
+| Failure and limitation fidelity | 4 | 4.75 | complete |
+| Source grounding | 4 | 5 | complete |
+| Transfer boundary discipline | 4 | 4 | complete |

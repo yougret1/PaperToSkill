@@ -28,15 +28,17 @@ Do not say:
 ## Q2: How do you prevent hallucinated instructions?
 
 Short answer: PaperToSkill uses source maps and source-span validation as local
-guards, while independent human semantic validation remains pending.
+guards, and the completed 24-cell human-fidelity annotation provides bounded
+semantic-fidelity and reviewability evidence rather than broad human validation.
 
 Evidence to cite:
 
 - `generated_skills/*/references/source_map.json`
 - `results/tables/compactness_source_grounding.md`
 - Source-span support rates: 0.938, 1.0, 1.0, and 1.0 with zero invalid ranges.
-- `results/human_fidelity_packets/annotation_summary.md`: 0 scored rows,
-  24 pending paper-by-criterion cells, and 0 errors.
+- `results/human_fidelity_packets/annotation_summary.md`:
+  annotation_status=complete, 24 scored paper-by-criterion cells, 0 pending
+  cells, mean score 4.75/5, and average confidence 0.946.
 
 Do not say:
 
@@ -72,9 +74,10 @@ human semantic review or real live-task success.
 Evidence to cite:
 
 - `paper/limitations.md`: heuristic metric limitation.
-- `results/reproducibility/package_report.md`: 483 ready checks, 1 pending
+- `results/reproducibility/package_report.md`: 484 ready checks, 0 pending
   checks, and 0 failed checks.
-- `results/human_fidelity_packets/`: prepared independent-review protocol.
+- `results/human_fidelity_packets/annotation_summary.md`: completed bounded
+  24-cell annotation summary.
 
 Do not say:
 
@@ -261,11 +264,12 @@ Do not say:
 
 ## Q10: What must be done before a stronger submission?
 
-Short answer: Resolve the two pending-external-evidence items or submit
-explicitly as a deterministic/offline system paper with those limitations
-prominent. The local closure queue and execution packets are ready handoffs,
-but `pending_external_evidence` remains the active status until human fidelity
-annotation and the AAAI final decision are closed.
+Short answer: Resolve the one pending-external-evidence item or submit
+explicitly as a deterministic/offline system paper with the remaining
+limitations prominent. The local closure queue and execution packets are ready
+handoffs, but `pending_external_evidence` remains the active status until the
+AAAI final decision is closed. Human-fidelity annotation_status=complete with
+24 scored rows and 0 pending rows.
 
 Evidence to cite:
 

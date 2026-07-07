@@ -383,7 +383,9 @@
   final submission readiness.
 - Claim impact: supports saying all four current live-transfer response sets
   are saved and scored, while preserving the boundary that stronger live task
-  and human-fidelity evidence remain pending.
+  evidence and the final submission decision remain pending. The completed
+  bounded human-fidelity annotation is separate semantic-fidelity and
+  reviewability evidence, not live task-success evidence.
 - Figure/table: `research/run_logs/2026-06-19_phase40_all_live_transfer_responses.md`;
   `results/live_transfer_prompts/ai_scientist_v2_v0/run_report.md`;
   `results/live_transfer_prompts/reflexion_v0/run_report.md`;
@@ -404,7 +406,8 @@
   deterministic/offline statements from pending live-agent claims.
 - Statistical evidence: none; no new experiment was run for this card.
 - Failure modes: draft quality depends on the current benchmark scope and may
-  need revision after live cross-harness runs or human fidelity annotation.
+  need revision after live cross-harness runs, a broader human study, or a
+  changed final submission decision.
 - Limitations: the draft is a working paper package, not a submission-ready
   manuscript.
 - Claim impact: improves claim discipline and makes missing evidence visible
@@ -484,20 +487,20 @@
 - Experiment: add a deterministic summarizer for the human-fidelity annotation
   template.
 - Main result: `scripts/summarize_human_fidelity_annotations.py` reports
-  `annotation_status=pending`, 24 total rows, 0 scored rows, 24 pending rows,
-  average confidence `n/a`, 0 discussion rows, and 0 validation errors for the
-  current blank template.
-- Compared baselines: none; this is provenance and validation infrastructure for
-  future human annotations.
-- Practical significance: once independent reviewers fill the template, the same
-  script can summarize per-paper and per-criterion scores and catch missing
-  evidence locators, evidence notes, confidence values, reviewer IDs, review
-  dates, and malformed discussion flags.
-- Statistical evidence: none; no annotation has been completed.
+  `annotation_status=complete`, 24 total rows, 24 scored rows, 24 scored
+  paper-by-criterion cells, 0 pending cells, average confidence 0.946, 4
+  discussion-marked rows, and 0 validation errors.
+- Compared baselines: none; this is bounded semantic-fidelity and reviewability
+  annotation evidence, not a task-performance baseline.
+- Practical significance: the script now summarizes per-paper and per-criterion
+  scores while still catching missing evidence locators, evidence notes,
+  confidence values, reviewer IDs, review dates, and malformed discussion flags.
+- Statistical evidence: descriptive only; the bounded 24-cell annotation reports
+  mean score 4.75/5 and average confidence 0.946.
 - Failure modes: the summary is only as valid as the human-filled CSV; it does
   not judge fidelity by itself.
-- Limitations: current output supports only the claim that human annotation is
-  prepared and pending.
+- Limitations: current output supports only bounded annotation evidence; it does
+  not make the whole system human-validated or expert-validated.
 - Claim impact: makes the human-fidelity evidence boundary machine-readable and
   harder to accidentally overstate.
 - Figure/table: `results/human_fidelity_packets/annotation_summary.md`;
@@ -533,17 +536,18 @@
   evaluations, prompt packets, human-fidelity packet status, failure archive,
   and secret scan.
 - Main result: `results/reproducibility/package_report.md` should report
-  `overall_status=ready_with_pending_external_evidence` after dependent gates
-  are refreshed in order. The latest intended package state is 427 ready
-  checks, 1 pending check, and 0 failed checks; stale failure states usually
-  indicate report refresh ordering around the AAAI decision gate.
+  `overall_status=ready` after dependent gates are refreshed in order. The
+  latest intended package state is 484 ready checks, 0 pending checks, and 0
+  failed checks; stale failure states usually indicate report refresh ordering
+  around the AAAI decision gate.
 - Compared baselines: unchecked artifact bundle.
 - Practical significance: the package is locally reviewable while making the
   remaining external gaps explicit. AI-Scientist-v2 bounded smoke/full-run
   evidence, DeepSeek saved-response rows, model-ablation scoring, and local
-  token accounting are complete for their bounded roles. Human-fidelity
-  annotation remains pending. Provider billing and success-per-dollar are
-  outside the current claim set.
+  token accounting are complete for their bounded roles. The human-fidelity
+  annotation is complete as bounded semantic-fidelity/reviewability evidence.
+  Final AAAI submission readiness remains governed by the recorded wait policy.
+  Provider billing and success-per-dollar are outside the current claim set.
 - Statistical evidence: none; this is a deterministic reproducibility gate.
 - Failure modes: the checker verifies package presence and key consistency
   gates, but it does not replace running live agents or collecting independent
@@ -943,8 +947,7 @@
   AAAI package preparation, usage examples, model-ablation saved responses,
   bounded AI-Scientist-v2 integration, failure-branch provenance, and local
   reproducibility readiness as satisfied for the current artifact package.
-- Remaining blockers: human-fidelity annotation is unscored and final AAAI
-  submission readiness remains governed by the recorded
+- Remaining active blocker: final AAAI submission readiness remains governed by the recorded
   `wait_for_external_evidence` policy. The current real-reuse first pass is
   complete as an execution milestone but mixed as effectiveness evidence, so
   core real-reuse stabilization remains the next experimental priority.
@@ -964,7 +967,7 @@
 
 - Experiment: make the active-goal completion audit machine-checkable.
 - Main result: `results/reproducibility/goal_completion_report.md` reports
-  `overall_status=not_complete_pending_external_evidence`, 77 ready checks, 3
+  `overall_status=not_complete_pending_external_evidence`, 79 ready checks, 2
   pending checks, and 0 failed checks.
 - Checks: durable memory, AI-Scientist-v2 dry-run evidence, PaperToSkill
   prototype and benchmark readiness, bounded AI-Scientist-v2 LLM-client smoke
@@ -996,8 +999,8 @@
 - Main result: `results/external_evidence_closure/closure.md` reports
   `overall_status=pending_external_evidence`, 3 ready checks, 0 pending checks,
   and 0 failed checks.
-- Queue items: human-fidelity annotation and AAAI final submission readiness
-  under the recorded wait policy.
+- Queue item: AAAI final submission readiness under the recorded wait policy.
+  The bounded human-fidelity annotation is complete.
 - Practical significance: pending external work is now centrally mapped and
   machine-checkable, reducing the chance that one blocker disappears from the
   runbook or completion audit.
@@ -1021,10 +1024,9 @@
   completion criteria, escalation rules, and evidence boundaries.
 - Main result: `results/external_evidence_packets/packets.md` reports
   `overall_status=ready`, 8 ready checks, 0 pending checks, and 0 failed
-  checks. The extra check makes the human-fidelity `toHuman.md` / `ok.txt`
-  handoff and cleanup workflow explicit.
-- Packet items: human-fidelity annotation and AAAI submission decision/final
-  readiness.
+  checks, with the completed human-fidelity annotation status preserved as
+  context for the remaining final-decision packet.
+- Packet item: AAAI submission decision/final readiness.
 - Practical significance: the remaining external work is now not only mapped
   but directly executable as a handoff checklist, reducing ambiguity after
   context compaction or agent handoff.
@@ -1047,10 +1049,10 @@
 - Experiment: keep internal review, rebuttal, and submission checklist handoff
   files synchronized with the current evidence state.
 - Main result: `results/reproducibility/submission_review_report.md` reports
-  `overall_status=ready`, 18 ready checks, and 0 failed checks.
+  `overall_status=ready`, 19 ready checks, and 0 failed checks.
 - Checks: stale HTTP 503/live-transfer pending language is absent; review
   materials include the current 24 scored saved live-transfer response rows,
-  6 scored and 0 pending model-ablation rows, 0 scored and 24 pending
+  6 scored and 0 pending model-ablation rows, 24 scored and 0 pending
   human-fidelity cells, local token-accounting evidence, bounded AI-Scientist-v2
   smoke/full-run completion, the 12/18 scored auxiliary real-reuse LLM ablation
   slice with Claude-family provider-pending rows, and current goal/package
@@ -1081,8 +1083,8 @@
   `wait_for_external_evidence`, and the current recorded policy is to wait for
   named external evidence before stronger claims.
 - Practical significance: the decision record prevents the project from
-  drifting into final-submission language while human fidelity and the chosen
-  evidence policy remain unresolved.
+  drifting into final-submission language while the chosen evidence policy
+  remains unresolved. Human-fidelity annotation is complete but bounded.
 - Statistical evidence: none; this is a decision and claim-boundary preflight.
 - Failure modes: a future changed decision record can still be invalid if it
   lacks a selected option, decision owner, decision date, claim boundary, or

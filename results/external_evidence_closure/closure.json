@@ -8,12 +8,10 @@
     "fail": 0
   },
   "item_status_counts": {
-    "pending_reviewers": 1,
     "pending_decision": 1
   },
   "pending_goal_requirements": [
-    "aaai_final_submission_ready",
-    "human_fidelity_annotation_complete"
+    "aaai_final_submission_ready"
   ],
   "checks": [
     {
@@ -25,30 +23,17 @@
     {
       "id": "external_closure_goal_pending_items_covered",
       "status": "ready",
-      "detail": "pending_goal_requirements=2; covered=2",
+      "detail": "pending_goal_requirements=1; covered=1",
       "evidence": "results/reproducibility/goal_completion_report.json"
     },
     {
       "id": "external_closure_queue_items_declared",
       "status": "ready",
-      "detail": "items=2",
+      "detail": "items=1",
       "evidence": "results/external_evidence_closure/closure.json"
     }
   ],
   "items": [
-    {
-      "id": "human_fidelity_annotation",
-      "status": "pending_reviewers",
-      "goal_requirements": [
-        "human_fidelity_annotation_complete"
-      ],
-      "detail": "status=pending; scored_rows=0; pending_rows=24",
-      "evidence": "results/human_fidelity_packets/annotation_summary.json",
-      "next_action": "Independent reviewers fill the annotation template, then rerun the strict summarizer.",
-      "next_commands": [
-        "python scripts\\summarize_human_fidelity_annotations.py --strict"
-      ]
-    },
     {
       "id": "aaai_submission_decision",
       "status": "pending_decision",

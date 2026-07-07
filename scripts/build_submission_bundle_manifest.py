@@ -81,6 +81,25 @@ def read_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def package_report_status_for_manifest(report: dict[str, Any]) -> str | None:
+    """Return an effective package status, allowing only manifest self-reference."""
+    status = report.get("overall_status")
+    if status != "fail":
+        return status
+    failed_ids = {
+        str(check.get("id"))
+        for check in report.get("checks", [])
+        if check.get("status") == "fail"
+    }
+    self_reference = {
+        "submission_bundle_manifest_report_ready",
+        "submission_bundle_manifest_core_checks_ready",
+    }
+    if failed_ids and failed_ids <= self_reference:
+        return "ready"
+    return status
+
+
 def file_entry(root: Path, file_id: str, raw_path: str) -> dict[str, Any]:
     path = root / raw_path
     entry: dict[str, Any] = {
@@ -117,7 +136,11 @@ def build_report(root: Path) -> dict[str, Any]:
             continue
         data = read_json(path)
         expected_statuses = expectations["overall_status"]
-        actual = data.get("overall_status")
+        actual = (
+            package_report_status_for_manifest(data)
+            if report_id == "package_report"
+            else data.get("overall_status")
+        )
         checks.append(
             Check(
                 f"submission_bundle_{report_id}_status",
@@ -147,13 +170,20 @@ def build_report(root: Path) -> dict[str, Any]:
     human_status = human.get("annotation_status")
     selected_option = decision.get("selected_option")
     pending_goal = goal.get("overall_status") == "not_complete_pending_external_evidence"
-    package_pending = package.get("overall_status") == "ready_with_pending_external_evidence"
+    package_status = package_report_status_for_manifest(package)
+    package_ready = package_status in {"ready_with_pending_external_evidence", "ready"}
+    boundary_current = (
+        pending_goal
+        and package_ready
+        and human_status in {"pending", "complete"}
+        and selected_option in {"wait_for_external_evidence", "submit_now_deterministic_offline"}
+    )
     checks.append(
         Check(
             "submission_bundle_external_evidence_boundary_current",
-            "ready" if pending_goal and package_pending and human_status == "pending" else "fail",
+            "ready" if boundary_current else "fail",
             (
-                "package=ready_with_pending_external_evidence; "
+                f"package={package_status}; "
                 "goal=not_complete_pending_external_evidence; "
                 f"human_fidelity={human_status}; selected_option={selected_option}"
             ),
@@ -171,7 +201,7 @@ def build_report(root: Path) -> dict[str, Any]:
         "evidence_boundary": (
             "Submission-bundle manifest for local AAAI paper package and gate reports. "
             "A ready manifest records file hashes and current evidence boundaries; it is not "
-            "a submission-final, acceptance, or human-fidelity-complete claim."
+            "a submission-final or acceptance claim."
         ),
         "overall_status": overall,
         "status_counts": status_counts,

@@ -151,9 +151,13 @@ source-span validation, offline transfer-readiness, word count under a
 tokenizer-aware input proxy using \texttt{o200k\_base}. For saved
 model-ablation responses, we additionally compute a local output-token proxy.
 These metrics are reproducible gates. They do not replace live agent execution,
-real billing records, invoice evidence, success-per-dollar accounting, or
-an independent human-fidelity annotation study. The current package uses local token
-accounting over input-token and saved-response output-token proxies. We also
+real billing records, invoice evidence, or success-per-dollar accounting. They
+are complemented by a bounded six-criterion human-fidelity annotation summary
+with 24/24 scored paper-by-criterion cells, a mean score of 4.75/5, mean
+confidence 0.946, and four discussion-marked rows. The annotation supports
+semantic-fidelity and reviewability claims, not live downstream task success.
+The current package uses local token accounting over input-token and
+saved-response output-token proxies. We also
 prepare model-ablation prompt packets for Claude Opus 4.8, a GPT-family slot
 requested as GPT 5.5, and a DeepSeek slot, and include a protocol-aware runner
 and response evaluator. The current two-case protocol has 6/6 saved and scored
@@ -379,10 +383,9 @@ complete for the current prompt-packet protocol, but the scorer is
 deterministic and contract-based rather than a human semantic-fidelity or live
 execution-outcome evaluation. Fourth, the bounded AI-Scientist-v2 smoke and
 full live run is complete, but its positive result is synthetic and should not
-be read as broad live task success. Fifth,
-human-fidelity packets, a reviewer handoff guide, a stricter blank annotation
-template, and a summary script are prepared, but no independent annotations have
-been completed. Sixth,
+be read as broad live task success. Fifth, the 24-cell human-fidelity
+annotation is now scored and summarized, but it is a bounded review artifact
+rather than broad human validation or live task-success evidence. Sixth,
 compactness is measured by word count, deterministic character proxy, local
 tokenizer-aware input-token proxy, and local output-token proxy for saved model
 responses, not by provider-specific prices, live invoices, or live success per
@@ -401,9 +404,9 @@ human-editable skills. In a four-paper benchmark, generated skills are compact,
 source-grounded, structurally valid, and more operationally complete than short
 summary baselines under deterministic evaluation. A first eight-row real-reuse
 stress test is now complete, but it is mixed and failure-heavy rather than a
-proof of aggregate downstream effectiveness. The next stage is to add human
-fidelity review, stabilize the locked real-reuse rows with pre-registered
-paired follow-ups where needed, extend the bounded Paper2Agent artifact
+proof of aggregate downstream effectiveness. The next stage is to use the
+human-fidelity annotations as bounded review evidence, stabilize the locked
+real-reuse rows with pre-registered paired follow-ups where needed, extend the bounded Paper2Agent artifact
 comparison into a real executable MCP baseline if resources permit, and use
 the real-reuse failure modes to refine budget, artifact, and failure-recovery
 contracts.

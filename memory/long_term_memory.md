@@ -75,6 +75,18 @@ This file is intentionally compact. Detailed chronological history lives in
   If a network/download problem blocks a core asset or phase save, record the
   concrete command, error, and blocked artifact in
   `C:\Users\19351\Desktop\tem\toHuman.md`, then continue non-blocked work.
+- Latest human-fidelity evidence state as of 2026-07-07: the bounded
+  six-criterion annotation packet is complete. The summary reports 24 scored
+  rows, 24 scored paper-by-criterion cells, 0 pending cells, mean score 4.75/5,
+  average confidence 0.946, 4 discussion-marked rows, and 0 errors. This is
+  bounded semantic-fidelity/reviewability evidence only; it is not broad human
+  validation, expert validation, or live downstream task-success evidence.
+- Latest package/goal state as of 2026-07-07: local reproducibility package is
+  `ready` with `484 ready / 0 pending / 0 failed`; submission bundle manifest
+  is `ready_with_pending_external_evidence` with `11 ready / 0 failed`; active
+  goal remains `not_complete_pending_external_evidence` with `79 ready /
+  2 pending / 0 failed` because `aaai_final_submission_ready` is still pending
+  under the recorded `wait_for_external_evidence` AAAI decision.
 - Latest locally recorded remote checkpoint is
   `22b254f142e323b19a12f077981c5a2e8e491319 refs/heads/main`
   (`22b254f Record recovered backup push blocker`). It is independently

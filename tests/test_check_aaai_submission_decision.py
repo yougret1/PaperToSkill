@@ -114,6 +114,46 @@ class CheckAAAISubmissionDecisionTest(unittest.TestCase):
         self.assertIn("aaai_final_submission_ready", pending)
         self.assertTrue(decision.self_referential_goal_failure(goal))
 
+    def test_pending_state_accepts_post_annotation_final_decision_only(self):
+        reports = {
+            "goal_completion": {
+                "overall_status": "not_complete_pending_external_evidence",
+                "checks": [
+                    {
+                        "id": "aaai_final_submission_ready",
+                        "status": "pending",
+                        "detail": "final decision pending",
+                    }
+                ],
+            },
+            "reproducibility_package": {
+                "overall_status": "ready",
+                "checks": [],
+            },
+        }
+
+        check = decision.pending_state_check(reports)
+
+        self.assertEqual("ready", check.status)
+        self.assertIn("pending=1", check.detail)
+
+    def test_goal_completion_accepts_bounded_submit_now_decision(self):
+        reports = {
+            "goal_completion": {
+                "overall_status": "complete",
+                "checks": [],
+            },
+            "reproducibility_package": {
+                "overall_status": "ready",
+                "checks": [],
+            },
+        }
+
+        check = decision.pending_state_check(reports)
+
+        self.assertEqual("ready", check.status)
+        self.assertIn("pending=0", check.detail)
+
 
 if __name__ == "__main__":
     unittest.main()

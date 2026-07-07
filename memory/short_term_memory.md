@@ -3,7 +3,36 @@
 Read this file after any context compaction or session resume. Also read
 `memory/long_term_memory.md` before taking project actions.
 
-Current date: 2026-07-06.
+Current date: 2026-07-07.
+
+## Latest 2026-07-07 State
+
+- Human-fidelity annotation has been processed from the completed
+  `results/human_fidelity_packets/annotation_template.csv` using the 1-5
+  Likert scale. `results/human_fidelity_packets/annotation_summary.md` now
+  reports `annotation_status=complete`, 24 scored rows, 24 scored
+  paper-by-criterion cells, 0 pending cells, mean score 4.75/5, average
+  confidence 0.946, 4 discussion-marked rows, and 0 errors.
+- Paper-facing text and checkers have been synchronized to say bounded-complete
+  human-fidelity annotation evidence. Do not call the whole system
+  human-validated or expert-validated, and do not use the annotation as live
+  downstream task-success evidence.
+- Current local gates passed after this synchronization: full unit discovery
+  `219/219`, strict human-fidelity summary, usage examples, real-reuse
+  preflight, external-evidence closure/packets, submission review, AAAI
+  decision, paper claims, paper tables, AAAI package, goal completion,
+  reproducibility package, and submission-bundle manifest. The AAAI PDF was
+  rebuilt successfully at 8 pages.
+- Latest report counts after refresh: package `ready` with `484 ready /
+  0 pending / 0 failed`; submission bundle manifest
+  `ready_with_pending_external_evidence` with `11 ready / 0 failed`; goal
+  completion `not_complete_pending_external_evidence` with `79 ready /
+  2 pending / 0 failed`. The only active external-evidence queue item is
+  `aaai_submission_decision` for `aaai_final_submission_ready`.
+- The overall user goal is still not complete because the recorded AAAI
+  decision remains `Selected option: wait_for_external_evidence`. If the
+  Research Lead explicitly chooses submit-now, use
+  `scripts/generate_aaai_submission_decision.py` and rerun all strict gates.
 
 ## Current Task
 
@@ -442,11 +471,11 @@ Current date: 2026-07-06.
   `check_aaai_submission_decision.py --strict`, `git diff --check` with only
   CRLF warnings, a long `sk-...` raw-key scan with no matches, and no diff
   under `research/run_logs/**` or `research/stage_log.md`. Latest refreshed
-  report counts: paper claims `56 ready / 0 failed`, package `483 ready / 1 pending /
-  0 failed`, AAAI package `20 ready / 0 failed`, paper tables `343 ready / 0
-  failed`, submission review `19 ready / 0 failed`, goal completion `78 ready /
-  3 pending / 0 failed`. Human-fidelity annotation remains pending; `ok.txt`
-  was absent at resume.
+  report counts were later superseded on 2026-07-07 by the completed
+  human-fidelity annotation state: package `484 ready / 0 pending / 0 failed`,
+  submission review `19 ready / 0 failed`, and goal completion `79 ready /
+  2 pending / 0 failed`. The older note that human-fidelity annotation was
+  pending is no longer current.
 - Current limitations-claim gate sync extends `scripts/check_paper_claims.py` to
   cover `paper/limitations.md` in addition to the AAAI body, AAAI table file,
   Markdown draft, and paper outline. `paper_claim_report.md` is now `ready`
@@ -1397,9 +1426,10 @@ Current date: 2026-07-06.
   12 collected scored rows out of 18 expected rows. This is auxiliary
   model/repetition evidence, not a main-row replacement and not aggregate
   PaperToSkill advantage.
-- Human-fidelity annotation supports semantic fidelity and reviewability, not
-  main task effectiveness. It remains pending: 0 scored rows and 24 pending
-  paper-by-criterion cells.
+- Human-fidelity annotation supports bounded semantic fidelity and reviewability,
+  not main task effectiveness. It is now complete for the bounded 24-cell
+  packet: 24 scored rows, 24 scored paper-by-criterion cells, 0 pending cells,
+  mean score 4.75/5, average confidence 0.946, and 4 discussion-marked rows.
 - Quality/grounding gates remain supporting evidence: rubric, source-span,
   source-map, context coverage, usage examples, token accounting, paper-table
   gates, and claim gates.

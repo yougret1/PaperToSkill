@@ -3,8 +3,8 @@
 Evidence boundary: this report audits the active user goal against local repository evidence. Pending checks are remaining requirements, not negative evidence and not local package failures.
 
 - Overall status: not_complete_pending_external_evidence
-- Ready checks: 78
-- Pending checks: 3
+- Ready checks: 79
+- Pending checks: 2
 - Failed checks: 0
 
 ## Checks
@@ -88,7 +88,7 @@ Evidence boundary: this report audits the active user goal against local reposit
 | aide_live_transfer_responses_complete | ready | scored_rows=6/6 | results/live_transfer_prompts/evaluation.json; results/live_transfer_prompts/aide_v0/run_report.json |
 | toolformer_live_transfer_responses_complete | ready | scored_rows=6/6 | results/live_transfer_prompts/evaluation.json; results/live_transfer_prompts/toolformer_v0/run_report.json |
 | live_cross_harness_responses_complete | ready | scored_rows=24; pending_rows=0; pending_tasks= | results/live_transfer_prompts/evaluation.json |
-| human_fidelity_annotation_complete | pending | status=pending; scored_rows=0; pending_rows=24 | results/human_fidelity_packets/annotation_summary.json |
-| external_evidence_closure_queue_ready | ready | overall=pending_external_evidence; failed=0; items=2 | results/external_evidence_closure/closure.json |
-| external_evidence_execution_packets_ready | ready | overall=ready; failed=0; packets=2 | results/external_evidence_packets/packets.json |
-| active_goal_complete | pending | pending_requirements=aaai_final_submission_ready,human_fidelity_annotation_complete | all goal checks |
+| human_fidelity_annotation_complete | ready | status=complete; scored_rows=24; pending_rows=0 | results/human_fidelity_packets/annotation_summary.json |
+| external_evidence_closure_queue_ready | ready | overall=pending_external_evidence; failed=0; items=1 | results/external_evidence_closure/closure.json |
+| external_evidence_execution_packets_ready | ready | overall=ready; failed=0; packets=1 | results/external_evidence_packets/packets.json |
+| active_goal_complete | pending | pending_requirements=aaai_final_submission_ready | all goal checks |

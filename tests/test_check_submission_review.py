@@ -125,7 +125,8 @@ class CheckSubmissionReviewTest(unittest.TestCase):
             ]:
                 path = tmp_root / relative
                 text = path.read_text(encoding="utf-8")
-                text = text.replace("483 ready", "459 ready")
+                text = text.replace("484 ready", "459 ready")
+                text = text.replace("79 ready", "78 ready")
                 text = text.replace("343 ready", "316 ready")
                 path.write_text(text, encoding="utf-8")
 
@@ -168,8 +169,8 @@ class CheckSubmissionReviewTest(unittest.TestCase):
                 path = tmp_root / relative
                 text = path.read_text(encoding="utf-8")
                 text = text.replace("pending_external_evidence", "ready_external_handoff")
-                text = text.replace("two pending-external-evidence items", "two local handoff items")
-                text = text.replace("2 pending external-evidence items", "2 local handoff items")
+                text = text.replace("one pending-external-evidence item", "one local handoff item")
+                text = text.replace("1 pending external-evidence item", "1 local handoff item")
                 path.write_text(text, encoding="utf-8")
 
             report = build_report(tmp_root)

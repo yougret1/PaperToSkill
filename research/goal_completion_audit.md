@@ -171,8 +171,6 @@ task-success claim.
 
 ## Current Pending Evidence
 
-- `human_fidelity_annotation_complete`: `results/human_fidelity_packets/annotation_summary.md`
-  reports 0 scored rows and 24 pending paper-by-criterion cells.
 - `aaai_final_submission_ready`: local package and submission-review gates are
   ready, but the recorded policy waits for named external evidence.
 

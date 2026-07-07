@@ -40,9 +40,10 @@ class CheckExternalEvidenceClosureTest(unittest.TestCase):
             self.assertNotIn("ai_scientist_v2_smoke_completion", item_ids)
             self.assertNotIn("ai_scientist_v2_full_live_run", item_ids)
             self.assertNotIn("deepseek_followup_responses", item_ids)
-            self.assertIn("human_fidelity_annotation", item_ids)
+            self.assertNotIn("human_fidelity_annotation", item_ids)
             self.assertNotIn("token_accounting_summary", item_ids)
             self.assertIn("aaai_submission_decision", item_ids)
+            self.assertEqual({"aaai_submission_decision"}, item_ids)
             checks = {check["id"]: check for check in report["checks"]}
             self.assertEqual("ready", checks["external_closure_goal_pending_items_covered"]["status"])
             self.assertTrue(output_md.exists())
