@@ -1,0 +1,26 @@
+\begin{abstract}
+Many LLM and agent papers introduce workflows that could help ordinary users and
+agent builders, but those workflows are usually described for human reading
+rather than direct reuse. Summaries compress the idea, but often discard the
+procedural details, validation checks, assumptions, and failure branches needed
+to apply the method. We introduce PaperToSkill, a paper-to-skill conversion
+workflow that turns source-anchored paper notes into compact, human-editable
+agent skills. Each skill records the paper's contribution, use conditions,
+workflow, validation checks, failure cases, transfer notes, and source anchors.
+In a four-paper benchmark over AI Scientist-v2, Reflexion, AIDE, and
+Toolformer, PaperToSkill generates skills that score 20/20 on deterministic
+structural rubrics, preserve more deterministic operational coverage than
+generic-summary and abstract-only baselines, remain under a 1200-word
+compactness budget, and substantially reduce deterministic input-token proxy
+size relative to full extracted papers. These results support PaperToSkill as a
+reproducible conversion layer from curated paper notes to portable skills. All
+four live-transfer saved-response sets are collected and scored under a
+deterministic output-contract evaluator; these saved response files are not
+human semantic fidelity or downstream execution-outcome evidence. A first
+single-run real-reuse stress test over eight AIDE, SWE-agent, Reflexion, and
+SnapATAC2 paper-task rows is complete, but the outcome is mixed rather than
+confirmatory: AIDE-T2 and one SWE task favor PaperToSkill, AIDE-T1 and
+Reflexion are solved by both conditions, and SWE-T1 plus SnapATAC2 expose
+patch-application and artifact-completion failures. We therefore treat these
+rows as downstream boundary evidence, not aggregate effectiveness.
+\end{abstract}

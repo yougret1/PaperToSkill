@@ -1,0 +1,34 @@
+\section{Introduction}
+
+Using LLMs is becoming a practical skill for researchers, builders, and
+non-expert users. At the same time, many of the best ways to use LLM agents are
+introduced in papers whose methods are difficult to operationalize. A paper may
+describe a search policy, memory loop, validation stage, or interface contract,
+but a user who wants to reuse the contribution must translate prose into an
+agent workflow by hand.
+
+PaperToSkill studies a simple hypothesis: papers can be converted into compact,
+editable skills that preserve enough procedural knowledge for agents and users
+to reuse the main contribution. We use ``skill'' to mean a natural-language
+operational artifact with an entry-point \texttt{SKILL.md}, similar to formats
+used by agent harnesses that load task-specific instructions. Unlike a summary,
+a skill is not only explanatory. It should specify when to use the method,
+which inputs are required, which steps to execute, how to validate progress,
+which failures to watch for, and how to adapt the instructions across
+harnesses.
+
+This paper takes an artifact-first view. PaperToSkill is not presented as a
+fully automatic PDF understanding system. The current implementation converts
+curated, source-anchored paper notes into skills and source maps. This narrow
+scope is intentional: it lets us evaluate whether the conversion layer
+preserves operational knowledge before claiming end-to-end PDF automation.
+
+Our current contributions are: (1) a paper-to-skill schema for operationalizing
+research contributions; (2) a deterministic extraction scaffold that emits
+\texttt{SKILL.md} plus source maps; (3) deterministic extracted-text-to-note
+scaffolds evaluated on Toolformer and AIDE; (4) a four-paper benchmark using AI
+Scientist-v2, Reflexion, AIDE, and Toolformer; (5) deterministic/offline
+evaluations for structure, context coverage, compactness, source grounding, and
+transfer readiness; and (6) a first single-run real-reuse stress test that
+records both positive and failed Summary-vs-PaperToSkill outcomes without
+promoting them into an aggregate downstream-success claim.

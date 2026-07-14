@@ -1,33 +1,46 @@
-# AAAI Paper Package
+# PaperToSkill AAAI-27 Overleaf Package
 
-This directory contains the PaperToSkill AAAI LaTeX package.
+This directory uses the Overleaf project structure from
+`paper/Paper2Skill_AAAI2027.zip` while preserving the current PaperToSkill
+manuscript, tables, references, and conceptual figures.
 
-## Template Provenance
+## Primary Overleaf Entry
 
-- Source URL: `https://aaai.org/authorkit27/`
-- Download date: 2026-06-18
-- Downloaded file: `AuthorKit27.zip`
-- SHA256: `E28C6AC9BC6EB3B4E2D849547D2CEFB5162610EE39D0A12E0DC62D1126B44A7D`
-- The repository keeps the original zip plus build-local `aaai2027.sty` and
-  `aaai2027.bst`, copied unchanged from the official author kit.
-- `AuthorKit27/` was used as a temporary extraction directory during setup, but
-  is not required for the local paper build.
+- `main.tex`: canonical Overleaf entry point.
+- `src/abstract.tex`: abstract.
+- `src/introduction.tex`: introduction.
+- `src/related.tex`: related work.
+- `src/method.tex`: method and experimental setup.
+- `src/result.tex`: results, discussion, and limitations.
+- `src/conclusion.tex`: conclusion.
+- `src/references.bib`: bibliography used by `main.tex`.
+- `images/`: PaperToSkill conceptual figures only.
 
-The AAAI author kit is kept as downloaded so the local paper draft can build
-against the official style files. PaperToSkill-specific files live beside the
-downloaded kit:
+The unrelated semantic-typography text and image assets from the downloaded
+project are intentionally excluded.
 
-- `papertoskill_aaai2027.tex`
-- `papertoskill_tables.tex`
-- `papertoskill_supporting_tables.tex`
-- `papertoskill_refs.bib`
-- `aaai2027.sty`
-- `aaai2027.bst`
+## Compatibility Entry
 
-## Evidence Boundary
+`papertoskill_aaai2027.tex` is the flat compatibility entry used by existing
+repository checkers. It contains the same paper revision as the modular
+Overleaf entry. The root-level table and bibliography fragments are retained
+for this compatibility build.
 
-The LaTeX paper reflects the current deterministic/offline artifact state. It
-does not claim completed live cross-harness model ablations, broad human
-validation, provider billing, or arbitrary-PDF automation.
-Supporting tables are retained for package/table-drift checks while the main
-PDF keeps non-reference content within the AAAI page-limit guard.
+## Build
+
+From this directory, build the Overleaf entry with:
+
+```powershell
+pdflatex -interaction=nonstopmode -halt-on-error main.tex
+bibtex main
+pdflatex -interaction=nonstopmode -halt-on-error main.tex
+pdflatex -interaction=nonstopmode -halt-on-error main.tex
+```
+
+The compatibility entry uses the same sequence with
+`papertoskill_aaai2027` as the job name.
+
+The package uses the AAAI-27 submission style. The current internal draft
+contains two external-evidence tables with literal `--` values and
+`Pending external evidence` statuses; it is not submission-ready until the
+external evidence and page-limit gate are closed.

@@ -1,0 +1,98 @@
+\section{Method}
+
+PaperToSkill represents each converted paper as a skill package. The main file
+is \texttt{SKILL.md}; optional references include a source map that links
+generated skill bullets to source note sections and line spans. The schema
+contains identity, central contribution, use conditions, required artifacts,
+workflow steps, validation checks, failure cases, transfer notes, and source
+notes that distinguish source-backed material from inferred guidance.
+
+The deterministic extractor reads a source-anchored paper note, normalizes
+Markdown sections and list items, collects candidates from abstract, methods,
+experiments, limitations, and transfer sections, then emits a compact skill.
+Candidate limits keep the artifact within a practical context budget while
+preserving method, validation, and failure coverage. The extractor also writes a
+\texttt{references/source\_map.json} file so later audits can inspect which
+source section supports each generated instruction.
+
+The text-to-note scaffold is an earlier preprocessing step. It operates on
+newline-numbered extracted text, detects broad paper regions, selects line
+windows for methods, experiments, and limitations, and preserves line anchors.
+For two-column extracted text, it keeps raw line spacing and selects the
+keyword-bearing column while retaining the original source line range. The
+output is explicitly marked as an audit scaffold.
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.96\textwidth]{papertoskill_pipeline.pdf}
+  \caption{PaperToSkill follows the flow source-anchored paper $\rightarrow$
+  operational note $\rightarrow$ portable skill $\rightarrow$ evaluation.
+  Evaluation separates deterministic local checks of package structure,
+  grounding, and transfer coverage from the external-evidence layer for
+  cross-model real-reuse and independent human assessment.}
+  \label{fig:papertoskill-pipeline}
+\end{figure*}
+
+\section{Experimental Setup}
+
+We evaluate four real agent-method papers: AI Scientist-v2, Reflexion, AIDE,
+and Toolformer. For each paper, we create a curated source-anchored note from
+the extracted paper text, generate a PaperToSkill skill, and compare it against
+two context baselines: a generic summary and an abstract-only context. For
+transfer ablation, we compare the full skill against the same skill with
+\texttt{Transfer Notes} removed and against the generic summary.
+
+The metrics are deterministic: skill rubric score, context coverage,
+source-span validation, offline transfer-readiness, word count under a
+1200-word compactness budget, character-based token/cost proxy, and a local
+tokenizer-aware input proxy using \texttt{o200k\_base}. For saved
+model-ablation responses, we additionally compute a local output-token proxy.
+These metrics are reproducible gates. They do not replace live agent execution,
+real billing records, invoice evidence, or success-per-dollar accounting. They
+are complemented by a bounded single-reviewer, six-criterion internal
+annotation summary with 24/24 scored paper-by-criterion cells, a mean score of
+4.75/5, mean confidence 0.946, and four discussion-marked rows. The annotation
+supports an internal semantic-fidelity audit, not independent human validation
+or live downstream task success.
+The current package uses local token accounting over input-token and
+saved-response output-token proxies. We also
+prepare model-ablation prompt packets for Claude Opus 4.8, a GPT-family slot
+requested as GPT 5.5, and a DeepSeek slot, and include a protocol-aware runner
+and response evaluator. The current two-case protocol has 6/6 saved and scored
+rows across Claude, GPT-family, and DeepSeek slots. This is saved-response
+output-contract evidence only; it is not live downstream task success,
+provider billing, or a broad model-quality result. Provider/model availability
+failures are logged separately from model-quality results.
+
+The primary downstream experiment is the real-reuse protocol in
+Table~\ref{tab:real-reuse-main}. It contains eight original-style
+\emph{paper-task} rows across AIDE, SWE-agent, Reflexion, and
+SnapATAC2~\cite{zhang2024snapatac2}. Each
+row fixes the source paper, task input/output shape, metric family, reported
+reference boundary, and the two main conditions: Summary and PaperToSkill. At
+this revision, all eight rows have one GPT-family run with scored Summary and
+PaperToSkill outputs. The AIDE rows use an official Kaggle Spaceship Titanic
+training file with a locked local validation split; the SnapATAC2 rows use
+prepared official miniature fixtures and are scored local dry-run tasks rather
+than full paper reproductions. These rows complete the first single-run pass
+over the real-reuse table, but they do not by themselves establish aggregate
+advantage over Summary.
+
+We also instantiate a small Full Excerpt sanity scaffold over the
+pre-registered AIDE-T1, SWE-T1, and SNAP-T1 subset
+(Table~\ref{tab:full-excerpt-sanity}). This table is separate from the main
+real-reuse comparison: it records the existing Summary/PaperToSkill scores and
+local context-token proxies, and the matched Full Excerpt runs remain
+auxiliary sanity evidence rather than a main baseline.
+
+\input{papertoskill_tables}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.96\textwidth]{external_evidence_design.pdf}
+  \caption{External evidence design with two tracks: cross-model live
+  real-reuse evaluation and expanded independent human evaluation.}
+  \label{fig:external-evidence-design}
+\end{figure*}
+
+\input{papertoskill_external_evidence_tables}
