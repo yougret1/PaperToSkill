@@ -15,6 +15,7 @@
 | `research/decision_log.md` | Decisions and rationale | Created |
 | `research/literature_matrix.md` | Seed related-work matrix for benchmark papers | Created |
 | `research/related_work_gap_map.md` | Capability groups and reviewer objections | Created |
+| `research/related_paper_search_snapshot_2026-07-14.md` | Reusable 2023-2026 related-paper search snapshot, source failures, candidate list, and selected closest works | Created |
 | `research/claim_source_map.md` | Source-backed vs hypothetical claims | Created |
 | `research/idea_cards.md` | Candidate ideas and selection notes | Created |
 | `research/claim_evidence_matrix.md` | Claims mapped to experiments/evidence | Created |
