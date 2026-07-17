@@ -1,0 +1,409 @@
+{
+  "schema_version": "effectslice-swe-development-summary.v1",
+  "evidence_boundary": "Development bundles only. Harness exclusions, ineligibility, and inconclusive runs cannot establish EffectSlice effectiveness or a model ranking.",
+  "thresholds": {
+    "delta_min": 0.01
+  },
+  "bundle_count": 4,
+  "classification_counts": {
+    "inconclusive_action_horizon": 1,
+    "full_artifact_ineligible": 2,
+    "harness_failure": 1
+  },
+  "bundles": [
+    {
+      "pair_id": "swe-t2:dev:aci:deepseek:bf:001",
+      "model_family": "DeepSeek-family",
+      "model_alias": "deepseek-v4-flash",
+      "wire_api": "openai_chat_completions",
+      "conditions": [
+        "B",
+        "F"
+      ],
+      "evidence_level": "development",
+      "eligibility_effect": null,
+      "meets_delta_min": null,
+      "identical_candidate_patches": null,
+      "score_normalization_applied": [],
+      "usable_for_scientific_claim": false,
+      "condition_results": {
+        "B": {
+          "status": "failed",
+          "terminal_reason": "action_budget_exhausted",
+          "submitted": false,
+          "task_score": 0.0,
+          "candidate_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "diff_present": false,
+          "actions_used": 8,
+          "actions": [
+            "search",
+            "open",
+            "open",
+            null,
+            "open",
+            "open",
+            "search",
+            "open"
+          ],
+          "observation_statuses": [
+            "ok",
+            "ok",
+            "ok",
+            "invalid_action",
+            "ok",
+            "ok",
+            "ok",
+            "ok"
+          ],
+          "input_tokens": 28905,
+          "output_tokens": 9241,
+          "transport_attempts": 9,
+          "last_scorer_task_score": null,
+          "last_scorer_success": null,
+          "run_result_path": "experiment_results/swe_t2_aci_deepseek_bf_001/B/run_result.json"
+        },
+        "F": {
+          "status": "failed",
+          "terminal_reason": "action_budget_exhausted",
+          "submitted": false,
+          "task_score": 0.0,
+          "candidate_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "diff_present": false,
+          "actions_used": 8,
+          "actions": [
+            "search",
+            "open",
+            "open",
+            null,
+            "search",
+            "open",
+            "search",
+            "open"
+          ],
+          "observation_statuses": [
+            "workspace_error",
+            "ok",
+            "ok",
+            "invalid_action",
+            "ok",
+            "ok",
+            "ok",
+            "ok"
+          ],
+          "input_tokens": 32538,
+          "output_tokens": 1763,
+          "transport_attempts": 8,
+          "last_scorer_task_score": null,
+          "last_scorer_success": null,
+          "run_result_path": "experiment_results/swe_t2_aci_deepseek_bf_001/F/run_result.json"
+        }
+      },
+      "classification": "inconclusive_action_horizon",
+      "classification_reason": "both conditions exhausted a model-hidden action horizon before edit, test, or submit",
+      "classification_evidence": [
+        "pair_manifest.conditions.*.max_actions",
+        "run_result.turns",
+        "common_scaffold_sha256"
+      ]
+    },
+    {
+      "pair_id": "swe-t2:dev:aci:deepseek:bf:002",
+      "model_family": "DeepSeek-family",
+      "model_alias": "deepseek-v4-flash",
+      "wire_api": "openai_chat_completions",
+      "conditions": [
+        "B",
+        "F"
+      ],
+      "evidence_level": "development",
+      "eligibility_effect": 0.0,
+      "meets_delta_min": false,
+      "identical_candidate_patches": true,
+      "score_normalization_applied": [
+        "B"
+      ],
+      "usable_for_scientific_claim": false,
+      "condition_results": {
+        "B": {
+          "status": "failed",
+          "terminal_reason": "action_budget_exhausted",
+          "submitted": false,
+          "task_score": 0.0,
+          "candidate_patch_sha256": "67d13e046d394909447f43e1c0e2f6ed8b94cff58262bbe7af280e4f4b40ff4f",
+          "diff_present": true,
+          "actions_used": 12,
+          "actions": [
+            "search",
+            "open",
+            "open",
+            "search",
+            "search",
+            "open",
+            "open",
+            "open",
+            "open",
+            "open",
+            "edit",
+            "test"
+          ],
+          "observation_statuses": [
+            "ok",
+            "ok",
+            "ok",
+            "ok",
+            "ok",
+            "ok",
+            "ok",
+            "ok",
+            "ok",
+            "ok",
+            "ok",
+            "scored"
+          ],
+          "input_tokens": 38743,
+          "output_tokens": 11672,
+          "transport_attempts": 12,
+          "last_scorer_task_score": 1.0,
+          "last_scorer_success": true,
+          "run_result_path": "experiment_results/swe_t2_aci_deepseek_bf_002/B/run_result.json"
+        },
+        "F": {
+          "status": "scored",
+          "terminal_reason": "submitted",
+          "submitted": true,
+          "task_score": 1.0,
+          "candidate_patch_sha256": "67d13e046d394909447f43e1c0e2f6ed8b94cff58262bbe7af280e4f4b40ff4f",
+          "diff_present": true,
+          "actions_used": 12,
+          "actions": [
+            "search",
+            "search",
+            "open",
+            null,
+            "search",
+            "open",
+            "search",
+            "open",
+            "search",
+            "edit",
+            "test",
+            "submit"
+          ],
+          "observation_statuses": [
+            "workspace_error",
+            "ok",
+            "ok",
+            "invalid_action",
+            "ok",
+            "ok",
+            "ok",
+            "ok",
+            "ok",
+            "ok",
+            "scored",
+            "scored"
+          ],
+          "input_tokens": 43402,
+          "output_tokens": 5754,
+          "transport_attempts": 12,
+          "last_scorer_task_score": 1.0,
+          "last_scorer_success": true,
+          "run_result_path": "experiment_results/swe_t2_aci_deepseek_bf_002/F/run_result.json"
+        }
+      },
+      "classification": "full_artifact_ineligible",
+      "classification_reason": "observed development F-B is below delta_min",
+      "classification_evidence": []
+    },
+    {
+      "pair_id": "swe-t2:dev:aci:gpt56:bf:001",
+      "model_family": "GPT-family",
+      "model_alias": "gpt-5.6",
+      "wire_api": "openai_responses",
+      "conditions": [
+        "B",
+        "F"
+      ],
+      "evidence_level": "development",
+      "eligibility_effect": null,
+      "meets_delta_min": null,
+      "identical_candidate_patches": null,
+      "score_normalization_applied": [],
+      "usable_for_scientific_claim": false,
+      "condition_results": {
+        "B": {
+          "status": "failed",
+          "terminal_reason": "action_budget_exhausted",
+          "submitted": false,
+          "task_score": 0.0,
+          "candidate_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "diff_present": false,
+          "actions_used": 8,
+          "actions": [
+            "search",
+            "open",
+            "search",
+            "search",
+            "open",
+            "open",
+            "edit",
+            "open"
+          ],
+          "observation_statuses": [
+            "ok",
+            "ok",
+            "workspace_error",
+            "ok",
+            "ok",
+            "ok",
+            "workspace_error",
+            "ok"
+          ],
+          "input_tokens": 52363,
+          "output_tokens": 494,
+          "transport_attempts": 8,
+          "last_scorer_task_score": null,
+          "last_scorer_success": null,
+          "run_result_path": "experiment_results/swe_t2_aci_gpt56_bf_001/B/run_result.json"
+        },
+        "F": {
+          "status": "failed",
+          "terminal_reason": "action_budget_exhausted",
+          "submitted": false,
+          "task_score": 0.0,
+          "candidate_patch_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "diff_present": false,
+          "actions_used": 8,
+          "actions": [
+            "search",
+            "open",
+            "open",
+            "open",
+            "edit",
+            "open",
+            "edit",
+            "search"
+          ],
+          "observation_statuses": [
+            "ok",
+            "ok",
+            "ok",
+            "ok",
+            "workspace_error",
+            "ok",
+            "workspace_error",
+            "workspace_error"
+          ],
+          "input_tokens": 69615,
+          "output_tokens": 598,
+          "transport_attempts": 8,
+          "last_scorer_task_score": null,
+          "last_scorer_success": null,
+          "run_result_path": "experiment_results/swe_t2_aci_gpt56_bf_001/F/run_result.json"
+        }
+      },
+      "classification": "harness_failure",
+      "classification_reason": "pre_fix_aci_line_endings",
+      "classification_evidence": [
+        "tests/test_aci_workspace.py",
+        "experiment_results/swe_t2_aci_harness_diagnostic/line-ending-fix/candidate.patch",
+        "experiment_results/swe_t2_aci_gpt56_bf_002/run_report.json"
+      ]
+    },
+    {
+      "pair_id": "swe-t2:dev:aci:gpt56:bf:002",
+      "model_family": "GPT-family",
+      "model_alias": "gpt-5.6",
+      "wire_api": "openai_responses",
+      "conditions": [
+        "B",
+        "F"
+      ],
+      "evidence_level": "development",
+      "eligibility_effect": 0.0,
+      "meets_delta_min": false,
+      "identical_candidate_patches": true,
+      "score_normalization_applied": [],
+      "usable_for_scientific_claim": false,
+      "condition_results": {
+        "B": {
+          "status": "scored",
+          "terminal_reason": "submitted",
+          "submitted": true,
+          "task_score": 1.0,
+          "candidate_patch_sha256": "67d13e046d394909447f43e1c0e2f6ed8b94cff58262bbe7af280e4f4b40ff4f",
+          "diff_present": true,
+          "actions_used": 8,
+          "actions": [
+            "search",
+            "open",
+            "search",
+            "open",
+            "open",
+            "edit",
+            "test",
+            "submit"
+          ],
+          "observation_statuses": [
+            "ok",
+            "ok",
+            "ok",
+            "ok",
+            "ok",
+            "ok",
+            "scored",
+            "scored"
+          ],
+          "input_tokens": 53799,
+          "output_tokens": 428,
+          "transport_attempts": 8,
+          "last_scorer_task_score": 1.0,
+          "last_scorer_success": true,
+          "run_result_path": "experiment_results/swe_t2_aci_gpt56_bf_002/B/run_result.json"
+        },
+        "F": {
+          "status": "scored",
+          "terminal_reason": "submitted",
+          "submitted": true,
+          "task_score": 1.0,
+          "candidate_patch_sha256": "67d13e046d394909447f43e1c0e2f6ed8b94cff58262bbe7af280e4f4b40ff4f",
+          "diff_present": true,
+          "actions_used": 8,
+          "actions": [
+            "search",
+            "open",
+            "search",
+            "open",
+            "open",
+            "edit",
+            "test",
+            "submit"
+          ],
+          "observation_statuses": [
+            "ok",
+            "ok",
+            "ok",
+            "ok",
+            "ok",
+            "ok",
+            "scored",
+            "scored"
+          ],
+          "input_tokens": 67243,
+          "output_tokens": 427,
+          "transport_attempts": 8,
+          "last_scorer_task_score": 1.0,
+          "last_scorer_success": true,
+          "run_result_path": "experiment_results/swe_t2_aci_gpt56_bf_002/F/run_result.json"
+        }
+      },
+      "classification": "full_artifact_ineligible",
+      "classification_reason": "observed development F-B is below delta_min",
+      "classification_evidence": []
+    }
+  ],
+  "task_disposition": "abstain_full_artifact_ineligible",
+  "selected_development_candidate": null,
+  "run_slice_or_deletion_neighbors": false,
+  "scientific_claim_ready": false
+}

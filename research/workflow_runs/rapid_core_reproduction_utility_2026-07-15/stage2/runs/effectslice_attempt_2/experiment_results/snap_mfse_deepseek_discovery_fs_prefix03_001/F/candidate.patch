@@ -1,0 +1,65 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++import scipy.sparse.linalg as spla
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,53 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    # validation
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D ndarray")
++    n_cells, n_features = counts.shape
++    if n_components < 1 or n_components >= n_cells:
++        raise ValueError("n_components must be in 1 <= n_components < n_cells")
++    if np.any(~np.isfinite(counts)) or np.any(counts < 0):
++        raise ValueError("counts must be finite and nonnegative")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("all-zero rows are not allowed")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # IDF scaling
++    df = np.count_nonzero(counts, axis=0)
++    scaled = counts * np.log(n_cells / (1.0 + df))
++
++    # row normalization
++    row_norms = np.linalg.norm(scaled, axis=1, keepdims=True)
++    if np.any(row_norms == 0):
++        raise ValueError("row cannot be L2-normalized (zero norm after IDF)")
++    X = scaled / row_norms
++
++    # degree vector matrix-free: d = X @ (X.T @ 1) - 1
++    col_sums = X.sum(axis=0)
++    d = X @ col_sums - 1
++    if np.any(d <= 0):
++        raise ValueError("degrees must be positive")
++
++    D_inv_sqrt = 1.0 / np.sqrt(d)
++    X_tilde = X * D_inv_sqrt[:, np.newaxis]
++    D_inv = 1.0 / d
++
++    # linear operator for symmetric normalized similarity minus I
++    def matvec(v):
++        return X_tilde @ (X_tilde.T @ v) - D_inv * v
++
++    n = n_cells
++    A = spla.LinearOperator((n, n), matvec=matvec, dtype=np.float64)
++
++    # initial vector for reproducibility
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n).astype(np.float64)
++    v0 = v0 / np.linalg.norm(v0)
++
++    eigvals, eigvecs = spla.eigsh(A, k=n_components, which='LA', v0=v0, maxiter=1000, tol=0)
++    # eigsh returns eigenvalues in ascending order; reverse to descending
++    idx = np.argsort(eigvals)[::-1]
++    eigvals = eigvals[idx]
++    eigvecs = eigvecs[:, idx]
++
++    return eigvals, eigvecs

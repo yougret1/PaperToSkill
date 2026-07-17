@@ -1,0 +1,44 @@
+{
+  "selected_gaps": [
+    {
+      "gap": "Under a limited initial budget, no retrieved frontier establishes that the observed low-fidelity score preserves the sign and ordering of paper interventions by the performance improvement they later produce on independently specified user tasks; a probe can therefore support the wrong go/no-go decision even when it is internally faithful.",
+      "chosen_pattern_id": "reframe_as_solvable_object",
+      "anchor_alternates": [],
+      "companion_pattern": null,
+      "companion_rationale": "",
+      "selection_rationale": "This is the load-bearing method gap because the bottleneck is the cost of deciding the sign of downstream utility, not the cost of producing another artifact. Reframing adoption screening as cost-sensitive sequential experimental design turns heterogeneous minimal reproduction checks into decision-risk-reducing measurements while explicitly avoiding the occupied Hyperband/BOHB node: checks are not configurations on a shared fidelity axis and the objective is the sign of user-task net benefit."
+    },
+    {
+      "gap": "No retrieved paper tests whether tasks derived from the paper or skill, or selected by a fixed reproduction benchmark, are representative enough of the user's target-task distribution to support an adoption decision.",
+      "chosen_pattern_id": "controlled_diagnostic_design",
+      "anchor_alternates": [],
+      "companion_pattern": null,
+      "companion_rationale": "",
+      "selection_rationale": "This sibling shares the anchor's net-benefit object but attacks its task-distribution validity: paper-derived tasks can confound intervention relevance with target utility. The controlled-diagnostic move closes it with user-specified task strata and matched intervention/control runs that vary the paper intervention while holding task, model, environment, scorer, and seed fixed."
+    }
+  ],
+  "coherence_thread_type": "shared_object",
+  "deliverable_coverage": "method - the anchor gap's reframe_as_solvable_object pattern yields the runnable sequential triage rule that chooses paired minimal reproduction checks and emits adopt, reject, or inconclusive.",
+  "pattern_saturation": {
+    "reframe_as_solvable_object": {
+      "share": 0.37,
+      "saturation_band": "mid_frequency",
+      "selection_note": ""
+    },
+    "controlled_diagnostic_design": {
+      "share": 0.19,
+      "saturation_band": "mid_frequency",
+      "selection_note": ""
+    }
+  },
+  "deferred_gaps": [
+    {
+      "gap": "No retrieved frontier estimates net benefit after execution cost, adaptation effort, and regressions on task dimensions outside the paper's headline metric are deducted from gross performance gain.",
+      "reason": "Deferred as a separate closure leg to keep the candidate focused; cost, adaptation effort, and regressions remain preregistered terms inside the anchor's net-benefit estimand."
+    },
+    {
+      "gap": "No retrieved frontier quantifies decision calibration across paper families, user tasks, agent models, environments, and probe budgets, including false-adoption and false-rejection rates.",
+      "reason": "Deferred to future work because a full cross-factor calibration study would expand beyond the anchor and its single user-distribution sibling."
+    }
+  ]
+}

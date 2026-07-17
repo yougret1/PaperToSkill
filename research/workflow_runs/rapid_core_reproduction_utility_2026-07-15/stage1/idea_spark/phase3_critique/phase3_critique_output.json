@@ -1,0 +1,154 @@
+{
+  "gap_closure_reject_check": {
+    "entries": [
+      {
+        "gap": "Under a limited initial budget, no retrieved frontier establishes that the observed low-fidelity score preserves the sign and ordering of paper interventions by the performance improvement they later produce on independently specified user tasks; a probe can therefore support the wrong go/no-go decision even when it is internally faithful.",
+        "main_pattern": "reframe_as_solvable_object",
+        "sub_pattern": "C00 (Reframe as a Solvable Object)",
+        "tactical_failure_mode_quoted": "The signature failure is treating the reframing as a mechanical wrapper: taking an established attribution, decomposition, or estimation tool and pointing it at a new input granularity, a new architecture, or a new domain without re-deriving why the resulting scores are faithful to the model. These papers supply the computation but not the justification — no causal validation that the identified components actually drive behavior (only correlation), no axiomatic or soundness argument for why the proposed definition is the 'real' importance, and no confound control, so a reviewer can point to a methodological artifact (a computation-granularity difference, a degenerate zero baseline, an off-manifold perturbation) that explains the result instead.",
+        "reject_lessons_evaluated": [
+          {
+            "lesson_quoted": "Pointing an off-the-shelf decomposition at a coarser input granularity without showing the coarser units preserve the signal reads as a wrapper, not a contribution.",
+            "candidate_match": "no",
+            "reasoning": "The four-way atoms are frozen before search, ambiguous atomization abstains, the SCC quotient is bijective for dependency-closed subsets, and untouched paired execution tests the retained units rather than assuming their signal preservation."
+          },
+          {
+            "lesson_quoted": "Porting a known attribution technique to a new architecture or domain while ignoring that technique's documented failure modes — and omitting comparisons to alternatives — leaves reviewers unable to see any unique benefit.",
+            "candidate_match": "no",
+            "reasoning": "The candidate disclaims novelty for reduction machinery, names the principal degeneracies, and includes direct ClawTrace, Graph-of-Skills, and SkillRAE comparisons."
+          },
+          {
+            "lesson_quoted": "Proposing a new attribution definition without an axiomatic or causal argument for why it should count as ground-truth collapses the moment a reviewer asks why this is the real importance.",
+            "candidate_match": "no",
+            "reasoning": "Importance is not inferred from a post-hoc score: it is defined as a preregistered cost-adjusted paired task effect and checked on untouched executions against the eligible full artifact."
+          },
+          {
+            "lesson_quoted": "Conflating a methodological artifact — a computation-granularity difference, a degenerate zero baseline — with genuine signal undermines the entire premise once the confound is identified.",
+            "candidate_match": "no",
+            "reasoning": "The same-scaffold baseline, strict nonempty gate, positive-full-effect eligibility test, and epsilon <= delta_min/2 jointly exclude the stated zero-effect and empty-slice degeneracies."
+          },
+          {
+            "lesson_quoted": "Building a suppression or privacy method without formalizing the threat model leaves the central guarantee unverifiable regardless of strong empirical numbers.",
+            "candidate_match": "no",
+            "reasoning": "This is neither a suppression nor privacy claim, and its task, artifacts, hypotheses, abstentions, and certificate scope are explicitly bounded."
+          },
+          {
+            "lesson_quoted": "Surveying or recombining fragmented methods without a unifying axis or a decisive controlled experiment yields a contribution reviewers dismiss as anecdotal.",
+            "candidate_match": "no",
+            "reasoning": "Although it composes established tools, the sealed task-local effect certificate is a single unifying object and the held-out paired baseline/control experiment is decisive rather than anecdotal."
+          }
+        ],
+        "verdict": "clear"
+      },
+      {
+        "gap": "No retrieved frontier estimates net benefit after execution cost, adaptation effort, and regressions on task dimensions outside the paper's headline metric are deducted from gross performance gain.",
+        "main_pattern": "reframe_as_solvable_object",
+        "sub_pattern": "C00 (Reframe as a Solvable Object)",
+        "tactical_failure_mode_quoted": "The signature failure is treating the reframing as a mechanical wrapper: taking an established attribution, decomposition, or estimation tool and pointing it at a new input granularity, a new architecture, or a new domain without re-deriving why the resulting scores are faithful to the model. These papers supply the computation but not the justification — no causal validation that the identified components actually drive behavior (only correlation), no axiomatic or soundness argument for why the proposed definition is the 'real' importance, and no confound control, so a reviewer can point to a methodological artifact (a computation-granularity difference, a degenerate zero baseline, an off-manifold perturbation) that explains the result instead.",
+        "reject_lessons_evaluated": [
+          {
+            "lesson_quoted": "Pointing an off-the-shelf decomposition at a coarser input granularity without showing the coarser units preserve the signal reads as a wrapper, not a contribution.",
+            "candidate_match": "no",
+            "reasoning": "Cost and guardrail terms are evaluated on the same frozen atom family and paired task executions, not transferred from semantic or granularity proxies."
+          },
+          {
+            "lesson_quoted": "Porting a known attribution technique to a new architecture or domain while ignoring that technique's documented failure modes — and omitting comparisons to alternatives — leaves reviewers unable to see any unique benefit.",
+            "candidate_match": "no",
+            "reasoning": "The method explicitly treats search, quotienting, equivalence tests, provenance, and local minimality as prior machinery and schedules direct reducer/compiler baselines."
+          },
+          {
+            "lesson_quoted": "Proposing a new attribution definition without an axiomatic or causal argument for why it should count as ground-truth collapses the moment a reviewer asks why this is the real importance.",
+            "candidate_match": "no",
+            "reasoning": "Net benefit is a preregistered paired outcome with measured cost and regression penalties, and the certificate is tied to untouched downstream behavior."
+          },
+          {
+            "lesson_quoted": "Conflating a methodological artifact — a computation-granularity difference, a degenerate zero baseline — with genuine signal undermines the entire premise once the confound is identified.",
+            "candidate_match": "no",
+            "reasoning": "The full artifact must first have L_F > delta_min, every certified slice is nonempty, and epsilon <= delta_min/2 prevents a no-skill-equivalent slice from inheriting eligibility."
+          },
+          {
+            "lesson_quoted": "Building a suppression or privacy method without formalizing the threat model leaves the central guarantee unverifiable regardless of strong empirical numbers.",
+            "candidate_match": "no",
+            "reasoning": "The claim is a task-local effect and cost certificate rather than a suppression or privacy guarantee."
+          },
+          {
+            "lesson_quoted": "Surveying or recombining fragmented methods without a unifying axis or a decisive controlled experiment yields a contribution reviewers dismiss as anecdotal.",
+            "candidate_match": "no",
+            "reasoning": "Effect, cost, contract, and guardrails are simultaneous fields of one certificate, with a sealed held-out comparison rather than a survey-style aggregation."
+          }
+        ],
+        "verdict": "clear"
+      }
+    ],
+    "verdict": "clear",
+    "reasoning": "Both reframe_as_solvable_object entries avoid C00's wrapper failures: the exact SCC quotient preserves the frozen feasible family, while paired held-out interventions establish task effect rather than visual or semantic plausibility. The most relevant lesson, 'Conflating a methodological artifact — a computation-granularity difference, a degenerate zero baseline — with genuine signal,' is directly addressed by L_F > delta_min, epsilon <= delta_min/2, same-scaffold B, and the explicit nonempty rule."
+  },
+  "recipe_application_check": {
+    "entries": [
+      {
+        "gap": "Under a limited initial budget, no retrieved frontier establishes that the observed low-fidelity score preserves the sign and ordering of paper interventions by the performance improvement they later produce on independently specified user tasks; a probe can therefore support the wrong go/no-go decision even when it is internally faithful.",
+        "sub_pattern": "C00 (Reframe as a Solvable Object)",
+        "tactical_pattern_quoted": "This cluster recasts an opaque transparency question about an already-trained model or dataset as a concrete measurement over a well-studied object. The decisive move is choosing the right unit of analysis and the right faithfulness constraint; tractability is bought with a single compression trick, and fidelity is certified by causal intervention or proof.",
+        "instantiation_in_core_mechanism": "Steps 3-4 define source-grounded four-way procedure atoms, abstain on ambiguity, and map dependency-closed subsets bijectively through the SCC quotient Phi/Union with Delta_D(T)=Delta_G(Union(T)); Steps 7-9 then certify the retained object's paired downstream effect on untouched runs.",
+        "verdict": "applied"
+      },
+      {
+        "gap": "No retrieved frontier estimates net benefit after execution cost, adaptation effort, and regressions on task dimensions outside the paper's headline metric are deducted from gross performance gain.",
+        "sub_pattern": "C00 (Reframe as a Solvable Object)",
+        "tactical_pattern_quoted": "This cluster recasts an opaque transparency question about an already-trained model or dataset as a concrete measurement over a well-studied object. The decisive move is choosing the right unit of analysis and the right faithfulness constraint; tractability is bought with a single compression trick, and fidelity is certified by causal intervention or proof.",
+        "instantiation_in_core_mechanism": "The same Steps 3-4 preserve the subset family exactly, while Delta_tau embeds measured GPU, API, labor, and guardrail-regression costs and Steps 7-9 require corrected effect, contract, and guardrail evidence for the locked slice and all retained-deletion neighbors.",
+        "verdict": "applied"
+      }
+    ],
+    "verdict": "applied",
+    "reasoning": "Both entries perform C00's distinctive operation: a fixed behavioral question becomes a measured subset object with explicit atoms, an exact SCC quotient/inverse rather than a lossy heuristic, and untouched paired-effect certification. The N <= 16 and Q=24 abstention rules bound computation without claiming that SCC condensation always compresses an acyclic graph."
+  },
+  "anti_pattern_check": {
+    "composition_set": [
+      "reframe_as_solvable_object"
+    ],
+    "matched_pattern_id": null,
+    "required_mitigation_quoted": null,
+    "mitigation_substantively_delivered": "n/a",
+    "reasoning": "The candidate uses only reframe_as_solvable_object, so none of the three heterogeneous_decomposition pairings is present."
+  },
+  "paper_pointed_threat": {
+    "threat_paper_id": "arxiv:2604.23853v2",
+    "threat_source": "collision_hits",
+    "threat_channel": "signature",
+    "subsumption_argument": "ClawTrace already performs cost-aware tracing and compiles preserve, prune, and repair patches for agent skills, so procedure pruning, cost attribution, and quality-aware compact skill construction are not available as EffectSlice novelty. The overlap is partial rather than exact because the retrieved abstract does not show a positive-full-effect eligibility gate, deterministic source atoms, sealed equivalence to F, or corrected retained-deletion evidence; nevertheless, because EffectSlice makes the search backend interchangeable and disclaims the reduction machinery, its claim stands or falls on whether the eligibility-and-certificate layer yields a distinct held-out decision advantage when ClawTrace, Graph-of-Skills, and SkillRAE outputs are submitted to the same sealed test.",
+    "addressable_via": "Revise core_mechanism and differentiation_from_lit so the direct neighbor outputs are evaluated through the identical eligibility/certificate protocol and the claimed contribution is the resulting task-local admission decision, not another behavior-preserving reducer.",
+    "parametric_family_concern": "Collision coverage is explicitly degraded: behavior-preserving program reduction / statistical delta debugging remains an unresolved older family; a scoop-check should query 'behavior-preserving program reduction' and 'statistical delta debugging with equivalence tests' before investment."
+  },
+  "falsification_structure_check": {
+    "minimal_experiment_named": "yes",
+    "outcome_metric_named": "yes",
+    "load_bearing_variable": "M_tau(T)=epsilon-sup{|g|:g in I_tau(T)}",
+    "negative_control_target": "outcome_metric",
+    "verdict": "sound",
+    "reasoning": "The held-out experiment names matched EffectSlice and three direct baselines, predicts a higher rate of nonempty compact artifacts with confirmation gaps inside [-epsilon,epsilon], and predicts lower procedure count and cost. Permuting M_tau labels changes selection and is judged by the downstream paired effect gap moving outside the equivalence band and toward B, rather than by M_tau itself."
+  },
+  "verdict": "revise",
+  "verdict_layer": "soft_judgment",
+  "verdict_rationale": "No hard floor fires: every C00 Reject lesson is marked no, the recipe_application_check is applied, no reject-favored composition is present, and ClawTrace is a partial rather than exact mechanism collision. Revision is still required because paper_pointed_threat.subsumption_argument shows that interchangeable search plus disclaimed reduction machinery leaves the contribution at risk of collapsing into a certificate wrapped around prior pruning, and the core_mechanism's H_C definition omits the M_tau negative-control and direct-baseline hypotheses that Step 9 says receive the sealed H_C correction.",
+  "revision_targets": [
+    {
+      "scope": "tactical",
+      "field": "core_mechanism",
+      "issue": "The confirmation alpha family H_C covers T_star and retained-SCC deletion neighbors but not the M_tau-permuted negative control or the direct ClawTrace, Graph-of-Skills, and SkillRAE outputs, despite Step 9 applying H_C to all of them.",
+      "fix_direction": "Extend the preregistered H_C ledger to enumerate both equivalence sides and all guardrail statements for the negative-control and three direct-baseline outputs, plus any held-out rate comparison used for the claim; rebalance tests within alpha_C using the existing sealed correction without changing alpha_total, Q, branch counts, compute_budget, task, metric, or claim."
+    },
+    {
+      "scope": "tactical",
+      "field": "core_mechanism",
+      "issue": "The ClawTrace/Graph-of-Skills/SkillRAE collision is only partial, but the current interchangeable reducer makes EffectSlice vulnerable to being read as behavior-preserving program reduction plus standard equivalence testing.",
+      "fix_direction": "Make the load-bearing operation explicitly reducer-agnostic: submit EffectSlice's worker output and each direct neighbor output to the same beneficial-F gate, atom/source validity checks, and sealed confirmation family, then define success as the protocol's correctly admitted nonempty compact artifact rate under matched budgets; narrow the mechanism claim to this admission decision and do not claim subset search, pruning, SCC condensation, provenance, or local minimality as new."
+    },
+    {
+      "scope": "tactical",
+      "field": "differentiation_from_lit",
+      "issue": "The current neighbor deltas list missing certificate features but do not state the decisive matched test that prevents the contribution from resting on a checklist of added components.",
+      "fix_direction": "For ClawTrace, Graph-of-Skills, and SkillRAE, state that their direct outputs are frozen candidate slices and passed through the identical EffectSlice gate and confirmation family; the differentiator must be an empirically testable admission/error-rate delta, while degraded collision coverage and the unresolved behavior-preserving-reduction family remain explicit."
+    }
+  ]
+}

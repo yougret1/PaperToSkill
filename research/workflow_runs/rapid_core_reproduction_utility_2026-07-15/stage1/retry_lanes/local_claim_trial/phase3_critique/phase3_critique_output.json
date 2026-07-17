@@ -1,0 +1,131 @@
+{
+  "gap_closure_reject_check": {
+    "entries": [
+      {
+        "gap": "No retrieved frontier estimates net benefit after execution cost, adaptation effort, and regressions on task dimensions outside the paper's headline metric are deducted from gross performance gain.",
+        "main_pattern": "reframe_as_solvable_object",
+        "sub_pattern": "C00 (Reframe as a Solvable Object)",
+        "tactical_failure_mode_quoted": "The signature failure is treating the reframing as a mechanical wrapper: taking an established attribution, decomposition, or estimation tool and pointing it at a new input granularity, a new architecture, or a new domain without re-deriving why the resulting scores are faithful to the model. The common root is the assumption that because the target object is well-studied, faithfulness and novelty transfer for free; they do not — the reframing's value lives entirely in the faithfulness constraint and the validation, not in the act of mapping.",
+        "reject_lessons_evaluated": [
+          {
+            "lesson_quoted": "Pointing an off-the-shelf decomposition at a coarser input granularity without showing the coarser units preserve the signal reads as a wrapper, not a contribution.",
+            "candidate_match": "yes",
+            "reasoning": "core_mechanism defines a standard component-ablation contrast at the paper-operator granularity but never establishes that one automatically selected operator preserves the paper mechanism whose value the gap asks to attribute."
+          },
+          {
+            "lesson_quoted": "Porting a known attribution technique to a new architecture or domain while ignoring that technique's documented failure modes — and omitting comparisons to alternatives — leaves reviewers unable to see any unique benefit.",
+            "candidate_match": "yes",
+            "reasoning": "The paired operator-versus-sham effect is a known ablation estimator, while differentiation_from_lit compares only paper systems and never compares manual component ablation, alternative operator units, or alternative sham constructions."
+          },
+          {
+            "lesson_quoted": "Proposing a new attribution definition without an axiomatic or causal argument for why it should count as ground-truth collapses the moment a reviewer asks why this is the real importance.",
+            "candidate_match": "no",
+            "reasoning": "The candidate does provide a causal same-scaffold intervention and bounds its conclusion to the selected operator on the executed task rather than declaring delta_p,tau to be global paper importance."
+          },
+          {
+            "lesson_quoted": "Conflating a methodological artifact — a computation-granularity difference, a degenerate zero baseline — with genuine signal undermines the entire premise once the confound is identified.",
+            "candidate_match": "borderline",
+            "reasoning": "The paper-named baseline reduces zero-baseline risk, but allowing an interface-preserving identity and compiling adapters without a semantic-equivalence check can make the observed contrast depend on sham competence or adapter behavior."
+          },
+          {
+            "lesson_quoted": "Building a suppression or privacy method without formalizing the threat model leaves the central guarantee unverifiable regardless of strong empirical numbers.",
+            "candidate_match": "no",
+            "reasoning": "The candidate is neither a suppression nor a privacy method, so this lesson does not apply."
+          },
+          {
+            "lesson_quoted": "Surveying or recombining fragmented methods without a unifying axis or a decisive controlled experiment yields a contribution reviewers dismiss as anecdotal.",
+            "candidate_match": "no",
+            "reasoning": "delta_p,tau is a declared unifying object and the operator-versus-sham execution is a decisive controlled experiment, even though its novelty remains inadequate."
+          }
+        ],
+        "verdict": "triggered"
+      },
+      {
+        "gap": "Under a limited initial budget, no retrieved frontier establishes that the observed low-fidelity score preserves the sign and ordering of paper interventions by the performance improvement they later produce on independently specified user tasks; a probe can therefore support the wrong go/no-go decision even when it is internally faithful.",
+        "main_pattern": "controlled_diagnostic_design",
+        "sub_pattern": "C02 (Design a Confound-Isolating Diagnostic)",
+        "tactical_failure_mode_quoted": "Papers attempting this tactic fail most often when the constructed instrument isolates the confound only inside an artificial regime and never demonstrates that the isolated signal transfers to real deployment conditions — the synthetic-to-real gap is asserted rather than shown. A third is the confirmatory benchmark — the instrument re-derives an already-documented limitation and surfaces nothing that was not knowable in advance, leaving reviewers without an actionable new finding.",
+        "reject_lessons_evaluated": [
+          {
+            "lesson_quoted": "A diagnostic that only re-confirms a shortcut already known in advance, surfacing no previously unmeasurable failure, is read as confirmatory rather than as a contribution.",
+            "candidate_match": "yes",
+            "reasoning": "Holding the scaffold fixed and toggling one component is an established local component trial, and the candidate supplies no non-obvious regime split or new diagnostic quantity beyond that standard contrast."
+          },
+          {
+            "lesson_quoted": "Validating a synthetic-ground-truth instrument only on synthetic data, without demonstrating that the controlled finding transfers to real-world instances, leaves ecological validity unestablished and undermines the central claim.",
+            "candidate_match": "no",
+            "reasoning": "The trial executes on the user's existing locked task cases with their real scorer rather than synthetic-only instances."
+          },
+          {
+            "lesson_quoted": "Building the instrument around one contested definition of the target property means it cannot independently confirm that the definition is correct, and reviewers flag the resulting circularity.",
+            "candidate_match": "borderline",
+            "reasoning": "The primary and guardrail scorers are independently frozen, but the composite margin still depends on user-set conversion weights and on the compiler's contestable choice of operator and sham."
+          },
+          {
+            "lesson_quoted": "Resting an unsupervised evaluation on the unverified premise that the systems under test can reliably judge one another stakes the entire method on an assumption that collapses under scrutiny.",
+            "candidate_match": "no",
+            "reasoning": "The locked task scorer and execution logs provide the oracle; neither evaluated branch judges the other."
+          },
+          {
+            "lesson_quoted": "Pairing a single-task or small-sample instrument with broad capability claims triggers a scope-mismatch rejection, and assembling retrieval or engineering blocks without an isolating scientific insight reads as application rather than research.",
+            "candidate_match": "no",
+            "reasoning": "The output is explicitly limited to one paper-operator and one locked task; twenty seeds are repeated stochastic executions within that pair and are not presented as twenty tasks or cross-task evidence."
+          }
+        ],
+        "verdict": "triggered"
+      }
+    ],
+    "verdict": "triggered",
+    "reasoning": "The net-benefit gap's reframe_as_solvable_object entry triggers C00's wrapper lesson because LocalClaim applies standard component ablation to an automatically selected paper operator without proving that this unit preserves the claimed mechanism or comparing alternative units and shams. The low-budget gap's controlled_diagnostic_design entry separately triggers C02's confirmatory lesson: same-scaffold operator-versus-sham is a known local trial, while twenty seeds only tighten one paper-task estimate and do not create new task-level evidence."
+  },
+  "recipe_application_check": {
+    "entries": [
+      {
+        "gap": "No retrieved frontier estimates net benefit after execution cost, adaptation effort, and regressions on task dimensions outside the paper's headline metric are deducted from gross performance gain.",
+        "sub_pattern": "C00 (Reframe as a Solvable Object)",
+        "tactical_pattern_quoted": "This cluster recasts an opaque transparency question about an already-trained model or dataset — which feature/datum/internal component is responsible, how uncertain a prediction is, what a hidden representation encodes — as a concrete measurement over a well-studied object: a manifold-constrained counterfactual optimization, a submodular subset selection, an expectation/estimator over marginal statistics, an additive decomposition into a (often sparse) basis, or an influence/Shapley score accumulated along the optimization trajectory. Fidelity is finally certified either by a causal intervention that flips model behavior when the identified object is perturbed, or by a soundness/optimality proof, rather than by the visual plausibility of the produced explanation.",
+        "instantiation_in_core_mechanism": "Steps 2-8 select one operator and compute a paired A/B difference, but they neither map an opaque fixed-model attribution question to C00's estimator/decomposition object nor supply the tractability-preserving reframe that distinguishes this cluster; the causal test alone enacts generic ablation, not the C00 recipe.",
+        "verdict": "bypassed"
+      },
+      {
+        "gap": "Under a limited initial budget, no retrieved frontier establishes that the observed low-fidelity score preserves the sign and ordering of paper interventions by the performance improvement they later produce on independently specified user tasks; a probe can therefore support the wrong go/no-go decision even when it is internally faithful.",
+        "sub_pattern": "C02 (Design a Confound-Isolating Diagnostic)",
+        "tactical_pattern_quoted": "The shared move is to construct a controlled set of evaluation instances in which exactly one named confound is either structurally blocked or independently varied, then report the divergence between apparent and de-confounded performance as the primary result rather than an aggregate leaderboard score. The confounds attacked are recurring and specific — memorization/contamination, surface style, the generating source's capability, single-modality shortcuts, scoring-function nonlinearity, and task-format exposure — and the load-bearing artifact is always the controlled instance set paired with an oracle independent of the system under test.",
+        "instantiation_in_core_mechanism": "Steps 5-8 hold the task scaffold, prompts, tools, cache, and caps fixed, vary only A_p versus B_p, and use the independently locked scorer to measure delta_p,tau, which substantively performs C02's isolation move.",
+        "verdict": "applied"
+      }
+    ],
+    "verdict": "bypassed",
+    "reasoning": "The C02 entry applies its distinctive controlled-pair move, but the C00 entry is bypassed because LocalClaim never constructs C00's attribution/decomposition reframe and instead uses a standard operator ablation. The C00 citation therefore does not supply the claimed novelty."
+  },
+  "anti_pattern_check": {
+    "composition_set": [
+      "reframe_as_solvable_object",
+      "controlled_diagnostic_design"
+    ],
+    "matched_pattern_id": null,
+    "required_mitigation_quoted": null,
+    "mitigation_substantively_delivered": "n/a",
+    "reasoning": "The candidate uses no heterogeneous_decomposition leg, so none of the three reject-favored compositions matches."
+  },
+  "paper_pointed_threat": {
+    "threat_paper_id": "arxiv:2605.14517v1",
+    "threat_source": "collision_hits",
+    "threat_channel": "alias",
+    "subsumption_argument": "The retrieved partial full text already uses structured ablation to isolate individual instruction dimensions, so LocalClaim's local operator contrast cannot claim novelty from component-level intervention alone. Its claim stands or falls on demonstrating that the outcome-blind source-map compiler produces semantically valid, executable paper-operator units and shams that manual or dimension-level ablation cannot produce; the present mechanism specifies extraction agreement, adapters, and diff gates but no compilation semantics or validity guarantee across heterogeneous operators. Collision coverage is degraded and this hit is only partial, so it is a serious addressable ancestor threat rather than evidence of exact-mechanism overlap.",
+    "addressable_via": "core_mechanism and differentiation_from_lit must make the compiler's novel executable artifact, semantic-validity criterion, failure coverage, and direct comparison with manual or structured component ablation load-bearing rather than treating compilation as an asserted preprocessing step.",
+    "parametric_family_concern": "Black-box causal component ablation and N-of-1 randomized crossover trials; scoop-check 'component ablation causal effect' and 'single-case randomized crossover trial'."
+  },
+  "falsification_structure_check": {
+    "minimal_experiment_named": "yes",
+    "outcome_metric_named": "yes",
+    "load_bearing_variable": "the task-local claim effect delta_p,tau",
+    "negative_control_target": "outcome_metric",
+    "verdict": "sound",
+    "reasoning": "The designated locked row, operator-versus-sham comparison, twenty paired seeds, and direction of the locked primary score are concrete. Replacing A_p with a same-interface non-claim operator predicts the downstream primary-score difference returns to the sham baseline, not merely that delta_p,tau changes."
+  },
+  "verdict": "abandon",
+  "verdict_layer": "hard_floor",
+  "verdict_rationale": "gap_closure_reject_check.entries[0].reject_lessons_evaluated[0].lesson_quoted and [1].lesson_quoted are triggered because LocalClaim is standard component ablation moved to an automatically selected paper-operator granularity, while recipe_application_check.entries[0].verdict is bypassed and the compiler lacks semantic-validity and executable-coverage guarantees. gap_closure_reject_check.entries[1].reject_lessons_evaluated[0].lesson_quoted is also triggered because the C02 leg is a known same-scaffold local trial rather than a previously unmeasurable diagnostic; twenty seeds estimate stochastic variation within one pair and are not cross-task samples. The degraded collision pool supplies only a partial structured-ablation threat, not an exact collision, but that uncertainty does not override the documented Reject lessons that mechanically trigger the hard floor.",
+  "revision_targets": []
+}

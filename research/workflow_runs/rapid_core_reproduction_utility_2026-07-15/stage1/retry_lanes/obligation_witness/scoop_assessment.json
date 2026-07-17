@@ -1,0 +1,68 @@
+{
+  "run_id": "rapid_core_reproduction_utility_2026-07-15:obligation_witness",
+  "source_claim": "A paper claim and locked task can be compiled into a source-anchored obligation graph whose executable deletion tests yield a one-deletion-minimal claim-bearing witness and a direct task-local effect test.",
+  "axes": {
+    "problem": "Find the smallest source-grounded operational subset needed to exercise a paper's core claim on the user's task.",
+    "mechanism": "Typed obligation graph, source and dependency checkers, executable witness predicates, fixed-point block deletion, counterexample traces, and a claim-on versus claim-off local trial.",
+    "insight": "Field completeness and source support do not establish joint operational sufficiency; every retained obligation should survive a downstream deletion challenge.",
+    "application": "Paper-to-skill compilation and task-specific minimal reproduction.",
+    "evaluation_scope": "Eight bounded case studies, deletion controls, local task effect, resource cost, and prospective failure-boundary cases."
+  },
+  "comparisons": [
+    {
+      "paper_id": "arxiv:2606.09316v3",
+      "title": "Anything2Skill: Compiling External Knowledge into Reusable Skills for Agents",
+      "evidence_level": "full_text",
+      "mechanism_relationship": "partial",
+      "subsumes_claim": false,
+      "axis_overlap": {"problem": true, "mechanism": true, "insight": true, "application": true, "evaluation_scope": false},
+      "evidence": "Anything2Skill compiles evidence windows into structured contracts with actions, constraints, outputs, evidence, and confidence, but does not use downstream deletion to certify joint claim sufficiency.",
+      "limitations": "It defeats broad claims about first evidence-grounded knowledge-to-skill compilation."
+    },
+    {
+      "paper_id": "arxiv:2604.03964v1",
+      "title": "SkillFoundry: Automated Mining and Validation of Agent Skills for Scientific Tasks",
+      "evidence_level": "full_text",
+      "mechanism_relationship": "partial",
+      "subsumes_claim": false,
+      "axis_overlap": {"problem": true, "mechanism": true, "insight": true, "application": true, "evaluation_scope": true},
+      "evidence": "SkillFoundry mines operational contracts and closes execution-validation loops, but does not require each retained claim obligation to carry a failed-deletion counterexample.",
+      "limitations": "The validation-loop overlap is substantial."
+    },
+    {
+      "paper_id": "arxiv:2504.01848v3",
+      "title": "PaperBench: Evaluating AI's Ability to Replicate AI Research",
+      "evidence_level": "full_text",
+      "mechanism_relationship": "partial",
+      "subsumes_claim": false,
+      "axis_overlap": {"problem": true, "mechanism": true, "insight": true, "application": true, "evaluation_scope": true},
+      "evidence": "PaperBench defines hierarchical author-approved replication requirements and fresh execution, but does not minimize requirements into a source-linked task-local claim witness.",
+      "limitations": "Its rubrics are a strong completeness baseline."
+    },
+    {
+      "paper_id": "arxiv:2505.20662v4",
+      "title": "AutoReproduce: Automatic AI Experiment Reproduction with Paper Lineage",
+      "evidence_level": "full_text",
+      "mechanism_relationship": "partial",
+      "subsumes_claim": false,
+      "axis_overlap": {"problem": true, "mechanism": true, "insight": true, "application": true, "evaluation_scope": false},
+      "evidence": "AutoReproduce builds and debugs end-to-end reproductions using sampled validation, rather than deleting non-load-bearing paper obligations to a local fixed point.",
+      "limitations": "It is a stronger complete-reproduction baseline."
+    },
+    {
+      "paper_id": "arxiv:2605.28546v1",
+      "title": "A Minimal Executable Proof for Multi-Language Contract Traceability",
+      "evidence_level": "abstract",
+      "mechanism_relationship": "partial",
+      "subsumes_claim": false,
+      "axis_overlap": {"problem": false, "mechanism": true, "insight": true, "application": false, "evaluation_scope": true},
+      "evidence": "The abstract combines an observable-output contract, implementation graph, traceability file, readiness gate, and executable witnesses; it does not derive or minimize obligations from a scientific paper claim.",
+      "limitations": "Only abstract evidence was retrieved."
+    }
+  ],
+  "limitations": [
+    "Candidate-specific external collision terms were not transmitted; the assessment reuses generic run-scoped searches.",
+    "Dynamic program slicing, delta debugging, dependency minimization, and minimal-core extraction are high-risk classical ancestors and cannot themselves support novelty.",
+    "The combined source-anchored compiler and local claim witness, not deletion minimization alone, is the only defensible delta."
+  ]
+}

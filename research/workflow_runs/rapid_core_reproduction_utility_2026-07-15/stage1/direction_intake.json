@@ -1,0 +1,32 @@
+{
+  "source_wording_zh": "帮助人快速复现相关论文的核心创新点，然后快速使用去验证对人是否有帮助",
+  "normalized_user_goal": "Help a user cheaply reproduce the claim-bearing core of a paper and rapidly test whether that method is useful for the user's own task.",
+  "research_problem": "A full paper reproduction is too expensive to serve as an initial applicability test, while summaries and generated skills do not provide a calibrated prediction of whether the paper's core intervention will improve a specific user task.",
+  "research_question": "Can a low-cost, falsifiable reproduction probe predict the net benefit of a paper's core intervention on a user-specified task before a full reproduction is attempted?",
+  "domain": "agentic paper reproduction and task-specific method applicability testing",
+  "anchor_system": "PaperToSkill",
+  "contribution_type": "method_and_evaluation_protocol",
+  "target_users": [
+    "researchers evaluating whether to adopt a paper method",
+    "practitioners with a concrete dataset, task, or repository",
+    "non-experts who need an evidence-bounded go/no-go decision"
+  ],
+  "constraints": {
+    "stage": "1",
+    "reuse_existing_experiments": true,
+    "do_not_modify_manuscript": true,
+    "do_not_modify_existing_code": true,
+    "do_not_modify_existing_results": true,
+    "allow_stage1_artifacts_under_project": true,
+    "allow_future_comparison_projects_under_project": true
+  },
+  "inferred_resources": {
+    "time": "five-month research cycle",
+    "compute": "up to one 8x 80GB GPU node and approximately 50 GPU-days, with API usage bounded by the experiment plan",
+    "available_assets": "existing eight-row real-reuse tasks, locked task assets and scorers, PaperToSkill skills, summary baselines, source maps, human-fidelity packets, and saved cross-model outputs"
+  },
+  "routing": {
+    "ood": false,
+    "reason": "The direction names a paper-to-skill system, a concrete reproduction/applicability task, existing baselines, and reusable experimental assets."
+  }
+}

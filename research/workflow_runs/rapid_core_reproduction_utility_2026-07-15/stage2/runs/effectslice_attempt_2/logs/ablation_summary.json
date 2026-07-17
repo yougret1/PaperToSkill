@@ -1,0 +1,41 @@
+{
+  "schema_version": "effectslice-stage2-ablation-summary.v1",
+  "overall_plan": "Compare discovery selection with sealed confirmation to measure whether the confirmation gate rejects adaptive false discoveries.",
+  "analysis": "Toolformer prefix_01 matched F on all 16 discovery cases but failed 15 of 59 preservation comparisons in the sealed family. The confirmation gate rejected this apparently perfect discovery result. SNAP prefix_03 remained equivalent on all 59 sealed cases.",
+  "metric": {
+    "name": "sealed_false_discovery_rejections",
+    "value": 1,
+    "direction": "higher_is_better"
+  },
+  "rows": [
+    {
+      "task_id": "SNAP-MFSE",
+      "candidate_id": "prefix_03",
+      "discovery_mismatches": 0,
+      "confirmation_mismatches": 0,
+      "sealed_decision": "admit"
+    },
+    {
+      "task_id": "TOOLFORMER-FILTER",
+      "candidate_id": "prefix_01",
+      "discovery_mismatches": 0,
+      "confirmation_mismatches": 15,
+      "sealed_decision": "reject"
+    }
+  ],
+  "code": "analyze_*_discovery.py and analyze_*_confirmation.py",
+  "plot_code": "build_stage2_figures.py",
+  "plot_analyses": [],
+  "exp_results_data_files": [
+    "derived/aide_t2_development_summary.json",
+    "derived/swe_t2_development_summary.json",
+    "derived/snap_mfse_development_summary.json",
+    "derived/snap_mfse_eligibility_summary.json",
+    "derived/snap_mfse_discovery_summary.json",
+    "derived/snap_mfse_confirmation_summary.json",
+    "derived/toolformer_filter_development_summary.json",
+    "derived/toolformer_filter_eligibility_summary.json",
+    "derived/toolformer_filter_discovery_summary.json",
+    "derived/toolformer_filter_confirmation_summary.json"
+  ]
+}

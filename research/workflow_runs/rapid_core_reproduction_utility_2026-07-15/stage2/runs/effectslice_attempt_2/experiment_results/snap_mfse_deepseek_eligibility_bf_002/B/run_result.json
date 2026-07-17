@@ -1,0 +1,1487 @@
+{
+  "status": "scored",
+  "terminal_reason": "submitted",
+  "submitted": true,
+  "task_score": 0.0,
+  "success": false,
+  "diff_text": "--- a/snap_core.py\n+++ b/snap_core.py\n@@ -3,6 +3,7 @@\n from __future__ import annotations\n \n import numpy as np\n+from scipy.sparse.linalg import LinearOperator, svds\n \n \n def matrix_free_spectral_embedding(\n@@ -11,5 +12,37 @@\n     random_state: int = 0,\n ) -> tuple[np.ndarray, np.ndarray]:\n     \"\"\"Return leading spectral coordinates for a cell-by-feature count matrix.\"\"\"\n-\n-    raise NotImplementedError(\"implement the paper-core reproduction task\")\n+    # Validate inputs\n+    if not np.isfinite(counts).all():\n+        raise ValueError('Input contains nonfinite values')\n+    if (counts < 0).any():\n+        raise ValueError('Input contains negative values')\n+    if (counts.sum(axis=1) == 0).any():\n+        raise ValueError('Input contains all-zero cell rows')\n+    n_cells = counts.shape[0]\n+    if not (1 <= n_components < n_cells):\n+        raise ValueError('n_components must be in [1, n_cells)')\n+    # Compute row and column sums (degrees for bipartite normalization)\n+    row_sums = counts.sum(axis=1).astype(float)\n+    col_sums = counts.sum(axis=0).astype(float)\n+    # Handle zero column sums safely: treat zero-degree features as absent\n+    col_sums_inv = np.divide(1.0, col_sums, out=np.zeros_like(col_sums), where=col_sums > 0)\n+    # Define matrix-vector product for S = D_r^{-1/2} X D_c^{-1} X^T D_r^{-1/2}\n+    # Use random_state to seed a fixed initial vector for deterministic results\n+    rng = np.random.RandomState(random_state)\n+    v0 = rng.randn(n_cells).astype(float)\n+    def matvec(v):\n+        temp = v / np.sqrt(row_sums)\n+        temp2 = counts.T @ temp\n+        temp3 = temp2 * col_sums_inv\n+        temp4 = counts @ temp3\n+        return temp4 / np.sqrt(row_sums)\n+    shape = (n_cells, n_cells)\n+    S = LinearOperator(shape, matvec=matvec, dtype=float)\n+    # Compute leading eigenvalues and eigenvectors (largest magnitude)\n+    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM', v0=v0)\n+    # Sort eigenvalues in descending order and reorder eigenvectors accordingly\n+    idx = np.argsort(eigenvalues)[::-1]\n+    eigenvalues = eigenvalues[idx]\n+    eigenvectors = eigenvectors[:, idx]\n+    return eigenvalues, eigenvectors\n",
+  "state": {
+    "max_actions": 16,
+    "observations": [
+      {
+        "step": 1,
+        "action": {
+          "action": "search",
+          "query": "snap_core.py",
+          "path": ".",
+          "max_results": 10,
+          "start_line": null,
+          "end_line": null,
+          "old_text": null,
+          "new_text": null
+        },
+        "status": "ok",
+        "message": "no matches"
+      },
+      {
+        "step": 2,
+        "action": null,
+        "status": "invalid_action",
+        "message": "return exactly one JSON action matching the frozen schema"
+      },
+      {
+        "step": 3,
+        "action": {
+          "action": "search",
+          "query": "snap_core.py",
+          "path": ".",
+          "max_results": 10,
+          "start_line": null,
+          "end_line": null,
+          "old_text": null,
+          "new_text": null
+        },
+        "status": "ok",
+        "message": "no matches"
+      },
+      {
+        "step": 4,
+        "action": {
+          "action": "open",
+          "query": null,
+          "path": "snap_core.py",
+          "max_results": null,
+          "start_line": 1,
+          "end_line": 80,
+          "old_text": null,
+          "new_text": null
+        },
+        "status": "ok",
+        "message": "1: \"\"\"Starter module for the locked SNAP-MFSE reproduction task.\"\"\"\n2: \n3: from __future__ import annotations\n4: \n5: import numpy as np\n6: \n7: \n8: def matrix_free_spectral_embedding(\n9:     counts: np.ndarray,\n10:     n_components: int,\n11:     random_state: int = 0,\n12: ) -> tuple[np.ndarray, np.ndarray]:\n13:     \"\"\"Return leading spectral coordinates for a cell-by-feature count matrix.\"\"\"\n14: \n15:     raise NotImplementedError(\"implement the paper-core reproduction task\")"
+      },
+      {
+        "step": 5,
+        "action": {
+          "action": "edit",
+          "query": null,
+          "path": "snap_core.py",
+          "max_results": null,
+          "start_line": null,
+          "end_line": null,
+          "old_text": "\"\"\"Starter module for the locked SNAP-MFSE reproduction task.\"\"\"\n\nfrom __future__ import annotations\n\nimport numpy as np\n\n\ndef matrix_free_spectral_embedding(\n    counts: np.ndarray,\n    n_components: int,\n    random_state: int = 0,\n) -> tuple[np.ndarray, np.ndarray]:\n    \"\"\"Return leading spectral coordinates for a cell-by-feature count matrix.\"\"\"\n\n    raise NotImplementedError(\"implement the paper-core reproduction task\")\n",
+          "new_text": "\"\"\"Starter module for the locked SNAP-MFSE reproduction task.\"\"\"\n\nfrom __future__ import annotations\n\nimport numpy as np\nfrom scipy.sparse.linalg import LinearOperator, eigsh\n\n\ndef matrix_free_spectral_embedding(\n    counts: np.ndarray,\n    n_components: int,\n    random_state: int = 0,\n) -> tuple[np.ndarray, np.ndarray]:\n    \"\"\"Return leading spectral coordinates for a cell-by-feature count matrix.\"\"\"\n    # Validate inputs\n    if not np.isfinite(counts).all():\n        raise ValueError('Input contains nonfinite values')\n    if (counts < 0).any():\n        raise ValueError('Input contains negative values')\n    if (counts.sum(axis=1) == 0).any():\n        raise ValueError('Input contains all-zero cell rows')\n    n_cells = counts.shape[0]\n    if not (1 <= n_components < n_cells):\n        raise ValueError('n_components must be in [1, n_cells)')\n    # Compute degree vector without forming full similarity matrix\n    d = counts @ counts.sum(axis=0)\n    d_sqrt_inv = 1.0 / np.sqrt(d)\n    # Define matrix-vector product for S = D^{-1/2} X X^T D^{-1/2}\n    def matvec(v):\n        temp = v * d_sqrt_inv\n        temp2 = counts.T @ temp\n        temp3 = counts @ temp2\n        return temp3 * d_sqrt_inv\n    shape = (n_cells, n_cells)\n    S = LinearOperator(shape, matvec=matvec, dtype=counts.dtype)\n    # Compute leading eigenvalues and eigenvectors (largest magnitude)\n    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM')\n    # Sort eigenvalues in descending order and reorder eigenvectors accordingly\n    idx = np.argsort(eigenvalues)[::-1]\n    eigenvalues = eigenvalues[idx]\n    eigenvectors = eigenvectors[:, idx]\n    return eigenvalues, eigenvectors\n"
+        },
+        "status": "ok",
+        "message": "{\"changed\":true,\"path\":\"snap_core.py\",\"replacements\":1}"
+      },
+      {
+        "step": 6,
+        "action": {
+          "action": "test",
+          "query": null,
+          "path": null,
+          "max_results": null,
+          "start_line": null,
+          "end_line": null,
+          "old_text": null,
+          "new_text": null
+        },
+        "status": "scored",
+        "message": "{\"contract_passed\":true,\"failure_reason\":\"numerical_case_failed\",\"matrix_free_guard_passed\":true,\"passed_cases\":0,\"status\":\"failed\",\"task_score\":0.0,\"total_cases\":21}"
+      },
+      {
+        "step": 7,
+        "action": {
+          "action": "edit",
+          "query": null,
+          "path": "snap_core.py",
+          "max_results": null,
+          "start_line": null,
+          "end_line": null,
+          "old_text": "    # Validate inputs\n    if not np.isfinite(counts).all():\n        raise ValueError('Input contains nonfinite values')\n    if (counts < 0).any():\n        raise ValueError('Input contains negative values')\n    if (counts.sum(axis=1) == 0).any():\n        raise ValueError('Input contains all-zero cell rows')\n    n_cells = counts.shape[0]\n    if not (1 <= n_components < n_cells):\n        raise ValueError('n_components must be in [1, n_cells)')\n    # Compute degree vector without forming full similarity matrix\n    d = counts @ counts.sum(axis=0)\n    d_sqrt_inv = 1.0 / np.sqrt(d)\n    # Define matrix-vector product for S = D^{-1/2} X X^T D^{-1/2}\n    def matvec(v):\n        temp = v * d_sqrt_inv\n        temp2 = counts.T @ temp\n        temp3 = counts @ temp2\n        return temp3 * d_sqrt_inv\n    shape = (n_cells, n_cells)\n    S = LinearOperator(shape, matvec=matvec, dtype=counts.dtype)\n    # Compute leading eigenvalues and eigenvectors (largest magnitude)\n    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM')\n    # Sort eigenvalues in descending order and reorder eigenvectors accordingly\n    idx = np.argsort(eigenvalues)[::-1]\n    eigenvalues = eigenvalues[idx]\n    eigenvectors = eigenvectors[:, idx]\n    return eigenvalues, eigenvectors",
+          "new_text": "    # Validate inputs\n    if not np.isfinite(counts).all():\n        raise ValueError('Input contains nonfinite values')\n    if (counts < 0).any():\n        raise ValueError('Input contains negative values')\n    if (counts.sum(axis=1) == 0).any():\n        raise ValueError('Input contains all-zero cell rows')\n    n_cells = counts.shape[0]\n    if not (1 <= n_components < n_cells):\n        raise ValueError('n_components must be in [1, n_cells)')\n    # Compute row and column sums (degrees for bipartite normalization)\n    row_sums = counts.sum(axis=1).astype(float)\n    col_sums = counts.sum(axis=0).astype(float)\n    # Define matrix-vector product for S = D_r^{-1/2} X D_c^{-1} X^T D_r^{-1/2}\n    def matvec(v):\n        temp = v / np.sqrt(row_sums)\n        temp2 = counts.T @ temp\n        temp3 = temp2 / col_sums\n        temp4 = counts @ temp3\n        return temp4 / np.sqrt(row_sums)\n    shape = (n_cells, n_cells)\n    S = LinearOperator(shape, matvec=matvec, dtype=float)\n    # Compute leading eigenvalues and eigenvectors (largest magnitude)\n    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM')\n    # Sort eigenvalues in descending order and reorder eigenvectors accordingly\n    idx = np.argsort(eigenvalues)[::-1]\n    eigenvalues = eigenvalues[idx]\n    eigenvectors = eigenvectors[:, idx]\n    return eigenvalues, eigenvectors"
+        },
+        "status": "ok",
+        "message": "{\"changed\":true,\"path\":\"snap_core.py\",\"replacements\":1}"
+      },
+      {
+        "step": 8,
+        "action": {
+          "action": "open",
+          "query": null,
+          "path": "test_snap_core_public.py",
+          "max_results": null,
+          "start_line": 1,
+          "end_line": 80,
+          "old_text": null,
+          "new_text": null
+        },
+        "status": "ok",
+        "message": "1: import numpy as np\n2: \n3: from snap_core import matrix_free_spectral_embedding\n4: \n5: \n6: def test_returns_finite_descending_embedding_with_expected_shape():\n7:     counts = np.array(\n8:         [\n9:             [2.0, 1.0, 0.0, 0.0, 1.0],\n10:             [1.0, 3.0, 1.0, 0.0, 0.0],\n11:             [0.0, 1.0, 2.0, 1.0, 0.0],\n12:             [0.0, 0.0, 1.0, 3.0, 1.0],\n13:             [1.0, 0.0, 0.0, 1.0, 2.0],\n14:             [2.0, 0.0, 0.0, 0.0, 1.0],\n15:         ]\n16:     )\n17: \n18:     values, vectors = matrix_free_spectral_embedding(counts, 2, random_state=7)\n19: \n20:     assert values.shape == (2,)\n21:     assert vectors.shape == (counts.shape[0], 2)\n22:     assert np.isfinite(values).all()\n23:     assert np.isfinite(vectors).all()\n24:     assert np.all(values[:-1] >= values[1:])"
+      },
+      {
+        "step": 9,
+        "action": {
+          "action": "edit",
+          "query": null,
+          "path": "snap_core.py",
+          "max_results": null,
+          "start_line": null,
+          "end_line": null,
+          "old_text": "    # Compute row and column sums (degrees for bipartite normalization)\n    row_sums = counts.sum(axis=1).astype(float)\n    col_sums = counts.sum(axis=0).astype(float)\n    # Define matrix-vector product for S = D_r^{-1/2} X D_c^{-1} X^T D_r^{-1/2}\n    def matvec(v):\n        temp = v / np.sqrt(row_sums)\n        temp2 = counts.T @ temp\n        temp3 = temp2 / col_sums\n        temp4 = counts @ temp3\n        return temp4 / np.sqrt(row_sums)\n    shape = (n_cells, n_cells)\n    S = LinearOperator(shape, matvec=matvec, dtype=float)\n    # Compute leading eigenvalues and eigenvectors (largest magnitude)\n    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM')\n    # Sort eigenvalues in descending order and reorder eigenvectors accordingly\n    idx = np.argsort(eigenvalues)[::-1]\n    eigenvalues = eigenvalues[idx]\n    eigenvectors = eigenvectors[:, idx]\n    return eigenvalues, eigenvectors",
+          "new_text": "    # Compute row and column sums (degrees for bipartite normalization)\n    row_sums = counts.sum(axis=1).astype(float)\n    col_sums = counts.sum(axis=0).astype(float)\n    # Handle zero column sums safely: treat zero-degree features as absent\n    col_sums_inv = np.divide(1.0, col_sums, out=np.zeros_like(col_sums), where=col_sums > 0)\n    # Define matrix-vector product for S = D_r^{-1/2} X D_c^{-1} X^T D_r^{-1/2}\n    def matvec(v):\n        temp = v / np.sqrt(row_sums)\n        temp2 = counts.T @ temp\n        temp3 = temp2 * col_sums_inv\n        temp4 = counts @ temp3\n        return temp4 / np.sqrt(row_sums)\n    shape = (n_cells, n_cells)\n    S = LinearOperator(shape, matvec=matvec, dtype=float)\n    # Compute leading eigenvalues and eigenvectors (largest magnitude)\n    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM')\n    # Sort eigenvalues in descending order and reorder eigenvectors accordingly\n    idx = np.argsort(eigenvalues)[::-1]\n    eigenvalues = eigenvalues[idx]\n    eigenvectors = eigenvectors[:, idx]\n    return eigenvalues, eigenvectors"
+        },
+        "status": "ok",
+        "message": "{\"changed\":true,\"path\":\"snap_core.py\",\"replacements\":1}"
+      },
+      {
+        "step": 10,
+        "action": {
+          "action": "open",
+          "query": null,
+          "path": "snap_core.py",
+          "max_results": null,
+          "start_line": 1,
+          "end_line": 80,
+          "old_text": null,
+          "new_text": null
+        },
+        "status": "ok",
+        "message": "1: \"\"\"Starter module for the locked SNAP-MFSE reproduction task.\"\"\"\n2: \n3: from __future__ import annotations\n4: \n5: import numpy as np\n6: from scipy.sparse.linalg import LinearOperator, eigsh\n7: \n8: \n9: def matrix_free_spectral_embedding(\n10:     counts: np.ndarray,\n11:     n_components: int,\n12:     random_state: int = 0,\n13: ) -> tuple[np.ndarray, np.ndarray]:\n14:     \"\"\"Return leading spectral coordinates for a cell-by-feature count matrix.\"\"\"\n15:     # Validate inputs\n16:     if not np.isfinite(counts).all():\n17:         raise ValueError('Input contains nonfinite values')\n18:     if (counts < 0).any():\n19:         raise ValueError('Input contains negative values')\n20:     if (counts.sum(axis=1) == 0).any():\n21:         raise ValueError('Input contains all-zero cell rows')\n22:     n_cells = counts.shape[0]\n23:     if not (1 <= n_components < n_cells):\n24:         raise ValueError('n_components must be in [1, n_cells)')\n25:     # Compute row and column sums (degrees for bipartite normalization)\n26:     row_sums = counts.sum(axis=1).astype(float)\n27:     col_sums = counts.sum(axis=0).astype(float)\n28:     # Handle zero column sums safely: treat zero-degree features as absent\n29:     col_sums_inv = np.divide(1.0, col_sums, out=np.zeros_like(col_sums), where=col_sums > 0)\n30:     # Define matrix-vector product for S = D_r^{-1/2} X D_c^{-1} X^T D_r^{-1/2}\n31:     def matvec(v):\n32:         temp = v / np.sqrt(row_sums)\n33:         temp2 = counts.T @ temp\n34:         temp3 = temp2 * col_sums_inv\n35:         temp4 = counts @ temp3\n36:         return temp4 / np.sqrt(row_sums)\n37:     shape = (n_cells, n_cells)\n38:     S = LinearOperator(shape, matvec=matvec, dtype=float)\n39:     # Compute leading eigenvalues and eigenvectors (largest magnitude)\n40:     eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM')\n41:     # Sort eigenvalues in descending order and reorder eigenvectors accordingly\n42:     idx = np.argsort(eigenvalues)[::-1]\n43:     eigenvalues = eigenvalues[idx]\n44:     eigenvectors = eigenvectors[:, idx]\n45:     return eigenvalues, eigenvectors"
+      },
+      {
+        "step": 11,
+        "action": {
+          "action": "edit",
+          "query": null,
+          "path": "snap_core.py",
+          "max_results": null,
+          "start_line": null,
+          "end_line": null,
+          "old_text": "from scipy.sparse.linalg import LinearOperator, eigsh",
+          "new_text": "from scipy.sparse.linalg import LinearOperator, svds"
+        },
+        "status": "ok",
+        "message": "{\"changed\":true,\"path\":\"snap_core.py\",\"replacements\":1}"
+      },
+      {
+        "step": 12,
+        "action": {
+          "action": "edit",
+          "query": null,
+          "path": "snap_core.py",
+          "max_results": null,
+          "start_line": null,
+          "end_line": null,
+          "old_text": "    # Compute row and column sums (degrees for bipartite normalization)\n    row_sums = counts.sum(axis=1).astype(float)\n    col_sums = counts.sum(axis=0).astype(float)\n    # Handle zero column sums safely: treat zero-degree features as absent\n    col_sums_inv = np.divide(1.0, col_sums, out=np.zeros_like(col_sums), where=col_sums > 0)\n    # Define matrix-vector product for S = D_r^{-1/2} X D_c^{-1} X^T D_r^{-1/2}\n    def matvec(v):\n        temp = v / np.sqrt(row_sums)\n        temp2 = counts.T @ temp\n        temp3 = temp2 * col_sums_inv\n        temp4 = counts @ temp3\n        return temp4 / np.sqrt(row_sums)\n    shape = (n_cells, n_cells)\n    S = LinearOperator(shape, matvec=matvec, dtype=float)\n    # Compute leading eigenvalues and eigenvectors (largest magnitude)\n    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM')\n    # Sort eigenvalues in descending order and reorder eigenvectors accordingly\n    idx = np.argsort(eigenvalues)[::-1]\n    eigenvalues = eigenvalues[idx]\n    eigenvectors = eigenvectors[:, idx]\n    return eigenvalues, eigenvectors",
+          "new_text": "    # Compute row and column sums (degrees for bipartite normalization)\n    row_sums = counts.sum(axis=1).astype(float)\n    col_sums = counts.sum(axis=0).astype(float)\n    # Handle zero sums safely: zero-degree rows already rejected; zero columns treated as absent\n    row_inv_sqrt = np.divide(1.0, np.sqrt(row_sums), out=np.zeros_like(row_sums), where=row_sums > 0)\n    col_inv_sqrt = np.divide(1.0, np.sqrt(col_sums), out=np.zeros_like(col_sums), where=col_sums > 0)\n    # Form normalized matrix M = D_r^{-1/2} X D_c^{-1/2} (n_cells x n_features)\n    M = counts * row_inv_sqrt[:, np.newaxis] * col_inv_sqrt[np.newaxis, :]\n    # Compute leading singular values and left singular vectors (svds returns descending singular values)\n    u, s, vt = svds(M, k=n_components, which='LM')\n    # Use singular values squared as eigenvalues of S = M M^T\n    eigenvalues = s ** 2\n    # Left singular vectors correspond to eigenvectors of S\n    eigenvectors = u\n    # Ensure descending order (svds already returns s descending, so eigenvalues descending)\n    # But just to be safe, already descending; no further sorting needed.\n    return eigenvalues, eigenvectors"
+        },
+        "status": "ok",
+        "message": "{\"changed\":true,\"path\":\"snap_core.py\",\"replacements\":1}"
+      },
+      {
+        "step": 13,
+        "action": {
+          "action": "test",
+          "query": null,
+          "path": null,
+          "max_results": null,
+          "start_line": null,
+          "end_line": null,
+          "old_text": null,
+          "new_text": null
+        },
+        "status": "scored",
+        "message": "{\"contract_passed\":true,\"failure_reason\":\"numerical_case_failed\",\"matrix_free_guard_passed\":true,\"passed_cases\":0,\"status\":\"failed\",\"task_score\":0.0,\"total_cases\":21}"
+      },
+      {
+        "step": 14,
+        "action": {
+          "action": "edit",
+          "query": null,
+          "path": "snap_core.py",
+          "max_results": null,
+          "start_line": null,
+          "end_line": null,
+          "old_text": "    \"\"\"Return leading spectral coordinates for a cell-by-feature count matrix.\"\"\"\n    # Validate inputs\n    if not np.isfinite(counts).all():\n        raise ValueError('Input contains nonfinite values')\n    if (counts < 0).any():\n        raise ValueError('Input contains negative values')\n    if (counts.sum(axis=1) == 0).any():\n        raise ValueError('Input contains all-zero cell rows')\n    n_cells = counts.shape[0]\n    if not (1 <= n_components < n_cells):\n        raise ValueError('n_components must be in [1, n_cells)')\n    # Compute row and column sums (degrees for bipartite normalization)\n    row_sums = counts.sum(axis=1).astype(float)\n    col_sums = counts.sum(axis=0).astype(float)\n    # Handle zero sums safely: zero-degree rows already rejected; zero columns treated as absent\n    row_inv_sqrt = np.divide(1.0, np.sqrt(row_sums), out=np.zeros_like(row_sums), where=row_sums > 0)\n    col_inv_sqrt = np.divide(1.0, np.sqrt(col_sums), out=np.zeros_like(col_sums), where=col_sums > 0)\n    # Form normalized matrix M = D_r^{-1/2} X D_c^{-1/2} (n_cells x n_features)\n    M = counts * row_inv_sqrt[:, np.newaxis] * col_inv_sqrt[np.newaxis, :]\n    # Compute leading singular values and left singular vectors (svds returns descending singular values)\n    u, s, vt = svds(M, k=n_components, which='LM')\n    # Use singular values squared as eigenvalues of S = M M^T\n    eigenvalues = s ** 2\n    # Left singular vectors correspond to eigenvectors of S\n    eigenvectors = u\n    # Ensure descending order (svds already returns s descending, so eigenvalues descending)\n    # But just to be safe, already descending; no further sorting needed.\n    return eigenvalues, eigenvectors",
+          "new_text": "    \"\"\"Return leading spectral coordinates for a cell-by-feature count matrix.\"\"\"\n    # Validate inputs\n    if not np.isfinite(counts).all():\n        raise ValueError('Input contains nonfinite values')\n    if (counts < 0).any():\n        raise ValueError('Input contains negative values')\n    if (counts.sum(axis=1) == 0).any():\n        raise ValueError('Input contains all-zero cell rows')\n    n_cells = counts.shape[0]\n    if not (1 <= n_components < n_cells):\n        raise ValueError('n_components must be in [1, n_cells)')\n    # Compute row and column sums (degrees for bipartite normalization)\n    row_sums = counts.sum(axis=1).astype(float)\n    col_sums = counts.sum(axis=0).astype(float)\n    # Handle zero column sums safely: treat zero-degree features as absent\n    col_sums_inv = np.divide(1.0, col_sums, out=np.zeros_like(col_sums), where=col_sums > 0)\n    # Define matrix-vector product for S = D_r^{-1/2} X D_c^{-1} X^T D_r^{-1/2}\n    # Use random_state to seed a fixed initial vector for deterministic results\n    rng = np.random.RandomState(random_state)\n    v0 = rng.randn(n_cells).astype(float)\n    def matvec(v):\n        temp = v / np.sqrt(row_sums)\n        temp2 = counts.T @ temp\n        temp3 = temp2 * col_sums_inv\n        temp4 = counts @ temp3\n        return temp4 / np.sqrt(row_sums)\n    shape = (n_cells, n_cells)\n    S = LinearOperator(shape, matvec=matvec, dtype=float)\n    # Compute leading eigenvalues and eigenvectors (largest magnitude)\n    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM', v0=v0)\n    # Sort eigenvalues in descending order and reorder eigenvectors accordingly\n    idx = np.argsort(eigenvalues)[::-1]\n    eigenvalues = eigenvalues[idx]\n    eigenvectors = eigenvectors[:, idx]\n    return eigenvalues, eigenvectors"
+        },
+        "status": "ok",
+        "message": "{\"changed\":true,\"path\":\"snap_core.py\",\"replacements\":1}"
+      },
+      {
+        "step": 15,
+        "action": {
+          "action": "test",
+          "query": null,
+          "path": null,
+          "max_results": null,
+          "start_line": null,
+          "end_line": null,
+          "old_text": null,
+          "new_text": null
+        },
+        "status": "scored",
+        "message": "{\"contract_passed\":true,\"failure_reason\":\"numerical_case_failed\",\"matrix_free_guard_passed\":true,\"passed_cases\":0,\"status\":\"failed\",\"task_score\":0.0,\"total_cases\":21}"
+      },
+      {
+        "step": 16,
+        "action": {
+          "action": "submit",
+          "query": null,
+          "path": null,
+          "max_results": null,
+          "start_line": null,
+          "end_line": null,
+          "old_text": null,
+          "new_text": null
+        },
+        "status": "scored",
+        "message": "{\"contract_passed\":true,\"failure_reason\":\"numerical_case_failed\",\"matrix_free_guard_passed\":true,\"passed_cases\":0,\"status\":\"failed\",\"task_score\":0.0,\"total_cases\":21}"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "step": 1,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:B:turn-001",
+      "prompt_sha256": "01185d96fe176941320aa2249104576e2cfc6f38902be26a043ca69809f2dea5",
+      "response_sha256": "d2c0714a09f147d9a47f386e303f51a3146bef7291bad934a900a88aed77b02b",
+      "response_text": "{\"action\":\"search\",\"query\":\"snap_core.py\",\"path\":\".\",\"max_results\":10}",
+      "action": {
+        "action": "search",
+        "query": "snap_core.py",
+        "path": ".",
+        "max_results": 10,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "no matches",
+      "transport_attempts": 1,
+      "input_tokens": 508,
+      "output_tokens": 167
+    },
+    {
+      "step": 2,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:B:turn-002",
+      "prompt_sha256": "d5b1cd21179f6fefe7328c1160f6d210b1547780fe5829ba15615f7302d98c26",
+      "response_sha256": "e32ffb13edae8fa59d660ca42a8dda65f97f967d898a030e8df3e29872150443",
+      "response_text": "{\"action\":\"edit\",\"path\":\"snap_core.py\",\"old_text\":\"\",\"new_text\":\"import numpy as np\\nfrom scipy.sparse.linalg import LinearOperator, eigsh\\n\\ndef matrix_free_spectral_embedding(X, n_components):\\n    # Validate inputs\\n    if not np.isfinite(X).all():\\n        raise ValueError('Input contains nonfinite values')\\n    if (X < 0).any():\\n        raise ValueError('Input contains negative values')\\n    if (X.sum(axis=1) == 0).any():\\n        raise ValueError('Input contains all-zero cell rows')\\n    n_cells = X.shape[0]\\n    if not (1 <= n_components < n_cells):\\n        raise ValueError('n_components must be in [1, n_cells)')\\n    # Compute degree vector without forming full similarity matrix\\n    d = X @ X.sum(axis=0)\\n    d_sqrt_inv = 1.0 / np.sqrt(d)\\n    # Define matrix-vector product for S = D^{-1/2} X X^T D^{-1/2}\\n    def matvec(v):\\n        temp = v * d_sqrt_inv\\n        temp2 = X.T @ temp\\n        temp3 = X @ temp2\\n        return temp3 * d_sqrt_inv\\n    shape = (n_cells, n_cells)\\n    S = LinearOperator(shape, matvec=matvec, dtype=X.dtype)\\n    # Compute leading eigenvalues and eigenvectors (largest magnitude)\\n    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM')\\n    # Reverse to descending order\\n    eigenvalues = eigenvalues[::-1]\\n    eigenvectors = eigenvectors[:, ::-1]\\n    return eigenvalues, eigenvectors\"}",
+      "action": null,
+      "observation_status": "invalid_action",
+      "observation_message": "return exactly one JSON action matching the frozen schema",
+      "transport_attempts": 1,
+      "input_tokens": 553,
+      "output_tokens": 4504
+    },
+    {
+      "step": 3,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:B:turn-003",
+      "prompt_sha256": "05898554d903222d1f5a278abd5b8d7cd869bef8a4db3a5e7ce6d48d26f22767",
+      "response_sha256": "d2c0714a09f147d9a47f386e303f51a3146bef7291bad934a900a88aed77b02b",
+      "response_text": "{\"action\":\"search\",\"query\":\"snap_core.py\",\"path\":\".\",\"max_results\":10}",
+      "action": {
+        "action": "search",
+        "query": "snap_core.py",
+        "path": ".",
+        "max_results": 10,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "no matches",
+      "transport_attempts": 1,
+      "input_tokens": 982,
+      "output_tokens": 1620
+    },
+    {
+      "step": 4,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:B:turn-004",
+      "prompt_sha256": "d3a12aa8a27dd9ac1362358d1f10c756d122d6993b2ddef9a37b11b5bdf0c65c",
+      "response_sha256": "b2825e93db22822a409d253240238ce998f378bc9c3469a4d5622eef514a0bb2",
+      "response_text": "{\"action\":\"open\",\"path\":\"snap_core.py\",\"start_line\":1,\"end_line\":80}",
+      "action": {
+        "action": "open",
+        "query": null,
+        "path": "snap_core.py",
+        "max_results": null,
+        "start_line": 1,
+        "end_line": 80,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "1: \"\"\"Starter module for the locked SNAP-MFSE reproduction task.\"\"\"\n2: \n3: from __future__ import annotations\n4: \n5: import numpy as np\n6: \n7: \n8: def matrix_free_spectral_embedding(\n9:     counts: np.ndarray,\n10:     n_components: int,\n11:     random_state: int = 0,\n12: ) -> tuple[np.ndarray, np.ndarray]:\n13:     \"\"\"Return leading spectral coordinates for a cell-by-feature count matrix.\"\"\"\n14: \n15:     raise NotImplementedError(\"implement the paper-core reproduction task\")",
+      "transport_attempts": 1,
+      "input_tokens": 1023,
+      "output_tokens": 1135
+    },
+    {
+      "step": 5,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:B:turn-005",
+      "prompt_sha256": "e662cfc2446e9501a50d86a2c87b8052ab49b3401a01cd20eea152ae760f27fd",
+      "response_sha256": "5b8751725e7a7c2139be8660e08647cee6022e10ac6ceb27378199f743ef0ebf",
+      "response_text": "{\"action\":\"edit\",\"path\":\"snap_core.py\",\"old_text\":\"\\\"\\\"\\\"Starter module for the locked SNAP-MFSE reproduction task.\\\"\\\"\\\"\\n\\nfrom __future__ import annotations\\n\\nimport numpy as np\\n\\n\\ndef matrix_free_spectral_embedding(\\n    counts: np.ndarray,\\n    n_components: int,\\n    random_state: int = 0,\\n) -> tuple[np.ndarray, np.ndarray]:\\n    \\\"\\\"\\\"Return leading spectral coordinates for a cell-by-feature count matrix.\\\"\\\"\\\"\\n\\n    raise NotImplementedError(\\\"implement the paper-core reproduction task\\\")\\n\",\"new_text\":\"\\\"\\\"\\\"Starter module for the locked SNAP-MFSE reproduction task.\\\"\\\"\\\"\\n\\nfrom __future__ import annotations\\n\\nimport numpy as np\\nfrom scipy.sparse.linalg import LinearOperator, eigsh\\n\\n\\ndef matrix_free_spectral_embedding(\\n    counts: np.ndarray,\\n    n_components: int,\\n    random_state: int = 0,\\n) -> tuple[np.ndarray, np.ndarray]:\\n    \\\"\\\"\\\"Return leading spectral coordinates for a cell-by-feature count matrix.\\\"\\\"\\\"\\n    # Validate inputs\\n    if not np.isfinite(counts).all():\\n        raise ValueError('Input contains nonfinite values')\\n    if (counts < 0).any():\\n        raise ValueError('Input contains negative values')\\n    if (counts.sum(axis=1) == 0).any():\\n        raise ValueError('Input contains all-zero cell rows')\\n    n_cells = counts.shape[0]\\n    if not (1 <= n_components < n_cells):\\n        raise ValueError('n_components must be in [1, n_cells)')\\n    # Compute degree vector without forming full similarity matrix\\n    d = counts @ counts.sum(axis=0)\\n    d_sqrt_inv = 1.0 / np.sqrt(d)\\n    # Define matrix-vector product for S = D^{-1/2} X X^T D^{-1/2}\\n    def matvec(v):\\n        temp = v * d_sqrt_inv\\n        temp2 = counts.T @ temp\\n        temp3 = counts @ temp2\\n        return temp3 * d_sqrt_inv\\n    shape = (n_cells, n_cells)\\n    S = LinearOperator(shape, matvec=matvec, dtype=counts.dtype)\\n    # Compute leading eigenvalues and eigenvectors (largest magnitude)\\n    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM')\\n    # Sort eigenvalues in descending order and reorder eigenvectors accordingly\\n    idx = np.argsort(eigenvalues)[::-1]\\n    eigenvalues = eigenvalues[idx]\\n    eigenvectors = eigenvectors[:, idx]\\n    return eigenvalues, eigenvectors\\n\"}",
+      "action": {
+        "action": "edit",
+        "query": null,
+        "path": "snap_core.py",
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": "\"\"\"Starter module for the locked SNAP-MFSE reproduction task.\"\"\"\n\nfrom __future__ import annotations\n\nimport numpy as np\n\n\ndef matrix_free_spectral_embedding(\n    counts: np.ndarray,\n    n_components: int,\n    random_state: int = 0,\n) -> tuple[np.ndarray, np.ndarray]:\n    \"\"\"Return leading spectral coordinates for a cell-by-feature count matrix.\"\"\"\n\n    raise NotImplementedError(\"implement the paper-core reproduction task\")\n",
+        "new_text": "\"\"\"Starter module for the locked SNAP-MFSE reproduction task.\"\"\"\n\nfrom __future__ import annotations\n\nimport numpy as np\nfrom scipy.sparse.linalg import LinearOperator, eigsh\n\n\ndef matrix_free_spectral_embedding(\n    counts: np.ndarray,\n    n_components: int,\n    random_state: int = 0,\n) -> tuple[np.ndarray, np.ndarray]:\n    \"\"\"Return leading spectral coordinates for a cell-by-feature count matrix.\"\"\"\n    # Validate inputs\n    if not np.isfinite(counts).all():\n        raise ValueError('Input contains nonfinite values')\n    if (counts < 0).any():\n        raise ValueError('Input contains negative values')\n    if (counts.sum(axis=1) == 0).any():\n        raise ValueError('Input contains all-zero cell rows')\n    n_cells = counts.shape[0]\n    if not (1 <= n_components < n_cells):\n        raise ValueError('n_components must be in [1, n_cells)')\n    # Compute degree vector without forming full similarity matrix\n    d = counts @ counts.sum(axis=0)\n    d_sqrt_inv = 1.0 / np.sqrt(d)\n    # Define matrix-vector product for S = D^{-1/2} X X^T D^{-1/2}\n    def matvec(v):\n        temp = v * d_sqrt_inv\n        temp2 = counts.T @ temp\n        temp3 = counts @ temp2\n        return temp3 * d_sqrt_inv\n    shape = (n_cells, n_cells)\n    S = LinearOperator(shape, matvec=matvec, dtype=counts.dtype)\n    # Compute leading eigenvalues and eigenvectors (largest magnitude)\n    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM')\n    # Sort eigenvalues in descending order and reorder eigenvectors accordingly\n    idx = np.argsort(eigenvalues)[::-1]\n    eigenvalues = eigenvalues[idx]\n    eigenvectors = eigenvectors[:, idx]\n    return eigenvalues, eigenvectors\n"
+      },
+      "observation_status": "ok",
+      "observation_message": "{\"changed\":true,\"path\":\"snap_core.py\",\"replacements\":1}",
+      "transport_attempts": 1,
+      "input_tokens": 1196,
+      "output_tokens": 4690
+    },
+    {
+      "step": 6,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:B:turn-006",
+      "prompt_sha256": "044065819fdcabf5f2d9ee668484b168fb627ae6226c1040290b88a20e3d15a8",
+      "response_sha256": "af062acbe3e64aa039672b0bc0197abeb443bf0cc9685e7d96ea67d18afdb7d7",
+      "response_text": "{\"action\":\"test\"}",
+      "action": {
+        "action": "test",
+        "query": null,
+        "path": null,
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "scored",
+      "observation_message": "{\"contract_passed\":true,\"failure_reason\":\"numerical_case_failed\",\"matrix_free_guard_passed\":true,\"passed_cases\":0,\"status\":\"failed\",\"task_score\":0.0,\"total_cases\":21}",
+      "transport_attempts": 1,
+      "input_tokens": 1870,
+      "output_tokens": 172
+    },
+    {
+      "step": 7,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:B:turn-007",
+      "prompt_sha256": "3fd4293f891f079ec0d6da0018215301c800d993d748d45634e091c9b3e19e4c",
+      "response_sha256": "c7243cae2572d56794ae55167609a2ccb404f5f045e2b8c74636ac1b12743c18",
+      "response_text": "{\"action\":\"edit\",\"path\":\"snap_core.py\",\"old_text\":\"    # Validate inputs\\n    if not np.isfinite(counts).all():\\n        raise ValueError('Input contains nonfinite values')\\n    if (counts < 0).any():\\n        raise ValueError('Input contains negative values')\\n    if (counts.sum(axis=1) == 0).any():\\n        raise ValueError('Input contains all-zero cell rows')\\n    n_cells = counts.shape[0]\\n    if not (1 <= n_components < n_cells):\\n        raise ValueError('n_components must be in [1, n_cells)')\\n    # Compute degree vector without forming full similarity matrix\\n    d = counts @ counts.sum(axis=0)\\n    d_sqrt_inv = 1.0 / np.sqrt(d)\\n    # Define matrix-vector product for S = D^{-1/2} X X^T D^{-1/2}\\n    def matvec(v):\\n        temp = v * d_sqrt_inv\\n        temp2 = counts.T @ temp\\n        temp3 = counts @ temp2\\n        return temp3 * d_sqrt_inv\\n    shape = (n_cells, n_cells)\\n    S = LinearOperator(shape, matvec=matvec, dtype=counts.dtype)\\n    # Compute leading eigenvalues and eigenvectors (largest magnitude)\\n    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM')\\n    # Sort eigenvalues in descending order and reorder eigenvectors accordingly\\n    idx = np.argsort(eigenvalues)[::-1]\\n    eigenvalues = eigenvalues[idx]\\n    eigenvectors = eigenvectors[:, idx]\\n    return eigenvalues, eigenvectors\",\"new_text\":\"    # Validate inputs\\n    if not np.isfinite(counts).all():\\n        raise ValueError('Input contains nonfinite values')\\n    if (counts < 0).any():\\n        raise ValueError('Input contains negative values')\\n    if (counts.sum(axis=1) == 0).any():\\n        raise ValueError('Input contains all-zero cell rows')\\n    n_cells = counts.shape[0]\\n    if not (1 <= n_components < n_cells):\\n        raise ValueError('n_components must be in [1, n_cells)')\\n    # Compute row and column sums (degrees for bipartite normalization)\\n    row_sums = counts.sum(axis=1).astype(float)\\n    col_sums = counts.sum(axis=0).astype(float)\\n    # Define matrix-vector product for S = D_r^{-1/2} X D_c^{-1} X^T D_r^{-1/2}\\n    def matvec(v):\\n        temp = v / np.sqrt(row_sums)\\n        temp2 = counts.T @ temp\\n        temp3 = temp2 / col_sums\\n        temp4 = counts @ temp3\\n        return temp4 / np.sqrt(row_sums)\\n    shape = (n_cells, n_cells)\\n    S = LinearOperator(shape, matvec=matvec, dtype=float)\\n    # Compute leading eigenvalues and eigenvectors (largest magnitude)\\n    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM')\\n    # Sort eigenvalues in descending order and reorder eigenvectors accordingly\\n    idx = np.argsort(eigenvalues)[::-1]\\n    eigenvalues = eigenvalues[idx]\\n    eigenvectors = eigenvectors[:, idx]\\n    return eigenvalues, eigenvectors\"}",
+      "action": {
+        "action": "edit",
+        "query": null,
+        "path": "snap_core.py",
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": "    # Validate inputs\n    if not np.isfinite(counts).all():\n        raise ValueError('Input contains nonfinite values')\n    if (counts < 0).any():\n        raise ValueError('Input contains negative values')\n    if (counts.sum(axis=1) == 0).any():\n        raise ValueError('Input contains all-zero cell rows')\n    n_cells = counts.shape[0]\n    if not (1 <= n_components < n_cells):\n        raise ValueError('n_components must be in [1, n_cells)')\n    # Compute degree vector without forming full similarity matrix\n    d = counts @ counts.sum(axis=0)\n    d_sqrt_inv = 1.0 / np.sqrt(d)\n    # Define matrix-vector product for S = D^{-1/2} X X^T D^{-1/2}\n    def matvec(v):\n        temp = v * d_sqrt_inv\n        temp2 = counts.T @ temp\n        temp3 = counts @ temp2\n        return temp3 * d_sqrt_inv\n    shape = (n_cells, n_cells)\n    S = LinearOperator(shape, matvec=matvec, dtype=counts.dtype)\n    # Compute leading eigenvalues and eigenvectors (largest magnitude)\n    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM')\n    # Sort eigenvalues in descending order and reorder eigenvectors accordingly\n    idx = np.argsort(eigenvalues)[::-1]\n    eigenvalues = eigenvalues[idx]\n    eigenvectors = eigenvectors[:, idx]\n    return eigenvalues, eigenvectors",
+        "new_text": "    # Validate inputs\n    if not np.isfinite(counts).all():\n        raise ValueError('Input contains nonfinite values')\n    if (counts < 0).any():\n        raise ValueError('Input contains negative values')\n    if (counts.sum(axis=1) == 0).any():\n        raise ValueError('Input contains all-zero cell rows')\n    n_cells = counts.shape[0]\n    if not (1 <= n_components < n_cells):\n        raise ValueError('n_components must be in [1, n_cells)')\n    # Compute row and column sums (degrees for bipartite normalization)\n    row_sums = counts.sum(axis=1).astype(float)\n    col_sums = counts.sum(axis=0).astype(float)\n    # Define matrix-vector product for S = D_r^{-1/2} X D_c^{-1} X^T D_r^{-1/2}\n    def matvec(v):\n        temp = v / np.sqrt(row_sums)\n        temp2 = counts.T @ temp\n        temp3 = temp2 / col_sums\n        temp4 = counts @ temp3\n        return temp4 / np.sqrt(row_sums)\n    shape = (n_cells, n_cells)\n    S = LinearOperator(shape, matvec=matvec, dtype=float)\n    # Compute leading eigenvalues and eigenvectors (largest magnitude)\n    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM')\n    # Sort eigenvalues in descending order and reorder eigenvectors accordingly\n    idx = np.argsort(eigenvalues)[::-1]\n    eigenvalues = eigenvalues[idx]\n    eigenvectors = eigenvectors[:, idx]\n    return eigenvalues, eigenvectors"
+      },
+      "observation_status": "ok",
+      "observation_message": "{\"changed\":true,\"path\":\"snap_core.py\",\"replacements\":1}",
+      "transport_attempts": 1,
+      "input_tokens": 1942,
+      "output_tokens": 3895
+    },
+    {
+      "step": 8,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:B:turn-008",
+      "prompt_sha256": "0be0c8f00bb2a3fe869751efb5a6d1d11c405f59c11e3842f63a7a45a5c717d0",
+      "response_sha256": "d68d00e8d93420f851292fe0a8a196247d44eb1a15d3fbf4acc53686c77aeed0",
+      "response_text": "{\"action\":\"open\",\"path\":\"test_snap_core_public.py\",\"start_line\":1,\"end_line\":80}",
+      "action": {
+        "action": "open",
+        "query": null,
+        "path": "test_snap_core_public.py",
+        "max_results": null,
+        "start_line": 1,
+        "end_line": 80,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "1: import numpy as np\n2: \n3: from snap_core import matrix_free_spectral_embedding\n4: \n5: \n6: def test_returns_finite_descending_embedding_with_expected_shape():\n7:     counts = np.array(\n8:         [\n9:             [2.0, 1.0, 0.0, 0.0, 1.0],\n10:             [1.0, 3.0, 1.0, 0.0, 0.0],\n11:             [0.0, 1.0, 2.0, 1.0, 0.0],\n12:             [0.0, 0.0, 1.0, 3.0, 1.0],\n13:             [1.0, 0.0, 0.0, 1.0, 2.0],\n14:             [2.0, 0.0, 0.0, 0.0, 1.0],\n15:         ]\n16:     )\n17: \n18:     values, vectors = matrix_free_spectral_embedding(counts, 2, random_state=7)\n19: \n20:     assert values.shape == (2,)\n21:     assert vectors.shape == (counts.shape[0], 2)\n22:     assert np.isfinite(values).all()\n23:     assert np.isfinite(vectors).all()\n24:     assert np.all(values[:-1] >= values[1:])",
+      "transport_attempts": 1,
+      "input_tokens": 2751,
+      "output_tokens": 2453
+    },
+    {
+      "step": 9,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:B:turn-009",
+      "prompt_sha256": "adc32602888ea0c78bf3aba2f94bf182c39f4fdf5eafbf5c908658237a63e88f",
+      "response_sha256": "2f73c0b3ea3266b63c0d7f68d182323424ba985277fe94cf35e4b03267a25fbe",
+      "response_text": "{\"action\":\"edit\",\"path\":\"snap_core.py\",\"old_text\":\"    # Compute row and column sums (degrees for bipartite normalization)\\n    row_sums = counts.sum(axis=1).astype(float)\\n    col_sums = counts.sum(axis=0).astype(float)\\n    # Define matrix-vector product for S = D_r^{-1/2} X D_c^{-1} X^T D_r^{-1/2}\\n    def matvec(v):\\n        temp = v / np.sqrt(row_sums)\\n        temp2 = counts.T @ temp\\n        temp3 = temp2 / col_sums\\n        temp4 = counts @ temp3\\n        return temp4 / np.sqrt(row_sums)\\n    shape = (n_cells, n_cells)\\n    S = LinearOperator(shape, matvec=matvec, dtype=float)\\n    # Compute leading eigenvalues and eigenvectors (largest magnitude)\\n    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM')\\n    # Sort eigenvalues in descending order and reorder eigenvectors accordingly\\n    idx = np.argsort(eigenvalues)[::-1]\\n    eigenvalues = eigenvalues[idx]\\n    eigenvectors = eigenvectors[:, idx]\\n    return eigenvalues, eigenvectors\",\"new_text\":\"    # Compute row and column sums (degrees for bipartite normalization)\\n    row_sums = counts.sum(axis=1).astype(float)\\n    col_sums = counts.sum(axis=0).astype(float)\\n    # Handle zero column sums safely: treat zero-degree features as absent\\n    col_sums_inv = np.divide(1.0, col_sums, out=np.zeros_like(col_sums), where=col_sums > 0)\\n    # Define matrix-vector product for S = D_r^{-1/2} X D_c^{-1} X^T D_r^{-1/2}\\n    def matvec(v):\\n        temp = v / np.sqrt(row_sums)\\n        temp2 = counts.T @ temp\\n        temp3 = temp2 * col_sums_inv\\n        temp4 = counts @ temp3\\n        return temp4 / np.sqrt(row_sums)\\n    shape = (n_cells, n_cells)\\n    S = LinearOperator(shape, matvec=matvec, dtype=float)\\n    # Compute leading eigenvalues and eigenvectors (largest magnitude)\\n    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM')\\n    # Sort eigenvalues in descending order and reorder eigenvectors accordingly\\n    idx = np.argsort(eigenvalues)[::-1]\\n    eigenvalues = eigenvalues[idx]\\n    eigenvectors = eigenvectors[:, idx]\\n    return eigenvalues, eigenvectors\"}",
+      "action": {
+        "action": "edit",
+        "query": null,
+        "path": "snap_core.py",
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": "    # Compute row and column sums (degrees for bipartite normalization)\n    row_sums = counts.sum(axis=1).astype(float)\n    col_sums = counts.sum(axis=0).astype(float)\n    # Define matrix-vector product for S = D_r^{-1/2} X D_c^{-1} X^T D_r^{-1/2}\n    def matvec(v):\n        temp = v / np.sqrt(row_sums)\n        temp2 = counts.T @ temp\n        temp3 = temp2 / col_sums\n        temp4 = counts @ temp3\n        return temp4 / np.sqrt(row_sums)\n    shape = (n_cells, n_cells)\n    S = LinearOperator(shape, matvec=matvec, dtype=float)\n    # Compute leading eigenvalues and eigenvectors (largest magnitude)\n    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM')\n    # Sort eigenvalues in descending order and reorder eigenvectors accordingly\n    idx = np.argsort(eigenvalues)[::-1]\n    eigenvalues = eigenvalues[idx]\n    eigenvectors = eigenvectors[:, idx]\n    return eigenvalues, eigenvectors",
+        "new_text": "    # Compute row and column sums (degrees for bipartite normalization)\n    row_sums = counts.sum(axis=1).astype(float)\n    col_sums = counts.sum(axis=0).astype(float)\n    # Handle zero column sums safely: treat zero-degree features as absent\n    col_sums_inv = np.divide(1.0, col_sums, out=np.zeros_like(col_sums), where=col_sums > 0)\n    # Define matrix-vector product for S = D_r^{-1/2} X D_c^{-1} X^T D_r^{-1/2}\n    def matvec(v):\n        temp = v / np.sqrt(row_sums)\n        temp2 = counts.T @ temp\n        temp3 = temp2 * col_sums_inv\n        temp4 = counts @ temp3\n        return temp4 / np.sqrt(row_sums)\n    shape = (n_cells, n_cells)\n    S = LinearOperator(shape, matvec=matvec, dtype=float)\n    # Compute leading eigenvalues and eigenvectors (largest magnitude)\n    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM')\n    # Sort eigenvalues in descending order and reorder eigenvectors accordingly\n    idx = np.argsort(eigenvalues)[::-1]\n    eigenvalues = eigenvalues[idx]\n    eigenvectors = eigenvectors[:, idx]\n    return eigenvalues, eigenvectors"
+      },
+      "observation_status": "ok",
+      "observation_message": "{\"changed\":true,\"path\":\"snap_core.py\",\"replacements\":1}",
+      "transport_attempts": 1,
+      "input_tokens": 3132,
+      "output_tokens": 6675
+    },
+    {
+      "step": 10,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:B:turn-010",
+      "prompt_sha256": "9a9274b8213c4ee5d9fad314cdf10d6ba3c77a71c7c8a634b218bf01ca4ae33f",
+      "response_sha256": "b2825e93db22822a409d253240238ce998f378bc9c3469a4d5622eef514a0bb2",
+      "response_text": "{\"action\":\"open\",\"path\":\"snap_core.py\",\"start_line\":1,\"end_line\":80}",
+      "action": {
+        "action": "open",
+        "query": null,
+        "path": "snap_core.py",
+        "max_results": null,
+        "start_line": 1,
+        "end_line": 80,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "1: \"\"\"Starter module for the locked SNAP-MFSE reproduction task.\"\"\"\n2: \n3: from __future__ import annotations\n4: \n5: import numpy as np\n6: from scipy.sparse.linalg import LinearOperator, eigsh\n7: \n8: \n9: def matrix_free_spectral_embedding(\n10:     counts: np.ndarray,\n11:     n_components: int,\n12:     random_state: int = 0,\n13: ) -> tuple[np.ndarray, np.ndarray]:\n14:     \"\"\"Return leading spectral coordinates for a cell-by-feature count matrix.\"\"\"\n15:     # Validate inputs\n16:     if not np.isfinite(counts).all():\n17:         raise ValueError('Input contains nonfinite values')\n18:     if (counts < 0).any():\n19:         raise ValueError('Input contains negative values')\n20:     if (counts.sum(axis=1) == 0).any():\n21:         raise ValueError('Input contains all-zero cell rows')\n22:     n_cells = counts.shape[0]\n23:     if not (1 <= n_components < n_cells):\n24:         raise ValueError('n_components must be in [1, n_cells)')\n25:     # Compute row and column sums (degrees for bipartite normalization)\n26:     row_sums = counts.sum(axis=1).astype(float)\n27:     col_sums = counts.sum(axis=0).astype(float)\n28:     # Handle zero column sums safely: treat zero-degree features as absent\n29:     col_sums_inv = np.divide(1.0, col_sums, out=np.zeros_like(col_sums), where=col_sums > 0)\n30:     # Define matrix-vector product for S = D_r^{-1/2} X D_c^{-1} X^T D_r^{-1/2}\n31:     def matvec(v):\n32:         temp = v / np.sqrt(row_sums)\n33:         temp2 = counts.T @ temp\n34:         temp3 = temp2 * col_sums_inv\n35:         temp4 = counts @ temp3\n36:         return temp4 / np.sqrt(row_sums)\n37:     shape = (n_cells, n_cells)\n38:     S = LinearOperator(shape, matvec=matvec, dtype=float)\n39:     # Compute leading eigenvalues and eigenvectors (largest magnitude)\n40:     eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM')\n41:     # Sort eigenvalues in descending order and reorder eigenvectors accordingly\n42:     idx = np.argsort(eigenvalues)[::-1]\n43:     eigenvalues = eigenvalues[idx]\n44:     eigenvectors = eigenvectors[:, idx]\n45:     return eigenvalues, eigenvectors",
+      "transport_attempts": 1,
+      "input_tokens": 3755,
+      "output_tokens": 1634
+    },
+    {
+      "step": 11,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:B:turn-011",
+      "prompt_sha256": "9302b6c42225a293cef0f8dc3fdc9451487492df9a6568c98b422e705602f6de",
+      "response_sha256": "e6ae1d2e55e58e7da11d66f1ade05eb5eada4cbf6b6c075fcc4c7c7a967fa7cb",
+      "response_text": "{\"action\":\"edit\",\"path\":\"snap_core.py\",\"old_text\":\"from scipy.sparse.linalg import LinearOperator, eigsh\",\"new_text\":\"from scipy.sparse.linalg import LinearOperator, svds\"}",
+      "action": {
+        "action": "edit",
+        "query": null,
+        "path": "snap_core.py",
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": "from scipy.sparse.linalg import LinearOperator, eigsh",
+        "new_text": "from scipy.sparse.linalg import LinearOperator, svds"
+      },
+      "observation_status": "ok",
+      "observation_message": "{\"changed\":true,\"path\":\"snap_core.py\",\"replacements\":1}",
+      "transport_attempts": 1,
+      "input_tokens": 4402,
+      "output_tokens": 6893
+    },
+    {
+      "step": 12,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:B:turn-012",
+      "prompt_sha256": "9c1a42220fc0499c952e61e84c820a1835e224ad83810ea3316f788780afdecc",
+      "response_sha256": "7923dc2e0729afa6c2a7e3ea97e73efcfcce89b2584ab2b1178692286bc791c0",
+      "response_text": "{\"action\":\"edit\",\"path\":\"snap_core.py\",\"old_text\":\"    # Compute row and column sums (degrees for bipartite normalization)\\n    row_sums = counts.sum(axis=1).astype(float)\\n    col_sums = counts.sum(axis=0).astype(float)\\n    # Handle zero column sums safely: treat zero-degree features as absent\\n    col_sums_inv = np.divide(1.0, col_sums, out=np.zeros_like(col_sums), where=col_sums > 0)\\n    # Define matrix-vector product for S = D_r^{-1/2} X D_c^{-1} X^T D_r^{-1/2}\\n    def matvec(v):\\n        temp = v / np.sqrt(row_sums)\\n        temp2 = counts.T @ temp\\n        temp3 = temp2 * col_sums_inv\\n        temp4 = counts @ temp3\\n        return temp4 / np.sqrt(row_sums)\\n    shape = (n_cells, n_cells)\\n    S = LinearOperator(shape, matvec=matvec, dtype=float)\\n    # Compute leading eigenvalues and eigenvectors (largest magnitude)\\n    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM')\\n    # Sort eigenvalues in descending order and reorder eigenvectors accordingly\\n    idx = np.argsort(eigenvalues)[::-1]\\n    eigenvalues = eigenvalues[idx]\\n    eigenvectors = eigenvectors[:, idx]\\n    return eigenvalues, eigenvectors\",\"new_text\":\"    # Compute row and column sums (degrees for bipartite normalization)\\n    row_sums = counts.sum(axis=1).astype(float)\\n    col_sums = counts.sum(axis=0).astype(float)\\n    # Handle zero sums safely: zero-degree rows already rejected; zero columns treated as absent\\n    row_inv_sqrt = np.divide(1.0, np.sqrt(row_sums), out=np.zeros_like(row_sums), where=row_sums > 0)\\n    col_inv_sqrt = np.divide(1.0, np.sqrt(col_sums), out=np.zeros_like(col_sums), where=col_sums > 0)\\n    # Form normalized matrix M = D_r^{-1/2} X D_c^{-1/2} (n_cells x n_features)\\n    M = counts * row_inv_sqrt[:, np.newaxis] * col_inv_sqrt[np.newaxis, :]\\n    # Compute leading singular values and left singular vectors (svds returns descending singular values)\\n    u, s, vt = svds(M, k=n_components, which='LM')\\n    # Use singular values squared as eigenvalues of S = M M^T\\n    eigenvalues = s ** 2\\n    # Left singular vectors correspond to eigenvectors of S\\n    eigenvectors = u\\n    # Ensure descending order (svds already returns s descending, so eigenvalues descending)\\n    # But just to be safe, already descending; no further sorting needed.\\n    return eigenvalues, eigenvectors\"}",
+      "action": {
+        "action": "edit",
+        "query": null,
+        "path": "snap_core.py",
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": "    # Compute row and column sums (degrees for bipartite normalization)\n    row_sums = counts.sum(axis=1).astype(float)\n    col_sums = counts.sum(axis=0).astype(float)\n    # Handle zero column sums safely: treat zero-degree features as absent\n    col_sums_inv = np.divide(1.0, col_sums, out=np.zeros_like(col_sums), where=col_sums > 0)\n    # Define matrix-vector product for S = D_r^{-1/2} X D_c^{-1} X^T D_r^{-1/2}\n    def matvec(v):\n        temp = v / np.sqrt(row_sums)\n        temp2 = counts.T @ temp\n        temp3 = temp2 * col_sums_inv\n        temp4 = counts @ temp3\n        return temp4 / np.sqrt(row_sums)\n    shape = (n_cells, n_cells)\n    S = LinearOperator(shape, matvec=matvec, dtype=float)\n    # Compute leading eigenvalues and eigenvectors (largest magnitude)\n    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM')\n    # Sort eigenvalues in descending order and reorder eigenvectors accordingly\n    idx = np.argsort(eigenvalues)[::-1]\n    eigenvalues = eigenvalues[idx]\n    eigenvectors = eigenvectors[:, idx]\n    return eigenvalues, eigenvectors",
+        "new_text": "    # Compute row and column sums (degrees for bipartite normalization)\n    row_sums = counts.sum(axis=1).astype(float)\n    col_sums = counts.sum(axis=0).astype(float)\n    # Handle zero sums safely: zero-degree rows already rejected; zero columns treated as absent\n    row_inv_sqrt = np.divide(1.0, np.sqrt(row_sums), out=np.zeros_like(row_sums), where=row_sums > 0)\n    col_inv_sqrt = np.divide(1.0, np.sqrt(col_sums), out=np.zeros_like(col_sums), where=col_sums > 0)\n    # Form normalized matrix M = D_r^{-1/2} X D_c^{-1/2} (n_cells x n_features)\n    M = counts * row_inv_sqrt[:, np.newaxis] * col_inv_sqrt[np.newaxis, :]\n    # Compute leading singular values and left singular vectors (svds returns descending singular values)\n    u, s, vt = svds(M, k=n_components, which='LM')\n    # Use singular values squared as eigenvalues of S = M M^T\n    eigenvalues = s ** 2\n    # Left singular vectors correspond to eigenvectors of S\n    eigenvectors = u\n    # Ensure descending order (svds already returns s descending, so eigenvalues descending)\n    # But just to be safe, already descending; no further sorting needed.\n    return eigenvalues, eigenvectors"
+      },
+      "observation_status": "ok",
+      "observation_message": "{\"changed\":true,\"path\":\"snap_core.py\",\"replacements\":1}",
+      "transport_attempts": 1,
+      "input_tokens": 4486,
+      "output_tokens": 3717
+    },
+    {
+      "step": 13,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:B:turn-013",
+      "prompt_sha256": "e75ff907979bdcbc4e108875f973a6e7b6fba54f416d7d6e73ea1aced4a5f175",
+      "response_sha256": "af062acbe3e64aa039672b0bc0197abeb443bf0cc9685e7d96ea67d18afdb7d7",
+      "response_text": "{\"action\":\"test\"}",
+      "action": {
+        "action": "test",
+        "query": null,
+        "path": null,
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "scored",
+      "observation_message": "{\"contract_passed\":true,\"failure_reason\":\"numerical_case_failed\",\"matrix_free_guard_passed\":true,\"passed_cases\":0,\"status\":\"failed\",\"task_score\":0.0,\"total_cases\":21}",
+      "transport_attempts": 1,
+      "input_tokens": 5182,
+      "output_tokens": 1232
+    },
+    {
+      "step": 14,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:B:turn-014",
+      "prompt_sha256": "f77806db9f645036879460076f6283f890dbd3552ae3023382d5ad4f2df760a3",
+      "response_sha256": "b4f887803b357c93842b0d4cf7d3a5036907c7a8334c05fb9ce2733f32c21bb4",
+      "response_text": "{\"action\":\"edit\",\"path\":\"snap_core.py\",\"old_text\":\"    \\\"\\\"\\\"Return leading spectral coordinates for a cell-by-feature count matrix.\\\"\\\"\\\"\\n    # Validate inputs\\n    if not np.isfinite(counts).all():\\n        raise ValueError('Input contains nonfinite values')\\n    if (counts < 0).any():\\n        raise ValueError('Input contains negative values')\\n    if (counts.sum(axis=1) == 0).any():\\n        raise ValueError('Input contains all-zero cell rows')\\n    n_cells = counts.shape[0]\\n    if not (1 <= n_components < n_cells):\\n        raise ValueError('n_components must be in [1, n_cells)')\\n    # Compute row and column sums (degrees for bipartite normalization)\\n    row_sums = counts.sum(axis=1).astype(float)\\n    col_sums = counts.sum(axis=0).astype(float)\\n    # Handle zero sums safely: zero-degree rows already rejected; zero columns treated as absent\\n    row_inv_sqrt = np.divide(1.0, np.sqrt(row_sums), out=np.zeros_like(row_sums), where=row_sums > 0)\\n    col_inv_sqrt = np.divide(1.0, np.sqrt(col_sums), out=np.zeros_like(col_sums), where=col_sums > 0)\\n    # Form normalized matrix M = D_r^{-1/2} X D_c^{-1/2} (n_cells x n_features)\\n    M = counts * row_inv_sqrt[:, np.newaxis] * col_inv_sqrt[np.newaxis, :]\\n    # Compute leading singular values and left singular vectors (svds returns descending singular values)\\n    u, s, vt = svds(M, k=n_components, which='LM')\\n    # Use singular values squared as eigenvalues of S = M M^T\\n    eigenvalues = s ** 2\\n    # Left singular vectors correspond to eigenvectors of S\\n    eigenvectors = u\\n    # Ensure descending order (svds already returns s descending, so eigenvalues descending)\\n    # But just to be safe, already descending; no further sorting needed.\\n    return eigenvalues, eigenvectors\",\"new_text\":\"    \\\"\\\"\\\"Return leading spectral coordinates for a cell-by-feature count matrix.\\\"\\\"\\\"\\n    # Validate inputs\\n    if not np.isfinite(counts).all():\\n        raise ValueError('Input contains nonfinite values')\\n    if (counts < 0).any():\\n        raise ValueError('Input contains negative values')\\n    if (counts.sum(axis=1) == 0).any():\\n        raise ValueError('Input contains all-zero cell rows')\\n    n_cells = counts.shape[0]\\n    if not (1 <= n_components < n_cells):\\n        raise ValueError('n_components must be in [1, n_cells)')\\n    # Compute row and column sums (degrees for bipartite normalization)\\n    row_sums = counts.sum(axis=1).astype(float)\\n    col_sums = counts.sum(axis=0).astype(float)\\n    # Handle zero column sums safely: treat zero-degree features as absent\\n    col_sums_inv = np.divide(1.0, col_sums, out=np.zeros_like(col_sums), where=col_sums > 0)\\n    # Define matrix-vector product for S = D_r^{-1/2} X D_c^{-1} X^T D_r^{-1/2}\\n    # Use random_state to seed a fixed initial vector for deterministic results\\n    rng = np.random.RandomState(random_state)\\n    v0 = rng.randn(n_cells).astype(float)\\n    def matvec(v):\\n        temp = v / np.sqrt(row_sums)\\n        temp2 = counts.T @ temp\\n        temp3 = temp2 * col_sums_inv\\n        temp4 = counts @ temp3\\n        return temp4 / np.sqrt(row_sums)\\n    shape = (n_cells, n_cells)\\n    S = LinearOperator(shape, matvec=matvec, dtype=float)\\n    # Compute leading eigenvalues and eigenvectors (largest magnitude)\\n    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM', v0=v0)\\n    # Sort eigenvalues in descending order and reorder eigenvectors accordingly\\n    idx = np.argsort(eigenvalues)[::-1]\\n    eigenvalues = eigenvalues[idx]\\n    eigenvectors = eigenvectors[:, idx]\\n    return eigenvalues, eigenvectors\"}",
+      "action": {
+        "action": "edit",
+        "query": null,
+        "path": "snap_core.py",
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": "    \"\"\"Return leading spectral coordinates for a cell-by-feature count matrix.\"\"\"\n    # Validate inputs\n    if not np.isfinite(counts).all():\n        raise ValueError('Input contains nonfinite values')\n    if (counts < 0).any():\n        raise ValueError('Input contains negative values')\n    if (counts.sum(axis=1) == 0).any():\n        raise ValueError('Input contains all-zero cell rows')\n    n_cells = counts.shape[0]\n    if not (1 <= n_components < n_cells):\n        raise ValueError('n_components must be in [1, n_cells)')\n    # Compute row and column sums (degrees for bipartite normalization)\n    row_sums = counts.sum(axis=1).astype(float)\n    col_sums = counts.sum(axis=0).astype(float)\n    # Handle zero sums safely: zero-degree rows already rejected; zero columns treated as absent\n    row_inv_sqrt = np.divide(1.0, np.sqrt(row_sums), out=np.zeros_like(row_sums), where=row_sums > 0)\n    col_inv_sqrt = np.divide(1.0, np.sqrt(col_sums), out=np.zeros_like(col_sums), where=col_sums > 0)\n    # Form normalized matrix M = D_r^{-1/2} X D_c^{-1/2} (n_cells x n_features)\n    M = counts * row_inv_sqrt[:, np.newaxis] * col_inv_sqrt[np.newaxis, :]\n    # Compute leading singular values and left singular vectors (svds returns descending singular values)\n    u, s, vt = svds(M, k=n_components, which='LM')\n    # Use singular values squared as eigenvalues of S = M M^T\n    eigenvalues = s ** 2\n    # Left singular vectors correspond to eigenvectors of S\n    eigenvectors = u\n    # Ensure descending order (svds already returns s descending, so eigenvalues descending)\n    # But just to be safe, already descending; no further sorting needed.\n    return eigenvalues, eigenvectors",
+        "new_text": "    \"\"\"Return leading spectral coordinates for a cell-by-feature count matrix.\"\"\"\n    # Validate inputs\n    if not np.isfinite(counts).all():\n        raise ValueError('Input contains nonfinite values')\n    if (counts < 0).any():\n        raise ValueError('Input contains negative values')\n    if (counts.sum(axis=1) == 0).any():\n        raise ValueError('Input contains all-zero cell rows')\n    n_cells = counts.shape[0]\n    if not (1 <= n_components < n_cells):\n        raise ValueError('n_components must be in [1, n_cells)')\n    # Compute row and column sums (degrees for bipartite normalization)\n    row_sums = counts.sum(axis=1).astype(float)\n    col_sums = counts.sum(axis=0).astype(float)\n    # Handle zero column sums safely: treat zero-degree features as absent\n    col_sums_inv = np.divide(1.0, col_sums, out=np.zeros_like(col_sums), where=col_sums > 0)\n    # Define matrix-vector product for S = D_r^{-1/2} X D_c^{-1} X^T D_r^{-1/2}\n    # Use random_state to seed a fixed initial vector for deterministic results\n    rng = np.random.RandomState(random_state)\n    v0 = rng.randn(n_cells).astype(float)\n    def matvec(v):\n        temp = v / np.sqrt(row_sums)\n        temp2 = counts.T @ temp\n        temp3 = temp2 * col_sums_inv\n        temp4 = counts @ temp3\n        return temp4 / np.sqrt(row_sums)\n    shape = (n_cells, n_cells)\n    S = LinearOperator(shape, matvec=matvec, dtype=float)\n    # Compute leading eigenvalues and eigenvectors (largest magnitude)\n    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM', v0=v0)\n    # Sort eigenvalues in descending order and reorder eigenvectors accordingly\n    idx = np.argsort(eigenvalues)[::-1]\n    eigenvalues = eigenvalues[idx]\n    eigenvectors = eigenvectors[:, idx]\n    return eigenvalues, eigenvectors"
+      },
+      "observation_status": "ok",
+      "observation_message": "{\"changed\":true,\"path\":\"snap_core.py\",\"replacements\":1}",
+      "transport_attempts": 1,
+      "input_tokens": 5254,
+      "output_tokens": 3901
+    },
+    {
+      "step": 15,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:B:turn-015",
+      "prompt_sha256": "8d648f747daaa10e65b5596b507683c8ba4bc1fe78056c17afaea189de0e07a0",
+      "response_sha256": "af062acbe3e64aa039672b0bc0197abeb443bf0cc9685e7d96ea67d18afdb7d7",
+      "response_text": "{\"action\":\"test\"}",
+      "action": {
+        "action": "test",
+        "query": null,
+        "path": null,
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "scored",
+      "observation_message": "{\"contract_passed\":true,\"failure_reason\":\"numerical_case_failed\",\"matrix_free_guard_passed\":true,\"passed_cases\":0,\"status\":\"failed\",\"task_score\":0.0,\"total_cases\":21}",
+      "transport_attempts": 1,
+      "input_tokens": 6309,
+      "output_tokens": 371
+    },
+    {
+      "step": 16,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:B:turn-016",
+      "prompt_sha256": "918a4a935d304ef7d2078a80ffa54432354f76700362016c5320a021a7de184a",
+      "response_sha256": "6831a7112fd0308595c6abaab94fbd4f05541fda862d0e6075e89ad1df53163b",
+      "response_text": "{\"action\":\"submit\"}",
+      "action": {
+        "action": "submit",
+        "query": null,
+        "path": null,
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "scored",
+      "observation_message": "{\"contract_passed\":true,\"failure_reason\":\"numerical_case_failed\",\"matrix_free_guard_passed\":true,\"passed_cases\":0,\"status\":\"failed\",\"task_score\":0.0,\"total_cases\":21}",
+      "transport_attempts": 1,
+      "input_tokens": 6381,
+      "output_tokens": 1005
+    }
+  ],
+  "scorer_metrics": [
+    {
+      "schema_version": "effectslice-snap-mfse-score.v1",
+      "task_id": "SNAP-MFSE",
+      "metric_name": "registered_case_pass_rate",
+      "block": "eligibility",
+      "evidence_boundary": "Objective numerical score for one locked SNAP-MFSE patch and case block. Development scores do not establish EffectSlice effectiveness.",
+      "task_score": 0.0,
+      "success": false,
+      "patch_applied": true,
+      "matrix_free_guard_passed": true,
+      "guard_violations": [],
+      "contract_passed": true,
+      "contract_failures": [],
+      "case_scores": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "case_details": [
+        {
+          "case_id": "snap-mfse:eligibility:001",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.04666652277106342,
+          "projector_ok": false,
+          "projector_error": 0.10967529856623391,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:002",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.1817083463187441,
+          "projector_ok": false,
+          "projector_error": 0.14218824565804244,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:003",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.12709853963955065,
+          "projector_ok": false,
+          "projector_error": 0.1335292033761248,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:004",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.10300738958118093,
+          "projector_ok": false,
+          "projector_error": 0.7797106407202454,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:005",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.045893091637927985,
+          "projector_ok": false,
+          "projector_error": 0.6105062228183085,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:006",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.0918654843455784,
+          "projector_ok": false,
+          "projector_error": 0.313680026042963,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:007",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.014015565533933017,
+          "projector_ok": false,
+          "projector_error": 0.07692450347971441,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:008",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.07432657054489966,
+          "projector_ok": false,
+          "projector_error": 0.15725224902135718,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:009",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.2419162686125187,
+          "projector_ok": false,
+          "projector_error": 0.26999869518889513,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:010",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.024261768696591503,
+          "projector_ok": false,
+          "projector_error": 0.6120389245456122,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:011",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.141363534897065,
+          "projector_ok": false,
+          "projector_error": 0.1708357761541271,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:012",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.11889311720016904,
+          "projector_ok": false,
+          "projector_error": 0.19005478896370628,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:013",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.035604070168645974,
+          "projector_ok": false,
+          "projector_error": 0.13971892365358443,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:014",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.04251753797940405,
+          "projector_ok": false,
+          "projector_error": 0.1201670703970032,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:015",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.0811924301376129,
+          "projector_ok": false,
+          "projector_error": 0.38030209824073546,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:016",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.16391159156186866,
+          "projector_ok": false,
+          "projector_error": 0.5179319219824512,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:017",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.14197840349929924,
+          "projector_ok": false,
+          "projector_error": 0.4634700277353921,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:018",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.16215592032666226,
+          "projector_ok": false,
+          "projector_error": 0.19226522238659527,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:019",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.008847866427400986,
+          "projector_ok": false,
+          "projector_error": 0.14025589717261644,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:020",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.06782208757750274,
+          "projector_ok": false,
+          "projector_error": 0.1395631749767235,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:021",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.13765565794298262,
+          "projector_ok": false,
+          "projector_error": 0.3715487965317285,
+          "error_type": null
+        }
+      ],
+      "failure_reason": "numerical_case_failed",
+      "private_apply_result": {
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "public_summary": {
+        "status": "failed",
+        "task_score": 0.0,
+        "passed_cases": 0,
+        "total_cases": 21,
+        "contract_passed": true,
+        "matrix_free_guard_passed": true,
+        "failure_reason": "numerical_case_failed"
+      }
+    },
+    {
+      "schema_version": "effectslice-snap-mfse-score.v1",
+      "task_id": "SNAP-MFSE",
+      "metric_name": "registered_case_pass_rate",
+      "block": "eligibility",
+      "evidence_boundary": "Objective numerical score for one locked SNAP-MFSE patch and case block. Development scores do not establish EffectSlice effectiveness.",
+      "task_score": 0.0,
+      "success": false,
+      "patch_applied": true,
+      "matrix_free_guard_passed": true,
+      "guard_violations": [],
+      "contract_passed": true,
+      "contract_failures": [],
+      "case_scores": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "case_details": [
+        {
+          "case_id": "snap-mfse:eligibility:001",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.39480370069505644,
+          "projector_ok": false,
+          "projector_error": 0.12416836804908077,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:002",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.38991410387569514,
+          "projector_ok": false,
+          "projector_error": 0.1620331785409114,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:003",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.31806293545420683,
+          "projector_ok": false,
+          "projector_error": 0.2365863721368978,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:004",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 1.0449988915238064,
+          "projector_ok": false,
+          "projector_error": 0.2741913252344328,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:005",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.32556238628869616,
+          "projector_ok": false,
+          "projector_error": 0.11809490667086342,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:006",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.3085845300669452,
+          "projector_ok": false,
+          "projector_error": 0.3642412971196565,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:007",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.2638383545876656,
+          "projector_ok": false,
+          "projector_error": 0.0878016782943778,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:008",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.4627212422329433,
+          "projector_ok": false,
+          "projector_error": 0.15038713764063386,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:009",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.22650521914102184,
+          "projector_ok": false,
+          "projector_error": 0.1887924910526016,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:010",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.9564708444683994,
+          "projector_ok": false,
+          "projector_error": 0.5066294152177958,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:011",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.29216614643920535,
+          "projector_ok": false,
+          "projector_error": 0.13678809674498987,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:012",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.32450200153600783,
+          "projector_ok": false,
+          "projector_error": 0.18700753466609246,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:013",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.28330462612345786,
+          "projector_ok": false,
+          "projector_error": 0.14523856971680238,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:014",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.41868540012074695,
+          "projector_ok": false,
+          "projector_error": 0.10825841462465077,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:015",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.3880540709591501,
+          "projector_ok": false,
+          "projector_error": 0.47705530593758827,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:016",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 1.0835090533441964,
+          "projector_ok": false,
+          "projector_error": 0.15930445428620585,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:017",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.21831294996562256,
+          "projector_ok": false,
+          "projector_error": 0.5495693786471945,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:018",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.47196480845922795,
+          "projector_ok": false,
+          "projector_error": 0.17869343994349973,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:019",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.2484747282082268,
+          "projector_ok": false,
+          "projector_error": 0.14831974030915127,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:020",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.43817593527737786,
+          "projector_ok": false,
+          "projector_error": 0.17365579549276153,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:021",
+          "passed": false,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": false,
+          "eigenvalue_error": 0.27952816505612765,
+          "projector_ok": false,
+          "projector_error": 0.22444268861232405,
+          "error_type": null
+        }
+      ],
+      "failure_reason": "numerical_case_failed",
+      "private_apply_result": {
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "public_summary": {
+        "status": "failed",
+        "task_score": 0.0,
+        "passed_cases": 0,
+        "total_cases": 21,
+        "contract_passed": true,
+        "matrix_free_guard_passed": true,
+        "failure_reason": "numerical_case_failed"
+      }
+    },
+    {
+      "schema_version": "effectslice-snap-mfse-score.v1",
+      "task_id": "SNAP-MFSE",
+      "metric_name": "registered_case_pass_rate",
+      "block": "eligibility",
+      "evidence_boundary": "Objective numerical score for one locked SNAP-MFSE patch and case block. Development scores do not establish EffectSlice effectiveness.",
+      "task_score": 0.0,
+      "success": false,
+      "patch_applied": true,
+      "matrix_free_guard_passed": true,
+      "guard_violations": [],
+      "contract_passed": true,
+      "contract_failures": [],
+      "case_scores": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "case_details": [
+        {
+          "case_id": "snap-mfse:eligibility:001",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:002",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:003",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:004",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:005",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:006",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:007",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:008",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:009",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:010",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:011",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:012",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:013",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:014",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:015",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:016",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:017",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:018",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:019",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:020",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:021",
+          "passed": false,
+          "error_type": "NameError"
+        }
+      ],
+      "failure_reason": "numerical_case_failed",
+      "private_apply_result": {
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "public_summary": {
+        "status": "failed",
+        "task_score": 0.0,
+        "passed_cases": 0,
+        "total_cases": 21,
+        "contract_passed": true,
+        "matrix_free_guard_passed": true,
+        "failure_reason": "numerical_case_failed"
+      }
+    },
+    {
+      "schema_version": "effectslice-snap-mfse-score.v1",
+      "task_id": "SNAP-MFSE",
+      "metric_name": "registered_case_pass_rate",
+      "block": "eligibility",
+      "evidence_boundary": "Objective numerical score for one locked SNAP-MFSE patch and case block. Development scores do not establish EffectSlice effectiveness.",
+      "task_score": 0.0,
+      "success": false,
+      "patch_applied": true,
+      "matrix_free_guard_passed": true,
+      "guard_violations": [],
+      "contract_passed": true,
+      "contract_failures": [],
+      "case_scores": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "case_details": [
+        {
+          "case_id": "snap-mfse:eligibility:001",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:002",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:003",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:004",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:005",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:006",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:007",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:008",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:009",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:010",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:011",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:012",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:013",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:014",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:015",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:016",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:017",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:018",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:019",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:020",
+          "passed": false,
+          "error_type": "NameError"
+        },
+        {
+          "case_id": "snap-mfse:eligibility:021",
+          "passed": false,
+          "error_type": "NameError"
+        }
+      ],
+      "failure_reason": "numerical_case_failed",
+      "private_apply_result": {
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "public_summary": {
+        "status": "failed",
+        "task_score": 0.0,
+        "passed_cases": 0,
+        "total_cases": 21,
+        "contract_passed": true,
+        "matrix_free_guard_passed": true,
+        "failure_reason": "numerical_case_failed"
+      }
+    }
+  ],
+  "input_tokens": 49726,
+  "output_tokens": 44064,
+  "transport_attempts": 16,
+  "elapsed_seconds": 458.048797,
+  "common_scaffold_sha256": "903785b3c7758109279f7b4a8c9ceed62a8543cb020d6ec6175055f636a3eda2",
+  "condition_context_sha256": "b1f938ce74d010e85c75383afc16af6ab810f34266f21fe0c8ccde508aa3891d",
+  "task_prompt_sha256": "b542599b62c925c3427fdf98c32b087f11e0bd8993ca8c37c4d15000c3805768",
+  "public_error": ""
+}

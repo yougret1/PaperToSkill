@@ -1,0 +1,51 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++import scipy.sparse.linalg as spla
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,38 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    if not np.issubdtype(counts.dtype, np.number):
++        raise ValueError("counts must be numeric")
++    if np.any(counts < 0):
++        raise ValueError("Negative values in counts")
++    if not np.all(np.isfinite(counts)):
++        raise ValueError("Nonfinite values in counts")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("All-zero cell rows")
++    if not isinstance(n_components, int) or n_components < 1 or n_components >= counts.shape[0]:
++        raise ValueError("n_components must be 1 <= n_components < n_cells")
++    
++    n = counts.shape[0]
++    # IDF scaling
++    df = np.count_nonzero(counts, axis=0).astype(float)
++    idf = np.log(n / (1.0 + df))
++    X = counts.astype(np.float64) * idf[np.newaxis, :]
++    
++    # Row normalization to unit L2 norm
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    row_norms[row_norms == 0] = 1.0  # avoid division by zero
++    X = X / row_norms  # rows with zero norm remain zero
++    
++    # Reproducibility
++    np.random.seed(random_state)
++    # Compute truncated SVD implicitly (matrix-free)
++    U, s, Vt = spla.svds(X, k=n_components, which='LM')
++    # Ensure descending order
++    idx = np.argsort(s)[::-1]
++    s = s[idx]
++    U = U[:, idx]
++    eigenvalues = s**2 - 1.0
++    return (eigenvalues, U)

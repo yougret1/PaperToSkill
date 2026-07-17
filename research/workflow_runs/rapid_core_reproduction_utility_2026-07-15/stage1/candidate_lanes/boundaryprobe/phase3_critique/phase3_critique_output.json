@@ -1,0 +1,125 @@
+{
+  "gap_closure_reject_check": {
+    "entries": [
+      {
+        "gap": "Under a limited initial budget, no retrieved frontier establishes that the observed low-fidelity score preserves the sign and ordering of paper interventions by the performance improvement they later produce on independently specified user tasks; a probe can therefore support the wrong go/no-go decision even when it is internally faithful.",
+        "main_pattern": "controlled_diagnostic_design",
+        "sub_pattern": "C02 (Design a Confound-Isolating Diagnostic)",
+        "tactical_failure_mode_quoted": "Papers attempting this tactic fail most often when the constructed instrument isolates the confound only inside an artificial regime and never demonstrates that the isolated signal transfers to real deployment conditions — the synthetic-to-real gap is asserted rather than shown. A third is the confirmatory benchmark — the instrument re-derives an already-documented limitation and surfaces nothing that was not knowable in advance, leaving reviewers without an actionable new finding.",
+        "reject_lessons_evaluated": [
+          {
+            "lesson_quoted": "A diagnostic that only re-confirms a shortcut already known in advance, surfacing no previously unmeasurable failure, is read as confirmatory rather than as a contribution.",
+            "candidate_match": "yes",
+            "reasoning": "The hook's sign reversal is a one-factor local response-surface manifestation of already-known task-specific utility and causal transportability, while the candidate does not identify a new estimand or mechanism beyond applying that structure to paper-method adoption."
+          },
+          {
+            "lesson_quoted": "Validating a synthetic-ground-truth instrument only on synthetic data, without demonstrating that the controlled finding transfers to real-world instances, leaves ecological validity unestablished and undermines the central claim.",
+            "candidate_match": "borderline",
+            "reasoning": "The held-out labels are saved outcomes from eight real-reuse rows, but the zero crossings are learned from validator-generated counterfactual levels and are not corroborated on naturally occurring deployment shifts."
+          },
+          {
+            "lesson_quoted": "Building the instrument around one contested definition of the target property means it cannot independently confirm that the definition is correct, and reviewers flag the resulting circularity.",
+            "candidate_match": "borderline",
+            "reasoning": "The locked task packet supplies much of the utility definition independently, but missing scales are imputed and both probe and held-out labels use the same constructed net-benefit functional, leaving construct validity unresolved."
+          },
+          {
+            "lesson_quoted": "Resting an unsupervised evaluation on the unverified premise that the systems under test can reliably judge one another stakes the entire method on an assumption that collapses under scrutiny.",
+            "candidate_match": "no",
+            "reasoning": "The oracle is the locked external scorer plus measured costs and saved adoption outcomes, not mutual judgment by the evaluated systems."
+          },
+          {
+            "lesson_quoted": "Pairing a single-task or small-sample instrument with broad capability claims triggers a scope-mismatch rejection, and assembling retrieval or engineering blocks without an isolating scientific insight reads as application rather than research.",
+            "candidate_match": "yes",
+            "reasoning": "The falsification study has only eight paper-task rows, yet the title and hook claim that BoundaryProbe reveals when paper methods pay off and improves adoption decisions beyond those eight rows."
+          }
+        ],
+        "verdict": "triggered"
+      },
+      {
+        "gap": "No retrieved frontier estimates net benefit after execution cost, adaptation effort, and regressions on task dimensions outside the paper's headline metric are deducted from gross performance gain.",
+        "main_pattern": "controlled_diagnostic_design",
+        "sub_pattern": "C02 (Design a Confound-Isolating Diagnostic)",
+        "tactical_failure_mode_quoted": "Papers attempting this tactic fail most often when the constructed instrument isolates the confound only inside an artificial regime and never demonstrates that the isolated signal transfers to real deployment conditions — the synthetic-to-real gap is asserted rather than shown. A third is the confirmatory benchmark — the instrument re-derives an already-documented limitation and surfaces nothing that was not knowable in advance, leaving reviewers without an actionable new finding.",
+        "reject_lessons_evaluated": [
+          {
+            "lesson_quoted": "A diagnostic that only re-confirms a shortcut already known in advance, surfacing no previously unmeasurable failure, is read as confirmatory rather than as a contribution.",
+            "candidate_match": "yes",
+            "reasoning": "Deducting execution, adaptation, and regression costs changes the utility functional but does not expose a previously unmeasurable confound; cost-sensitive treatment utility and local thresholding are established problem forms."
+          },
+          {
+            "lesson_quoted": "Validating a synthetic-ground-truth instrument only on synthetic data, without demonstrating that the controlled finding transfers to real-world instances, leaves ecological validity unestablished and undermines the central claim.",
+            "candidate_match": "borderline",
+            "reasoning": "Real saved adoption outcomes provide a limited external anchor, but eight rows do not establish that counterfactual one-factor boundaries survive real joint context changes."
+          },
+          {
+            "lesson_quoted": "Building the instrument around one contested definition of the target property means it cannot independently confirm that the definition is correct, and reviewers flag the resulting circularity.",
+            "candidate_match": "borderline",
+            "reasoning": "The dimensionless net-benefit formula is preregistered and partly user-specified, yet its normalization, weights, and imputed scales remain a single constructed definition whose correspondence to adoption utility is not independently validated."
+          },
+          {
+            "lesson_quoted": "Resting an unsupervised evaluation on the unverified premise that the systems under test can reliably judge one another stakes the entire method on an assumption that collapses under scrutiny.",
+            "candidate_match": "no",
+            "reasoning": "Scores, costs, and effort are externally locked or measured; no evaluated system serves as another system's oracle."
+          },
+          {
+            "lesson_quoted": "Pairing a single-task or small-sample instrument with broad capability claims triggers a scope-mismatch rejection, and assembling retrieval or engineering blocks without an isolating scientific insight reads as application rather than research.",
+            "candidate_match": "yes",
+            "reasoning": "Eight leave-one-task-out observations cannot support the general claim that the proposed functional and marginal boundaries screen paper-method adoption across paper families, tasks, models, or interacting contexts."
+          }
+        ],
+        "verdict": "triggered"
+      }
+    ],
+    "verdict": "triggered",
+    "reasoning": "Both controlled_diagnostic_design gaps trigger the confirmatory lesson because the claimed one-factor sign boundary is a paper-to-skill application of causal transportability and local response-surface reasoning rather than a new isolating discovery. The eight-row evaluation also triggers the quoted small-sample/broad-claim lesson, while its generated counterfactual levels leave ecological transfer only borderline."
+  },
+  "recipe_application_check": {
+    "entries": [
+      {
+        "gap": "Under a limited initial budget, no retrieved frontier establishes that the observed low-fidelity score preserves the sign and ordering of paper interventions by the performance improvement they later produce on independently specified user tasks; a probe can therefore support the wrong go/no-go decision even when it is internally faithful.",
+        "sub_pattern": "C02 (Design a Confound-Isolating Diagnostic)",
+        "tactical_pattern_quoted": "The shared move is to construct a controlled set of evaluation instances in which exactly one named confound is either structurally blocked or independently varied, then report the divergence between apparent and de-confounded performance as the primary result rather than an aggregate leaderboard score. The confounds attacked are recurring and specific — memorization/contamination, surface style, the generating source's capability, single-modality shortcuts, scoring-function nonlinearity, and task-format exposure — and the load-bearing artifact is always the controlled instance set paired with an oracle independent of the system under test.",
+        "instantiation_in_core_mechanism": "Steps 3-6 preregister one claim-task mismatch factor, generate matched levels while freezing every other field and seed, and score the minimal intervention against a locked external scorer; steps 7-8 report the resulting net-benefit response and zero crossing.",
+        "verdict": "applied"
+      },
+      {
+        "gap": "No retrieved frontier estimates net benefit after execution cost, adaptation effort, and regressions on task dimensions outside the paper's headline metric are deducted from gross performance gain.",
+        "sub_pattern": "C02 (Design a Confound-Isolating Diagnostic)",
+        "tactical_pattern_quoted": "The shared move is to construct a controlled set of evaluation instances in which exactly one named confound is either structurally blocked or independently varied, then report the divergence between apparent and de-confounded performance as the primary result rather than an aggregate leaderboard score. The confounds attacked are recurring and specific — memorization/contamination, surface style, the generating source's capability, single-modality shortcuts, scoring-function nonlinearity, and task-format exposure — and the load-bearing artifact is always the controlled instance set paired with an oracle independent of the system under test.",
+        "instantiation_in_core_mechanism": "The net-benefit functional deducts several costs and regressions, but no cost, effort, regression, or scoring-function confound is independently varied or blocked; the mechanism reuses the first gap's context perturbations and therefore enacts cost accounting rather than C02's distinctive confound-isolation move for this gap.",
+        "verdict": "bypassed"
+      }
+    ],
+    "verdict": "bypassed",
+    "reasoning": "The first gap applies C02 through single-factor matched instances, but the second gap only replaces gross score with a composite net-benefit functional. It does not isolate a cost-accounting confound or report apparent-versus-de-confounded divergence for that gap."
+  },
+  "anti_pattern_check": {
+    "composition_set": [
+      "controlled_diagnostic_design"
+    ],
+    "matched_pattern_id": null,
+    "required_mitigation_quoted": null,
+    "mitigation_substantively_delivered": "n/a",
+    "reasoning": "The unique main-pattern set contains only controlled_diagnostic_design, so none of the three heterogeneous_decomposition compositions matches."
+  },
+  "paper_pointed_threat": {
+    "threat_paper_id": "semanticscholar:49b60f4ffa36e2b2a225484a22ce22988d0b6dbd",
+    "threat_source": "collision_hits",
+    "threat_channel": "alias",
+    "subsumption_argument": "The retrieved abstract-level result identifies and estimates target-population causal measures under covariate shift, so BoundaryProbe's broad novelty claim stands or falls on showing that claim-conditioned perturbation construction and cost-adjusted adoption decisions add more than a domain-specific estimator of context-dependent effect sign. Because collision coverage is degraded and the hit is marked partial, this is not evidence of exact-mechanism overlap; it is a high-priority ancestor-family threat that the current differentiation fields do not resolve.",
+    "addressable_via": "Narrow the hook and differentiation_from_lit to the independently testable diagnostic artifact, and make core_mechanism explain what is identifiable from claim-derived matched probes that standard target-population treatment-effect transport cannot identify.",
+    "parametric_family_concern": "Response-surface methodology and threshold/change-point regression; scoop-check 'local response surface zero crossing' and 'threshold regression treatment benefit'."
+  },
+  "falsification_structure_check": {
+    "minimal_experiment_named": "yes",
+    "outcome_metric_named": "yes",
+    "load_bearing_variable": "the claim-task boundary margin M, the minimum standardized distance from the actual context to a factor's estimated zero crossing",
+    "negative_control_target": "outcome_metric",
+    "verdict": "sound",
+    "reasoning": "The eight-row leave-one-task-out comparison names benefit-sign balanced accuracy and false-adoption direction, and factor-identity permutation intervenes on M while predicting downstream balanced accuracy returns to baseline."
+  },
+  "verdict": "abandon",
+  "verdict_layer": "hard_floor",
+  "verdict_rationale": "gap_closure_reject_check.entries[0].reject_lessons_evaluated[0].lesson_quoted and entries[1].reject_lessons_evaluated[0].lesson_quoted are triggered: the one-factor sign boundary largely re-expresses causal transportability/local response-surface structure in a new application domain. The quoted small-sample/scope lesson is also triggered by an eight-row study paired with general paper-method adoption claims; recipe_application_check.entries[1].verdict is additionally bypassed because cost accounting does not instantiate a second C02 isolation. The alias threat is partial under degraded coverage, so it does not itself trigger the exact-mechanism hard floor.",
+  "revision_targets": []
+}

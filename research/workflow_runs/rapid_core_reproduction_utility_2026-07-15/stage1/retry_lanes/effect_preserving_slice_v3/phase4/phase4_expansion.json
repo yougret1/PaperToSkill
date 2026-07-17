@@ -1,0 +1,895 @@
+{
+  "title": "EffectSlice: Eligibility-Gated Certificates for Task-Local Procedural Effects",
+  "title_zh": "EffectSlice：任务局部过程效应的资格门控证书",
+  "method_name": "EffectSlice",
+  "hook": "Once a complete paper-derived skill has a sealed positive net effect on one locked user task, a nonempty source-grounded slice may preserve that effect while executing fewer procedures. EffectSlice certifies only this task-local reduction and abstains when the full effect, units, statistical family, or complete neighbor audit is invalid.",
+  "abstract_draft": "Paper-derived skills can reproduce a method yet remain too large, costly, or brittle for a particular user task. The unresolved question is not whether a skill can be shortened, but whether a strict subset preserves the complete skill's positive cost-adjusted effect on an independently locked task. Existing systems evaluate full skills, reproduce papers, or compile compact artifacts, but they do not bind reduction to a sealed eligibility and effect-preservation decision; this gap remains after A Framework for Evaluating Agentic Skills at Scale [arxiv:2606.17819v1] and PaperBench [arxiv:2504.01848v3]. We propose EffectSlice, a reducer-agnostic certificate protocol that first admits only complete artifacts with a positive paired effect, compiles deterministic source-grounded procedure atoms, uses an exact strongly connected component quotient, and accepts a nonempty compact slice only after corrected confirmation against the full artifact, contracts, guardrails, and all retained-unit deletion neighbors. The proposal is falsified if, on genuinely new paper-task pairs, its admitted slices do not improve the correctly admitted compact-artifact rate over matched ClawTrace, Graph-of-Skills, and SkillRAE outputs, or if permuting the discovery margin does not degrade the downstream effect gap. The expected outcome is a task-local decision procedure that tells users when fewer paper-derived procedures preserve measured benefit, while returning an explicit abstention whenever the evidence or representation is invalid.",
+  "motivation": {
+    "problem_framing": "PaperToSkill can turn a paper into an executable artifact, but successful reproduction does not answer a user's practical question: which procedures are actually needed for this independently specified task, and does removing the rest preserve the benefit after execution cost and regressions are counted? The bottleneck identified in Phase 1 is a decision-validity problem. A low-cost score may look faithful inside the generated workflow while reversing the sign or ordering of the intervention's later effect on the user's task.\n\nThe closest systems stop on either side of this decision. PaperBench [arxiv:2504.01848v3] and AutoReproduce [arxiv:2505.20662v4] test or automate reproduction, while A Framework for Evaluating Agentic Skills at Scale [arxiv:2606.17819v1] measures skill utility and SkillFoundry [arxiv:2604.03964v1] constructs reusable skills. Compact-artifact systems can prune or retrieve procedures, but compactness alone does not establish that the complete artifact was beneficial, that a strict nonempty subset preserved its cost-adjusted effect, or that the claim survived a sealed family of contract and guardrail checks. EffectSlice therefore reframes the object of interest from 'a shorter skill' to 'a task-local admission certificate for a shorter skill.'",
+    "why_now": "This gap is timely because the 2026 wave of agent-skill evaluation and compilation work supplies the missing infrastructure without yet solving the admission question: A Framework for Evaluating Agentic Skills at Scale [arxiv:2606.17819v1] makes skill effects measurable, while SkillFoundry [arxiv:2604.03964v1], ClawTrace [arxiv:2604.23853v2], and Graph-of-Skills [arxiv:2604.05333v3] make generated or compact procedural artifacts available as frozen candidates. Deterministic parsers, source maps, execution traces, and paired task scorers now make it practical to bind those candidates to explicit units and untouched confirmation runs. The contribution can therefore be tested as a reducer-agnostic admission decision rather than as another pruning algorithm.",
+    "why_prior_stopped": [
+      {
+        "paper_id": "arxiv:2606.17819v1",
+        "venue_year": "arXiv 2026",
+        "what_they_did": "A Framework for Evaluating Agentic Skills at Scale measured the utility of complete agent skills on tasks synthesized from the evaluated skill.",
+        "what_they_did_not_do": "It did not condition certification on an independently supplied user task or test whether a strict nonempty subset preserves a complete skill's positive cost-adjusted effect.",
+        "structural_reason_they_stopped": "Its measurement object is whole-skill utility rather than a source-grounded subset with a sealed equivalence and abstention protocol."
+      },
+      {
+        "paper_id": "arxiv:2504.01848v3",
+        "venue_year": "arXiv 2025",
+        "what_they_did": "PaperBench introduced execution-verified, granular evaluation of AI systems attempting to replicate AI research.",
+        "what_they_did_not_do": "It did not decide whether a paper-derived procedural subset remains beneficial on an independently locked user task after local costs and guardrail regressions are deducted.",
+        "structural_reason_they_stopped": "The benchmark measures replication success, not paired task-local treatment effects or statistically corrected subset admission."
+      },
+      {
+        "paper_id": "arxiv:2505.20662v4",
+        "venue_year": "ACL 2025",
+        "what_they_did": "AutoReproduce automated substantial parts of the workflow needed to reproduce machine-learning research results.",
+        "what_they_did_not_do": "It did not certify that fewer frozen procedures preserve the complete reproduction artifact's effect, contract, and guardrails on a separate user task.",
+        "structural_reason_they_stopped": "Its endpoint is successful reproduction, so it lacks a positive-full-effect gate, deterministic subset units, and an untouched confirmation family for reduction decisions."
+      },
+      {
+        "paper_id": "arxiv:2604.03964v1",
+        "venue_year": "arXiv 2026",
+        "what_they_did": "SkillFoundry constructed reusable agent skills from generated experience and evaluated the resulting skill behavior.",
+        "what_they_did_not_do": "It did not require the complete artifact to show a sealed positive effect before admitting a smaller source-grounded slice on an independently specified task.",
+        "structural_reason_they_stopped": "Its contribution centers on skill construction, not on a reducer-agnostic causal admission layer with corrected equivalence, guardrail, and retained-deletion evidence."
+      }
+    ],
+    "what_changes_when_gap_closes": "A user can make an evidence-backed adopt, reduce, or abstain decision for one paper-task pair instead of treating successful reproduction or a compact artifact as proof of usefulness. Reproduction systems such as PaperBench [arxiv:2504.01848v3] and AutoReproduce [arxiv:2505.20662v4], and skill systems such as A Framework for Evaluating Agentic Skills at Scale [arxiv:2606.17819v1], could pass their outputs through the same task-local gate, making compactness and utility claims comparable under one explicit error budget."
+  },
+  "core_claim": "For an independently locked user task, EffectSlice can certify that a strict nonempty source-grounded subset preserves an eligible complete paper-derived artifact's positive cost-adjusted effect, contract, and guardrails, while abstaining whenever the claim cannot be supported.",
+  "sub_claims": [
+    {
+      "id": "c1",
+      "statement": "The positive-full-effect eligibility gate prevents an ineffective complete artifact or a no-skill-equivalent subset from being certified.",
+      "supports_which_aspect": "Closes the sign-validity gap between internal reproduction fidelity and downstream user-task benefit."
+    },
+    {
+      "id": "c2",
+      "statement": "Deterministic four-way procedure atoms and the exact SCC quotient preserve the dependency-closed candidate family without semantic merging or learned tie-breaking.",
+      "supports_which_aspect": "Makes the object being reduced source-grounded, auditable, and representation-faithful."
+    },
+    {
+      "id": "c3",
+      "statement": "A sealed corrected family can admit a slice only when its cost-adjusted paired effect, contract, and guardrails match the eligible complete artifact and every retained-unit deletion neighbor fails.",
+      "supports_which_aspect": "Closes the net-benefit and multiple-testing gap for adaptive subset selection."
+    },
+    {
+      "id": "c4",
+      "statement": "Applying the identical gate to EffectSlice and direct compact-artifact baselines isolates the proposed admission decision from the reducer used to generate a candidate.",
+      "supports_which_aspect": "Separates the claimed certificate contribution from prior pruning, retrieval, and program-reduction machinery."
+    }
+  ],
+  "key_equations": [
+    {
+      "id": "e1",
+      "linked_step_id": "S3",
+      "latex": "L_F = \\operatorname{LCB}_{1-\\alpha_F}\\!\\left(\\Delta_\\tau(F)\\right) > \\delta_{\\min}",
+      "description": "The complete artifact is eligible only when the simultaneous lower confidence bound of its cost-adjusted effect exceeds the preregistered minimum benefit.",
+      "description_zh": "仅当完整产物的成本调整效应下置信界 L_F 严格超过预注册最小收益 δ_min 时，才允许继续切片。"
+    },
+    {
+      "id": "e2",
+      "linked_step_id": "S6",
+      "latex": "\\Phi(S)=\\{C\\in\\operatorname{SCC}(G):C\\subseteq S\\},\\quad \\operatorname{Union}(\\Phi(S))=S",
+      "description": "The SCC projection and inverse form an exact correspondence between dependency-closed atom subsets and downward-closed quotient subsets.",
+      "description_zh": "SCC 投影 Φ 与逆映射 Union 在依赖闭合原子子集和商图向下闭合子集之间保持精确对应。"
+    },
+    {
+      "id": "e3",
+      "linked_step_id": "S6",
+      "latex": "\\Delta_D(T)=\\Delta_G(\\operatorname{Union}(T))",
+      "description": "Quotienting changes neither the feasible artifact represented by a subset nor its measured task effect.",
+      "description_zh": "商图压缩不改变子集对应的可行产物，也不改变其测得的任务效应 Δ。"
+    },
+    {
+      "id": "e4",
+      "linked_step_id": "S9",
+      "latex": "G_\\tau(T)=\\Delta_\\tau(\\operatorname{Union}(T))-\\Delta_\\tau(F),\\quad M_\\tau(T)=\\epsilon-\\sup_{g\\in I_\\tau(T)}|g|",
+      "description": "The discovery margin is positive only when the entire simultaneous confidence interval for the slice-to-full effect gap lies inside the equivalence band.",
+      "description_zh": "只有切片相对完整产物的效应差置信区间 I_τ(T) 全部落入等效带时，发现裕量 M_τ(T) 才为正。"
+    },
+    {
+      "id": "e5",
+      "linked_step_id": "S9",
+      "latex": "\\alpha_{D,q}=\\frac{6\\alpha_D}{\\pi^2q^2},\\quad \\alpha_F+\\alpha_D+\\alpha_C\\leq\\alpha_{\\mathrm{total}}",
+      "description": "Predictable discovery allocations and sealed family budgets control repeated adaptive queries without reallocating error after outcomes.",
+      "description_zh": "可预测的发现阶段分配与封存的检验族预算约束自适应重复查询，结果出现后不得重分配错误率。"
+    }
+  ],
+  "method_flow": {
+    "high_level_pipeline": "EffectSlice begins with one paper, one independently locked task, a complete paper-derived artifact, and a same-scaffold no-skill baseline. It first proves that the complete artifact has a positive cost-adjusted effect, then compiles every executable procedure into deterministic source-grounded atoms and an exact dependency quotient. A reducer may propose candidate slices, but every candidate is judged by fresh paired executions, a fixed error ledger, and a complete retained-unit deletion audit. Untouched confirmation applies the same admission gate to EffectSlice, a permuted-margin control, and direct compact-artifact baselines, producing either a task-local certificate or a specific abstention reason.",
+    "steps": [
+      {
+        "step_id": "S1",
+        "title": "Freeze the task manifest",
+        "what_changes": "Serialize the task cases, weights, primary and guardrail scorers, contract roles, B, F, δ_min, ε, η_j, cost weights, α families, Q, parser versions, and seed pools into an immutable manifest.",
+        "why_this_step": "Precommitment prevents the task, units, margins, and error budget from adapting to observed slice outcomes.",
+        "linked_component": "engineering",
+        "linked_falsification": "metric_specification",
+        "input": "One paper p, locked task τ, complete artifact F, same-scaffold baseline B, scorers, contracts, and budgets.",
+        "output": "Hashed immutable experiment and parsing manifest."
+      },
+      {
+        "step_id": "S2",
+        "title": "Execute paired full-artifact branches",
+        "what_changes": "Run F and B on the sealed eligibility seeds and record paired primary scores, measured GPU/API/labor costs, contracts, and guardrails.",
+        "why_this_step": "The complete artifact must be measured as an intervention on the user's task before any reduction claim is meaningful.",
+        "linked_component": "engineering",
+        "linked_falsification": "metric_specification",
+        "input": "Immutable manifest, F, B, and eligibility seed pool.",
+        "output": "Paired full-artifact outcome ledger."
+      },
+      {
+        "step_id": "S3",
+        "title": "Gate on positive full effect",
+        "what_changes": "Compute Δ_τ(F) and its simultaneous one-sided lower bound L_F, and continue only when L_F > δ_min with every contract and guardrail condition passing.",
+        "why_this_step": "This eligibility rule blocks certification when the full paper-derived artifact has no validated task-local benefit.",
+        "linked_component": "theory",
+        "linked_falsification": "metric_specification",
+        "input": "Paired full-artifact outcome ledger and α_F.",
+        "output": "Eligible-F record or no_validated_beneficial_effect abstention."
+      },
+      {
+        "step_id": "S4",
+        "title": "Compile source-grounded atoms",
+        "what_changes": "Parse SKILL.md leaves and intersect each with an exact source_map span, pinned executable region, and one contract role; split only at explicit boundaries and abstain on ambiguity.",
+        "why_this_step": "A deterministic four-way tuple makes each retained procedure auditable and avoids semantic or LLM-selected units.",
+        "linked_component": "engineering",
+        "linked_falsification": "mechanism_distinguisher",
+        "input": "Frozen artifact files, source maps, executable symbols or tool templates, role vocabulary, and pinned parser.",
+        "output": "Ordered atom inventory or ambiguous_atomization abstention."
+      },
+      {
+        "step_id": "S5",
+        "title": "Build the dependency graph",
+        "what_changes": "Create G=(V,E) over the frozen atoms, with u→v exactly when executing u requires v, and mechanically validate every recorded edge against the executor.",
+        "why_this_step": "Candidate subsets must remain executable and dependency-closed rather than merely semantically compact.",
+        "linked_component": "engineering",
+        "linked_falsification": "mechanism_distinguisher",
+        "input": "Ordered atom inventory and frozen executor dependencies.",
+        "output": "Validated original dependency graph G."
+      },
+      {
+        "step_id": "S6",
+        "title": "Condense and verify the exact quotient",
+        "what_changes": "Compute the SCC condensation D, emit Φ and Union, verify the dependency-closed/downward-closed bijection and Δ_D(T)=Δ_G(Union(T)), and abstain when D has more than 16 nodes.",
+        "why_this_step": "SCC condensation supplies the single tractability compression while preserving the feasible family and measured effect exactly.",
+        "linked_component": "both",
+        "linked_falsification": "mechanism_distinguisher",
+        "input": "Validated dependency graph G and frozen executor.",
+        "output": "Verified quotient D with inverse maps, or granularity_out_of_scope."
+      },
+      {
+        "step_id": "S7",
+        "title": "Register candidates and reserve audit budget",
+        "what_changes": "Define only nonempty, source-valid, executable, contract-passing downward-closed candidates smaller than F, reserve N of Q=24 for all final deletion neighbors, and expose at most Q-N discovery slots.",
+        "why_this_step": "The complete neighbor audit cannot be traded away after an attractive discovery result appears.",
+        "linked_component": "engineering",
+        "linked_falsification": "metric_specification",
+        "input": "Verified quotient D, atom inventory, Q, N, contracts, and source-validity rules.",
+        "output": "Frozen candidate predicate and query-budget ledger."
+      },
+      {
+        "step_id": "S8",
+        "title": "Propose slices without seeing fresh outcomes",
+        "what_changes": "Let an interchangeable reducer propose T_q from prior discovery data before revealing its fresh paired T_q/F/B seed block, then log T_q and α_{D,q}.",
+        "why_this_step": "Reducer-agnostic proposal and delayed outcome access separate candidate generation from the claimed admission mechanism.",
+        "linked_component": "engineering",
+        "linked_falsification": "mechanism_distinguisher",
+        "input": "Registered candidate family, prior discovery ledger, and any frozen reducer.",
+        "output": "Pre-outcome candidate T_q with predictable test allocation."
+      },
+      {
+        "step_id": "S9",
+        "title": "Measure and filter discovery slices",
+        "what_changes": "Execute fresh paired T_q, F, and B branches, update I_τ(T_q) and M_τ(T_q), and retain only candidates with M_τ(T_q)>0 and no corrected contract or guardrail failure.",
+        "why_this_step": "A positive margin ties selection to downstream equivalence with F rather than to size, attribution, or internal proxy scores.",
+        "linked_component": "theory",
+        "linked_falsification": "both",
+        "input": "Pre-outcome T_q, fresh paired seeds, α_{D,q}, scorers, contracts, and guardrails.",
+        "output": "Corrected discovery ledger and surviving candidate set."
+      },
+      {
+        "step_id": "S10",
+        "title": "Lock the slice and audit every deletion neighbor",
+        "what_changes": "Choose T_star under the frozen rule, enumerate each dependency-relative retained-SCC deletion neighbor, and require every neighbor to fail a corrected effect, contract, or guardrail condition within Q.",
+        "why_this_step": "A complete registered neighbor scan supports task-local irreducibility and turns missing budget into abstention rather than selective evidence.",
+        "linked_component": "both",
+        "linked_falsification": "mechanism_distinguisher",
+        "input": "Surviving candidates, quotient dependencies, reserved neighbor budget, and frozen selection rule.",
+        "output": "Locked T_star with complete neighbor evidence, or an insufficiency abstention."
+      },
+      {
+        "step_id": "S11",
+        "title": "Run sealed confirmation and matched admissions",
+        "what_changes": "On untouched seeds, rerun F, B, T_star, all registered neighbors, the M_τ-permuted control, and frozen direct ClawTrace, Graph-of-Skills, and SkillRAE outputs; pass each compact output through the identical atom, eligibility, contract, guardrail, and H_C gate.",
+        "why_this_step": "The common gate makes correctly admitted compact-artifact rate and false admission the mechanism-level comparison, independent of the reducer.",
+        "linked_component": "both",
+        "linked_falsification": "both",
+        "input": "Locked hypotheses, untouched confirmation seeds, direct baseline outputs, and sealed H_C ledger.",
+        "output": "Cert_τ for a passing nonempty T_star, or a corrected rejection/abstention record for every output."
+      },
+      {
+        "step_id": "S12",
+        "title": "Freeze development and report held-out decisions",
+        "what_changes": "After development on eight existing tasks, freeze code and manifests, evaluate at least four new paper-task pairs, and keep every ineligible, ambiguous, oversized, empty, or under-budget case in the reported denominator.",
+        "why_this_step": "Genuinely new pairs test task-local transport of the admission protocol and prevent favorable abstentions from disappearing from the claim.",
+        "linked_component": "engineering",
+        "linked_falsification": "metric_specification",
+        "input": "Frozen implementation and new complete paper-task pairs with source maps, artifacts, assets, and scorers.",
+        "output": "Held-out correctly admitted compact-artifact, false-admission, cost, and abstention rates."
+      }
+    ],
+    "design_reasoning_echo": "The two selected gaps are handled by one certificate object: faithfulness is defined by the complete artifact's downstream paired effect, while usefulness deducts measured execution and regression costs from that same effect. Deterministic four-way atoms and an exact SCC quotient were chosen because they preserve the candidate family and its executor-defined effect; learned pruning, semantic merging, and approximate graph embeddings would make the certified object ambiguous. Search, quotienting, provenance, equivalence tests, and local minimality remain interchangeable infrastructure, so the defensible contribution is narrowly the positive-full-effect eligibility and sealed task-local admission decision."
+  },
+  "plain_motivation_en": "A system can reproduce a paper and still leave a user with a large procedure that is expensive or unnecessary for the user's own task. A short version is not automatically useful: the complete version may never have helped, the removed steps may matter only on the user's data, or the apparent gain may disappear after execution cost and safety regressions are counted.\n\nPaperBench and AutoReproduce help evaluate or automate research reproduction. A Framework for Evaluating Agentic Skills at Scale measures whole-skill utility, and newer systems can generate, trace, retrieve, or compress skill procedures. What is still missing is a fair decision rule for one independently chosen task: first prove that the complete skill helps, then ask whether a strict nonempty subset keeps the same measured benefit.\n\nEffectSlice makes that decision explicit. It turns procedures into deterministic source-linked units, keeps dependencies exact through strongly connected component (SCC) condensation, and tests candidate subsets with fresh paired runs. It issues a certificate only when the compact version stays within ε of the complete version, preserves contracts and guardrails, and survives a corrected audit of every retained-unit deletion. The same gate is applied to outputs from other compact-skill methods. The result is not a claim that one reducer is universally best; it is a task-local answer to adopt, reduce, or abstain.",
+  "plain_motivation_zh": "系统能够复现论文，并不等于用户应该把整套流程搬到自己的任务里。完整流程可能从未带来净收益，删除的步骤也可能只在用户数据上起作用；如果把 GPU、API、人工成本和安全回退算进去，看似有效的方法甚至可能变成负收益。\n\nPaperBench 和 AutoReproduce 解决的是复现评测或复现自动化，A Framework for Evaluating Agentic Skills at Scale 评估完整 skill 的效用，近期系统还可以生成、追踪、检索或压缩 skill。仍然缺少的是针对一个独立指定任务的公平判定：先证明完整 skill 确实有用，再判断一个严格非空的子集能否保留同样的效果。\n\nEffectSlice 把这个判定做成明确的证书流程。它把过程编译为确定、可追溯到源码的原子，用 SCC 压缩精确保留依赖关系，再通过新的配对运行评估候选子集。只有当精简版本与完整版本的效应差处于 ε 范围内，同时满足 contract、guardrail 以及全部保留单元删除邻居的校正检查时，系统才发证书。其他压缩方法的输出也经过同一扇门，因此最终给用户的是针对当前任务的采用、精简或弃权结论，而不是声称某个 reducer 普遍最好。",
+  "plain_method_steps_en": [
+    {
+      "step_id": "S1",
+      "what_to_do": "Write every task case, scorer, threshold, cost, error budget, parser version, and seed pool into a hashed manifest before running anything.",
+      "why_this_makes_sense": "The decision rules cannot move after favorable or unfavorable slice results appear."
+    },
+    {
+      "step_id": "S2",
+      "what_to_do": "Run the complete artifact F and same-scaffold no-skill baseline B on the sealed eligibility seeds and record paired scores, costs, contracts, and guardrails.",
+      "why_this_makes_sense": "Reduction matters only relative to a measured full intervention on the user's task."
+    },
+    {
+      "step_id": "S3",
+      "what_to_do": "Continue only if the lower bound L_F of the cost-adjusted effect is above δ_min and every contract and guardrail passes.",
+      "why_this_makes_sense": "This prevents an ineffective complete artifact from lending credibility to an ineffective subset."
+    },
+    {
+      "step_id": "S4",
+      "what_to_do": "Turn SKILL.md procedures into units that each have one workflow step, exact source span, pinned executable region, and one contract role; abstain on ambiguity.",
+      "why_this_makes_sense": "Every retained or removed procedure remains traceable and reproducible."
+    },
+    {
+      "step_id": "S5",
+      "what_to_do": "Build a graph where u→v means procedure u requires procedure v, and check the edges against the frozen executor.",
+      "why_this_makes_sense": "A compact subset must still be executable, not just look semantically coherent."
+    },
+    {
+      "step_id": "S6",
+      "what_to_do": "Condense strongly connected components, verify Φ and Union exactly preserve all dependency-closed subsets and Δ, and abstain when N>16.",
+      "why_this_makes_sense": "The search becomes smaller without changing which executable artifacts can be certified."
+    },
+    {
+      "step_id": "S7",
+      "what_to_do": "Allow only strict nonempty valid subsets, reserve N of Q=24 tests for every final deletion neighbor, and use only the remaining Q-N tests for discovery.",
+      "why_this_makes_sense": "The final audit budget cannot be consumed by exploratory search."
+    },
+    {
+      "step_id": "S8",
+      "what_to_do": "Let any frozen reducer propose T_q before revealing the fresh T_q/F/B outcomes, then log T_q and α_{D,q}.",
+      "why_this_makes_sense": "Candidate generation stays separate from the admission test and its unseen evidence."
+    },
+    {
+      "step_id": "S9",
+      "what_to_do": "Run fresh paired branches and retain T_q only when M_τ(T_q)>0 with no corrected contract or guardrail failure.",
+      "why_this_makes_sense": "Selection depends on the downstream effect gap to F, not an internal compactness proxy."
+    },
+    {
+      "step_id": "S10",
+      "what_to_do": "Lock T_star, enumerate every dependency-relative deletion neighbor, and require every neighbor to fail within the reserved Q budget.",
+      "why_this_makes_sense": "The certificate cannot call a retained procedure necessary while leaving an unchecked deletion."
+    },
+    {
+      "step_id": "S11",
+      "what_to_do": "On untouched seeds, test F, B, T_star, all neighbors, the permuted-M_τ control, and direct ClawTrace, Graph-of-Skills, and SkillRAE outputs through the same sealed H_C gate.",
+      "why_this_makes_sense": "A common admission protocol isolates the certificate from whichever reducer proposed the compact artifact."
+    },
+    {
+      "step_id": "S12",
+      "what_to_do": "Freeze development after eight existing tasks, evaluate at least four new paper-task pairs, and report every abstention in the denominator.",
+      "why_this_makes_sense": "Held-out pairs and visible abstentions test whether the decision is useful beyond the development cases."
+    }
+  ],
+  "plain_method_steps_zh": [
+    {
+      "step_id": "S1",
+      "what_to_do": "运行前，把任务样例、scorer、阈值、成本、错误预算、parser 版本和 seed 池写入带哈希的固定 manifest。",
+      "why_this_makes_sense": "这样看到有利或不利结果后都不能移动判定规则。"
+    },
+    {
+      "step_id": "S2",
+      "what_to_do": "在封存的资格 seed 上运行完整产物 F 和同脚手架无 skill 基线 B，记录配对分数、成本、contract 与 guardrail。",
+      "why_this_makes_sense": "只有先测量完整方法对用户任务的干预，精简才有参照。"
+    },
+    {
+      "step_id": "S3",
+      "what_to_do": "仅当成本调整效应的下界 L_F 高于 δ_min，且所有 contract 和 guardrail 通过时继续。",
+      "why_this_makes_sense": "完整产物无效时，任何子集都不能借它获得可信度。"
+    },
+    {
+      "step_id": "S4",
+      "what_to_do": "把 SKILL.md 过程编译成四元原子，每个原子只对应一个 workflow step、精确 source span、固定 executable region 和一个 contract role；有歧义就弃权。",
+      "why_this_makes_sense": "每个保留或删除的过程都能回溯并复现。"
+    },
+    {
+      "step_id": "S5",
+      "what_to_do": "建立依赖图，u→v 表示过程 u 需要过程 v，并用冻结 executor 检查所有边。",
+      "why_this_makes_sense": "精简子集必须仍可执行，不能只在语义上看起来完整。"
+    },
+    {
+      "step_id": "S6",
+      "what_to_do": "压缩 SCC，验证 Φ、Union 与 Δ 精确保留全部依赖闭合子集；当 N>16 时弃权。",
+      "why_this_makes_sense": "它缩小搜索对象，却不改变哪些可执行产物能够被认证。"
+    },
+    {
+      "step_id": "S7",
+      "what_to_do": "只允许严格非空且有效的子集，从 Q=24 中预留 N 次用于全部最终删除邻居，其余 Q-N 次才能用于发现。",
+      "why_this_makes_sense": "探索过程不能吃掉最终完整审计所需的预算。"
+    },
+    {
+      "step_id": "S8",
+      "what_to_do": "任意冻结的 reducer 都可以在新 T_q/F/B 结果揭示前提出 T_q，随后记录 T_q 与 α_{D,q}。",
+      "why_this_makes_sense": "候选生成与使用未知证据的准入判定保持分离。"
+    },
+    {
+      "step_id": "S9",
+      "what_to_do": "运行新的配对分支，仅当 M_τ(T_q)>0 且没有校正后的 contract 或 guardrail 失败时保留 T_q。",
+      "why_this_makes_sense": "选择依据是相对 F 的下游效应差，而不是内部紧凑度代理。"
+    },
+    {
+      "step_id": "S10",
+      "what_to_do": "锁定 T_star，枚举全部依赖相对删除邻居，并要求每个邻居都在预留 Q 预算内失败。",
+      "why_this_makes_sense": "存在未检查的删除时，证书不能声称某个保留过程是必要的。"
+    },
+    {
+      "step_id": "S11",
+      "what_to_do": "在未使用的 seed 上，让 F、B、T_star、全部邻居、置乱 M_τ 对照以及 ClawTrace、Graph-of-Skills、SkillRAE 的直接输出经过同一封存 H_C gate。",
+      "why_this_makes_sense": "同一准入协议把证书效果与提出候选的 reducer 区分开。"
+    },
+    {
+      "step_id": "S12",
+      "what_to_do": "在八个现有任务开发后冻结实现，再评估至少四个新 paper-task pair，并把所有弃权保留在分母中。",
+      "why_this_makes_sense": "新任务与可见弃权能够检验判定是否超出开发样例仍然有用。"
+    }
+  ],
+  "plain_method_modules_en": [
+    {
+      "module_id": "M1 Eligibility Gate",
+      "purpose_oneline": "Establish that the complete artifact has a sealed positive task-local net effect before reduction.",
+      "step_ids": [
+        "S1",
+        "S2",
+        "S3"
+      ]
+    },
+    {
+      "module_id": "M2 Exact Procedural Object",
+      "purpose_oneline": "Compile auditable source units and reduce the feasible family through an exact dependency quotient.",
+      "step_ids": [
+        "S4",
+        "S5",
+        "S6",
+        "S7"
+      ]
+    },
+    {
+      "module_id": "M3 Slice Admission",
+      "purpose_oneline": "Generate candidates independently of fresh outcomes and certify a locked locally irreducible slice.",
+      "step_ids": [
+        "S8",
+        "S9",
+        "S10"
+      ]
+    },
+    {
+      "module_id": "M4 Sealed Comparison",
+      "purpose_oneline": "Apply one corrected gate to controls and baselines, then report held-out decisions including abstentions.",
+      "step_ids": [
+        "S11",
+        "S12"
+      ]
+    }
+  ],
+  "plain_method_modules_zh": [
+    {
+      "module_id": "M1 资格门控",
+      "purpose_oneline": "在精简前确认完整产物具有封存的任务局部正净效应。",
+      "step_ids": [
+        "S1",
+        "S2",
+        "S3"
+      ]
+    },
+    {
+      "module_id": "M2 精确过程对象",
+      "purpose_oneline": "编译可审计源码单元，并通过精确依赖商图缩小可行候选族。",
+      "step_ids": [
+        "S4",
+        "S5",
+        "S6",
+        "S7"
+      ]
+    },
+    {
+      "module_id": "M3 切片准入",
+      "purpose_oneline": "在不窥视新结果的前提下生成候选，并认证锁定且局部不可再减的切片。",
+      "step_ids": [
+        "S8",
+        "S9",
+        "S10"
+      ]
+    },
+    {
+      "module_id": "M4 封存比较",
+      "purpose_oneline": "让对照与基线经过同一校正 gate，并在保留弃权的条件下报告 held-out 判定。",
+      "step_ids": [
+        "S11",
+        "S12"
+      ]
+    }
+  ],
+  "falsification_prediction": "After development on the existing eight tasks, freeze the parser, atomization, quotient, eligibility rule, margins, alpha families, Q ledger, search worker, and budgets, then acquire at least four genuinely new paper-task pairs with untouched source maps, complete artifacts, assets, and scorers; run EffectSlice and direct ClawTrace, Graph-of-Skills, and SkillRAE baselines under matched task and branch budgets. Among held-out pairs whose F has sealed L_F>delta_min, a successful mechanism should increase the rate of nonempty compact artifacts whose untouched-confirmation paired effect gap remains inside [-epsilon,epsilon] with no corrected contract or guardrail failure, while reducing original procedure count and measured local cost relative to F; all abstentions remain in the denominator. The single load-bearing variable is M_tau(T)=epsilon-sup{|g|:g in I_tau(T)}. As a negative control, permute discovery M_tau labels among same-size contract-passing candidates before selection and evaluate the selected candidate on untouched confirmation seeds; its downstream paired effect gap should leave [-epsilon,epsilon] and move toward the no-skill baseline more often than for the unpermuted worker.",
+  "compute_budget": "Upper-bound campaign: 12 tasks total (8 development plus at least 4 genuinely new held-out), N<=16 SCC atoms, Q=24 distinct slice hypotheses including at most Q-N=8 adaptive discovery candidates and up to N=16 final deletion neighbors, two fresh paired discovery seeds per T/F/B branch, three sealed F/B eligibility seeds, and five confirmation seeds for F, B, T_star, up to 16 deletion neighbors, the M_tau-permuted control, and three direct baselines. This is at most 48 discovery + 6 eligibility + 115 confirmation = 169 branch-runs per task, or 2,028 branch-runs total; at preregistered caps of 0.25 GPU-hour and $1.50 API per branch plus a 15% rerun reserve, the full upper bound is 24.3 GPU-days on 80GB-class GPUs + $3,500 API, with deterministic parsing and SCC construction charged as CPU-only. If the pilot exceeds either per-branch cap, or Q cannot include every final neighbor, the run returns budget_infeasible or insufficient_query_budget rather than reducing seeds or hypotheses after outcomes.",
+  "almost_prior_paper_id": "arxiv:2604.23853v2",
+  "almost_prior_venue_year": "",
+  "what_step_was_missed": "ClawTrace would have needed to establish the complete skill's sealed positive cost-adjusted effect on an independently locked task, compile every retained unit by a deterministic four-way source rule, and confirm that a strict nonempty subset preserves that effect while every registered retained-unit deletion fails under one preregistered error family.",
+  "feasibility_validation": {
+    "compute": {
+      "verdict": "feasible",
+      "rationale": "GPU line ≈ 24.3 vs 50 GPU-day (49%) → feasible; API line ≈ $3,500 vs $10,000 (35%) → feasible. Overall (worse line) → feasible."
+    },
+    "data": {
+      "verdict": "tight",
+      "rationale": "The eight development tasks exist, but at least four genuinely new pairs need complete artifacts, untouched source maps, executable assets, and reliable scorers; public PaperBench and CORE-Bench tasks can substitute for any inaccessible private task material."
+    },
+    "theoretical": {
+      "verdict": "feasible",
+      "rationale": "The exact SCC correspondence and sealed familywise error accounting use standard graph and multiple-testing tools, with proofs bounded to the preregistered dependency and execution model."
+    },
+    "engineering": {
+      "verdict": "tight",
+      "rationale": "The binding cost is implementing deterministic four-way atomization and a reproducible branch ledger across heterogeneous skills and direct baselines without silent parser or source-map ambiguity."
+    },
+    "falsification": {
+      "verdict": "feasible",
+      "rationale": "The held-out paired comparison, common admission gate, and M_τ-label permutation are executable with the existing runner once new pairs and direct baseline adapters are frozen."
+    },
+    "overall": "tight"
+  },
+  "differentiation_from_lit": [
+    {
+      "paper_id": "arxiv:2604.23853v2",
+      "venue_year": "",
+      "delta": "Abstract-level evidence indicates ClawTrace attributes per-step cost and compiles preserve, prune, and repair patches; its frozen direct output and EffectSlice's frozen worker output are instead passed through the identical beneficial-F, atom/source-validity, and sealed H_C gate, making the testable delta the correctly admitted nonempty compact-artifact rate and false-admission rate at matched branch budgets, while degraded collision coverage leaves behavior-preserving program reduction and statistical delta debugging unresolved."
+    },
+    {
+      "paper_id": "arxiv:2604.05333v3",
+      "venue_year": "",
+      "delta": "Abstract-level evidence indicates Graph-of-Skills retrieves dependency-complete bundles under a context budget; its frozen direct bundle and EffectSlice's frozen worker output are passed through the identical beneficial-F, atom/source-validity, and sealed H_C gate, making the testable delta the correctly admitted nonempty compact-artifact rate and false-admission rate at matched branch budgets rather than graph machinery, with no novelty inference from the degraded collision pool."
+    },
+    {
+      "paper_id": "semanticscholar:bd91da9d56398d541c2210e1dc3dfbd3ce6845fd",
+      "venue_year": "",
+      "delta": "Abstract-level evidence indicates SkillRAE compiles compact grounded execution context with evidence rescue; its frozen direct context and EffectSlice's frozen worker output are passed through the identical beneficial-F, atom/source-validity, and sealed H_C gate, making the testable delta the correctly admitted nonempty compact-artifact rate and false-admission rate at matched branch budgets, while degraded collision coverage prevents treating absent older reduction work as evidence of novelty."
+    },
+    {
+      "paper_id": "arxiv:2606.17819v1",
+      "venue_year": "",
+      "delta": "A Framework for Evaluating Agentic Skills at Scale measures with-skill utility on tasks synthesized from the evaluated skill, whereas EffectSlice conditions on an independently supplied user task, first requires positive cost-adjusted utility from the complete artifact, and then tests preservation by a strict nonempty subset."
+    }
+  ],
+  "reviewer_concerns_and_responses": [
+    {
+      "attack": "Paper-pointed threat: arxiv:2604.23853v2 (collision_hits). ClawTrace already performs cost-aware tracing and compiles preserve, prune, and repair patches for agent skills, so procedure pruning, cost attribution, and quality-aware compact skill construction are not available as EffectSlice novelty. The overlap is partial rather than exact because the retrieved abstract does not show a positive-full-effect eligibility gate, deterministic source atoms, sealed equivalence to F, or corrected retained-deletion evidence; nevertheless, because EffectSlice makes the search backend interchangeable and disclaims the reduction machinery, its claim stands or falls on whether the eligibility-and-certificate layer yields a distinct held-out decision advantage when ClawTrace, Graph-of-Skills, and SkillRAE outputs are submitted to the same sealed test.",
+      "severity": "non_blocking",
+      "response": "The defense is anchored in core_mechanism, which makes every search backend interchangeable and submits EffectSlice plus direct ClawTrace, Graph-of-Skills, and SkillRAE outputs to the identical beneficial-F, atom-validity, contract, guardrail, and sealed H_C gate. Consistent with the Phase 3 verdict rationale, differentiation_from_lit narrows the empirical claim to correctly admitted nonempty compact-artifact and false-admission rates under matched budgets; pruning, SCC condensation, provenance, and local minimality are explicitly disclaimed as novelty.",
+      "fields_changed_to_address": [
+        "core_mechanism",
+        "core_mechanism",
+        "differentiation_from_lit"
+      ]
+    },
+    {
+      "attack": "Un-retrieved mechanism family flagged by the audit (parametric knowledge, not in the retrieved pool): Collision coverage is explicitly degraded: behavior-preserving program reduction / statistical delta debugging remains an unresolved older family; a scoop-check should query 'behavior-preserving program reduction' and 'statistical delta debugging with equivalence tests' before investment. — novelty vs this family is UNVERIFIED; run a targeted scoop-check on that vocabulary before investing.",
+      "severity": "non_blocking",
+      "response": "A targeted scoop-check must establish whether behavior-preserving program reduction or statistical delta debugging already combines a positive-full-effect eligibility condition, deterministic paper-source units, and one sealed task-local admission family for candidates, controls, and reducer baselines. If that combination or an equivalent admission decision already exists, EffectSlice's current novelty delta does not survive and must be narrowed or abandoned.",
+      "fields_changed_to_address": [
+        "core_mechanism",
+        "core_mechanism",
+        "differentiation_from_lit"
+      ]
+    }
+  ],
+  "domain_landscape": {
+    "n_papers": 27,
+    "pattern_distribution": [
+      {
+        "pattern_id": "assumption_audit_and_pivot",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "architectural_operator_substitution",
+        "count": 4,
+        "share": 0.15,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "generative_process_redesign",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "controlled_diagnostic_design",
+        "count": 5,
+        "share": 0.19,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "unify_into_shared_representation",
+        "count": 7,
+        "share": 0.26,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "reframe_as_solvable_object",
+        "count": 10,
+        "share": 0.37,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "self_supervised_signal_engineering",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "structural_prior_encoding",
+        "count": 14,
+        "share": 0.52,
+        "saturation_band": "saturated"
+      },
+      {
+        "pattern_id": "algebraic_equivalence_unification",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "heterogeneous_decomposition",
+        "count": 11,
+        "share": 0.41,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "decompose_and_delegate",
+        "count": 9,
+        "share": 0.33,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "relax_discrete_search_to_continuous",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "adapt_via_conditioning",
+        "count": 4,
+        "share": 0.15,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "characterize_limit_then_surpass",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "targeted_self_supervised_objective",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      }
+    ],
+    "candidate_uses": [
+      {
+        "pattern_id": "reframe_as_solvable_object",
+        "role": "closes Gap 1",
+        "sub_pattern_id": "C00 (Reframe as a Solvable Object)",
+        "saturation_in_domain": "mid_frequency"
+      },
+      {
+        "pattern_id": "reframe_as_solvable_object",
+        "role": "closes Gap 2",
+        "sub_pattern_id": "C00 (Reframe as a Solvable Object)",
+        "saturation_in_domain": "mid_frequency"
+      }
+    ],
+    "position_note": "EffectSlice uses the mid-frequency reframe_as_solvable_object pattern in a domain dominated by structural_prior_encoding, but applies it to a sealed task-local admission certificate rather than introducing another structural skill representation."
+  },
+  "literature_breakdown": {
+    "summary": {
+      "n_phase0_total": 33,
+      "n_phase0_on_topic": 27,
+      "n_phase0_outside_taxonomy": 6,
+      "n_phase3_collision": 7
+    },
+    "phase0_by_pattern": [
+      {
+        "pattern_id": "controlled_diagnostic_design",
+        "pattern_name": "Design a Confound-Isolating Diagnostic",
+        "papers": [
+          {
+            "paper_id": "arxiv:2504.01848v3",
+            "title": "PaperBench: Evaluating AI's Ability to Replicate AI Research",
+            "venue_year": "arXiv 2025-04",
+            "bottleneck_targeted": "Agent research-replication ability lacked an execution-verified, granular evaluation that separates code development, successful execution, and result matching."
+          },
+          {
+            "paper_id": "arxiv:2409.11363v2",
+            "title": "CORE-Bench: Fostering the Credibility of Published Research Through a Computational Reproducibility Agent Benchmark",
+            "venue_year": "arXiv 2024-09",
+            "bottleneck_targeted": "Agent benchmarks did not isolate progressively harder components of real computational reproducibility across code execution, dependency setup, result retrieval"
+          },
+          {
+            "paper_id": "arxiv:2606.17819v1",
+            "title": "A Framework for Evaluating Agentic Skills at Scale",
+            "venue_year": "arXiv 2026-06",
+            "bottleneck_targeted": "Fixed task suites cannot estimate an arbitrary skill's marginal effect, distinguish instruction adherence from goal completion, or expose model- and task-specif"
+          },
+          {
+            "paper_id": "arxiv:2605.14517v1",
+            "title": "Dimension-Level Intent Fidelity Evaluation for Large Language Models: Evidence from Structured Prompt Ablation",
+            "venue_year": "arXiv 2026-05",
+            "bottleneck_targeted": "Holistic scores can conceal dimension-level intent deficits and cannot distinguish default recoverability, prior inferability, or tolerance to different degrees"
+          },
+          {
+            "paper_id": "arxiv:2604.23853v2",
+            "title": "ClawTrace: Cost-Aware Tracing for LLM Agent Skill Distillation",
+            "venue_year": "arXiv 2026-04",
+            "bottleneck_targeted": "Skill distillation lacks per-step cost attribution, while aggregate evaluation hides divergent effects of preserve, prune, and repair rules."
+          }
+        ]
+      },
+      {
+        "pattern_id": "decompose_and_delegate",
+        "pattern_name": "Decompose and Delegate to Solvers",
+        "papers": [
+          {
+            "paper_id": "arxiv:2607.02703v1",
+            "title": "LLMoxie: Exploring Agentic AI for Scientific Software Development",
+            "venue_year": "arXiv 2026-07",
+            "bottleneck_targeted": "Generic coding agents are poorly calibrated to scientific-software conventions, sensitive data, reproducibility, citation, and auditable decision trails."
+          },
+          {
+            "paper_id": "arxiv:2605.21825v1",
+            "title": "Toward AI VIS Co-Scientists: A General and End-to-End Agent Harness for Solving Complex Data Visualization Tasks",
+            "venue_year": "arXiv 2026-05",
+            "bottleneck_targeted": "Domain experts need end-to-end visual-analysis applications but lack time and specialized expertise across analysis, design, implementation, and validation."
+          },
+          {
+            "paper_id": "arxiv:2506.06972v1",
+            "title": "Atomic Reasoning for Scientific Table Claim Verification",
+            "venue_year": "arXiv 2025-06",
+            "bottleneck_targeted": "Models fail at fine-grained scientific-table claim verification because dense claims impose high cognitive load and require multiple distinct reasoning operatio"
+          },
+          {
+            "paper_id": "semanticscholar:529853339c7ed42ae10c674c787d697d60b1ece1",
+            "title": "DeepReviewer 2.0: A Traceable Agentic System for Auditable Scientific Peer Review",
+            "venue_year": "arXiv 2026-03",
+            "bottleneck_targeted": "Fluent review text is insufficient when reviewers need localized evidence, auditable concerns, and concrete follow-up actions under coverage constraints."
+          }
+        ]
+      },
+      {
+        "pattern_id": "heterogeneous_decomposition",
+        "pattern_name": "Decompose for Differentiated Treatment",
+        "papers": [
+          {
+            "paper_id": "arxiv:2605.23989v1",
+            "title": "Towards trustworthy agentic AI: a comprehensive survey of safety, robustness, privacy, and system security",
+            "venue_year": "arXiv 2026-05",
+            "bottleneck_targeted": "Trustworthy-agent evaluation lacks a workflow-aligned organization of safety, robustness, privacy, system-security risks, mitigations, and release metrics."
+          },
+          {
+            "paper_id": "arxiv:2606.20873v1",
+            "title": "SciLens: Multi-modal Scientific Claim Verification with Agentic Entailment and Grounding",
+            "venue_year": "arXiv 2026-06",
+            "bottleneck_targeted": "Direct binary vision-language judgments cannot reliably verify claims combining numbers, comparisons, qualifiers, tables, and figures with different grounding s"
+          },
+          {
+            "paper_id": "semanticscholar:689372ecd072c3122b804ae10fbf68b5aa0a06b1",
+            "title": "Dynamic Agent Skills: A Lifecycle Survey and Taxonomy of Evolving Skill Libraries",
+            "venue_year": "arXiv 2026-07",
+            "bottleneck_targeted": "Incompatible meanings of skill and static evaluation obscure how reusable procedure libraries are proposed, verified, stored, retrieved, repaired, governed, and"
+          }
+        ]
+      },
+      {
+        "pattern_id": "reframe_as_solvable_object",
+        "pattern_name": "Reframe as a Solvable Object",
+        "papers": [
+          {
+            "paper_id": "arxiv:2604.18752v2",
+            "title": "A Scientific Human-Agent Reproduction Pipeline",
+            "venue_year": "arXiv 2026-04",
+            "bottleneck_targeted": "Reproducing scientific analyses is costly and under-rewarded despite being expressible as translation from human-readable papers and documentation into executab"
+          },
+          {
+            "paper_id": "arxiv:2603.10028v1",
+            "title": "How to Count AIs: Individuation and Liability for AI Agents",
+            "venue_year": "arXiv 2026-02",
+            "bottleneck_targeted": "Copying, splitting, merging, and swarming agents make stable identity and assignment of human liability difficult."
+          },
+          {
+            "paper_id": "arxiv:2509.06917",
+            "title": "Paper2Agent: Reimagining Research Papers As Interactive and Reliable AI Agents",
+            "venue_year": "arXiv 2025-09",
+            "bottleneck_targeted": "Static papers and linked repositories leave users to discover, install, configure, and manually adapt computational methods before they can apply them to new da"
+          },
+          {
+            "paper_id": "arxiv:2604.24658v3",
+            "title": "The Last Human-Written Paper: Agent-Native Research Artifacts",
+            "venue_year": "arXiv 2026-04",
+            "bottleneck_targeted": "Narrative publication discards branching failures and separates reviewer-sufficient prose from agent-sufficient operational specification, forcing agents to rev"
+          },
+          {
+            "paper_id": "arxiv:2604.05333v3",
+            "title": "Graph-of-Skills: Dependency-Aware Structural Retrieval for Massive Agent Skills",
+            "venue_year": "arXiv 2026-04",
+            "bottleneck_targeted": "Full skill loading exceeds context budgets, while semantic top-k retrieval omits prerequisite dependencies and yields execution-incomplete bundles."
+          },
+          {
+            "paper_id": "semanticscholar:9517ca9bc41baa3f2ecbe48ea15679e3b11ed381",
+            "title": "Evergreen: Efficient Claim Verification for Semantic Aggregates",
+            "venue_year": "arXiv 2026-04",
+            "bottleneck_targeted": "Natural-language semantic aggregates can contain unsupported quantified or comparative claims whose source relations exceed model context and are expensive to v"
+          },
+          {
+            "paper_id": "semanticscholar:66c14be05ea44f4612870eafe4dfa101d261538d",
+            "title": "Post-Document Science: From Static Narratives to Intelligent Objects",
+            "venue_year": "Standards 2026",
+            "bottleneck_targeted": "Static narratives limit reproducibility, machine accessibility, validation, and cumulative integration of computational research."
+          },
+          {
+            "paper_id": "arxiv:2605.03353v4",
+            "title": "SkCC: Portable and Secure Skill Compilation for Cross-Framework LLM Agents",
+            "venue_year": "arXiv 2026-05",
+            "bottleneck_targeted": "Format-sensitive frameworks make the same skill nonportable, require per-framework rewrites, and expose inconsistent security behavior."
+          },
+          {
+            "paper_id": "semanticscholar:ba79cf58412756ed2f2385e3fcc1ae536faf92c0",
+            "title": "SkillFlow: Scalable and Efficient Agent Skill Retrieval System",
+            "venue_year": "arXiv 2025-04",
+            "bottleneck_targeted": "Loading large skill libraries raises cost and degrades performance, while agents need selective access to relevant executable capabilities."
+          },
+          {
+            "paper_id": "semanticscholar:bd91da9d56398d541c2210e1dc3dfbd3ce6845fd",
+            "title": "SkillRAE: Agent Skill-Based Context Compilation for Retrieval-Augmented Execution",
+            "venue_year": "arXiv 2026-05",
+            "bottleneck_targeted": "Skill retrieval alone does not organize selected evidence into compact, grounded, immediately usable context for downstream execution."
+          }
+        ]
+      },
+      {
+        "pattern_id": "structural_prior_encoding",
+        "pattern_name": "Encode Structure by Construction",
+        "papers": [
+          {
+            "paper_id": "arxiv:2603.17419v1",
+            "title": "Caging the Agents: A Zero Trust Security Architecture for Autonomous AI in Healthcare",
+            "venue_year": "arXiv 2026-03",
+            "bottleneck_targeted": "Production agents with broad privileges expose credentials, data, execution, network, prompt, and fleet-level attack surfaces in healthcare."
+          },
+          {
+            "paper_id": "arxiv:2505.20662v4",
+            "title": "AutoReproduce: Automatic AI Experiment Reproduction with Paper Lineage",
+            "venue_year": "ACL 2025",
+            "bottleneck_targeted": "Research papers omit domain conventions and implementation details needed for executable end-to-end reproduction, while prior automation addresses only isolated"
+          }
+        ]
+      },
+      {
+        "pattern_id": "unify_into_shared_representation",
+        "pattern_name": "Unify Heterogeneous Inputs into One Space",
+        "papers": [
+          {
+            "paper_id": "arxiv:2604.03964v1",
+            "title": "SKILLFOUNDRY: Building Self-Evolving Agent Skill Libraries from Heterogeneous Scientific Resources",
+            "venue_year": "arXiv 2026-04",
+            "bottleneck_targeted": "Scientific procedural knowledge is fragmented across heterogeneous resources and cannot be directly retrieved, executed, validated, or composed as reliable agen"
+          },
+          {
+            "paper_id": "arxiv:2606.09316v3",
+            "title": "Anything2Skill: Compiling External Knowledge into Reusable Skills for Agents",
+            "venue_year": "arXiv 2026-06",
+            "bottleneck_targeted": "RAG exposes fragmented declarative evidence but repeatedly leaves agents to reconstruct invocation conditions, action sequences, constraints, and outputs at tas"
+          },
+          {
+            "paper_id": "arxiv:2606.29538v2",
+            "title": "RESOURCE2SKILL: Distilling Executable Agent Skills from Human-Created Multimodal Resources",
+            "venue_year": "arXiv 2026-06",
+            "bottleneck_targeted": "Text-only and trace-derived skill libraries miss temporal operations, visual effects, and tacit design choices contained in tutorial videos and other multimodal"
+          }
+        ]
+      }
+    ],
+    "phase0_outside_taxonomy": [
+      {
+        "paper_id": "arxiv:2603.28944v2",
+        "title": "Faith in AI can narrow the futures individuals consider",
+        "venue_year": "arXiv 2026-03",
+        "bottleneck_targeted": "The study examines whether perceived AI predictive authority changes how people reason about their own future actions."
+      },
+      {
+        "paper_id": "arxiv:2601.16513v1",
+        "title": "Competing Visions of Ethical AI: A Case Study of OpenAI",
+        "venue_year": "arXiv 2026-01",
+        "bottleneck_targeted": "The study maps how one organization frames ethics, safety, alignment, and risk across public and academic discourse."
+      },
+      {
+        "paper_id": "arxiv:2604.00187v2",
+        "title": "Explainable AI for Blind and Low-Vision Users: Navigating Trust, Modality, and Interpretability in the Agentic Era",
+        "venue_year": "arXiv 2026-03",
+        "bottleneck_targeted": "Predominantly visual explanations prevent blind and low-vision users from forming reliable expectations about multi-step agent behavior."
+      },
+      {
+        "paper_id": "arxiv:2607.04282v1",
+        "title": "The New Shape of Search: How Conversational AI Recomposes Information Seeking",
+        "venue_year": "arXiv 2026-07",
+        "bottleneck_targeted": "Query-level analyses miss how conversational assistants reshape complete information-seeking episodes, verification, and transitions among search and browsing."
+      },
+      {
+        "paper_id": "arxiv:2607.03223v1",
+        "title": "Round-Trip Mutation Testing",
+        "venue_year": "arXiv 2026-07",
+        "bottleneck_targeted": "Not classified from title and arXiv metadata alone; no matching record or abstract appears in the permitted local artifacts."
+      },
+      {
+        "paper_id": "arxiv:2605.19362v2",
+        "title": "Toward User Comprehension Supports for LLM Agent Skill Specifications",
+        "venue_year": "arXiv 2026-05",
+        "bottleneck_targeted": "Existing skill audits emphasize maliciousness but do not measure whether specifications support bounded user expectations about inputs, outputs, and coverage."
+      }
+    ],
+    "phase3_collision": [
+      {
+        "paper_id": "arxiv:2604.05333v3",
+        "title": "Graph-of-Skills: Dependency-Aware Structural Retrieval for Massive Agent Skills",
+        "venue_year": "unknown"
+      },
+      {
+        "paper_id": "semanticscholar:bd91da9d56398d541c2210e1dc3dfbd3ce6845fd",
+        "title": "SkillRAE: Agent Skill-Based Context Compilation for Retrieval-Augmented Execution",
+        "venue_year": "unknown"
+      },
+      {
+        "paper_id": "arxiv:2604.23853v2",
+        "title": "ClawTrace: Cost-Aware Tracing for LLM Agent Skill Distillation",
+        "venue_year": "unknown"
+      },
+      {
+        "paper_id": "semanticscholar:ba79cf58412756ed2f2385e3fcc1ae536faf92c0",
+        "title": "SkillFlow: Scalable and Efficient Agent Skill Retrieval System",
+        "venue_year": "unknown"
+      },
+      {
+        "paper_id": "arxiv:2606.17819v1",
+        "title": "A Framework for Evaluating Agentic Skills at Scale",
+        "venue_year": "unknown"
+      },
+      {
+        "paper_id": "arxiv:2606.09316v3",
+        "title": "Anything2Skill: Compiling External Knowledge into Reusable Skills for Agents",
+        "venue_year": "unknown"
+      },
+      {
+        "paper_id": "arxiv:2604.03964v1",
+        "title": "SkillFoundry: Automated Mining and Validation of Agent Skills for Scientific Tasks",
+        "venue_year": "unknown"
+      }
+    ]
+  }
+}

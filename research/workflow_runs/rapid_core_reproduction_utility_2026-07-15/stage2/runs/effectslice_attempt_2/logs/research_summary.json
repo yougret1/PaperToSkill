@@ -1,0 +1,67 @@
+{
+  "schema_version": "effectslice-stage2-research-summary.v1",
+  "overall_plan": "Search source-grounded strict subsets only after full-artifact eligibility, then admit a slice only after deletion audit and sealed task-local confirmation.",
+  "analysis": "One task-local slice (SNAP-MFSE) passed sealed confirmation. The Toolformer prefix selected on discovery failed on untouched confirmation; the protocol correctly withheld admission. No cross-paper effectiveness claim is ready.",
+  "metric": {
+    "name": "sealed_confirmed_task_local_slices",
+    "value": 1,
+    "direction": "higher_is_better"
+  },
+  "task_rows": [
+    {
+      "task_id": "SNAP-MFSE",
+      "disposition": "sealed_confirmation",
+      "full_artifact_eligible": true,
+      "selected_candidate_id": "prefix_03",
+      "confirmation": "passed",
+      "preservation_violations": 0,
+      "beneficial_cases": 59,
+      "total_cases": 59,
+      "task_local_confirmation_ready": true
+    },
+    {
+      "task_id": "TOOLFORMER-FILTER",
+      "disposition": "sealed_confirmation",
+      "full_artifact_eligible": true,
+      "selected_candidate_id": "prefix_01",
+      "confirmation": "failed",
+      "preservation_violations": 15,
+      "beneficial_cases": 44,
+      "total_cases": 59,
+      "task_local_confirmation_ready": false
+    },
+    {
+      "task_id": "AIDE-T2",
+      "disposition": "development_only",
+      "full_artifact_eligible": null,
+      "selected_candidate_id": null,
+      "confirmation": "not_run",
+      "task_local_confirmation_ready": false
+    },
+    {
+      "task_id": "SWE-T2",
+      "disposition": "abstain",
+      "full_artifact_eligible": false,
+      "selected_candidate_id": null,
+      "confirmation": "not_run",
+      "task_local_confirmation_ready": false
+    }
+  ],
+  "general_effectslice_claim_ready": false,
+  "scientific_claim_ready": false,
+  "code": "build/analyze scripts and immutable experiment_results bundles",
+  "plot_code": "build_stage2_figures.py",
+  "plot_analyses": [],
+  "exp_results_data_files": [
+    "derived/aide_t2_development_summary.json",
+    "derived/swe_t2_development_summary.json",
+    "derived/snap_mfse_development_summary.json",
+    "derived/snap_mfse_eligibility_summary.json",
+    "derived/snap_mfse_discovery_summary.json",
+    "derived/snap_mfse_confirmation_summary.json",
+    "derived/toolformer_filter_development_summary.json",
+    "derived/toolformer_filter_eligibility_summary.json",
+    "derived/toolformer_filter_discovery_summary.json",
+    "derived/toolformer_filter_confirmation_summary.json"
+  ]
+}

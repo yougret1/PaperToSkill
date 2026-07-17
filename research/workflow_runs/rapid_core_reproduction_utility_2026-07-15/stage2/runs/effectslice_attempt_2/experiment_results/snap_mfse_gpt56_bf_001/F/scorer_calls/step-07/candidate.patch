@@ -1,0 +1,85 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -10,6 +11,72 @@
+     n_components: int,
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+-    """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    """Return the leading paper-specific cosine spectral coordinates."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    try:
++        counts = np.asarray(counts, dtype=np.float64)
++    except (TypeError, ValueError) as exc:
++        raise ValueError("counts must be a finite numeric matrix") from exc
++    if counts.ndim != 2:
++        raise ValueError("counts must be two-dimensional")
++
++    n_cells = counts.shape[0]
++    if (
++        isinstance(n_components, (bool, np.bool_))
++        or not isinstance(n_components, (int, np.integer))
++        or not 1 <= n_components < n_cells
++    ):
++        raise ValueError("n_components must satisfy 1 <= n_components < n_cells")
++    if not np.isfinite(counts).all() or np.any(counts < 0):
++        raise ValueError("counts must contain only finite, nonnegative values")
++    if np.any(np.linalg.norm(counts, axis=1) == 0):
++        raise ValueError("counts must not contain all-zero cell rows")
++
++    document_frequency = np.count_nonzero(counts, axis=0)
++    idf = np.log(n_cells / (1.0 + document_frequency))
++    x = counts * idf
++    row_norms = np.linalg.norm(x, axis=1)
++    if not np.isfinite(row_norms).all() or np.any(row_norms == 0):
++        raise ValueError("every IDF-scaled cell row must be L2-normalizable")
++    x /= row_norms[:, None]
++
++    degrees = x @ (x.T @ np.ones(n_cells, dtype=np.float64)) - 1.0
++    if not np.isfinite(degrees).all() or np.any(degrees <= 0):
++        raise ValueError("cosine similarity degrees must be positive")
++
++    inverse_sqrt_degrees = 1.0 / np.sqrt(degrees)
++    inverse_degrees = 1.0 / degrees
++    x_tilde = inverse_sqrt_degrees[:, None] * x
++
++    def matvec(vector: np.ndarray) -> np.ndarray:
++        return x_tilde @ (x_tilde.T @ vector) - inverse_degrees * vector
++
++    rng = np.random.default_rng(random_state)
++    if n_components == n_cells - 1:
++        # ARPACK requires k < N. Add a known eigenvalue below the spectrum so
++        # all but the smallest original eigenpair can still be requested.
++        def augmented_matvec(vector: np.ndarray) -> np.ndarray:
++            result = np.empty(n_cells + 1, dtype=np.float64)
++            result[:n_cells] = matvec(vector[:n_cells])
++            result[n_cells] = -2.0 * vector[n_cells]
++            return result
++
++        operator = LinearOperator(
++            (n_cells + 1, n_cells + 1), matvec=augmented_matvec, dtype=np.float64
++        )
++        initial = rng.standard_normal(n_cells + 1)
++        values, vectors = eigsh(operator, k=n_components, which="LA", v0=initial)
++        vectors = vectors[:n_cells]
++    else:
++        operator = LinearOperator(
++            (n_cells, n_cells), matvec=matvec, dtype=np.float64
++        )
++        initial = rng.standard_normal(n_cells)
++        values, vectors = eigsh(operator, k=n_components, which="LA", v0=initial)
++
++    order = np.argsort(values)[::-1]
++    values = values[order]
++    vectors = vectors[:, order]
++    if not np.isfinite(values).all() or not np.isfinite(vectors).all():
++        raise ValueError("eigensolver returned nonfinite results")
++    return values, vectors

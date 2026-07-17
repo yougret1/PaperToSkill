@@ -1,0 +1,49 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,45 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    for arr, name in [(logp_with_result, "logp_with_result"),
++                     (logp_call_only, "logp_call_only"),
++                     (logp_no_call, "logp_no_call")]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if arr.shape[0] == 0 or arr.shape[1] == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.isfinite(arr).all():
++            raise ValueError(f"{name} contains nonfinite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} contains positive values")
++    # Check same shape
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All input matrices must have the same shape")
++    # Validate threshold
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if tau_filter < 0 or not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be nonnegative and finite")
++    
++    n, H = logp_with_result.shape
++    # Compute normalized weights
++    t = np.arange(H)
++    raw_weights = np.maximum(0, 1.0 - 0.2 * t)
++    weights = raw_weights / raw_weights.sum()
++    
++    # Compute weighted losses
++    loss_plus = -np.dot(logp_with_result, weights)
++    loss_call_only = -np.dot(logp_call_only, weights)
++    loss_no_call = -np.dot(logp_no_call, weights)
++    
++    # Counterfactual baseline
++    L_minus = np.minimum(loss_no_call, loss_call_only)
++    
++    # Margins and keep mask
++    margins = L_minus - loss_plus
++    keep = margins >= tau_filter
++    
++    return keep, margins

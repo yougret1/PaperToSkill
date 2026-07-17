@@ -1,0 +1,55 @@
+{
+  "schema_version": "effectslice-stage2-baseline-summary.v1",
+  "overall_plan": "Require a positive paired full-artifact effect over the same-scaffold no-artifact baseline before any compact slice is searched.",
+  "analysis": "SNAP-MFSE and TOOLFORMER-FILTER passed frozen full-artifact eligibility. SWE-T2 abstained because the full artifact was ineligible; AIDE-T2 remained adaptive development evidence only.",
+  "metric": {
+    "name": "eligible_full_artifact_tasks",
+    "value": 2,
+    "direction": "descriptive"
+  },
+  "full_artifact_rows": [
+    {
+      "task_id": "SNAP-MFSE",
+      "classification": "eligible_full_artifact",
+      "beneficial_cases": 21,
+      "total_cases": 21,
+      "aggregate_effect": 1.0,
+      "one_sided_cp_lower": 0.8030857221391514
+    },
+    {
+      "task_id": "TOOLFORMER-FILTER",
+      "classification": "eligible_full_artifact",
+      "beneficial_cases": 21,
+      "total_cases": 21,
+      "aggregate_effect": 1.0,
+      "one_sided_cp_lower": 0.8030857221391514
+    }
+  ],
+  "excluded_or_abstained": [
+    {
+      "task_id": "AIDE-T2",
+      "disposition": "development_only",
+      "selected_candidate": null
+    },
+    {
+      "task_id": "SWE-T2",
+      "disposition": "abstain",
+      "reason": "abstain_full_artifact_ineligible"
+    }
+  ],
+  "code": "run_*_effectslice.py and src/effectslice/*_scorer.py",
+  "plot_code": "build_stage2_figures.py",
+  "plot_analyses": [],
+  "exp_results_data_files": [
+    "derived/aide_t2_development_summary.json",
+    "derived/swe_t2_development_summary.json",
+    "derived/snap_mfse_development_summary.json",
+    "derived/snap_mfse_eligibility_summary.json",
+    "derived/snap_mfse_discovery_summary.json",
+    "derived/snap_mfse_confirmation_summary.json",
+    "derived/toolformer_filter_development_summary.json",
+    "derived/toolformer_filter_eligibility_summary.json",
+    "derived/toolformer_filter_discovery_summary.json",
+    "derived/toolformer_filter_confirmation_summary.json"
+  ]
+}

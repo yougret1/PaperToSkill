@@ -1,0 +1,43 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, svds
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,30 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not np.isfinite(counts).all():
++        raise ValueError('Input contains nonfinite values')
++    if (counts < 0).any():
++        raise ValueError('Input contains negative values')
++    if (counts.sum(axis=1) == 0).any():
++        raise ValueError('Input contains all-zero cell rows')
++    n_cells = counts.shape[0]
++    if not (1 <= n_components < n_cells):
++        raise ValueError('n_components must be in [1, n_cells)')
++    # Compute row and column sums (degrees for bipartite normalization)
++    row_sums = counts.sum(axis=1).astype(float)
++    col_sums = counts.sum(axis=0).astype(float)
++    # Handle zero sums safely: zero-degree rows already rejected; zero columns treated as absent
++    row_inv_sqrt = np.divide(1.0, np.sqrt(row_sums), out=np.zeros_like(row_sums), where=row_sums > 0)
++    col_inv_sqrt = np.divide(1.0, np.sqrt(col_sums), out=np.zeros_like(col_sums), where=col_sums > 0)
++    # Form normalized matrix M = D_r^{-1/2} X D_c^{-1/2} (n_cells x n_features)
++    M = counts * row_inv_sqrt[:, np.newaxis] * col_inv_sqrt[np.newaxis, :]
++    # Compute leading singular values and left singular vectors (svds returns descending singular values)
++    u, s, vt = svds(M, k=n_components, which='LM')
++    # Use singular values squared as eigenvalues of S = M M^T
++    eigenvalues = s ** 2
++    # Left singular vectors correspond to eigenvectors of S
++    eigenvectors = u
++    # Ensure descending order (svds already returns s descending, so eigenvalues descending)
++    # But just to be safe, already descending; no further sorting needed.
++    return eigenvalues, eigenvectors

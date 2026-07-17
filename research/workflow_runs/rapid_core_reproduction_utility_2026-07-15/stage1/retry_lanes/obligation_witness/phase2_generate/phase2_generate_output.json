@@ -1,0 +1,59 @@
+{
+  "title": "Task-Specific Obligation Witnesses for Minimal Paper Reproduction",
+  "hook": "On a concrete user task, a paper's load-bearing claim may need only a deletion-minimal subset of the full reproduction: a source-anchored obligation witness should preserve the paired task-score effect while eliminating non-load-bearing execution. Every retained obligation carries both an executable witness and a deletion counterexample.",
+  "hook_shape_rationale": "This is counter-intuitive minimalism: relative to the current full-reproduction baseline, the candidate executes a strict subset of claim obligations while targeting the same source-paper task score and required output contract. A surprising empirical reveal was also viable, but rejected because the primary contribution is the mechanically certified smaller object rather than an unobserved regime split.",
+  "gap_closure": [
+    {
+      "gap": "Under a limited initial budget, no retrieved frontier establishes that the observed low-fidelity score preserves the sign and ordering of paper interventions by the performance improvement they later produce on independently specified user tasks; a probe can therefore support the wrong go/no-go decision even when it is internally faithful.",
+      "main_pattern": "decompose_and_delegate",
+      "sub_pattern": "C25 (Decompose and Delegate to Solvers)",
+      "companion_pattern": null,
+      "how_closed": "Closed by compiling one named load-bearing claim into a source-anchored obligation graph whose nodes are discharged by executable checkers, then returning a deletion-minimal claim-bearing witness rather than treating a cheap fidelity score as a predictor of whole-paper utility."
+    },
+    {
+      "gap": "No retrieved frontier estimates net benefit after execution cost, adaptation effort, and regressions on task dimensions outside the paper's headline metric are deducted from gross performance gain.",
+      "main_pattern": "controlled_diagnostic_design",
+      "sub_pattern": "C02 (Design a Confound-Isolating Diagnostic)",
+      "companion_pattern": null,
+      "how_closed": "Closed by matched obligation-deletion and intervention-off tests on the same locked user task, so the direct local task-score effect is reported together with measured execution cost, adaptation effort, and preregistered guardrail regressions."
+    }
+  ],
+  "core_mechanism": "The sequential pipeline takes a PaperToSkill source map M and a locked user-task contract T; T names exactly one load-bearing claim c, task inputs X, required output interface, primary scorer m in [0,1], guardrail scorers r_j in [0,1], an intervention-off baseline, and user-declared conversion weights lambda_gpu, lambda_api, lambda_labor, and beta_j in task-score units. A compiler expands c into an obligation graph G_c=(O,E) with typed prerequisite, action, artifact, validator, and failure-guard nodes, where every node o has a source anchor a(o) in M, an executable witness predicate w_o in {0,1}, and requires/produces/validates/guards edges. The learned extractor may propose nodes and anchors, but a source-span checker, dependency-closure checker, task runner, artifact parser, and objective scorer mechanically accept or reject them during construction; unsupported nodes cannot enter G_c, so the artifact is not merely a schema or summary. For a subset S of O and task case x, claim-bearing execution CBE(S,x)=1 only when S is predecessor-closed, every required w_o passes, and the produced output passes T's interface and claim validator on x. Starting from the complete ancestor closure of c, the minimizer deletes one obligation or dependency-closed block at a time, reruns the downstream task, and records the load-bearing obligation deletion delta D_o as the mean over X of CBE(S,x)-CBE(S without o,x); a deletion is kept only when all CBE values remain one, and fixed-point iteration returns a one-deletion-minimal closure S_star plus a counterexample trace for every retained obligation. The controlled diagnostic then runs S_star with the paper claim enabled and with only the claim action replaced by T's intervention-off baseline, holding inputs, model, environment, scorer, retained prerequisites, and random seed fixed, so the paired delta Delta_m is a direct local effect on the specified task rather than a proxy for later full-paper performance. It reports local net effect U_local=Delta_m-lambda_gpu*g-lambda_api*a-lambda_labor*l-sum_j beta_j*max(0,r_j(off)-r_j(on)), where g is measured GPU-hours, a is paid-API dollars, l is adaptation hours, and each guardrail term is computed by T. The method never predicts or ranks utility across papers, transports an effect across domains, chooses among fidelities, or reproduces the entire paper; its claim is only that S_star is an executable source-grounded witness for c on T and that the paired run measures c's local effect. The existing AIDE, SWE-agent, Reflexion, and SnapATAC2 task pairs instantiate eight heterogeneous case studies, while the recorded patch-application, artifact-completion, and task-contract repairs supply prospective held-out cases for whether failure-guard obligations prevent previously observed boundary failures.",
+  "core_mechanism_reasoning": "The two gaps form a sequential pipeline because source-grounded decomposition first produces the only object that deletion and local-effect controls can manipulate without changing the task. I rejected a learned cross-paper predictor, Bayesian acquisition policy, resource-fidelity ladder, and causal transport model because they regress to the lineage's collateral transferability, learning-curve, multi-fidelity, or transport nodes; direct full reproduction is retained only as a case-study comparator, not as the proposed mechanism. I also rejected a plain obligation schema because C25 requires the intermediate artifact to be load-bearing: every node must close through execution feedback, and every retained node must have a failed deletion trace.",
+  "core_mechanism_steps": "1. Load one generated skill's source_map.json, its locked real-reuse task JSON, asset lock, scorer, and user-selected claim_id; output the normalized source map M and task contract T without generating new tasks.\n2. Parse the claim's cited method spans, equations, code references, and expected artifacts into candidate prerequisite, action, artifact, validator, and failure-guard obligations; output candidate G_c with an explicit source anchor for every node.\n3. Resolve every anchor against the source map and reject unsupported spans, then run graph checks for missing predecessors, orphan artifacts, and validators with no producer; output a source-valid dependency graph.\n4. Materialize w_o for each node as a command, assertion, artifact parser, source-consistency check, or objective scorer invocation; execute each checker immediately and feed failures back to repair only the failing node.\n5. Run the complete claim closure on each locked task fixture, propagate generated artifacts through the task runner to the primary and guardrail scorers, and output a passing reference trace or a localized failed obligation.\n6. Traverse dependency-closed deletion blocks from leaves toward prerequisites; after each deletion rerun the task and all downstream checkers, record D_o and the changed final task output, and permanently remove the block only when claim-bearing execution still passes.\n7. Repeat deletion passes to a fixed point and emit S_star, its executable files, and a minimality certificate containing one failed-deletion trace for every retained obligation.\n8. Execute S_star in matched claim-on and claim-off conditions with identical task input, model, environment, scorer, and seed; output paired primary-score, guardrail, GPU-hour, API-dollar, and adaptation-hour deltas.\n9. Compute U_local from the measured paired outputs and declared task-contract weights, and return support, no-support, or inconclusive for this claim-task pair without extrapolating to other papers or tasks.\n10. Replay steps 1-9 on the eight locked cases, then append later patch, artifact, and contract failure repairs as prospectively labeled held-out case studies; output per-case witnesses and an aggregate descriptive table rather than a paper ranking.",
+  "falsification_prediction": "On the eight locked AIDE, SWE-agent, Reflexion, and SnapATAC2 real-reuse tasks, compile S_star from each existing source map and task contract, then run matched claim-on/claim-off executions and the current full PaperToSkill and summary-only conditions under the same scorer and budget. If the mechanism works, the paired source-paper objective task-score delta from S_star should agree in sign with the full condition more often than summary-only and budget-matched arbitrary obligation subsets, while executed-obligation count, GPU/API cost, or adaptation effort decreases. The single load-bearing variable is the measured obligation deletion delta D_o. As a negative control, permute D_o across obligations before constructing a same-size closure and skip repair; the downstream objective task score and claim-effect sign agreement should fall to the arbitrary-deletion baseline, while later failure-repair cases are evaluated prospectively rather than used to tune the compiler.",
+  "compute_budget": "16 GPU-days on 80GB-class GPUs + $2,500 API for the full eight-case obligation compilation, deletion reruns, matched claim controls, full-condition comparisons, and prospective failure-repair case studies; adaptation labor is recorded in U_local but is not compute spend.",
+  "differentiation_from_lit": [
+    {
+      "paper_id": "arxiv:2606.17819v1",
+      "delta": "It synthesizes tasks from each skill and measures with-skill marginal utility, whereas this candidate starts from an independently locked user task and compiles source-anchored claim obligations into a deletion-minimal executable witness before measuring the paired local effect."
+    },
+    {
+      "paper_id": "arxiv:2504.01848v3",
+      "delta": "PaperBench's author-approved hierarchy scores completeness of a full replication, whereas this candidate turns one claim's source-linked obligations into executable predicates and returns the smallest deletion-stable closure that still produces the task-scored claim effect."
+    },
+    {
+      "paper_id": "arxiv:2505.20662v4",
+      "delta": "AutoReproduce uses lineage summaries, sampled mini-batches, and dry runs to build and debug an end-to-end reproduction, whereas this candidate deletes non-load-bearing obligations, certifies every retained obligation by a failed deletion, and directly tests only the surviving claim on the user's task."
+    },
+    {
+      "paper_id": "arxiv:2604.03964v1",
+      "delta": "SkillFoundry compiles operational contracts and runs execution, system, and synthetic-data checks, whereas this candidate binds every obligation to a paper source anchor, minimizes the claim closure by downstream deletion tests, and measures a matched task-local intervention effect."
+    }
+  ],
+  "almost_prior_paper_id": "arxiv:2504.01848v3",
+  "what_step_was_missed": "PaperBench would have needed to bind each requirement leaf to a source span and user-task execution path, replace weighted completeness scoring with executable witness predicates, and delete requirements to a claim-sufficient closure before running a matched local-effect test.",
+  "signature_terms": [
+    "source-anchored obligation witness",
+    "deletion-minimal claim execution",
+    "task-specific local effect test",
+    "claim sufficiency certificate",
+    "paper intervention obligation graph"
+  ],
+  "alias_terms": [
+    "dynamic program slicing",
+    "delta debugging dependency minimization",
+    "minimal unsat core extraction",
+    "proof carrying code synthesis"
+  ]
+}

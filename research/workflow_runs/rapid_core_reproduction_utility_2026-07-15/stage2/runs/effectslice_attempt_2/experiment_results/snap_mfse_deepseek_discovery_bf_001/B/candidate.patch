@@ -1,0 +1,33 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -11,5 +11,28 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # validation
++    if not np.isfinite(counts).all():
++        raise ValueError("counts must be finite")
++    if np.any(counts < 0):
++        raise ValueError("counts must be nonnegative")
++    if counts.ndim != 2:
++        raise ValueError("counts must be 2D")
++    n_cells, n_features = counts.shape
++    if n_components < 1 or n_components >= n_cells:
++        raise ValueError("n_components must satisfy 1 <= n_components < n_cells")
++    row_sums = counts.sum(axis=1)
++    if np.any(row_sums == 0):
++        raise ValueError("all-zero cell rows are not allowed")
++    col_sums = counts.sum(axis=0)
++    total = counts.sum()
++    # expected under independence
++    expected = np.outer(row_sums, col_sums) / total
++    sqrt_expected = np.sqrt(expected)
++    with np.errstate(divide='ignore', invalid='ignore'):
++        z = np.where(sqrt_expected > 0, (counts - expected) / sqrt_expected, 0.0)
++    U, S, Vt = np.linalg.svd(z, full_matrices=False)
++    # svd returns descending singular values
++    eigvals = S[:n_components]
++    embedding = U[:, :n_components]
++    return eigvals, embedding

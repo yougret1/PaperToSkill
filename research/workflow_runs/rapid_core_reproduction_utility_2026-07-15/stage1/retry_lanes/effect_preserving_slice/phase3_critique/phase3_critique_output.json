@@ -1,0 +1,126 @@
+{
+  "gap_closure_reject_check": {
+    "entries": [
+      {
+        "gap": "Under a limited initial budget, no retrieved frontier establishes that the observed low-fidelity score preserves the sign and ordering of paper interventions by the performance improvement they later produce on independently specified user tasks; a probe can therefore support the wrong go/no-go decision even when it is internally faithful.",
+        "main_pattern": "reframe_as_solvable_object",
+        "sub_pattern": "C00 (Reframe as a Solvable Object)",
+        "tactical_failure_mode_quoted": "The signature failure is treating the reframing as a mechanical wrapper: taking an established attribution, decomposition, or estimation tool and pointing it at a new input granularity, a new architecture, or a new domain without re-deriving why the resulting scores are faithful to the model. The common root is the assumption that because the target object is well-studied, faithfulness and novelty transfer for free; they do not — the reframing's value lives entirely in the faithfulness constraint and the validation, not in the act of mapping.",
+        "reject_lessons_evaluated": [
+          {
+            "lesson_quoted": "Pointing an off-the-shelf decomposition at a coarser input granularity without showing the coarser units preserve the signal reads as a wrapper, not a contribution.",
+            "candidate_match": "no",
+            "reasoning": "core_mechanism fixes source-anchored procedural atoms and directly tests each candidate slice against the complete artifact's paired task effect, so the selected units are not accepted without a behavioral preservation check."
+          },
+          {
+            "lesson_quoted": "Porting a known attribution technique to a new architecture or domain while ignoring that technique's documented failure modes — and omitting comparisons to alternatives — leaves reviewers unable to see any unique benefit.",
+            "candidate_match": "no",
+            "reasoning": "The candidate does not claim delta debugging or subset selection as novel and explicitly names semantic top-k, random or truncation, dependency-only closure, manual ablation, and interchangeable search backends as comparisons."
+          },
+          {
+            "lesson_quoted": "Proposing a new attribution definition without an axiomatic or causal argument for why it should count as ground-truth collapses the moment a reviewer asks why this is the real importance.",
+            "candidate_match": "borderline",
+            "reasoning": "Cert_tau(S) supplies a direct intervention-style equivalence test against F, but calling the resulting task-local subset the paper's 'core innovation' remains stronger than the certificate's operational claim."
+          },
+          {
+            "lesson_quoted": "Conflating a methodological artifact — a computation-granularity difference, a degenerate zero baseline — with genuine signal undermines the entire premise once the confound is identified.",
+            "candidate_match": "yes",
+            "reasoning": "Neither core_mechanism nor falsification_prediction requires Delta_tau(F) to exceed a preregistered nontrivial positive-effect floor, so an empty or near-empty slice can be certified as equivalent when the complete artifact itself has negligible effect over B."
+          },
+          {
+            "lesson_quoted": "Building a suppression or privacy method without formalizing the threat model leaves the central guarantee unverifiable regardless of strong empirical numbers.",
+            "candidate_match": "no",
+            "reasoning": "EffectSlice is an effect-preserving artifact reduction method rather than a suppression or privacy mechanism, so this lesson does not apply."
+          },
+          {
+            "lesson_quoted": "Surveying or recombining fragmented methods without a unifying axis or a decisive controlled experiment yields a contribution reviewers dismiss as anecdotal.",
+            "candidate_match": "no",
+            "reasoning": "Cert_tau(S) is a single unifying object and the held-out paired comparison against F and B is a decisive controlled experiment, even though other novelty defects remain."
+          }
+        ],
+        "verdict": "triggered"
+      },
+      {
+        "gap": "No retrieved frontier estimates net benefit after execution cost, adaptation effort, and regressions on task dimensions outside the paper's headline metric are deducted from gross performance gain.",
+        "main_pattern": "architectural_operator_substitution",
+        "sub_pattern": "C09 (Substitute the Operator or Representation)",
+        "tactical_failure_mode_quoted": "The recurring failure is that the substitution is performed but the gap over the substituted-out baseline is never convincingly established. One shape is the mechanical composition: the intermediate is just two pre-existing primitives stacked together (a moment reformulation feeding a random projection), yielding no new sensitivity bound, so reviewers see 'an obvious idea' and 'not enough of a contribution in itself.'",
+        "reject_lessons_evaluated": [
+          {
+            "lesson_quoted": "A substitution that is merely two known primitives composed, carrying no new sensitivity bound, reads as 'not enough of a contribution in and of itself.'",
+            "candidate_match": "yes",
+            "reasoning": "core_mechanism explicitly composes interchangeable known subset-search backends with standard anytime-valid equivalence intervals, while R_tau(S) is a statistical confidence radius rather than C09's required new per-procedure influence or sensitivity bound."
+          },
+          {
+            "lesson_quoted": "An improvement that holds only in a narrow regime and might be matched by re-analyzing existing methods will be judged a non-improvement, not a contribution.",
+            "candidate_match": "borderline",
+            "reasoning": "The claim is intentionally task-local and margin-dependent, but the candidate does not establish that its cost-effect frontier could not be matched by re-analyzing dependency-aware retrieval or standard program-reduction baselines."
+          },
+          {
+            "lesson_quoted": "Porting an aggregation rule across settings collapses when its correctness rests on an assumption that may not hold and the key theorem appeal is not rigorously nailed down.",
+            "candidate_match": "no",
+            "reasoning": "The candidate does not port an aggregation rule or rely on the specific assumption-and-theorem structure described by this lesson."
+          },
+          {
+            "lesson_quoted": "An internal inconsistency between the bound claimed in the abstract and the bound actually proven, plus a missing thorough prior-art comparison, sinks the work regardless of the idea's merit.",
+            "candidate_match": "yes",
+            "reasoning": "The hook claims the smallest slice while core_mechanism certifies only one-deletion-minimality, and differentiation_from_lit omits the closest compact-skill neighbors Graph-of-Skills, SkillRAE, and ClawTrace."
+          }
+        ],
+        "verdict": "triggered"
+      }
+    ],
+    "verdict": "triggered",
+    "reasoning": "The low-budget gap's reframe_as_solvable_object entry triggers C00's degenerate-zero-baseline lesson because EffectSlice has no full-artifact eligibility gate requiring a nontrivial Delta_tau(F). The net-benefit gap's architectural_operator_substitution entry independently triggers C09's no-new-sensitivity-bound lesson: a confidence radius over paired effect gaps is not the card's per-element influence bound, and the hook's 'smallest' claim also conflicts with the one-deletion-minimal certificate."
+  },
+  "recipe_application_check": {
+    "entries": [
+      {
+        "gap": "Under a limited initial budget, no retrieved frontier establishes that the observed low-fidelity score preserves the sign and ordering of paper interventions by the performance improvement they later produce on independently specified user tasks; a probe can therefore support the wrong go/no-go decision even when it is internally faithful.",
+        "sub_pattern": "C00 (Reframe as a Solvable Object)",
+        "tactical_pattern_quoted": "This cluster recasts an opaque transparency question about an already-trained model or dataset — which feature/datum/internal component is responsible, how uncertain a prediction is, what a hidden representation encodes — as a concrete measurement over a well-studied object: a manifold-constrained counterfactual optimization, a submodular subset selection, an expectation/estimator over marginal statistics, an additive decomposition into a (often sparse) basis, or an influence/Shapley score accumulated along the optimization trajectory. Fidelity is finally certified either by a causal intervention that flips model behavior when the identified object is perturbed, or by a soundness/optimality proof, rather than by the visual plausibility of the produced explanation.",
+        "instantiation_in_core_mechanism": "core_mechanism defines Cert_tau(S) over source-anchored procedural atoms, maps the opaque 'core innovation' question to constrained subset selection, and uses paired artifact interventions plus sealed confirmation to certify task-local effect fidelity; this performs C00's distinctive reframe and validation move despite the missing nontrivial-effect eligibility gate.",
+        "verdict": "applied"
+      },
+      {
+        "gap": "No retrieved frontier estimates net benefit after execution cost, adaptation effort, and regressions on task dimensions outside the paper's headline metric are deducted from gross performance gain.",
+        "sub_pattern": "C09 (Substitute the Operator or Representation)",
+        "tactical_pattern_quoted": "Insert a low-sensitivity intermediate object — a linear sketch, a partitioned binary accumulator, a hierarchically-separated tree, a matrix decomposition, a low-rank projection, or a calibrated input-space transform — between the sensitive raw input and the downstream procedure, then attach the privacy/perturbation (or third-party verification) mechanism to that intermediate rather than to the raw input or the final output. The load-bearing artifact is a per-element influence/sensitivity bound on the intermediate: each record toggles a single bit, modifies only a bounded subset of components, degrades the privacy parameter by just √m, or contributes only a gap-normalized residual.",
+        "instantiation_in_core_mechanism": "The fixed vector of paired case effects and R_tau(S) relocate statistical estimation onto an intermediate, but no step proves a new bounded influence for each source procedure or removes ambient verification scaling through such a bound; the mechanism substitutes a compact artifact in the parent's generic sense and bypasses C09's signature move.",
+        "verdict": "bypassed"
+      }
+    ],
+    "verdict": "bypassed",
+    "reasoning": "The C00 entry applies its subset-object and causal-fidelity move, but the C09 entry is bypassed because core_mechanism contains no low-sensitivity intermediate with a genuinely new per-element influence bound. R_tau(S) quantifies sampling uncertainty in an effect gap and cannot stand in for that tactical artifact."
+  },
+  "anti_pattern_check": {
+    "composition_set": [
+      "reframe_as_solvable_object",
+      "architectural_operator_substitution"
+    ],
+    "matched_pattern_id": null,
+    "required_mitigation_quoted": null,
+    "mitigation_substantively_delivered": "n/a",
+    "reasoning": "The candidate has no heterogeneous_decomposition leg, so none of the three documented reject-favored compositions matches."
+  },
+  "paper_pointed_threat": {
+    "threat_paper_id": "arxiv:2604.05333v3",
+    "threat_source": "collision_hits",
+    "threat_channel": "signature",
+    "subsumption_argument": "Graph-of-Skills already constructs executable dependency graphs and retrieves dependency-complete compact skill bundles under a context budget, directly covering EffectSlice's structural atomization, dependency closure, and compact runnable-substitute motivation. EffectSlice still has a potentially distinct claim in simultaneous task-local effect equivalence and retained/deleted procedure certificates, so this is a partial, addressable threat rather than exact-mechanism overlap; however, the candidate cannot present dependency-aware compaction itself as novel and must compare against this full-text method. Collision coverage remains degraded, so unresolved behavior-preserving program-reduction and prompt-pruning ancestors may pose additional threats not captured by the local pool.",
+    "addressable_via": "differentiation_from_lit must add Graph-of-Skills and make the simultaneous effect-equivalence and per-procedure certificate delta explicit, with a direct dependency-aware compaction baseline in the stated evaluation.",
+    "parametric_family_concern": "Behavior-preserving program reduction and statistical delta debugging; scoop-check 'behavior-preserving program reduction equivalence testing' and 'statistical delta debugging minimal failure-inducing input'."
+  },
+  "falsification_structure_check": {
+    "minimal_experiment_named": "yes",
+    "outcome_metric_named": "yes",
+    "load_bearing_variable": "the certified effect-gap radius R_tau(S)",
+    "negative_control_target": "outcome_metric",
+    "verdict": "borderline",
+    "reasoning": "The held-out paper-task experiment and paired net-effect direction are concrete, and the label permutation predicts a downstream effect change. However, R_tau(S) is a confidence radius governing selection uncertainty rather than the source-grounded effect-preservation mechanism itself, so permuting its labels primarily corrupts candidate selection and does not cleanly identify the claimed certificate mechanism."
+  },
+  "verdict": "abandon",
+  "verdict_layer": "hard_floor",
+  "verdict_rationale": "gap_closure_reject_check.entries[0].reject_lessons_evaluated[3].lesson_quoted is triggered because no eligibility gate prevents certification against a full artifact with negligible effect, and gap_closure_reject_check.entries[1].reject_lessons_evaluated[0].lesson_quoted is independently triggered because the C09 leg composes known search and confidence machinery without a new per-element sensitivity bound. recipe_application_check.entries[1].verdict is bypassed, while the hook's 'smallest' claim conflicts with one-deletion-minimality and the nearest compact-skill literature is omitted. The collision evidence is explicitly degraded and identifies only partial overlap, but degraded retrieval cannot override the documented Reject lessons that mechanically trigger the hard floor.",
+  "revision_targets": []
+}

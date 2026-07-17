@@ -1,0 +1,414 @@
+{
+  "schema_version": "effectslice-toolformer-filter-source-atom-map.v1",
+  "paper_id": "toolformer",
+  "task_id": "TOOLFORMER-FILTER",
+  "source_path": "papers/extracted/toolformer.txt",
+  "source_sha256": "1fa619f443e107690b9fb722a72ab361825cfda5346436c90cb23acb3c7bfbb6",
+  "full_artifact_path": "full_artifact.md",
+  "full_artifact_sha256": "4ada0d67b79996bfd3551f8d70cf444dd6604731aba7a6cb32b50005e7e7ea33",
+  "atoms": [
+    {
+      "atom_id": "T01",
+      "title": "Normalize the decreasing future-token weights",
+      "instruction": "Let t = j - i, so the first future token uses t = 0. Use raw weight max(0, 1 - 0.2 * t), then divide every raw weight by the sum over offsets.",
+      "contract_role": "paper_weight_schedule",
+      "source_spans": [
+        {
+          "byte_start": 26992,
+          "byte_end": 27111,
+          "line_start": 268,
+          "line_end": 268,
+          "source_text": "function, we use                                                      (Brown et al., 2020), two models that are about\r\n"
+        },
+        {
+          "byte_start": 27111,
+          "byte_end": 27234,
+          "line_start": 269,
+          "line_end": 269,
+          "source_text": "                                                                      10 and 25 times larger than our other baseline mod-\r\n"
+        },
+        {
+          "byte_start": 27234,
+          "byte_end": 27325,
+          "line_start": 270,
+          "line_end": 270,
+          "source_text": "               w̃t                                                    els, respectively.\r\n"
+        },
+        {
+          "byte_start": 27325,
+          "byte_end": 27385,
+          "line_start": 271,
+          "line_end": 271,
+          "source_text": "  wt = P                with w̃t = max(0, 1 − 0.2 · t)\r\n"
+        },
+        {
+          "byte_start": 27385,
+          "byte_end": 27411,
+          "line_start": 272,
+          "line_end": 272,
+          "source_text": "              s∈N w̃s\r\n"
+        }
+      ]
+    },
+    {
+      "atom_id": "T02",
+      "title": "Compute weighted future-token loss",
+      "instruction": "For each conditioning prefix, compute negative weighted log probability over the future tokens using the normalized weights.",
+      "contract_role": "weighted_cross_entropy",
+      "source_spans": [
+        {
+          "byte_start": 13937,
+          "byte_end": 14051,
+          "line_start": 134,
+          "line_end": 134,
+          "source_text": "  Biden born?\")] Scranton, [QA(\"In which state is               Filtering API Calls Let i be the position of the\r\n"
+        },
+        {
+          "byte_start": 14051,
+          "byte_end": 14174,
+          "line_start": 135,
+          "line_end": 135,
+          "source_text": "  Scranton?\")] Pennsylvania.                                    API call ci in the sequence x = x1 , . . . , xn , and let\r\n"
+        },
+        {
+          "byte_start": 14174,
+          "byte_end": 14289,
+          "line_start": 136,
+          "line_end": 136,
+          "source_text": "                                                                ri be the response from the API. Further, given a\r\n"
+        },
+        {
+          "byte_start": 14289,
+          "byte_end": 14394,
+          "line_start": 137,
+          "line_end": 137,
+          "source_text": "  Input: Coca-Cola, or Coke, is a carbonated soft drink         sequence (wi | i ∈ N) of weights, let\r\n"
+        },
+        {
+          "byte_start": 14394,
+          "byte_end": 14436,
+          "line_start": 138,
+          "line_end": 138,
+          "source_text": "  manufactured by the Coca-Cola Company.\r\n"
+        },
+        {
+          "byte_start": 14436,
+          "byte_end": 14521,
+          "line_start": 139,
+          "line_end": 139,
+          "source_text": "                                                                                  n\r\n"
+        },
+        {
+          "byte_start": 14521,
+          "byte_end": 14606,
+          "line_start": 140,
+          "line_end": 140,
+          "source_text": "                                                                                  X\r\n"
+        },
+        {
+          "byte_start": 14606,
+          "byte_end": 14735,
+          "line_start": 141,
+          "line_end": 141,
+          "source_text": "  Output: Coca-Cola, or [QA(\"What other name is                    Li (z) = −            wj−i · log pM (xj | z, x1:j−1 )\r\n"
+        },
+        {
+          "byte_start": 14735,
+          "byte_end": 14823,
+          "line_start": 142,
+          "line_end": 142,
+          "source_text": "  Coca-Cola known by?\")] Coke, is a carbonated soft drink                          j=i\r\n"
+        },
+        {
+          "byte_start": 14823,
+          "byte_end": 14878,
+          "line_start": 143,
+          "line_end": 143,
+          "source_text": "  manufactured by [QA(\"Who manufactures Coca-Cola?\")]\r\n"
+        },
+        {
+          "byte_start": 14878,
+          "byte_end": 14993,
+          "line_start": 144,
+          "line_end": 144,
+          "source_text": "  the Coca-Cola Company.                                        be the weighted cross entropy loss for M over the\r\n"
+        },
+        {
+          "byte_start": 14993,
+          "byte_end": 15114,
+          "line_start": 145,
+          "line_end": 145,
+          "source_text": "                                                                tokens xi , . . . , xn if the model is prefixed with z.\r\n"
+        }
+      ]
+    },
+    {
+      "atom_id": "T03",
+      "title": "Use the stronger counterfactual baseline",
+      "instruction": "Let L_empty be the loss with no API call and L_call_only the loss with the call but no result; set L_minus = min(L_empty, L_call_only).",
+      "contract_role": "counterfactual_comparator",
+      "source_spans": [
+        {
+          "byte_start": 15114,
+          "byte_end": 15233,
+          "line_start": 146,
+          "line_end": 146,
+          "source_text": "  Input: x                                                      We compare two different instantiations of this loss:\r\n"
+        },
+        {
+          "byte_start": 15233,
+          "byte_end": 15244,
+          "line_start": 147,
+          "line_end": 147,
+          "source_text": "  Output:\r\n"
+        },
+        {
+          "byte_start": 15244,
+          "byte_end": 15324,
+          "line_start": 148,
+          "line_end": 148,
+          "source_text": "                                                                            L+\r\n"
+        },
+        {
+          "byte_start": 15324,
+          "byte_end": 15423,
+          "line_start": 149,
+          "line_end": 149,
+          "source_text": "                                                                             i = Li (e(ci , ri ))\r\n"
+        },
+        {
+          "byte_start": 15423,
+          "byte_end": 15505,
+          "line_start": 150,
+          "line_end": 150,
+          "source_text": "Figure 3: An exemplary prompt P (x) used to generate                        L−\r\n"
+        },
+        {
+          "byte_start": 15505,
+          "byte_end": 15618,
+          "line_start": 151,
+          "line_end": 151,
+          "source_text": "                                                                             i = min (Li (ε), Li (e(ci , ε)))\r\n"
+        },
+        {
+          "byte_start": 15618,
+          "byte_end": 15662,
+          "line_start": 152,
+          "line_end": 152,
+          "source_text": "API calls for the question answering tool.\r\n"
+        },
+        {
+          "byte_start": 15662,
+          "byte_end": 15777,
+          "line_start": 153,
+          "line_end": 153,
+          "source_text": "                                                                where ε denotes an empty sequence. The former is\r\n"
+        },
+        {
+          "byte_start": 15777,
+          "byte_end": 15899,
+          "line_start": 154,
+          "line_end": 154,
+          "source_text": "                                                                the weighted loss over all tokens xi , . . . , xn if the\r\n"
+        },
+        {
+          "byte_start": 15899,
+          "byte_end": 16017,
+          "line_start": 155,
+          "line_end": 155,
+          "source_text": "M itself on this dataset. Each of these steps is                API call and its result are given to M as a prefix;3\r\n"
+        },
+        {
+          "byte_start": 16017,
+          "byte_end": 16131,
+          "line_start": 156,
+          "line_end": 156,
+          "source_text": "described in more detail below.                                 the latter is the minimum of the losses obtained\r\n"
+        },
+        {
+          "byte_start": 16131,
+          "byte_end": 16248,
+          "line_start": 157,
+          "line_end": 157,
+          "source_text": "Sampling API Calls For each API, we write a                     from (i) doing no API call at all and (ii) doing an\r\n"
+        },
+        {
+          "byte_start": 16248,
+          "byte_end": 16368,
+          "line_start": 158,
+          "line_end": 158,
+          "source_text": "prompt P (x) that encourages the LM to anno-                    API call, but not providing the response. Intuitively,\r\n"
+        }
+      ]
+    },
+    {
+      "atom_id": "T04",
+      "title": "Keep calls that meet the filtering threshold",
+      "instruction": "Let L_plus be the loss with the call and result. Compute margin = L_minus - L_plus and keep the call exactly when margin >= tau_filter.",
+      "contract_role": "inclusive_filter_decision",
+      "source_spans": [
+        {
+          "byte_start": 16368,
+          "byte_end": 16487,
+          "line_start": 159,
+          "line_end": 159,
+          "source_text": "tate an example x = x1 , . . . , xn with API calls.             an API call is helpful to M if providing it with both\r\n"
+        },
+        {
+          "byte_start": 16487,
+          "byte_end": 16606,
+          "line_start": 160,
+          "line_end": 160,
+          "source_text": "An example of such a prompt for a question an-                  the input and the output of this call makes it easier\r\n"
+        },
+        {
+          "byte_start": 16606,
+          "byte_end": 16723,
+          "line_start": 161,
+          "line_end": 161,
+          "source_text": "swering tool is shown in Figure 3; all prompts                  for the model to predict future tokens, compared to\r\n"
+        },
+        {
+          "byte_start": 16723,
+          "byte_end": 16841,
+          "line_start": 162,
+          "line_end": 162,
+          "source_text": "used are shown in Appendix A.2. Let pM (zn+1 |                  not receiving the API call at all, or receiving only\r\n"
+        },
+        {
+          "byte_start": 16841,
+          "byte_end": 16959,
+          "line_start": 163,
+          "line_end": 163,
+          "source_text": "z1 , . . . , zn ) be the probability that M assigns to          its input. Given a filtering threshold τf , we thus\r\n"
+        },
+        {
+          "byte_start": 16959,
+          "byte_end": 17054,
+          "line_start": 164,
+          "line_end": 164,
+          "source_text": "token zn+1 as a continuation for the sequence                   only keep API calls for which\r\n"
+        },
+        {
+          "byte_start": 17054,
+          "byte_end": 17113,
+          "line_start": 165,
+          "line_end": 165,
+          "source_text": "z1 , . . . , zn . We first sample up to k candidate posi-\r\n"
+        },
+        {
+          "byte_start": 17113,
+          "byte_end": 17210,
+          "line_start": 166,
+          "line_end": 166,
+          "source_text": "                                                                                      L−    +\r\n"
+        },
+        {
+          "byte_start": 17210,
+          "byte_end": 17315,
+          "line_start": 167,
+          "line_end": 167,
+          "source_text": "                                                                                       i − Li ≥ τf\r\n"
+        },
+        {
+          "byte_start": 17315,
+          "byte_end": 17365,
+          "line_start": 168,
+          "line_end": 168,
+          "source_text": "tions for doing API calls by computing, for each\r\n"
+        },
+        {
+          "byte_start": 17365,
+          "byte_end": 17488,
+          "line_start": 169,
+          "line_end": 169,
+          "source_text": "i ∈ {1, . . . , n}, the probability                             holds, i.e., adding the API call and its result reduces\r\n"
+        },
+        {
+          "byte_start": 17488,
+          "byte_end": 17606,
+          "line_start": 170,
+          "line_end": 170,
+          "source_text": "                                                                the loss by at least τf , compared to not doing any\r\n"
+        },
+        {
+          "byte_start": 17606,
+          "byte_end": 17714,
+          "line_start": 171,
+          "line_end": 171,
+          "source_text": "             pi = pM (<API> | P (x), x1:i−1 )                   API call or obtaining no result from it.\r\n"
+        }
+      ]
+    },
+    {
+      "atom_id": "T05",
+      "title": "Apply the rule to every proposed call in order",
+      "instruction": "Evaluate every executed candidate call independently, filter all candidates with the same rule, and preserve candidate order in the output.",
+      "contract_role": "batched_candidate_filtering",
+      "source_spans": [
+        {
+          "byte_start": 8022,
+          "byte_end": 8135,
+          "line_start": 76,
+          "line_end": 76,
+          "source_text": "Figure 2: Key steps in our approach, illustrated for a question answering tool: Given an input text x, we first\r\n"
+        },
+        {
+          "byte_start": 8135,
+          "byte_end": 8256,
+          "line_start": 77,
+          "line_end": 77,
+          "source_text": "sample a position i and corresponding API call candidates c1i , c2i , . . . , cki . We then execute these API calls and\r\n"
+        },
+        {
+          "byte_start": 8256,
+          "byte_end": 8372,
+          "line_start": 78,
+          "line_end": 78,
+          "source_text": "filter out all calls which do not reduce the loss Li over the next tokens. All remaining API calls are interleaved\r\n"
+        },
+        {
+          "byte_start": 8372,
+          "byte_end": 8428,
+          "line_start": 79,
+          "line_end": 79,
+          "source_text": "with the original text, resulting in a new text x∗ .\r\n"
+        }
+      ]
+    }
+  ],
+  "requires": {
+    "T01": [],
+    "T02": [
+      "T01"
+    ],
+    "T03": [
+      "T02"
+    ],
+    "T04": [
+      "T03"
+    ],
+    "T05": [
+      "T04"
+    ]
+  },
+  "dependency_edges": [
+    {
+      "from": "T02",
+      "to": "T01"
+    },
+    {
+      "from": "T03",
+      "to": "T02"
+    },
+    {
+      "from": "T04",
+      "to": "T03"
+    },
+    {
+      "from": "T05",
+      "to": "T04"
+    }
+  ],
+  "evidence_boundary": "Source-grounded task artifact only; not eligibility or effectiveness evidence."
+}

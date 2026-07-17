@@ -1,0 +1,272 @@
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+
+
+TRAIN_PATH = Path("train.csv")
+VALIDATION_PATH = Path("validation_features.csv")
+OUTPUT_PATH = Path("submission.csv")
+RANDOM_STATE = 42
+
+
+def parse_target(series):
+    if pd.api.types.is_bool_dtype(series):
+        return series.astype(int)
+
+    numeric = pd.to_numeric(series, errors="coerce")
+    if numeric.notna().all():
+        return numeric.astype(int)
+
+    normalized = series.astype(str).str.strip().str.lower()
+    mapped = normalized.map(
+        {
+            "true": 1,
+            "false": 0,
+            "yes": 1,
+            "no": 0,
+            "1": 1,
+            "0": 0,
+        }
+    )
+    if mapped.isna().any():
+        raise ValueError("Transported contains unsupported target values")
+    return mapped.astype(int)
+
+
+def prepare_features(train, validation, y):
+    train = train.copy()
+    validation = validation.copy()
+    combined = pd.concat([train, validation], axis=0, ignore_index=True)
+
+    passenger_id = combined["PassengerId"].fillna("Unknown_0").astype(str)
+    id_parts = passenger_id.str.split("_", n=1, expand=True)
+    combined["GroupId"] = id_parts[0]
+    combined["GroupMember"] = pd.to_numeric(id_parts[1], errors="coerce")
+
+    cabin = combined.get("Cabin", pd.Series(index=combined.index, dtype=object))
+    cabin = cabin.fillna("Unknown/Unknown/Unknown").astype(str)
+    cabin_parts = cabin.str.split("/", n=2, expand=True)
+    combined["CabinDeck"] = cabin_parts[0]
+    combined["CabinNumber"] = pd.to_numeric(cabin_parts[1], errors="coerce")
+    combined["CabinSide"] = cabin_parts[2]
+
+    name = combined.get("Name", pd.Series(index=combined.index, dtype=object))
+    name = name.fillna("Unknown Unknown").astype(str).str.strip()
+    combined["Surname"] = name.str.rsplit(n=1).str[-1]
+
+    spend_columns = [
+        column
+        for column in ["RoomService", "FoodCourt", "ShoppingMall", "Spa", "VRDeck"]
+        if column in combined.columns
+    ]
+    for column in spend_columns:
+        combined[column] = pd.to_numeric(combined[column], errors="coerce")
+        combined[f"Log{column}"] = np.log1p(combined[column].clip(lower=0))
+
+    if spend_columns:
+        combined["TotalSpend"] = combined[spend_columns].sum(axis=1, min_count=1)
+        combined["LogTotalSpend"] = np.log1p(combined["TotalSpend"].clip(lower=0))
+        combined["NoSpend"] = combined["TotalSpend"].fillna(0).eq(0).astype(int)
+        combined["SpendServices"] = combined[spend_columns].gt(0).sum(axis=1)
+
+    if "Age" in combined.columns:
+        combined["Age"] = pd.to_numeric(combined["Age"], errors="coerce")
+        combined["AgeBand"] = pd.cut(
+            combined["Age"],
+            bins=[-np.inf, 5, 12, 17, 25, 40, 60, np.inf],
+            labels=["Infant", "Child", "Teen", "YoungAdult", "Adult", "Older", "Senior"],
+        ).astype(object)
+
+    combined["GroupSize"] = combined.groupby("GroupId")["GroupId"].transform("size")
+    combined["TravelingAlone"] = combined["GroupSize"].eq(1).astype(int)
+    combined["SurnameSize"] = combined.groupby("Surname")["Surname"].transform("size")
+    combined["CabinOccupancy"] = combined.groupby(
+        ["CabinDeck", "CabinNumber", "CabinSide"], dropna=False
+    )["PassengerId"].transform("size")
+
+    n_train = len(train)
+    global_rate = float(y.mean())
+
+    # Leave-one-out encodings use only other labeled rows during training.
+    for source_column, output_column, smoothing in [
+        ("GroupId", "GroupTransportRate", 1.5),
+        ("Surname", "SurnameTransportRate", 5.0),
+    ]:
+        train_keys = combined.loc[: n_train - 1, source_column]
+        stats = pd.DataFrame({"key": train_keys.to_numpy(), "target": y.to_numpy()})
+        grouped = stats.groupby("key")["target"].agg(["sum", "count"])
+
+        sums = train_keys.map(grouped["sum"]).astype(float)
+        counts = train_keys.map(grouped["count"]).astype(float)
+        combined.loc[: n_train - 1, output_column] = (
+            sums - y.to_numpy() + smoothing * global_rate
+        ) / (counts - 1 + smoothing)
+
+        validation_keys = combined.loc[n_train:, source_column]
+        combined.loc[n_train:, output_column] = (
+            validation_keys.map(grouped["sum"]).fillna(0).to_numpy()
+            + smoothing * global_rate
+        ) / (
+            validation_keys.map(grouped["count"]).fillna(0).to_numpy()
+            + smoothing
+        )
+
+    combined = combined.drop(columns=["Transported", "Name", "Cabin"], errors="ignore")
+    return (
+        combined.iloc[:n_train].reset_index(drop=True),
+        combined.iloc[n_train:].reset_index(drop=True),
+    )
+
+
+def fit_catboost(train_features, validation_features, y):
+    from catboost import CatBoostClassifier
+
+    train_features = train_features.copy()
+    validation_features = validation_features.copy()
+    categorical_columns = train_features.select_dtypes(
+        include=["object", "category", "bool"]
+    ).columns.tolist()
+
+    for column in categorical_columns:
+        train_features[column] = train_features[column].fillna("__MISSING__").astype(str)
+        validation_features[column] = (
+            validation_features[column].fillna("__MISSING__").astype(str)
+        )
+
+    numeric_columns = train_features.columns.difference(categorical_columns)
+    for column in numeric_columns:
+        train_features[column] = pd.to_numeric(
+            train_features[column], errors="coerce"
+        ).replace([np.inf, -np.inf], np.nan)
+        validation_features[column] = pd.to_numeric(
+            validation_features[column], errors="coerce"
+        ).replace([np.inf, -np.inf], np.nan)
+
+    model = CatBoostClassifier(
+        iterations=700,
+        depth=7,
+        learning_rate=0.045,
+        loss_function="Logloss",
+        eval_metric="Accuracy",
+        l2_leaf_reg=5.0,
+        random_seed=RANDOM_STATE,
+        random_strength=0.5,
+        verbose=False,
+        allow_writing_files=False,
+        thread_count=-1,
+    )
+    model.fit(train_features, y, cat_features=categorical_columns)
+    return model.predict_proba(validation_features)[:, 1]
+
+
+def fit_sklearn_fallback(train_features, validation_features, y):
+    from sklearn.compose import ColumnTransformer
+    from sklearn.ensemble import HistGradientBoostingClassifier
+    from sklearn.impute import SimpleImputer
+    from sklearn.pipeline import Pipeline
+    from sklearn.preprocessing import OneHotEncoder
+
+    train_features = train_features.copy()
+    validation_features = validation_features.copy()
+
+    # High-cardinality text identifiers are represented by their engineered
+    # numeric statistics in the fallback model.
+    train_features = train_features.drop(
+        columns=["PassengerId", "GroupId", "Surname"], errors="ignore"
+    )
+    validation_features = validation_features.drop(
+        columns=["PassengerId", "GroupId", "Surname"], errors="ignore"
+    )
+
+    categorical_columns = train_features.select_dtypes(
+        include=["object", "category", "bool"]
+    ).columns.tolist()
+    numeric_columns = [
+        column for column in train_features.columns if column not in categorical_columns
+    ]
+
+    try:
+        encoder = OneHotEncoder(handle_unknown="ignore", sparse_output=False)
+    except TypeError:
+        encoder = OneHotEncoder(handle_unknown="ignore", sparse=False)
+
+    preprocessing = ColumnTransformer(
+        transformers=[
+            (
+                "numeric",
+                SimpleImputer(strategy="median", add_indicator=True),
+                numeric_columns,
+            ),
+            (
+                "categorical",
+                Pipeline(
+                    [
+                        (
+                            "imputer",
+                            SimpleImputer(strategy="most_frequent"),
+                        ),
+                        ("encoder", encoder),
+                    ]
+                ),
+                categorical_columns,
+            ),
+        ],
+        remainder="drop",
+    )
+
+    model = Pipeline(
+        [
+            ("preprocessing", preprocessing),
+            (
+                "classifier",
+                HistGradientBoostingClassifier(
+                    learning_rate=0.06,
+                    max_iter=350,
+                    max_leaf_nodes=31,
+                    min_samples_leaf=18,
+                    l2_regularization=1.5,
+                    random_state=RANDOM_STATE,
+                ),
+            ),
+        ]
+    )
+    model.fit(train_features, y)
+    return model.predict_proba(validation_features)[:, 1]
+
+
+def main():
+    train = pd.read_csv(TRAIN_PATH)
+    validation = pd.read_csv(VALIDATION_PATH)
+
+    if "Transported" not in train.columns:
+        raise ValueError("train.csv must contain the Transported target")
+    if "PassengerId" not in validation.columns:
+        raise ValueError("validation_features.csv must contain PassengerId")
+
+    y = parse_target(train["Transported"])
+    passenger_ids = validation["PassengerId"].copy()
+    train_features, validation_features = prepare_features(
+        train.drop(columns=["Transported"]),
+        validation,
+        y,
+    )
+
+    try:
+        probabilities = fit_catboost(train_features, validation_features, y)
+    except (ImportError, ModuleNotFoundError):
+        probabilities = fit_sklearn_fallback(
+            train_features, validation_features, y
+        )
+
+    submission = pd.DataFrame(
+        {
+            "PassengerId": passenger_ids,
+            "Transported": probabilities >= 0.5,
+        }
+    )
+    submission.to_csv(OUTPUT_PATH, index=False)
+
+
+if __name__ == "__main__":
+    main()

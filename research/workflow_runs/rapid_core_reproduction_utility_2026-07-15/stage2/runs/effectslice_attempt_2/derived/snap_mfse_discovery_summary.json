@@ -1,0 +1,108 @@
+{
+  "schema_version": "effectslice-snap-mfse-discovery-summary.v1",
+  "evidence_boundary": "Discovery and deletion audit only. The selected candidate remains unconfirmed until sealed confirmation.",
+  "thresholds": {
+    "epsilon": 0.025,
+    "delta_delete": 0.05
+  },
+  "registered_candidate_ids": [
+    "prefix_01",
+    "prefix_02",
+    "prefix_03",
+    "prefix_04"
+  ],
+  "attempted_candidate_ids": [
+    "prefix_01",
+    "prefix_02",
+    "prefix_03"
+  ],
+  "baseline_row": {
+    "pair_id": "snap-mfse:discovery:deepseek:bf:001",
+    "candidate_id": null,
+    "classification": "candidate_inferior",
+    "effect_gap_F_minus_candidate": 1.0,
+    "effect_gap_F_minus_S": 1.0,
+    "case_mismatches": 16,
+    "total_cases": 16,
+    "contract_passed": true,
+    "matrix_free_guard_passed": true,
+    "neighbor_id": "B"
+  },
+  "candidate_rows": [
+    {
+      "pair_id": "snap-mfse:discovery:deepseek:fs:prefix01:001",
+      "candidate_id": "prefix_01",
+      "classification": "candidate_inferior",
+      "effect_gap_F_minus_candidate": 1.0,
+      "effect_gap_F_minus_S": 1.0,
+      "case_mismatches": 16,
+      "total_cases": 16,
+      "contract_passed": true,
+      "matrix_free_guard_passed": true,
+      "retained_atom_ids": [
+        "A01"
+      ],
+      "retained_scc_count": 1
+    },
+    {
+      "pair_id": "snap-mfse:discovery:deepseek:fs:prefix02:001",
+      "candidate_id": "prefix_02",
+      "classification": "candidate_inferior",
+      "effect_gap_F_minus_candidate": 1.0,
+      "effect_gap_F_minus_S": 1.0,
+      "case_mismatches": 16,
+      "total_cases": 16,
+      "contract_passed": true,
+      "matrix_free_guard_passed": true,
+      "retained_atom_ids": [
+        "A01",
+        "A02"
+      ],
+      "retained_scc_count": 2
+    },
+    {
+      "pair_id": "snap-mfse:discovery:deepseek:fs:prefix03:001",
+      "candidate_id": "prefix_03",
+      "classification": "candidate_equivalent",
+      "effect_gap_F_minus_candidate": 0.0,
+      "effect_gap_F_minus_S": 0.0,
+      "case_mismatches": 0,
+      "total_cases": 16,
+      "contract_passed": true,
+      "matrix_free_guard_passed": true,
+      "retained_atom_ids": [
+        "A01",
+        "A02",
+        "A03"
+      ],
+      "retained_scc_count": 3
+    }
+  ],
+  "selected_candidate_id": "prefix_03",
+  "deletion_rows": [
+    {
+      "neighbor_id": "B",
+      "removed_atom_id": "A01",
+      "classification": "candidate_inferior",
+      "effect_gap_F_minus_neighbor": 1.0,
+      "deletion_failed": true
+    },
+    {
+      "neighbor_id": "prefix_01",
+      "removed_atom_id": "A02",
+      "classification": "candidate_inferior",
+      "effect_gap_F_minus_neighbor": 1.0,
+      "deletion_failed": true
+    },
+    {
+      "neighbor_id": "prefix_02",
+      "removed_atom_id": "A03",
+      "classification": "candidate_inferior",
+      "effect_gap_F_minus_neighbor": 1.0,
+      "deletion_failed": true
+    }
+  ],
+  "deletion_audit_complete": true,
+  "task_disposition": "candidate_locked_for_confirmation",
+  "scientific_claim_ready": false
+}

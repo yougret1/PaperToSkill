@@ -1,0 +1,71 @@
+{
+  "schema_version": "research-workflow.novelty-decision.v2",
+  "run_id": "rapid_core_reproduction_utility_2026-07-15:sequential-triage",
+  "decision": "reject",
+  "evidence_confidence": "low",
+  "mechanism_severity": "subsumed",
+  "subsumption_risk": "high",
+  "axes": {
+    "problem": "Spend a limited budget on cheap observations before deciding whether to run or adopt an expensive method.",
+    "mechanism": "Bayesian posterior decision risk, value-of-information-per-cost acquisition, and three-way sequential stopping.",
+    "insight": "The cheapest faithful check need not be the most decision-informative check.",
+    "application": "Paper-derived intervention probes on user tasks.",
+    "evaluation_scope": "Cost to correct adoption decision under fixed false-adoption and false-rejection constraints."
+  },
+  "closest_work": [
+    {
+      "paper_id": "semanticscholar:ab6729cff99ab165013e982a76461cce091f8cae",
+      "title": "Cost-Sensitive Multi-Fidelity Bayesian Optimization with Transfer of Learning Curve Extrapolation",
+      "evidence_level": "abstract",
+      "mechanism_relationship": "subsumes",
+      "subsumes_claim": true,
+      "axis_overlap": {
+        "problem": true,
+        "mechanism": true,
+        "insight": true,
+        "application": false,
+        "evaluation_scope": true
+      },
+      "evidence": "The abstract already defines a user cost-performance utility, selects future observations with a cost-sensitive acquisition function, transfers cheap-to-expensive predictions, and stops automatically; the candidate changes the application object but not the central sequential decision mechanism.",
+      "limitations": "Full text was not fetched, but the abstract states all load-bearing mechanism components."
+    },
+    {
+      "paper_id": "crossref:10.1137/1.9781611977141.1",
+      "title": "GPTuneBand: Multi-task and Multi-fidelity Autotuning for Large-scale High Performance Computing Applications",
+      "evidence_level": "abstract",
+      "mechanism_relationship": "partial",
+      "subsumes_claim": false,
+      "axis_overlap": {
+        "problem": true,
+        "mechanism": true,
+        "insight": true,
+        "application": false,
+        "evaluation_scope": true
+      },
+      "evidence": "It combines multi-task Bayesian optimization and multi-armed-bandit fidelity allocation under limited budget.",
+      "limitations": "It optimizes configurations rather than paper adoption."
+    },
+    {
+      "paper_id": "arxiv:2310.20447v1",
+      "title": "Efficient Bayesian Learning Curve Extrapolation using Prior-Data Fitted Networks",
+      "evidence_level": "abstract",
+      "mechanism_relationship": "partial",
+      "subsumes_claim": false,
+      "axis_overlap": {
+        "problem": true,
+        "mechanism": true,
+        "insight": true,
+        "application": false,
+        "evaluation_scope": true
+      },
+      "evidence": "It builds a Bayesian posterior predictive from cheap prefixes and uses it for model selection and early stopping.",
+      "limitations": "The observation family is a learning curve rather than heterogeneous paper probes."
+    }
+  ],
+  "retrieved_paper_count": 81,
+  "limitations": [
+    "dblp: failed: HTTPSConnectionPool(host='dblp.org', port=443): Max retries exceeded with url: /search/publ/api?q=learning+curve+extrapolation+early+performance+prediction&format=json&h=10&f=0 (Caused by ProxyError('Unable to connect to proxy', RemoteDisconnected('Remote end closed connection without response')))",
+    "Candidate-specific external collision terms were not transmitted; the assessment reuses generic run-scoped searches.",
+    "The central mechanism appears to be a direct application of established cost-sensitive Bayesian optimal experimental design and active hypothesis testing."
+  ]
+}

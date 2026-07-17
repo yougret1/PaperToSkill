@@ -1,0 +1,58 @@
+{
+  "title": "ClaimProbe: Paired Micro-Reproduction Predicts Cost-Adjusted Paper Utility",
+  "hook": "ClaimProbe reproduces only a paper's load-bearing intervention operator, not its full experiment, yet aims to make the earlier decision that matters: whether adoption will deliver positive net benefit on independently specified user tasks. It returns beneficial, not-beneficial, or inconclusive and ranks papers only when paired uncertainty supports an order.",
+  "hook_shape_rationale": "We choose counter-intuitive minimalism: the current strongest baseline implements and executes the complete reproduction, while ClaimProbe is strictly smaller on implementation scope, run count, and GPU/API cost because it instantiates one claim-bearing operator in a matched target-task probe. A surprising empirical reveal was also viable, but a claim of frequent sign reversal would be premature before the locked eight-row study measures it.",
+  "gap_closure": [
+    {
+      "gap": "Under a limited initial budget, no retrieved frontier establishes that the observed low-fidelity score preserves the sign and ordering of paper interventions by the performance improvement they later produce on independently specified user tasks; a probe can therefore support the wrong go/no-go decision even when it is internally faithful.",
+      "main_pattern": "controlled_diagnostic_design",
+      "sub_pattern": "C02 (Design a Confound-Isolating Diagnostic)",
+      "companion_pattern": null,
+      "how_closed": "ClaimProbe isolates the paper's load-bearing operator in matched intervention-sham micro-runs on locked user cases, then uses calibrated intervals over the paired net-benefit margin to predict sign and assert only supported pairwise rankings."
+    },
+    {
+      "gap": "No retrieved frontier estimates net benefit after execution cost, adaptation effort, and regressions on task dimensions outside the paper's headline metric are deducted from gross performance gain.",
+      "main_pattern": "controlled_diagnostic_design",
+      "sub_pattern": "C02 (Design a Confound-Isolating Diagnostic)",
+      "companion_pattern": null,
+      "how_closed": "Each matched pair produces a pre-weighted ledger that subtracts incremental execution cost, adaptation effort, and off-metric regression penalties from normalized target-task gain before any sign or ranking decision."
+    }
+  ],
+  "core_mechanism": "ClaimProbe names one confound: artifact conditioning, where the paper or generated skill helps choose the tasks or evidence used to judge its own value, making internal fidelity look like user utility. For each candidate paper p, a source map identifies one load-bearing intervention operator A_p, and a capped micro-implementation exposes two otherwise identical code paths: I_p executes A_p, while S_p is a sham that replaces only A_p with the paper's named pre-intervention baseline or an identity operator; S_p is not a no-skill condition and both arms receive the same instructions, tools, model, environment, cache state, and resource cap. The instrument runs I_p and S_p in randomized order on the user's eight locked real-reuse task rows, using the same case, seed, and evaluator for each pair; the oracle is a pre-registered scorer or blinded human rule fixed before the paper is inspected and never the evaluated agent's self-judgment. Let u_t(y) be the row's primary outcome normalized to [0,1], g_tj(y) each normalized guardrail score, e_t(y) measured GPU/API execution cost, and a_t(y) logged human adaptation minutes; user-fixed conversion weights lambda_e, lambda_a, and gamma_j put costs and regressions into utility units. The per-case paired net benefit is z_pt = u_t(I_p)-u_t(S_p)-lambda_e[e_t(I_p)-e_t(S_p)]-lambda_a[a_t(I_p)-a_t(S_p)]-sum_j gamma_j max(0, g_tj(S_p)-g_tj(I_p)), and the load-bearing claim-isolated paired margin m_p is the pre-registered target-task-weighted mean of z_pt. Existing saved full-reproduction outputs supply leave-one-paper-out residuals between m_p and realized full-adoption net benefit; a jackknife-plus interval adds this bridge uncertainty to the paired bootstrap interval, without extrapolating a learning curve or training a product recommender. ClaimProbe labels p beneficial only when the calibrated interval is wholly above zero, not-beneficial when it is wholly at or below zero, and inconclusive otherwise; candidate papers are ordered by calibrated median only when the pairwise difference interval excludes zero, producing a partial rather than forced ranking. Both selected gaps share this evaluation object: matched operator isolation supplies sign evidence, while the same z_pt ledger makes the prediction cost-adjusted; pre-locked real user cases and held-out full-adoption outcomes are control conditions for the anchor, not additional paper legs.",
+  "core_mechanism_reasoning": "The anchor and sibling share machinery because sign preservation and cost accounting change the interpretation of the same paired intervention-control record; separate modules would allow their populations or units to drift. We rejected full reproduction because it defeats screening, ordinary with/without-skill testing because it entangles the entire artifact with paper-generated tasks, and early-curve or multi-fidelity extrapolation because heterogeneous paper interventions do not share a training trajectory. This also avoids the occupied lineage nodes: the contribution is the matched claim-isolation object plus abstaining transport interval, not another generic partial-fidelity pilot, direct target A/B trial, or learning-curve predictor.",
+  "core_mechanism_steps": "1. Freeze the eight real-reuse task rows, target weights, normalized primary scorers, guardrail scorers, and utility conversion weights before opening a candidate paper; input is the user task packet and output is a signed evaluation manifest.\n2. Parse the paper source map to select the single operator that carries its headline intervention claim and record a testable input-output contract; input is paper evidence and output is operator specification A_p.\n3. Implement a capped micro-path I_p containing A_p and a same-scaffold sham S_p that swaps only A_p for the paper's named baseline or identity operator; input is A_p plus the existing task harness and output is two executable branches with matched interfaces and caps.\n4. Run randomized paired cases through I_p and S_p with identical model, environment, tools, seed, and cache state; both branches emit final task outputs, scorer inputs, resource logs, and adaptation-event logs, so the operator change propagates through normal execution to the user's downstream answer or artifact.\n5. Score final outputs with the frozen independent oracle and compute z_pt from primary gain, execution cost, human effort, and guardrail regressions; input is each pair's outputs and logs and output is one cost-adjusted paired record.\n6. Aggregate records with pre-registered task weights to obtain m_p and a paired bootstrap interval; input is all z_pt for paper p and output is the raw ClaimProbe estimate.\n7. Use the existing eight-row saved full-adoption packets in leave-one-paper-out fashion to compute jackknife-plus bridge residuals and widen the raw interval; input is historical probe/full-adoption pairs and output is a calibrated net-benefit interval for the held-out paper.\n8. Emit beneficial, not-beneficial, or inconclusive from the interval's relation to zero, and emit a pairwise paper order only when the calibrated difference interval excludes zero; input is candidate intervals and output is an abstaining adoption report rather than an automatic product workflow.\n9. Audit the isolation by permuting intervention-sham labels within matched cases and rerunning Steps 5-8; input is the same executions under a destroyed operator assignment and output is the negative-control decision set used by the falsification test.",
+  "falsification_prediction": "On the existing eight locked real-reuse rows, build capped ClaimProbe pairs for each available paper intervention using only its source map, then compare leave-one-paper-out predictions with the saved full-reproduction cost-adjusted outcomes. If the idea works, selective sign accuracy and Kendall rank correlation on conclusive cases will exceed summary-only, Code-Dev-style fidelity, and uncalibrated with/without-skill baselines, while false-adoption rate falls as inconclusive coverage is allowed to increase. The single load-bearing variable is the claim-isolated paired margin m_p; as a negative control, permute intervention-sham labels within every matched case before calibration, which should return the realized net benefit of papers selected on held-out full-adoption packets and their rank correlation to the summary-only or random-selection baseline rather than merely driving m_p toward zero. A stripped-down selector using only m_p and the pre-registered cost ledger should recover most of ClaimProbe's held-out selection benefit if the paired operator contrast, rather than auxiliary metadata, carries the mechanism.",
+  "compute_budget": "Full campaign over the existing eight real-reuse rows and up to four candidate papers: approximately 6 GPU-days on 80GB-class GPUs plus about $2,500 in API inference/judging, including paired reruns, calibration, negative controls, and one failed-implementation retry per operator; this is comfortable within the stated 50 GPU-day and bounded-API envelope.",
+  "differentiation_from_lit": [
+    {
+      "paper_id": "arxiv:2606.17819v1",
+      "delta": "That framework generates tasks from each skill and measures with-skill versus without-skill behavior, whereas ClaimProbe freezes independently supplied user tasks, neutralizes only the paper's load-bearing operator in a same-scaffold sham, and predicts cost-adjusted full-adoption sign with an inconclusive region."
+    },
+    {
+      "paper_id": "arxiv:2504.01848v3",
+      "delta": "PaperBench and its Code-Dev variant score replication requirements, with the cached method reporting only weak correlation between the cheap and full variants, whereas ClaimProbe constructs a target-task paired effect and calibrates it against realized adoption utility rather than replication fidelity."
+    },
+    {
+      "paper_id": "arxiv:2505.20662v4",
+      "delta": "AutoReproduce's sampled mini-batches and early-exit dry runs expose data and execution failures during end-to-end implementation, whereas ClaimProbe's matched micro-runs estimate the isolated intervention's user-task gain after cost and regression penalties without building the full reproduction."
+    },
+    {
+      "paper_id": "arxiv:2604.03964v1",
+      "delta": "SkillFoundry separates synthetic contract validation from downstream workflow evaluation, whereas ClaimProbe supplies a calibrated bridge from one low-cost paper-operator probe to held-out full-adoption net benefit on pre-existing user tasks."
+    }
+  ],
+  "almost_prior_paper_id": "arxiv:2606.17819v1",
+  "what_step_was_missed": "It would have needed to replace artifact-derived tasks and whole-skill removal with pre-locked user cases and a same-scaffold neutralization of the paper's claim-bearing operator, then calibrate that paired cost-and-regression margin against held-out full-adoption outcomes with an explicit abstention interval.",
+  "signature_terms": [
+    "paired claim micro-reproduction",
+    "cost-adjusted utility sign prediction",
+    "abstaining paper adoption ranking",
+    "independent target-task probe"
+  ],
+  "alias_terms": [
+    "surrogate endpoint trial triage",
+    "paired encouragement design",
+    "selective prediction reject option",
+    "cost-sensitive treatment ranking"
+  ]
+}

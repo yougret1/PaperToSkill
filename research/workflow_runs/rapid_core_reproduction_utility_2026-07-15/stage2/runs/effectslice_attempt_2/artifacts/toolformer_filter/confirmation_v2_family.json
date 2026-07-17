@@ -1,0 +1,221 @@
+{
+  "schema_version": "effectslice-confirmation-v2-family.v1",
+  "task_key": "toolformer_filter",
+  "task_id": "TOOLFORMER-FILTER",
+  "selected_candidate_id": "prefix_01",
+  "retained_atom_ids": [
+    "T01"
+  ],
+  "retained_scc_count": 1,
+  "conditions": [
+    "B",
+    "F",
+    "S"
+  ],
+  "case_block": "confirmation_v2",
+  "case_count": 64,
+  "case_role": "clustered_within_run_checks",
+  "statistical_unit": "independent_agent_run",
+  "replicate_count": 18,
+  "replicate_schedule": [
+    {
+      "replicate_id": "r001",
+      "condition_order": [
+        "S",
+        "F",
+        "B"
+      ]
+    },
+    {
+      "replicate_id": "r002",
+      "condition_order": [
+        "F",
+        "B",
+        "S"
+      ]
+    },
+    {
+      "replicate_id": "r003",
+      "condition_order": [
+        "F",
+        "S",
+        "B"
+      ]
+    },
+    {
+      "replicate_id": "r004",
+      "condition_order": [
+        "B",
+        "F",
+        "S"
+      ]
+    },
+    {
+      "replicate_id": "r005",
+      "condition_order": [
+        "S",
+        "F",
+        "B"
+      ]
+    },
+    {
+      "replicate_id": "r006",
+      "condition_order": [
+        "S",
+        "F",
+        "B"
+      ]
+    },
+    {
+      "replicate_id": "r007",
+      "condition_order": [
+        "B",
+        "F",
+        "S"
+      ]
+    },
+    {
+      "replicate_id": "r008",
+      "condition_order": [
+        "F",
+        "S",
+        "B"
+      ]
+    },
+    {
+      "replicate_id": "r009",
+      "condition_order": [
+        "B",
+        "S",
+        "F"
+      ]
+    },
+    {
+      "replicate_id": "r010",
+      "condition_order": [
+        "S",
+        "B",
+        "F"
+      ]
+    },
+    {
+      "replicate_id": "r011",
+      "condition_order": [
+        "B",
+        "S",
+        "F"
+      ]
+    },
+    {
+      "replicate_id": "r012",
+      "condition_order": [
+        "F",
+        "B",
+        "S"
+      ]
+    },
+    {
+      "replicate_id": "r013",
+      "condition_order": [
+        "S",
+        "B",
+        "F"
+      ]
+    },
+    {
+      "replicate_id": "r014",
+      "condition_order": [
+        "F",
+        "S",
+        "B"
+      ]
+    },
+    {
+      "replicate_id": "r015",
+      "condition_order": [
+        "B",
+        "S",
+        "F"
+      ]
+    },
+    {
+      "replicate_id": "r016",
+      "condition_order": [
+        "F",
+        "B",
+        "S"
+      ]
+    },
+    {
+      "replicate_id": "r017",
+      "condition_order": [
+        "B",
+        "F",
+        "S"
+      ]
+    },
+    {
+      "replicate_id": "r018",
+      "condition_order": [
+        "S",
+        "B",
+        "F"
+      ]
+    }
+  ],
+  "schedule_seed": 2026071702,
+  "run_success_threshold": 0.95,
+  "maximum_score_gap": 0.05,
+  "alpha": 0.02,
+  "minimum_prevalence": 0.8,
+  "private_score_policy": "final_only",
+  "maximum_transport_attempts": 5,
+  "provider_label": "DeepSeek V3.2 (user/provider label)",
+  "model_alias": "deepseek-v4-flash",
+  "wire_api": "openai_chat_completions",
+  "temperature": 0,
+  "max_tokens": 8192,
+  "prior_confirmation_status": "contaminated_development",
+  "confirmation_unsealed": false,
+  "hypotheses": [
+    {
+      "hypothesis_id": "H_full_benefit_run_level",
+      "indicator": "F_success and not B_success"
+    },
+    {
+      "hypothesis_id": "H_slice_preservation_run_level",
+      "indicator": "S_success equals F_success and abs(S_score-F_score)<=0.05"
+    },
+    {
+      "hypothesis_id": "H_slice_benefit_run_level",
+      "indicator": "S_success and not B_success"
+    }
+  ],
+  "evidence_boundary": "Registered before provider execution. Cases are clustered checks; probability bounds use independent agent runs only.",
+  "selected_artifact_path": "artifacts/toolformer_filter/slices/candidates/prefix_01.md",
+  "selected_artifact_sha256": "2f35d3e71da8e62c5abd6d5a7564a8b304ffd2990aacfd270904c6668084b64a",
+  "discovery_summary_path": "derived/toolformer_filter_discovery_summary.json",
+  "discovery_summary_sha256": "8c18432cc8219e6439353b88da9c64d6f14f1cdc9598899d508d088b9cbfde20",
+  "slice_registry_path": "artifacts/toolformer_filter/slices/slice_registry.json",
+  "slice_registry_sha256": "1eb379547bb9e8b35fc5ecebcf276bccc997f6869efa48d0d5b6ade21f9b5d70",
+  "case_registry_path": "artifacts/toolformer_filter/case_registry_v2.json",
+  "case_registry_sha256": "29a204c5848eeafd9528216c5d260b4515afda5b7ac62e53260a26f5a5710e71",
+  "source_map_path": "artifacts/toolformer_filter/source_atom_map.json",
+  "source_map_sha256": "e7b648237861ba1f6c326ca967a2eb891ec99e3d33a441eb413c8d04ce736bba",
+  "task_prompt_path": "artifacts/toolformer_filter/task_prompt.md",
+  "task_prompt_sha256": "05c0ee7f7a212855d331b2349c4d6ff8b6ab5f9b4a7822fea4d3e277c9bce6de",
+  "scorer_path": "src/effectslice/toolformer_filter_scorer.py",
+  "scorer_sha256": "9c62237484765b0fb8e36b1ea18a42bc52f1b2a6e853386d8d412686ddc02e8e",
+  "runner_path": "run_toolformer_filter_effectslice.py",
+  "runner_sha256": "dc4cf78cf1f3044fc7f73fcb66e733c6da2f9b19e97139466d6b4adb6748bccf",
+  "scheduler_path": "run_confirmation_v2.py",
+  "scheduler_sha256": "a9bc077dfd942945fea864c9707f9362bc70056492c579d0e5253e226744fa0d",
+  "aci_runner_path": "src/effectslice/aci_runner.py",
+  "aci_runner_sha256": "6162c7abc91f137106f98cc49faf9eb76736a2b0b29177eeb3401c2dc6df2d12",
+  "full_artifact_path": "artifacts/toolformer_filter/full_artifact.md",
+  "full_artifact_sha256": "4ada0d67b79996bfd3551f8d70cf444dd6604731aba7a6cb32b50005e7e7ea33",
+  "workspace_path": "task_workspaces/toolformer_filter_v1",
+  "workspace_tree_sha256": "e2eb40488dac4db97e10297f9a6ddc3b50ac09ec8e189c220b44bfc7a1457546",
+  "workspace_file_count": 2,
+  "workspace_total_bytes": 1089
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": "effectslice-toolformer-filter-confirmation-family.v1",
+  "task_id": "TOOLFORMER-FILTER",
+  "selected_candidate_id": "prefix_01",
+  "retained_atom_ids": [
+    "T01"
+  ],
+  "retained_scc_count": 1,
+  "selected_artifact_path": "artifacts/toolformer_filter/slices/candidates/prefix_01.md",
+  "selected_artifact_sha256": "2f35d3e71da8e62c5abd6d5a7564a8b304ffd2990aacfd270904c6668084b64a",
+  "conditions": [
+    "B",
+    "F",
+    "S"
+  ],
+  "case_block": "confirmation",
+  "case_count": 59,
+  "alpha": 0.02,
+  "epsilon": 0.025,
+  "minimum_beneficial_prevalence": 0.8,
+  "maximum_violation_rate": 0.1,
+  "discovery_summary_path": "derived/toolformer_filter_discovery_summary.json",
+  "discovery_summary_sha256": "8c18432cc8219e6439353b88da9c64d6f14f1cdc9598899d508d088b9cbfde20",
+  "slice_registry_path": "artifacts/toolformer_filter/slices/slice_registry.json",
+  "slice_registry_sha256": "1eb379547bb9e8b35fc5ecebcf276bccc997f6869efa48d0d5b6ade21f9b5d70",
+  "case_registry_path": "artifacts/toolformer_filter/case_registry.json",
+  "case_registry_sha256": "387e8c3278b5720451b9e6b3be1771fe157f0f7d931c4675b7089a97b5584d45",
+  "hypotheses": [
+    {
+      "hypothesis_id": "H_preserve_F",
+      "metric": "casewise_S_not_equal_F",
+      "acceptance_rule": "zero observed mismatches and one-sided Clopper-Pearson upper bound <= maximum_violation_rate"
+    },
+    {
+      "hypothesis_id": "H_benefit_over_B",
+      "metric": "casewise_S_minus_B_at_least_delta_min",
+      "acceptance_rule": "one-sided Clopper-Pearson lower bound >= minimum_beneficial_prevalence"
+    },
+    {
+      "hypothesis_id": "H_hard_constraints",
+      "metric": "S_contract_passed",
+      "acceptance_rule": "candidate contract passes"
+    }
+  ],
+  "confirmation_unsealed": false,
+  "general_effectslice_claim_ready": false,
+  "evidence_boundary": "Frozen after discovery and before any confirmation provider run. Passing supports only a task-local confirmation claim."
+}

@@ -1,0 +1,233 @@
+{
+  "schema_version": "effectslice-confirmation-v2-family.v1",
+  "task_key": "snap_mfse",
+  "task_id": "SNAP-MFSE",
+  "selected_candidate_id": "prefix_03",
+  "retained_atom_ids": [
+    "A01",
+    "A02",
+    "A03"
+  ],
+  "retained_scc_count": 3,
+  "conditions": [
+    "B",
+    "F",
+    "S"
+  ],
+  "case_block": "confirmation_v2",
+  "case_count": 64,
+  "case_role": "clustered_within_run_checks",
+  "statistical_unit": "independent_agent_run",
+  "replicate_count": 18,
+  "replicate_schedule": [
+    {
+      "replicate_id": "r001",
+      "condition_order": [
+        "S",
+        "B",
+        "F"
+      ]
+    },
+    {
+      "replicate_id": "r002",
+      "condition_order": [
+        "B",
+        "F",
+        "S"
+      ]
+    },
+    {
+      "replicate_id": "r003",
+      "condition_order": [
+        "F",
+        "B",
+        "S"
+      ]
+    },
+    {
+      "replicate_id": "r004",
+      "condition_order": [
+        "S",
+        "F",
+        "B"
+      ]
+    },
+    {
+      "replicate_id": "r005",
+      "condition_order": [
+        "F",
+        "B",
+        "S"
+      ]
+    },
+    {
+      "replicate_id": "r006",
+      "condition_order": [
+        "F",
+        "S",
+        "B"
+      ]
+    },
+    {
+      "replicate_id": "r007",
+      "condition_order": [
+        "F",
+        "S",
+        "B"
+      ]
+    },
+    {
+      "replicate_id": "r008",
+      "condition_order": [
+        "S",
+        "B",
+        "F"
+      ]
+    },
+    {
+      "replicate_id": "r009",
+      "condition_order": [
+        "B",
+        "F",
+        "S"
+      ]
+    },
+    {
+      "replicate_id": "r010",
+      "condition_order": [
+        "B",
+        "S",
+        "F"
+      ]
+    },
+    {
+      "replicate_id": "r011",
+      "condition_order": [
+        "B",
+        "F",
+        "S"
+      ]
+    },
+    {
+      "replicate_id": "r012",
+      "condition_order": [
+        "S",
+        "F",
+        "B"
+      ]
+    },
+    {
+      "replicate_id": "r013",
+      "condition_order": [
+        "S",
+        "B",
+        "F"
+      ]
+    },
+    {
+      "replicate_id": "r014",
+      "condition_order": [
+        "B",
+        "S",
+        "F"
+      ]
+    },
+    {
+      "replicate_id": "r015",
+      "condition_order": [
+        "F",
+        "S",
+        "B"
+      ]
+    },
+    {
+      "replicate_id": "r016",
+      "condition_order": [
+        "B",
+        "S",
+        "F"
+      ]
+    },
+    {
+      "replicate_id": "r017",
+      "condition_order": [
+        "F",
+        "B",
+        "S"
+      ]
+    },
+    {
+      "replicate_id": "r018",
+      "condition_order": [
+        "S",
+        "F",
+        "B"
+      ]
+    }
+  ],
+  "schedule_seed": 2026071701,
+  "run_success_threshold": 0.95,
+  "maximum_score_gap": 0.05,
+  "alpha": 0.02,
+  "minimum_prevalence": 0.8,
+  "private_score_policy": "final_only",
+  "maximum_transport_attempts": 5,
+  "provider_label": "DeepSeek V3.2 (user/provider label)",
+  "model_alias": "deepseek-v4-flash",
+  "wire_api": "openai_chat_completions",
+  "temperature": 0,
+  "max_tokens": 8192,
+  "prior_confirmation_status": "contaminated_development",
+  "confirmation_unsealed": false,
+  "hypotheses": [
+    {
+      "hypothesis_id": "H_full_benefit_run_level",
+      "indicator": "F_success and not B_success"
+    },
+    {
+      "hypothesis_id": "H_slice_preservation_run_level",
+      "indicator": "S_success equals F_success and abs(S_score-F_score)<=0.05"
+    },
+    {
+      "hypothesis_id": "H_slice_benefit_run_level",
+      "indicator": "S_success and not B_success"
+    }
+  ],
+  "evidence_boundary": "Registered before provider execution. Cases are clustered checks; probability bounds use independent agent runs only.",
+  "selected_artifact_path": "artifacts/snap_mfse/slices/candidates/prefix_03.md",
+  "selected_artifact_sha256": "a581423575c0fa780739a2040a59260c6df4cc0172d022cc49d8b491552e8877",
+  "discovery_summary_path": "derived/snap_mfse_discovery_summary.json",
+  "discovery_summary_sha256": "21b92cd72985b20ef22fd52af024ffc0e0acef01ef6a443172bec03a1a354ba7",
+  "slice_registry_path": "artifacts/snap_mfse/slices/slice_registry.json",
+  "slice_registry_sha256": "3728cb32d49bcd32ad34259e5361a8088b36a142bba301da0b332c96d8d0e82f",
+  "case_registry_path": "artifacts/snap_mfse/case_registry_v2_r2.json",
+  "case_registry_sha256": "86488f49a50d4df2380bfa5eb737a8e5348366f050151941533b4002c2b77044",
+  "source_map_path": "artifacts/snap_mfse/source_atom_map.json",
+  "source_map_sha256": "c495f458b2ec182a850d10b06fd843961340947ce5ab7ee11ec16edca42c84d8",
+  "task_prompt_path": "artifacts/snap_mfse/task_prompt.md",
+  "task_prompt_sha256": "710affeca4aafeb56a821c9e59914c4cb8963f74b50ae918568272edf52c227d",
+  "scorer_path": "src/effectslice/snap_mfse_scorer.py",
+  "scorer_sha256": "3c475336d81b8cb79c4afd2b70605f0e68f3682c9867b975fcd5e35516e60c2c",
+  "runner_path": "run_snap_mfse_effectslice.py",
+  "runner_sha256": "e6c3a5f4a66a8ccd098f34b1b465a42c3e638fcf9cb61cea352c9b961ba28db7",
+  "scheduler_path": "run_confirmation_v2.py",
+  "scheduler_sha256": "a9bc077dfd942945fea864c9707f9362bc70056492c579d0e5253e226744fa0d",
+  "aci_runner_path": "src/effectslice/aci_runner.py",
+  "aci_runner_sha256": "5475175a8fa4dbd016cb7c67996db29702fff4fab992a4eea0c006ab480e7853",
+  "aci_protocol_path": "src/effectslice/aci_protocol.py",
+  "aci_protocol_sha256": "142e81e26499f1e36195a79633f17011fce1bfaaf6d5ac9ff9998ceeb2ddffa1",
+  "evidence_binding_path": "src/effectslice/evidence_binding.py",
+  "evidence_binding_sha256": "16a5e77a27c4a196651e5b19d819342e7382e56afabed73826f996f041c4e791",
+  "transport_path": "run_swe_effectslice.py",
+  "transport_sha256": "6d69bff7847b4b6e584ab65120956f67c273f03307f8a8d32ee7d24e4254a7dd",
+  "case_generator_path": "src/effectslice/snap_mfse_cases.py",
+  "case_generator_sha256": "c33a4a35efce7a55a99cadfdb9c1de63212e83de86ced8ec600d8967a2af3451",
+  "family_builder_path": "build_confirmation_v2.py",
+  "family_builder_sha256": "0e01f923a68f2cea05e530aa8b6d6a97d5e7e03554908fa83f4be8572a8577e6",
+  "full_artifact_path": "artifacts/snap_mfse/full_artifact.md",
+  "full_artifact_sha256": "e29cc563627d384bec3e854f86b24a57bb2e801dc79e3ceed9dfbbfc53f5815d",
+  "workspace_path": "task_workspaces/snap_mfse_v1",
+  "workspace_tree_sha256": "7d8a241e029f9971a3773bd2a50aaa9a0232a0bfded57b948eaae76fcd82561b",
+  "workspace_file_count": 2,
+  "workspace_total_bytes": 1137
+}

@@ -1,0 +1,42 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,38 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    matrices = (logp_with_result, logp_call_only, logp_no_call)
++    validated = []
++    for matrix in matrices:
++        array = np.asarray(matrix)
++        if array.ndim != 2 or array.size == 0:
++            raise ValueError("log-probability inputs must be nonempty matrices")
++        if not np.issubdtype(array.dtype, np.number):
++            raise ValueError("log-probability inputs must be numeric")
++        if not np.isfinite(array).all() or (array > 0).any():
++            raise ValueError("log probabilities must be finite and nonpositive")
++        validated.append(array.astype(float, copy=False))
++
++    with_result, call_only, no_call = validated
++    if call_only.shape != with_result.shape or no_call.shape != with_result.shape:
++        raise ValueError("log-probability matrices must have matching shapes")
++    if isinstance(tau_filter, (bool, np.bool_)):
++        raise ValueError("tau_filter must be a finite nonnegative number")
++    try:
++        threshold = float(tau_filter)
++    except (TypeError, ValueError):
++        raise ValueError("tau_filter must be a finite nonnegative number") from None
++    if not np.isfinite(threshold) or threshold < 0:
++        raise ValueError("tau_filter must be a finite nonnegative number")
++
++    # Toolformer compares the call-with-result loss against the better of the
++    # call-without-result and no-call counterfactuals over the future tokens.
++    score_with_result = np.sum(with_result, axis=1)
++    score_without_result = np.maximum(
++        np.sum(call_only, axis=1),
++        np.sum(no_call, axis=1),
++    )
++    margins = score_with_result - score_without_result
++    if not np.isfinite(margins).all():
++        raise ValueError("aggregated losses must be finite")
++    return margins > threshold, margins

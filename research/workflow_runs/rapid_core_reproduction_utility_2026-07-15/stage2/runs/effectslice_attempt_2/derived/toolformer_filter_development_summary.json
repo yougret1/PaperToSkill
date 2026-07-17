@@ -1,0 +1,190 @@
+{
+  "schema_version": "effectslice-toolformer-filter-development-summary.v2",
+  "evidence_boundary": "Development bundles only. Only a positive signal from the frozen primary model family authorizes the eligibility block; robustness signals cannot substitute for it or support a scientific claim.",
+  "thresholds": {
+    "delta_min": 0.05
+  },
+  "primary_model_family": "DeepSeek-family",
+  "bundle_count": 3,
+  "classification_counts": {
+    "task_contract_failure": 1,
+    "positive_development_signal": 2
+  },
+  "bundles": [
+    {
+      "pair_id": "toolformer-filter:development:deepseek:bf:001",
+      "model_family": "DeepSeek-family",
+      "model_alias": "deepseek-v4-flash",
+      "primary_model_family": "DeepSeek-family",
+      "robustness_signal_only": false,
+      "wire_api": "openai_chat_completions",
+      "case_block": "development",
+      "conditions": [
+        "B",
+        "F"
+      ],
+      "evidence_level": "development",
+      "eligibility_effect": null,
+      "meets_delta_min": null,
+      "identical_candidate_patches": null,
+      "score_normalization_applied": [],
+      "proceed_to_frozen_eligibility": false,
+      "usable_for_scientific_claim": false,
+      "condition_results": {
+        "B": {
+          "status": "scored",
+          "terminal_reason": "action_budget_exhausted_after_final_score",
+          "task_score": 0.0,
+          "success": false,
+          "candidate_patch_sha256": "3dd5a6066b41e07489de22111a23a35b9c702d2577ca91d1c9c22778d0d8fc4b",
+          "diff_present": true,
+          "last_action": "edit",
+          "last_observation_status": "ok",
+          "last_scorer_task_score": 0.0,
+          "input_tokens": 32704,
+          "output_tokens": 57168,
+          "transport_attempts": 17,
+          "run_result_path": "experiment_results/toolformer_filter_development_deepseek_v1/B/run_result.json"
+        },
+        "F": {
+          "status": "scored",
+          "terminal_reason": "action_budget_exhausted_after_final_score",
+          "task_score": 0.0,
+          "success": false,
+          "candidate_patch_sha256": "6acfd87e2822fb96e22478dddbe9914943947c25f37128fcf3a6e4bcd9316921",
+          "diff_present": true,
+          "last_action": "test",
+          "last_observation_status": "scored",
+          "last_scorer_task_score": 0.0,
+          "input_tokens": 45835,
+          "output_tokens": 30310,
+          "transport_attempts": 16,
+          "run_result_path": "experiment_results/toolformer_filter_development_deepseek_v1/F/run_result.json"
+        }
+      },
+      "classification": "task_contract_failure",
+      "classification_reason": "v1 omitted the source-grounded t=0 offset convention and explicit Boolean-threshold rejection; both conditions were hard-zeroed by the incidental threshold contract",
+      "classification_evidence": [
+        "B: boolean_threshold:accepted",
+        "F: boolean_threshold:accepted",
+        "F used t=1 for the first future token"
+      ]
+    },
+    {
+      "pair_id": "toolformer-filter:development:deepseek:bf:002",
+      "model_family": "DeepSeek-family",
+      "model_alias": "deepseek-v4-flash",
+      "primary_model_family": "DeepSeek-family",
+      "robustness_signal_only": false,
+      "wire_api": "openai_chat_completions",
+      "case_block": "development",
+      "conditions": [
+        "B",
+        "F"
+      ],
+      "evidence_level": "development",
+      "eligibility_effect": 1.0,
+      "meets_delta_min": true,
+      "identical_candidate_patches": false,
+      "score_normalization_applied": [],
+      "proceed_to_frozen_eligibility": true,
+      "usable_for_scientific_claim": false,
+      "condition_results": {
+        "B": {
+          "status": "scored",
+          "terminal_reason": "action_budget_exhausted_after_final_score",
+          "task_score": 0.0,
+          "success": false,
+          "candidate_patch_sha256": "76e7f5eae5b9946f474ab4c8be192827a55084c1403a21b8a74bc35bec65c952",
+          "diff_present": true,
+          "last_action": "edit",
+          "last_observation_status": "ok",
+          "last_scorer_task_score": 0.0,
+          "input_tokens": 34165,
+          "output_tokens": 52910,
+          "transport_attempts": 17,
+          "run_result_path": "experiment_results/toolformer_filter_development_deepseek_v2/B/run_result.json"
+        },
+        "F": {
+          "status": "scored",
+          "terminal_reason": "submitted",
+          "task_score": 1.0,
+          "success": true,
+          "candidate_patch_sha256": "80b8c9a782888491f69adf6191cb67a67edd50651f949ec546614acd687cd608",
+          "diff_present": true,
+          "last_action": "submit",
+          "last_observation_status": "scored",
+          "last_scorer_task_score": 1.0,
+          "input_tokens": 7167,
+          "output_tokens": 4923,
+          "transport_attempts": 5,
+          "run_result_path": "experiment_results/toolformer_filter_development_deepseek_v2/F/run_result.json"
+        }
+      },
+      "classification": "positive_development_signal",
+      "classification_reason": "development F-B meets delta_min; frozen eligibility is still required",
+      "classification_evidence": []
+    },
+    {
+      "pair_id": "toolformer-filter:development:gpt:bf:001",
+      "model_family": "GPT-family",
+      "model_alias": "gpt-5.6",
+      "primary_model_family": "DeepSeek-family",
+      "robustness_signal_only": true,
+      "wire_api": "openai_responses",
+      "case_block": "development",
+      "conditions": [
+        "B",
+        "F"
+      ],
+      "evidence_level": "development",
+      "eligibility_effect": 1.0,
+      "meets_delta_min": true,
+      "identical_candidate_patches": false,
+      "score_normalization_applied": [],
+      "proceed_to_frozen_eligibility": false,
+      "usable_for_scientific_claim": false,
+      "condition_results": {
+        "B": {
+          "status": "scored",
+          "terminal_reason": "action_budget_exhausted_after_final_score",
+          "task_score": 0.0,
+          "success": false,
+          "candidate_patch_sha256": "c539003cfcfbedcca8c6b9db0ec2e84e58fdf72b3e19e23340803a1896ae4fde",
+          "diff_present": true,
+          "last_action": "edit",
+          "last_observation_status": "ok",
+          "last_scorer_task_score": 0.0,
+          "input_tokens": 99829,
+          "output_tokens": 10109,
+          "transport_attempts": 16,
+          "run_result_path": "experiment_results/toolformer_filter_development_gpt_v1/B/run_result.json"
+        },
+        "F": {
+          "status": "scored",
+          "terminal_reason": "submitted",
+          "task_score": 1.0,
+          "success": true,
+          "candidate_patch_sha256": "ab21e5962891b00d9c16b4fa147af401e860d537cf5222d9ced85c24cc13b9f0",
+          "diff_present": true,
+          "last_action": "submit",
+          "last_observation_status": "scored",
+          "last_scorer_task_score": 1.0,
+          "input_tokens": 34399,
+          "output_tokens": 835,
+          "transport_attempts": 6,
+          "run_result_path": "experiment_results/toolformer_filter_development_gpt_v1/F/run_result.json"
+        }
+      },
+      "classification": "positive_development_signal",
+      "classification_reason": "development F-B meets delta_min; frozen eligibility is still required",
+      "classification_evidence": []
+    }
+  ],
+  "task_disposition": "proceed_to_frozen_eligibility",
+  "selected_development_model_family": "DeepSeek-family",
+  "robustness_positive_model_families": [
+    "GPT-family"
+  ],
+  "scientific_claim_ready": false
+}

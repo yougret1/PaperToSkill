@@ -1,0 +1,65 @@
+{
+  "schema_version": "0.1",
+  "evidence_boundary": "Direct provider endpoint diagnostic. A complete report proves the configured endpoint can return the tiny marker-contract response without using ai_scientist.llm. It does not complete the AI-Scientist-v2 LLM-client smoke, BFTS, or a live research task.",
+  "model": "gpt-5.6",
+  "wire_api": "openai_responses",
+  "attempted_models": [
+    {
+      "model": "gpt-5.6",
+      "status": "success",
+      "detail": "response_chars=91; http_status=200"
+    }
+  ],
+  "base_url_env": "EFFECTSLICE_GPT_BASE_URL",
+  "base_url": "https://coderxiaoc.com/v1",
+  "auth_env": "EFFECTSLICE_GPT_API_KEY",
+  "api_key_present": true,
+  "max_tokens": 256,
+  "timeout_seconds": 60.0,
+  "started_at_unix": 1784180650,
+  "completed_at_unix": 1784180655,
+  "overall_status": "complete",
+  "status_counts": {
+    "ready": 6,
+    "pending": 0,
+    "fail": 0
+  },
+  "checks": [
+    {
+      "id": "direct_probe_configuration",
+      "status": "ready",
+      "detail": "base_url_present=True; api_key_present=True",
+      "evidence": "EFFECTSLICE_GPT_BASE_URL; EFFECTSLICE_GPT_API_KEY"
+    },
+    {
+      "id": "direct_probe_response_saved",
+      "status": "ready",
+      "detail": "response_chars=91",
+      "evidence": "research\\workflow_runs\\rapid_core_reproduction_utility_2026-07-15\\stage2\\runs\\effectslice_attempt_2\\transport_smoke\\gpt_5_6\\response.md"
+    },
+    {
+      "id": "direct_probe_marker_papertoskill_smoke_ok",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "research\\workflow_runs\\rapid_core_reproduction_utility_2026-07-15\\stage2\\runs\\effectslice_attempt_2\\transport_smoke\\gpt_5_6\\response.md"
+    },
+    {
+      "id": "direct_probe_marker_ai_scientist_v2",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "research\\workflow_runs\\rapid_core_reproduction_utility_2026-07-15\\stage2\\runs\\effectslice_attempt_2\\transport_smoke\\gpt_5_6\\response.md"
+    },
+    {
+      "id": "direct_probe_marker_paper_to_skill",
+      "status": "ready",
+      "detail": "present",
+      "evidence": "research\\workflow_runs\\rapid_core_reproduction_utility_2026-07-15\\stage2\\runs\\effectslice_attempt_2\\transport_smoke\\gpt_5_6\\response.md"
+    },
+    {
+      "id": "direct_probe_alias_attempt_1",
+      "status": "ready",
+      "detail": "gpt-5.6: success; response_chars=91; http_status=200",
+      "evidence": "provider/model availability"
+    }
+  ]
+}

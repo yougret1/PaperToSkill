@@ -1,0 +1,58 @@
+{
+  "title": "FactorGate: Four-Cell Mechanism-Contract Attribution for Locked-Task Paper Reuse",
+  "hook": "Four verifier-closed factor cells on one locked task can separate paper-mechanism value from execution-contract completion without using historical paper-task rows. FactorGate returns one local failure class and stops at the executed task.",
+  "hook_shape_rationale": "This is counter-intuitive minimalism: the strongest adjacent evaluator generates roughly 1,000 tasks for about 500 skills, whereas FactorGate generates no surrogate task and uses exactly four factor cells on the user's locked task. A surprising empirical reveal was viable because SWE-T1 and SNAP follow-ups reverse the interpretation of their original failures, but it was rejected as the hook because those reversals are motivating evidence; the contribution is the independently verifiable attribution object that recovers them.",
+  "gap_closure": [
+    {
+      "gap": "Under a limited initial budget, no retrieved frontier establishes that the observed low-fidelity score preserves the sign and ordering of paper interventions by the performance improvement they later produce on independently specified user tasks; a probe can therefore support the wrong go/no-go decision even when it is internally faithful.",
+      "main_pattern": "decompose_and_delegate",
+      "sub_pattern": "C25 (Decompose and Delegate to Solvers)",
+      "companion_pattern": null,
+      "how_closed": "Closed by compiling paper-mechanism content and task execution-contract scaffolding into independently togglable, machine-checkable artifacts, then delegating all four same-task cells to the locked runner and scorer for local attribution."
+    },
+    {
+      "gap": "No retrieved frontier estimates net benefit after execution cost, adaptation effort, and regressions on task dimensions outside the paper's headline metric are deducted from gross performance gain.",
+      "main_pattern": "decompose_and_delegate",
+      "sub_pattern": "C25 (Decompose and Delegate to Solvers)",
+      "companion_pattern": null,
+      "how_closed": "Closed by making the verifier's four-cell ledger record task score, contract validity, measured GPU/API cost, adaptation actions, and locked regression metrics before computing task-local net-benefit contrasts from user-supplied scales only."
+    }
+  ],
+  "core_mechanism": "FactorGate's shared object is a four-cell execution ledger L for one locked user task, indexed by mechanism bit m in {0,1}, contract bit c in {0,1}, and paired seed s. A learned compiler reads the paper source map and emits M1, a typed mechanism.json containing only source-anchored intervention operations and parameters, while M0 omits that payload and leaves the same base agent, task assets, model, token limit, and seed unchanged. A deterministic contract compiler reads only the locked task manifest and emits C1, a contract.json plus scaffold that fixes entrypoint, base revision, required files, output schema, runtime cap, and resource-record fields without adding paper-specific solution content; C0 preserves the original raw-output interface. Source-grounding and contract validators return field-level errors during artifact construction, and only the failing artifact is repaired before the fixed M0C0, M1C0, M0C1, and M1C1 cells are composed, making the typed handoff and verifier feedback load-bearing rather than advisory. The external locked runner executes each cell and records contract pass V_mcs, downstream task score S_mcs, GPU-hours G_mcs, API dollars A_mcs, adaptation actions E_mcs, and every locked regression score R_mcsr; none is supplied by the evaluated model. When the task packet supplies minimum meaningful gain tau_S, resource budgets B_G, B_A, B_E, regression tolerances tau_r, and priority weights w_r, the ledger computes B_mcs = (S_mcs-S_00s)/tau_S - (G_mcs-G_00s)/B_G - (A_mcs-A_00s)/B_A - E_mcs/B_E - sum_r w_r max(0,R_mcsr-R_00sr)/tau_r; if any scale is absent, net benefit is marked unscorable rather than imputed. From paired seeds it reports mechanism contrasts D_M^c = mean_s(B_1cs-B_0cs), contract contrasts D_C^m = mean_s(B_m1s-B_m0s), and interaction I = D_M^1-D_M^0 with bootstrap intervals, so a contract-dependent mechanism is not mistaken for a main effect. With delta_B fixed by the task packet, H_M is true only when the lower interval for D_M^1 exceeds delta_B, and H_C is true only when C0 fails its declared contract while the matched C1 passes or the lower interval for I exceeds delta_B; the four outputs are direct-mechanism (1,0), scaffold-masked-mechanism (1,1), contract-only (0,1), and no-local-mechanism-gain (0,0). If factor-integrity validation fails, a required utility scale is missing, or an interval crosses its threshold, FactorGate returns not-identifiable as a gate status rather than forcing one of the four scientific classes, and it never pools ledgers across tasks or extrapolates beyond the executed task.",
+  "core_mechanism_reasoning": "The existing SWE-T1 and SNAP rows show why both gaps share one object: raw failures were patch-application or artifact-completion failures, while issue-aligned and executable-contract follow-ups closed those interfaces for both Summary and PaperToSkill, so the original outcome could not identify mechanism value. I chose C25 because mechanism extraction can end in a typed source-grounded payload while the locked runner and scorer provide the sound, obtainable feedback that constructs and grades the orthogonal cells. I rejected context perturbation curves, historical-task predictors, and budget-allocation designs because they answer a different question and would obscure the local mechanism-by-contract interaction that the follow-ups expose.",
+  "core_mechanism_steps": "1. Freeze one user task's assets, scorer, base revision, model, seeds, token/time caps, resource limits, meaningful-gain scale, and locked regression dimensions; output task_lock.json.\n2. Compile the paper source map into mechanism.json with source spans, callable operations, parameters, and a strict ban on task-interface instructions; validate source grounding and repair only invalid fields.\n3. Compile task_lock.json deterministically into contract.json and a solution-neutral scaffold containing the entrypoint, patch or artifact schema, required outputs, runtime cap, and resource record; validate that it contains no paper-mechanism content.\n4. Materialize M0C0, M1C0, M0C1, and M1C1 from the two independent slots while keeping the task, base agent, model, prompt budget, and paired seed identical.\n5. Execute every cell with the locked runner; capture schema and execution verdicts during construction and permit only slot-local repairs before the preregistered final rerun.\n6. Score the final outputs with the external locked scorer and write S, V, GPU-hours, API dollars, adaptation actions, regression metrics, stdout/stderr hashes, and artifact hashes to the cell ledger.\n7. Compute B only from task-supplied scales, then compute D_M^0, D_M^1, D_C^0, D_C^1, and I with paired bootstrap intervals; otherwise mark the missing quantity explicitly.\n8. Apply the preregistered H_M/H_C decision table to emit one local class or not-identifiable, together with the exact cells and verifier evidence responsible.\n9. For SWE-T1 and SNAP-T1 validation, keep phase107/108/110/112 follow-up outcomes hidden from compilation and compare the emitted local class with those held-out contract-closure results without pooling the tasks.",
+  "falsification_prediction": "Run the four cells with three paired seeds separately on the preregistered SWE-T1 and SNAP-T1 failures, withholding their phase107/108/110/112 follow-up outcomes from both compilers; compare locked task success and the emitted class with those held-out follow-ups. If the mechanism works, C1 should raise downstream locked-task success from the failed C0 level to the task's pass threshold in both cases while D_M^1 remains non-positive, yielding the local contract-only class rather than a claim about other tasks. The single load-bearing variable is the contract-specific rescue contrast R_C = 0.5[(S_01-S_00)+(S_11-S_10)]; as a negative control, permute the task-specific field bindings between the SWE and SNAP C1 scaffolds while preserving schema, length, model, and seeds, which should make downstream success in the scaffolded cells return to the corresponding C0 baseline rather than merely driving R_C by definition.",
+  "compute_budget": "1.0 GPU-day on 80GB-class GPUs + approximately $1,200 API inference for two separately reported four-cell, three-seed locked-task trials including one preregistered rerun and the binding-permutation control; comfortably within the stated 50 GPU-day and bounded-API envelope.",
+  "differentiation_from_lit": [
+    {
+      "paper_id": "arxiv:2606.17819v1",
+      "delta": "It compares an agent with and without a skill on tasks generated from that skill, whereas FactorGate constructs independently togglable mechanism and contract artifacts for the same externally locked task and reports their main and interaction contrasts."
+    },
+    {
+      "paper_id": "arxiv:2504.01848v3",
+      "delta": "PaperBench separates code-development, execution, and result-match rubric evidence for a complete submission, while FactorGate actively constructs four counterfactual submissions that isolate method content from interface completion on one task."
+    },
+    {
+      "paper_id": "arxiv:2505.20662v4",
+      "delta": "AutoReproduce jointly builds and debugs method code plus its experiment pipeline, while FactorGate emits mechanism.json and contract.json as independently swappable factors whose locked executions identify which factor caused a failure."
+    },
+    {
+      "paper_id": "arxiv:2604.03964v1",
+      "delta": "SkillFoundry validates contract completeness before downstream utility testing, whereas FactorGate crosses contract presence with mechanism presence in the same locked task so contract closure cannot be misattributed to the paper mechanism."
+    }
+  ],
+  "almost_prior_paper_id": "arxiv:2604.03964v1",
+  "what_step_was_missed": "It would have needed to compile the operational contract and paper mechanism into independent slots, execute all four slot combinations on the identical user task with paired seeds, and use the resulting interaction to distinguish contract closure from mechanism benefit instead of validating them sequentially.",
+  "signature_terms": [
+    "mechanism contract factorial gate",
+    "orthogonal paper method attribution",
+    "locked task failure diagnosis",
+    "verifier closed execution ledger"
+  ],
+  "alias_terms": [
+    "two factor ablation design",
+    "factorial intervention analysis",
+    "component interaction attribution",
+    "interface treatment decomposition"
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "stage": "1.4",
+  "stage_name": "Candidate generation and citation gate",
+  "status": "passed",
+  "handoff_mode": null,
+  "user_approved_degraded_route": false,
+  "user_approval_evidence": null,
+  "inputs_checked": [
+    "stage1/direction_intake.json",
+    "stage1/idea_spark/phase1/phase1_output.json",
+    "stage1/idea_spark/phase0/lit_table.md",
+    "stage1/candidate_lanes/*",
+    "stage1/retry_lanes/*"
+  ],
+  "outputs_produced": [
+    "stage1/idea_spark/phase2_select/phase2_select_output.json",
+    "stage1/idea_spark/phase2_generate/phase2_generate_output.json",
+    "stage1/candidate_comparison.json",
+    "stage1/candidate_comparison.md"
+  ],
+  "traceability_notes": [
+    "ClaimProbe, BoundaryProbe, Sequential Triage, LocalClaim, FactorGate, Obligation Witness, and EffectSlice v1/v2 were rejected rather than presented as parallel innovations.",
+    "EffectSlice v3 is the only selected candidate and passed the sub-pattern citation-consistency gate.",
+    "The selected candidate contains a concrete falsification prediction, negative control, and upper-bound compute budget of 24.3 GPU-days plus $3,500 API."
+  ],
+  "blocking_issues": [],
+  "next_stage": "1.5"
+}

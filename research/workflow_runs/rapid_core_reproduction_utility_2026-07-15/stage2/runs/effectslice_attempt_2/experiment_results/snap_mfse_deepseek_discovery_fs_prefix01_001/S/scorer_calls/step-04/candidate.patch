@@ -1,0 +1,46 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -12,4 +12,42 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    if not isinstance(counts, np.ndarray):
++        raise ValueError("counts must be a numpy array")
++    if not np.issubdtype(counts.dtype, np.floating):
++        counts = counts.astype(np.float64)
++    if np.any(~np.isfinite(counts)):
++        raise ValueError("Input contains nonfinite values")
++    if np.any(counts < 0):
++        raise ValueError("Input contains negative values")
++    n_cells, n_features = counts.shape
++    if n_components < 1 or n_components >= n_cells:
++        raise ValueError("n_components must be in 1 <= n_components < n_cells")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("Input contains all-zero rows")
++
++    # IDF scaling
++    df = np.count_nonzero(counts > 0, axis=0)
++    n_cells = float(n_cells)
++    idf = np.log(n_cells / (1.0 + df))
++    scaled = counts * idf
++
++    # Row normalization
++    row_norms = np.linalg.norm(scaled, axis=1)
++    normalized = scaled / row_norms[:, np.newaxis]
++
++    # Sparse matrix for matrix-free SVD
++    from scipy.sparse import csr_matrix
++    normalized_sparse = csr_matrix(normalized)
++
++    # Truncated SVD
++    from scipy.sparse.linalg import svds
++    u, s, vh = svds(normalized_sparse, k=n_components, which='LM', random_state=random_state)
++
++    # Sort descending
++    idx = np.argsort(s)[::-1]
++    eigenvalues = s[idx] ** 2  # eigenvalues of the Gram matrix
++    embedding = u[:, idx] * s[idx]  # U * S (principal components)
++
++    return eigenvalues, embedding

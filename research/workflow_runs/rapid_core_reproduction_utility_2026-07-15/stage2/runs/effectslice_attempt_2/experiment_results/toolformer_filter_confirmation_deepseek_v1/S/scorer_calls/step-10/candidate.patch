@@ -1,0 +1,40 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,36 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    inputs = [logp_with_result, logp_call_only, logp_no_call]
++    names = ["logp_with_result", "logp_call_only", "logp_no_call"]
++    for name, arr in zip(names, inputs):
++        if not isinstance(arr, np.ndarray) or arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D numpy array")
++        if arr.size == 0:
++            raise ValueError(f"{name} must not be empty")
++        if np.any(np.isnan(arr)) or np.any(np.isinf(arr)):
++            raise ValueError(f"{name} contains nonfinite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} contains positive values")
++    # Shape consistency
++    shape = logp_with_result.shape
++    if logp_call_only.shape != shape or logp_no_call.shape != shape:
++        raise ValueError("All input matrices must have the same shape")
++    # tau_filter validation
++    if isinstance(tau_filter, bool) or not isinstance(tau_filter, (int, float)) or np.isnan(tau_filter) or np.isinf(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be a finite nonnegative number and not boolean")
++    n, T = shape
++    # Compute normalized decreasing weights
++    t = np.arange(T)
++    raw_weights = np.maximum(0, 1 - 0.2 * t)
++    weights = raw_weights / raw_weights.sum()
++    # Compute weighted averages for each conditioning
++    avg_with = np.dot(logp_with_result, weights)
++    avg_call_only = np.dot(logp_call_only, weights)
++    avg_no_call = np.dot(logp_no_call, weights)
++    max_avg = np.maximum(avg_call_only, avg_no_call)
++    margins = avg_with - max_avg
++    # Keep mask (strictly greater than tau)
++    keep = margins > tau_filter
++    return (keep, margins)

@@ -1,0 +1,57 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import eigsh, LinearOperator
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,45 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # --- Input validation ---
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2-D numpy array")
++    if not (1 <= n_components < counts.shape[0]):
++        raise ValueError(
++            f"n_components must satisfy 1 <= n_components < n_cells, got {n_components}"
++        )
++    if np.any(~np.isfinite(counts)) or np.any(counts < 0):
++        raise ValueError("counts must be finite and non-negative")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("counts contains all-zero cell rows")
++
++    n_cells, n_features = counts.shape
++
++    # --- IDF scaling (A01) ---
++    df = np.count_nonzero(counts, axis=0).astype(float)  # document frequency per feature
++    idf = np.log(n_cells / (1.0 + df))  # natural log, as typical in TF-IDF
++    X = counts * idf  # broadcast multiply per column
++
++    # --- Row normalization (A02) ---
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    # rows are non-zero because we already rejected all-zero rows
++    X = X / row_norms
++
++    # --- Matrix-free spectral decomposition of W = XX^T - I (A03) ---
++    def matvec(v: np.ndarray) -> np.ndarray:
++        return X @ (X.T @ v) - v
++
++    n = n_cells
++    Op = LinearOperator((n, n), matvec=matvec, dtype=X.dtype)
++
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n).astype(X.dtype)
++
++    # eigsh returns k eigenvalues in ascending order of the eigenvalue value.
++    # We need descending order of the eigenvalues.
++    eigvals, eigvecs = eigsh(Op, k=n_components, which="LM", v0=v0)
++    idx = np.argsort(eigvals)[::-1]
++    eigvals = eigvals[idx]
++    eigvecs = eigvecs[:, idx]
++
++    return eigvals, eigvecs

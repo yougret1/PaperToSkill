@@ -1,0 +1,245 @@
+from pathlib import Path
+import warnings
+
+import numpy as np
+import pandas as pd
+
+warnings.filterwarnings("ignore")
+
+TRAIN_PATH = Path("train.csv")
+VALID_PATH = Path("validation_features.csv")
+FEEDBACK_PATH = Path("error_or_score_feedback.md")
+OUTPUT_PATH = Path("submission.csv")
+
+# The weak score indicates that a nonlinear model and domain-specific feature
+# extraction are warranted; hidden validation labels are never accessed.
+feedback = FEEDBACK_PATH.read_text(encoding="utf-8") if FEEDBACK_PATH.exists() else ""
+
+train = pd.read_csv(TRAIN_PATH)
+validation = pd.read_csv(VALID_PATH)
+
+if "Transported" not in train.columns:
+    raise ValueError("train.csv must contain the Transported target")
+if "PassengerId" not in validation.columns:
+    raise ValueError("validation_features.csv must contain PassengerId")
+
+target = (
+    train.pop("Transported")
+    .replace({"True": 1, "False": 0, True: 1, False: 0})
+    .astype(int)
+)
+validation_ids = validation["PassengerId"].copy()
+
+combined = pd.concat([train, validation], axis=0, ignore_index=True)
+
+
+def engineer_features(df):
+    x = df.copy()
+
+    passenger_id = x.get(
+        "PassengerId",
+        pd.Series(["unknown_0"] * len(x), index=x.index),
+    ).fillna("unknown_0").astype(str)
+    pid_parts = passenger_id.str.split("_", n=1, expand=True)
+    x["GroupId"] = pid_parts[0]
+    x["GroupMember"] = pd.to_numeric(
+        pid_parts[1] if pid_parts.shape[1] > 1 else 0,
+        errors="coerce",
+    )
+
+    group_size = x.groupby("GroupId")["GroupId"].transform("size")
+    x["GroupSize"] = group_size
+    x["TravellingAlone"] = (group_size == 1).astype(int)
+
+    if "Cabin" in x:
+        cabin = x["Cabin"].fillna("Unknown/Unknown/Unknown").astype(str)
+        cabin_parts = cabin.str.split("/", n=2, expand=True)
+        x["CabinDeck"] = cabin_parts[0]
+        x["CabinNumber"] = pd.to_numeric(cabin_parts[1], errors="coerce")
+        x["CabinSide"] = cabin_parts[2]
+        x["CabinRegion"] = pd.cut(
+            x["CabinNumber"],
+            bins=[-np.inf, 299, 599, 899, 1199, 1499, np.inf],
+            labels=["0", "1", "2", "3", "4", "5"],
+        ).astype(object)
+        x.drop(columns=["Cabin"], inplace=True)
+
+    if "Name" in x:
+        names = x["Name"].fillna("Unknown Unknown").astype(str)
+        x["Surname"] = names.str.rsplit(n=1).str[-1]
+        surname_size = x.groupby("Surname")["Surname"].transform("size")
+        x["FamilySize"] = surname_size
+        x["FamilyAlone"] = (surname_size == 1).astype(int)
+        x.drop(columns=["Name"], inplace=True)
+
+    spend_columns = [
+        column
+        for column in ["RoomService", "FoodCourt", "ShoppingMall", "Spa", "VRDeck"]
+        if column in x.columns
+    ]
+    if spend_columns:
+        spend = x[spend_columns].apply(pd.to_numeric, errors="coerce")
+        x["TotalSpend"] = spend.sum(axis=1, min_count=1)
+        x["NoSpend"] = (spend.fillna(0).sum(axis=1) == 0).astype(int)
+        x["SpendServices"] = (spend.fillna(0) > 0).sum(axis=1)
+        x["MaxSpend"] = spend.max(axis=1)
+        x["MeanSpend"] = spend.mean(axis=1)
+        x["LuxurySpend"] = spend[
+            [c for c in ["RoomService", "Spa", "VRDeck"] if c in spend]
+        ].sum(axis=1, min_count=1)
+        x["EssentialSpend"] = spend[
+            [c for c in ["FoodCourt", "ShoppingMall"] if c in spend]
+        ].sum(axis=1, min_count=1)
+
+    if "Age" in x:
+        age = pd.to_numeric(x["Age"], errors="coerce")
+        x["AgeGroup"] = pd.cut(
+            age,
+            bins=[-np.inf, 5, 12, 17, 25, 40, 60, np.inf],
+            labels=["baby", "child", "teen", "young", "adult", "mature", "senior"],
+        ).astype(object)
+        x["IsChild"] = (age < 13).astype(int)
+
+    if "HomePlanet" in x and "Destination" in x:
+        x["Route"] = (
+            x["HomePlanet"].fillna("Unknown").astype(str)
+            + "_"
+            + x["Destination"].fillna("Unknown").astype(str)
+        )
+
+    if "GroupId" in x:
+        for source in ["Age", "TotalSpend"]:
+            if source in x:
+                numeric = pd.to_numeric(x[source], errors="coerce")
+                x[f"GroupMean{source}"] = numeric.groupby(x["GroupId"]).transform("mean")
+
+    x.drop(columns=["PassengerId"], inplace=True, errors="ignore")
+    return x
+
+
+features = engineer_features(combined)
+x_train = features.iloc[: len(train)].copy()
+x_valid = features.iloc[len(train) :].copy()
+
+categorical_columns = [
+    column
+    for column in x_train.columns
+    if x_train[column].dtype == object
+    or str(x_train[column].dtype).startswith("category")
+    or column in {"CryoSleep", "VIP"}
+]
+numeric_columns = [c for c in x_train.columns if c not in categorical_columns]
+
+for column in categorical_columns:
+    x_train[column] = x_train[column].fillna("__MISSING__").astype(str)
+    x_valid[column] = x_valid[column].fillna("__MISSING__").astype(str)
+
+for column in numeric_columns:
+    x_train[column] = pd.to_numeric(x_train[column], errors="coerce")
+    x_valid[column] = pd.to_numeric(x_valid[column], errors="coerce")
+
+try:
+    from catboost import CatBoostClassifier
+    from sklearn.model_selection import StratifiedKFold
+
+    fold_predictions = []
+    folds = StratifiedKFold(n_splits=5, shuffle=True, random_state=2024)
+
+    for fold, (fit_index, holdout_index) in enumerate(folds.split(x_train, target)):
+        model = CatBoostClassifier(
+            iterations=1100,
+            depth=7,
+            learning_rate=0.045,
+            loss_function="Logloss",
+            eval_metric="Accuracy",
+            random_seed=2024 + fold,
+            l2_leaf_reg=5.0,
+            random_strength=0.6,
+            bootstrap_type="Bayesian",
+            bagging_temperature=0.7,
+            verbose=False,
+            allow_writing_files=False,
+            thread_count=-1,
+        )
+        model.fit(
+            x_train.iloc[fit_index],
+            target.iloc[fit_index],
+            cat_features=categorical_columns,
+            eval_set=(x_train.iloc[holdout_index], target.iloc[holdout_index]),
+            early_stopping_rounds=120,
+            verbose=False,
+        )
+        fold_predictions.append(model.predict_proba(x_valid)[:, 1])
+
+    probabilities = np.mean(fold_predictions, axis=0)
+
+except ImportError:
+    from sklearn.compose import ColumnTransformer
+    from sklearn.ensemble import ExtraTreesClassifier, HistGradientBoostingClassifier
+    from sklearn.impute import SimpleImputer
+    from sklearn.pipeline import Pipeline
+    from sklearn.preprocessing import OrdinalEncoder
+
+    preprocessor = ColumnTransformer(
+        transformers=[
+            (
+                "categorical",
+                Pipeline(
+                    [
+                        (
+                            "encode",
+                            OrdinalEncoder(
+                                handle_unknown="use_encoded_value",
+                                unknown_value=-1,
+                                encoded_missing_value=-1,
+                            ),
+                        )
+                    ]
+                ),
+                categorical_columns,
+            ),
+            (
+                "numeric",
+                Pipeline([("impute", SimpleImputer(strategy="median"))]),
+                numeric_columns,
+            ),
+        ],
+        remainder="drop",
+    )
+
+    train_matrix = preprocessor.fit_transform(x_train)
+    valid_matrix = preprocessor.transform(x_valid)
+
+    hist_model = HistGradientBoostingClassifier(
+        learning_rate=0.055,
+        max_iter=450,
+        max_leaf_nodes=31,
+        min_samples_leaf=18,
+        l2_regularization=2.5,
+        early_stopping=True,
+        validation_fraction=0.15,
+        random_state=2024,
+    )
+    tree_model = ExtraTreesClassifier(
+        n_estimators=600,
+        min_samples_leaf=2,
+        max_features=0.8,
+        class_weight="balanced",
+        n_jobs=-1,
+        random_state=2024,
+    )
+
+    hist_model.fit(train_matrix, target)
+    tree_model.fit(train_matrix, target)
+    probabilities = (
+        0.75 * hist_model.predict_proba(valid_matrix)[:, 1]
+        + 0.25 * tree_model.predict_proba(valid_matrix)[:, 1]
+    )
+
+submission = pd.DataFrame(
+    {
+        "PassengerId": validation_ids,
+        "Transported": probabilities >= 0.5,
+    }
+)
+submission.to_csv(OUTPUT_PATH, index=False)

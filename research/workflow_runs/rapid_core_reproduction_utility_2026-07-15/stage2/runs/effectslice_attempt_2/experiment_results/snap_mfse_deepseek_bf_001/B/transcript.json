@@ -1,0 +1,108 @@
+{
+  "schema_version": "effectslice-snap-mfse-transcript.v1",
+  "evidence_boundary": "development_only_not_confirmation",
+  "condition": "B",
+  "turns": [
+    {
+      "step": 1,
+      "retry_lineage_id": "snap-mfse:dev:deepseek:bf:001:B:turn-001",
+      "prompt_sha256": "01185d96fe176941320aa2249104576e2cfc6f38902be26a043ca69809f2dea5",
+      "response_sha256": "ce5d57951ac1a45625caf9910cd4924603570d91f8ab9111328333635a4453e3",
+      "response_text": "{\"action\":\"search\",\"query\":\"snap_core\",\"path\":\".\",\"max_results\":10}",
+      "action": {
+        "action": "search",
+        "query": "snap_core",
+        "path": ".",
+        "max_results": 10,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "test_snap_core_public.py:3: from snap_core import matrix_free_spectral_embedding",
+      "transport_attempts": 1,
+      "input_tokens": 508,
+      "output_tokens": 104
+    },
+    {
+      "step": 2,
+      "retry_lineage_id": "snap-mfse:dev:deepseek:bf:001:B:turn-002",
+      "prompt_sha256": "a63df18c50f67355b4a599349dc0598ebbe8b4283336c746a68c4b5b3d69f528",
+      "response_sha256": "b2825e93db22822a409d253240238ce998f378bc9c3469a4d5622eef514a0bb2",
+      "response_text": "{\"action\":\"open\",\"path\":\"snap_core.py\",\"start_line\":1,\"end_line\":80}",
+      "action": {
+        "action": "open",
+        "query": null,
+        "path": "snap_core.py",
+        "max_results": null,
+        "start_line": 1,
+        "end_line": 80,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "1: \"\"\"Starter module for the locked SNAP-MFSE reproduction task.\"\"\"\n2: \n3: from __future__ import annotations\n4: \n5: import numpy as np\n6: \n7: \n8: def matrix_free_spectral_embedding(\n9:     counts: np.ndarray,\n10:     n_components: int,\n11:     random_state: int = 0,\n12: ) -> tuple[np.ndarray, np.ndarray]:\n13:     \"\"\"Return leading spectral coordinates for a cell-by-feature count matrix.\"\"\"\n14: \n15:     raise NotImplementedError(\"implement the paper-core reproduction task\")",
+      "transport_attempts": 1,
+      "input_tokens": 574,
+      "output_tokens": 86
+    },
+    {
+      "step": 3,
+      "retry_lineage_id": "snap-mfse:dev:deepseek:bf:001:B:turn-003",
+      "prompt_sha256": "91114877c61329964bb5f26b9714d1ca47c6000de9b597aa118c152bb36b30e4",
+      "response_sha256": "d68d00e8d93420f851292fe0a8a196247d44eb1a15d3fbf4acc53686c77aeed0",
+      "response_text": "{\"action\":\"open\",\"path\":\"test_snap_core_public.py\",\"start_line\":1,\"end_line\":80}",
+      "action": {
+        "action": "open",
+        "query": null,
+        "path": "test_snap_core_public.py",
+        "max_results": null,
+        "start_line": 1,
+        "end_line": 80,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "1: import numpy as np\n2: \n3: from snap_core import matrix_free_spectral_embedding\n4: \n5: \n6: def test_returns_finite_descending_embedding_with_expected_shape():\n7:     counts = np.array(\n8:         [\n9:             [2.0, 1.0, 0.0, 0.0, 1.0],\n10:             [1.0, 3.0, 1.0, 0.0, 0.0],\n11:             [0.0, 1.0, 2.0, 1.0, 0.0],\n12:             [0.0, 0.0, 1.0, 3.0, 1.0],\n13:             [1.0, 0.0, 0.0, 1.0, 2.0],\n14:             [2.0, 0.0, 0.0, 0.0, 1.0],\n15:         ]\n16:     )\n17: \n18:     values, vectors = matrix_free_spectral_embedding(counts, 2, random_state=7)\n19: \n20:     assert values.shape == (2,)\n21:     assert vectors.shape == (counts.shape[0], 2)\n22:     assert np.isfinite(values).all()\n23:     assert np.isfinite(vectors).all()\n24:     assert np.all(values[:-1] >= values[1:])",
+      "transport_attempts": 1,
+      "input_tokens": 747,
+      "output_tokens": 53
+    },
+    {
+      "step": 4,
+      "retry_lineage_id": "snap-mfse:dev:deepseek:bf:001:B:turn-004",
+      "prompt_sha256": "e56b7a71c9177ec728bb66831d6e08a3e119210fdc8f259a16aff59616c26150",
+      "response_sha256": "e92a3d6602500bd5af864dca6a3f6115ded9c9eb924c05664260673c1e2fdd62",
+      "response_text": "{\"action\":\"open\",\"path\":\"test_snap_core_public.py\",\"start_line\":24,\"end_line\":80}",
+      "action": {
+        "action": "open",
+        "query": null,
+        "path": "test_snap_core_public.py",
+        "max_results": null,
+        "start_line": 24,
+        "end_line": 80,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "24:     assert np.all(values[:-1] >= values[1:])",
+      "transport_attempts": 1,
+      "input_tokens": 1128,
+      "output_tokens": 881
+    },
+    {
+      "step": 5,
+      "retry_lineage_id": "snap-mfse:dev:deepseek:bf:001:B:turn-005",
+      "prompt_sha256": "1402abb30b2c55b36539bcb08fc51f160c65818162acb98f0e2ce98b25cded3f",
+      "response_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "response_text": "",
+      "action": null,
+      "observation_status": "provider_error",
+      "observation_message": "provider_error",
+      "transport_attempts": 5,
+      "input_tokens": 5930,
+      "output_tokens": 20480
+    }
+  ]
+}

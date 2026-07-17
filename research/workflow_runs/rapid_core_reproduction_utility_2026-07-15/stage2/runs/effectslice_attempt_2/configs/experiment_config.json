@@ -1,0 +1,191 @@
+{
+  "schema_version": "effectslice-experiment-config.v2",
+  "run_id": "effectslice_attempt_2",
+  "project_root": "D:/a_work/gitee/PaperToSkill",
+  "evidence_mode": "development_adapter_then_sealed_pac_confirmation",
+  "task_spec": "benchmarks/real_reuse/real_reuse_v0.json",
+  "main_row_selection": "results/real_reuse/main_run_selection.json",
+  "raw_rows": "results/real_reuse/raw_rows.jsonl",
+  "source_maps": {
+    "aide": "generated_skills/aide/references/source_map.json",
+    "swe_agent": "generated_skills/real_reuse/swe_agent/references/source_map.json",
+    "reflexion": "generated_skills/reflexion/references/source_map.json",
+    "snapatac2": "generated_skills/real_reuse/snapatac2/references/source_map.json"
+  },
+  "task_adapters": {
+    "SNAP-MFSE": {
+      "status": "frozen_before_provider_runs",
+      "workspace": "task_workspaces/snap_mfse_v1",
+      "full_artifact": "artifacts/snap_mfse/full_artifact.md",
+      "atom_map": "artifacts/snap_mfse/source_atom_map.json",
+      "case_registry": "artifacts/snap_mfse/case_registry.json",
+      "slice_registry": "artifacts/snap_mfse/slices/slice_registry.json",
+      "confirmation_family": "artifacts/snap_mfse/confirmation_family.json",
+      "task_prompt": "artifacts/snap_mfse/task_prompt.md",
+      "metric": "registered_case_pass_rate",
+      "development_delta_min": 0.05,
+      "max_actions": 16,
+      "action_budget_visible_to_model": true,
+      "primary_model_family": "DeepSeek-family",
+      "robustness_model_family": "GPT-family",
+      "case_blocks": {
+        "development": 4,
+        "eligibility": 21,
+        "discovery": 16,
+        "confirmation": 59
+      },
+      "provider_protocols": {
+        "deepseek_primary_v1": {
+          "version": "effectslice-provider-output-budget.v1",
+          "max_tokens": 4096,
+          "status": "historical_provider_inconclusive",
+          "harness_protocol_version": "effectslice-snap-mfse-aci.v1"
+        },
+        "deepseek_primary_v2": {
+          "version": "effectslice-deepseek-output-budget.v2",
+          "max_tokens": 8192,
+          "only_changed_fields": [
+            "max_tokens"
+          ],
+          "harness_protocol_version": "effectslice-snap-mfse-aci.v1",
+          "rationale": "Two primary B runs exhausted five 4096-token attempts with empty visible content; task, cases, scorer, action budget, thresholds, and retry policy remain frozen."
+        }
+      },
+      "harness_protocols": {
+        "original_v1": {
+          "version": "effectslice-snap-mfse-aci.v1",
+          "score_final_state_on_exhaustion": false,
+          "max_actions": 16,
+          "status": "historical"
+        },
+        "final_state_scoring_v2": {
+          "version": "effectslice-snap-mfse-aci.v2",
+          "score_final_state_on_exhaustion": true,
+          "max_actions": 16,
+          "only_changed_fields": [
+            "terminal_scoring"
+          ],
+          "rationale": "Eligibility v1 exhausted its action budget after a final edit, leaving the final patch unscored. V2 deterministically scores the terminal workspace without adding a model action or exposing feedback to the model."
+        }
+      },
+      "claim_boundary": "A task-local paper-core implementation benchmark; not a full SnapATAC2 biological reproduction."
+    },
+    "TOOLFORMER-FILTER": {
+      "status": "frozen_before_provider_runs",
+      "workspace": "task_workspaces/toolformer_filter_v1",
+      "full_artifact": "artifacts/toolformer_filter/full_artifact.md",
+      "atom_map": "artifacts/toolformer_filter/source_atom_map.json",
+      "case_registry": "artifacts/toolformer_filter/case_registry.json",
+      "slice_registry": "artifacts/toolformer_filter/slices/slice_registry.json",
+      "confirmation_builder": "build_toolformer_filter_confirmation_family.py",
+      "confirmation_family": "artifacts/toolformer_filter/confirmation_family.json",
+      "task_prompt": "artifacts/toolformer_filter/task_prompt.md",
+      "runner": "run_toolformer_filter_effectslice.py",
+      "scorer": "src/effectslice/toolformer_filter_scorer.py",
+      "metric": "registered_case_pass_rate",
+      "development_delta_min": 0.05,
+      "max_actions": 16,
+      "max_tokens": 8192,
+      "maximum_transport_attempts": 5,
+      "action_budget_visible_to_model": true,
+      "primary_model_family": "DeepSeek-family",
+      "primary_model_alias": "deepseek-v4-flash",
+      "robustness_model_family": "GPT-family",
+      "robustness_model_alias": "gpt-5.6",
+      "inference_mode": "trusted_vendor_api",
+      "local_accelerator_required": false,
+      "provider_protocol_version": "effectslice-deepseek-output-budget.v2",
+      "harness_protocol_version": "effectslice-toolformer-filter-aci.v2",
+      "task_contract_protocol_version": "effectslice-toolformer-filter-task-contract.v2",
+      "excluded_development_pair_ids": [
+        "toolformer-filter:development:deepseek:bf:001"
+      ],
+      "case_blocks": {
+        "development": 4,
+        "eligibility": 21,
+        "discovery": 16,
+        "confirmation": 59
+      },
+      "claim_boundary": "A task-local reproduction of Toolformer's API-call loss filter; not full Toolformer training or downstream benchmark reproduction."
+    }
+  },
+  "statistics": {
+    "protocol": "exact_binomial_pac_v1",
+    "alpha_total": 0.03,
+    "alpha_F": 0.01,
+    "alpha_C": 0.02,
+    "delta_min": 0.05,
+    "minimum_beneficial_prevalence": 0.8,
+    "minimum_eligibility_pairs": 21,
+    "epsilon": 0.025,
+    "delta_delete": 0.05,
+    "maximum_violation_rate": 0.1,
+    "illustrative_confirmation_family_size": 10,
+    "zero_violation_confirmation_pairs": 59,
+    "family_correction": "holm",
+    "simultaneous_bound_reporting": "bonferroni_clopper_pearson"
+  },
+  "search": {
+    "Q": 24,
+    "N": 16,
+    "candidate_order": [
+      "retained_scc_count_ascending",
+      "discovery_margin_descending",
+      "measured_task_local_cost_ascending",
+      "atom_ids_lexicographic"
+    ],
+    "scientific_claim": false
+  },
+  "retry_policy": {
+    "maximum_transport_attempts": 5,
+    "retryable": [
+      "connection_error",
+      "timeout",
+      "http_429",
+      "http_502",
+      "http_503",
+      "http_504"
+    ],
+    "same_statistical_unit": true,
+    "exhausted_retry_missing_value_policy": "count_as_violation"
+  },
+  "credential_policy": {
+    "source": "user-supplied external provider documentation",
+    "persist_credentials": false,
+    "log_authorization_headers": false,
+    "copy_provider_documents_into_run": false
+  },
+  "execution_model": {
+    "ordinary_device_definition": "A local computer performs orchestration, file and tool operations, scoring, and verification while model inference is supplied by a trusted vendor API.",
+    "inference_mode": "trusted_vendor_api",
+    "local_accelerator_required": false,
+    "local_roles": [
+      "experiment_orchestration",
+      "bounded_tool_execution",
+      "artifact_persistence",
+      "deterministic_scoring",
+      "result_verification"
+    ],
+    "providers": {
+      "primary": {
+        "model_family": "DeepSeek-family",
+        "user_facing_name": "DeepSeek V3.2",
+        "request_alias": "deepseek-v4-flash",
+        "wire_api": "openai_chat_completions",
+        "identity_note": "The user identifies the trusted service as DeepSeek V3.2; artifacts retain the exact request alias until a provider mapping is independently recorded."
+      },
+      "robustness": {
+        "model_family": "GPT-family",
+        "request_alias": "gpt-5.6",
+        "wire_api": "openai_responses"
+      }
+    },
+    "local_quantized_model": {
+      "required": false,
+      "role": "optional_supplement_only",
+      "status": "excluded_from_core_evidence"
+    }
+  },
+  "downloads": [],
+  "new_dependencies": []
+}

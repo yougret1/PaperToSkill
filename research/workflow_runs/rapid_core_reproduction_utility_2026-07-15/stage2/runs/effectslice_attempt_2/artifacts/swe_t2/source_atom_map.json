@@ -1,0 +1,324 @@
+{
+  "schema_version": "effectslice-swe-source-atom-map.v1",
+  "paper_id": "swe_agent",
+  "task_id": "SWE-T2",
+  "source_path": "D:/a_work/gitee/PaperToSkill/generated_skills/real_reuse/swe_agent/SKILL.md",
+  "source_sha256": "486c7cc319e9dad8a6bd1db396df2ec3e267de6a6a3e0b0a6bb752376119f537",
+  "source_map_path": "D:/a_work/gitee/PaperToSkill/generated_skills/real_reuse/swe_agent/references/source_map.json",
+  "source_map_sha256": "19dc2d4eccbcad9d0467cd10f362a21a7a77020b17ed3ea23518d4ae76968818",
+  "atoms": [
+    {
+      "atom_id": "A01",
+      "workflow_step": "1. Frame the method as an agent-computer interface that shapes commands, documentation, state, history, and feedback: ... back to the LM. It also tracks the history of all previous commands and observations and, at each step, manages how these should be formatted and combined with .... Source anchors: lines 135-139.",
+      "source_text": "1. Frame the method as an agent-computer interface that shapes commands, documentation, state, history, and feedback: ... back to the LM. It also tracks the history of all previous commands and observations and, at each step, manages how these should be formatted and combined with .... Source anchors: lines 135-139.\r\n",
+      "source_span": {
+        "file_digest": "486c7cc319e9dad8a6bd1db396df2ec3e267de6a6a3e0b0a6bb752376119f537",
+        "byte_start": 1403,
+        "byte_end": 1722,
+        "line_start": 36,
+        "line_end": 37
+      },
+      "executable_region": {
+        "file_digest": "486c7cc319e9dad8a6bd1db396df2ec3e267de6a6a3e0b0a6bb752376119f537",
+        "byte_start": 1403,
+        "byte_end": 1722,
+        "symbol": "aci_framing"
+      },
+      "contract_role": "interface_contract"
+    },
+    {
+      "atom_id": "A02",
+      "workflow_step": "2. Keep ACI actions simple, compact, efficient, and paired with concise environment feedback: ... Actions should be simple and easy to understand for agents. Many bash commands have documentation that includes dozens of options. Simple commands with a few options and .... Source anchors: lines 148-152.",
+      "source_text": "2. Keep ACI actions simple, compact, efficient, and paired with concise environment feedback: ... Actions should be simple and easy to understand for agents. Many bash commands have documentation that includes dozens of options. Simple commands with a few options and .... Source anchors: lines 148-152.\r\n",
+      "source_span": {
+        "file_digest": "486c7cc319e9dad8a6bd1db396df2ec3e267de6a6a3e0b0a6bb752376119f537",
+        "byte_start": 1722,
+        "byte_end": 2027,
+        "line_start": 37,
+        "line_end": 38
+      },
+      "executable_region": {
+        "file_digest": "486c7cc319e9dad8a6bd1db396df2ec3e267de6a6a3e0b0a6bb752376119f537",
+        "byte_start": 1722,
+        "byte_end": 2027,
+        "symbol": "simple_actions"
+      },
+      "contract_role": "action_contract"
+    },
+    {
+      "atom_id": "A03",
+      "workflow_step": "3. Use SWE-agent's ReAct loop with thoughts, commands, execution feedback, and common Linux utilities when needed: ... search, navigate, edit, and execute code commands. The ACI com- prises several principal components, including search/navigation, file viewer, file editor, and context .... Source anchors: lines 173-177.",
+      "source_text": "3. Use SWE-agent's ReAct loop with thoughts, commands, execution feedback, and common Linux utilities when needed: ... search, navigate, edit, and execute code commands. The ACI com- prises several principal components, including search/navigation, file viewer, file editor, and context .... Source anchors: lines 173-177.\r\n",
+      "source_span": {
+        "file_digest": "486c7cc319e9dad8a6bd1db396df2ec3e267de6a6a3e0b0a6bb752376119f537",
+        "byte_start": 2027,
+        "byte_end": 2351,
+        "line_start": 38,
+        "line_end": 39
+      },
+      "executable_region": {
+        "file_digest": "486c7cc319e9dad8a6bd1db396df2ec3e267de6a6a3e0b0a6bb752376119f537",
+        "byte_start": 2027,
+        "byte_end": 2351,
+        "symbol": "react_loop"
+      },
+      "contract_role": "control_loop"
+    },
+    {
+      "atom_id": "A04",
+      "workflow_step": "4. Localize code with LM-friendly search and navigation commands such as find_file, search_file, and search_dir: ... an issue. We introduce the special commands find_file, search_file, and search_dir, which output a summary of search results when searching for filenames and strings within files .... Source anchors: lines 178-182.",
+      "source_text": "4. Localize code with LM-friendly search and navigation commands such as find_file, search_file, and search_dir: ... an issue. We introduce the special commands find_file, search_file, and search_dir, which output a summary of search results when searching for filenames and strings within files .... Source anchors: lines 178-182.\r\n",
+      "source_span": {
+        "file_digest": "486c7cc319e9dad8a6bd1db396df2ec3e267de6a6a3e0b0a6bb752376119f537",
+        "byte_start": 2351,
+        "byte_end": 2684,
+        "line_start": 39,
+        "line_end": 40
+      },
+      "executable_region": {
+        "file_digest": "486c7cc319e9dad8a6bd1db396df2ec3e267de6a6a3e0b0a6bb752376119f537",
+        "byte_start": 2351,
+        "byte_end": 2684,
+        "symbol": "bounded_localization"
+      },
+      "contract_role": "search_action"
+    },
+    {
+      "atom_id": "A05",
+      "workflow_step": "5. Inspect code through the file viewer with bounded windows, line numbers, scrolling, and goto: ... that the agent write a more specific query. File viewer. After finding a file they want to view, agents use the interactive file viewer by calling the command open on the .... Source anchors: lines 235-239.",
+      "source_text": "5. Inspect code through the file viewer with bounded windows, line numbers, scrolling, and goto: ... that the agent write a more specific query. File viewer. After finding a file they want to view, agents use the interactive file viewer by calling the command open on the .... Source anchors: lines 235-239.\r\n",
+      "source_span": {
+        "file_digest": "486c7cc319e9dad8a6bd1db396df2ec3e267de6a6a3e0b0a6bb752376119f537",
+        "byte_start": 2684,
+        "byte_end": 2993,
+        "line_start": 40,
+        "line_end": 41
+      },
+      "executable_region": {
+        "file_digest": "486c7cc319e9dad8a6bd1db396df2ec3e267de6a6a3e0b0a6bb752376119f537",
+        "byte_start": 2684,
+        "byte_end": 2993,
+        "symbol": "bounded_file_view"
+      },
+      "contract_role": "inspection_action"
+    },
+    {
+      "atom_id": "A06",
+      "workflow_step": "6. Apply focused multiline edits through the edit command and immediately inspect the updated file view: ... with the file viewer, allowing agents to replace a specific range of lines in the open file. This command takes 3 required arguments: the start line, end line, and replacement .... Source anchors: lines 244-248.",
+      "source_text": "6. Apply focused multiline edits through the edit command and immediately inspect the updated file view: ... with the file viewer, allowing agents to replace a specific range of lines in the open file. This command takes 3 required arguments: the start line, end line, and replacement .... Source anchors: lines 244-248.\r\n",
+      "source_span": {
+        "file_digest": "486c7cc319e9dad8a6bd1db396df2ec3e267de6a6a3e0b0a6bb752376119f537",
+        "byte_start": 2993,
+        "byte_end": 3315,
+        "line_start": 41,
+        "line_end": 42
+      },
+      "executable_region": {
+        "file_digest": "486c7cc319e9dad8a6bd1db396df2ec3e267de6a6a3e0b0a6bb752376119f537",
+        "byte_start": 2993,
+        "byte_end": 3315,
+        "symbol": "focused_edit"
+      },
+      "contract_role": "edit_action"
+    },
+    {
+      "atom_id": "A07",
+      "workflow_step": "7. Use editing guardrails such as linting feedback and discarded invalid edits to avoid error propagation: ... files in an IDE, we integrate a code linter into the edit function to alert the agent of mistakes it may have introduced when editing a file. Select errors from the linter .... Source anchors: lines 250-254.",
+      "source_text": "7. Use editing guardrails such as linting feedback and discarded invalid edits to avoid error propagation: ... files in an IDE, we integrate a code linter into the edit function to alert the agent of mistakes it may have introduced when editing a file. Select errors from the linter .... Source anchors: lines 250-254.\r\n",
+      "source_span": {
+        "file_digest": "486c7cc319e9dad8a6bd1db396df2ec3e267de6a6a3e0b0a6bb752376119f537",
+        "byte_start": 3315,
+        "byte_end": 3635,
+        "line_start": 42,
+        "line_end": 43
+      },
+      "executable_region": {
+        "file_digest": "486c7cc319e9dad8a6bd1db396df2ec3e267de6a6a3e0b0a6bb752376119f537",
+        "byte_start": 3315,
+        "byte_end": 3635,
+        "symbol": "edit_guardrail"
+      },
+      "contract_role": "guardrail"
+    },
+    {
+      "atom_id": "A08",
+      "workflow_step": "8. Manage context with command documentation, demonstrations, malformed-response feedback, and collapsed old observations: Context management. The SWE-agent system uses informative prompts, error messages, and history processors to keep agent context concise and informative. Agents receive .... Source anchors: lines 255-259.",
+      "source_text": "8. Manage context with command documentation, demonstrations, malformed-response feedback, and collapsed old observations: Context management. The SWE-agent system uses informative prompts, error messages, and history processors to keep agent context concise and informative. Agents receive .... Source anchors: lines 255-259.\r\n",
+      "source_span": {
+        "file_digest": "486c7cc319e9dad8a6bd1db396df2ec3e267de6a6a3e0b0a6bb752376119f537",
+        "byte_start": 3635,
+        "byte_end": 3963,
+        "line_start": 43,
+        "line_end": 44
+      },
+      "executable_region": {
+        "file_digest": "486c7cc319e9dad8a6bd1db396df2ec3e267de6a6a3e0b0a6bb752376119f537",
+        "byte_start": 3635,
+        "byte_end": 3963,
+        "symbol": "context_management"
+      },
+      "contract_role": "context_control"
+    },
+    {
+      "atom_id": "A09",
+      "workflow_step": "- Report % Resolved or pass@1, average cost, and the per-instance budget boundary: ... after interaction. Metrics. We report % Resolved or pass@1 as the main metric, which is the proportion of instances for which all tests pass successfully after the model .... Source anchors: lines 294-298.",
+      "source_text": "- Report % Resolved or pass@1, average cost, and the per-instance budget boundary: ... after interaction. Metrics. We report % Resolved or pass@1 as the main metric, which is the proportion of instances for which all tests pass successfully after the model .... Source anchors: lines 294-298.\r\n",
+      "source_span": {
+        "file_digest": "486c7cc319e9dad8a6bd1db396df2ec3e267de6a6a3e0b0a6bb752376119f537",
+        "byte_start": 4631,
+        "byte_end": 4925,
+        "line_start": 49,
+        "line_end": 50
+      },
+      "executable_region": {
+        "file_digest": "486c7cc319e9dad8a6bd1db396df2ec3e267de6a6a3e0b0a6bb752376119f537",
+        "byte_start": 4631,
+        "byte_end": 4925,
+        "symbol": "resolved_cost_budget"
+      },
+      "contract_role": "metric_budget_contract"
+    }
+  ],
+  "dependency_nodes": [
+    "A01",
+    "A02",
+    "A03",
+    "A04",
+    "A05",
+    "A06",
+    "A07",
+    "A08",
+    "A09"
+  ],
+  "dependency_edges": [
+    {
+      "from": "A02",
+      "to": "A01"
+    },
+    {
+      "from": "A03",
+      "to": "A01"
+    },
+    {
+      "from": "A03",
+      "to": "A02"
+    },
+    {
+      "from": "A05",
+      "to": "A04"
+    },
+    {
+      "from": "A06",
+      "to": "A05"
+    },
+    {
+      "from": "A07",
+      "to": "A06"
+    },
+    {
+      "from": "A08",
+      "to": "A01"
+    },
+    {
+      "from": "A08",
+      "to": "A02"
+    }
+  ],
+  "requires": {
+    "A01": [],
+    "A02": [
+      "A01"
+    ],
+    "A03": [
+      "A01",
+      "A02"
+    ],
+    "A04": [],
+    "A05": [
+      "A04"
+    ],
+    "A06": [
+      "A05"
+    ],
+    "A07": [
+      "A06"
+    ],
+    "A08": [
+      "A01",
+      "A02"
+    ],
+    "A09": []
+  },
+  "development_candidates": {
+    "slice_v0": {
+      "atom_ids": [
+        "A04",
+        "A05",
+        "A06",
+        "A07",
+        "A09"
+      ],
+      "dependency_closed": true,
+      "artifact_path": "slice_v0.md",
+      "artifact_sha256": "dcc6ec719a40e8fe45d1a3e9d848906600fcf56aa55dcefde0ac349c111722ad",
+      "context_sha256": "e0a6f4f4aee59f554a65cdc3ff34dee63b1ee84eb9c7a28cba1bd88fb6478319",
+      "deletion_neighbors": {
+        "minus_A04": {
+          "removed_atom_id": "A04",
+          "atom_ids": [
+            "A09"
+          ],
+          "artifact_path": "deletion_neighbors/slice_v0_minus_A04.md",
+          "artifact_sha256": "070a8d5faadde073d42efd95899c1d302a7e7b24b3a9d571abb5b782d97f271e",
+          "context_sha256": "b4b2e981f87f70641dad2d8424f47b0b079d43481c59062cb47153b1a1f37c91"
+        },
+        "minus_A05": {
+          "removed_atom_id": "A05",
+          "atom_ids": [
+            "A04",
+            "A09"
+          ],
+          "artifact_path": "deletion_neighbors/slice_v0_minus_A05.md",
+          "artifact_sha256": "bd1abf13ec4bdf1582e44bda0319ea8ae502209b501470b8b4592352d5aeb60b",
+          "context_sha256": "411203d4a0afae0fad6112e3ce8b17fa05a395a4b7aa2e032ac300b04a3410d6"
+        },
+        "minus_A06": {
+          "removed_atom_id": "A06",
+          "atom_ids": [
+            "A04",
+            "A05",
+            "A09"
+          ],
+          "artifact_path": "deletion_neighbors/slice_v0_minus_A06.md",
+          "artifact_sha256": "24ae460d2b1b00a189964cbc80fbc8f252e6d75b466e8292630e55b054e577eb",
+          "context_sha256": "97f2277ac97b49711116fef1861edd4e7d7aad244ecd7e212b02bbcfb0ff42e2"
+        },
+        "minus_A07": {
+          "removed_atom_id": "A07",
+          "atom_ids": [
+            "A04",
+            "A05",
+            "A06",
+            "A09"
+          ],
+          "artifact_path": "deletion_neighbors/slice_v0_minus_A07.md",
+          "artifact_sha256": "423de5fc665d9ff4fe0669755b2a1ea2aaa351b5da1df69b4b23ae58d09cb758",
+          "context_sha256": "8be9949e808d24049c36da2740400282044cc3e4aec563b6986c53de9605ab28"
+        },
+        "minus_A09": {
+          "removed_atom_id": "A09",
+          "atom_ids": [
+            "A04",
+            "A05",
+            "A06",
+            "A07"
+          ],
+          "artifact_path": "deletion_neighbors/slice_v0_minus_A09.md",
+          "artifact_sha256": "8e30231f2f26b5594a0321977b5982cdde38ff4793262d0177bbce21ed627983",
+          "context_sha256": "118cb1c73dbddeea3f49fad18520e932ba61d39b4865c33993ce4ce0ff9d3f9b"
+        }
+      }
+    }
+  },
+  "evidence_boundary": "Development source atomization and candidate neighbors only; not an EffectSlice admission or effectiveness result."
+}

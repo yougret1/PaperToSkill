@@ -1,0 +1,50 @@
+{
+  "schema_version": "effectslice-snap-mfse-confirmation-family.v1",
+  "task_id": "SNAP-MFSE",
+  "selected_candidate_id": "prefix_03",
+  "retained_atom_ids": [
+    "A01",
+    "A02",
+    "A03"
+  ],
+  "retained_scc_count": 3,
+  "selected_artifact_path": "artifacts/snap_mfse/slices/candidates/prefix_03.md",
+  "selected_artifact_sha256": "a581423575c0fa780739a2040a59260c6df4cc0172d022cc49d8b491552e8877",
+  "conditions": [
+    "B",
+    "F",
+    "S"
+  ],
+  "case_block": "confirmation",
+  "case_count": 59,
+  "alpha": 0.02,
+  "epsilon": 0.025,
+  "minimum_beneficial_prevalence": 0.8,
+  "maximum_violation_rate": 0.1,
+  "discovery_summary_path": "derived/snap_mfse_discovery_summary.json",
+  "discovery_summary_sha256": "21b92cd72985b20ef22fd52af024ffc0e0acef01ef6a443172bec03a1a354ba7",
+  "slice_registry_path": "artifacts/snap_mfse/slices/slice_registry.json",
+  "slice_registry_sha256": "3728cb32d49bcd32ad34259e5361a8088b36a142bba301da0b332c96d8d0e82f",
+  "case_registry_path": "artifacts/snap_mfse/case_registry.json",
+  "case_registry_sha256": "0434982d7dd7d04bd3e25068aa7e94b848f62c29e93ae8034444de7b2cfd0a08",
+  "hypotheses": [
+    {
+      "hypothesis_id": "H_preserve_F",
+      "metric": "casewise_S_not_equal_F",
+      "acceptance_rule": "zero observed mismatches and one-sided Clopper-Pearson upper bound <= maximum_violation_rate"
+    },
+    {
+      "hypothesis_id": "H_benefit_over_B",
+      "metric": "casewise_S_minus_B_at_least_delta_min",
+      "acceptance_rule": "one-sided Clopper-Pearson lower bound >= minimum_beneficial_prevalence"
+    },
+    {
+      "hypothesis_id": "H_hard_constraints",
+      "metric": "S_contract_and_matrix_free_guard",
+      "acceptance_rule": "both hard constraints pass"
+    }
+  ],
+  "confirmation_unsealed": false,
+  "general_effectslice_claim_ready": false,
+  "evidence_boundary": "Frozen after discovery and before any confirmation provider run. Passing supports only a task-local confirmation claim."
+}

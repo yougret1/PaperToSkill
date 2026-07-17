@@ -1,0 +1,66 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -12,4 +12,62 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate input
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    n_cells, n_features = counts.shape
++    if n_cells < 2:
++        raise ValueError("counts must have at least two cells")
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be between 1 and n_cells-1")
++    if not np.isfinite(counts).all():
++        raise ValueError("counts contains nonfinite values")
++    if (counts < 0).any():
++        raise ValueError("counts contains negative values")
++
++    # IDF scaling
++    n_cells_float = float(n_cells)
++    df = np.count_nonzero(counts > 0, axis=0)
++    idf = np.log(n_cells_float / (1.0 + df))
++    X = counts * idf[None, :]
++
++    # Row normalization (L2)
++    row_norms = np.linalg.norm(X, axis=1)
++    if (row_norms == 0).any():
++        raise ValueError("counts contains rows that cannot be L2-normalized")
++    X = X / row_norms[:, None]
++
++    # Degree vector matrix-free: d = X @ (X.T @ 1) - 1
++    ones = np.ones(n_cells)
++    colsum = X.T @ ones
++    degree = X @ colsum - 1.0
++    if (degree <= 0).any():
++        raise ValueError("non-positive degree encountered; check data")
++
++    # Build linear operator for normalized similarity
++    D_inv_sqrt = 1.0 / np.sqrt(degree)
++    D_inv = 1.0 / degree
++    X_tilde = X * D_inv_sqrt[:, None]
++
++    def matvec(v):
++        # L_sym @ v = X_tilde @ (X_tilde.T @ v) - D_inv * v
++        return X_tilde @ (X_tilde.T @ v) - D_inv * v
++
++    from scipy.sparse.linalg import LinearOperator, eigsh
++
++    A = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=np.float64)
++
++    # Use random_state for reproducibility
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells).astype(np.float64)
++    v0 /= np.linalg.norm(v0)
++
++    # Compute largest eigenvalues via Lanczos (eigsh returns ascending order)
++    eigenvalues, eigenvectors = eigsh(A, k=n_components, which='LM', v0=v0)
++
++    # eigsh returns eigenvalues in ascending order, eigenvectors columns correspond
++    # We need descending order
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    return eigenvalues.astype(np.float64), eigenvectors.astype(np.float64)

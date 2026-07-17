@@ -1,0 +1,47 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,43 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    for arr, name in [(logp_with_result, 'logp_with_result'), (logp_call_only, 'logp_call_only'), (logp_no_call, 'logp_no_call')]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if arr.shape[0] == 0:
++            raise ValueError(f"{name} must be non-empty")
++        if arr.shape[1] == 0:
++            raise ValueError(f"{name} must be non-empty (horizon length zero)")
++        if not np.isfinite(arr).all():
++            raise ValueError(f"{name} contains non-finite values")
++        if (arr > 0).any():
++            raise ValueError(f"{name} contains positive values")
++    # Check shape consistency
++    n_candidates = logp_with_result.shape[0]
++    future_horizon = logp_with_result.shape[1]
++    if logp_call_only.shape != (n_candidates, future_horizon):
++        raise ValueError("All input matrices must have the same shape")
++    if logp_no_call.shape != (n_candidates, future_horizon):
++        raise ValueError("All input matrices must have the same shape")
++    # Validate tau_filter
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not isinstance(tau_filter, (int, float, np.integer, np.floating)):
++        raise ValueError("tau_filter must be a numeric scalar")
++    if not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
++
++    # Compute margins according to Toolformer loss filter:
++    # margin = sum(logp_with_result) - max(sum(logp_no_call), sum(logp_call_only))
++    sum_with = np.sum(logp_with_result, axis=1)
++    sum_call = np.sum(logp_call_only, axis=1)
++    sum_no_call = np.sum(logp_no_call, axis=1)
++    margins = sum_with - np.maximum(sum_call, sum_no_call)
++
++    keep = margins > tau_filter
++    return keep, margins

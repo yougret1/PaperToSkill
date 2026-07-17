@@ -1,0 +1,39 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -12,5 +12,35 @@
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
++    # Validate inputs
++    if not (isinstance(logp_with_result, np.ndarray) and isinstance(logp_call_only, np.ndarray) and isinstance(logp_no_call, np.ndarray)):
++        raise ValueError("All input matrices must be numpy arrays")
++    if logp_with_result.ndim != 2 or logp_call_only.ndim != 2 or logp_no_call.ndim != 2:
++        raise ValueError("All input matrices must be 2D")
++    if logp_with_result.shape != logp_call_only.shape or logp_with_result.shape != logp_no_call.shape:
++        raise ValueError("All input matrices must have the same shape")
++    if logp_with_result.size == 0:
++        raise ValueError("Input matrices must be non-empty")
++    if not (np.isfinite(logp_with_result).all() and np.isfinite(logp_call_only).all() and np.isfinite(logp_no_call).all()):
++        raise ValueError("All input values must be finite")
++    if not ((logp_with_result <= 0).all() and (logp_call_only <= 0).all() and (logp_no_call <= 0).all()):
++        raise ValueError("All input values must be nonpositive")
++    if isinstance(tau_filter, (bool, np.bool_)):
++        raise ValueError("tau_filter must not be a Boolean")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be a finite nonnegative number")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Sum log probabilities over the future horizon
++    sum_with = np.sum(logp_with_result, axis=1, dtype=np.float64)
++    sum_call = np.sum(logp_call_only, axis=1, dtype=np.float64)
++    sum_no = np.sum(logp_no_call, axis=1, dtype=np.float64)
++
++    # Improvement over each baseline (margin = improvement over the worse baseline)
++    imp_call = sum_with - sum_call
++    imp_no = sum_with - sum_no
++    margin = np.maximum(imp_call, imp_no)
++
++    # Keep if margin is strictly greater than the threshold
++    keep = margin > tau_filter
++
++    return keep, margin

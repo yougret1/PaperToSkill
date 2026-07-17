@@ -1,0 +1,73 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,61 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D NumPy array")
++    if not np.all(np.isfinite(counts)):
++        raise ValueError("counts contains nonfinite values")
++    if np.any(counts < 0):
++        raise ValueError("counts contains negative values")
++    if not np.issubdtype(counts.dtype, np.number):
++        raise ValueError("counts must be numeric")
++    n_cells, n_features = counts.shape
++    if n_cells < 2:
++        raise ValueError("counts must have at least 2 rows")
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must satisfy 1 <= n_components < n_cells")
++    # Check for all-zero rows
++    row_sums = counts.sum(axis=1)
++    if np.any(row_sums == 0):
++        raise ValueError("counts contains all-zero rows")
++
++    # 1. IDF scaling: log(n / (1 + df))
++    df = (counts > 0).sum(axis=0)  # document frequency per feature
++    idf = np.log(n_cells / (1.0 + df))
++    X = counts * idf  # shape (n_cells, n_features)
++
++    # 2. Row normalization to unit L2 norm
++    row_norms = np.linalg.norm(X, axis=1)
++    # Should not be zero because we rejected all-zero rows and IDF preserves sign
++    X = X / row_norms[:, np.newaxis]
++
++    # 3. Compute degree vector d = X @ (X.T @ 1) - 1
++    ones = np.ones(n_cells)
++    d = X @ (X.T @ ones) - ones
++    if np.any(d <= 0):
++        raise ValueError("non-positive degrees computed; check input or IDF")
++
++    # 4. Prepare X_tilde = D^(-1/2) X and D_inv = 1/d
++    sqrt_d_inv = 1.0 / np.sqrt(d)
++    X_tilde = X * sqrt_d_inv[:, np.newaxis]  # row scaling
++    D_inv = 1.0 / d
++
++    # 5. Define linear operator L(v) = X_tilde @ (X_tilde.T @ v) - D_inv * v
++    def matvec(v):
++        # v shape (n_cells,)
++        return X_tilde @ (X_tilde.T @ v) - D_inv * v
++
++    # Create a symmetric LinearOperator
++    n = n_cells
++    L_op = LinearOperator((n, n), matvec=matvec, rmatvec=matvec, dtype=X.dtype)
++
++    # 6. Use Lanczos (eigsh) to compute top eigenvalues and eigenvectors
++    # which='LM' returns largest magnitude eigenvalues; we want largest eigenvalues
++    eigenvalues, eigenvectors = eigsh(L_op, k=n_components, which='LM',
++                                      return_eigenvectors=True)
++    # eigsh returns eigenvalues in ascending order; reverse for descending
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    return eigenvalues.astype(np.float64), eigenvectors.astype(np.float64)

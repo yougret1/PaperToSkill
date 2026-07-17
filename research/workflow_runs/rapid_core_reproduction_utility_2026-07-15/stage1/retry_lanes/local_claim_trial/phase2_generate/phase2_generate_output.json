@@ -1,0 +1,58 @@
+{
+  "title": "LocalClaim: Compiling Papers into Task-Locked Operator Trials",
+  "hook": "LocalClaim compiles only a paper's explicitly evidenced claim-bearing operator, not its complete experiment, into an operator-versus-same-scaffold-sham trial on one already locked user task. It returns a task-local positive, non-positive, or inconclusive effect and nothing beyond that task.",
+  "hook_shape_rationale": "We use counter-intuitive minimalism: relative to PaperBench-style complete replication and the current PaperToSkill reproduction workflow, LocalClaim implements one evidenced operator and its sham under a strictly smaller code and execution footprint. A surprising empirical reveal was rejected because no cross-case result is assumed before the eight rows are run as separate case studies.",
+  "gap_closure": [
+    {
+      "gap": "No retrieved frontier estimates net benefit after execution cost, adaptation effort, and regressions on task dimensions outside the paper's headline metric are deducted from gross performance gain.",
+      "main_pattern": "reframe_as_solvable_object",
+      "sub_pattern": "C00 (Reframe as a Solvable Object)",
+      "companion_pattern": null,
+      "how_closed": "The compiler reframes diffuse paper value as the causal responsibility of one evidenced operator for one locked task, measured by a paired local margin that deducts only that trial's execution, adaptation, and guardrail regressions."
+    },
+    {
+      "gap": "Under a limited initial budget, no retrieved frontier establishes that the observed low-fidelity score preserves the sign and ordering of paper interventions by the performance improvement they later produce on independently specified user tasks; a probe can therefore support the wrong go/no-go decision even when it is internally faithful.",
+      "main_pattern": "controlled_diagnostic_design",
+      "sub_pattern": "C02 (Design a Confound-Isolating Diagnostic)",
+      "companion_pattern": null,
+      "how_closed": "A same-scaffold operator-versus-sham pair blocks whole-artifact scaffolding as the named confound and directly measures only the current task's local effect, returning inconclusive instead of projecting a later effect or cross-paper order."
+    }
+  ],
+  "core_mechanism": "For a paper p and exactly one current user task tau, LocalClaim freezes before paper inspection a task packet T_tau containing K locked cases x_i, case weights w_i, a primary scorer s_tau in [0,1], normalized guardrail scorers q_tau,j in [0,1], and user-fixed conversion weights lambda_c, lambda_a, and gamma_j. The source-map compiler then reads only the paper, its source map, and cited code evidence; a fixed rule selects the single operator A_p that is named in the primary method claim, linked to an explicit equation or algorithm span, and paired with a paper-named pre-intervention baseline B_p, while any missing evidence, tie, or extractor disagreement ends as inconclusive before task execution. It emits an operator manifest M_p containing evidence spans, A_p and B_p input-output contracts, an interface adapter, and an allowlist of files and calls that may differ, so task outcomes cannot influence operator selection. The executor builds two capped branches from one scaffold: I_p invokes A_p and S_p invokes B_p or an interface-preserving identity only when the paper explicitly licenses that identity; static and runtime diff gates reject any pair whose dependencies, prompts, tools, cache state, or resource caps differ outside the allowlist. For each locked case and seed, the branches run in randomized order and produce final task outputs y_i^I and y_i^S, measured execution costs c_i^I and c_i^S, and logged adaptation minutes a_i^I and a_i^S. The per-pair local margin is d_i = s_tau(y_i^I)-s_tau(y_i^S)-lambda_c(c_i^I-c_i^S)-lambda_a(a_i^I-a_i^S)-sum_j gamma_j max(0,q_tau,j(y_i^S)-q_tau,j(y_i^I)); every term comes from the frozen task manifest or branch logs and therefore has no free post-hoc index. The shared object is the task-local claim effect delta_p,tau = sum_i w_i d_i / sum_i w_i together with an exact paired-randomization interval over the pre-registered case-seed pairs. LocalClaim reports local-positive only when that interval is wholly above zero, local-non-positive when it is wholly at or below zero, and inconclusive otherwise or whenever compilation or diff gates fail. C00 supplies the operator-level causal responsibility object and its perturbation certificate, while C02 makes that object faithful by isolating whole-artifact scaffolding and using the frozen scorer as an oracle independent of the paper and generated skill. The eight existing rows are executed and reported as eight separate case studies with no pooled estimate, shared threshold fitting, or order between papers.",
+  "core_mechanism_reasoning": "Both selected gaps share delta_p,tau: the C00 leg makes net task value a computable operator-responsibility object, and the C02 leg identifies it by neutralizing every scaffold difference except the evidenced operator. We rejected whole-artifact removal because it cannot attribute a local effect to the paper's claimed mechanism, and rejected any cheap-score bridge because it recreates the prior hard-floor. The design explicitly avoids lineage nodes n1 and c1-c4 by fitting no proxy-to-later bridge, shared resource-fidelity curve, or source-to-target extrapolation.",
+  "core_mechanism_steps": "1. Freeze one task manifest T_tau before inspecting paper p; input is the current user's locked cases, scorers, case weights, guardrails, and cost weights, and output is a signed immutable manifest.\n2. Parse p and its source map into claim, equation or algorithm, ablation, baseline, and code-span records; input is paper evidence only and output is a claim graph with provenance for every edge.\n3. Apply the fixed primary-claim rule in two independent extraction passes and require agreement on A_p, B_p, and their evidence spans; input is the claim graph and output is M_p or an inconclusive compile status, with no task score visible to either pass.\n4. Generate interface tests for A_p and B_p, then compile a common adapter into the existing task harness; input is M_p plus T_tau's input schema and output is one typed operator contract or an inconclusive incompatibility status.\n5. Fork the common harness into I_p and S_p, replacing only the allowlisted operator call with A_p versus B_p; input is the typed contract and output is two executable branches whose final outputs flow through the same downstream task code.\n6. Run static AST and dependency diffs plus a one-case runtime trace; input is both branches and output is a gate certificate proving prompts, tools, model, environment, cache, and caps match outside the operator call.\n7. Execute all pre-registered case-seed pairs in randomized branch order; input is the gate certificate and T_tau, and output is paired final task outputs plus cost and adaptation logs.\n8. Score final outputs with the locked oracle, compute every d_i, delta_p,tau, and its exact paired-randomization interval; input is paired outputs and logs and output is the task-local effect record.\n9. Emit local-positive, local-non-positive, or inconclusive for this paper-task pair only; input is the interval and compile gates and output is a local claim-trial report with provenance and no cross-row aggregation.\n10. For falsification, substitute a pre-registered same-interface non-claim operator while preserving the scaffold and rerun Steps 6-9; input is the negative-control manifest and output is the downstream task-score control effect.",
+  "falsification_prediction": "On one pre-registered locked row whose human-fidelity packet independently identifies a task-relevant claim operator and named baseline, compile M_p without access to scores and run 20 paired seeds through I_p and S_p; repeat on the remaining seven rows only as separate case studies. If the mechanism is valid, the locked primary task score on that designated row will be higher under I_p than S_p and the paired interval for delta_p,tau will lie above zero, while unsupported rows may remain inconclusive. The single load-bearing variable is the task-local claim effect delta_p,tau. As a negative control, replace A_p with a pre-registered same-interface non-claim operator while preserving the scaffold and budget; the downstream locked primary-score difference must return to the sham baseline rather than merely changing delta_p,tau by definition.",
+  "compute_budget": "Eight-row campaign reported as eight independent case studies: approximately 3 GPU-days on 80GB-class GPUs plus about $800 in paid API inference for source-map extraction, paired runs, diff-gate retries, and negative controls; comfortable within the stated 50 GPU-day and bounded-API envelope.",
+  "differentiation_from_lit": [
+    {
+      "paper_id": "arxiv:2606.17819v1",
+      "delta": "That framework derives tasks and rubrics from each skill and removes the whole skill, whereas LocalClaim freezes the user's task first, selects an operator from outcome-blind paper evidence, and neutralizes only that operator inside an identical scaffold to measure a task-local causal effect."
+    },
+    {
+      "paper_id": "arxiv:2504.01848v3",
+      "delta": "PaperBench and Code-Dev grade complete or code-only replication requirements, whereas LocalClaim compiles one claim-and-baseline contract and measures its intervention effect on the user's already locked task output."
+    },
+    {
+      "paper_id": "arxiv:2505.20662v4",
+      "delta": "AutoReproduce uses lineage evidence, sampled mini-batches, and dry runs to build executable end-to-end experiments, whereas LocalClaim uses source evidence to construct an operator-specific sham pair whose only result is a direct local task-effect interval."
+    },
+    {
+      "paper_id": "arxiv:2604.03964v1",
+      "delta": "SkillFoundry validates compiled skill contracts with execution, system, and synthetic tests before downstream workflows, whereas LocalClaim requires an outcome-blind claim-operator manifest and a same-scaffold causal intervention on one pre-existing task."
+    }
+  ],
+  "almost_prior_paper_id": "arxiv:2606.17819v1",
+  "what_step_was_missed": "It would have needed to replace artifact-derived task generation and whole-skill removal with a scorer-locked user task plus an outcome-blind compilation of one explicitly evidenced claim operator and its paper-named baseline into interface-identical branches.",
+  "signature_terms": [
+    "task-locked operator claim trial",
+    "same-scaffold intervention sham pair",
+    "source-map operator compiler",
+    "local claim effect interval"
+  ],
+  "alias_terms": [
+    "single-substitution randomized trial",
+    "component ablation causal effect",
+    "mechanism-specific treatment contrast",
+    "controlled component intervention"
+  ]
+}

@@ -1,0 +1,82 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++import scipy.sparse.linalg as spla
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,70 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    
++    # Input validation
++    if not isinstance(counts, np.ndarray) or not np.issubdtype(counts.dtype, np.number):
++        raise ValueError("counts must be a numeric numpy array")
++    if np.any(counts < 0) or np.any(~np.isfinite(counts)):
++        raise ValueError("counts must be finite and nonnegative")
++    if n_components < 1 or n_components >= counts.shape[0]:
++        raise ValueError("n_components must be between 1 and n_cells - 1")
++    
++    n_cells, n_features = counts.shape
++    
++    # IDF scaling
++    df = np.count_nonzero(counts > 0, axis=0).astype(float)
++    idf = np.log(n_cells / (1.0 + df))
++    X_scaled = counts * idf
++    
++    # Row normalization to unit L2
++    row_norms = np.linalg.norm(X_scaled, axis=1)
++    if np.any(row_norms == 0):
++        raise ValueError("zero-norm row after IDF scaling")
++    X = X_scaled / row_norms[:, np.newaxis]
++    
++    # Degree vector: d = X @ (X.T @ 1) - 1
++    ones = np.ones(n_cells)
++    degrees = X @ (X.T @ ones) - 1.0
++    if np.any(degrees <= 0):
++        raise ValueError("non-positive degree; check input matrix")
++    
++    # Diagonal scaling factors
++    D_half_inv = 1.0 / np.sqrt(degrees)
++    D_inv = 1.0 / degrees
++    
++    # Tilde matrix
++    X_tilde = X * D_half_inv[:, np.newaxis]
++    
++    # Linear operator for normalized similarity
++    def matvec(v):
++        a = X_tilde.T @ v
++        b = X_tilde @ a
++        return b - D_inv * v
++    
++    operator = spla.LinearOperator(
++        shape=(n_cells, n_cells),
++        matvec=matvec,
++        rmatvec=matvec,
++        dtype=np.float64
++    )
++    
++    # Lanczos solver for leading eigenvalues
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells)
++    eigenvalues, eigenvectors = spla.eigsh(
++        operator,
++        k=n_components,
++        which='LM',
++        v0=v0,
++        tol=0,
++        maxiter=10 * n_cells,
++    )
++    
++    # Sort descending
++    idx = np.argsort(-eigenvalues)
++    eigenvalues = eigenvalues[idx]
++    eigenvectors = eigenvectors[:, idx]
++    
++    return eigenvalues, eigenvectors
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")

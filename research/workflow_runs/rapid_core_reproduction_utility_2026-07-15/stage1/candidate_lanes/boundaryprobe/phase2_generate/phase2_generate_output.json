@@ -1,0 +1,58 @@
+{
+  "title": "BoundaryProbe: Task-Conditioned Perturbations Reveal When Paper Methods Pay Off",
+  "hook": "A paper method can look beneficial on a faithful probe yet flip to negative cost-adjusted net benefit after one user-context factor crosses a claim-matched threshold. BoundaryProbe predicts this flip, increasing benefit-sign accuracy over artifact-derived and unperturbed probes.",
+  "hook_shape_rationale": "This is a surprising empirical reveal: the named outcome is benefit-sign accuracy, and the non-obvious prediction is a sign reversal along a single context factor despite an internally faithful positive probe. Counter-intuitive minimalism was also viable because the method uses only a mechanism-bearing slice, but it was rejected because fewer reproduced components is not the scientific claim; locating the applicability boundary is.",
+  "gap_closure": [
+    {
+      "gap": "Under a limited initial budget, no retrieved frontier establishes that the observed low-fidelity score preserves the sign and ordering of paper interventions by the performance improvement they later produce on independently specified user tasks; a probe can therefore support the wrong go/no-go decision even when it is internally faithful.",
+      "main_pattern": "controlled_diagnostic_design",
+      "sub_pattern": "C02 (Design a Confound-Isolating Diagnostic)",
+      "companion_pattern": null,
+      "how_closed": "Closed by executing a minimal mechanism-bearing intervention on matched user-task instances that differ in exactly one claim-linked context factor, then estimating where cost-adjusted benefit changes sign."
+    },
+    {
+      "gap": "No retrieved frontier estimates net benefit after execution cost, adaptation effort, and regressions on task dimensions outside the paper's headline metric are deducted from gross performance gain.",
+      "main_pattern": "controlled_diagnostic_design",
+      "sub_pattern": "C02 (Design a Confound-Isolating Diagnostic)",
+      "companion_pattern": null,
+      "how_closed": "Closed by scoring every matched condition with one preregistered dimensionless net-benefit functional that deducts incremental execution, adaptation, and locked off-metric regression penalties before fitting the zero crossing."
+    }
+  ],
+  "core_mechanism": "BoundaryProbe treats paper applicability as a local, task-conditioned sign-boundary problem rather than as reproduction fidelity or generic robustness. From the paper claim and source map it extracts the intervention's claimed outcome and explicit support conditions; from the user task packet it reads the actual context, locked scorer, baseline, environment, acceptance thresholds, and empirical task strata. A typed claim-task mismatch table ranks context factors without observing method performance, and the top K = min(3, number of nonmatching support conditions) factors are retained, so factor selection cannot chase favorable outcomes. For each retained factor j, a deterministic task validator constructs at most three levels centered on the user's actual value z_j^0; each level reuses the same user-distribution anchor, seed, goal, scorer, baseline, model, and resource cap and changes only j, while invalid counterfactuals are discarded rather than repaired with a second change. Anchors form the smallest weighted coreset covering at least 80% of empirical user-task probability mass across the packet's locked strata, with original stratum mass q_i carried as the evaluation weight; uncovered mass is reported and blocks a transferable adoption claim. On each small matched set, the baseline and only the paper's minimal mechanism-bearing intervention slice are executed, not the complete paper pipeline or experimental campaign. For anchor i and factor level z, cost-adjusted net benefit is N_i(z) = (S_int - S_base)/tau_S - (C_int - C_base)/B_exec - A_int/B_adapt - sum_r w_r max(0, R_int,r - R_base,r)/tau_R,r: S is the locked task score, tau_S is the packet's minimum meaningful gain, C is measured GPU/API execution cost, B_exec is its allowed incremental budget, A is measured adaptation effort, B_adapt is its allowed effort, R_r is loss on locked non-headline dimension r, tau_R,r is that dimension's tolerated loss, and w_r are the packet's normalized priority weights. If a scale is absent, it is fixed before probing to the median corresponding scale from the seven non-held-out real-reuse tasks; no scale is fitted on the current task. The weighted response n_j(z) = sum_i q_i N_i(z) is fit independently for each factor with a shape-free piecewise-linear interval and bootstrap confidence bounds; its zero crossing gives the supported positive-benefit interval E_j, and the applicability envelope E is the intersection of these one-factor intervals, explicitly making no interaction claim. The user task is inside only when every z_j^0 lies in E_j, the lower confidence bound of weighted N at the actual context is above zero, and covered user-task mass is at least 80%; it is outside when a supported crossing places any actual factor beyond E_j or the upper confidence bound is below zero, otherwise the result is indeterminate rather than a robustness verdict.",
+  "core_mechanism_reasoning": "Both selected gaps share the same measured object, the user-weighted cost-adjusted benefit response; user-distribution coverage is a validity gate on that object rather than a third research leg. I rejected a global multi-fidelity predictor and a broad perturbation benchmark because they would regress to the lineage's partial-fidelity pilot or Hyperband-style nodes; restricting the artifact to claim-derived one-factor pairs creates a diagnostic the occupied lineage does not contain. I also rejected component ablation because toggling paper modules asks which component matters, whereas BoundaryProbe holds the intervention fixed and varies only user context to ask where it pays off.",
+  "core_mechanism_steps": "1. Parse the paper claim and source map into a typed record of intervention, claimed outcome, support conditions, and minimal mechanism-bearing code path; input is the paper packet and output is claim.json plus a callable intervention slice.\n2. Parse the user task packet into actual context values, locked task strata and probabilities, scorer, baseline, environment, cost limits, regression dimensions, and acceptance scales; input is the task packet and output is task_context.json.\n3. Join the two typed records, rank nonmatching support conditions, and select at most three context factors before any intervention run; input is claim.json and task_context.json and output is a preregistered factor list.\n4. Select the minimum anchor coreset covering at least 80% of the locked user-task mass; input is task strata and q_i and output is weighted anchor cases plus uncovered mass.\n5. For each selected factor, generate validator-approved matched levels around the actual user value while freezing every other field and seed; input is an anchor and factor schema and output is at most three single-factor instances per anchor.\n6. Run the baseline and minimal intervention slice on every matched instance; inputs are fixed instances and code paths and outputs are task scores, locked regression scores, GPU/API cost, adaptation effort, and generated task results.\n7. Convert each paired outcome to N_i(z) with preregistered scales, aggregate with q_i, and bootstrap over anchors; input is the run ledger and output is one response interval per factor.\n8. Locate each supported zero crossing and compare the actual user context to the intersection envelope; input is the response intervals and coverage report and output is inside, outside, or indeterminate plus the factor responsible.\n9. Emit a go/no-go report that links the decision to the generated downstream task outputs and measured costs, without extrapolating to unperturbed paper families, models, or factor interactions.",
+  "falsification_prediction": "Use the existing eight real-reuse paper-task rows, their source maps, locked scorers, and saved full-adoption outcomes in leave-one-task-out evaluation; for each held-out row, run only BoundaryProbe's small matched set and predict the sign of saved cost-adjusted net benefit. If the mechanism works, benefit-sign balanced accuracy should increase and false-adoption rate should decrease relative to the unperturbed cheap-score and artifact-derived-task probes. The single load-bearing variable is the claim-task boundary margin M, the minimum standardized distance from the actual context to a factor's estimated zero crossing; as a negative control, permute factor identities across matched pairs before estimating M while leaving outputs and costs fixed. Under that control, downstream benefit-sign balanced accuracy should return to the unperturbed-probe baseline; a positive control using M alone should recover most of BoundaryProbe's accuracy gain.",
+  "compute_budget": "2.5 GPU-days on 80GB-class GPUs + approximately $1,800 API inference for the full eight-row leave-one-out perturbation, scoring, and one rerun campaign; comfortably within the stated 50 GPU-day and bounded-API envelope.",
+  "differentiation_from_lit": [
+    {
+      "paper_id": "arxiv:2606.17819v1",
+      "delta": "Its tasks are generated from each skill to measure with-skill marginal utility, whereas BoundaryProbe starts from an independently supplied user-task distribution and measures the single-factor zero crossing of cost-adjusted benefit."
+    },
+    {
+      "paper_id": "arxiv:2504.01848v3",
+      "delta": "PaperBench decomposes full replication into code-development, execution, and result-match evidence, while BoundaryProbe constructs a small user-context response curve whose outcome is the adoption-benefit sign after execution, adaptation, and regression penalties."
+    },
+    {
+      "paper_id": "arxiv:2505.20662v4",
+      "delta": "AutoReproduce's sampled mini-batches and dry runs establish data compatibility and executable pipelines, whereas BoundaryProbe holds executability fixed and varies one claim-linked user context to locate where downstream net benefit reverses."
+    },
+    {
+      "paper_id": "arxiv:2604.03964v1",
+      "delta": "SkillFoundry's controlled synthetic tests validate contracts rather than approximate the full task, while BoundaryProbe weights real user-task anchors, reports uncovered target mass, and withholds an applicability decision when representativeness is insufficient."
+    }
+  ],
+  "almost_prior_paper_id": "arxiv:2606.17819v1",
+  "what_step_was_missed": "It would have needed to replace skill-derived task generation with matched anchors from an independent user-task distribution, vary one paper-support condition at a time, and locate the zero crossing of cost-adjusted marginal utility rather than report aggregate with-skill gain.",
+  "signature_terms": [
+    "claim-conditioned applicability envelope",
+    "single-factor task perturbation probes",
+    "cost-adjusted benefit boundary",
+    "user-distribution adoption screening"
+  ],
+  "alias_terms": [
+    "heterogeneous treatment effect transport",
+    "local response surface mapping",
+    "decision-focused value of information",
+    "conditional policy deployment testing"
+  ]
+}

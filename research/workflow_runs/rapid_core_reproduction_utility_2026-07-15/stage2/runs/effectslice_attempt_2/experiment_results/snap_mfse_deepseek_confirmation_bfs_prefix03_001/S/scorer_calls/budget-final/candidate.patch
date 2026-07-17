@@ -1,0 +1,60 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++import scipy.sparse.linalg as spla
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,47 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    if not np.issubdtype(counts.dtype, np.number):
++        raise ValueError("counts must be numeric")
++    if np.any(counts < 0):
++        raise ValueError("Negative values in counts")
++    if not np.all(np.isfinite(counts)):
++        raise ValueError("Nonfinite values in counts")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("All-zero cell rows")
++    if not isinstance(n_components, int) or n_components < 1 or n_components >= counts.shape[0]:
++        raise ValueError("n_components must be 1 <= n_components < n_cells")
++    
++    n = counts.shape[0]
++    # IDF scaling
++    df = np.count_nonzero(counts, axis=0).astype(float)
++    idf = np.log(n / (1.0 + df))
++    X = counts.astype(np.float64) * idf[np.newaxis, :]
++    
++    # Row normalization to unit L2 norm
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    row_norms[row_norms == 0] = 1.0  # avoid division by zero
++    X = X / row_norms  # rows with zero norm remain zero
++    
++    # Reproducibility
++    rng = np.random.RandomState(random_state)
++    # Compute degree vector: d = X @ (X.T @ 1) - 1
++    ones = np.ones(n)
++    d = X @ (X.T @ ones) - 1.0
++    # Avoid zero or negative degrees by setting to epsilon
++    d = np.maximum(d, 1e-12)
++    d_inv_sqrt = 1.0 / np.sqrt(d)
++    # Define matrix-free operator for normalized W: D^{-1/2} W D^{-1/2}
++    def matvec(v):
++        v_scaled = v * d_inv_sqrt
++        temp = X @ (X.T @ v_scaled)
++        return d_inv_sqrt * (temp - v_scaled)
++    W_op = spla.LinearOperator((n, n), matvec=matvec, dtype=np.float64)
++    eigenvalues, eigenvectors = spla.eigsh(W_op, k=n_components, which='LA', v0=rng.randn(n))
++    # eigsh returns eigenvalues in ascending order; reverse for descending
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++    return (eigenvalues, eigenvectors)

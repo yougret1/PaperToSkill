@@ -1,0 +1,48 @@
+{
+  "schema_version": "effectslice-pilot-config.v1",
+  "run_id": "effectslice_attempt_1",
+  "project_root": "D:/a_work/gitee/PaperToSkill",
+  "evidence_mode": "development_readiness_only",
+  "task_spec": "benchmarks/real_reuse/real_reuse_v0.json",
+  "main_row_selection": "results/real_reuse/main_run_selection.json",
+  "raw_rows": "results/real_reuse/raw_rows.jsonl",
+  "source_maps": {
+    "aide": "generated_skills/aide/references/source_map.json",
+    "swe_agent": "generated_skills/real_reuse/swe_agent/references/source_map.json",
+    "reflexion": "generated_skills/reflexion/references/source_map.json",
+    "snapatac2": "generated_skills/real_reuse/snapatac2/references/source_map.json"
+  },
+  "statistics": {
+    "alpha_total": 0.05,
+    "alpha_F": 0.01,
+    "alpha_D": 0.02,
+    "alpha_C": 0.02,
+    "delta_min": 0.05,
+    "epsilon": 0.025,
+    "minimum_eligibility_pairs": 3,
+    "difference_bounds": [-1.0, 1.0],
+    "interval_method": "bounded_hoeffding",
+    "family_correction": "holm"
+  },
+  "search": {
+    "Q": 24,
+    "N": 16,
+    "candidate_order": [
+      "retained_scc_count_ascending",
+      "discovery_margin_descending",
+      "normalized_cost_ascending",
+      "atom_ids_lexicographic"
+    ]
+  },
+  "baseline_normalization": {
+    "unrepresentable_output": "abstain_and_keep_in_denominator"
+  },
+  "compute": {
+    "local_gpu": "NVIDIA GeForce RTX 4060 Laptop GPU, 8GB",
+    "pilot_execution": "CPU and Python standard library",
+    "full_campaign_locally_feasible": false,
+    "full_campaign_action": "do_not_shrink_design_after_outcomes"
+  },
+  "downloads": [],
+  "new_dependencies": []
+}

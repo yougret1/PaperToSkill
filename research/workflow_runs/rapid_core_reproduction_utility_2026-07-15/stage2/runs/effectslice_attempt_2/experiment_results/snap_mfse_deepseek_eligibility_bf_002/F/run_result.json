@@ -1,0 +1,984 @@
+{
+  "status": "scored",
+  "terminal_reason": "submitted",
+  "submitted": true,
+  "task_score": 1.0,
+  "success": true,
+  "diff_text": "--- a/snap_core.py\n+++ b/snap_core.py\n@@ -3,6 +3,7 @@\n from __future__ import annotations\n \n import numpy as np\n+import scipy.sparse.linalg as sla\n \n \n def matrix_free_spectral_embedding(\n@@ -12,4 +13,52 @@\n ) -> tuple[np.ndarray, np.ndarray]:\n     \"\"\"Return leading spectral coordinates for a cell-by-feature count matrix.\"\"\"\n \n-    raise NotImplementedError(\"implement the paper-core reproduction task\")\n+    if not isinstance(counts, np.ndarray) or counts.ndim != 2:\n+        raise ValueError(\"counts must be a 2D numpy array\")\n+    if not np.issubdtype(counts.dtype, np.floating):\n+        counts = counts.astype(np.float64)\n+    if np.any(np.isnan(counts)) or np.any(np.isinf(counts)) or np.any(counts < 0):\n+        raise ValueError(\"counts must be finite and nonnegative\")\n+\n+    n_cells, n_features = counts.shape\n+    if n_components < 1 or n_components >= n_cells:\n+        raise ValueError(\"n_components must be in [1, n_cells-1]\")\n+\n+    row_sums = counts.sum(axis=1)\n+    if np.any(row_sums == 0):\n+        raise ValueError(\"all-zero rows not allowed\")\n+\n+    # 1. IDF scaling\n+    df = np.count_nonzero(counts > 0, axis=0)\n+    idf = np.log(n_cells / (1.0 + df))\n+    X = counts * idf\n+\n+    # 2. Row normalization to unit L2 norm\n+    norm = np.linalg.norm(X, axis=1, keepdims=True)\n+    X = X / norm\n+\n+    # 3. Compute degree vector matrix-free\n+    X_T_ones = X.T @ np.ones(n_cells)\n+    D = X @ X_T_ones - 1.0\n+    if np.any(D <= 0):\n+        raise ValueError(\"positive degrees required for normalization\")\n+\n+    # 4. Precompute scaling factors\n+    D_half_inv = np.sqrt(1.0 / D)\n+    D_inv = 1.0 / D\n+    X_tilde = X * D_half_inv[:, np.newaxis]\n+\n+    # 5. Define matrix-free operator M(v) = X_tilde @ (X_tilde.T @ v) - D_inv * v\n+    def matvec(v):\n+        return X_tilde @ (X_tilde.T @ v) - D_inv * v\n+\n+    M = sla.LinearOperator((n_cells, n_cells), matvec=matvec, dtype=np.float64)\n+\n+    # 6. Compute leading eigenpairs using Lanczos\n+    eigenvalues, eigenvectors = sla.eigsh(M, k=n_components, which='LA')\n+\n+    eigenvalues = eigenvalues[::-1]\n+    eigenvectors = eigenvectors[:, ::-1]\n+\n+    return eigenvalues, eigenvectors\n+\n",
+  "state": {
+    "max_actions": 16,
+    "observations": [
+      {
+        "step": 1,
+        "action": {
+          "action": "search",
+          "query": "snap_core.py",
+          "path": ".",
+          "max_results": 10,
+          "start_line": null,
+          "end_line": null,
+          "old_text": null,
+          "new_text": null
+        },
+        "status": "ok",
+        "message": "no matches"
+      },
+      {
+        "step": 2,
+        "action": {
+          "action": "search",
+          "query": "*.py",
+          "path": ".",
+          "max_results": 20,
+          "start_line": null,
+          "end_line": null,
+          "old_text": null,
+          "new_text": null
+        },
+        "status": "ok",
+        "message": "no matches"
+      },
+      {
+        "step": 3,
+        "action": {
+          "action": "open",
+          "query": null,
+          "path": "snap_core.py",
+          "max_results": null,
+          "start_line": 1,
+          "end_line": 1,
+          "old_text": null,
+          "new_text": null
+        },
+        "status": "ok",
+        "message": "1: \"\"\"Starter module for the locked SNAP-MFSE reproduction task.\"\"\""
+      },
+      {
+        "step": 4,
+        "action": {
+          "action": "open",
+          "query": null,
+          "path": "snap_core.py",
+          "max_results": null,
+          "start_line": 1,
+          "end_line": 50,
+          "old_text": null,
+          "new_text": null
+        },
+        "status": "ok",
+        "message": "1: \"\"\"Starter module for the locked SNAP-MFSE reproduction task.\"\"\"\n2: \n3: from __future__ import annotations\n4: \n5: import numpy as np\n6: \n7: \n8: def matrix_free_spectral_embedding(\n9:     counts: np.ndarray,\n10:     n_components: int,\n11:     random_state: int = 0,\n12: ) -> tuple[np.ndarray, np.ndarray]:\n13:     \"\"\"Return leading spectral coordinates for a cell-by-feature count matrix.\"\"\"\n14: \n15:     raise NotImplementedError(\"implement the paper-core reproduction task\")"
+      },
+      {
+        "step": 5,
+        "action": {
+          "action": "search",
+          "query": "test_snap_core_public.py",
+          "path": ".",
+          "max_results": 10,
+          "start_line": null,
+          "end_line": null,
+          "old_text": null,
+          "new_text": null
+        },
+        "status": "ok",
+        "message": "no matches"
+      },
+      {
+        "step": 6,
+        "action": null,
+        "status": "invalid_action",
+        "message": "return exactly one JSON action matching the frozen schema"
+      },
+      {
+        "step": 7,
+        "action": {
+          "action": "open",
+          "query": null,
+          "path": "snap_core.py",
+          "max_results": null,
+          "start_line": 1,
+          "end_line": 25,
+          "old_text": null,
+          "new_text": null
+        },
+        "status": "ok",
+        "message": "1: \"\"\"Starter module for the locked SNAP-MFSE reproduction task.\"\"\"\n2: \n3: from __future__ import annotations\n4: \n5: import numpy as np\n6: \n7: \n8: def matrix_free_spectral_embedding(\n9:     counts: np.ndarray,\n10:     n_components: int,\n11:     random_state: int = 0,\n12: ) -> tuple[np.ndarray, np.ndarray]:\n13:     \"\"\"Return leading spectral coordinates for a cell-by-feature count matrix.\"\"\"\n14: \n15:     raise NotImplementedError(\"implement the paper-core reproduction task\")"
+      },
+      {
+        "step": 8,
+        "action": {
+          "action": "edit",
+          "query": null,
+          "path": "snap_core.py",
+          "max_results": null,
+          "start_line": null,
+          "end_line": null,
+          "old_text": "\"\"\"Starter module for the locked SNAP-MFSE reproduction task.\"\"\"\n\nfrom __future__ import annotations\n\nimport numpy as np\n\n\ndef matrix_free_spectral_embedding(\n    counts: np.ndarray,\n    n_components: int,\n    random_state: int = 0,\n) -> tuple[np.ndarray, np.ndarray]:\n    \"\"\"Return leading spectral coordinates for a cell-by-feature count matrix.\"\"\"\n\n    raise NotImplementedError(\"implement the paper-core reproduction task\")",
+          "new_text": "\"\"\"Starter module for the locked SNAP-MFSE reproduction task.\"\"\"\n\nfrom __future__ import annotations\n\nimport numpy as np\nimport scipy.sparse.linalg as sla\n\n\ndef matrix_free_spectral_embedding(\n    counts: np.ndarray,\n    n_components: int,\n    random_state: int = 0,\n) -> tuple[np.ndarray, np.ndarray]:\n    \"\"\"Return leading spectral coordinates for a cell-by-feature count matrix.\"\"\"\n\n    if not isinstance(counts, np.ndarray) or counts.ndim != 2:\n        raise ValueError(\"counts must be a 2D numpy array\")\n    if not np.issubdtype(counts.dtype, np.floating):\n        counts = counts.astype(np.float64)\n    if np.any(np.isnan(counts)) or np.any(np.isinf(counts)) or np.any(counts < 0):\n        raise ValueError(\"counts must be finite and nonnegative\")\n\n    n_cells, n_features = counts.shape\n    if n_components < 1 or n_components >= n_cells:\n        raise ValueError(\"n_components must be in [1, n_cells-1]\")\n\n    row_sums = counts.sum(axis=1)\n    if np.any(row_sums == 0):\n        raise ValueError(\"all-zero rows not allowed\")\n\n    # 1. IDF scaling\n    df = np.count_nonzero(counts > 0, axis=0)\n    idf = np.log(n_cells / (1.0 + df))\n    X = counts * idf\n\n    # 2. Row normalization to unit L2 norm\n    norm = np.linalg.norm(X, axis=1, keepdims=True)\n    X = X / norm\n\n    # 3. Compute degree vector matrix-free\n    X_T_ones = X.T @ np.ones(n_cells)\n    D = X @ X_T_ones - 1.0\n    if np.any(D <= 0):\n        raise ValueError(\"positive degrees required for normalization\")\n\n    # 4. Precompute scaling factors\n    D_half_inv = np.sqrt(1.0 / D)\n    D_inv = 1.0 / D\n    X_tilde = X * D_half_inv[:, np.newaxis]\n\n    # 5. Define matrix-free operator M(v) = X_tilde @ (X_tilde.T @ v) - D_inv * v\n    def matvec(v):\n        return X_tilde @ (X_tilde.T @ v) - D_inv * v\n\n    M = sla.LinearOperator((n_cells, n_cells), matvec=matvec, dtype=np.float64)\n\n    # 6. Compute leading eigenpairs using Lanczos\n    eigenvalues, eigenvectors = sla.eigsh(M, k=n_components, which='LA')\n\n    eigenvalues = eigenvalues[::-1]\n    eigenvectors = eigenvectors[:, ::-1]\n\n    return eigenvalues, eigenvectors\n"
+        },
+        "status": "ok",
+        "message": "{\"changed\":true,\"path\":\"snap_core.py\",\"replacements\":1}"
+      },
+      {
+        "step": 9,
+        "action": {
+          "action": "open",
+          "query": null,
+          "path": "test_snap_core_public.py",
+          "max_results": null,
+          "start_line": 1,
+          "end_line": 80,
+          "old_text": null,
+          "new_text": null
+        },
+        "status": "ok",
+        "message": "1: import numpy as np\n2: \n3: from snap_core import matrix_free_spectral_embedding\n4: \n5: \n6: def test_returns_finite_descending_embedding_with_expected_shape():\n7:     counts = np.array(\n8:         [\n9:             [2.0, 1.0, 0.0, 0.0, 1.0],\n10:             [1.0, 3.0, 1.0, 0.0, 0.0],\n11:             [0.0, 1.0, 2.0, 1.0, 0.0],\n12:             [0.0, 0.0, 1.0, 3.0, 1.0],\n13:             [1.0, 0.0, 0.0, 1.0, 2.0],\n14:             [2.0, 0.0, 0.0, 0.0, 1.0],\n15:         ]\n16:     )\n17: \n18:     values, vectors = matrix_free_spectral_embedding(counts, 2, random_state=7)\n19: \n20:     assert values.shape == (2,)\n21:     assert vectors.shape == (counts.shape[0], 2)\n22:     assert np.isfinite(values).all()\n23:     assert np.isfinite(vectors).all()\n24:     assert np.all(values[:-1] >= values[1:])"
+      },
+      {
+        "step": 10,
+        "action": {
+          "action": "test",
+          "query": null,
+          "path": null,
+          "max_results": null,
+          "start_line": null,
+          "end_line": null,
+          "old_text": null,
+          "new_text": null
+        },
+        "status": "scored",
+        "message": "{\"contract_passed\":true,\"failure_reason\":\"\",\"matrix_free_guard_passed\":true,\"passed_cases\":21,\"status\":\"passed\",\"task_score\":1.0,\"total_cases\":21}"
+      },
+      {
+        "step": 11,
+        "action": {
+          "action": "submit",
+          "query": null,
+          "path": null,
+          "max_results": null,
+          "start_line": null,
+          "end_line": null,
+          "old_text": null,
+          "new_text": null
+        },
+        "status": "scored",
+        "message": "{\"contract_passed\":true,\"failure_reason\":\"\",\"matrix_free_guard_passed\":true,\"passed_cases\":21,\"status\":\"passed\",\"task_score\":1.0,\"total_cases\":21}"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "step": 1,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:F:turn-001",
+      "prompt_sha256": "6e0b7f891443a73cf4bb29ec379a5050ee03f8361c3db02877e0485a82972e97",
+      "response_sha256": "d2c0714a09f147d9a47f386e303f51a3146bef7291bad934a900a88aed77b02b",
+      "response_text": "{\"action\":\"search\",\"query\":\"snap_core.py\",\"path\":\".\",\"max_results\":10}",
+      "action": {
+        "action": "search",
+        "query": "snap_core.py",
+        "path": ".",
+        "max_results": 10,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "no matches",
+      "transport_attempts": 1,
+      "input_tokens": 951,
+      "output_tokens": 113
+    },
+    {
+      "step": 2,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:F:turn-002",
+      "prompt_sha256": "dbff55e071250de0de25bbcda2466e3c2f4d1de81103c41e07bd68d0a11da78e",
+      "response_sha256": "1e42aac39b64faca99de7a619eada15088bdb03a05f047f8f493be9d6960e039",
+      "response_text": "{\"action\":\"search\",\"query\":\"*.py\",\"path\":\".\",\"max_results\":20}",
+      "action": {
+        "action": "search",
+        "query": "*.py",
+        "path": ".",
+        "max_results": 20,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "no matches",
+      "transport_attempts": 1,
+      "input_tokens": 996,
+      "output_tokens": 97
+    },
+    {
+      "step": 3,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:F:turn-003",
+      "prompt_sha256": "44ae6c8035c8f8064308e9a9d957c93aa48823fcd455eef79f673ab7cd38bd2b",
+      "response_sha256": "433f9c4f474785b1f2449d6cc9417812b4fc0c276cfee8e54f991a28c898cb69",
+      "response_text": "{\"action\":\"open\",\"path\":\"snap_core.py\",\"start_line\":1,\"end_line\":1}",
+      "action": {
+        "action": "open",
+        "query": null,
+        "path": "snap_core.py",
+        "max_results": null,
+        "start_line": 1,
+        "end_line": 1,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "1: \"\"\"Starter module for the locked SNAP-MFSE reproduction task.\"\"\"",
+      "transport_attempts": 1,
+      "input_tokens": 1034,
+      "output_tokens": 661
+    },
+    {
+      "step": 4,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:F:turn-004",
+      "prompt_sha256": "86db1e3d4134e769df145442e673d0d03f8d72d1c4b54857768df3beadeda900",
+      "response_sha256": "898b9c974e77506d185d5d1ae04346c9722bc3f68156915168331d11a6a0bdd4",
+      "response_text": "{\"action\":\"open\",\"path\":\"snap_core.py\",\"start_line\":1,\"end_line\":50}",
+      "action": {
+        "action": "open",
+        "query": null,
+        "path": "snap_core.py",
+        "max_results": null,
+        "start_line": 1,
+        "end_line": 50,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "1: \"\"\"Starter module for the locked SNAP-MFSE reproduction task.\"\"\"\n2: \n3: from __future__ import annotations\n4: \n5: import numpy as np\n6: \n7: \n8: def matrix_free_spectral_embedding(\n9:     counts: np.ndarray,\n10:     n_components: int,\n11:     random_state: int = 0,\n12: ) -> tuple[np.ndarray, np.ndarray]:\n13:     \"\"\"Return leading spectral coordinates for a cell-by-feature count matrix.\"\"\"\n14: \n15:     raise NotImplementedError(\"implement the paper-core reproduction task\")",
+      "transport_attempts": 1,
+      "input_tokens": 1091,
+      "output_tokens": 147
+    },
+    {
+      "step": 5,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:F:turn-005",
+      "prompt_sha256": "5fcb214e4b1fef2b13090861205fe1bd67e77fe10cc107835c1e4d83dc13b85b",
+      "response_sha256": "b3bc6fa5bcbd012b5d72a3027f2fd4fd90ed83c7a1c5b2c173109e58050faef7",
+      "response_text": "{\"action\":\"search\",\"query\":\"test_snap_core_public.py\",\"path\":\".\",\"max_results\":10}",
+      "action": {
+        "action": "search",
+        "query": "test_snap_core_public.py",
+        "path": ".",
+        "max_results": 10,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "no matches",
+      "transport_attempts": 1,
+      "input_tokens": 1264,
+      "output_tokens": 4510
+    },
+    {
+      "step": 6,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:F:turn-006",
+      "prompt_sha256": "168885d6ae46da18a7ff01f9b860aafe1f1529faea9881efafeef4cf9668a921",
+      "response_sha256": "b7de6c463adb2c76a555c94561ee9333aff5dcbd33b811c466f753452826957a",
+      "response_text": "{\"action\":\"edit\",\"path\":\"snap_core.py\",\"old_text\":\"\\\"\\\"\\\"Starter module for the locked SNAP-MFSE reproduction task.\\\"\\\"\\\"\\n\\nfrom __future__ import annotations\\n\\nimport numpy as np\\n\\n\\ndef matrix_free_spectral_embedding(\\n    counts: np.ndarray,\\n    n_components: int,\\n    random_state: int = 0,\\n) -> tuple[np.ndarray, np.ndarray]:\\n    \\\"\\\"\\\"Return leading spectral coordinates for a cell-by-feature count matrix.\\\"\\\"\\\"\\n\\n    raise NotImplementedError(\\\"implement the paper-core reproduction task\\\")\",\"new_text\":\"\\\"\\\"\\\"Starter module for the locked SNAP-MFSE reproduction task.\\\"\\\"\\\"\\n\\nfrom __future__ import annotations\\n\\nimport numpy as np\\nimport scipy.sparse.linalg as sla\\n\\n\\ndef matrix_free_spectral_embedding(\\n    counts: np.ndarray,\\n    n_components: int,\\n    random_state: int = 0,\\n) -> tuple[np.ndarray, np.ndarray]:\\n    \\\"\\\"\\\"Return leading spectral coordinates for a cell-by-feature count matrix.\\\"\\\"\\\"\\n\\n    # Input validation\\n    if not isinstance(counts, np.ndarray) or counts.ndim != 2:\\n        raise ValueError(\\\"counts must be a 2D numpy array\\\")\\n    if not np.issubdtype(counts.dtype, np.floating):\\n        counts = counts.astype(np.float64)\\n    if np.any(np.isnan(counts)) or np.any(np.isinf(counts)) or np.any(counts < 0):\\n        raise ValueError(\\\"counts must be finite and nonnegative\\\")\\n    n_cells, n_features = counts.shape\\n    if n_components < 1 or n_components >= n_cells:\\n        raise ValueError(\\\"n_components must be in [1, n_cells-1]\\\")\\n    row_sums = counts.sum(axis=1)\\n    if np.any(row_sums == 0):\\n        raise ValueError(\\\"all-zero rows not allowed\\\")\\n\\n    # 1. IDF scaling\\n    df = np.count_nonzero(counts > 0, axis=0)  # document frequency per feature\\n    idf = np.log(n_cells / (1.0 + df))\\n    X = counts * idf  # shape (n_cells, n_features)\\n\\n    # 2. Row normalization to unit L2 norm\\n    norm = np.linalg.norm(X, axis=1, keepdims=True)\\n    # norm > 0 since rows not all zero (idf > 0 for any nonzero entry)\\n    X = X / norm\\n\\n    # 3. Compute degree vector matrix-free\\n    # D = diag(X X^T) - 1 = sum_j (X_ij * (X^T 1)_j) - 1\\n    # (X^T 1) is a vector of length n_features\\n    X_T_ones = X.T @ np.ones(n_cells)\\n    D = X @ X_T_ones - 1.0\\n    if np.any(D <= 0):\\n        raise ValueError(\\\"positive degrees required for normalization\\\")\\n\\n    # 4. Precompute scaling factors\\n    D_half_inv = np.sqrt(1.0 / D)  # D^(-1/2)\\n    D_inv = 1.0 / D\\n    X_tilde = X * D_half_inv[:, np.newaxis]  # scale each row\\n\\n    # 5. Define matrix-free operator M(v) = X_tilde @ (X_tilde.T @ v) - D_inv * v\\n    def matvec(v):\\n        return X_tilde @ (X_tilde.T @ v) - D_inv * v\\n\\n    # Create LinearOperator\\n    M = sla.LinearOperator((n_cells, n_cells), matvec=matvec, dtype=np.float64)\\n\\n    # 6. Compute leading eigenpairs using Lanczos (symmetric)\\n    # which='LA' returns algebraically largest eigenvalues\\n    eigenvalues, eigenvectors = sla.eigsh(M, k=n_components, which='LA')\\n\\n    # eigsh returns eigenvalues in ascending order; reverse to descending\\n    eigenvalues = eigenvalues[::-1]\\n    eigenvectors = eigenvectors[:, ::-1]\\n\\n    return eigenvalues, eigenvectors\\n\"}\n\nNote: The old_text must exactly match the current content. Ensure no trailing spaces. We'll use the content from the observation. Also, the new_text includes the import and implementation. We'll assume the tool will apply it. After edit, we should test with the verification command. But we have 10 actions remaining after this (since we used one). We can then run test. However, we need to be sure the test file exists; the search showed no matches for test_snap_core_public.py earlier, but that might be because the search didn't find it? It said \"no matches\", but the task says the verification command uses that test file. Possibly it is in a subdirectory? We searched from root \".\" and found no matches. That suggests the test file might not be present yet, maybe it is created after we submit? Or the search didn't find it because it's in a deeper path? We should search more thoroughly. But we are already at action 11 left, so we have some room. We can proceed with edit, then search for the test file again, maybe in a parent? The directory might have test file not returned because we searched with max_results 10? But it said no matches, which usually means none found. Could be that the test file is not present in the current workspace? The task says \"Verification command: python -m pytest test_snap_core_public.py\". This suggests it should be there. It might be in a subdirectory like tests/? But the search didn't find it. To be safe, we should search again with path \"tests\" or \"**\". But we already used search with path \".\" which is the root. It should find any .py file. Since it found none, there might be no files at all? Actually earlier search for snap_core.py found \"no matches\", but then we opened it and it existed. Wait, step 1 search for snap_core.py returned no matches, but step 3 opened it successfully. This is contradictory. Perhaps the search tool only returns files if they match a pattern? Or the environment is virtual? Possibly the search action returns \"no matches\" but the file still exists because it's the only file? Actually step 1: {\"action\":\"search\",\"query\":\"snap_core.py\",\"path\":\".\",\"max_results\":10} returned \"no matches\". Then step 2: {\"action\":\"search\",\"query\":\"*.py\",\"path\":\".\",\"max_results\":20} also returned \"no matches\". Then step 3: {\"action\":\"open\",\"path\":\"snap_core.py\",\"start_line\":1,\"end_line\":1} returned ok with content. So the file exists but the search didn't return it. That might be a quirk of the environment where search only works for certain patterns or the file is not indexed? In any case, we can trust that the file exists and we can edit it. For the test file, we haven't tried to open it. We should try to open it after edit. If it doesn't exist, the test command will fail. But the task says to use the public test before submitting, so we must have it. We'll assume it exists. We can try to open it after edit. But let's proceed with the edit first. Then we can try to open the test file to confirm its existence and maybe inspect it to understand the test. That would be a good step. So after this edit, we will next action: open test_snap_core_public.py to see its contents. Then we can run the test. We have enough actions. Let's proceed with the edit.{\"action\":\"edit\",\"path\":\"snap_core.py\",\"old_text\":\"\\\"\\\"\\\"Starter module for the locked SNAP-MFSE reproduction task.\\\"\\\"\\\"\\n\\nfrom __future__ import annotations\\n\\nimport numpy as np\\n\\n\\ndef matrix_free_spectral_embedding(\\n    counts: np.ndarray,\\n    n_components: int,\\n    random_state: int = 0,\\n) -> tuple[np.ndarray, np.ndarray]:\\n    \\\"\\\"\\\"Return leading spectral coordinates for a cell-by-feature count matrix.\\\"\\\"\\\"\\n\\n    raise NotImplementedError(\\\"implement the paper-core reproduction task\\\")\",\"new_text\":\"\\\"\\\"\\\"Starter module for the locked SNAP-MFSE reproduction task.\\\"\\\"\\\"\\n\\nfrom __future__ import annotations\\n\\nimport numpy as np\\nimport scipy.sparse.linalg as sla\\n\\n\\ndef matrix_free_spectral_embedding(\\n    counts: np.ndarray,\\n    n_components: int,\\n    random_state: int = 0,\\n) -> tuple[np.ndarray, np.ndarray]:\\n    \\\"\\\"\\\"Return leading spectral coordinates for a cell-by-feature count matrix.\\\"\\\"\\\"\\n\\n    # Input validation\\n    if not isinstance(counts, np.ndarray) or counts.ndim != 2:\\n        raise ValueError(\\\"counts must be a 2D numpy array\\\")\\n    if not np.issubdtype(counts.dtype, np.floating):\\n        counts = counts.astype(np.float64)\\n    if np.any(np.isnan(counts)) or np.any(np.isinf(counts)) or np.any(counts < 0):\\n        raise ValueError(\\\"counts must be finite and nonnegative\\\")\\n    n_cells, n_features = counts.shape\\n    if n_components < 1 or n_components >= n_cells:\\n        raise ValueError(\\\"n_components must be in [1, n_cells-1]\\\")\\n    row_sums = counts.sum(axis=1)\\n    if np.any(row_sums == 0):\\n        raise ValueError(\\\"all-zero rows not allowed\\\")\\n\\n    # 1. IDF scaling\\n    df = np.count_nonzero(counts > 0, axis=0)  # document frequency per feature\\n    idf = np.log(n_cells / (1.0 + df))\\n    X = counts * idf  # shape (n_cells, n_features)\\n\\n    # 2. Row normalization to unit L2 norm\\n    norm = np.linalg.norm(X, axis=1, keepdims=True)\\n    # norm > 0 since rows not all zero (idf > 0 for any nonzero entry)\\n    X = X / norm\\n\\n    # 3. Compute degree vector matrix-free\\n    # D = diag(X X^T) - 1 = sum_j (X_ij * (X^T 1)_j) - 1\\n    # (X^T 1) is a vector of length n_features\\n    X_T_ones = X.T @ np.ones(n_cells)\\n    D = X @ X_T_ones - 1.0\\n    if np.any(D <= 0):\\n        raise ValueError(\\\"positive degrees required for normalization\\\")\\n\\n    # 4. Precompute scaling factors\\n    D_half_inv = np.sqrt(1.0 / D)  # D^(-1/2)\\n    D_inv = 1.0 / D\\n    X_tilde = X * D_half_inv[:, np.newaxis]  # scale each row\\n\\n    # 5. Define matrix-free operator M(v) = X_tilde @ (X_tilde.T @ v) - D_inv * v\\n    def matvec(v):\\n        return X_tilde @ (X_tilde.T @ v) - D_inv * v\\n\\n    # Create LinearOperator\\n    M = sla.LinearOperator((n_cells, n_cells), matvec=matvec, dtype=np.float64)\\n\\n    # 6. Compute leading eigenpairs using Lanczos (symmetric)\\n    # which='LA' returns algebraically largest eigenvalues\\n    eigenvalues, eigenvectors = sla.eigsh(M, k=n_components, which='LA')\\n\\n    # eigsh returns eigenvalues in ascending order; reverse to descending\\n    eigenvalues = eigenvalues[::-1]\\n    eigenvectors = eigenvectors[:, ::-1]\\n\\n    return eigenvalues, eigenvectors\\n\"}",
+      "action": null,
+      "observation_status": "invalid_action",
+      "observation_message": "return exactly one JSON action matching the frozen schema",
+      "transport_attempts": 1,
+      "input_tokens": 1308,
+      "output_tokens": 6676
+    },
+    {
+      "step": 7,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:F:turn-007",
+      "prompt_sha256": "ae9e984f8d8a8711380e6b876c1d606145d41bc7bfe9501c00bebfaedaefe1c6",
+      "response_sha256": "e00c2386f2a5ebce6dd6a1e16c3c21144aeb0c5c5e4597ac6aa9e698ec793820",
+      "response_text": "{\"action\":\"open\",\"path\":\"snap_core.py\",\"start_line\":1,\"end_line\":25}",
+      "action": {
+        "action": "open",
+        "query": null,
+        "path": "snap_core.py",
+        "max_results": null,
+        "start_line": 1,
+        "end_line": 25,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "1: \"\"\"Starter module for the locked SNAP-MFSE reproduction task.\"\"\"\n2: \n3: from __future__ import annotations\n4: \n5: import numpy as np\n6: \n7: \n8: def matrix_free_spectral_embedding(\n9:     counts: np.ndarray,\n10:     n_components: int,\n11:     random_state: int = 0,\n12: ) -> tuple[np.ndarray, np.ndarray]:\n13:     \"\"\"Return leading spectral coordinates for a cell-by-feature count matrix.\"\"\"\n14: \n15:     raise NotImplementedError(\"implement the paper-core reproduction task\")",
+      "transport_attempts": 1,
+      "input_tokens": 4096,
+      "output_tokens": 1866
+    },
+    {
+      "step": 8,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:F:turn-008",
+      "prompt_sha256": "e7d0714ce695f6f9e5e430b132a7a24f7284ee015430b6955494e366968a196f",
+      "response_sha256": "453b609e6945214d966d89d202f465da80c38aa8d3b7715bb19ad15945b748f6",
+      "response_text": "{\"action\":\"edit\",\"path\":\"snap_core.py\",\"old_text\":\"\\\"\\\"\\\"Starter module for the locked SNAP-MFSE reproduction task.\\\"\\\"\\\"\\n\\nfrom __future__ import annotations\\n\\nimport numpy as np\\n\\n\\ndef matrix_free_spectral_embedding(\\n    counts: np.ndarray,\\n    n_components: int,\\n    random_state: int = 0,\\n) -> tuple[np.ndarray, np.ndarray]:\\n    \\\"\\\"\\\"Return leading spectral coordinates for a cell-by-feature count matrix.\\\"\\\"\\\"\\n\\n    raise NotImplementedError(\\\"implement the paper-core reproduction task\\\")\",\"new_text\":\"\\\"\\\"\\\"Starter module for the locked SNAP-MFSE reproduction task.\\\"\\\"\\\"\\n\\nfrom __future__ import annotations\\n\\nimport numpy as np\\nimport scipy.sparse.linalg as sla\\n\\n\\ndef matrix_free_spectral_embedding(\\n    counts: np.ndarray,\\n    n_components: int,\\n    random_state: int = 0,\\n) -> tuple[np.ndarray, np.ndarray]:\\n    \\\"\\\"\\\"Return leading spectral coordinates for a cell-by-feature count matrix.\\\"\\\"\\\"\\n\\n    if not isinstance(counts, np.ndarray) or counts.ndim != 2:\\n        raise ValueError(\\\"counts must be a 2D numpy array\\\")\\n    if not np.issubdtype(counts.dtype, np.floating):\\n        counts = counts.astype(np.float64)\\n    if np.any(np.isnan(counts)) or np.any(np.isinf(counts)) or np.any(counts < 0):\\n        raise ValueError(\\\"counts must be finite and nonnegative\\\")\\n\\n    n_cells, n_features = counts.shape\\n    if n_components < 1 or n_components >= n_cells:\\n        raise ValueError(\\\"n_components must be in [1, n_cells-1]\\\")\\n\\n    row_sums = counts.sum(axis=1)\\n    if np.any(row_sums == 0):\\n        raise ValueError(\\\"all-zero rows not allowed\\\")\\n\\n    # 1. IDF scaling\\n    df = np.count_nonzero(counts > 0, axis=0)\\n    idf = np.log(n_cells / (1.0 + df))\\n    X = counts * idf\\n\\n    # 2. Row normalization to unit L2 norm\\n    norm = np.linalg.norm(X, axis=1, keepdims=True)\\n    X = X / norm\\n\\n    # 3. Compute degree vector matrix-free\\n    X_T_ones = X.T @ np.ones(n_cells)\\n    D = X @ X_T_ones - 1.0\\n    if np.any(D <= 0):\\n        raise ValueError(\\\"positive degrees required for normalization\\\")\\n\\n    # 4. Precompute scaling factors\\n    D_half_inv = np.sqrt(1.0 / D)\\n    D_inv = 1.0 / D\\n    X_tilde = X * D_half_inv[:, np.newaxis]\\n\\n    # 5. Define matrix-free operator M(v) = X_tilde @ (X_tilde.T @ v) - D_inv * v\\n    def matvec(v):\\n        return X_tilde @ (X_tilde.T @ v) - D_inv * v\\n\\n    M = sla.LinearOperator((n_cells, n_cells), matvec=matvec, dtype=np.float64)\\n\\n    # 6. Compute leading eigenpairs using Lanczos\\n    eigenvalues, eigenvectors = sla.eigsh(M, k=n_components, which='LA')\\n\\n    eigenvalues = eigenvalues[::-1]\\n    eigenvectors = eigenvectors[:, ::-1]\\n\\n    return eigenvalues, eigenvectors\\n\"}",
+      "action": {
+        "action": "edit",
+        "query": null,
+        "path": "snap_core.py",
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": "\"\"\"Starter module for the locked SNAP-MFSE reproduction task.\"\"\"\n\nfrom __future__ import annotations\n\nimport numpy as np\n\n\ndef matrix_free_spectral_embedding(\n    counts: np.ndarray,\n    n_components: int,\n    random_state: int = 0,\n) -> tuple[np.ndarray, np.ndarray]:\n    \"\"\"Return leading spectral coordinates for a cell-by-feature count matrix.\"\"\"\n\n    raise NotImplementedError(\"implement the paper-core reproduction task\")",
+        "new_text": "\"\"\"Starter module for the locked SNAP-MFSE reproduction task.\"\"\"\n\nfrom __future__ import annotations\n\nimport numpy as np\nimport scipy.sparse.linalg as sla\n\n\ndef matrix_free_spectral_embedding(\n    counts: np.ndarray,\n    n_components: int,\n    random_state: int = 0,\n) -> tuple[np.ndarray, np.ndarray]:\n    \"\"\"Return leading spectral coordinates for a cell-by-feature count matrix.\"\"\"\n\n    if not isinstance(counts, np.ndarray) or counts.ndim != 2:\n        raise ValueError(\"counts must be a 2D numpy array\")\n    if not np.issubdtype(counts.dtype, np.floating):\n        counts = counts.astype(np.float64)\n    if np.any(np.isnan(counts)) or np.any(np.isinf(counts)) or np.any(counts < 0):\n        raise ValueError(\"counts must be finite and nonnegative\")\n\n    n_cells, n_features = counts.shape\n    if n_components < 1 or n_components >= n_cells:\n        raise ValueError(\"n_components must be in [1, n_cells-1]\")\n\n    row_sums = counts.sum(axis=1)\n    if np.any(row_sums == 0):\n        raise ValueError(\"all-zero rows not allowed\")\n\n    # 1. IDF scaling\n    df = np.count_nonzero(counts > 0, axis=0)\n    idf = np.log(n_cells / (1.0 + df))\n    X = counts * idf\n\n    # 2. Row normalization to unit L2 norm\n    norm = np.linalg.norm(X, axis=1, keepdims=True)\n    X = X / norm\n\n    # 3. Compute degree vector matrix-free\n    X_T_ones = X.T @ np.ones(n_cells)\n    D = X @ X_T_ones - 1.0\n    if np.any(D <= 0):\n        raise ValueError(\"positive degrees required for normalization\")\n\n    # 4. Precompute scaling factors\n    D_half_inv = np.sqrt(1.0 / D)\n    D_inv = 1.0 / D\n    X_tilde = X * D_half_inv[:, np.newaxis]\n\n    # 5. Define matrix-free operator M(v) = X_tilde @ (X_tilde.T @ v) - D_inv * v\n    def matvec(v):\n        return X_tilde @ (X_tilde.T @ v) - D_inv * v\n\n    M = sla.LinearOperator((n_cells, n_cells), matvec=matvec, dtype=np.float64)\n\n    # 6. Compute leading eigenpairs using Lanczos\n    eigenvalues, eigenvectors = sla.eigsh(M, k=n_components, which='LA')\n\n    eigenvalues = eigenvalues[::-1]\n    eigenvectors = eigenvectors[:, ::-1]\n\n    return eigenvalues, eigenvectors\n"
+      },
+      "observation_status": "ok",
+      "observation_message": "{\"changed\":true,\"path\":\"snap_core.py\",\"replacements\":1}",
+      "transport_attempts": 1,
+      "input_tokens": 4269,
+      "output_tokens": 1132
+    },
+    {
+      "step": 9,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:F:turn-009",
+      "prompt_sha256": "0b7d90408955609daab5a00fad476f3f642320c9456817e5fec945e9dbb1e686",
+      "response_sha256": "d68d00e8d93420f851292fe0a8a196247d44eb1a15d3fbf4acc53686c77aeed0",
+      "response_text": "{\"action\":\"open\",\"path\":\"test_snap_core_public.py\",\"start_line\":1,\"end_line\":80}",
+      "action": {
+        "action": "open",
+        "query": null,
+        "path": "test_snap_core_public.py",
+        "max_results": null,
+        "start_line": 1,
+        "end_line": 80,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "1: import numpy as np\n2: \n3: from snap_core import matrix_free_spectral_embedding\n4: \n5: \n6: def test_returns_finite_descending_embedding_with_expected_shape():\n7:     counts = np.array(\n8:         [\n9:             [2.0, 1.0, 0.0, 0.0, 1.0],\n10:             [1.0, 3.0, 1.0, 0.0, 0.0],\n11:             [0.0, 1.0, 2.0, 1.0, 0.0],\n12:             [0.0, 0.0, 1.0, 3.0, 1.0],\n13:             [1.0, 0.0, 0.0, 1.0, 2.0],\n14:             [2.0, 0.0, 0.0, 0.0, 1.0],\n15:         ]\n16:     )\n17: \n18:     values, vectors = matrix_free_spectral_embedding(counts, 2, random_state=7)\n19: \n20:     assert values.shape == (2,)\n21:     assert vectors.shape == (counts.shape[0], 2)\n22:     assert np.isfinite(values).all()\n23:     assert np.isfinite(vectors).all()\n24:     assert np.all(values[:-1] >= values[1:])",
+      "transport_attempts": 1,
+      "input_tokens": 5163,
+      "output_tokens": 227
+    },
+    {
+      "step": 10,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:F:turn-010",
+      "prompt_sha256": "0e26d0dc4f4a44a4f43cea68cbfb71e3ddc44f1520f4ef04d7b7b90ebba40e42",
+      "response_sha256": "af062acbe3e64aa039672b0bc0197abeb443bf0cc9685e7d96ea67d18afdb7d7",
+      "response_text": "{\"action\":\"test\"}",
+      "action": {
+        "action": "test",
+        "query": null,
+        "path": null,
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "scored",
+      "observation_message": "{\"contract_passed\":true,\"failure_reason\":\"\",\"matrix_free_guard_passed\":true,\"passed_cases\":21,\"status\":\"passed\",\"task_score\":1.0,\"total_cases\":21}",
+      "transport_attempts": 1,
+      "input_tokens": 5544,
+      "output_tokens": 1598
+    },
+    {
+      "step": 11,
+      "retry_lineage_id": "snap-mfse:eligibility:deepseek:bf:002:F:turn-011",
+      "prompt_sha256": "0df0c8f1297bd8afb9ae5e8c9b61f31b28ff71893b54daf4e3bfded6955ab534",
+      "response_sha256": "6831a7112fd0308595c6abaab94fbd4f05541fda862d0e6075e89ad1df53163b",
+      "response_text": "{\"action\":\"submit\"}",
+      "action": {
+        "action": "submit",
+        "query": null,
+        "path": null,
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "scored",
+      "observation_message": "{\"contract_passed\":true,\"failure_reason\":\"\",\"matrix_free_guard_passed\":true,\"passed_cases\":21,\"status\":\"passed\",\"task_score\":1.0,\"total_cases\":21}",
+      "transport_attempts": 1,
+      "input_tokens": 5611,
+      "output_tokens": 130
+    }
+  ],
+  "scorer_metrics": [
+    {
+      "schema_version": "effectslice-snap-mfse-score.v1",
+      "task_id": "SNAP-MFSE",
+      "metric_name": "registered_case_pass_rate",
+      "block": "eligibility",
+      "evidence_boundary": "Objective numerical score for one locked SNAP-MFSE patch and case block. Development scores do not establish EffectSlice effectiveness.",
+      "task_score": 1.0,
+      "success": true,
+      "patch_applied": true,
+      "matrix_free_guard_passed": true,
+      "guard_violations": [],
+      "contract_passed": true,
+      "contract_failures": [],
+      "case_scores": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "case_details": [
+        {
+          "case_id": "snap-mfse:eligibility:001",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 2.220446049250313e-16,
+          "projector_ok": true,
+          "projector_error": 8.936368677713376e-16,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:002",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 7.771561172376096e-16,
+          "projector_ok": true,
+          "projector_error": 1.0120284184335095e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:003",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 3.3306690738754696e-16,
+          "projector_ok": true,
+          "projector_error": 2.0923152746032362e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:004",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 4.440892098500626e-16,
+          "projector_ok": true,
+          "projector_error": 2.5988858701617834e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:005",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 1.1102230246251565e-15,
+          "projector_ok": true,
+          "projector_error": 4.584023114945006e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:006",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 4.440892098500626e-16,
+          "projector_ok": true,
+          "projector_error": 1.0612815074386926e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:007",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 7.771561172376096e-16,
+          "projector_ok": true,
+          "projector_error": 1.1437183299343463e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:008",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 5.551115123125783e-16,
+          "projector_ok": true,
+          "projector_error": 1.1956706612391343e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:009",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 2.220446049250313e-16,
+          "projector_ok": true,
+          "projector_error": 1.8705564345173122e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:010",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 1.2212453270876722e-15,
+          "projector_ok": true,
+          "projector_error": 2.2504252189309273e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:011",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 0.0,
+          "projector_ok": true,
+          "projector_error": 9.206790519901233e-16,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:012",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 4.440892098500626e-16,
+          "projector_ok": true,
+          "projector_error": 1.4102323865642741e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:013",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 1.1102230246251565e-16,
+          "projector_ok": true,
+          "projector_error": 9.635573039215034e-16,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:014",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 5.551115123125783e-16,
+          "projector_ok": true,
+          "projector_error": 9.86925537651716e-16,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:015",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 4.440892098500626e-16,
+          "projector_ok": true,
+          "projector_error": 4.625661535867267e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:016",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 4.440892098500626e-16,
+          "projector_ok": true,
+          "projector_error": 1.4690574831333134e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:017",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 1.1102230246251565e-16,
+          "projector_ok": true,
+          "projector_error": 5.4853305888898244e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:018",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 9.992007221626409e-16,
+          "projector_ok": true,
+          "projector_error": 9.180834502538413e-16,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:019",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 4.440892098500626e-16,
+          "projector_ok": true,
+          "projector_error": 1.109485522192652e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:020",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 9.992007221626409e-16,
+          "projector_ok": true,
+          "projector_error": 1.3162623280336271e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:021",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 1.1102230246251565e-16,
+          "projector_ok": true,
+          "projector_error": 2.5769093898508264e-15,
+          "error_type": null
+        }
+      ],
+      "failure_reason": "",
+      "private_apply_result": {
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "public_summary": {
+        "status": "passed",
+        "task_score": 1.0,
+        "passed_cases": 21,
+        "total_cases": 21,
+        "contract_passed": true,
+        "matrix_free_guard_passed": true,
+        "failure_reason": ""
+      }
+    },
+    {
+      "schema_version": "effectslice-snap-mfse-score.v1",
+      "task_id": "SNAP-MFSE",
+      "metric_name": "registered_case_pass_rate",
+      "block": "eligibility",
+      "evidence_boundary": "Objective numerical score for one locked SNAP-MFSE patch and case block. Development scores do not establish EffectSlice effectiveness.",
+      "task_score": 1.0,
+      "success": true,
+      "patch_applied": true,
+      "matrix_free_guard_passed": true,
+      "guard_violations": [],
+      "contract_passed": true,
+      "contract_failures": [],
+      "case_scores": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      "case_details": [
+        {
+          "case_id": "snap-mfse:eligibility:001",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 5.551115123125783e-16,
+          "projector_ok": true,
+          "projector_error": 1.4261916990769401e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:002",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 7.771561172376096e-16,
+          "projector_ok": true,
+          "projector_error": 9.726751954090464e-16,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:003",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 3.3306690738754696e-16,
+          "projector_ok": true,
+          "projector_error": 2.6817815054691988e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:004",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 7.771561172376096e-16,
+          "projector_ok": true,
+          "projector_error": 5.260835399037838e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:005",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 8.881784197001252e-16,
+          "projector_ok": true,
+          "projector_error": 7.419636799368661e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:006",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 6.661338147750939e-16,
+          "projector_ok": true,
+          "projector_error": 1.4144915792383185e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:007",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 2.220446049250313e-16,
+          "projector_ok": true,
+          "projector_error": 8.271266314748642e-16,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:008",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 3.3306690738754696e-16,
+          "projector_ok": true,
+          "projector_error": 1.1296156004274622e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:009",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 3.3306690738754696e-16,
+          "projector_ok": true,
+          "projector_error": 2.5910985674292483e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:010",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 5.551115123125783e-16,
+          "projector_ok": true,
+          "projector_error": 2.0920149066816224e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:011",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 3.3306690738754696e-16,
+          "projector_ok": true,
+          "projector_error": 7.683708899040274e-16,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:012",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 4.440892098500626e-16,
+          "projector_ok": true,
+          "projector_error": 1.2742178642176364e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:013",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 4.440892098500626e-16,
+          "projector_ok": true,
+          "projector_error": 8.957625595437287e-16,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:014",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 7.771561172376096e-16,
+          "projector_ok": true,
+          "projector_error": 1.1718858501056002e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:015",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 7.771561172376096e-16,
+          "projector_ok": true,
+          "projector_error": 4.404130501086675e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:016",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 3.3306690738754696e-16,
+          "projector_ok": true,
+          "projector_error": 1.0468874128182172e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:017",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 6.661338147750939e-16,
+          "projector_ok": true,
+          "projector_error": 5.072317205239816e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:018",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 8.881784197001252e-16,
+          "projector_ok": true,
+          "projector_error": 1.351550361360827e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:019",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 8.881784197001252e-16,
+          "projector_ok": true,
+          "projector_error": 8.515071789557529e-16,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:020",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 4.440892098500626e-16,
+          "projector_ok": true,
+          "projector_error": 1.3310782408349123e-15,
+          "error_type": null
+        },
+        {
+          "case_id": "snap-mfse:eligibility:021",
+          "passed": true,
+          "shape_ok": true,
+          "finite": true,
+          "eigenvalues_ok": true,
+          "eigenvalue_error": 1.1102230246251565e-16,
+          "projector_ok": true,
+          "projector_error": 2.569827577738209e-15,
+          "error_type": null
+        }
+      ],
+      "failure_reason": "",
+      "private_apply_result": {
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "public_summary": {
+        "status": "passed",
+        "task_score": 1.0,
+        "passed_cases": 21,
+        "total_cases": 21,
+        "contract_passed": true,
+        "matrix_free_guard_passed": true,
+        "failure_reason": ""
+      }
+    }
+  ],
+  "input_tokens": 31327,
+  "output_tokens": 17157,
+  "transport_attempts": 11,
+  "elapsed_seconds": 165.744714,
+  "common_scaffold_sha256": "903785b3c7758109279f7b4a8c9ceed62a8543cb020d6ec6175055f636a3eda2",
+  "condition_context_sha256": "be348d12a43ccd2c74bf168c1e2a581f26721a547ccf10525ace8046bd31e010",
+  "task_prompt_sha256": "b542599b62c925c3427fdf98c32b087f11e0bd8993ca8c37c4d15000c3805768",
+  "public_error": ""
+}

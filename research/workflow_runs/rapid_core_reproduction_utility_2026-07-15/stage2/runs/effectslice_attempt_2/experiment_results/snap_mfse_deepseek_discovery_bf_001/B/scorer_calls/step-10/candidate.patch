@@ -1,0 +1,46 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -11,5 +11,41 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # validation
++    if not np.isfinite(counts).all():
++        raise ValueError("counts must be finite")
++    if np.any(counts < 0):
++        raise ValueError("counts must be nonnegative")
++    if counts.ndim != 2:
++        raise ValueError("counts must be 2D")
++    n_cells, n_features = counts.shape
++    if n_components < 1 or n_components >= n_cells:
++        raise ValueError("n_components must satisfy 1 <= n_components < n_cells")
++    row_sums = counts.sum(axis=1)
++    if np.any(row_sums == 0):
++        raise ValueError("all-zero cell rows are not allowed")
++    col_sums = counts.sum(axis=0)
++    total = counts.sum()
++    d_c = row_sums / total
++    d_f = col_sums / total
++    inv_sqrt_d_c = np.where(d_c > 0, 1.0 / np.sqrt(d_c), 0.0)
++    inv_sqrt_d_f = np.where(d_f > 0, 1.0 / np.sqrt(d_f), 0.0)
++    from scipy.sparse.linalg import eigsh, LinearOperator
++    def matvec(v):
++        # v shape (n_cells,)
++        x = inv_sqrt_d_c * v
++        # x -> A^T x
++        y = counts.T @ x
++        # y -> D_f^{-1} y
++        z = inv_sqrt_d_f * y
++        # z -> A z
++        w = counts @ z
++        # w -> D_c^{-1/2} w
++        return inv_sqrt_d_c * w
++    M_op = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=float)
++    eigenvalues, eigenvectors = eigsh(M_op, k=n_components, which='LM', maxiter=1000, tol=1e-8)
++    idx = np.argsort(-eigenvalues)
++    eigenvalues = eigenvalues[idx]
++    eigenvectors = eigenvectors[:, idx]
++    return eigenvalues, eigenvectors
++    return eigvals, embedding

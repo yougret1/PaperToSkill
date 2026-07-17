@@ -1,0 +1,131 @@
+{
+  "gap_closure_reject_check": {
+    "entries": [
+      {
+        "gap": "Under a limited initial budget, no retrieved frontier establishes that the observed low-fidelity score preserves the sign and ordering of paper interventions by the performance improvement they later produce on independently specified user tasks; a probe can therefore support the wrong go/no-go decision even when it is internally faithful.",
+        "main_pattern": "reframe_as_solvable_object",
+        "sub_pattern": "C00 (Reframe as a Solvable Object)",
+        "tactical_failure_mode_quoted": "The signature failure is treating the reframing as a mechanical wrapper: taking an established attribution, decomposition, or estimation tool and pointing it at a new input granularity, a new architecture, or a new domain without re-deriving why the resulting scores are faithful to the model. These papers supply the computation but not the justification — no causal validation that the identified components actually drive behavior (only correlation), no axiomatic or soundness argument for why the proposed definition is the 'real' importance, and no confound control, so a reviewer can point to a methodological artifact (a computation-granularity difference, a degenerate zero baseline, an off-manifold perturbation) that explains the result instead.",
+        "reject_lessons_evaluated": [
+          {
+            "lesson_quoted": "Pointing an off-the-shelf decomposition at a coarser input granularity without showing the coarser units preserve the signal reads as a wrapper, not a contribution.",
+            "candidate_match": "borderline",
+            "reasoning": "core_mechanism ports expected Bayes-risk reduction to heterogeneous paper probes, but its leave-one-family-out calibration and comparison to full paired endpoints provide some evidence that probe outcomes preserve the decision sign."
+          },
+          {
+            "lesson_quoted": "Porting a known attribution technique to a new architecture or domain while ignoring that technique's documented failure modes — and omitting comparisons to alternatives — leaves reviewers unable to see any unique benefit.",
+            "candidate_match": "no",
+            "reasoning": "The imported method is sequential Bayesian decision design rather than attribution, and core_mechanism_steps compares EDIV against fixed, cheapest-first, and randomized schedules, although it omits direct Bayesian-design baselines."
+          },
+          {
+            "lesson_quoted": "Proposing a new attribution definition without an axiomatic or causal argument for why it should count as ground-truth collapses the moment a reviewer asks why this is the real importance.",
+            "candidate_match": "no",
+            "reasoning": "mu_P is a preregistered user-relative decision utility rather than a claimed ground-truth attribution, and it is evaluated against the full paired-reproduction sign."
+          },
+          {
+            "lesson_quoted": "Conflating a methodological artifact — a computation-granularity difference, a degenerate zero baseline — with genuine signal undermines the entire premise once the confound is identified.",
+            "candidate_match": "no",
+            "reasoning": "The matched intervention/control design, frozen task weights, and fixed check catalog are intended to keep schedule effects separate from easier checks or a changing baseline."
+          },
+          {
+            "lesson_quoted": "Building a suppression or privacy method without formalizing the threat model leaves the central guarantee unverifiable regardless of strong empirical numbers.",
+            "candidate_match": "no",
+            "reasoning": "The candidate is neither a suppression nor a privacy method."
+          },
+          {
+            "lesson_quoted": "Surveying or recombining fragmented methods without a unifying axis or a decisive controlled experiment yields a contribution reviewers dismiss as anecdotal.",
+            "candidate_match": "no",
+            "reasoning": "mu_P supplies one unifying decision object and the fixed-catalog schedule comparison is a decisive controlled experiment, even though the method's novelty remains threatened by prior sequential-design work."
+          }
+        ],
+        "verdict": "borderline"
+      },
+      {
+        "gap": "No retrieved paper tests whether tasks derived from the paper or skill, or selected by a fixed reproduction benchmark, are representative enough of the user's target-task distribution to support an adoption decision.",
+        "main_pattern": "controlled_diagnostic_design",
+        "sub_pattern": "C02 (Design a Confound-Isolating Diagnostic)",
+        "tactical_failure_mode_quoted": "Papers attempting this tactic fail most often when the constructed instrument isolates the confound only inside an artificial regime and never demonstrates that the isolated signal transfers to real deployment conditions — the synthetic-to-real gap is asserted rather than shown. A second recurring shape is circularity: the diagnostic is validated against the same definition, assumption, or system population it was built to interrogate (using the evaluated models as their own oracle, or hardcoding a contested definition of the target property), so it cannot independently confirm what it claims.",
+        "reject_lessons_evaluated": [
+          {
+            "lesson_quoted": "A diagnostic that only re-confirms a shortcut already known in advance, surfacing no previously unmeasurable failure, is read as confirmatory rather than as a contribution.",
+            "candidate_match": "no",
+            "reasoning": "The headline claim concerns the cost and error of adaptive adoption decisions, not merely re-confirming that artifact-conditioned tasks can inflate utility."
+          },
+          {
+            "lesson_quoted": "Validating a synthetic-ground-truth instrument only on synthetic data, without demonstrating that the controlled finding transfers to real-world instances, leaves ecological validity unestablished and undermines the central claim.",
+            "candidate_match": "no",
+            "reasoning": "The planned replay uses eight locked real-reuse cases and full paired reproductions rather than synthetic-only ground truth."
+          },
+          {
+            "lesson_quoted": "Building the instrument around one contested definition of the target property means it cannot independently confirm that the definition is correct, and reviewers flag the resulting circularity.",
+            "candidate_match": "borderline",
+            "reasoning": "The full-reproduction gold sign is computed from the same user-declared net-utility definition, although preregistration and explicit user-relative scope reduce the circularity concern."
+          },
+          {
+            "lesson_quoted": "Resting an unsupervised evaluation on the unverified premise that the systems under test can reliably judge one another stakes the entire method on an assumption that collapses under scrutiny.",
+            "candidate_match": "no",
+            "reasoning": "The candidate uses independently specified scorers and paired endpoints, not mutual model judging."
+          },
+          {
+            "lesson_quoted": "Pairing a single-task or small-sample instrument with broad capability claims triggers a scope-mismatch rejection, and assembling retrieval or engineering blocks without an isolating scientific insight reads as application rather than research.",
+            "candidate_match": "borderline",
+            "reasoning": "Evaluation is explicitly scoped to eight locked cases, but the hook states a general expected reduction and the evidence base is still too small to support broad cross-paper-family claims."
+          }
+        ],
+        "verdict": "borderline"
+      }
+    ],
+    "verdict": "borderline",
+    "reasoning": "The anchor gap under reframe_as_solvable_object is closest to the mechanical-wrapper lesson because EDIV applies an established Bayesian decision rule at paper-probe granularity, although calibration against full endpoints prevents an unqualified trigger. The controlled_diagnostic_design entry also remains borderline because its gold sign reuses the candidate's own declared utility definition and only eight cases support the claim."
+  },
+  "recipe_application_check": {
+    "entries": [
+      {
+        "gap": "Under a limited initial budget, no retrieved frontier establishes that the observed low-fidelity score preserves the sign and ordering of paper interventions by the performance improvement they later produce on independently specified user tasks; a probe can therefore support the wrong go/no-go decision even when it is internally faithful.",
+        "sub_pattern": "C00 (Reframe as a Solvable Object)",
+        "tactical_pattern_quoted": "This cluster recasts an opaque transparency question about an already-trained model or dataset — which feature/datum/internal component is responsible, how uncertain a prediction is, what a hidden representation encodes — as a concrete measurement over a well-studied object: a manifold-constrained counterfactual optimization, a submodular subset selection, an expectation/estimator over marginal statistics, an additive decomposition into a (often sparse) basis, or an influence/Shapley score accumulated along the optimization trajectory. The decisive move is choosing the right unit of analysis and the right faithfulness constraint so the resulting scores reflect the model's actual computation rather than an off-distribution or post-hoc artifact — e.g., searching counterfactuals only on the learned data manifold, decomposing into monosemantic sparse directions before causal tracing, or embedding the explanatory predictors as the primary decision representation.",
+        "instantiation_in_core_mechanism": "No core_mechanism step produces a per-unit responsibility or uncertainty score about a fixed model or dataset, supplies the cluster's compression move, or certifies such an attribution by perturbation/proof; steps 5-8 instead instantiate generic cost-sensitive Bayesian experimental design over probe outcomes.",
+        "verdict": "bypassed"
+      },
+      {
+        "gap": "No retrieved paper tests whether tasks derived from the paper or skill, or selected by a fixed reproduction benchmark, are representative enough of the user's target-task distribution to support an adoption decision.",
+        "sub_pattern": "C02 (Design a Confound-Isolating Diagnostic)",
+        "tactical_pattern_quoted": "The shared move is to construct a controlled set of evaluation instances in which exactly one named confound is either structurally blocked or independently varied, then report the divergence between apparent and de-confounded performance as the primary result rather than an aggregate leaderboard score. The confounds attacked are recurring and specific — memorization/contamination, surface style, the generating source's capability, single-modality shortcuts, scoring-function nonlinearity, and task-format exposure — and the load-bearing artifact is always the controlled instance set paired with an oracle independent of the system under test.",
+        "instantiation_in_core_mechanism": "Step 2 matches P_q and B to isolate the paper intervention, but it never independently varies the selected task-source confound by comparing paper-derived versus preregistered user-task instances or reports that apparent-versus-de-confounded divergence as the headline result; excluding artifact-generated tasks is not the C02 controlled diagnostic.",
+        "verdict": "bypassed"
+      }
+    ],
+    "verdict": "bypassed",
+    "reasoning": "Both entries bypass their cited cluster tactics: C00's fixed-artifact attribution/uncertainty measurement is absent, and C02's task-source confound is excluded rather than independently varied in a controlled instance set."
+  },
+  "anti_pattern_check": {
+    "composition_set": [
+      "reframe_as_solvable_object",
+      "controlled_diagnostic_design"
+    ],
+    "matched_pattern_id": null,
+    "required_mitigation_quoted": null,
+    "mitigation_substantively_delivered": "n/a",
+    "reasoning": "The composition contains no heterogeneous_decomposition leg and therefore matches none of the three documented reject-favored pairs."
+  },
+  "paper_pointed_threat": {
+    "threat_paper_id": "semanticscholar:ab6729cff99ab165013e982a76461cce091f8cae",
+    "threat_source": "collision_hits",
+    "threat_channel": "alias",
+    "subsumption_argument": "The retrieved abstract-level hit already combines a user utility over performance and cost, a cost-sensitive acquisition rule that selects the next fidelity by expected future utility, and automatic stopping near the utility optimum. EDIV_t(q) is the same central sequential value-of-information mechanism expressed as expected Bayes decision-risk reduction per unit cost; changing the application object from configuration fidelities to heterogeneous paper probes, and changing the terminal utility to an adoption-sign loss, does not create a new acquisition principle. The degraded collision coverage prevents any claim that this is the only ancestor, but it does not weaken this positive exact-mechanism overlap.",
+    "addressable_via": null,
+    "parametric_family_concern": "Bayesian optimal experimental design and cost-sensitive active sequential hypothesis testing; a scoop-check should query 'expected Bayes risk reduction per unit cost' and 'active sequential hypothesis testing stopping rule'."
+  },
+  "falsification_structure_check": {
+    "minimal_experiment_named": "yes",
+    "outcome_metric_named": "yes",
+    "load_bearing_variable": "EDIV_t(q)",
+    "negative_control_target": "outcome_metric",
+    "verdict": "sound",
+    "reasoning": "The paragraph specifies an eight-case replay against fixed-order and cheapest-first schedules, predicts lower median normalized cost-to-correct adoption without higher false decisions, and permutes EDIV_t(q) while predicting the downstream cost metric returns to baseline."
+  },
+  "verdict": "abandon",
+  "verdict_layer": "hard_floor",
+  "verdict_rationale": "paper_pointed_threat.subsumption_argument identifies exact central-mechanism overlap with semanticscholar:ab6729cff99ab165013e982a76461cce091f8cae: expected utility/value per cost selects the next observation and an automatic rule stops the sequence, while the candidate mainly substitutes paper probes and adoption-sign loss. Independently, recipe_application_check.entries[0].verdict and entries[1].verdict are both bypassed, and the C00 wrapper lesson remains borderline rather than providing a distinct tactic-based novelty defense.",
+  "revision_targets": []
+}

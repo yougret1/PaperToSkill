@@ -1,0 +1,135 @@
+{
+  "gap_closure_reject_check": {
+    "entries": [
+      {
+        "gap": "Under a limited initial budget, no retrieved frontier establishes that the observed low-fidelity score preserves the sign and ordering of paper interventions by the performance improvement they later produce on independently specified user tasks; a probe can therefore support the wrong go/no-go decision even when it is internally faithful.",
+        "main_pattern": "decompose_and_delegate",
+        "sub_pattern": "C25 (Decompose and Delegate to Solvers)",
+        "tactical_failure_mode_quoted": "The recurring failure is assembling a decompose-and-delegate pipeline whose components are all off-the-shelf — role-agents, prompts, existing engines, retrieval modules — so that no single piece is shown to be both novel and load-bearing. The intermediate artifact stays advisory (read by the next stage but never closed by a verification signal), reducing the system to sampling-plus-filtering or to a re-skin of an already-published neighbor that performed the same routing move.",
+        "reject_lessons_evaluated": [
+          {
+            "lesson_quoted": "A decomposition that merely chains off-the-shelf agents or engines, with no single component demonstrated to be both novel and load-bearing, reads as engineering assembly rather than a contribution.",
+            "candidate_match": "yes",
+            "reasoning": "core_mechanism combines a learned JSON compiler, deterministic manifest compiler, standard validators, locked runner, scorer, and classical 2x2 contrasts without defining a novel compilation operator or showing that any one new component is load-bearing."
+          },
+          {
+            "lesson_quoted": "If the 'key' prompt or elicitation scheme is tuned to one benchmark and not validated across settings, reviewers treat it as a dataset-specific hack instead of a transferable mechanism.",
+            "candidate_match": "yes",
+            "reasoning": "core_mechanism_reasoning uses the already-known SWE-T1 and SNAP follow-up reversals to choose the factors and expected contract-only class, while falsification_prediction validates only those same two retrospectively selected failures."
+          },
+          {
+            "lesson_quoted": "Delegating a sub-problem to a sound but costly solver (NP-hard search, materialized intermediate state) sinks the contribution when latency and scalability are left unexamined.",
+            "candidate_match": "no",
+            "reasoning": "The locked runner and bootstrap analysis are bounded, and compute_budget explicitly accounts for the twelve cell executions per task and the negative control."
+          },
+          {
+            "lesson_quoted": "Without an ablation isolating the decomposition's marginal effect from extra data, more epochs, or the base model's prior knowledge, the reported gains read as confounded and unattributable.",
+            "candidate_match": "yes",
+            "reasoning": "The four cells ablate mechanism and contract payloads but never ablate verifier feedback or compare the proposed compilers with hand-authored factors, so the claimed C25 construction loop itself is not isolated."
+          },
+          {
+            "lesson_quoted": "Re-deriving a routing move that a closely neighboring published system already demonstrated, while showing only marginal gains, fails the novelty bar regardless of engineering polish.",
+            "candidate_match": "borderline",
+            "reasoning": "SkillFoundry already compiles operational contracts, validates them, and runs downstream utility tests; FactorGate adds independent crossing, but available evidence does not establish that its compiler or routing is substantively new."
+          },
+          {
+            "lesson_quoted": "A self-improvement or decomposition loop whose reliability hinges on an unvalidated data-generation, retrieval, or filtering component invites rejection when error propagation across iterations is never analyzed.",
+            "candidate_match": "borderline",
+            "reasoning": "mechanism.json depends on learned extraction from source maps, yet the proposal specifies source-span validation without testing missed or wrongly factorized mechanism content across papers."
+          }
+        ],
+        "verdict": "triggered"
+      },
+      {
+        "gap": "No retrieved frontier estimates net benefit after execution cost, adaptation effort, and regressions on task dimensions outside the paper's headline metric are deducted from gross performance gain.",
+        "main_pattern": "decompose_and_delegate",
+        "sub_pattern": "C25 (Decompose and Delegate to Solvers)",
+        "tactical_failure_mode_quoted": "The recurring failure is assembling a decompose-and-delegate pipeline whose components are all off-the-shelf — role-agents, prompts, existing engines, retrieval modules — so that no single piece is shown to be both novel and load-bearing. The intermediate artifact stays advisory (read by the next stage but never closed by a verification signal), reducing the system to sampling-plus-filtering or to a re-skin of an already-published neighbor that performed the same routing move.",
+        "reject_lessons_evaluated": [
+          {
+            "lesson_quoted": "A decomposition that merely chains off-the-shelf agents or engines, with no single component demonstrated to be both novel and load-bearing, reads as engineering assembly rather than a contribution.",
+            "candidate_match": "yes",
+            "reasoning": "The second leg adds a typed execution ledger and standard factorial arithmetic to the same compiler-runner chain, but no new load-bearing estimator or verifier component beyond assembling existing machinery."
+          },
+          {
+            "lesson_quoted": "If the 'key' prompt or elicitation scheme is tuned to one benchmark and not validated across settings, reviewers treat it as a dataset-specific hack instead of a transferable mechanism.",
+            "candidate_match": "yes",
+            "reasoning": "The proposed utility scales and contract rescue diagnosis are demonstrated only on SWE-T1 and SNAP-T1, chosen after their contract-closing follow-ups were already known."
+          },
+          {
+            "lesson_quoted": "Delegating a sub-problem to a sound but costly solver (NP-hard search, materialized intermediate state) sinks the contribution when latency and scalability are left unexamined.",
+            "candidate_match": "no",
+            "reasoning": "No expensive combinatorial solver is delegated, and the per-cell GPU/API cost is explicitly budgeted and logged."
+          },
+          {
+            "lesson_quoted": "Without an ablation isolating the decomposition's marginal effect from extra data, more epochs, or the base model's prior knowledge, the reported gains read as confounded and unattributable.",
+            "candidate_match": "yes",
+            "reasoning": "The design estimates mechanism and contract effects but does not remove mid-construction verifier feedback, so it cannot show that the decompose-and-delegate loop rather than a manually specified 2x2 design causes any gain."
+          },
+          {
+            "lesson_quoted": "Re-deriving a routing move that a closely neighboring published system already demonstrated, while showing only marginal gains, fails the novelty bar regardless of engineering polish.",
+            "candidate_match": "borderline",
+            "reasoning": "SkillFoundry's contract compilation and validation plus PaperBench's separated execution evidence are close neighbors; the four-cell interaction is distinct but belongs to classical factorial analysis."
+          },
+          {
+            "lesson_quoted": "A self-improvement or decomposition loop whose reliability hinges on an unvalidated data-generation, retrieval, or filtering component invites rejection when error propagation across iterations is never analyzed.",
+            "candidate_match": "borderline",
+            "reasoning": "Factor integrity depends on mechanism extraction excluding task-interface content and contract compilation excluding mechanism content, but leakage and omission rates are not independently evaluated."
+          }
+        ],
+        "verdict": "triggered"
+      }
+    ],
+    "verdict": "triggered",
+    "reasoning": "Both decompose_and_delegate entries are driven by the lesson 'A decomposition that merely chains off-the-shelf agents or engines, with no single component demonstrated to be both novel and load-bearing, reads as engineering assembly rather than a contribution.' The anchor also triggers the missing-ablation lesson because its M/C cells do not isolate verifier feedback, while both entries use post-hoc-selected SWE/SNAP follow-ups as their only validation settings."
+  },
+  "recipe_application_check": {
+    "entries": [
+      {
+        "gap": "Under a limited initial budget, no retrieved frontier establishes that the observed low-fidelity score preserves the sign and ordering of paper interventions by the performance improvement they later produce on independently specified user tasks; a probe can therefore support the wrong go/no-go decision even when it is internally faithful.",
+        "sub_pattern": "C25 (Decompose and Delegate to Solvers)",
+        "tactical_pattern_quoted": "Have the learned model emit a structured, machine-checkable intermediate artifact at the decomposition boundary — an executable program, a formal domain/world model, a relational-or-constraint graph, a concrete state waypoint, an interleaved reason-act/tool-call trace, or a typed inter-agent deliverable — in place of a final answer, then route that artifact to a sound solver (interpreter, classical planner, constraint solver, MCTS/RL optimizer) or back through the model's own verify-and-revise loop. The load-bearing move is closing the loop with the solver's verifiable output — execution results, validator verdicts, behavioral consensus across independently sampled candidates, or terminal-answer confidence — and using that signal for credit assignment, candidate selection, or in-place correction applied DURING construction rather than only post-hoc.",
+        "instantiation_in_core_mechanism": "core_mechanism has the learned compiler emit mechanism.json, routes mechanism.json and deterministic contract.json through source, contract, runner, and scorer validators, and uses field-level errors to repair only the failing artifact before composing the final cells.",
+        "verdict": "applied"
+      },
+      {
+        "gap": "No retrieved frontier estimates net benefit after execution cost, adaptation effort, and regressions on task dimensions outside the paper's headline metric are deducted from gross performance gain.",
+        "sub_pattern": "C25 (Decompose and Delegate to Solvers)",
+        "tactical_pattern_quoted": "Have the learned model emit a structured, machine-checkable intermediate artifact at the decomposition boundary — an executable program, a formal domain/world model, a relational-or-constraint graph, a concrete state waypoint, an interleaved reason-act/tool-call trace, or a typed inter-agent deliverable — in place of a final answer, then route that artifact to a sound solver (interpreter, classical planner, constraint solver, MCTS/RL optimizer) or back through the model's own verify-and-revise loop. The load-bearing move is closing the loop with the solver's verifiable output — execution results, validator verdicts, behavioral consensus across independently sampled candidates, or terminal-answer confidence — and using that signal for credit assignment, candidate selection, or in-place correction applied DURING construction rather than only post-hoc.",
+        "instantiation_in_core_mechanism": "The same verified artifacts are executed by the locked runner, whose external scores and resource records populate the typed ledger and determine whether slot-local repairs are accepted before the final net-benefit contrasts are computed.",
+        "verdict": "applied"
+      }
+    ],
+    "verdict": "applied",
+    "reasoning": "Both entries instantiate C25's typed intermediate artifact plus verifier-closed construction loop; the failure is novelty and load-bearing isolation, not recipe bypass."
+  },
+  "anti_pattern_check": {
+    "composition_set": [
+      "decompose_and_delegate"
+    ],
+    "matched_pattern_id": null,
+    "required_mitigation_quoted": null,
+    "mitigation_substantively_delivered": "n/a",
+    "reasoning": "The candidate uses only decompose_and_delegate and therefore matches none of the three heterogeneous_decomposition pair compositions."
+  },
+  "paper_pointed_threat": {
+    "threat_paper_id": "arxiv:2604.03964v1",
+    "threat_source": "collision_hits",
+    "threat_channel": "signature",
+    "subsumption_argument": "SkillFoundry already compiles operational contracts from scientific resources, validates executability and contract completeness, and then measures downstream task utility. FactorGate's mechanism.json and contract.json compilers do not introduce a specified new compilation algorithm beyond separating those existing artifacts into two slots; the remaining novelty claim is the classical act of crossing the slots in a 2x2 design and reading main and interaction effects. SkillFoundry therefore does not exactly subsume the four-cell analysis, but it removes novelty from the compilation-and-validation components on which FactorGate claims C25 differentiation.",
+    "addressable_via": "core_mechanism and core_mechanism_steps would need a new compiler or factor-integrity component whose removal collapses correct attribution, plus a comparison against manually authored M/C slots and the same classical 2x2 analysis.",
+    "parametric_family_concern": "Classical factorial experimental design and software feature-interaction testing; a scoop-check should query '2x2 factorial interaction analysis' and 'software feature interaction testing'."
+  },
+  "falsification_structure_check": {
+    "minimal_experiment_named": "yes",
+    "outcome_metric_named": "yes",
+    "load_bearing_variable": "R_C = 0.5[(S_01-S_00)+(S_11-S_10)]",
+    "negative_control_target": "outcome_metric",
+    "verdict": "sound",
+    "reasoning": "The paragraph specifies two locked tasks, four cells, three paired seeds, expected locked-task success direction, one named rescue contrast, and a binding-permutation control predicting downstream success returns to C0. This is structurally sound, although selecting tasks and predictions from already-known follow-ups makes the evidence post-hoc confirmatory rather than an independent novelty test."
+  },
+  "verdict": "abandon",
+  "verdict_layer": "hard_floor",
+  "verdict_rationale": "gap_closure_reject_check.entries[0].reject_lessons_evaluated[0].lesson_quoted and entries[1].reject_lessons_evaluated[0].lesson_quoted are triggered because the proposal assembles JSON compilers, validators, a runner, scorer, and classical 2x2 contrasts without one new component shown both novel and load-bearing. The missing verifier-feedback ablation also triggers the C25 lesson at entries[0].reject_lessons_evaluated[3], while the only falsification tasks and expected contract-only outcomes were selected from known SWE/SNAP follow-ups; degraded collision coverage further leaves the named classical factorial and feature-interaction families unresolved, even though arxiv:2604.03964v1 is only a partial rather than exact paper-level overlap.",
+  "revision_targets": []
+}

@@ -1,0 +1,147 @@
+{
+  "schema_version": "effectslice-snap-mfse-slice-registry.v1",
+  "task_id": "SNAP-MFSE",
+  "source_atom_map_path": "source_atom_map.json",
+  "source_atom_map_sha256": "c495f458b2ec182a850d10b06fd843961340947ce5ab7ee11ec16edca42c84d8",
+  "full_atom_ids": [
+    "A01",
+    "A02",
+    "A03",
+    "A04",
+    "A05"
+  ],
+  "query_budget_Q": 24,
+  "branch_cost_per_discovery_candidate": 2,
+  "maximum_registered_discovery_branches": 8,
+  "candidate_order": [
+    "retained_scc_count_ascending",
+    "atom_ids_lexicographic"
+  ],
+  "candidates": [
+    {
+      "candidate_id": "prefix_01",
+      "artifact_path": "candidates/prefix_01.md",
+      "artifact_sha256": "a822b074f3feaaf06299dbe56f0f1e825b5d8737dbf51876dd6cbf190636f738",
+      "retained_atom_ids": [
+        "A01"
+      ],
+      "retained_scc_count": 1,
+      "dependency_closed": true,
+      "strict_subset": true,
+      "deletion_neighbors": [
+        {
+          "removed_atom_id": "A01",
+          "retained_atom_ids": [],
+          "condition": "B"
+        }
+      ]
+    },
+    {
+      "candidate_id": "prefix_02",
+      "artifact_path": "candidates/prefix_02.md",
+      "artifact_sha256": "e5e47ebb0876acdd42802e9fab7564840894f5ae4597522fa7b411104c13d7fe",
+      "retained_atom_ids": [
+        "A01",
+        "A02"
+      ],
+      "retained_scc_count": 2,
+      "dependency_closed": true,
+      "strict_subset": true,
+      "deletion_neighbors": [
+        {
+          "removed_atom_id": "A01",
+          "retained_atom_ids": [],
+          "condition": "B"
+        },
+        {
+          "removed_atom_id": "A02",
+          "retained_atom_ids": [
+            "A01"
+          ],
+          "candidate_id": "prefix_01"
+        }
+      ]
+    },
+    {
+      "candidate_id": "prefix_03",
+      "artifact_path": "candidates/prefix_03.md",
+      "artifact_sha256": "a581423575c0fa780739a2040a59260c6df4cc0172d022cc49d8b491552e8877",
+      "retained_atom_ids": [
+        "A01",
+        "A02",
+        "A03"
+      ],
+      "retained_scc_count": 3,
+      "dependency_closed": true,
+      "strict_subset": true,
+      "deletion_neighbors": [
+        {
+          "removed_atom_id": "A01",
+          "retained_atom_ids": [],
+          "condition": "B"
+        },
+        {
+          "removed_atom_id": "A02",
+          "retained_atom_ids": [
+            "A01"
+          ],
+          "candidate_id": "prefix_01"
+        },
+        {
+          "removed_atom_id": "A03",
+          "retained_atom_ids": [
+            "A01",
+            "A02"
+          ],
+          "candidate_id": "prefix_02"
+        }
+      ]
+    },
+    {
+      "candidate_id": "prefix_04",
+      "artifact_path": "candidates/prefix_04.md",
+      "artifact_sha256": "ff39b7c8d054fc1eb1e63368fb9658feb8cccbfb6cd55a8e99656b5b05c9ceb1",
+      "retained_atom_ids": [
+        "A01",
+        "A02",
+        "A03",
+        "A04"
+      ],
+      "retained_scc_count": 4,
+      "dependency_closed": true,
+      "strict_subset": true,
+      "deletion_neighbors": [
+        {
+          "removed_atom_id": "A01",
+          "retained_atom_ids": [],
+          "condition": "B"
+        },
+        {
+          "removed_atom_id": "A02",
+          "retained_atom_ids": [
+            "A01"
+          ],
+          "candidate_id": "prefix_01"
+        },
+        {
+          "removed_atom_id": "A03",
+          "retained_atom_ids": [
+            "A01",
+            "A02"
+          ],
+          "candidate_id": "prefix_02"
+        },
+        {
+          "removed_atom_id": "A04",
+          "retained_atom_ids": [
+            "A01",
+            "A02",
+            "A03"
+          ],
+          "candidate_id": "prefix_03"
+        }
+      ]
+    }
+  ],
+  "evidence_boundary": "Frozen before discovery provider runs; contains no model outcomes or scores."
+}

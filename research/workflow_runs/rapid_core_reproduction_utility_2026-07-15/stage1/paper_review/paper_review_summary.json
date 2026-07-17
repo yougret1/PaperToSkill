@@ -1,0 +1,75 @@
+{
+  "schema_version": "cs-paper-review.synthesis.v1",
+  "paper": "PaperToSkill: Turning Research Papers into Portable Agent Skills",
+  "target_venue": "AAAI 2027",
+  "review_date": "2026-07-15",
+  "overall_verdict": "reject_high_risk",
+  "panel": [
+    {
+      "reviewer": "R1",
+      "perspective": "Technical Correctness and Methodology",
+      "verdict": "reject",
+      "score_10": 3,
+      "confidence": 0.88
+    },
+    {
+      "reviewer": "R2",
+      "perspective": "Empirical Evidence and Reproducibility",
+      "verdict": "weak_reject",
+      "score_10": 4,
+      "confidence": "high"
+    },
+    {
+      "reviewer": "R3",
+      "perspective": "Novelty, Positioning, and Impact",
+      "verdict": "reject",
+      "score_10": 3,
+      "confidence_5": 4
+    }
+  ],
+  "original_innovation": [
+    "A lightweight, human-editable SKILL.md artifact for operational paper knowledge rather than an MCP server or full runnable reproduction.",
+    "A deterministic curated-note-to-skill compiler that keeps line-span provenance, explicit inferred guidance, validation checks, failure branches, and transfer boundaries.",
+    "An artifact-first audit pipeline that preserves negative downstream failures and maps them to execution-contract requirements."
+  ],
+  "innovation_judgment": "This is a narrow artifact/compiler design contribution, not a verified broad paper-to-skill, portable, grounded, or downstream-usefulness novelty. SkillFoundry, Anything2Skill, Paper2Agent, ClawTrace, Graph-of-Skills, SkillRAE, and recent skill-evaluation work occupy most of the broad claim space.",
+  "supported_by_current_evidence": [
+    "The implementation produces four compact artifacts that satisfy the authors' deterministic schema checks.",
+    "The artifacts contain valid source-span links and are substantially shorter than full extracted paper text under local token proxies.",
+    "The eight real-reuse rows are mixed and reveal concrete patch, scorer-contract, timeout, and artifact-completion boundaries.",
+    "The repository preserves run/table lineage and does not hide negative diagnostic outcomes."
+  ],
+  "not_supported_by_current_evidence": [
+    "Independent semantic preservation or source entailment.",
+    "Advantage over token-matched structured summaries or strong adjacent systems.",
+    "Stable downstream benefit across tasks, seeds, models, or harnesses.",
+    "Benefit to ordinary/non-expert users.",
+    "Robust arbitrary-PDF conversion or broad portability."
+  ],
+  "consensus_major_concerns": [
+    "The conversion algorithm and curated-note construction protocol are underspecified, so the extractor's contribution cannot be separated from curator work.",
+    "The headline deterministic metrics are self-aligned with the output schema and lack independent construct validation.",
+    "Summary and abstract baselines are weak and strongly length-confounded; adjacent systems are not executed.",
+    "The downstream study uses one stochastic run per condition, no uncertainty or significance, heterogeneous metrics, and no frozen held-out confirmation set.",
+    "Related Work omits the 2026 systems that define the current novelty boundary.",
+    "Ordinary-user impact is motivated but never measured."
+  ],
+  "visual_findings": [
+    "No clipping, overlap, or broken glyphs were observed in the nine-page PDF.",
+    "Several wide tables on pages 3-5 are too small for efficient review.",
+    "Non-reference content reaches page 8 despite the stated seven-page limit, and float placement creates large unused regions on pages 6-9."
+  ],
+  "effectslice_relationship": {
+    "judgment": "separate_paper_scale_pivot",
+    "reason": "The original paper asks whether curated notes can be compiled into auditable skill artifacts. EffectSlice asks whether an already beneficial complete artifact can be reduced while preserving an independently measured task effect under a sealed certificate. The hypothesis, method, baselines, primary endpoint, statistics, and experiment campaign all change.",
+    "reusable_assets": [
+      "PaperToSkill source maps and generated skills",
+      "The existing eight real-reuse tasks as development-only data",
+      "Current runners, scorers, failure taxonomies, and table lineage"
+    ]
+  },
+  "recommended_paths": [
+    "Narrow the current paper to a deterministic, source/failure-boundary-aware note-to-skill compiler and validate it with strong matched baselines plus independent semantic evaluation.",
+    "Develop EffectSlice as a separate methods paper, using PaperToSkill only as infrastructure and keeping all existing eight rows as development evidence."
+  ]
+}

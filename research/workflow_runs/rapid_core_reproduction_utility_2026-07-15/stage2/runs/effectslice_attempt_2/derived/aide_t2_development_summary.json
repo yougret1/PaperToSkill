@@ -1,0 +1,144 @@
+{
+  "schema_version": "effectslice-aide-development-summary.v1",
+  "evidence_boundary": "Adaptive development pairs only. These rows select a candidate but do not establish eligibility, preservation, necessity, or EffectSlice effectiveness.",
+  "thresholds": {
+    "delta_min": 0.01,
+    "epsilon": 0.025,
+    "delta_delete": 0.01
+  },
+  "pair_count": 6,
+  "eligibility": [
+    {
+      "pair_id": "aide-t2:dev:split20260703:001",
+      "scores": {
+        "B": 0.8010350776308223,
+        "F": 0.81943645773433
+      },
+      "input_tokens": {
+        "B": 4676,
+        "F": 5935
+      },
+      "evidence_level": "development",
+      "effect": 0.01840138010350778,
+      "meets_delta": true
+    },
+    {
+      "pair_id": "aide-t2:dev:triage-v2-001",
+      "scores": {
+        "B": 0.8228867165037378,
+        "F": 0.8263369752731455,
+        "S": 0.8131109833237493
+      },
+      "input_tokens": {
+        "B": 4676,
+        "F": 5935,
+        "S": 4707
+      },
+      "evidence_level": "development",
+      "effect": 0.0034502587694077436,
+      "meets_delta": false
+    }
+  ],
+  "preservation": {
+    "None": [
+      {
+        "pair_id": "aide-t2:dev:split20260703:fs001",
+        "scores": {
+          "F": 0.4997124784358827,
+          "S": 0.8200115008625647
+        },
+        "input_tokens": {
+          "F": 5935,
+          "S": 4872
+        },
+        "evidence_level": "development",
+        "full_minus_slice": -0.320299022426682,
+        "within_margin": true
+      }
+    ],
+    "slice_v1": [
+      {
+        "pair_id": "aide-t2:dev:split20260703:fs-v1-001",
+        "scores": {
+          "F": 0.828637147786084,
+          "S": 0.81196089706728
+        },
+        "input_tokens": {
+          "F": 5935,
+          "S": 4758
+        },
+        "evidence_level": "development",
+        "full_minus_slice": 0.016676250718803964,
+        "within_margin": true
+      }
+    ],
+    "slice_v2": [
+      {
+        "pair_id": "aide-t2:dev:split20260703:fs-v2-001",
+        "scores": {
+          "F": 0.8131109833237493,
+          "S": 0.8142610695802185
+        },
+        "input_tokens": {
+          "F": 5935,
+          "S": 4707
+        },
+        "evidence_level": "development",
+        "full_minus_slice": -0.0011500862564691738,
+        "within_margin": true
+      },
+      {
+        "pair_id": "aide-t2:dev:triage-v2-001",
+        "scores": {
+          "B": 0.8228867165037378,
+          "F": 0.8263369752731455,
+          "S": 0.8131109833237493
+        },
+        "input_tokens": {
+          "B": 4676,
+          "F": 5935,
+          "S": 4707
+        },
+        "evidence_level": "development",
+        "full_minus_slice": 0.01322599194939622,
+        "within_margin": true
+      }
+    ]
+  },
+  "deletion_neighbor": {
+    "slice_v2": [
+      {
+        "pair_id": "aide-t2:dev:split20260703:bs-v2-001",
+        "scores": {
+          "B": 0.7832087406555491,
+          "S": 0.8085106382978723
+        },
+        "input_tokens": {
+          "B": 4676,
+          "S": 4707
+        },
+        "evidence_level": "development",
+        "slice_minus_neighbor": 0.025301897642323157,
+        "witnessed": true
+      },
+      {
+        "pair_id": "aide-t2:dev:triage-v2-001",
+        "scores": {
+          "B": 0.8228867165037378,
+          "F": 0.8263369752731455,
+          "S": 0.8131109833237493
+        },
+        "input_tokens": {
+          "B": 4676,
+          "F": 5935,
+          "S": 4707
+        },
+        "evidence_level": "development",
+        "slice_minus_neighbor": -0.009775733179988477,
+        "witnessed": false
+      }
+    ]
+  },
+  "selected_development_candidate": null,
+  "scientific_claim_ready": false
+}

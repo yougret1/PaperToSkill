@@ -1,0 +1,259 @@
+```python
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+
+TRAIN_PATH = Path("train.csv")
+VALIDATION_PATH = Path("validation_features.csv")
+OUTPUT_PATH = Path("submission.csv")
+TARGET = "Transported"
+ID_COLUMN = "PassengerId"
+
+
+def add_features(train, validation):
+    train = train.copy()
+    validation = validation.copy()
+    train["_source"] = "train"
+    validation["_source"] = "validation"
+
+    combined = pd.concat([train.drop(columns=[TARGET]), validation], ignore_index=True)
+
+    passenger_id = combined[ID_COLUMN].astype("string")
+    id_parts = passenger_id.str.split("_", n=1, expand=True)
+    combined["GroupId"] = id_parts[0]
+    combined["GroupMember"] = pd.to_numeric(id_parts[1], errors="coerce")
+    combined["GroupSize"] = combined["GroupId"].map(
+        combined["GroupId"].value_counts(dropna=False)
+    )
+    combined["TravellingAlone"] = combined["GroupSize"].eq(1)
+
+    if "Cabin" in combined:
+        cabin_parts = combined["Cabin"].astype("string").str.split("/", expand=True)
+        combined["CabinDeck"] = cabin_parts[0]
+        combined["CabinNumber"] = pd.to_numeric(cabin_parts[1], errors="coerce")
+        combined["CabinSide"] = cabin_parts[2]
+        combined["CabinNumberBand"] = (combined["CabinNumber"] // 100).astype("Int64")
+
+    if "Name" in combined:
+        combined["Surname"] = (
+            combined["Name"].astype("string").str.rsplit(n=1).str[-1]
+        )
+        combined["FamilySize"] = combined["Surname"].map(
+            combined["Surname"].value_counts(dropna=False)
+        )
+
+    spend_columns = [
+        column
+        for column in ["RoomService", "FoodCourt", "ShoppingMall", "Spa", "VRDeck"]
+        if column in combined
+    ]
+    if spend_columns:
+        spend = combined[spend_columns].apply(pd.to_numeric, errors="coerce")
+        combined["TotalSpend"] = spend.sum(axis=1, min_count=1)
+        combined["NoSpend"] = combined["TotalSpend"].fillna(0).eq(0)
+        combined["SpendServices"] = spend.fillna(0).gt(0).sum(axis=1)
+        combined["LuxurySpend"] = spend[
+            [c for c in ["Spa", "VRDeck"] if c in spend]
+        ].sum(axis=1, min_count=1)
+        combined["EssentialSpend"] = spend[
+            [c for c in ["RoomService", "FoodCourt", "ShoppingMall"] if c in spend]
+        ].sum(axis=1, min_count=1)
+
+    if "Age" in combined:
+        age = pd.to_numeric(combined["Age"], errors="coerce")
+        combined["AgeBand"] = pd.cut(
+            age,
+            bins=[-np.inf, 12, 17, 25, 40, 60, np.inf],
+            labels=["child", "teen", "young_adult", "adult", "mature", "senior"],
+        )
+        combined["IsChild"] = age.lt(13)
+
+    train_features = combined.loc[combined["_source"].eq("train")].copy()
+    validation_features = combined.loc[
+        combined["_source"].eq("validation")
+    ].copy()
+    train_features.index = train.index
+    validation_features.index = validation.index
+
+    y = train[TARGET].map(
+        {True: 1, False: 0, "True": 1, "False": 0, 1: 1, 0: 0}
+    )
+    if y.isna().any():
+        y = pd.to_numeric(train[TARGET], errors="raise").astype(int)
+    else:
+        y = y.astype(int)
+
+    # Leave-one-out rates retain useful group/family evidence without copying a
+    # training row's own label into its features.
+    global_rate = float(y.mean())
+    for key in ["GroupId", "Surname"]:
+        if key not in train_features:
+            continue
+        stats = pd.DataFrame({key: train_features[key], "_target": y}).groupby(
+            key, dropna=False
+        )["_target"].agg(["sum", "count"])
+        sums = train_features[key].map(stats["sum"])
+        counts = train_features[key].map(stats["count"])
+        train_features[f"{key}TargetRate"] = np.where(
+            counts > 1, (sums - y) / (counts - 1), global_rate
+        )
+        validation_features[f"{key}TargetRate"] = (
+            validation_features[key].map(stats["sum"])
+            / validation_features[key].map(stats["count"])
+        ).fillna(global_rate)
+
+    drop_columns = ["_source", ID_COLUMN, "Name", "Cabin"]
+    train_features = train_features.drop(
+        columns=[c for c in drop_columns if c in train_features]
+    )
+    validation_features = validation_features.drop(
+        columns=[c for c in drop_columns if c in validation_features]
+    )
+    return train_features, validation_features, y
+
+
+def prepare_categoricals(train_features, validation_features):
+    categorical_columns = []
+    for column in train_features.columns:
+        if (
+            pd.api.types.is_object_dtype(train_features[column])
+            or isinstance(train_features[column].dtype, pd.CategoricalDtype)
+            or pd.api.types.is_string_dtype(train_features[column])
+            or pd.api.types.is_bool_dtype(train_features[column])
+        ):
+            categorical_columns.append(column)
+            train_features[column] = (
+                train_features[column].astype("string").fillna("__MISSING__")
+            )
+            validation_features[column] = (
+                validation_features[column].astype("string").fillna("__MISSING__")
+            )
+        else:
+            train_features[column] = pd.to_numeric(
+                train_features[column], errors="coerce"
+            )
+            validation_features[column] = pd.to_numeric(
+                validation_features[column], errors="coerce"
+            )
+    return categorical_columns
+
+
+def predict_with_catboost(train_features, validation_features, y, categoricals):
+    from catboost import CatBoostClassifier
+
+    model = CatBoostClassifier(
+        iterations=750,
+        depth=7,
+        learning_rate=0.045,
+        loss_function="Logloss",
+        eval_metric="Accuracy",
+        l2_leaf_reg=5,
+        random_seed=42,
+        random_strength=0.6,
+        bootstrap_type="Bayesian",
+        bagging_temperature=0.5,
+        allow_writing_files=False,
+        verbose=False,
+        thread_count=-1,
+    )
+    model.fit(train_features, y, cat_features=categoricals)
+    return model.predict_proba(validation_features)[:, 1]
+
+
+def predict_with_sklearn(train_features, validation_features, y, categoricals):
+    from sklearn.compose import ColumnTransformer
+    from sklearn.ensemble import ExtraTreesClassifier, HistGradientBoostingClassifier
+    from sklearn.impute import SimpleImputer
+    from sklearn.pipeline import Pipeline
+    from sklearn.preprocessing import OrdinalEncoder
+
+    numeric_columns = [
+        column for column in train_features.columns if column not in categoricals
+    ]
+    transformer = ColumnTransformer(
+        [
+            (
+                "categorical",
+                Pipeline(
+                    [
+                        ("imputer", SimpleImputer(strategy="most_frequent")),
+                        (
+                            "encoder",
+                            OrdinalEncoder(
+                                handle_unknown="use_encoded_value",
+                                unknown_value=-1,
+                                encoded_missing_value=-1,
+                            ),
+                        ),
+                    ]
+                ),
+                categoricals,
+            ),
+            (
+                "numeric",
+                SimpleImputer(strategy="median", add_indicator=True),
+                numeric_columns,
+            ),
+        ]
+    )
+    x_train = transformer.fit_transform(train_features)
+    x_validation = transformer.transform(validation_features)
+
+    extra_trees = ExtraTreesClassifier(
+        n_estimators=700,
+        min_samples_leaf=2,
+        max_features=0.75,
+        class_weight="balanced",
+        random_state=42,
+        n_jobs=-1,
+    )
+    extra_trees.fit(x_train, y)
+    tree_probability = extra_trees.predict_proba(x_validation)[:, 1]
+
+    histogram = HistGradientBoostingClassifier(
+        learning_rate=0.055,
+        max_iter=350,
+        max_leaf_nodes=25,
+        min_samples_leaf=18,
+        l2_regularization=2.0,
+        random_state=43,
+    )
+    histogram.fit(x_train, y)
+    histogram_probability = histogram.predict_proba(x_validation)[:, 1]
+    return 0.55 * histogram_probability + 0.45 * tree_probability
+
+
+def main():
+    train = pd.read_csv(TRAIN_PATH)
+    validation = pd.read_csv(VALIDATION_PATH)
+
+    if TARGET not in train or ID_COLUMN not in train or ID_COLUMN not in validation:
+        raise ValueError(
+            f"Expected {TARGET!r} in train and {ID_COLUMN!r} in both input files"
+        )
+
+    train_features, validation_features, y = add_features(train, validation)
+    categoricals = prepare_categoricals(train_features, validation_features)
+
+    try:
+        probabilities = predict_with_catboost(
+            train_features, validation_features, y, categoricals
+        )
+    except ImportError:
+        probabilities = predict_with_sklearn(
+            train_features, validation_features, y, categoricals
+        )
+
+    submission = pd.DataFrame(
+        {
+            ID_COLUMN: validation[ID_COLUMN],
+            TARGET: probabilities >= 0.5,
+        }
+    )
+    submission.to_csv(OUTPUT_PATH, index=False)
+
+
+if __name__ == "__main__":
+    main()
+```

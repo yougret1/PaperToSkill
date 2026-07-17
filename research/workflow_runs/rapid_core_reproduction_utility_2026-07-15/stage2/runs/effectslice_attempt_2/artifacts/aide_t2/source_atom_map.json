@@ -1,0 +1,371 @@
+{
+  "schema_version": "effectslice-source-atom-map.v2",
+  "paper_id": "aide",
+  "task_id": "AIDE-T2",
+  "source_path": "D:/a_work/gitee/PaperToSkill/generated_skills/aide/SKILL.md",
+  "source_sha256": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+  "atoms": [
+    {
+      "atom_id": "A01",
+      "workflow_step": "1. Model the task as optimization over a solution space of Python scripts, with a stateless objective function such as validation accuracy or loss. Each candidate solution can be evaluated independently and compared. Source anchors: lines 91-102.",
+      "source_text": "1. Model the task as optimization over a solution space of Python scripts, with a stateless objective function such as validation accuracy or loss. Each candidate solution can be evaluated independently and compared. Source anchors: lines 91-102.\r\n",
+      "source_span": {
+        "file_digest": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+        "byte_start": 1289,
+        "byte_end": 1537,
+        "line_start": 36,
+        "line_end": 37
+      },
+      "executable_region": {
+        "file_digest": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+        "byte_start": 1289,
+        "byte_end": 1537,
+        "symbol": "objective_function"
+      },
+      "contract_role": "objective"
+    },
+    {
+      "atom_id": "A02",
+      "workflow_step": "2. Run AI-Driven Exploration as iterative tree search: initialize a solution tree, propose a new solution, evaluate it, record the node and score, select the next base node, and return the best-scoring solution. Source anchors: lines 117-126.",
+      "source_text": "2. Run AI-Driven Exploration as iterative tree search: initialize a solution tree, propose a new solution, evaluate it, record the node and score, select the next base node, and return the best-scoring solution. Source anchors: lines 117-126.\r\n",
+      "source_span": {
+        "file_digest": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+        "byte_start": 1537,
+        "byte_end": 1781,
+        "line_start": 37,
+        "line_end": 38
+      },
+      "executable_region": {
+        "file_digest": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+        "byte_start": 1537,
+        "byte_end": 1781,
+        "symbol": "iterative_tree_search"
+      },
+      "contract_role": "search_loop"
+    },
+    {
+      "atom_id": "A03",
+      "workflow_step": "3. Store every discovered solution in a solution tree. Nodes correspond to scripts, edges represent improvement attempts, a search policy selects the base solution, a summarization operator extracts relevant history, and a coding operator proposes new scripts. Source anchors: lines 132-144.",
+      "source_text": "3. Store every discovered solution in a solution tree. Nodes correspond to scripts, edges represent improvement attempts, a search policy selects the base solution, a summarization operator extracts relevant history, and a coding operator proposes new scripts. Source anchors: lines 132-144.\r\n",
+      "source_span": {
+        "file_digest": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+        "byte_start": 1781,
+        "byte_end": 2074,
+        "line_start": 38,
+        "line_end": 39
+      },
+      "executable_region": {
+        "file_digest": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+        "byte_start": 1781,
+        "byte_end": 2074,
+        "symbol": "solution_tree_state"
+      },
+      "contract_role": "state"
+    },
+    {
+      "atom_id": "A04",
+      "workflow_step": "4. Use a hard-coded search policy that chooses drafting for initial solutions, debugging for buggy nodes within a debug-depth budget, and improving for the best non-buggy solution. Source anchors: lines 152-162.",
+      "source_text": "4. Use a hard-coded search policy that chooses drafting for initial solutions, debugging for buggy nodes within a debug-depth budget, and improving for the best non-buggy solution. Source anchors: lines 152-162.\r\n",
+      "source_span": {
+        "file_digest": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+        "byte_start": 2074,
+        "byte_end": 2287,
+        "line_start": 39,
+        "line_end": 40
+      },
+      "executable_region": {
+        "file_digest": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+        "byte_start": 2074,
+        "byte_end": 2287,
+        "symbol": "draft_debug_improve_policy"
+      },
+      "contract_role": "policy"
+    },
+    {
+      "atom_id": "A05",
+      "workflow_step": "5. Implement the coding operator with three specialized actions: drafting a single-file program from scratch, debugging by inspecting error logs and traces while preserving the approach, and improving a valid solution with one atomic measurable change. Source anchors: lines 167-199.",
+      "source_text": "5. Implement the coding operator with three specialized actions: drafting a single-file program from scratch, debugging by inspecting error logs and traces while preserving the approach, and improving a valid solution with one atomic measurable change. Source anchors: lines 167-199.\r\n",
+      "source_span": {
+        "file_digest": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+        "byte_start": 2287,
+        "byte_end": 2572,
+        "line_start": 40,
+        "line_end": 41
+      },
+      "executable_region": {
+        "file_digest": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+        "byte_start": 2287,
+        "byte_end": 2572,
+        "symbol": "focused_coding_actions"
+      },
+      "contract_role": "action"
+    },
+    {
+      "atom_id": "A06",
+      "workflow_step": "6. Keep prompts concise with a summarization operator that extracts performance metrics, hyperparameters, and debugging hints rather than appending all historical logs. Source anchors: lines 201-211.",
+      "source_text": "6. Keep prompts concise with a summarization operator that extracts performance metrics, hyperparameters, and debugging hints rather than appending all historical logs. Source anchors: lines 201-211.\r\n",
+      "source_span": {
+        "file_digest": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+        "byte_start": 2572,
+        "byte_end": 2773,
+        "line_start": 41,
+        "line_end": 42
+      },
+      "executable_region": {
+        "file_digest": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+        "byte_start": 2572,
+        "byte_end": 2773,
+        "symbol": "compact_history_summary"
+      },
+      "contract_role": "context_control"
+    },
+    {
+      "atom_id": "A07",
+      "workflow_step": "7. Include a static data preview with dataset size, column names, or data splits so coding prompts can make validation and hyperparameter decisions without a full EDA pipeline. Source anchors: lines 213-217.",
+      "source_text": "7. Include a static data preview with dataset size, column names, or data splits so coding prompts can make validation and hyperparameter decisions without a full EDA pipeline. Source anchors: lines 213-217.\r\n",
+      "source_span": {
+        "file_digest": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+        "byte_start": 2773,
+        "byte_end": 2982,
+        "line_start": 42,
+        "line_end": 43
+      },
+      "executable_region": {
+        "file_digest": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+        "byte_start": 2773,
+        "byte_end": 2982,
+        "symbol": "static_data_preview"
+      },
+      "contract_role": "task_observation"
+    },
+    {
+      "atom_id": "A08",
+      "workflow_step": "8. Combine search policy, coding operator, and summarization under a stateless optimization framework to search code solutions without ever-increasing prompt history. Source anchors: lines 221-227.",
+      "source_text": "8. Combine search policy, coding operator, and summarization under a stateless optimization framework to search code solutions without ever-increasing prompt history. Source anchors: lines 221-227.\r\n",
+      "source_span": {
+        "file_digest": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+        "byte_start": 2982,
+        "byte_end": 3181,
+        "line_start": 43,
+        "line_end": 44
+      },
+      "executable_region": {
+        "file_digest": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+        "byte_start": 2982,
+        "byte_end": 3181,
+        "symbol": "stateless_integrated_search"
+      },
+      "contract_role": "integration"
+    },
+    {
+      "atom_id": "A09",
+      "workflow_step": "- The Kaggle protocol splits training data into train and holdout test sets, prompts AIDE to produce `submission.csv`, and reports Exceeds % of Human and Above Median metrics. Source anchors: lines 252-280.",
+      "source_text": "- The Kaggle protocol splits training data into train and holdout test sets, prompts AIDE to produce `submission.csv`, and reports Exceeds % of Human and Above Median metrics. Source anchors: lines 252-280.\r\n",
+      "source_span": {
+        "file_digest": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+        "byte_start": 3513,
+        "byte_end": 3721,
+        "line_start": 49,
+        "line_end": 50
+      },
+      "executable_region": {
+        "file_digest": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+        "byte_start": 3513,
+        "byte_end": 3721,
+        "symbol": "submission_metric_contract"
+      },
+      "contract_role": "output_metric_contract"
+    },
+    {
+      "atom_id": "A10",
+      "workflow_step": "- Kaggle holdout sets may differ from official private test sets, so percentile scores may not always be directly comparable. Source anchors: lines 396-398.\r\n- There is possible data contamination because models may have seen competition-related data; the paper says live competition submissions are the only way to fully ensure no contamination. Source anchors: lines 398-402.\r\n- AIDE can adopt a simple greedy policy that may lead to local optima on challenging R&D tasks. Source anchors: lines 488-491.\r\n- AIDE fell short in environments requiring larger codebases or single improvements with multiple steps of interaction; in Rust CodeContests it repeated local patches instead of discovering new strategies. Source anchors: lines 494-501.",
+      "source_text": "- Kaggle holdout sets may differ from official private test sets, so percentile scores may not always be directly comparable. Source anchors: lines 396-398.\r\n- There is possible data contamination because models may have seen competition-related data; the paper says live competition submissions are the only way to fully ensure no contamination. Source anchors: lines 398-402.\r\n- AIDE can adopt a simple greedy policy that may lead to local optima on challenging R&D tasks. Source anchors: lines 488-491.\r\n- AIDE fell short in environments requiring larger codebases or single improvements with multiple steps of interaction; in Rust CodeContests it repeated local patches instead of discovering new strategies. Source anchors: lines 494-501.\r\n",
+      "source_span": {
+        "file_digest": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+        "byte_start": 4636,
+        "byte_end": 5381,
+        "line_start": 57,
+        "line_end": 61
+      },
+      "executable_region": {
+        "file_digest": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+        "byte_start": 4636,
+        "byte_end": 5381,
+        "symbol": "failure_boundaries"
+      },
+      "contract_role": "failure_boundary"
+    },
+    {
+      "atom_id": "A11",
+      "workflow_step": "- Check whether the target harness supports the tools assumed by the paper.\r\n- Replace framework-specific commands with local equivalents before execution.",
+      "source_text": "- Check whether the target harness supports the tools assumed by the paper.\r\n- Replace framework-specific commands with local equivalents before execution.\r\n",
+      "source_span": {
+        "file_digest": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+        "byte_start": 5839,
+        "byte_end": 5996,
+        "line_start": 66,
+        "line_end": 68
+      },
+      "executable_region": {
+        "file_digest": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+        "byte_start": 5839,
+        "byte_end": 5996,
+        "symbol": "harness_compatibility"
+      },
+      "contract_role": "execution_contract"
+    },
+    {
+      "atom_id": "A12",
+      "workflow_step": "- Keep source-backed steps separate from inferred adaptations.\r\n- Record any failed branch as part of the skill's future revision history.",
+      "source_text": "- Keep source-backed steps separate from inferred adaptations.\r\n- Record any failed branch as part of the skill's future revision history.\r\n",
+      "source_span": {
+        "file_digest": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+        "byte_start": 5996,
+        "byte_end": 6136,
+        "line_start": 68,
+        "line_end": 70
+      },
+      "executable_region": {
+        "file_digest": "34c7585e9977378bc9923a080992d0c6aba62740d216c539271d724a78e168e5",
+        "byte_start": 5996,
+        "byte_end": 6136,
+        "symbol": "provenance_and_failure_log"
+      },
+      "contract_role": "provenance_contract"
+    }
+  ],
+  "dependency_nodes": [
+    "A01",
+    "A02",
+    "A03",
+    "A04",
+    "A05",
+    "A06",
+    "A07",
+    "A08",
+    "A09",
+    "A10",
+    "A11",
+    "A12"
+  ],
+  "dependency_edges": [
+    {
+      "from": "A02",
+      "to": "A01"
+    },
+    {
+      "from": "A03",
+      "to": "A02"
+    },
+    {
+      "from": "A04",
+      "to": "A03"
+    },
+    {
+      "from": "A05",
+      "to": "A01"
+    },
+    {
+      "from": "A06",
+      "to": "A03"
+    },
+    {
+      "from": "A07",
+      "to": "A01"
+    },
+    {
+      "from": "A08",
+      "to": "A04"
+    },
+    {
+      "from": "A08",
+      "to": "A05"
+    },
+    {
+      "from": "A08",
+      "to": "A06"
+    },
+    {
+      "from": "A08",
+      "to": "A07"
+    },
+    {
+      "from": "A09",
+      "to": "A01"
+    }
+  ],
+  "requires": {
+    "A01": [],
+    "A02": [
+      "A01"
+    ],
+    "A03": [
+      "A02"
+    ],
+    "A04": [
+      "A03"
+    ],
+    "A05": [
+      "A01"
+    ],
+    "A06": [
+      "A03"
+    ],
+    "A07": [
+      "A01"
+    ],
+    "A08": [
+      "A04",
+      "A05",
+      "A06",
+      "A07"
+    ],
+    "A09": [
+      "A01"
+    ],
+    "A10": [],
+    "A11": [],
+    "A12": []
+  },
+  "candidate_atom_ids": [
+    "A01",
+    "A05",
+    "A07",
+    "A09",
+    "A11"
+  ],
+  "candidate_dependency_closed": true,
+  "candidate_sha256": "bffaba92a1234e01936279e43795e7a2902c62b46dae1fb7458297bdb3e1f288",
+  "development_candidates": {
+    "slice_v0": {
+      "atom_ids": [
+        "A01",
+        "A05",
+        "A07",
+        "A09",
+        "A11"
+      ],
+      "sha256": "bffaba92a1234e01936279e43795e7a2902c62b46dae1fb7458297bdb3e1f288",
+      "artifact_sha256": "bffaba92a1234e01936279e43795e7a2902c62b46dae1fb7458297bdb3e1f288",
+      "context_sha256": "9986d1b27500eca4cbab5ae5e564ce8bcc3f91061a9dd82c3aebcd0dac825e60"
+    },
+    "slice_v1": {
+      "atom_ids": [
+        "A01",
+        "A05"
+      ],
+      "sha256": "edc20df4c695c32227c00ecdce2d169fb81b1406a6ebf8ac8af80c61c1811c79",
+      "artifact_sha256": "edc20df4c695c32227c00ecdce2d169fb81b1406a6ebf8ac8af80c61c1811c79",
+      "context_sha256": "cacb367bcb1c7f6655f1e6084207b0db1f0e9b38cdd659466a1bf513c951b377"
+    },
+    "slice_v2": {
+      "atom_ids": [
+        "A01"
+      ],
+      "sha256": "e9d956ccaa582e988b028b50a0c21d929b338c61fa4869f2d5b090a561c167f0",
+      "artifact_sha256": "e9d956ccaa582e988b028b50a0c21d929b338c61fa4869f2d5b090a561c167f0",
+      "context_sha256": "2b3dff8d9385a48b4081b0fc86624662d009001cee3f81819e6ac0537b9eadb6"
+    }
+  },
+  "evidence_boundary": "Development atomization and source-preserving candidate only; not an EffectSlice admission or effectiveness result."
+}

@@ -1,0 +1,424 @@
+{
+  "schema_version": "1.0",
+  "reviewer": {
+    "panel_role": "Reviewer 1 of 3",
+    "perspective": "Technical Correctness and Methodology",
+    "independence": "Reviewed only the paper sources, compiled-artifact inventory, and this agent's own structure_reader.json; no other reviewer output was read.",
+    "review_date": "2026-07-15"
+  },
+  "paper": {
+    "title": "PaperToSkill: Turning Research Papers into Portable Agent Skills",
+    "target_venue": "AAAI 2027",
+    "primary_source": "paper/aaai/papertoskill_aaai2027.tex"
+  },
+  "review_scope": {
+    "questions": [
+      "Is the problem and claimed technical scope precise?",
+      "Is the paper-note-to-skill algorithm sufficiently specified and technically sound?",
+      "Do the deterministic measurements validly test operational knowledge preservation and source grounding?",
+      "Do the downstream paired conditions isolate the effect of PaperToSkill?",
+      "Are assumptions, task contracts, and failure modes explicit enough for methodological interpretation?"
+    ],
+    "excluded_from_critique": "Pending external work is not treated as a concern merely because it is unfinished. It is mentioned only when the absence of an independent measurement leaves a completed central claim methodologically unidentified.",
+    "visual_review_limitation": "The PDF and PDF figures could not be rendered in the available environment. This review therefore evaluates the full TeX content, table sources, captions, and reported numbers, but makes no visual-layout claims."
+  },
+  "concise_verdict": "The paper has a clear and appropriately bounded artifact-level thesis, but the current manuscript does not specify the conversion algorithm or construct-valid evaluation well enough to establish that PaperToSkill preserves operational knowledge rather than satisfying a schema and its associated lexical rubrics. The downstream study is honestly reported as mixed, yet single runs, unmatched contexts, and mutable task/scorer contracts prevent causal attribution of individual wins. I recommend rejection in the present form, with a plausible resubmission path after a frozen, reproducible method specification and independently constructed, token-controlled evaluation.",
+  "strengths": [
+    {
+      "id": "S1",
+      "title": "Technically disciplined claim boundary",
+      "assessment": "The manuscript explicitly defines the main system as curated-note-to-skill conversion rather than arbitrary-PDF understanding and repeatedly separates deterministic artifact checks from semantic fidelity, billing, and aggregate downstream effectiveness. This reduces overclaiming and makes the intended technical object unusually clear.",
+      "anchors": [
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 66,
+          "line_end": 80
+        },
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 278,
+          "line_end": 293
+        },
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 425,
+          "line_end": 437
+        }
+      ],
+      "confidence": 0.99
+    },
+    {
+      "id": "S2",
+      "title": "Source-boundary-aware artifact design",
+      "assessment": "The proposed schema explicitly distinguishes source-backed content from inferred guidance and emits a source map from skill bullets to source-note sections and line spans. This is a technically appropriate foundation for later entailment auditing, even though the current validation is incomplete.",
+      "anchors": [
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 118,
+          "line_end": 131
+        }
+      ],
+      "confidence": 0.97
+    },
+    {
+      "id": "S3",
+      "title": "Failure diagnostics are not misrepresented as new wins",
+      "assessment": "The SWE and SnapATAC2 follow-ups distinguish patch application, scorer alignment, and executable-artifact contracts and explicitly state when both conditions pass. The paper does not promote these diagnostics into evidence of PaperToSkill superiority.",
+      "anchors": [
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 242,
+          "line_end": 265
+        },
+        {
+          "file": "paper/aaai/papertoskill_tables.tex",
+          "line_start": 45,
+          "line_end": 109
+        }
+      ],
+      "confidence": 0.99
+    },
+    {
+      "id": "S4",
+      "title": "Reported primary-table arithmetic is internally consistent",
+      "assessment": "The four reported coverage improvements over Summary in the main deterministic table equal Skill minus Summary to the displayed precision. This does not validate the metrics, but no arithmetic error was found in these headline deltas.",
+      "anchors": [
+        {
+          "file": "paper/aaai/papertoskill_tables.tex",
+          "line_start": 145,
+          "line_end": 159
+        }
+      ],
+      "confidence": 1.0
+    },
+    {
+      "id": "S5",
+      "title": "Method failures feed back into explicit contract requirements",
+      "assessment": "The Discussion identifies candidate-cap truncation, title parsing, source-map, and line-counting failures and connects downstream failures to budget, patch-application, artifact-manifest, and recovery requirements. This is more informative than reporting only successful cases.",
+      "anchors": [
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 378,
+          "line_end": 397
+        }
+      ],
+      "confidence": 0.98
+    }
+  ],
+  "major_concerns": [
+    {
+      "id": "M1",
+      "severity": "major",
+      "title": "The conversion algorithm and note-curation operator are not reproducibly specified",
+      "issue": "The Method gives only a prose outline: normalize Markdown, collect candidates from named regions, apply candidate limits, and emit a skill. It does not define region detection, candidate representation, scoring/ranking, deduplication, conflict handling, exact per-section caps, ordering, treatment of inferred guidance, or what happens when required fields have no source support. More importantly, the primary input is a curated source-anchored note, but the manuscript does not specify who curates it, the instructions used, time/cost, adjudication, or variability across curators.",
+      "methodological_consequence": "The transformation is not independently implementable from the paper, and the effect of PaperToSkill cannot be separated from the information selection performed by the curator. A high-quality note may already contain most of the operationalization credited to the extractor.",
+      "why_acknowledged_scope_does_not_resolve_it": "Narrowing the system from PDF-to-skill to note-to-skill is valid, but it makes the note construction protocol part of the method rather than an ignorable preprocessing detail.",
+      "anchors": [
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 76,
+          "line_end": 80
+        },
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 118,
+          "line_end": 138
+        },
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 153,
+          "line_end": 158
+        }
+      ],
+      "concrete_fix": [
+        "Add pseudocode with deterministic tie-breaking and all final cap/ranking parameters.",
+        "Publish the exact input-note schema, curation instructions, annotator qualifications, time/cost, and every benchmark note.",
+        "Measure note-curation variability with at least two independent curators per paper and report skill-output stability and downstream sensitivity.",
+        "Add a decomposition with paper text -> curated note, curated note -> skill, and curator-written operational artifact so the extractor's incremental contribution is identifiable."
+      ],
+      "confidence": 0.99
+    },
+    {
+      "id": "M2",
+      "severity": "major",
+      "title": "The central artifact metrics have unresolved circularity and construct-validity problems",
+      "issue": "The manuscript names structural rubric, context coverage, source-span validation, and transfer-readiness metrics but does not formally define their items, weights, matching rules, thresholds, provenance, or whether rubric authors were independent of note/skill construction. The paper itself acknowledges that metrics are partly lexical. A generated skill explicitly designed to contain workflow, validation, failures, transfer notes, and source anchors will predictably score well on structural and readiness checks for those same fields. Valid line ranges show that a span exists, not that a generated instruction is entailed by that span. The 24-cell semantic audit uses one internal reviewer, so it cannot independently calibrate these deterministic measures.",
+      "methodological_consequence": "The reported 20/20 scores, 10/10 readiness, and near-perfect source support can demonstrate package conformance and link validity, but they do not yet establish the stronger claim that correct operational knowledge was preserved without hallucination or distortion.",
+      "anchors": [
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 160,
+          "line_end": 171
+        },
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 266,
+          "line_end": 293
+        },
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 399,
+          "line_end": 412
+        },
+        {
+          "file": "paper/aaai/papertoskill_tables.tex",
+          "line_start": 145,
+          "line_end": 175
+        }
+      ],
+      "concrete_fix": [
+        "Formally define every rubric item, weight, normalization, matching rule, and pass threshold in the paper or appendix.",
+        "Construct rubrics from source papers before generating notes/skills and have independent annotators blind to condition adjudicate them.",
+        "Replace line-range validity alone with claim-level entailment labels: supported, contradicted, unsupported, and ambiguous, with inter-rater agreement.",
+        "Add adversarial negative controls containing structurally complete but source-contradictory instructions; a valid grounding metric should reject them.",
+        "Report calibration between deterministic scores and independent semantic judgments rather than treating both as interchangeable evidence."
+      ],
+      "confidence": 0.99
+    },
+    {
+      "id": "M3",
+      "severity": "major",
+      "title": "Comparator construction and context budgets do not isolate the value of the skill representation",
+      "issue": "The paper compares a purpose-built operational skill against a generic summary and an abstract-only context, but it does not specify how the generic summaries were produced, which source material or prompts they received, or whether they were optimized for operational coverage. The only displayed matched-task context counts show large differences: Summary uses 72-121 whitespace tokens, PaperToSkill 878-1173, and Full Excerpt 7,366-42,048. Thus representation, information quantity, prompt objective, and token budget change together.",
+      "methodological_consequence": "Higher deterministic coverage for PaperToSkill may follow mechanically from supplying much more context and instructing it to include the exact rubric categories. The design cannot distinguish the proposed schema from a same-budget structured summary or retrieval baseline.",
+      "anchors": [
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 153,
+          "line_end": 166
+        },
+        {
+          "file": "paper/aaai/papertoskill_tables.tex",
+          "line_start": 111,
+          "line_end": 126
+        },
+        {
+          "file": "paper/aaai/papertoskill_tables.tex",
+          "line_start": 145,
+          "line_end": 159
+        }
+      ],
+      "concrete_fix": [
+        "Add token-matched baselines produced from the same source note and model: free-form summary, structured operational summary without source maps, checklist extraction, and retrieval of source spans.",
+        "Use identical system prompts, model versions, inference settings, and maximum context/output budgets across paired conditions.",
+        "Report a budget-performance curve rather than one very short Summary point and one much longer skill point.",
+        "Treat abstract-only as a lower-bound sanity check, not a competitive baseline."
+      ],
+      "confidence": 0.98
+    },
+    {
+      "id": "M4",
+      "severity": "major",
+      "title": "The downstream design is insufficient for causal interpretation of row-level PaperToSkill wins",
+      "issue": "Each main real-reuse row contains one GPT-family run per condition, with heterogeneous tasks and scorers. The manuscript does not report sampling parameters, seeds, variance, paired stochastic control, or confidence intervals. It also documents that increasing the AIDE scorer budget changes the apparent boundary and that revised source context or scorer contracts change SWE/SNAP outcomes for both conditions. These are useful diagnostics, but they show that execution budget and evaluator contract are strong uncontrolled factors.",
+      "methodological_consequence": "Even though the paper correctly avoids an aggregate superiority claim, labels such as 'PaperToSkill-only success' cannot be interpreted as a stable causal effect of the skill from a single stochastic sample under context-length and task-contract confounds.",
+      "anchors": [
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 182,
+          "line_end": 201
+        },
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 217,
+          "line_end": 265
+        },
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 386,
+          "line_end": 397
+        },
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 417,
+          "line_end": 423
+        }
+      ],
+      "concrete_fix": [
+        "Freeze prompts, source context, scorer, success threshold, runtime budget, and artifact contract before model execution.",
+        "Run enough paired seeds or repeated samples per task to report success rates and paired uncertainty; use exact paired tests where task counts remain small.",
+        "Match context budgets as in M3 and randomize or counterbalance condition order when provider state may vary.",
+        "Keep all revised-contract runs as separately preregistered experiments and never mix them with first-pass estimates.",
+        "Report raw outputs, failure taxonomy, and scorer traces for every attempt so patch/scorer failures can be independently adjudicated."
+      ],
+      "confidence": 0.99
+    }
+  ],
+  "minor_concerns": [
+    {
+      "id": "m1",
+      "title": "Source-map optionality is internally ambiguous",
+      "issue": "The package description says optional references include a source map, while the extractor description says it writes references/source_map.json. Since source grounding is central, the artifact contract should state whether source_map.json is mandatory and what constitutes a valid map.",
+      "anchors": [
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 118,
+          "line_end": 131
+        }
+      ],
+      "concrete_fix": "Define a versioned package schema and make source-map presence, field types, cardinality, and validation invariants explicit.",
+      "confidence": 0.96
+    },
+    {
+      "id": "m2",
+      "title": "The 1200-word cap is not motivated or stress-tested",
+      "issue": "The cap is used as a success gate, but the paper does not explain why 1200 words is the operational threshold or show how coverage and downstream behavior vary as candidate limits change. The Discussion confirms that aggressive caps previously dropped important content.",
+      "anchors": [
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 125,
+          "line_end": 130
+        },
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 160,
+          "line_end": 166
+        },
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 378,
+          "line_end": 384
+        }
+      ],
+      "concrete_fix": "Report a cap sensitivity curve and choose the operating point using a preregistered fidelity-versus-size criterion.",
+      "confidence": 0.97
+    },
+    {
+      "id": "m3",
+      "title": "The two-column extraction heuristic lacks a correctness contract",
+      "issue": "Selecting a keyword-bearing column while preserving a raw line range can break reading order, join unrelated columns, or omit equations/captions. The method provides no ambiguity detection or fallback behavior.",
+      "anchors": [
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 133,
+          "line_end": 138
+        },
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 306,
+          "line_end": 317
+        }
+      ],
+      "concrete_fix": "Specify reading-order reconstruction, ambiguity flags, and manual-review triggers; evaluate section recall and anchor correctness on a layout-diverse PDF set.",
+      "confidence": 0.91
+    },
+    {
+      "id": "m4",
+      "title": "Task metrics and success thresholds are named but not formally defined",
+      "issue": "The real-reuse table lists validation_score, resolved, tests_passed, exact_match_or_f1, and composite runtime/memory/quality metrics without formulas, normalization rules, or per-task success thresholds. Scores from heterogeneous rows therefore have limited technical interpretability even without aggregation.",
+      "anchors": [
+        {
+          "file": "paper/aaai/papertoskill_tables.tex",
+          "line_start": 1,
+          "line_end": 21
+        }
+      ],
+      "concrete_fix": "Provide task cards defining each input, output contract, metric formula, threshold, timeout, and scorer version, with a frozen hash for every fixture and scorer.",
+      "confidence": 0.98
+    },
+    {
+      "id": "m5",
+      "title": "Conversion efficiency and scalability are not characterized",
+      "issue": "The paper measures artifact length and downstream scorer runtimes in selected diagnostics, but not extractor runtime, peak memory, curator effort, or behavior as paper/note length grows.",
+      "anchors": [
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 125,
+          "line_end": 138
+        },
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 278,
+          "line_end": 286
+        }
+      ],
+      "concrete_fix": "Report end-to-end wall time, peak memory, manual curation time, and scaling with source length and number of candidate bullets.",
+      "confidence": 0.86
+    },
+    {
+      "id": "m6",
+      "title": "Saved-response protocol versions are not a single contemporaneous model comparison",
+      "issue": "The scored Claude rows come from previously saved responses after the latest Claude refresh failed, while GPT and DeepSeek rows were refreshed with named aliases. The paper correctly limits this to output-contract evidence, but exact model snapshot, date, prompt, and decoding parameters are still needed to interpret repeatability.",
+      "anchors": [
+        {
+          "file": "paper/aaai/papertoskill_aaai2027.tex",
+          "line_start": 330,
+          "line_end": 347
+        }
+      ],
+      "concrete_fix": "Version every response with provider model ID, date, prompt hash, system prompt, decoding settings, and evaluator hash; do not summarize non-contemporaneous rows as one model grid without a version column.",
+      "confidence": 0.94
+    }
+  ],
+  "key_assumptions": [
+    {
+      "assumption": "Curated notes faithfully and sufficiently represent each source paper's operational content.",
+      "status": "central but not independently established",
+      "affected_concerns": ["M1", "M2"]
+    },
+    {
+      "assumption": "Lexical/structural coverage is a useful proxy for correct operational fidelity.",
+      "status": "partially acknowledged as limited; calibration not shown",
+      "affected_concerns": ["M2"]
+    },
+    {
+      "assumption": "A very short generic summary is the appropriate counterfactual for a much longer structured skill.",
+      "status": "not justified",
+      "affected_concerns": ["M3"]
+    },
+    {
+      "assumption": "One model sample per condition can reveal stable task-boundary differences.",
+      "status": "not justified for causal claims",
+      "affected_concerns": ["M4"]
+    },
+    {
+      "assumption": "A valid source line span implies semantic support for a generated instruction.",
+      "status": "not technically valid without entailment adjudication",
+      "affected_concerns": ["M2"]
+    }
+  ],
+  "claim_support_assessment": {
+    "supported_by_current_evidence": [
+      "The implementation emits artifacts that satisfy the authors' deterministic package-structure rubric on four curated cases.",
+      "The emitted artifacts are below the chosen 1200-word cap and materially shorter than full extracted paper text under the reported token proxy.",
+      "The local pipeline can attach syntactically valid source ranges and expose concrete failure modes in the selected cases.",
+      "The first-pass downstream rows are mixed and include patch-application and artifact-completion boundaries."
+    ],
+    "not_yet_supported_methodologically": [
+      "That PaperToSkill preserves semantically correct operational knowledge better than a same-budget, independently produced operational summary.",
+      "That high source-support rates imply instruction-level entailment rather than valid span syntax.",
+      "That the individual AIDE-T2 and SWE-T2 wins are stable causal effects of the skill rather than single-sample, budget, context, or scorer-contract effects.",
+      "That the conversion method is reproducible from the manuscript without access to repository-specific code, notes, and undocumented curation choices."
+    ]
+  },
+  "priority_revision_plan": [
+    {
+      "priority": 1,
+      "action": "Freeze and publish the complete conversion specification and note-curation protocol.",
+      "resolves": ["M1"]
+    },
+    {
+      "priority": 2,
+      "action": "Build preregistered, independently authored semantic and source-entailment evaluation with negative controls.",
+      "resolves": ["M2"]
+    },
+    {
+      "priority": 3,
+      "action": "Add same-source, same-model, token-matched operational baselines and budget-performance curves.",
+      "resolves": ["M3"]
+    },
+    {
+      "priority": 4,
+      "action": "Rerun frozen downstream tasks with paired repeated samples, exact prompts/settings, uncertainty, and immutable scorer contracts.",
+      "resolves": ["M4"]
+    }
+  ],
+  "likely_aaai_disposition": {
+    "recommendation": "Reject",
+    "numeric_score_on_10_point_scale": 3,
+    "confidence_on_5_point_scale": 4,
+    "confidence": 0.88,
+    "rationale": "The paper is candid and the artifact design is promising, but the primary method is not specified at publication-level reproducibility, the completed deterministic evaluation is too close to schema-conformance testing, and the downstream comparison cannot isolate the treatment effect. These are central methodological gaps requiring redesigned evaluation rather than a textual clarification or one additional table.",
+    "resubmission_outlook": "Promising if the authors formalize the transformation, separate note quality from extractor value, validate semantic/source entailment independently, and run token-controlled repeated downstream comparisons under frozen contracts."
+  }
+}

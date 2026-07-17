@@ -1,0 +1,82 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import svds, LinearOperator
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -10,6 +11,69 @@
+     n_components: int,
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+-    """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    """Return leading spectral coordinates for a cell-by-feature count matrix.
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    Parameters
++    ----------
++    counts : np.ndarray
++        Nonnegative cell-by-feature count matrix.
++    n_components : int
++        Number of leading components (1 <= n_components < n_cells).
++    random_state : int, optional
++        Random seed for SVD initialization.
++
++    Returns
++    -------
++    eigenvalues : np.ndarray
++        Leading singular values in descending order.
++    embedding : np.ndarray
++        Cell embedding matrix (n_cells, n_components).
++    """
++    # Input validation
++    if not isinstance(counts, np.ndarray):
++        raise ValueError("counts must be a NumPy array")
++    if counts.ndim != 2:
++        raise ValueError("counts must be a 2D array")
++    if not np.isfinite(counts).all():
++        raise ValueError("counts contains non-finite values")
++    if (counts < 0).any():
++        raise ValueError("counts contains negative values")
++    row_sums = counts.sum(axis=1)
++    if (row_sums == 0).any():
++        raise ValueError("counts contains all-zero cell rows")
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must satisfy 1 <= n_components < n_cells")
++
++    # Compute row and column normalization factors
++    sqrt_row_inv = np.where(row_sums > 0, 1.0 / np.sqrt(row_sums), 0.0)
++    col_sums = counts.sum(axis=0)
++    sqrt_col_inv = np.where(col_sums > 0, 1.0 / np.sqrt(col_sums), 0.0)
++
++    # Define linear operator for the normalized matrix N = D_r^{-1/2} @ X @ D_c^{-1/2}
++    def matvec(x):
++        # x: vector of length n_features
++        x_scaled = x * sqrt_col_inv
++        mid = counts @ x_scaled
++        return mid * sqrt_row_inv
++
++    def rmatvec(y):
++        # y: vector of length n_cells
++        y_scaled = y * sqrt_row_inv
++        mid = counts.T @ y_scaled
++        return mid * sqrt_col_inv
++
++    A = LinearOperator((n_cells, n_features), matvec=matvec, rmatvec=rmatvec)
++
++    # Compute truncated SVD
++    U, s, Vt = svds(A, k=n_components, random_state=random_state)
++
++    # svds may return singular values in ascending order; sort descending
++    idx = np.argsort(s)[::-1]
++    s = s[idx]
++    U = U[:, idx]
++
++    # Eigenvalues of the normalized similarity matrix are squared singular values
++    eigenvalues = s ** 2
++
++    return eigenvalues, U

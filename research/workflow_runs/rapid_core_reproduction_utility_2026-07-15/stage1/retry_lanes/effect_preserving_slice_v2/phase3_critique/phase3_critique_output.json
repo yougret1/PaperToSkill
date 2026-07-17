@@ -1,0 +1,135 @@
+{
+  "gap_closure_reject_check": {
+    "entries": [
+      {
+        "gap": "Under a limited initial budget, no retrieved frontier establishes that the observed low-fidelity score preserves the sign and ordering of paper interventions by the performance improvement they later produce on independently specified user tasks; a probe can therefore support the wrong go/no-go decision even when it is internally faithful.",
+        "main_pattern": "reframe_as_solvable_object",
+        "sub_pattern": "C00 (Reframe as a Solvable Object)",
+        "tactical_failure_mode_quoted": "The signature failure is treating the reframing as a mechanical wrapper: taking an established attribution, decomposition, or estimation tool and pointing it at a new input granularity, a new architecture, or a new domain without re-deriving why the resulting scores are faithful to the model. These papers supply the computation but not the justification — no causal validation that the identified components actually drive behavior (only correlation), no axiomatic or soundness argument for why the proposed definition is the 'real' importance, and no confound control, so a reviewer can point to a methodological artifact (a computation-granularity difference, a degenerate zero baseline, an off-manifold perturbation) that explains the result instead.",
+        "reject_lessons_evaluated": [
+          {
+            "lesson_quoted": "Pointing an off-the-shelf decomposition at a coarser input granularity without showing the coarser units preserve the signal reads as a wrapper, not a contribution.",
+            "candidate_match": "borderline",
+            "reasoning": "The final slice is effect-tested, but the atom rule 'one executable instruction or file region' and task-contract-role assignment lack a deterministic segmentation and tie-breaking procedure, so independent compilers may produce different locally irreducible atoms."
+          },
+          {
+            "lesson_quoted": "Porting a known attribution technique to a new architecture or domain while ignoring that technique's documented failure modes — and omitting comparisons to alternatives — leaves reviewers unable to see any unique benefit.",
+            "candidate_match": "borderline",
+            "reasoning": "The candidate preregisters Graph-of-Skills, SkillRAE, ClawTrace, random, and generic delta-debugging baselines, but degraded retrieval leaves behavior-preserving program reduction, prompt pruning, and statistical delta-debugging failure modes unresolved."
+          },
+          {
+            "lesson_quoted": "Proposing a new attribution definition without an axiomatic or causal argument for why it should count as ground-truth collapses the moment a reviewer asks why this is the real importance.",
+            "candidate_match": "no",
+            "reasoning": "Importance is operationalized against an eligible complete artifact's direct paired net effect and verified on untouched confirmation runs rather than by a post-hoc attribution score."
+          },
+          {
+            "lesson_quoted": "Conflating a methodological artifact — a computation-granularity difference, a degenerate zero baseline — with genuine signal undermines the entire premise once the confound is identified.",
+            "candidate_match": "yes",
+            "reasoning": "The full artifact must clear a beneficial lower bound, but no constraint requires 0 < epsilon < delta_min or epsilon below the sealed lower bound for Delta_tau(F), so a no-skill-equivalent empty or near-empty slice can still satisfy the effect-equivalence margin when epsilon is wide."
+          },
+          {
+            "lesson_quoted": "Building a suppression or privacy method without formalizing the threat model leaves the central guarantee unverifiable regardless of strong empirical numbers.",
+            "candidate_match": "no",
+            "reasoning": "The candidate is neither a suppression nor privacy method, and its certification scope, excluded components, margins, query budget, and failure outputs are explicitly stated."
+          },
+          {
+            "lesson_quoted": "Surveying or recombining fragmented methods without a unifying axis or a decisive controlled experiment yields a contribution reviewers dismiss as anecdotal.",
+            "candidate_match": "no",
+            "reasoning": "Cert_tau(S) is a single unifying object and the held-out paired experiment with sealed confirmation and direct compact-skill baselines is decisive rather than anecdotal."
+          }
+        ],
+        "verdict": "triggered"
+      },
+      {
+        "gap": "No retrieved frontier estimates net benefit after execution cost, adaptation effort, and regressions on task dimensions outside the paper's headline metric are deducted from gross performance gain.",
+        "main_pattern": "reframe_as_solvable_object",
+        "sub_pattern": "C00 (Reframe as a Solvable Object)",
+        "tactical_failure_mode_quoted": "The signature failure is treating the reframing as a mechanical wrapper: taking an established attribution, decomposition, or estimation tool and pointing it at a new input granularity, a new architecture, or a new domain without re-deriving why the resulting scores are faithful to the model. These papers supply the computation but not the justification — no causal validation that the identified components actually drive behavior (only correlation), no axiomatic or soundness argument for why the proposed definition is the 'real' importance, and no confound control, so a reviewer can point to a methodological artifact (a computation-granularity difference, a degenerate zero baseline, an off-manifold perturbation) that explains the result instead.",
+        "reject_lessons_evaluated": [
+          {
+            "lesson_quoted": "Pointing an off-the-shelf decomposition at a coarser input granularity without showing the coarser units preserve the signal reads as a wrapper, not a contribution.",
+            "candidate_match": "borderline",
+            "reasoning": "Effect preservation is checked end to end, but local irreducibility depends on underspecified executable-region boundaries and role assignments even though the candidate honestly limits its claim to the frozen atomization and dependency policy."
+          },
+          {
+            "lesson_quoted": "Porting a known attribution technique to a new architecture or domain while ignoring that technique's documented failure modes — and omitting comparisons to alternatives — leaves reviewers unable to see any unique benefit.",
+            "candidate_match": "borderline",
+            "reasoning": "Direct skill-compaction alternatives are named, yet the degraded collision pool cannot establish whether eligibility-gated statistical preservation is already standard in behavior-preserving reduction or prompt-pruning work."
+          },
+          {
+            "lesson_quoted": "Proposing a new attribution definition without an axiomatic or causal argument for why it should count as ground-truth collapses the moment a reviewer asks why this is the real importance.",
+            "candidate_match": "no",
+            "reasoning": "The cost-adjusted quantity is preregistered and causally anchored to paired F/B and S/B task outcomes with sealed confirmation."
+          },
+          {
+            "lesson_quoted": "Conflating a methodological artifact — a computation-granularity difference, a degenerate zero baseline — with genuine signal undermines the entire premise once the confound is identified.",
+            "candidate_match": "yes",
+            "reasoning": "Eligibility establishes that F is beneficial, but without a declared epsilon < delta_min or epsilon < LCB[Delta_tau(F)] relationship, equivalence can still certify a zero-effect subset and mislabel absence of the paper effect as preservation."
+          },
+          {
+            "lesson_quoted": "Building a suppression or privacy method without formalizing the threat model leaves the central guarantee unverifiable regardless of strong empirical numbers.",
+            "candidate_match": "no",
+            "reasoning": "This is an effect-preservation method with an explicit certification scope, not a suppression or privacy guarantee."
+          },
+          {
+            "lesson_quoted": "Surveying or recombining fragmented methods without a unifying axis or a decisive controlled experiment yields a contribution reviewers dismiss as anecdotal.",
+            "candidate_match": "no",
+            "reasoning": "The candidate unifies effect, cost, contract, and guardrails in Cert_tau(S) and commits to at least four genuinely new held-out paper-task pairs."
+          }
+        ],
+        "verdict": "triggered"
+      }
+    ],
+    "verdict": "triggered",
+    "reasoning": "Both reframe_as_solvable_object entries are driven by the exact lesson 'Conflating a methodological artifact — a computation-granularity difference, a degenerate zero baseline — with genuine signal undermines the entire premise once the confound is identified.' The beneficial-full gate is necessary but not sufficient: because the candidate never relates epsilon to delta_min or the sealed lower bound for Delta_tau(F), a zero-effect slice can remain inside the equivalence region; atomization reproducibility and unresolved reduction-family prior art add separate borderlines."
+  },
+  "recipe_application_check": {
+    "entries": [
+      {
+        "gap": "Under a limited initial budget, no retrieved frontier establishes that the observed low-fidelity score preserves the sign and ordering of paper interventions by the performance improvement they later produce on independently specified user tasks; a probe can therefore support the wrong go/no-go decision even when it is internally faithful.",
+        "sub_pattern": "C00 (Reframe as a Solvable Object)",
+        "tactical_pattern_quoted": "This cluster recasts an opaque transparency question about an already-trained model or dataset — which feature/datum/internal component is responsible, how uncertain a prediction is, what a hidden representation encodes — as a concrete measurement over a well-studied object: a manifold-constrained counterfactual optimization, a submodular subset selection, an expectation/estimator over marginal statistics, an additive decomposition into a (often sparse) basis, or an influence/Shapley score accumulated along the optimization trajectory. The decisive move is choosing the right unit of analysis and the right faithfulness constraint so the resulting scores reflect the model's actual computation rather than an off-distribution or post-hoc artifact — e.g., searching counterfactuals only on the learned data manifold, decomposing into monosemantic sparse directions before causal tracing, or embedding the explanatory predictors as the primary decision representation.",
+        "instantiation_in_core_mechanism": "C00 Steps 1, 2, 3, and 5 are explicit: M_tau and Cert_tau make responsibility precise, the problem becomes constrained subset selection, atomization and effect faithfulness are frozen, and sealed paired interventions certify the result. Step 4 is not substantively delivered because N=16, Q=24, frontier search, and generic delta-debugging backends cap work but provide no single compression or linearization trick with a proof that it preserves the target value; the recipe is therefore incomplete rather than bypassed wholesale."
+        ,"verdict": "borderline"
+      },
+      {
+        "gap": "No retrieved frontier estimates net benefit after execution cost, adaptation effort, and regressions on task dimensions outside the paper's headline metric are deducted from gross performance gain.",
+        "sub_pattern": "C00 (Reframe as a Solvable Object)",
+        "tactical_pattern_quoted": "This cluster recasts an opaque transparency question about an already-trained model or dataset — which feature/datum/internal component is responsible, how uncertain a prediction is, what a hidden representation encodes — as a concrete measurement over a well-studied object: a manifold-constrained counterfactual optimization, a submodular subset selection, an expectation/estimator over marginal statistics, an additive decomposition into a (often sparse) basis, or an influence/Shapley score accumulated along the optimization trajectory. The decisive move is choosing the right unit of analysis and the right faithfulness constraint so the resulting scores reflect the model's actual computation rather than an off-distribution or post-hoc artifact — e.g., searching counterfactuals only on the learned data manifold, decomposing into monosemantic sparse directions before causal tracing, or embedding the explanatory predictors as the primary decision representation.",
+        "instantiation_in_core_mechanism": "The second leg shares the same precise subset object, frozen units, direct effect/cost constraint, and sealed perturbation certificate, so C00 Steps 1-3 and 5 remain present. The hard N/Q caps and interchangeable local searches still do not instantiate Step 4's preservation-guaranteed compression move, and the net-benefit formulation does not repair that tactical omission."
+        ,"verdict": "borderline"
+      }
+    ],
+    "verdict": "borderline",
+    "reasoning": "Both entries execute four of C00's five moves, but neither supplies the card's load-bearing tractability device: a single compression or linearization whose preservation of the responsibility value is established. The discovery alpha schedule is arithmetically valid because sum_{q=1}^{24} 1/[q(q+1)]=24/25, and sealed Holm correction is meaningful, but the certificate does not state a global alpha_F+alpha_D+alpha_C bound or the exact three-seed eligibility interval construction."
+  },
+  "anti_pattern_check": {
+    "composition_set": [
+      "reframe_as_solvable_object"
+    ],
+    "matched_pattern_id": null,
+    "required_mitigation_quoted": null,
+    "mitigation_substantively_delivered": "n/a",
+    "reasoning": "Only reframe_as_solvable_object is used, so none of the three heterogeneous_decomposition compositions matches."
+  },
+  "paper_pointed_threat": {
+    "threat_paper_id": "arxiv:2604.23853v2",
+    "threat_source": "collision_hits",
+    "threat_channel": "signature",
+    "subsumption_argument": "ClawTrace already uses cost-attributed execution traces to compile preserve, prune, and repair skill patches and reports that rule types have different quality-regression behavior, making it the closest direct threat to EffectSlice's cost-aware procedural reduction claim. The retrieved evidence still classifies the relation as partial because it does not show a beneficial-full eligibility gate, sealed paired equivalence to the complete artifact, or corrected failed-removal certificates; Graph-of-Skills and SkillRAE are likewise partial dependency/compact-context neighbors rather than exact overlaps. Collision coverage is degraded and candidate-specific terms were not externally searched, so these partial hits cannot be used to infer that no exact behavior-preserving reduction ancestor exists.",
+    "addressable_via": "core_mechanism and differentiation_from_lit would need to isolate the certificate's incremental value over ClawTrace-style pruning on the same held-out tasks and close the epsilon-versus-full-effect and global-error-budget conditions before claiming a distinct method.",
+    "parametric_family_concern": "Behavior-preserving program reduction, statistical delta debugging, prompt pruning, and minimal-sufficient-rationale extraction; scoop-check 'behavior-preserving program reduction equivalence', 'statistical delta debugging noninferiority', and 'minimal sufficient prompt rationale'."
+  },
+  "falsification_structure_check": {
+    "minimal_experiment_named": "yes",
+    "outcome_metric_named": "yes",
+    "load_bearing_variable": "M_tau(S)=epsilon-sup{|g|: g in I_tau(S)}",
+    "negative_control_target": "outcome_metric",
+    "verdict": "sound",
+    "reasoning": "The paragraph specifies at least four genuinely new paper-task pairs, complete and compact-skill controls, and predicts sealed task-local effect equivalence with lower procedure count and cost. Permuting M_tau labels changes selection and predicts that the untouched-confirmation paired effect gap leaves the margin and moves toward the no-skill baseline, so the control targets downstream outcome rather than M_tau alone."
+  },
+  "verdict": "abandon",
+  "verdict_layer": "hard_floor",
+  "verdict_rationale": "The hard floor fires because gap_closure_reject_check.entries[0].reject_lessons_evaluated[3].lesson_quoted applies: full-effect eligibility does not exclude a degenerate zero slice unless epsilon is explicitly smaller than delta_min or the sealed beneficial-effect lower bound. recipe_application_check.entries[0].verdict is additionally borderline because C00's preservation-guaranteed tractability compression is absent, while atomization and the combined alpha budget remain underspecified. paper_pointed_threat.subsumption_argument finds only partial direct overlaps, and the 38 GPU-day/$5,500 upper-bound arithmetic is correct, but degraded coverage leaves behavior-preserving reduction ancestors unresolved and cannot override the hard floor.",
+  "revision_targets": []
+}

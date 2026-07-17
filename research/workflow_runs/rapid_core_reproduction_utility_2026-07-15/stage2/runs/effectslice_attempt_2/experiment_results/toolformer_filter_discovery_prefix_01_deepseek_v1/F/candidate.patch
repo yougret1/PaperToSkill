@@ -1,0 +1,48 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -12,5 +12,43 @@
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not isinstance(tau_filter, (int, float)):
++        raise ValueError("tau_filter must be a number")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
++    arrays = [logp_with_result, logp_call_only, logp_no_call]
++    for arr in arrays:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError("Input must be numpy array")
++        if arr.ndim != 2:
++            raise ValueError("Input must be 2D matrix")
++        if arr.size == 0:
++            raise ValueError("Input cannot be empty")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError("All values must be finite")
++        if np.any(arr > 0):
++            raise ValueError("All values must be nonpositive")
++    # Check shapes
++    shape = arrays[0].shape
++    for arr in arrays[1:]:
++        if arr.shape != shape:
++            raise ValueError("All input matrices must have same shape")
++    n_candidates, horizon = shape
++    # Compute normalized decreasing weights
++    t = np.arange(horizon)
++    raw_weights = np.maximum(0, 1 - 0.2 * t)
++    normalized_weights = raw_weights / raw_weights.sum()
++    # Compute weighted negative log probability losses
++    L_no_call = -np.sum(logp_no_call * normalized_weights, axis=1)
++    L_call_only = -np.sum(logp_call_only * normalized_weights, axis=1)
++    L_with_result = -np.sum(logp_with_result * normalized_weights, axis=1)
++    # Stronger counterfactual baseline
++    L_minus = np.minimum(L_no_call, L_call_only)
++    # Margin
++    margin = L_minus - L_with_result
++    # Keep condition
++    keep = margin >= tau_filter
++    return keep, margin

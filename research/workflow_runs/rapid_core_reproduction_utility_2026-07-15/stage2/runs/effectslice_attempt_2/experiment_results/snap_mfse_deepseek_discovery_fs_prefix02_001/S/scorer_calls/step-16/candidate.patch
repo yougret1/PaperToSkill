@@ -1,0 +1,47 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import svds
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,35 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    if not np.isfinite(counts).all() or np.any(counts < 0):
++        raise ValueError("counts must be finite and nonnegative")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("counts must not have all-zero rows")
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError(f"n_components must satisfy 1 <= n_components < {n_cells}")
++
++    # IDF scaling
++    df = np.count_nonzero(counts > 0, axis=0)
++    n = n_cells
++    idf = np.log(n / (1.0 + df))
++    X_idf = counts * idf
++
++    # Row normalization (L2)
++    row_norms = np.linalg.norm(X_idf, axis=1)
++    X_norm = X_idf / row_norms[:, np.newaxis]
++
++
++    # Truncated SVD of the normalized matrix (matrix-free)
++    U, s, Vt = svds(X_norm, k=n_components, random_state=random_state)
++    # svds returns singular values in descending order (or ascending? we sort)
++    idx = np.argsort(s)[::-1]
++    s = s[idx]
++    U = U[:, idx]
++    eigenvalues = s ** 2
++    eigenvectors = U
++
++    return eigenvalues, eigenvectors

@@ -1,0 +1,64 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++import scipy.sparse.linalg as sla
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,52 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    if not np.issubdtype(counts.dtype, np.floating):
++        counts = counts.astype(np.float64)
++    if np.any(np.isnan(counts)) or np.any(np.isinf(counts)) or np.any(counts < 0):
++        raise ValueError("counts must be finite and nonnegative")
++
++    n_cells, n_features = counts.shape
++    if n_components < 1 or n_components >= n_cells:
++        raise ValueError("n_components must be in [1, n_cells-1]")
++
++    row_sums = counts.sum(axis=1)
++    if np.any(row_sums == 0):
++        raise ValueError("all-zero rows not allowed")
++
++    # 1. IDF scaling
++    df = np.count_nonzero(counts > 0, axis=0)
++    idf = np.log(n_cells / (1.0 + df))
++    X = counts * idf
++
++    # 2. Row normalization to unit L2 norm
++    norm = np.linalg.norm(X, axis=1, keepdims=True)
++    X = X / norm
++
++    # 3. Compute degree vector matrix-free
++    X_T_ones = X.T @ np.ones(n_cells)
++    D = X @ X_T_ones - 1.0
++    if np.any(D <= 0):
++        raise ValueError("positive degrees required for normalization")
++
++    # 4. Precompute scaling factors
++    D_half_inv = np.sqrt(1.0 / D)
++    D_inv = 1.0 / D
++    X_tilde = X * D_half_inv[:, np.newaxis]
++
++    # 5. Define matrix-free operator M(v) = X_tilde @ (X_tilde.T @ v) - D_inv * v
++    def matvec(v):
++        return X_tilde @ (X_tilde.T @ v) - D_inv * v
++
++    M = sla.LinearOperator((n_cells, n_cells), matvec=matvec, dtype=np.float64)
++
++    # 6. Compute leading eigenpairs using Lanczos
++    eigenvalues, eigenvectors = sla.eigsh(M, k=n_components, which='LA')
++
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    return eigenvalues, eigenvectors
++

@@ -1,0 +1,65 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -10,6 +11,52 @@
+     n_components: int,
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+-    """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    """Return leading eigenpairs of the normalized cell similarity matrix.
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    The count Gram matrix and its symmetric degree normalization are applied
++    through matrix-vector products, without forming a cell-by-cell matrix.
++    """
++
++    x = np.asarray(counts, dtype=np.float64)
++    if x.ndim != 2:
++        raise ValueError("counts must be a two-dimensional matrix")
++    if not np.isfinite(x).all() or np.any(x < 0):
++        raise ValueError("counts must contain finite, nonnegative values")
++
++    n_cells = x.shape[0]
++    if (
++        isinstance(n_components, (bool, np.bool_))
++        or not isinstance(n_components, (int, np.integer))
++        or not 1 <= int(n_components) < n_cells
++    ):
++        raise ValueError("n_components must satisfy 1 <= n_components < n_cells")
++    if np.any(np.sum(x, axis=1) == 0):
++        raise ValueError("counts must not contain all-zero cell rows")
++
++    cell_degrees = np.sum(x, axis=1)
++    feature_degrees = np.sum(x, axis=0)
++    inv_sqrt_cell_degrees = 1.0 / np.sqrt(cell_degrees)
++    inv_feature_degrees = np.zeros_like(feature_degrees)
++    nonzero_features = feature_degrees > 0
++    inv_feature_degrees[nonzero_features] = 1.0 / feature_degrees[nonzero_features]
++
++    def matvec(vector: np.ndarray) -> np.ndarray:
++        scaled = inv_sqrt_cell_degrees * vector
++        projected = x.T @ scaled
++        return inv_sqrt_cell_degrees * (x @ (inv_feature_degrees * projected))
++
++    operator = LinearOperator(
++        (n_cells, n_cells),
++        matvec=matvec,
++        rmatvec=matvec,
++        dtype=np.float64,
++    )
++    rng = np.random.default_rng(random_state)
++    values, vectors = eigsh(
++        operator,
++        k=int(n_components),
++        which="LA",
++        v0=rng.standard_normal(n_cells),
++    )
++    order = np.argsort(values)[::-1]
++    return values[order], vectors[:, order]

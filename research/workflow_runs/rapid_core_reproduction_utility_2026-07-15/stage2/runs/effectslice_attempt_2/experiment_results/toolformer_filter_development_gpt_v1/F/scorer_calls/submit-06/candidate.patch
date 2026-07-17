@@ -1,0 +1,43 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,39 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    matrices = []
++    for value in (logp_with_result, logp_call_only, logp_no_call):
++        try:
++            matrix = np.asarray(value, dtype=float)
++        except (TypeError, ValueError, OverflowError) as exc:
++            raise ValueError("log probabilities must be real-valued matrices") from exc
++        if (
++            matrix.ndim != 2
++            or 0 in matrix.shape
++            or not np.isfinite(matrix).all()
++            or np.any(matrix > 0)
++        ):
++            raise ValueError("log probabilities must be finite, nonpositive, nonempty matrices")
++        matrices.append(matrix)
++
++    if any(matrix.shape != matrices[0].shape for matrix in matrices[1:]):
++        raise ValueError("log probability matrices must have matching shapes")
++
++    if isinstance(tau_filter, (bool, np.bool_)):
++        raise ValueError("tau_filter must be a finite nonnegative number")
++    try:
++        threshold = float(tau_filter)
++    except (TypeError, ValueError, OverflowError) as exc:
++        raise ValueError("tau_filter must be a finite nonnegative number") from exc
++    if not np.isfinite(threshold) or threshold < 0:
++        raise ValueError("tau_filter must be a finite nonnegative number")
++
++    horizon = matrices[0].shape[1]
++    weights = np.maximum(0.0, 1.0 - 0.2 * np.arange(horizon, dtype=float))
++    weights /= weights.sum()
++
++    loss_with_result, loss_call_only, loss_no_call = (
++        -(matrix @ weights) for matrix in matrices
++    )
++    margins = np.minimum(loss_no_call, loss_call_only) - loss_with_result
++    return margins >= threshold, margins

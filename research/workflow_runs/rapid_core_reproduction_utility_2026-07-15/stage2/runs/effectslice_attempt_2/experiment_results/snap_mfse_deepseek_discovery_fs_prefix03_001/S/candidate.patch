@@ -1,0 +1,63 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import eigsh, LinearOperator
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,51 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # --- Input validation ---
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2-D numpy array")
++    if not (1 <= n_components < counts.shape[0]):
++        raise ValueError(
++            f"n_components must satisfy 1 <= n_components < n_cells, got {n_components}"
++        )
++    if np.any(~np.isfinite(counts)) or np.any(counts < 0):
++        raise ValueError("counts must be finite and non-negative")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("counts contains all-zero cell rows")
++
++    n_cells, n_features = counts.shape
++
++    # --- IDF scaling (A01) ---
++    df = np.count_nonzero(counts, axis=0).astype(float)
++    idf = np.log(n_cells / (1.0 + df))
++    X = counts * idf
++
++    # --- Row normalization (A02) ---
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    X = X / row_norms
++
++    # --- Degrees (A03) ---
++    ones = np.ones(n_cells, dtype=X.dtype)
++    degree = X @ (X.T @ ones) - ones
++    eps = 1e-12
++    degree = np.maximum(degree, eps)
++    d_inv_sqrt = 1.0 / np.sqrt(degree)
++
++    # --- Matrix-free operator for D^{-1/2} W D^{-1/2} ---
++    def matvec(v: np.ndarray) -> np.ndarray:
++        t = d_inv_sqrt * v
++        u = X @ (X.T @ t) - t
++        return d_inv_sqrt * u
++
++    Op = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=X.dtype)
++
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells).astype(X.dtype)
++
++    # Compute largest algebraic eigenvalues
++    eigvals, eigvecs = eigsh(Op, k=n_components, which="LA", v0=v0)
++    idx = np.argsort(eigvals)[::-1]
++    eigvals = eigvals[idx]
++    eigvecs = eigvecs[:, idx]
++
++    return eigvals, eigvecs

@@ -1,0 +1,94 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[margin=1.55cm]{geometry}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{enumitem}
+\usepackage{fontspec}
+\usepackage[CJKmath=true]{xeCJK}
+% CJK main font is resolved at COMPILE time on the actual machine, not baked in at
+% generation time, so a .tex generated on one OS still renders on another (the older
+% Python-side probe hardcoded one OS's font name into the file and broke when moved).
+% Walk a cross-platform priority list and use the first font that exists; AutoFakeBold
+% + AutoFakeSlant give bold/italic CJK even on faces that ship no bold/italic cut.
+\newcommand{\setCJKto}[1]{\setCJKmainfont{#1}[AutoFakeBold=true,AutoFakeSlant=0.2]}
+\IfFontExistsTF{Noto Sans CJK SC}{\setCJKto{Noto Sans CJK SC}}{%        % Linux (fonts-noto-cjk); cross-platform if installed
+ \IfFontExistsTF{Source Han Sans SC}{\setCJKto{Source Han Sans SC}}{%   % Adobe 思源黑体; cross-platform
+  \IfFontExistsTF{PingFang SC}{\setCJKto{PingFang SC}}{%               % macOS 10.11+
+   \IfFontExistsTF{Hiragino Sans GB}{\setCJKto{Hiragino Sans GB}}{%    % older macOS
+    \IfFontExistsTF{Microsoft YaHei}{\setCJKto{Microsoft YaHei}}{%     % Windows
+     \IfFontExistsTF{WenQuanYi Micro Hei}{\setCJKto{WenQuanYi Micro Hei}}{% % older Linux
+      \setCJKto{Songti SC}}}}}}}                                       % macOS bottom fallback
+\definecolor{cblue}{HTML}{4C72B0}
+\setlength{\parskip}{3pt}\setlength{\parindent}{0pt}
+\setlist[enumerate]{topsep=2pt,itemsep=2pt,parsep=1pt,partopsep=0pt}
+\setlist[itemize]{topsep=2pt,itemsep=2pt,parsep=1pt,partopsep=0pt}
+% Let prose-embedded inline math break across lines and absorb small overflows, so simple
+% formulas inserted mid-sentence stop running past the right margin.
+\tolerance=1200
+\emergencystretch=2.5em
+\relpenalty=20
+\binoppenalty=40
+\hfuzz=1pt
+\begin{document}
+
+\section*{EffectSlice：任务局部过程效应的资格门控证书}
+\textbf{方法名称：} EffectSlice
+\section*{研究动机}
+系统能够复现论文，并不等于用户应该把整套流程搬到自己的任务里。完整流程可能从未带来净收益，删除的步骤也可能只在用户数据上起作用；如果把 GPU、API、人工成本和安全回退算进去，看似有效的方法甚至可能变成负收益。
+
+PaperBench 和 AutoReproduce 解决的是复现评测或复现自动化，A Framework for Evaluating Agentic Skills at Scale 评估完整 skill 的效用，近期系统还可以生成、追踪、检索或压缩 skill。仍然缺少的是针对一个独立指定任务的公平判定：先证明完整 skill 确实有用，再判断一个严格非空的子集能否保留同样的效果。
+
+EffectSlice 把这个判定做成明确的证书流程。它把过程编译为确定、可追溯到源码的原子，用 SCC 压缩精确保留依赖关系，再通过新的配对运行评估候选子集。只有当精简版本与完整版本的效应差处于 \(\epsilon \) 范围内，同时满足 contract、guardrail 以及全部保留单元删除邻居的校正检查时，系统才发证书。其他压缩方法的输出也经过同一扇门，因此最终给用户的是针对当前任务的采用、精简或弃权结论，而不是声称某个 reducer 普遍最好。
+\section*{方法}
+\subsection*{M1 资格门控}
+\emph{在精简前确认完整产物具有封存的任务局部正净效应。}
+\begin{enumerate}[leftmargin=*,start=1]
+  \item 在任何运行之前写出一份规范化的 JavaScript Object Notation(JSON) 清单。为每个任务样例分配稳定标识，记录不可变的输入引用、预期产物引用和权重；标明完整产物 F 与同脚手架基线 B；固定全部评分器、契约检查、防护规则、解析器和执行器的版本；用文字记录判定阈值与错误率分配规则；并分别列出资格、发现和确认阶段的随机种子标识。定义统一的统计接口，把按任务样例和随机种子配对的记录转换为完整产物效应估计、单侧下界、切片相对完整产物的区间以及校正后的通过或失败结果。【作者需决定：明确评分方向与汇总方式、每项契约和防护规则的谓词、缺失值处理、配对重采样单位、同时置信界方法，以及哪些判定属于同一错误率检验族。】按键排序并规范化路径和数值格式，再用安全散列算法 256 位(Secure Hash Algorithm 256-bit, SHA-256)散列清单及其引用的全部不可变文件；任何摘要变化或必填字段缺失都应停止执行。
+\par\emph{为什么：} 这样看到有利或不利结果后都不能移动判定规则。
+  \item 对每个封存的资格阶段随机种子与任务样例组合生成唯一 \(`pair_{id}`\)，并分别运行完整产物 F 和同脚手架基线 B 两个隔离分支。每次运行前重置可变状态，确保两个分支接收完全相同的任务输入和随机种子。记录产物摘要、评分器原始输入与输出、规范化主分数、每项契约结果、每项防护规则结果、执行状态和错误日志摘要。只按 \(`pair_{id}`\) 配对，拒绝缺失行、重复行、未登记重试或摘要不一致，并输出只追加的结果账本，证明每个组合恰好有一条有效 F 记录和一条有效 B 记录。
+\par\emph{为什么：} 只有先测量完整方法对用户任务的干预，精简才有参照。
+  \item 在每个 \(`pair_{id}`\) 内，按照评分器预先声明的方向，用完整产物 F 的分数减去基线 B 的分数，并保留任务样例权重，再把全部配对差值交给冻结的统计过程。此处首次得到完整产物的任务效应 \(\Delta _\tau (F)\)、其同时单侧下置信界 \(L_{F}\)，以及预注册最小收益 \(\delta _{min}\)。只有 \(L_{F}\) 严格高于 \(\delta _{min}\)，且全部经过校正的契约与防护规则都通过，才允许继续。输出记录应包含清单摘要、账本摘要、效应估计、下界、阈值、全部谓词判定及其证据行标识；否则返回 \(`\mathit{no\_validated\_beneficial\_effect}`\)，且不创建任何切片候选。
+\noindent\emph{仅当完整产物的成本调整效应下置信界 \(L_{F}\) 严格超过预注册最小收益 \(\delta _{min}\) 时，才允许继续切片。}
+\par\noindent{\small\ttfamily [eq~1, raw LaTeX, not typeset] L\_F = \textbackslash\{\}operatorname\{LCB\}\_\{1-\textbackslash\{\}alpha\_F\}\textbackslash\{\}!\textbackslash\{\}left(\textbackslash\{\}Delta\_\textbackslash\{\}tau(F)\textbackslash\{\}right) > \textbackslash\{\}delta\_\{\textbackslash\{\}min\}}
+\par\emph{为什么：} 完整产物无效时，任何子集都不能借它获得可信度。
+\end{enumerate}
+\subsection*{M2 精确过程对象}
+\emph{编译可审计源码单元，并通过精确依赖商图缩小可行候选族。}
+\begin{enumerate}[leftmargin=*,start=4]
+  \item 只依据显式结构解析固定版本的 SKILL.md：标题限定的叶级小节、列表项、围栏代码块和工具模板记录。每个 \(`source_{map}`\) 区段用文件摘要、精确字节区间和行区间表示；每个可执行区域用固定文件摘要、符号或模板标识及精确区间表示。把一个工作流叶节点、唯一相交的来源区段、唯一相交的可执行区域和一个契约角色组合成有序原子。原子标识由规范四元组的 SHA-256 摘要生成，并保存四个组成部分、来源顺序和各组件摘要。只能在显式文档或可执行边界处分割，不能因为语义相似而合并；任一组成部分缺失或不唯一时，返回 \(`ambiguous_{atomization}`\) 及全部冲突匹配。
+\par\emph{为什么：} 每个保留或删除的过程都能回溯并复现。
+  \item 为每个冻结原子建立一个图节点。若过程 u 显式声明需要过程 v、读取 v 产生的产物，或冻结执行器在运行完整产物时报告该依赖，就提出一条候选边。\(u\to v\) 表示缺少 v 的输出或可唯一归因于 v 的状态变化时，u 无法正确执行。用同一份保存的执行前状态重放 u：一次保留 v，另一次只屏蔽 v 及其可归因输出，同时固定其他全部前置条件。只有屏蔽后执行器请求 v、缺少必需输入或违反已声明契约时才保留该边。为每条边保存证据类型与两次重放摘要，合并重复证据；若无法单独隔离 v，或观测到的依赖没有对应生产者，则弃权。
+\par\emph{为什么：} 精简子集必须仍可执行，不能只在语义上看起来完整。
+  \item 在依赖图 G 上运行 Tarjan 算法，求出强连通分量(Strongly Connected Component, SCC)，也就是彼此形成循环依赖的一组过程。用分量内排好序的原子标识生成稳定的 SCC 标识，把分量之间的重复依赖合并成一条边，得到商图 D。对任意依赖闭合的原子子集，\(\Phi \) 返回其中完整包含的 SCC 标识；Union 则把 SCC 标识展开回原子。由于 D 最多含 16 个节点，枚举全部向下闭合子集，逐一检查展开再映射后标识不变、依赖仍闭合、物化产物摘要一致且执行器能解析全部依赖。只有两种表示解析为完全相同的原子集合和产物摘要时，才把 \(\Delta _{D}(T)\) 与 \(\Delta _{G}(Union(T))\) 视为同一测量结果；否则弃权。最终输出 D、成员映射、逆映射与验证账本；节点超过 16 个时返回 \(`\mathit{granularity\_out\_of\_scope}`\)。
+\noindent\emph{SCC 投影 \(\Phi \) 与逆映射 Union 在依赖闭合原子子集和商图向下闭合子集之间保持精确对应。}
+\par\noindent{\small\ttfamily [eq~2, raw LaTeX, not typeset] \textbackslash\{\}Phi(S)=\textbackslash\{\}\{C\textbackslash\{\}in\textbackslash\{\}operatorname\{SCC\}(G):C\textbackslash\{\}subseteq S\textbackslash\{\}\},\textbackslash\{\}quad \textbackslash\{\}operatorname\{Union\}(\textbackslash\{\}Phi(S))=S}
+\noindent\emph{商图压缩不改变子集对应的可行产物，也不改变其测得的任务效应 \(\Delta \)。}
+\par\noindent{\small\ttfamily [eq~3, raw LaTeX, not typeset] \textbackslash\{\}Delta\_D(T)=\textbackslash\{\}Delta\_G(\textbackslash\{\}operatorname\{Union\}(T))}
+\par\emph{为什么：} 它缩小搜索对象，却不改变哪些可执行产物能够被认证。
+  \item 令 N 为已验证商图 D 的 SCC 节点数，并把 Q 定义为最多 24 次已登记的候选与邻居检验。一个候选只有同时满足以下条件才有效：排好序的 SCC 集合非空；相对完整产物 F 至少删除一个 SCC；每个保留 SCC 的全部前置依赖也被保留；展开后的原子来源记录和摘要未变化；执行器能够解析；并通过全部静态契约检查。把最后 N 个检验序号只留给最终删除邻居，发现阶段只能使用前 \(Q- N\) 个序号。每个序号在只追加账本中恰好占一行，记录用途、假设标识、候选摘要、随机种子块和状态。未登记检验、序号复用、超额发现检验或占用邻居专用序号都应被拒绝。
+\par\emph{为什么：} 探索过程不能吃掉最终完整审计所需的预算。
+\end{enumerate}
+\subsection*{M3 切片准入}
+\emph{在不窥视新结果的前提下生成候选，并认证锁定且局部不可再减的切片。}
+\begin{enumerate}[leftmargin=*,start=8]
+  \item 通过统一适配器调用任意冻结的切片提出器。输入包括候选登记表摘要、已经公开的发现账本和提出器自身的冻结状态摘要；输出必须是一个排好序的 SCC 集合 \(T_{q}\)，并可附带提出过程记录。调用前先登记查询序号、新的配对随机种子块和预先分配的错误率份额，但不得透露新的 \(T_{q}\)、F、B 分支结果或评分器原始输出。用 第7步（令 N 为已验证商图 \(D\dots \)） 的候选谓词检查 \(T_{q}\)，散列提出器名称、版本、设置、状态、输入和输出，并在任何分支运行前追加提案记录。无效、重复、迟到或使用了未揭示结果的提案都会占用其登记序号并记为拒绝，不能悄悄换一个候选。
+\par\emph{为什么：} 候选生成与使用未知证据的准入判定保持分离。
+  \item 对已登记查询 q，在同一批新的 \(`pair_{id}`\) 上隔离运行 \(T_{q}\)、F 和 B，并沿用 第2步（对每个封存的资格阶段随机种子\(\dots \)） 的账本格式。此步骤首次定义切片相对完整产物的配对效应差 \(G_\tau (T_{q})\)、其同时置信区间 \(I_\tau (T_{q})\) 和发现裕量 \(M_\tau (T_{q})\)；只有整个区间严格落在半宽为 \(\epsilon \) 的等效带内，裕量才为正。按预注册的可预测序列分配本次查询的错误率 \(\alpha _{D,q}\)，看到结果后不得在完整产物、发现和确认三个检验族之间移动错误率。对每项契约和防护规则执行冻结的多重校正，并把 \(\eta _{j}\) 作为第 j 项防护规则的声明容差。保存支持该结论的配对行、估计值、区间端点、裕量、错误率分配、全部判定和校正元数据；仅当 \(M_\tau (T_{q})\) 严格为正且全部校正检查通过时保留 \(T_{q}\)。
+\noindent\emph{只有切片相对完整产物的效应差置信区间 \(I_\tau (T)\) 全部落入等效带时，发现裕量 \(M_\tau (T)\) 才为正。}
+\par\noindent{\small\ttfamily [eq~4, raw LaTeX, not typeset] G\_\textbackslash\{\}tau(T)=\textbackslash\{\}Delta\_\textbackslash\{\}tau(\textbackslash\{\}operatorname\{Union\}(T))-\textbackslash\{\}Delta\_\textbackslash\{\}tau(F),\textbackslash\{\}quad M\_\textbackslash\{\}tau(T)=\textbackslash\{\}epsilon-\textbackslash\{\}sup\_\{g\textbackslash\{\}in I\_\textbackslash\{\}tau(T)\}|g|}
+\noindent\emph{可预测的发现阶段分配与封存的检验族预算约束自适应重复查询，结果出现后不得重分配错误率。}
+\par\noindent{\small\ttfamily [eq~5, raw LaTeX, not typeset] \textbackslash\{\}alpha\_\{D,q\}=\textbackslash\{\}frac\{6\textbackslash\{\}alpha\_D\}\{\textbackslash\{\}pi\textasciicircum{}2q\textasciicircum{}2\},\textbackslash\{\}quad \textbackslash\{\}alpha\_F+\textbackslash\{\}alpha\_D+\textbackslash\{\}alpha\_C\textbackslash\{\}leq\textbackslash\{\}alpha\_\{\textbackslash\{\}mathrm\{total\}\}}
+\par\emph{为什么：} 选择依据是相对 F 的下游效应差，而不是内部紧凑度代理。
+  \item 用一个冻结的全序规则从通过发现阶段的候选中选择 \(T_{star}\)，并保存当时完整的发现账本快照和排序键。【作者需决定：明确排序首先偏好更少的保留 SCC、更大的发现裕量还是其他准则，并给出覆盖所有并列情况的确定性次序；该选择会改变被声称为不可再删的邻居检验族。】对 \(T_{star}\) 中每个保留 SCC c，删除 c 以及所有经任意依赖路径依赖 c 的保留 SCC，得到排除 c 后最大的依赖闭合子集。相同邻居子集可以去重，但必须保留它对应的全部原始 c 标识。用预留序号检验每个邻居，执行校正后的效应、契约和防护规则判定。每个保留 c 都必须映射到一个已检验且至少违反一项条件的邻居，否则返回证据不足弃权。输出 \(T_{star}\)、选择证据、完整的原子到邻居映射和全部判定行。
+\par\emph{为什么：} 存在未检查的删除时，证书不能声称某个保留过程是必要的。
+\end{enumerate}
+\subsection*{M4 封存比较}
+\emph{让对照与基线经过同一校正 gate，并在保留弃权的条件下报告 held-out 判定。}
+\begin{enumerate}[leftmargin=*,start=11]
+  \item 在读取未使用样本的结果之前，建立并封存确认假设账本 \(H_{C}\)，其中分别登记 F、B、\(T_{star}\)、全部已注册删除邻居、发现裕量置乱对照，以及 ClawTrace、Graph-of-Skills 和 SkillRAE 的每个冻结直接输出。所有紧凑产物都必须经过与 EffectSlice 相同的原子编译、依赖检查、来源有效性检查、执行器检查和契约检查。【作者需决定：为缺少精确来源或可执行区域记录的基线输出定义与方法无关的转换规则，并预先决定无法表示的输出是判为拒绝、计为弃权，还是按明确的适用性规则排除。】按照清单中封存的置乱映射，在每个配对发现块内打乱候选标签，但保持分支配对不变，并在确认前锁定对照产物。随后在从未使用的 \(`pair_{id}`\) 上重跑 \(H_{C}\) 的每一行，采用冻结的确认阶段校正规则。只有 F 仍具备资格、紧凑产物严格非空且小于 F、其切片相对完整产物区间落在等效带内、全部契约和防护规则通过，并且全部登记删除邻居都被拒绝时，才可准入。通过的 \(T_{star}\) 输出带全部标识摘要的 \(Cert_\tau \)；其他每一行都输出带原因码的校正拒绝或弃权。
+\par\emph{为什么：} 同一准入协议把证书效果与提出候选的 reducer 区分开。
+  \item 在恰好八个现有任务上完成开发后，为源码修订打标签，散列全部清单和可执行产物，禁止继续修改设置，并且只接收开发阶段从未出现过其标识和来源快照的论文---任务对清单。看到任何结果前，至少登记四个新论文---任务对。【作者需决定：明确合格论文---任务对的总体、选择或抽样规则、全部排除条件，以及不依赖本次结果的错误准入判定程序；否则留出评估率与错误准入率无法复现。】对每个新组合原样运行一次 第1步（在任何运行之前写出一份规范化\(\dots \)）--第11步（在读取未使用样本的结果之前），并追加一条终态记录，包含资格判定、原子化结果、商图大小、候选状态、确认结论、弃权原因和证据摘要。以全部已登记组合为分母，报告正确准入紧凑产物率、错误准入率和弃权率，并分别统计不具资格、有歧义、节点超过 16、空候选和检验名额不足的情况。公开每个组合的原因码，终态一旦出现就不得删除该组合。
+\par\emph{为什么：} 新任务与可见弃权能够检验判定是否超出开发样例仍然有用。
+\end{enumerate}
+\end{document}

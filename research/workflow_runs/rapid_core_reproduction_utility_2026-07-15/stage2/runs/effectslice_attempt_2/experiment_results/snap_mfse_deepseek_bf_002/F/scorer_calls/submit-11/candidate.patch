@@ -1,0 +1,67 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++import scipy.sparse.linalg as spla
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,54 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate input
++    if not isinstance(counts, np.ndarray):
++        raise ValueError("counts must be a numpy array")
++    if counts.ndim != 2:
++        raise ValueError("counts must be 2-dimensional")
++    # Convert integer to float
++    if np.issubdtype(counts.dtype, np.integer):
++        counts = counts.astype(np.float64)
++    if not np.issubdtype(counts.dtype, np.floating):
++        raise ValueError("counts must be numeric")
++    if not np.all(np.isfinite(counts)):
++        raise ValueError("counts contains nonfinite values")
++    if np.any(counts < 0):
++        raise ValueError("counts contains negative values")
++    n_cells, n_features = counts.shape
++    if not isinstance(n_components, int) or n_components < 1 or n_components >= n_cells:
++        raise ValueError("n_components must be an integer with 1 <= n_components < n_cells")
++    # Check all-zero rows
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("counts has at least one all-zero row")
++    # Step A01: IDF scaling
++    df = np.count_nonzero(counts > 0, axis=0).astype(np.float64)
++    idf = np.log(n_cells / (1.0 + df))
++    X = counts * idf[np.newaxis, :]
++    # Step A02: Row normalization to unit L2
++    row_norms = np.linalg.norm(X, axis=1)
++    if np.any(row_norms == 0):
++        raise ValueError("Row has zero norm after IDF scaling")
++    X = X / row_norms[:, np.newaxis]
++    # Step A03: Compute degree matrix-free
++    ones = np.ones(n_cells)
++    degree = X @ (X.T @ ones) - 1.0
++    if np.any(degree <= 0):
++        raise ValueError("Non-positive degree encountered")
++    D_inv = 1.0 / degree
++    D_minus_half = np.sqrt(D_inv)
++    # Step A04: Expose linear operator
++    X_tilde = X * D_minus_half[:, np.newaxis]
++    def matvec(v):
++        return X_tilde @ (X_tilde.T @ v) - D_inv * v
++    A = spla.LinearOperator((n_cells, n_cells), matvec=matvec, dtype=X.dtype)
++    # Set up random seed for v0
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells).astype(X.dtype)
++    v0 = v0 / np.linalg.norm(v0)
++    # Step A05: Leading spectral coordinates via Lanczos
++    eigenvalues, eigenvectors = spla.eigsh(A, k=n_components, which='LA', v0=v0)
++    # eigsh returns eigenvalues in ascending order; reverse to descending
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++    return eigenvalues, eigenvectors

@@ -1,0 +1,78 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import eigsh, LinearOperator
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,66 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    # Validation
++    if not isinstance(counts, np.ndarray):
++        raise ValueError("counts must be a numpy array")
++    if counts.ndim != 2:
++        raise ValueError("counts must be 2-dimensional")
++    if np.any(np.isnan(counts)) or np.any(np.isinf(counts)):
++        raise ValueError("counts contains nonfinite values")
++    if np.any(counts < 0):
++        raise ValueError("counts contains negative values")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    n_cells, n_features = counts.shape
++
++    # Check all-zero rows
++    if np.any(counts.sum(axis=1) == 0):
++        raise ValueError("counts contains all-zero rows")
++
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be between 1 and n_cells-1")
++
++    # A01: IDF scaling
++    df = np.count_nonzero(counts, axis=0)
++    idf = np.log(n_cells / (1.0 + df))
++    X = counts * idf
++
++    # A02: Row L2 normalization
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    if np.any(row_norms == 0):
++        raise ValueError("rows cannot be L2-normalized after IDF scaling")
++    X = X / row_norms
++
++    # A03: Degree vector without constructing W
++    ones_vec = np.ones(n_cells)
++    q = X.T @ ones_vec
++    d = X @ q - 1.0
++    if np.any(d <= 0):
++        raise ValueError("non-positive degrees encountered")
++
++    # A04: Build linear operator for normalized similarity
++    D_inv = 1.0 / d
++    D_inv_sqrt = np.sqrt(D_inv)
++    X_tilde = X * D_inv_sqrt[:, np.newaxis]
++
++    def matvec(v):
++        temp = X_tilde.T @ v
++        return X_tilde @ temp - D_inv * v
++
++    op = LinearOperator((n_cells, n_cells), matvec=matvec, rmatvec=matvec, dtype=X.dtype)
++
++    # Set initial vector for reproducibility
++    if random_state is not None:
++        rng = np.random.RandomState(random_state)
++        v0 = rng.randn(n_cells).astype(X.dtype)
++    else:
++        v0 = None
++
++    # A05: Compute leading eigenpairs with Lanczos
++    eigenvalues, eigenvectors = eigsh(op, k=n_components, which='LA', v0=v0)
++
++    # eigsh returns ascending order; reverse to descending
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    return eigenvalues, eigenvectors

@@ -1,0 +1,50 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, svds
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,37 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not np.isfinite(counts).all():
++        raise ValueError('Input contains nonfinite values')
++    if (counts < 0).any():
++        raise ValueError('Input contains negative values')
++    if (counts.sum(axis=1) == 0).any():
++        raise ValueError('Input contains all-zero cell rows')
++    n_cells = counts.shape[0]
++    if not (1 <= n_components < n_cells):
++        raise ValueError('n_components must be in [1, n_cells)')
++    # Compute row and column sums (degrees for bipartite normalization)
++    row_sums = counts.sum(axis=1).astype(float)
++    col_sums = counts.sum(axis=0).astype(float)
++    # Handle zero column sums safely: treat zero-degree features as absent
++    col_sums_inv = np.divide(1.0, col_sums, out=np.zeros_like(col_sums), where=col_sums > 0)
++    # Define matrix-vector product for S = D_r^{-1/2} X D_c^{-1} X^T D_r^{-1/2}
++    # Use random_state to seed a fixed initial vector for deterministic results
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells).astype(float)
++    def matvec(v):
++        temp = v / np.sqrt(row_sums)
++        temp2 = counts.T @ temp
++        temp3 = temp2 * col_sums_inv
++        temp4 = counts @ temp3
++        return temp4 / np.sqrt(row_sums)
++    shape = (n_cells, n_cells)
++    S = LinearOperator(shape, matvec=matvec, dtype=float)
++    # Compute leading eigenvalues and eigenvectors (largest magnitude)
++    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LM', v0=v0)
++    # Sort eigenvalues in descending order and reorder eigenvectors accordingly
++    idx = np.argsort(eigenvalues)[::-1]
++    eigenvalues = eigenvalues[idx]
++    eigenvectors = eigenvectors[:, idx]
++    return eigenvalues, eigenvectors

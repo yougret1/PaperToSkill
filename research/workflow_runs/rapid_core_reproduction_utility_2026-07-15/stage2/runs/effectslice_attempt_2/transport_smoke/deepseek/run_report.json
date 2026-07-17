@@ -1,0 +1,53 @@
+{
+  "schema_version": "0.1",
+  "evidence_boundary": "Direct provider endpoint diagnostic. A complete report proves the configured endpoint can return the tiny marker-contract response without using ai_scientist.llm. It does not complete the AI-Scientist-v2 LLM-client smoke, BFTS, or a live research task.",
+  "model": "deepseek-v4-flash",
+  "wire_api": "openai_chat_completions",
+  "attempted_models": [
+    {
+      "model": "deepseek-v4-flash",
+      "status": "blocked",
+      "detail": "empty response content"
+    }
+  ],
+  "base_url_env": "EFFECTSLICE_DEEPSEEK_BASE_URL",
+  "base_url": "https://api.deepseek.com",
+  "auth_env": "EFFECTSLICE_DEEPSEEK_API_KEY",
+  "api_key_present": true,
+  "max_tokens": 64,
+  "timeout_seconds": 60.0,
+  "started_at_unix": 1784180551,
+  "completed_at_unix": 1784180552,
+  "overall_status": "blocked_by_provider_or_model_availability",
+  "status_counts": {
+    "ready": 2,
+    "pending": 2,
+    "fail": 0
+  },
+  "checks": [
+    {
+      "id": "direct_probe_configuration",
+      "status": "ready",
+      "detail": "base_url_present=True; api_key_present=True",
+      "evidence": "EFFECTSLICE_DEEPSEEK_BASE_URL; EFFECTSLICE_DEEPSEEK_API_KEY"
+    },
+    {
+      "id": "direct_probe_response_saved",
+      "status": "pending",
+      "detail": "response_chars=0",
+      "evidence": "research\\workflow_runs\\rapid_core_reproduction_utility_2026-07-15\\stage2\\runs\\effectslice_attempt_2\\transport_smoke\\deepseek\\response.md"
+    },
+    {
+      "id": "direct_probe_error",
+      "status": "pending",
+      "detail": "deepseek-v4-flash: empty response content",
+      "evidence": "provider/model availability"
+    },
+    {
+      "id": "direct_probe_alias_attempt_1",
+      "status": "ready",
+      "detail": "deepseek-v4-flash: blocked; empty response content",
+      "evidence": "provider/model availability"
+    }
+  ]
+}

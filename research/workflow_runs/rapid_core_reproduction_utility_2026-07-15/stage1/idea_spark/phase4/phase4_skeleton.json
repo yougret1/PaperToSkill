@@ -1,0 +1,521 @@
+{
+  "title": "EffectSlice: Eligibility-Gated Certificates for Task-Local Procedural Effects",
+  "title_zh": "<TODO[title_zh]: Chinese translation; keep proper nouns and method acronyms in English>",
+  "method_name": "<TODO[method_name]: short handle for the proposed method, e.g. 'Persistent Baseline GRPO (PB-GRPO)'>",
+  "hook": "Once a complete paper-derived skill has a sealed positive net effect on one locked user task, a nonempty source-grounded slice may preserve that effect while executing fewer procedures. EffectSlice certifies only this task-local reduction and abstains when the full effect, units, statistical family, or complete neighbor audit is invalid.",
+  "abstract_draft": "<TODO[abstract_draft]: 150-250 words. Order: problem → bottleneck (cite ≥ 1 Phase 0 paper) → contribution (one sentence) → falsification prediction → expected outcome.>",
+  "motivation": {
+    "problem_framing": "<TODO[motivation.problem_framing]: 2-3 paragraphs framing the user's problem. Reference the bottleneck_statement from Phase 1 and the closest_adjacent papers. NOT a category label.>",
+    "why_now": "<TODO[motivation.why_now]: one paragraph on what makes this gap timely. Cite the most recent Phase 0 papers (within last 4-12 months) that get close but stop short.>",
+    "why_prior_stopped": [
+      {
+        "paper_id": "arxiv:2606.17819v1",
+        "venue_year": "<TODO[motivation.why_prior_stopped[0].venue_year]: venue + year for this paper_id (not in lit_results lookup)>",
+        "what_they_did": "<TODO[motivation.why_prior_stopped[0].what_they_did]: one sentence>",
+        "what_they_did_not_do": "<TODO[motivation.why_prior_stopped[0].what_they_did_not_do]: one sentence — the specific limit being lifted by the candidate>",
+        "structural_reason_they_stopped": "<TODO[motivation.why_prior_stopped[0].structural_reason_they_stopped]: one sentence — missing tool / missing assumption-relaxation / missing mechanism / missing measurement>"
+      },
+      {
+        "paper_id": "arxiv:2504.01848v3",
+        "venue_year": "<TODO[motivation.why_prior_stopped[1].venue_year]: venue + year for this paper_id (not in lit_results lookup)>",
+        "what_they_did": "<TODO[motivation.why_prior_stopped[1].what_they_did]: one sentence>",
+        "what_they_did_not_do": "<TODO[motivation.why_prior_stopped[1].what_they_did_not_do]: one sentence — the specific limit being lifted by the candidate>",
+        "structural_reason_they_stopped": "<TODO[motivation.why_prior_stopped[1].structural_reason_they_stopped]: one sentence — missing tool / missing assumption-relaxation / missing mechanism / missing measurement>"
+      },
+      {
+        "paper_id": "arxiv:2505.20662v4",
+        "venue_year": "<TODO[motivation.why_prior_stopped[2].venue_year]: venue + year for this paper_id (not in lit_results lookup)>",
+        "what_they_did": "<TODO[motivation.why_prior_stopped[2].what_they_did]: one sentence>",
+        "what_they_did_not_do": "<TODO[motivation.why_prior_stopped[2].what_they_did_not_do]: one sentence — the specific limit being lifted by the candidate>",
+        "structural_reason_they_stopped": "<TODO[motivation.why_prior_stopped[2].structural_reason_they_stopped]: one sentence — missing tool / missing assumption-relaxation / missing mechanism / missing measurement>"
+      },
+      {
+        "paper_id": "arxiv:2604.03964v1",
+        "venue_year": "<TODO[motivation.why_prior_stopped[3].venue_year]: venue + year for this paper_id (not in lit_results lookup)>",
+        "what_they_did": "<TODO[motivation.why_prior_stopped[3].what_they_did]: one sentence>",
+        "what_they_did_not_do": "<TODO[motivation.why_prior_stopped[3].what_they_did_not_do]: one sentence — the specific limit being lifted by the candidate>",
+        "structural_reason_they_stopped": "<TODO[motivation.why_prior_stopped[3].structural_reason_they_stopped]: one sentence — missing tool / missing assumption-relaxation / missing mechanism / missing measurement>"
+      }
+    ],
+    "what_changes_when_gap_closes": "<TODO[motivation.what_changes_when_gap_closes]: 2-3 sentences naming downstream consequences. NOT \"better numbers\" — name the specific capability or theoretical statement that becomes available>"
+  },
+  "core_claim": "<TODO[core_claim]: one sentence; should mirror the candidate's hook stripped to its load-bearing assertion>",
+  "sub_claims": "<TODO[sub_claims]: list of {id, statement, supports_which_aspect}; 2-4 entries>",
+  "key_equations": "<TODO[key_equations]: optional 3-6 equations; each {id, linked_step_id, latex, description, description_zh}. Emit [] (literal empty list) for a pure-prose candidate.>",
+  "method_flow": {
+    "high_level_pipeline": "<TODO[method_flow.high_level_pipeline]: 3-5 sentences narrating the method end-to-end as a story: input → key transformation → output>",
+    "steps": "<TODO[method_flow.steps]: derive from candidate.core_mechanism_steps; emit a list where each entry is {step_id, title, what_changes, why_this_step, linked_component, linked_falsification, input, output}. Each step_id MUST be S1, S2, ... in reading order. linked_component ∈ {theory, engineering, both}; linked_falsification ∈ {metric_specification, mechanism_distinguisher, both}.>",
+    "design_reasoning_echo": "<TODO[method_flow.design_reasoning_echo]: one paragraph echoing or condensing candidate.core_mechanism_reasoning>"
+  },
+  "plain_motivation_en": "<TODO[plain_motivation_en]: plain-language English rendering of motivation for a reader outside this subfield. Simplify LANGUAGE only — never drop the load-bearing mechanism. Spell out every abbreviation on first use.>",
+  "plain_motivation_zh": "<TODO[plain_motivation_zh]: Chinese 普通版 counterpart. Same content; keep identifiers/symbols/acronyms in English.>",
+  "plain_method_steps_en": "<TODO[plain_method_steps_en]: list of {step_id, what_to_do, why_this_makes_sense}; SAME step_ids and SAME order as method_flow.steps.>",
+  "plain_method_steps_zh": "<TODO[plain_method_steps_zh]: Chinese 普通版 counterpart; English for identifiers/symbols/acronyms.>",
+  "plain_method_modules_en": "<TODO[plain_method_modules_en]: group the CONTRIBUTION steps into named modules; list of {module_id, purpose_oneline, step_ids}.>",
+  "plain_method_modules_zh": "<TODO[plain_method_modules_zh]: Chinese 普通版 counterpart.>",
+  "falsification_prediction": "After development on the existing eight tasks, freeze the parser, atomization, quotient, eligibility rule, margins, alpha families, Q ledger, search worker, and budgets, then acquire at least four genuinely new paper-task pairs with untouched source maps, complete artifacts, assets, and scorers; run EffectSlice and direct ClawTrace, Graph-of-Skills, and SkillRAE baselines under matched task and branch budgets. Among held-out pairs whose F has sealed L_F>delta_min, a successful mechanism should increase the rate of nonempty compact artifacts whose untouched-confirmation paired effect gap remains inside [-epsilon,epsilon] with no corrected contract or guardrail failure, while reducing original procedure count and measured local cost relative to F; all abstentions remain in the denominator. The single load-bearing variable is M_tau(T)=epsilon-sup{|g|:g in I_tau(T)}. As a negative control, permute discovery M_tau labels among same-size contract-passing candidates before selection and evaluate the selected candidate on untouched confirmation seeds; its downstream paired effect gap should leave [-epsilon,epsilon] and move toward the no-skill baseline more often than for the unpermuted worker.",
+  "compute_budget": "Upper-bound campaign: 12 tasks total (8 development plus at least 4 genuinely new held-out), N<=16 SCC atoms, Q=24 distinct slice hypotheses including at most Q-N=8 adaptive discovery candidates and up to N=16 final deletion neighbors, two fresh paired discovery seeds per T/F/B branch, three sealed F/B eligibility seeds, and five confirmation seeds for F, B, T_star, up to 16 deletion neighbors, the M_tau-permuted control, and three direct baselines. This is at most 48 discovery + 6 eligibility + 115 confirmation = 169 branch-runs per task, or 2,028 branch-runs total; at preregistered caps of 0.25 GPU-hour and $1.50 API per branch plus a 15% rerun reserve, the full upper bound is 24.3 GPU-days on 80GB-class GPUs + $3,500 API, with deterministic parsing and SCC construction charged as CPU-only. If the pilot exceeds either per-branch cap, or Q cannot include every final neighbor, the run returns budget_infeasible or insufficient_query_budget rather than reducing seeds or hypotheses after outcomes.",
+  "almost_prior_paper_id": "arxiv:2604.23853v2",
+  "almost_prior_venue_year": "",
+  "what_step_was_missed": "ClawTrace would have needed to establish the complete skill's sealed positive cost-adjusted effect on an independently locked task, compile every retained unit by a deterministic four-way source rule, and confirm that a strict nonempty subset preserves that effect while every registered retained-unit deletion fails under one preregistered error family.",
+  "feasibility_validation": {
+    "compute": {
+      "verdict": "feasible",
+      "rationale": "GPU line ≈ 24.3 vs 50 GPU-day (49%) → feasible; API line ≈ $3,500 vs $10,000 (35%) → feasible. Overall (worse line) → feasible."
+    },
+    "data": {
+      "verdict": "<TODO[feasibility_validation.data.verdict]: feasible | tight | infeasible>",
+      "rationale": "<TODO[feasibility_validation.data.rationale]: one sentence: required data sources accessible; if any closed/private, name a public substitute>"
+    },
+    "theoretical": {
+      "verdict": "<TODO[feasibility_validation.theoretical.verdict]: feasible | tight | infeasible | n/a (only when the candidate has no theoretical contribution)>",
+      "rationale": "<TODO[feasibility_validation.theoretical.rationale]: one sentence; if tight, name the missing prerequisite>"
+    },
+    "engineering": {
+      "verdict": "<TODO[feasibility_validation.engineering.verdict]: feasible | tight | infeasible | n/a (only when the candidate has no engineering contribution)>",
+      "rationale": "<TODO[feasibility_validation.engineering.rationale]: one sentence; if tight, name the binding implementation cost>"
+    },
+    "falsification": {
+      "verdict": "<TODO[feasibility_validation.falsification.verdict]: feasible | tight | infeasible>",
+      "rationale": "<TODO[feasibility_validation.falsification.rationale]: one sentence: the falsification_prediction experiment is concrete enough to run with available tooling>"
+    },
+    "overall": "<TODO[feasibility_validation.overall]: feasible | tight | infeasible>"
+  },
+  "differentiation_from_lit": [
+    {
+      "paper_id": "arxiv:2604.23853v2",
+      "venue_year": "",
+      "delta": "Abstract-level evidence indicates ClawTrace attributes per-step cost and compiles preserve, prune, and repair patches; its frozen direct output and EffectSlice's frozen worker output are instead passed through the identical beneficial-F, atom/source-validity, and sealed H_C gate, making the testable delta the correctly admitted nonempty compact-artifact rate and false-admission rate at matched branch budgets, while degraded collision coverage leaves behavior-preserving program reduction and statistical delta debugging unresolved."
+    },
+    {
+      "paper_id": "arxiv:2604.05333v3",
+      "venue_year": "",
+      "delta": "Abstract-level evidence indicates Graph-of-Skills retrieves dependency-complete bundles under a context budget; its frozen direct bundle and EffectSlice's frozen worker output are passed through the identical beneficial-F, atom/source-validity, and sealed H_C gate, making the testable delta the correctly admitted nonempty compact-artifact rate and false-admission rate at matched branch budgets rather than graph machinery, with no novelty inference from the degraded collision pool."
+    },
+    {
+      "paper_id": "semanticscholar:bd91da9d56398d541c2210e1dc3dfbd3ce6845fd",
+      "venue_year": "",
+      "delta": "Abstract-level evidence indicates SkillRAE compiles compact grounded execution context with evidence rescue; its frozen direct context and EffectSlice's frozen worker output are passed through the identical beneficial-F, atom/source-validity, and sealed H_C gate, making the testable delta the correctly admitted nonempty compact-artifact rate and false-admission rate at matched branch budgets, while degraded collision coverage prevents treating absent older reduction work as evidence of novelty."
+    },
+    {
+      "paper_id": "arxiv:2606.17819v1",
+      "venue_year": "",
+      "delta": "A Framework for Evaluating Agentic Skills at Scale measures with-skill utility on tasks synthesized from the evaluated skill, whereas EffectSlice conditions on an independently supplied user task, first requires positive cost-adjusted utility from the complete artifact, and then tests preservation by a strict nonempty subset."
+    }
+  ],
+  "reviewer_concerns_and_responses": [
+    {
+      "attack": "Paper-pointed threat: arxiv:2604.23853v2 (collision_hits). ClawTrace already performs cost-aware tracing and compiles preserve, prune, and repair patches for agent skills, so procedure pruning, cost attribution, and quality-aware compact skill construction are not available as EffectSlice novelty. The overlap is partial rather than exact because the retrieved abstract does not show a positive-full-effect eligibility gate, deterministic source atoms, sealed equivalence to F, or corrected retained-deletion evidence; nevertheless, because EffectSlice makes the search backend interchangeable and disclaims the reduction machinery, its claim stands or falls on whether the eligibility-and-certificate layer yields a distinct held-out decision advantage when ClawTrace, Graph-of-Skills, and SkillRAE outputs are submitted to the same sealed test.",
+      "severity": "non_blocking",
+      "response": "<TODO[reviewer_concerns_and_responses[0].response]: 2-3 sentences: explain where in the candidate (which field) the defense is anchored; reference the Phase 3.2 verdict_rationale when relevant>",
+      "fields_changed_to_address": [
+        "core_mechanism",
+        "core_mechanism",
+        "differentiation_from_lit"
+      ]
+    },
+    {
+      "attack": "Un-retrieved mechanism family flagged by the audit (parametric knowledge, not in the retrieved pool): Collision coverage is explicitly degraded: behavior-preserving program reduction / statistical delta debugging remains an unresolved older family; a scoop-check should query 'behavior-preserving program reduction' and 'statistical delta debugging with equivalence tests' before investment. — novelty vs this family is UNVERIFIED; run a targeted scoop-check on that vocabulary before investing.",
+      "severity": "non_blocking",
+      "response": "<TODO[reviewer_concerns_and_responses[1].response]: 1-2 sentences: state what a scoop-check on the named family must establish for the candidate's delta to survive (do NOT claim the check already passed)>",
+      "fields_changed_to_address": [
+        "core_mechanism",
+        "core_mechanism",
+        "differentiation_from_lit"
+      ]
+    }
+  ],
+  "domain_landscape": {
+    "n_papers": 27,
+    "pattern_distribution": [
+      {
+        "pattern_id": "assumption_audit_and_pivot",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "architectural_operator_substitution",
+        "count": 4,
+        "share": 0.15,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "generative_process_redesign",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "controlled_diagnostic_design",
+        "count": 5,
+        "share": 0.19,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "unify_into_shared_representation",
+        "count": 7,
+        "share": 0.26,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "reframe_as_solvable_object",
+        "count": 10,
+        "share": 0.37,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "self_supervised_signal_engineering",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "structural_prior_encoding",
+        "count": 14,
+        "share": 0.52,
+        "saturation_band": "saturated"
+      },
+      {
+        "pattern_id": "algebraic_equivalence_unification",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "heterogeneous_decomposition",
+        "count": 11,
+        "share": 0.41,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "decompose_and_delegate",
+        "count": 9,
+        "share": 0.33,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "relax_discrete_search_to_continuous",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "adapt_via_conditioning",
+        "count": 4,
+        "share": 0.15,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "characterize_limit_then_surpass",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "targeted_self_supervised_objective",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      }
+    ],
+    "candidate_uses": [
+      {
+        "pattern_id": "reframe_as_solvable_object",
+        "role": "closes Gap 1",
+        "sub_pattern_id": "C00 (Reframe as a Solvable Object)",
+        "saturation_in_domain": "mid_frequency"
+      },
+      {
+        "pattern_id": "reframe_as_solvable_object",
+        "role": "closes Gap 2",
+        "sub_pattern_id": "C00 (Reframe as a Solvable Object)",
+        "saturation_in_domain": "mid_frequency"
+      }
+    ],
+    "position_note": "<TODO[domain_landscape.position_note]: one sentence describing how the candidate's chosen patterns sit relative to the area's pattern usage; descriptive, not prescriptive>"
+  },
+  "literature_breakdown": {
+    "summary": {
+      "n_phase0_total": 33,
+      "n_phase0_on_topic": 27,
+      "n_phase0_outside_taxonomy": 6,
+      "n_phase3_collision": 7
+    },
+    "phase0_by_pattern": [
+      {
+        "pattern_id": "controlled_diagnostic_design",
+        "pattern_name": "Design a Confound-Isolating Diagnostic",
+        "papers": [
+          {
+            "paper_id": "arxiv:2504.01848v3",
+            "title": "PaperBench: Evaluating AI's Ability to Replicate AI Research",
+            "venue_year": "arXiv 2025-04",
+            "bottleneck_targeted": "Agent research-replication ability lacked an execution-verified, granular evaluation that separates code development, successful execution, and result matching."
+          },
+          {
+            "paper_id": "arxiv:2409.11363v2",
+            "title": "CORE-Bench: Fostering the Credibility of Published Research Through a Computational Reproducibility Agent Benchmark",
+            "venue_year": "arXiv 2024-09",
+            "bottleneck_targeted": "Agent benchmarks did not isolate progressively harder components of real computational reproducibility across code execution, dependency setup, result retrieval"
+          },
+          {
+            "paper_id": "arxiv:2606.17819v1",
+            "title": "A Framework for Evaluating Agentic Skills at Scale",
+            "venue_year": "arXiv 2026-06",
+            "bottleneck_targeted": "Fixed task suites cannot estimate an arbitrary skill's marginal effect, distinguish instruction adherence from goal completion, or expose model- and task-specif"
+          },
+          {
+            "paper_id": "arxiv:2605.14517v1",
+            "title": "Dimension-Level Intent Fidelity Evaluation for Large Language Models: Evidence from Structured Prompt Ablation",
+            "venue_year": "arXiv 2026-05",
+            "bottleneck_targeted": "Holistic scores can conceal dimension-level intent deficits and cannot distinguish default recoverability, prior inferability, or tolerance to different degrees"
+          },
+          {
+            "paper_id": "arxiv:2604.23853v2",
+            "title": "ClawTrace: Cost-Aware Tracing for LLM Agent Skill Distillation",
+            "venue_year": "arXiv 2026-04",
+            "bottleneck_targeted": "Skill distillation lacks per-step cost attribution, while aggregate evaluation hides divergent effects of preserve, prune, and repair rules."
+          }
+        ]
+      },
+      {
+        "pattern_id": "decompose_and_delegate",
+        "pattern_name": "Decompose and Delegate to Solvers",
+        "papers": [
+          {
+            "paper_id": "arxiv:2607.02703v1",
+            "title": "LLMoxie: Exploring Agentic AI for Scientific Software Development",
+            "venue_year": "arXiv 2026-07",
+            "bottleneck_targeted": "Generic coding agents are poorly calibrated to scientific-software conventions, sensitive data, reproducibility, citation, and auditable decision trails."
+          },
+          {
+            "paper_id": "arxiv:2605.21825v1",
+            "title": "Toward AI VIS Co-Scientists: A General and End-to-End Agent Harness for Solving Complex Data Visualization Tasks",
+            "venue_year": "arXiv 2026-05",
+            "bottleneck_targeted": "Domain experts need end-to-end visual-analysis applications but lack time and specialized expertise across analysis, design, implementation, and validation."
+          },
+          {
+            "paper_id": "arxiv:2506.06972v1",
+            "title": "Atomic Reasoning for Scientific Table Claim Verification",
+            "venue_year": "arXiv 2025-06",
+            "bottleneck_targeted": "Models fail at fine-grained scientific-table claim verification because dense claims impose high cognitive load and require multiple distinct reasoning operatio"
+          },
+          {
+            "paper_id": "semanticscholar:529853339c7ed42ae10c674c787d697d60b1ece1",
+            "title": "DeepReviewer 2.0: A Traceable Agentic System for Auditable Scientific Peer Review",
+            "venue_year": "arXiv 2026-03",
+            "bottleneck_targeted": "Fluent review text is insufficient when reviewers need localized evidence, auditable concerns, and concrete follow-up actions under coverage constraints."
+          }
+        ]
+      },
+      {
+        "pattern_id": "heterogeneous_decomposition",
+        "pattern_name": "Decompose for Differentiated Treatment",
+        "papers": [
+          {
+            "paper_id": "arxiv:2605.23989v1",
+            "title": "Towards trustworthy agentic AI: a comprehensive survey of safety, robustness, privacy, and system security",
+            "venue_year": "arXiv 2026-05",
+            "bottleneck_targeted": "Trustworthy-agent evaluation lacks a workflow-aligned organization of safety, robustness, privacy, system-security risks, mitigations, and release metrics."
+          },
+          {
+            "paper_id": "arxiv:2606.20873v1",
+            "title": "SciLens: Multi-modal Scientific Claim Verification with Agentic Entailment and Grounding",
+            "venue_year": "arXiv 2026-06",
+            "bottleneck_targeted": "Direct binary vision-language judgments cannot reliably verify claims combining numbers, comparisons, qualifiers, tables, and figures with different grounding s"
+          },
+          {
+            "paper_id": "semanticscholar:689372ecd072c3122b804ae10fbf68b5aa0a06b1",
+            "title": "Dynamic Agent Skills: A Lifecycle Survey and Taxonomy of Evolving Skill Libraries",
+            "venue_year": "arXiv 2026-07",
+            "bottleneck_targeted": "Incompatible meanings of skill and static evaluation obscure how reusable procedure libraries are proposed, verified, stored, retrieved, repaired, governed, and"
+          }
+        ]
+      },
+      {
+        "pattern_id": "reframe_as_solvable_object",
+        "pattern_name": "Reframe as a Solvable Object",
+        "papers": [
+          {
+            "paper_id": "arxiv:2604.18752v2",
+            "title": "A Scientific Human-Agent Reproduction Pipeline",
+            "venue_year": "arXiv 2026-04",
+            "bottleneck_targeted": "Reproducing scientific analyses is costly and under-rewarded despite being expressible as translation from human-readable papers and documentation into executab"
+          },
+          {
+            "paper_id": "arxiv:2603.10028v1",
+            "title": "How to Count AIs: Individuation and Liability for AI Agents",
+            "venue_year": "arXiv 2026-02",
+            "bottleneck_targeted": "Copying, splitting, merging, and swarming agents make stable identity and assignment of human liability difficult."
+          },
+          {
+            "paper_id": "arxiv:2509.06917",
+            "title": "Paper2Agent: Reimagining Research Papers As Interactive and Reliable AI Agents",
+            "venue_year": "arXiv 2025-09",
+            "bottleneck_targeted": "Static papers and linked repositories leave users to discover, install, configure, and manually adapt computational methods before they can apply them to new da"
+          },
+          {
+            "paper_id": "arxiv:2604.24658v3",
+            "title": "The Last Human-Written Paper: Agent-Native Research Artifacts",
+            "venue_year": "arXiv 2026-04",
+            "bottleneck_targeted": "Narrative publication discards branching failures and separates reviewer-sufficient prose from agent-sufficient operational specification, forcing agents to rev"
+          },
+          {
+            "paper_id": "arxiv:2604.05333v3",
+            "title": "Graph-of-Skills: Dependency-Aware Structural Retrieval for Massive Agent Skills",
+            "venue_year": "arXiv 2026-04",
+            "bottleneck_targeted": "Full skill loading exceeds context budgets, while semantic top-k retrieval omits prerequisite dependencies and yields execution-incomplete bundles."
+          },
+          {
+            "paper_id": "semanticscholar:9517ca9bc41baa3f2ecbe48ea15679e3b11ed381",
+            "title": "Evergreen: Efficient Claim Verification for Semantic Aggregates",
+            "venue_year": "arXiv 2026-04",
+            "bottleneck_targeted": "Natural-language semantic aggregates can contain unsupported quantified or comparative claims whose source relations exceed model context and are expensive to v"
+          },
+          {
+            "paper_id": "semanticscholar:66c14be05ea44f4612870eafe4dfa101d261538d",
+            "title": "Post-Document Science: From Static Narratives to Intelligent Objects",
+            "venue_year": "Standards 2026",
+            "bottleneck_targeted": "Static narratives limit reproducibility, machine accessibility, validation, and cumulative integration of computational research."
+          },
+          {
+            "paper_id": "arxiv:2605.03353v4",
+            "title": "SkCC: Portable and Secure Skill Compilation for Cross-Framework LLM Agents",
+            "venue_year": "arXiv 2026-05",
+            "bottleneck_targeted": "Format-sensitive frameworks make the same skill nonportable, require per-framework rewrites, and expose inconsistent security behavior."
+          },
+          {
+            "paper_id": "semanticscholar:ba79cf58412756ed2f2385e3fcc1ae536faf92c0",
+            "title": "SkillFlow: Scalable and Efficient Agent Skill Retrieval System",
+            "venue_year": "arXiv 2025-04",
+            "bottleneck_targeted": "Loading large skill libraries raises cost and degrades performance, while agents need selective access to relevant executable capabilities."
+          },
+          {
+            "paper_id": "semanticscholar:bd91da9d56398d541c2210e1dc3dfbd3ce6845fd",
+            "title": "SkillRAE: Agent Skill-Based Context Compilation for Retrieval-Augmented Execution",
+            "venue_year": "arXiv 2026-05",
+            "bottleneck_targeted": "Skill retrieval alone does not organize selected evidence into compact, grounded, immediately usable context for downstream execution."
+          }
+        ]
+      },
+      {
+        "pattern_id": "structural_prior_encoding",
+        "pattern_name": "Encode Structure by Construction",
+        "papers": [
+          {
+            "paper_id": "arxiv:2603.17419v1",
+            "title": "Caging the Agents: A Zero Trust Security Architecture for Autonomous AI in Healthcare",
+            "venue_year": "arXiv 2026-03",
+            "bottleneck_targeted": "Production agents with broad privileges expose credentials, data, execution, network, prompt, and fleet-level attack surfaces in healthcare."
+          },
+          {
+            "paper_id": "arxiv:2505.20662v4",
+            "title": "AutoReproduce: Automatic AI Experiment Reproduction with Paper Lineage",
+            "venue_year": "ACL 2025",
+            "bottleneck_targeted": "Research papers omit domain conventions and implementation details needed for executable end-to-end reproduction, while prior automation addresses only isolated"
+          }
+        ]
+      },
+      {
+        "pattern_id": "unify_into_shared_representation",
+        "pattern_name": "Unify Heterogeneous Inputs into One Space",
+        "papers": [
+          {
+            "paper_id": "arxiv:2604.03964v1",
+            "title": "SKILLFOUNDRY: Building Self-Evolving Agent Skill Libraries from Heterogeneous Scientific Resources",
+            "venue_year": "arXiv 2026-04",
+            "bottleneck_targeted": "Scientific procedural knowledge is fragmented across heterogeneous resources and cannot be directly retrieved, executed, validated, or composed as reliable agen"
+          },
+          {
+            "paper_id": "arxiv:2606.09316v3",
+            "title": "Anything2Skill: Compiling External Knowledge into Reusable Skills for Agents",
+            "venue_year": "arXiv 2026-06",
+            "bottleneck_targeted": "RAG exposes fragmented declarative evidence but repeatedly leaves agents to reconstruct invocation conditions, action sequences, constraints, and outputs at tas"
+          },
+          {
+            "paper_id": "arxiv:2606.29538v2",
+            "title": "RESOURCE2SKILL: Distilling Executable Agent Skills from Human-Created Multimodal Resources",
+            "venue_year": "arXiv 2026-06",
+            "bottleneck_targeted": "Text-only and trace-derived skill libraries miss temporal operations, visual effects, and tacit design choices contained in tutorial videos and other multimodal"
+          }
+        ]
+      }
+    ],
+    "phase0_outside_taxonomy": [
+      {
+        "paper_id": "arxiv:2603.28944v2",
+        "title": "Faith in AI can narrow the futures individuals consider",
+        "venue_year": "arXiv 2026-03",
+        "bottleneck_targeted": "The study examines whether perceived AI predictive authority changes how people reason about their own future actions."
+      },
+      {
+        "paper_id": "arxiv:2601.16513v1",
+        "title": "Competing Visions of Ethical AI: A Case Study of OpenAI",
+        "venue_year": "arXiv 2026-01",
+        "bottleneck_targeted": "The study maps how one organization frames ethics, safety, alignment, and risk across public and academic discourse."
+      },
+      {
+        "paper_id": "arxiv:2604.00187v2",
+        "title": "Explainable AI for Blind and Low-Vision Users: Navigating Trust, Modality, and Interpretability in the Agentic Era",
+        "venue_year": "arXiv 2026-03",
+        "bottleneck_targeted": "Predominantly visual explanations prevent blind and low-vision users from forming reliable expectations about multi-step agent behavior."
+      },
+      {
+        "paper_id": "arxiv:2607.04282v1",
+        "title": "The New Shape of Search: How Conversational AI Recomposes Information Seeking",
+        "venue_year": "arXiv 2026-07",
+        "bottleneck_targeted": "Query-level analyses miss how conversational assistants reshape complete information-seeking episodes, verification, and transitions among search and browsing."
+      },
+      {
+        "paper_id": "arxiv:2607.03223v1",
+        "title": "Round-Trip Mutation Testing",
+        "venue_year": "arXiv 2026-07",
+        "bottleneck_targeted": "Not classified from title and arXiv metadata alone; no matching record or abstract appears in the permitted local artifacts."
+      },
+      {
+        "paper_id": "arxiv:2605.19362v2",
+        "title": "Toward User Comprehension Supports for LLM Agent Skill Specifications",
+        "venue_year": "arXiv 2026-05",
+        "bottleneck_targeted": "Existing skill audits emphasize maliciousness but do not measure whether specifications support bounded user expectations about inputs, outputs, and coverage."
+      }
+    ],
+    "phase3_collision": [
+      {
+        "paper_id": "arxiv:2604.05333v3",
+        "title": "Graph-of-Skills: Dependency-Aware Structural Retrieval for Massive Agent Skills",
+        "venue_year": "unknown"
+      },
+      {
+        "paper_id": "semanticscholar:bd91da9d56398d541c2210e1dc3dfbd3ce6845fd",
+        "title": "SkillRAE: Agent Skill-Based Context Compilation for Retrieval-Augmented Execution",
+        "venue_year": "unknown"
+      },
+      {
+        "paper_id": "arxiv:2604.23853v2",
+        "title": "ClawTrace: Cost-Aware Tracing for LLM Agent Skill Distillation",
+        "venue_year": "unknown"
+      },
+      {
+        "paper_id": "semanticscholar:ba79cf58412756ed2f2385e3fcc1ae536faf92c0",
+        "title": "SkillFlow: Scalable and Efficient Agent Skill Retrieval System",
+        "venue_year": "unknown"
+      },
+      {
+        "paper_id": "arxiv:2606.17819v1",
+        "title": "A Framework for Evaluating Agentic Skills at Scale",
+        "venue_year": "unknown"
+      },
+      {
+        "paper_id": "arxiv:2606.09316v3",
+        "title": "Anything2Skill: Compiling External Knowledge into Reusable Skills for Agents",
+        "venue_year": "unknown"
+      },
+      {
+        "paper_id": "arxiv:2604.03964v1",
+        "title": "SkillFoundry: Automated Mining and Validation of Agent Skills for Scientific Tasks",
+        "venue_year": "unknown"
+      }
+    ]
+  }
+}

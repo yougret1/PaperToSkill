@@ -1,0 +1,304 @@
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import StratifiedKFold
+
+
+TRAIN_PATH = Path("train.csv")
+VALID_PATH = Path("validation_features.csv")
+OUTPUT_PATH = Path("submission.csv")
+SEED = 42
+
+
+def engineer_features(train_features, validation_features):
+    train = train_features.copy()
+    valid = validation_features.copy()
+    train["_dataset"] = "train"
+    valid["_dataset"] = "validation"
+
+    combined = pd.concat([train, valid], ignore_index=True)
+
+    passenger_parts = combined["PassengerId"].fillna("Unknown_0").astype(str).str.split("_")
+    combined["GroupId"] = passenger_parts.str[0]
+    combined["GroupMember"] = pd.to_numeric(passenger_parts.str[1], errors="coerce")
+    combined["GroupSize"] = combined.groupby("GroupId")["PassengerId"].transform("size")
+    combined["IsAlone"] = (combined["GroupSize"] == 1).astype(int)
+
+    cabin_parts = combined["Cabin"].fillna("Unknown/0/Unknown").astype(str).str.split("/")
+    combined["CabinDeck"] = cabin_parts.str[0]
+    combined["CabinNumber"] = pd.to_numeric(cabin_parts.str[1], errors="coerce")
+    combined["CabinSide"] = cabin_parts.str[2]
+    combined["CabinMissing"] = combined["Cabin"].isna().astype(int)
+
+    combined["Surname"] = (
+        combined["Name"]
+        .fillna("Unknown Unknown")
+        .astype(str)
+        .str.rsplit(n=1)
+        .str[-1]
+    )
+    combined["FamilySize"] = combined.groupby("Surname")["PassengerId"].transform("size")
+
+    spending_columns = [
+        column
+        for column in ["RoomService", "FoodCourt", "ShoppingMall", "Spa", "VRDeck"]
+        if column in combined.columns
+    ]
+    for column in spending_columns:
+        combined[column] = pd.to_numeric(combined[column], errors="coerce")
+
+    combined["TotalSpend"] = combined[spending_columns].fillna(0).sum(axis=1)
+    combined["NoSpend"] = (combined["TotalSpend"] == 0).astype(int)
+    combined["LuxurySpend"] = combined[
+        [c for c in ["Spa", "VRDeck", "RoomService"] if c in combined.columns]
+    ].fillna(0).sum(axis=1)
+    combined["LeisureSpend"] = combined[
+        [c for c in ["FoodCourt", "ShoppingMall"] if c in combined.columns]
+    ].fillna(0).sum(axis=1)
+
+    combined["Age"] = pd.to_numeric(combined["Age"], errors="coerce")
+    combined["AgeGroup"] = pd.cut(
+        combined["Age"],
+        bins=[-np.inf, 5, 12, 17, 25, 40, 60, np.inf],
+        labels=["Infant", "Child", "Teen", "YoungAdult", "Adult", "MiddleAge", "Senior"],
+    ).astype("object")
+    combined["IsChild"] = (combined["Age"] < 13).fillna(False).astype(int)
+
+    combined["CryoNoSpend"] = (
+        combined["CryoSleep"].fillna(False).astype(str).eq("True")
+        & combined["NoSpend"].eq(1)
+    ).astype(int)
+
+    combined = combined.drop(
+        columns=["_dataset", "Name", "Cabin", "PassengerId"],
+        errors="ignore",
+    )
+
+    train_engineered = combined.iloc[: len(train)].reset_index(drop=True)
+    valid_engineered = combined.iloc[len(train) :].reset_index(drop=True)
+    return train_engineered, valid_engineered
+
+
+def normalized_target(series):
+    if pd.api.types.is_bool_dtype(series):
+        return series.astype(int)
+    normalized = series.astype(str).str.strip().str.lower()
+    mapped = normalized.map({"true": 1, "false": 0, "1": 1, "0": 0})
+    if mapped.isna().any():
+        raise ValueError("Transported contains unsupported target values")
+    return mapped.astype(int)
+
+
+def best_oof_threshold(y_true, probabilities):
+    thresholds = np.linspace(0.40, 0.60, 81)
+    scores = np.array(
+        [np.mean((probabilities >= threshold).astype(int) == y_true) for threshold in thresholds]
+    )
+    return float(thresholds[np.argmax(scores)])
+
+
+def train_with_catboost(x_train, y_train, x_valid):
+    from catboost import CatBoostClassifier
+
+    categorical_columns = [
+        column
+        for column in x_train.columns
+        if x_train[column].dtype == "object"
+        or isinstance(x_train[column].dtype, pd.CategoricalDtype)
+        or pd.api.types.is_bool_dtype(x_train[column])
+    ]
+
+    train_data = x_train.copy()
+    valid_data = x_valid.copy()
+
+    for column in categorical_columns:
+        train_data[column] = train_data[column].astype("object").where(
+            train_data[column].notna(), "Missing"
+        ).astype(str)
+        valid_data[column] = valid_data[column].astype("object").where(
+            valid_data[column].notna(), "Missing"
+        ).astype(str)
+
+    numeric_columns = [c for c in train_data.columns if c not in categorical_columns]
+    for column in numeric_columns:
+        train_data[column] = pd.to_numeric(train_data[column], errors="coerce")
+        valid_data[column] = pd.to_numeric(valid_data[column], errors="coerce")
+
+    splitter = StratifiedKFold(n_splits=5, shuffle=True, random_state=SEED)
+    oof = np.zeros(len(train_data), dtype=float)
+    predictions = np.zeros(len(valid_data), dtype=float)
+
+    for fold, (fit_indices, holdout_indices) in enumerate(splitter.split(train_data, y_train)):
+        model = CatBoostClassifier(
+            iterations=900,
+            depth=7,
+            learning_rate=0.045,
+            loss_function="Logloss",
+            eval_metric="Accuracy",
+            l2_leaf_reg=5.0,
+            random_seed=SEED + fold,
+            random_strength=0.4,
+            bagging_temperature=0.5,
+            border_count=128,
+            allow_writing_files=False,
+            verbose=False,
+            thread_count=-1,
+        )
+        model.fit(
+            train_data.iloc[fit_indices],
+            y_train.iloc[fit_indices],
+            cat_features=categorical_columns,
+            eval_set=(train_data.iloc[holdout_indices], y_train.iloc[holdout_indices]),
+            early_stopping_rounds=100,
+            verbose=False,
+        )
+        oof[holdout_indices] = model.predict_proba(
+            train_data.iloc[holdout_indices]
+        )[:, 1]
+        predictions += model.predict_proba(valid_data)[:, 1] / splitter.n_splits
+
+    return predictions, best_oof_threshold(y_train.to_numpy(), oof)
+
+
+def train_with_sklearn(x_train, y_train, x_valid):
+    from sklearn.compose import ColumnTransformer
+    from sklearn.ensemble import HistGradientBoostingClassifier
+    from sklearn.impute import SimpleImputer
+    from sklearn.pipeline import Pipeline
+    from sklearn.preprocessing import OneHotEncoder
+
+    categorical_columns = [
+        column
+        for column in x_train.columns
+        if x_train[column].dtype == "object"
+        or isinstance(x_train[column].dtype, pd.CategoricalDtype)
+        or pd.api.types.is_bool_dtype(x_train[column])
+    ]
+    numeric_columns = [c for c in x_train.columns if c not in categorical_columns]
+
+    try:
+        encoder = OneHotEncoder(
+            handle_unknown="ignore",
+            min_frequency=2,
+            sparse_output=False,
+        )
+    except TypeError:
+        encoder = OneHotEncoder(
+            handle_unknown="ignore",
+            min_frequency=2,
+            sparse=False,
+        )
+
+    preprocessor = ColumnTransformer(
+        transformers=[
+            (
+                "numeric",
+                SimpleImputer(strategy="median", add_indicator=True),
+                numeric_columns,
+            ),
+            (
+                "categorical",
+                Pipeline(
+                    [
+                        ("imputer", SimpleImputer(strategy="most_frequent")),
+                        ("encoder", encoder),
+                    ]
+                ),
+                categorical_columns,
+            ),
+        ],
+        sparse_threshold=0,
+    )
+
+    splitter = StratifiedKFold(n_splits=5, shuffle=True, random_state=SEED)
+    oof = np.zeros(len(x_train), dtype=float)
+    predictions = np.zeros(len(x_valid), dtype=float)
+
+    for fold, (fit_indices, holdout_indices) in enumerate(splitter.split(x_train, y_train)):
+        model = Pipeline(
+            [
+                ("preprocessor", preprocessor),
+                (
+                    "classifier",
+                    HistGradientBoostingClassifier(
+                        learning_rate=0.055,
+                        max_iter=400,
+                        max_leaf_nodes=25,
+                        min_samples_leaf=22,
+                        l2_regularization=1.5,
+                        early_stopping=True,
+                        validation_fraction=0.12,
+                        random_state=SEED + fold,
+                    ),
+                ),
+            ]
+        )
+        model.fit(x_train.iloc[fit_indices], y_train.iloc[fit_indices])
+        oof[holdout_indices] = model.predict_proba(
+            x_train.iloc[holdout_indices]
+        )[:, 1]
+        predictions += model.predict_proba(x_valid)[:, 1] / splitter.n_splits
+
+    return predictions, best_oof_threshold(y_train.to_numpy(), oof)
+
+
+def main():
+    train = pd.read_csv(TRAIN_PATH)
+    validation = pd.read_csv(VALID_PATH)
+
+    print(
+        {
+            "train_rows": len(train),
+            "validation_rows": len(validation),
+            "train_columns": train.columns.tolist(),
+            "validation_columns": validation.columns.tolist(),
+            "cv_splits": 5,
+        }
+    )
+
+    feedback_path = Path("error_or_score_feedback.md")
+    if feedback_path.exists():
+        feedback = feedback_path.read_text(encoding="utf-8", errors="replace").strip()
+        print("Weak-script feedback:", feedback[:500])
+
+    required_train = {"PassengerId", "Transported"}
+    required_validation = {"PassengerId"}
+    if not required_train.issubset(train.columns):
+        raise ValueError(f"train.csv must contain {sorted(required_train)}")
+    if not required_validation.issubset(validation.columns):
+        raise ValueError("validation_features.csv must contain PassengerId")
+
+    passenger_ids = validation["PassengerId"].copy()
+    y_train = normalized_target(train["Transported"])
+    x_train, x_validation = engineer_features(
+        train.drop(columns=["Transported"]),
+        validation,
+    )
+
+    try:
+        probabilities, threshold = train_with_catboost(
+            x_train, y_train, x_validation
+        )
+        print("Model: CatBoost cross-validation ensemble")
+    except ImportError:
+        probabilities, threshold = train_with_sklearn(
+            x_train, y_train, x_validation
+        )
+        print("Model: sklearn histogram gradient boosting ensemble")
+
+    submission = pd.DataFrame(
+        {
+            "PassengerId": passenger_ids,
+            "Transported": probabilities >= threshold,
+        }
+    )
+    submission.to_csv(OUTPUT_PATH, index=False)
+    print(
+        f"Wrote {OUTPUT_PATH} with {len(submission)} rows "
+        f"using decision threshold {threshold:.3f}"
+    )
+
+
+if __name__ == "__main__":
+    main()

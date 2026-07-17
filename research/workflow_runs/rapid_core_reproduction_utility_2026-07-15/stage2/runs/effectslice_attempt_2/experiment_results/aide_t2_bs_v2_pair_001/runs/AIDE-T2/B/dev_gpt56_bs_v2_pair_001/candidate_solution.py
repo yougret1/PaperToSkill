@@ -1,0 +1,250 @@
+from pathlib import Path
+import warnings
+
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import StratifiedKFold
+
+warnings.filterwarnings("ignore")
+
+ROOT = Path(__file__).resolve().parent
+TRAIN_PATH = ROOT / "train.csv"
+VALID_PATH = ROOT / "validation_features.csv"
+OUTPUT_PATH = ROOT / "submission.csv"
+
+train = pd.read_csv(TRAIN_PATH)
+valid = pd.read_csv(VALID_PATH)
+
+if "PassengerId" not in train.columns or "PassengerId" not in valid.columns:
+    raise ValueError("Both input files must contain PassengerId")
+if "Transported" not in train.columns:
+    raise ValueError("train.csv must contain Transported")
+
+passenger_ids = valid["PassengerId"].copy()
+
+target = train.pop("Transported")
+if pd.api.types.is_bool_dtype(target):
+    y = target.astype(int).to_numpy()
+elif pd.api.types.is_numeric_dtype(target):
+    y = target.astype(int).to_numpy()
+else:
+    normalized = target.astype(str).str.strip().str.lower()
+    mapping = {"true": 1, "false": 0, "1": 1, "0": 0, "yes": 1, "no": 0}
+    if not normalized.isin(mapping).all():
+        raise ValueError("Transported contains unsupported values")
+    y = normalized.map(mapping).astype(int).to_numpy()
+
+
+def engineer(df):
+    out = df.copy()
+
+    passenger_parts = out["PassengerId"].fillna("Unknown_0").astype(str).str.split("_", n=1, expand=True)
+    out["GroupId"] = passenger_parts[0]
+    out["GroupMemberNo"] = pd.to_numeric(passenger_parts[1], errors="coerce")
+
+    cabin = out.get("Cabin", pd.Series(index=out.index, dtype=object))
+    cabin_parts = cabin.fillna("Unknown/Unknown/Unknown").astype(str).str.split("/", n=2, expand=True)
+    out["CabinDeck"] = cabin_parts[0]
+    out["CabinNumber"] = pd.to_numeric(cabin_parts[1], errors="coerce")
+    out["CabinSide"] = cabin_parts[2]
+    out["CabinDeckSide"] = out["CabinDeck"].astype(str) + "_" + out["CabinSide"].astype(str)
+
+    name = out.get("Name", pd.Series(index=out.index, dtype=object)).fillna("Unknown Unknown").astype(str)
+    out["Surname"] = name.str.rsplit(n=1).str[-1]
+    out["NameLength"] = name.str.len()
+    out["FamilyKey"] = out["Surname"].astype(str) + "_" + out.get(
+        "HomePlanet", pd.Series("Unknown", index=out.index)
+    ).fillna("Unknown").astype(str)
+
+    spend_columns = ["RoomService", "FoodCourt", "ShoppingMall", "Spa", "VRDeck"]
+    for column in spend_columns:
+        if column not in out:
+            out[column] = np.nan
+        out[column] = pd.to_numeric(out[column], errors="coerce")
+
+    out["TotalSpend"] = out[spend_columns].sum(axis=1, min_count=1)
+    out["SpendServices"] = (out[spend_columns].fillna(0) > 0).sum(axis=1)
+    out["HasSpend"] = (out["TotalSpend"].fillna(0) > 0).astype(int)
+    out["LuxurySpend"] = out[["Spa", "VRDeck", "RoomService"]].sum(axis=1, min_count=1)
+    out["RetailSpend"] = out[["FoodCourt", "ShoppingMall"]].sum(axis=1, min_count=1)
+    out["LogTotalSpend"] = np.log1p(out["TotalSpend"].clip(lower=0))
+
+    age = pd.to_numeric(out.get("Age", pd.Series(index=out.index, dtype=float)), errors="coerce")
+    out["Age"] = age
+    out["IsChild"] = (age < 13).astype(int)
+    out["IsYoung"] = (age < 25).astype(int)
+    out["AgeBand"] = pd.cut(
+        age,
+        bins=[-np.inf, 12, 17, 24, 34, 49, 64, np.inf],
+        labels=["child", "teen", "young", "adult", "middle", "senior", "elder"],
+    ).astype(object)
+
+    cryo = out.get("CryoSleep", pd.Series(index=out.index, dtype=object))
+    out["CryoWithSpend"] = (
+        cryo.astype(str).str.lower().eq("true") & out["HasSpend"].eq(1)
+    ).astype(int)
+
+    destination = out.get("Destination", pd.Series("Unknown", index=out.index)).fillna("Unknown")
+    planet = out.get("HomePlanet", pd.Series("Unknown", index=out.index)).fillna("Unknown")
+    out["Route"] = planet.astype(str) + "_" + destination.astype(str)
+
+    return out
+
+
+train_x = engineer(train)
+valid_x = engineer(valid)
+
+combined = pd.concat([train_x, valid_x], axis=0, ignore_index=True)
+for key, output_name in [
+    ("GroupId", "GroupSize"),
+    ("Surname", "SurnameSize"),
+    ("FamilyKey", "FamilySize"),
+    ("Cabin", "CabinOccupancy"),
+]:
+    if key in combined:
+        counts = combined[key].fillna("Unknown").astype(str).value_counts(dropna=False)
+        train_x[output_name] = train_x[key].fillna("Unknown").astype(str).map(counts).astype(float)
+        valid_x[output_name] = valid_x[key].fillna("Unknown").astype(str).map(counts).astype(float)
+
+train_x = train_x.drop(columns=["PassengerId", "Name"], errors="ignore")
+valid_x = valid_x.drop(columns=["PassengerId", "Name"], errors="ignore")
+
+for column in train_x.columns:
+    if column not in valid_x:
+        valid_x[column] = np.nan
+valid_x = valid_x[train_x.columns]
+
+categorical_columns = [
+    column
+    for column in train_x.columns
+    if train_x[column].dtype == object
+    or isinstance(train_x[column].dtype, pd.CategoricalDtype)
+    or pd.api.types.is_bool_dtype(train_x[column])
+]
+
+for column in categorical_columns:
+    train_x[column] = train_x[column].fillna("__MISSING__").astype(str)
+    valid_x[column] = valid_x[column].fillna("__MISSING__").astype(str)
+
+numeric_columns = [column for column in train_x.columns if column not in categorical_columns]
+for column in numeric_columns:
+    train_x[column] = pd.to_numeric(train_x[column], errors="coerce")
+    valid_x[column] = pd.to_numeric(valid_x[column], errors="coerce")
+    median = train_x[column].median()
+    if pd.isna(median):
+        median = 0.0
+    train_x[column] = train_x[column].fillna(median)
+    valid_x[column] = valid_x[column].fillna(median)
+
+try:
+    from catboost import CatBoostClassifier
+
+    folds = StratifiedKFold(n_splits=5, shuffle=True, random_state=2025)
+    valid_probability = np.zeros(len(valid_x), dtype=float)
+
+    for fold, (fit_idx, holdout_idx) in enumerate(folds.split(train_x, y)):
+        model = CatBoostClassifier(
+            iterations=650,
+            depth=7,
+            learning_rate=0.045,
+            loss_function="Logloss",
+            eval_metric="Accuracy",
+            l2_leaf_reg=6.0,
+            random_seed=2025 + fold,
+            random_strength=0.6,
+            bootstrap_type="Bayesian",
+            bagging_temperature=0.7,
+            allow_writing_files=False,
+            verbose=False,
+            thread_count=-1,
+        )
+        model.fit(
+            train_x.iloc[fit_idx],
+            y[fit_idx],
+            cat_features=categorical_columns,
+            eval_set=(train_x.iloc[holdout_idx], y[holdout_idx]),
+            early_stopping_rounds=90,
+            verbose=False,
+        )
+        valid_probability += model.predict_proba(valid_x)[:, 1] / folds.n_splits
+
+except ImportError:
+    from sklearn.compose import ColumnTransformer
+    from sklearn.ensemble import ExtraTreesClassifier, HistGradientBoostingClassifier, VotingClassifier
+    from sklearn.impute import SimpleImputer
+    from sklearn.pipeline import Pipeline
+    from sklearn.preprocessing import OrdinalEncoder
+
+    preprocessor = ColumnTransformer(
+        transformers=[
+            (
+                "categorical",
+                Pipeline(
+                    steps=[
+                        ("imputer", SimpleImputer(strategy="most_frequent")),
+                        (
+                            "encoder",
+                            OrdinalEncoder(
+                                handle_unknown="use_encoded_value",
+                                unknown_value=-1,
+                                encoded_missing_value=-1,
+                            ),
+                        ),
+                    ]
+                ),
+                categorical_columns,
+            ),
+            (
+                "numeric",
+                SimpleImputer(strategy="median"),
+                numeric_columns,
+            ),
+        ],
+        remainder="drop",
+    )
+
+    classifier = VotingClassifier(
+        estimators=[
+            (
+                "hist",
+                HistGradientBoostingClassifier(
+                    learning_rate=0.055,
+                    max_iter=350,
+                    max_leaf_nodes=31,
+                    l2_regularization=3.0,
+                    min_samples_leaf=18,
+                    random_state=2025,
+                ),
+            ),
+            (
+                "extra",
+                ExtraTreesClassifier(
+                    n_estimators=650,
+                    min_samples_leaf=2,
+                    max_features=0.8,
+                    class_weight="balanced",
+                    random_state=2025,
+                    n_jobs=-1,
+                ),
+            ),
+        ],
+        voting="soft",
+        weights=[3, 2],
+    )
+
+    model = Pipeline(
+        steps=[
+            ("preprocessor", preprocessor),
+            ("classifier", classifier),
+        ]
+    )
+    model.fit(train_x, y)
+    valid_probability = model.predict_proba(valid_x)[:, 1]
+
+submission = pd.DataFrame(
+    {
+        "PassengerId": passenger_ids,
+        "Transported": valid_probability >= 0.5,
+    }
+)
+submission.to_csv(OUTPUT_PATH, index=False)

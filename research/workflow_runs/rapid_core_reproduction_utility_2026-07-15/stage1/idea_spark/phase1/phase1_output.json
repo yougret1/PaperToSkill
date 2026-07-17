@@ -1,0 +1,286 @@
+{
+  "lit_grounding_mode": "real",
+  "fulltext_degraded": false,
+  "intake": {
+    "domain": "Agentic paper reproduction and task-specific method applicability testing",
+    "venue": "ICLR, ICML, NeurIPS, or a comparable top-tier machine-learning venue",
+    "time": "Five-month research cycle",
+    "data": [
+      "Existing eight-row real-reuse tasks with locked task assets and scorers",
+      "PaperToSkill source maps, generated skills, summary baselines, human-fidelity packets, and saved cross-model outputs"
+    ],
+    "compute": "Up to one 8x 80GB GPU node and approximately 50 GPU-days, with API usage bounded by the experiment plan",
+    "expertise": "Agent systems, scientific software reproduction, empirical evaluation, and LLM-based workflow engineering",
+    "preference": "both",
+    "baseline": "The current PaperToSkill full-reproduction and generated-skill workflow, compared with summary-only artifacts and direct use of the source paper",
+    "limitation": "Full reproduction is too expensive for initial applicability screening, while summaries, executable artifacts, and generated skills do not yield a calibrated prediction of whether the paper's intervention will provide positive net benefit on a concrete user task",
+    "contribution_type": "method",
+    "_inferred_fields": [
+      "venue",
+      "time",
+      "data",
+      "compute",
+      "expertise",
+      "preference",
+      "baseline",
+      "contribution_type"
+    ]
+  },
+  "bottleneck_statement": "The missing quantity is not another executable reproduction artifact but a calibrated estimate of an intervention's downstream net benefit before paying for full adoption: under a small probe budget and a user-task distribution that may differ from the paper's source setting, current proxy observations can fail to preserve the sign or ranking of later task gains once adaptation cost and regressions are included. AutoReproduce (arxiv:2505.20662v4) uses sampled mini-batches and dry runs to establish executable reproduction, and PaperBench (arxiv:2504.01848v3) decomposes code, execution, and result fidelity, but its cheaper Code-Dev score is only weakly correlated with full replication; neither quantity measures benefit on the user's task. The closest utility evaluator, arxiv:2606.17819v1, measures with-skill versus without-skill performance on tasks synthesized from the skill while filtering several complex environment requirements, and SkillFoundry (arxiv:2604.03964v1) validates contracts plus a small set of downstream workflows. Consequently, when task distribution, model, environment, and intervention cost change together, the existing machinery cannot determine whether a cheap positive signal predicts a positive counterfactual net gain for this user's task rather than only reproduction fidelity, instruction adherence, or benchmark-local utility.",
+  "closest_adjacent": [
+    {
+      "paper_id": "arxiv:2606.17819v1",
+      "is_anchor": true,
+      "summary_and_residue": "The framework generates executable tasks from an arbitrary skill and measures the same agent-model configuration with and without that skill, separating instruction adherence from goal completion and estimating marginal skill value. Its tasks are generated from the artifact being evaluated, its autonomous path excludes several environment-heavy skill classes, and its corpus is concentrated in trusted coding registries, so it does not establish whether a low-cost score predicts net benefit on a user's independently specified task distribution."
+    },
+    {
+      "paper_id": "arxiv:2504.01848v3",
+      "is_anchor": false,
+      "summary_and_residue": "PaperBench uses author-approved hierarchical rubrics and fresh execution to distinguish code development, successful execution, and result matching for complete paper replication. Its cheaper Code-Dev proxy skips execution and is only weakly correlated with full PaperBench performance (reported Pearson r = 0.48), and both variants evaluate replication capability rather than the paper intervention's downstream utility for a user."
+    },
+    {
+      "paper_id": "arxiv:2505.20662v4",
+      "is_anchor": false,
+      "summary_and_residue": "AutoReproduce combines paper-lineage retrieval, research/code agents, sampled mini-batch checks, and dry runs to produce executable end-to-end reproductions. Those low-cost checks detect data-shape, dependency, and pipeline failures, but they are not validated as predictors of the reproduced intervention's later task effect or of benefit after adaptation cost."
+    },
+    {
+      "paper_id": "arxiv:2604.03964v1",
+      "is_anchor": false,
+      "summary_and_residue": "SkillFoundry mines scientific resources into executable skills, applies execution, system, and synthetic-data contract tests, and then reports utility on MoSciBench and two genomics workflows. The synthetic tests explicitly do not approximate the full downstream task, and the limited downstream suite does not calibrate how an inexpensive validation signal transfers to a new user's task or predicts net gain."
+    }
+  ],
+  "what_phase_0_did_not_address": [
+    "Under a limited initial budget, no retrieved frontier establishes that the observed low-fidelity score preserves the sign and ordering of paper interventions by the performance improvement they later produce on independently specified user tasks; a probe can therefore support the wrong go/no-go decision even when it is internally faithful.",
+    "No retrieved frontier estimates net benefit after execution cost, adaptation effort, and regressions on task dimensions outside the paper's headline metric are deducted from gross performance gain.",
+    "No retrieved paper tests whether tasks derived from the paper or skill, or selected by a fixed reproduction benchmark, are representative enough of the user's target-task distribution to support an adoption decision.",
+    "No retrieved frontier quantifies decision calibration across paper families, user tasks, agent models, environments, and probe budgets, including false-adoption and false-rejection rates."
+  ],
+  "method_lineage": {
+    "line": "Cost-scaled empirical evaluation of whether a paper-derived intervention improves a downstream target task",
+    "nodes": [
+      {
+        "node_id": "n0",
+        "method": "Controlled intervention-versus-baseline evaluation on a predefined target-task distribution",
+        "move": "Directly estimates an intervention's effect by running both conditions on representative target cases and comparing downstream outcomes.",
+        "parent": null,
+        "provenance": "parametric",
+        "age_band": ">16y",
+        "confidence": "high",
+        "residual_problem": "A sufficiently powered end-to-end target-task trial is expensive as a first adoption screen, and its conclusion is tied to the chosen task distribution and cost accounting.",
+        "is_frontier_leaf": false,
+        "is_collateral": false
+      },
+      {
+        "node_id": "n1",
+        "method": "Partial-fidelity pilot and proxy evaluation",
+        "move": "Replaces the full intervention campaign with cheaper sub-outcomes, smaller samples, partial execution, or lower resource budgets intended to support earlier decisions.",
+        "parent": "n0",
+        "provenance": "parametric",
+        "age_band": "8-16y",
+        "confidence": "high",
+        "residual_problem": "A proxy can be cheap and internally valid yet fail to preserve intervention rankings or effect signs when fidelity, task distribution, or cost structure changes.",
+        "is_frontier_leaf": false,
+        "is_collateral": false
+      },
+      {
+        "node_id": "n2",
+        "method": "PaperBench full and Code-Dev replication evaluation",
+        "move": "Introduces paper-level hierarchical rubrics and separates code development, execution, and result-match evidence, with Code-Dev as a lower-cost fidelity.",
+        "parent": "n1",
+        "provenance": "retrieved:arxiv:2504.01848v3",
+        "age_band": "0-2y",
+        "confidence": "high",
+        "residual_problem": "The cheaper fidelity is weakly correlated with full replication, and neither fidelity measures whether the paper intervention improves an independently specified user task or yields positive net benefit.",
+        "is_frontier_leaf": true,
+        "is_collateral": false
+      },
+      {
+        "node_id": "n3",
+        "method": "AutoReproduce sampled validation and end-to-end reproduction",
+        "move": "Automates paper-lineage recovery, implementation, and debugging while using sampled mini-batches and dry runs for rapid executable checks before full experiments.",
+        "parent": "n1",
+        "provenance": "retrieved:arxiv:2505.20662v4",
+        "age_band": "0-2y",
+        "confidence": "high",
+        "residual_problem": "The rapid checks predict pipeline executability and local fidelity, not the intervention's downstream effect, task-shift robustness, or benefit after adaptation cost.",
+        "is_frontier_leaf": true,
+        "is_collateral": false
+      },
+      {
+        "node_id": "n4",
+        "method": "Generated-task marginal evaluation for arbitrary agent skills",
+        "move": "Generates skill-relevant executable tasks and custom rubrics, then compares with-skill and without-skill agent behavior to estimate marginal utility.",
+        "parent": "n1",
+        "provenance": "retrieved:arxiv:2606.17819v1",
+        "age_band": "0-2y",
+        "confidence": "high",
+        "residual_problem": "Artifact-conditioned task generation and environment filtering leave the score uncalibrated for independently supplied user tasks, heterogeneous paper interventions, and net utility after costs and regressions.",
+        "is_frontier_leaf": true,
+        "is_collateral": false
+      },
+      {
+        "node_id": "n5",
+        "method": "SkillFoundry contract validation and downstream workflow evaluation",
+        "move": "Combines execution, system, and synthetic-data checks with downstream benchmark and workflow tests for automatically mined scientific skills.",
+        "parent": "n1",
+        "provenance": "retrieved:arxiv:2604.03964v1",
+        "age_band": "0-2y",
+        "confidence": "high",
+        "residual_problem": "Contract-valid synthetic tests are not full-task approximations, and the small downstream suite does not establish probe-to-benefit calibration across new user tasks.",
+        "is_frontier_leaf": true,
+        "is_collateral": false
+      },
+      {
+        "node_id": "c1",
+        "method": "GBC-style source-model transferability estimation",
+        "move": "Uses target-data feature geometry and class separability to rank pretrained models without fully fine-tuning every candidate.",
+        "parent": null,
+        "provenance": "parametric",
+        "age_band": "4-8y",
+        "confidence": "medium",
+        "residual_problem": "It assumes comparable pretrained representations and labeled target examples, whereas paper interventions can alter heterogeneous workflows, objectives, and costs with no shared feature space.",
+        "is_frontier_leaf": false,
+        "is_collateral": true
+      },
+      {
+        "node_id": "c2",
+        "method": "Learning-curve extrapolation and NAS performance predictors",
+        "move": "Predicts terminal model performance from early training curves, zero-cost signals, or architecture descriptors to avoid fully training all candidates.",
+        "parent": null,
+        "provenance": "parametric",
+        "age_band": "4-8y",
+        "confidence": "high",
+        "residual_problem": "The signal is tied to a common training trajectory and terminal metric, conditions that do not hold across heterogeneous paper interventions and user-task adaptations.",
+        "is_frontier_leaf": false,
+        "is_collateral": true
+      },
+      {
+        "node_id": "c3",
+        "method": "Hyperband/BOHB-style multi-fidelity selection",
+        "move": "Allocates increasing resource budgets to configurations using observed low-fidelity objective values and early stopping.",
+        "parent": null,
+        "provenance": "parametric",
+        "age_band": "8-16y",
+        "confidence": "high",
+        "residual_problem": "It presumes a comparable resource-fidelity axis and an observable objective across candidates; paper interventions can change the task, artifact, metric, and adoption cost simultaneously.",
+        "is_frontier_leaf": false,
+        "is_collateral": true
+      },
+      {
+        "node_id": "c4",
+        "method": "Selection-diagram causal transportability",
+        "move": "Identifies when and how source-domain experimental effects can be transported to a target population given explicit assumptions about domain differences and effect modifiers.",
+        "parent": null,
+        "provenance": "parametric",
+        "age_band": "8-16y",
+        "confidence": "high",
+        "residual_problem": "It requires an explicit causal structure and measured target effect modifiers that are usually unavailable before a paper method has been adapted and exercised on the user's task.",
+        "is_frontier_leaf": false,
+        "is_collateral": true
+      }
+    ],
+    "notes": "The recent frontier is grounded only in paper_ids from lit_table.md. Transferability estimation, learning-curve prediction, multi-fidelity selection, and causal transportability were read as collateral prior-art families: their nodes are parametric awareness-only and are not hard-cited as retrieved prior art. The lineage is intentionally shallow because paper-to-skill utility prediction is young; its shared inherited assumption is that an artifact-derived or fixed evaluation distribution supplies enough evidence for a user's adoption decision. Only n2-n5 are legal frontier gap sites."
+  },
+  "domain_pattern_distribution": {
+    "n_total": 33,
+    "n_on_topic": 27,
+    "patterns": [
+      {
+        "pattern_id": "assumption_audit_and_pivot",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "architectural_operator_substitution",
+        "count": 4,
+        "share": 0.15,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "generative_process_redesign",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "controlled_diagnostic_design",
+        "count": 5,
+        "share": 0.19,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "unify_into_shared_representation",
+        "count": 7,
+        "share": 0.26,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "reframe_as_solvable_object",
+        "count": 10,
+        "share": 0.37,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "self_supervised_signal_engineering",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "structural_prior_encoding",
+        "count": 14,
+        "share": 0.52,
+        "saturation_band": "saturated"
+      },
+      {
+        "pattern_id": "algebraic_equivalence_unification",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "heterogeneous_decomposition",
+        "count": 11,
+        "share": 0.41,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "decompose_and_delegate",
+        "count": 9,
+        "share": 0.33,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "relax_discrete_search_to_continuous",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "adapt_via_conditioning",
+        "count": 4,
+        "share": 0.15,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "characterize_limit_then_surpass",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "targeted_self_supervised_objective",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      }
+    ],
+    "saturation_threshold_saturated": 0.5,
+    "saturation_threshold_untested_count": 1,
+    "notes": "structural_prior_encoding is the most-used pattern (14/27); its closest adjacent papers still stop at executable structure, fixed-suite utility, or contract validity rather than calibrating low-cost evidence to task-specific net benefit under distribution shift."
+  },
+  "state": "proceed",
+  "ood_reasons": [],
+  "remedial_steps": []
+}

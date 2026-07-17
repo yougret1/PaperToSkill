@@ -1,0 +1,147 @@
+{
+  "schema_version": "effectslice-toolformer-filter-slice-registry.v1",
+  "task_id": "TOOLFORMER-FILTER",
+  "source_atom_map_path": "source_atom_map.json",
+  "source_atom_map_sha256": "e7b648237861ba1f6c326ca967a2eb891ec99e3d33a441eb413c8d04ce736bba",
+  "full_atom_ids": [
+    "T01",
+    "T02",
+    "T03",
+    "T04",
+    "T05"
+  ],
+  "query_budget_Q": 24,
+  "branch_cost_per_discovery_candidate": 2,
+  "maximum_registered_discovery_branches": 8,
+  "candidate_order": [
+    "retained_scc_count_ascending",
+    "atom_ids_lexicographic"
+  ],
+  "candidates": [
+    {
+      "candidate_id": "prefix_01",
+      "artifact_path": "candidates/prefix_01.md",
+      "artifact_sha256": "2f35d3e71da8e62c5abd6d5a7564a8b304ffd2990aacfd270904c6668084b64a",
+      "retained_atom_ids": [
+        "T01"
+      ],
+      "retained_scc_count": 1,
+      "dependency_closed": true,
+      "strict_subset": true,
+      "deletion_neighbors": [
+        {
+          "removed_atom_id": "T01",
+          "retained_atom_ids": [],
+          "condition": "B"
+        }
+      ]
+    },
+    {
+      "candidate_id": "prefix_02",
+      "artifact_path": "candidates/prefix_02.md",
+      "artifact_sha256": "b43ccbb36afbb626bb7c3b42035c6cf9dd39493f14522b15deef4aa62ceb2006",
+      "retained_atom_ids": [
+        "T01",
+        "T02"
+      ],
+      "retained_scc_count": 2,
+      "dependency_closed": true,
+      "strict_subset": true,
+      "deletion_neighbors": [
+        {
+          "removed_atom_id": "T01",
+          "retained_atom_ids": [],
+          "condition": "B"
+        },
+        {
+          "removed_atom_id": "T02",
+          "retained_atom_ids": [
+            "T01"
+          ],
+          "candidate_id": "prefix_01"
+        }
+      ]
+    },
+    {
+      "candidate_id": "prefix_03",
+      "artifact_path": "candidates/prefix_03.md",
+      "artifact_sha256": "b34c528a2a7ea64d0aa1e4861e1823d222f129ce34392519d5d27df72d547a95",
+      "retained_atom_ids": [
+        "T01",
+        "T02",
+        "T03"
+      ],
+      "retained_scc_count": 3,
+      "dependency_closed": true,
+      "strict_subset": true,
+      "deletion_neighbors": [
+        {
+          "removed_atom_id": "T01",
+          "retained_atom_ids": [],
+          "condition": "B"
+        },
+        {
+          "removed_atom_id": "T02",
+          "retained_atom_ids": [
+            "T01"
+          ],
+          "candidate_id": "prefix_01"
+        },
+        {
+          "removed_atom_id": "T03",
+          "retained_atom_ids": [
+            "T01",
+            "T02"
+          ],
+          "candidate_id": "prefix_02"
+        }
+      ]
+    },
+    {
+      "candidate_id": "prefix_04",
+      "artifact_path": "candidates/prefix_04.md",
+      "artifact_sha256": "796d2d680ddbd9f87f9d218a77680834ab5e0c2cc3e3f5b089be15284db13658",
+      "retained_atom_ids": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "retained_scc_count": 4,
+      "dependency_closed": true,
+      "strict_subset": true,
+      "deletion_neighbors": [
+        {
+          "removed_atom_id": "T01",
+          "retained_atom_ids": [],
+          "condition": "B"
+        },
+        {
+          "removed_atom_id": "T02",
+          "retained_atom_ids": [
+            "T01"
+          ],
+          "candidate_id": "prefix_01"
+        },
+        {
+          "removed_atom_id": "T03",
+          "retained_atom_ids": [
+            "T01",
+            "T02"
+          ],
+          "candidate_id": "prefix_02"
+        },
+        {
+          "removed_atom_id": "T04",
+          "retained_atom_ids": [
+            "T01",
+            "T02",
+            "T03"
+          ],
+          "candidate_id": "prefix_03"
+        }
+      ]
+    }
+  ],
+  "evidence_boundary": "Frozen before discovery provider runs; contains no model outcomes or scores."
+}

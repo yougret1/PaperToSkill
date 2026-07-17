@@ -1,0 +1,53 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++import scipy.sparse.linalg as spla
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,41 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    if not np.isfinite(counts).all():
++        raise ValueError("counts contains non-finite values")
++    if np.any(counts < 0):
++        raise ValueError("counts contains negative values")
++    row_sums = counts.sum(axis=1)
++    if np.any(row_sums == 0):
++        raise ValueError("counts contains all-zero cell rows")
++    n_cells = counts.shape[0]
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be 1 <= n_components < n_cells")
++
++    # Compute diagonal of degree matrix D = X @ col_sums
++    col_sums = counts.sum(axis=0)
++    D_diag = counts @ col_sums  # shape (n_cells,)
++    D_inv_sqrt = 1.0 / np.sqrt(D_diag)
++
++    # Define linear operator for normalized similarity matrix S = D^{-1/2} A D^{-1/2}
++    def matvec(v):
++        return D_inv_sqrt * (counts @ (counts.T @ (D_inv_sqrt * v)))
++
++    A_linop = spla.LinearOperator(
++        (n_cells, n_cells), matvec=matvec, dtype=counts.dtype
++    )
++
++    # Set initial vector for reproducibility
++    rng = np.random.RandomState(random_state)
++    v0 = rng.normal(size=n_cells)
++
++    # Compute largest eigenvalues and eigenvectors
++    eigenvalues, eigenvectors = spla.eigsh(
++        A_linop, k=n_components, which="LM", v0=v0
++    )
++    # eigsh returns eigenvalues in ascending order; reverse for descending
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    return eigenvalues, eigenvectors

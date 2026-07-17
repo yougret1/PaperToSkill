@@ -1,0 +1,127 @@
+{
+  "schema_version": "effectslice-snap-mfse-source-atom-map.v1",
+  "paper_id": "snapatac2",
+  "task_id": "SNAP-MFSE",
+  "source_path": "papers/extracted/snapatac2.txt",
+  "source_sha256": "34ac99920bd570befad0993bb5f0bf0e66444ef09e4a670fcdc51e58815c56a7",
+  "full_artifact_path": "full_artifact.md",
+  "full_artifact_sha256": "e29cc563627d384bec3e854f86b24a57bb2e801dc79e3ceed9dfbbfc53f5815d",
+  "atoms": [
+    {
+      "atom_id": "A01",
+      "title": "Scale features with the paper IDF",
+      "instruction": "For n cells and feature document frequency df, multiply each feature by log(n / (1 + df)) before row normalization.",
+      "contract_role": "feature_scaling",
+      "source_spans": [
+        {
+          "byte_start": 36456,
+          "byte_end": 36736,
+          "line_start": 74,
+          "line_end": 74,
+          "source_text": "Given a cell-by-feature count matrix \\(C\\in {{\\mathbb{R}}}^{n\\times p}\\) , we first scale the columns of the matrix by the inverse document frequency (IDF). The IDF of a column or a feature f is defined by \\({idf}\\left(f\\right)=\\log \\frac{n}{1+\\left|i:{C}_{i,f}\\ne 0\\right|}\\) .\r\n"
+        }
+      ]
+    },
+    {
+      "atom_id": "A02",
+      "title": "Normalize rows for cosine similarity",
+      "instruction": "After IDF scaling, normalize every nonzero cell row to unit L2 norm; the resulting matrix X represents cosine similarities through X X^T.",
+      "contract_role": "row_normalization",
+      "source_spans": [
+        {
+          "byte_start": 37641,
+          "byte_end": 38259,
+          "line_start": 76,
+          "line_end": 76,
+          "source_text": "In this section, we introduce a matrix-free algorithm for spectral embedding that avoids calculating the similarity matrix. This approach is specifically designed for cosine similarity. The cosine similarity between two vectors A and B is given by \\({S}_{c}\\left(A,B\\right)=\\frac{A\\cdot B}{\\parallel A\\parallel \\parallel B\\parallel }\\) . To express the cosine similarity using matrix operations, we first rescale the nonnegative count matrix C to obtain a new matrix X , such that the rows of X have unit L 2 norm. Consequently, the cosine similarity matrix between rows of \\(X\\) can be represented as \\(X{X}^{T}\\) .\r\n"
+        }
+      ]
+    },
+    {
+      "atom_id": "A03",
+      "title": "Remove self-similarity and compute degrees matrix-free",
+      "instruction": "Use W = X X^T - I and compute its degree vector as X @ (X.T @ 1) - 1 without constructing W.",
+      "contract_role": "degree_normalization",
+      "source_spans": [
+        {
+          "byte_start": 38259,
+          "byte_end": 38807,
+          "line_start": 77,
+          "line_end": 77,
+          "source_text": "In traditional spectral clustering algorithms, it is necessary to set the diagonals of the similarity matrix to zero 58 . This can be accomplished by subtracting the identity matrix from the similarity matrix, resulting in the final similarity matrix \\(W=X{X}^{T}-I\\) . The degree matrix can then be calculated as \\(D={\\textrm{diag}}\\left(\\left(X{X}^{T}-I\\right){\\bf{1}}\\right)={\\textrm{diag}}\\left(X\\left({X}^{T}{\\bf{1}}\\right)-{\\bf{1}}\\right)\\) . The normalized similarity matrix, denoted as \\(\\widetilde{W}\\) , can then be computed as follows:\r\n"
+        }
+      ]
+    },
+    {
+      "atom_id": "A04",
+      "title": "Expose the normalized similarity as a linear operator",
+      "instruction": "Let X_tilde = D^(-1/2) X and D_inv be the reciprocal degree vector. For every trial vector v, evaluate X_tilde @ (X_tilde.T @ v) - D_inv * v.",
+      "contract_role": "matrix_free_operator",
+      "source_spans": [
+        {
+          "byte_start": 39716,
+          "byte_end": 40818,
+          "line_start": 79,
+          "line_end": 79,
+          "source_text": "Unlike previous work, we offer an exact solution to the problem. We apply the Lanczos algorithm 25 , an iterative method for computing the top eigenvectors of a symmetric matrix, to our problem without ever calculating \\(\\widetilde{W}\\) . This requires computing the matrix–vector product between \\(\\widetilde{W}\\) and v in each iteration, as follows: \\(\\widetilde{W}{\\bf{v}}=\\widetilde{X}\\left({\\widetilde{X}}^{T}{\\bf{v}}\\right)-{D}^{-1}{\\bf{v}}\\) , where v is the current solution to the eigenvalue problem and is iteratively refined by the Lanczos algorithm. By using the specific order of operations shown in the formula, we can reduce the computational cost of the matrix–vector product to 2 z + n , where n is the number of rows in X and z is the number of nonzero elements in X . In comparison, performing this operation on the full similarity matrix requires n 2 computations, which is prohibitively expensive for a large number of cells. Thus, our matrix-free method is substantially faster and more memory efficient. The pseudocode for our algorithm is shown in Extended Data Fig. 10a .\r\n"
+        }
+      ]
+    },
+    {
+      "atom_id": "A05",
+      "title": "Return the leading spectral coordinates under the paper scope",
+      "instruction": "Use a Lanczos-style symmetric eigensolver, order the top eigenpairs from largest to smallest, and keep this exact matrix-free route scoped to cosine similarity. Do not materialize an n-cell by n-cell matrix.",
+      "contract_role": "solver_and_guardrail",
+      "source_spans": [
+        {
+          "byte_start": 35912,
+          "byte_end": 36456,
+          "line_start": 73,
+          "line_end": 73,
+          "source_text": "In this section, we outline the core algorithms used to perform dimensionality reduction in the SnapATAC2 package. We first describe the preprocessing steps and then the classic spectral embedding method that works for arbitrary similarity metrics. Finally, we describe the matrix-free spectral embedding algorithm that works only for cosine similarity, but substantially decreases the running time and memory usage. Note the steps described below can be accomplished using the ‘snapatac2.tl.spectral’ function from the SnapATAC2 package.\r\n"
+        },
+        {
+          "byte_start": 36736,
+          "byte_end": 37641,
+          "line_start": 75,
+          "line_end": 75,
+          "source_text": "Assuming the cell-by-feature count matrix C has been preprocessed according to the procedures described above, in classic spectral embedding, we first compute the n × n pairwise similarity matrix W such that \\({W}_{{ij}}=\\delta \\left({C}_{i* },{C}_{j* }\\right)\\) , where \\(\\delta :{{\\mathbb{R}}}^{p}\\times {{\\mathbb{R}}}^{p}{\\mathbb{\\to }}{\\mathbb{R}}\\) is the function defining the similarity between any two cells. Typical choices of δ include the Jaccard index and the cosine similarity. We then compute the symmetric normalized graph Laplacian \\({L}_{{\\textrm{sym}}}=I-{D}^{-1/2}W{D}^{-1/2}\\) , where I is the identity matrix and D = diag( W 1). The bottom eigenvectors of L sym are selected as the lower-dimensional embedding. The corresponding eigenvectors can be computed alternatively as the top eigenvectors of the similarly normalized weight matrix: \\(\\widetilde{W}={D}^{-1/2}W{D}^{-1/2}\\) .\r\n"
+        }
+      ]
+    }
+  ],
+  "requires": {
+    "A01": [],
+    "A02": [
+      "A01"
+    ],
+    "A03": [
+      "A02"
+    ],
+    "A04": [
+      "A03"
+    ],
+    "A05": [
+      "A04"
+    ]
+  },
+  "dependency_edges": [
+    {
+      "from": "A02",
+      "to": "A01"
+    },
+    {
+      "from": "A03",
+      "to": "A02"
+    },
+    {
+      "from": "A04",
+      "to": "A03"
+    },
+    {
+      "from": "A05",
+      "to": "A04"
+    }
+  ],
+  "evidence_boundary": "Source-grounded development artifact only; not an eligibility or effectiveness result."
+}

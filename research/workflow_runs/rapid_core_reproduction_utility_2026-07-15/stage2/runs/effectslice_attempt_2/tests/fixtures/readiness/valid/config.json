@@ -1,0 +1,16 @@
+{
+  "task_spec": "benchmarks/real_reuse/real_reuse_v0.json",
+  "main_row_selection": "results/real_reuse/main_run_selection.json",
+  "raw_rows": "results/real_reuse/raw_rows.jsonl",
+  "source_maps": {"paper_one":"generated_skills/paper_one/references/source_map.json"},
+  "statistics": {"minimum_eligibility_pairs":3},
+  "task_adapters": {
+    "T1": {
+      "score_bounds": [-1.0,1.0],
+      "cost_weights": {"api":0.25,"compute":0.25,"guardrail":0.25,"labor":0.25},
+      "contracts": [{"id":"contract-1","callable":"adapter:contract","digest":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","missing_value_policy":"fail"}],
+      "guardrails": [{"id":"guardrail-1","callable":"adapter:guardrail","digest":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","missing_value_policy":"fail"}],
+      "query_budget": {"Q":24,"N":1}
+    }
+  }
+}

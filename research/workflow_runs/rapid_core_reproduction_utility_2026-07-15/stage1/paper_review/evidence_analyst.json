@@ -1,0 +1,602 @@
+{
+  "role": "Evidence Analyst Agent",
+  "paper_title": "PaperToSkill: Turning Research Papers into Portable Agent Skills",
+  "review_date": "2026-07-15",
+  "mode": "read_only",
+  "scope": {
+    "canonical_entry": "D:/a_work/gitee/PaperToSkill/paper/aaai/main.tex",
+    "manuscript_sections": [
+      "D:/a_work/gitee/PaperToSkill/paper/aaai/src/abstract.tex",
+      "D:/a_work/gitee/PaperToSkill/paper/aaai/src/introduction.tex",
+      "D:/a_work/gitee/PaperToSkill/paper/aaai/src/related.tex",
+      "D:/a_work/gitee/PaperToSkill/paper/aaai/src/method.tex",
+      "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex",
+      "D:/a_work/gitee/PaperToSkill/paper/aaai/src/conclusion.tex"
+    ],
+    "supporting_evidence": [
+      "D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_tables.tex",
+      "D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_supporting_tables.tex",
+      "D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_external_evidence_tables.tex",
+      "D:/a_work/gitee/PaperToSkill/paper/aaai/ReproducibilityChecklist.tex"
+    ],
+    "evidence_boundary": "This audit evaluates evidence stated in the paper package. It does not infer unreported protocol details from repository code or treat pending table shells as completed evidence."
+  },
+  "overall_assessment": {
+    "factual_summary": "The paper contains internally consistent deterministic artifact checks on four curated papers, token-proxy measurements, one narrow transfer-note ablation, and eight single-run downstream stress-test rows. The downstream results are mixed, and the manuscript usually labels them as boundary evidence rather than aggregate effectiveness. External cross-model and independent-human tables remain entirely pending.",
+    "evaluation": "The evidence supports a narrow artifact-engineering claim: the current pipeline can produce compact, structurally compliant, line-linked skill packages from curated notes under the authors' deterministic rubrics. It does not yet support the stronger title-level and discussion-level implications that the skills are broadly portable, preserve paper meaning independently of the rubric, or reliably improve real reuse. The largest threats are evaluator circularity, weak and unmatched baselines, a four-paper curated sample, single-run downstream measurements, no uncertainty or significance analysis, and incomplete reproducibility reporting.",
+    "evidence_strength": "promising_but_preliminary",
+    "submission_risk": "high_without_external_and_repeated_evidence"
+  },
+  "central_claim_audit": [
+    {
+      "claim_id": "C1",
+      "claim": "PaperToSkill converts curated, source-anchored paper notes into compact, human-editable skill packages with workflow, validation, failure, transfer, and source information.",
+      "claim_anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/abstract.tex:6-16",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/method.tex:3-16",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/introduction.tex:20-24"
+      ],
+      "factual_evidence": [
+        "The method describes SKILL.md plus an optional source_map.json and enumerates the intended schema fields.",
+        "The extractor is described as deterministic and operating on normalized sections and list items from curated notes.",
+        "All four generated artifacts are reported to satisfy a 20/20 structural rubric."
+      ],
+      "evidence_anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/method.tex:3-16",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_tables.tex:147-158"
+      ],
+      "evaluation": "Narrowly supported as an existence and schema-compliance claim. The paper does not provide pseudocode, exact candidate-selection limits, rubric definitions, or an independently checked mapping from paper semantics to emitted instructions, so the evidence does not establish general conversion fidelity.",
+      "support_level": "supported_narrowly",
+      "missing_tests": [
+        "Release or appendix-level algorithm/pseudocode with exact caps, ordering, deduplication, and source-map construction rules.",
+        "Blind reconstruction audit showing that an independent implementer produces the same package from the same note.",
+        "Independent semantic-entailment checks for every emitted instruction, not only source-span validity."
+      ]
+    },
+    {
+      "claim_id": "C2",
+      "claim": "Generated skills are structurally valid under the deterministic rubric.",
+      "claim_anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/abstract.tex:10-13",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:52-56"
+      ],
+      "factual_evidence": [
+        "AI Scientist-v2, Reflexion, AIDE, and Toolformer all receive 20/20 in Table main-results."
+      ],
+      "evidence_anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_tables.tex:147-158"
+      ],
+      "evaluation": "Supported only relative to the authors' rubric. Four identical perfect scores indicate a ceiling and provide no discrimination among artifacts. Without the rubric items, scorer implementation, adversarial invalid artifacts, or external validation, 20/20 cannot be interpreted as semantic correctness or practical usability.",
+      "support_level": "supported_by_reported_metric_only",
+      "missing_tests": [
+        "Publish the full rubric and scorer with positive, borderline, and intentionally corrupted artifacts.",
+        "Report item-level failures and scorer sensitivity rather than only saturated totals.",
+        "Correlate rubric scores with blinded human fidelity and downstream execution success."
+      ]
+    },
+    {
+      "claim_id": "C3",
+      "claim": "PaperToSkill preserves more operational coverage than generic-summary and abstract-only baselines.",
+      "claim_anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/abstract.tex:10-16",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:52-56",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:155-162"
+      ],
+      "factual_evidence": [
+        "Skill coverage is 7.867/9, 8.267/9, 9.1/10, and 8.9/10, with substantially smaller generic-summary and abstract-only values in the same table.",
+        "The comparison covers four hand-selected agent-method papers and uses paper-specific denominators of 9 or 10."
+      ],
+      "evidence_anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_tables.tex:147-158",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/method.tex:38-49"
+      ],
+      "evaluation": "The numerical statement is supported under the deterministic coverage rubric, but the causal interpretation is weak. PaperToSkill contexts are much longer and explicitly optimized for workflow fields, while the generic summary and abstract are not length-matched or structurally matched. The evaluator may therefore reward the schema it was designed to detect. No independent human or executable coverage validation is complete.",
+      "support_level": "partially_supported",
+      "missing_tests": [
+        "Length-matched procedural-summary and prompt-optimized summary baselines.",
+        "A blinded expert-written skill baseline and an automatic LLM paper-to-procedure baseline.",
+        "Held-out rubric construction or external raters who did not design the schema."
+      ]
+    },
+    {
+      "claim_id": "C4",
+      "claim": "The skills are compact and substantially reduce input-token proxy size relative to full extracted papers.",
+      "claim_anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/abstract.tex:10-15",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:58-72"
+      ],
+      "factual_evidence": [
+        "Reported skill lengths are 479 to 943 words, all below the declared 1200-word cap.",
+        "The o200k_base supporting table reports skill/full token ratios from 0.0239 to 0.0965, corresponding to 90.35% to 97.61% reduction."
+      ],
+      "evidence_anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:58-72",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_supporting_tables.tex:4-18"
+      ],
+      "evaluation": "The word-count and tokenizer-proxy claims are directly supported. They do not establish lower provider cost, lower end-to-end latency, lower human preparation effort, or success-per-dollar. The phrase 'coverage-preserving compression relative to full-paper context' is too strong because full-paper context is not scored by the same coverage measure and semantic preservation is not independently established.",
+      "support_level": "supported_for_size_not_utility",
+      "missing_tests": [
+        "Matched live billing, latency, and output-token accounting under identical models and tasks.",
+        "Measure author curation and editing time, which is currently absent from the cost claim.",
+        "Compare full paper, length-matched excerpts, and skills under a common downstream protocol."
+      ]
+    },
+    {
+      "claim_id": "C5",
+      "claim": "The generated skills are source-grounded.",
+      "claim_anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/abstract.tex:6-16",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/conclusion.tex:3-6"
+      ],
+      "factual_evidence": [
+        "Reported source support rates are 0.938, 1.0, 1.0, and 1.0, with zero invalid line ranges.",
+        "One AI Scientist-v2 span is explicitly retained as a weak boundary case."
+      ],
+      "evidence_anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:58-62",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_tables.tex:151-156"
+      ],
+      "evaluation": "Line-range validity and support-rate bookkeeping are necessary but not sufficient evidence of semantic grounding. The manuscript does not define whether support means string overlap, section membership, entailment, or reviewer judgment, nor does it report false-positive grounding on deliberately unsupported instructions.",
+      "support_level": "partially_supported",
+      "missing_tests": [
+        "Blinded claim-to-source entailment labels with multiple raters and agreement.",
+        "Adversarial unsupported or contradicted instruction tests to estimate false-grounding rate.",
+        "Separate exact-span validity, semantic support, and inferred-guidance accuracy in reporting."
+      ]
+    },
+    {
+      "claim_id": "C6",
+      "claim": "Transfer Notes encode signals that improve transfer readiness.",
+      "claim_anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:74-79"
+      ],
+      "factual_evidence": [
+        "Every full skill scores 10/10 and every no-Transfer-Notes version scores 7.6/10 in the offline readiness metric."
+      ],
+      "evidence_anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_tables.tex:161-175"
+      ],
+      "evaluation": "The paper appropriately limits this to offline readiness, but even the narrow causal claim may be tautological if the readiness rubric directly awards the presence of Transfer Notes. The identical 2.4-point drop across all papers suggests deterministic feature removal rather than evidence that the content improves actual transfer.",
+      "support_level": "metric_circularity_risk",
+      "missing_tests": [
+        "Define the readiness rubric and show which items change after ablation.",
+        "Run live cross-harness transfer with full, no-transfer, shuffled-transfer, and length-matched placebo notes.",
+        "Test whether paper-specific transfer content outperforms generic transfer boilerplate."
+      ]
+    },
+    {
+      "claim_id": "C7",
+      "claim": "PaperToSkill produces portable skills that help users or agents reuse a paper's contribution on downstream tasks.",
+      "claim_anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/main.tex:21-21",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/introduction.tex:10-18",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/conclusion.tex:3-8"
+      ],
+      "factual_evidence": [
+        "Eight main downstream rows contain one GPT-family run per Summary and PaperToSkill condition.",
+        "PaperToSkill is better on AIDE-T2 and SWE-T2, tied or nearly tied on AIDE-T1 and both Reflexion tasks, fails with Summary on SWE-T1, and remains below success threshold on both SnapATAC2 rows.",
+        "The paper explicitly says these rows do not establish aggregate advantage over Summary."
+      ],
+      "evidence_anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/method.tex:67-79",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:3-28",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_tables.tex:1-21"
+      ],
+      "evaluation": "The data support feasibility and failure-boundary discovery, not a general portability or usefulness claim. With one stochastic run, heterogeneous metrics, ceiling fixtures, two dry-run biomedical tasks, and several pre-execution contract failures, the sign and magnitude of the treatment effect are unknown. The manuscript is careful in the abstract and results, but the title, hypothesis, and conclusion still read more strongly than the evidence.",
+      "support_level": "not_established",
+      "missing_tests": [
+        "Repeated paired runs on held-out paper-task pairs with a predeclared primary endpoint and confidence interval.",
+        "More difficult Reflexion tasks to remove the 1.0/1.0 ceiling and full executable SnapATAC2 tasks rather than dry-run fixtures.",
+        "A task-level hierarchical or paired analysis that does not average incomparable raw metrics without normalization."
+      ]
+    },
+    {
+      "claim_id": "C8",
+      "claim": "Extracted text can seed auditable automatic note scaffolds, and the pipeline has a direct-PDF smoke path.",
+      "claim_anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/introduction.tex:26-30",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:92-103"
+      ],
+      "factual_evidence": [
+        "Auto-note scaffolds are retained only for Toolformer and AIDE and receive high deterministic rubric, coverage, readiness, and span-validity scores.",
+        "The direct-PDF path is described only as a pdftotext-layout smoke path and is explicitly not claimed as robust arbitrary-PDF automation."
+      ],
+      "evidence_anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_supporting_tables.tex:20-34",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:92-103"
+      ],
+      "evaluation": "The manuscript scopes this claim appropriately, but two papers are insufficient to assess layout diversity, equation/table loss, two-column corruption, OCR, or general automatic-note fidelity. Toolformer's auto-note scoring above its curated note also raises a metric-validity question that needs qualitative error analysis.",
+      "support_level": "supported_as_smoke_only",
+      "missing_tests": [
+        "A held-out PDF set stratified by layout, equations, tables, appendix length, and OCR quality.",
+        "Independent comparison of curated and automatic notes at the instruction-entailment level.",
+        "Failure-rate reporting for region detection, column selection, and line-anchor preservation."
+      ]
+    },
+    {
+      "claim_id": "C9",
+      "claim": "PaperToSkill is a reproducible conversion layer.",
+      "claim_anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/abstract.tex:15-16"
+      ],
+      "factual_evidence": [
+        "The manuscript describes deterministic extraction and deterministic evaluators, source maps, locked local rows, and saved response files.",
+        "The reproducibility checklist contains only the template text 'Type your response here' for every item and is not included in main.tex.",
+        "The manuscript does not report full hardware/software versions, seeds, task IDs, split construction, final parameters, or a code/data availability statement."
+      ],
+      "evidence_anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/method.tex:10-23",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/main.tex:41-44",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/ReproducibilityChecklist.tex:96-107",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/ReproducibilityChecklist.tex:172-215"
+      ],
+      "evaluation": "Determinism is a useful design property, but the current paper does not provide enough protocol detail for independent reproduction. The claim should be 'deterministically auditable in the authors' artifact pipeline' until the exact manifests, scorers, prompts, environments, seeds, and release plan are documented.",
+      "support_level": "overclaimed_relative_to_reporting",
+      "missing_tests": [
+        "Complete the reproducibility checklist and include or link a frozen artifact manifest.",
+        "Report exact model identifiers, API dates, decoding settings, prompts, seeds, run counts, task instance IDs, data hashes, split code, timeouts, hardware, OS, and library versions.",
+        "Have an independent machine reproduce all tables from released raw outputs with one documented command."
+      ]
+    },
+    {
+      "claim_id": "C10",
+      "claim": "PaperToSkill occupies a distinct practical layer from Paper2Agent because it emits portable natural-language skills without requiring an MCP server or runnable codebase.",
+      "claim_anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/related.tex:13-23",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:105-114"
+      ],
+      "factual_evidence": [
+        "The paper reports a seven-criterion artifact/workflow comparison grounded in Paper2Agent paper text and local PaperToSkill artifacts.",
+        "It explicitly states that Paper2Agent was not run and no MCP server was deployed."
+      ],
+      "evidence_anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:105-114"
+      ],
+      "evaluation": "The artifact-type distinction is plausible and textually supported, but no evidence establishes a usability, setup-cost, fidelity, or task-performance advantage. This is positioning evidence, not a competitive baseline result.",
+      "support_level": "supported_for_positioning_only",
+      "missing_tests": [
+        "Execute Paper2Agent on code-backed papers where both systems apply, with matched tasks and setup accounting.",
+        "Compare time-to-first-success, human edits, runtime dependencies, semantic fidelity, and downstream success."
+      ]
+    },
+    {
+      "claim_id": "C11",
+      "claim": "Saved-response evaluations and internal annotation provide semantic-fidelity or cross-model support.",
+      "claim_anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/method.tex:45-65",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:81-90",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:116-143"
+      ],
+      "factual_evidence": [
+        "The saved-response evaluator reports perfect contract scores on 24/24 transfer rows and 6/6 model-ablation rows.",
+        "The internal annotation reports 24 cells, one reviewer, mean 4.75/5, confidence 0.946, and four discussion-marked rows.",
+        "The latest Claude refresh failed with HTTP 502 and uses previously saved responses for scored rows.",
+        "The real-reuse model ablation is mixed: GPT-family Summary average 0.605 versus PaperToSkill 0.333, DeepSeek ties 0.500/0.500, and Claude remains pending."
+      ],
+      "evidence_anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:81-90",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:116-143",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_tables.tex:128-143"
+      ],
+      "evaluation": "The paper correctly disclaims human semantic fidelity and downstream success for saved responses. Perfect contract scores show evaluator saturation, and the one-reviewer annotation has no independence or agreement estimate. The real-reuse model ablation is counterevidence to a model-robust advantage and should be foregrounded rather than treated only as auxiliary detail.",
+      "support_level": "insufficient_for_semantic_or_cross_model_claim",
+      "missing_tests": [
+        "Independent blinded multi-rater fidelity evaluation with agreement and confidence intervals.",
+        "Fresh live responses under fixed model versions, prompts, decoding parameters, and multiple seeds.",
+        "Per-task model-ablation results and an explicit reconciliation with the main GPT-family rows."
+      ]
+    },
+    {
+      "claim_id": "C12",
+      "claim": "External live real-reuse and independent human evaluation validate generalization.",
+      "claim_anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/method.tex:90-98"
+      ],
+      "factual_evidence": [
+        "Every cell in both external-evidence tables is '--' and every row is labeled Pending external evidence."
+      ],
+      "evidence_anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_external_evidence_tables.tex:3-24",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_external_evidence_tables.tex:26-44",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/README.md:43-46"
+      ],
+      "evaluation": "Unsupported at the current revision. Figure external-evidence-design is a protocol illustration, not evidence. The README explicitly states that the draft is not submission-ready until these tables and the page-limit gate are closed.",
+      "support_level": "pending_no_evidence",
+      "missing_tests": [
+        "Complete the predeclared live model-by-task matrix with explicit seed counts and paired outcomes.",
+        "Complete independent human scoring with artifact count, rater count, agreement statistic, confidence intervals, and adjudication protocol."
+      ]
+    }
+  ],
+  "figure_and_table_audit": [
+    {
+      "item": "Figure 1: PaperToSkill pipeline",
+      "factual_evidence": "The caption presents the intended source-note-skill-evaluation flow and explicitly separates deterministic local checks from external evidence.",
+      "anchors": ["D:/a_work/gitee/PaperToSkill/paper/aaai/src/method.tex:25-34"],
+      "evaluation": "Useful conceptual overview; it contains no empirical quantities and cannot support accuracy, portability, or fidelity claims."
+    },
+    {
+      "item": "Table real-reuse-main",
+      "factual_evidence": "Eight single-run Summary/PaperToSkill rows show two clear PaperToSkill wins, three ties or near-ties, one double failure, and two sub-threshold partial SnapATAC2 scores.",
+      "anchors": ["D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_tables.tex:1-21"],
+      "evaluation": "Supports a mixed feasibility and boundary story only. It lacks repeated seeds, uncertainty, common metric scale, and a stronger procedural baseline."
+    },
+    {
+      "item": "Table real-reuse-failure-analysis",
+      "factual_evidence": "The table labels row-level failure modes and contract implications using the same eight raw rows.",
+      "anchors": ["D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_tables.tex:23-43"],
+      "evaluation": "Useful qualitative diagnosis but explicitly adds no new task-success evidence. Contract implications are hypotheses until prospectively tested."
+    },
+    {
+      "item": "SWE-T1 and SnapATAC2 follow-up tables",
+      "factual_evidence": "Changing source context or task contract makes both conditions improve or pass; controlled and model-generated SnapATAC2 executable artifacts also make both conditions pass.",
+      "anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_tables.tex:45-109",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:30-48"
+      ],
+      "evaluation": "These are valuable confound diagnostics and weaken any attribution of the original failures or recoveries specifically to PaperToSkill. They support contract sensitivity, not method advantage."
+    },
+    {
+      "item": "Table full-excerpt-sanity",
+      "factual_evidence": "On three tasks, Full Excerpt scores 0.000, 0.000, and 0.250 while using far more local context tokens.",
+      "anchors": ["D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_tables.tex:111-126"],
+      "evaluation": "A useful warning about raw context, but one run on three tasks with highly unequal context lengths cannot separate information quality, context overload, truncation, prompt format, and stochastic model behavior."
+    },
+    {
+      "item": "Table real-reuse-llm-ablation",
+      "factual_evidence": "The GPT-family slice favors Summary on average, DeepSeek ties, and all Claude rows are pending.",
+      "anchors": ["D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_tables.tex:128-143"],
+      "evaluation": "This is currently the strongest robustness warning. It does not support cross-model advantage and needs per-task, repeated-run explanation."
+    },
+    {
+      "item": "Table main-results",
+      "factual_evidence": "Four curated skills beat generic-summary and abstract-only baselines on deterministic coverage while meeting structure, support, and word-budget metrics.",
+      "anchors": ["D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_tables.tex:145-159"],
+      "evaluation": "Supports narrow artifact compliance and rubric coverage. Small sample, ceiling scores, author-defined rubrics, unequal contexts, and no uncertainty limit external validity."
+    },
+    {
+      "item": "Table transfer-ablation",
+      "factual_evidence": "All four full skills score 10/10 and all four no-transfer variants score 7.6/10.",
+      "anchors": ["D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_tables.tex:161-175"],
+      "evaluation": "Likely measures the direct presence of fields removed by the ablation. It does not demonstrate live transfer benefit."
+    },
+    {
+      "item": "Supporting token and auto-note tables",
+      "factual_evidence": "Token ratios show large deterministic compression; automatic notes on Toolformer and AIDE retain high local rubric values.",
+      "anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_supporting_tables.tex:4-18",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_supporting_tables.tex:20-34"
+      ],
+      "evaluation": "Directly supports proxy size and two-paper smoke claims, not provider cost or broad PDF generalization. These tables are excluded from the main PDF, reducing auditability for readers."
+    },
+    {
+      "item": "Figure 2 and external evidence tables",
+      "factual_evidence": "The figure describes two planned external tracks; all associated model/task and human-rating rows are pending.",
+      "anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/method.tex:90-98",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_external_evidence_tables.tex:3-44"
+      ],
+      "evaluation": "Protocol design only; no evidentiary weight until populated."
+    }
+  ],
+  "protocol_audit": {
+    "datasets_and_tasks": {
+      "facts": [
+        "Artifact benchmark: AI Scientist-v2, Reflexion, AIDE, and Toolformer, all based on curated source-anchored notes.",
+        "Real reuse: eight rows across AIDE, SWE-agent, Reflexion, and SnapATAC2.",
+        "AIDE uses an official Kaggle Spaceship Titanic training file with a locked local validation split.",
+        "SnapATAC2 uses prepared official miniature fixtures and dry-run tasks rather than full paper reproduction."
+      ],
+      "anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/method.tex:38-43",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/method.tex:67-79"
+      ],
+      "evaluation": "Selection criteria and representativeness are not reported. There is no train/development/held-out paper split, no evidence that curated notes were prepared blind to the evaluator, and several downstream fixtures are too easy or too synthetic to test reuse. The exact Kaggle split, SWE instance IDs, Reflexion fixtures, SnapATAC2 fixture construction, data hashes, and licensing are missing from the manuscript."
+    },
+    "baselines": {
+      "facts": [
+        "Deterministic benchmark baselines are generic summary and abstract-only context.",
+        "Main real-reuse baseline is Summary.",
+        "Full Excerpt is auxiliary on only AIDE-T1, SWE-T1, and SNAP-T1.",
+        "Paper2Agent is compared only at artifact/workflow level and is not executed."
+      ],
+      "anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/method.tex:38-43",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/method.tex:81-86",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:105-114"
+      ],
+      "evaluation": "Baselines are too weak to isolate the contribution of schema, curation, source maps, length, or validation instructions. Required additions are a length-matched structured summary, generic LLM proceduralization, expert-authored skill, original repository/readme instructions where available, and an executable Paper2Agent comparison on applicable cases."
+    },
+    "metrics": {
+      "facts": [
+        "Reported metrics include structure rubric, context coverage, source-span validation, offline transfer readiness, word count, character/token proxies, heterogeneous task scores, and deterministic output contracts.",
+        "The paper explicitly distinguishes proxies from live billing and contract scores from semantic or execution outcomes."
+      ],
+      "anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/method.tex:45-65",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:64-90"
+      ],
+      "evaluation": "Metric formulas, item definitions, success thresholds, normalization, and scorer validity are not sufficiently documented. Structural and contract metrics saturate, transfer readiness appears directly coupled to the removed field, and source support is not decomposed into location validity versus semantic entailment. Heterogeneous real-reuse metrics should not be combined without a preregistered normalization and decision rule."
+    },
+    "splits_seeds_and_statistics": {
+      "facts": [
+        "Every main real-reuse row has one GPT-family run per condition.",
+        "No variance, confidence interval, effect-size uncertainty, or significance test is reported for main results.",
+        "External seed counts are pending.",
+        "The reproducibility checklist entries on seeds, run counts, distributional analysis, and significance remain unanswered."
+      ],
+      "anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/method.tex:67-79",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:203-209",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_external_evidence_tables.tex:10-20",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/ReproducibilityChecklist.tex:196-215"
+      ],
+      "evaluation": "This is the principal empirical validity failure. At minimum, use paired multiple seeds for stochastic model calls, report task-level paired differences with bootstrap or randomization intervals, and predeclare how timeouts, invalid artifacts, and provider failures enter the endpoint. Four curated artifact rows cannot justify statistical generalization."
+    },
+    "ablations": {
+      "facts": [
+        "Transfer Notes are removed for an offline readiness ablation.",
+        "A three-task Full Excerpt sanity check and a three-task model-family slice are auxiliary.",
+        "A synthetic retrieval-depth branch reports success only at K=all."
+      ],
+      "anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_tables.tex:111-143",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_tables.tex:161-175",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:145-153"
+      ],
+      "evaluation": "There is no downstream component ablation for validation checks, failure branches, source anchors, transfer notes, curation, or source-map availability. The current transfer ablation is metric-facing, not outcome-facing. A factorial or targeted live ablation is needed to identify which schema components cause reuse gains."
+    },
+    "costs_and_efficiency": {
+      "facts": [
+        "The paper reports word counts and local input/output token proxies.",
+        "It explicitly disclaims provider billing, invoices, and success-per-dollar.",
+        "Some task rows use a 300-second scorer budget, and follow-up tables report SnapATAC2 runtime/memory."
+      ],
+      "anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/method.tex:45-51",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:3-10",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:199-203",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/papertoskill_tables.tex:77-109"
+      ],
+      "evaluation": "Proxy compression is well supported, but conversion cost is incomplete because curation time, editing time, model/API cost, wall-clock latency, failures, and amortization across reuse are absent. Actual task-level runtime and memory should be measured for every condition under a common budget."
+    },
+    "implementation_details": {
+      "facts": [
+        "The paper gives prose descriptions of note parsing, candidate collection, source mapping, and a two-column heuristic.",
+        "No algorithm block, pseudocode, exact caps, hyperparameter table, prompt templates, or model decoding settings appear in the manuscript.",
+        "The method refers to aliases such as GPT 5.5, Claude Opus 4.8, and DeepSeek without a stable full model/version protocol in the paper."
+      ],
+      "anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/method.tex:10-23",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/method.tex:57-65",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:116-133"
+      ],
+      "evaluation": "The implementation is not specified at a level that permits independent reconstruction. The paper needs a compact algorithm, exact configuration table, task manifest schema, prompt/version appendix, and a mapping from every result row to raw files and scorer command."
+    },
+    "reproducibility": {
+      "facts": [
+        "main.tex does not include the reproducibility checklist by default.",
+        "Every checklist answer is still the template placeholder.",
+        "No public code/data URL, archival identifier, license statement, or experiment reproduction command is present in the manuscript sections reviewed."
+      ],
+      "anchors": [
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/main.tex:41-44",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/ReproducibilityChecklist.tex:96-107",
+        "D:/a_work/gitee/PaperToSkill/paper/aaai/ReproducibilityChecklist.tex:142-215"
+      ],
+      "evaluation": "Reproducibility is not submission-ready. A frozen artifact release should include raw model responses, curated and automatic notes, source maps, rubrics, scorer code, task fixtures or download scripts, split manifests, environment lockfiles, exact commands, table-generation scripts, and expected hashes."
+    }
+  },
+  "unsupported_or_overclaimed_statements": [
+    {
+      "severity": "major",
+      "statement": "Turning Research Papers into Portable Agent Skills",
+      "anchor": "D:/a_work/gitee/PaperToSkill/paper/aaai/main.tex:21-21",
+      "reason": "Portability is title-level and unqualified, while live evidence is eight single-run mixed rows, cross-model live evidence is incomplete, and cross-harness success is not established.",
+      "supported_rewrite_scope": "Turning Curated Paper Notes into Source-Grounded Agent Skill Artifacts"
+    },
+    {
+      "severity": "major",
+      "statement": "These results support PaperToSkill as a reproducible conversion layer from curated paper notes to portable skills.",
+      "anchor": "D:/a_work/gitee/PaperToSkill/paper/aaai/src/abstract.tex:15-16",
+      "reason": "The reported deterministic checks support local auditability, but protocol and release details are insufficient for independent reproduction and portability is not confirmed.",
+      "supported_rewrite_scope": "These results support deterministic artifact construction and local auditability on four curated-note cases."
+    },
+    {
+      "severity": "major",
+      "statement": "We interpret both as coverage-preserving compression relative to full-paper context.",
+      "anchor": "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:64-72",
+      "reason": "The full paper is not evaluated by the same coverage metric, semantic preservation is unverified, and downstream results are mixed.",
+      "supported_rewrite_scope": "The skills are substantially smaller while retaining high scores on the authors' deterministic operational-coverage rubric."
+    },
+    {
+      "severity": "major",
+      "statement": "A structured paper-note-to-skill pipeline can preserve operational knowledge that summaries discard.",
+      "anchor": "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:155-162",
+      "reason": "The comparison is based on an author-defined rubric and unmatched context lengths; no independent semantic or outcome validation shows that the scored content is truly preserved and causally useful.",
+      "supported_rewrite_scope": "The pipeline retains more fields counted by the deterministic operational rubric than the tested short-summary baselines."
+    },
+    {
+      "severity": "moderate",
+      "statement": "generated skills are ... source-grounded",
+      "anchor": "D:/a_work/gitee/PaperToSkill/paper/aaai/src/conclusion.tex:3-6",
+      "reason": "Reported support rates and valid line spans do not by themselves demonstrate semantic entailment or correct use of the cited source.",
+      "supported_rewrite_scope": "generated skills contain auditable source-span links with high span-validation rates"
+    },
+    {
+      "severity": "moderate",
+      "statement": "transfer notes encode artifact-readiness signals",
+      "anchor": "D:/a_work/gitee/PaperToSkill/paper/aaai/src/result.tex:74-79",
+      "reason": "The identical drop after deleting the field may be mechanically induced by a rubric that checks for that field; no placebo or live transfer validates information content.",
+      "supported_rewrite_scope": "removing Transfer Notes lowers the current offline readiness score"
+    }
+  ],
+  "prioritized_missing_tests": [
+    {
+      "priority": "P0",
+      "test": "Repeated paired real-reuse evaluation on held-out paper-task pairs",
+      "minimum_design": "Predeclare one primary success endpoint, run Summary and PaperToSkill with identical model versions, decoding, budgets, and at least several independent seeds per task; retain timeouts and invalid artifacts as failures; report paired task-level effects, confidence intervals, and a paired randomization or hierarchical analysis.",
+      "claim_unblocked": "Whether PaperToSkill improves downstream reuse rather than only artifact metrics."
+    },
+    {
+      "priority": "P0",
+      "test": "Strong matched-baseline suite",
+      "minimum_design": "Add a length-matched structured summary, generic LLM proceduralization, expert-authored skill, budget-matched Full Excerpt or retrieval baseline, and executable Paper2Agent where applicable; control prompt and context budget.",
+      "claim_unblocked": "Whether the schema/conversion layer contributes beyond length, curation, and generic procedural prompting."
+    },
+    {
+      "priority": "P0",
+      "test": "Independent blinded human fidelity and usability evaluation",
+      "minimum_design": "Use at least three independent raters, randomized artifact identity, a source-entailment task and an execution-readiness task, preregistered adjudication, inter-rater agreement, and 95% confidence intervals.",
+      "claim_unblocked": "Semantic fidelity, source grounding, and usefulness to ordinary users."
+    },
+    {
+      "priority": "P0",
+      "test": "End-to-end held-out PDF conversion",
+      "minimum_design": "Select papers before rubric tuning, start from raw PDFs, blind curators/evaluators where possible, include diverse layouts and domains, and report failure/abstention rates plus human correction time.",
+      "claim_unblocked": "General conversion and automation claims beyond curated notes."
+    },
+    {
+      "priority": "P1",
+      "test": "Metric validation and anti-circularity study",
+      "minimum_design": "Publish all rubric items and formulas, score adversarially corrupted artifacts, estimate ceiling/floor behavior, and correlate structural, coverage, readiness, and source scores with independent fidelity and downstream outcomes.",
+      "claim_unblocked": "Whether deterministic metrics measure the intended constructs."
+    },
+    {
+      "priority": "P1",
+      "test": "Outcome-facing component ablations",
+      "minimum_design": "Remove or replace validation checks, failure cases, source anchors, and Transfer Notes one at a time; add shuffled and generic-placebo variants; evaluate on repeated live tasks rather than only the matching offline rubric.",
+      "claim_unblocked": "Which skill components actually cause transfer gains."
+    },
+    {
+      "priority": "P1",
+      "test": "Cross-model and cross-harness robustness",
+      "minimum_design": "Complete the pending GPT, Claude, and DeepSeek matrix with stable model snapshots, identical protocols, multiple seeds, per-task results, and provider failures separated from quality outcomes.",
+      "claim_unblocked": "Portability across model families and agent harnesses."
+    },
+    {
+      "priority": "P1",
+      "test": "Full cost and effort accounting",
+      "minimum_design": "Measure curation/editing labor, conversion latency, API/input/output tokens, actual billing, retries, execution runtime/memory, and success per dollar for all conditions.",
+      "claim_unblocked": "Practical efficiency rather than token-proxy compression alone."
+    },
+    {
+      "priority": "P1",
+      "test": "Independent reproducibility run",
+      "minimum_design": "Release frozen raw artifacts, manifests, source maps, task data or retrieval scripts, environment lockfiles, prompts, model/date identifiers, seeds, scorers, and one-command table generation; have an uninvolved machine regenerate all reported tables and hashes.",
+      "claim_unblocked": "Reproducible conversion-layer claim."
+    }
+  ],
+  "positive_evidence_practices": [
+    "The paper explicitly separates deterministic artifact evidence from live downstream evidence.",
+    "The main real-reuse results are reported as mixed rather than converted into an aggregate win claim.",
+    "Follow-up diagnostics state when both conditions improve and avoid presenting contract closure as PaperToSkill advantage.",
+    "Token proxies are not mislabeled as provider billing or success-per-dollar.",
+    "The automatic-note and direct-PDF claims are explicitly limited to scaffolds and smoke tests.",
+    "Provider availability failures are distinguished from model-quality results."
+  ],
+  "bottom_line": {
+    "fact": "Current evidence is strongest for deterministic package structure, rubric coverage, source-span bookkeeping, and proxy compression on four curated papers.",
+    "evaluation": "For AAAI-level empirical support, the paper still needs independent construct validation and repeated held-out downstream experiments. Without them, the defensible contribution is an artifact schema and auditable deterministic pipeline, not demonstrated broad portability or user benefit."
+  }
+}

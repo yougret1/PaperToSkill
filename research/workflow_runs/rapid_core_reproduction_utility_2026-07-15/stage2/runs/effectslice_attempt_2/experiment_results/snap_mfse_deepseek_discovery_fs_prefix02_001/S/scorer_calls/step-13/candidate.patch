@@ -1,0 +1,54 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,42 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    if not np.isfinite(counts).all() or np.any(counts < 0):
++        raise ValueError("counts must be finite and nonnegative")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("counts must not have all-zero rows")
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError(f"n_components must satisfy 1 <= n_components < {n_cells}")
++
++    # IDF scaling
++    df = np.count_nonzero(counts > 0, axis=0)
++    n = n_cells
++    idf = np.log(n / (1.0 + df))
++    X_idf = counts * idf
++
++    # Row normalization (L2)
++    row_norms = np.linalg.norm(X_idf, axis=1)
++    X_norm = X_idf / row_norms[:, np.newaxis]
++
++
++    # Matrix-free operator for X_norm @ X_norm.T
++    def matvec(v):
++        return X_norm @ (X_norm.T @ v)
++
++    A = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=X_norm.dtype)
++
++    # Starting vector for reproducibility
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells)
++    v0 = v0 / np.linalg.norm(v0)
++
++    eigenvalues, eigenvectors = eigsh(A, k=n_components, which='LM', v0=v0)
++
++    eigenvalues = eigenvalues[::-1].copy()
++    eigenvectors = eigenvectors[:, ::-1].copy()
++
++    return eigenvalues, eigenvectors

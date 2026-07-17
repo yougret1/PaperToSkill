@@ -1,0 +1,131 @@
+{
+  "gap_closure_reject_check": {
+    "entries": [
+      {
+        "gap": "Under a limited initial budget, no retrieved frontier establishes that the observed low-fidelity score preserves the sign and ordering of paper interventions by the performance improvement they later produce on independently specified user tasks; a probe can therefore support the wrong go/no-go decision even when it is internally faithful.",
+        "main_pattern": "decompose_and_delegate",
+        "sub_pattern": "C25 (Decompose and Delegate to Solvers)",
+        "tactical_failure_mode_quoted": "The recurring failure is assembling a decompose-and-delegate pipeline whose components are all off-the-shelf — role-agents, prompts, existing engines, retrieval modules — so that no single piece is shown to be both novel and load-bearing. The intermediate artifact stays advisory (read by the next stage but never closed by a verification signal), reducing the system to sampling-plus-filtering or to a re-skin of an already-published neighbor that performed the same routing move.",
+        "reject_lessons_evaluated": [
+          {
+            "lesson_quoted": "A decomposition that merely chains off-the-shelf agents or engines, with no single component demonstrated to be both novel and load-bearing, reads as engineering assembly rather than a contribution.",
+            "candidate_match": "yes",
+            "reasoning": "The source-map parser, graph checkers, task runner, artifact parser, objective scorer, dependency-closed deletion, and fixed-point minimizer are standard components, while source anchoring is a domain wrapper and the candidate does not establish that its delta-debugging/minimal-core operation is itself novel as well as load-bearing."
+          },
+          {
+            "lesson_quoted": "If the 'key' prompt or elicitation scheme is tuned to one benchmark and not validated across settings, reviewers treat it as a dataset-specific hack instead of a transferable mechanism.",
+            "candidate_match": "borderline",
+            "reasoning": "The obligation types and extraction loop are exercised only on eight existing PaperToSkill source-map cases, so heterogeneous case labels do not yet show that the compiler survives a genuinely different source-map schema or task harness."
+          },
+          {
+            "lesson_quoted": "Delegating a sub-problem to a sound but costly solver (NP-hard search, materialized intermediate state) sinks the contribution when latency and scalability are left unexamined.",
+            "candidate_match": "borderline",
+            "reasoning": "The compute budget discloses 16 GPU-days and API cost, but neither core_mechanism nor falsification_prediction characterizes deletion-run growth with graph size, dependency-block overlap, or repeated fixed-point passes."
+          },
+          {
+            "lesson_quoted": "Without an ablation isolating the decomposition's marginal effect from extra data, more epochs, or the base model's prior knowledge, the reported gains read as confounded and unattributable.",
+            "candidate_match": "borderline",
+            "reasoning": "The falsification compares budget-matched arbitrary subsets, but its negative control simultaneously permutes D_o and skips repair, so it does not separately isolate the obligation decomposition, deletion ordering, and verification-feedback contributions."
+          },
+          {
+            "lesson_quoted": "Re-deriving a routing move that a closely neighboring published system already demonstrated, while showing only marginal gains, fails the novelty bar regardless of engineering polish.",
+            "candidate_match": "borderline",
+            "reasoning": "Retrieved neighbors are only partial, but degraded collision coverage leaves dynamic program slicing, delta debugging, dependency minimization, and minimal-core extraction unresolved as older same-operation families."
+          },
+          {
+            "lesson_quoted": "A self-improvement or decomposition loop whose reliability hinges on an unvalidated data-generation, retrieval, or filtering component invites rejection when error propagation across iterations is never analyzed.",
+            "candidate_match": "borderline",
+            "reasoning": "Source-span checks reject unsupported additions but cannot detect omissions or semantic errors already present in source_map.json, and the candidate does not analyze how such upstream errors propagate through deletion and repair."
+          }
+        ],
+        "verdict": "triggered"
+      },
+      {
+        "gap": "No retrieved frontier estimates net benefit after execution cost, adaptation effort, and regressions on task dimensions outside the paper's headline metric are deducted from gross performance gain.",
+        "main_pattern": "controlled_diagnostic_design",
+        "sub_pattern": "C02 (Design a Confound-Isolating Diagnostic)",
+        "tactical_failure_mode_quoted": "Papers attempting this tactic fail most often when the constructed instrument isolates the confound only inside an artificial regime and never demonstrates that the isolated signal transfers to real deployment conditions — the synthetic-to-real gap is asserted rather than shown. A second recurring shape is circularity: the diagnostic is validated against the same definition, assumption, or system population it was built to interrogate (using the evaluated models as their own oracle, or hardcoding a contested definition of the target property), so it cannot independently confirm what it claims.",
+        "reject_lessons_evaluated": [
+          {
+            "lesson_quoted": "A diagnostic that only re-confirms a shortcut already known in advance, surfacing no previously unmeasurable failure, is read as confirmatory rather than as a contribution.",
+            "candidate_match": "borderline",
+            "reasoning": "The C02 leg chiefly checks whether a minimized witness agrees in sign with the existing complete condition, so without an apparent-versus-de-confounded divergence it risks confirming that non-load-bearing execution can be deleted rather than surfacing a new measurement failure."
+          },
+          {
+            "lesson_quoted": "Validating a synthetic-ground-truth instrument only on synthetic data, without demonstrating that the controlled finding transfers to real-world instances, leaves ecological validity unestablished and undermines the central claim.",
+            "candidate_match": "no",
+            "reasoning": "The eight inputs are locked real-reuse task cases and prospective repair cases, not synthetic-only instances."
+          },
+          {
+            "lesson_quoted": "Building the instrument around one contested definition of the target property means it cannot independently confirm that the definition is correct, and reviewers flag the resulting circularity.",
+            "candidate_match": "borderline",
+            "reasoning": "The task scorer is externally locked, but T also names the supposedly load-bearing claim and supplies the claim validator used by CBE, so deletion minimality is partly certified against the same operational definition it is meant to witness."
+          },
+          {
+            "lesson_quoted": "Resting an unsupervised evaluation on the unverified premise that the systems under test can reliably judge one another stakes the entire method on an assumption that collapses under scrutiny.",
+            "candidate_match": "no",
+            "reasoning": "Claim-on and claim-off outputs are judged by locked task scorers and mechanical predicates rather than by the evaluated system's self-judgment."
+          },
+          {
+            "lesson_quoted": "Pairing a single-task or small-sample instrument with broad capability claims triggers a scope-mismatch rejection, and assembling retrieval or engineering blocks without an isolating scientific insight reads as application rather than research.",
+            "candidate_match": "borderline",
+            "reasoning": "The local-effect claim is explicitly task-scoped, but eight heterogeneous case studies are still thin support for the broader method-level claim that the compiler yields deletion-minimal source-grounded witnesses across paper and task types."
+          }
+        ],
+        "verdict": "borderline"
+      }
+    ],
+    "verdict": "triggered",
+    "reasoning": "The anchor gap under decompose_and_delegate drives the aggregate because the lesson 'A decomposition that merely chains off-the-shelf agents or engines, with no single component demonstrated to be both novel and load-bearing, reads as engineering assembly rather than a contribution.' matches a pipeline whose distinctive deletion step is recognizable as program-slicing/delta-debugging/minimal-core transfer. The controlled_diagnostic_design entry remains borderline on confirmatory and small-N scope risks, but those concerns do not soften the C25 hard-floor trigger."
+  },
+  "recipe_application_check": {
+    "entries": [
+      {
+        "gap": "Under a limited initial budget, no retrieved frontier establishes that the observed low-fidelity score preserves the sign and ordering of paper interventions by the performance improvement they later produce on independently specified user tasks; a probe can therefore support the wrong go/no-go decision even when it is internally faithful.",
+        "sub_pattern": "C25 (Decompose and Delegate to Solvers)",
+        "tactical_pattern_quoted": "Have the learned model emit a structured, machine-checkable intermediate artifact at the decomposition boundary — an executable program, a formal domain/world model, a relational-or-constraint graph, a concrete state waypoint, an interleaved reason-act/tool-call trace, or a typed inter-agent deliverable — in place of a final answer, then route that artifact to a sound solver (interpreter, classical planner, constraint solver, MCTS/RL optimizer) or back through the model's own verify-and-revise loop. The load-bearing move is closing the loop with the solver's verifiable output — execution results, validator verdicts, behavioral consensus across independently sampled candidates, or terminal-answer confidence — and using that signal for credit assignment, candidate selection, or in-place correction applied DURING construction rather than only post-hoc.",
+        "instantiation_in_core_mechanism": "Core mechanism sentences 2-5 and Steps 2-7 create the typed obligation graph G_c, route nodes through source, dependency, execution, artifact, and objective checkers, feed failures back during construction, and retain nodes only after executable deletion tests. This performs C25's signature verification loop, although applying the recipe does not resolve whether the loop is novel beyond established slicing and reduction machinery.",
+        "verdict": "applied"
+      },
+      {
+        "gap": "No retrieved frontier estimates net benefit after execution cost, adaptation effort, and regressions on task dimensions outside the paper's headline metric are deducted from gross performance gain.",
+        "sub_pattern": "C02 (Design a Confound-Isolating Diagnostic)",
+        "tactical_pattern_quoted": "The shared move is to construct a controlled set of evaluation instances in which exactly one named confound is either structurally blocked or independently varied, then report the divergence between apparent and de-confounded performance as the primary result rather than an aggregate leaderboard score. The headline finding is the measured gap itself (a transition that vanishes under a linear metric, a score that collapses when an irrelevant clause is inserted, an 87%-versus-37% split between pedagogical and production partitions), used to overturn a face-value reading of an existing measurement.",
+        "instantiation_in_core_mechanism": "Core mechanism sentence 6 and Step 8 hold the minimized scaffold fixed and swap the claim action, which is a matched local intervention. However, the primary result is Delta_m and U_local from that pair, not the C02-defining divergence between an apparent complete-reproduction measurement and its de-confounded counterpart; moreover S_star is minimized against binary CBE rather than preservation of Delta_m, so deletion minimality and the claimed local effect are not causally coupled.",
+        "verdict": "bypassed"
+      }
+    ],
+    "verdict": "bypassed",
+    "reasoning": "C25's machine-checkable artifact and feedback loop are applied, but the C02 entry drives the aggregate because a generic claim-on/off pair replaces the required apparent-versus-de-confounded divergence. The mismatch between the CBE deletion criterion and Delta_m also leaves the sequential pipeline's two legs coupled only procedurally, not by the quantity they preserve."
+  },
+  "anti_pattern_check": {
+    "composition_set": [
+      "decompose_and_delegate",
+      "controlled_diagnostic_design"
+    ],
+    "matched_pattern_id": null,
+    "required_mitigation_quoted": null,
+    "mitigation_substantively_delivered": "n/a",
+    "reasoning": "The composition does not contain heterogeneous_decomposition, so none of the three documented reject-favored pairs matches."
+  },
+  "paper_pointed_threat": {
+    "threat_paper_id": "arxiv:2605.28546v1",
+    "threat_source": "collision_hits",
+    "threat_channel": "alias",
+    "subsumption_argument": "A Minimal Executable Proof for Multi-Language Contract Traceability already combines a contract, implementation graph, traceability chain, readiness gate, and executable witnesses, which subsumes the broad claim that source-linked obligations plus mechanical witnesses constitute the contribution. Obligation Witness therefore stands or falls on proving that dependency-aware deletion and the local-effect coupling create a substantively new object rather than moving executable-proof machinery into paper reproduction; the current CBE-based minimizer does not preserve Delta_m, so that differentiating step is not yet delivered. Because collision coverage is degraded and candidate-specific terms were not externally searched, this is the strongest retrieved threat, not evidence that no closer slicing or delta-debugging ancestor exists.",
+    "addressable_via": "core_mechanism and differentiation_from_lit would need an effect-preserving minimality criterion tied directly to Delta_m plus explicit comparisons against dependency-aware delta debugging, dynamic slicing, and minimal-core baselines.",
+    "parametric_family_concern": "Dynamic program slicing and delta-debugging/program-reduction families; scoop-check 'dependency-aware delta debugging', 'dynamic slicing minimal executable core', and 'hierarchical delta debugging program reduction'."
+  },
+  "falsification_structure_check": {
+    "minimal_experiment_named": "yes",
+    "outcome_metric_named": "yes",
+    "load_bearing_variable": "measured obligation deletion delta D_o",
+    "negative_control_target": "outcome_metric",
+    "verdict": "sound",
+    "reasoning": "The paragraph specifies eight locked tasks, matched claim-on/off executions, complete and summary controls, and predicts higher objective-score sign agreement with lower execution burden. Permuting D_o before closure construction predicts that downstream objective task score and sign agreement return to the arbitrary-deletion baseline, so the control targets the outcome rather than only D_o itself."
+  },
+  "verdict": "abandon",
+  "verdict_layer": "hard_floor",
+  "verdict_rationale": "The hard floor fires because gap_closure_reject_check.entries[0].reject_lessons_evaluated[0].lesson_quoted applies: the obligation compiler chains standard source-map extraction, graph checking, execution, and dependency-minimization machinery without demonstrating one component that is both novel and load-bearing. Independently, recipe_application_check.entries[1].verdict is bypassed because the candidate reports a generic claim-on/off effect rather than C02's apparent-versus-de-confounded divergence, and S_star minimizes binary CBE instead of preserving Delta_m. paper_pointed_threat.subsumption_argument further shows that executable contract graphs and witnesses are already occupied while degraded coverage leaves the closest dynamic-slicing and delta-debugging ancestors unresolved.",
+  "revision_targets": []
+}
