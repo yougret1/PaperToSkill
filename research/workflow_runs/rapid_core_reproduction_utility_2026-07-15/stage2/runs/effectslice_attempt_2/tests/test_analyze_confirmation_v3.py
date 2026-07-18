@@ -83,6 +83,19 @@ def case_registry_bytes() -> bytes:
     )
 
 
+def v2_case_registry_payload() -> dict:
+    return {
+        "schema_version": "effectslice-toolformer-filter-case-registry.v1",
+        "task_id": "TOOLFORMER-FILTER",
+        "evidence_boundary": "synthetic frozen private cases",
+        "blocks": {
+            "confirmation_v2": [
+                {"case_id": f"case-{index:03d}"} for index in range(1, 65)
+            ]
+        },
+    }
+
+
 def workspace_state() -> dict:
     digest = hashlib.sha256()
     total_bytes = 0
@@ -194,8 +207,14 @@ def family_payload(control: str) -> dict:
             if planted
             else "identity_instrumentation_only"
         ),
+        "retained_atom_ids": ["T01"],
+        "retained_unit_count": 1,
+        "retained_scc_count": 1,
         "case_block": "confirmation_v3",
         "case_count": 64,
+        "case_role": "clustered",
+        "case_generator_config_id": "synthetic-v3-cases",
+        "statistical_unit": "registered_matched_block",
         "decision_basis": "finite_registered_schedule",
         "primary_event": "joint_substitution_event",
         "independence_verified": False,
@@ -712,7 +731,7 @@ def test_slice_better_than_full_remains_joint_event_eligible(tmp_path):
     assert result["controls"]["planted"]["strict_subset_admitted"] is True
 
 
-def test_stale_stored_event_flag_is_ignored_and_recomputed(tmp_path):
+def test_stale_stored_event_flag_is_rejected_as_an_unregistered_pair_field(tmp_path):
     progress_path, progress, _ = write_complete_schedule(tmp_path)
     record = next(
         row
@@ -734,7 +753,9 @@ def test_stale_stored_event_flag_is_ignored_and_recomputed(tmp_path):
         for row in result["blocks"]
         if row["control"] == "planted" and row["replicate_id"] == "r001"
     )
-    assert block["joint_substitution_event"] is True
+    assert block["integrity_passed"] is False
+    assert block["joint_substitution_event"] is False
+    assert result["controls"]["planted"]["strict_subset_admitted"] is False
 
 
 def test_self_consistent_unregistered_condition_context_is_rejected(tmp_path):
@@ -921,6 +942,69 @@ def test_private_metric_uses_strict_bool_and_binary_integer_types(
     assert block["integrity_passed"] is False
 
 
+def test_successful_metric_requires_an_applied_patch_and_registered_details():
+    metric = score_metric(success=True, score=1.0)
+    metric["patch_applied"] = False
+    metric["case_details"] = []
+
+    with pytest.raises(analyzer.AnalysisInputError):
+        analyzer._audit_metric(
+            metric,
+            expected_case_ids=[f"case-{index:03d}" for index in range(1, 65)],
+        )
+
+
+def test_no_patch_failure_is_a_valid_fail_closed_metric_shape():
+    metric = score_metric(success=False, score=0.0)
+    metric.update(
+        patch_applied=False,
+        contract_passed=False,
+        case_details=[],
+        failure_reason="patch_apply_failed",
+        private_apply_result={"returncode": 1, "stdout": "", "stderr": "failed"},
+    )
+    metric["public_summary"].update(
+        contract_passed=False,
+        failure_reason="patch_apply_failed",
+    )
+
+    assert analyzer._audit_metric(
+        metric,
+        expected_case_ids=[f"case-{index:03d}" for index in range(1, 65)],
+    ) == (False, 0.0, False)
+
+
+@pytest.mark.parametrize(
+    "mutation", ["failure_reason", "contract_failure", "zero_returncode"]
+)
+def test_no_patch_failure_rejects_non_scorer_shapes(mutation):
+    metric = score_metric(success=False, score=0.0)
+    metric.update(
+        patch_applied=False,
+        contract_passed=False,
+        case_details=[],
+        failure_reason="patch_apply_failed",
+        private_apply_result={"returncode": 1, "stdout": "", "stderr": "failed"},
+    )
+    metric["public_summary"].update(
+        contract_passed=False,
+        failure_reason="patch_apply_failed",
+    )
+    if mutation == "failure_reason":
+        metric["failure_reason"] = "numerical_case_failed"
+        metric["public_summary"]["failure_reason"] = "numerical_case_failed"
+    elif mutation == "contract_failure":
+        metric["contract_failures"] = ["unexpected"]
+    else:
+        metric["private_apply_result"]["returncode"] = 0
+
+    with pytest.raises(analyzer.AnalysisInputError):
+        analyzer._audit_metric(
+            metric,
+            expected_case_ids=[f"case-{index:03d}" for index in range(1, 65)],
+        )
+
+
 def test_common_scaffold_and_response_ids_match_across_registered_schedule(tmp_path):
     progress_path, progress, _ = write_complete_schedule(tmp_path)
     first, second = [
@@ -995,7 +1079,67 @@ def test_action_budget_final_score_has_zero_post_score_model_turns(tmp_path):
     assert block["joint_substitution_event"] is True
 
 
+@pytest.mark.parametrize(
+    ("object_name", "mutation"),
+    [
+        ("family", "extra"),
+        ("family", "missing"),
+        ("pair", "extra"),
+        ("pair", "missing"),
+    ],
+)
+def test_authoritative_v3_top_level_fields_are_exact(
+    tmp_path, object_name, mutation
+):
+    progress_path, progress, families = write_complete_schedule(tmp_path)
+    if object_name == "family":
+        family_path = families["planted"]
+        payload = json.loads(family_path.read_text(encoding="utf-8"))
+        if mutation == "extra":
+            payload["unregistered_field"] = "must be rejected"
+        else:
+            payload.pop("workspace_path")
+        write_json(family_path, payload)
+        family_sha256 = sha256_file(family_path)
+        for record in progress["records"]:
+            if record["control"] == "planted":
+                record["family_sha256"] = family_sha256
+        write_json(progress_path, progress)
+
+        with pytest.raises(analyzer.AnalysisInputError):
+            analyzer.analyze_registered_schedule(
+                progress_path, include_historical_negative_control=False
+            )
+        return
+
+    record = next(
+        row
+        for row in progress["records"]
+        if row["control"] == "planted" and row["replicate_id"] == "r001"
+    )
+    manifest_path = Path(record["output_dir"]) / "pair_manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if mutation == "extra":
+        manifest["unregistered_field"] = "must be rejected"
+    else:
+        manifest.pop("retry_lineage")
+    write_json(manifest_path, manifest)
+
+    result = analyzer.analyze_registered_schedule(
+        progress_path, include_historical_negative_control=False
+    )
+    block = next(
+        row
+        for row in result["blocks"]
+        if row["control"] == "planted" and row["replicate_id"] == "r001"
+    )
+    assert block["integrity_passed"] is False
+
+
 def write_v2_negative_control(root: Path) -> Path:
+    registry_path = root / "case_registry_v2.json"
+    write_json(registry_path, v2_case_registry_payload())
+    registry_sha256 = sha256_file(registry_path)
     records = []
     for index in range(1, 19):
         replicate_id = f"r{index:03d}"
@@ -1028,13 +1172,45 @@ def write_v2_negative_control(root: Path) -> Path:
                 "evidence_boundary": "registered_final_only_confirmation",
                 "pair_id": pair_id,
                 "task_id": "TOOLFORMER-FILTER",
+                "action_budget_visible_to_model": True,
+                "atom_map_sha256": SHA["source-map"],
+                "authorization_evidence": "synthetic trusted endpoint",
                 "model_alias": "deepseek-v4-flash",
+                "model_family": "DeepSeek-family",
                 "wire_api": "openai_chat_completions",
                 "case_block": "confirmation_v2",
                 "comparison_role": "development_triage",
                 "slice_candidate_id": "prefix_01",
                 "confirmation_case_count": 64,
                 "private_score_policy": "final_only",
+                "common_scaffold_sha256": SHA["common-scaffold"],
+                "condition_execution_order": ["B", "F", "S"],
+                "conditions": {condition: {} for condition in ("B", "F", "S")},
+                "confirmation_family_path": registry_path.resolve().as_posix(),
+                "confirmation_family_sha256": registry_sha256,
+                "confirmation_hypothesis_ids": ["synthetic-joint-event"],
+                "full_artifact_sha256": SHA["full"],
+                "harness_protocol_version": "effectslice-toolformer-filter-aci.v3",
+                "maximum_transport_attempts": 5,
+                "provider_config": {},
+                "retained_atom_ids": ["T01"],
+                "retained_scc_count": 1,
+                "same_aci_scaffold": True,
+                "scorer_sha256": SHA["scorer"],
+                "seed_block_id": f"confirmation-v2:toolformer_filter:{replicate_id}",
+                "slice_artifact_path": "synthetic-prefix-01.md",
+                "slice_artifact_sha256": SHA["selected"],
+                "slice_registry_path": "synthetic-slice-registry.json",
+                "slice_registry_sha256": SHA["reference-registry"],
+                "task_prompt_sha256": SHA["prompt-text"],
+                "workspace_state": {},
+                "case_registry_sha256": registry_sha256,
+                "verified_family_inputs": {
+                    "case_registry": {
+                        "path": registry_path.resolve().as_posix(),
+                        "sha256": registry_sha256,
+                    }
+                },
                 "results": summaries,
             },
         )
@@ -1108,6 +1284,45 @@ def test_invalid_v2_negative_control_cannot_make_registered_rule_pass(tmp_path):
     assert negative["decision"] == "invalid"
     assert negative["strict_subset_admitted"] is False
     assert result["rule_comparison"]["registered_joint_schedule"]["decision"] == "fail"
+
+
+def test_v2_reanalysis_rejects_case_ids_outside_the_bound_registry(tmp_path):
+    v2_progress_path = write_v2_negative_control(tmp_path / "v2")
+    v2_progress = json.loads(v2_progress_path.read_text(encoding="utf-8"))
+    first = v2_progress["records"][0]
+    result_path = Path(first["output_dir"]) / "S" / "run_result.json"
+    run_result = json.loads(result_path.read_text(encoding="utf-8"))
+    for index, detail in enumerate(
+        run_result["scorer_metrics"][0]["case_details"], start=1
+    ):
+        detail["case_id"] = f"replacement-{index:03d}"
+    write_json(result_path, run_result)
+
+    negative = analyzer.reanalyze_v2_negative_control(v2_progress_path)
+
+    assert negative["registered_block_count"] == 18
+    assert negative["full_integrity_passed"] is False
+    assert negative["decision"] == "invalid"
+
+
+@pytest.mark.parametrize("mutation", ["extra", "missing"])
+def test_v2_pair_manifest_top_level_fields_are_exact(tmp_path, mutation):
+    v2_progress_path = write_v2_negative_control(tmp_path / "v2")
+    v2_progress = json.loads(v2_progress_path.read_text(encoding="utf-8"))
+    first = v2_progress["records"][0]
+    manifest_path = Path(first["output_dir"]) / "pair_manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if mutation == "extra":
+        manifest["unregistered_field"] = "must be rejected"
+    else:
+        manifest.pop("authorization_evidence")
+    write_json(manifest_path, manifest)
+
+    negative = analyzer.reanalyze_v2_negative_control(v2_progress_path)
+
+    assert negative["registered_block_count"] == 18
+    assert negative["full_integrity_passed"] is False
+    assert negative["decision"] == "invalid"
 
 
 def test_write_analysis_is_deterministic_derived_only_and_preserves_raw(tmp_path):

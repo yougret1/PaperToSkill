@@ -98,6 +98,138 @@ METRIC_FIELDS = {
     "private_apply_result",
     "public_summary",
 }
+FAMILY_FIELDS = {
+    "schema_version",
+    "registration_status",
+    "control",
+    "task_key",
+    "task_id",
+    "conditions",
+    "strict_subset",
+    "calibration_role",
+    "retained_atom_ids",
+    "retained_unit_count",
+    "retained_scc_count",
+    "case_block",
+    "case_count",
+    "case_role",
+    "case_generator_config_id",
+    "statistical_unit",
+    "decision_basis",
+    "primary_event",
+    "independence_verified",
+    "iid_conditional_reference",
+    "replicate_count",
+    "replicate_schedule",
+    "schedule_seed",
+    "run_success_threshold",
+    "maximum_shortfall",
+    "admission_rule",
+    "required_joint_events_for_admission",
+    "private_score_policy",
+    "maximum_transport_attempts",
+    "provider_label",
+    "model_alias",
+    "wire_api",
+    "temperature",
+    "max_tokens",
+    "fresh_provider_conversation_per_condition",
+    "comparison_role",
+    "evidence_boundary",
+    "bindings",
+    "task_prompt_path",
+    "task_prompt_status",
+    "task_prompt_file_sha256",
+    "task_prompt_canonical_text_sha256",
+    "workspace_path",
+    "workspace_tree_sha256",
+    "workspace_file_count",
+    "workspace_total_bytes",
+    "workspace_excluded_directory_names",
+}
+PAIR_FIELDS = {
+    "schema_version",
+    "completion_status",
+    "pair_id",
+    "task_id",
+    "control",
+    "comparison_role",
+    "evidence_boundary",
+    "decision_basis",
+    "primary_event",
+    "independence_verified",
+    "private_score_policy",
+    "family_path",
+    "family_sha256",
+    "replicate_id",
+    "condition_execution_order",
+    "task_prompt_path",
+    "task_prompt_file_sha256",
+    "task_prompt_canonical_text_sha256",
+    "full_artifact_path",
+    "full_artifact_sha256",
+    "selected_artifact_path",
+    "selected_artifact_sha256",
+    "source_map_sha256",
+    "case_registry_sha256",
+    "scorer_sha256",
+    "runner_sha256",
+    "scheduler_sha256",
+    "analyzer_sha256",
+    "aci_runner_sha256",
+    "transport_sha256",
+    "case_generator_sha256",
+    "reference_registry_sha256",
+    "provider_config",
+    "workspace_state",
+    "conditions",
+    "retry_lineage",
+    "workspace_snapshot_path",
+    "verified_inputs_path",
+    "results",
+}
+V2_PAIR_FIELDS = {
+    "action_budget_visible_to_model",
+    "atom_map_sha256",
+    "authorization_evidence",
+    "case_block",
+    "case_registry_sha256",
+    "common_scaffold_sha256",
+    "comparison_role",
+    "condition_execution_order",
+    "conditions",
+    "confirmation_case_count",
+    "confirmation_family_path",
+    "confirmation_family_sha256",
+    "confirmation_hypothesis_ids",
+    "evidence_boundary",
+    "full_artifact_sha256",
+    "harness_protocol_version",
+    "maximum_transport_attempts",
+    "model_alias",
+    "model_family",
+    "pair_id",
+    "private_score_policy",
+    "provider_config",
+    "provider_protocol_version",
+    "results",
+    "retained_atom_ids",
+    "retained_scc_count",
+    "same_aci_scaffold",
+    "schema_version",
+    "scorer_sha256",
+    "seed_block_id",
+    "slice_artifact_path",
+    "slice_artifact_sha256",
+    "slice_candidate_id",
+    "slice_registry_path",
+    "slice_registry_sha256",
+    "task_id",
+    "task_prompt_sha256",
+    "verified_family_inputs",
+    "wire_api",
+    "workspace_state",
+}
 CONTROL_SPECS = {
     "identity": {
         "schedule_seed": 2026071801,
@@ -190,6 +322,10 @@ def _validate_family(path: Path, expected_sha256: str) -> dict[str, Any]:
     family = _json_object(path, "registered family")
     if _sha256_file(path.resolve()) != expected_sha256:
         raise AnalysisInputError("registered family digest mismatch")
+    if set(family) != FAMILY_FIELDS:
+        raise AnalysisInputError(
+            "registered family fields do not match the family schema"
+        )
     exact = {
         "schema_version": "effectslice-confirmation-v3-family.v1",
         "registration_status": "complete",
@@ -319,7 +455,9 @@ def _audit_metric(
     contract = metric.get("contract_passed")
     _require_bool(success, "private score success")
     _require_bool(contract, "private score contract_passed")
-    _require_bool(metric.get("patch_applied"), "private score patch_applied")
+    patch_applied = _require_bool(
+        metric.get("patch_applied"), "private score patch_applied"
+    )
     failures = metric.get("contract_failures")
     if not isinstance(failures, list) or any(
         not isinstance(item, str) for item in failures
@@ -339,6 +477,16 @@ def _audit_metric(
         raise AnalysisInputError("private score case details are invalid")
     if not case_details and metric.get("patch_applied") is True and contract is True:
         raise AnalysisInputError("evaluated private score lacks its 64 case details")
+    if not patch_applied and (
+        success
+        or float(score) != 0.0
+        or contract
+        or any(case_scores)
+        or case_details
+    ):
+        raise AnalysisInputError(
+            "unapplied private score must be a zero-valued failure without case details"
+        )
     case_ids: set[str] = set()
     for detail, case_score in zip(case_details, case_scores):
         if not isinstance(detail, dict):
@@ -385,6 +533,10 @@ def _audit_metric(
     if case_details and expected_case_ids is not None:
         if [detail["case_id"] for detail in case_details] != expected_case_ids:
             raise AnalysisInputError("private case IDs/order do not match registration")
+    if success and (expected_case_ids is None or len(case_details) != 64):
+        raise AnalysisInputError(
+            "successful private score lacks registered case details"
+        )
     failure_reason = metric.get("failure_reason")
     if not isinstance(failure_reason, str):
         raise AnalysisInputError("private failure reason must be a string")
@@ -412,9 +564,14 @@ def _audit_metric(
             apply_result.get("stderr"), str
         ):
             raise AnalysisInputError("private apply output is invalid")
-    if success is not bool(score >= 0.95 and contract):
+    if not patch_applied:
+        if failure_reason != "patch_apply_failed" or failures:
+            raise AnalysisInputError("unapplied private score failure shape is invalid")
+        if apply_result and apply_result["returncode"] == 0:
+            raise AnalysisInputError("unapplied private score has a successful apply")
+    if success is not bool(patch_applied and score >= 0.95 and contract):
         raise AnalysisInputError(
-            "private success does not match score and hard contract"
+            "private success does not match patch, score, and hard contract"
         )
     return success, float(score), contract
 
@@ -781,6 +938,10 @@ def _audit_bundle(
     if output_dir.name != record["replicate_id"] or not output_dir.is_dir():
         raise AnalysisInputError("registered output directory is invalid")
     manifest = _json_object(output_dir / "pair_manifest.json", "final pair manifest")
+    if set(manifest) != PAIR_FIELDS:
+        raise AnalysisInputError(
+            "pair manifest fields do not match the registered schema"
+        )
     pair_id = f"confirmation-v3:{record['control']}:{record['replicate_id']}"
     expected = {
         "schema_version": PAIR_SCHEMA,
@@ -997,8 +1158,65 @@ def _load_registered_progress(
     return progress, families
 
 
+def _v2_registered_case_ids(manifest: dict[str, Any]) -> list[str]:
+    verified_inputs = manifest.get("verified_family_inputs")
+    if not isinstance(verified_inputs, dict):
+        raise AnalysisInputError("v2 verified family inputs are missing")
+    binding = verified_inputs.get("case_registry")
+    if not isinstance(binding, dict) or set(binding) != {"path", "sha256"}:
+        raise AnalysisInputError("v2 case registry binding is invalid")
+    digest = _require_sha256(binding.get("sha256"), "v2 case registry digest")
+    _require_exact(
+        manifest.get("case_registry_sha256"), digest, "v2 manifest case registry digest"
+    )
+    raw_path = binding.get("path")
+    if not isinstance(raw_path, str) or not Path(raw_path).is_absolute():
+        raise AnalysisInputError("v2 case registry path is invalid")
+    payload = _snapshot_bytes(
+        Path(raw_path), digest, "v2 registered case registry"
+    )
+    try:
+        registry = json.loads(payload.decode("utf-8"))
+    except (UnicodeError, json.JSONDecodeError) as exc:
+        raise AnalysisInputError("v2 case registry must be valid UTF-8 JSON") from exc
+    if not isinstance(registry, dict) or set(registry) != {
+        "schema_version",
+        "task_id",
+        "evidence_boundary",
+        "blocks",
+    }:
+        raise AnalysisInputError("v2 case registry fields are invalid")
+    _require_exact(
+        registry.get("schema_version"),
+        "effectslice-toolformer-filter-case-registry.v1",
+        "v2 case registry schema",
+    )
+    _require_exact(registry.get("task_id"), "TOOLFORMER-FILTER", "v2 registry task")
+    if (
+        not isinstance(registry.get("evidence_boundary"), str)
+        or not registry["evidence_boundary"]
+    ):
+        raise AnalysisInputError("v2 case registry evidence boundary is invalid")
+    blocks = registry.get("blocks")
+    cases = blocks.get("confirmation_v2") if isinstance(blocks, dict) else None
+    if not isinstance(cases, list) or len(cases) != 64:
+        raise AnalysisInputError("v2 case registry must contain 64 confirmation cases")
+    case_ids: list[str] = []
+    for case in cases:
+        case_id = case.get("case_id") if isinstance(case, dict) else None
+        if not isinstance(case_id, str) or not case_id or case_id in case_ids:
+            raise AnalysisInputError("v2 registered case IDs must be nonempty and unique")
+        case_ids.append(case_id)
+    return case_ids
+
+
 def _audit_v2_result(
-    result: dict[str, Any], *, pair_id: str, condition: str, response_ids: set[str]
+    result: dict[str, Any],
+    *,
+    pair_id: str,
+    condition: str,
+    response_ids: set[str],
+    expected_case_ids: list[str],
 ) -> dict[str, Any]:
     if set(result) != RUN_RESULT_FIELDS:
         raise AnalysisInputError("v2 run result fields do not match the runner schema")
@@ -1011,7 +1229,9 @@ def _audit_v2_result(
     if not isinstance(metrics, list) or len(metrics) != 1:
         raise AnalysisInputError("v2 condition must contain exactly one private score")
     success, score, hard_constraints = _audit_metric(
-        metrics[0], expected_block="confirmation_v2"
+        metrics[0],
+        expected_block="confirmation_v2",
+        expected_case_ids=expected_case_ids,
     )
     _require_exact(result.get("success"), success, "v2 condition success")
     _require_exact(result.get("task_score"), score, "v2 condition task_score")
@@ -1070,6 +1290,8 @@ def _audit_v2_bundle(record: dict[str, Any], response_ids: set[str]) -> dict[str
     ):
         raise AnalysisInputError("v2 registered output directory is invalid")
     manifest = _json_object(output_dir / "pair_manifest.json", "v2 final pair manifest")
+    if set(manifest) != V2_PAIR_FIELDS:
+        raise AnalysisInputError("v2 pair manifest fields do not match its schema")
     pair_id = f"toolformer_filter:confirmation-v2:{record['replicate_id']}"
     for field, expected in {
         "schema_version": "effectslice-toolformer-filter-pair.v2",
@@ -1090,6 +1312,7 @@ def _audit_v2_bundle(record: dict[str, Any], response_ids: set[str]) -> dict[str
     if not isinstance(summaries, dict) or set(summaries) != set(CONDITIONS):
         raise AnalysisInputError("v2 pair results must contain exactly B/F/S")
     local_response_ids: set[str] = set()
+    expected_case_ids = _v2_registered_case_ids(manifest)
     rows = {}
     for condition in CONDITIONS:
         summary = summaries[condition]
@@ -1119,6 +1342,7 @@ def _audit_v2_bundle(record: dict[str, Any], response_ids: set[str]) -> dict[str
             pair_id=pair_id,
             condition=condition,
             response_ids=local_response_ids,
+            expected_case_ids=expected_case_ids,
         )
     scaffolds = {row["common_scaffold_sha256"] for row in rows.values()}
     if len(scaffolds) != 1 or local_response_ids & response_ids:
