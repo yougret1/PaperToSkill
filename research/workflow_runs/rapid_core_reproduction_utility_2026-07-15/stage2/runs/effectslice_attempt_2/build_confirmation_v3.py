@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import copy
 import hashlib
+import inspect
 import json
 import re
 import shutil
@@ -67,6 +68,26 @@ def _stored_path(path: Path, run_root: Path) -> str:
         return resolved.relative_to(Path(run_root).resolve()).as_posix()
     except ValueError:
         return resolved.as_posix()
+
+
+def _imported_source_path(function: Any, binding_name: str) -> Path:
+    module = inspect.getmodule(function)
+    module_path = getattr(module, "__file__", None)
+    if not module_path:
+        raise ValueError(f"{binding_name} imported execution source is unavailable")
+    return Path(module_path).resolve()
+
+
+def _require_execution_source_match(
+    binding_name: str,
+    claimed_path: Path,
+    imported_function: Any,
+) -> None:
+    imported_path = _imported_source_path(imported_function, binding_name)
+    if sha256_file(claimed_path) != sha256_file(imported_path):
+        raise ValueError(
+            f"{binding_name} claimed file does not match imported execution source"
+        )
 
 
 def _write_bytes_exclusive(path: Path, payload: bytes) -> None:
@@ -163,7 +184,9 @@ def _validate_case_independence(
     if len(set(case_ids)) != 64:
         raise ValueError("confirmation-v3 case IDs must be unique")
     if not v2_registry_path.is_file():
-        return
+        raise FileNotFoundError(
+            f"confirmation-v3 reference registry is missing: {v2_registry_path}"
+        )
 
     v2_registry = json.loads(v2_registry_path.read_text(encoding="utf-8"))
     v2_cases = _all_registry_cases(v2_registry)
@@ -295,30 +318,49 @@ def _validate_artifact_truth(
     if not isinstance(raw_requires, dict) or set(raw_requires) != full_atoms:
         raise ValueError("source map requires keys must exactly match its atoms")
     requires: dict[str, list[str]] = {}
+    requires_edges: set[tuple[str, str]] = set()
     for atom_id in full_atom_ids:
         dependencies = raw_requires[atom_id]
         if not isinstance(dependencies, list) or not all(
             isinstance(dependency, str) for dependency in dependencies
         ):
             raise ValueError(f"dependencies for {atom_id} must be atom ID lists")
+        if len(dependencies) != len(set(dependencies)):
+            raise ValueError(f"duplicate dependency edge in requires for {atom_id}")
         for dependency in dependencies:
             if dependency not in full_atoms:
                 raise ValueError(
                     f"source map dependency for {atom_id} refers to missing atom {dependency}"
                 )
+            if dependency == atom_id:
+                raise ValueError(f"source map dependency graph has a self-edge at {atom_id}")
+            requires_edges.add((atom_id, dependency))
         requires[atom_id] = dependencies
 
     edges = source_map.get("dependency_edges")
     if not isinstance(edges, list):
         raise ValueError("source map dependency_edges must be a list")
+    declared_edges: set[tuple[str, str]] = set()
     for edge in edges:
         if not isinstance(edge, dict):
             raise ValueError("source map dependency edges must be objects")
-        for endpoint in (edge.get("from"), edge.get("to")):
+        source = edge.get("from")
+        target = edge.get("to")
+        for endpoint in (source, target):
             if endpoint not in full_atoms:
                 raise ValueError(
                     f"source map dependency edge refers to missing atom {endpoint}"
                 )
+        if source == target:
+            raise ValueError(f"source map dependency graph has a self-edge at {source}")
+        pair = (source, target)
+        if pair in declared_edges:
+            raise ValueError(f"duplicate dependency edge: {source} -> {target}")
+        declared_edges.add(pair)
+    if requires_edges != declared_edges:
+        raise ValueError(
+            "source map requires and dependency_edges must encode the same directed graph"
+        )
 
     for atom_id in selected_atom_ids:
         missing = set(requires[atom_id]) - selected_atoms
@@ -424,6 +466,7 @@ def build_family(
     required_inputs = (
         original_artifact,
         original_source_map,
+        v2_case_registry,
         task_prompt,
         root / "src" / "effectslice" / "toolformer_filter_scorer.py",
         root / "src" / "effectslice" / "aci_runner.py",
@@ -437,6 +480,16 @@ def build_family(
             raise FileNotFoundError(f"confirmation-v3 input is missing: {path}")
     if not workspace.is_dir():
         raise FileNotFoundError(f"confirmation-v3 workspace is missing: {workspace}")
+    _require_execution_source_match(
+        "case_generator",
+        root / "src" / "effectslice" / "toolformer_filter_cases.py",
+        generate_case,
+    )
+    _require_execution_source_match(
+        "transport",
+        root / "run_swe_effectslice.py",
+        workspace_tree_digest,
+    )
 
     planned_paths = {
         "runner": root / "run_toolformer_filter_confirmation_v3.py",
@@ -585,6 +638,7 @@ def build_family(
         }
         binding_paths = {
             **final_outputs,
+            "v2_case_registry": v2_case_registry,
             "scorer": root / "src" / "effectslice" / "toolformer_filter_scorer.py",
             **planned_paths,
             "aci_runner": root / "src" / "effectslice" / "aci_runner.py",
@@ -654,6 +708,8 @@ def main() -> int:
                 "control": family["control"],
                 "case_count": family["case_count"],
                 "replicate_count": family["replicate_count"],
+                "registration_status": family["registration_status"],
+                "comparison_role": family["comparison_role"],
             },
             sort_keys=True,
         )

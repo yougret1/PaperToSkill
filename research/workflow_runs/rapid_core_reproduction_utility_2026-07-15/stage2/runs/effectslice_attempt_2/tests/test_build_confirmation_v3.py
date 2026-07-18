@@ -281,6 +281,7 @@ def test_bindings_hash_existing_inputs_and_mark_missing_v3_executables_planned()
             "selected_artifact",
             "source_map",
             "case_registry",
+            "v2_case_registry",
             "task_prompt",
             "scorer",
             "runner",
@@ -516,6 +517,7 @@ def test_non_dependency_closed_slice_is_rejected_before_publication():
         source_path = run_root / "artifacts" / "toolformer_filter" / "source_atom_map.json"
         source_map = json.loads(source_path.read_text(encoding="utf-8"))
         source_map["requires"]["T05"] = ["T04", "T06"]
+        source_map["dependency_edges"].append({"from": "T05", "to": "T06"})
         source_path.write_text(json.dumps(source_map), encoding="utf-8")
         output_dir = registered_output(run_root, "planted")
 
@@ -537,7 +539,7 @@ def test_planted_full_and_slice_with_same_atom_membership_are_rejected(
         assert not output_dir.exists()
 
 
-def test_retained_scc_count_is_derived_from_validated_dependency_graph():
+def test_requires_and_dependency_edges_must_encode_the_same_graph():
     with tempfile.TemporaryDirectory() as tmp:
         run_root = make_run_root(Path(tmp), complete=True)
         source_path = run_root / "artifacts" / "toolformer_filter" / "source_atom_map.json"
@@ -545,14 +547,108 @@ def test_retained_scc_count_is_derived_from_validated_dependency_graph():
         source_map["requires"]["T04"] = ["T03", "T05"]
         source_path.write_text(json.dumps(source_map), encoding="utf-8")
 
-        family = build_family(
-            "identity", registered_output(run_root, "identity"), run_root=run_root
+        output_dir = registered_output(run_root, "identity")
+        with pytest.raises(ValueError, match="same directed graph"):
+            build_family("identity", output_dir, run_root=run_root)
+        assert not output_dir.exists()
+
+
+@pytest.mark.parametrize(
+    "defect",
+    ["duplicate_requires", "duplicate_edge", "self_requires", "self_edge"],
+)
+def test_dependency_graph_rejects_duplicates_and_self_edges(defect):
+    with tempfile.TemporaryDirectory() as tmp:
+        run_root = make_run_root(Path(tmp), complete=True)
+        source_path = run_root / "artifacts" / "toolformer_filter" / "source_atom_map.json"
+        source_map = json.loads(source_path.read_text(encoding="utf-8"))
+        if defect == "duplicate_requires":
+            source_map["requires"]["T04"].append("T03")
+        elif defect == "duplicate_edge":
+            source_map["dependency_edges"].append(
+                dict(source_map["dependency_edges"][0])
+            )
+        elif defect == "self_requires":
+            source_map["requires"]["T04"].append("T04")
+        else:
+            source_map["dependency_edges"].append({"from": "T04", "to": "T04"})
+        source_path.write_text(json.dumps(source_map), encoding="utf-8")
+        output_dir = registered_output(run_root, "identity")
+
+        with pytest.raises(ValueError, match="duplicate|self-edge"):
+            build_family("identity", output_dir, run_root=run_root)
+        assert not output_dir.exists()
+
+
+def test_missing_v2_reference_registry_is_rejected_before_publication():
+    with tempfile.TemporaryDirectory() as tmp:
+        run_root = make_run_root(Path(tmp), complete=True)
+        v2_path = (
+            run_root
+            / "artifacts"
+            / "toolformer_filter"
+            / "case_registry_v2_r2.json"
         )
-        augmented = json.loads(
-            bound_path(family, "source_map", run_root).read_text(encoding="utf-8")
-        )
-        assert family["retained_scc_count"] == 4
-        assert augmented["selected_artifact_scc_count"] == 4
+        v2_path.unlink()
+        output_dir = registered_output(run_root, "identity")
+
+        with pytest.raises(FileNotFoundError, match="case_registry_v2_r2"):
+            build_family("identity", output_dir, run_root=run_root)
+        assert not output_dir.exists()
+
+
+@pytest.mark.parametrize(
+    ("relative_path", "binding_name"),
+    [
+        ("src/effectslice/toolformer_filter_cases.py", "case_generator"),
+        ("run_swe_effectslice.py", "transport"),
+    ],
+)
+def test_alternate_run_root_execution_sources_must_match_imported_code(
+    relative_path,
+    binding_name,
+):
+    with tempfile.TemporaryDirectory() as tmp:
+        run_root = make_run_root(Path(tmp), complete=True)
+        claimed_source = run_root / relative_path
+        changed = bytearray(claimed_source.read_bytes())
+        changed[-1] ^= 1
+        claimed_source.write_bytes(changed)
+        output_dir = registered_output(run_root, "identity")
+
+        with pytest.raises(ValueError, match=rf"{binding_name}.*execution source"):
+            build_family("identity", output_dir, run_root=run_root)
+        assert not output_dir.exists()
+
+
+def test_cli_success_json_exposes_registration_status_and_comparison_role(
+    monkeypatch,
+    capsys,
+):
+    family = {
+        "control": "identity",
+        "case_count": 64,
+        "replicate_count": 6,
+        "registration_status": "draft_incomplete",
+        "comparison_role": "planned_confirmation_v3_draft",
+    }
+    monkeypatch.setattr(builder, "build_family", lambda *args, **kwargs: family)
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "build_confirmation_v3.py",
+            "--control",
+            "identity",
+            "--output-dir",
+            "unused",
+        ],
+    )
+
+    assert builder.main() == 0
+    payload = json.loads(capsys.readouterr().out)
+    assert payload["registration_status"] == "draft_incomplete"
+    assert payload["comparison_role"] == "planned_confirmation_v3_draft"
 
 
 def test_builder_rejects_v3_case_payload_overlap_with_v2():
