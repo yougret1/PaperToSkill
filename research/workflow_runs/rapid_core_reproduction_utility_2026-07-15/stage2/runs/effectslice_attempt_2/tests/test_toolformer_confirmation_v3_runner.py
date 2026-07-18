@@ -4,9 +4,11 @@ import argparse
 import hashlib
 import importlib.util
 import json
+import math
 import os
 import shutil
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -60,6 +62,13 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
 
 def relative(path: Path, root: Path) -> str:
     return path.resolve().relative_to(root.resolve()).as_posix()
+
+
+def stored_path(path: Path, root: Path) -> str:
+    try:
+        return relative(path, root)
+    except ValueError:
+        return path.resolve().as_posix()
 
 
 class FakeTransport:
@@ -153,8 +162,10 @@ def build_family_tree(
     artifact_dir = root / "artifacts" / "toolformer_filter" / "confirmation_v3" / control
     full = artifact_dir / "full_artifact.md"
     selected = artifact_dir / "selected_artifact.md"
-    full_text = "FULL REGISTERED ARTIFACT\n"
-    selected_text = full_text if control == "identity" else "SELECTED REGISTERED ARTIFACT\n"
+    full_text = "1. **Base invariant** (`T01`)\n"
+    if control == "planted":
+        full_text += "2. **Redundant restatement** (`T02`)\n"
+    selected_text = "1. **Base invariant** (`T01`)\n"
     write_bytes(full, full_text.encode("utf-8"))
     write_bytes(selected, selected_text.encode("utf-8"))
 
@@ -162,38 +173,53 @@ def build_family_tree(
     case_registry = artifact_dir / "case_registry.json"
     reference_registry = root / "artifacts" / "toolformer_filter" / "case_registry_v2_r2.json"
     task_prompt = root / "artifacts" / "toolformer_filter" / "task_prompt.md"
-    write_json(source_map, {"schema_version": "test-source-map.v1"})
+    source_atoms = [{"atom_id": "T01", "title": "Base invariant"}]
+    requires = {"T01": []}
+    dependency_edges: list[dict[str, str]] = []
+    if control == "planted":
+        source_atoms.append(
+            {"atom_id": "T02", "title": "Redundant restatement"}
+        )
+        requires["T02"] = ["T01"]
+        dependency_edges.append({"from": "T02", "to": "T01"})
+    write_json(
+        source_map,
+        {
+            "schema_version": "test-source-map.v1",
+            "atoms": source_atoms,
+            "requires": requires,
+            "dependency_edges": dependency_edges,
+        },
+    )
     write_json(
         case_registry,
         {
             "schema_version": "test-case-registry.v3",
-            "blocks": {"confirmation_v3": [generate_case(36_004)]},
+            "blocks": {
+                "confirmation_v3": [
+                    generate_case(seed) for seed in range(36_004, 36_068)
+                ]
+            },
         },
     )
     write_json(reference_registry, {"schema_version": "test-reference.v2"})
     write_bytes(task_prompt, b"LOCKED TASK PROMPT\n\n")
 
-    source_files = {
+    execution_sources = {
         "scorer": RUN_ROOT / "src" / "effectslice" / "toolformer_filter_scorer.py",
         "aci_runner": RUN_ROOT / "src" / "effectslice" / "aci_runner.py",
         "aci_protocol": RUN_ROOT / "src" / "effectslice" / "aci_protocol.py",
-        "evidence_binding": RUN_ROOT / "src" / "effectslice" / "evidence_binding.py",
         "case_generator": RUN_ROOT / "src" / "effectslice" / "toolformer_filter_cases.py",
         "transport": RUN_ROOT / "run_swe_effectslice.py",
         "runner": RUNNER_PATH,
     }
-    destinations = {
-        "scorer": root / "src" / "effectslice" / "toolformer_filter_scorer.py",
-        "aci_runner": root / "src" / "effectslice" / "aci_runner.py",
-        "aci_protocol": root / "src" / "effectslice" / "aci_protocol.py",
-        "evidence_binding": root / "src" / "effectslice" / "evidence_binding.py",
-        "case_generator": root / "src" / "effectslice" / "toolformer_filter_cases.py",
-        "transport": root / "run_swe_effectslice.py",
-        "runner": root / "run_toolformer_filter_confirmation_v3.py",
-    }
-    for key, source in source_files.items():
-        destinations[key].parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(source, destinations[key])
+    evidence_binding = root / "src" / "effectslice" / "evidence_binding.py"
+    evidence_binding.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(
+        RUN_ROOT / "src" / "effectslice" / "evidence_binding.py",
+        evidence_binding,
+    )
+    destinations = {**execution_sources, "evidence_binding": evidence_binding}
 
     scheduler = root / "run_confirmation_v3.py"
     analyzer = root / "analyze_confirmation_v3.py"
@@ -222,7 +248,7 @@ def build_family_tree(
     }
     bindings = {
         name: {
-            "path": relative(path, root),
+            "path": stored_path(path, root),
             "sha256": sha256_file(path),
             "status": "bound",
         }
@@ -246,12 +272,17 @@ def build_family_tree(
         "conditions": ["B", "F", "S"],
         "strict_subset": control == "planted",
         "case_block": "confirmation_v3",
-        "case_count": 1,
+        "case_count": 64,
         "decision_basis": "finite_registered_schedule",
         "primary_event": "joint_substitution_event",
         "independence_verified": False,
         "replicate_count": 6,
         "replicate_schedule": schedule,
+        "run_success_threshold": 0.95,
+        "maximum_shortfall": 0.05,
+        "required_joint_events_for_admission": (
+            None if control == "identity" else 6
+        ),
         "private_score_policy": "final_only",
         "maximum_transport_attempts": 5,
         "provider_label": "DeepSeek V3.2",
@@ -289,6 +320,8 @@ def build_family_tree(
         family=family,
         full=full,
         selected=selected,
+        source_map=source_map,
+        case_registry=case_registry,
         task_prompt=task_prompt,
         workspace=workspace,
     )
@@ -315,6 +348,31 @@ def make_args(tree, output_dir: Path, **overrides: Any) -> argparse.Namespace:
 def mutate_family(tree, mutation) -> None:
     family = json.loads(tree.family_path.read_text(encoding="utf-8"))
     mutation(family)
+    write_json(tree.family_path, family)
+
+
+def rebind_file(tree, name: str, path: Path) -> None:
+    family = json.loads(tree.family_path.read_text(encoding="utf-8"))
+    digest = sha256_file(path)
+    family["bindings"][name]["path"] = stored_path(path, tree.root)
+    family["bindings"][name]["sha256"] = digest
+    family[f"{name}_path"] = family["bindings"][name]["path"]
+    family[f"{name}_sha256"] = digest
+    write_json(tree.family_path, family)
+
+
+def rebind_task_prompt(tree) -> None:
+    family = json.loads(tree.family_path.read_text(encoding="utf-8"))
+    file_digest = sha256_file(tree.task_prompt)
+    try:
+        canonical_digest = sha256_canonical_text(tree.task_prompt)
+    except UnicodeDecodeError:
+        canonical_digest = hashlib.sha256(tree.task_prompt.read_bytes()).hexdigest()
+    binding = family["bindings"]["task_prompt"]
+    binding["file_sha256"] = file_digest
+    binding["canonical_text_sha256"] = canonical_digest
+    family["task_prompt_file_sha256"] = file_digest
+    family["task_prompt_canonical_text_sha256"] = canonical_digest
     write_json(tree.family_path, family)
 
 
@@ -517,6 +575,179 @@ def test_serialized_json_contains_no_secret_values(runner, tmp_path):
     )
     assert SECRET_API_KEY not in serialized
     assert SECRET_BASE_URL not in serialized
+
+
+def test_identical_byte_execution_source_decoy_is_rejected(runner, tmp_path):
+    tree = build_family_tree(tmp_path)
+    decoy = tree.root / "decoy_runner.py"
+    shutil.copyfile(RUNNER_PATH, decoy)
+    rebind_file(tree, "runner", decoy)
+
+    with pytest.raises(ValueError, match="actual runner execution source"):
+        runner.load_and_verify_family(tree.family_path, "r001")
+
+
+def test_provider_mutation_cannot_change_verified_context_or_workspace(
+    runner, tmp_path
+):
+    tree = build_family_tree(tmp_path, control="planted")
+    original_full = tree.full.read_text(encoding="utf-8").strip()
+    original_selected = tree.selected.read_text(encoding="utf-8").strip()
+    original_workspace = (tree.workspace / "toolformer_filter.py").read_bytes()
+    output = tmp_path / "immutable-snapshot"
+
+    def mutating_factory(**kwargs):
+        tree.full.write_text("MUTATED FULL\n", encoding="utf-8")
+        tree.selected.write_text("MUTATED SELECTED\n", encoding="utf-8")
+        tree.task_prompt.write_text("MUTATED PROMPT\n", encoding="utf-8")
+        (tree.workspace / "toolformer_filter.py").write_text(
+            "MUTATED WORKSPACE\n", encoding="utf-8"
+        )
+        return FakeTransport(**kwargs)
+
+    runner.run_bundle(
+        make_args(tree, output), transport_factory=mutating_factory
+    )
+    transport = FakeTransport.instances[0]
+    first_prompts = {call["condition"]: call["prompt"] for call in transport.calls[::4]}
+    assert context_section(first_prompts["F"]) == original_full
+    assert context_section(first_prompts["S"]) == original_selected
+    assert "LOCKED TASK PROMPT" in first_prompts["F"]
+    assert "MUTATED" not in "\n".join(first_prompts.values())
+    assert (
+        output / "workspace_snapshot" / "toolformer_filter.py"
+    ).read_bytes() == original_workspace
+
+
+@pytest.mark.parametrize("failure_stage", ["constructor", "public_config"])
+def test_provider_preflight_failure_is_sanitized_and_leaves_no_output(
+    runner, tmp_path, failure_stage
+):
+    tree = build_family_tree(tmp_path)
+    output = tmp_path / f"preflight-{failure_stage}"
+
+    class SecretFailureTransport(FakeTransport):
+        def __init__(self, **kwargs):
+            if failure_stage == "constructor":
+                raise RuntimeError(f"{SECRET_BASE_URL} {SECRET_API_KEY}")
+            super().__init__(**kwargs)
+
+        def public_config(self):
+            if failure_stage == "public_config":
+                raise RuntimeError(f"{SECRET_BASE_URL} {SECRET_API_KEY}")
+            return super().public_config()
+
+    with pytest.raises(ValueError, match="provider preflight failed") as caught:
+        runner.run_bundle(
+            make_args(tree, output), transport_factory=SecretFailureTransport
+        )
+    assert SECRET_BASE_URL not in str(caught.value)
+    assert SECRET_API_KEY not in str(caught.value)
+    assert not output.exists()
+
+
+@pytest.mark.parametrize(
+    ("field", "value", "message"),
+    [
+        ("max_tokens", True, "max_tokens"),
+        ("case_count", True, "case_count"),
+        ("case_count", 63, "case_count"),
+        ("maximum_shortfall", math.inf, "maximum_shortfall"),
+        ("maximum_shortfall", -0.01, "maximum_shortfall"),
+        ("run_success_threshold", -0.1, "run_success_threshold"),
+    ],
+)
+def test_malformed_registered_numeric_metadata_rejects(
+    runner, tmp_path, field, value, message
+):
+    tree = build_family_tree(tmp_path)
+    mutate_family(tree, lambda family: family.update({field: value}))
+    with pytest.raises(ValueError, match=message):
+        runner.load_and_verify_family(tree.family_path, "r001")
+
+
+@pytest.mark.parametrize("mutation", ["not_subset", "not_dependency_closed"])
+def test_planted_artifact_truth_is_verified(runner, tmp_path, mutation):
+    tree = build_family_tree(tmp_path, control="planted")
+    if mutation == "not_subset":
+        tree.selected.write_text(
+            "1. **Base invariant** (`T01`)\n"
+            "2. **Unknown atom** (`T03`)\n",
+            encoding="utf-8",
+        )
+        rebind_file(tree, "selected_artifact", tree.selected)
+    else:
+        source = json.loads(tree.source_map.read_text(encoding="utf-8"))
+        source["requires"]["T01"] = ["T02"]
+        source["dependency_edges"].append({"from": "T01", "to": "T02"})
+        write_json(tree.source_map, source)
+        rebind_file(tree, "source_map", tree.source_map)
+    with pytest.raises(ValueError, match="subset|dependency"):
+        runner.load_and_verify_family(tree.family_path, "r001")
+
+
+def test_invalid_utf8_is_normalized_and_leaves_no_output(runner, tmp_path):
+    tree = build_family_tree(tmp_path)
+    tree.full.write_bytes(b"\xff")
+    tree.selected.write_bytes(b"\xff")
+    rebind_file(tree, "full_artifact", tree.full)
+    rebind_file(tree, "selected_artifact", tree.selected)
+    output = tmp_path / "bad-utf8"
+    with pytest.raises(ValueError, match="UTF-8"):
+        runner.run_bundle(
+            make_args(tree, output), transport_factory=FakeTransport
+        )
+    assert FakeTransport.instances == []
+    assert not output.exists()
+
+
+def test_invalid_bound_json_and_short_family_path_are_normalized(runner, tmp_path):
+    tree = build_family_tree(tmp_path)
+    tree.source_map.write_text("{", encoding="utf-8")
+    rebind_file(tree, "source_map", tree.source_map)
+    with pytest.raises(ValueError, match="source_map.*JSON"):
+        runner.load_and_verify_family(tree.family_path, "r001")
+
+    with pytest.raises(ValueError, match="family path"):
+        runner._resolve_run_root(Path("D:/family.json"), tree.family)
+
+
+def test_scorer_timeout_is_passed_and_enforced(runner, tmp_path, monkeypatch):
+    tree = build_family_tree(tmp_path)
+
+    def hanging_score(**kwargs):
+        del kwargs
+        time.sleep(0.15)
+        return {"public_summary": {}, "task_score": 0.0, "success": False}
+
+    monkeypatch.setattr(runner, "score_toolformer_filter_patch", hanging_score)
+    bridge = runner._ExclusiveToolformerScorerBridge(
+        workspace=tree.workspace,
+        case_registry_path=tree.case_registry,
+        condition_dir=tmp_path / "timeout-condition",
+        timeout_seconds=0.01,
+    )
+    with pytest.raises(ValueError, match="timed out"):
+        bridge.evaluate(
+            "--- a/toolformer_filter.py\n+++ b/toolformer_filter.py\n",
+            evaluation_id="submit-01",
+        )
+    time.sleep(0.2)
+
+
+@pytest.mark.parametrize("value", [math.inf, 0.0, True])
+def test_invalid_runtime_timeout_rejects_before_provider_and_output(
+    runner, tmp_path, value
+):
+    tree = build_family_tree(tmp_path)
+    output = tmp_path / "bad-timeout"
+    with pytest.raises(ValueError, match="timeout_seconds"):
+        runner.run_bundle(
+            make_args(tree, output, scorer_timeout_seconds=value),
+            transport_factory=FakeTransport,
+        )
+    assert FakeTransport.instances == []
+    assert not output.exists()
 
 
 def test_cli_has_no_arbitrary_condition_argument(runner):

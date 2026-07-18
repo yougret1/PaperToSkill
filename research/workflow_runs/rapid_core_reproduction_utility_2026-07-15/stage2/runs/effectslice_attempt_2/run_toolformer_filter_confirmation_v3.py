@@ -4,10 +4,13 @@ import argparse
 import copy
 import dataclasses
 import hashlib
+import inspect
 import json
+import math
 import os
 import re
 import sys
+import threading
 from pathlib import Path
 from typing import Any, Mapping
 
@@ -22,7 +25,6 @@ from effectslice.aci_runner import (  # noqa: E402
 )
 from effectslice.aci_workspace import OverlayWorkspace  # noqa: E402
 from effectslice.confirmation_v3 import (  # noqa: E402
-    sha256_canonical_text,
     sha256_file,
 )
 from effectslice.swe_scorer_bridge import ScorerEvaluation  # noqa: E402
@@ -30,10 +32,10 @@ from effectslice.toolformer_filter_scorer import (  # noqa: E402
     ToolformerFilterScorerError,
     score_toolformer_filter_patch,
 )
+from effectslice.toolformer_filter_cases import generate_case  # noqa: E402
 from run_swe_effectslice import (  # noqa: E402
     ProviderTransport,
     RunnerInputError,
-    workspace_tree_digest,
 )
 
 
@@ -66,6 +68,7 @@ _STANDARD_BINDINGS = tuple(
     binding for binding in REQUIRED_BINDINGS if binding != "task_prompt"
 )
 _SHA256_PATTERN = re.compile(r"[0-9a-fA-F]{64}")
+_ATOM_ID_PATTERN = re.compile(r"\(`(T\d+)`\)")
 _PUBLIC_PROVIDER_FIELDS = (
     "model_alias",
     "wire_api",
@@ -79,6 +82,27 @@ _PUBLIC_PROVIDER_FIELDS = (
 
 def _sha256_text(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def _sha256_bytes(payload: bytes) -> str:
+    return hashlib.sha256(payload).hexdigest()
+
+
+def _decode_utf8(payload: bytes, label: str) -> str:
+    try:
+        return payload.decode("utf-8")
+    except UnicodeDecodeError as exc:
+        raise RunnerInputError(f"{label} must be valid UTF-8") from exc
+
+
+def _load_json_object(payload: bytes, label: str) -> dict[str, Any]:
+    try:
+        value = json.loads(_decode_utf8(payload, label))
+    except json.JSONDecodeError as exc:
+        raise RunnerInputError(f"{label} must be valid JSON") from exc
+    if not isinstance(value, dict):
+        raise RunnerInputError(f"{label} JSON must be an object")
+    return value
 
 
 def _require_exact(value: Any, expected: Any, label: str) -> None:
@@ -103,6 +127,11 @@ def _write_text_exclusive(path: Path, text: str) -> None:
         handle.write(text)
 
 
+def _write_bytes_exclusive(path: Path, payload: bytes) -> None:
+    with Path(path).open("xb") as handle:
+        handle.write(payload)
+
+
 def _resolve_run_root(family_path: Path, family: Mapping[str, Any]) -> Path:
     bindings = family.get("bindings")
     if not isinstance(bindings, dict):
@@ -115,28 +144,44 @@ def _resolve_run_root(family_path: Path, family: Mapping[str, Any]) -> Path:
     if not isinstance(raw_path, str) or not raw_path.strip():
         raise RunnerInputError("runner binding path must be nonempty")
     path = Path(raw_path)
+    actual_runner = Path(__file__).resolve()
     if path.is_absolute():
-        if not path.is_file() or sha256_file(path).lower() != expected:
-            raise RunnerInputError("runner binding digest does not match the registered file")
-        conventional = family_path.resolve().parents[4]
+        if path.resolve() != actual_runner or sha256_file(actual_runner).lower() != expected:
+            raise RunnerInputError(
+                "actual runner execution source does not match the bound path and SHA"
+            )
+        parents = family_path.resolve().parents
+        if len(parents) <= 4:
+            raise RunnerInputError("family path is too short to resolve the run root")
+        conventional = parents[4]
         return conventional
     candidates = (family_path.resolve().parent, *family_path.resolve().parents)
     for candidate in candidates:
         bound_runner = (candidate / path).resolve()
-        if bound_runner.is_file() and sha256_file(bound_runner).lower() == expected:
+        if (
+            bound_runner == actual_runner
+            and sha256_file(actual_runner).lower() == expected
+        ):
             return candidate.resolve()
-    raise RunnerInputError("unable to resolve the registered family run root")
+    raise RunnerInputError(
+        "actual runner execution source does not match the bound path and SHA"
+    )
 
 
-def _resolve_bound_path(raw_path: Any, *, run_root: Path, label: str) -> Path:
+def _resolve_bound_path(
+    raw_path: Any, *, run_root: Path, label: str, allow_external: bool = False
+) -> Path:
     if not isinstance(raw_path, str) or not raw_path.strip():
         raise RunnerInputError(f"{label} binding path must be nonempty")
     path = Path(raw_path)
     resolved = path.resolve() if path.is_absolute() else (run_root / path).resolve()
-    try:
-        resolved.relative_to(run_root)
-    except ValueError as exc:
-        raise RunnerInputError(f"{label} binding escapes the registered run root") from exc
+    if not allow_external:
+        try:
+            resolved.relative_to(run_root)
+        except ValueError as exc:
+            raise RunnerInputError(
+                f"{label} binding escapes the registered run root"
+            ) from exc
     if not resolved.is_file():
         raise RunnerInputError(f"{label} binding file is missing: {resolved}")
     return resolved
@@ -147,14 +192,23 @@ def _verify_standard_binding(
     *,
     name: str,
     run_root: Path,
-) -> dict[str, str]:
+) -> dict[str, Any]:
     record = family["bindings"].get(name)
     if not isinstance(record, dict):
         raise RunnerInputError(f"required binding is missing: {name}")
     _require_exact(record.get("status"), "bound", f"{name} binding status")
     expected = _require_sha256(record.get("sha256"), f"{name} binding digest")
-    path = _resolve_bound_path(record.get("path"), run_root=run_root, label=name)
-    actual = sha256_file(path).lower()
+    path = _resolve_bound_path(
+        record.get("path"),
+        run_root=run_root,
+        label=name,
+        allow_external=name in _actual_execution_sources(),
+    )
+    try:
+        payload = path.read_bytes()
+    except OSError as exc:
+        raise RunnerInputError(f"unable to read {name} binding") from exc
+    actual = _sha256_bytes(payload)
     if actual != expected:
         raise RunnerInputError(f"{name} binding digest does not match the registered file")
     for suffix, expected_value in (
@@ -165,12 +219,17 @@ def _verify_standard_binding(
         top_level = family.get(f"{name}_{suffix}")
         if top_level != expected_value:
             raise RunnerInputError(f"{name} top-level binding metadata does not match")
-    return {"path": path.as_posix(), "sha256": actual, "status": "bound"}
+    return {
+        "path": path.as_posix(),
+        "sha256": actual,
+        "status": "bound",
+        "verified_bytes": payload,
+    }
 
 
 def _verify_task_prompt_binding(
     family: Mapping[str, Any], *, run_root: Path
-) -> dict[str, str]:
+) -> dict[str, Any]:
     record = family["bindings"].get("task_prompt")
     if not isinstance(record, dict):
         raise RunnerInputError("required binding is missing: task_prompt")
@@ -184,9 +243,14 @@ def _verify_task_prompt_binding(
     canonical_digest = _require_sha256(
         record.get("canonical_text_sha256"), "task_prompt canonical text digest"
     )
-    if sha256_file(path).lower() != file_digest:
+    try:
+        payload = path.read_bytes()
+    except OSError as exc:
+        raise RunnerInputError("unable to read task_prompt binding") from exc
+    if _sha256_bytes(payload) != file_digest:
         raise RunnerInputError("task_prompt file digest does not match the registered file")
-    if sha256_canonical_text(path).lower() != canonical_digest:
+    text = _decode_utf8(payload, "task_prompt")
+    if _sha256_text(text.strip()) != canonical_digest:
         raise RunnerInputError(
             "task_prompt canonical text digest does not match the registered file"
         )
@@ -207,24 +271,196 @@ def _verify_task_prompt_binding(
         "file_sha256": file_digest,
         "canonical_text_sha256": canonical_digest,
         "status": "bound",
+        "verified_bytes": payload,
+        "verified_text": text,
     }
 
 
-def _verify_execution_sources(bindings: Mapping[str, Mapping[str, str]]) -> None:
-    actual_sources = {
-        "runner": Path(__file__).resolve(),
-        "scorer": RUN_ROOT / "src" / "effectslice" / "toolformer_filter_scorer.py",
-        "aci_runner": RUN_ROOT / "src" / "effectslice" / "aci_runner.py",
-        "aci_protocol": RUN_ROOT / "src" / "effectslice" / "aci_protocol.py",
-        "evidence_binding": RUN_ROOT / "src" / "effectslice" / "evidence_binding.py",
-        "transport": RUN_ROOT / "run_swe_effectslice.py",
-        "case_generator": RUN_ROOT / "src" / "effectslice" / "toolformer_filter_cases.py",
+def _actual_execution_sources() -> dict[str, Path]:
+    sources = {
+        "runner": Path(__file__),
+        "scorer": inspect.getsourcefile(score_toolformer_filter_patch),
+        "aci_runner": inspect.getsourcefile(InteractiveACIRunner),
+        "aci_protocol": inspect.getsourcefile(ActionLimits),
+        "transport": inspect.getsourcefile(ProviderTransport),
+        "case_generator": inspect.getsourcefile(generate_case),
     }
-    for name, source in actual_sources.items():
-        if not source.is_file() or sha256_file(source) != bindings[name]["sha256"]:
+    if any(source is None for source in sources.values()):
+        raise RunnerInputError("unable to identify an actual execution source")
+    return {name: Path(source).resolve() for name, source in sources.items()}
+
+
+def _verify_execution_sources(bindings: Mapping[str, Mapping[str, Any]]) -> None:
+    for name, source in _actual_execution_sources().items():
+        bound_path = Path(bindings[name]["path"]).resolve()
+        if (
+            bound_path != source
+            or not source.is_file()
+            or sha256_file(source).lower() != bindings[name]["sha256"]
+        ):
             raise RunnerInputError(
-                f"actual {name} execution source does not match the bound SHA"
+                f"actual {name} execution source does not match the bound path and SHA"
             )
+
+
+def _artifact_atom_ids(payload: bytes, label: str) -> list[str]:
+    atom_ids = _ATOM_ID_PATTERN.findall(_decode_utf8(payload, f"{label} artifact"))
+    if not atom_ids or len(atom_ids) != len(set(atom_ids)):
+        raise RunnerInputError(
+            f"{label} artifact atom IDs must be unique and nonempty"
+        )
+    return atom_ids
+
+
+def _verify_artifact_truth(
+    control: str,
+    full_bytes: bytes,
+    selected_bytes: bytes,
+    source_map: Mapping[str, Any],
+) -> None:
+    full_ids = _artifact_atom_ids(full_bytes, "F")
+    selected_ids = _artifact_atom_ids(selected_bytes, "S")
+    full_atoms = set(full_ids)
+    selected_atoms = set(selected_ids)
+    strict_subset = selected_atoms < full_atoms
+    if control == "identity":
+        if full_bytes != selected_bytes or selected_atoms != full_atoms:
+            raise RunnerInputError("identity F and S must be byte-identical")
+    elif not strict_subset:
+        raise RunnerInputError("planted S must be a strict subset of F")
+
+    atoms = source_map.get("atoms")
+    if not isinstance(atoms, list) or not all(isinstance(row, dict) for row in atoms):
+        raise RunnerInputError("source_map atoms must be objects")
+    map_ids = [row.get("atom_id") for row in atoms]
+    if (
+        any(not isinstance(atom_id, str) for atom_id in map_ids)
+        or len(map_ids) != len(set(map_ids))
+        or map_ids != full_ids
+    ):
+        raise RunnerInputError(
+            "F artifact atom membership must exactly match the source_map"
+        )
+
+    raw_requires = source_map.get("requires")
+    if not isinstance(raw_requires, dict) or set(raw_requires) != full_atoms:
+        raise RunnerInputError(
+            "source_map requires keys must exactly match its atoms"
+        )
+    requires_edges: set[tuple[str, str]] = set()
+    for atom_id in full_ids:
+        dependencies = raw_requires[atom_id]
+        if (
+            not isinstance(dependencies, list)
+            or any(not isinstance(item, str) for item in dependencies)
+            or len(dependencies) != len(set(dependencies))
+        ):
+            raise RunnerInputError(
+                f"source_map dependencies for {atom_id} must be unique atom IDs"
+            )
+        for dependency in dependencies:
+            if dependency not in full_atoms or dependency == atom_id:
+                raise RunnerInputError(
+                    f"source_map dependency for {atom_id} is invalid: {dependency}"
+                )
+            requires_edges.add((atom_id, dependency))
+        missing = set(dependencies) - selected_atoms
+        if atom_id in selected_atoms and missing:
+            raise RunnerInputError(
+                f"S artifact is not dependency-closed at {atom_id}: {sorted(missing)}"
+            )
+
+    raw_edges = source_map.get("dependency_edges")
+    if not isinstance(raw_edges, list):
+        raise RunnerInputError("source_map dependency_edges must be a list")
+    declared_edges: set[tuple[str, str]] = set()
+    for edge in raw_edges:
+        if not isinstance(edge, dict):
+            raise RunnerInputError("source_map dependency edges must be objects")
+        pair = (edge.get("from"), edge.get("to"))
+        if (
+            pair[0] not in full_atoms
+            or pair[1] not in full_atoms
+            or pair[0] == pair[1]
+            or pair in declared_edges
+        ):
+            raise RunnerInputError("source_map contains an invalid dependency edge")
+        declared_edges.add(pair)
+    if declared_edges != requires_edges:
+        raise RunnerInputError(
+            "source_map requires and dependency_edges disagree"
+        )
+
+
+def _capture_workspace_tree(workspace: Path) -> tuple[dict[str, Any], dict[str, bytes]]:
+    root = Path(workspace).resolve()
+    if not root.is_dir():
+        raise RunnerInputError("workspace tree does not exist")
+    excluded = {".git", "__pycache__", ".pytest_cache"}
+    digest = hashlib.sha256()
+    files: dict[str, bytes] = {}
+    total_bytes = 0
+    for current_root, directory_names, file_names in os.walk(
+        root, followlinks=False
+    ):
+        current = Path(current_root)
+        for directory_name in tuple(directory_names):
+            directory = current / directory_name
+            if directory_name in excluded:
+                directory_names.remove(directory_name)
+            elif directory.is_symlink():
+                raise RunnerInputError("workspace contains a directory symlink")
+        directory_names.sort()
+        for file_name in sorted(file_names):
+            path = current / file_name
+            relative = path.relative_to(root).as_posix()
+            if path.is_symlink():
+                raise RunnerInputError(f"workspace contains a file symlink: {relative}")
+            try:
+                payload = path.read_bytes()
+            except OSError as exc:
+                raise RunnerInputError(
+                    f"unable to capture workspace file: {relative}"
+                ) from exc
+            relative_bytes = relative.encode("utf-8")
+            digest.update(len(relative_bytes).to_bytes(8, "big"))
+            digest.update(relative_bytes)
+            digest.update(payload)
+            digest.update(len(payload).to_bytes(8, "big"))
+            files[relative] = payload
+            total_bytes += len(payload)
+    return (
+        {
+            "sha256": digest.hexdigest(),
+            "file_count": len(files),
+            "total_bytes": total_bytes,
+            "excluded_directory_names": sorted(excluded),
+        },
+        files,
+    )
+
+
+def _verify_registered_metadata(family: Mapping[str, Any], control: str) -> None:
+    _require_exact(family.get("case_count"), 64, "case_count")
+    _require_exact(family.get("max_tokens"), 8192, "max_tokens")
+    _require_exact(family.get("strict_subset"), control == "planted", "strict_subset")
+    _require_exact(
+        family.get("run_success_threshold"), 0.95, "run_success_threshold"
+    )
+    _require_exact(family.get("maximum_shortfall"), 0.05, "maximum_shortfall")
+    replicate_count = family.get("replicate_count")
+    if type(replicate_count) is not int or replicate_count < 1:
+        raise RunnerInputError("replicate_count must be a positive integer")
+    required = family.get("required_joint_events_for_admission")
+    if control == "identity":
+        if required is not None:
+            raise RunnerInputError(
+                "identity required_joint_events_for_admission must be null"
+            )
+    elif type(required) is not int or not 1 <= required <= replicate_count:
+        raise RunnerInputError(
+            "planted required_joint_events_for_admission is out of range"
+        )
 
 
 def _verify_schedule(
@@ -308,6 +544,7 @@ def load_and_verify_family(
     control = family.get("control")
     if control not in {"identity", "planted"}:
         raise RunnerInputError("control must be identity or planted")
+    _verify_registered_metadata(family, control)
 
     run_root = _resolve_run_root(family_file, family)
     bindings = {
@@ -321,20 +558,34 @@ def load_and_verify_family(
         raise RunnerInputError("family bindings must contain exactly the registered inputs")
     _verify_execution_sources(bindings)
 
-    full_bytes = Path(bindings["full_artifact"]["path"]).read_bytes()
-    selected_bytes = Path(bindings["selected_artifact"]["path"]).read_bytes()
-    if control == "identity":
-        if full_bytes != selected_bytes or family.get("strict_subset") is not False:
-            raise RunnerInputError("identity F and S must be byte-identical")
-    elif full_bytes == selected_bytes or family.get("strict_subset") is not True:
-        raise RunnerInputError("planted F and S must differ")
-
-    case_registry = json.loads(
-        Path(bindings["case_registry"]["path"]).read_text(encoding="utf-8")
+    full_bytes = bindings["full_artifact"]["verified_bytes"]
+    selected_bytes = bindings["selected_artifact"]["verified_bytes"]
+    source_map = _load_json_object(
+        bindings["source_map"]["verified_bytes"], "source_map"
     )
-    cases = case_registry.get("blocks", {}).get("confirmation_v3")
-    if not isinstance(cases, list) or len(cases) != family.get("case_count"):
+    _verify_artifact_truth(control, full_bytes, selected_bytes, source_map)
+
+    case_registry = _load_json_object(
+        bindings["case_registry"]["verified_bytes"], "case_registry"
+    )
+    blocks = case_registry.get("blocks")
+    if not isinstance(blocks, dict):
+        raise RunnerInputError("case_registry blocks must be a JSON object")
+    cases = blocks.get("confirmation_v3")
+    if not isinstance(cases, list) or len(cases) != 64:
         raise RunnerInputError("case registry does not match the registered case_count")
+    seen_seeds: set[int] = set()
+    for case in cases:
+        if not isinstance(case, dict):
+            raise RunnerInputError("confirmation_v3 cases must be JSON objects")
+        seed = case.get("seed")
+        if type(seed) is not int or seed in seen_seeds:
+            raise RunnerInputError("confirmation_v3 case seeds must be unique integers")
+        seen_seeds.add(seed)
+        if case != generate_case(seed):
+            raise RunnerInputError(
+                f"confirmation_v3 case does not match generate_case({seed})"
+            )
 
     workspace_raw = family.get("workspace_path")
     if not isinstance(workspace_raw, str) or not workspace_raw.strip():
@@ -344,11 +595,19 @@ def load_and_verify_family(
         workspace_path.relative_to(run_root)
     except ValueError as exc:
         raise RunnerInputError("workspace path escapes the registered run root") from exc
-    actual_workspace = workspace_tree_digest(workspace_path)
+    actual_workspace, workspace_files = _capture_workspace_tree(workspace_path)
+    expected_file_count = family.get("workspace_file_count")
+    expected_total_bytes = family.get("workspace_total_bytes")
+    if type(expected_file_count) is not int or expected_file_count < 0:
+        raise RunnerInputError("workspace_file_count must be a nonnegative integer")
+    if type(expected_total_bytes) is not int or expected_total_bytes < 0:
+        raise RunnerInputError("workspace_total_bytes must be a nonnegative integer")
     expected_workspace = {
-        "sha256": family.get("workspace_tree_sha256"),
-        "file_count": family.get("workspace_file_count"),
-        "total_bytes": family.get("workspace_total_bytes"),
+        "sha256": _require_sha256(
+            family.get("workspace_tree_sha256"), "workspace_tree_sha256"
+        ),
+        "file_count": expected_file_count,
+        "total_bytes": expected_total_bytes,
         "excluded_directory_names": family.get(
             "workspace_excluded_directory_names"
         ),
@@ -367,6 +626,7 @@ def load_and_verify_family(
             "registered_replicate": replicate,
             "verified_bindings": bindings,
             "workspace_state": actual_workspace,
+            "verified_workspace_files": workspace_files,
         }
     )
     return verified
@@ -376,12 +636,12 @@ def _build_contexts(verified_family: Mapping[str, Any]) -> dict[str, str]:
     bindings = verified_family["verified_bindings"]
     contexts = {
         "B": NO_ARTIFACT_CONTEXT,
-        "F": Path(bindings["full_artifact"]["path"])
-        .read_text(encoding="utf-8")
-        .strip(),
-        "S": Path(bindings["selected_artifact"]["path"])
-        .read_text(encoding="utf-8")
-        .strip(),
+        "F": _decode_utf8(
+            bindings["full_artifact"]["verified_bytes"], "full_artifact"
+        ).strip(),
+        "S": _decode_utf8(
+            bindings["selected_artifact"]["verified_bytes"], "selected_artifact"
+        ).strip(),
     }
     for condition, context in contexts.items():
         if not context:
@@ -390,17 +650,59 @@ def _build_contexts(verified_family: Mapping[str, Any]) -> dict[str, str]:
 
 
 def _public_provider_config(
-    raw_config: Mapping[str, Any], *, provider_label: str
+    raw_config: Mapping[str, Any],
+    *,
+    provider_label: str,
+    expected: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     if not isinstance(raw_config, Mapping):
         raise RunnerInputError("transport public_config must return an object")
-    public = {
-        key: raw_config[key]
-        for key in _PUBLIC_PROVIDER_FIELDS
-        if key in raw_config
-    }
+    public: dict[str, Any] = {}
+    for key in _PUBLIC_PROVIDER_FIELDS:
+        if key not in raw_config:
+            continue
+        value = raw_config[key]
+        if expected is not None:
+            if key not in expected:
+                raise RunnerInputError(f"unexpected provider config field: {key}")
+            _require_exact(value, expected[key], f"provider config {key}")
+            value = expected[key]
+        public[key] = value
+    if expected is not None and set(public) != set(expected):
+        raise RunnerInputError("transport public_config is incomplete")
     public["provider_label"] = provider_label
     return public
+
+
+def _materialize_verified_snapshots(
+    output_dir: Path, verified_family: Mapping[str, Any]
+) -> tuple[Path, Path]:
+    bindings = verified_family["verified_bindings"]
+    input_dir = output_dir / "verified_inputs"
+    input_dir.mkdir(exist_ok=False)
+    names = {
+        "task_prompt": "task_prompt.md",
+        "full_artifact": "full_artifact.md",
+        "selected_artifact": "selected_artifact.md",
+        "source_map": "source_atom_map.json",
+        "case_registry": "case_registry.json",
+    }
+    for binding, filename in names.items():
+        _write_bytes_exclusive(
+            input_dir / filename, bindings[binding]["verified_bytes"]
+        )
+
+    workspace_dir = output_dir / "workspace_snapshot"
+    workspace_dir.mkdir(exist_ok=False)
+    for relative, payload in verified_family["verified_workspace_files"].items():
+        destination = (workspace_dir / relative).resolve()
+        try:
+            destination.relative_to(workspace_dir.resolve())
+        except ValueError as exc:
+            raise RunnerInputError("captured workspace path escapes snapshot") from exc
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        _write_bytes_exclusive(destination, payload)
+    return workspace_dir, input_dir / names["case_registry"]
 
 
 def build_pair_manifest(
@@ -475,10 +777,12 @@ class _ExclusiveToolformerScorerBridge:
         workspace: Path,
         case_registry_path: Path,
         condition_dir: Path,
+        timeout_seconds: float,
     ) -> None:
         self._workspace = Path(workspace).resolve()
         self._case_registry_path = Path(case_registry_path).resolve()
         self._condition_dir = Path(condition_dir).resolve()
+        self._timeout_seconds = timeout_seconds
         self._score_count = 0
         if not self._workspace.is_dir() or not self._case_registry_path.is_file():
             raise ToolformerFilterScorerError("scorer inputs are missing")
@@ -498,12 +802,31 @@ class _ExclusiveToolformerScorerBridge:
         patch_path = evaluation_dir / "candidate.patch"
         _write_text_exclusive(patch_path, diff_text)
         self._score_count += 1
-        metric = score_toolformer_filter_patch(
-            diff_text=diff_text,
-            workspace=self._workspace,
-            case_registry_path=self._case_registry_path,
-            block="confirmation_v3",
-        )
+        outcome: dict[str, Any] = {}
+        completed = threading.Event()
+
+        def invoke() -> None:
+            try:
+                outcome["metric"] = score_toolformer_filter_patch(
+                    diff_text=diff_text,
+                    workspace=self._workspace,
+                    case_registry_path=self._case_registry_path,
+                    block="confirmation_v3",
+                )
+            except BaseException as exc:  # propagated on the caller thread
+                outcome["error"] = exc
+            finally:
+                completed.set()
+
+        worker = threading.Thread(target=invoke, daemon=True)
+        worker.start()
+        if not completed.wait(self._timeout_seconds):
+            raise RunnerInputError(
+                f"scorer timed out after {self._timeout_seconds:g} seconds"
+            )
+        if "error" in outcome:
+            raise outcome["error"]
+        metric = outcome["metric"]
         feedback = json.dumps(
             metric["public_summary"], sort_keys=True, separators=(",", ":")
         )
@@ -523,6 +846,7 @@ def _run_condition(
     output_dir: Path,
     transport: Any,
     retry_lineage_prefix: str,
+    scorer_timeout_seconds: float,
 ) -> dict[str, Any]:
     condition_dir = output_dir / condition
     bindings = verified_family["verified_bindings"]
@@ -530,6 +854,7 @@ def _run_condition(
         workspace=Path(verified_family["workspace_state"]["path"]),
         case_registry_path=Path(bindings["case_registry"]["path"]),
         condition_dir=condition_dir,
+        timeout_seconds=scorer_timeout_seconds,
     )
     runner = InteractiveACIRunner(
         workspace=OverlayWorkspace(Path(verified_family["workspace_state"]["path"])),
@@ -553,7 +878,7 @@ def _run_condition(
     )
     result = runner.run(retry_lineage_prefix=retry_lineage_prefix)
     if result.status == "error":
-        raise RuntimeError(f"condition {condition} failed: {result.terminal_reason}")
+        raise RuntimeError(f"condition {condition} failed") from None
     if not condition_dir.exists():
         condition_dir.mkdir(exist_ok=False)
     serialized = _serialize_result(result)
@@ -596,6 +921,7 @@ def _validate_runtime_args(args: argparse.Namespace, family: Mapping[str, Any]) 
         if (
             isinstance(value, bool)
             or not isinstance(value, (int, float))
+            or not math.isfinite(value)
             or value <= 0
         ):
             raise RunnerInputError(f"{name} must be positive")
@@ -603,6 +929,7 @@ def _validate_runtime_args(args: argparse.Namespace, family: Mapping[str, Any]) 
     if (
         isinstance(delay, bool)
         or not isinstance(delay, (int, float))
+        or not math.isfinite(delay)
         or delay < 0
     ):
         raise RunnerInputError("retry_delay_seconds must be nonnegative")
@@ -623,43 +950,74 @@ def run_bundle(
         raise RunnerInputError(
             "provider base URL or API key environment variable is missing"
         )
-    output_dir.mkdir(parents=True, exist_ok=False)
-    transport = transport_factory(
-        base_url=base_url,
-        api_key=api_key,
-        model_alias=args.model_alias,
-        wire_api="openai_chat_completions",
-        max_tokens=args.max_tokens,
-        timeout_seconds=args.timeout_seconds,
-        max_attempts=args.max_attempts,
-        retry_delay_seconds=args.retry_delay_seconds,
-    )
-    public_config = _public_provider_config(
-        transport.public_config(), provider_label=verified["provider_label"]
-    )
     contexts = _build_contexts(verified)
+    task_prompt = verified["verified_bindings"]["task_prompt"][
+        "verified_text"
+    ].strip()
+    if not task_prompt:
+        raise RunnerInputError("task_prompt is empty")
+    expected_public_config = {
+        "model_alias": args.model_alias,
+        "wire_api": "openai_chat_completions",
+        "max_tokens": args.max_tokens,
+        "timeout_seconds": args.timeout_seconds,
+        "max_attempts": args.max_attempts,
+        "retry_delay_seconds": args.retry_delay_seconds,
+        "temperature": 0,
+    }
+    try:
+        transport = transport_factory(
+            base_url=base_url,
+            api_key=api_key,
+            model_alias=args.model_alias,
+            wire_api="openai_chat_completions",
+            max_tokens=args.max_tokens,
+            timeout_seconds=args.timeout_seconds,
+            max_attempts=args.max_attempts,
+            retry_delay_seconds=args.retry_delay_seconds,
+        )
+        public_config = _public_provider_config(
+            transport.public_config(),
+            provider_label=verified["provider_label"],
+            expected=expected_public_config,
+        )
+    except Exception:
+        raise RunnerInputError("provider preflight failed") from None
+
     manifest = build_pair_manifest(
         verified_family=verified,
         condition_contexts=contexts,
         provider_config=public_config,
     )
-    _write_json_exclusive(output_dir / "pair_manifest.pre_run.json", manifest)
+    manifest["workspace_snapshot_path"] = (
+        output_dir / "workspace_snapshot"
+    ).as_posix()
+    manifest["verified_inputs_path"] = (output_dir / "verified_inputs").as_posix()
 
-    task_prompt = Path(
-        verified["verified_bindings"]["task_prompt"]["path"]
-    ).read_text(encoding="utf-8").strip()
+    output_dir.mkdir(parents=True, exist_ok=False)
+    _write_json_exclusive(output_dir / "pair_manifest.pre_run.json", manifest)
+    workspace_snapshot, case_registry_snapshot = _materialize_verified_snapshots(
+        output_dir, verified
+    )
+
+    execution_family = copy.deepcopy(verified)
+    execution_family["workspace_state"]["path"] = workspace_snapshot.as_posix()
+    execution_family["verified_bindings"]["case_registry"][
+        "path"
+    ] = case_registry_snapshot.as_posix()
     results: dict[str, Any] = {}
     for condition in verified["registered_replicate"]["condition_order"]:
         results[condition] = _run_condition(
             condition=condition,
             context=contexts[condition],
             task_prompt=task_prompt,
-            verified_family=verified,
+            verified_family=execution_family,
             output_dir=output_dir,
             transport=transport,
             retry_lineage_prefix=manifest["conditions"][condition][
                 "retry_lineage_prefix"
             ],
+            scorer_timeout_seconds=args.scorer_timeout_seconds,
         )
 
     final_manifest = copy.deepcopy(manifest)
