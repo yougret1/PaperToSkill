@@ -18,6 +18,10 @@ from effectslice.confirmation_v3 import (  # noqa: E402
 )
 
 
+MISSING = object()
+ROW_NAMES = ("baseline", "full", "sliced")
+
+
 def condition(success: bool, score: float, hard: bool = True) -> dict:
     return {
         "success": success,
@@ -27,6 +31,25 @@ def condition(success: bool, score: float, hard: bool = True) -> dict:
         "private_feedback_exposed": False,
         "integrity_violations": [],
     }
+
+
+def valid_rows() -> dict[str, dict]:
+    return {
+        "baseline": condition(False, 0.0),
+        "full": condition(True, 0.98),
+        "sliced": condition(True, 0.96),
+    }
+
+
+def event_with_mutation(row_name: str, field: str, value=MISSING) -> bool:
+    rows = valid_rows()
+    if value is MISSING:
+        rows[row_name].pop(field)
+    else:
+        rows[row_name][field] = value
+    return joint_substitution_event(
+        rows["baseline"], rows["full"], rows["sliced"]
+    )
 
 
 def test_joint_event_accepts_successful_noninferior_slice():
@@ -59,6 +82,141 @@ def test_joint_event_rejects_hard_contract_failure():
     )
 
 
+@pytest.mark.parametrize("row_name", ROW_NAMES)
+@pytest.mark.parametrize(
+    "value",
+    [
+        pytest.param(MISSING, id="missing"),
+        pytest.param(None, id="none"),
+        pytest.param(False, id="false"),
+        pytest.param(0, id="zero"),
+        pytest.param("", id="empty-string"),
+        pytest.param({}, id="empty-dict"),
+    ],
+)
+def test_joint_event_requires_integrity_violations_to_be_an_explicit_empty_list(
+    row_name, value
+):
+    assert not event_with_mutation(row_name, "integrity_violations", value)
+
+
+@pytest.mark.parametrize("row_name", ROW_NAMES)
+@pytest.mark.parametrize(
+    "value",
+    [
+        pytest.param(MISSING, id="missing"),
+        pytest.param(None, id="none"),
+        pytest.param(0, id="zero-int"),
+        pytest.param(1, id="one-int"),
+        pytest.param("False", id="false-string"),
+        pytest.param("True", id="true-string"),
+    ],
+)
+def test_joint_event_rejects_non_boolean_success_metadata(row_name, value):
+    assert not event_with_mutation(row_name, "success", value)
+
+
+@pytest.mark.parametrize(
+    ("row_name", "wrong_success"),
+    [("baseline", True), ("full", False), ("sliced", False)],
+)
+def test_joint_event_requires_condition_specific_boolean_success(
+    row_name, wrong_success
+):
+    assert not event_with_mutation(row_name, "success", wrong_success)
+
+
+@pytest.mark.parametrize("row_name", ROW_NAMES)
+@pytest.mark.parametrize(
+    "value",
+    [
+        pytest.param(MISSING, id="missing"),
+        pytest.param(None, id="none"),
+        pytest.param(False, id="false-bool"),
+        pytest.param(True, id="true-bool"),
+        pytest.param(1.0, id="float"),
+        pytest.param("1", id="string"),
+    ],
+)
+def test_joint_event_requires_exact_integer_private_score_count(row_name, value):
+    assert not event_with_mutation(row_name, "private_score_count", value)
+
+
+@pytest.mark.parametrize("row_name", ROW_NAMES)
+@pytest.mark.parametrize(
+    "value",
+    [
+        pytest.param(MISSING, id="missing"),
+        pytest.param(None, id="none"),
+        pytest.param(0, id="zero-int"),
+        pytest.param("False", id="string"),
+        pytest.param(True, id="true-bool"),
+    ],
+)
+def test_joint_event_requires_exact_false_private_feedback_flag(row_name, value):
+    assert not event_with_mutation(row_name, "private_feedback_exposed", value)
+
+
+@pytest.mark.parametrize("row_name", ROW_NAMES)
+@pytest.mark.parametrize(
+    "value",
+    [
+        pytest.param(MISSING, id="missing"),
+        pytest.param(None, id="none"),
+        pytest.param(1, id="one-int"),
+        pytest.param("True", id="string"),
+        pytest.param(False, id="false-bool"),
+    ],
+)
+def test_joint_event_requires_exact_true_hard_constraints_flag(row_name, value):
+    assert not event_with_mutation(row_name, "hard_constraints_passed", value)
+
+
+@pytest.mark.parametrize("row_name", ROW_NAMES)
+@pytest.mark.parametrize(
+    "value",
+    [
+        pytest.param(MISSING, id="missing"),
+        pytest.param(None, id="none"),
+        pytest.param(False, id="false-bool"),
+        pytest.param(True, id="true-bool"),
+        pytest.param("0.5", id="string"),
+        pytest.param(float("nan"), id="nan"),
+        pytest.param(float("inf"), id="positive-infinity"),
+        pytest.param(float("-inf"), id="negative-infinity"),
+        pytest.param(-0.01, id="below-zero"),
+        pytest.param(1.01, id="above-one"),
+    ],
+)
+def test_joint_event_rejects_invalid_task_scores_for_every_condition(row_name, value):
+    assert not event_with_mutation(row_name, "task_score", value)
+
+
+@pytest.mark.parametrize(
+    "maximum_shortfall",
+    [
+        pytest.param(None, id="none"),
+        pytest.param(False, id="false-bool"),
+        pytest.param(True, id="true-bool"),
+        pytest.param("0.05", id="string"),
+        pytest.param(float("nan"), id="nan"),
+        pytest.param(float("inf"), id="positive-infinity"),
+        pytest.param(float("-inf"), id="negative-infinity"),
+        pytest.param(-0.01, id="below-zero"),
+        pytest.param(1.01, id="above-one"),
+    ],
+)
+def test_joint_event_rejects_invalid_maximum_shortfall_argument(maximum_shortfall):
+    rows = valid_rows()
+    with pytest.raises(ValueError, match="maximum_shortfall"):
+        joint_substitution_event(
+            rows["baseline"],
+            rows["full"],
+            rows["sliced"],
+            maximum_shortfall=maximum_shortfall,
+        )
+
+
 @pytest.mark.parametrize("replicate_count", [-6, 0, 1, 5, 7])
 def test_balanced_schedule_rejects_nonpositive_or_unbalanced_counts(replicate_count):
     with pytest.raises(ValueError, match="positive multiple of six"):
@@ -80,6 +238,13 @@ def test_balanced_schedule_uses_all_orders_equally():
         for order in expected_orders
     }
     assert set(planted_counts.values()) == {3}
+
+
+def test_balanced_schedule_is_repeatable_for_the_same_seed():
+    first = balanced_schedule(seed=2026071803, replicate_count=18)
+    second = balanced_schedule(seed=2026071803, replicate_count=18)
+
+    assert first == second
 
 
 def test_file_and_canonical_text_hashes_use_exact_bytes_and_stripped_text():
