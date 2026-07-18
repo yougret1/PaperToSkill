@@ -5,6 +5,7 @@ import hashlib
 import json
 import os
 import re
+import stat
 import uuid
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from contextlib import ExitStack, contextmanager
@@ -240,17 +241,18 @@ def _load_registered_family(
 
 
 def _safe_output_dir(output_root: Path, replicate_id: str) -> Path:
-    if not isinstance(replicate_id, str) or not replicate_id:
+    if (
+        not isinstance(replicate_id, str)
+        or not replicate_id
+        or Path(replicate_id).name != replicate_id
+    ):
         raise ValueError("replicate ID must be nonempty")
-    root = Path(output_root).resolve()
-    candidate = (root / replicate_id).resolve()
-    try:
-        candidate.relative_to(root)
-    except ValueError as exc:
-        raise ValueError("replicate output path escapes its control output root") from exc
-    if candidate == root:
-        raise ValueError("replicate output path must be below its control output root")
-    return candidate
+    supplied_root = Path(output_root)
+    if supplied_root.is_symlink() or _is_reparse_point(supplied_root):
+        raise ValueError("control output root must be a regular filesystem path")
+    _reject_reparse_components(supplied_root, "control output root")
+    root = _lexical_absolute(supplied_root).resolve()
+    return _validate_output_destination(root, replicate_id, root / replicate_id)
 
 
 def build_run_namespace(
@@ -295,10 +297,16 @@ def _normalize_output_roots(
 ) -> dict[str, Path]:
     if not isinstance(output_roots, Mapping) or set(output_roots) != set(CONTROL_SPECS):
         raise ValueError("output_roots must contain exactly identity and planted")
-    try:
-        roots = {control: Path(output_roots[control]).resolve() for control in CONTROL_SPECS}
-    except (TypeError, ValueError) as exc:
-        raise ValueError("control output roots must be filesystem paths") from exc
+    roots = {}
+    for control in CONTROL_SPECS:
+        try:
+            supplied = Path(output_roots[control])
+        except TypeError as exc:
+            raise ValueError("control output roots must be filesystem paths") from exc
+        if supplied.is_symlink() or _is_reparse_point(supplied):
+            raise ValueError("control output root must be a regular filesystem path")
+        _reject_reparse_components(supplied, "control output root")
+        roots[control] = _lexical_absolute(supplied).resolve()
     identity = roots["identity"]
     planted = roots["planted"]
     if (
@@ -317,6 +325,80 @@ def _default_progress_path(output_roots: Mapping[str, Path]) -> Path:
             "progress_path is required when control output roots are not siblings"
         )
     return next(iter(parents)) / "confirmation_v3_progress.json"
+
+
+def _is_reparse_point(path: Path) -> bool:
+    try:
+        metadata = os.lstat(path)
+    except (FileNotFoundError, NotADirectoryError):
+        return False
+    reparse_flag = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0)
+    return bool(getattr(metadata, "st_file_attributes", 0) & reparse_flag)
+
+
+def _lexical_absolute(path: Path) -> Path:
+    return Path(os.path.abspath(os.fspath(path)))
+
+
+def _reject_reparse_components(path: Path, label: str) -> None:
+    supplied = Path(path)
+    if ".." in supplied.parts:
+        raise ValueError(f"{label} must not traverse parents")
+    absolute = _lexical_absolute(supplied)
+    for component in (*reversed(absolute.parents), absolute):
+        if component.is_symlink() or _is_reparse_point(component):
+            raise ValueError(f"{label} must be a regular filesystem path")
+
+
+def _validate_progress_destination(path: Path) -> None:
+    destination = Path(path)
+    _reject_reparse_components(destination, "progress path")
+    if destination.exists() and not destination.is_file():
+        raise ValueError("progress path must be a regular file")
+
+
+def _validate_progress_disjoint(
+    destination: Path, output_roots: Mapping[str, Path]
+) -> None:
+    for root in output_roots.values():
+        if (
+            destination == root
+            or destination in root.parents
+            or root in destination.parents
+        ):
+            raise ValueError("progress path must be disjoint from control output roots")
+
+
+def _prepare_progress_destination(
+    output_roots: Mapping[str, Path], progress_path: Path | None
+) -> Path:
+    supplied = (
+        _default_progress_path(output_roots)
+        if progress_path is None
+        else Path(progress_path)
+    )
+    if supplied.is_symlink() or _is_reparse_point(supplied):
+        raise ValueError("progress path must be a regular file")
+    _reject_reparse_components(supplied, "progress path")
+    destination = _lexical_absolute(supplied)
+    _validate_progress_disjoint(destination, output_roots)
+    _validate_progress_destination(destination)
+    return destination
+
+
+def _validate_output_destination(
+    output_root: Path, replicate_id: str, output_dir: Path
+) -> Path:
+    root = Path(output_root)
+    candidate = _lexical_absolute(Path(output_dir))
+    if candidate.name != replicate_id:
+        raise ValueError("replicate output path must preserve its registered ID")
+    _reject_reparse_components(root, "control output root")
+    _reject_reparse_components(candidate, "replicate output path")
+    resolved_root = root.resolve()
+    if candidate.parent.resolve() != resolved_root:
+        raise ValueError("replicate output parent must equal its control output root")
+    return candidate
 
 
 def _base_record(
@@ -402,10 +484,9 @@ def _read_prior_records(
     progress_path: Path,
     registered: list[dict[str, Any]],
 ) -> dict[tuple[str, str], dict[str, Any]]:
+    _validate_progress_destination(progress_path)
     if not progress_path.exists():
         return {}
-    if progress_path.is_symlink() or not progress_path.is_file():
-        raise ValueError("progress path must be a regular file")
     payload = _load_json_object(progress_path, "confirmation-v3 progress")
     _require_exact(payload.get("schema_version"), PROGRESS_SCHEMA, "progress schema")
     _require_exact(
@@ -475,8 +556,34 @@ def _journal_record_path(
     )
 
 
-def _write_json_atomic(destination: Path, payload: Mapping[str, Any]) -> None:
+def _validate_journal_directory(directory: Path) -> None:
+    directory = Path(directory)
+    try:
+        _reject_reparse_components(directory, "terminal journal path")
+    except ValueError as exc:
+        raise ValueError("terminal journal path must be a safe directory") from exc
+    if directory.exists() and not directory.is_dir():
+        raise ValueError("terminal journal path must be a safe directory")
+
+
+def _validate_journal_record_destination(path: Path) -> None:
+    path = Path(path)
+    _validate_journal_directory(path.parent)
+    if path.is_symlink() or _is_reparse_point(path):
+        raise ValueError("terminal journal record must be a regular file")
+    if path.exists() and not path.is_file():
+        raise ValueError("terminal journal record must be a regular file")
+
+
+def _write_json_atomic(
+    destination: Path,
+    payload: Mapping[str, Any],
+    *,
+    validate_destination: Callable[[Path], None] | None = None,
+) -> None:
     destination = Path(destination)
+    if validate_destination is not None:
+        validate_destination(destination)
     destination.parent.mkdir(parents=True, exist_ok=True)
     temporary = destination.with_name(
         f".{destination.name}.{os.getpid()}.{uuid.uuid4().hex[:12]}.tmp"
@@ -487,6 +594,8 @@ def _write_json_atomic(destination: Path, payload: Mapping[str, Any]) -> None:
             handle.write("\n")
             handle.flush()
             os.fsync(handle.fileno())
+        if validate_destination is not None:
+            validate_destination(destination)
         os.replace(temporary, destination)
     finally:
         if temporary.exists():
@@ -497,11 +606,11 @@ def _write_journal_record(
     progress_path: Path, record: Mapping[str, Any]
 ) -> None:
     directory = _journal_directory(progress_path)
-    if directory.exists() and (directory.is_symlink() or not directory.is_dir()):
-        raise ValueError("terminal journal path must be a safe directory")
+    _validate_journal_directory(directory)
     _write_json_atomic(
         _journal_record_path(progress_path, record),
         {"schema_version": JOURNAL_SCHEMA, "record": dict(record)},
+        validate_destination=_validate_journal_record_destination,
     )
 
 
@@ -509,10 +618,9 @@ def _read_journal_records(
     progress_path: Path, registered: list[dict[str, Any]]
 ) -> dict[tuple[str, str], dict[str, Any]]:
     directory = _journal_directory(progress_path)
+    _validate_journal_directory(directory)
     if not directory.exists():
         return {}
-    if directory.is_symlink() or not directory.is_dir():
-        raise ValueError("terminal journal path must be a safe directory")
     expected = {
         _journal_record_path(progress_path, row).name: row for row in registered
     }
@@ -527,11 +635,16 @@ def _read_journal_records(
                 is not None
                 for record_name in expected
             )
-            if is_writer_temporary and not path.is_symlink() and path.is_file():
+            if (
+                is_writer_temporary
+                and not path.is_symlink()
+                and not _is_reparse_point(path)
+                and path.is_file()
+            ):
                 path.unlink()
                 continue
             raise ValueError("terminal journal contains an unsafe or unregistered record")
-        if path.is_symlink() or not path.is_file():
+        if path.is_symlink() or _is_reparse_point(path) or not path.is_file():
             raise ValueError("terminal journal contains an unsafe or unregistered record")
         payload = _load_json_object(path, "terminal journal record")
         _require_exact(
@@ -581,16 +694,22 @@ def _write_progress(
         "counts": counts,
         "records": records,
     }
-    destination = Path(progress_path).resolve()
-    _write_json_atomic(destination, payload)
+    destination = Path(progress_path)
+    _write_json_atomic(
+        destination, payload, validate_destination=_validate_progress_destination
+    )
     return payload
 
 
 @contextmanager
 def _exclusive_schedule_lock(progress_path: Path):
     lock_path = Path(progress_path).with_name(f".{Path(progress_path).name}.lock")
-    if lock_path.is_symlink():
+    if lock_path.is_symlink() or _is_reparse_point(lock_path):
         raise ValueError("scheduler lock path must be a regular file")
+    try:
+        _reject_reparse_components(lock_path, "scheduler lock path")
+    except ValueError as exc:
+        raise ValueError("scheduler lock path must be a regular file") from exc
     lock_path.parent.mkdir(parents=True, exist_ok=True)
     handle = lock_path.open("a+b")
     locked = False
@@ -663,13 +782,7 @@ def _run_schedule_locked(
     ):
         raise ValueError("production default runner no longer matches its binding")
     roots = _normalize_output_roots(output_roots)
-    if progress_path is None:
-        destination = _default_progress_path(roots)
-    else:
-        supplied_progress_path = Path(progress_path)
-        if supplied_progress_path.is_symlink():
-            raise ValueError("progress path must be a regular file")
-        destination = supplied_progress_path.resolve()
+    destination = _prepare_progress_destination(roots, progress_path)
     runners = DEFAULT_RUNNERS if runner_by_task is None else runner_by_task
     if not isinstance(runners, Mapping):
         raise ValueError("runner_by_task must be a mapping")
@@ -679,6 +792,7 @@ def _run_schedule_locked(
     seen_paths: set[Path] = set()
     seen_controls: set[str] = set()
     registered: list[dict[str, Any]] = []
+    seen_output_dirs: set[Path] = set()
     jobs: list[
         tuple[
             dict[str, Any],
@@ -710,6 +824,13 @@ def _run_schedule_locked(
                 replicate=replicate,
                 output_root=roots[control],
             )
+            output_dir = _validate_output_destination(
+                roots[control], replicate["replicate_id"], args.output_dir
+            )
+            output_identity = output_dir.resolve()
+            if output_identity in seen_output_dirs:
+                raise ValueError("registered replicate IDs alias the same output directory")
+            seen_output_dirs.add(output_identity)
             base = _base_record(
                 family_path=family_path,
                 family_sha256=family_sha256,
@@ -724,6 +845,9 @@ def _run_schedule_locked(
     terminal: dict[tuple[str, str], dict[str, Any]] = {}
     runnable = []
     for base, args, runner in jobs:
+        _validate_output_destination(
+            roots[base["control"]], base["replicate_id"], args.output_dir
+        )
         key = (base["control"], base["replicate_id"])
         previous = prior.get(key)
         if previous is not None:
@@ -773,9 +897,15 @@ def _run_schedule_locked(
     def execute(job):
         base, args, runner = job
         try:
+            _validate_output_destination(
+                roots[base["control"]], base["replicate_id"], args.output_dir
+            )
             if _sha256_file(args.family) != base["family_sha256"]:
                 raise ValueError("confirmation-v3 family changed before execution")
             report = runner(args)
+            _validate_output_destination(
+                roots[base["control"]], base["replicate_id"], args.output_dir
+            )
             if _sha256_file(args.family) != base["family_sha256"]:
                 raise ValueError("confirmation-v3 family changed during execution")
             _validate_runner_report(report, base)
@@ -804,12 +934,35 @@ def _run_schedule_locked(
             ),
         )
 
-    with ThreadPoolExecutor(max_workers=max_workers) as pool:
-        futures = {pool.submit(execute, job): job for job in runnable}
-        for future in as_completed(futures):
-            base = futures[future][0]
+    pool = ThreadPoolExecutor(max_workers=max_workers)
+    futures = {}
+    remaining = iter(runnable)
+
+    def submit_next() -> bool:
+        try:
+            job = next(remaining)
+        except StopIteration:
+            return False
+        futures[pool.submit(execute, job)] = job
+        return True
+
+    try:
+        for _ in range(max_workers):
+            if not submit_next():
+                break
+        while futures:
+            future = next(as_completed(tuple(futures)))
+            base = futures.pop(future)[0]
             key = (base["control"], base["replicate_id"])
             terminal[key] = future.result()
+            submit_next()
+    except BaseException:
+        for future in futures:
+            future.cancel()
+        pool.shutdown(wait=True, cancel_futures=True)
+        raise
+    else:
+        pool.shutdown(wait=True)
 
     records = [
         terminal[(row["control"], row["replicate_id"])] for row in registered
@@ -846,13 +999,7 @@ def run_schedule(
     if has_custom_execution and not allow_test_injection:
         raise ValueError("custom runner or family loader requires explicit test injection")
     roots = _normalize_output_roots(output_roots)
-    if progress_path is None:
-        destination = _default_progress_path(roots)
-    else:
-        supplied_progress_path = Path(progress_path)
-        if supplied_progress_path.is_symlink():
-            raise ValueError("progress path must be a regular file")
-        destination = supplied_progress_path.resolve()
+    destination = _prepare_progress_destination(roots, progress_path)
     lock_targets = {destination, *roots.values()}
     with ExitStack() as locks:
         for target in sorted(

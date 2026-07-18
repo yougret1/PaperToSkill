@@ -1,5 +1,6 @@
 import hashlib
 import json
+import subprocess
 import sys
 import threading
 from pathlib import Path
@@ -136,6 +137,30 @@ def output_roots(root: Path) -> dict[str, Path]:
     }
 
 
+def file_symlink_or_skip(link: Path, target: Path) -> None:
+    try:
+        link.symlink_to(target)
+    except (NotImplementedError, OSError) as exc:
+        pytest.skip(f"file symlinks are unavailable: {exc}")
+
+
+def directory_link_or_skip(link: Path, target: Path) -> None:
+    if sys.platform == "win32":
+        completed = subprocess.run(
+            ["cmd", "/c", "mklink", "/J", str(link), str(target)],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        if completed.returncode != 0:
+            pytest.skip(f"directory junctions are unavailable: {completed.stderr}")
+        return
+    try:
+        link.symlink_to(target, target_is_directory=True)
+    except (NotImplementedError, OSError) as exc:
+        pytest.skip(f"directory symlinks are unavailable: {exc}")
+
+
 def test_namespace_uses_registered_order_and_control_specific_output_root(tmp_path):
     family_path, family = write_family(tmp_path, "planted")
     replicate = family["replicate_schedule"][4]
@@ -157,6 +182,148 @@ def test_namespace_uses_registered_order_and_control_specific_output_root(tmp_pa
     assert args.model_alias == "deepseek-v4-flash"
     assert args.max_attempts == 5
     assert args.max_tokens == 8192
+
+
+def test_namespace_rejects_a_lexically_linked_replicate_output(
+    tmp_path, monkeypatch
+):
+    family_path, family = write_family(tmp_path, "identity")
+    output_root = tmp_path / "raw" / "identity"
+    output_root.mkdir(parents=True)
+    replicate = family["replicate_schedule"][0]
+    candidate = output_root / replicate["replicate_id"]
+    original_is_symlink = Path.is_symlink
+
+    def simulated_is_symlink(path):
+        if str(path) == str(candidate):
+            return True
+        return original_is_symlink(path)
+
+    monkeypatch.setattr(Path, "is_symlink", simulated_is_symlink)
+
+    with pytest.raises(ValueError, match="replicate output path"):
+        scheduler.build_run_namespace(
+            family_path=family_path,
+            family=family,
+            replicate=replicate,
+            output_root=output_root,
+        )
+
+
+def test_namespace_rejects_a_real_replicate_output_junction(tmp_path):
+    family_path, family = write_family(tmp_path, "identity")
+    output_root = tmp_path / "raw" / "identity"
+    output_root.mkdir(parents=True)
+    target = output_root / "aliased-target"
+    target.mkdir()
+    replicate = family["replicate_schedule"][0]
+    directory_link_or_skip(output_root / replicate["replicate_id"], target)
+
+    with pytest.raises(ValueError, match="replicate output path"):
+        scheduler.build_run_namespace(
+            family_path=family_path,
+            family=family,
+            replicate=replicate,
+            output_root=output_root,
+        )
+
+
+def test_output_root_lexical_link_is_rejected_before_family_loading(
+    tmp_path, monkeypatch
+):
+    family_path, _ = write_family(tmp_path, "identity")
+    roots = output_roots(tmp_path)
+    original_is_symlink = Path.is_symlink
+    calls = []
+
+    def simulated_is_symlink(path):
+        if str(path) == str(roots["identity"]):
+            return True
+        return original_is_symlink(path)
+
+    monkeypatch.setattr(Path, "is_symlink", simulated_is_symlink)
+
+    with pytest.raises(ValueError, match="control output root"):
+        scheduler.run_schedule(
+            family_paths=[family_path],
+            output_roots=roots,
+            runner_by_task={"toolformer_filter": calls.append},
+            family_loader=load_synthetic_family,
+            allow_test_injection=True,
+        )
+
+    assert calls == []
+
+
+def test_output_root_parent_traversal_is_rejected_before_family_loading(tmp_path):
+    family_path, _ = write_family(tmp_path, "identity")
+    alias_parent = tmp_path / "alias-parent"
+    alias_parent.mkdir()
+    roots = {
+        "identity": alias_parent / ".." / "raw" / "identity",
+        "planted": tmp_path / "raw" / "planted",
+    }
+    calls = []
+
+    with pytest.raises(ValueError, match="control output root must not traverse parents"):
+        scheduler.run_schedule(
+            family_paths=[family_path],
+            output_roots=roots,
+            runner_by_task={"toolformer_filter": calls.append},
+            family_loader=load_synthetic_family,
+            allow_test_injection=True,
+        )
+
+    assert calls == []
+
+
+def test_output_path_is_revalidated_immediately_before_runner_use(
+    tmp_path, monkeypatch
+):
+    family_path, family = write_family(tmp_path, "identity")
+    roots = output_roots(tmp_path)
+    first_id = family["replicate_schedule"][0]["replicate_id"]
+    first_output = roots["identity"] / first_id
+    original_is_symlink = Path.is_symlink
+    original_write_journal = scheduler._write_journal_record
+    linked = False
+    calls = []
+
+    def simulated_is_symlink(path):
+        if linked and str(path) == str(first_output):
+            return True
+        return original_is_symlink(path)
+
+    def write_journal_and_introduce_link(progress_path, record):
+        nonlocal linked
+        original_write_journal(progress_path, record)
+        if (
+            record["replicate_id"] == first_id
+            and record.get("error_type") == "SchedulerInterrupted"
+        ):
+            linked = True
+
+    def failing_runner(args):
+        calls.append(args.replicate_id)
+        raise RuntimeError("synthetic runner failure")
+
+    monkeypatch.setattr(Path, "is_symlink", simulated_is_symlink)
+    monkeypatch.setattr(scheduler, "_write_journal_record", write_journal_and_introduce_link)
+
+    result = scheduler.run_schedule(
+        family_paths=[family_path],
+        output_roots=roots,
+        max_workers=1,
+        runner_by_task={"toolformer_filter": failing_runner},
+        family_loader=load_synthetic_family,
+        allow_test_injection=True,
+    )
+
+    assert first_id not in calls
+    first_record = next(
+        row for row in result["records"] if row["replicate_id"] == first_id
+    )
+    assert first_record["status"] == "failed"
 
 
 def test_family_path_symlink_is_rejected_before_resolution(tmp_path, monkeypatch):
@@ -208,6 +375,104 @@ def test_explicit_progress_path_symlink_is_rejected_before_resolution(
             family_loader=load_synthetic_family,
             allow_test_injection=True,
         )
+
+
+def test_default_progress_path_lexical_symlink_is_rejected_before_runner(
+    tmp_path, monkeypatch
+):
+    family_path, _ = write_family(tmp_path, "identity")
+    roots = output_roots(tmp_path)
+    default_progress = tmp_path / "raw" / "confirmation_v3_progress.json"
+    original_is_symlink = Path.is_symlink
+    calls = []
+
+    def simulated_is_symlink(path):
+        if str(path) == str(default_progress):
+            return True
+        return original_is_symlink(path)
+
+    monkeypatch.setattr(Path, "is_symlink", simulated_is_symlink)
+
+    with pytest.raises(ValueError, match="progress path must be a regular file"):
+        scheduler.run_schedule(
+            family_paths=[family_path],
+            output_roots=roots,
+            runner_by_task={"toolformer_filter": calls.append},
+            family_loader=load_synthetic_family,
+            allow_test_injection=True,
+        )
+
+    assert calls == []
+
+
+def test_default_progress_path_rejects_a_real_dangling_symlink(tmp_path):
+    family_path, _ = write_family(tmp_path, "identity")
+    roots = output_roots(tmp_path)
+    default_progress = tmp_path / "raw" / "confirmation_v3_progress.json"
+    default_progress.parent.mkdir(parents=True)
+    file_symlink_or_skip(default_progress, tmp_path / "missing-progress.json")
+    calls = []
+
+    with pytest.raises(ValueError, match="progress path must be a regular file"):
+        scheduler.run_schedule(
+            family_paths=[family_path],
+            output_roots=roots,
+            runner_by_task={"toolformer_filter": calls.append},
+            family_loader=load_synthetic_family,
+            allow_test_injection=True,
+        )
+
+    assert calls == []
+
+
+def test_explicit_progress_parent_traversal_is_rejected_before_runner(tmp_path):
+    family_path, _ = write_family(tmp_path, "identity")
+    roots = output_roots(tmp_path)
+    alias_parent = tmp_path / "alias-parent"
+    alias_parent.mkdir()
+    progress_path = alias_parent / ".." / "progress.json"
+    calls = []
+
+    with pytest.raises(ValueError, match="progress path must not traverse parents"):
+        scheduler.run_schedule(
+            family_paths=[family_path],
+            output_roots=roots,
+            progress_path=progress_path,
+            runner_by_task={"toolformer_filter": calls.append},
+            family_loader=load_synthetic_family,
+            allow_test_injection=True,
+        )
+
+    assert calls == []
+
+
+@pytest.mark.parametrize(
+    "progress_location",
+    ["equal", "descendant", "ancestor"],
+)
+def test_progress_path_must_be_disjoint_from_both_raw_roots(
+    tmp_path, progress_location
+):
+    family_path, _ = write_family(tmp_path, "identity")
+    roots = output_roots(tmp_path)
+    progress_paths = {
+        "equal": roots["identity"],
+        "descendant": roots["identity"] / "progress.json",
+        "ancestor": tmp_path / "raw",
+    }
+    calls = []
+
+    with pytest.raises(ValueError, match="progress path must be disjoint"):
+        scheduler.run_schedule(
+            family_paths=[family_path],
+            output_roots=roots,
+            progress_path=progress_paths[progress_location],
+            runner_by_task={"toolformer_filter": calls.append},
+            family_loader=load_synthetic_family,
+            allow_test_injection=True,
+        )
+
+    assert calls == []
 
 
 def test_fake_runner_and_family_loader_require_explicit_test_injection(tmp_path):
@@ -388,6 +653,61 @@ def test_same_raw_roots_cannot_run_concurrently_with_different_progress_paths(
     assert background_errors == []
 
 
+def test_scheduler_lock_leaf_rejects_a_real_windows_junction(tmp_path):
+    lock_target = tmp_path / "registered-resource"
+    lock_path = tmp_path / ".registered-resource.lock"
+    redirected = tmp_path / "redirected-lock"
+    redirected.mkdir()
+    directory_link_or_skip(lock_path, redirected)
+
+    with pytest.raises(ValueError, match="scheduler lock path"):
+        with scheduler._exclusive_schedule_lock(lock_target):
+            pytest.fail("junction-backed scheduler lock was acquired")
+
+
+@pytest.mark.parametrize("max_workers", [1, 2])
+def test_keyboard_interrupt_cancels_unstarted_jobs_and_keeps_journal_placeholders(
+    tmp_path, max_workers
+):
+    family_path, family = write_family(tmp_path, "identity")
+    roots = output_roots(tmp_path)
+    calls = []
+    started = threading.Barrier(max_workers)
+
+    def interrupting_runner(args):
+        calls.append(args.replicate_id)
+        started.wait(timeout=5)
+        raise KeyboardInterrupt
+
+    with pytest.raises(KeyboardInterrupt):
+        scheduler.run_schedule(
+            family_paths=[family_path],
+            output_roots=roots,
+            max_workers=max_workers,
+            runner_by_task={"toolformer_filter": interrupting_runner},
+            family_loader=load_synthetic_family,
+            allow_test_injection=True,
+        )
+
+    expected_started = {
+        row["replicate_id"]
+        for row in family["replicate_schedule"][:max_workers]
+    }
+    assert len(calls) == max_workers
+    assert set(calls) == expected_started
+    progress_path = tmp_path / "raw" / "confirmation_v3_progress.json"
+    assert not progress_path.exists()
+    journal_records = [
+        json.loads(path.read_text(encoding="utf-8"))["record"]
+        for path in scheduler._journal_directory(progress_path).glob("*.json")
+    ]
+    assert len(journal_records) == family["replicate_count"]
+    assert {row["status"] for row in journal_records} == {"failed"}
+    assert {row["error_type"] for row in journal_records} == {
+        "SchedulerInterrupted"
+    }
+
+
 def test_resume_preserves_completed_bundles_and_prior_failed_records(tmp_path):
     family_path, family = write_family(tmp_path, "identity")
     roots = output_roots(tmp_path)
@@ -512,6 +832,31 @@ def test_resume_cleans_an_atomic_journal_temp_left_by_a_crash(tmp_path):
         "failed": 0,
         "preserved": family["replicate_count"],
     }
+
+
+def test_terminal_journal_rejects_a_real_windows_junction(tmp_path):
+    family_path, _ = write_family(tmp_path, "identity")
+    roots = output_roots(tmp_path)
+    progress_path = tmp_path / "raw" / "confirmation_v3_progress.json"
+    progress_path.parent.mkdir(parents=True)
+    journal_target = tmp_path / "redirected-journal"
+    journal_target.mkdir()
+    directory_link_or_skip(
+        scheduler._journal_directory(progress_path), journal_target
+    )
+    calls = []
+
+    with pytest.raises(ValueError, match="terminal journal path must be a safe directory"):
+        scheduler.run_schedule(
+            family_paths=[family_path],
+            output_roots=roots,
+            runner_by_task={"toolformer_filter": calls.append},
+            family_loader=load_synthetic_family,
+            allow_test_injection=True,
+        )
+
+    assert calls == []
+    assert list(journal_target.iterdir()) == []
 
 
 def test_resume_rejects_an_unsanitized_prior_error_type(tmp_path):
