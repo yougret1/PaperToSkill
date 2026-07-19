@@ -408,6 +408,19 @@ def test_complete_identity_and_planted_families_are_accepted(runner, tmp_path, c
     assert verified["registered_replicate"]["condition_order"] == ["S", "F", "B"]
 
 
+def test_task_prompt_canonical_digest_normalizes_windows_newlines(runner, tmp_path):
+    tree = build_family_tree(tmp_path)
+    tree.task_prompt.write_bytes(b"LOCKED TASK PROMPT\r\n\r\n")
+    rebind_task_prompt(tree)
+
+    verified = runner.load_and_verify_family(tree.family_path, "r001")
+
+    assert verified["task_prompt_file_sha256"] == sha256_file(tree.task_prompt)
+    assert verified["task_prompt_canonical_text_sha256"] == sha256_canonical_text(
+        tree.task_prompt
+    )
+
+
 def test_run_preserves_registered_order_context_and_manifest_semantics(runner, tmp_path):
     tree = build_family_tree(tmp_path, control="planted", order=["S", "F", "B"])
     output = tmp_path / "bundle"

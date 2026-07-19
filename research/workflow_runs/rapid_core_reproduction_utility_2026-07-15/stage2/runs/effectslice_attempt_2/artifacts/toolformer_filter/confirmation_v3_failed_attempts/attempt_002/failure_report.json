@@ -1,0 +1,39 @@
+{
+  "schema_version": "effectslice-confirmation-v3-registration-failure.v1",
+  "status": "failed",
+  "recorded_on": "2026-07-19",
+  "failure_classification": "execution_failure",
+  "failure_stage": "formal-run-preflight-binding",
+  "error_type": "RunnerInputError",
+  "error_message": "The task_prompt file digest bound the CRLF bytes, while its canonical text digest used universal-newline LF text; the runner hashed decoded CRLF text without canonicalizing newlines, so the two registered checks could not both pass.",
+  "formal_provider_execution_started": false,
+  "generic_provider_marker_succeeded": true,
+  "formal_provider_response_id_count": 0,
+  "formal_condition_output_count": 0,
+  "startup_output_files": [
+    "startup_output/.confirmation_v3_progress.json.lock",
+    "startup_output/.identity.lock",
+    "startup_output/.planted.lock"
+  ],
+  "preregistration_created": true,
+  "ledger_created": true,
+  "anchor_created": true,
+  "registration_commit": "3eec9be",
+  "preserved_artifacts": {
+    "identity_family_path": "registration/identity/family.json",
+    "identity_family_sha256": "216ebce058db21df0a6eb1355e1247e73ed646a0e707f456c45055b42540beaa6",
+    "planted_family_path": "registration/planted/family.json",
+    "planted_family_sha256": "57e6bfc752dbc22504535e2b1debcba75cc60d70b4d22becc05b0e197c0426983",
+    "preregistration_path": "registration/preregistration.json",
+    "preregistration_sha256": "36b4e1bf92187e7aff4b913a4f0cd31bb2382e7e6011f53fd7ddc11fc0f5def6",
+    "anchor_path": "registration/preregistration_anchor.json",
+    "anchor_sha256": "b9e2788b3f66e5288eb62645d27d0b2f61017bfd6e1528ed1d3ab09c18a3e67f",
+    "ledger_path": "derived/evidence_ledger/preregistration/ledger.json",
+    "ledger_sha256": "aab2d3e0da9d7c9af26ed83824b978eff9130c85b9ed7042a673e5d72cc355cd"
+  },
+  "resolution": "Archived the immutable registration and lock-only startup output, normalized CRLF and isolated CR to LF before the runner's canonical-text hash, retained the independent raw-byte digest check, and added a Windows-newline regression test before creating a replacement registration.",
+  "verification": {
+    "runner_test_file": "36 passed",
+    "confirmation_v3_related_suite": "338 passed, 1 skipped"
+  }
+}

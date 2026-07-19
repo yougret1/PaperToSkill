@@ -98,6 +98,10 @@ def _sha256_text(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
+def _canonical_text(text: str) -> str:
+    return text.replace("\r\n", "\n").replace("\r", "\n").strip()
+
+
 def _sha256_bytes(payload: bytes) -> str:
     return hashlib.sha256(payload).hexdigest()
 
@@ -264,7 +268,7 @@ def _verify_task_prompt_binding(
     if _sha256_bytes(payload) != file_digest:
         raise RunnerInputError("task_prompt file digest does not match the registered file")
     text = _decode_utf8(payload, "task_prompt")
-    if _sha256_text(text.strip()) != canonical_digest:
+    if _sha256_text(_canonical_text(text)) != canonical_digest:
         raise RunnerInputError(
             "task_prompt canonical text digest does not match the registered file"
         )
