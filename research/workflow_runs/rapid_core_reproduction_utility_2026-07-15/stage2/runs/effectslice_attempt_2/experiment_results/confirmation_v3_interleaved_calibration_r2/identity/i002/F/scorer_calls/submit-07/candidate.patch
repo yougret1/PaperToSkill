@@ -1,0 +1,48 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,44 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not isinstance(logp_with_result, np.ndarray) or not isinstance(logp_call_only, np.ndarray) or not isinstance(logp_no_call, np.ndarray):
++        raise ValueError("All logp inputs must be numpy arrays")
++    for arr in [logp_with_result, logp_call_only, logp_no_call]:
++        if arr.ndim != 2:
++            raise ValueError("Each logp matrix must be 2D")
++        if 0 in arr.shape:
++            raise ValueError("Matrices must not be empty")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError("All logp values must be finite")
++        if np.any(arr > 0):
++            raise ValueError("All logp values must be nonpositive")
++    shape = logp_with_result.shape
++    if logp_call_only.shape != shape or logp_no_call.shape != shape:
++        raise ValueError("All logp matrices must have the same shape")
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be a finite nonnegative number")
++
++    n_candidates, horizon = shape
++    # Compute normalized decreasing weights
++    t = np.arange(horizon, dtype=float)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    weight_sum = raw_weights.sum()
++    if weight_sum == 0:
++        norm_weights = raw_weights
++    else:
++        norm_weights = raw_weights / weight_sum
++
++    # Compute weighted future‑token losses
++    loss_with = -np.sum(norm_weights * logp_with_result, axis=1)
++    loss_call = -np.sum(norm_weights * logp_call_only, axis=1)
++    loss_no = -np.sum(norm_weights * logp_no_call, axis=1)
++
++    # Stronger counterfactual baseline
++    L_minus = np.minimum(loss_no, loss_call)
++    L_plus = loss_with
++    margin = L_minus - L_plus
++    keep = margin >= tau_filter
++    return keep, margin

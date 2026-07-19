@@ -1,0 +1,54 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,50 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not (isinstance(logp_with_result, np.ndarray) and
++            isinstance(logp_call_only, np.ndarray) and
++            isinstance(logp_no_call, np.ndarray)):
++        raise ValueError("Inputs must be numpy arrays")
++    
++    if logp_with_result.ndim != 2 or logp_call_only.ndim != 2 or logp_no_call.ndim != 2:
++        raise ValueError("Inputs must be 2D matrices")
++    
++    if (logp_with_result.shape[0] == 0 or logp_with_result.shape[1] == 0 or
++            logp_call_only.shape != logp_with_result.shape or
++            logp_no_call.shape != logp_with_result.shape):
++        raise ValueError("Matrices must be non-empty and have matching shapes")
++    
++    if not (np.isfinite(logp_with_result).all() and np.isfinite(logp_call_only).all() and
++            np.isfinite(logp_no_call).all()):
++        raise ValueError("All matrix entries must be finite")
++    
++    if not ((logp_with_result <= 0).all() and (logp_call_only <= 0).all() and
++            (logp_no_call <= 0).all()):
++        raise ValueError("All matrix entries must be nonpositive")
++    
++    if isinstance(tau_filter, (bool, np.bool_)):
++        raise ValueError("tau_filter must not be a boolean")
++    try:
++        tau_val = float(tau_filter)
++    except (TypeError, ValueError):
++        raise ValueError("tau_filter must be a non-boolean numeric value")
++    if not np.isfinite(tau_val) or tau_val < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
++    
++    # Compute weights
++    future_horizon = logp_with_result.shape[1]
++    t = np.arange(future_horizon)
++    raw_weights = np.maximum(0, 1 - 0.2 * t)
++    weights = raw_weights / raw_weights.sum()
++    
++    # Weighted average along axis=1 using broadcasting
++    weighted_with = np.sum(logp_with_result * weights, axis=1)
++    weighted_call_only = np.sum(logp_call_only * weights, axis=1)
++    weighted_no_call = np.sum(logp_no_call * weights, axis=1)
++    
++    # Margins and keep mask
++    margins = weighted_with - np.maximum(weighted_no_call, weighted_call_only)
++    keep = margins > tau_val
++    
++    return keep, margins

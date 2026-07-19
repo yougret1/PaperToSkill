@@ -1,0 +1,52 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,48 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    for arr, name in [
++        (logp_with_result, 'logp_with_result'),
++        (logp_call_only, 'logp_call_only'),
++        (logp_no_call, 'logp_no_call'),
++    ]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D array")
++        if arr.shape[0] == 0 or arr.shape[1] == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} contains non-finite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} contains positive values")
++    shape = logp_with_result.shape
++    if logp_call_only.shape != shape or logp_no_call.shape != shape:
++        raise ValueError("All input arrays must have the same shape")
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not isinstance(tau_filter, (int, float)):
++        raise ValueError("tau_filter must be a numeric scalar")
++    if not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
++
++    # Compute weights
++    horizon = shape[1]
++    t = np.arange(horizon)
++    raw_weight = np.maximum(0.0, 1.0 - 0.2 * t)
++    weight_sum = raw_weight.sum()
++    weights = raw_weight / weight_sum
++
++    # Weighted sums
++    weighted_with = logp_with_result @ weights
++    weighted_no = logp_no_call @ weights
++    weighted_call = logp_call_only @ weights
++
++    margin = weighted_with - weighted_no
++    margin_call = weighted_with - weighted_call
++    keep_mask = (margin > tau_filter) & (margin_call > 0)
++
++    return keep_mask, margin

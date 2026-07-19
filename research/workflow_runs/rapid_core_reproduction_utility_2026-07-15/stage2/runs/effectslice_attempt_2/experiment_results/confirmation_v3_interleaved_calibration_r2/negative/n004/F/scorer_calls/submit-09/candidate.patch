@@ -1,0 +1,46 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,42 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    for arr, name in [(logp_with_result, 'logp_with_result'), (logp_call_only, 'logp_call_only'), (logp_no_call, 'logp_no_call')]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be 2-dimensional")
++        if arr.shape[0] == 0 or arr.shape[1] == 0:
++            raise ValueError(f"{name} must be non-empty")
++        if not np.issubdtype(arr.dtype, np.floating):
++            raise ValueError(f"{name} must be floating point")
++        if np.any(np.isnan(arr)) or np.any(np.isinf(arr)):
++            raise ValueError(f"{name} must be finite")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} must be nonpositive")
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All input arrays must have the same shape")
++    if not isinstance(tau_filter, (int, float)) or isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must be a nonnegative number")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
++
++    n_candidates, horizon = logp_with_result.shape
++    t = np.arange(horizon, dtype=float)
++    raw = np.maximum(0, 1.0 - 0.2 * t)
++    weights = raw / raw.sum()
++
++    keep = np.empty(n_candidates, dtype=bool)
++    margins = np.empty(n_candidates, dtype=np.float64)
++
++    for i in range(n_candidates):
++        with_loss = -np.sum(weights * logp_with_result[i])
++        call_loss = -np.sum(weights * logp_call_only[i])
++        no_loss = -np.sum(weights * logp_no_call[i])
++        L_minus = min(no_loss, call_loss)
++        margin = L_minus - with_loss
++        margins[i] = margin
++        keep[i] = margin >= tau_filter
++
++    return keep, margins

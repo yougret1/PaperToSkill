@@ -1,0 +1,38 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -12,5 +12,33 @@
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    for arr, name in [(logp_with_result, 'logp_with_result'),
++                      (logp_call_only, 'logp_call_only'),
++                      (logp_no_call, 'logp_no_call')]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be 2-dimensional")
++        if arr.size == 0:
++            raise ValueError(f"{name} must be non-empty")
++        if not np.isfinite(arr).all():
++            raise ValueError(f"{name} must contain only finite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} must be nonpositive")
++    # Check same shape
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All arrays must have the same shape")
++    # Validate tau_filter
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be boolean")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
++    # Compute margins and keep mask
++    sum_with = np.sum(logp_with_result, axis=1)
++    sum_no = np.sum(logp_no_call, axis=1)
++    sum_call = np.sum(logp_call_only, axis=1)
++    # Reduction in loss compared to no call and call only
++    margin = np.minimum(sum_with - sum_no, sum_with - sum_call)
++    keep = margin > tau_filter
++    return keep, margin

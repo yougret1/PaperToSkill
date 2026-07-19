@@ -1,0 +1,46 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,42 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    inputs = [logp_with_result, logp_call_only, logp_no_call]
++    for arr in inputs:
++        if arr.ndim != 2:
++            raise ValueError("Input must be a 2D matrix")
++        if arr.size == 0:
++            raise ValueError("Input must be non-empty")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError("Input contains nonfinite values")
++        if np.any(arr > 0):
++            raise ValueError("Input contains positive log probabilities")
++    shape = logp_with_result.shape
++    if logp_call_only.shape != shape or logp_no_call.shape != shape:
++        raise ValueError("All input matrices must have the same shape")
++    if isinstance(tau_filter, (bool, np.bool_)):
++        raise ValueError("tau_filter cannot be a boolean")
++    if np.ndim(tau_filter) != 0:
++        raise ValueError("tau_filter must be a scalar")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be a finite nonnegative float")
++
++    # Compute normalized weights for future tokens
++    horizon = shape[1]
++    t = np.arange(horizon, dtype=float)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    normalized_weights = raw_weights / raw_weights.sum()  # shape (horizon,)
++
++    # Weighted losses (negative weighted log probability)
++    def weighted_loss(logp_mat: np.ndarray) -> np.ndarray:
++        return -np.sum(normalized_weights * logp_mat, axis=1)  # shape (n_candidates,)
++
++    L_plus = weighted_loss(logp_with_result)
++    L_empty = weighted_loss(logp_no_call)
++    L_call_only = weighted_loss(logp_call_only)
++    L_minus = np.minimum(L_empty, L_call_only)
++    margins = L_minus - L_plus
++    keep_mask = margins >= tau_filter
++
++    return keep_mask, margins

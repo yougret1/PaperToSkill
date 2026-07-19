@@ -1,0 +1,47 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,43 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not isinstance(logp_with_result, np.ndarray) or not isinstance(logp_call_only, np.ndarray) or not isinstance(logp_no_call, np.ndarray):
++        raise ValueError("All inputs must be numpy arrays")
++    if logp_with_result.ndim != 2 or logp_call_only.ndim != 2 or logp_no_call.ndim != 2:
++        raise ValueError("All inputs must be 2D matrices")
++    n_candidates, future_horizon = logp_with_result.shape
++    if n_candidates < 1 or future_horizon < 1:
++        raise ValueError("Input matrices must be non-empty")
++    if logp_call_only.shape != (n_candidates, future_horizon) or logp_no_call.shape != (n_candidates, future_horizon):
++        raise ValueError("Shape mismatch among inputs")
++    if not np.all(np.isfinite(logp_with_result)) or not np.all(np.isfinite(logp_call_only)) or not np.all(np.isfinite(logp_no_call)):
++        raise ValueError("All inputs must contain only finite values")
++    if np.any(logp_with_result > 0) or np.any(logp_call_only > 0) or np.any(logp_no_call > 0):
++        raise ValueError("Log probabilities must be nonpositive")
++    if isinstance(tau_filter, bool):
++        raise ValueError("Invalid threshold")
++    if not isinstance(tau_filter, (int, float, np.integer, np.floating)):
++        raise ValueError("Invalid threshold")
++    if not np.isfinite(tau_filter):
++        raise ValueError("Threshold must be finite")
++    if tau_filter < 0:
++        raise ValueError("Threshold must be nonnegative")
++
++    # Compute normalized decreasing weights
++    t = np.arange(future_horizon, dtype=float)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    weight_sum = np.sum(raw_weights)
++    norm_weights = raw_weights / weight_sum  # safe because weight_sum > 0 for future_horizon >= 1
++
++    # Weighted sums for each condition
++    L_with = np.dot(logp_with_result, norm_weights)  # shape (n_candidates,)
++    L_call_only = np.dot(logp_call_only, norm_weights)
++    L_no = np.dot(logp_no_call, norm_weights)
++
++    # Compute improvement over the better of the two baselines (call-only and no-call)
++    baseline = np.maximum(L_call_only, L_no)
++    margin = L_with - baseline  # positive when with-result yields higher probability than both baselines
++    keep_mask = margin > tau_filter
++
++    return keep_mask, margin

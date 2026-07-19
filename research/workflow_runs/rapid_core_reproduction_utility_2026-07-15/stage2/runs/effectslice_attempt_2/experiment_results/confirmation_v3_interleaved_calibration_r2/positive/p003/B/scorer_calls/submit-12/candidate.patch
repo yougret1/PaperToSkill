@@ -1,0 +1,50 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,46 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate tau_filter
++    if isinstance(tau_filter, (bool, np.bool_)):
++        raise ValueError("tau_filter must be a float, not boolean")
++    tau_filter = float(tau_filter)
++    if tau_filter < 0 or not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be nonnegative and finite")
++
++    # Validate input arrays
++    for name, arr in [
++        ("logp_with_result", logp_with_result),
++        ("logp_call_only", logp_call_only),
++        ("logp_no_call", logp_no_call),
++    ]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if arr.size == 0:
++            raise ValueError(f"{name} cannot be empty")
++        if not np.isfinite(arr).all():
++            raise ValueError(f"{name} contains nonfinite values")
++        if (arr > 0).any():
++            raise ValueError(f"{name} contains positive values")
++
++    # Check shape consistency
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("Input matrices must have the same shape")
++
++    # Compute per-token improvements
++    imp_no = logp_with_result - logp_no_call
++    imp_call = logp_with_result - logp_call_only
++
++    # Average improvements
++    avg_imp_no = np.mean(imp_no, axis=1)
++    avg_imp_call = np.mean(imp_call, axis=1)
++
++    # Margin: the smaller of the two average improvements
++    margins = np.minimum(avg_imp_no, avg_imp_call)
++
++    # Keep: margin strictly greater than tau_filter
++    keep = margins > tau_filter
++
++    return keep, margins

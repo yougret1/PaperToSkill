@@ -1,0 +1,50 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,46 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate input matrices
++    for arr, name in [
++        (logp_with_result, 'logp_with_result'),
++        (logp_call_only, 'logp_call_only'),
++        (logp_no_call, 'logp_no_call'),
++    ]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if arr.size == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.isfinite(arr).all():
++            raise ValueError(f"{name} contains nonfinite values")
++        if (arr > 0).any():
++            raise ValueError(f"{name} contains positive values")
++
++    # Check shape consistency
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All input matrices must have the same shape")
++
++    # Validate tau_filter
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter cannot be a Boolean")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
++
++    # Compute average log probabilities over future horizon
++    avg_with = np.mean(logp_with_result, axis=1)
++    avg_call = np.mean(logp_call_only, axis=1)
++    avg_no = np.mean(logp_no_call, axis=1)
++
++    # Compute improvements over not calling and calling without result
++    delta_no_call = avg_with - avg_no
++    delta_call_only = avg_with - avg_call
++
++    # Keep calls where both improvements exceed the threshold
++    keep = (delta_no_call > tau_filter) & (delta_call_only > tau_filter)
++
++    # Margin is the minimum improvement
++    margins = np.minimum(delta_no_call, delta_call_only)
++
++    return keep, margins

@@ -1,0 +1,54 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,50 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    # Check tau_filter is not boolean
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    # Check tau_filter is finite and nonnegative
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
++
++    # Check each array is a 2D matrix
++    for arr, name in [(logp_with_result, 'logp_with_result'), (logp_call_only, 'logp_call_only'), (logp_no_call, 'logp_no_call')]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if arr.shape[0] == 0 or arr.shape[1] == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} contains non-finite values")
++        if not np.all(arr <= 0):
++            raise ValueError(f"{name} must be nonpositive")
++
++    # Check shapes match
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All input arrays must have the same shape")
++
++    # Compute per-candidate sums along horizon
++    sum_with = np.sum(logp_with_result, axis=1)
++    sum_call = np.sum(logp_call_only, axis=1)
++    sum_no = np.sum(logp_no_call, axis=1)
++
++    # Margin relative to no-call (negative loss reduction is positive margin)
++    # margin = L_no_call - L_with_result = sum_with - sum_no
++    margin = sum_with - sum_no
++
++    # Also need margin relative to call-only for filtering
++    # L_call_only - L_with_result = sum_with - sum_call
++    margin_call = sum_with - sum_call
++
++    # Keep if both margins exceed tau (strictly greater)
++    keep_mask = (margin > tau_filter) & (margin_call > tau_filter)
++
++    # Ensure margins are finite (they should be)
++    if not np.all(np.isfinite(margin)):
++        raise ValueError("Unexpected non-finite margin")
++
++    return keep_mask, margin
++

@@ -1,0 +1,37 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,33 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not isinstance(logp_with_result, np.ndarray) or not isinstance(logp_call_only, np.ndarray) or not isinstance(logp_no_call, np.ndarray):
++        raise ValueError("All inputs must be numpy arrays")
++    if logp_with_result.ndim != 2 or logp_call_only.ndim != 2 or logp_no_call.ndim != 2:
++        raise ValueError("All arrays must be 2-dimensional")
++    if logp_with_result.shape != logp_call_only.shape or logp_with_result.shape != logp_no_call.shape:
++        raise ValueError("All arrays must have the same shape")
++    if logp_with_result.size == 0:
++        raise ValueError("Arrays must not be empty")
++    if not (np.isfinite(logp_with_result).all() and np.isfinite(logp_call_only).all() and np.isfinite(logp_no_call).all()):
++        raise ValueError("All arrays must contain only finite values")
++    if not (np.all(logp_with_result <= 0) and np.all(logp_call_only <= 0) and np.all(logp_no_call <= 0)):
++        raise ValueError("All arrays must contain only nonpositive values")
++    if isinstance(tau_filter, bool) or not isinstance(tau_filter, (int, float, np.floating, np.integer)):
++        raise ValueError("tau_filter must be a finite nonnegative number")
++    if not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
++    
++    # Compute totals
++    total_with = np.sum(logp_with_result, axis=1)
++    total_call = np.sum(logp_call_only, axis=1)
++    total_no = np.sum(logp_no_call, axis=1)
++    
++    # Compute margin and keep mask
++    margin = total_with - np.maximum(total_call, total_no)
++    keep = margin > tau_filter
++    
++    return keep, margin

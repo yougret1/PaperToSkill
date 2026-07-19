@@ -1,0 +1,44 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -12,5 +12,40 @@
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
++    # Validate inputs
++    for arr, name in [
++        (logp_with_result, "logp_with_result"),
++        (logp_call_only, "logp_call_only"),
++        (logp_no_call, "logp_no_call"),
++    ]:
++        if not isinstance(arr, np.ndarray) or arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D NumPy array")
++        if arr.size == 0:
++            raise ValueError(f"{name} must not be empty")
++        if np.any(np.isnan(arr)) or np.any(np.isinf(arr)):
++            raise ValueError(f"{name} contains nonfinite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} contains positive values")
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All input arrays must have the same shape")
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter cannot be a Boolean value")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be a finite nonnegative number")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    n_candidates, horizon = logp_with_result.shape
++    # Compute normalized weights
++    t = np.arange(horizon, dtype=float)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    norm_weights = raw_weights / raw_weights.sum()
++
++    # Weighted losses: -sum(weights * log_prob)
++    loss_with_result = -np.sum(norm_weights * logp_with_result, axis=1)
++    loss_call_only = -np.sum(norm_weights * logp_call_only, axis=1)
++    loss_no_call = -np.sum(norm_weights * logp_no_call, axis=1)
++
++    # Stronger counterfactual baseline
++    L_minus = np.minimum(loss_no_call, loss_call_only)
++    margins = L_minus - loss_with_result
++    keep_mask = margins >= tau_filter
++    return keep_mask, margins

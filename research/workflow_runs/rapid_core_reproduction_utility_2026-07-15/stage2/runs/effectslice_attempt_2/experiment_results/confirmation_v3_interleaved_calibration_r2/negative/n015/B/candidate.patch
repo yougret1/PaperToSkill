@@ -1,0 +1,63 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,59 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not isinstance(logp_with_result, np.ndarray):
++        raise ValueError("logp_with_result must be a numpy ndarray")
++    if not isinstance(logp_call_only, np.ndarray):
++        raise ValueError("logp_call_only must be a numpy ndarray")
++    if not isinstance(logp_no_call, np.ndarray):
++        raise ValueError("logp_no_call must be a numpy ndarray")
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter cannot be a boolean")
++
++    # Check 2D matrix
++    if logp_with_result.ndim != 2:
++        raise ValueError("logp_with_result must be a two-dimensional matrix")
++    if logp_call_only.ndim != 2:
++        raise ValueError("logp_call_only must be a two-dimensional matrix")
++    if logp_no_call.ndim != 2:
++        raise ValueError("logp_no_call must be a two-dimensional matrix")
++
++    # Check non-empty
++    if logp_with_result.size == 0:
++        raise ValueError("logp_with_result must be non-empty")
++    if logp_call_only.size == 0:
++        raise ValueError("logp_call_only must be non-empty")
++    if logp_no_call.size == 0:
++        raise ValueError("logp_no_call must be non-empty")
++
++    # Check shape consistency
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All input matrices must have the same shape")
++
++    # Check finite
++    if not (np.isfinite(logp_with_result).all() and np.isfinite(logp_call_only).all() and np.isfinite(logp_no_call).all()):
++        raise ValueError("All input matrices must contain only finite values")
++
++    # Check nonpositive
++    if not (np.all(logp_with_result <= 0) and np.all(logp_call_only <= 0) and np.all(logp_no_call <= 0)):
++        raise ValueError("All input matrices must contain only nonpositive values")
++
++    # Check tau_filter
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be a finite nonnegative value")
++
++    # Compute sums along future horizon
++    sum_with = np.sum(logp_with_result, axis=1)
++    sum_call_only = np.sum(logp_call_only, axis=1)
++    sum_no_call = np.sum(logp_no_call, axis=1)
++
++    # Compute margin per candidate: min(L_no_call - L_with, L_call_only - L_with)
++    # margin = sum_with - max(sum_no_call, sum_call_only)
++    max_other = np.maximum(sum_no_call, sum_call_only)
++    margins = sum_with - max_other
++
++    # Keep if margin >= tau_filter
++    keep = margins >= tau_filter
++
++    return keep, margins.astype(np.float64)

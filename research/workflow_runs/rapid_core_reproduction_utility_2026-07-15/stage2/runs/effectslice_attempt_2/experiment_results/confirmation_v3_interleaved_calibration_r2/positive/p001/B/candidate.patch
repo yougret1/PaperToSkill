@@ -1,0 +1,54 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -12,5 +12,50 @@
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
++    # Validate logp_with_result
++    if not isinstance(logp_with_result, np.ndarray) or logp_with_result.ndim != 2:
++        raise ValueError("logp_with_result must be a 2D numpy array")
++    if logp_with_result.size == 0:
++        raise ValueError("logp_with_result must not be empty")
++    if not np.isfinite(logp_with_result).all():
++        raise ValueError("logp_with_result must contain finite values")
++    if (logp_with_result > 0).any():
++        raise ValueError("logp_with_result must be nonpositive")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate logp_call_only
++    if not isinstance(logp_call_only, np.ndarray) or logp_call_only.ndim != 2:
++        raise ValueError("logp_call_only must be a 2D numpy array")
++    if logp_call_only.size == 0:
++        raise ValueError("logp_call_only must not be empty")
++    if not np.isfinite(logp_call_only).all():
++        raise ValueError("logp_call_only must contain finite values")
++    if (logp_call_only > 0).any():
++        raise ValueError("logp_call_only must be nonpositive")
++
++    # Validate logp_no_call
++    if not isinstance(logp_no_call, np.ndarray) or logp_no_call.ndim != 2:
++        raise ValueError("logp_no_call must be a 2D numpy array")
++    if logp_no_call.size == 0:
++        raise ValueError("logp_no_call must not be empty")
++    if not np.isfinite(logp_no_call).all():
++        raise ValueError("logp_no_call must contain finite values")
++    if (logp_no_call > 0).any():
++        raise ValueError("logp_no_call must be nonpositive")
++
++    # Shape consistency
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All input matrices must have the same shape")
++
++    # Validate threshold
++    if isinstance(tau_filter, bool):
++        raise ValueError("Threshold must not be a boolean")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("Threshold must be finite and nonnegative")
++
++    # Compute weights from log weights (logp_call_only is log of weights)
++    weights = np.exp(logp_call_only)
++    # Weighted margin: sum over future horizon
++    margins = np.sum((logp_with_result - logp_no_call) * weights, axis=1)
++    keep_mask = margins > tau_filter
++
++    return keep_mask, margins

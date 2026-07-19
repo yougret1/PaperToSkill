@@ -1,0 +1,52 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -12,5 +12,48 @@
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
++    # Validate inputs
++    for arr, name in [(logp_with_result, 'logp_with_result'),
++                      (logp_call_only, 'logp_call_only'),
++                      (logp_no_call, 'logp_no_call')]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be 2-dimensional")
++        if arr.shape[0] == 0 or arr.shape[1] == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} contains nonfinite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} contains positive values")
++    # Check shape consistency
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("all three log-probability arrays must have the same shape")
++    # Validate tau_filter
++    if isinstance(tau_filter, (bool, np.bool_)):
++        raise ValueError("tau_filter must not be a boolean")
++    if not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    n_candidates, horizon = logp_with_result.shape
++
++    # Compute normalized decreasing weights (T01 procedure)
++    t = np.arange(horizon)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    normalized_weights = raw_weights / np.sum(raw_weights)
++
++    # Weighted average log-probabilities for each candidate
++    weighted_with = np.dot(logp_with_result, normalized_weights)
++    weighted_call = np.dot(logp_call_only, normalized_weights)
++    weighted_no = np.dot(logp_no_call, normalized_weights)
++
++    # Margin = L_no_call - L_with_result = ( - weighted_no ) - ( - weighted_with ) = weighted_with - weighted_no
++    margins = weighted_with - weighted_no
++
++    # Keep condition: margin >= threshold and call-only does not outperform no-call
++    # Paper: L_call_only >= L_no_call  =>  -weighted_call >= -weighted_no  =>  weighted_no >= weighted_call
++    keep = (margins >= tau_filter) & (weighted_no >= weighted_call)
++
++    return keep, margins

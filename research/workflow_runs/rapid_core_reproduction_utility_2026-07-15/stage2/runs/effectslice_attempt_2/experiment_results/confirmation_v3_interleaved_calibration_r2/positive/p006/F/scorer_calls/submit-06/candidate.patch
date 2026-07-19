@@ -1,0 +1,48 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,44 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs: 2D arrays, finite, nonpositive, same shape
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must be a finite nonnegative float")
++    if not isinstance(tau_filter, (int, float)):
++        raise ValueError("tau_filter must be a finite nonnegative float")
++    if tau_filter < 0 or not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite nonnegative")
++
++    for arr in [logp_with_result, logp_call_only, logp_no_call]:
++        if not isinstance(arr, np.ndarray) or arr.ndim != 2:
++            raise ValueError("Inputs must be 2D numpy arrays")
++        if arr.shape[0] == 0 or arr.shape[1] == 0:
++            raise ValueError("Inputs must not be empty")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError("Inputs must be finite")
++        if np.any(arr > 0):
++            raise ValueError("Inputs must be nonpositive (log probabilities)")
++
++    if not (logp_call_only.shape == logp_with_result.shape == logp_no_call.shape):
++        raise ValueError("Input matrices must have same shape")
++
++    n_candidates, H = logp_with_result.shape
++
++    # Normalize decreasing future-token weights (T01)
++    t = np.arange(H)  # offsets 0,1,...,H-1
++    raw_weights = np.maximum(0, 1 - 0.2 * t)
++    weights = raw_weights / raw_weights.sum()  # shape (H,)
++
++    # Weighted future-token losses: L = - sum(weights * logp) (T02)
++    loss_with_result = -np.dot(logp_with_result, weights)
++    loss_call_only = -np.dot(logp_call_only, weights)
++    loss_no_call = -np.dot(logp_no_call, weights)
++
++    # Stronger counterfactual baseline (T03)
++    L_minus = np.minimum(loss_no_call, loss_call_only)
++    margin = L_minus - loss_with_result
++
++    # Filtering threshold (T04, T05, T06)
++    keep_mask = margin >= tau_filter
++
++    return keep_mask, margin

@@ -1,0 +1,43 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -12,5 +12,38 @@
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    for x, name in zip([logp_with_result, logp_call_only, logp_no_call],
++                       ["logp_with_result", "logp_call_only", "logp_no_call"]):
++        if not isinstance(x, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if x.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if x.size == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.isfinite(x).all():
++            raise ValueError(f"{name} contains non-finite values")
++        if (x > 0).any():
++            raise ValueError(f"{name} contains positive values")
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All log-probability inputs must have the same shape")
++    if isinstance(tau_filter, bool) or not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be a finite nonnegative threshold and not a boolean")
++    tau_filter = float(tau_filter)
++    # Compute normalized decreasing weights (T01)
++    future_horizon = logp_with_result.shape[1]
++    t = np.arange(future_horizon, dtype=float)
++    raw = np.maximum(0.0, 1.0 - 0.2 * t)
++    norm_weights = raw / raw.sum()
++    # Weighted average log-probabilities
++    wavg_with = np.dot(logp_with_result, norm_weights)
++    wavg_call = np.dot(logp_call_only, norm_weights)
++    wavg_no = np.dot(logp_no_call, norm_weights)
++    # Differences
++    diff_no_call = wavg_with - wavg_no
++    diff_call_only = wavg_with - wavg_call
++    # Keep mask
++    keep = (diff_no_call > tau_filter) & (diff_call_only > tau_filter)
++    # Margins
++    margins = np.minimum(diff_no_call, diff_call_only)
++    return keep, margins

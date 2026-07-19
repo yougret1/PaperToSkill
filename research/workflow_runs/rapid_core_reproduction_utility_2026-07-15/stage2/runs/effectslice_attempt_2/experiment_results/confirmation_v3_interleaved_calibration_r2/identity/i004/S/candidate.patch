@@ -1,0 +1,54 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -12,5 +12,50 @@
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
++    # Validate inputs
++    for arr, name in [(logp_with_result, "logp_with_result"),
++                      (logp_call_only, "logp_call_only"),
++                      (logp_no_call, "logp_no_call")]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be 2-dimensional")
++        if arr.shape[0] == 0 or arr.shape[1] == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} contains non-finite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} must be nonpositive")
++    # Check shape consistency
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All input arrays must have the same shape")
++    # Validate tau_filter
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not isinstance(tau_filter, (int, float)):
++        raise ValueError("tau_filter must be a number")
++    if not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    n_candidates, future_horizon = logp_with_result.shape
++
++    # Compute normalized weights
++    t = np.arange(future_horizon)
++    raw_weights = np.maximum(0, 1 - 0.2 * t)
++    normalized_weights = raw_weights / raw_weights.sum()
++
++    # Compute weighted losses
++    loss_with_result = -np.dot(logp_with_result, normalized_weights)
++    loss_call_only = -np.dot(logp_call_only, normalized_weights)
++    loss_no_call = -np.dot(logp_no_call, normalized_weights)
++
++    # Baseline
++    L_minus = np.minimum(loss_no_call, loss_call_only)
++
++    # Margin and keep
++    margin = L_minus - loss_with_result
++    keep = margin >= tau_filter
++
++    return keep, margin

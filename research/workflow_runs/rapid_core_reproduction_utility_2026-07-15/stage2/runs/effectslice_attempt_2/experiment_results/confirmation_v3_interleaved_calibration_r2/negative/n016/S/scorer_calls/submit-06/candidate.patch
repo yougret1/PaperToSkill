@@ -1,0 +1,40 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -12,5 +12,35 @@
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    if any(not isinstance(arr, np.ndarray) for arr in [logp_with_result, logp_call_only, logp_no_call]):
++        raise ValueError("Inputs must be numpy arrays")
++    for arr in [logp_with_result, logp_call_only, logp_no_call]:
++        if arr.ndim != 2:
++            raise ValueError("Inputs must be 2D matrices")
++        if arr.size == 0:
++            raise ValueError("Inputs must not be empty")
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("Input shapes must match")
++    for arr in [logp_with_result, logp_call_only, logp_no_call]:
++        if np.any(arr > 0):
++            raise ValueError("All entries must be nonpositive")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError("All entries must be finite")
++    if isinstance(tau_filter, bool) or not isinstance(tau_filter, (int, float)):
++        raise ValueError("tau_filter must be a finite nonnegative number, not a boolean")
++    if not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
++    n_candidates, future_horizon = logp_with_result.shape
++    positions = np.arange(future_horizon)
++    raw_weights = np.maximum(0, 1 - 0.2 * positions)
++    weights = raw_weights / raw_weights.sum()
++    avg_with = np.dot(logp_with_result, weights)
++    avg_call = np.dot(logp_call_only, weights)
++    avg_no = np.dot(logp_no_call, weights)
++    max_other = np.maximum(avg_call, avg_no)
++    keep = avg_with > max_other - tau_filter
++    margins = avg_with - max_other + tau_filter
++    return keep, margins

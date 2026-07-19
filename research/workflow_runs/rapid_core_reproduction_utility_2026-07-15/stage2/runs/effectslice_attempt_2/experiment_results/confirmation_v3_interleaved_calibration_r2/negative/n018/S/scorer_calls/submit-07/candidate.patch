@@ -1,0 +1,50 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,46 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    for arr, name in [(logp_with_result, 'logp_with_result'), (logp_call_only, 'logp_call_only'), (logp_no_call, 'logp_no_call')]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2-dimensional array")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} must have finite values")
++        if not np.all(arr <= 0):
++            raise ValueError(f"{name} must have nonpositive values")
++        if arr.size == 0:
++            raise ValueError(f"{name} must not be empty")
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All log probability arrays must have the same shape")
++    if isinstance(tau_filter, (bool, np.bool_)):
++        raise ValueError("tau_filter must not be a boolean")
++    if not isinstance(tau_filter, (int, float, np.integer, np.floating)):
++        raise ValueError("tau_filter must be a finite nonnegative scalar")
++    if not (np.isfinite(tau_filter) and tau_filter >= 0):
++        raise ValueError("tau_filter must be a finite nonnegative number")
++    
++    n_candidates, future_horizon = logp_with_result.shape
++    if future_horizon == 0:
++        raise ValueError("Future horizon must be positive")
++    
++    # Compute decreasing future-token weights
++    t = np.arange(future_horizon)
++    raw_weights = np.maximum(0.0, 1 - 0.2 * t)
++    weight_sum = raw_weights.sum()
++    if weight_sum == 0:
++        normalized_weights = np.ones(future_horizon) / future_horizon
++    else:
++        normalized_weights = raw_weights / weight_sum
++    
++    # Compute weighted margin
++    weighted_with_result = np.sum(logp_with_result * normalized_weights[np.newaxis, :], axis=1)
++    weighted_no_call = np.sum(logp_no_call * normalized_weights[np.newaxis, :], axis=1)
++    margin = weighted_with_result - weighted_no_call
++    
++    # Keep if margin exceeds threshold
++    keep_mask = margin > tau_filter
++    
++    return keep_mask.astype(bool), margin.astype(float)

@@ -1,0 +1,52 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,48 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    inputs = [logp_no_call, logp_call_only, logp_with_result]
++    for inp in inputs:
++        if not isinstance(inp, np.ndarray) or inp.ndim != 2:
++            raise ValueError("Each log probability input must be a 2D numpy array")
++
++    shape = logp_no_call.shape
++    if logp_call_only.shape != shape or logp_with_result.shape != shape:
++        raise ValueError("All input matrices must have the same shape")
++
++    for inp in inputs:
++        if np.any(np.isnan(inp)) or np.any(np.isinf(inp)):
++            raise ValueError("Log probabilities must be finite")
++        if np.any(inp > 0):
++            raise ValueError("Log probabilities must be nonpositive")
++
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter cannot be a boolean")
++    if not isinstance(tau_filter, (int, float)):
++        raise ValueError("tau_filter must be a finite nonnegative number")
++    if np.isnan(tau_filter) or np.isinf(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite nonnegative")
++
++    n, horizon = shape
++    # Compute normalized weights (decreasing future-token weights)
++    t = np.arange(horizon)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    weight_sum = np.sum(raw_weights)
++    if weight_sum > 0:
++        normalized_weights = raw_weights / weight_sum
++    else:
++        normalized_weights = np.ones(horizon) / horizon
++
++    # Compute weighted future-token losses
++    L_empty = -np.dot(logp_no_call, normalized_weights)
++    L_call_only = -np.dot(logp_call_only, normalized_weights)
++    L_plus = -np.dot(logp_with_result, normalized_weights)
++
++    # Use stronger counterfactual baseline
++    L_minus = np.minimum(L_empty, L_call_only)
++
++    margin = L_minus - L_plus
++    keep_mask = margin >= tau_filter
++
++    return keep_mask, margin.astype(float)

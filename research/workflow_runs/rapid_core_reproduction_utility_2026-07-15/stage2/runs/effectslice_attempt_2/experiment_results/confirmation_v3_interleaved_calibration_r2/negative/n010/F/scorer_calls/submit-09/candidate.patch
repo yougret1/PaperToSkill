@@ -1,0 +1,44 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -11,6 +11,39 @@
+     logp_no_call: np.ndarray,
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+-    """Return an ordered keep mask and one finite margin per proposed call."""
++    '''Return an ordered keep mask and one finite margin per proposed call.'''
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate matrices
++    matrices = [logp_no_call, logp_call_only, logp_with_result]
++    for mat in matrices:
++        if not isinstance(mat, np.ndarray):
++            raise ValueError('Input must be numpy arrays')
++        if mat.ndim != 2:
++            raise ValueError('Input must be 2D')
++        if mat.shape[0] == 0 or mat.shape[1] == 0:
++            raise ValueError('Input must not be empty')
++        if np.any(np.isnan(mat)) or np.any(np.isinf(mat)):
++            raise ValueError('Input must be finite')
++        if np.any(mat > 0):
++            raise ValueError('Log probabilities must be nonpositive')
++    if not (logp_no_call.shape == logp_call_only.shape == logp_with_result.shape):
++        raise ValueError('All matrices must have same shape')
++    if isinstance(tau_filter, bool):
++        raise ValueError('tau_filter cannot be boolean')
++    if not np.isscalar(tau_filter) or np.isnan(tau_filter) or np.isinf(tau_filter) or tau_filter < 0:
++        raise ValueError('tau_filter must be finite nonnegative scalar')
++
++    n_candidates, future_horizon = logp_no_call.shape
++    t = np.arange(future_horizon)
++    raw_weights = np.maximum(0, 1 - 0.2 * t)
++    normalized_weights = raw_weights / np.sum(raw_weights)
++
++    loss_empty = -np.dot(logp_no_call, normalized_weights)
++    loss_call_only = -np.dot(logp_call_only, normalized_weights)
++    loss_plus = -np.dot(logp_with_result, normalized_weights)
++
++    L_minus = np.minimum(loss_empty, loss_call_only)
++    margin = L_minus - loss_plus
++    keep = margin >= tau_filter
++
++    return keep, margin

@@ -1,0 +1,50 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -11,6 +11,45 @@
+     logp_no_call: np.ndarray,
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+-    """Return an ordered keep mask and one finite margin per proposed call."""
++    """Return an ordered keep mask and one finite margin per proposed call.
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    Implements the Toolformer loss-filter with decreasing future-token weights.
++    """
++    # Input validation
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must be a numeric scalar, not bool")
++    # Check tau_filter is a finite nonnegative scalar
++    if not np.isscalar(tau_filter) or not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be a finite nonnegative scalar")
++    # Check inputs are arrays
++    if not isinstance(logp_with_result, np.ndarray) or not isinstance(logp_call_only, np.ndarray) or not isinstance(logp_no_call, np.ndarray):
++        raise ValueError("Input log-probability matrices must be numpy arrays")
++    shape = logp_with_result.shape
++    if logp_with_result.ndim != 2 or logp_call_only.shape != shape or logp_no_call.shape != shape:
++        raise ValueError("Input matrices must have same 2D shape")
++    if shape[0] == 0 or shape[1] == 0:
++        raise ValueError("Input matrices must not be empty")
++    # Check all values are finite and nonpositive
++    for name, arr in [('logp_with_result', logp_with_result), ('logp_call_only', logp_call_only), ('logp_no_call', logp_no_call)]:
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} contains nonfinite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} contains positive values")
++    # Normalized decreasing weights (Procedure T01)
++    horizon = shape[1]
++    t = np.arange(horizon)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    weight_sum = np.sum(raw_weights)
++    if weight_sum == 0:
++        # Edge case: all weights zero (could happen if horizon=0, but horizon>=1). Fallback to uniform?
++        # With max(0, 1-0.2*t), for t>=5, weight becomes 0. If horizon>=5, some weights may be positive.
++        # But if horizon <5, all weights are 1-0.2*t >0. So weight_sum>0 always for horizon>=1.
++        weights = raw_weights / weight_sum  # weight_sum >0
++    else:
++        weights = raw_weights / weight_sum
++    # Compute margins: improvement over no-call and call-only
++    diff_nocall = np.dot(logp_with_result - logp_no_call, weights)
++    diff_call = np.dot(logp_with_result - logp_call_only, weights)
++    margins = np.minimum(diff_nocall, diff_call)
++    keep = margins > tau_filter
++    return keep, margins

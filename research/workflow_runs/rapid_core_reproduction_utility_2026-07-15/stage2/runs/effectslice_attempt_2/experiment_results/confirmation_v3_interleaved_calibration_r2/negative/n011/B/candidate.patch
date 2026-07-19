@@ -1,0 +1,32 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,28 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not (isinstance(logp_with_result, np.ndarray) and isinstance(logp_call_only, np.ndarray) and isinstance(logp_no_call, np.ndarray)):
++        raise ValueError("All input arrays must be numpy arrays")
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not np.issubdtype(type(tau_filter), np.number):
++        raise ValueError("tau_filter must be a numeric type")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
++    for arr in [logp_with_result, logp_call_only, logp_no_call]:
++        if arr.ndim != 2:
++            raise ValueError("All input arrays must be 2D")
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All input arrays must have the same shape")
++    if logp_with_result.size == 0:
++        raise ValueError("Input arrays must not be empty")
++    if not (np.all(np.isfinite(logp_with_result)) and np.all(np.isfinite(logp_call_only)) and np.all(np.isfinite(logp_no_call))):
++        raise ValueError("All input arrays must be finite")
++    if not (np.all(logp_with_result <= 0) and np.all(logp_call_only <= 0) and np.all(logp_no_call <= 0)):
++        raise ValueError("All input arrays must be nonpositive")
++    diff_no_call = np.sum(logp_with_result - logp_no_call, axis=1)
++    diff_call_only = np.sum(logp_with_result - logp_call_only, axis=1)
++    margin = np.minimum(diff_no_call, diff_call_only)
++    keep = margin > tau_filter
++    return keep, margin

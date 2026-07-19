@@ -1,0 +1,44 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,40 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    arrays = [logp_with_result, logp_call_only, logp_no_call]
++    for arr in arrays:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError("Inputs must be numpy arrays")
++        if arr.ndim != 2:
++            raise ValueError("Each input matrix must be two-dimensional")
++        if arr.size == 0:
++            raise ValueError("Input matrices must not be empty")
++        if np.any(arr > 0):
++            raise ValueError("Input matrices must be nonpositive")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError("Input matrices must be finite")
++    # Check shape consistency
++    shape = arrays[0].shape
++    for arr in arrays[1:]:
++        if arr.shape != shape:
++            raise ValueError("All input matrices must have the same shape")
++    # Validate tau_filter
++    if isinstance(tau_filter, (bool, np.bool_)):
++        raise ValueError("tau_filter must not be a Boolean value")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
++
++    n_candidates, horizon = shape
++    # Compute normalized weights
++    t = np.arange(horizon)
++    raw_weights = np.maximum(0, 1 - 0.2 * t)
++    weights = raw_weights / np.sum(raw_weights)
++    # Compute weighted averages
++    wavg_result = np.sum(logp_with_result * weights, axis=1)
++    wavg_call = np.sum(logp_call_only * weights, axis=1)
++    wavg_no_call = np.sum(logp_no_call * weights, axis=1)
++    # Compute margins
++    margins = wavg_result - np.maximum(wavg_call, wavg_no_call)
++    keep = margins > tau_filter
++    return keep, margins

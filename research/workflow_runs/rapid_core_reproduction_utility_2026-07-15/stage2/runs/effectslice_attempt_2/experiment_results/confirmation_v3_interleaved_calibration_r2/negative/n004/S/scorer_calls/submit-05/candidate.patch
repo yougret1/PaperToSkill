@@ -1,0 +1,52 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -12,5 +12,48 @@
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
++    # Validate inputs
++    for arr, name in [(logp_with_result, 'logp_with_result'),
++                      (logp_call_only, 'logp_call_only'),
++                      (logp_no_call, 'logp_no_call')]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if arr.size == 0:
++            raise ValueError(f"{name} must not be empty")
++        if np.any(np.isnan(arr)) or np.any(np.isinf(arr)):
++            raise ValueError(f"{name} contains nonfinite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} contains positive values")
++    # Check shape consistency
++    shape = logp_with_result.shape
++    if logp_call_only.shape != shape or logp_no_call.shape != shape:
++        raise ValueError("All three input matrices must have the same shape")
++    # Validate tau_filter (no booleans)
++    if isinstance(tau_filter, (bool, np.bool_)):
++        raise ValueError("tau_filter must not be a boolean")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Compute normalized decreasing future-token weights (T01)
++    future_horizon = shape[1]
++    t = np.arange(future_horizon)  # offsets from call token
++    raw_weights = np.maximum(0, 1 - 0.2 * t)  # shape (future_horizon,)
++    weight_sum = raw_weights.sum()
++    if weight_sum <= 0:
++        raise ValueError("Future horizon too short to produce positive weights")
++    normalized_weights = raw_weights / weight_sum  # broadcast over candidates
++
++    # Weighted sums over the future tokens for each candidate
++    w_with = np.sum(logp_with_result * normalized_weights, axis=1)
++    w_call = np.sum(logp_call_only * normalized_weights, axis=1)
++    w_no = np.sum(logp_no_call * normalized_weights, axis=1)
++
++    # Margin: (with_result) - max(call_only, no_call)
++    margin = w_with - np.maximum(w_call, w_no)
++
++    # Keep if margin strictly greater than threshold
++    keep = margin > tau_filter
++
++    return keep, margin
