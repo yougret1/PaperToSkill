@@ -2,6 +2,9 @@ import copy
 import hashlib
 import json
 import math
+import os
+import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -94,6 +97,106 @@ def v2_case_registry_payload() -> dict:
             ]
         },
     }
+
+
+V2_VERIFIED_INPUT_NAMES = (
+    "aci_protocol",
+    "aci_runner",
+    "case_generator",
+    "case_registry",
+    "discovery_summary",
+    "evidence_binding",
+    "family_builder",
+    "full_artifact",
+    "runner",
+    "scheduler",
+    "scorer",
+    "selected_artifact",
+    "slice_registry",
+    "source_map",
+    "task_prompt",
+    "transport",
+)
+
+
+def write_v2_family_bundle(
+    root: Path, registry_path: Path
+) -> tuple[Path, str, dict, dict]:
+    input_dir = root / "registered_inputs"
+    special_paths = {
+        "case_registry": registry_path,
+        "selected_artifact": root / "synthetic-prefix-01.md",
+        "slice_registry": root / "synthetic-slice-registry.json",
+    }
+    bindings = {}
+    for name in V2_VERIFIED_INPUT_NAMES:
+        path = special_paths.get(name, input_dir / f"{name}.bin")
+        if name != "case_registry":
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(f"synthetic frozen {name}\n".encode("ascii"))
+        bindings[name] = {
+            "path": path.resolve().as_posix(),
+            "sha256": sha256_file(path),
+        }
+
+    workspace_root = root / "workspace"
+    for relative, payload in WORKSPACE_FILES.items():
+        path = workspace_root / relative
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_bytes(payload)
+    workspace = {
+        **workspace_state(),
+        "workspace": workspace_root.resolve().as_posix(),
+    }
+    family = {
+        "schema_version": "effectslice-confirmation-v2-family.v1",
+        "task_key": "toolformer_filter",
+        "task_id": "TOOLFORMER-FILTER",
+        "selected_candidate_id": "prefix_01",
+        "retained_atom_ids": ["T01"],
+        "retained_scc_count": 1,
+        "conditions": ["B", "F", "S"],
+        "case_block": "confirmation_v2",
+        "case_count": 64,
+        "replicate_count": 18,
+        "replicate_schedule": [
+            {
+                "replicate_id": f"r{index:03d}",
+                "condition_order": ["B", "F", "S"],
+            }
+            for index in range(1, 19)
+        ],
+        "private_score_policy": "final_only",
+        "maximum_transport_attempts": 5,
+        "model_alias": "deepseek-v4-flash",
+        "wire_api": "openai_chat_completions",
+        "temperature": 0,
+        "max_tokens": 8192,
+        "confirmation_unsealed": False,
+        "evidence_boundary": "synthetic registered family",
+        "selected_artifact_sha256": bindings["selected_artifact"]["sha256"],
+        "discovery_summary_sha256": bindings["discovery_summary"]["sha256"],
+        "slice_registry_sha256": bindings["slice_registry"]["sha256"],
+        "case_registry_sha256": bindings["case_registry"]["sha256"],
+        "source_map_sha256": bindings["source_map"]["sha256"],
+        "task_prompt_sha256": bindings["task_prompt"]["sha256"],
+        "scorer_sha256": bindings["scorer"]["sha256"],
+        "runner_sha256": bindings["runner"]["sha256"],
+        "scheduler_sha256": bindings["scheduler"]["sha256"],
+        "aci_runner_sha256": bindings["aci_runner"]["sha256"],
+        "aci_protocol_sha256": bindings["aci_protocol"]["sha256"],
+        "evidence_binding_sha256": bindings["evidence_binding"]["sha256"],
+        "transport_sha256": bindings["transport"]["sha256"],
+        "case_generator_sha256": bindings["case_generator"]["sha256"],
+        "family_builder_sha256": bindings["family_builder"]["sha256"],
+        "full_artifact_sha256": bindings["full_artifact"]["sha256"],
+        "workspace_tree_sha256": workspace["sha256"],
+        "workspace_file_count": workspace["file_count"],
+        "workspace_total_bytes": workspace["total_bytes"],
+    }
+    family_path = root / "confirmation_v2_family.json"
+    write_json(family_path, family)
+    return family_path, sha256_file(family_path), bindings, workspace
 
 
 def workspace_state() -> dict:
@@ -1140,6 +1243,9 @@ def write_v2_negative_control(root: Path) -> Path:
     registry_path = root / "case_registry_v2.json"
     write_json(registry_path, v2_case_registry_payload())
     registry_sha256 = sha256_file(registry_path)
+    family_path, family_sha256, bindings, workspace = write_v2_family_bundle(
+        root, registry_path
+    )
     records = []
     for index in range(1, 19):
         replicate_id = f"r{index:03d}"
@@ -1173,7 +1279,7 @@ def write_v2_negative_control(root: Path) -> Path:
                 "pair_id": pair_id,
                 "task_id": "TOOLFORMER-FILTER",
                 "action_budget_visible_to_model": True,
-                "atom_map_sha256": SHA["source-map"],
+                "atom_map_sha256": bindings["source_map"]["sha256"],
                 "authorization_evidence": "synthetic trusted endpoint",
                 "model_alias": "deepseek-v4-flash",
                 "model_family": "DeepSeek-family",
@@ -1186,31 +1292,28 @@ def write_v2_negative_control(root: Path) -> Path:
                 "common_scaffold_sha256": SHA["common-scaffold"],
                 "condition_execution_order": ["B", "F", "S"],
                 "conditions": {condition: {} for condition in ("B", "F", "S")},
-                "confirmation_family_path": registry_path.resolve().as_posix(),
-                "confirmation_family_sha256": registry_sha256,
+                "confirmation_family_path": family_path.resolve().as_posix(),
+                "confirmation_family_sha256": family_sha256,
                 "confirmation_hypothesis_ids": ["synthetic-joint-event"],
-                "full_artifact_sha256": SHA["full"],
+                "full_artifact_sha256": bindings["full_artifact"]["sha256"],
                 "harness_protocol_version": "effectslice-toolformer-filter-aci.v3",
                 "maximum_transport_attempts": 5,
                 "provider_config": {},
                 "retained_atom_ids": ["T01"],
                 "retained_scc_count": 1,
                 "same_aci_scaffold": True,
-                "scorer_sha256": SHA["scorer"],
+                "scorer_sha256": bindings["scorer"]["sha256"],
                 "seed_block_id": f"confirmation-v2:toolformer_filter:{replicate_id}",
-                "slice_artifact_path": "synthetic-prefix-01.md",
-                "slice_artifact_sha256": SHA["selected"],
-                "slice_registry_path": "synthetic-slice-registry.json",
-                "slice_registry_sha256": SHA["reference-registry"],
-                "task_prompt_sha256": SHA["prompt-text"],
-                "workspace_state": {},
+                "slice_artifact_path": bindings["selected_artifact"]["path"],
+                "slice_artifact_sha256": bindings["selected_artifact"]["sha256"],
+                "slice_registry_path": bindings["slice_registry"]["path"],
+                "slice_registry_sha256": bindings["slice_registry"]["sha256"],
+                "task_prompt_sha256": hashlib.sha256(
+                    TASK_PROMPT_BYTES.decode("utf-8").strip().encode("utf-8")
+                ).hexdigest(),
+                "workspace_state": workspace,
                 "case_registry_sha256": registry_sha256,
-                "verified_family_inputs": {
-                    "case_registry": {
-                        "path": registry_path.resolve().as_posix(),
-                        "sha256": registry_sha256,
-                    }
-                },
+                "verified_family_inputs": bindings,
                 "results": summaries,
             },
         )
@@ -1233,6 +1336,49 @@ def write_v2_negative_control(root: Path) -> Path:
         },
     )
     return progress_path
+
+
+def rebind_v2_registry(
+    progress_path: Path,
+    registry_path: Path,
+    *,
+    replicate_id: str | None = None,
+    rebind_family: bool = False,
+) -> str:
+    digest = sha256_file(registry_path)
+    progress = json.loads(progress_path.read_text(encoding="utf-8"))
+    alternate_family_path = registry_path.with_name(
+        f"{registry_path.stem}_family.json"
+    )
+    alternate_family_digest = None
+    for record in progress["records"]:
+        if record.get("task_key") != "toolformer_filter":
+            continue
+        if replicate_id is not None and record["replicate_id"] != replicate_id:
+            continue
+        manifest_path = Path(record["output_dir"]) / "pair_manifest.json"
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        manifest["case_registry_sha256"] = digest
+        manifest["verified_family_inputs"]["case_registry"] = {
+            "path": registry_path.resolve().as_posix(),
+            "sha256": digest,
+        }
+        if rebind_family:
+            if alternate_family_digest is None:
+                family = json.loads(
+                    Path(manifest["confirmation_family_path"]).read_text(
+                        encoding="utf-8"
+                    )
+                )
+                family["case_registry_sha256"] = digest
+                write_json(alternate_family_path, family)
+                alternate_family_digest = sha256_file(alternate_family_path)
+            manifest["confirmation_family_path"] = (
+                alternate_family_path.resolve().as_posix()
+            )
+            manifest["confirmation_family_sha256"] = alternate_family_digest
+        write_json(manifest_path, manifest)
+    return digest
 
 
 def test_v2_negative_control_and_rule_comparison_are_reanalyzed_from_raw(tmp_path):
@@ -1325,6 +1471,183 @@ def test_v2_pair_manifest_top_level_fields_are_exact(tmp_path, mutation):
     assert negative["decision"] == "invalid"
 
 
+@pytest.mark.parametrize("mutation", ["missing", "digest", "binding"])
+def test_v2_confirmation_family_is_read_hashed_and_cross_bound(tmp_path, mutation):
+    v2_progress_path = write_v2_negative_control(tmp_path / "v2")
+    v2_progress = json.loads(v2_progress_path.read_text(encoding="utf-8"))
+    manifests = [
+        Path(record["output_dir"]) / "pair_manifest.json"
+        for record in v2_progress["records"]
+        if record["task_key"] == "toolformer_filter"
+    ]
+    first_manifest = json.loads(manifests[0].read_text(encoding="utf-8"))
+    family_path = Path(first_manifest["confirmation_family_path"])
+
+    if mutation == "missing":
+        family_path.unlink()
+    else:
+        family = json.loads(family_path.read_text(encoding="utf-8"))
+        if mutation == "digest":
+            family["evidence_boundary"] = "mutated after registration"
+        else:
+            family["case_registry_sha256"] = hashlib.sha256(
+                b"different registry"
+            ).hexdigest()
+        write_json(family_path, family)
+        if mutation == "binding":
+            family_sha256 = sha256_file(family_path)
+            for manifest_path in manifests:
+                manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+                manifest["confirmation_family_sha256"] = family_sha256
+                write_json(manifest_path, manifest)
+
+    negative = analyzer.reanalyze_v2_negative_control(v2_progress_path)
+
+    assert negative["registered_block_count"] == 18
+    assert negative["full_integrity_passed"] is False
+    assert negative["decision"] == "invalid"
+
+
+def test_v2_workspace_state_is_recomputed_from_registered_files(tmp_path):
+    v2_progress_path = write_v2_negative_control(tmp_path / "v2")
+    progress = json.loads(v2_progress_path.read_text(encoding="utf-8"))
+    manifest_path = Path(progress["records"][0]["output_dir"]) / "pair_manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    workspace = Path(manifest["workspace_state"]["workspace"])
+    (workspace / "README.md").write_text(
+        "mutated after registration\n", encoding="utf-8"
+    )
+
+    negative = analyzer.reanalyze_v2_negative_control(v2_progress_path)
+
+    assert negative["full_integrity_passed"] is False
+    assert negative["decision"] == "invalid"
+
+
+@pytest.mark.parametrize("bad_output_dir", [None, 7, {}, "relative/r001"])
+def test_v2_output_directory_type_and_absolute_path_fail_closed(
+    tmp_path, bad_output_dir
+):
+    v2_progress_path = write_v2_negative_control(tmp_path / "v2")
+    progress = json.loads(v2_progress_path.read_text(encoding="utf-8"))
+    progress["records"][0]["output_dir"] = bad_output_dir
+    write_json(v2_progress_path, progress)
+
+    negative = analyzer.reanalyze_v2_negative_control(v2_progress_path)
+
+    assert negative["full_integrity_passed"] is False
+    assert negative["decision"] == "invalid"
+
+
+def test_write_analysis_rejects_relative_v2_output_directory(tmp_path):
+    progress_path, _, _ = write_complete_schedule(tmp_path / "v3")
+    v2_progress_path = write_v2_negative_control(tmp_path / "v2")
+    progress = json.loads(v2_progress_path.read_text(encoding="utf-8"))
+    progress["records"][0]["output_dir"] = "relative/r001"
+    write_json(v2_progress_path, progress)
+
+    with pytest.raises(analyzer.AnalysisInputError, match="absolute"):
+        analyzer.write_analysis(
+            progress_path,
+            tmp_path / "derived" / "analysis.json",
+            historical_v2_progress_path=v2_progress_path,
+            derived_root=tmp_path / "derived",
+        )
+
+
+@pytest.mark.parametrize("relationship", ["equal", "ancestor", "descendant"])
+def test_write_analysis_protects_transitive_v2_registry_paths(tmp_path, relationship):
+    progress_path, _, _ = write_complete_schedule(tmp_path / "v3")
+    v2_progress_path = write_v2_negative_control(tmp_path / "v2")
+    derived_root = tmp_path / "derived"
+    registry_path = derived_root / "registry.json"
+    registry_path.parent.mkdir(parents=True, exist_ok=True)
+    original_registry = Path(
+        json.loads(v2_progress_path.read_text(encoding="utf-8"))["records"][0][
+            "output_dir"
+        ]
+    ).parent.parent / "case_registry_v2.json"
+    shutil.copyfile(original_registry, registry_path)
+    rebind_v2_registry(v2_progress_path, registry_path, rebind_family=True)
+
+    if relationship == "equal":
+        output_path = registry_path
+    elif relationship == "ancestor":
+        output_path = derived_root / "analysis.json"
+    elif relationship == "descendant":
+        output_path = registry_path / "nested" / "analysis.json"
+        derived_root = output_path.parents[1]
+    with pytest.raises(analyzer.AnalysisInputError):
+        analyzer.write_analysis(
+            progress_path,
+            output_path,
+            historical_v2_progress_path=v2_progress_path,
+            derived_root=derived_root,
+        )
+
+
+@pytest.mark.skipif(os.name != "nt", reason="Windows junction semantics")
+def test_write_analysis_rejects_real_windows_junction_alias(tmp_path):
+    progress_path, _, _ = write_complete_schedule(tmp_path / "v3")
+    v2_progress_path = write_v2_negative_control(tmp_path / "v2")
+    raw_root = tmp_path / "registered_raw"
+    raw_root.mkdir()
+    registry_path = raw_root / "registry.json"
+    original_registry = tmp_path / "v2" / "case_registry_v2.json"
+    shutil.copyfile(original_registry, registry_path)
+    rebind_v2_registry(v2_progress_path, registry_path, rebind_family=True)
+    junction_root = tmp_path / "derived_junction"
+    created = subprocess.run(
+        [
+            "cmd.exe",
+            "/d",
+            "/c",
+            "mklink",
+            "/J",
+            str(junction_root),
+            str(raw_root),
+        ],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if created.returncode != 0:
+        pytest.skip(f"junction creation unavailable: {created.stderr.strip()}")
+    try:
+        assert junction_root != raw_root
+        assert junction_root.resolve() == raw_root.resolve()
+        assert os.path.samefile(junction_root, raw_root)
+        with pytest.raises(analyzer.AnalysisInputError):
+            analyzer.write_analysis(
+                progress_path,
+                junction_root / "analysis.json",
+                historical_v2_progress_path=v2_progress_path,
+                derived_root=junction_root,
+            )
+    finally:
+        junction_root.rmdir()
+
+
+def test_v2_schedule_rejects_mixed_complete_registry_identity(tmp_path):
+    v2_progress_path = write_v2_negative_control(tmp_path / "v2")
+    alternate_registry = tmp_path / "alternate_registry.json"
+    alternate = v2_case_registry_payload()
+    alternate["evidence_boundary"] = "synthetic alternate frozen private cases"
+    write_json(alternate_registry, alternate)
+    rebind_v2_registry(
+        v2_progress_path,
+        alternate_registry,
+        replicate_id="r002",
+        rebind_family=True,
+    )
+
+    negative = analyzer.reanalyze_v2_negative_control(v2_progress_path)
+
+    assert negative["registered_block_count"] == 18
+    assert negative["full_integrity_passed"] is False
+    assert negative["decision"] == "invalid"
+
+
 def test_write_analysis_is_deterministic_derived_only_and_preserves_raw(tmp_path):
     progress_path, _, _ = write_complete_schedule(tmp_path / "inputs")
     derived_root = tmp_path / "derived" / "confirmation_v3"
@@ -1370,6 +1693,73 @@ def test_write_analysis_is_deterministic_derived_only_and_preserves_raw(tmp_path
             include_historical_negative_control=False,
             derived_root=derived_root,
         )
+
+
+def test_json_inputs_have_a_bounded_size(tmp_path, monkeypatch):
+    oversized = tmp_path / "oversized.json"
+    write_json(oversized, {"payload": "x" * 128})
+    monkeypatch.setattr(analyzer, "MAX_JSON_BYTES", 64, raising=False)
+
+    with pytest.raises(analyzer.AnalysisInputError, match="size limit"):
+        analyzer._json_object(oversized, "oversized input")
+
+
+def test_validated_payload_cache_rechecks_file_signature(tmp_path):
+    registered = tmp_path / "registered.json"
+    registered.write_bytes(b'{"value":1}\n')
+    digest = sha256_file(registered)
+
+    assert analyzer._snapshot_bytes(registered, digest, "registered input")
+    registered.write_bytes(b'{"value":200}\n')
+
+    with pytest.raises(analyzer.AnalysisInputError, match="digest mismatch"):
+        analyzer._snapshot_bytes(registered, digest, "registered input")
+
+
+def test_write_analysis_honors_existing_cooperative_root_lock(tmp_path):
+    progress_path, _, _ = write_complete_schedule(tmp_path / "inputs")
+    derived_root = tmp_path / "derived" / "confirmation_v3"
+    derived_root.mkdir(parents=True)
+    lock_path = derived_root / ".effectslice-analysis.lock"
+    lock_path.write_text("another cooperative writer\n", encoding="utf-8")
+    output_path = derived_root / "analysis.json"
+
+    with pytest.raises(analyzer.AnalysisInputError, match="locked"):
+        analyzer.write_analysis(
+            progress_path,
+            output_path,
+            include_historical_negative_control=False,
+            derived_root=derived_root,
+        )
+
+    assert lock_path.read_text(encoding="utf-8") == "another cooperative writer\n"
+    assert not output_path.exists()
+
+
+def test_write_analysis_revalidates_destination_parent_identity(
+    tmp_path, monkeypatch
+):
+    progress_path, _, _ = write_complete_schedule(tmp_path / "inputs")
+    derived_root = tmp_path / "derived" / "confirmation_v3"
+    output_path = derived_root / "analysis.json"
+    identities = iter([(1, 1), (2, 2)])
+    monkeypatch.setattr(
+        analyzer,
+        "_path_identity",
+        lambda path, label: next(identities),
+        raising=False,
+    )
+
+    with pytest.raises(analyzer.AnalysisInputError, match="changed"):
+        analyzer.write_analysis(
+            progress_path,
+            output_path,
+            include_historical_negative_control=False,
+            derived_root=derived_root,
+        )
+
+    assert not output_path.exists()
+    assert not (derived_root / ".effectslice-analysis.lock").exists()
 
 
 def test_write_analysis_cannot_overwrite_transitive_raw_input(tmp_path):

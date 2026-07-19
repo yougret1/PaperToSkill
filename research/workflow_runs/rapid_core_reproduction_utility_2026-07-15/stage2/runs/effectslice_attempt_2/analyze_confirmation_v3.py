@@ -1,3 +1,12 @@
+"""Audit registered EffectSlice evidence and write derived-only analyses.
+
+Filesystem threat boundary: registered evidence is stored on trusted local
+storage, and writers under a derived root are expected to honor this module's
+cooperative lock. The checks below detect accidental aliasing, reparse paths,
+and parent replacement; they are not a defense against an administrator or a
+hostile process with raw-volume access.
+"""
+
 from __future__ import annotations
 
 import argparse
@@ -8,8 +17,11 @@ import os
 import re
 import stat
 import tempfile
+from collections import OrderedDict
+from contextlib import contextmanager
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterator
 
 from scipy.stats import beta
 
@@ -17,6 +29,9 @@ from effectslice.confirmation_v3 import balanced_schedule, joint_substitution_ev
 
 
 RUN_ROOT = Path(__file__).resolve().parent
+MAX_JSON_BYTES = 16 * 1024 * 1024
+MAX_CACHED_PAYLOAD_BYTES = 1024 * 1024
+MAX_VALIDATED_PAYLOAD_CACHE_ENTRIES = 64
 PROGRESS_SCHEMA = "effectslice-confirmation-v3-progress.v1"
 PAIR_SCHEMA = "effectslice-confirmation-v3-pair.v1"
 REGISTERED_V3 = "registered_final_only_confirmation_v3"
@@ -230,6 +245,92 @@ V2_PAIR_FIELDS = {
     "wire_api",
     "workspace_state",
 }
+V2_VERIFIED_INPUT_NAMES = {
+    "aci_protocol",
+    "aci_runner",
+    "case_generator",
+    "case_registry",
+    "discovery_summary",
+    "evidence_binding",
+    "family_builder",
+    "full_artifact",
+    "runner",
+    "scheduler",
+    "scorer",
+    "selected_artifact",
+    "slice_registry",
+    "source_map",
+    "task_prompt",
+    "transport",
+}
+V2_WORKSPACE_FIELDS = {
+    "sha256",
+    "file_count",
+    "total_bytes",
+    "excluded_directory_names",
+    "workspace",
+}
+V2_FAMILY_REQUIRED_FIELDS = {
+    "schema_version",
+    "task_key",
+    "task_id",
+    "selected_candidate_id",
+    "retained_atom_ids",
+    "retained_scc_count",
+    "conditions",
+    "case_block",
+    "case_count",
+    "replicate_count",
+    "replicate_schedule",
+    "private_score_policy",
+    "maximum_transport_attempts",
+    "model_alias",
+    "wire_api",
+    "temperature",
+    "max_tokens",
+    "confirmation_unsealed",
+    "evidence_boundary",
+    "selected_artifact_sha256",
+    "discovery_summary_sha256",
+    "slice_registry_sha256",
+    "case_registry_sha256",
+    "source_map_sha256",
+    "task_prompt_sha256",
+    "scorer_sha256",
+    "runner_sha256",
+    "scheduler_sha256",
+    "aci_runner_sha256",
+    "aci_protocol_sha256",
+    "evidence_binding_sha256",
+    "transport_sha256",
+    "case_generator_sha256",
+    "family_builder_sha256",
+    "full_artifact_sha256",
+    "workspace_tree_sha256",
+    "workspace_file_count",
+    "workspace_total_bytes",
+}
+V2_FAMILY_DIGEST_BINDINGS = {
+    "aci_protocol": "aci_protocol_sha256",
+    "aci_runner": "aci_runner_sha256",
+    "case_generator": "case_generator_sha256",
+    "case_registry": "case_registry_sha256",
+    "discovery_summary": "discovery_summary_sha256",
+    "evidence_binding": "evidence_binding_sha256",
+    "family_builder": "family_builder_sha256",
+    "full_artifact": "full_artifact_sha256",
+    "runner": "runner_sha256",
+    "scheduler": "scheduler_sha256",
+    "scorer": "scorer_sha256",
+    "selected_artifact": "selected_artifact_sha256",
+    "slice_registry": "slice_registry_sha256",
+    "source_map": "source_map_sha256",
+    "task_prompt": "task_prompt_sha256",
+    "transport": "transport_sha256",
+}
+_VALIDATED_PAYLOAD_CACHE: OrderedDict[
+    tuple[Path, str], tuple[tuple[int, int, int, int], bytes]
+] = OrderedDict()
 CONTROL_SPECS = {
     "identity": {
         "schedule_seed": 2026071801,
@@ -255,35 +356,112 @@ class AnalysisInputError(ValueError):
     """Raised when registered evidence cannot be audited without ambiguity."""
 
 
+@dataclass(frozen=True)
+class V2RegisteredIdentity:
+    registry_path: Path
+    registry_sha256: str
+    case_ids: tuple[str, ...]
+    family_path: Path
+    family_sha256: str
+    replicate_schedule: tuple[tuple[str, tuple[str, ...]], ...]
+    verified_inputs: tuple[tuple[str, Path, str], ...]
+    workspace_state: tuple[Path, str, int, int, tuple[str, ...]]
+
+
 def _is_reparse_point(path: Path) -> bool:
     try:
         metadata = os.lstat(path)
-    except (FileNotFoundError, NotADirectoryError):
+    except (OSError, ValueError):
         return False
     flag = getattr(stat, "FILE_ATTRIBUTE_REPARSE_POINT", 0)
     return bool(getattr(metadata, "st_file_attributes", 0) & flag)
 
 
 def _reject_unsafe_components(path: Path, label: str) -> None:
-    supplied = Path(path)
-    if ".." in supplied.parts:
-        raise AnalysisInputError(f"{label} must not traverse parents")
-    absolute = Path(os.path.abspath(os.fspath(supplied)))
-    for component in (*reversed(absolute.parents), absolute):
-        if component.is_symlink() or _is_reparse_point(component):
-            raise AnalysisInputError(f"{label} must not use symlink or reparse paths")
+    try:
+        supplied = Path(path)
+        if ".." in supplied.parts:
+            raise AnalysisInputError(f"{label} must not traverse parents")
+        absolute = Path(os.path.abspath(os.fspath(supplied)))
+        for component in (*reversed(absolute.parents), absolute):
+            if component.is_symlink() or _is_reparse_point(component):
+                raise AnalysisInputError(
+                    f"{label} must not use symlink or reparse paths"
+                )
+    except AnalysisInputError:
+        raise
+    except (OSError, RuntimeError, TypeError, ValueError) as exc:
+        raise AnalysisInputError(f"{label} path is invalid") from exc
+
+
+def _absolute_registered_path(raw: Any, label: str) -> Path:
+    if not isinstance(raw, str) or not raw:
+        raise AnalysisInputError(f"{label} must be an absolute string")
+    try:
+        supplied = Path(raw)
+        if not supplied.is_absolute():
+            raise AnalysisInputError(f"{label} must be an absolute string")
+        _reject_unsafe_components(supplied, label)
+        return supplied.resolve()
+    except AnalysisInputError:
+        raise
+    except (OSError, RuntimeError, TypeError, ValueError) as exc:
+        raise AnalysisInputError(f"{label} path is invalid") from exc
+
+
+def _path_identity(path: Path, label: str) -> tuple[int, int]:
+    try:
+        metadata = os.stat(path, follow_symlinks=False)
+    except (OSError, TypeError, ValueError) as exc:
+        raise AnalysisInputError(f"{label} identity cannot be read") from exc
+    if _is_reparse_point(path) or stat.S_ISLNK(metadata.st_mode):
+        raise AnalysisInputError(f"{label} must not be a linked path")
+    return metadata.st_dev, metadata.st_ino
+
+
+def _file_signature(path: Path, label: str) -> tuple[int, int, int, int]:
+    try:
+        metadata = os.stat(path, follow_symlinks=False)
+    except (OSError, TypeError, ValueError) as exc:
+        raise AnalysisInputError(f"{label} metadata cannot be read") from exc
+    if _is_reparse_point(path) or stat.S_ISLNK(metadata.st_mode):
+        raise AnalysisInputError(f"{label} must not be a linked path")
+    return (
+        metadata.st_dev,
+        metadata.st_ino,
+        metadata.st_size,
+        metadata.st_mtime_ns,
+    )
+
+
+def _bounded_file_bytes(path: Path, label: str, maximum_bytes: int) -> bytes:
+    signature_before = _file_signature(path, label)
+    if signature_before[2] > maximum_bytes:
+        raise AnalysisInputError(f"{label} exceeds the JSON size limit")
+    try:
+        with path.open("rb") as handle:
+            payload = handle.read(maximum_bytes + 1)
+    except (OSError, ValueError) as exc:
+        raise AnalysisInputError(f"{label} cannot be read") from exc
+    if len(payload) > maximum_bytes:
+        raise AnalysisInputError(f"{label} exceeds the JSON size limit")
+    if _file_signature(path, label) != signature_before:
+        raise AnalysisInputError(f"{label} changed while being read")
+    return payload
 
 
 def _json_object(path: Path, label: str) -> dict[str, Any]:
     supplied = Path(path)
     _reject_unsafe_components(supplied, label)
-    resolved = supplied.resolve()
-    if not resolved.is_file():
-        raise AnalysisInputError(f"{label} is missing")
     try:
-        snapshot = resolved.read_bytes()
+        resolved = supplied.resolve()
+        if not resolved.is_file():
+            raise AnalysisInputError(f"{label} is missing")
+        snapshot = _bounded_file_bytes(resolved, label, MAX_JSON_BYTES)
         value = json.loads(snapshot.decode("utf-8"))
-    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+    except AnalysisInputError:
+        raise
+    except (OSError, RuntimeError, UnicodeError, ValueError, json.JSONDecodeError) as exc:
         raise AnalysisInputError(f"{label} must be valid UTF-8 JSON") from exc
     if not isinstance(value, dict):
         raise AnalysisInputError(f"{label} must be a JSON object")
@@ -604,16 +782,49 @@ def _audit_final_score_terminal(
 
 
 def _snapshot_bytes(path: Path, expected_sha256: str, label: str) -> bytes:
-    _reject_unsafe_components(path, label)
-    if not path.is_file():
-        raise AnalysisInputError(f"{label} is missing")
+    expected = _require_sha256(expected_sha256, f"{label} digest")
+    supplied = Path(path)
+    _reject_unsafe_components(supplied, label)
     try:
-        payload = path.read_bytes()
-    except OSError as exc:
+        resolved = supplied.resolve()
+        if not resolved.is_file():
+            raise AnalysisInputError(f"{label} is missing")
+        signature_before = _file_signature(resolved, label)
+        cache_key = (resolved, expected)
+        cached = _VALIDATED_PAYLOAD_CACHE.get(cache_key)
+        if cached is not None and cached[0] == signature_before:
+            _VALIDATED_PAYLOAD_CACHE.move_to_end(cache_key)
+            return cached[1]
+        payload = resolved.read_bytes()
+        if _file_signature(resolved, label) != signature_before:
+            raise AnalysisInputError(f"{label} changed while being read")
+    except AnalysisInputError:
+        raise
+    except (OSError, RuntimeError, ValueError) as exc:
         raise AnalysisInputError(f"{label} cannot be read") from exc
-    if hashlib.sha256(payload).hexdigest() != expected_sha256:
+    if hashlib.sha256(payload).hexdigest() != expected:
         raise AnalysisInputError(f"{label} digest mismatch")
+    if len(payload) <= MAX_CACHED_PAYLOAD_BYTES:
+        _VALIDATED_PAYLOAD_CACHE[cache_key] = (signature_before, payload)
+        _VALIDATED_PAYLOAD_CACHE.move_to_end(cache_key)
+        while len(_VALIDATED_PAYLOAD_CACHE) > MAX_VALIDATED_PAYLOAD_CACHE_ENTRIES:
+            _VALIDATED_PAYLOAD_CACHE.popitem(last=False)
     return payload
+
+
+def _snapshot_json_object(
+    path: Path, expected_sha256: str, label: str
+) -> dict[str, Any]:
+    payload = _snapshot_bytes(path, expected_sha256, label)
+    if len(payload) > MAX_JSON_BYTES:
+        raise AnalysisInputError(f"{label} exceeds the JSON size limit")
+    try:
+        value = json.loads(payload.decode("utf-8"))
+    except (UnicodeError, json.JSONDecodeError) as exc:
+        raise AnalysisInputError(f"{label} must be valid UTF-8 JSON") from exc
+    if not isinstance(value, dict):
+        raise AnalysisInputError(f"{label} must be a JSON object")
+    return value
 
 
 def _workspace_snapshot_state(path: Path) -> dict[str, Any]:
@@ -1158,28 +1369,153 @@ def _load_registered_progress(
     return progress, families
 
 
-def _v2_registered_case_ids(manifest: dict[str, Any]) -> list[str]:
+def _v2_verified_inputs(
+    manifest: dict[str, Any],
+) -> tuple[tuple[str, Path, str], ...]:
     verified_inputs = manifest.get("verified_family_inputs")
-    if not isinstance(verified_inputs, dict):
+    if (
+        not isinstance(verified_inputs, dict)
+        or set(verified_inputs) != V2_VERIFIED_INPUT_NAMES
+    ):
         raise AnalysisInputError("v2 verified family inputs are missing")
-    binding = verified_inputs.get("case_registry")
-    if not isinstance(binding, dict) or set(binding) != {"path", "sha256"}:
-        raise AnalysisInputError("v2 case registry binding is invalid")
-    digest = _require_sha256(binding.get("sha256"), "v2 case registry digest")
+    resolved = []
+    for name in sorted(V2_VERIFIED_INPUT_NAMES):
+        binding = verified_inputs.get(name)
+        if not isinstance(binding, dict) or set(binding) != {"path", "sha256"}:
+            raise AnalysisInputError(f"v2 {name} binding is invalid")
+        path = _absolute_registered_path(binding.get("path"), f"v2 {name} input")
+        digest = _require_sha256(binding.get("sha256"), f"v2 {name} input digest")
+        _snapshot_bytes(path, digest, f"v2 verified {name} input")
+        resolved.append((name, path, digest))
+    return tuple(resolved)
+
+
+def _v2_workspace_state(
+    manifest: dict[str, Any], family: dict[str, Any]
+) -> tuple[Path, str, int, int, tuple[str, ...]]:
+    workspace = manifest.get("workspace_state")
+    if not isinstance(workspace, dict) or set(workspace) != V2_WORKSPACE_FIELDS:
+        raise AnalysisInputError("v2 workspace state fields are invalid")
+    digest = _require_sha256(workspace.get("sha256"), "v2 workspace digest")
+    file_count = workspace.get("file_count")
+    total_bytes = workspace.get("total_bytes")
+    excluded = workspace.get("excluded_directory_names")
+    if (
+        type(file_count) is not int
+        or file_count < 1
+        or type(total_bytes) is not int
+        or total_bytes < 1
+        or not isinstance(excluded, list)
+        or excluded != [".git", ".pytest_cache", "__pycache__"]
+    ):
+        raise AnalysisInputError("v2 workspace state values are invalid")
+    path = _absolute_registered_path(workspace.get("workspace"), "v2 workspace")
+    _require_exact(family.get("workspace_tree_sha256"), digest, "v2 family workspace")
+    _require_exact(
+        family.get("workspace_file_count"), file_count, "v2 family workspace files"
+    )
+    _require_exact(
+        family.get("workspace_total_bytes"), total_bytes, "v2 family workspace bytes"
+    )
+    _require_exact(
+        _workspace_snapshot_state(path),
+        {
+            "sha256": digest,
+            "file_count": file_count,
+            "total_bytes": total_bytes,
+            "excluded_directory_names": excluded,
+        },
+        "v2 workspace snapshot state",
+    )
+    return path, digest, file_count, total_bytes, tuple(excluded)
+
+
+def _v2_family_schedule(
+    family: dict[str, Any],
+    manifest: dict[str, Any],
+    bindings: dict[str, tuple[Path, str]],
+) -> tuple[tuple[str, tuple[str, ...]], ...]:
+    if not V2_FAMILY_REQUIRED_FIELDS.issubset(family):
+        raise AnalysisInputError("v2 confirmation family fields are incomplete")
+    for field, expected in {
+        "schema_version": "effectslice-confirmation-v2-family.v1",
+        "task_key": "toolformer_filter",
+        "task_id": "TOOLFORMER-FILTER",
+        "selected_candidate_id": "prefix_01",
+        "conditions": ["B", "F", "S"],
+        "case_block": "confirmation_v2",
+        "case_count": 64,
+        "replicate_count": 18,
+        "private_score_policy": "final_only",
+        "maximum_transport_attempts": 5,
+        "model_alias": "deepseek-v4-flash",
+        "wire_api": "openai_chat_completions",
+        "temperature": 0,
+        "max_tokens": 8192,
+        "confirmation_unsealed": False,
+    }.items():
+        _require_exact(family.get(field), expected, f"v2 family {field}")
+    if not isinstance(family.get("evidence_boundary"), str) or not family[
+        "evidence_boundary"
+    ]:
+        raise AnalysisInputError("v2 family evidence boundary is invalid")
+    _require_exact(
+        family.get("retained_atom_ids"),
+        manifest.get("retained_atom_ids"),
+        "v2 family retained atoms",
+    )
+    _require_exact(
+        family.get("retained_scc_count"),
+        manifest.get("retained_scc_count"),
+        "v2 family retained SCC count",
+    )
+    for name, family_field in V2_FAMILY_DIGEST_BINDINGS.items():
+        _require_exact(
+            family.get(family_field),
+            bindings[name][1],
+            f"v2 family {name} binding",
+        )
+    schedule = family.get("replicate_schedule")
+    if not isinstance(schedule, list) or len(schedule) != 18:
+        raise AnalysisInputError("v2 family replicate schedule is invalid")
+    normalized = []
+    seen = set()
+    for row in schedule:
+        if not isinstance(row, dict) or set(row) != {
+            "replicate_id",
+            "condition_order",
+        }:
+            raise AnalysisInputError("v2 family replicate entry is invalid")
+        replicate_id = row.get("replicate_id")
+        order = row.get("condition_order")
+        if (
+            not isinstance(replicate_id, str)
+            or replicate_id in seen
+            or not isinstance(order, list)
+            or len(order) != 3
+            or set(order) != set(CONDITIONS)
+        ):
+            raise AnalysisInputError("v2 family replicate schedule is invalid")
+        seen.add(replicate_id)
+        normalized.append((replicate_id, tuple(order)))
+    if seen != {f"r{index:03d}" for index in range(1, 19)}:
+        raise AnalysisInputError("v2 family replicate IDs are invalid")
+    return tuple(sorted(normalized))
+
+
+def _v2_registered_identity(
+    manifest: dict[str, Any], replicate_id: str | None = None
+) -> V2RegisteredIdentity:
+    verified = _v2_verified_inputs(manifest)
+    bindings = {name: (path, digest) for name, path, digest in verified}
+    registry_path, digest = bindings["case_registry"]
     _require_exact(
         manifest.get("case_registry_sha256"), digest, "v2 manifest case registry digest"
     )
-    raw_path = binding.get("path")
-    if not isinstance(raw_path, str) or not Path(raw_path).is_absolute():
-        raise AnalysisInputError("v2 case registry path is invalid")
-    payload = _snapshot_bytes(
-        Path(raw_path), digest, "v2 registered case registry"
+    registry = _snapshot_json_object(
+        registry_path, digest, "v2 registered case registry"
     )
-    try:
-        registry = json.loads(payload.decode("utf-8"))
-    except (UnicodeError, json.JSONDecodeError) as exc:
-        raise AnalysisInputError("v2 case registry must be valid UTF-8 JSON") from exc
-    if not isinstance(registry, dict) or set(registry) != {
+    if set(registry) != {
         "schema_version",
         "task_id",
         "evidence_boundary",
@@ -1207,7 +1543,59 @@ def _v2_registered_case_ids(manifest: dict[str, Any]) -> list[str]:
         if not isinstance(case_id, str) or not case_id or case_id in case_ids:
             raise AnalysisInputError("v2 registered case IDs must be nonempty and unique")
         case_ids.append(case_id)
-    return case_ids
+    family_path = _absolute_registered_path(
+        manifest.get("confirmation_family_path"), "v2 confirmation family"
+    )
+    family_digest = _require_sha256(
+        manifest.get("confirmation_family_sha256"), "v2 confirmation family digest"
+    )
+    family = _snapshot_json_object(
+        family_path, family_digest, "v2 confirmation family"
+    )
+    schedule = _v2_family_schedule(family, manifest, bindings)
+    workspace = _v2_workspace_state(manifest, family)
+    for manifest_field, binding_name in {
+        "atom_map_sha256": "source_map",
+        "full_artifact_sha256": "full_artifact",
+        "scorer_sha256": "scorer",
+        "slice_artifact_sha256": "selected_artifact",
+        "slice_registry_sha256": "slice_registry",
+    }.items():
+        _require_exact(
+            manifest.get(manifest_field),
+            bindings[binding_name][1],
+            f"v2 manifest {binding_name} digest",
+        )
+    for manifest_field, binding_name in {
+        "slice_artifact_path": "selected_artifact",
+        "slice_registry_path": "slice_registry",
+    }.items():
+        _require_exact(
+            _absolute_registered_path(
+                manifest.get(manifest_field), f"v2 manifest {binding_name}"
+            ),
+            bindings[binding_name][0],
+            f"v2 manifest {binding_name} path",
+        )
+    if replicate_id is not None:
+        order_by_replicate = dict(schedule)
+        if replicate_id not in order_by_replicate:
+            raise AnalysisInputError("v2 replicate is absent from its family")
+        _require_exact(
+            manifest.get("condition_execution_order"),
+            list(order_by_replicate[replicate_id]),
+            "v2 registered condition order",
+        )
+    return V2RegisteredIdentity(
+        registry_path=registry_path,
+        registry_sha256=digest,
+        case_ids=tuple(case_ids),
+        family_path=family_path,
+        family_sha256=family_digest,
+        replicate_schedule=schedule,
+        verified_inputs=verified,
+        workspace_state=workspace,
+    )
 
 
 def _audit_v2_result(
@@ -1280,9 +1668,14 @@ def _audit_v2_result(
     }
 
 
-def _audit_v2_bundle(record: dict[str, Any], response_ids: set[str]) -> dict[str, Any]:
-    output_dir = Path(record["output_dir"])
-    _reject_unsafe_components(output_dir, "v2 registered output directory")
+def _audit_v2_bundle(
+    record: dict[str, Any],
+    response_ids: set[str],
+    expected_identity: V2RegisteredIdentity | None,
+) -> dict[str, Any]:
+    output_dir = _absolute_registered_path(
+        record.get("output_dir"), "v2 registered output directory"
+    )
     if (
         output_dir.name != record["replicate_id"]
         or output_dir.parent.name != "toolformer_filter"
@@ -1312,7 +1705,10 @@ def _audit_v2_bundle(record: dict[str, Any], response_ids: set[str]) -> dict[str
     if not isinstance(summaries, dict) or set(summaries) != set(CONDITIONS):
         raise AnalysisInputError("v2 pair results must contain exactly B/F/S")
     local_response_ids: set[str] = set()
-    expected_case_ids = _v2_registered_case_ids(manifest)
+    identity = _v2_registered_identity(manifest, record["replicate_id"])
+    if expected_identity is not None and identity != expected_identity:
+        raise AnalysisInputError("v2 registered family or case registry changed")
+    expected_case_ids = list(identity.case_ids)
     rows = {}
     for condition in CONDITIONS:
         summary = summaries[condition]
@@ -1323,6 +1719,11 @@ def _audit_v2_bundle(record: dict[str, Any], response_ids: set[str]) -> dict[str
             summary.get("run_result_path"), result_path, "v2 run result path"
         )
         result = _json_object(result_path, "v2 condition run result")
+        _require_exact(
+            result.get("task_prompt_sha256"),
+            manifest.get("task_prompt_sha256"),
+            "v2 canonical task prompt digest",
+        )
         for field in (
             "status",
             "terminal_reason",
@@ -1351,7 +1752,8 @@ def _audit_v2_bundle(record: dict[str, Any], response_ids: set[str]) -> dict[str
     return {
         "joint_substitution_event": joint_substitution_event(
             rows["B"], rows["F"], rows["S"], 0.05
-        )
+        ),
+        "registered_identity": identity,
     }
 
 
@@ -1386,6 +1788,7 @@ def reanalyze_v2_negative_control(progress_path: Path) -> dict[str, Any]:
     blocks = []
     integrity = []
     response_ids: set[str] = set()
+    registered_identity: V2RegisteredIdentity | None = None
     for row in toolformer:
         status = row.get("status")
         expected_fields = {"task_key", "replicate_id", "status", "output_dir"}
@@ -1405,11 +1808,13 @@ def reanalyze_v2_negative_control(progress_path: Path) -> dict[str, Any]:
             integrity.append(False)
             continue
         try:
-            block = _audit_v2_bundle(row, response_ids)
+            block = _audit_v2_bundle(row, response_ids, registered_identity)
         except (AnalysisInputError, OSError, UnicodeError):
             blocks.append(False)
             integrity.append(False)
         else:
+            if registered_identity is None:
+                registered_identity = block["registered_identity"]
             blocks.append(block["joint_substitution_event"] is True)
             integrity.append(True)
     events = sum(blocks)
@@ -1600,6 +2005,24 @@ def _paths_overlap(first: Path, second: Path) -> bool:
         return False
 
 
+def _protect_v2_manifest_inputs(
+    manifest_path: Path,
+    protected_files: set[Path],
+    protected_roots: set[Path],
+) -> None:
+    manifest = _json_object(manifest_path, "v2 final pair manifest")
+    if set(manifest) != V2_PAIR_FIELDS:
+        raise AnalysisInputError("v2 pair manifest fields do not match its schema")
+    identity = _v2_registered_identity(manifest)
+    for path in (identity.registry_path, identity.family_path):
+        protected_files.add(path)
+        protected_roots.add(path.parent)
+    for _, path, _ in identity.verified_inputs:
+        protected_files.add(path)
+        protected_roots.add(path.parent)
+    protected_roots.add(identity.workspace_state[0])
+
+
 def _analysis_input_boundaries(
     progress_path: Path, historical_v2_progress_path: Path | None
 ) -> tuple[set[Path], set[Path]]:
@@ -1627,16 +2050,24 @@ def _analysis_input_boundaries(
             if not isinstance(row, dict):
                 raise AnalysisInputError(f"{label} record is invalid")
             output_dir = row.get("output_dir")
-            if not isinstance(output_dir, str):
-                raise AnalysisInputError(f"{label} output directory is invalid")
-            _reject_unsafe_components(Path(output_dir), f"{label} output directory")
-            protected_roots.add(Path(output_dir).resolve())
+            resolved_output_dir = _absolute_registered_path(
+                output_dir, f"{label} output directory"
+            )
+            protected_roots.add(resolved_output_dir)
+            if (
+                label == "confirmation-v2 progress"
+                and row.get("status") in {"completed", "preserved"}
+            ):
+                _protect_v2_manifest_inputs(
+                    resolved_output_dir / "pair_manifest.json",
+                    protected_files,
+                    protected_roots,
+                )
             family_path = row.get("family_path")
             if family_path is not None:
-                if not isinstance(family_path, str):
-                    raise AnalysisInputError(f"{label} family path is invalid")
-                _reject_unsafe_components(Path(family_path), f"{label} family path")
-                protected_files.add(Path(family_path).resolve())
+                protected_files.add(
+                    _absolute_registered_path(family_path, f"{label} family path")
+                )
     return protected_files, protected_roots
 
 
@@ -1665,6 +2096,100 @@ def _derived_destination(output_path: Path, derived_root: Path) -> Path:
             "analysis output must be a JSON file below its derived root"
         )
     return destination
+
+
+@contextmanager
+def _cooperative_derived_root_lock(root: Path) -> Iterator[None]:
+    try:
+        root.mkdir(parents=True, exist_ok=True)
+    except (OSError, ValueError) as exc:
+        raise AnalysisInputError("derived output root cannot be created") from exc
+    _reject_unsafe_components(root, "derived output root")
+    lock_path = root / ".effectslice-analysis.lock"
+    descriptor = None
+    try:
+        descriptor = os.open(
+            lock_path,
+            os.O_CREAT | os.O_EXCL | os.O_WRONLY,
+            0o600,
+        )
+    except FileExistsError as exc:
+        raise AnalysisInputError("derived output root is locked") from exc
+    except (OSError, ValueError) as exc:
+        raise AnalysisInputError("derived output root lock cannot be created") from exc
+    try:
+        os.write(descriptor, f"pid={os.getpid()}\n".encode("ascii"))
+        os.fsync(descriptor)
+        yield
+    except AnalysisInputError:
+        raise
+    except OSError as exc:
+        raise AnalysisInputError("derived output root lock failed") from exc
+    finally:
+        if descriptor is not None:
+            try:
+                os.close(descriptor)
+            except OSError:
+                pass
+            try:
+                lock_path.unlink()
+            except OSError:
+                pass
+
+
+def _atomic_write_analysis(destination: Path, payload: bytes) -> None:
+    parent = destination.parent
+    try:
+        parent.mkdir(parents=True, exist_ok=True)
+    except (OSError, ValueError) as exc:
+        raise AnalysisInputError("analysis output parent cannot be created") from exc
+    _reject_unsafe_components(parent, "analysis output parent")
+    try:
+        resolved_parent = parent.resolve()
+    except (OSError, RuntimeError, ValueError) as exc:
+        raise AnalysisInputError("analysis output parent path is invalid") from exc
+    parent_identity = _path_identity(parent, "analysis output parent")
+    temporary_path = None
+    try:
+        with tempfile.NamedTemporaryFile(
+            mode="wb",
+            prefix=f".{destination.name}.",
+            suffix=".tmp",
+            dir=parent,
+            delete=False,
+        ) as handle:
+            temporary_path = Path(handle.name)
+            handle.write(payload)
+            handle.flush()
+            os.fsync(handle.fileno())
+        _reject_unsafe_components(parent, "analysis output parent")
+        _reject_unsafe_components(destination, "analysis output")
+        if (
+            parent.resolve() != resolved_parent
+            or _path_identity(parent, "analysis output parent") != parent_identity
+        ):
+            raise AnalysisInputError("analysis output parent changed before replace")
+        os.replace(temporary_path, destination)
+        _reject_unsafe_components(parent, "analysis output parent")
+        if (
+            parent.resolve() != resolved_parent
+            or _path_identity(parent, "analysis output parent") != parent_identity
+        ):
+            raise AnalysisInputError("analysis output parent changed during replace")
+    except AnalysisInputError:
+        if temporary_path is not None:
+            try:
+                temporary_path.unlink()
+            except OSError:
+                pass
+        raise
+    except (OSError, RuntimeError, ValueError) as exc:
+        if temporary_path is not None:
+            try:
+                temporary_path.unlink()
+            except OSError:
+                pass
+        raise AnalysisInputError("analysis output could not be written safely") from exc
 
 
 def write_analysis(
@@ -1701,47 +2226,28 @@ def write_analysis(
         raise AnalysisInputError("analysis output must not overwrite raw input")
     if any(_paths_overlap(resolved_root, raw_root) for raw_root in protected_roots):
         raise AnalysisInputError("derived output root overlaps registered raw evidence")
-    result = analyze_registered_schedule(
-        Path(progress_path),
-        include_historical_negative_control=include_historical_negative_control,
-        historical_v2_progress_path=historical_v2_progress_path,
-    )
-    try:
-        payload = (
-            json.dumps(
-                result,
-                indent=2,
-                sort_keys=True,
-                ensure_ascii=True,
-                allow_nan=False,
-            )
-            + "\n"
-        ).encode("utf-8")
-    except (TypeError, ValueError) as exc:
-        raise AnalysisInputError("analysis result is not deterministic JSON") from exc
-    destination.parent.mkdir(parents=True, exist_ok=True)
-    _reject_unsafe_components(destination.parent, "analysis output parent")
-    temporary_path = None
-    try:
-        with tempfile.NamedTemporaryFile(
-            mode="wb",
-            prefix=f".{destination.name}.",
-            suffix=".tmp",
-            dir=destination.parent,
-            delete=False,
-        ) as handle:
-            temporary_path = Path(handle.name)
-            handle.write(payload)
-            handle.flush()
-            os.fsync(handle.fileno())
-        os.replace(temporary_path, destination)
-    except OSError as exc:
-        if temporary_path is not None:
-            try:
-                temporary_path.unlink()
-            except OSError:
-                pass
-        raise AnalysisInputError("analysis output could not be written safely") from exc
+    with _cooperative_derived_root_lock(resolved_root):
+        result = analyze_registered_schedule(
+            Path(progress_path),
+            include_historical_negative_control=include_historical_negative_control,
+            historical_v2_progress_path=historical_v2_progress_path,
+        )
+        try:
+            payload = (
+                json.dumps(
+                    result,
+                    indent=2,
+                    sort_keys=True,
+                    ensure_ascii=True,
+                    allow_nan=False,
+                )
+                + "\n"
+            ).encode("utf-8")
+        except (TypeError, ValueError) as exc:
+            raise AnalysisInputError(
+                "analysis result is not deterministic JSON"
+            ) from exc
+        _atomic_write_analysis(destination, payload)
     return result
 
 
