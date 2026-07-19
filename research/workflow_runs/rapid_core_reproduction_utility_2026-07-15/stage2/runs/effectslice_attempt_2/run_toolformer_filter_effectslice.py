@@ -20,6 +20,7 @@ from effectslice.aci_runner import (  # noqa: E402
     InteractiveACIRunner,
 )
 from effectslice.aci_workspace import OverlayWorkspace  # noqa: E402
+from effectslice.public_test_bridge import PublicTestBridge  # noqa: E402
 from effectslice.evidence_binding import (  # noqa: E402
     normalize_condition_order,
     require_new_output_dir,
@@ -49,12 +50,14 @@ EVIDENCE_BOUNDARY_BY_BLOCK = {
     "discovery": "discovery_only_not_confirmation",
     "confirmation": "contaminated_development",
     "confirmation_v2": "registered_final_only_confirmation",
+    "confirmation_v4": "registered_public_test_finite_schedule_confirmation_v4",
 }
 
 FINAL_STATE_SCORING_BY_HARNESS = {
     "effectslice-toolformer-filter-aci.v1": False,
     "effectslice-toolformer-filter-aci.v2": True,
     "effectslice-toolformer-filter-aci.v3": True,
+    "effectslice-toolformer-filter-aci.v4": True,
 }
 
 
@@ -148,9 +151,9 @@ def load_confirmation_binding(
     if family.get("confirmation_unsealed") is not False:
         raise ValueError("confirmation family must be frozen before unsealing")
     expected_workspace = family.get("workspace_tree_sha256")
-    if case_block == "confirmation_v2":
+    if case_block in {"confirmation_v2", "confirmation_v4"}:
         if not isinstance(workspace_state, dict) or not workspace_state.get("sha256"):
-            raise ValueError("confirmation-v2 requires a verified workspace tree")
+            raise ValueError(f"{case_block} requires a verified workspace tree")
         if expected_workspace != workspace_state["sha256"]:
             raise ValueError("workspace tree does not match the frozen family")
     if family.get("case_block") != case_block or not case_block.startswith(
@@ -304,6 +307,7 @@ def run_condition(
     max_actions: int,
     score_final_state_on_exhaustion: bool = False,
     private_score_policy: str = "interactive",
+    public_test_file: str | None = None,
 ) -> tuple[Any, dict[str, Any]]:
     condition_dir = Path(output_dir).resolve() / condition
     bridge = ToolformerFilterScorerBridge(
@@ -312,6 +316,13 @@ def run_condition(
         block=case_block,
         output_dir=condition_dir / "scorer_calls",
     )
+    public_bridge = None
+    if public_test_file is not None:
+        public_bridge = PublicTestBridge(
+            workspace=workspace,
+            command=(sys.executable, "-m", "pytest", public_test_file, "-q"),
+            timeout_seconds=60.0,
+        )
     runner = InteractiveACIRunner(
         workspace=OverlayWorkspace(workspace),
         scorer_bridge=bridge,
@@ -331,6 +342,7 @@ def run_condition(
         max_observation_chars=4_000,
         score_final_state_on_exhaustion=score_final_state_on_exhaustion,
         private_score_policy=private_score_policy,
+        public_test_bridge=public_bridge,
     )
     result = runner.run(retry_lineage_prefix=retry_lineage_prefix)
     condition_dir.mkdir(parents=True, exist_ok=True)
@@ -379,6 +391,41 @@ def run_bundle(args: argparse.Namespace) -> dict[str, Any]:
     case_registry_path = Path(args.case_registry).resolve()
     task_prompt_path = RUN_ROOT / "artifacts" / "toolformer_filter" / "task_prompt.md"
     scorer_path = RUN_ROOT / "src" / "effectslice" / "toolformer_filter_scorer.py"
+    if args.case_block == "confirmation_v4":
+        family_path = Path(args.confirmation_family).resolve()
+        family = json.loads(family_path.read_text(encoding="utf-8"))
+        if family.get("schema_version") != "effectslice-confirmation-v4-family.v1":
+            raise RunnerInputError("confirmation-v4 family schema is invalid")
+        verified = validate_file_bindings(family, root=RUN_ROOT)
+        required = {
+            "full_artifact",
+            "selected_artifact",
+            "source_map",
+            "case_registry",
+            "slice_registry",
+            "task_prompt",
+        }
+        if not required.issubset(verified):
+            raise RunnerInputError("confirmation-v4 family bindings are incomplete")
+        full_artifact_path = Path(verified["full_artifact"]["path"])
+        atom_map_path = Path(verified["source_map"]["path"])
+        case_registry_path = Path(verified["case_registry"]["path"])
+        task_prompt_path = Path(verified["task_prompt"]["path"])
+        registered_workspace = Path(family.get("workspace_path", "")).resolve()
+        if registered_workspace != workspace:
+            raise RunnerInputError("confirmation-v4 workspace path is invalid")
+        if family.get("workspace_tree_sha256") != workspace_tree_digest(workspace)[
+            "sha256"
+        ]:
+            raise RunnerInputError("confirmation-v4 workspace digest does not match")
+        if Path(args.slice_context).resolve() != Path(
+            verified["selected_artifact"]["path"]
+        ):
+            raise RunnerInputError("confirmation-v4 selected artifact path differs")
+        if Path(args.slice_registry).resolve() != Path(
+            verified["slice_registry"]["path"]
+        ):
+            raise RunnerInputError("confirmation-v4 slice registry path differs")
     task_prompt = task_prompt_path.read_text(encoding="utf-8").strip()
     execution_order, conditions = normalize_condition_order(args.condition)
     if conditions not in PAIR_ROLE_BY_CONDITIONS:
@@ -455,7 +502,9 @@ def run_bundle(args: argparse.Namespace) -> dict[str, Any]:
     )
     manifest["provider_config"] = transport.public_config()
     private_score_policy = (
-        "final_only" if args.case_block == "confirmation_v2" else "interactive"
+        "final_only"
+        if args.case_block in {"confirmation_v2", "confirmation_v4"}
+        else "interactive"
     )
     manifest["private_score_policy"] = private_score_policy
     manifest["condition_execution_order"] = list(execution_order)
@@ -478,6 +527,7 @@ def run_bundle(args: argparse.Namespace) -> dict[str, Any]:
                 args.harness_protocol_version
             ],
             private_score_policy=private_score_policy,
+            public_test_file=getattr(args, "public_test_file", None),
         )
         results[condition] = public
     manifest["results"] = results

@@ -81,6 +81,7 @@ class ToolformerFilterCasesTest(unittest.TestCase):
                 "discovery": 16,
                 "confirmation": 59,
                 "confirmation_v2": 64,
+                "confirmation_v4": 64,
             },
         )
         all_seeds = [seed for seeds in BLOCK_SEEDS.values() for seed in seeds]
@@ -154,6 +155,7 @@ class ToolformerFilterCasesTest(unittest.TestCase):
                 "discovery": 16,
                 "confirmation": 59,
                 "confirmation_v2": 64,
+                "confirmation_v4": 64,
             },
         )
 

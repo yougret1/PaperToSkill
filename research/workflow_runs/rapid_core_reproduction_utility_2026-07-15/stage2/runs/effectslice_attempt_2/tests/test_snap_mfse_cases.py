@@ -119,11 +119,12 @@ class SnapMFSECasesTest(unittest.TestCase):
                 "discovery": 16,
                 "confirmation": 59,
                 "confirmation_v2": 64,
+                "confirmation_v4": 64,
             },
         )
         all_cases = [case for cases in first["blocks"].values() for case in cases]
-        self.assertEqual(len({case["case_id"] for case in all_cases}), 164)
-        self.assertEqual(len({case["seed"] for case in all_cases}), 164)
+        self.assertEqual(len({case["case_id"] for case in all_cases}), 228)
+        self.assertEqual(len({case["seed"] for case in all_cases}), 228)
         for case in all_cases:
             counts = generate_case(case)
             self.assertEqual(

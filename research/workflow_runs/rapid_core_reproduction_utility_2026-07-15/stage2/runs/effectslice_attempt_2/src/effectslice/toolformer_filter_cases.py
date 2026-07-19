@@ -16,6 +16,7 @@ BLOCK_SEEDS = {
     "discovery": tuple(range(33_000, 33_016)),
     "confirmation": tuple(range(34_000, 34_059)),
     "confirmation_v2": tuple(range(35_000, 35_064)),
+    "confirmation_v4": tuple(range(37_000, 37_064)),
 }
 
 
@@ -186,7 +187,10 @@ def _generate_v2_case(seed: int) -> dict[str, Any]:
 def generate_case(seed: int) -> dict[str, Any]:
     if isinstance(seed, bool) or not isinstance(seed, int):
         raise ValueError("seed must be an integer")
-    if seed in BLOCK_SEEDS["confirmation_v2"]:
+    if seed in (
+        *BLOCK_SEEDS["confirmation_v2"],
+        *BLOCK_SEEDS["confirmation_v4"],
+    ):
         return _generate_v2_case(seed)
     return _generate_v1_case(seed)
 

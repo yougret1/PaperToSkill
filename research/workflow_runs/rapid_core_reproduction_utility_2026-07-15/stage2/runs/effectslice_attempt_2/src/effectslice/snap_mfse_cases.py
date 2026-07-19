@@ -15,6 +15,7 @@ BLOCK_SIZES = {
     "discovery": 16,
     "confirmation": 59,
     "confirmation_v2": 64,
+    "confirmation_v4": 64,
 }
 
 BLOCK_SEED_BASES = {
@@ -23,6 +24,7 @@ BLOCK_SEED_BASES = {
     "discovery": 30_000,
     "confirmation": 40_000,
     "confirmation_v2": 50_000,
+    "confirmation_v4": 60_000,
 }
 
 

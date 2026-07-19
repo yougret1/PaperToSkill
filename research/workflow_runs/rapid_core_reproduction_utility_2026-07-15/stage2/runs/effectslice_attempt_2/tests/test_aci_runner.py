@@ -67,6 +67,20 @@ class FakeScorerBridge:
         return ScorerEvaluation(feedback, metric, Path("candidate.patch"))
 
 
+class FakePublicTestBridge:
+    def __init__(self, feedback='{"status":"passed","stdout":"1 passed"}'):
+        self.feedback = feedback
+        self.calls = []
+
+    def evaluate(self, diff_text, *, evaluation_id):
+        self.calls.append({"diff_text": diff_text, "evaluation_id": evaluation_id})
+        return type(
+            "PublicResult",
+            (),
+            {"feedback": self.feedback, "passed": True, "returncode": 0},
+        )()
+
+
 def success_turn(text, *, attempts=1, input_tokens=10, output_tokens=5):
     return ModelTurnResult(
         status="success",
@@ -97,6 +111,7 @@ class InteractiveACIRunnerTest(unittest.TestCase):
         max_actions=6,
         score_final_state_on_exhaustion=False,
         private_score_policy="interactive",
+        public_test_bridge=None,
     ):
         return InteractiveACIRunner(
             workspace=OverlayWorkspace(self.source_root),
@@ -111,6 +126,7 @@ class InteractiveACIRunnerTest(unittest.TestCase):
             max_observation_chars=2000,
             score_final_state_on_exhaustion=score_final_state_on_exhaustion,
             private_score_policy=private_score_policy,
+            public_test_bridge=public_test_bridge,
         )
 
     def test_runs_search_open_edit_test_submit_and_preserves_private_metrics(self):
@@ -279,6 +295,42 @@ class InteractiveACIRunnerTest(unittest.TestCase):
         self.assertIn("private scoring is unavailable", transport.calls[2]["prompt"])
         self.assertNotIn("task_score", transport.calls[2]["prompt"])
         self.assertNotIn("test_passed", transport.calls[2]["prompt"])
+
+    def test_final_only_policy_exposes_public_test_but_not_private_score(self):
+        transport = SequenceTransport(
+            [
+                success_turn(
+                    '{"action":"edit","path":"pkg/main.py",'
+                    '"old_text":"return \'old\'","new_text":"return \'new\'"}'
+                ),
+                success_turn('{"action":"test"}'),
+                success_turn('{"action":"submit"}'),
+            ]
+        )
+        private_bridge = FakeScorerBridge(score=1.0)
+        public_bridge = FakePublicTestBridge()
+
+        result = self.runner(
+            transport,
+            private_bridge,
+            private_score_policy="final_only",
+            public_test_bridge=public_bridge,
+        ).run(retry_lineage_prefix="confirmation:F")
+
+        self.assertEqual(result.status, "scored")
+        self.assertEqual(
+            [call["evaluation_id"] for call in public_bridge.calls],
+            ["step-02"],
+        )
+        self.assertEqual(
+            [call["evaluation_id"] for call in private_bridge.calls],
+            ["submit-03"],
+        )
+        self.assertEqual(result.private_score_count, 1)
+        self.assertFalse(result.private_feedback_exposed)
+        self.assertIn("locked public test", transport.calls[0]["prompt"])
+        self.assertIn("1 passed", transport.calls[2]["prompt"])
+        self.assertNotIn("task_score", transport.calls[2]["prompt"])
 
     def test_provider_failure_is_terminal_and_not_scored(self):
         transport = SequenceTransport(

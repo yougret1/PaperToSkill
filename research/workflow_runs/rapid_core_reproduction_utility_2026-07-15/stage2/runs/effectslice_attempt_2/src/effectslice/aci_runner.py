@@ -144,6 +144,7 @@ class InteractiveACIRunner:
         max_observation_chars: int,
         score_final_state_on_exhaustion: bool = False,
         private_score_policy: str = "interactive",
+        public_test_bridge: Any | None = None,
     ) -> None:
         if not isinstance(workspace, OverlayWorkspace):
             raise RunnerConfigurationError("workspace must be an OverlayWorkspace")
@@ -168,6 +169,10 @@ class InteractiveACIRunner:
             raise RunnerConfigurationError(
                 "private_score_policy must be interactive or final_only"
             )
+        if public_test_bridge is not None and not callable(
+            getattr(public_test_bridge, "evaluate", None)
+        ):
+            raise RunnerConfigurationError("public_test_bridge must provide evaluate")
         for value, name in (
             (max_actions, "max_actions"),
             (max_response_chars, "max_response_chars"),
@@ -187,6 +192,7 @@ class InteractiveACIRunner:
         self._max_observation_chars = max_observation_chars
         self._score_final_state_on_exhaustion = score_final_state_on_exhaustion
         self._private_score_policy = private_score_policy
+        self._public_test_bridge = public_test_bridge
 
     def run(self, *, retry_lineage_prefix: str) -> ACIRunResult:
         if not isinstance(retry_lineage_prefix, str) or not retry_lineage_prefix:
@@ -536,6 +542,13 @@ class InteractiveACIRunner:
                     None,
                 )
             if action.action == "test":
+                if self._public_test_bridge is not None:
+                    diff_text = self._workspace.unified_diff()
+                    evaluation = self._public_test_bridge.evaluate(
+                        diff_text,
+                        evaluation_id=f"step-{step:02d}",
+                    )
+                    return "public_tested", evaluation.feedback, None
                 if self._private_score_policy == "final_only":
                     return (
                         "unavailable",
@@ -577,15 +590,18 @@ class InteractiveACIRunner:
             self._task_prompt,
         ]
         if self._private_score_policy == "final_only":
-            parts.extend(
-                [
-                    "# Private Score Policy",
-                    (
-                        "Private scoring is final-only. Do not use the test action; it "
-                        "cannot reveal a score. Submit the fixed patch when ready."
-                    ),
-                ]
-            )
+            if self._public_test_bridge is None:
+                policy = (
+                    "Private scoring is final-only. Do not use the test action; it "
+                    "cannot reveal a score. Submit the fixed patch when ready."
+                )
+            else:
+                policy = (
+                    "Private scoring is final-only. The test action runs only the "
+                    "locked public test and returns public output; it never invokes "
+                    "the private scorer. Submit the fixed patch when ready."
+                )
+            parts.extend(["# Private Score Policy", policy])
         if turns:
             parts.append("# Prior Interaction")
             for turn in turns:
