@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
 from run_confirmation_v3_interleaved_calibration import (
     build_records,
     classify_existing_output,
+    preflight_summary,
     progress_payload,
 )
 
@@ -100,3 +102,17 @@ def test_progress_payload_counts_terminal_states(tmp_path):
         "running": 0,
     }
     assert progress["registered_schedule_length"] == 3
+
+
+def test_preflight_accepts_transport_success_contract():
+    result = SimpleNamespace(
+        status="success",
+        attempts=1,
+        provider_model_id="deepseek-v4-flash",
+        provider_response_id="response-1",
+    )
+
+    summary = preflight_summary(result)
+
+    assert summary["valid"] is True
+    assert summary["status"] == "success"

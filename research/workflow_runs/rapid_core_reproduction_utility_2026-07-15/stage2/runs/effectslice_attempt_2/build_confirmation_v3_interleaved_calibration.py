@@ -20,9 +20,9 @@ ARTIFACT_ROOT = (
     RUN_ROOT
     / "artifacts"
     / "toolformer_filter"
-    / "confirmation_v3_interleaved_calibration"
+    / "confirmation_v3_interleaved_calibration_r2"
 )
-RESULT_ROOT = RUN_ROOT / "experiment_results" / "confirmation_v3_interleaved_calibration"
+RESULT_ROOT = RUN_ROOT / "experiment_results" / "confirmation_v3_interleaved_calibration_r2"
 PREREGISTRATION_PATH = ARTIFACT_ROOT / "preregistration.json"
 ANCHOR_PATH = ARTIFACT_ROOT / "preregistration_anchor.json"
 PROGRESS_PATH = RESULT_ROOT / "progress.json"

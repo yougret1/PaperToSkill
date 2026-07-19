@@ -213,13 +213,17 @@ def provider_preflight() -> dict[str, Any]:
         retry_lineage_id="confirmation-v3-interleaved:generic-marker",
         turn_index=1,
     )
+    return preflight_summary(result)
+
+
+def preflight_summary(result: Any) -> dict[str, Any]:
     return {
         "status": result.status,
         "attempts": result.attempts,
         "provider_model_id": result.provider_model_id,
         "provider_response_id_present": bool(result.provider_response_id),
         "valid": bool(
-            result.status == "ok"
+            result.status == "success"
             and result.provider_model_id
             == registration.legacy.REGISTERED_MODEL_ALIAS
             and result.provider_response_id

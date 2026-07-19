@@ -14,7 +14,7 @@ import build_confirmation_v3_interleaved_calibration as registration
 
 RUN_ROOT = Path(__file__).resolve().parent
 POSTRUN_ROOT = RUN_ROOT.parent.parent / "postrun" / "derived" / RUN_ROOT.name
-OUTPUT_ROOT = POSTRUN_ROOT / "confirmation_v3_interleaved_calibration"
+OUTPUT_ROOT = POSTRUN_ROOT / "confirmation_v3_interleaved_calibration_r2"
 SCHEMA_VERSION = "effectslice-v3-interleaved-calibration-analysis.v1"
 PROVENANCE_SCHEMA = "effectslice-v3-interleaved-calibration-analysis-provenance.v1"
 
