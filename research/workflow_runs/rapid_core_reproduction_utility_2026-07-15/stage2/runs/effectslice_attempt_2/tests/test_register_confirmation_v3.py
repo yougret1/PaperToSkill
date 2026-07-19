@@ -1,5 +1,6 @@
 import hashlib
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -22,6 +23,19 @@ from test_build_confirmation_v3 import (  # noqa: E402
 
 
 BOUNDARY = "registered_final_only_confirmation_v3"
+
+
+def test_cli_bootstraps_local_source_tree():
+    completed = subprocess.run(
+        [sys.executable, str(RUN_ROOT / "register_confirmation_v3.py"), "--help"],
+        cwd=RUN_ROOT,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert completed.returncode == 0, completed.stderr
+    assert "build-preregistration" in completed.stdout
 
 
 def prepare_registered_root(tmp_path: Path) -> Path:

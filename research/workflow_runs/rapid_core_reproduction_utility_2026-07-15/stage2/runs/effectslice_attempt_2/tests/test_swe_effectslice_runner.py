@@ -150,7 +150,7 @@ class SWEffectSliceRunnerTest(unittest.TestCase):
             workspace = Path(tmp) / "locked_source"
             shutil.copytree(source, workspace)
             git_config = workspace / ".git" / "config"
-            git_config.parent.mkdir()
+            git_config.parent.mkdir(exist_ok=True)
             git_config.write_text("[core]\n\trepositoryformatversion = 0\n", encoding="utf-8")
             included = [
                 workspace / "alpha.txt",

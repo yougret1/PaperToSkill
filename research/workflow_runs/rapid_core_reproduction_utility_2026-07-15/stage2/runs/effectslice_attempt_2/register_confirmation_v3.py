@@ -7,15 +7,18 @@ import hashlib
 import json
 import os
 import re
+import sys
 import tempfile
 from pathlib import Path
 from typing import Any
+
+RUN_ROOT = Path(__file__).resolve().parent
+sys.path.insert(0, str(RUN_ROOT / "src"))
 
 import analyze_confirmation_v3 as analyzer
 import evidence_ledger_v3 as ledger
 
 
-RUN_ROOT = Path(__file__).resolve().parent
 BOUNDARY = "registered_final_only_confirmation_v3"
 PREREGISTRATION_SCHEMA = "effectslice-confirmation-v3-preregistration.v1"
 ANCHOR_SCHEMA = "effectslice-confirmation-v3-preregistration-anchor.v1"
