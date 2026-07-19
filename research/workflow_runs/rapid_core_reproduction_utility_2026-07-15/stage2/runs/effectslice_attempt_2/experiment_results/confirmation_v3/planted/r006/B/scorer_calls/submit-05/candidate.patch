@@ -1,0 +1,48 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -12,5 +12,44 @@
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
++    # Input validation
++    for mat, name in zip(
++        [logp_with_result, logp_call_only, logp_no_call],
++        ["logp_with_result", "logp_call_only", "logp_no_call"]
++    ):
++        if not isinstance(mat, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if mat.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if mat.size == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.isfinite(mat).all():
++            raise ValueError(f"{name} contains nonfinite values")
++        if (mat > 0).any():
++            raise ValueError(f"{name} contains positive values (must be nonpositive)")
++    # Check shape consistency
++    shape = logp_with_result.shape
++    if logp_call_only.shape != shape or logp_no_call.shape != shape:
++        raise ValueError("All input matrices must have the same shape")
++    # Validate tau_filter
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not isinstance(tau_filter, (int, float)):
++        raise ValueError("tau_filter must be a scalar")
++    if not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Compute sums over the future horizon
++    sum_w = np.sum(logp_with_result, axis=1)
++    sum_c = np.sum(logp_call_only, axis=1)
++    sum_n = np.sum(logp_no_call, axis=1)
++
++    # Loss improvement (margin)
++    improvement = sum_w - sum_n
++
++    # Keep if improvement > threshold and the call alone is worse than with result
++    keep = (improvement > tau_filter) & (sum_w > sum_c)
++
++    return keep, improvement.astype(np.float64)

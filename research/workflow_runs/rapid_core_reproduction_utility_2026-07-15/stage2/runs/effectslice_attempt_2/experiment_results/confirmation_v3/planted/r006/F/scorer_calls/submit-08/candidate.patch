@@ -1,0 +1,43 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,39 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if logp_with_result.ndim != 2 or logp_call_only.ndim != 2 or logp_no_call.ndim != 2:
++        raise ValueError("All log probability inputs must be 2D matrices")
++    if logp_with_result.shape != logp_call_only.shape or logp_call_only.shape != logp_no_call.shape:
++        raise ValueError("All log probability inputs must have the same shape")
++    n_candidates, future_horizon = logp_with_result.shape
++    if n_candidates == 0 or future_horizon == 0:
++        raise ValueError("Input matrices must not be empty")
++    # Check finite and nonpositive
++    for arr, name in [(logp_with_result, 'logp_with_result'), (logp_call_only, 'logp_call_only'), (logp_no_call, 'logp_no_call')]:
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} contains non-finite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} contains positive values")
++    # Validate threshold
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be a finite nonnegative number")
++    # Compute normalized weights
++    t = np.arange(future_horizon, dtype=float)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    weight_sum = np.sum(raw_weights)
++    if weight_sum <= 0:
++        normalized_weights = np.full_like(raw_weights, 1.0 / future_horizon)
++    else:
++        normalized_weights = raw_weights / weight_sum
++    # Weighted negative log likelihood
++    L_empty = -np.sum(logp_no_call * normalized_weights, axis=1)
++    L_call_only = -np.sum(logp_call_only * normalized_weights, axis=1)
++    L_plus = -np.sum(logp_with_result * normalized_weights, axis=1)
++    # Counterfactual baseline
++    L_minus = np.minimum(L_empty, L_call_only)
++    margin = L_minus - L_plus
++    keep = margin >= tau_filter
++    return keep, margin

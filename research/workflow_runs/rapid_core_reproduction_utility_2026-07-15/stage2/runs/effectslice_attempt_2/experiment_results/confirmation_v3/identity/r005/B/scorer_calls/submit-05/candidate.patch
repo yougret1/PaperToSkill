@@ -1,0 +1,39 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,35 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not isinstance(logp_with_result, np.ndarray) or not isinstance(logp_call_only, np.ndarray) or not isinstance(logp_no_call, np.ndarray):
++        raise ValueError("inputs must be numpy arrays")
++    if logp_with_result.ndim != 2 or logp_call_only.ndim != 2 or logp_no_call.ndim != 2:
++        raise ValueError("inputs must be 2D matrices")
++    if logp_with_result.shape != logp_call_only.shape or logp_with_result.shape != logp_no_call.shape:
++        raise ValueError("input shapes must match")
++    if logp_with_result.size == 0:
++        raise ValueError("empty input not allowed")
++    if np.any(np.isnan(logp_with_result)) or np.any(np.isnan(logp_call_only)) or np.any(np.isnan(logp_no_call)):
++        raise ValueError("inputs must be finite (no NaN)")
++    if np.any(np.isinf(logp_with_result)) or np.any(np.isinf(logp_call_only)) or np.any(np.isinf(logp_no_call)):
++        raise ValueError("inputs must be finite (no Inf)")
++    if np.any(logp_with_result > 0) or np.any(logp_call_only > 0) or np.any(logp_no_call > 0):
++        raise ValueError("inputs must be nonpositive")
++    if not isinstance(tau_filter, (int, float)) or isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must be a finite nonnegative number, not boolean")
++    if tau_filter < 0 or np.isinf(tau_filter) or np.isnan(tau_filter):
++        raise ValueError("tau_filter must be finite nonnegative")
++
++    # Compute losses (negative log-likelihood)
++    loss_with_result = -np.sum(logp_with_result, axis=1)
++    loss_call_only = -np.sum(logp_call_only, axis=1)
++    loss_no_call = -np.sum(logp_no_call, axis=1)
++
++    # Margins: both differences must exceed tau
++    margin1 = loss_no_call - loss_with_result
++    margin2 = loss_call_only - loss_with_result
++    margin = np.minimum(margin1, margin2)
++    keep = margin > tau_filter
++
++    return keep, margin

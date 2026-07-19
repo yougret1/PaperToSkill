@@ -1,0 +1,54 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,50 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    for name, arr in [("logp_with_result", logp_with_result),
++                      ("logp_call_only", logp_call_only),
++                      ("logp_no_call", logp_no_call)]:
++        if not isinstance(arr, np.ndarray) or arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D numpy array")
++        if arr.shape[0] == 0 or arr.shape[1] == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} must contain only finite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} must be nonpositive (all entries <= 0)")
++    
++    # Check shapes match
++    shape0 = logp_with_result.shape
++    if logp_call_only.shape != shape0 or logp_no_call.shape != shape0:
++        raise ValueError("All input matrices must have the same shape")
++    
++    # Check tau_filter
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not isinstance(tau_filter, (int, float)):
++        raise ValueError("tau_filter must be a number")
++    
++    n_candidates, horizon = shape0
++    
++    # Compute normalized future-token weights
++    t = np.arange(horizon)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    norm_weights = raw_weights / raw_weights.sum()
++    
++    # Compute weighted future-token losses (lower is better)
++    def weighted_loss(logp: np.ndarray) -> np.ndarray:
++        return -np.sum(norm_weights * logp, axis=1)
++    
++    L_plus = weighted_loss(logp_with_result)
++    L_call_only = weighted_loss(logp_call_only)
++    L_empty = weighted_loss(logp_no_call)
++    
++    # Stronger counterfactual baseline
++    L_minus = np.minimum(L_empty, L_call_only)
++    
++    # Margin
++    margin = L_minus - L_plus
++    keep = margin >= tau_filter
++    
++    return keep, margin

@@ -1,0 +1,35 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,31 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate tau_filter
++    if isinstance(tau_filter, (bool, np.bool_)):
++        raise ValueError("tau_filter must not be a boolean")
++    if not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
++    # Convert inputs
++    arr_with = np.asarray(logp_with_result, dtype=float)
++    arr_call = np.asarray(logp_call_only, dtype=float)
++    arr_no = np.asarray(logp_no_call, dtype=float)
++    # Validate shapes
++    if arr_with.shape != arr_call.shape or arr_with.shape != arr_no.shape:
++        raise ValueError("All input matrices must have the same shape")
++    if arr_with.ndim != 2:
++        raise ValueError("Input matrices must be 2-dimensional")
++    if arr_with.size == 0:
++        raise ValueError("Input matrices must not be empty")
++    # Validate finiteness and nonpositivity
++    for arr in [arr_with, arr_call, arr_no]:
++        if not np.all(np.isfinite(arr)):
++            raise ValueError("Input matrices must be finite")
++        if np.any(arr > 0):
++            raise ValueError("Input matrices must be nonpositive")
++    # Compute margins
++    margins = np.sum(arr_with + arr_call - arr_no, axis=1)
++    keep_mask = margins > tau_filter
++    return (keep_mask, margins)

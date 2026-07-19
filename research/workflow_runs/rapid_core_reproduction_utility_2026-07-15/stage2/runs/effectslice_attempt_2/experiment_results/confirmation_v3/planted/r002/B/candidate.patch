@@ -1,0 +1,46 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,42 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate each input is a 2D NumPy array
++    for arr in (logp_with_result, logp_call_only, logp_no_call):
++        if not isinstance(arr, np.ndarray):
++            raise ValueError("Input must be numpy array")
++        if arr.ndim != 2:
++            raise ValueError("Input must be 2D matrix")
++        if arr.size == 0:
++            raise ValueError("Input cannot be empty")
++        if not np.isfinite(arr).all():
++            raise ValueError("Input contains nonfinite values")
++        if (arr > 0).any():
++            raise ValueError("Input contains positive values")
++
++    # Validate shape consistency
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All inputs must have the same shape")
++
++    # Validate tau_filter
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter cannot be boolean")
++    if not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
++
++    # Compute sum of log probabilities along the horizon axis
++    sum_with = logp_with_result.sum(axis=1)
++    sum_call = logp_call_only.sum(axis=1)
++    sum_no = logp_no_call.sum(axis=1)
++
++    # Margin: reduction in negative log-likelihood when conditioning on the API result
++    # compared to conditioning on the API call alone (as per the Toolformer paper).
++    # A positive value means the result reduces the loss relative to the call-only baseline.
++    margin = sum_with - sum_call  # positive if with-result is better than call-only
++
++    # Keep if the reduction exceeds the threshold
++    keep = (margin > tau_filter)
++
++    return keep, margin

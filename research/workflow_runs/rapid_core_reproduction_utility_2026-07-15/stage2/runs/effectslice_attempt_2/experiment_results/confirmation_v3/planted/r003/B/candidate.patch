@@ -1,0 +1,48 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,44 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate tau_filter
++    if isinstance(tau_filter, (bool, np.bool_)):
++        raise ValueError("tau_filter must not be a boolean")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be a finite nonnegative float")
++
++    # Validate input matrices
++    for name, arr in [("logp_with_result", logp_with_result),
++                      ("logp_call_only", logp_call_only),
++                      ("logp_no_call", logp_no_call)]:
++        if not isinstance(arr, np.ndarray) or arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D numpy array")
++        if arr.size == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.issubdtype(arr.dtype, np.floating):
++            raise ValueError(f"{name} must be a floating-point array")
++        if np.any(np.isnan(arr)) or np.any(np.isinf(arr)):
++            raise ValueError(f"{name} contains non-finite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} contains positive values")
++
++    # Check shape consistency
++    shape = logp_with_result.shape
++    if logp_call_only.shape != shape or logp_no_call.shape != shape:
++        raise ValueError("All input matrices must have the same shape")
++
++    # Compute per-candidate sums
++    sum_with = np.sum(logp_with_result, axis=1)
++    sum_call = np.sum(logp_call_only, axis=1)
++    sum_no = np.sum(logp_no_call, axis=1)
++
++    # Margin: improvement over the better baseline
++    max_baseline = np.maximum(sum_call, sum_no)
++    margin = sum_with - max_baseline
++
++    # Keep if margin > tau_filter
++    keep = margin > tau_filter
++
++    # Return finite float64 margins
++    margins = margin.astype(np.float64)
++    return keep, margins

@@ -1,0 +1,83 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -11,6 +11,78 @@
+     logp_no_call: np.ndarray,
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+-    """Return an ordered keep mask and one finite margin per proposed call."""
++    """Return an ordered keep mask and one finite margin per proposed call.
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    Implements the Toolformer loss-filter procedure from the paper core.
++    Inputs are 2-D arrays of token log probabilities (nonpositive, finite).
++    tau_filter must be finite, nonnegative, and not Boolean.
++    """
++    # ------------------------------------------------------------------ #
++    # Validate inputs
++    # ------------------------------------------------------------------ #
++    for arr, name in [(logp_with_result, "logp_with_result"),
++                      (logp_call_only, "logp_call_only"),
++                      (logp_no_call, "logp_no_call")]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a NumPy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2-D array, got ndim={arr.ndim}")
++        if arr.shape[0] == 0 or arr.shape[1] == 0:
++            raise ValueError(f"{name} must be non-empty, got shape {arr.shape}")
++        if not np.isfinite(arr).all():
++            raise ValueError(f"{name} contains non-finite values")
++        if (arr > 0).any():
++            raise ValueError(f"{name} must be nonpositive, but has positive values")
++
++    # Check all three arrays have same shape
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError(
++            f"Input array shapes do not match: "
++            f"with_result {logp_with_result.shape}, "
++            f"call_only {logp_call_only.shape}, "
++            f"no_call {logp_no_call.shape}"
++        )
++
++    # Validate tau_filter
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a Boolean")
++    tau_filter = float(tau_filter)  # coerce to float after bool check
++    if not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite")
++    if tau_filter < 0:
++        raise ValueError(f"tau_filter must be nonnegative, got {tau_filter}")
++
++    # ------------------------------------------------------------------ #
++    # Procedure
++    # ------------------------------------------------------------------ #
++    n_candidates, future_horizon = logp_with_result.shape
++
++    # 1. Normalize the decreasing future-token weights (T01)
++    #    t = offset from first future token; raw weight = max(0, 1 - 0.2*t)
++    t = np.arange(future_horizon, dtype=np.float64)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    weight_sum = raw_weights.sum()
++    if weight_sum == 0:
++        # This should not happen if future_horizon > 0, but guard
++        normalized_weights = np.ones_like(raw_weights) / future_horizon
++    else:
++        normalized_weights = raw_weights / weight_sum
++
++    # 2. Compute weighted future-token loss (T02)
++    #    loss = - sum( weight_i * logp_i )  for each candidate
++    #    logp is log probability (nonpositive), so -weighted sum is nonnegative.
++    L_with = -np.sum(normalized_weights * logp_with_result, axis=1)
++    L_call = -np.sum(normalized_weights * logp_call_only, axis=1)
++    L_none = -np.sum(normalized_weights * logp_no_call, axis=1)
++
++    # 3. Use the stronger counterfactual baseline (T03)
++    L_minus = np.minimum(L_none, L_call)  # element-wise min
++
++    # 4. Keep calls that meet the filtering threshold (T04)
++    margins = L_minus - L_with
++    keep = margins >= tau_filter
++
++    # 5. Apply the rule to every proposed call in order (T05)
++    #    Order is preserved because we did not reorder.
++
++    return keep, margins

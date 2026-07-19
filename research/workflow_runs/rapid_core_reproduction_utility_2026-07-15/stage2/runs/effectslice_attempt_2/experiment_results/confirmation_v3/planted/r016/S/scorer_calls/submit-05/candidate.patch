@@ -1,0 +1,49 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,45 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    for arr, name in [(logp_with_result, 'logp_with_result'),
++                      (logp_call_only, 'logp_call_only'),
++                      (logp_no_call, 'logp_no_call')]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if arr.size == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.isfinite(arr).all():
++            raise ValueError(f"{name} contains nonfinite values")
++        if (arr > 0).any():
++            raise ValueError(f"{name} contains positive values")
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All input arrays must have the same shape")
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
++
++    # Compute normalized weights
++    n_candidates, horizon = logp_with_result.shape
++    t = np.arange(horizon)
++    raw_weights = np.maximum(0, 1 - 0.2 * t)
++    normalized_weights = raw_weights / raw_weights.sum()
++
++    # Compute weighted losses
++    loss_with = -np.sum(normalized_weights * logp_with_result, axis=1)
++    loss_call_only = -np.sum(normalized_weights * logp_call_only, axis=1)
++    loss_no_call = -np.sum(normalized_weights * logp_no_call, axis=1)
++
++    # Counterfactual baseline
++    L_minus = np.minimum(loss_no_call, loss_call_only)
++
++    # Margins and keep mask
++    margins = L_minus - loss_with
++    keep = margins >= tau_filter
++
++    return keep, margins

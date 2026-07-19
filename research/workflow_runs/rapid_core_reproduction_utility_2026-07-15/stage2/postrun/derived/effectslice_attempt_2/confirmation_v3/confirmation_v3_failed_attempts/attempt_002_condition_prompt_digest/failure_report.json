@@ -1,0 +1,20 @@
+{
+  "schema_version": "effectslice-confirmation-v3-analysis-failure.v1",
+  "status": "failed",
+  "recorded_on": "2026-07-20",
+  "failure_classification": "execution_failure",
+  "failure_stage": "condition-result-task-prompt-audit",
+  "error_type": "AnalysisInputError",
+  "error_message": "condition task prompt digest does not match the registered value",
+  "affected_registered_blocks": 24,
+  "observed_condition_results": false,
+  "outcomes_inspected_before_correction": false,
+  "root_cause": "After the snapshot-decode adapter passed the registered snapshot audit, the frozen analyzer compared each immutable run result's digest of stripped CRLF prompt text with the registered digest of stripped LF-canonical prompt text. The runner and registration builder therefore bound different newline semantics to the same field name.",
+  "preserved_artifacts": {
+    "analysis_path": "analysis.json",
+    "analysis_sha256": "f7b4b4bd3cf71316c0497f3927f1882d9135a766809786ae72fa594594913e26",
+    "provenance_path": "analysis.provenance.json",
+    "provenance_sha256": "4091fbb911171affdd02c9b671d4cd7f6615d43e9f9b16609d20ef6be9bbe5a4"
+  },
+  "resolution": "Preserved this failed replay and extended the post-hoc adapter to reverify the exact registered prompt bytes and LF-canonical digest before validating the immutable condition result against the runner's legacy stripped-CRLF digest. The frozen analyzer and raw run outputs remain unchanged."
+}

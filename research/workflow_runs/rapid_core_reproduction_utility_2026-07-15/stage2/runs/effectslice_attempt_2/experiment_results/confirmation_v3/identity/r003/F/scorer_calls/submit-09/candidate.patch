@@ -1,0 +1,47 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,43 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
++    for arr, name in [(logp_with_result, 'logp_with_result'),
++                      (logp_call_only, 'logp_call_only'),
++                      (logp_no_call, 'logp_no_call')]:
++        if not isinstance(arr, np.ndarray) or arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D numpy array")
++        if arr.size == 0:
++            raise ValueError(f"{name} must not be empty")
++        if np.any(np.isnan(arr)) or np.any(np.isinf(arr)):
++            raise ValueError(f"{name} contains nonfinite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} contains positive log probabilities")
++    # Check shapes match
++    n_candidates, future_horizon = logp_with_result.shape
++    if logp_call_only.shape != (n_candidates, future_horizon) or \
++       logp_no_call.shape != (n_candidates, future_horizon):
++        raise ValueError("All input matrices must have the same shape")
++
++    # Compute normalized decreasing future-token weights
++    t = np.arange(future_horizon)
++    raw_weights = np.maximum(0, 1 - 0.2 * t)
++    norm_weights = raw_weights / raw_weights.sum()
++
++    # Compute weighted future-token loss (negative weighted log prob)
++    L_plus = -np.dot(logp_with_result, norm_weights)
++    L_call_only = -np.dot(logp_call_only, norm_weights)
++    L_empty = -np.dot(logp_no_call, norm_weights)
++
++    # Use the stronger counterfactual baseline (min of no-call and call-only)
++    L_minus = np.minimum(L_empty, L_call_only)
++
++    # Margin and threshold
++    margin = L_minus - L_plus
++    keep = margin >= tau_filter
++
++    return keep, margin

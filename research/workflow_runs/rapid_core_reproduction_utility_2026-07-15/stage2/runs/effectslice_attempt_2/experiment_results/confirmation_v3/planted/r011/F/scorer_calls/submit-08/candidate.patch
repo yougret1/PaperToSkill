@@ -1,0 +1,58 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,54 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    for name, arr in [
++        ("logp_with_result", logp_with_result),
++        ("logp_call_only", logp_call_only),
++        ("logp_no_call", logp_no_call),
++    ]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if arr.size == 0:
++            raise ValueError(f"{name} cannot be empty")
++        if not np.isfinite(arr).all():
++            raise ValueError(f"{name} must contain only finite values")
++        if (arr > 0).any():
++            raise ValueError(f"{name} must contain only nonpositive values")
++
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("all input matrices must have the same shape")
++
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter cannot be boolean")
++    if not isinstance(tau_filter, (int, float)):
++        raise ValueError("tau_filter must be a finite nonnegative float")
++    if not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
++
++    # Compute normalized future-token weights
++    future_horizon = logp_with_result.shape[1]
++    t = np.arange(future_horizon)                       # offsets
++    raw = np.maximum(0.0, 1.0 - 0.2 * t)                # raw weights
++    weights = raw / raw.sum()                            # normalized weights
++
++    # Compute weighted future-token loss for each candidate
++    def weighted_loss(logp_matrix: np.ndarray) -> np.ndarray:
++        return -np.sum(weights * logp_matrix, axis=1)   # shape (n_candidates,)
++
++    L_plus = weighted_loss(logp_with_result)
++    L_empty = weighted_loss(logp_no_call)
++    L_call_only = weighted_loss(logp_call_only)
++
++    # Stronger counterfactual baseline
++    L_minus = np.minimum(L_empty, L_call_only)
++
++    # Margins and keep mask
++    margins = L_minus - L_plus
++    keep = margins >= tau_filter
++
++    return keep, margins

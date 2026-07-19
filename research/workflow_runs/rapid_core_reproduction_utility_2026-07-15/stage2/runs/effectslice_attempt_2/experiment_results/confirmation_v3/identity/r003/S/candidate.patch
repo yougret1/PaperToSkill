@@ -1,0 +1,42 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,38 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    for arr, name in [
++        (logp_with_result, 'logp_with_result'),
++        (logp_call_only, 'logp_call_only'),
++        (logp_no_call, 'logp_no_call'),
++    ]:
++        if not isinstance(arr, np.ndarray) or arr.ndim != 2:
++            raise ValueError(f\"{name} must be a 2D NumPy array\")
++        if not np.issubdtype(arr.dtype, np.floating):
++            raise ValueError(f\"{name} must be floating point\")
++        if arr.size == 0:
++            raise ValueError(f\"{name} must not be empty\")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f\"{name} contains nonfinite values\")
++        if np.any(arr > 0):
++            raise ValueError(f\"{name} contains positive log probabilities\")
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All input arrays must have the same shape")
++    if isinstance(tau_filter, bool) or tau_filter is None:
++        raise ValueError("tau_filter must be a finite nonnegative number, not boolean")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
++    n_candidates, horizon = logp_with_result.shape
++    t_offsets = np.arange(horizon, dtype=np.float64)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t_offsets)
++    norm_weights = raw_weights / np.sum(raw_weights)
++    loss_with = -np.dot(logp_with_result, norm_weights)
++    loss_call = -np.dot(logp_call_only, norm_weights)
++    loss_no = -np.dot(logp_no_call, norm_weights)
++    L_minus = np.minimum(loss_no, loss_call)
++    margin = L_minus - loss_with
++    keep = margin >= tau_filter
++    if not np.all(np.isfinite(margin)):
++        raise ValueError("Margins became nonfinite")
++    return keep.astype(bool), margin.astype(np.float64)

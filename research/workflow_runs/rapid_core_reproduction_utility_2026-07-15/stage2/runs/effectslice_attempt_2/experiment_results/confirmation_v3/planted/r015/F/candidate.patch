@@ -1,0 +1,53 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,49 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate each input matrix
++    for name, mat in [('logp_with_result', logp_with_result),
++                      ('logp_call_only', logp_call_only),
++                      ('logp_no_call', logp_no_call)]:
++        if not isinstance(mat, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if mat.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if not np.issubdtype(mat.dtype, np.floating) and not np.issubdtype(mat.dtype, np.integer):
++            raise ValueError(f"{name} must have numeric dtype")
++        if mat.size == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.all(np.isfinite(mat)):
++            raise ValueError(f"{name} contains non-finite values")
++        if np.any(mat > 0):
++            raise ValueError(f"{name} must be nonpositive")
++    # Check shapes match
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All input matrices must have the same shape")
++    # Validate tau_filter
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not isinstance(tau_filter, (int, float)):
++        raise ValueError("tau_filter must be a number")
++    if not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
++    n_candidates, horizon = logp_no_call.shape
++    # Compute weights
++    t = np.arange(horizon, dtype=float)
++    raw_weights = np.maximum(0, 1 - 0.2 * t)
++    if raw_weights.sum() == 0:
++        raise ValueError("All weights are zero (horizon too large or negative)")
++    normalized_weights = raw_weights / raw_weights.sum()
++    # Compute weighted losses (negative weighted log probability)
++    L_empty = -np.dot(logp_no_call, normalized_weights)
++    L_call_only = -np.dot(logp_call_only, normalized_weights)
++    L_plus = -np.dot(logp_with_result, normalized_weights)
++    # Baseline
++    L_minus = np.minimum(L_empty, L_call_only)
++    # Margins
++    margins = L_minus - L_plus
++    # Decision
++    keep = margins >= tau_filter
++    return keep, margins

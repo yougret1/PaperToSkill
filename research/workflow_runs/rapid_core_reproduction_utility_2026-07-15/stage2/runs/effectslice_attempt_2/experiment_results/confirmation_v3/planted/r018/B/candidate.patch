@@ -1,0 +1,41 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,37 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not isinstance(logp_with_result, np.ndarray) or not isinstance(logp_call_only, np.ndarray) or not isinstance(logp_no_call, np.ndarray):
++        raise ValueError("Inputs must be numpy arrays")
++    if logp_with_result.shape != logp_call_only.shape or logp_with_result.shape != logp_no_call.shape:
++        raise ValueError("All input arrays must have the same shape")
++    if logp_with_result.ndim != 2:
++        raise ValueError("Input arrays must be 2-dimensional")
++    if logp_with_result.size == 0 or logp_call_only.size == 0 or logp_no_call.size == 0:
++        raise ValueError("Input arrays must not be empty")
++    if not np.isfinite(logp_with_result).all() or not np.isfinite(logp_call_only).all() or not np.isfinite(logp_no_call).all():
++        raise ValueError("Input arrays must contain only finite values")
++    if np.any(logp_with_result > 0) or np.any(logp_call_only > 0) or np.any(logp_no_call > 0):
++        raise ValueError("Input arrays must contain nonpositive values")
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not isinstance(tau_filter, (int, float, np.floating)):
++        raise ValueError("tau_filter must be a finite nonnegative scalar")
++    if tau_filter < 0 or not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be nonnegative and finite")
++    
++    # Compute average log probabilities over future horizon
++    avg_with = np.mean(logp_with_result, axis=1)
++    avg_no_call = np.mean(logp_no_call, axis=1)
++    avg_call_only = np.mean(logp_call_only, axis=1)
++    
++    # Compute margins: improvement in average log probability
++    margin_no_call = avg_with - avg_no_call
++    margin_call_only = avg_with - avg_call_only
++    
++    # Keep if both margins exceed tau_filter
++    keep_mask = (margin_no_call > tau_filter) & (margin_call_only > tau_filter)
++    
++    # Return keep_mask and margin (improvement over no call)
++    return keep_mask, margin_no_call

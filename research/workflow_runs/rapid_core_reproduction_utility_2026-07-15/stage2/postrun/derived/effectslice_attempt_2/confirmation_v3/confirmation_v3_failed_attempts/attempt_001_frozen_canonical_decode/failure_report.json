@@ -1,0 +1,20 @@
+{
+  "schema_version": "effectslice-confirmation-v3-analysis-failure.v1",
+  "status": "failed",
+  "recorded_on": "2026-07-19",
+  "failure_classification": "execution_failure",
+  "failure_stage": "registered-bundle-snapshot-audit",
+  "error_type": "AnalysisInputError",
+  "error_message": "canonical task prompt snapshot digest mismatch",
+  "affected_registered_blocks": 24,
+  "observed_condition_results": false,
+  "outcomes_inspected_before_correction": false,
+  "root_cause": "The frozen analyzer first verified the CRLF task-prompt snapshot against its raw file SHA, then hashed decoded CRLF text without universal-newline normalization against the registered LF canonical-text SHA. No snapshot can satisfy both checks.",
+  "preserved_artifacts": {
+    "analysis_path": "analysis.json",
+    "analysis_sha256": "f7b4b4bd3cf71316c0497f3927f1882d9135a766809786ae72fa594594913e26",
+    "provenance_path": "analysis.provenance.json",
+    "provenance_sha256": "87851066588fe82d2b6be4ed12a8c677e8b3be5e00497f9b68b699686dbbb0f9"
+  },
+  "resolution": "Preserved the frozen-analyzer failure and introduced a post-hoc adapter that retains exact raw-byte verification while applying the preregistration builder's CRLF/CR-to-LF canonical text semantics only to task-prompt snapshot decoding."
+}

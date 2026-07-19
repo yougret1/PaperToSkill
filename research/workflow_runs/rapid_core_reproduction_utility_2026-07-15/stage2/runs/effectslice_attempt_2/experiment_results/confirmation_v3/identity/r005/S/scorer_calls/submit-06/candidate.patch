@@ -1,0 +1,43 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,39 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    for arr, name in [(logp_with_result, 'logp_with_result'), 
++                      (logp_call_only, 'logp_call_only'),
++                      (logp_no_call, 'logp_no_call')]:
++        if not isinstance(arr, np.ndarray) or arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D NumPy array")
++        if not np.isfinite(arr).all():
++            raise ValueError(f"{name} contains non-finite values")
++        if (arr > 0).any():
++            raise ValueError(f"{name} contains positive values (must be nonpositive)")
++    if logp_with_result.shape != logp_call_only.shape or logp_call_only.shape != logp_no_call.shape:
++        raise ValueError("All input matrices must have the same shape")
++    if logp_with_result.shape[0] == 0 or logp_with_result.shape[1] == 0:
++        raise ValueError("Input matrices must be non-empty")
++    # Validate tau_filter
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
++    
++    future_horizon = logp_with_result.shape[1]
++    # Compute normalized weights
++    t = np.arange(future_horizon)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    norm_weights = raw_weights / raw_weights.sum()
++    
++    # Compute losses: -weighted sum of log probs
++    L_plus = -np.sum(norm_weights * logp_with_result, axis=1)
++    L_call_only = -np.sum(norm_weights * logp_call_only, axis=1)
++    L_empty = -np.sum(norm_weights * logp_no_call, axis=1)
++    
++    L_minus = np.minimum(L_empty, L_call_only)
++    margin = L_minus - L_plus
++    
++    keep = margin >= tau_filter
++    return keep, margin

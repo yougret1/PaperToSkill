@@ -1,0 +1,48 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,44 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not all(isinstance(arr, np.ndarray) for arr in [logp_with_result, logp_call_only, logp_no_call]):
++        raise ValueError("All inputs must be numpy arrays")
++    for arr in [logp_with_result, logp_call_only, logp_no_call]:
++        if arr.ndim != 2:
++            raise ValueError("All arrays must be 2D matrices")
++        if arr.shape[0] == 0 or arr.shape[1] == 0:
++            raise ValueError("Arrays must not be empty")
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All arrays must have the same shape")
++    for arr in [logp_with_result, logp_call_only, logp_no_call]:
++        if not np.isfinite(arr).all():
++            raise ValueError("All arrays must contain finite values")
++        if (arr > 0).any():
++            raise ValueError("All arrays must contain nonpositive values")
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not isinstance(tau_filter, (int, float)):
++        raise ValueError("tau_filter must be a number")
++    if tau_filter < 0 or not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be nonnegative and finite")
++
++    n_candidates, horizon = logp_with_result.shape
++
++    # Compute normalized weights
++    t = np.arange(horizon, dtype=float)
++    raw_weights = np.maximum(0, 1 - 0.2 * t)
++    weight_sum = raw_weights.sum()
++    normalized_weights = raw_weights / weight_sum
++
++    # Compute weighted losses
++    loss_with = -np.dot(logp_with_result, normalized_weights)
++    loss_call_only = -np.dot(logp_call_only, normalized_weights)
++    loss_no_call = -np.dot(logp_no_call, normalized_weights)
++
++    L_minus = np.minimum(loss_no_call, loss_call_only)
++    L_plus = loss_with
++    margins = L_minus - L_plus
++    keep = margins >= tau_filter
++
++    return keep, margins.astype(float)

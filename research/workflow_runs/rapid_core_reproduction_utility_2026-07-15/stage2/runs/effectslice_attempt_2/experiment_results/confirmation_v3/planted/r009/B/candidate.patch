@@ -1,0 +1,50 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,46 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    for arr, name in [(logp_with_result, "logp_with_result"), (logp_call_only, "logp_call_only"), (logp_no_call, "logp_no_call")]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if arr.size == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.isfinite(arr).all():
++            raise ValueError(f"{name} contains non-finite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} must be nonpositive")
++    
++    # Check shapes match
++    shape = logp_with_result.shape
++    if logp_call_only.shape != shape or logp_no_call.shape != shape:
++        raise ValueError("All input matrices must have the same shape")
++    
++    # Validate tau_filter
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not isinstance(tau_filter, (int, float)):
++        raise ValueError("tau_filter must be a numeric value")
++    if not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
++    
++    # Compute sums over future horizon (axis=1)
++    sum_with = np.sum(logp_with_result, axis=1)
++    sum_call_only = np.sum(logp_call_only, axis=1)
++    sum_no_call = np.sum(logp_no_call, axis=1)
++    
++    # Margin: L(no_call) - L(with_result) = sum_with - sum_no_call
++    margins = sum_with - sum_no_call
++    
++    # Loss of the call itself
++    loss_call_only = -sum_call_only
++    
++    # Keep if margin > 0 and loss_call_only < tau_filter
++    keep = (margins > 0) & (loss_call_only < tau_filter)
++    
++    return (keep, margins.astype(np.float64))

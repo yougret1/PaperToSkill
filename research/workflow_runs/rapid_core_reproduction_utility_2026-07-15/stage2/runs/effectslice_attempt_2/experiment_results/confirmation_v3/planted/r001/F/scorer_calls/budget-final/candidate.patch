@@ -1,0 +1,43 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -1,4 +1,39 @@
+-"""Starter module for the locked Toolformer loss-filter task."""
++import numpy as np
++
++def filter_api_calls(with_result, call_only, no_call, tau_filter):
++    # Validate inputs
++    if with_result.ndim != 2 or call_only.ndim != 2 or no_call.ndim != 2:
++        raise ValueError("All input arrays must be 2D matrices")
++    if with_result.shape != call_only.shape or call_only.shape != no_call.shape:
++        raise ValueError("All input arrays must have the same shape")
++    if with_result.size == 0 or call_only.size == 0 or no_call.size == 0:
++        raise ValueError("Input arrays must not be empty")
++    if not np.isfinite(with_result).all() or not np.isfinite(call_only).all() or not np.isfinite(no_call).all():
++        raise ValueError("All input values must be finite")
++    if np.any(with_result > 0) or np.any(call_only > 0) or np.any(no_call > 0):
++        raise ValueError("All input values must be nonpositive")
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter cannot be a boolean")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be a finite nonnegative float")
++
++    n_future = with_result.shape[1]
++    t = np.arange(n_future).astype(float)
++    raw = np.maximum(0.0, 1.0 - 0.2 * t)
++    norm = raw / raw.sum()
++
++    def weighted_loss(log_probs):
++        return -np.dot(log_probs, norm)
++
++    L_plus = weighted_loss(with_result)
++    L_call_only = weighted_loss(call_only)
++    L_empty = weighted_loss(no_call)
++
++    L_minus = np.minimum(L_empty, L_call_only)
++    margin = L_minus - L_plus
++    keep = margin >= tau_filter
++
++    return keep, margin
+ 
+ from __future__ import annotations
+ 
