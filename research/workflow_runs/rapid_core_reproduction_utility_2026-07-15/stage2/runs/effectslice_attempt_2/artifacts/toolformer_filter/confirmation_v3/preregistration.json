@@ -1,0 +1,111 @@
+{
+  "conditions": [
+    "B",
+    "F",
+    "S"
+  ],
+  "controls": {
+    "identity": {
+      "admission_rule": "descriptive_only",
+      "calibration_role": "identity_instrumentation_only",
+      "family_path": "artifacts/toolformer_filter/confirmation_v3/identity/family.json",
+      "family_sha256": "216ebce058db21df0a6eb1355e1247e73ed646a0e707f456c4505b42540beaa6",
+      "replicate_count": 6,
+      "required_joint_events_for_admission": null,
+      "schedule_seed": 2026071801,
+      "strict_subset": false
+    },
+    "planted": {
+      "admission_rule": "all_registered_joint_events",
+      "calibration_role": "planted_redundancy_positive_control",
+      "family_path": "artifacts/toolformer_filter/confirmation_v3/planted/family.json",
+      "family_sha256": "57e6bfc752dbc22504535e2b1debcba75cc60d70b4d22bec05b0e197c0426983",
+      "replicate_count": 18,
+      "required_joint_events_for_admission": 18,
+      "schedule_seed": 2026071802,
+      "strict_subset": true
+    }
+  },
+  "decision_basis": "finite_registered_schedule",
+  "evidence_boundary": "registered_final_only_confirmation_v3",
+  "execution_bindings": {
+    "analyzer": {
+      "path": "analyze_confirmation_v3.py",
+      "sha256": "881904de5b3ba747dce1e61358a0a4cb11fd5f136e572a87fd1d4f728efd4c17"
+    },
+    "builder": {
+      "path": "build_confirmation_v3.py",
+      "sha256": "756228ed381340c79ef5a7b77e59bfca0f3eb04f5e3ec2644a31602eaf9d2856"
+    },
+    "evidence_ledger": {
+      "path": "evidence_ledger_v3.py",
+      "sha256": "d98b6c0846c4fd57a214e43d6390a3cf846596ff6e81489c465a84e2d736acc0"
+    },
+    "registration": {
+      "path": "register_confirmation_v3.py",
+      "sha256": "a9fb8b923eb55ae03fb666e0385e2cbc647689d04d966b8e0a41068925a22079"
+    },
+    "runner": {
+      "path": "run_toolformer_filter_confirmation_v3.py",
+      "sha256": "9ed784685ba21d506fe17392c6c0816281d0c418ac87b8334c566356135eac67"
+    },
+    "scheduler": {
+      "path": "run_confirmation_v3.py",
+      "sha256": "97e44b82601bdcaf03ae9831304b7b824bc3e7bca4539f9eaf6baf93efc2f354"
+    },
+    "transport": {
+      "path": "confirmation_transport_v3.py",
+      "sha256": "ef94a2155e9ae3e19652ef72e7e91e959f16f931ace50148116ebb3a6ae28652"
+    }
+  },
+  "execution_paths": {
+    "identity_family_path": "artifacts/toolformer_filter/confirmation_v3/identity/family.json",
+    "identity_output_root": "experiment_results/confirmation_v3/identity",
+    "planted_family_path": "artifacts/toolformer_filter/confirmation_v3/planted/family.json",
+    "planted_output_root": "experiment_results/confirmation_v3/planted",
+    "progress_path": "experiment_results/confirmation_v3/confirmation_v3_progress.json"
+  },
+  "fresh_provider_conversation_per_condition": true,
+  "iid_conditional_reference": {
+    "label": "iid_conditional_only"
+  },
+  "independence_verified": false,
+  "ledger_plan": {
+    "external_anchor_path": "artifacts/toolformer_filter/confirmation_v3/preregistration_anchor.json",
+    "ledger_path": "derived/confirmation_v3/evidence_ledger/preregistration/ledger.json",
+    "phase": "preregistration",
+    "required_source_roots": [
+      "artifacts/toolformer_filter/confirmation_v3/identity",
+      "artifacts/toolformer_filter/confirmation_v3/planted",
+      "artifacts/toolformer_filter/confirmation_v3/preregistration.json"
+    ]
+  },
+  "manifest_core_sha256": "a213444b8e923606b18d287c7e04810042160f37f729a3fb020ba0b8969015c9",
+  "maximum_parallel_workers": 2,
+  "maximum_transport_attempts": 5,
+  "no_replacement_replicates": true,
+  "preserve_registered_failures": true,
+  "primary_event": "joint_substitution_event",
+  "private_score_policy": "final_only",
+  "progress_path": "experiment_results/confirmation_v3/confirmation_v3_progress.json",
+  "provider": {
+    "base_url": "https://api.deepseek.com",
+    "direct_connection": true,
+    "max_tokens": 8192,
+    "model_alias": "deepseek-v4-flash",
+    "provider_label": "DeepSeek V3.2",
+    "proxy_policy": "disabled",
+    "retry_delay_seconds": 2.0,
+    "temperature": 0,
+    "timeout_seconds": 240.0,
+    "wire_api": "openai_chat_completions"
+  },
+  "provider_execution_started": false,
+  "registered_block_count": 24,
+  "registered_condition_run_count": 72,
+  "registration_status": "complete",
+  "schema_version": "effectslice-confirmation-v3-preregistration.v1",
+  "statistical_unit": "registered_matched_block",
+  "task_id": "TOOLFORMER-FILTER",
+  "task_key": "toolformer_filter"
+}

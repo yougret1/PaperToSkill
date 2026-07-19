@@ -21,10 +21,11 @@ Run these commands from this directory, in order, only after the implementation
 commit is final:
 
 ```powershell
+$RunRoot = (Resolve-Path -LiteralPath '.').Path
 python .\build_confirmation_v3.py --control identity --output-dir .\artifacts\toolformer_filter\confirmation_v3\identity --require-complete-bindings
 python .\build_confirmation_v3.py --control planted --output-dir .\artifacts\toolformer_filter\confirmation_v3\planted --require-complete-bindings
 python .\register_confirmation_v3.py build-preregistration
-python .\evidence_ledger_v3.py build --root . --source .\artifacts\toolformer_filter\confirmation_v3\identity --source .\artifacts\toolformer_filter\confirmation_v3\planted --source .\artifacts\toolformer_filter\confirmation_v3\preregistration.json --ledger-path .\derived\confirmation_v3\evidence_ledger\preregistration\ledger.json --phase preregistration --evidence-boundary registered_final_only_confirmation_v3
+python .\evidence_ledger_v3.py build --root $RunRoot --source "$RunRoot\artifacts\toolformer_filter\confirmation_v3\identity" --source "$RunRoot\artifacts\toolformer_filter\confirmation_v3\planted" --source "$RunRoot\artifacts\toolformer_filter\confirmation_v3\preregistration.json" --ledger-path "$RunRoot\derived\confirmation_v3\evidence_ledger\preregistration\ledger.json" --phase preregistration --evidence-boundary registered_final_only_confirmation_v3
 python .\register_confirmation_v3.py build-anchor
 python .\register_confirmation_v3.py audit
 python .\run_confirmation_v3.py --max-workers 2
