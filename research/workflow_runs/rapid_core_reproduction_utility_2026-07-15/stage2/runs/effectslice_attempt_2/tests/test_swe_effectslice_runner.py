@@ -1,6 +1,8 @@
 import hashlib
 import json
+import shutil
 import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -143,23 +145,31 @@ class SWEffectSliceRunnerTest(unittest.TestCase):
             build_pair_manifest(**kwargs)
 
     def test_workspace_tree_digest_matches_scorer_copy_exclusions(self):
-        workspace = RUN_ROOT / "tests" / "fixtures" / "aci_workspace" / "locked_source"
-        included = [
-            workspace / "alpha.txt",
-            workspace / "binary.dat",
-            workspace / "large.txt",
-            workspace / "pkg" / "main.py",
-            workspace / "pkg" / "unchanged.py",
-        ]
+        source = RUN_ROOT / "tests" / "fixtures" / "aci_workspace" / "locked_source"
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = Path(tmp) / "locked_source"
+            shutil.copytree(source, workspace)
+            git_config = workspace / ".git" / "config"
+            git_config.parent.mkdir()
+            git_config.write_text("[core]\n\trepositoryformatversion = 0\n", encoding="utf-8")
+            included = [
+                workspace / "alpha.txt",
+                workspace / "binary.dat",
+                workspace / "large.txt",
+                workspace / "pkg" / "main.py",
+                workspace / "pkg" / "unchanged.py",
+            ]
 
-        first = workspace_tree_digest(workspace)
-        second = workspace_tree_digest(workspace)
+            first = workspace_tree_digest(workspace)
+            second = workspace_tree_digest(workspace)
 
-        self.assertEqual(first, second)
-        self.assertEqual(first["file_count"], 5)
-        self.assertEqual(first["total_bytes"], sum(path.stat().st_size for path in included))
-        self.assertEqual(len(first["sha256"]), 64)
-        self.assertNotEqual(first["sha256"], sha256_file(workspace / ".git" / "config"))
+            self.assertEqual(first, second)
+            self.assertEqual(first["file_count"], 5)
+            self.assertEqual(
+                first["total_bytes"], sum(path.stat().st_size for path in included)
+            )
+            self.assertEqual(len(first["sha256"]), 64)
+            self.assertNotEqual(first["sha256"], sha256_file(git_config))
 
     def test_gpt_responses_transport_normalizes_usage_and_public_config(self):
         requester = FakeRequester(

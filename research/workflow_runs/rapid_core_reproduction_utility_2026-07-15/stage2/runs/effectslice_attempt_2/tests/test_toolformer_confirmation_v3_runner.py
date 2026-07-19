@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import dataclasses
 import hashlib
 import importlib.util
 import json
@@ -31,7 +32,7 @@ from run_swe_effectslice import workspace_tree_digest  # noqa: E402
 
 
 REGISTERED = "registered_final_only_confirmation_v3"
-SECRET_BASE_URL = "https://secret.invalid/v1"
+REGISTERED_BASE_URL = "https://api.deepseek.com"
 SECRET_API_KEY = "do-not-serialize-this-key"
 
 
@@ -91,6 +92,8 @@ class FakeTransport:
             "max_attempts": self.kwargs["max_attempts"],
             "retry_delay_seconds": self.kwargs["retry_delay_seconds"],
             "temperature": 0,
+            "direct_connection": True,
+            "proxy_policy": "disabled",
         }
 
     def __call__(
@@ -142,7 +145,7 @@ class FakeTransport:
 def reset_fake_transport(monkeypatch):
     FakeTransport.instances = []
     FakeTransport.fail_condition = None
-    monkeypatch.setenv("TEST_DEEPSEEK_BASE_URL", SECRET_BASE_URL)
+    monkeypatch.setenv("TEST_DEEPSEEK_BASE_URL", REGISTERED_BASE_URL)
     monkeypatch.setenv("TEST_DEEPSEEK_API_KEY", SECRET_API_KEY)
 
 
@@ -210,7 +213,7 @@ def build_family_tree(
         "aci_runner": RUN_ROOT / "src" / "effectslice" / "aci_runner.py",
         "aci_protocol": RUN_ROOT / "src" / "effectslice" / "aci_protocol.py",
         "case_generator": RUN_ROOT / "src" / "effectslice" / "toolformer_filter_cases.py",
-        "transport": RUN_ROOT / "run_swe_effectslice.py",
+        "transport": RUN_ROOT / "confirmation_transport_v3.py",
         "runner": RUNNER_PATH,
     }
     evidence_binding = root / "src" / "effectslice" / "evidence_binding.py"
@@ -286,10 +289,15 @@ def build_family_tree(
         "private_score_policy": "final_only",
         "maximum_transport_attempts": 5,
         "provider_label": "DeepSeek V3.2",
+        "base_url": REGISTERED_BASE_URL,
         "model_alias": "deepseek-v4-flash",
         "wire_api": "openai_chat_completions",
         "temperature": 0,
         "max_tokens": 8192,
+        "timeout_seconds": 240.0,
+        "retry_delay_seconds": 2.0,
+        "direct_connection": True,
+        "proxy_policy": "disabled",
         "comparison_role": REGISTERED if registration_status == "complete" else "planned_confirmation_v3_draft",
         "evidence_boundary": REGISTERED if registration_status == "complete" else "draft_incomplete_confirmation_v3",
         "bindings": bindings,
@@ -336,10 +344,10 @@ def make_args(tree, output_dir: Path, **overrides: Any) -> argparse.Namespace:
         "base_url_env": "TEST_DEEPSEEK_BASE_URL",
         "api_key_env": "TEST_DEEPSEEK_API_KEY",
         "max_tokens": 8192,
-        "timeout_seconds": 30.0,
-        "scorer_timeout_seconds": 60.0,
+        "timeout_seconds": 240.0,
+        "scorer_timeout_seconds": 300.0,
         "max_attempts": 5,
-        "retry_delay_seconds": 0.0,
+        "retry_delay_seconds": 2.0,
     }
     values.update(overrides)
     return argparse.Namespace(**values)
@@ -574,7 +582,28 @@ def test_serialized_json_contains_no_secret_values(runner, tmp_path):
         path.read_text(encoding="utf-8") for path in output.rglob("*.json")
     )
     assert SECRET_API_KEY not in serialized
-    assert SECRET_BASE_URL not in serialized
+    assert REGISTERED_BASE_URL in serialized
+
+
+@pytest.mark.parametrize("identity_failure", ["model", "duplicate_response"])
+def test_provider_identity_mismatch_cannot_complete_bundle(
+    runner, tmp_path, identity_failure
+):
+    tree = build_family_tree(tmp_path)
+    output = tmp_path / f"bad-identity-{identity_failure}"
+
+    class InconsistentTransport(FakeTransport):
+        def __call__(self, **kwargs):
+            result = super().__call__(**kwargs)
+            if identity_failure == "model":
+                return dataclasses.replace(result, provider_model_id="other-model")
+            return dataclasses.replace(result, provider_response_id="duplicate")
+
+    with pytest.raises(ValueError, match="provider .*identity"):
+        runner.run_bundle(
+            make_args(tree, output), transport_factory=InconsistentTransport
+        )
+    assert not (output / "pair_manifest.json").exists()
 
 
 def test_identical_byte_execution_source_decoy_is_rejected(runner, tmp_path):
@@ -629,19 +658,18 @@ def test_provider_preflight_failure_is_sanitized_and_leaves_no_output(
     class SecretFailureTransport(FakeTransport):
         def __init__(self, **kwargs):
             if failure_stage == "constructor":
-                raise RuntimeError(f"{SECRET_BASE_URL} {SECRET_API_KEY}")
+                raise RuntimeError(f"{REGISTERED_BASE_URL} {SECRET_API_KEY}")
             super().__init__(**kwargs)
 
         def public_config(self):
             if failure_stage == "public_config":
-                raise RuntimeError(f"{SECRET_BASE_URL} {SECRET_API_KEY}")
+                raise RuntimeError(f"{REGISTERED_BASE_URL} {SECRET_API_KEY}")
             return super().public_config()
 
     with pytest.raises(ValueError, match="provider preflight failed") as caught:
         runner.run_bundle(
             make_args(tree, output), transport_factory=SecretFailureTransport
         )
-    assert SECRET_BASE_URL not in str(caught.value)
     assert SECRET_API_KEY not in str(caught.value)
     assert not output.exists()
 
@@ -768,3 +796,9 @@ def test_cli_has_no_arbitrary_condition_argument(runner):
     assert "--max-tokens" in option_strings
     assert "--max-attempts" in option_strings
     assert "--condition" not in option_strings
+
+
+def test_confirmation_runner_imports_only_the_bound_transport_module():
+    source = RUNNER_PATH.read_text(encoding="utf-8")
+    assert "from confirmation_transport_v3 import" in source
+    assert "run_swe_effectslice" not in source

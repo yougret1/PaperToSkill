@@ -33,9 +33,16 @@ from effectslice.toolformer_filter_scorer import (  # noqa: E402
     score_toolformer_filter_patch,
 )
 from effectslice.toolformer_filter_cases import generate_case  # noqa: E402
-from run_swe_effectslice import (  # noqa: E402
+from confirmation_transport_v3 import (  # noqa: E402
     ProviderTransport,
-    RunnerInputError,
+    REGISTERED_BASE_URL,
+    REGISTERED_MAX_ATTEMPTS,
+    REGISTERED_MAX_TOKENS,
+    REGISTERED_MODEL_ALIAS,
+    REGISTERED_PROXY_POLICY,
+    REGISTERED_RETRY_DELAY_SECONDS,
+    REGISTERED_TIMEOUT_SECONDS,
+    REGISTERED_WIRE_API,
 )
 
 
@@ -70,6 +77,7 @@ _STANDARD_BINDINGS = tuple(
 _SHA256_PATTERN = re.compile(r"[0-9a-fA-F]{64}")
 _ATOM_ID_PATTERN = re.compile(r"\(`(T\d+)`\)")
 _PUBLIC_PROVIDER_FIELDS = (
+    "base_url",
     "model_alias",
     "wire_api",
     "max_tokens",
@@ -77,7 +85,13 @@ _PUBLIC_PROVIDER_FIELDS = (
     "max_attempts",
     "retry_delay_seconds",
     "temperature",
+    "direct_connection",
+    "proxy_policy",
 )
+
+
+class RunnerInputError(ValueError):
+    """Raised when a frozen confirmation-v3 bundle input is invalid."""
 
 
 def _sha256_text(text: str) -> str:
@@ -442,7 +456,26 @@ def _capture_workspace_tree(workspace: Path) -> tuple[dict[str, Any], dict[str, 
 
 def _verify_registered_metadata(family: Mapping[str, Any], control: str) -> None:
     _require_exact(family.get("case_count"), 64, "case_count")
-    _require_exact(family.get("max_tokens"), 8192, "max_tokens")
+    _require_exact(
+        family.get("base_url"), REGISTERED_BASE_URL, "base_url"
+    )
+    _require_exact(
+        family.get("timeout_seconds"),
+        REGISTERED_TIMEOUT_SECONDS,
+        "timeout_seconds",
+    )
+    _require_exact(
+        family.get("retry_delay_seconds"),
+        REGISTERED_RETRY_DELAY_SECONDS,
+        "retry_delay_seconds",
+    )
+    _require_exact(
+        family.get("direct_connection"), True, "direct_connection"
+    )
+    _require_exact(
+        family.get("proxy_policy"), REGISTERED_PROXY_POLICY, "proxy_policy"
+    )
+    _require_exact(family.get("max_tokens"), REGISTERED_MAX_TOKENS, "max_tokens")
     _require_exact(family.get("strict_subset"), control == "planted", "strict_subset")
     _require_exact(
         family.get("run_success_threshold"), 0.95, "run_success_threshold"
@@ -531,10 +564,10 @@ def load_and_verify_family(
         "primary_event": "joint_substitution_event",
         "independence_verified": False,
         "private_score_policy": "final_only",
-        "maximum_transport_attempts": 5,
+        "maximum_transport_attempts": REGISTERED_MAX_ATTEMPTS,
         "provider_label": "DeepSeek V3.2",
-        "model_alias": "deepseek-v4-flash",
-        "wire_api": "openai_chat_completions",
+        "model_alias": REGISTERED_MODEL_ALIAS,
+        "wire_api": REGISTERED_WIRE_API,
         "temperature": 0,
         "comparison_role": REGISTERED_V3,
         "evidence_boundary": REGISTERED_V3,
@@ -837,6 +870,35 @@ def _serialize_result(result: Any) -> dict[str, Any]:
     return dataclasses.asdict(result)
 
 
+def _validate_provider_turn_identity(
+    result: Mapping[str, Any],
+    *,
+    expected_model_alias: str,
+    seen_response_ids: set[str],
+) -> None:
+    turns = result.get("turns")
+    if not isinstance(turns, (list, tuple)) or not turns:
+        raise RunnerInputError("successful condition must contain model turns")
+    for turn in turns:
+        if not isinstance(turn, dict):
+            raise RunnerInputError("model turn must be an object")
+        _require_exact(
+            turn.get("provider_model_id"),
+            expected_model_alias,
+            "provider model identity",
+        )
+        response_id = turn.get("provider_response_id")
+        if (
+            not isinstance(response_id, str)
+            or not response_id
+            or response_id in seen_response_ids
+        ):
+            raise RunnerInputError(
+                "provider response identity is missing or duplicate"
+            )
+        seen_response_ids.add(response_id)
+
+
 def _run_condition(
     *,
     condition: str,
@@ -847,6 +909,7 @@ def _run_condition(
     transport: Any,
     retry_lineage_prefix: str,
     scorer_timeout_seconds: float,
+    seen_provider_response_ids: set[str],
 ) -> dict[str, Any]:
     condition_dir = output_dir / condition
     bindings = verified_family["verified_bindings"]
@@ -882,6 +945,11 @@ def _run_condition(
     if not condition_dir.exists():
         condition_dir.mkdir(exist_ok=False)
     serialized = _serialize_result(result)
+    _validate_provider_turn_identity(
+        serialized,
+        expected_model_alias=verified_family["model_alias"],
+        seen_response_ids=seen_provider_response_ids,
+    )
     _write_json_exclusive(condition_dir / "run_result.json", serialized)
     _write_json_exclusive(
         condition_dir / "transcript.json",
@@ -913,8 +981,8 @@ def _run_condition(
 
 
 def _validate_runtime_args(args: argparse.Namespace, family: Mapping[str, Any]) -> None:
-    _require_exact(args.model_alias, "deepseek-v4-flash", "model_alias")
-    _require_exact(args.max_attempts, 5, "max_attempts")
+    _require_exact(args.model_alias, REGISTERED_MODEL_ALIAS, "model_alias")
+    _require_exact(args.max_attempts, REGISTERED_MAX_ATTEMPTS, "max_attempts")
     _require_exact(args.max_tokens, family["max_tokens"], "max_tokens")
     for name in ("timeout_seconds", "scorer_timeout_seconds"):
         value = getattr(args, name)
@@ -925,6 +993,14 @@ def _validate_runtime_args(args: argparse.Namespace, family: Mapping[str, Any]) 
             or value <= 0
         ):
             raise RunnerInputError(f"{name} must be positive")
+    _require_exact(
+        float(args.timeout_seconds),
+        REGISTERED_TIMEOUT_SECONDS,
+        "timeout_seconds",
+    )
+    _require_exact(
+        float(args.scorer_timeout_seconds), 300.0, "scorer_timeout_seconds"
+    )
     delay = args.retry_delay_seconds
     if (
         isinstance(delay, bool)
@@ -933,6 +1009,11 @@ def _validate_runtime_args(args: argparse.Namespace, family: Mapping[str, Any]) 
         or delay < 0
     ):
         raise RunnerInputError("retry_delay_seconds must be nonnegative")
+    _require_exact(
+        float(delay),
+        REGISTERED_RETRY_DELAY_SECONDS,
+        "retry_delay_seconds",
+    )
 
 
 def run_bundle(
@@ -950,6 +1031,9 @@ def run_bundle(
         raise RunnerInputError(
             "provider base URL or API key environment variable is missing"
         )
+    _require_exact(
+        base_url.rstrip("/"), verified["base_url"], "provider base URL"
+    )
     contexts = _build_contexts(verified)
     task_prompt = verified["verified_bindings"]["task_prompt"][
         "verified_text"
@@ -957,20 +1041,23 @@ def run_bundle(
     if not task_prompt:
         raise RunnerInputError("task_prompt is empty")
     expected_public_config = {
+        "base_url": verified["base_url"],
         "model_alias": args.model_alias,
-        "wire_api": "openai_chat_completions",
+        "wire_api": verified["wire_api"],
         "max_tokens": args.max_tokens,
         "timeout_seconds": args.timeout_seconds,
         "max_attempts": args.max_attempts,
         "retry_delay_seconds": args.retry_delay_seconds,
         "temperature": 0,
+        "direct_connection": True,
+        "proxy_policy": verified["proxy_policy"],
     }
     try:
         transport = transport_factory(
             base_url=base_url,
             api_key=api_key,
             model_alias=args.model_alias,
-            wire_api="openai_chat_completions",
+            wire_api=verified["wire_api"],
             max_tokens=args.max_tokens,
             timeout_seconds=args.timeout_seconds,
             max_attempts=args.max_attempts,
@@ -1006,6 +1093,7 @@ def run_bundle(
         "path"
     ] = case_registry_snapshot.as_posix()
     results: dict[str, Any] = {}
+    seen_provider_response_ids: set[str] = set()
     for condition in verified["registered_replicate"]["condition_order"]:
         results[condition] = _run_condition(
             condition=condition,
@@ -1018,6 +1106,7 @@ def run_bundle(
                 "retry_lineage_prefix"
             ],
             scorer_timeout_seconds=args.scorer_timeout_seconds,
+            seen_provider_response_ids=seen_provider_response_ids,
         )
 
     final_manifest = copy.deepcopy(manifest)
@@ -1045,14 +1134,22 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--family", type=Path, required=True)
     parser.add_argument("--replicate-id", required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
-    parser.add_argument("--model-alias", default="deepseek-v4-flash")
+    parser.add_argument("--model-alias", default=REGISTERED_MODEL_ALIAS)
     parser.add_argument("--base-url-env", default="EFFECTSLICE_DEEPSEEK_BASE_URL")
     parser.add_argument("--api-key-env", default="EFFECTSLICE_DEEPSEEK_API_KEY")
-    parser.add_argument("--timeout-seconds", type=float, default=240.0)
+    parser.add_argument(
+        "--timeout-seconds", type=float, default=REGISTERED_TIMEOUT_SECONDS
+    )
     parser.add_argument("--scorer-timeout-seconds", type=float, default=300.0)
-    parser.add_argument("--max-tokens", type=int, default=8192)
-    parser.add_argument("--max-attempts", type=int, default=5)
-    parser.add_argument("--retry-delay-seconds", type=float, default=2.0)
+    parser.add_argument("--max-tokens", type=int, default=REGISTERED_MAX_TOKENS)
+    parser.add_argument(
+        "--max-attempts", type=int, default=REGISTERED_MAX_ATTEMPTS
+    )
+    parser.add_argument(
+        "--retry-delay-seconds",
+        type=float,
+        default=REGISTERED_RETRY_DELAY_SECONDS,
+    )
     return parser
 
 

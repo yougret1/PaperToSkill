@@ -44,6 +44,7 @@ REQUIRED_INPUT_FILES = (
     "src/effectslice/evidence_binding.py",
     "src/effectslice/toolformer_filter_cases.py",
     "run_swe_effectslice.py",
+    "confirmation_transport_v3.py",
 )
 PLANNED_EXECUTABLES = (
     "run_toolformer_filter_confirmation_v3.py",
@@ -263,9 +264,15 @@ def test_family_freezes_new_structured_cases_prompt_hashes_and_protocol(control)
         assert family["private_score_policy"] == "final_only"
         assert family["maximum_transport_attempts"] == 5
         assert family["provider_label"] == "DeepSeek V3.2"
+        assert family["base_url"] == "https://api.deepseek.com"
         assert family["model_alias"] == "deepseek-v4-flash"
         assert family["wire_api"] == "openai_chat_completions"
         assert family["temperature"] == 0
+        assert family["max_tokens"] == 8192
+        assert family["timeout_seconds"] == 240.0
+        assert family["retry_delay_seconds"] == 2.0
+        assert family["direct_connection"] is True
+        assert family["proxy_policy"] == "disabled"
         assert family["registration_status"] == "complete"
         assert family["comparison_role"] == "registered_final_only_confirmation_v3"
         assert family["evidence_boundary"] == "registered_final_only_confirmation_v3"
@@ -601,7 +608,7 @@ def test_missing_v2_reference_registry_is_rejected_before_publication():
     ("relative_path", "binding_name"),
     [
         ("src/effectslice/toolformer_filter_cases.py", "case_generator"),
-        ("run_swe_effectslice.py", "transport"),
+        ("confirmation_transport_v3.py", "transport"),
     ],
 )
 def test_alternate_run_root_execution_sources_must_match_imported_code(

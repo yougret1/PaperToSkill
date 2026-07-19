@@ -148,6 +148,37 @@ class RealConfigTest(unittest.TestCase):
         ):
             self.assertTrue((RUN_ROOT / adapter[key]).exists(), key)
 
+    def test_confirmation_v3_freezes_vendor_transport_and_finite_schedule(self):
+        config = self.load_config()
+        protocol = config["task_adapters"]["TOOLFORMER-FILTER"]["confirmation_v3"]
+        provider = protocol["provider"]
+
+        self.assertEqual(
+            protocol["evidence_boundary"],
+            "registered_final_only_confirmation_v3",
+        )
+        self.assertEqual(protocol["registered_block_count"], 24)
+        self.assertEqual(protocol["registered_condition_run_count"], 72)
+        self.assertEqual(protocol["controls"]["identity"]["replicate_count"], 6)
+        self.assertEqual(protocol["controls"]["planted"]["replicate_count"], 18)
+        self.assertEqual(
+            protocol["controls"]["planted"][
+                "required_joint_events_for_admission"
+            ],
+            18,
+        )
+        self.assertEqual(provider["base_url"], "https://api.deepseek.com")
+        self.assertEqual(provider["model_alias"], "deepseek-v4-flash")
+        self.assertEqual(provider["timeout_seconds"], 240.0)
+        self.assertEqual(provider["maximum_transport_attempts"], 5)
+        self.assertEqual(provider["retry_delay_seconds"], 2.0)
+        self.assertEqual(provider["maximum_parallel_workers"], 2)
+        self.assertTrue(provider["direct_connection"])
+        self.assertEqual(provider["proxy_policy"], "disabled")
+        self.assertIn(
+            "confirmation_transport_v3.py", protocol["execution_bindings"]
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

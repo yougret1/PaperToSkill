@@ -100,6 +100,61 @@
       "excluded_development_pair_ids": [
         "toolformer-filter:development:deepseek:bf:001"
       ],
+      "confirmation_v3": {
+        "status": "planned_code_freeze_required",
+        "evidence_boundary": "registered_final_only_confirmation_v3",
+        "purpose": "calibrate whether the admission instrument distinguishes an identity control from a strict planted redundant-unit control",
+        "task_key": "toolformer_filter",
+        "conditions": [
+          "B",
+          "F",
+          "S"
+        ],
+        "statistical_unit": "registered_matched_block",
+        "decision_basis": "finite_registered_schedule",
+        "primary_event": "joint_substitution_event",
+        "registered_block_count": 24,
+        "registered_condition_run_count": 72,
+        "controls": {
+          "identity": {
+            "replicate_count": 6,
+            "strict_subset": false,
+            "admission_rule": "descriptive_only"
+          },
+          "planted": {
+            "replicate_count": 18,
+            "strict_subset": true,
+            "admission_rule": "all_registered_joint_events",
+            "required_joint_events_for_admission": 18
+          }
+        },
+        "provider": {
+          "provider_label": "DeepSeek V3.2",
+          "base_url": "https://api.deepseek.com",
+          "model_alias": "deepseek-v4-flash",
+          "wire_api": "openai_chat_completions",
+          "temperature": 0,
+          "max_tokens": 8192,
+          "timeout_seconds": 240.0,
+          "maximum_transport_attempts": 5,
+          "retry_delay_seconds": 2.0,
+          "maximum_parallel_workers": 2,
+          "direct_connection": true,
+          "proxy_policy": "disabled"
+        },
+        "no_replacement_replicates": true,
+        "preserve_registered_failures": true,
+        "prior_trace_policy": "preregistration_and_anchor_creation_require experiment_results/confirmation_v3 to be absent",
+        "execution_bindings": [
+          "build_confirmation_v3.py",
+          "register_confirmation_v3.py",
+          "run_toolformer_filter_confirmation_v3.py",
+          "run_confirmation_v3.py",
+          "analyze_confirmation_v3.py",
+          "evidence_ledger_v3.py",
+          "confirmation_transport_v3.py"
+        ]
+      },
       "case_blocks": {
         "development": 4,
         "eligibility": 21,

@@ -16,6 +16,14 @@ from typing import Any, Callable, Mapping
 RUN_ROOT = Path(__file__).resolve().parent
 
 from effectslice.confirmation_v3 import balanced_schedule
+from confirmation_transport_v3 import (
+    REGISTERED_MAX_ATTEMPTS,
+    REGISTERED_MAX_TOKENS,
+    REGISTERED_MODEL_ALIAS,
+    REGISTERED_RETRY_DELAY_SECONDS,
+    REGISTERED_TIMEOUT_SECONDS,
+)
+import register_confirmation_v3 as registration
 from run_toolformer_filter_confirmation_v3 import (
     load_and_verify_family as load_toolformer_family,
 )
@@ -140,12 +148,17 @@ def _validate_registered_family(
         "run_success_threshold": 0.95,
         "maximum_shortfall": 0.05,
         "private_score_policy": "final_only",
-        "maximum_transport_attempts": 5,
+        "maximum_transport_attempts": REGISTERED_MAX_ATTEMPTS,
         "provider_label": "DeepSeek V3.2",
-        "model_alias": "deepseek-v4-flash",
+        "base_url": "https://api.deepseek.com",
+        "model_alias": REGISTERED_MODEL_ALIAS,
         "wire_api": "openai_chat_completions",
         "temperature": 0,
-        "max_tokens": 8192,
+        "max_tokens": REGISTERED_MAX_TOKENS,
+        "timeout_seconds": REGISTERED_TIMEOUT_SECONDS,
+        "retry_delay_seconds": REGISTERED_RETRY_DELAY_SECONDS,
+        "direct_connection": True,
+        "proxy_policy": "disabled",
         "fresh_provider_conversation_per_condition": True,
         "comparison_role": REGISTERED_V3,
         "evidence_boundary": REGISTERED_V3,
@@ -284,11 +297,11 @@ def build_run_namespace(
         model_alias=family["model_alias"],
         base_url_env="EFFECTSLICE_DEEPSEEK_BASE_URL",
         api_key_env="EFFECTSLICE_DEEPSEEK_API_KEY",
-        timeout_seconds=240.0,
+        timeout_seconds=REGISTERED_TIMEOUT_SECONDS,
         scorer_timeout_seconds=300.0,
         max_tokens=family["max_tokens"],
         max_attempts=family["maximum_transport_attempts"],
-        retry_delay_seconds=2.0,
+        retry_delay_seconds=REGISTERED_RETRY_DELAY_SECONDS,
     )
 
 
@@ -384,6 +397,85 @@ def _prepare_progress_destination(
     _validate_progress_disjoint(destination, output_roots)
     _validate_progress_destination(destination)
     return destination
+
+
+def _validate_production_registration(
+    *,
+    family_paths: list[Path],
+    output_roots: Mapping[str, Path],
+    progress_destination: Path,
+) -> None:
+    execution_started = (
+        registration.execution_root_path(RUN_ROOT).exists()
+        or registration.progress_path(RUN_ROOT).exists()
+    )
+    audit = registration.audit_preregistration(
+        RUN_ROOT,
+        require_anchor=True,
+        allow_execution_started=execution_started,
+    )
+    if (
+        audit.get("valid") is not True
+        or audit.get("anchor_verified") is not True
+        or audit.get("provider_execution_started") is not execution_started
+    ):
+        raise ValueError("confirmation-v3 preregistration gate did not pass")
+    expected_families = [
+        (
+            RUN_ROOT
+            / "artifacts"
+            / "toolformer_filter"
+            / "confirmation_v3"
+            / control
+            / "family.json"
+        ).resolve()
+        for control in ("identity", "planted")
+    ]
+    supplied_families = []
+    for path in family_paths:
+        supplied = Path(path)
+        if supplied.is_symlink() or _is_reparse_point(supplied):
+            raise ValueError("family_paths must be regular files")
+        _reject_reparse_components(supplied, "family path")
+        supplied_families.append(_lexical_absolute(supplied).resolve())
+    if supplied_families != expected_families:
+        raise ValueError("family_paths do not match the preregistered schedule")
+    expected_roots = {
+        control: registration.output_root_path(RUN_ROOT, control).resolve()
+        for control in CONTROL_SPECS
+    }
+    if dict(output_roots) != expected_roots:
+        raise ValueError("output_roots do not match the preregistered paths")
+    if Path(progress_destination).resolve() != registration.progress_path(
+        RUN_ROOT
+    ).resolve():
+        raise ValueError("progress_path does not match the preregistered path")
+
+
+def _reject_unregistered_output_entries(
+    output_roots: Mapping[str, Path], registered: list[dict[str, Any]]
+) -> None:
+    allowed = {
+        control: {
+            row["replicate_id"]
+            for row in registered
+            if row["control"] == control
+        }
+        for control in CONTROL_SPECS
+    }
+    for control, root in output_roots.items():
+        if not root.exists():
+            continue
+        if root.is_symlink() or _is_reparse_point(root) or not root.is_dir():
+            raise ValueError("control output root must be a regular directory")
+        for child in root.iterdir():
+            if (
+                child.name not in allowed[control]
+                or child.is_symlink()
+                or _is_reparse_point(child)
+                or not child.is_dir()
+            ):
+                raise ValueError("control output root contains an unregistered entry")
 
 
 def _validate_output_destination(
@@ -783,6 +875,12 @@ def _run_schedule_locked(
         raise ValueError("production default runner no longer matches its binding")
     roots = _normalize_output_roots(output_roots)
     destination = _prepare_progress_destination(roots, progress_path)
+    if not allow_test_injection:
+        _validate_production_registration(
+            family_paths=family_paths,
+            output_roots=roots,
+            progress_destination=destination,
+        )
     runners = DEFAULT_RUNNERS if runner_by_task is None else runner_by_task
     if not isinstance(runners, Mapping):
         raise ValueError("runner_by_task must be a mapping")
@@ -839,6 +937,8 @@ def _run_schedule_locked(
             )
             registered.append(base)
             jobs.append((base, args, runner))
+
+    _reject_unregistered_output_entries(roots, registered)
 
     prior = _read_prior_records(destination, registered)
     journal = {} if prior else _read_journal_records(destination, registered)

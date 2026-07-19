@@ -47,6 +47,8 @@ SHA = {
         "scheduler",
         "analyzer",
         "aci-runner",
+        "aci-protocol",
+        "evidence-binding",
         "transport",
         "case-generator",
         "reference-registry",
@@ -273,6 +275,16 @@ def family_payload(control: str) -> dict:
             "sha256": SHA["aci-runner"],
             "status": "bound",
         },
+        "aci_protocol": {
+            "path": "aci_protocol.py",
+            "sha256": SHA["aci-protocol"],
+            "status": "bound",
+        },
+        "evidence_binding": {
+            "path": "evidence_binding.py",
+            "sha256": SHA["evidence-binding"],
+            "status": "bound",
+        },
         "transport": {
             "path": "transport.py",
             "sha256": SHA["transport"],
@@ -297,7 +309,7 @@ def family_payload(control: str) -> dict:
             "status": "bound",
         },
     }
-    return {
+    family = {
         "schema_version": "effectslice-confirmation-v3-family.v1",
         "registration_status": "complete",
         "control": control,
@@ -334,10 +346,15 @@ def family_payload(control: str) -> dict:
         "private_score_policy": "final_only",
         "maximum_transport_attempts": 5,
         "provider_label": "DeepSeek V3.2",
+        "base_url": "https://api.deepseek.com",
         "model_alias": "deepseek-v4-flash",
         "wire_api": "openai_chat_completions",
         "temperature": 0,
         "max_tokens": 8192,
+        "timeout_seconds": 240.0,
+        "retry_delay_seconds": 2.0,
+        "direct_connection": True,
+        "proxy_policy": "disabled",
         "fresh_provider_conversation_per_condition": True,
         "comparison_role": REGISTERED,
         "evidence_boundary": REGISTERED,
@@ -351,11 +368,16 @@ def family_payload(control: str) -> dict:
         "workspace_tree_sha256": workspace["sha256"],
         "workspace_file_count": workspace["file_count"],
         "workspace_total_bytes": workspace["total_bytes"],
-        "workspace_excluded_directory_names": workspace[
-            "excluded_directory_names"
-        ],
+        "workspace_excluded_directory_names": workspace["excluded_directory_names"],
         "bindings": bindings,
     }
+    for name, record in bindings.items():
+        if name == "task_prompt":
+            continue
+        family[f"{name}_path"] = record["path"]
+        family[f"{name}_status"] = record["status"]
+        family[f"{name}_sha256"] = record["sha256"]
+    return family
 
 
 def score_metric(*, success: bool, score: float) -> dict:
@@ -567,9 +589,7 @@ def write_bundle(root: Path, family_path: Path, family: dict, row: dict) -> Path
         "full_artifact_path": "full.md",
         "full_artifact_sha256": family["bindings"]["full_artifact"]["sha256"],
         "selected_artifact_path": "selected.md",
-        "selected_artifact_sha256": family["bindings"]["selected_artifact"][
-            "sha256"
-        ],
+        "selected_artifact_sha256": family["bindings"]["selected_artifact"]["sha256"],
         "source_map_sha256": family["bindings"]["source_map"]["sha256"],
         "case_registry_sha256": family["bindings"]["case_registry"]["sha256"],
         "scorer_sha256": SHA["scorer"],
@@ -581,6 +601,7 @@ def write_bundle(root: Path, family_path: Path, family: dict, row: dict) -> Path
         "case_generator_sha256": SHA["case-generator"],
         "reference_registry_sha256": SHA["reference-registry"],
         "provider_config": {
+            "base_url": "https://api.deepseek.com",
             "model_alias": "deepseek-v4-flash",
             "wire_api": "openai_chat_completions",
             "max_tokens": 8192,
@@ -588,6 +609,8 @@ def write_bundle(root: Path, family_path: Path, family: dict, row: dict) -> Path
             "max_attempts": 5,
             "retry_delay_seconds": 2.0,
             "temperature": 0,
+            "direct_connection": True,
+            "proxy_policy": "disabled",
             "provider_label": "DeepSeek V3.2",
         },
         "workspace_state": {
@@ -1191,9 +1214,7 @@ def test_action_budget_final_score_has_zero_post_score_model_turns(tmp_path):
         ("pair", "missing"),
     ],
 )
-def test_authoritative_v3_top_level_fields_are_exact(
-    tmp_path, object_name, mutation
-):
+def test_authoritative_v3_top_level_fields_are_exact(tmp_path, object_name, mutation):
     progress_path, progress, families = write_complete_schedule(tmp_path)
     if object_name == "family":
         family_path = families["planted"]
@@ -1347,9 +1368,7 @@ def rebind_v2_registry(
 ) -> str:
     digest = sha256_file(registry_path)
     progress = json.loads(progress_path.read_text(encoding="utf-8"))
-    alternate_family_path = registry_path.with_name(
-        f"{registry_path.stem}_family.json"
-    )
+    alternate_family_path = registry_path.with_name(f"{registry_path.stem}_family.json")
     alternate_family_digest = None
     for record in progress["records"]:
         if record.get("task_key") != "toolformer_filter":
@@ -1562,11 +1581,14 @@ def test_write_analysis_protects_transitive_v2_registry_paths(tmp_path, relation
     derived_root = tmp_path / "derived"
     registry_path = derived_root / "registry.json"
     registry_path.parent.mkdir(parents=True, exist_ok=True)
-    original_registry = Path(
-        json.loads(v2_progress_path.read_text(encoding="utf-8"))["records"][0][
-            "output_dir"
-        ]
-    ).parent.parent / "case_registry_v2.json"
+    original_registry = (
+        Path(
+            json.loads(v2_progress_path.read_text(encoding="utf-8"))["records"][0][
+                "output_dir"
+            ]
+        ).parent.parent
+        / "case_registry_v2.json"
+    )
     shutil.copyfile(original_registry, registry_path)
     rebind_v2_registry(v2_progress_path, registry_path, rebind_family=True)
 
@@ -1736,9 +1758,7 @@ def test_write_analysis_honors_existing_cooperative_root_lock(tmp_path):
     assert not output_path.exists()
 
 
-def test_write_analysis_revalidates_destination_parent_identity(
-    tmp_path, monkeypatch
-):
+def test_write_analysis_revalidates_destination_parent_identity(tmp_path, monkeypatch):
     progress_path, _, _ = write_complete_schedule(tmp_path / "inputs")
     derived_root = tmp_path / "derived" / "confirmation_v3"
     output_path = derived_root / "analysis.json"

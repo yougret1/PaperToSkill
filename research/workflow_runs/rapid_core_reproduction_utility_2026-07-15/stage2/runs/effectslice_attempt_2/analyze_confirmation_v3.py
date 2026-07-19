@@ -113,6 +113,22 @@ METRIC_FIELDS = {
     "private_apply_result",
     "public_summary",
 }
+FAMILY_BINDING_PREFIXES = (
+    "full_artifact",
+    "selected_artifact",
+    "source_map",
+    "case_registry",
+    "v2_case_registry",
+    "scorer",
+    "runner",
+    "scheduler",
+    "analyzer",
+    "aci_runner",
+    "aci_protocol",
+    "evidence_binding",
+    "transport",
+    "case_generator",
+)
 FAMILY_FIELDS = {
     "schema_version",
     "registration_status",
@@ -144,10 +160,15 @@ FAMILY_FIELDS = {
     "private_score_policy",
     "maximum_transport_attempts",
     "provider_label",
+    "base_url",
     "model_alias",
     "wire_api",
     "temperature",
     "max_tokens",
+    "timeout_seconds",
+    "retry_delay_seconds",
+    "direct_connection",
+    "proxy_policy",
     "fresh_provider_conversation_per_condition",
     "comparison_role",
     "evidence_boundary",
@@ -161,6 +182,10 @@ FAMILY_FIELDS = {
     "workspace_file_count",
     "workspace_total_bytes",
     "workspace_excluded_directory_names",
+} | {
+    f"{prefix}_{suffix}"
+    for prefix in FAMILY_BINDING_PREFIXES
+    for suffix in ("path", "status", "sha256")
 }
 PAIR_FIELDS = {
     "schema_version",
@@ -461,7 +486,13 @@ def _json_object(path: Path, label: str) -> dict[str, Any]:
         value = json.loads(snapshot.decode("utf-8"))
     except AnalysisInputError:
         raise
-    except (OSError, RuntimeError, UnicodeError, ValueError, json.JSONDecodeError) as exc:
+    except (
+        OSError,
+        RuntimeError,
+        UnicodeError,
+        ValueError,
+        json.JSONDecodeError,
+    ) as exc:
         raise AnalysisInputError(f"{label} must be valid UTF-8 JSON") from exc
     if not isinstance(value, dict):
         raise AnalysisInputError(f"{label} must be a JSON object")
@@ -521,15 +552,72 @@ def _validate_family(path: Path, expected_sha256: str) -> dict[str, Any]:
         "private_score_policy": "final_only",
         "maximum_transport_attempts": 5,
         "provider_label": "DeepSeek V3.2",
+        "base_url": "https://api.deepseek.com",
         "model_alias": "deepseek-v4-flash",
         "wire_api": "openai_chat_completions",
         "temperature": 0,
         "max_tokens": 8192,
+        "timeout_seconds": 240.0,
+        "retry_delay_seconds": 2.0,
+        "direct_connection": True,
+        "proxy_policy": "disabled",
         "fresh_provider_conversation_per_condition": True,
         "comparison_role": REGISTERED_V3,
         "evidence_boundary": REGISTERED_V3,
     }
     for field, expected in exact.items():
+        _require_exact(family.get(field), expected, f"family {field}")
+    bindings = family.get("bindings")
+    expected_binding_names = set(FAMILY_BINDING_PREFIXES) | {"task_prompt"}
+    if not isinstance(bindings, dict) or set(bindings) != expected_binding_names:
+        raise AnalysisInputError(
+            "registered family bindings do not match the binding schema"
+        )
+    for name in FAMILY_BINDING_PREFIXES:
+        record = bindings.get(name)
+        if not isinstance(record, dict) or set(record) != {
+            "path",
+            "status",
+            "sha256",
+        }:
+            raise AnalysisInputError(f"family {name} binding is invalid")
+        binding_path = record.get("path")
+        if not isinstance(binding_path, str) or not binding_path:
+            raise AnalysisInputError(f"family {name} binding path is invalid")
+        _require_exact(record.get("status"), "bound", f"family {name} status")
+        binding_sha256 = _require_sha256(record.get("sha256"), f"family {name} digest")
+        _require_exact(family.get(f"{name}_path"), binding_path, f"family {name}_path")
+        _require_exact(family.get(f"{name}_status"), "bound", f"family {name}_status")
+        _require_exact(
+            family.get(f"{name}_sha256"),
+            binding_sha256,
+            f"family {name}_sha256",
+        )
+    prompt_binding = bindings.get("task_prompt")
+    if not isinstance(prompt_binding, dict) or set(prompt_binding) != {
+        "path",
+        "status",
+        "file_sha256",
+        "canonical_text_sha256",
+    }:
+        raise AnalysisInputError("family task_prompt binding is invalid")
+    prompt_path = prompt_binding.get("path")
+    if not isinstance(prompt_path, str) or not prompt_path:
+        raise AnalysisInputError("family task_prompt binding path is invalid")
+    _require_exact(prompt_binding.get("status"), "bound", "family task_prompt status")
+    prompt_file_sha256 = _require_sha256(
+        prompt_binding.get("file_sha256"), "family task_prompt file digest"
+    )
+    prompt_text_sha256 = _require_sha256(
+        prompt_binding.get("canonical_text_sha256"),
+        "family task_prompt canonical text digest",
+    )
+    for field, expected in {
+        "task_prompt_path": prompt_path,
+        "task_prompt_status": "bound",
+        "task_prompt_file_sha256": prompt_file_sha256,
+        "task_prompt_canonical_text_sha256": prompt_text_sha256,
+    }.items():
         _require_exact(family.get(field), expected, f"family {field}")
     control = family.get("control")
     if control not in CONTROL_SPECS:
@@ -656,11 +744,7 @@ def _audit_metric(
     if not case_details and metric.get("patch_applied") is True and contract is True:
         raise AnalysisInputError("evaluated private score lacks its 64 case details")
     if not patch_applied and (
-        success
-        or float(score) != 0.0
-        or contract
-        or any(case_scores)
-        or case_details
+        success or float(score) != 0.0 or contract or any(case_scores) or case_details
     ):
         raise AnalysisInputError(
             "unapplied private score must be a zero-valued failure without case details"
@@ -700,9 +784,7 @@ def _audit_metric(
                 detail.get("max_abs_margin_error"), "private margin error"
             )
             if passed is not bool(keep_match and margin_match):
-                raise AnalysisInputError(
-                    "private case comparisons do not match passed"
-                )
+                raise AnalysisInputError("private case comparisons do not match passed")
         elif set(detail) == error_fields:
             if passed is not False or not isinstance(detail.get("error_type"), str):
                 raise AnalysisInputError("private case error detail is invalid")
@@ -843,7 +925,9 @@ def _workspace_snapshot_state(path: Path) -> dict[str, Any]:
             if directory_name in excluded:
                 directory_names.remove(directory_name)
             elif directory.is_symlink() or _is_reparse_point(directory):
-                raise AnalysisInputError("workspace snapshot contains a linked directory")
+                raise AnalysisInputError(
+                    "workspace snapshot contains a linked directory"
+                )
         directory_names.sort()
         for file_name in sorted(file_names):
             source = current / file_name
@@ -853,7 +937,9 @@ def _workspace_snapshot_state(path: Path) -> dict[str, Any]:
             try:
                 payload = source.read_bytes()
             except OSError as exc:
-                raise AnalysisInputError("workspace snapshot file cannot be read") from exc
+                raise AnalysisInputError(
+                    "workspace snapshot file cannot be read"
+                ) from exc
             relative_bytes = relative.encode("utf-8")
             digest.update(len(relative_bytes).to_bytes(8, "big"))
             digest.update(relative_bytes)
@@ -931,15 +1017,21 @@ def _audit_registered_snapshots(
         selected_text = selected_artifact.decode("utf-8").strip()
         registry = json.loads(registry_bytes.decode("utf-8"))
     except (UnicodeError, json.JSONDecodeError) as exc:
-        raise AnalysisInputError("registered input snapshots are not valid UTF-8") from exc
-    if not task_text or hashlib.sha256(task_text.encode("utf-8")).hexdigest() != family[
-        "task_prompt_canonical_text_sha256"
-    ]:
+        raise AnalysisInputError(
+            "registered input snapshots are not valid UTF-8"
+        ) from exc
+    if (
+        not task_text
+        or hashlib.sha256(task_text.encode("utf-8")).hexdigest()
+        != family["task_prompt_canonical_text_sha256"]
+    ):
         raise AnalysisInputError("canonical task prompt snapshot digest mismatch")
     blocks = registry.get("blocks") if isinstance(registry, dict) else None
     cases = blocks.get("confirmation_v3") if isinstance(blocks, dict) else None
     if not isinstance(cases, list) or len(cases) != 64:
-        raise AnalysisInputError("case registry snapshot must contain 64 registered cases")
+        raise AnalysisInputError(
+            "case registry snapshot must contain 64 registered cases"
+        )
     case_ids = []
     for case in cases:
         case_id = case.get("case_id") if isinstance(case, dict) else None
@@ -993,9 +1085,7 @@ def _audit_condition(
         "candidate_patch_path": output_dir / condition / "candidate.patch",
     }
     for field, expected in expected_paths.items():
-        _registered_stored_path(
-            summary.get(field), expected, f"condition {field}"
-        )
+        _registered_stored_path(summary.get(field), expected, f"condition {field}")
     result = _json_object(expected_paths["run_result_path"], "condition run result")
     if set(result) != RUN_RESULT_FIELDS:
         raise AnalysisInputError(
@@ -1191,13 +1281,16 @@ def _audit_bundle(
         _require_exact(manifest.get(field), value, f"pair manifest {field}")
     provider = manifest.get("provider_config")
     expected_provider = {
+        "base_url": family["base_url"],
         "model_alias": family["model_alias"],
         "wire_api": family["wire_api"],
         "max_tokens": family["max_tokens"],
-        "timeout_seconds": 240.0,
+        "timeout_seconds": family["timeout_seconds"],
         "max_attempts": family["maximum_transport_attempts"],
-        "retry_delay_seconds": 2.0,
+        "retry_delay_seconds": family["retry_delay_seconds"],
         "temperature": family["temperature"],
+        "direct_connection": family["direct_connection"],
+        "proxy_policy": family["proxy_policy"],
         "provider_label": family["provider_label"],
     }
     _require_exact(provider, expected_provider, "provider identity")
@@ -1455,9 +1548,10 @@ def _v2_family_schedule(
         "confirmation_unsealed": False,
     }.items():
         _require_exact(family.get(field), expected, f"v2 family {field}")
-    if not isinstance(family.get("evidence_boundary"), str) or not family[
-        "evidence_boundary"
-    ]:
+    if (
+        not isinstance(family.get("evidence_boundary"), str)
+        or not family["evidence_boundary"]
+    ):
         raise AnalysisInputError("v2 family evidence boundary is invalid")
     _require_exact(
         family.get("retained_atom_ids"),
@@ -1541,7 +1635,9 @@ def _v2_registered_identity(
     for case in cases:
         case_id = case.get("case_id") if isinstance(case, dict) else None
         if not isinstance(case_id, str) or not case_id or case_id in case_ids:
-            raise AnalysisInputError("v2 registered case IDs must be nonempty and unique")
+            raise AnalysisInputError(
+                "v2 registered case IDs must be nonempty and unique"
+            )
         case_ids.append(case_id)
     family_path = _absolute_registered_path(
         manifest.get("confirmation_family_path"), "v2 confirmation family"
@@ -1549,9 +1645,7 @@ def _v2_registered_identity(
     family_digest = _require_sha256(
         manifest.get("confirmation_family_sha256"), "v2 confirmation family digest"
     )
-    family = _snapshot_json_object(
-        family_path, family_digest, "v2 confirmation family"
-    )
+    family = _snapshot_json_object(family_path, family_digest, "v2 confirmation family")
     schedule = _v2_family_schedule(family, manifest, bindings)
     workspace = _v2_workspace_state(manifest, family)
     for manifest_field, binding_name in {
@@ -2031,9 +2125,11 @@ def _analysis_input_boundaries(
     for path, label in (
         (Path(progress_path), "confirmation-v3 progress"),
         (
-            Path(historical_v2_progress_path)
-            if historical_v2_progress_path is not None
-            else None,
+            (
+                Path(historical_v2_progress_path)
+                if historical_v2_progress_path is not None
+                else None
+            ),
             "confirmation-v2 progress",
         ),
     ):
@@ -2054,10 +2150,10 @@ def _analysis_input_boundaries(
                 output_dir, f"{label} output directory"
             )
             protected_roots.add(resolved_output_dir)
-            if (
-                label == "confirmation-v2 progress"
-                and row.get("status") in {"completed", "preserved"}
-            ):
+            if label == "confirmation-v2 progress" and row.get("status") in {
+                "completed",
+                "preserved",
+            }:
                 _protect_v2_manifest_inputs(
                     resolved_output_dir / "pair_manifest.json",
                     protected_files,

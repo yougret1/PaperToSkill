@@ -78,10 +78,15 @@ def write_family(root: Path, control: str) -> tuple[Path, dict]:
         "private_score_policy": "final_only",
         "maximum_transport_attempts": 5,
         "provider_label": "DeepSeek V3.2",
+        "base_url": "https://api.deepseek.com",
         "model_alias": "deepseek-v4-flash",
         "wire_api": "openai_chat_completions",
         "temperature": 0,
         "max_tokens": 8192,
+        "timeout_seconds": 240.0,
+        "retry_delay_seconds": 2.0,
+        "direct_connection": True,
+        "proxy_policy": "disabled",
         "fresh_provider_conversation_per_condition": True,
         "comparison_role": "registered_final_only_confirmation_v3",
         "evidence_boundary": "registered_final_only_confirmation_v3",
@@ -182,6 +187,8 @@ def test_namespace_uses_registered_order_and_control_specific_output_root(tmp_pa
     assert args.model_alias == "deepseek-v4-flash"
     assert args.max_attempts == 5
     assert args.max_tokens == 8192
+    assert args.timeout_seconds == 240.0
+    assert args.retry_delay_seconds == 2.0
 
 
 def test_namespace_rejects_a_lexically_linked_replicate_output(
@@ -499,6 +506,68 @@ def test_production_default_runner_must_still_match_its_registered_binding(
             family_paths=[tmp_path / "missing-family.json"],
             output_roots=output_roots(tmp_path),
         )
+
+
+def test_production_gate_requires_exact_preregistered_paths(monkeypatch):
+    calls = []
+
+    def audit(*args, **kwargs):
+        calls.append((args, kwargs))
+        return {
+            "valid": True,
+            "anchor_verified": True,
+            "provider_execution_started": kwargs["allow_execution_started"],
+        }
+
+    monkeypatch.setattr(scheduler.registration, "audit_preregistration", audit)
+    families = [
+        scheduler.RUN_ROOT
+        / "artifacts"
+        / "toolformer_filter"
+        / "confirmation_v3"
+        / control
+        / "family.json"
+        for control in ("identity", "planted")
+    ]
+    roots = {
+        control: scheduler.registration.output_root_path(
+            scheduler.RUN_ROOT, control
+        ).resolve()
+        for control in scheduler.CONTROL_SPECS
+    }
+    progress = scheduler.registration.progress_path(scheduler.RUN_ROOT)
+
+    scheduler._validate_production_registration(
+        family_paths=families,
+        output_roots=roots,
+        progress_destination=progress,
+    )
+    assert calls and calls[0][1]["require_anchor"] is True
+
+    with pytest.raises(ValueError, match="output_roots"):
+        scheduler._validate_production_registration(
+            family_paths=families,
+            output_roots={**roots, "identity": roots["identity"].with_name("other")},
+            progress_destination=progress,
+        )
+
+
+def test_unregistered_output_entry_is_rejected_before_runner(tmp_path):
+    identity_path, _ = write_family(tmp_path, "identity")
+    planted_path, _ = write_family(tmp_path, "planted")
+    roots = output_roots(tmp_path)
+    (roots["identity"] / "unregistered").mkdir(parents=True)
+    calls = []
+
+    with pytest.raises(ValueError, match="unregistered entry"):
+        scheduler.run_schedule(
+            family_paths=[identity_path, planted_path],
+            output_roots=roots,
+            runner_by_task={"toolformer_filter": calls.append},
+            family_loader=load_synthetic_family,
+            allow_test_injection=True,
+        )
+    assert calls == []
 
 
 def test_registered_schedule_must_contain_at_least_one_family(tmp_path):

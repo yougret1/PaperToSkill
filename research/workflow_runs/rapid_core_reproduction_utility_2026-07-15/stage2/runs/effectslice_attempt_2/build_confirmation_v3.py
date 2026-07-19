@@ -22,6 +22,17 @@ from effectslice.confirmation_v3 import (  # noqa: E402
     sha256_file,
 )
 from effectslice.toolformer_filter_cases import generate_case  # noqa: E402
+from confirmation_transport_v3 import (  # noqa: E402
+    ProviderTransport,
+    REGISTERED_BASE_URL,
+    REGISTERED_MAX_ATTEMPTS,
+    REGISTERED_MAX_TOKENS,
+    REGISTERED_MODEL_ALIAS,
+    REGISTERED_PROXY_POLICY,
+    REGISTERED_RETRY_DELAY_SECONDS,
+    REGISTERED_TIMEOUT_SECONDS,
+    REGISTERED_WIRE_API,
+)
 from run_swe_effectslice import workspace_tree_digest  # noqa: E402
 
 
@@ -473,6 +484,7 @@ def build_family(
         root / "src" / "effectslice" / "aci_protocol.py",
         root / "src" / "effectslice" / "evidence_binding.py",
         root / "run_swe_effectslice.py",
+        root / "confirmation_transport_v3.py",
         root / "src" / "effectslice" / "toolformer_filter_cases.py",
     )
     for path in required_inputs:
@@ -487,8 +499,8 @@ def build_family(
     )
     _require_execution_source_match(
         "transport",
-        root / "run_swe_effectslice.py",
-        workspace_tree_digest,
+        root / "confirmation_transport_v3.py",
+        ProviderTransport,
     )
 
     planned_paths = {
@@ -613,12 +625,17 @@ def build_family(
                 "required_joint_events_for_admission"
             ],
             "private_score_policy": "final_only",
-            "maximum_transport_attempts": 5,
+            "maximum_transport_attempts": REGISTERED_MAX_ATTEMPTS,
             "provider_label": "DeepSeek V3.2",
-            "model_alias": "deepseek-v4-flash",
-            "wire_api": "openai_chat_completions",
+            "base_url": REGISTERED_BASE_URL,
+            "model_alias": REGISTERED_MODEL_ALIAS,
+            "wire_api": REGISTERED_WIRE_API,
             "temperature": 0,
-            "max_tokens": 8192,
+            "max_tokens": REGISTERED_MAX_TOKENS,
+            "timeout_seconds": REGISTERED_TIMEOUT_SECONDS,
+            "retry_delay_seconds": REGISTERED_RETRY_DELAY_SECONDS,
+            "direct_connection": True,
+            "proxy_policy": REGISTERED_PROXY_POLICY,
             "fresh_provider_conversation_per_condition": True,
             "comparison_role": comparison_role,
             "evidence_boundary": evidence_boundary,
@@ -644,7 +661,7 @@ def build_family(
             "aci_runner": root / "src" / "effectslice" / "aci_runner.py",
             "aci_protocol": root / "src" / "effectslice" / "aci_protocol.py",
             "evidence_binding": root / "src" / "effectslice" / "evidence_binding.py",
-            "transport": root / "run_swe_effectslice.py",
+            "transport": root / "confirmation_transport_v3.py",
             "case_generator": root / "src" / "effectslice" / "toolformer_filter_cases.py",
         }
         for prefix, path in binding_paths.items():
