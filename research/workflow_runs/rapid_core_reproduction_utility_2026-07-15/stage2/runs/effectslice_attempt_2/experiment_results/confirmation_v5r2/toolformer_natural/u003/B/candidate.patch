@@ -1,0 +1,36 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,32 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not isinstance(tau_filter, (float, int)) or isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must be a finite nonnegative number")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
++    for arr in (logp_with_result, logp_call_only, logp_no_call):
++        if not isinstance(arr, np.ndarray):
++            raise ValueError("Inputs must be numpy arrays")
++        if arr.ndim != 2:
++            raise ValueError("Inputs must be 2-dimensional")
++        if not np.issubdtype(arr.dtype, np.floating) and not np.issubdtype(arr.dtype, np.integer):
++            raise ValueError("Inputs must be numeric")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError("Inputs must be finite")
++        if np.any(arr > 0):
++            raise ValueError("Inputs must be nonpositive")
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All inputs must have the same shape")
++    n_candidates = logp_with_result.shape[0]
++    if n_candidates == 0:
++        keep = np.array([], dtype=bool)
++        margins = np.array([], dtype=float)
++        return keep, margins
++    sum_wr = np.sum(logp_with_result, axis=1)
++    sum_co = np.sum(logp_call_only, axis=1)
++    sum_nc = np.sum(logp_no_call, axis=1)
++    margin = np.maximum(sum_wr, sum_nc) - sum_co
++    keep = margin > tau_filter
++    return keep, margin.astype(float)

@@ -1,0 +1,57 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,53 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    # Check shape and dimensions
++    for name, arr in [("logp_with_result", logp_with_result),
++                      ("logp_call_only", logp_call_only),
++                      ("logp_no_call", logp_no_call)]:
++        if not isinstance(arr, np.ndarray) or arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D numpy array")
++    
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All input arrays must have the same shape")
++    
++    n_candidates, future_horizon = logp_with_result.shape
++    if n_candidates == 0 or future_horizon == 0:
++        raise ValueError("Input arrays must not be empty")
++    
++    # Check finiteness and nonpositivity
++    for name, arr in [("logp_with_result", logp_with_result),
++                      ("logp_call_only", logp_call_only),
++                      ("logp_no_call", logp_no_call)]:
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} contains non-finite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} contains positive values")
++    
++    # Validate tau_filter
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be a finite nonnegative number")
++    
++    # Compute future-token weights
++    t = np.arange(future_horizon, dtype=float)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    weight_sum = raw_weights.sum()
++    # weight_sum > 0 because t=0 gives weight=1
++    weights = raw_weights / weight_sum
++    
++    # Compute weighted negative log probability losses
++    L_plus = -np.dot(logp_with_result, weights)          # shape (n_candidates,)
++    L_empty = -np.dot(logp_no_call, weights)
++    L_call_only = -np.dot(logp_call_only, weights)
++    
++    # Stronger counterfactual baseline
++    L_minus = np.minimum(L_empty, L_call_only)
++    
++    # Margins
++    margins = L_minus - L_plus
++    keep_mask = margins >= tau_filter
++    
++    return keep_mask, margins

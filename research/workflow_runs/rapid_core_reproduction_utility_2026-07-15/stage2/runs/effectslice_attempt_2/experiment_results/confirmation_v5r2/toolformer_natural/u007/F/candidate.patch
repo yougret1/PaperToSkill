@@ -1,0 +1,74 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,70 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # ------------------------------------------------------------------ #
++    # Input validation                                                   #
++    # ------------------------------------------------------------------ #
++
++    # tau_filter must be a non‑boolean float / int and finite non‑negative
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    tau_filter = float(tau_filter)
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be a finite non‑negative number")
++
++    for arr, name in [
++        (logp_with_result, "logp_with_result"),
++        (logp_call_only, "logp_call_only"),
++        (logp_no_call, "logp_no_call"),
++    ]:
++        # must be a numpy array
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        # must be 2‑dimensional
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2‑dimensional matrix")
++        # must not be empty
++        if arr.size == 0:
++            raise ValueError(f"{name} must be non‑empty")
++        # must be all finite
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} contains non‑finite values")
++        # must be non‑positive (log probabilities ≤ 0)
++        if np.any(arr > 0):
++            raise ValueError(f"{name} contains positive values (log probs must be ≤ 0)")
++
++    # shape consistency
++    if logp_with_result.shape != logp_call_only.shape:
++        raise ValueError("logp_with_result and logp_call_only must have the same shape")
++    if logp_with_result.shape != logp_no_call.shape:
++        raise ValueError("logp_with_result and logp_no_call must have the same shape")
++
++    # ------------------------------------------------------------------ #
++    # Paper‑core reproduction (steps T01 → T04)                          #
++    # ------------------------------------------------------------------ #
++
++    future_horizon = logp_with_result.shape[1]
++
++    # T01: Normalize decreasing future‑token weights
++    offsets = np.arange(future_horizon, dtype=float)                 # first token → offset 0
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * offsets)
++    normalized_weights = raw_weights / np.sum(raw_weights)
++
++    # T02: Weighted future‑token loss for each prefix
++    def weighted_loss(logp: np.ndarray) -> np.ndarray:
++        return -np.sum(normalized_weights[None, :] * logp, axis=1)
++
++    L_plus_loss = weighted_loss(logp_with_result)
++    L_call_only_loss = weighted_loss(logp_call_only)
++    L_no_call_loss = weighted_loss(logp_no_call)
++
++    # T03: Stronger counterfactual baseline
++    L_minus = np.minimum(L_no_call_loss, L_call_only_loss)
++
++    # T04: Keep if margin meets the threshold
++    margin = L_minus - L_plus_loss
++    keep = margin >= tau_filter
++
++    # T05: preserve order – already satisfied by row‑wise processing
++
++    return (keep, margin)

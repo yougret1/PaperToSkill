@@ -1,0 +1,132 @@
+{
+  "schema_version": "effectslice-toolformer-filter-transcript.v1",
+  "evidence_boundary": "registered_natural_candidate_finite_schedule_confirmation_v5_attempt_2",
+  "condition": "B",
+  "turns": [
+    {
+      "step": 1,
+      "retry_lineage_id": "confirmation-v5r2:toolformer_natural:u014:B:turn-001",
+      "prompt_sha256": "30fecf8f71817c9b1294144e14f4761bef3041a6f3c5b3d712c52003b5316ed4",
+      "response_sha256": "b31c53202c9783e01776adff2760f3b88a250c71ef2f5c910f8125229b6f23f5",
+      "response_text": "{\"action\":\"search\",\"query\":\"toolformer_filter.py\",\"path\":\".\",\"max_results\":10}",
+      "action": {
+        "action": "search",
+        "query": "toolformer_filter.py",
+        "path": ".",
+        "max_results": 10,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "no matches",
+      "transport_attempts": 1,
+      "input_tokens": 530,
+      "output_tokens": 92,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "e4cea3ac-b48c-49cc-9d05-a823733a2ffa",
+      "provider_created": 1784540083
+    },
+    {
+      "step": 2,
+      "retry_lineage_id": "confirmation-v5r2:toolformer_natural:u014:B:turn-002",
+      "prompt_sha256": "b5f965a333e34a9bbf46001233617bd6f7e981df5bf3cef44803e1c3aa35dae7",
+      "response_sha256": "8b16122b8a500e5379f3cb0ddf30470b358026530157c11ba8b633230f5520b9",
+      "response_text": "{\"action\":\"open\",\"path\":\"toolformer_filter.py\",\"start_line\":1,\"end_line\":80}",
+      "action": {
+        "action": "open",
+        "query": null,
+        "path": "toolformer_filter.py",
+        "max_results": null,
+        "start_line": 1,
+        "end_line": 80,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "1: \"\"\"Starter module for the locked Toolformer loss-filter task.\"\"\"\n2: \n3: from __future__ import annotations\n4: \n5: import numpy as np\n6: \n7: \n8: def filter_api_calls(\n9:     logp_with_result: np.ndarray,\n10:     logp_call_only: np.ndarray,\n11:     logp_no_call: np.ndarray,\n12:     tau_filter: float,\n13: ) -> tuple[np.ndarray, np.ndarray]:\n14:     \"\"\"Return an ordered keep mask and one finite margin per proposed call.\"\"\"\n15: \n16:     raise NotImplementedError(\"implement the paper-core reproduction task\")",
+      "transport_attempts": 1,
+      "input_tokens": 574,
+      "output_tokens": 703,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "d3806217-6de4-43db-a068-4ab7d34c46f6",
+      "provider_created": 1784540085
+    },
+    {
+      "step": 3,
+      "retry_lineage_id": "confirmation-v5r2:toolformer_natural:u014:B:turn-003",
+      "prompt_sha256": "81212a7ef0b28ae33fcb632bddb11fd93c6f1c96203c9d7765a36e141945e302",
+      "response_sha256": "f8126f3c0a79fb954c4597b2b3056f82ccd38faa3de4af9b7c5b2659fcb95364",
+      "response_text": "{\"action\":\"edit\",\"path\":\"toolformer_filter.py\",\"old_text\":\"    raise NotImplementedError(\\\"implement the paper-core reproduction task\\\")\",\"new_text\":\"    # Validate inputs\\n    for arr in [logp_with_result, logp_call_only, logp_no_call]:\\n        if not isinstance(arr, np.ndarray):\\n            raise ValueError(\\\"Each input must be a numpy array\\\")\\n        if arr.ndim != 2:\\n            raise ValueError(\\\"Each input must be a 2D matrix\\\")\\n        if arr.size == 0:\\n            raise ValueError(\\\"Input array must not be empty\\\")\\n        if not np.all(np.isfinite(arr)):\\n            raise ValueError(\\\"All input values must be finite\\\")\\n        if np.any(arr > 0):\\n            raise ValueError(\\\"All input values must be nonpositive\\\")\\n    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):\\n        raise ValueError(\\\"All input arrays must have the same shape\\\")\\n    if isinstance(tau_filter, bool) or not isinstance(tau_filter, (int, float)):\\n        raise ValueError(\\\"tau_filter must be a non-boolean numeric value\\\")\\n    if not np.isfinite(tau_filter) or tau_filter < 0:\\n        raise ValueError(\\\"tau_filter must be finite and nonnegative\\\")\\n    total_with = np.sum(logp_with_result, axis=1)\\n    total_call_only = np.sum(logp_call_only, axis=1)\\n    total_no_call = np.sum(logp_no_call, axis=1)\\n    best_alt = np.maximum(total_no_call, total_call_only)\\n    margins = total_with - best_alt\\n    keep = margins > tau_filter\\n    return keep, margins\"}",
+      "action": {
+        "action": "edit",
+        "query": null,
+        "path": "toolformer_filter.py",
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": "    raise NotImplementedError(\"implement the paper-core reproduction task\")",
+        "new_text": "    # Validate inputs\n    for arr in [logp_with_result, logp_call_only, logp_no_call]:\n        if not isinstance(arr, np.ndarray):\n            raise ValueError(\"Each input must be a numpy array\")\n        if arr.ndim != 2:\n            raise ValueError(\"Each input must be a 2D matrix\")\n        if arr.size == 0:\n            raise ValueError(\"Input array must not be empty\")\n        if not np.all(np.isfinite(arr)):\n            raise ValueError(\"All input values must be finite\")\n        if np.any(arr > 0):\n            raise ValueError(\"All input values must be nonpositive\")\n    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):\n        raise ValueError(\"All input arrays must have the same shape\")\n    if isinstance(tau_filter, bool) or not isinstance(tau_filter, (int, float)):\n        raise ValueError(\"tau_filter must be a non-boolean numeric value\")\n    if not np.isfinite(tau_filter) or tau_filter < 0:\n        raise ValueError(\"tau_filter must be finite and nonnegative\")\n    total_with = np.sum(logp_with_result, axis=1)\n    total_call_only = np.sum(logp_call_only, axis=1)\n    total_no_call = np.sum(logp_no_call, axis=1)\n    best_alt = np.maximum(total_no_call, total_call_only)\n    margins = total_with - best_alt\n    keep = margins > tau_filter\n    return keep, margins"
+      },
+      "observation_status": "ok",
+      "observation_message": "{\"changed\":true,\"path\":\"toolformer_filter.py\",\"replacements\":1}",
+      "transport_attempts": 1,
+      "input_tokens": 755,
+      "output_tokens": 6232,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "6f00b5b5-3a8e-4518-bbb9-d8af190e253e",
+      "provider_created": 1784540091
+    },
+    {
+      "step": 4,
+      "retry_lineage_id": "confirmation-v5r2:toolformer_natural:u014:B:turn-004",
+      "prompt_sha256": "480a83ead28f166cc70d335bc6da2276ebede6740a12f36e3cb2b89b8941c0d6",
+      "response_sha256": "af062acbe3e64aa039672b0bc0197abeb443bf0cc9685e7d96ea67d18afdb7d7",
+      "response_text": "{\"action\":\"test\"}",
+      "action": {
+        "action": "test",
+        "query": null,
+        "path": null,
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "public_tested",
+      "observation_message": "{\"message\":\"locked public test completed\",\"returncode\":0,\"status\":\"passed\",\"stderr\":\"\",\"stdout\":\".                                                                        [100%]\\n1 passed in 0.11s\\n\"}",
+      "transport_attempts": 1,
+      "input_tokens": 1187,
+      "output_tokens": 305,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "96fa62a0-b70a-4ba4-82d5-cd89912f1713",
+      "provider_created": 1784540146
+    },
+    {
+      "step": 5,
+      "retry_lineage_id": "confirmation-v5r2:toolformer_natural:u014:B:turn-005",
+      "prompt_sha256": "dec1b94b6dfb5bf7577b3bca9061ed6f393428e7e7368df7b1a502bc36607ce5",
+      "response_sha256": "6831a7112fd0308595c6abaab94fbd4f05541fda862d0e6075e89ad1df53163b",
+      "response_text": "{\"action\":\"submit\"}",
+      "action": {
+        "action": "submit",
+        "query": null,
+        "path": null,
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "scored",
+      "observation_message": "{\"contract_passed\":true,\"failure_reason\":\"numerical_case_failed\",\"passed_cases\":0,\"status\":\"failed\",\"task_score\":0.0,\"total_cases\":64}",
+      "transport_attempts": 1,
+      "input_tokens": 1254,
+      "output_tokens": 711,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "93a5456e-a3dd-44ec-8c3b-bec8786074fd",
+      "provider_created": 1784540151
+    }
+  ]
+}

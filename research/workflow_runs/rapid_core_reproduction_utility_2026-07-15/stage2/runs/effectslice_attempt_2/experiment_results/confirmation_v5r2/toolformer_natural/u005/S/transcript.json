@@ -1,0 +1,123 @@
+{
+  "schema_version": "effectslice-toolformer-filter-transcript.v1",
+  "evidence_boundary": "registered_natural_candidate_finite_schedule_confirmation_v5_attempt_2",
+  "condition": "S",
+  "turns": [
+    {
+      "step": 1,
+      "retry_lineage_id": "confirmation-v5r2:toolformer_natural:u005:S:turn-001",
+      "prompt_sha256": "f609db751032bce9a366d42f0196f91252887f3b6bb924bb059f4b86ab2f9c52",
+      "response_sha256": "e52f4770df39b7fa55eec225d36cfbccd0573b7860e317c59574aed568f75800",
+      "response_text": "{\"action\":\"open\",\"path\":\"toolformer_filter.py\",\"start_line\":1,\"end_line\":80\"}",
+      "action": null,
+      "observation_status": "invalid_action",
+      "observation_message": "return exactly one JSON action matching the frozen schema",
+      "transport_attempts": 1,
+      "input_tokens": 774,
+      "output_tokens": 68,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "f891002b-03e6-4469-91c3-230a8ffa64d9",
+      "provider_created": 1784537741
+    },
+    {
+      "step": 2,
+      "retry_lineage_id": "confirmation-v5r2:toolformer_natural:u005:S:turn-002",
+      "prompt_sha256": "2ee03759b7dd55a3e9dbc361b5721d2db8715ee3f68b0eee5930290d0fecf2df",
+      "response_sha256": "8b16122b8a500e5379f3cb0ddf30470b358026530157c11ba8b633230f5520b9",
+      "response_text": "{\"action\":\"open\",\"path\":\"toolformer_filter.py\",\"start_line\":1,\"end_line\":80}",
+      "action": {
+        "action": "open",
+        "query": null,
+        "path": "toolformer_filter.py",
+        "max_results": null,
+        "start_line": 1,
+        "end_line": 80,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "1: \"\"\"Starter module for the locked Toolformer loss-filter task.\"\"\"\n2: \n3: from __future__ import annotations\n4: \n5: import numpy as np\n6: \n7: \n8: def filter_api_calls(\n9:     logp_with_result: np.ndarray,\n10:     logp_call_only: np.ndarray,\n11:     logp_no_call: np.ndarray,\n12:     tau_filter: float,\n13: ) -> tuple[np.ndarray, np.ndarray]:\n14:     \"\"\"Return an ordered keep mask and one finite margin per proposed call.\"\"\"\n15: \n16:     raise NotImplementedError(\"implement the paper-core reproduction task\")",
+      "transport_attempts": 1,
+      "input_tokens": 828,
+      "output_tokens": 109,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "d00cd0a0-cade-412e-b90b-dc85beebe8ef",
+      "provider_created": 1784537742
+    },
+    {
+      "step": 3,
+      "retry_lineage_id": "confirmation-v5r2:toolformer_natural:u005:S:turn-003",
+      "prompt_sha256": "d9fecfa63eae11ebbe2bffeeb9d7c30f5eb1bc037c9e628c315f9440d5345ab6",
+      "response_sha256": "904ab5224b91741889443a4e6051ccf41479a170c87aed6e49909ce91d757344",
+      "response_text": "{\"action\":\"edit\",\"path\":\"toolformer_filter.py\",\"old_text\":\"    raise NotImplementedError(\\\"implement the paper-core reproduction task\\\")\",\"new_text\":\"    # Validate inputs\\n    arrs = [np.asarray(x) for x in [logp_with_result, logp_call_only, logp_no_call]]\\n    for arr in arrs:\\n        if arr.ndim != 2:\\n            raise ValueError(\\\"Input must be 2D\\\")\\n        if arr.size == 0:\\n            raise ValueError(\\\"Input cannot be empty\\\")\\n        if not np.all(np.isfinite(arr)):\\n            raise ValueError(\\\"Input contains nonfinite values\\\")\\n        if np.any(arr > 0):\\n            raise ValueError(\\\"Input contains positive values\\\")\\n    shapes = [arr.shape for arr in arrs]\\n    if not all(s == shapes[0] for s in shapes):\\n        raise ValueError(\\\"Input shapes must match\\\")\\n    n_candidates, future_horizon = shapes[0]\\n\\n    if isinstance(tau_filter, bool):\\n        raise ValueError(\\\"Boolean threshold is invalid\\\")\\n    if not np.isfinite(tau_filter):\\n        raise ValueError(\\\"Threshold must be finite\\\")\\n    if tau_filter < 0:\\n        raise ValueError(\\\"Threshold must be nonnegative\\\")\\n\\n    # Compute normalized decreasing future-token weights\\n    t = np.arange(future_horizon, dtype=float)\\n    raw_weights = np.maximum(0, 1 - 0.2 * t)\\n    normalized_weights = raw_weights / raw_weights.sum()\\n\\n    # Compute weighted future-token loss (negative weighted log probability)\\n    def compute_loss(logp):\\n        return -np.sum(logp * normalized_weights, axis=1)\\n\\n    loss_empty = compute_loss(arrs[2])\\n    loss_call_only = compute_loss(arrs[1])\\n    loss_with_result = compute_loss(arrs[0])\\n\\n    # Use stronger counterfactual baseline\\n    L_minus = np.minimum(loss_empty, loss_call_only)\\n    margin = L_minus - loss_with_result\\n\\n    # Keep calls meeting the filtering threshold\\n    keep_mask = margin >= tau_filter\\n\\n    return keep_mask, margin\"}",
+      "action": {
+        "action": "edit",
+        "query": null,
+        "path": "toolformer_filter.py",
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": "    raise NotImplementedError(\"implement the paper-core reproduction task\")",
+        "new_text": "    # Validate inputs\n    arrs = [np.asarray(x) for x in [logp_with_result, logp_call_only, logp_no_call]]\n    for arr in arrs:\n        if arr.ndim != 2:\n            raise ValueError(\"Input must be 2D\")\n        if arr.size == 0:\n            raise ValueError(\"Input cannot be empty\")\n        if not np.all(np.isfinite(arr)):\n            raise ValueError(\"Input contains nonfinite values\")\n        if np.any(arr > 0):\n            raise ValueError(\"Input contains positive values\")\n    shapes = [arr.shape for arr in arrs]\n    if not all(s == shapes[0] for s in shapes):\n        raise ValueError(\"Input shapes must match\")\n    n_candidates, future_horizon = shapes[0]\n\n    if isinstance(tau_filter, bool):\n        raise ValueError(\"Boolean threshold is invalid\")\n    if not np.isfinite(tau_filter):\n        raise ValueError(\"Threshold must be finite\")\n    if tau_filter < 0:\n        raise ValueError(\"Threshold must be nonnegative\")\n\n    # Compute normalized decreasing future-token weights\n    t = np.arange(future_horizon, dtype=float)\n    raw_weights = np.maximum(0, 1 - 0.2 * t)\n    normalized_weights = raw_weights / raw_weights.sum()\n\n    # Compute weighted future-token loss (negative weighted log probability)\n    def compute_loss(logp):\n        return -np.sum(logp * normalized_weights, axis=1)\n\n    loss_empty = compute_loss(arrs[2])\n    loss_call_only = compute_loss(arrs[1])\n    loss_with_result = compute_loss(arrs[0])\n\n    # Use stronger counterfactual baseline\n    L_minus = np.minimum(loss_empty, loss_call_only)\n    margin = L_minus - loss_with_result\n\n    # Keep calls meeting the filtering threshold\n    keep_mask = margin >= tau_filter\n\n    return keep_mask, margin"
+      },
+      "observation_status": "ok",
+      "observation_message": "{\"changed\":true,\"path\":\"toolformer_filter.py\",\"replacements\":1}",
+      "transport_attempts": 2,
+      "input_tokens": 2018,
+      "output_tokens": 11106,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "f92d0893-04cf-44a2-900f-912676248e11",
+      "provider_created": 1784537798
+    },
+    {
+      "step": 4,
+      "retry_lineage_id": "confirmation-v5r2:toolformer_natural:u005:S:turn-004",
+      "prompt_sha256": "c782eac7dfb891ee07d9c255cfccdf5852046c41aff3472227cccbf056c77b3c",
+      "response_sha256": "af062acbe3e64aa039672b0bc0197abeb443bf0cc9685e7d96ea67d18afdb7d7",
+      "response_text": "{\"action\":\"test\"}",
+      "action": {
+        "action": "test",
+        "query": null,
+        "path": null,
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "public_tested",
+      "observation_message": "{\"message\":\"locked public test completed\",\"returncode\":0,\"status\":\"passed\",\"stderr\":\"\",\"stdout\":\".                                                                        [100%]\\n1 passed in 0.13s\\n\"}",
+      "transport_attempts": 1,
+      "input_tokens": 1557,
+      "output_tokens": 955,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "2a8dbedd-6ae4-4316-a589-79b046937802",
+      "provider_created": 1784537820
+    },
+    {
+      "step": 5,
+      "retry_lineage_id": "confirmation-v5r2:toolformer_natural:u005:S:turn-005",
+      "prompt_sha256": "adc2b1aa6be0622eb4f1b5cc617ed35b656804559bae84cdc98b0f98aed30b10",
+      "response_sha256": "6831a7112fd0308595c6abaab94fbd4f05541fda862d0e6075e89ad1df53163b",
+      "response_text": "{\"action\":\"submit\"}",
+      "action": {
+        "action": "submit",
+        "query": null,
+        "path": null,
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "scored",
+      "observation_message": "{\"contract_passed\":true,\"failure_reason\":\"\",\"passed_cases\":64,\"status\":\"passed\",\"task_score\":1.0,\"total_cases\":64}",
+      "transport_attempts": 1,
+      "input_tokens": 1624,
+      "output_tokens": 1010,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "b6fd4582-aff9-4abc-84d6-e2d68c4f417e",
+      "provider_created": 1784537827
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,31 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not all(isinstance(arr, np.ndarray) for arr in [logp_with_result, logp_call_only, logp_no_call]):
++        raise ValueError("All inputs must be numpy arrays")
++    if any(arr.ndim != 2 for arr in [logp_with_result, logp_call_only, logp_no_call]):
++        raise ValueError("All input arrays must be 2-dimensional")
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All input arrays must have the same shape")
++    if any(arr.size == 0 for arr in [logp_with_result, logp_call_only, logp_no_call]):
++        raise ValueError("Input arrays must not be empty")
++    if any(not np.all(np.isfinite(arr)) for arr in [logp_with_result, logp_call_only, logp_no_call]):
++        raise ValueError("All input arrays must contain only finite values")
++    if any(np.any(arr > 0) for arr in [logp_with_result, logp_call_only, logp_no_call]):
++        raise ValueError("All input arrays must be nonpositive")
++    if isinstance(tau_filter, bool):
++        raise ValueError("Threshold cannot be a boolean value")
++    if not (isinstance(tau_filter, (int, float, np.integer, np.floating)) and np.isfinite(tau_filter) and tau_filter >= 0):
++        raise ValueError("Threshold must be a finite nonnegative number")
++
++    # Compute losses (negative sum of log probabilities)
++    loss_with = -np.sum(logp_with_result, axis=1)
++    loss_call = -np.sum(logp_call_only, axis=1)
++    loss_no = -np.sum(logp_no_call, axis=1)
++
++    min_loss = np.minimum(loss_no, loss_call)
++    keep = (loss_with + tau_filter) < min_loss
++    margins = min_loss - (loss_with + tau_filter)
++
++    return keep, margins

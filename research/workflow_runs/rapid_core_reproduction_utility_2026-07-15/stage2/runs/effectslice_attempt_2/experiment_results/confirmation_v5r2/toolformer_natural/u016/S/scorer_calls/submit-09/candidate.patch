@@ -1,0 +1,38 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,34 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    for name, arr in [("logp_with_result", logp_with_result), ("logp_call_only", logp_call_only), ("logp_no_call", logp_no_call)]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if arr.size == 0:
++            raise ValueError(f"{name} must not be empty")
++        if arr.shape != logp_with_result.shape:
++            raise ValueError("All input matrices must have the same shape")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} contains non-finite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} contains positive values")
++    if isinstance(tau_filter, bool) or not isinstance(tau_filter, (int, float)):
++        raise ValueError("tau_filter must be a nonnegative numeric threshold, not a boolean")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
++
++    n, horizon = logp_with_result.shape
++    raw_weights = np.maximum(0, 1 - 0.2 * np.arange(horizon))
++    weights = raw_weights / raw_weights.sum()
++
++    loss_with = -np.sum(weights * logp_with_result, axis=1)
++    loss_call = -np.sum(weights * logp_call_only, axis=1)
++    loss_empty = -np.sum(weights * logp_no_call, axis=1)
++
++    L_minus = np.minimum(loss_empty, loss_call)
++    margins = L_minus - loss_with
++    keep = margins >= tau_filter
++
++    return keep, margins

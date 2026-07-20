@@ -1,0 +1,94 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -1,16 +1,76 @@
+-"""Starter module for the locked Toolformer loss-filter task."""
+-
+-from __future__ import annotations
+-
+ import numpy as np
+ 
+-
+-def filter_api_calls(
+-    logp_with_result: np.ndarray,
+-    logp_call_only: np.ndarray,
+-    logp_no_call: np.ndarray,
+-    tau_filter: float,
+-) -> tuple[np.ndarray, np.ndarray]:
+-    """Return an ordered keep mask and one finite margin per proposed call."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++def filter_api_calls(L_empty, L_call_only, L_plus, tau_filter):
++    """
++    Implements Toolformer loss-filtering procedure.
++    
++    Parameters
++    ----------
++    L_empty : np.ndarray, shape (n_candidates, future_horizon)
++        Log probabilities with no API call.
++    L_call_only : np.ndarray, shape (n_candidates, future_horizon)
++        Log probabilities with API call but no result.
++    L_plus : np.ndarray, shape (n_candidates, future_horizon)
++        Log probabilities with API call and result.
++    tau_filter : float
++        Nonnegative threshold.
++    
++    Returns
++    -------
++    keep_mask : np.ndarray, shape (n_candidates,), dtype bool
++        Whether each candidate should be kept.
++    margins : np.ndarray, shape (n_candidates,), dtype float
++        The computed margins (L_minus - L_plus_loss).
++    """
++    # Input validation
++    # Each input must be a 2D matrix
++    for name, arr in [('L_empty', L_empty), ('L_call_only', L_call_only), ('L_plus', L_plus)]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if arr.size == 0 or arr.shape[1] == 0:
++            raise ValueError(f"{name} must be non-empty")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} contains non-finite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} contains positive values (log probabilities must be nonpositive)")
++    
++    # Check shapes match
++    if not (L_empty.shape == L_call_only.shape == L_plus.shape):
++        raise ValueError("All input matrices must have the same shape")
++    
++    # Validate tau_filter
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be boolean")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
++    
++    n_candidates, future_horizon = L_empty.shape
++    
++    # Compute normalized decreasing weights
++    t = np.arange(future_horizon, dtype=np.float64)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    weight_sum = np.sum(raw_weights)
++    if weight_sum <= 0:
++        raise ValueError("Sum of raw weights is zero or negative (check future_horizon)")
++    normalized_weights = raw_weights / weight_sum
++    
++    # Compute weighted negative log probabilities (loss)
++    def compute_loss(probs):
++        return -np.dot(probs, normalized_weights)  # shape (n_candidates,)
++    
++    loss_empty = compute_loss(L_empty)
++    loss_call_only = compute_loss(L_call_only)
++    loss_plus = compute_loss(L_plus)
++    
++    # Stronger counterfactual baseline
++    loss_minus = np.minimum(loss_empty, loss_call_only)
++    
++    # Compute margins
++    margins = loss_minus - loss_plus
++    
++    # Filtering
++    keep_mask = margins >= tau_filter
++    
++    return keep_mask, margins
+\ No newline at end of file

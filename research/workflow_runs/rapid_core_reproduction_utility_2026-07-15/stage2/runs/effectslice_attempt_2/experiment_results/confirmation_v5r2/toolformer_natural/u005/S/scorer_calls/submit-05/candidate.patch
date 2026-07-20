@@ -1,0 +1,51 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,47 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    arrs = [np.asarray(x) for x in [logp_with_result, logp_call_only, logp_no_call]]
++    for arr in arrs:
++        if arr.ndim != 2:
++            raise ValueError("Input must be 2D")
++        if arr.size == 0:
++            raise ValueError("Input cannot be empty")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError("Input contains nonfinite values")
++        if np.any(arr > 0):
++            raise ValueError("Input contains positive values")
++    shapes = [arr.shape for arr in arrs]
++    if not all(s == shapes[0] for s in shapes):
++        raise ValueError("Input shapes must match")
++    n_candidates, future_horizon = shapes[0]
++
++    if isinstance(tau_filter, bool):
++        raise ValueError("Boolean threshold is invalid")
++    if not np.isfinite(tau_filter):
++        raise ValueError("Threshold must be finite")
++    if tau_filter < 0:
++        raise ValueError("Threshold must be nonnegative")
++
++    # Compute normalized decreasing future-token weights
++    t = np.arange(future_horizon, dtype=float)
++    raw_weights = np.maximum(0, 1 - 0.2 * t)
++    normalized_weights = raw_weights / raw_weights.sum()
++
++    # Compute weighted future-token loss (negative weighted log probability)
++    def compute_loss(logp):
++        return -np.sum(logp * normalized_weights, axis=1)
++
++    loss_empty = compute_loss(arrs[2])
++    loss_call_only = compute_loss(arrs[1])
++    loss_with_result = compute_loss(arrs[0])
++
++    # Use stronger counterfactual baseline
++    L_minus = np.minimum(loss_empty, loss_call_only)
++    margin = L_minus - loss_with_result
++
++    # Keep calls meeting the filtering threshold
++    keep_mask = margin >= tau_filter
++
++    return keep_mask, margin

@@ -1,0 +1,67 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,63 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # --- input validation ---
++    for name, arr in [
++        ("logp_with_result", logp_with_result),
++        ("logp_call_only", logp_call_only),
++        ("logp_no_call", logp_no_call),
++    ]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a NumPy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if arr.shape[0] == 0 or arr.shape[1] == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} contains non-finite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} contains positive values (log probs must be nonpositive)")
++
++    # shape matching
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("all three input matrices must have the same shape")
++
++    # threshold validation
++    if isinstance(tau_filter, (bool, np.bool_)):
++        raise ValueError("tau_filter must not be a boolean")
++    try:
++        tau_f = float(tau_filter)
++    except (TypeError, ValueError):
++        raise ValueError("tau_filter must be a numeric type")
++    if not np.isfinite(tau_f):
++        raise ValueError("tau_filter must be finite")
++    if tau_f < 0:
++        raise ValueError("tau_filter must be nonnegative")
++
++    n_candidates, future_horizon = logp_with_result.shape
++
++    # --- normalized future-token weights (T01) ---
++    t = np.arange(future_horizon, dtype=float)  # offset from first future token
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    norm_weights = raw_weights / raw_weights.sum()
++
++    # helper to compute weighted loss for a candidate
++    def weighted_loss(logp_row: np.ndarray) -> float:
++        # loss = - sum( w_i * logp_i )
++        return -float(np.sum(norm_weights * logp_row))
++
++    margins = np.empty(n_candidates, dtype=float)
++    keep_mask = np.empty(n_candidates, dtype=bool)
++
++    for i in range(n_candidates):
++        L_plus = weighted_loss(logp_with_result[i, :])
++        L_call_only = weighted_loss(logp_call_only[i, :])
++        L_no_call = weighted_loss(logp_no_call[i, :])
++
++        # T03: stronger counterfactual baseline
++        L_minus = min(L_no_call, L_call_only)
++        margin = L_minus - L_plus
++        margins[i] = margin
++        keep_mask[i] = margin >= tau_filter
++
++    return keep_mask, margins

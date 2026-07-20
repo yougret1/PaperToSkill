@@ -1,0 +1,51 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -12,5 +12,47 @@
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
++    # Validate inputs
++    inputs = [logp_with_result, logp_call_only, logp_no_call]
++    for arr in inputs:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError("All log probability inputs must be numpy arrays")
++        if arr.ndim != 2:
++            raise ValueError("All log probability inputs must be 2D matrices")
++        if arr.shape[0] == 0 or arr.shape[1] == 0:
++            raise ValueError("Log probability matrices must not be empty")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError("All log probability values must be finite")
++        if np.any(arr > 0):
++            raise ValueError("All log probability values must be nonpositive")
++    # Check shape consistency
++    shape = logp_with_result.shape
++    if logp_call_only.shape != shape or logp_no_call.shape != shape:
++        raise ValueError("All log probability matrices must have the same shape")
++    # Validate threshold
++    if isinstance(tau_filter, bool):
++        raise ValueError("Threshold must not be a boolean")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("Threshold must be finite and nonnegative")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    n_candidates, future_horizon = shape
++
++    # Compute normalized weights (T01)
++    t = np.arange(future_horizon)  # offsets 0..K-1
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    norm_weights = raw_weights / raw_weights.sum()  # normalized, shape (K,)
++
++    # Compute weighted future-token losses (T02)
++    # loss = - sum_t w_t * logp_t
++    loss_plus = - (logp_with_result @ norm_weights)
++    loss_call_only = - (logp_call_only @ norm_weights)
++    loss_no_call = - (logp_no_call @ norm_weights)
++
++    # Stronger counterfactual baseline (T03)
++    loss_minus = np.minimum(loss_no_call, loss_call_only)
++
++    # Margins and filtering (T04)
++    margins = loss_minus - loss_plus
++    keep = margins >= tau_filter
++
++    return keep, margins

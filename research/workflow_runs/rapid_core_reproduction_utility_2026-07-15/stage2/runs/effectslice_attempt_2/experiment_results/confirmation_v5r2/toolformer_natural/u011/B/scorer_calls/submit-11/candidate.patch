@@ -1,0 +1,45 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,41 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    for arr, name in zip([logp_with_result, logp_call_only, logp_no_call],
++                         ["logp_with_result", "logp_call_only", "logp_no_call"]):
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if arr.size == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} must contain only finite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} must contain only nonpositive values")
++    # Check shape match
++    shape = logp_with_result.shape
++    if logp_call_only.shape != shape or logp_no_call.shape != shape:
++        raise ValueError("Input matrices must have the same shape")
++    # Validate tau_filter
++    if isinstance(tau_filter, (bool, np.bool_)):
++        raise ValueError("tau_filter cannot be a boolean")
++    if not np.isscalar(tau_filter) or not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be a finite nonnegative scalar")
++    
++    # Compute loss sums (negative log probability summed over future horizon)
++    loss_result = -logp_with_result.sum(axis=1)
++    loss_call_only = -logp_call_only.sum(axis=1)
++    loss_no_call = -logp_no_call.sum(axis=1)
++    
++    # Paper filter condition:
++    # Keep if API call alone reduces loss (loss_no_call > loss_call_only)
++    # OR if result reduces loss by at least tau_filter (loss_no_call - loss_result >= tau_filter)
++    keep_mask = (loss_no_call > loss_call_only) | (loss_no_call - loss_result >= tau_filter)
++    # Margin: improvement of loss due to result
++    margin = loss_no_call - loss_result
++    # Ensure boolean and float types
++    keep_mask = np.asarray(keep_mask, dtype=bool)
++    margin = np.asarray(margin, dtype=float)
++    return (keep_mask, margin)
