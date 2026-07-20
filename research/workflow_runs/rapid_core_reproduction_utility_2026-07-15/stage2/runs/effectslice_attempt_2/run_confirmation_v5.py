@@ -15,11 +15,11 @@ from typing import Any, Callable, Mapping
 
 
 RUN_ROOT = Path(__file__).resolve().parent
-PREREGISTRATION_PATH = RUN_ROOT / "artifacts" / "confirmation_v5" / "preregistration.json"
-DEFAULT_OUTPUT_ROOT = RUN_ROOT / "experiment_results" / "confirmation_v5"
-DEFAULT_PROGRESS_PATH = DEFAULT_OUTPUT_ROOT / "confirmation_v5_progress.json"
-EVIDENCE_BOUNDARY = "registered_natural_candidate_finite_schedule_confirmation_v5"
-PROGRESS_SCHEMA = "effectslice-confirmation-v5-progress.v1"
+PREREGISTRATION_PATH = RUN_ROOT / "artifacts" / "confirmation_v5r2" / "preregistration.json"
+DEFAULT_OUTPUT_ROOT = RUN_ROOT / "experiment_results" / "confirmation_v5r2"
+DEFAULT_PROGRESS_PATH = DEFAULT_OUTPUT_ROOT / "confirmation_v5r2_progress.json"
+EVIDENCE_BOUNDARY = "registered_natural_candidate_finite_schedule_confirmation_v5_attempt_2"
+PROGRESS_SCHEMA = "effectslice-confirmation-v5r2-progress.v1"
 FAMILY_KEYS = {"toolformer_natural"}
 HARNESS_BY_TASK = {
     "snap_mfse": "effectslice-snap-mfse-aci.v3",
@@ -104,7 +104,7 @@ def _validate_family(
     family = _load_json(path, f"{family_key} family")
     spec = FAMILY_SPECS[family_key]
     expected = {
-        "schema_version": "effectslice-confirmation-v5-family.v1",
+        "schema_version": "effectslice-confirmation-v5r2-family.v1",
         "registration_status": "complete",
         "case_block": "confirmation_v5",
         "case_count": 64,
@@ -185,6 +185,7 @@ def _validate_family(
         "reducer_source",
         "reducer_registry",
         "prior_v4_summary",
+        "attempt_1_progress",
         "crosscheck",
         "confirmation_tests",
         "crosscheck_tests",
@@ -215,7 +216,7 @@ def load_and_verify_registration(
         raise ValueError("preregistration digest does not match the external anchor")
     registration = _load_json(path, "preregistration")
     expected = {
-        "schema_version": "effectslice-confirmation-v5-preregistration.v1",
+        "schema_version": "effectslice-confirmation-v5r2-preregistration.v1",
         "registration_status": "complete",
         "evidence_boundary": EVIDENCE_BOUNDARY,
         "decision_basis": "finite_registered_schedule_without_population_inference",
@@ -299,8 +300,8 @@ def build_run_namespace(
     return argparse.Namespace(
         family_key=family_key,
         condition=list(order),
-        pair_id=f"confirmation-v5:{family_key}:{replicate_id}",
-        seed_block_id=f"confirmation-v5:{family_key}:{replicate_id}",
+        pair_id=f"confirmation-v5r2:{family_key}:{replicate_id}",
+        seed_block_id=f"confirmation-v5r2:{family_key}:{replicate_id}",
         model_family="DeepSeek-family",
         model_alias=family["model_alias"],
         wire_api=family["wire_api"],
@@ -310,7 +311,7 @@ def build_run_namespace(
         case_registry=_family_bound_path(family, "case_registry"),
         max_tokens=int(family["max_tokens"]),
         harness_protocol_version=HARNESS_BY_TASK[task_key],
-        provider_protocol_version="effectslice-deepseek-public-test-final-only.v5",
+        provider_protocol_version="effectslice-deepseek-public-test-final-only.v5r2",
         timeout_seconds=float(family["timeout_seconds"]),
         max_attempts=int(family["maximum_transport_attempts"]),
         retry_delay_seconds=float(family["retry_delay_seconds"]),
@@ -353,7 +354,7 @@ def _validate_completed_bundle(base: Mapping[str, Any]) -> dict[str, Any]:
         raise ValueError("registered output is not a safe completed directory")
     manifest = _load_json(output_dir / "pair_manifest.json", "pair manifest")
     report = _load_json(output_dir / "run_report.json", "run report")
-    pair_id = f"confirmation-v5:{base['family_key']}:{base['replicate_id']}"
+    pair_id = f"confirmation-v5r2:{base['family_key']}:{base['replicate_id']}"
     for payload, label in ((manifest, "pair manifest"), (report, "run report")):
         if payload.get("pair_id") != pair_id:
             raise ValueError(f"{label} pair ID does not match registration")
@@ -426,7 +427,7 @@ def _load_prior_records(
         return {}
     progress = _load_json(path, "progress")
     if progress.get("schema_version") != PROGRESS_SCHEMA:
-        raise ValueError("progress schema does not match confirmation V5")
+        raise ValueError("progress schema does not match confirmation V5 attempt 2")
     if progress.get("preregistration_sha256") != preregistration_sha256:
         raise ValueError("progress preregistration digest changed")
     if progress.get("registered_schedule_length") != len(expected):
@@ -469,7 +470,7 @@ def _exclusive_lock(progress_path: Path):
 
                 fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
         except OSError as exc:
-            raise ValueError("confirmation-v5 scheduler is already active") from exc
+            raise ValueError("confirmation-v5r2 scheduler is already active") from exc
         locked = True
         yield
     finally:
@@ -660,7 +661,7 @@ def run_schedule(
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Run the externally anchored EffectSlice confirmation V5 schedule"
+        description="Run the externally anchored EffectSlice confirmation V5 attempt-2 schedule"
     )
     parser.add_argument("--preregistration", type=Path, default=PREREGISTRATION_PATH)
     parser.add_argument(

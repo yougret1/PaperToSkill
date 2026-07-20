@@ -51,6 +51,7 @@ EVIDENCE_BOUNDARY_BY_BLOCK = {
     "confirmation": "contaminated_development",
     "confirmation_v2": "registered_final_only_confirmation",
     "confirmation_v4": "registered_public_test_finite_schedule_confirmation_v4",
+    "confirmation_v5": "registered_natural_candidate_finite_schedule_confirmation_v5_attempt_2",
 }
 
 FINAL_STATE_SCORING_BY_HARNESS = {
@@ -151,7 +152,7 @@ def load_confirmation_binding(
     if family.get("confirmation_unsealed") is not False:
         raise ValueError("confirmation family must be frozen before unsealing")
     expected_workspace = family.get("workspace_tree_sha256")
-    if case_block in {"confirmation_v2", "confirmation_v4"}:
+    if case_block in {"confirmation_v2", "confirmation_v4", "confirmation_v5"}:
         if not isinstance(workspace_state, dict) or not workspace_state.get("sha256"):
             raise ValueError(f"{case_block} requires a verified workspace tree")
         if expected_workspace != workspace_state["sha256"]:
@@ -391,11 +392,16 @@ def run_bundle(args: argparse.Namespace) -> dict[str, Any]:
     case_registry_path = Path(args.case_registry).resolve()
     task_prompt_path = RUN_ROOT / "artifacts" / "toolformer_filter" / "task_prompt.md"
     scorer_path = RUN_ROOT / "src" / "effectslice" / "toolformer_filter_scorer.py"
-    if args.case_block == "confirmation_v4":
+    if args.case_block in {"confirmation_v4", "confirmation_v5"}:
         family_path = Path(args.confirmation_family).resolve()
         family = json.loads(family_path.read_text(encoding="utf-8"))
-        if family.get("schema_version") != "effectslice-confirmation-v4-family.v1":
-            raise RunnerInputError("confirmation-v4 family schema is invalid")
+        expected_schema = (
+            "effectslice-confirmation-v4-family.v1"
+            if args.case_block == "confirmation_v4"
+            else "effectslice-confirmation-v5r2-family.v1"
+        )
+        if family.get("schema_version") != expected_schema:
+            raise RunnerInputError(f"{args.case_block} family schema is invalid")
         verified = validate_file_bindings(family, root=RUN_ROOT)
         required = {
             "full_artifact",
@@ -406,26 +412,26 @@ def run_bundle(args: argparse.Namespace) -> dict[str, Any]:
             "task_prompt",
         }
         if not required.issubset(verified):
-            raise RunnerInputError("confirmation-v4 family bindings are incomplete")
+            raise RunnerInputError(f"{args.case_block} family bindings are incomplete")
         full_artifact_path = Path(verified["full_artifact"]["path"])
         atom_map_path = Path(verified["source_map"]["path"])
         case_registry_path = Path(verified["case_registry"]["path"])
         task_prompt_path = Path(verified["task_prompt"]["path"])
         registered_workspace = Path(family.get("workspace_path", "")).resolve()
         if registered_workspace != workspace:
-            raise RunnerInputError("confirmation-v4 workspace path is invalid")
+            raise RunnerInputError(f"{args.case_block} workspace path is invalid")
         if family.get("workspace_tree_sha256") != workspace_tree_digest(workspace)[
             "sha256"
         ]:
-            raise RunnerInputError("confirmation-v4 workspace digest does not match")
+            raise RunnerInputError(f"{args.case_block} workspace digest does not match")
         if Path(args.slice_context).resolve() != Path(
             verified["selected_artifact"]["path"]
         ):
-            raise RunnerInputError("confirmation-v4 selected artifact path differs")
+            raise RunnerInputError(f"{args.case_block} selected artifact path differs")
         if Path(args.slice_registry).resolve() != Path(
             verified["slice_registry"]["path"]
         ):
-            raise RunnerInputError("confirmation-v4 slice registry path differs")
+            raise RunnerInputError(f"{args.case_block} slice registry path differs")
     task_prompt = task_prompt_path.read_text(encoding="utf-8").strip()
     execution_order, conditions = normalize_condition_order(args.condition)
     if conditions not in PAIR_ROLE_BY_CONDITIONS:
@@ -503,7 +509,7 @@ def run_bundle(args: argparse.Namespace) -> dict[str, Any]:
     manifest["provider_config"] = transport.public_config()
     private_score_policy = (
         "final_only"
-        if args.case_block in {"confirmation_v2", "confirmation_v4"}
+        if args.case_block in {"confirmation_v2", "confirmation_v4", "confirmation_v5"}
         else "interactive"
     )
     manifest["private_score_policy"] = private_score_policy

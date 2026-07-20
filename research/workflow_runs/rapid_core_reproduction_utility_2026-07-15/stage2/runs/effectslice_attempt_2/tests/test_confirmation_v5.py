@@ -14,6 +14,11 @@ sys.path.insert(0, str(RUN_ROOT))
 import analyze_confirmation_v5 as analyzer  # noqa: E402
 import build_confirmation_v5 as builder  # noqa: E402
 import run_confirmation_v5 as scheduler  # noqa: E402
+from run_swe_effectslice import RunnerInputError  # noqa: E402
+from run_toolformer_filter_effectslice import (  # noqa: E402
+    evidence_boundary_for_block,
+    run_bundle as run_toolformer_bundle,
+)
 
 
 def _sha256(path: Path) -> str:
@@ -82,6 +87,7 @@ def test_v5_builder_registers_natural_candidate_and_fresh_cases(tmp_path):
     assert _resolve(family["reducer_source_path"]).is_file()
     assert _resolve(family["reducer_registry_path"]).is_file()
     assert _resolve(family["prior_v4_summary_path"]).is_file()
+    assert _resolve(family["attempt_1_progress_path"]).is_file()
 
     registry = json.loads(
         _resolve(family["case_registry_path"]).read_text(encoding="utf-8")
@@ -118,10 +124,10 @@ def test_v5_builder_registers_natural_candidate_and_fresh_cases(tmp_path):
         output_root=tmp_path / "results",
     )
     assert args.case_block == "confirmation_v5"
-    assert args.pair_id.startswith("confirmation-v5:toolformer_natural:")
+    assert args.pair_id.startswith("confirmation-v5r2:toolformer_natural:")
     assert args.slice_candidate_id == "toolformer_prefix_04_v5"
     assert analyzer.DEFAULT_ANALYSIS_PATH.parts[-2:] == (
-        "confirmation_v5",
+        "confirmation_v5r2",
         "analysis.json",
     )
 
@@ -143,3 +149,29 @@ def test_v5_scheduler_rejects_excess_parallelism_before_execution(tmp_path):
             max_workers=3,
             allow_test_injection=True,
         )
+
+
+def test_v5_runner_accepts_registered_block_before_transport(tmp_path, monkeypatch):
+    output = tmp_path / "registration"
+    registration = builder.build_registration(output)
+    preregistration = output / "preregistration.json"
+    _, families, _ = scheduler.load_and_verify_registration(
+        preregistration,
+        _sha256(preregistration),
+        allow_test_registration=True,
+    )
+    row = registration["global_interleaved_schedule"][0]
+    loaded = families["toolformer_natural"]
+    args = scheduler.build_run_namespace(
+        family_key="toolformer_natural",
+        family_path=loaded["path"],
+        family=loaded["family"],
+        schedule_row=row,
+        output_root=tmp_path / "results",
+    )
+    monkeypatch.delenv("EFFECTSLICE_DEEPSEEK_BASE_URL", raising=False)
+    monkeypatch.delenv("EFFECTSLICE_DEEPSEEK_API_KEY", raising=False)
+    assert evidence_boundary_for_block("confirmation_v5") == builder.EVIDENCE_BOUNDARY
+    with pytest.raises(RunnerInputError, match="provider base URL"):
+        run_toolformer_bundle(args)
+    assert not Path(args.output_dir).exists()

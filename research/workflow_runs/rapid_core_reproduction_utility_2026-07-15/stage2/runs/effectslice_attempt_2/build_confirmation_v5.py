@@ -12,9 +12,9 @@ from typing import Any
 
 
 RUN_ROOT = Path(__file__).resolve().parent
-OUTPUT_ROOT = RUN_ROOT / "artifacts" / "confirmation_v5"
+OUTPUT_ROOT = RUN_ROOT / "artifacts" / "confirmation_v5r2"
 PREREGISTRATION_PATH = OUTPUT_ROOT / "preregistration.json"
-EVIDENCE_BOUNDARY = "registered_natural_candidate_finite_schedule_confirmation_v5"
+EVIDENCE_BOUNDARY = "registered_natural_candidate_finite_schedule_confirmation_v5_attempt_2"
 MODEL_ALIAS = "deepseek-v4-flash"
 BASE_URL = "https://api.deepseek.com"
 PUBLIC_TEST_FILES = {
@@ -224,7 +224,7 @@ def _slice_registry(
     retained_atom_ids: list[str],
 ) -> None:
     payload = {
-        "schema_version": "effectslice-confirmation-v5-slice-registry.v1",
+        "schema_version": "effectslice-confirmation-v5r2-slice-registry.v1",
         "candidates": [
             {
                 "candidate_id": candidate_id,
@@ -254,7 +254,7 @@ def _base_family(
     expected_admission: bool | None,
 ) -> dict[str, Any]:
     return {
-        "schema_version": "effectslice-confirmation-v5-family.v1",
+        "schema_version": "effectslice-confirmation-v5r2-family.v1",
         "registration_status": "complete",
         "task_key": task_key,
         "task_id": task_id,
@@ -316,7 +316,7 @@ def _source_map_with_paths(
 ) -> dict[str, Any]:
     payload = copy.deepcopy(source_map)
     payload["source_schema_version"] = payload.get("schema_version")
-    payload["schema_version"] = "effectslice-confirmation-v5-source-map.v1"
+    payload["schema_version"] = "effectslice-confirmation-v5r2-source-map.v1"
     payload["registration_status"] = "complete"
     payload["candidate_role"] = role
     payload["full_artifact_path"] = full_path.name
@@ -703,6 +703,12 @@ def _build_toolformer_natural(
     reducer_registry = artifact_root / "slices" / "slice_registry.json"
     reducer_source = RUN_ROOT / "build_toolformer_filter_slices.py"
     v4_summary = RUN_ROOT / "logs" / "confirmation_v4_summary.json"
+    attempt_1_progress = (
+        RUN_ROOT
+        / "experiment_results"
+        / "confirmation_v5"
+        / "confirmation_v5_progress.json"
+    )
 
     _write_bytes(full_path, (artifact_root / "full_artifact.md").read_bytes())
     _write_bytes(
@@ -775,6 +781,7 @@ def _build_toolformer_natural(
         "reducer_source": reducer_source,
         "reducer_registry": reducer_registry,
         "prior_v4_summary": v4_summary,
+        "attempt_1_progress": attempt_1_progress,
         "crosscheck": RUN_ROOT / "crosscheck_confirmation_v5.py",
         "confirmation_tests": RUN_ROOT / "tests" / "test_confirmation_v5.py",
         "crosscheck_tests": RUN_ROOT / "tests" / "test_crosscheck_confirmation_v5.py",
@@ -810,13 +817,13 @@ def build_registration(output_root: Path = OUTPUT_ROOT) -> dict[str, Any]:
         raise FileExistsError(destination)
     destination.parent.mkdir(parents=True, exist_ok=True)
     staging = Path(
-        tempfile.mkdtemp(prefix=".confirmation_v5.staging-", dir=destination.parent)
+        tempfile.mkdtemp(prefix=".confirmation_v5r2.staging-", dir=destination.parent)
     ).resolve()
     try:
         natural = _build_toolformer_natural(staging, destination)
         v4_summary = RUN_ROOT / "logs" / "confirmation_v4_summary.json"
         registration = {
-            "schema_version": "effectslice-confirmation-v5-preregistration.v1",
+            "schema_version": "effectslice-confirmation-v5r2-preregistration.v1",
             "registration_status": "complete",
             "evidence_boundary": EVIDENCE_BOUNDARY,
             "decision_basis": "finite_registered_schedule_without_population_inference",
@@ -830,6 +837,20 @@ def build_registration(output_root: Path = OUTPUT_ROOT) -> dict[str, Any]:
                 "prior_v4_summary_path": _stored(v4_summary),
                 "prior_v4_summary_sha256": _sha256(v4_summary),
                 "candidate_selected_after_v4": True,
+                "attempt_1_progress_path": _stored(
+                    RUN_ROOT
+                    / "experiment_results"
+                    / "confirmation_v5"
+                    / "confirmation_v5_progress.json"
+                ),
+                "attempt_1_progress_sha256": _sha256(
+                    RUN_ROOT
+                    / "experiment_results"
+                    / "confirmation_v5"
+                    / "confirmation_v5_progress.json"
+                ),
+                "attempt_1_failure_class": "pretransport_runner_allowlist_failure",
+                "attempt_1_provider_calls": 0,
                 "new_private_case_block": "confirmation_v5",
                 "new_private_block_nonoverlap_checks": [
                     "case_id",
@@ -878,13 +899,13 @@ def build_registration(output_root: Path = OUTPUT_ROOT) -> dict[str, Any]:
             "preserve_registered_failures": True,
             "execution": {
                 "output_root": _stored(
-                    RUN_ROOT / "experiment_results" / "confirmation_v5"
+                    RUN_ROOT / "experiment_results" / "confirmation_v5r2"
                 ),
                 "progress_path": _stored(
                     RUN_ROOT
                     / "experiment_results"
-                    / "confirmation_v5"
-                    / "confirmation_v5_progress.json"
+                    / "confirmation_v5r2"
+                    / "confirmation_v5r2_progress.json"
                 ),
             },
             "scope_guards": {
@@ -904,7 +925,9 @@ def build_registration(output_root: Path = OUTPUT_ROOT) -> dict[str, Any]:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Build write-once EffectSlice V5 inputs")
+    parser = argparse.ArgumentParser(
+        description="Build write-once EffectSlice V5 attempt-2 inputs"
+    )
     parser.add_argument("--output-root", type=Path, default=OUTPUT_ROOT)
     args = parser.parse_args()
     registration = build_registration(args.output_root)

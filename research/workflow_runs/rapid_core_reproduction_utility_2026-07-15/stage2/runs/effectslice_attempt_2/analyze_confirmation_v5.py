@@ -11,11 +11,11 @@ from typing import Any, Mapping
 
 
 RUN_ROOT = Path(__file__).resolve().parent
-PREREGISTRATION_PATH = RUN_ROOT / "artifacts" / "confirmation_v5" / "preregistration.json"
-DEFAULT_OUTPUT_ROOT = RUN_ROOT / "experiment_results" / "confirmation_v5"
-DEFAULT_PROGRESS_PATH = DEFAULT_OUTPUT_ROOT / "confirmation_v5_progress.json"
-DEFAULT_ANALYSIS_PATH = RUN_ROOT / "derived" / "confirmation_v5" / "analysis.json"
-EVIDENCE_BOUNDARY = "registered_natural_candidate_finite_schedule_confirmation_v5"
+PREREGISTRATION_PATH = RUN_ROOT / "artifacts" / "confirmation_v5r2" / "preregistration.json"
+DEFAULT_OUTPUT_ROOT = RUN_ROOT / "experiment_results" / "confirmation_v5r2"
+DEFAULT_PROGRESS_PATH = DEFAULT_OUTPUT_ROOT / "confirmation_v5r2_progress.json"
+DEFAULT_ANALYSIS_PATH = RUN_ROOT / "derived" / "confirmation_v5r2" / "analysis.json"
+EVIDENCE_BOUNDARY = "registered_natural_candidate_finite_schedule_confirmation_v5_attempt_2"
 CONDITIONS = ("B", "F", "S")
 
 
@@ -315,7 +315,7 @@ def _audit_block(
     report_path = output_dir / "run_report.json"
     manifest = _load_json(manifest_path, "pair manifest")
     report = _load_json(report_path, "run report")
-    pair_id = f"confirmation-v5:{base['family_key']}:{base['replicate_id']}"
+    pair_id = f"confirmation-v5r2:{base['family_key']}:{base['replicate_id']}"
     for payload, label in ((manifest, "pair manifest"), (report, "run report")):
         if payload.get("pair_id") != pair_id:
             raise AnalysisInputError(f"{label} pair ID changed")
@@ -459,7 +459,7 @@ def analyze_schedule(
         )
         for row in schedule
     }
-    progress = _load_json(progress_file, "confirmation V5 progress")
+    progress = _load_json(progress_file, "confirmation V5 attempt-2 progress")
     if progress.get("schema_version") != PROGRESS_SCHEMA:
         raise AnalysisInputError("confirmation V5 progress schema changed")
     terminal = _load_prior_records(
@@ -530,7 +530,7 @@ def analyze_schedule(
     for condition_result in all_conditions:
         action_counts.update(condition_result["action_counts"])
     analysis = {
-        "schema_version": "effectslice-confirmation-v5-analysis.v1",
+        "schema_version": "effectslice-confirmation-v5r2-analysis.v1",
         "analysis_status": "passed",
         "evidence_boundary": EVIDENCE_BOUNDARY,
         "preregistration_path": Path(preregistration_path).resolve().as_posix(),
@@ -580,7 +580,7 @@ def analyze_schedule(
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="Audit and analyze the externally anchored EffectSlice V5 schedule"
+        description="Audit and analyze the externally anchored EffectSlice V5 attempt-2 schedule"
     )
     parser.add_argument("--preregistration", type=Path, default=PREREGISTRATION_PATH)
     parser.add_argument(

@@ -11,11 +11,11 @@ from typing import Any
 
 RUN_ROOT = Path(__file__).resolve().parent
 DEFAULT_PREREGISTRATION = (
-    RUN_ROOT / "artifacts" / "confirmation_v5" / "preregistration.json"
+    RUN_ROOT / "artifacts" / "confirmation_v5r2" / "preregistration.json"
 )
-DEFAULT_RESULTS = RUN_ROOT / "experiment_results" / "confirmation_v5"
-DEFAULT_SUMMARY = RUN_ROOT / "derived" / "confirmation_v5" / "analysis.json"
-DEFAULT_OUTPUT = RUN_ROOT / "derived" / "confirmation_v5" / "independent_crosscheck.json"
+DEFAULT_RESULTS = RUN_ROOT / "experiment_results" / "confirmation_v5r2"
+DEFAULT_SUMMARY = RUN_ROOT / "derived" / "confirmation_v5r2" / "analysis.json"
+DEFAULT_OUTPUT = RUN_ROOT / "derived" / "confirmation_v5r2" / "independent_crosscheck.json"
 FAMILY_ORDER = ("toolformer_natural",)
 CONDITIONS = ("B", "F", "S")
 SUCCESS_THRESHOLD = 0.95
@@ -199,7 +199,7 @@ def build_crosscheck(
     result_root = Path(results_root).resolve()
     summary_source = Path(summary_path).resolve()
     prereg = _load_json(prereg_path)
-    if prereg.get("schema_version") != "effectslice-confirmation-v5-preregistration.v1":
+    if prereg.get("schema_version") != "effectslice-confirmation-v5r2-preregistration.v1":
         raise ValueError("unexpected V5 preregistration schema")
     schedule = prereg.get("global_interleaved_schedule", [])
     if len(schedule) != 18 or prereg.get("registered_condition_run_count") != 54:
@@ -330,7 +330,7 @@ def build_crosscheck(
         separators=(",", ":"),
     ).encode("ascii")
     payload: dict[str, Any] = {
-        "schema_version": "effectslice-confirmation-v5-independent-crosscheck.v1",
+        "schema_version": "effectslice-confirmation-v5r2-independent-crosscheck.v1",
         "implementation": {
             "path": Path(__file__).resolve().as_posix(),
             "sha256": _sha256(Path(__file__).resolve()),
@@ -384,7 +384,7 @@ def build_crosscheck(
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Independently recompute confirmation V5 decisions from raw outputs"
+        description="Independently recompute confirmation V5 attempt-2 decisions from raw outputs"
     )
     parser.add_argument("--preregistration", type=Path, default=DEFAULT_PREREGISTRATION)
     parser.add_argument("--results", type=Path, default=DEFAULT_RESULTS)
