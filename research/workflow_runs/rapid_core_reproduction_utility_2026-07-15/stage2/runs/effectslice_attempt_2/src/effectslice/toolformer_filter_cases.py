@@ -17,6 +17,7 @@ BLOCK_SEEDS = {
     "confirmation": tuple(range(34_000, 34_059)),
     "confirmation_v2": tuple(range(35_000, 35_064)),
     "confirmation_v4": tuple(range(37_000, 37_064)),
+    "confirmation_v5": tuple(range(47_000, 47_064)),
 }
 
 
@@ -190,6 +191,7 @@ def generate_case(seed: int) -> dict[str, Any]:
     if seed in (
         *BLOCK_SEEDS["confirmation_v2"],
         *BLOCK_SEEDS["confirmation_v4"],
+        *BLOCK_SEEDS["confirmation_v5"],
     ):
         return _generate_v2_case(seed)
     return _generate_v1_case(seed)
