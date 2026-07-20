@@ -1,0 +1,37 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,8 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++import scipy.sparse as sp
++from scipy.sparse.linalg import svds
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +13,23 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    if not isinstance(counts, np.ndarray):
++        raise ValueError("counts must be a numpy ndarray")
++    if not np.isfinite(counts).all():
++        raise ValueError("counts contain nonfinite values")
++    if (counts < 0).any():
++        raise ValueError("counts contain negative values")
++    row_sums = counts.sum(axis=1)
++    if (row_sums == 0).any():
++        raise ValueError("counts contain all-zero rows")
++    n_cells = counts.shape[0]
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be between 1 and n_cells-1 inclusive")
++    sqrt_row_sums = np.sqrt(row_sums)
++    B = counts / sqrt_row_sums[:, np.newaxis]
++    U, s, Vt = svds(B, k=n_components, which='LM', random_state=random_state)
++    eigenvalues = s ** 2
++    idx = np.argsort(eigenvalues)[::-1]
++    eigenvalues = eigenvalues[idx]
++    embedding = U[:, idx]
++    return eigenvalues, embedding

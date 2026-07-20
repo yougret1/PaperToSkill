@@ -1,0 +1,914 @@
+{
+  "status": "scored",
+  "terminal_reason": "submitted",
+  "submitted": true,
+  "task_score": 0.03125,
+  "success": false,
+  "diff_text": "--- a/toolformer_filter.py\n+++ b/toolformer_filter.py\n@@ -12,5 +12,36 @@\n     tau_filter: float,\n ) -> tuple[np.ndarray, np.ndarray]:\n     \"\"\"Return an ordered keep mask and one finite margin per proposed call.\"\"\"\n-\n-    raise NotImplementedError(\"implement the paper-core reproduction task\")\n+    # Validate inputs\n+    for name, arr in [(\"logp_with_result\", logp_with_result),\n+                      (\"logp_call_only\", logp_call_only),\n+                      (\"logp_no_call\", logp_no_call)]:\n+        if not isinstance(arr, np.ndarray):\n+            raise ValueError(f\"{name} must be a numpy array\")\n+        if arr.ndim != 2:\n+            raise ValueError(f\"{name} must be a 2D matrix\")\n+        if arr.shape[0] == 0 or arr.shape[1] == 0:\n+            raise ValueError(f\"{name} is empty\")\n+        if np.any(np.isnan(arr)) or np.any(np.isinf(arr)):\n+            raise ValueError(f\"{name} contains nonfinite values\")\n+        if np.any(arr > 0):\n+            raise ValueError(f\"{name} contains positive values (must be nonpositive)\")\n+    # Check shape consistency\n+    shape = logp_with_result.shape\n+    if logp_call_only.shape != shape or logp_no_call.shape != shape:\n+        raise ValueError(\"all input matrices must have the same shape\")\n+    # Validate tau_filter\n+    if isinstance(tau_filter, bool):\n+        raise ValueError(\"tau_filter must not be a boolean value\")\n+    if not (isinstance(tau_filter, (int, float)) and np.isfinite(tau_filter) and tau_filter >= 0):\n+        raise ValueError(\"tau_filter must be a finite nonnegative number\")\n+    n_candidates, H = shape\n+    # Compute weights\n+    t = np.arange(H)\n+    raw_w = np.maximum(0, 1 - 0.2 * t)\n+    w = raw_w / raw_w.sum()\n+    # Compute margin: weighted sum of (logp_with_result - logp_call_only)\n+    margin = np.sum(w * (logp_with_result - logp_call_only), axis=1)\n+    # Keep if margin > tau_filter\n+    keep = margin > tau_filter\n+    return (keep, margin)\n",
+  "state": {
+    "max_actions": 16,
+    "observations": [
+      {
+        "step": 1,
+        "action": {
+          "action": "search",
+          "query": "toolformer_filter.py",
+          "path": ".",
+          "max_results": 10,
+          "start_line": null,
+          "end_line": null,
+          "old_text": null,
+          "new_text": null
+        },
+        "status": "ok",
+        "message": "no matches"
+      },
+      {
+        "step": 2,
+        "action": {
+          "action": "search",
+          "query": "test_toolformer",
+          "path": ".",
+          "max_results": 10,
+          "start_line": null,
+          "end_line": null,
+          "old_text": null,
+          "new_text": null
+        },
+        "status": "ok",
+        "message": "no matches"
+      },
+      {
+        "step": 3,
+        "action": {
+          "action": "search",
+          "query": "*.py",
+          "path": ".",
+          "max_results": 20,
+          "start_line": null,
+          "end_line": null,
+          "old_text": null,
+          "new_text": null
+        },
+        "status": "ok",
+        "message": "no matches"
+      },
+      {
+        "step": 4,
+        "action": {
+          "action": "open",
+          "query": null,
+          "path": "toolformer_filter.py",
+          "max_results": null,
+          "start_line": 1,
+          "end_line": 80,
+          "old_text": null,
+          "new_text": null
+        },
+        "status": "ok",
+        "message": "1: \"\"\"Starter module for the locked Toolformer loss-filter task.\"\"\"\n2: \n3: from __future__ import annotations\n4: \n5: import numpy as np\n6: \n7: \n8: def filter_api_calls(\n9:     logp_with_result: np.ndarray,\n10:     logp_call_only: np.ndarray,\n11:     logp_no_call: np.ndarray,\n12:     tau_filter: float,\n13: ) -> tuple[np.ndarray, np.ndarray]:\n14:     \"\"\"Return an ordered keep mask and one finite margin per proposed call.\"\"\"\n15: \n16:     raise NotImplementedError(\"implement the paper-core reproduction task\")"
+      },
+      {
+        "step": 5,
+        "action": {
+          "action": "edit",
+          "query": null,
+          "path": "toolformer_filter.py",
+          "max_results": null,
+          "start_line": null,
+          "end_line": null,
+          "old_text": "    \"\"\"Return an ordered keep mask and one finite margin per proposed call.\"\"\"\n\n    raise NotImplementedError(\"implement the paper-core reproduction task\")",
+          "new_text": "    \"\"\"Return an ordered keep mask and one finite margin per proposed call.\"\"\"\n    # Validate inputs\n    for name, arr in [(\"logp_with_result\", logp_with_result),\n                      (\"logp_call_only\", logp_call_only),\n                      (\"logp_no_call\", logp_no_call)]:\n        if not isinstance(arr, np.ndarray):\n            raise ValueError(f\"{name} must be a numpy array\")\n        if arr.ndim != 2:\n            raise ValueError(f\"{name} must be a 2D matrix\")\n        if arr.shape[0] == 0 or arr.shape[1] == 0:\n            raise ValueError(f\"{name} is empty\")\n        if np.any(np.isnan(arr)) or np.any(np.isinf(arr)):\n            raise ValueError(f\"{name} contains nonfinite values\")\n        if np.any(arr > 0):\n            raise ValueError(f\"{name} contains positive values (must be nonpositive)\")\n    # Check shape consistency\n    shape = logp_with_result.shape\n    if logp_call_only.shape != shape or logp_no_call.shape != shape:\n        raise ValueError(\"all input matrices must have the same shape\")\n    # Validate tau_filter\n    if isinstance(tau_filter, bool):\n        raise ValueError(\"tau_filter must not be a boolean value\")\n    if not (isinstance(tau_filter, (int, float)) and np.isfinite(tau_filter) and tau_filter >= 0):\n        raise ValueError(\"tau_filter must be a finite nonnegative number\")\n    n_candidates, H = shape\n    # Compute weights\n    t = np.arange(H)\n    raw_w = np.maximum(0, 1 - 0.2 * t)\n    w = raw_w / raw_w.sum()\n    # Compute margin: weighted sum of (logp_with_result - logp_call_only)\n    margin = np.sum(w * (logp_with_result - logp_call_only), axis=1)\n    # Keep if margin > tau_filter\n    keep = margin > tau_filter\n    return (keep, margin)"
+        },
+        "status": "ok",
+        "message": "{\"changed\":true,\"path\":\"toolformer_filter.py\",\"replacements\":1}"
+      },
+      {
+        "step": 6,
+        "action": {
+          "action": "test",
+          "query": null,
+          "path": null,
+          "max_results": null,
+          "start_line": null,
+          "end_line": null,
+          "old_text": null,
+          "new_text": null
+        },
+        "status": "public_tested",
+        "message": "{\"message\":\"locked public test completed\",\"returncode\":0,\"status\":\"passed\",\"stderr\":\"\",\"stdout\":\".                                                                        [100%]\\n1 passed in 0.12s\\n\"}"
+      },
+      {
+        "step": 7,
+        "action": {
+          "action": "submit",
+          "query": null,
+          "path": null,
+          "max_results": null,
+          "start_line": null,
+          "end_line": null,
+          "old_text": null,
+          "new_text": null
+        },
+        "status": "scored",
+        "message": "{\"contract_passed\":true,\"failure_reason\":\"numerical_case_failed\",\"passed_cases\":2,\"status\":\"failed\",\"task_score\":0.03125,\"total_cases\":64}"
+      }
+    ]
+  },
+  "turns": [
+    {
+      "step": 1,
+      "retry_lineage_id": "confirmation-v4:toolformer_negative:n009:S:turn-001",
+      "prompt_sha256": "d2a6e69b74fcc94d206aa08a23fbd06840a43c76e3a7ef95f495ecb8e0640d57",
+      "response_sha256": "b31c53202c9783e01776adff2760f3b88a250c71ef2f5c910f8125229b6f23f5",
+      "response_text": "{\"action\":\"search\",\"query\":\"toolformer_filter.py\",\"path\":\".\",\"max_results\":10}",
+      "action": {
+        "action": "search",
+        "query": "toolformer_filter.py",
+        "path": ".",
+        "max_results": 10,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "no matches",
+      "transport_attempts": 1,
+      "input_tokens": 638,
+      "output_tokens": 487,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "dbec9059-fa8b-4f7d-bc65-d56e843b8cc5",
+      "provider_created": 1784511261
+    },
+    {
+      "step": 2,
+      "retry_lineage_id": "confirmation-v4:toolformer_negative:n009:S:turn-002",
+      "prompt_sha256": "1eecf72bcd96614f97cd6f8d79e935d165bd923dfa8ef4eb848afc57c72cd29c",
+      "response_sha256": "809d45930d611292c3051590d8c2ff5cbc6e008b2fb22dfa95d9ba710c3447b4",
+      "response_text": "{\"action\":\"search\",\"query\":\"test_toolformer\",\"path\":\".\",\"max_results\":10}",
+      "action": {
+        "action": "search",
+        "query": "test_toolformer",
+        "path": ".",
+        "max_results": 10,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "no matches",
+      "transport_attempts": 1,
+      "input_tokens": 682,
+      "output_tokens": 192,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "7e208c38-df15-4736-99ff-c2fb8bc555cf",
+      "provider_created": 1784511265
+    },
+    {
+      "step": 3,
+      "retry_lineage_id": "confirmation-v4:toolformer_negative:n009:S:turn-003",
+      "prompt_sha256": "609d024913c7c9ee80f98281b06f572d18d9276e9952ed441505d97b79f82250",
+      "response_sha256": "1e42aac39b64faca99de7a619eada15088bdb03a05f047f8f493be9d6960e039",
+      "response_text": "{\"action\":\"search\",\"query\":\"*.py\",\"path\":\".\",\"max_results\":20}",
+      "action": {
+        "action": "search",
+        "query": "*.py",
+        "path": ".",
+        "max_results": 20,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "no matches",
+      "transport_attempts": 1,
+      "input_tokens": 722,
+      "output_tokens": 173,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "e3cfe905-1956-450b-bff7-4124920bfc1f",
+      "provider_created": 1784511268
+    },
+    {
+      "step": 4,
+      "retry_lineage_id": "confirmation-v4:toolformer_negative:n009:S:turn-004",
+      "prompt_sha256": "340fd981bd428d90c8a0cce5f20cc95b9a373edeed0dda5b775aa61f5d09cdb5",
+      "response_sha256": "8b16122b8a500e5379f3cb0ddf30470b358026530157c11ba8b633230f5520b9",
+      "response_text": "{\"action\":\"open\",\"path\":\"toolformer_filter.py\",\"start_line\":1,\"end_line\":80}",
+      "action": {
+        "action": "open",
+        "query": null,
+        "path": "toolformer_filter.py",
+        "max_results": null,
+        "start_line": 1,
+        "end_line": 80,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "1: \"\"\"Starter module for the locked Toolformer loss-filter task.\"\"\"\n2: \n3: from __future__ import annotations\n4: \n5: import numpy as np\n6: \n7: \n8: def filter_api_calls(\n9:     logp_with_result: np.ndarray,\n10:     logp_call_only: np.ndarray,\n11:     logp_no_call: np.ndarray,\n12:     tau_filter: float,\n13: ) -> tuple[np.ndarray, np.ndarray]:\n14:     \"\"\"Return an ordered keep mask and one finite margin per proposed call.\"\"\"\n15: \n16:     raise NotImplementedError(\"implement the paper-core reproduction task\")",
+      "transport_attempts": 1,
+      "input_tokens": 760,
+      "output_tokens": 3114,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "d5da037d-df15-4a0e-a57e-04a2b7ad9a45",
+      "provider_created": 1784511270
+    },
+    {
+      "step": 5,
+      "retry_lineage_id": "confirmation-v4:toolformer_negative:n009:S:turn-005",
+      "prompt_sha256": "c49d3c03b1709c6f3895742dc6fe98252cca02ed3064c4e387270f142c0de158",
+      "response_sha256": "4131b9b1fe4a50d9d998c21e087693ccf8e6c696e40f2334c98b4713308fdf20",
+      "response_text": "{\n  \"action\": \"edit\",\n  \"path\": \"toolformer_filter.py\",\n  \"old_text\": \"    \\\"\\\"\\\"Return an ordered keep mask and one finite margin per proposed call.\\\"\\\"\\\"\\n\\n    raise NotImplementedError(\\\"implement the paper-core reproduction task\\\")\",\n  \"new_text\": \"    \\\"\\\"\\\"Return an ordered keep mask and one finite margin per proposed call.\\\"\\\"\\\"\\n    # Validate inputs\\n    for name, arr in [(\\\"logp_with_result\\\", logp_with_result),\\n                      (\\\"logp_call_only\\\", logp_call_only),\\n                      (\\\"logp_no_call\\\", logp_no_call)]:\\n        if not isinstance(arr, np.ndarray):\\n            raise ValueError(f\\\"{name} must be a numpy array\\\")\\n        if arr.ndim != 2:\\n            raise ValueError(f\\\"{name} must be a 2D matrix\\\")\\n        if arr.shape[0] == 0 or arr.shape[1] == 0:\\n            raise ValueError(f\\\"{name} is empty\\\")\\n        if np.any(np.isnan(arr)) or np.any(np.isinf(arr)):\\n            raise ValueError(f\\\"{name} contains nonfinite values\\\")\\n        if np.any(arr > 0):\\n            raise ValueError(f\\\"{name} contains positive values (must be nonpositive)\\\")\\n    # Check shape consistency\\n    shape = logp_with_result.shape\\n    if logp_call_only.shape != shape or logp_no_call.shape != shape:\\n        raise ValueError(\\\"all input matrices must have the same shape\\\")\\n    # Validate tau_filter\\n    if isinstance(tau_filter, bool):\\n        raise ValueError(\\\"tau_filter must not be a boolean value\\\")\\n    if not (isinstance(tau_filter, (int, float)) and np.isfinite(tau_filter) and tau_filter >= 0):\\n        raise ValueError(\\\"tau_filter must be a finite nonnegative number\\\")\\n    n_candidates, H = shape\\n    # Compute weights\\n    t = np.arange(H)\\n    raw_w = np.maximum(0, 1 - 0.2 * t)\\n    w = raw_w / raw_w.sum()\\n    # Compute margin: weighted sum of (logp_with_result - logp_call_only)\\n    margin = np.sum(w * (logp_with_result - logp_call_only), axis=1)\\n    # Keep if margin > tau_filter\\n    keep = margin > tau_filter\\n    return (keep, margin)\"\n}",
+      "action": {
+        "action": "edit",
+        "query": null,
+        "path": "toolformer_filter.py",
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": "    \"\"\"Return an ordered keep mask and one finite margin per proposed call.\"\"\"\n\n    raise NotImplementedError(\"implement the paper-core reproduction task\")",
+        "new_text": "    \"\"\"Return an ordered keep mask and one finite margin per proposed call.\"\"\"\n    # Validate inputs\n    for name, arr in [(\"logp_with_result\", logp_with_result),\n                      (\"logp_call_only\", logp_call_only),\n                      (\"logp_no_call\", logp_no_call)]:\n        if not isinstance(arr, np.ndarray):\n            raise ValueError(f\"{name} must be a numpy array\")\n        if arr.ndim != 2:\n            raise ValueError(f\"{name} must be a 2D matrix\")\n        if arr.shape[0] == 0 or arr.shape[1] == 0:\n            raise ValueError(f\"{name} is empty\")\n        if np.any(np.isnan(arr)) or np.any(np.isinf(arr)):\n            raise ValueError(f\"{name} contains nonfinite values\")\n        if np.any(arr > 0):\n            raise ValueError(f\"{name} contains positive values (must be nonpositive)\")\n    # Check shape consistency\n    shape = logp_with_result.shape\n    if logp_call_only.shape != shape or logp_no_call.shape != shape:\n        raise ValueError(\"all input matrices must have the same shape\")\n    # Validate tau_filter\n    if isinstance(tau_filter, bool):\n        raise ValueError(\"tau_filter must not be a boolean value\")\n    if not (isinstance(tau_filter, (int, float)) and np.isfinite(tau_filter) and tau_filter >= 0):\n        raise ValueError(\"tau_filter must be a finite nonnegative number\")\n    n_candidates, H = shape\n    # Compute weights\n    t = np.arange(H)\n    raw_w = np.maximum(0, 1 - 0.2 * t)\n    w = raw_w / raw_w.sum()\n    # Compute margin: weighted sum of (logp_with_result - logp_call_only)\n    margin = np.sum(w * (logp_with_result - logp_call_only), axis=1)\n    # Keep if margin > tau_filter\n    keep = margin > tau_filter\n    return (keep, margin)"
+      },
+      "observation_status": "ok",
+      "observation_message": "{\"changed\":true,\"path\":\"toolformer_filter.py\",\"replacements\":1}",
+      "transport_attempts": 1,
+      "input_tokens": 941,
+      "output_tokens": 5918,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "eaf6117a-bee4-4a5d-af0c-9b521a90ac89",
+      "provider_created": 1784511304
+    },
+    {
+      "step": 6,
+      "retry_lineage_id": "confirmation-v4:toolformer_negative:n009:S:turn-006",
+      "prompt_sha256": "f8a8d9a53d824e5717d2f2b79cab6db9cb65b13dad1984ffd4c22374dcddc12d",
+      "response_sha256": "af062acbe3e64aa039672b0bc0197abeb443bf0cc9685e7d96ea67d18afdb7d7",
+      "response_text": "{\"action\":\"test\"}",
+      "action": {
+        "action": "test",
+        "query": null,
+        "path": null,
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "public_tested",
+      "observation_message": "{\"message\":\"locked public test completed\",\"returncode\":0,\"status\":\"passed\",\"stderr\":\"\",\"stdout\":\".                                                                        [100%]\\n1 passed in 0.12s\\n\"}",
+      "transport_attempts": 2,
+      "input_tokens": 1532,
+      "output_tokens": 163,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "30b19e0e-d4d6-4c14-a63a-91b1cd9c9309",
+      "provider_created": 1784511415
+    },
+    {
+      "step": 7,
+      "retry_lineage_id": "confirmation-v4:toolformer_negative:n009:S:turn-007",
+      "prompt_sha256": "e6accffc22fe58866bedd2c4b3ab97cd554f76f8c26c9e54fa03450ff2d67430",
+      "response_sha256": "6831a7112fd0308595c6abaab94fbd4f05541fda862d0e6075e89ad1df53163b",
+      "response_text": "{\"action\":\"submit\"}",
+      "action": {
+        "action": "submit",
+        "query": null,
+        "path": null,
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "scored",
+      "observation_message": "{\"contract_passed\":true,\"failure_reason\":\"numerical_case_failed\",\"passed_cases\":2,\"status\":\"failed\",\"task_score\":0.03125,\"total_cases\":64}",
+      "transport_attempts": 1,
+      "input_tokens": 1599,
+      "output_tokens": 176,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "52c7c745-21d1-4bd5-845f-a0f0e614c5c6",
+      "provider_created": 1784511418
+    }
+  ],
+  "scorer_metrics": [
+    {
+      "schema_version": "effectslice-toolformer-filter-score.v1",
+      "task_id": "TOOLFORMER-FILTER",
+      "metric_name": "registered_case_pass_rate",
+      "block": "confirmation_v4",
+      "evidence_boundary": "Objective numerical score for one locked Toolformer filter patch and case block. Development scores are not general EffectSlice evidence.",
+      "task_score": 0.03125,
+      "success": false,
+      "patch_applied": true,
+      "contract_passed": true,
+      "contract_failures": [],
+      "case_scores": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "case_details": [
+        {
+          "case_id": "toolformer-filter-v2-37000",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 1.5712609729862614,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37001",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 0.636824788583136,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37002",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 1.6456780442801762,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37003",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 1.2173269920907446,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37004",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 0.5798332992412197,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37005",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 0.6488902561525417,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37006",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 1.781027076569253,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37007",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 0.5543813329891754,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37008",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 0.7961149741043635,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37009",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 2.5025900215860473,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37010",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 0.44176849415679365,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37011",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 0.8875884682998318,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37012",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 1.8919293987943764,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37013",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 0.1488951642431955,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37014",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 0.8971697828844207,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37015",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 0.04426031354416157,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37016",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 1.76031511787775,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37017",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 1.0091340231373365,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37018",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 1.8119081863125346,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37019",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 1.7294598852454528,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37020",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 1.7315842063372313,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37021",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 1.4810032712437864,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37022",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 1.7615340978651544,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37023",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 0.06726425764210464,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37024",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 1.1300396003764726,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37025",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 0.7162298592400282,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37026",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 1.3008790566496655,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37027",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 0.9534038801199632,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37028",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 0.1846962865948792,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37029",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 1.2707208105823258,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37030",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 1.020880677269166,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37031",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 1.0145948933813353,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37032",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 0.7660684478980149,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37033",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 0.5298387052571836,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37034",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 0.9228482094057701,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37035",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 0.7566094924646198,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37036",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 0.45316394295805873,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37037",
+          "passed": true,
+          "keep_match": true,
+          "margin_match": true,
+          "max_abs_margin_error": 4.440892098500626e-16,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37038",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 0.7274672280764187,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37039",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 0.6592958786385514,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37040",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 0.42964363477700096,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37041",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 0.9037133338506167,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37042",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 0.030120316260822344,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37043",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 1.1110623596295972,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37044",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 1.587364031134772,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37045",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 1.8446908483500049,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37046",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 1.6644328499451113,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37047",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 1.6896351193244457,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37048",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 0.8200351857315673,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37049",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 2.0980508681210375,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37050",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 1.4404337509152985,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37051",
+          "passed": true,
+          "keep_match": true,
+          "margin_match": true,
+          "max_abs_margin_error": 6.661338147750939e-16,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37052",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 1.6925957912438019,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37053",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 0.38451563761301655,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37054",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 1.5560617191184982,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37055",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 0.31112000418849317,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37056",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 1.3883128836037892,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37057",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 0.9650518513063109,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37058",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 1.2582724937049339,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37059",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 1.925262401313525,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37060",
+          "passed": false,
+          "keep_match": true,
+          "margin_match": false,
+          "max_abs_margin_error": 0.7391422430882859,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37061",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 1.5472017693392606,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37062",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 0.7803303846152185,
+          "error_type": null
+        },
+        {
+          "case_id": "toolformer-filter-v2-37063",
+          "passed": false,
+          "keep_match": false,
+          "margin_match": false,
+          "max_abs_margin_error": 0.4488401506825407,
+          "error_type": null
+        }
+      ],
+      "failure_reason": "numerical_case_failed",
+      "private_apply_result": {
+        "returncode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "public_summary": {
+        "status": "failed",
+        "task_score": 0.03125,
+        "passed_cases": 2,
+        "total_cases": 64,
+        "contract_passed": true,
+        "failure_reason": "numerical_case_failed"
+      }
+    }
+  ],
+  "input_tokens": 6874,
+  "output_tokens": 10223,
+  "transport_attempts": 8,
+  "elapsed_seconds": 159.230084,
+  "common_scaffold_sha256": "903785b3c7758109279f7b4a8c9ceed62a8543cb020d6ec6175055f636a3eda2",
+  "condition_context_sha256": "bc8a19d996437c9cf31278843e72605a9ef6ed0b4c678e9141d86447f97b149b",
+  "task_prompt_sha256": "06dc19af716e01d9d812823342a48e7dab445f92f5a4e9714c1f32b18af3e12c",
+  "private_score_policy": "final_only",
+  "private_score_count": 1,
+  "private_feedback_exposed": false,
+  "public_error": ""
+}

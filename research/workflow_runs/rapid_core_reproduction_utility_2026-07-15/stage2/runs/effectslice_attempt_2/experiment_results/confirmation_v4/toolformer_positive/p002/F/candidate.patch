@@ -1,0 +1,61 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -12,5 +12,57 @@
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
++    # Validate inputs
++    for name, arr in [("logp_with_result", logp_with_result),
++                      ("logp_call_only", logp_call_only),
++                      ("logp_no_call", logp_no_call)]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be 2-dimensional")
++        if arr.shape[0] == 0:
++            raise ValueError(f"{name} must have at least one candidate")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} contains non-finite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} contains positive values (must be nonpositive)")
++    # Check same shape
++    shape = logp_with_result.shape
++    if logp_call_only.shape != shape or logp_no_call.shape != shape:
++        raise ValueError("Input arrays must have the same shape")
++    # Validate tau_filter
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter cannot be a boolean")
++    if not isinstance(tau_filter, (int, float)):
++        raise ValueError("tau_filter must be a numeric value")
++    if not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    n_candidates, horizon = shape
++
++    # Compute normalized future-token weights
++    if horizon == 0:
++        # No future tokens; special case: margin is 0? According to procedure, no tokens means no loss difference.
++        margin = np.zeros(n_candidates)
++        keep = margin >= tau_filter
++        return keep, margin
++
++    t = np.arange(horizon)  # offset 0..H-1
++    raw = np.maximum(0.0, 1.0 - 0.2 * t)
++    weights = raw / raw.sum()  # normalized weights
++
++    # Compute weighted future-token losses (negative weighted log probability)
++    loss_plus = -np.dot(logp_with_result, weights)   # shape (n_candidates,)
++    loss_only = -np.dot(logp_call_only, weights)
++    loss_none = -np.dot(logp_no_call, weights)
++
++    # Stronger counterfactual baseline: min of no_call and call_only
++    L_minus = np.minimum(loss_none, loss_only)
++
++    # Margin and filter
++    margin = L_minus - loss_plus   # positive means call with result reduced loss
++    keep = margin >= tau_filter
++
++    return keep, margin.astype(float)

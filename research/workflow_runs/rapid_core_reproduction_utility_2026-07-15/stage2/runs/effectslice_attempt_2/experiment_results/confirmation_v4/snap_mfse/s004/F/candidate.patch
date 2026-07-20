@@ -1,0 +1,74 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++import scipy.sparse.linalg
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,62 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    # Input validation
++    counts = np.asarray(counts, dtype=float)
++    if not np.all(np.isfinite(counts)):
++        raise ValueError("counts must be finite")
++    if np.any(counts < 0):
++        raise ValueError("counts must be nonnegative")
++    if counts.ndim != 2:
++        raise ValueError("counts must be 2D")
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be between 1 and n_cells-1")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("rows with all zeros are not allowed")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # A01: IDF scaling
++    df = np.count_nonzero(counts > 0, axis=0)
++    idf = np.log(n_cells / (1.0 + df))
++    X = counts * idf
++
++    # A02: Row normalization to unit L2
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    if np.any(row_norms == 0):
++        raise ValueError("row with zero norm after IDF (should not happen)")
++    X = X / row_norms
++
++    # A03: Compute degree vector matrix-free
++    ones = np.ones(n_cells)
++    degree = X @ (X.T @ ones) - 1.0
++    if np.any(degree <= 0):
++        raise ValueError("non-positive degree encountered")
++
++    # A04: Build operator for normalized similarity
++    D_inv_sqrt = 1.0 / np.sqrt(degree)
++    X_tilde = X * D_inv_sqrt[:, np.newaxis]
++    D_inv = 1.0 / degree
++
++    class NormSimOperator(scipy.sparse.linalg.LinearOperator):
++        def __init__(self):
++            self.shape = (n_cells, n_cells)
++            self.dtype = X_tilde.dtype
++
++        def _matvec(self, v):
++            return X_tilde @ (X_tilde.T @ v) - D_inv * v
++
++    operator = NormSimOperator()
++
++    # Use Lanczos eigensolver (eigsh)
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells)
++    eigenvalues, eigenvectors = scipy.sparse.linalg.eigsh(
++        operator, k=n_components, which='LA', v0=v0, maxiter=1000, tol=1e-8
++    )
++    # Ensure descending order
++    idx = np.argsort(eigenvalues)[::-1]
++    eigenvalues = eigenvalues[idx]
++    eigenvectors = eigenvectors[:, idx]
++
++    return eigenvalues, eigenvectors
++

@@ -1,0 +1,44 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,40 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    if not all(isinstance(arr, np.ndarray) for arr in [logp_with_result, logp_call_only, logp_no_call]):
++        raise ValueError("All inputs must be numpy arrays")
++    if logp_with_result.ndim != 2 or logp_call_only.ndim != 2 or logp_no_call.ndim != 2:
++        raise ValueError("All inputs must be 2D matrices")
++    if logp_with_result.shape != logp_call_only.shape or logp_with_result.shape != logp_no_call.shape:
++        raise ValueError("All inputs must have the same shape")
++    n, m = logp_with_result.shape
++    if n == 0 or m == 0:
++        raise ValueError("Matrices must not be empty")
++    if not (np.all(np.isfinite(logp_with_result)) and np.all(np.isfinite(logp_call_only)) and np.all(np.isfinite(logp_no_call))):
++        raise ValueError("All inputs must be finite")
++    if np.any(logp_with_result > 0) or np.any(logp_call_only > 0) or np.any(logp_no_call > 0):
++        raise ValueError("All inputs must be nonpositive")
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be boolean")
++    if not isinstance(tau_filter, (int, float, np.floating, np.integer)):
++        raise ValueError("tau_filter must be a finite nonnegative number")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
++
++    # Compute normalized weights
++    t_offsets = np.arange(m, dtype=float)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t_offsets)
++    norm_weights = raw_weights / np.sum(raw_weights)
++
++    # Compute weighted averages
++    weighted_avg_with_result = logp_with_result @ norm_weights  # (n,)
++    weighted_avg_no_call = logp_no_call @ norm_weights
++
++    # Compute margins: weighted improvement from using API result
++    margins = weighted_avg_with_result - weighted_avg_no_call
++
++    # Keep mask: improvement >= threshold
++    keep_mask = margins >= tau_filter
++
++    return keep_mask, margins

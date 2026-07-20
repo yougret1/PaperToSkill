@@ -1,0 +1,61 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -11,5 +11,57 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    # Input validation
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    n_cells, n_features = counts.shape
++    if not np.isfinite(counts).all():
++        raise ValueError("counts contains non-finite values")
++    if (counts < 0).any():
++        raise ValueError("counts contains negative values")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("counts has all-zero rows")
++    if not isinstance(n_components, int) or n_components < 1:
++        raise ValueError("n_components must be a positive integer")
++    if n_components >= n_cells:
++        raise ValueError(
++            f"n_components ({n_components}) must be less than n_cells ({n_cells})"
++        )
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Step 1: IDF scaling
++    df = np.count_nonzero(counts > 0, axis=0)  # document frequency per feature
++    idf = np.log(n_cells / (1.0 + df))
++    X = counts * idf
++
++    # Step 2: Row normalization for cosine similarity
++    norms = np.linalg.norm(X, axis=1, keepdims=True)
++    X = X / norms
++
++    # Step 3: Compute degree vector matrix-free
++    ones = np.ones(n_cells)
++    d = X @ (X.T @ ones) - ones
++    d = np.clip(d, 0, None)
++
++    # Prepare diagonal operators
++    sqrt_d = np.sqrt(d)
++    inv_sqrt_d = np.where(d > 0, 1.0 / sqrt_d, 0.0)
++    inv_d = np.where(d > 0, 1.0 / d, 0.0)
++
++    # Matrix-free operator for M = D^{-1/2} W D^{-1/2}
++    from scipy.sparse.linalg import LinearOperator, eigsh
++
++    def matvec(v):
++        v_scaled = v * inv_sqrt_d
++        temp = X.T @ v_scaled
++        result = X @ temp
++        return inv_sqrt_d * result - inv_d * v
++
++    n = n_cells
++    M_op = LinearOperator((n, n), matvec=matvec, rmatvec=matvec)
++
++    eigenvalues, eigenvectors = eigsh(M_op, k=n_components, which='LA')
++    # Reverse to descending order
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    return eigenvalues, eigenvectors

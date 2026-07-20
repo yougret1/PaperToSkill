@@ -1,0 +1,40 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,36 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # ===== validation =====
++    for arr, name in [(logp_with_result, "logp_with_result"),
++                     (logp_call_only, "logp_call_only"),
++                     (logp_no_call, "logp_no_call")]:
++        if not isinstance(arr, np.ndarray) or arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D numpy array")
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("all logp arrays must have the same shape")
++    if logp_with_result.size == 0:
++        raise ValueError("logp arrays must not be empty")
++    if not (np.isfinite(logp_with_result).all() and np.isfinite(logp_call_only).all() and np.isfinite(logp_no_call).all()):
++        raise ValueError("all logp values must be finite")
++    if not (np.all(logp_with_result <= 0) and np.all(logp_call_only <= 0) and np.all(logp_no_call <= 0)):
++        raise ValueError("all logp values must be nonpositive")
++    if not isinstance(tau_filter, (int, float)) or isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must be a finite nonnegative float")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
++    # ===== T01: normalize weights =====
++    horizon = logp_with_result.shape[1]
++    t = np.arange(horizon, dtype=float)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    weights = raw_weights / np.sum(raw_weights)
++    # ===== T02: compute weighted future-token loss =====
++    L_plus = -np.sum(logp_with_result * weights, axis=1)
++    L_call_only = -np.sum(logp_call_only * weights, axis=1)
++    L_empty = -np.sum(logp_no_call * weights, axis=1)
++    # ===== T03: stronger counterfactual baseline =====
++    L_minus = np.minimum(L_empty, L_call_only)
++    # ===== T04: margin and threshold =====
++    margin = L_minus - L_plus
++    keep = margin >= tau_filter
++    return keep, margin

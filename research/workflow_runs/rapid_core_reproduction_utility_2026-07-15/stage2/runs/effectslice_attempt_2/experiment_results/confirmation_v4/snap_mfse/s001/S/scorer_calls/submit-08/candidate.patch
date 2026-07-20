@@ -1,0 +1,69 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,57 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    if not isinstance(counts, np.ndarray) or not np.issubdtype(counts.dtype, np.number):
++        raise ValueError("counts must be a numeric NumPy array")
++    if not np.isfinite(counts).all():
++        raise ValueError("counts contains nonfinite values")
++    if np.any(counts < 0):
++        raise ValueError("counts contains negative values")
++    if counts.ndim != 2:
++        raise ValueError("counts must be a two-dimensional array")
++    n_cells, _ = counts.shape
++    if n_cells == 0:
++        raise ValueError("counts must have at least one cell")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("counts contains all-zero rows")
++    if not (1 <= n_components < n_cells):
++        raise ValueError(
++            f"n_components must be between 1 and {n_cells - 1}, got {n_components}"
++        )
++
++    # Step A01: IDF scaling
++    n = n_cells
++    df = np.count_nonzero(counts, axis=0)  # document frequency per feature
++    idf = np.log(n / (1.0 + df))
++    X = counts * idf  # broadcasts over columns
++
++    # Step A02: Row normalization to unit L2 norm
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    row_norms[row_norms == 0] = 1  # safety: all-zero rows already rejected
++    X = X / row_norms
++
++    # Matrix-free operator for W = X X^T - I
++    def matvec(v):
++        return X @ (X.T @ v) - v
++
++    size = n_cells
++    op = LinearOperator((size, size), matvec=matvec, rmatvec=matvec, dtype=float)
++
++    # Use the random_state for reproducibility in the iterative solver
++    np.random.seed(random_state)
++    v0 = np.random.randn(size)
++    v0 = v0 / np.linalg.norm(v0)
++
++    eigenvalues, eigenvectors = eigsh(
++        op, k=n_components, which="LA", v0=v0, tol=0, maxiter=1000
++    )
++
++    # eigsh returns eigenvalues in increasing order for 'SA' and decreasing for 'LA'
++    # but to be safe, ensure descending order
++    # eigenvectors columns correspond to eigenvalues in the same order
++    idx = np.argsort(eigenvalues)[::-1]
++    eigenvalues = eigenvalues[idx]
++    eigenvectors = eigenvectors[:, idx]
++
++    return eigenvalues, eigenvectors

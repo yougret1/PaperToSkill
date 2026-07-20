@@ -1,0 +1,58 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,54 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # --- Validation ---
++    for arr, name in [(logp_with_result, "logp_with_result"),
++                      (logp_call_only, "logp_call_only"),
++                      (logp_no_call, "logp_no_call")]:
++        if not isinstance(arr, np.ndarray) or arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D NumPy array")
++        if not np.isfinite(arr).all():
++            raise ValueError(f"{name} contains non-finite values")
++        if (arr > 0).any():
++            raise ValueError(f"{name} contains positive (invalid) log probabilities")
++
++    # Check shape consistency
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All input matrices must have the same shape")
++
++    # Validate tau_filter
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not isinstance(tau_filter, (int, float)) or not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be a finite non-negative number")
++
++    n_candidates, future_horizon = logp_with_result.shape
++
++    # --- T01: Normalize decreasing future-token weights ---
++    # For offset t = j - i (0-indexed), raw weight = max(0, 1 - 0.2*t)
++    t = np.arange(future_horizon, dtype=float)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    weight_sum = raw_weights.sum()
++    if weight_sum == 0:
++        # Edge: if future_horizon is 0, all weights zero -> no loss contribution
++        weights = np.ones(future_horizon) / future_horizon if future_horizon > 0 else np.array([])
++    else:
++        weights = raw_weights / weight_sum
++
++    # --- T02: Compute negative weighted log probability loss ---
++    # Loss = - sum(weight_i * logp_i) over the horizon
++    def loss(matrix: np.ndarray) -> np.ndarray:
++        return -np.sum(weights * matrix, axis=1)
++
++    L_plus = loss(logp_with_result)
++    L_call_only = loss(logp_call_only)
++    L_empty = loss(logp_no_call)
++
++    # --- T03: Stronger counterfactual baseline ---
++    L_minus = np.minimum(L_empty, L_call_only)
++
++    # --- T04: Filtering ---
++    margins = L_minus - L_plus
++    keep = margins >= tau_filter
++
++    return keep, margins

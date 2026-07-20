@@ -1,0 +1,48 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,44 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    def check_matrix(x, name):
++        if not isinstance(x, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if x.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if x.size == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.isfinite(x).all():
++            raise ValueError(f"{name} contains nonfinite values")
++        if np.any(x > 0):
++            raise ValueError(f"{name} contains positive values")
++
++    check_matrix(logp_with_result, "logp_with_result")
++    check_matrix(logp_call_only, "logp_call_only")
++    check_matrix(logp_no_call, "logp_no_call")
++
++    if logp_with_result.shape != logp_call_only.shape or logp_with_result.shape != logp_no_call.shape:
++        raise ValueError("input matrices must have the same shape")
++
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not isinstance(tau_filter, (int, float, np.floating)):
++        raise ValueError("tau_filter must be a finite nonnegative float")
++    if not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
++
++    # Compute mean log probabilities over the future horizon
++    mean_with = np.mean(logp_with_result, axis=1)
++    mean_call = np.mean(logp_call_only, axis=1)
++    mean_no = np.mean(logp_no_call, axis=1)
++
++    # Keep condition: with_result better than no_call and better than call_only - tau
++    keep = (mean_with > mean_no) & (mean_with > mean_call - tau_filter)
++
++    # Margin: minimum improvement over the two baselines
++    margins = np.minimum(mean_with - mean_no, mean_with - mean_call + tau_filter).astype(np.float64)
++
++    return keep, margins

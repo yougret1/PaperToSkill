@@ -1,0 +1,107 @@
+{
+  "schema_version": "effectslice-toolformer-filter-transcript.v1",
+  "evidence_boundary": "registered_public_test_finite_schedule_confirmation_v4",
+  "condition": "F",
+  "turns": [
+    {
+      "step": 1,
+      "retry_lineage_id": "confirmation-v4:toolformer_identity:i003:F:turn-001",
+      "prompt_sha256": "4ac79a70c26af5fd5e1269d86b192a3d1e79cd5b49bfba54200d48029b955aee",
+      "response_sha256": "8b16122b8a500e5379f3cb0ddf30470b358026530157c11ba8b633230f5520b9",
+      "response_text": "{\"action\":\"open\",\"path\":\"toolformer_filter.py\",\"start_line\":1,\"end_line\":80}",
+      "action": {
+        "action": "open",
+        "query": null,
+        "path": "toolformer_filter.py",
+        "max_results": null,
+        "start_line": 1,
+        "end_line": 80,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "1: \"\"\"Starter module for the locked Toolformer loss-filter task.\"\"\"\n2: \n3: from __future__ import annotations\n4: \n5: import numpy as np\n6: \n7: \n8: def filter_api_calls(\n9:     logp_with_result: np.ndarray,\n10:     logp_call_only: np.ndarray,\n11:     logp_no_call: np.ndarray,\n12:     tau_filter: float,\n13: ) -> tuple[np.ndarray, np.ndarray]:\n14:     \"\"\"Return an ordered keep mask and one finite margin per proposed call.\"\"\"\n15: \n16:     raise NotImplementedError(\"implement the paper-core reproduction task\")",
+      "transport_attempts": 1,
+      "input_tokens": 897,
+      "output_tokens": 253,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "12ac1c05-80f1-4b00-a6d5-3306b701df8e",
+      "provider_created": 1784509611
+    },
+    {
+      "step": 2,
+      "retry_lineage_id": "confirmation-v4:toolformer_identity:i003:F:turn-002",
+      "prompt_sha256": "b6958e22512c8f32addade69b5f62c099d6e264dc3aecf97d0e866b9db6b0e82",
+      "response_sha256": "2d02a1ef354b0d8a36806a01d5c6b7c4ba001aa57647962b97c8ded621886f43",
+      "response_text": "{\"action\":\"edit\",\"path\":\"toolformer_filter.py\",\"old_text\":\"    raise NotImplementedError(\\\"implement the paper-core reproduction task\\\")\\n\",\"new_text\":\"    # Validate inputs\\n    if not (isinstance(logp_with_result, np.ndarray) and isinstance(logp_call_only, np.ndarray) and isinstance(logp_no_call, np.ndarray)):\\n        raise ValueError(\\\"Inputs must be numpy arrays\\\")\\n    if logp_with_result.ndim != 2 or logp_call_only.ndim != 2 or logp_no_call.ndim != 2:\\n        raise ValueError(\\\"Inputs must be 2D matrices\\\")\\n    n_candidates, future_horizon = logp_with_result.shape\\n    if logp_call_only.shape != (n_candidates, future_horizon) or logp_no_call.shape != (n_candidates, future_horizon):\\n        raise ValueError(\\\"Input matrices must have same shape\\\")\\n    if n_candidates == 0 or future_horizon == 0:\\n        raise ValueError(\\\"Empty matrices are not allowed\\\")\\n    if not (np.all(np.isfinite(logp_with_result)) and np.all(np.isfinite(logp_call_only)) and np.all(np.isfinite(logp_no_call))):\\n        raise ValueError(\\\"All log probabilities must be finite\\\")\\n    if not (np.all(logp_with_result <= 0) and np.all(logp_call_only <= 0) and np.all(logp_no_call <= 0)):\\n        raise ValueError(\\\"All log probabilities must be nonpositive\\\")\\n    if isinstance(tau_filter, bool):\\n        raise ValueError(\\\"Threshold cannot be boolean\\\")\\n    if not isinstance(tau_filter, (int, float)):\\n        raise ValueError(\\\"Threshold must be a numeric scalar\\\")\\n    if tau_filter < 0 or not np.isfinite(tau_filter):\\n        raise ValueError(\\\"Threshold must be nonnegative and finite\\\")\\n\\n    # Compute normalized weights\\n    t = np.arange(future_horizon, dtype=float)\\n    weights = np.maximum(0.0, 1.0 - 0.2 * t)\\n    weight_sum = weights.sum()\\n    if weight_sum == 0:\\n        raise ValueError(\\\"Future horizon too small (all weights zero)\\\")\\n    norm_weights = weights / weight_sum\\n\\n    # Compute weighted losses\\n    loss_with_result = -np.dot(logp_with_result, norm_weights)\\n    loss_call_only = -np.dot(logp_call_only, norm_weights)\\n    loss_no_call = -np.dot(logp_no_call, norm_weights)\\n\\n    L_minus = np.minimum(loss_no_call, loss_call_only)\\n    margins = L_minus - loss_with_result\\n    keep_mask = margins >= tau_filter\\n\\n    return keep_mask, margins\\n\"}",
+      "action": {
+        "action": "edit",
+        "query": null,
+        "path": "toolformer_filter.py",
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": "    raise NotImplementedError(\"implement the paper-core reproduction task\")\n",
+        "new_text": "    # Validate inputs\n    if not (isinstance(logp_with_result, np.ndarray) and isinstance(logp_call_only, np.ndarray) and isinstance(logp_no_call, np.ndarray)):\n        raise ValueError(\"Inputs must be numpy arrays\")\n    if logp_with_result.ndim != 2 or logp_call_only.ndim != 2 or logp_no_call.ndim != 2:\n        raise ValueError(\"Inputs must be 2D matrices\")\n    n_candidates, future_horizon = logp_with_result.shape\n    if logp_call_only.shape != (n_candidates, future_horizon) or logp_no_call.shape != (n_candidates, future_horizon):\n        raise ValueError(\"Input matrices must have same shape\")\n    if n_candidates == 0 or future_horizon == 0:\n        raise ValueError(\"Empty matrices are not allowed\")\n    if not (np.all(np.isfinite(logp_with_result)) and np.all(np.isfinite(logp_call_only)) and np.all(np.isfinite(logp_no_call))):\n        raise ValueError(\"All log probabilities must be finite\")\n    if not (np.all(logp_with_result <= 0) and np.all(logp_call_only <= 0) and np.all(logp_no_call <= 0)):\n        raise ValueError(\"All log probabilities must be nonpositive\")\n    if isinstance(tau_filter, bool):\n        raise ValueError(\"Threshold cannot be boolean\")\n    if not isinstance(tau_filter, (int, float)):\n        raise ValueError(\"Threshold must be a numeric scalar\")\n    if tau_filter < 0 or not np.isfinite(tau_filter):\n        raise ValueError(\"Threshold must be nonnegative and finite\")\n\n    # Compute normalized weights\n    t = np.arange(future_horizon, dtype=float)\n    weights = np.maximum(0.0, 1.0 - 0.2 * t)\n    weight_sum = weights.sum()\n    if weight_sum == 0:\n        raise ValueError(\"Future horizon too small (all weights zero)\")\n    norm_weights = weights / weight_sum\n\n    # Compute weighted losses\n    loss_with_result = -np.dot(logp_with_result, norm_weights)\n    loss_call_only = -np.dot(logp_call_only, norm_weights)\n    loss_no_call = -np.dot(logp_no_call, norm_weights)\n\n    L_minus = np.minimum(loss_no_call, loss_call_only)\n    margins = L_minus - loss_with_result\n    keep_mask = margins >= tau_filter\n\n    return keep_mask, margins\n"
+      },
+      "observation_status": "ok",
+      "observation_message": "{\"changed\":true,\"path\":\"toolformer_filter.py\",\"replacements\":1}",
+      "transport_attempts": 1,
+      "input_tokens": 1082,
+      "output_tokens": 3927,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "94a6699e-308b-4353-9282-71731130b1b0",
+      "provider_created": 1784509614
+    },
+    {
+      "step": 3,
+      "retry_lineage_id": "confirmation-v4:toolformer_identity:i003:F:turn-003",
+      "prompt_sha256": "8cf61c6a0adafcd3e00295a4363e971196ac15da36a591a2710e575097b2f31d",
+      "response_sha256": "af062acbe3e64aa039672b0bc0197abeb443bf0cc9685e7d96ea67d18afdb7d7",
+      "response_text": "{\"action\":\"test\"}",
+      "action": {
+        "action": "test",
+        "query": null,
+        "path": null,
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "public_tested",
+      "observation_message": "{\"message\":\"locked public test completed\",\"returncode\":0,\"status\":\"passed\",\"stderr\":\"\",\"stdout\":\".                                                                        [100%]\\n1 passed in 0.08s\\n\"}",
+      "transport_attempts": 1,
+      "input_tokens": 1751,
+      "output_tokens": 162,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "3658b12c-2c2d-465d-9b46-27d0e86709cf",
+      "provider_created": 1784509641
+    },
+    {
+      "step": 4,
+      "retry_lineage_id": "confirmation-v4:toolformer_identity:i003:F:turn-004",
+      "prompt_sha256": "7a3cf6566aef472a756de520e6049cf860303534d4a0ded118ee7d5b8906cb2c",
+      "response_sha256": "6831a7112fd0308595c6abaab94fbd4f05541fda862d0e6075e89ad1df53163b",
+      "response_text": "{\"action\":\"submit\"}",
+      "action": {
+        "action": "submit",
+        "query": null,
+        "path": null,
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "scored",
+      "observation_message": "{\"contract_passed\":true,\"failure_reason\":\"\",\"passed_cases\":64,\"status\":\"passed\",\"task_score\":1.0,\"total_cases\":64}",
+      "transport_attempts": 1,
+      "input_tokens": 1818,
+      "output_tokens": 463,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "1f425206-7ef9-45c8-b1c9-9070f66e0714",
+      "provider_created": 1784509644
+    }
+  ]
+}

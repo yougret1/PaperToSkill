@@ -1,0 +1,34 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -12,5 +12,29 @@
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    arrays = [logp_with_result, logp_call_only, logp_no_call]
++    names = ["logp_with_result", "logp_call_only", "logp_no_call"]
++    for name, arr in zip(names, arrays):
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy ndarray")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be 2D")
++        if arr.shape[0] == 0 or arr.shape[1] == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} must have finite entries")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} must have nonpositive entries")
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("all three log probability arrays must have the same shape")
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
++    # Compute margin: sum((logp_with_result - logp_no_call), axis=1)
++    margin = np.sum(logp_with_result - logp_no_call, axis=1)
++    keep = margin > tau_filter
++    return keep, margin

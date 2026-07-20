@@ -1,0 +1,65 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import eigsh, LinearOperator
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,53 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    if not np.isfinite(counts).all():
++        raise ValueError("counts contains nonfinite values")
++    if np.any(counts < 0):
++        raise ValueError("counts contains negative values")
++    n_cells, n_features = counts.shape
++    if n_cells <= 1:
++        raise ValueError("counts must have at least 2 cells")
++    if n_components is None or n_components < 1 or n_components >= n_cells:
++        raise ValueError("n_components must be between 1 and n_cells-1")
++    
++    # IDF scaling
++    df = np.count_nonzero(counts > 0, axis=0)
++    idf = np.log(n_cells / (1.0 + df))
++    scaled = counts * idf
++    
++    # Row L2 normalization
++    row_norms = np.linalg.norm(scaled, axis=1)
++    if np.any(row_norms == 0) or np.any(~np.isfinite(row_norms)):
++        raise ValueError("some rows have zero or nonfinite norm")
++    X = scaled / row_norms[:, np.newaxis]
++    
++    # Degree vector: d = X @ (X.T @ ones) - 1
++    ones = np.ones(n_cells)
++    X_T_ones = X.T @ ones
++    d = X @ X_T_ones - 1.0
++    if np.any(d <= 0):
++        raise ValueError("nonpositive degree encountered")
++    
++    D_inv = 1.0 / d
++    D_inv_sqrt = np.sqrt(D_inv)
++    X_tilde = X * D_inv_sqrt[:, np.newaxis]
++    
++    # Define matrix-free linear operator
++    def matvec(v):
++        return X_tilde @ (X_tilde.T @ v) - D_inv * v
++    
++    op = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=np.float64)
++    
++    # Compute top eigenvectors via Lanczos
++    k = min(n_components, n_cells - 1)
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells)
++    eigenvalues, eigenvectors = eigsh(op, k=k, which='LA', tol=1e-10, v0=v0)
++    # Reverse to descending order
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++    return eigenvalues, eigenvectors

@@ -1,0 +1,68 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,8 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++import scipy
++from scipy.sparse.linalg import eigsh, LinearOperator
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +14,55 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D array")
++    if not np.isfinite(counts).all():
++        raise ValueError("counts must be finite")
++    if (counts < 0).any():
++        raise ValueError("counts must be nonnegative")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("all-zero rows are not allowed")
++    if not (1 <= n_components < counts.shape[0]):
++        raise ValueError("n_components must be >= 1 and < n_cells")
++
++    n, p = counts.shape
++
++    # IDF scaling (A01)
++    df = np.count_nonzero(counts, axis=0).astype(np.float64)
++    idf = np.log(n / (1.0 + df))
++    counts_idf = counts * idf[np.newaxis, :]
++
++    # Row normalization (A02)
++    row_norms = np.linalg.norm(counts_idf, axis=1)
++    if (row_norms == 0).any():
++        raise ValueError("Row normalization failed (zero row after IDF)")
++    X = counts_idf / row_norms[:, np.newaxis]
++
++    # Degree vector (A03)
++    ones = np.ones(n, dtype=np.float64)
++    d = X @ (X.T @ ones) - 1.0
++    if not (d > 0).all():
++        raise ValueError("Degrees must be positive")
++
++    D_inv = 1.0 / d
++    D_inv_half = np.sqrt(D_inv)
++
++    X_tilde = X * D_inv_half[:, np.newaxis]
++
++    # Linear operator for L_sym (A04)
++    def matvec(v):
++        return X_tilde @ (X_tilde.T @ v) - D_inv * v
++
++    op = LinearOperator((n, n), matvec=matvec, rmatvec=matvec, dtype=np.float64)
++
++    # Lanczos eigensolver (A05)
++    eigenvalues, eigenvectors = eigsh(op, k=n_components, which='LA',
++                                      tol=0, maxiter=None, v0=np.random.RandomState(random_state).randn(n))
++
++    # Sort descending
++    idx = np.argsort(-eigenvalues)
++    eigenvalues = eigenvalues[idx]
++    eigenvectors = eigenvectors[:, idx]
++
++    return eigenvalues, eigenvectors

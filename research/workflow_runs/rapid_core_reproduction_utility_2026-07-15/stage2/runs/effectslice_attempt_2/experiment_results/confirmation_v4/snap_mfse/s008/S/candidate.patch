@@ -1,0 +1,66 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++import scipy.sparse.linalg as spla
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,54 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    if counts.ndim != 2:
++        raise ValueError('counts must be a 2D array')
++    if not np.issubdtype(counts.dtype, np.floating):
++        raise ValueError('counts must be floating point')
++    if not np.all(np.isfinite(counts)):
++        raise ValueError('counts contains nonfinite values')
++    if np.any(counts < 0):
++        raise ValueError('counts contains negative values')
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError('counts has all-zero rows')
++
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError('n_components must be between 1 and n_cells-1')
++
++    # IDF scaling
++    df = np.count_nonzero(counts > 0, axis=0)
++    idf = np.log(n_cells / (1.0 + df))
++    X = counts * idf
++
++    # Row normalization
++    norms = np.linalg.norm(X, axis=1, keepdims=True)
++    if np.any(norms == 0):
++        raise ValueError('counts has all-zero rows')
++    X = X / norms
++
++    # Degree vector (matrix-free): d = X @ (X.T @ ones) - 1
++    d = X @ (X.T @ np.ones(n_cells)) - 1.0
++    if np.any(d <= 0):
++        raise ValueError('Some cells have zero degree')
++
++    # Matrix-free operator for the normalized Laplacian L_norm
++    # L_norm = I - D^{-1/2} (X X^T - I) D^{-1/2} = I - D^{-1/2} X X^T D^{-1/2} + D^{-1}
++    d_inv_sqrt = 1.0 / np.sqrt(d)
++    def matvec(v):
++        scaled = d_inv_sqrt * v
++        inner = X @ (X.T @ scaled)
++        return v - d_inv_sqrt * inner + v / d
++
++    A = spla.LinearOperator((n_cells, n_cells), matvec=matvec, rmatvec=matvec, dtype=np.float64)
++
++    rs = np.random.RandomState(random_state)
++    v0 = rs.randn(n_cells)
++    eigenvalues, eigenvectors = spla.eigsh(A, k=n_components, which='SA', v0=v0, maxiter=1000)
++
++    # eigsh returns eigenvalues in ascending order; reverse for descending
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    return eigenvalues, eigenvectors

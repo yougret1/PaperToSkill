@@ -1,0 +1,46 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -12,4 +12,42 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    n_cells, n_features = counts.shape
++    if not np.all(np.isfinite(counts)) or np.any(counts < 0):
++        raise ValueError("Input must be finite and nonnegative.")
++    if np.any((counts > 0).sum(axis=1) == 0):
++        raise ValueError("All-zero cell rows are not allowed.")
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be between 1 and n_cells-1.")
++    
++    # IDF scaling
++    df = np.count_nonzero(counts > 0, axis=0)
++    idf = np.log(n_cells / (1 + df))
++    X = counts * idf[np.newaxis, :]
++    
++    # Row normalization
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    X = X / row_norms
++    
++    # Matrix-free operator for W = X X^T - I
++    import scipy.sparse.linalg as spla
++    
++    def matvec(v):
++        return X @ (X.T @ v) - v
++    
++    n = n_cells
++    A = spla.LinearOperator((n, n), matvec=matvec, rmatvec=matvec, dtype=np.float64)
++    
++    # Set starting vector from random_state for reproducibility
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells)
++    
++    # Compute leading eigenvalues and eigenvectors of the normalized similarity matrix
++    eigenvalues, eigenvectors = spla.eigsh(A, k=n_components, which='LA', v0=v0, return_eigenvectors=True)
++    
++    # eigsh returns eigenvalues in ascending order; sort descending
++    idx = np.argsort(eigenvalues)[::-1]
++    eigenvalues = eigenvalues[idx]
++    eigenvectors = eigenvectors[:, idx]
++    
++    return eigenvalues, eigenvectors

@@ -1,0 +1,61 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import eigsh, LinearOperator
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,49 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    if np.any(~np.isfinite(counts)):
++        raise ValueError("counts contains nonfinite values")
++    if np.any(counts < 0):
++        raise ValueError("counts contains negative values")
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be in [1, n_cells)")
++    row_sums = counts.sum(axis=1)
++    if np.any(row_sums == 0):
++        raise ValueError("counts has all-zero rows")
++    
++    # 1. IDF scaling
++    df = np.count_nonzero(counts, axis=0).astype(np.float64)
++    idf = np.log(n_cells / (1.0 + df))
++    X = counts * idf[np.newaxis, :]
++    
++    # 2. Row normalization
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    X = X / row_norms
++    
++    # 3. Degrees matrix-free
++    ones = np.ones(n_cells)
++    d = X @ (X.T @ ones) - ones
++    if np.any(d <= 0):
++        raise ValueError("non-positive degrees encountered")
++    D_inv = 1.0 / d
++    D_inv_sqrt = np.sqrt(D_inv)
++    
++    # 4. Linear operator for normalized similarity
++    X_tilde = X * D_inv_sqrt[:, np.newaxis]
++    def matvec(v):
++        return X_tilde @ (X_tilde.T @ v) - D_inv * v
++    operator = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=X.dtype)
++    
++    # 5. Lanczos spectral decomposition
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells)
++    eigenvalues, eigenvectors = eigsh(operator, k=n_components, which='LA', v0=v0)
++    # eigsh returns eigenvalues in ascending order for 'LA'
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++    
++    return eigenvalues, eigenvectors

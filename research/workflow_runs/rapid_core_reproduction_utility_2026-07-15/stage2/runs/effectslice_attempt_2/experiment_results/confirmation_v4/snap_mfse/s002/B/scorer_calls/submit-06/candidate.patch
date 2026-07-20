@@ -1,0 +1,50 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,38 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not isinstance(counts, np.ndarray):
++        raise TypeError("counts must be a numpy array")
++    if not np.isfinite(counts).all():
++        raise ValueError("counts contains nonfinite values")
++    if np.any(counts < 0):
++        raise ValueError("counts contains negative values")
++    if counts.ndim != 2:
++        raise ValueError("counts must be 2D")
++    n_cells, n_features = counts.shape
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("counts contains all-zero rows")
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be 1 <= n_components < n_cells")
++
++    # Define matrix-free operator for Gram matrix A = counts @ counts.T
++    def matvec(v):
++        # v is 1-D array of length n_cells
++        return counts @ (counts.T @ v)
++
++    A = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=counts.dtype)
++
++    # Reproducible initialization
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells)
++
++    # Compute leading eigenvalues and eigenvectors
++    eigenvalues, eigenvectors = eigsh(A, k=n_components, which='LM', v0=v0)
++
++    # Sort descending
++    idx = np.argsort(eigenvalues)[::-1]
++    eigenvalues_desc = eigenvalues[idx]
++    eigenvectors_desc = eigenvectors[:, idx]
++
++    return eigenvalues_desc, eigenvectors_desc

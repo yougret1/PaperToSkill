@@ -1,0 +1,42 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -12,5 +12,37 @@
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validation
++    for arr, name in [(logp_with_result, "logp_with_result"),
++                      (logp_call_only, "logp_call_only"),
++                      (logp_no_call, "logp_no_call")]:
++        if not isinstance(arr, np.ndarray) or arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D numpy array")
++    n_cand, future_horizon = logp_with_result.shape
++    if logp_call_only.shape != logp_with_result.shape or logp_no_call.shape != logp_with_result.shape:
++        raise ValueError("All input matrices must have the same shape")
++    if n_cand == 0 or future_horizon == 0:
++        raise ValueError("Input matrices must not be empty")
++    for arr, name in [(logp_with_result, "logp_with_result"),
++                      (logp_call_only, "logp_call_only"),
++                      (logp_no_call, "logp_no_call")]:
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} contains nonfinite values")
++        if not np.all(arr <= 0):
++            raise ValueError(f"{name} contains positive values")
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be boolean")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
++    # Compute sums over horizon
++    sum_with = np.sum(logp_with_result, axis=1)
++    sum_call_only = np.sum(logp_call_only, axis=1)
++    sum_no_call = np.sum(logp_no_call, axis=1)
++    # Margin from including the result
++    margin = sum_with - sum_no_call
++    # Margin from call only
++    margin_call_only = sum_call_only - sum_no_call
++    # Keep if the result improves significantly above threshold
++    # and the call without result does not improve above threshold
++    keep = (margin > tau_filter) & (margin_call_only < tau_filter)
++    return keep, margin

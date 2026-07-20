@@ -1,0 +1,89 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,77 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # --- input validation ---
++    if not isinstance(counts, np.ndarray):
++        raise ValueError("counts must be a numpy array")
++    if not np.issubdtype(counts.dtype, np.floating) and not np.issubdtype(counts.dtype, np.integer):
++        raise ValueError("counts must be numeric")
++    if not np.all(np.isfinite(counts)):
++        raise ValueError("counts must be finite")
++    if (counts < 0).any():
++        raise ValueError("counts must be nonnegative")
++    n, p = counts.shape
++    row_sums = counts.sum(axis=1)
++    if (row_sums == 0).any():
++        raise ValueError("all-zero rows are not allowed")
++    if not (1 <= n_components < n):
++        raise ValueError("n_components must be in [1, n_cells-1]")
++
++    # --- IDF scaling (A01) ---
++    n_cells = n
++    df = (counts > 0).sum(axis=0).astype(np.float64)
++    idf = np.log(n_cells / (1.0 + df))
++    scaled = counts.astype(np.float64) * idf[np.newaxis, :]
++
++    # --- row normalization (A02) ---
++    row_norms = np.linalg.norm(scaled, axis=1, keepdims=True)
++    row_norms[row_norms == 0] = 1.0   # should not happen because zero rows rejected earlier
++    X = scaled / row_norms
++
++    # --- compute degree vector matrix-free (A03) ---
++    ones = np.ones(n_cells)
++    degree = X @ (X.T @ ones) - 1.0
++    # ensure non-negative (floating point may yield small negatives)
++    degree = np.maximum(degree, 0.0)
++    d_sqrt_inv = np.where(degree > 0, 1.0 / np.sqrt(degree), 0.0)
++
++    # --- matrix-free operator for D^{-1/2} W D^{-1/2} ---
++    # W = X X^T - I, so operator(v) = d_sqrt_inv*(X @ (X.T @ (d_sqrt_inv*v))) - d_sqrt_inv*d_sqrt_inv*v
++    # But the second term is (d_sqrt_inv**2) which is 1/degree. This is diagonal.
++    # We implement full operator: v -> d_sqrt_inv * (X @ (X.T @ (d_sqrt_inv * v))) - (1/degree) * v
++    # This is symmetric.
++
++    # Precompute 1/degree safely
++    inv_degree = np.where(degree > 0, 1.0 / degree, 0.0)
++
++    def matvec(v):
++        t = d_sqrt_inv * v
++        inner = X.T @ t
++        temp = X @ inner
++        term1 = d_sqrt_inv * temp
++        term2 = inv_degree * v   # safe even if degree = 0
++        return term1 - term2
++
++    # Linear operator for the symmetric matrix M = D^{-1/2} W D^{-1/2}
++    n_cells = X.shape[0]
++    M_op = LinearOperator((n_cells, n_cells), matvec=matvec, rmatvec=matvec, dtype=np.float64)
++
++    # seed the initial vector for reproducibility
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells)
++    v0 = v0 / np.linalg.norm(v0)
++
++    # compute leading (largest algebraic) eigenvalues and vectors
++    try:
++        eigenvalues, eigenvectors = eigsh(M_op, k=n_components, which='LA', tol=1e-8, maxiter=10000, v0=v0)
++    except Exception as e:
++        raise RuntimeError("eigsh failed") from e
++
++    # eigsh returns eigenvalues in ascending order for 'LA'? Actually it returns in ascending order for 'SA', for 'LA' and 'LM' it returns in descending order.
++    # The documentation says for 'LA' the eigenvalues are returned in descending order.
++    # We still sort to be safe.
++    order = np.argsort(-eigenvalues)  # descending order of algebraic value
++    eigenvalues = eigenvalues[order]
++    eigenvectors = eigenvectors[:, order]
++
++    return eigenvalues, eigenvectors

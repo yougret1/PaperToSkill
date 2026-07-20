@@ -1,0 +1,101 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -10,6 +11,88 @@
+     n_components: int,
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+-    """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    """Return leading spectral coordinates for a cell-by-feature count matrix.
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    Implements the matrix-free spectral embedding described in the paper,
++    including IDF scaling, row normalization, and computing the leading
++    eigenpairs of W = X X^T - I without forming the full n_cells x n_cells
++    matrix.
++
++    Parameters
++    ----------
++    counts : ndarray
++        Cell-by-feature count matrix (finite, nonnegative, no all-zero rows).
++    n_components : int
++        Number of leading components to return (1 <= n_components < n_cells).
++    random_state : int
++        Seed for reproducibility of the iterative solver.
++
++    Returns
++    -------
++    eigenvalues : ndarray, shape (n_components,)
++        Leading eigenvalues of W in descending order.
++    eigenvectors : ndarray, shape (n_cells, n_components)
++        Corresponding eigenvectors (cell embedding).
++
++    Raises
++    ------
++    ValueError
++        If inputs violate the constraints.
++    """
++    # Input validation
++    if counts.ndim != 2:
++        raise ValueError("counts must be a 2D array")
++    if not np.isfinite(counts).all():
++        raise ValueError("counts must be finite")
++    if np.any(counts < 0):
++        raise ValueError("counts must be nonnegative")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("no cell row may be all zeros")
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError(
++            f"n_components must satisfy 1 <= n_components < n_cells, "
++            f"got n_components={n_components}, n_cells={n_cells}"
++        )
++
++    # Step 1: IDF scaling
++    # Feature document frequency: number of cells with non-zero count
++    df = np.count_nonzero(counts, axis=0).astype(np.float64)
++    idf = np.log(n_cells / (1.0 + df))
++    scaled = counts * idf  # shape (n_cells, n_features)
++
++    # Step 2: Row normalization to unit L2 norm
++    norms = np.linalg.norm(scaled, axis=1, keepdims=True)
++    X = np.divide(scaled, norms, out=np.zeros_like(scaled), where=norms != 0)
++
++    # Step 3: Matrix-free eigenpairs of W = X X^T - I
++    class _WOp(LinearOperator):
++        def __init__(self, X_ref):
++            self.X = X_ref
++            self.shape = (n_cells, n_cells)
++            self.dtype = X_ref.dtype
++
++        def _matvec(self, v):
++            return self.X @ (self.X.T @ v) - v
++
++    operator = _WOp(X)
++
++    rng = np.random.RandomState(random_state)
++    initial = rng.randn(n_cells).astype(X.dtype)
++
++    eigenvalues, eigenvectors = eigsh(
++        operator,
++        k=n_components,
++        which='LA',
++        v0=initial,
++        tol=1e-6,
++        maxiter=1000,
++        return_eigenvectors=True,
++    )
++
++    # Sort eigenvalues in descending order
++    idx = np.argsort(eigenvalues)[::-1]
++    eigenvalues = eigenvalues[idx]
++    eigenvectors = eigenvectors[:, idx]
++
++    return eigenvalues, eigenvectors

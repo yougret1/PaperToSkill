@@ -1,0 +1,36 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -12,5 +12,31 @@
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    for arr in [logp_with_result, logp_call_only, logp_no_call]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError("Input must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError("Input must be a 2D matrix")
++        if arr.size == 0:
++            raise ValueError("Input cannot be empty")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError("Input contains nonfinite values")
++        if np.any(arr > 0):
++            raise ValueError("Input contains positive values (log probabilites must be nonpositive)")
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("Input shapes must match")
++    # Validate tau_filter
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be boolean")
++    if not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
++    # Compute margins
++    diff_with = logp_with_result - logp_no_call
++    diff_call = logp_call_only - logp_no_call
++    combined = np.maximum(diff_with, diff_call)
++    margin = np.max(combined, axis=1)
++    keep_mask = margin > tau_filter
++    return (keep_mask, margin)

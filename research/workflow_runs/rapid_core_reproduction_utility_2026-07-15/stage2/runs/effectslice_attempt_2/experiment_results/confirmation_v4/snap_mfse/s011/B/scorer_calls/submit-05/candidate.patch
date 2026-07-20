@@ -1,0 +1,48 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -12,4 +12,44 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    from scipy.sparse.linalg import eigsh, LinearOperator
++
++    # Input validation
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    counts = counts.astype(np.float64, copy=False)
++    if not np.isfinite(counts).all():
++        raise ValueError("counts contains nonfinite values")
++    if np.any(counts < 0):
++        raise ValueError("counts contains negative values")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("counts contains all-zero rows")
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be between 1 and n_cells-1")
++
++    # Row normalization
++    d = counts.sum(axis=1)  # (n_cells,)
++    d_inv_sqrt = 1.0 / np.sqrt(d)
++
++    # Define linear operator for matrix-free multiplication
++    def matvec(v: np.ndarray) -> np.ndarray:
++        temp1 = v * d_inv_sqrt
++        temp2 = counts.T @ temp1
++        temp3 = counts @ temp2
++        return d_inv_sqrt * temp3
++
++    A = LinearOperator(shape=(n_cells, n_cells), matvec=matvec, dtype=np.float64)
++
++    # Set starting vector for reproducibility
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells).astype(np.float64)
++
++    # Compute leading eigenvalues and eigenvectors
++    eigenvalues, eigenvectors = eigsh(A, k=n_components, which='LA', v0=v0)
++
++    # Reverse to descending order
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    return eigenvalues, eigenvectors

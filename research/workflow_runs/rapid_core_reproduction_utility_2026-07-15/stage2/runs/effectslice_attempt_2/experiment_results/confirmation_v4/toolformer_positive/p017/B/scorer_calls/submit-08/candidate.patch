@@ -1,0 +1,40 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -12,5 +12,35 @@
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    arrays = [logp_with_result, logp_call_only, logp_no_call]
++    for arr in arrays:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError("Inputs must be np.ndarray")
++        if arr.ndim != 2:
++            raise ValueError("Inputs must be 2D")
++        if arr.shape[0] == 0 or arr.shape[1] == 0:
++            raise ValueError("Inputs cannot be empty")
++        if not np.isfinite(arr).all():
++            raise ValueError("Inputs must be finite")
++        if np.any(arr > 0):
++            raise ValueError("Inputs must be nonpositive")
++    shape = logp_with_result.shape
++    if logp_call_only.shape != shape or logp_no_call.shape != shape:
++        raise ValueError("All inputs must have same shape")
++    if isinstance(tau_filter, (bool, np.bool_)):
++        raise ValueError("tau_filter cannot be bool")
++    if not np.isscalar(tau_filter) or not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite nonnegative")
++    tau = float(tau_filter)
++    # Compute average log probabilities over future horizon
++    with_mean = np.mean(logp_with_result, axis=1)
++    call_mean = np.mean(logp_call_only, axis=1)
++    no_call_mean = np.mean(logp_no_call, axis=1)
++    # Best baseline without result is the higher (better) mean log prob
++    best_no_result = np.maximum(call_mean, no_call_mean)
++    # Margin: how much better with_result is over best without result
++    margin = with_mean - best_no_result
++    # Keep if margin > tau (strict)
++    keep = margin > tau
++    return keep, margin

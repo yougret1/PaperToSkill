@@ -1,0 +1,55 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,51 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be boolean")
++    if not np.isscalar(tau_filter) or not np.isreal(tau_filter):
++        raise ValueError("tau_filter must be a finite real number")
++    if np.isnan(tau_filter) or np.isinf(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
++
++    for arr, name in [(logp_with_result, 'logp_with_result'),
++                      (logp_call_only, 'logp_call_only'),
++                      (logp_no_call, 'logp_no_call')]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if arr.size == 0:
++            raise ValueError(f"{name} is empty")
++        if np.any(np.isnan(arr)) or np.any(np.isinf(arr)):
++            raise ValueError(f"{name} contains nonfinite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} contains positive values (log probabilities must be <=0)")
++
++    sh = logp_with_result.shape
++    if logp_call_only.shape != sh or logp_no_call.shape != sh:
++        raise ValueError("All input matrices must have the same shape")
++
++    n_candidates, horizon = sh
++    if horizon == 0:
++        raise ValueError("Horizon must be at least 1")
++
++    # compute normalized weights
++    t = np.arange(horizon, dtype=float)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    weight_sum = raw_weights.sum()
++    if weight_sum <= 0:
++        raise ValueError("Weight sum is non-positive (horizon too small)")
++    norm_weights = raw_weights / weight_sum
++
++    # weighted future-token losses
++    L_plus = -np.sum(logp_with_result * norm_weights, axis=1)
++    L_empty = -np.sum(logp_no_call * norm_weights, axis=1)
++    L_call_only = -np.sum(logp_call_only * norm_weights, axis=1)
++
++    L_minus = np.minimum(L_empty, L_call_only)
++    margins = L_minus - L_plus
++    keep = margins >= tau_filter
++
++    return keep, margins

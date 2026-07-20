@@ -1,0 +1,59 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,55 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    if not isinstance(tau_filter, (int, float)) or isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must be a finite nonnegative number")
++    if tau_filter < 0 or not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite and nonnegative")
++
++    for arr, name in [
++        (logp_with_result, "logp_with_result"),
++        (logp_call_only, "logp_call_only"),
++        (logp_no_call, "logp_no_call"),
++    ]:
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D array")
++        if arr.size == 0:
++            raise ValueError(f"{name} must not be empty")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} must be nonpositive")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} must contain only finite values")
++
++    if not (
++        logp_with_result.shape == logp_call_only.shape == logp_no_call.shape
++    ):
++        raise ValueError("All input arrays must have the same shape")
++
++    # Compute weights: decreasing linearly to 0 at t=5 (max(0, 1-0.2*t))
++    horizon = logp_with_result.shape[1]
++    t = np.arange(horizon)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    weight_sum = np.sum(raw_weights)
++    if weight_sum <= 0:
++        raise ValueError("Normalization denominator zero (all weights zero)")
++    weights = raw_weights / weight_sum  # shape (horizon,)
++
++    # Weighted sums of log probabilities (each shape (n_candidates,))
++    w_sum_result = np.dot(logp_with_result, weights)
++    w_sum_call = np.dot(logp_call_only, weights)
++    w_sum_no = np.dot(logp_no_call, weights)
++
++    # Losses = -weighted_sum_of_log_probs
++    L_result = -w_sum_result
++    L_call = -w_sum_call
++    L_no = -w_sum_no
++
++    # Margin: reduction in loss from no_call to with_result
++    margin = L_no - L_result
++
++    # Keep if API call helps (L_result < L_no and L_result < L_call)
++    # and margin exceeds threshold
++    keep = (L_result < L_no) & (L_result < L_call) & (margin > tau_filter)
++
++    return (keep, margin)

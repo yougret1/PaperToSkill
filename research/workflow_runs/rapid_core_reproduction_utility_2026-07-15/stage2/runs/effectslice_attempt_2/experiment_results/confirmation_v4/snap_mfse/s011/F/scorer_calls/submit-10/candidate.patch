@@ -1,0 +1,74 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,62 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate input
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    if np.any(np.isnan(counts)) or np.any(np.isinf(counts)):
++        raise ValueError("counts contains nonfinite values")
++    if np.any(counts < 0):
++        raise ValueError("counts contains negative values")
++    n, f = counts.shape
++    if not (1 <= n_components < n):
++        raise ValueError(f"n_components must be between 1 and {n-1}, got {n_components}")
++    # Check all-zero rows
++    row_sums = counts.sum(axis=1)
++    if np.any(row_sums == 0):
++        raise ValueError("counts contains all-zero rows")
++
++    # Step 1: IDF scaling
++    df = np.count_nonzero(counts, axis=0)  # document frequency
++    scale = np.log(n / (1.0 + df))
++    scaled = counts * scale
++
++    # Step 2: Row normalize to unit L2 norm
++    row_norms = np.linalg.norm(scaled, axis=1, keepdims=True)
++    if np.any(row_norms == 0):
++        raise ValueError("row normalization failed due to zero L2 norm")
++    X = scaled / row_norms  # shape (n, f)
++
++    # Step 3: Compute degree vector matrix-free: d = X @ (X.T @ 1) - 1
++    ones = np.ones(n)
++    XT_ones = X.T @ ones
++    d = X @ XT_ones - 1.0
++    if np.any(d <= 0):
++        raise ValueError("degree values must be positive")
++
++    # Step 4: Prepare diagonal inverse degree
++    D_inv = 1.0 / d
++    sqrt_D_inv = np.sqrt(D_inv)
++    X_tilde = X * sqrt_D_inv[:, np.newaxis]  # D^{-1/2} X
++
++    # Step 5: Define linear operator for L = X_tilde X_tilde^T - diag(D_inv)
++    def matvec(v):
++        w = X_tilde @ (X_tilde.T @ v) - D_inv * v
++        return w
++
++    L_op = LinearOperator((n, n), matvec=matvec, dtype=np.float64)
++
++    # Step 6: Lanczos eigensolver, get largest eigenvalues
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n).astype(np.float64)
++    try:
++        eigenvalues, eigenvectors = eigsh(L_op, k=n_components, which='LA', v0=v0)
++    except Exception as e:
++        raise RuntimeError(f"Eigensolver failed: {e}")
++
++    # Sort eigenvalues descending
++    idx = np.argsort(eigenvalues)[::-1]
++    eigenvalues = eigenvalues[idx]
++    eigenvectors = eigenvectors[:, idx]
++
++    return np.ascontiguousarray(eigenvalues), np.ascontiguousarray(eigenvectors)

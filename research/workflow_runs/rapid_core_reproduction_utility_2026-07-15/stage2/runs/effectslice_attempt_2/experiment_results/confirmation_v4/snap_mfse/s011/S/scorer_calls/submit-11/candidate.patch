@@ -1,0 +1,47 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -12,4 +12,43 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    if not np.isfinite(counts).all():
++        raise ValueError("counts must be finite")
++    if (counts < 0).any():
++        raise ValueError("counts must be nonnegative")
++    if (counts.sum(axis=1) == 0).any():
++        raise ValueError("counts has all-zero rows")
++    n_cells, _ = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be between 1 and n_cells-1 inclusive")
++
++    # Step 1: IDF scaling
++    n = counts.shape[0]
++    df = (counts > 0).sum(axis=0).astype(float)
++    idf = np.log(n / (1.0 + df))
++    X = counts * idf[np.newaxis, :]
++
++    # Step 2: Row normalization to unit L2 norm
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    X = X / row_norms
++
++    # Step 3: Matrix-free top eigen decomposition of W = X X^T - I
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells)
++
++    def matvec(v):
++        return X @ (X.T @ v) - v
++
++    from scipy.sparse.linalg import LinearOperator, eigsh
++    A = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=np.float64)
++
++    eigenvalues, eigenvectors = eigsh(A, k=n_components, which='LA', v0=v0, maxiter=1000)
++
++    # Convert to descending order
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    return eigenvalues, eigenvectors

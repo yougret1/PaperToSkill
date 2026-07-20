@@ -1,0 +1,56 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,44 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    if not np.isfinite(counts).all():
++        raise ValueError("counts contains nonfinite values")
++    if np.any(counts < 0):
++        raise ValueError("counts contains negative values")
++
++    n_cells, n_features = counts.shape
++    if n_cells < 1 or n_features < 1:
++        raise ValueError("counts must have positive dimensions")
++    if n_components < 1 or n_components >= n_cells:
++        raise ValueError("n_components must be in [1, n_cells-1]")
++
++    # Reject all-zero rows
++    row_sums = counts.sum(axis=1)
++    if np.any(row_sums == 0):
++        raise ValueError("counts contains all-zero cell rows")
++
++    # Normalize rows to unit L2 norm (cosine similarity preparation)
++    row_norms = np.linalg.norm(counts, axis=1)
++    # row_norms > 0 guaranteed by row_sums > 0
++    X = counts / row_norms[:, np.newaxis]
++
++    # Define matrix-free linear operator: matvec(v) = X @ (X.T @ v)
++    def matvec(v):
++        return X @ (X.T @ v)
++
++    A = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=float)
++
++    # Compute leading eigenvalues/eigenvectors using implicitly restarted Lanczos
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells)
++    eigenvalues, eigenvectors = eigsh(A, k=n_components, which='LM', v0=v0)
++
++    # eigsh returns eigenvalues in ascending order; convert to descending
++    idx = np.argsort(eigenvalues)[::-1]
++    eigenvalues = eigenvalues[idx]
++    eigenvectors = eigenvectors[:, idx]
++
++    return eigenvalues, eigenvectors

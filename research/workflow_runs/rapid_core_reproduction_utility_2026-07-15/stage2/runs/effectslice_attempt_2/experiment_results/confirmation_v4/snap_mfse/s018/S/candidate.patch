@@ -1,0 +1,87 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,22 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++import scipy.sparse.linalg
++
++
++def _idf_scale(counts: np.ndarray) -> np.ndarray:
++    """Apply IDF scaling to features (A01)."""
++    n, _ = counts.shape
++    df = np.count_nonzero(counts, axis=0)
++    scale = np.log(n / (1.0 + df))
++    return counts * scale
++
++
++def _row_normalize(X: np.ndarray) -> np.ndarray:
++    """Normalize rows to unit L2 norm (A02)."""
++    norms = np.linalg.norm(X, axis=1, keepdims=True)
++    norms[norms == 0] = 1.0
++    return X / norms
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +28,60 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # ---- Input validation ----
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    if not np.isfinite(counts).all():
++        raise ValueError("counts must contain only finite values")
++    if np.any(counts < 0):
++        raise ValueError("counts must be nonnegative")
++    n_cells, _ = counts.shape
++    if not (isinstance(n_components, int) and 1 <= n_components < n_cells):
++        raise ValueError("n_components must satisfy 1 <= n_components < n_cells")
++    if np.any(counts.sum(axis=1) == 0):
++        raise ValueError("all-zero cell rows are not allowed")
++
++    # ---- Step A01: IDF scaling ----
++    X = _idf_scale(counts)
++
++    # ---- Step A02: Row normalization ----
++    X = _row_normalize(X)
++
++    # ---- Step A03: Degree vector matrix-free ----
++    ones = np.ones(n_cells, dtype=X.dtype)
++    d = X @ (X.T @ ones) - ones  # shape (n_cells,)
++
++    # ---- Symmetric normalized similarity operator ----
++    # A = D^{-1/2} (X X^T - I) D^{-1/2}
++    # Embedding from eigenvectors of the transition matrix D^{-1}W
++    # Eigenvalues lambda satisfy D^{-1}W u = lambda u
++    # u = D^{-1/2} * v  where v is eigenvector of A
++    sqrt_dinv = np.zeros_like(d)
++    positive = d > 0
++    sqrt_dinv[positive] = 1.0 / np.sqrt(d[positive])
++
++    # Reproducible starting vector
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells).astype(X.dtype)
++
++    def matvec(v):
++        v_scaled = sqrt_dinv * v
++        tmp = X @ (X.T @ v_scaled) - v_scaled
++        return sqrt_dinv * tmp
++
++    A = scipy.sparse.linalg.LinearOperator(
++        (n_cells, n_cells), matvec=matvec, dtype=X.dtype
++    )
++
++    eigenvalues, eigenvectors = scipy.sparse.linalg.eigsh(
++        A, k=n_components, which='LA', v0=v0, return_eigenvectors=True
++    )
++
++    # eigsh returns eigenvalues in ascending order; reverse for descending
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    # Transform to eigenvectors of transition matrix: u = D^{-1/2} v
++    u = sqrt_dinv[:, None] * eigenvectors
++
++    return eigenvalues, u

@@ -1,0 +1,38 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -12,5 +12,33 @@
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    for arr, name in zip(
++        [logp_with_result, logp_call_only, logp_no_call],
++        ["logp_with_result", "logp_call_only", "logp_no_call"],
++    ):
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a two-dimensional matrix")
++        if arr.shape[0] == 0 or arr.shape[1] == 0:
++            raise ValueError(f"{name} must not be empty")
++        if np.any(np.isnan(arr)) or np.any(np.isinf(arr)):
++            raise ValueError(f"{name} contains nonfinite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} contains positive values")
++    # Check shape consistency
++    shapes = [logp_with_result.shape, logp_call_only.shape, logp_no_call.shape]
++    if not all(s == shapes[0] for s in shapes):
++        raise ValueError("All input matrices must have the same shape")
++    # Validate tau_filter
++    if isinstance(tau_filter, (bool, np.bool_)):
++        raise ValueError("tau_filter must not be a boolean")
++    if not isinstance(tau_filter, (int, float, np.floating)):
++        raise ValueError("tau_filter must be a finite nonnegative number")
++    if np.isnan(tau_filter) or np.isinf(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be a finite nonnegative number")
++    # Compute margins: average log probability improvement over no call
++    margins = (logp_with_result - logp_no_call).mean(axis=1)
++    keep_mask = margins > tau_filter
++    return keep_mask, margins

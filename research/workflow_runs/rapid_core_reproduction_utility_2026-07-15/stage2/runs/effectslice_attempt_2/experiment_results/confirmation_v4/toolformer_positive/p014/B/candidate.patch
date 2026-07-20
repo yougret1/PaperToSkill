@@ -1,0 +1,34 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,30 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not isinstance(logp_with_result, np.ndarray) or not isinstance(logp_call_only, np.ndarray) or not isinstance(logp_no_call, np.ndarray):
++        raise ValueError("Inputs must be numpy arrays")
++    if logp_with_result.ndim != 2 or logp_call_only.ndim != 2 or logp_no_call.ndim != 2:
++        raise ValueError("Input matrices must be 2-dimensional")
++    if logp_with_result.size == 0 or logp_call_only.size == 0 or logp_no_call.size == 0:
++        raise ValueError("Empty input matrices")
++    if logp_with_result.shape != logp_call_only.shape or logp_with_result.shape != logp_no_call.shape:
++        raise ValueError("Input matrices must have the same shape")
++    if not np.all(np.isfinite(logp_with_result)) or not np.all(np.isfinite(logp_call_only)) or not np.all(np.isfinite(logp_no_call)):
++        raise ValueError("Input matrices contain nonfinite values")
++    if np.any(logp_with_result > 0) or np.any(logp_call_only > 0) or np.any(logp_no_call > 0):
++        raise ValueError("Input matrices must be nonpositive")
++    if isinstance(tau_filter, bool):
++        raise ValueError("Boolean values are invalid thresholds")
++    if not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
++    # Compute total log probabilities over the future horizon
++    sum_with = np.sum(logp_with_result, axis=-1)
++    sum_call = np.sum(logp_call_only, axis=-1)
++    sum_no = np.sum(logp_no_call, axis=-1)
++    # Improvement = logp_with_result - min(logp_call_only, logp_no_call)
++    improvement = sum_with - np.minimum(sum_call, sum_no)
++    keep_mask = improvement > tau_filter
++    return keep_mask, improvement

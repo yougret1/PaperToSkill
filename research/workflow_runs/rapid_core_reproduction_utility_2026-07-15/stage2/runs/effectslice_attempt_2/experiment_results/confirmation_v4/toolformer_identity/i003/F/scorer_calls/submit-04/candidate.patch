@@ -1,0 +1,46 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,42 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not (isinstance(logp_with_result, np.ndarray) and isinstance(logp_call_only, np.ndarray) and isinstance(logp_no_call, np.ndarray)):
++        raise ValueError("Inputs must be numpy arrays")
++    if logp_with_result.ndim != 2 or logp_call_only.ndim != 2 or logp_no_call.ndim != 2:
++        raise ValueError("Inputs must be 2D matrices")
++    n_candidates, future_horizon = logp_with_result.shape
++    if logp_call_only.shape != (n_candidates, future_horizon) or logp_no_call.shape != (n_candidates, future_horizon):
++        raise ValueError("Input matrices must have same shape")
++    if n_candidates == 0 or future_horizon == 0:
++        raise ValueError("Empty matrices are not allowed")
++    if not (np.all(np.isfinite(logp_with_result)) and np.all(np.isfinite(logp_call_only)) and np.all(np.isfinite(logp_no_call))):
++        raise ValueError("All log probabilities must be finite")
++    if not (np.all(logp_with_result <= 0) and np.all(logp_call_only <= 0) and np.all(logp_no_call <= 0)):
++        raise ValueError("All log probabilities must be nonpositive")
++    if isinstance(tau_filter, bool):
++        raise ValueError("Threshold cannot be boolean")
++    if not isinstance(tau_filter, (int, float)):
++        raise ValueError("Threshold must be a numeric scalar")
++    if tau_filter < 0 or not np.isfinite(tau_filter):
++        raise ValueError("Threshold must be nonnegative and finite")
++
++    # Compute normalized weights
++    t = np.arange(future_horizon, dtype=float)
++    weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    weight_sum = weights.sum()
++    if weight_sum == 0:
++        raise ValueError("Future horizon too small (all weights zero)")
++    norm_weights = weights / weight_sum
++
++    # Compute weighted losses
++    loss_with_result = -np.dot(logp_with_result, norm_weights)
++    loss_call_only = -np.dot(logp_call_only, norm_weights)
++    loss_no_call = -np.dot(logp_no_call, norm_weights)
++
++    L_minus = np.minimum(loss_no_call, loss_call_only)
++    margins = L_minus - loss_with_result
++    keep_mask = margins >= tau_filter
++
++    return keep_mask, margins

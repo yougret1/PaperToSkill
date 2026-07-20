@@ -1,0 +1,47 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -11,5 +11,43 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    # Input validation
++    if not np.all(np.isfinite(counts)):
++        raise ValueError("Input contains non-finite values")
++    if np.any(counts < 0):
++        raise ValueError("Input contains negative values")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("Input contains all-zero rows")
++    n_cells, n_features = counts.shape
++    if n_components < 1 or n_components >= n_cells:
++        raise ValueError("n_components must be in 1 <= n_components < n_cells")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Row normalization to unit L2 norm
++    row_norms = np.sqrt(np.sum(counts ** 2, axis=1))
++    N_norm = counts / row_norms[:, np.newaxis]
++
++    # Compute degree vector D
++    col_sum = N_norm.sum(axis=0)
++    D = N_norm @ col_sum
++    D_inv_sqrt = 1.0 / np.sqrt(D)
++
++    # Linear operator for K = D^{-1/2} W D^{-1/2}
++    def matvec(v):
++        x = D_inv_sqrt * v
++        y = N_norm.T @ x
++        z = N_norm @ y
++        return D_inv_sqrt * z
++
++    import scipy.sparse.linalg as spla
++    n = n_cells
++    K_op = spla.LinearOperator((n, n), matvec=matvec, dtype=np.float64)
++
++    np.random.seed(random_state)
++    eigenvalues, eigenvectors = spla.eigsh(K_op, k=n_components, which='LM', tol=1e-6)
++
++    # Sort descending
++    idx = np.argsort(eigenvalues)[::-1]
++    eigenvalues = eigenvalues[idx]
++    eigenvectors = eigenvectors[:, idx]
++
++    return eigenvalues, eigenvectors

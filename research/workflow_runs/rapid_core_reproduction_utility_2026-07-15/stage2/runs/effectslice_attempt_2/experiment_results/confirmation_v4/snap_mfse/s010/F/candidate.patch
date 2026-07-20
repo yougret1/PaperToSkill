@@ -1,0 +1,65 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -10,6 +11,52 @@
+     n_components: int,
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+-    """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    # Input validation
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    n_cells, n_features = counts.shape
++    if n_components < 1 or n_components >= n_cells:
++        raise ValueError(f"n_components must be between 1 and {n_cells-1}, got {n_components}")
++    if not np.all(np.isfinite(counts)):
++        raise ValueError("counts contains non-finite values")
++    if np.any(counts < 0):
++        raise ValueError("counts contains negative values")
++    row_norms = np.linalg.norm(counts, axis=1)
++    if np.any(row_norms == 0):
++        raise ValueError("counts contains all-zero rows")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # IDF scaling
++    df = np.sum(counts > 0, axis=0)
++    idf = np.log(n_cells / (1.0 + df))
++    X_idf = counts * idf
++
++    # Row normalization
++    row_norms = np.linalg.norm(X_idf, axis=1, keepdims=True)
++    X_norm = X_idf / row_norms
++
++    # Degree vector
++    ones = np.ones(n_cells)
++    degree = X_norm @ (X_norm.T @ ones) - 1.0
++    if np.any(degree <= 0):
++        raise ValueError("non-positive degree values encountered")
++    D_inv = 1.0 / degree
++
++    # Normalize rows by degree^{-1/2}
++    X_tilde = X_norm / np.sqrt(degree)[:, np.newaxis]
++
++    # Define matrix-free linear operator
++    def matvec(v):
++        return X_tilde @ (X_tilde.T @ v) - D_inv * v
++
++    A = LinearOperator((n_cells, n_cells), matvec=matvec, rmatvec=matvec, dtype=float)
++
++    # Compute leading eigenvalues and eigenvectors
++    # Use 'LA' for largest algebraic, and seed initial vector for reproducibility
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells).astype(float)
++    eigenvalues, eigenvectors = eigsh(A, k=n_components, which='LA', v0=v0)
++    # Reverse to descending order
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    return eigenvalues, eigenvectors

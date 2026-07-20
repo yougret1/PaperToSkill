@@ -1,0 +1,67 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,55 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    # Validate input
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    if not np.isfinite(counts).all():
++        raise ValueError("counts contains nonfinite values")
++    if (counts < 0).any():
++        raise ValueError("counts contains negative values")
++    if (counts.sum(axis=1) == 0).any():
++        raise ValueError("counts contains all-zero cell rows")
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be between 1 and n_cells - 1")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # 1. IDF scaling
++    df = (counts > 0).sum(axis=0).astype(float)
++    idf = np.log(n_cells / (1.0 + df))
++    X = counts * idf  # broadcast over columns
++
++    # 2. Row normalization to unit L2 norm
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    row_norms[row_norms == 0] = 1.0  # safety, but should not occur
++    X = X / row_norms
++
++    # 3. Compute degree vector d = X @ (X.T @ 1) - 1
++    ones = np.ones(n_cells)
++    d = X @ (X.T @ ones) - 1.0
++
++    # 4. Compute D^{-1/2} with safeguard for zero degrees
++    d_inv_sqrt = np.where(d > 0, 1.0 / np.sqrt(d), 0.0)
++
++    # 5. Define linear operator for S = D^{-1/2} (X X^T - I) D^{-1/2}
++    def matvec(v):
++        w = d_inv_sqrt * v  # D^{-1/2} v
++        t = X.T @ w          # feature space
++        u = X @ t             # back to cell space
++        # subtract D^{-1} v
++        return d_inv_sqrt * u - (d_inv_sqrt ** 2) * v
++
++    A = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=X.dtype)
++
++    # 6. Compute leading eigenvalues/vectors
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells).astype(X.dtype)
++    eigenvalues, eigenvectors = eigsh(
++        A, k=n_components, which='LA', v0=v0, maxiter=1000
++    )
++
++    # eigsh returns eigenvalues in ascending order for 'LA'
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    return eigenvalues, eigenvectors

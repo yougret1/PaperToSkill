@@ -1,0 +1,61 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,49 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    # Validate input
++    if not isinstance(counts, np.ndarray):
++        counts = np.asarray(counts)
++    if not np.isfinite(counts).all():
++        raise ValueError("Input contains nonfinite values.")
++    if (counts < 0).any():
++        raise ValueError("Input contains negative values.")
++    row_sums = np.sum(counts, axis=1)
++    if (row_sums == 0).any():
++        raise ValueError("Input contains all-zero rows.")
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be between 1 and n_cells-1 inclusive.")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # IDF scaling
++    df = np.sum(counts > 0, axis=0)
++    n = n_cells
++    idf = np.log(n / (1 + df))
++    X_idf = counts * idf
++
++    # Row normalization
++    row_norms = np.linalg.norm(X_idf, axis=1, keepdims=True)
++    X_norm = X_idf / row_norms
++
++    # Matrix-free operator for W = X_norm @ X_norm.T - I
++    def matvec(v):
++        Xt_v = X_norm.T @ v
++        X_Xt_v = X_norm @ Xt_v
++        return X_Xt_v - v
++
++    A = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=np.float64)
++
++    # Use eigsh to compute largest algebraic eigenvalues
++    if random_state is not None:
++        np.random.seed(random_state)
++        v0 = np.random.randn(n_cells)
++        v0 = v0 / np.linalg.norm(v0)
++    else:
++        v0 = None
++
++    eigenvalues, eigenvectors = eigsh(A, k=n_components, which='LA', v0=v0)
++    # Reverse for descending order
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    return eigenvalues, eigenvectors

@@ -1,0 +1,41 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,37 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    for arr in [logp_with_result, logp_call_only, logp_no_call]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError("Input must be numpy arrays")
++        if arr.ndim != 2:
++            raise ValueError("Input matrices must be 2D")
++        if arr.shape[0] == 0 or arr.shape[1] == 0:
++            raise ValueError("Input matrices must not be empty")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError("Input matrices must be finite")
++        if np.any(arr > 0):
++            raise ValueError("Input matrices must be nonpositive")
++    # Check shape match
++    shape = logp_with_result.shape
++    if logp_call_only.shape != shape or logp_no_call.shape != shape:
++        raise ValueError("Input matrices must have same shape")
++    # Validate threshold
++    if isinstance(tau_filter, bool):
++        raise ValueError("Boolean threshold is invalid")
++    if not isinstance(tau_filter, (int, float)):
++        raise ValueError("Threshold must be numeric")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("Threshold must be finite and nonnegative")
++    T = shape[1]
++    t = np.arange(T)
++    raw_weights = np.maximum(0, 1 - 0.2 * t)
++    norm_weights = raw_weights / raw_weights.sum()
++    L_plus = np.sum(logp_with_result * norm_weights, axis=1)
++    L_empty = np.sum(logp_no_call * norm_weights, axis=1)
++    L_call_only = np.sum(logp_call_only * norm_weights, axis=1)
++    L_minus = np.minimum(L_empty, L_call_only)
++    margin = L_minus - L_plus
++    keep_mask = margin >= tau_filter
++    return (keep_mask, margin)

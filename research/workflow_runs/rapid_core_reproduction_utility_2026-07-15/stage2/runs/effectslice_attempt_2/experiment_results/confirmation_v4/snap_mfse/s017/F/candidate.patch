@@ -1,0 +1,41 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,29 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    n, m = counts.shape
++    df = (counts > 0).sum(axis=0)
++    idf = np.log(n / (1.0 + df))
++    X = counts * idf
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    if (row_norms == 0).any():
++        raise ValueError("Row cannot be L2-normalized after IDF scaling")
++    X = X / row_norms
++    ones = np.ones(n)
++    d = X @ (X.T @ ones) - 1.0
++    if (d <= 0).any():
++        raise ValueError("Nonpositive degree detected")
++    D_inv = d ** (-0.5)
++    X_tilde = X * D_inv[:, None]
++    def matvec(v):
++        return X_tilde @ (X_tilde.T @ v) - D_inv.astype(X.dtype) * v
++    A = LinearOperator((n, n), matvec=matvec, dtype=X.dtype)
++    if random_state is not None:
++        rng = np.random.RandomState(random_state)
++        v0 = rng.uniform(size=n).astype(X.dtype)
++    else:
++        v0 = None
++    eigenvalues, eigenvectors = eigsh(A, k=n_components, which='LM', v0=v0)
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++    return eigenvalues, eigenvectors

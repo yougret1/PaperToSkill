@@ -1,0 +1,67 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,55 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate input
++    if not np.issubdtype(counts.dtype, np.floating):
++        counts = counts.astype(np.float64)
++    if not np.all(np.isfinite(counts)):
++        raise ValueError("Input contains nonfinite values.")
++    if np.any(counts < 0):
++        raise ValueError("Input contains negative values.")
++    n_cells, n_features = counts.shape
++    if n_components < 1 or n_components >= n_cells:
++        raise ValueError(f"n_components must be between 1 and {n_cells - 1}.")
++    row_sums = np.sum(counts, axis=1)
++    if np.any(row_sums == 0):
++        raise ValueError("Input contains all-zero rows.")
++
++    # IDF scaling
++    df = np.count_nonzero(counts, axis=0)  # document frequency per feature
++    scale = np.log(n_cells / (1.0 + df))
++    X = counts * scale[np.newaxis, :]
++
++    # Row normalization to unit L2 norm
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    X = X / row_norms
++
++    # Compute degree vector matrix-free
++    ones = np.ones(n_cells)
++    Xt_ones = X.T @ ones
++    degrees = X @ Xt_ones - 1.0  # because W = X X^T - I
++    if np.any(degrees <= 0):
++        raise ValueError("Non-positive degree(s) found.")
++
++    # Build normalized operator
++    D_inv_sqrt = np.reciprocal(np.sqrt(degrees))
++    X_tilde = X * D_inv_sqrt[:, np.newaxis]
++    D_inv = np.reciprocal(degrees)  # reciprocal degree vector for the operator
++
++    # Define linear operator for v -> X_tilde @ (X_tilde.T @ v) - D_inv * v
++    def matvec(v):
++        return X_tilde @ (X_tilde.T @ v) - D_inv * v
++
++    A = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=np.float64)
++
++    # Solve for top eigenvalues
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells)
++    eigenvalues, eigenvectors = eigsh(A, k=n_components, which='LA', v0=v0)
++
++    # Sort descending
++    idx = np.argsort(eigenvalues)[::-1]
++    eigenvalues = eigenvalues[idx]
++    eigenvectors = eigenvectors[:, idx]
++
++    return eigenvalues, eigenvectors

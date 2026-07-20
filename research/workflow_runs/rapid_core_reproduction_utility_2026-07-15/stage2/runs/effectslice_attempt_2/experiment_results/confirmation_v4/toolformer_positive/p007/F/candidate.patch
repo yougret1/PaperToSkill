@@ -1,0 +1,56 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -1,16 +1,39 @@
+-"""Starter module for the locked Toolformer loss-filter task."""
+-
+-from __future__ import annotations
+-
+ import numpy as np
+ 
+-
+-def filter_api_calls(
+-    logp_with_result: np.ndarray,
+-    logp_call_only: np.ndarray,
+-    logp_no_call: np.ndarray,
+-    tau_filter: float,
+-) -> tuple[np.ndarray, np.ndarray]:
+-    """Return an ordered keep mask and one finite margin per proposed call."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++def filter_api_calls(log_probs_plus, log_probs_empty, log_probs_call_only, tau_filter):
++    # Validate inputs
++    if not isinstance(log_probs_plus, np.ndarray) or not isinstance(log_probs_empty, np.ndarray) or not isinstance(log_probs_call_only, np.ndarray):
++        raise ValueError("Inputs must be numpy arrays")
++    if log_probs_plus.ndim != 2 or log_probs_empty.ndim != 2 or log_probs_call_only.ndim != 2:
++        raise ValueError("Inputs must be 2D matrices")
++    shape = log_probs_plus.shape
++    if log_probs_empty.shape != shape or log_probs_call_only.shape != shape:
++        raise ValueError("Input shapes must match")
++    if shape[0] == 0 or shape[1] == 0:
++        raise ValueError("Inputs must not be empty")
++    if not (np.isfinite(log_probs_plus).all() and np.isfinite(log_probs_empty).all() and np.isfinite(log_probs_call_only).all()):
++        raise ValueError("Inputs must contain only finite values")
++    if not ((log_probs_plus <= 0).all() and (log_probs_empty <= 0).all() and (log_probs_call_only <= 0).all()):
++        raise ValueError("Inputs must be nonpositive")
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter cannot be a boolean")
++    if not np.isscalar(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be a nonnegative scalar")
++    
++    H = shape[1]
++    t = np.arange(H)
++    raw_weights = np.maximum(0, 1 - 0.2 * t)
++    normalizer = np.sum(raw_weights)
++    weights = raw_weights / normalizer
++    
++    def weighted_loss(log_probs):
++        return -np.sum(log_probs * weights, axis=1)
++    
++    L_plus = weighted_loss(log_probs_plus)
++    L_empty = weighted_loss(log_probs_empty)
++    L_call_only = weighted_loss(log_probs_call_only)
++    
++    L_minus = np.minimum(L_empty, L_call_only)
++    margins = L_minus - L_plus
++    mask = margins >= tau_filter
++    return mask, margins

@@ -1,0 +1,51 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -1,6 +1,8 @@
+ """Starter module for the locked SNAP-MFSE reproduction task."""
+ 
+ from __future__ import annotations
++
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ import numpy as np
+ 
+@@ -11,5 +13,37 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    counts = np.asarray(counts)
++    if not np.all(np.isfinite(counts)):
++        raise ValueError("Input contains nonfinite values.")
++    if np.any(counts < 0):
++        raise ValueError("Input contains negative values.")
++    n_cells, n_features = counts.shape
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("Input contains all-zero cell rows.")
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be >= 1 and < n_cells.")
++    # 1. IDF scaling
++    df = np.count_nonzero(counts, axis=0).astype(np.float64)
++    idf = np.log(n_cells / (1.0 + df))
++    X = counts * idf
++    # 2. Row normalization
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    X = X / row_norms
++    # 3. Matrix-free spectral embedding
++    ones = np.ones(n_cells)
++    temp = X.T @ ones
++    d = X @ temp - ones
++    d_inv_sqrt = 1.0 / np.sqrt(d)
++    def matvec(x):
++        x_scaled = d_inv_sqrt * x
++        y = X @ (X.T @ x_scaled) - x_scaled
++        return d_inv_sqrt * y
++    A_operator = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=np.float64)
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells)
++    eigvals, eigvecs = eigsh(A_operator, k=n_components, which='LA', v0=v0)
++    idx = np.argsort(eigvals)[::-1]
++    eigvals = eigvals[idx]
++    eigvecs = eigvecs[:, idx]
++    return eigvals, eigvecs

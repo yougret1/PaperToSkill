@@ -1,0 +1,44 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,40 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    for arr, name in [(logp_with_result, 'logp_with_result'), (logp_call_only, 'logp_call_only'), (logp_no_call, 'logp_no_call')]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D array")
++        if arr.size == 0:
++            raise ValueError(f"{name} cannot be empty")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} contains nonfinite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} must have nonpositive values")
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All input arrays must have the same shape")
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter cannot be a boolean")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be a finite nonnegative number")
++
++    n, horizon = logp_with_result.shape
++    t = np.arange(horizon, dtype=float)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    raw_weights_sum = raw_weights.sum()
++    if raw_weights_sum <= 0:
++        raise ValueError("Invalid horizon: no positive weights")
++    normalized_weights = raw_weights / raw_weights_sum
++
++    L_plus = -np.sum(logp_with_result * normalized_weights, axis=1)
++    L_call_only = -np.sum(logp_call_only * normalized_weights, axis=1)
++    L_empty = -np.sum(logp_no_call * normalized_weights, axis=1)
++
++    L_minus = np.minimum(L_empty, L_call_only)
++    margin = L_minus - L_plus
++
++    keep = margin >= tau_filter
++
++    return keep, margin

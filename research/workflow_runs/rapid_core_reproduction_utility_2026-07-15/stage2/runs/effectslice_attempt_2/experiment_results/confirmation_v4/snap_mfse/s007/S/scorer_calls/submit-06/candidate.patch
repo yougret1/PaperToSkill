@@ -1,0 +1,61 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,48 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    if not np.isfinite(counts).all():
++        raise ValueError("Input contains non-finite values.")
++    if np.any(counts < 0):
++        raise ValueError("Input contains negative values.")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("Input contains all-zero rows.")
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be in [1, n_cells).")
++    
++    # A01: IDF scaling
++    df = np.count_nonzero(counts, axis=0)
++    idf = np.log(n_cells / (1.0 + df))
++    scaled = counts * idf
++    
++    # A02: Row normalization
++    row_norms = np.linalg.norm(scaled, axis=1)
++    X = scaled / row_norms[:, np.newaxis]
++    
++    # A03: Degree computation
++    ones = np.ones(n_cells)
++    a = X.T @ ones
++    b = X @ a
++    d = b - 1.0
++    d = np.maximum(d, 1e-10)
++    D_inv = 1.0 / d
++    D_inv_sqrt = np.sqrt(D_inv)
++    
++    # Matrix-free operator M = D^{-1/2} W D^{-1/2}
++    def matvec(v):
++        w = D_inv_sqrt * v
++        y = X.T @ w
++        z = X @ y
++        u = D_inv_sqrt * z
++        return u - D_inv * v
++    
++    M = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=np.float64)
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells).astype(np.float64)
++    eigenvalues, eigenvectors = eigsh(M, k=n_components, which='LA', v0=v0)
++    
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++    
++    return eigenvalues, eigenvectors

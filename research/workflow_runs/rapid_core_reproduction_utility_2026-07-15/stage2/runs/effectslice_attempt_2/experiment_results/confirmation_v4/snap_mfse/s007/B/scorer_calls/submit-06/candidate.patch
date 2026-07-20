@@ -1,0 +1,67 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,55 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    # Input validation
++    if not np.isfinite(counts).all():
++        raise ValueError("counts must be finite")
++    if (counts < 0).any():
++        raise ValueError("counts must be nonnegative")
++    cell_sums = counts.sum(axis=1)
++    if (cell_sums == 0).any():
++        raise ValueError("counts must not have all-zero rows")
++    n_cells = counts.shape[0]
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be between 1 and n_cells-1")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Row normalization
++    norms = np.linalg.norm(counts, axis=1, keepdims=True)
++    u = counts / norms  # shape (n_cells, n_features)
++
++    # Degree computation (matrix-free)
++    sum_u = u.sum(axis=0)  # shape (n_features,)
++    degrees = u @ sum_u  # shape (n_cells,)  # each entry: u_i dot sum_u = sum_j sim(i,j)
++    # Ensure positive
++    if (degrees <= 0).any():
++        raise ValueError("zero degrees computed")
++
++    D_sqrt_inv = 1.0 / np.sqrt(degrees)
++
++    # Construct matrix-free operator for A_norm = D^{-1/2} A D^{-1/2}
++    def matvec(x):
++        tmp = D_sqrt_inv * x
++        # A * tmp = u @ (u.T @ tmp)
++        y = u @ (u.T @ tmp)
++        return D_sqrt_inv * y
++
++    A_norm_op = LinearOperator(
++        (n_cells, n_cells),
++        matvec=matvec,
++        rmatvec=matvec  # symmetric
++    )
++
++    # Seed for eigenvector initialization
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells).astype(np.float64)
++
++    # Compute leading eigenvalues/eigenvectors of A_norm
++    eigvals_A, eigvecs = eigsh(A_norm_op, k=n_components, which='LM', v0=v0)
++
++    # Convert to eigenvalues of L_sym = I - A_norm
++    eigvals_L = 1.0 - eigvals_A
++
++    # Since eigvals_A are in descending order, eigvals_L are ascending.
++    # Return in descending order.
++    idx = np.argsort(eigvals_L)[::-1]  # descending indices
++    return eigvals_L[idx], eigvecs[:, idx]

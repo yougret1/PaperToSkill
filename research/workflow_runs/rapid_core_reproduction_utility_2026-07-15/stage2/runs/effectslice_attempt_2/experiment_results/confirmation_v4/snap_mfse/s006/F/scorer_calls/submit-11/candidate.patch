@@ -1,0 +1,114 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,102 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # input validation
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    if not np.issubdtype(counts.dtype, np.floating) and not np.issubdtype(counts.dtype, np.integer):
++        raise ValueError("counts must be numeric")
++    if np.any(np.isnan(counts)) or np.any(np.isinf(counts)):
++        raise ValueError("counts must not contain nonfinite values")
++    if np.any(counts < 0):
++        raise ValueError("counts must be nonnegative")
++    n_cells, n_features = counts.shape
++    if n_cells < 2:
++        raise ValueError("need at least two cells")
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be between 1 and n_cells-1")
++    # reject rows that are all zero (cannot L2-normalize)
++    row_sums = counts.sum(axis=1)
++    if np.any(row_sums == 0):
++        raise ValueError("counts has all-zero rows, cannot normalize")
++
++    n = n_cells
++    m = n_components
++
++    # Step A01: IDF scaling
++    # document frequency: number of cells with non-zero count per feature
++    df = np.array(np.sum(counts > 0, axis=0), dtype=np.float64)
++    # avoid log(0) by clamping? df >= 1? Actually if a feature appears in no cells, df=0, log(n/(1+0))=log(n). That's fine.
++    idf = np.log(n / (1.0 + df))
++    X = counts.astype(np.float64) * idf  # multiply each column by its IDF
++
++    # Step A02: Row normalization to unit L2
++    row_norms = np.linalg.norm(X, axis=1)
++    # row_norms should be > 0 because all rows have at least one feature? We already rejected all-zero rows, but could be zero after IDF if all counts are zero? Already rejected.
++    X = X / row_norms[:, np.newaxis]
++
++    # Step A03: Compute degree vector matrix-free: D = X @ (X.T @ 1) - 1
++    ones = np.ones(n, dtype=np.float64)
++    Xt_ones = X.T @ ones  # shape (n_features,)
++    D = X @ Xt_ones - 1.0
++
++    # Hard check: require positive degrees
++    if np.any(D <= 0):
++        raise ValueError("non-positive degrees encountered")
++
++    # Step A04: Define linear operator for normalized similarity
++    D_inv = 1.0 / D
++    D_inv_sqrt = np.sqrt(D_inv)
++    # X_tilde = D_inv_sqrt[:, None] * X   (row-wise scaling)
++    # But we can define operator without materializing X_tilde.
++    # Operator: A @ v = X_tilde @ (X_tilde.T @ v) - D_inv * v
++    # We'll store X and D_inv_sqrt, D_inv to compute efficiently.
++
++    def matvec(v):
++        # v is 1D of length n
++        # compute X_tilde.T @ v = (X.T * D_inv_sqrt) @ v  (since X_tilde = diag(D_inv_sqrt) @ X)
++        # Actually X_tilde = diag(D_inv_sqrt) @ X, so X_tilde.T = X.T @ diag(D_inv_sqrt)
++        # But better: we can compute v scaled then X^T product
++        # Let's implement straightforward:
++        # temp1 = D_inv_sqrt * v   (elementwise)
++        # temp2 = X.T @ temp1   (n_features,)
++        # temp3 = X @ temp2   (n,)
++        # temp4 = D_inv_sqrt * temp3
++        # result = temp4 - D_inv * v
++        temp1 = D_inv_sqrt * v
++        temp2 = X.T @ temp1
++        temp3 = X @ temp2
++        temp4 = D_inv_sqrt * temp3
++        return temp4 - D_inv * v
++
++    n_cells = n
++    A_operator = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=np.float64)
++
++    # Step A05: Lanczos eigensolver for largest eigenvalues
++    # We use scipy.sparse.linalg.eigsh with which='LA' to get largest algebraic eigenvalues
++    # eigsh returns eigenvalues in ascending order, so reverse
++    # Also need to provide k = n_components + 1? Actually for symmetric, if we ask for k eigenvalues, we get k. But ensure k < n-1.
++    # We want exactly n_components eigenvalues.
++    k = n_components
++    if k >= n_cells - 1:
++        # eigsh requires k < n-1 for standard eigenvalue problem
++        # But we already checked n_components < n_cells, so k <= n_cells-1. If k == n_cells-1, eigsh can handle it? Usually k must be < n. So it's fine.
++        pass
++
++    # Use random_state to set v0 if needed (optional)
++    # We can set numpy random seed, but not required.
++    np.random.seed(random_state)
++    v0 = np.random.randn(n_cells)
++    v0 = v0 / np.linalg.norm(v0)
++
++    eigenvalues, eigenvectors = eigsh(A_operator, k=k, which='LA', v0=v0)
++
++    # Reverse order to descending
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    # Ensure finite results
++    if not np.all(np.isfinite(eigenvalues)) or not np.all(np.isfinite(eigenvectors)):
++        raise ValueError("nonfinite eigenvalues or eigenvectors produced")
++
++    return eigenvalues, eigenvectors

@@ -1,0 +1,50 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,46 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    for arr in [logp_with_result, logp_call_only, logp_no_call]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError("Inputs must be numpy arrays")
++        if arr.ndim != 2:
++            raise ValueError("Inputs must be 2D matrices")
++        if arr.shape[0] == 0 or arr.shape[1] == 0:
++            raise ValueError("Inputs cannot be empty")
++        if not np.isfinite(arr).all():
++            raise ValueError("Inputs must be finite")
++        if (arr > 0).any():
++            raise ValueError("Inputs must be nonpositive (log probabilities)")
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must be a finite nonnegative number")
++    if not isinstance(tau_filter, (int, float)):
++        raise ValueError("tau_filter must be a number")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite nonnegative")
++
++    shape = logp_with_result.shape
++    if logp_call_only.shape != shape or logp_no_call.shape != shape:
++        raise ValueError("Input matrices must have same shape")
++
++    n_candidates, future_horizon = shape
++
++    # Compute raw weights: max(0, 1 - 0.2*t) for t = 0, 1, ...
++    t = np.arange(future_horizon,dtype=float)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    weight_sum = np.sum(raw_weights)
++    normalized_weights = raw_weights / weight_sum if weight_sum > 0.0 else np.zeros_like(raw_weights)
++
++    # Weighted future-token loss: -sum(w * log_prob)
++    loss_with = -np.sum(normalized_weights * logp_with_result, axis=1)
++    loss_call_only = -np.sum(normalized_weights * logp_call_only, axis=1)
++    loss_no_call = -np.sum(normalized_weights * logp_no_call, axis=1)
++
++    # Stronger counterfactual baseline: min(no_call, call_only)
++    L_minus = np.minimum(loss_no_call, loss_call_only)
++
++    margin = L_minus - loss_with
++    keep = margin >= tau_filter
++
++    return keep, margin

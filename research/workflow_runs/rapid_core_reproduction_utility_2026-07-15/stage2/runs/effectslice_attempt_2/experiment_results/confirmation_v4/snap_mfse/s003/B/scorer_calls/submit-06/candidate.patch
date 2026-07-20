@@ -1,0 +1,33 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -11,5 +11,28 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # input validation
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    if not np.all(np.isfinite(counts)):
++        raise ValueError("counts must be finite")
++    if np.any(counts < 0):
++        raise ValueError("counts must be nonnegative")
++    if np.any(counts.sum(axis=1) == 0):
++        raise ValueError("all-zero cell rows not allowed")
++    n_cells = counts.shape[0]
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be 1 <= n_components < n_cells")
++    # matrix-free operator for Gram matrix: counts @ counts.T
++    from scipy.sparse.linalg import LinearOperator, eigsh
++    def matvec(x):
++        return counts @ (counts.T @ x)
++    A = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=counts.dtype)
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells)
++    eigenvalues, eigenvectors = eigsh(A, k=n_components, which='LM', v0=v0)
++    # sort descending
++    idx = np.argsort(eigenvalues)[::-1]
++    eigenvalues = eigenvalues[idx]
++    eigenvectors = eigenvectors[:, idx]
++    return eigenvalues, eigenvectors

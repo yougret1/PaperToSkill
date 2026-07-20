@@ -1,0 +1,48 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,44 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not isinstance(logp_with_result, np.ndarray) or logp_with_result.ndim != 2:
++        raise ValueError("logp_with_result must be a 2D numpy array")
++    if not isinstance(logp_call_only, np.ndarray) or logp_call_only.ndim != 2:
++        raise ValueError("logp_call_only must be a 2D numpy array")
++    if not isinstance(logp_no_call, np.ndarray) or logp_no_call.ndim != 2:
++        raise ValueError("logp_no_call must be a 2D numpy array")
++    if logp_with_result.shape[0] == 0:
++        raise ValueError("empty matrix")
++    if logp_with_result.shape != logp_call_only.shape or logp_with_result.shape != logp_no_call.shape:
++        raise ValueError("shape mismatch")
++    if not np.all(np.isfinite(logp_with_result)) or not np.all(np.isfinite(logp_call_only)) or not np.all(np.isfinite(logp_no_call)):
++        raise ValueError("nonfinite values")
++    if np.any(logp_with_result > 0) or np.any(logp_call_only > 0) or np.any(logp_no_call > 0):
++        raise ValueError("positive values")
++    if not isinstance(tau_filter, (int, float)) or isinstance(tau_filter, bool):
++        raise ValueError("invalid threshold")
++    if tau_filter < 0 or not np.isfinite(tau_filter):
++        raise ValueError("threshold must be nonnegative finite")
++
++    n_candidates, horizon = logp_with_result.shape
++
++    # Compute normalized weights
++    t = np.arange(horizon)
++    raw_weights = np.maximum(0, 1 - 0.2 * t)
++    sum_raw = np.sum(raw_weights)
++    if sum_raw == 0:
++        raise ValueError("all weights zero")
++    weights = raw_weights / sum_raw
++
++    # Compute losses
++    loss_with = np.sum(weights * logp_with_result, axis=1)
++    loss_call = np.sum(weights * logp_call_only, axis=1)
++    loss_nocall = np.sum(weights * logp_no_call, axis=1)
++
++    # Margin: min improvement over no-call and call-only
++    margin = np.minimum(loss_nocall - loss_with, loss_call - loss_with)
++
++    keep = margin > tau_filter
++
++    return keep, margin

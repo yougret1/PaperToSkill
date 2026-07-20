@@ -1,0 +1,42 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -12,5 +12,37 @@
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validation
++    for arr, name in [(logp_with_result, 'logp_with_result'), (logp_call_only, 'logp_call_only'), (logp_no_call, 'logp_no_call')]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a two-dimensional matrix")
++        if arr.shape[0] == 0 or arr.shape[1] == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.isfinite(arr).all():
++            raise ValueError(f"{name} contains nonfinite values")
++        if not np.all(arr <= 0):
++            raise ValueError(f"{name} contains positive values")
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("all input matrices must have the same shape")
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not isinstance(tau_filter, (int, float)):
++        raise ValueError("tau_filter must be a number")
++    if tau_filter < 0 or not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be nonnegative and finite")
++    
++    # Compute sum over future horizon
++    sum_with = np.sum(logp_with_result, axis=1)
++    sum_call = np.sum(logp_call_only, axis=1)
++    sum_no = np.sum(logp_no_call, axis=1)
++    
++    # Best logp from with_result or call_only
++    best = np.maximum(sum_with, sum_call)
++    
++    # Margin of improvement in loss (higher is better)
++    margin = best - sum_no
++    keep = margin >= tau_filter
++    
++    return (keep, margin)

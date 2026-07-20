@@ -1,0 +1,123 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++import scipy.sparse.linalg
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -10,6 +11,110 @@
+     n_components: int,
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+-    """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    """Return leading spectral coordinates for a cell-by-feature count matrix.
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    Implements the matrix-free spectral embedding procedure from
++    SnapATAC2 (lines 73-79).
++
++    Parameters
++    ----------
++    counts : np.ndarray
++        Nonnegative, finite cell-by-feature count matrix.
++    n_components : int
++        Number of components to return (1 <= n_components < n_cells).
++    random_state : int
++        Seed for the random initial vector in the Lanczos solver.
++
++    Returns
++    -------
++    eigenvalues : np.ndarray, shape (n_components,)
++        Leading eigenvalues in descending order.
++    eigenvectors : np.ndarray, shape (n_cells, n_components)
++        Corresponding eigenvectors (columns).
++    """
++    # --- Input validation ---
++    if not isinstance(counts, np.ndarray):
++        raise ValueError("counts must be a NumPy array")
++    if counts.ndim != 2:
++        raise ValueError("counts must be 2-dimensional")
++    n_cells, n_features = counts.shape
++    if n_cells < 2:
++        raise ValueError("need at least two cells")
++    if not (1 <= n_components < n_cells):
++        raise ValueError(
++            f"n_components must satisfy 1 <= n_components < n_cells, got {n_components}"
++        )
++    if not np.issubdtype(counts.dtype, np.floating) and not np.issubdtype(counts.dtype, np.integer):
++        raise ValueError("counts must be a numeric type")
++    if np.any(np.isnan(counts)) or np.any(np.isinf(counts)):
++        raise ValueError("counts contains nonfinite values")
++    if np.any(counts < 0):
++        raise ValueError("counts contains negative values")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("counts contains all-zero rows that cannot be L2-normalized")
++
++    # --- Step A01: IDF scaling ---
++    df = np.count_nonzero(counts, axis=0)  # document frequency per feature
++    n = n_cells
++    idf = np.log(n / (1.0 + df))
++    counts_idf = counts.astype(np.float64, copy=False) * idf  # broadcast over columns
++
++    # --- Step A02: Row normalization for cosine similarity ---
++    row_norms = np.linalg.norm(counts_idf, axis=1)
++    if np.any(row_norms == 0):
++        raise ValueError("row normalization failed: a row became zero after IDF scaling")
++    X = counts_idf / row_norms[:, np.newaxis]  # shape (n_cells, n_features)
++
++    # --- Step A03: Compute degrees without forming W ---
++    ones = np.ones(n_cells)
++    col_sums = X.T @ ones  # shape (n_features,)
++    degree = X @ col_sums - 1.0  # shape (n_cells,)
++    if np.any(degree <= 0):
++        raise ValueError("non-positive degree detected")
++
++    # --- Step A04: Build matrix-free linear operator ---
++    D_inv = 1.0 / degree
++    D_inv_half = np.sqrt(D_inv)  # D^{-1/2}
++    X_tilde = X * D_inv_half[:, np.newaxis]  # D^{-1/2} X
++
++    class _NormalizedSimilarityOperator(scipy.sparse.linalg.LinearOperator):
++        """Linear operator for A(v) = X_tilde @ (X_tilde.T @ v) - D_inv * v."""
++        def __init__(self, X_tilde, D_inv):
++            self.X_tilde = X_tilde
++            self.D_inv = D_inv
++            self.shape = (n_cells, n_cells)
++            self.dtype = np.dtype(np.float64)
++
++        def _matvec(self, v):
++            # A(v) = X_tilde (X_tilde^T v) - D_inv * v
++            x = self.X_tilde.T @ v
++            return self.X_tilde @ x - self.D_inv * v
++
++    operator = _NormalizedSimilarityOperator(X_tilde, D_inv)
++
++    # --- Step A05: Lanczos symmetric eigensolver ---
++    # Use a deterministic initial vector from the random_state seed
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells).astype(np.float64)
++    v0 /= np.linalg.norm(v0)
++
++    eigenvalues, eigenvectors = scipy.sparse.linalg.eigsh(
++        operator,
++        k=n_components,
++        which='LA',
++        v0=v0,
++        return_eigenvectors=True,
++    )
++
++    # eigsh returns eigenvalues in ascending order; reorder descending
++    idx = np.argsort(eigenvalues)[::-1]
++    eigenvalues = eigenvalues[idx]
++    eigenvectors = eigenvectors[:, idx]
++
++    # Validate that results are finite
++    if not np.all(np.isfinite(eigenvalues)):
++        raise RuntimeError("eigenvalues contain nonfinite values")
++    if not np.all(np.isfinite(eigenvectors)):
++        raise RuntimeError("eigenvectors contain nonfinite values")
++
++    return eigenvalues, eigenvectors

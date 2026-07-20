@@ -1,0 +1,53 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,49 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate tau_filter
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be boolean")
++    if not np.isscalar(tau_filter) or not np.isreal(tau_filter) or not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be a finite nonnegative float")
++    
++    # Validate input arrays
++    for name, arr in [('logp_with_result', logp_with_result),
++                      ('logp_call_only', logp_call_only),
++                      ('logp_no_call', logp_no_call)]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if arr.shape[0] == 0 or arr.shape[1] == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} must contain only finite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} must be nonpositive")
++    
++    # Check shape consistency
++    ref_shape = logp_with_result.shape
++    if logp_call_only.shape != ref_shape or logp_no_call.shape != ref_shape:
++        raise ValueError("Input matrices must have the same shape")
++    n_candidates = ref_shape[0]
++    
++    # Compute sums along future horizon
++    sum_with = np.sum(logp_with_result, axis=1)
++    sum_call = np.sum(logp_call_only, axis=1)
++    sum_no = np.sum(logp_no_call, axis=1)
++    
++    # Keep if loss with result < loss without call by at least tau_filter
++    # and loss with result < loss with call only (the result provides additional benefit)
++    # loss = -sum, so condition becomes:
++    # -sum_with < -sum_no - tau_filter  ->  sum_with > sum_no + tau_filter
++    # -sum_with < -sum_call  ->  sum_with > sum_call
++    # Keep if loss with result < both baselines by at least tau_filter
++    # Loss = -sum(logp), so condition: sum_with > max(sum_no, sum_call) + tau_filter
++    baseline = np.maximum(sum_no, sum_call)
++    keep = sum_with > baseline + tau_filter
++    
++    # Margin: reduction in loss over the better baseline
++    margin = sum_with - baseline
++    
++    return keep, margin

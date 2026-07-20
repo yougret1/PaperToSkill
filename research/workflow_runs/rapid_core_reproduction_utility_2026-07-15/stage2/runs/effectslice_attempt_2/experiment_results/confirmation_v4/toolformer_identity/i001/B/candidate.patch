@@ -1,0 +1,31 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,27 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    if not isinstance(logp_with_result, np.ndarray) or logp_with_result.ndim != 2:
++        raise ValueError("logp_with_result must be a 2D numpy array")
++    if not isinstance(logp_call_only, np.ndarray) or logp_call_only.ndim != 2:
++        raise ValueError("logp_call_only must be a 2D numpy array")
++    if not isinstance(logp_no_call, np.ndarray) or logp_no_call.ndim != 2:
++        raise ValueError("logp_no_call must be a 2D numpy array")
++    if logp_with_result.shape != logp_call_only.shape or logp_with_result.shape != logp_no_call.shape:
++        raise ValueError("All input matrices must have the same shape")
++    n_candidates, future_horizon = logp_with_result.shape
++    if n_candidates == 0 or future_horizon == 0:
++        raise ValueError("Input matrices must not be empty")
++    if np.any(logp_with_result > 0) or np.any(logp_call_only > 0) or np.any(logp_no_call > 0):
++        raise ValueError("All log probabilities must be nonpositive")
++    if not np.all(np.isfinite(logp_with_result)) or not np.all(np.isfinite(logp_call_only)) or not np.all(np.isfinite(logp_no_call)):
++        raise ValueError("All inputs must be finite")
++    if isinstance(tau_filter, bool) or not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be a finite nonnegative number and not a boolean")
++
++    # Compute margins and keep mask
++    max_alternative = np.maximum(logp_call_only, logp_no_call)  # shape (n_candidates, future_horizon)
++    loss = np.max(logp_with_result - max_alternative, axis=1)   # shape (n_candidates,) max over horizon
++    keep = loss > tau_filter
++    return (keep, loss)

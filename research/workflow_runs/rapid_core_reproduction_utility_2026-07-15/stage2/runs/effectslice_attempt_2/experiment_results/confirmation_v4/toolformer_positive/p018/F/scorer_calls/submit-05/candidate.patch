@@ -1,0 +1,42 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,38 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    if isinstance(tau_filter, bool) or not isinstance(tau_filter, (int, float)):
++        raise ValueError("tau_filter must be a finite nonnegative float, not bool")
++    if np.isnan(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and >= 0")
++    for arr in [logp_with_result, logp_call_only, logp_no_call]:
++        if not isinstance(arr, np.ndarray) or arr.ndim != 2:
++            raise ValueError("Each logp matrix must be a 2D numpy array")
++        if arr.size == 0:
++            raise ValueError("Matrices must not be empty")
++        if not np.all(np.isfinite(arr)) or np.any(arr > 0):
++            raise ValueError("All entries must be finite and nonpositive")
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All three logp matrices must have the same shape")
++
++    n_candidates, future_horizon = logp_with_result.shape
++
++    # Compute normalized decreasing future-token weights
++    t = np.arange(future_horizon)  # t = j - i, first future token t=0
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    normalized_weights = raw_weights / raw_weights.sum()
++
++    # Compute weighted future-token loss (neg weighted log prob)
++    L_plus = -np.sum(normalized_weights * logp_with_result, axis=1)
++    L_call_only = -np.sum(normalized_weights * logp_call_only, axis=1)
++    L_empty = -np.sum(normalized_weights * logp_no_call, axis=1)
++
++    # Stronger counterfactual baseline
++    L_minus = np.minimum(L_empty, L_call_only)
++
++    # Margin and keep decision
++    margin = L_minus - L_plus
++    keep = margin >= tau_filter
++
++    return keep, margin.astype(float)

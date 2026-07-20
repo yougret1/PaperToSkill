@@ -1,0 +1,47 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,43 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    for arr in [logp_with_result, logp_call_only, logp_no_call]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError("Input must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError("Input must be a 2D matrix")
++        if arr.size == 0:
++            raise ValueError("Input cannot be empty")
++        if not np.isfinite(arr).all():
++            raise ValueError("Input contains non-finite values")
++        if (arr > 0).any():
++            raise ValueError("Input contains positive values")
++
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("Input shapes must match")
++
++    if isinstance(tau_filter, bool):
++        raise ValueError("Boolean threshold is invalid")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("Invalid threshold")
++
++    n_candidates, future_horizon = logp_with_result.shape
++
++    # Compute normalized decreasing future-token weights (T01)
++    t = np.arange(future_horizon)
++    raw_weights = np.maximum(0, 1 - 0.2 * t)
++    normalized_weights = raw_weights / raw_weights.sum()
++
++    # Weighted average log probabilities for each candidate
++    wavg_with = logp_with_result @ normalized_weights
++    wavg_call = logp_call_only @ normalized_weights
++    wavg_no = logp_no_call @ normalized_weights
++
++    # Margin: improvement over the best alternative (max of call-only and no-call)
++    improvement = wavg_with - np.maximum(wavg_call, wavg_no)
++
++    keep = improvement > tau_filter
++    margins = improvement.astype(np.float64)
++
++    return keep, margins

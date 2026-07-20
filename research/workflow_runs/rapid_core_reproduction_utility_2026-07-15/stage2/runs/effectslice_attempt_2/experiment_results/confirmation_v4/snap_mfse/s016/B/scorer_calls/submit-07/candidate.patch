@@ -1,0 +1,46 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,34 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    counts = np.asarray(counts, dtype=np.float64)
++    if not np.isfinite(counts).all():
++        raise ValueError("counts must be finite")
++    if (counts < 0).any():
++        raise ValueError("counts must be nonnegative")
++    cell_norms = np.sqrt(np.sum(counts ** 2, axis=1))
++    if (cell_norms == 0).any():
++        raise ValueError("all-zero rows are not allowed")
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be between 1 and n_cells-1")
++
++    def matvec(v):
++        w = v / cell_norms
++        temp = counts.T @ w
++        z = counts @ temp
++        result = z / cell_norms
++        return result
++
++    shape = (n_cells, n_cells)
++    dtype = np.float64
++    S = LinearOperator(shape, matvec=matvec, rmatvec=matvec, dtype=dtype)
++
++    np.random.seed(random_state)
++    eigenvalues, eigenvectors = eigsh(S, k=n_components, which='LA', return_eigenvectors=True)
++
++    idx = np.argsort(eigenvalues)[::-1]
++    eigenvalues = eigenvalues[idx]
++    eigenvectors = eigenvectors[:, idx]
++
++    return eigenvalues, eigenvectors

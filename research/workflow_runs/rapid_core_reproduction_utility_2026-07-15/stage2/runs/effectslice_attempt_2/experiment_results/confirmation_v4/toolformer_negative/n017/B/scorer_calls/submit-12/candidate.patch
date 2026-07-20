@@ -1,0 +1,35 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,31 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be boolean")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
++    for arr, name in [(logp_with_result, 'logp_with_result'), (logp_call_only, 'logp_call_only'), (logp_no_call, 'logp_no_call')]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} must contain only finite values")
++        if not np.all(arr <= 0):
++            raise ValueError(f"{name} must be nonpositive")
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All arrays must have the same shape")
++    # Validate empty arrays
++    for arr, name in [(logp_with_result, 'logp_with_result'), (logp_call_only, 'logp_call_only'), (logp_no_call, 'logp_no_call')]:
++        if arr.size == 0:
++            raise ValueError(f"{name} must not be empty")
++    # Compute improvement over no-call and over call-only
++    improvement_no_call = np.sum(logp_with_result - logp_no_call, axis=1)
++    improvement_call_only = np.sum(logp_call_only - logp_no_call, axis=1)
++    # Keep if with-result is better than no-call by more than tau, and call-only is better than no-call
++    keep = (improvement_no_call > tau_filter) & (improvement_call_only > 0)
++    # Margin is the improvement over no-call minus tau
++    margin = improvement_no_call - tau_filter
++    return keep, margin.astype(np.float64)

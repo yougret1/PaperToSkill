@@ -1,0 +1,64 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -1,16 +1,53 @@
+-"""Starter module for the locked Toolformer loss-filter task."""
+-
+-from __future__ import annotations
++"""Toolformer loss-filter implementation using NumPy."""
+ 
+ import numpy as np
+ 
+ 
+ def filter_api_calls(
+-    logp_with_result: np.ndarray,
+-    logp_call_only: np.ndarray,
+-    logp_no_call: np.ndarray,
++    with_result: np.ndarray,
++    call_only: np.ndarray,
++    no_call: np.ndarray,
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+-    """Return an ordered keep mask and one finite margin per proposed call."""
++    """Return an ordered keep mask and one finite margin per proposed call.
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    Based on Toolformer's API call filtering: keep a candidate if the
++    log-probability sum with the API call exceeds the no-call sum plus
++    the threshold. The margin is the difference minus the threshold.
++    """
++    # Validate inputs
++    for arr, name in [
++        (with_result, "with_result"),
++        (call_only, "call_only"),
++        (no_call, "no_call"),
++    ]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy ndarray")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if arr.shape[0] == 0 or arr.shape[1] == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} contains non-finite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} must be nonpositive")
++    # Validate tau_filter
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be boolean")
++    if not isinstance(tau_filter, (int, float, np.integer, np.floating)):
++        raise ValueError("tau_filter must be a number")
++    if np.isnan(tau_filter) or np.isinf(tau_filter):
++        raise ValueError("tau_filter must be finite")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
++    # Check shape consistency
++    if not (with_result.shape == call_only.shape == no_call.shape):
++        raise ValueError("Input matrices must have the same shape")
++    # Compute sums along the future horizon axis
++    sum_call = np.sum(call_only, axis=1)
++    sum_with = np.sum(with_result, axis=1)
++    sum_no = np.sum(no_call, axis=1)
++    # Keep candidate if the log-probability sum with the API call exceeds the no-call sum minus tau_filter
++    keep = (sum_call + sum_with) > (sum_no - tau_filter)
++    margins = sum_call + sum_with - sum_no + tau_filter
++    return keep, margins

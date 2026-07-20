@@ -1,0 +1,60 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -11,5 +11,56 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    # Validate input
++    counts = np.asarray(counts, dtype=float)
++    if not np.isfinite(counts).all():
++        raise ValueError("Input contains non-finite values")
++    if (counts < 0).any():
++        raise ValueError("Input contains negative values")
++    if (counts.sum(axis=1) == 0).any():
++        raise ValueError("Input contains all-zero cell rows")
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError(f"n_components must be in [1, {n_cells - 1}]")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Step 1: IDF scaling (A01)
++    df = (counts > 0).sum(axis=0)
++    idf = np.log(n_cells / (1.0 + df))
++    X = counts * idf[np.newaxis, :]
++
++    # Step 2: Row normalization to unit L2 norm (A02)
++    row_norms = np.linalg.norm(X, axis=1, ord=2)
++    X = X / row_norms[:, np.newaxis]
++
++    # Step 3: Compute degree vector matrix-free (A03)
++    ones = np.ones(n_cells)
++    t = X.T @ ones          # (n_features,)
++    d = X @ t - 1.0         # (n_cells,) degree vector of W = X X^T - I
++    d = np.maximum(d, 1e-12)  # safeguard against zero degree
++
++    inv_sqrt_d = 1.0 / np.sqrt(d)
++
++    # Build linear operator for D^{-1/2} (X X^T - I) D^{-1/2}
++    from scipy.sparse.linalg import LinearOperator, eigsh
++
++    def matvec(v):
++        u = v * inv_sqrt_d          # D^{-1/2} v
++        a = X.T @ u                 # X^T D^{-1/2} v
++        b = X @ a                   # X X^T D^{-1/2} v
++        c = b - u                   # (X X^T - I) D^{-1/2} v
++        return c * inv_sqrt_d       # D^{-1/2} (X X^T - I) D^{-1/2} v
++
++    op = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=np.float64)
++
++    # Set initial vector if random_state provided
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells).astype(np.float64)
++
++    # Compute leading eigenvalues and eigenvectors of the normalized adjacency
++    eigenvalues, eigenvectors = eigsh(op, k=n_components, which='LM', v0=v0)
++
++    # eigsh returns eigenvalues in ascending order; reverse for descending
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    return eigenvalues, eigenvectors

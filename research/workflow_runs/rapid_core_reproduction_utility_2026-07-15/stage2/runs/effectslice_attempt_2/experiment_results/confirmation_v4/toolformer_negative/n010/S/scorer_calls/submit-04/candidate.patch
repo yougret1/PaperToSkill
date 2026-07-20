@@ -1,0 +1,41 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,37 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not isinstance(logp_with_result, np.ndarray) or not isinstance(logp_call_only, np.ndarray) or not isinstance(logp_no_call, np.ndarray):
++        raise ValueError("Inputs must be numpy arrays")
++    if logp_with_result.ndim != 2 or logp_call_only.ndim != 2 or logp_no_call.ndim != 2:
++        raise ValueError("Inputs must be 2D matrices")
++    if logp_with_result.shape != logp_call_only.shape or logp_with_result.shape != logp_no_call.shape:
++        raise ValueError("All matrices must have the same shape")
++    n_candidates, future_horizon = logp_with_result.shape
++    if n_candidates == 0 or future_horizon == 0:
++        raise ValueError("Matrices must not be empty")
++    if not np.all(np.isfinite(logp_with_result)) or not np.all(np.isfinite(logp_call_only)) or not np.all(np.isfinite(logp_no_call)):
++        raise ValueError("All matrix entries must be finite")
++    if not np.all(logp_with_result <= 0) or not np.all(logp_call_only <= 0) or not np.all(logp_no_call <= 0):
++        raise ValueError("All log probabilities must be nonpositive")
++    if not isinstance(tau_filter, (int, float)) or isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must be a finite nonnegative number")
++    if tau_filter < 0 or not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite nonnegative")
++
++    # Compute normalized decreasing weights
++    t = np.arange(future_horizon, dtype=float)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    weight_sum = np.sum(raw_weights)
++    normalized_weights = raw_weights / weight_sum
++
++    # Compute margin for each candidate
++    max_alternative = np.maximum(logp_call_only, logp_no_call)
++    delta = logp_with_result - max_alternative
++    margin = np.dot(delta, normalized_weights)
++
++    # Determine keep mask
++    keep_mask = margin > tau_filter
++
++    return (keep_mask, margin)

@@ -1,0 +1,72 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,60 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    counts = np.asarray(counts, dtype=float)
++    n_cells, n_features = counts.shape
++
++    # Validate n_components
++    if not isinstance(n_components, (int, np.integer)) or n_components < 1 or n_components >= n_cells:
++        raise ValueError(f"n_components must be 1 <= n_components < n_cells, got {n_components}")
++
++    # Reject nonfinite or negative values
++    if not np.all(np.isfinite(counts)) or np.any(counts < 0):
++        raise ValueError("Input contains nonfinite or negative values")
++
++    # Reject all-zero rows
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("Input contains all-zero cell rows")
++
++    # Step A01: IDF scaling
++    n = n_cells
++    df = np.sum(counts > 0, axis=0)  # document frequency per feature
++    idf = np.log(n / (1.0 + df))
++    X = counts * idf[np.newaxis, :]  # shape (n_cells, n_features)
++
++    # Step A02: Row normalization (unit L2 norm)
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    # row_norms > 0 because all-zero rows already rejected
++    X = X / row_norms
++
++    # Step A03: Compute degrees matrix-free: d = X @ (X.T @ 1) - 1
++    ones = np.ones(n_cells)
++    degrees = X @ (X.T @ ones) - 1.0
++
++    if np.any(degrees <= 0):
++        raise ValueError("Degrees must be positive; invalid count matrix")
++
++    D_inv = 1.0 / degrees
++    D_inv_sqrt = np.sqrt(D_inv)
++
++    # Define linear operator for the normalized similarity matrix
++    def matvec(v):
++        # v: shape (n_cells,)
++        v_scaled = D_inv_sqrt * v
++        temp = X.T @ v_scaled          # (n_features,)
++        y = X @ temp                   # (n_cells,)
++        y_scaled = D_inv_sqrt * y
++        result = y_scaled - D_inv * v
++        return result
++
++    # Linear operator shape (n_cells, n_cells)
++    op = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=float)
++
++    # Step A05: Lanczos eigensolver, top n_components eigenvalues (largest algebraic)
++    eigenvalues, eigenvectors = eigsh(op, k=n_components, which='LA', tol=0)
++
++    # eigsh returns eigenvalues in ascending order; reverse to descending
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    return eigenvalues, eigenvectors

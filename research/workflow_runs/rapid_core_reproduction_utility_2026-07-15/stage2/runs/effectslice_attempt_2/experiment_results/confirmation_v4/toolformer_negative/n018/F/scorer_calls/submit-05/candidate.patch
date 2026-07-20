@@ -1,0 +1,92 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -1,8 +1,60 @@
+-"""Starter module for the locked Toolformer loss-filter task."""
++"""Toolformer loss-filter implementation following the paper-core procedure."""
+ 
+ from __future__ import annotations
+ 
+ import numpy as np
++
++
++def _validate_input(
++    logp_with_result: np.ndarray,
++    logp_call_only: np.ndarray,
++    logp_no_call: np.ndarray,
++    tau_filter: float,
++) -> None:
++    """Validate all inputs according to the task specification."""
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not isinstance(tau_filter, (int, float)):
++        raise ValueError("tau_filter must be a number")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be a finite nonnegative number")
++
++    for name, mat in [
++        ("logp_with_result", logp_with_result),
++        ("logp_call_only", logp_call_only),
++        ("logp_no_call", logp_no_call),
++    ]:
++        if not isinstance(mat, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if mat.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix, got ndim={mat.ndim}")
++        if mat.size == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.all(np.isfinite(mat)):
++            raise ValueError(f"{name} contains non-finite values")
++        if np.any(mat > 0):
++            raise ValueError(f"{name} contains positive values")
++
++    # Check shape consistency
++    shape = logp_with_result.shape
++    if logp_call_only.shape != shape or logp_no_call.shape != shape:
++        raise ValueError("all log probability matrices must have the same shape")
++
++
++def _normalized_weights(H: int) -> np.ndarray:
++    """Compute normalized decreasing future-token weights (T01)."""
++    t = np.arange(H, dtype=float)
++    raw = np.maximum(0.0, 1.0 - 0.2 * t)
++    total = raw.sum()
++    if total == 0.0:
++        # Should not happen for H >= 1, but guard against division by zero
++        return np.zeros_like(raw)
++    return raw / total
++
++
++def _weighted_loss(logp: np.ndarray, weights: np.ndarray) -> np.ndarray:
++    """Compute weighted future-token loss (T02)."""
++    return -np.sum(weights * logp, axis=1)
+ 
+ 
+ def filter_api_calls(
+@@ -11,6 +63,25 @@
+     logp_no_call: np.ndarray,
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+-    """Return an ordered keep mask and one finite margin per proposed call."""
++    """Return an ordered keep mask and one finite margin per proposed call.
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    Implements the Toolformer API-call loss filter as described in the paper.
++    """
++    _validate_input(
++        logp_with_result, logp_call_only, logp_no_call, tau_filter
++    )
++
++    n_candidates, H = logp_with_result.shape
++    weights = _normalized_weights(H)
++
++    L_plus = _weighted_loss(logp_with_result, weights)     # with result
++    L_call = _weighted_loss(logp_call_only, weights)       # call only
++    L_empty = _weighted_loss(logp_no_call, weights)        # no call
++
++    # Stronger counterfactual baseline (T03)
++    L_minus = np.minimum(L_empty, L_call)
++
++    margin = L_minus - L_plus
++    keep = margin >= tau_filter  # inclusive threshold (T04)
++
++    return keep, margin

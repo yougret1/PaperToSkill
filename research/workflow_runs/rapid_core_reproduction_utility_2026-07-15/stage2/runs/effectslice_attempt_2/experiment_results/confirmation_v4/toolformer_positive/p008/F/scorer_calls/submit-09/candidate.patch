@@ -1,0 +1,55 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,51 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a Python bool")
++    for name, mat in [("logp_with_result", logp_with_result),
++                      ("logp_call_only", logp_call_only),
++                      ("logp_no_call", logp_no_call)]:
++        if not isinstance(mat, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if mat.ndim != 2:
++            raise ValueError(f"{name} must be 2-dimensional, got ndim={mat.ndim}")
++        if mat.size == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.all(np.isfinite(mat)):
++            raise ValueError(f"{name} contains non-finite values")
++        if np.any(mat > 0):
++            raise ValueError(f"{name} contains positive values (expected nonpositive)")
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All log probability matrices must have the same shape")
++    if not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
++    
++    n_candidates, horizon = logp_with_result.shape
++    # T01: compute future-token weights
++    t = np.arange(horizon, dtype=np.float64)
++    raw = np.maximum(0.0, 1.0 - 0.2 * t)
++    weight_sum = np.sum(raw)
++    if weight_sum == 0.0:
++        raise ValueError("All weights are zero — this should not occur")
++    weights = raw / weight_sum
++    
++    def weighted_loss(log_probs):
++        return -np.dot(log_probs, weights)
++    
++    # T02: compute losses
++    L_empty = weighted_loss(logp_no_call)
++    L_call_only = weighted_loss(logp_call_only)
++    L_plus = weighted_loss(logp_with_result)
++    
++    # T03: stronger counterfactual baseline
++    L_minus = np.minimum(L_empty, L_call_only)
++    
++    # T04: margin and threshold
++    margins = L_minus - L_plus
++    keep_mask = margins >= tau_filter
++    
++    return keep_mask, margins

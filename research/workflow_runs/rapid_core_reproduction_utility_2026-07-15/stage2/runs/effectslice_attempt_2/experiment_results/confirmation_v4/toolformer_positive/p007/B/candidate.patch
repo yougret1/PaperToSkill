@@ -1,0 +1,60 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,56 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate tau_filter
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not np.isscalar(tau_filter) or not np.isreal(tau_filter):
++        raise ValueError("tau_filter must be a finite real number")
++    tau = float(tau_filter)
++    if not np.isfinite(tau) or tau < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
++
++    # Validate inputs
++    for name, arr in [("logp_with_result", logp_with_result),
++                      ("logp_call_only", logp_call_only),
++                      ("logp_no_call", logp_no_call)]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a NumPy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if arr.size == 0:
++            raise ValueError(f"{name} is empty")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} contains non-finite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} contains positive values")
++
++    # Check shape consistency
++    n_candidates = logp_with_result.shape[0]
++    future_horizon = logp_with_result.shape[1]
++    if logp_call_only.shape != (n_candidates, future_horizon):
++        raise ValueError("logp_call_only shape mismatch")
++    if logp_no_call.shape != (n_candidates, future_horizon):
++        raise ValueError("logp_no_call shape mismatch")
++
++    # Compute means
++    mean_with = np.mean(logp_with_result, axis=1)
++    mean_call = np.mean(logp_call_only, axis=1)
++    mean_no = np.mean(logp_no_call, axis=1)
++
++    # Losses (negative log probabilities)
++    loss_add = -mean_with
++    loss_remove = -mean_call
++    loss_no_call = -mean_no
++
++    # Improvements
++    improvement_add = loss_no_call - loss_add
++    improvement_remove = loss_no_call - loss_remove
++
++    # Keep mask
++    keep = (improvement_add > tau) & (improvement_remove > 0)
++
++    # Margins (one per candidate, finite)
++    margins = improvement_add
++
++    return keep, margins

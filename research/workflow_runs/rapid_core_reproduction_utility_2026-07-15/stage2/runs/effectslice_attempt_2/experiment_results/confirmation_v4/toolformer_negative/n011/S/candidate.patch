@@ -1,0 +1,45 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,41 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    if not isinstance(logp_with_result, np.ndarray) or not isinstance(logp_call_only, np.ndarray) or not isinstance(logp_no_call, np.ndarray):
++        raise ValueError("Inputs must be NumPy arrays.")
++    if logp_with_result.ndim != 2 or logp_call_only.ndim != 2 or logp_no_call.ndim != 2:
++        raise ValueError("Inputs must be two-dimensional matrices.")
++    n_candidates, future_horizon = logp_with_result.shape
++    if logp_call_only.shape != (n_candidates, future_horizon) or logp_no_call.shape != (n_candidates, future_horizon):
++        raise ValueError("All inputs must have the same shape.")
++    if n_candidates == 0:
++        raise ValueError("Inputs must not be empty.")
++    if not (np.isfinite(logp_with_result).all() and np.isfinite(logp_call_only).all() and np.isfinite(logp_no_call).all()):
++        raise ValueError("All input values must be finite.")
++    if (logp_with_result > 0).any() or (logp_call_only > 0).any() or (logp_no_call > 0).any():
++        raise ValueError("All input values must be nonpositive (log probabilities).")
++    if not isinstance(tau_filter, (int, float)) or isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must be a finite nonnegative number, not a boolean.")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and nonnegative.")
++
++    # Compute normalized decaying weights
++    t = np.arange(future_horizon)
++    raw_weights = np.maximum(0, 1.0 - 0.2 * t)
++    weight_sum = raw_weights.sum()
++    if weight_sum == 0:
++        raise ValueError("Future horizon too small for positive weights.")
++    norm_weights = raw_weights / weight_sum
++
++    # Weighted averages over future horizon
++    weighted_with = np.sum(logp_with_result * norm_weights, axis=1)
++    weighted_call = np.sum(logp_call_only * norm_weights, axis=1)
++    weighted_no = np.sum(logp_no_call * norm_weights, axis=1)
++
++    # Baseline: best alternative (lowest loss = highest log prob) among no_call and call_only
++    best_baseline = np.maximum(weighted_no, weighted_call)
++    margins = weighted_with - best_baseline
++    keep = margins > tau_filter
++
++    return keep, margins

@@ -1,0 +1,48 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,44 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be boolean")
++    for name, mat in [('logp_with_result', logp_with_result), ('logp_call_only', logp_call_only), ('logp_no_call', logp_no_call)]:
++        if not isinstance(mat, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if mat.ndim != 2:
++            raise ValueError(f"{name} must be 2-dimensional")
++        if mat.shape[0] == 0 or mat.shape[1] == 0:
++            raise ValueError(f"{name} must have non-empty dimensions")
++        if not np.all(np.isfinite(mat)):
++            raise ValueError(f"{name} must contain only finite values")
++        if not np.all(mat <= 0):
++            raise ValueError(f"{name} must contain only nonpositive values")
++    # Check shapes
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All three matrices must have the same shape")
++    # Validate tau_filter
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
++
++    n_candidates, future_horizon = logp_with_result.shape
++
++    # Compute weights
++    t = np.arange(future_horizon, dtype=float)
++    raw_weights = np.maximum(0, 1.0 - 0.2 * t)
++    normalized_weights = raw_weights / np.sum(raw_weights)
++
++    # Weighted sums
++    weighted_sum_with = np.sum(logp_with_result * normalized_weights, axis=1)
++    weighted_sum_call_only = np.sum(logp_call_only * normalized_weights, axis=1)
++    weighted_sum_no_call = np.sum(logp_no_call * normalized_weights, axis=1)
++
++    # Baseline: better of no call and call only
++    best_baseline = np.maximum(weighted_sum_no_call, weighted_sum_call_only)
++    improvement = weighted_sum_with - best_baseline
++
++    keep_mask = improvement > tau_filter
++    margins = improvement - tau_filter
++
++    return keep_mask, margins

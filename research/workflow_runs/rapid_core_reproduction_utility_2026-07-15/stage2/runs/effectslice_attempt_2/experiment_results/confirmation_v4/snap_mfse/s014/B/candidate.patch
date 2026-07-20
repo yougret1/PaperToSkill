@@ -1,0 +1,39 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import svds
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,26 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    counts = np.asarray(counts)
++    if not np.isfinite(counts).all():
++        raise ValueError("Input contains nonfinite values.")
++    if np.any(counts < 0):
++        raise ValueError("Input contains negative values.")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("Input contains all-zero cell rows.")
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be between 1 and n_cells-1.")
++    # Row and column normalization
++    row_sums = counts.sum(axis=1)
++    col_sums = counts.sum(axis=0)
++    inv_sqrt_row = 1.0 / np.sqrt(row_sums)
++    inv_sqrt_col = np.where(col_sums > 0, 1.0 / np.sqrt(col_sums), 0.0)
++    normalized_counts = counts * inv_sqrt_row[:, None] * inv_sqrt_col[None, :]
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(min(n_cells, n_features))
++    U, s, Vt = svds(normalized_counts, k=n_components, v0=v0)
++    idx = np.argsort(s)[::-1]
++    eigenvalues = (s[idx])**2
++    vectors = U[:, idx]
++    return eigenvalues, vectors
