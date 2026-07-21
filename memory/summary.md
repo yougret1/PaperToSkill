@@ -22,9 +22,11 @@ core research workflow.
 - Active paper: `EffectSlice: Evidence-Carrying Admission for Paper-Derived
   Procedural Cores`.
 - Manuscript source: `paper/effectslice_aaai/main_v3.tex`.
-- Rendered artifact: `paper/effectslice_aaai/main.pdf` (7 pages).
+- Rendered artifact: `paper/effectslice_aaai/main_v3.pdf` (8 pages).
 - Stages `2.1` through `2.8`: passed.
 - Major Stage `2`: passed with `handoff_mode: normal`.
+- Forward Stage `2.6`: passed with 33 bibliography entries, 30 main-text
+  citations, and 7 DOI-verified AAAI papers.
 - Current branch: `codex/effectslice-v3`.
 
 ## EffectSlice Evidence State
@@ -35,10 +37,22 @@ core research workflow.
   unsupported manuscript claims or remaining scientific blocker.
 - Focused high-risk tests pass 26/26; the authoritative `tests/` suite passes
   678 tests with 6 skips.
-- The final LaTeX build has no critical log findings, and all 7 rendered pages
+- The latest LaTeX build has no critical log findings, and all 8 rendered pages
   passed visual inspection.
-- The user has prohibited workflow-stage rollback; any future work must iterate
-  from the accepted Stage 2 record rather than returning to experiments.
+- The user has prohibited workflow-stage rollback. New experiments must be
+  forward extensions with new preregistrations and evidence boundaries; the
+  accepted V4/V5 records remain immutable parent evidence.
+
+## Forward Generalization Extension
+
+- Root: `research/workflow_runs/rapid_core_reproduction_utility_2026-07-15/stage2/runs/effectslice_attempt_2/forward_extensions/generalization_2026-07-21/`.
+- Citation gate: 33 unique bibliography entries, 30 unique main-text citations,
+  7 AAAI citations, and 13 official or retrieved metadata records.
+- Added admission-risk positioning from SelectiveNet and Conformal Risk Control,
+  fine-grained agent-evaluation positioning from AgentBoard, and the ICML 2025
+  PaperBench venue record.
+- Next forward stage: `2.2`, preregistering a 12-paper by 2-task experiment over
+  NLP, software engineering, data analysis, and agent/tool-use domains.
 
 ## Legacy Evidence Policy
 

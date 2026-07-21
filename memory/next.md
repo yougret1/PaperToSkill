@@ -1,18 +1,21 @@
 # Next Actions
 
-No mandatory Stage 2 research step remains. Stages `2.1` through `2.8` and the
-major Stage `2` report are passed with a normal handoff.
+The accepted Stage `2` remains complete. The active work is a separate,
+forward-only generalization extension required by the user.
 
-## Optional Forward Work
+## Required Forward Work
 
-1. Complete venue-specific author metadata, anonymity, supplementary-package,
-   and submission-portal checks when the target submission state is known.
-2. Enter Stage `3.1` only if publication assets are requested; start from the
-   rendered manuscript and the accepted Stage 2 evidence record.
-3. Any broader empirical claim requires a new forward iteration with a frozen
-   candidate-selection rule, independent private registry, external reducer,
-   second provider, or user study as appropriate. Do not rewrite the accepted
-   Stage 2 record or roll the workflow back.
+1. Commit and push the passed forward Stage `2.6` citation package.
+2. Write Stage `2.2` preregistration for 12 papers by 2 tasks, stratified across
+   NLP, software engineering, data analysis, and agent/tool-use.
+3. Freeze paper-selection criteria, task and atom contracts, six execution blocks
+   per paper-task, B/F/S conditions, controls, retry policy, provider identities,
+   SLA thresholds, and cluster-aware statistical analysis before private runs.
+4. Require a fixed-seed open-model reproducibility anchor. Closed-model ablations
+   use a frozen four-paper-task subset and do not replace cross-paper coverage.
+5. Build and validate method diagrams from the preregistered structure; empirical
+   forest, heatmap, calibration, sensitivity, Pareto, and restore/drop plots must
+   wait for real forward results.
 
 ## Preservation Rules
 
@@ -23,3 +26,5 @@ major Stage `2` report are passed with a normal handoff.
   duplicate snapshots and is not a valid release signal.
 - Do not present the local admission result as a broad reduction, portability,
   population-rate, or human-benefit claim.
+- Do not mutate, supersede, or reinterpret V4/V5 preregistrations, raw outputs,
+  or accepted stage reports; every new artifact lives under `forward_extensions`.

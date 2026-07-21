@@ -2,34 +2,30 @@
 
 ## Active Iteration
 
-Finalize ResearchStudio Full Research Workflow Stages `2.7`, `2.8`, and major
-Stage `2` for the EffectSlice AAAI-format manuscript. Workflow rollback and new
-experiments are out of scope for this iteration.
+Run a forward-only EffectSlice generalization extension from the accepted V4/V5
+parent evidence. The current boundary is Stage `2.6` citation completion followed
+by a new Stage `2.2` preregistration; no parent experiment is reopened.
 
 ## Completed This Iteration
 
-- Applied the last technical, empirical, and novelty reviewer revisions to
-  `paper/effectslice_aaai/main_v3.tex` and its manuscript contract tests.
-- Regenerated the V5 result bindings and release manifest.
-- Rebuilt the formal 7-page manuscript and visually inspected every page.
-- Passed the release verifier over 858 canonical raw files and 24 directly
-  bound artifacts.
-- Passed 26 focused high-risk tests and the authoritative full `tests/` suite
-  with 678 passes and 6 skips.
-- Recorded final text and figure/caption/reference reviews from three
-  independent reviewers.
-- Added and validated `stage_report_2_7.json`, `stage_report_2_8.json`, and
-  `stage_report_2.json`; every declared input and output path exists.
+- Expanded the bibliography to 33 unique entries and the manuscript to 30
+  unique cited works, including 7 DOI-verified AAAI papers.
+- Added SelectiveNet, Conformal Risk Control, and AgentBoard positioning and
+  upgraded PaperBench to its ICML 2025 publication record.
+- Preserved structured retrieval envelopes, a citation-role matrix, official
+  metadata, SHA-256 digests, and a forward citation verifier.
+- Passed the forward citation audit, 2 forward tests, and 15 existing manuscript
+  and citation contract tests.
+- Rebuilt `paper/effectslice_aaai/main_v3.pdf` as a valid 8-page PDF and visually
+  inspected all pages at 144 DPI.
 
 ## Current State
 
-- Stages `2.1` through `2.8` are passed.
-- Major Stage `2` is passed with a normal manuscript handoff.
-- Final reviewer ratings are 8.5/10, 7/10, and 7/10, all Weak Accept.
-- There are no unsupported claims or unresolved scientific blockers.
-- The release-ready manuscript is `paper/effectslice_aaai/main.pdf`.
-- The remaining action in this iteration is private Git backup and remote
-  verification of `codex/effectslice-v3`.
+- The accepted parent Stage `2` and V4/V5 evidence remain unchanged.
+- Forward Stage `2.6` is passed and ready for private Git backup.
+- The current manuscript is `paper/effectslice_aaai/main_v3.pdf`.
+- The next stage is a new `2.2` experiment preregistration; provider execution
+  is not authorized until that stage is frozen and backed up.
 
 ## Residual Risk
 

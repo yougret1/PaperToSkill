@@ -134,7 +134,14 @@ registered full artifact exists and audits a later strict-subset substitution cl
 
 \paragraph{Skill construction, retrieval, and compression.}
 SkillFoundry and Anything2Skill compile reusable skills from heterogeneous
-sources \cite{shen2026skillfoundry,pan2026anything2skill}.  SkillReducer compresses
+sources \cite{shen2026skillfoundry,pan2026anything2skill}.  Graph-of-Skills and
+SkillRAE organize dependency-aware retrieval and context compilation, while
+ClawTrace distills skill content from execution traces
+\cite{liu2026graphskills,meng2026skillrae,yuan2026clawtrace}.  Related tool-learning
+work iteratively acquires tool use, preserves general capability during tool
+training, constructs reusable toolsets, and selects tools for agent execution
+\cite{gao2024confucius,hao2025citi,ma2025reusabletoolsets,jia2026autotool}.
+SkillReducer compresses
 routing descriptions and skill bodies, then restores content when task feedback
 shows a regression; it also reports an independent deterministic benchmark
 \cite{gao2026skillreducer}.  Xu and Wu freeze ten skill-delivery conditions over
@@ -148,6 +155,25 @@ release identity to source locators and the evaluation boundary.
 EffectSlice neither competes with their reducers nor repeats their cost question.
 It adds source-span binding and a candidate-level admission record after the
 candidate is frozen.
+
+\paragraph{Tool-agent evaluation.}
+MCP-AgentBench tests agents with MCP-mediated tools, while complementary work
+maps tool-use capability boundaries through cognitive load
+\cite{guo2026mcpagentbench,wang2026beyondaccuracy}.  EffectSlice narrows this
+evaluation question to whether one frozen strict subset may substitute for its
+registered full artifact, and retains source and release identities for that
+decision.
+
+\paragraph{Admission and risk control.}
+Selective prediction studies when a system should reject rather than make a
+prediction, typically reporting a risk--coverage trade-off
+\cite{geifman2019selectivenet}.  Conformal risk control calibrates a monotone
+loss against held-out data \cite{angelopoulos2022conformalriskcontrol}, and
+AgentBoard advocates fine-grained rather than final-success-only evaluation of
+multi-turn agents \cite{ma2024agentboard}.  EffectSlice does not claim a
+distribution-free risk guarantee: it records a finite, preregistered local
+admission decision with integrity checks, explicit controls, and its applicable
+task and release boundary.
 
 \begin{table*}[t]
 \centering
@@ -185,9 +211,12 @@ Despite its name, EffectSlice is an admission protocol, not a slicing algorithm.
 
 \paragraph{Reduction and adaptive evaluation.}
 Delta debugging and C-Reduce remove components while preserving observed behavior
-\cite{regehr2012creduce}; prompt compression trades context size against retained
-information \cite{jiang2023llmlingua}.  Repeated holdout exposure can overfit an
-adaptively selected hypothesis \cite{dwork2015reusableholdout}.  EffectSlice applies
+\cite{zeller2002simplifying,regehr2012creduce}; cause reduction extends the
+objective beyond failure-inducing inputs \cite{groce2016cause}.  Prompt compression
+trades context size against retained information
+\cite{jiang2023llmlingua,pan2024llmlingua2,liskavets2025contextcompression}.
+Repeated holdout exposure can overfit an adaptively selected hypothesis
+\cite{dwork2015reusableholdout,nakkiran2018genericholdout}.  EffectSlice applies
 this information-flow lesson to tool-using code agents: public tests support
 development, while the fixed patch receives one terminal private evaluation.  The
 increment is binding that isolation to paper-source addresses, B/F/S candidate
