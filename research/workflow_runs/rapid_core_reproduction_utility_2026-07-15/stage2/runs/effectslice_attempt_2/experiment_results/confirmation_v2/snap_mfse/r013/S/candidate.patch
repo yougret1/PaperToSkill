@@ -1,0 +1,48 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -11,5 +11,44 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    # Validate inputs
++    if not isinstance(counts, np.ndarray):
++        raise ValueError("counts must be a numpy array")
++    if counts.ndim != 2:
++        raise ValueError("counts must be 2D")
++    n_cells, n_features = counts.shape
++    if not np.isfinite(counts).all():
++        raise ValueError("counts contains nonfinite values")
++    if np.any(counts < 0):
++        raise ValueError("counts contains negative values")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("counts contains all-zero cell rows")
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be 1 <= n_components < n_cells")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # IDF scaling
++    df = np.count_nonzero(counts > 0, axis=0)
++    idf = np.log(n_cells / (1 + df))
++    X = counts * idf  # broadcast over columns
++
++    # Row normalization
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    X = X / row_norms
++
++    # Matrix-free eigen decomposition of W = X X^T - I
++    from scipy.sparse.linalg import LinearOperator, eigsh
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells).astype(X.dtype)
++
++    def matvec(v):
++        # v shape (n_cells,)
++        return X @ (X.T @ v) - v
++
++    op = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=X.dtype)
++    eigenvalues, eigenvectors = eigsh(op, k=n_components, which='LA', v0=v0)
++
++    # eigsh returns eigenvalues in ascending order, reverse for descending
++    eigenvalues = eigenvalues[::-1].copy()
++    eigenvectors = eigenvectors[:, ::-1].copy()
++
++    return eigenvalues, eigenvectors

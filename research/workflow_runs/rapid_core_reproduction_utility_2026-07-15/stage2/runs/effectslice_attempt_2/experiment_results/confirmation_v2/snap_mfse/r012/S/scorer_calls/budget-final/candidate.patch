@@ -1,0 +1,75 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -1,4 +1,71 @@
+-"""Starter module for the locked SNAP-MFSE reproduction task."""
++import numpy as np
++import scipy.sparse as sp
++from scipy.sparse.linalg import LinearOperator, eigsh
++
++def matrix_free_spectral_embedding(C, n_components, random_state=None):
++    """Compute spectral embedding using matrix-free operations."""
++    # Input validation
++    if not isinstance(C, (np.ndarray, sp.spmatrix)):
++        raise ValueError("C must be a numpy array or scipy sparse matrix")
++    n_cells, n_features = C.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must satisfy 1 <= n_components < n_cells")
++    data = C.data if sp.issparse(C) else C
++    if not np.all(np.isfinite(data)):
++        raise ValueError("Input contains nonfinite values")
++    if np.any(data < 0):
++        raise ValueError("Input contains negative values")
++    if sp.issparse(C):
++        row_sums = C.sum(axis=1).A1
++    else:
++        row_sums = C.sum(axis=1)
++    if np.any(row_sums == 0):
++        raise ValueError("Input contains all-zero rows")
++    # IDF scaling
++    if sp.issparse(C):
++        df = (C != 0).sum(axis=0).A1
++        idf = np.log(n_cells / (1 + df))
++        Y = C.multiply(sp.csr_matrix(idf))
++    else:
++        df = np.count_nonzero(C, axis=0)
++        idf = np.log(n_cells / (1 + df))
++        Y = C * idf
++    # Row normalization to unit L2 norm
++    if sp.issparse(Y):
++        norms = np.sqrt(Y.power(2).sum(axis=1).A1)
++        inv_norms = 1.0 / norms
++        X = Y.multiply(sp.csr_matrix(inv_norms).T)
++    else:
++        norms = np.linalg.norm(Y, axis=1)
++        X = Y / norms[:, None]
++    # Compute degree vector d = X @ (X.T @ 1) - 1 without forming W
++    ones = np.ones(n_cells)
++    if sp.issparse(X):
++        col_sums = X.T.dot(ones)
++        d = X.dot(col_sums) - 1.0
++    else:
++        col_sums = X.T @ ones
++        d = X @ col_sums - 1.0
++    d = np.maximum(d, 1e-12)
++    D_inv_sqrt = 1.0 / np.sqrt(d)
++    # Define linear operator for A = D^{-1/2} (X X^T - I) D^{-1/2}
++    def matvec(v):
++        x = D_inv_sqrt * v
++        if sp.issparse(X):
++            temp = X.T.dot(x)
++            Wx = X.dot(temp) - x
++        else:
++            temp = X.T @ x
++            Wx = X @ temp - x
++        return D_inv_sqrt * Wx
++    Aop = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=X.dtype)
++    if random_state is not None:
++        rng = np.random.RandomState(random_state)
++        v0 = rng.randn(n_cells).astype(X.dtype)
++        eigenvalues, eigenvectors = eigsh(Aop, k=n_components, which='LA', maxiter=1000, tol=1e-6, v0=v0)
++    else:
++        eigenvalues, eigenvectors = eigsh(Aop, k=n_components, which='LA', maxiter=1000, tol=1e-6)
++    return eigenvalues[::-1].astype(np.float64), eigenvectors[:, ::-1].astype(np.float64)
+ 
+ from __future__ import annotations
+ 

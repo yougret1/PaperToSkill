@@ -1,0 +1,41 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -12,4 +12,37 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # validate input
++    if counts is None:
++        raise ValueError("counts must not be None")
++    counts = np.asarray(counts)
++    if counts.ndim != 2:
++        raise ValueError("counts must be 2D")
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be in [1, n_cells-1]")
++    if not np.all(np.isfinite(counts)):
++        raise ValueError("counts contains nonfinite values")
++    if np.any(counts < 0):
++        raise ValueError("counts contains negative values")
++    row_sums = np.asarray(counts.sum(axis=1)).ravel()
++    if not np.all(row_sums > 0):
++        raise ValueError("counts contains all-zero cell rows")
++    col_sums = np.asarray(counts.sum(axis=0)).ravel()
++    d_r = 1.0 / np.sqrt(row_sums)
++    d_c = np.where(col_sums > 0, 1.0 / col_sums, 0.0)
++    from scipy.sparse.linalg import LinearOperator, eigsh
++    n = n_cells
++    def matvec(v):
++        temp = d_r * v
++        temp = np.dot(counts.T, temp)
++        temp = d_c * temp
++        temp = np.dot(counts, temp)
++        return d_r * temp
++    op = LinearOperator((n, n), matvec=matvec, dtype=float)
++    np.random.seed(random_state)
++    eigenvalues, eigenvectors = eigsh(op, k=n_components, which='LM')
++    idx = np.argsort(-eigenvalues)
++    eigenvalues = eigenvalues[idx]
++    eigenvectors = eigenvectors[:, idx]
++    return eigenvalues, eigenvectors

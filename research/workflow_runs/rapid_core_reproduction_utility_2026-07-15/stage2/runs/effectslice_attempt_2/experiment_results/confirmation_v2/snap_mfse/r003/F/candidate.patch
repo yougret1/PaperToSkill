@@ -1,0 +1,69 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,57 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate input
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    if counts.size == 0:
++        raise ValueError("counts must not be empty")
++    if np.any(np.isnan(counts)) or np.any(np.isinf(counts)):
++        raise ValueError("counts must contain finite values")
++    if np.any(counts < 0):
++        raise ValueError("counts must be nonnegative")
++    n, p = counts.shape
++    if not (1 <= n_components < n):
++        raise ValueError("n_components must be 1 <= n_components < n_cells")
++
++    # 1. IDF scaling
++    df = np.count_nonzero(counts, axis=0)  # feature document frequencies
++    idf = np.log(n / (1.0 + df))
++    X_idf = counts * idf  # shape (n, p)
++
++    # Check for rows that cannot be normalized (all zero after IDF)
++    row_norms = np.linalg.norm(X_idf, axis=1)
++    if np.any(row_norms == 0):
++        raise ValueError("counts contains all-zero rows that cannot be L2-normalized")
++
++    # 2. Row normalization
++    X = X_idf / row_norms[:, np.newaxis]  # now each row has unit L2 norm
++
++    # 3. Compute degree vector without forming W
++    ones = np.ones(n)
++    XT_ones = X.T @ ones
++    d = X @ XT_ones - ones
++
++    if np.any(d <= 0):
++        raise ValueError("Non-positive degrees detected; cannot apply D^{-1/2}")
++
++    # 4. Prepare linear operator for normalized similarity
++    D_inv = 1.0 / d
++    D_inv_half = np.sqrt(D_inv)
++    X_tilde = X * D_inv_half[:, np.newaxis]  # D^{-1/2} X
++
++    def matvec(v):
++        return X_tilde @ (X_tilde.T @ v) - D_inv * v
++
++    operator = LinearOperator((n, n), matvec=matvec, rmatvec=matvec, dtype=X.dtype)
++
++    # 5. Compute leading eigenpairs
++    rng = np.random.default_rng(random_state)
++    v0 = rng.standard_normal(n)
++    eigenvalues, eigenvectors = eigsh(operator, k=n_components, which='LA', v0=v0)
++
++    # eigsh returns in ascending order; reverse for descending
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    return eigenvalues, eigenvectors

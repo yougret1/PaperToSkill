@@ -1,0 +1,42 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,38 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    inputs = [logp_with_result, logp_call_only, logp_no_call]
++    for name, arr in zip(["logp_with_result", "logp_call_only", "logp_no_call"], inputs):
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy ndarray")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if arr.shape[0] == 0 or arr.shape[1] == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.isfinite(arr).all():
++            raise ValueError(f"{name} contains nonfinite values")
++        if (arr > 0).any():
++            raise ValueError(f"{name} contains positive values")
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All input matrices must have the same shape")
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not isinstance(tau_filter, (int, float)):
++        raise ValueError("tau_filter must be a number")
++    if not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
++
++    L_with = np.sum(logp_with_result, axis=1)
++    L_call = np.sum(logp_call_only, axis=1)
++    L_no_call = np.sum(logp_no_call, axis=1)
++
++    margins = L_with - np.maximum(L_call, L_no_call)
++    keep = margins > tau_filter
++
++    margins = margins.astype(np.float64)
++    keep = keep.astype(np.bool_)
++
++    return keep, margins

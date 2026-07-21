@@ -1,0 +1,39 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,35 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    if not isinstance(logp_with_result, np.ndarray) or not isinstance(logp_call_only, np.ndarray) or not isinstance(logp_no_call, np.ndarray):
++        raise ValueError("Input matrices must be numpy arrays")
++    if logp_with_result.ndim != 2 or logp_call_only.ndim != 2 or logp_no_call.ndim != 2:
++        raise ValueError("Input matrices must be 2-dimensional")
++    if logp_with_result.shape != logp_call_only.shape or logp_with_result.shape != logp_no_call.shape:
++        raise ValueError("All input matrices must have the same shape")
++    if logp_with_result.shape[0] == 0 or logp_with_result.shape[1] == 0:
++        raise ValueError("Input matrices must not be empty")
++    if not np.all(np.isfinite(logp_with_result)) or not np.all(np.isfinite(logp_call_only)) or not np.all(np.isfinite(logp_no_call)):
++        raise ValueError("Input matrices must contain only finite values")
++    if np.any(logp_with_result > 0) or np.any(logp_call_only > 0) or np.any(logp_no_call > 0):
++        raise ValueError("Input matrices must contain only nonpositive values")
++    if isinstance(tau_filter, bool):
++        raise ValueError("Invalid threshold: boolean values are not allowed")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("Threshold must be finite and nonnegative")
++
++    n_candidates, future_horizon = logp_with_result.shape
++    t = np.arange(future_horizon)
++    raw_weights = np.maximum(0, 1 - 0.2 * t)
++    normalized_weights = raw_weights / np.sum(raw_weights)
++
++    loss_with_result = -np.dot(logp_with_result, normalized_weights)
++    loss_call_only = -np.dot(logp_call_only, normalized_weights)
++    loss_no_call = -np.dot(logp_no_call, normalized_weights)
++
++    L_minus = np.minimum(loss_no_call, loss_call_only)
++    margin = L_minus - loss_with_result
++    keep = margin >= tau_filter
++
++    return keep, margin

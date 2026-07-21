@@ -1,0 +1,55 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -11,5 +11,51 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    n_cells, n_features = counts.shape
++    if n_components < 1 or n_components >= n_cells:
++        raise ValueError("n_components must be in 1 <= n_components < n_cells")
++    if not np.isfinite(counts).all() or (counts < 0).any():
++        raise ValueError("counts must be finite and nonnegative")
++    if (counts.sum(axis=1) == 0).any():
++        raise ValueError("all-zero cell rows are not allowed")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # 1. IDF scaling
++    df = (counts > 0).sum(axis=0).astype(float)
++    idf = np.log(n_cells / (1.0 + df))
++    X = counts * idf
++
++    # 2. Row normalization
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    if (row_norms[:, 0] == 0).any():
++        raise ValueError("row norm zero after IDF scaling")
++    X = X / row_norms
++
++    # 3. Degree compute matrix-free
++    ones = np.ones(n_cells)
++    d = X @ (X.T @ ones) - 1.0
++    if (d <= 0).any():
++        raise ValueError("non-positive degrees detected")
++
++    # 4. Prepare linear operator
++    D_inv = 1.0 / d
++    D_inv_sqrt = np.sqrt(D_inv)
++    X_tilde = X * D_inv_sqrt[:, np.newaxis]
++
++    def matvec(v):
++        return X_tilde @ (X_tilde.T @ v) - D_inv * v
++
++    from scipy.sparse.linalg import LinearOperator, eigsh
++    op = LinearOperator((n_cells, n_cells), matvec=matvec)
++
++    # Reproducible initial vector
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells)
++
++    eigenvalues, eigenvectors = eigsh(op, k=n_components, which='LA', v0=v0)
++    # eigsh returns eigenvalues in ascending order; reverse for descending
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++    return eigenvalues, eigenvectors
++

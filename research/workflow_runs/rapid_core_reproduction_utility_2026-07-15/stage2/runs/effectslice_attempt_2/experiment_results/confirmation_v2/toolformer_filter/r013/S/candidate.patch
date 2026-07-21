@@ -1,0 +1,39 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,35 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not all(isinstance(arr, np.ndarray) and arr.ndim == 2 for arr in [logp_with_result, logp_call_only, logp_no_call]):
++        raise ValueError("Inputs must be 2D numpy arrays")
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All input matrices must have the same shape")
++    if logp_with_result.size == 0:
++        raise ValueError("Input matrices must not be empty")
++    for arr in [logp_with_result, logp_call_only, logp_no_call]:
++        if not np.isfinite(arr).all():
++            raise ValueError("Input matrices must be finite")
++        if (arr > 0).any():
++            raise ValueError("Input matrices must be nonpositive")
++    if isinstance(tau_filter, bool) or tau_filter < 0 or not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be a finite nonnegative number (not boolean)")
++
++    n_candidates, horizon = logp_with_result.shape
++
++    # Compute normalized linear decay weights
++    t = np.arange(horizon)
++    raw_weights = np.maximum(0, 1 - 0.2 * t)
++    norm_weights = raw_weights / np.sum(raw_weights)
++
++    # Compute weighted averages
++    weighted_with = logp_with_result @ norm_weights
++    weighted_call = logp_call_only @ norm_weights
++    weighted_no = logp_no_call @ norm_weights
++
++    # Margin: improvement of using API with result over no API
++    margin = weighted_with - weighted_no
++    keep = margin > tau_filter
++
++    return keep, margin

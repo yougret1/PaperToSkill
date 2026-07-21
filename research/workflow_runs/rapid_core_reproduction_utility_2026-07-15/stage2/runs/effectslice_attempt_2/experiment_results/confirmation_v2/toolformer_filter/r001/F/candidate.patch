@@ -1,0 +1,60 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,56 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not isinstance(tau_filter, (int, float, np.floating, np.integer)):
++        raise ValueError("tau_filter must be a finite nonnegative numeric")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
++
++    for name, arr in [("logp_with_result", logp_with_result),
++                      ("logp_call_only", logp_call_only),
++                      ("logp_no_call", logp_no_call)]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if arr.size == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} contains non-finite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} contains positive values (expected nonpositive)")
++
++    # Check shape consistency
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All input matrices must have the same shape")
++
++    n_candidates, horizon = logp_with_result.shape
++    if horizon == 0:
++        raise ValueError("Future horizon must be positive")
++
++    # Step T01: Normalize decreasing future-token weights
++    t = np.arange(horizon, dtype=float)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    weight_sum = np.sum(raw_weights)
++    if weight_sum == 0.0:
++        raise ValueError("All raw weights are zero (horizon too large?)")
++    weights = raw_weights / weight_sum  # shape (horizon,)
++
++    # Step T02: Compute weighted future-token loss for each candidate
++    # Loss = - sum(weight * logp)  (logp is nonpositive, so loss is nonnegative)
++    loss_no_call = -np.sum(weights * logp_no_call, axis=1)
++    loss_call_only = -np.sum(weights * logp_call_only, axis=1)
++    loss_with_result = -np.sum(weights * logp_with_result, axis=1)
++
++    # Step T03: Use stronger counterfactual baseline
++    loss_minus = np.minimum(loss_no_call, loss_call_only)
++
++    # Step T04: Compute margin and apply threshold
++    margin = loss_minus - loss_with_result
++    keep = margin >= tau_filter
++
++    # Step T05: preserve order (already in order)
++    return keep, margin

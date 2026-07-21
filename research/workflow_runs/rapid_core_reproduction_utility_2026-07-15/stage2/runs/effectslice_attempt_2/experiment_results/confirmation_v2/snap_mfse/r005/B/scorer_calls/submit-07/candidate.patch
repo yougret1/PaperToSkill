@@ -1,0 +1,33 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -12,4 +12,29 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    counts = np.asarray(counts)
++    if not np.isfinite(counts).all() or np.any(counts < 0):
++        raise ValueError("Input must be finite and nonnegative")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("All-zero cell rows are not allowed")
++    n_cells = counts.shape[0]
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be between 1 and n_cells-1")
++    # Row L2 normalization
++    row_norms = np.linalg.norm(counts, axis=1, keepdims=True)
++    X_norm = counts / row_norms
++    # Matrix-free operator for W = X_norm @ X_norm^T
++    from scipy.sparse.linalg import eigsh, LinearOperator
++    def matvec(x):
++        return X_norm @ (X_norm.T @ x)
++    W_op = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=np.float64)
++    # Compute leading eigenvalues and eigenvectors
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells)
++    eigenvalues, eigenvectors = eigsh(W_op, k=n_components, which='LM',
++                                     v0=v0)
++    # eigsh returns ascending order; reverse to descending
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++    return eigenvalues, eigenvectors

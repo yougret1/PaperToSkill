@@ -1,0 +1,42 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,38 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if isinstance(tau_filter, bool) or not isinstance(tau_filter, (int, float)):
++        raise ValueError("tau_filter must be a finite non-negative number, not boolean")
++    if tau_filter < 0 or not np.isfinite(tau_filter):
++        raise ValueError("tau_filter must be finite and non-negative")
++    for name, arr in [("logp_with_result", logp_with_result),
++                      ("logp_call_only", logp_call_only),
++                      ("logp_no_call", logp_no_call)]:
++        if not isinstance(arr, np.ndarray) or arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D numpy array")
++        if not np.isfinite(arr).all():
++            raise ValueError(f"{name} contains non-finite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} contains positive values")
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("all input matrices must have the same shape")
++    n_candidates, future_horizon = logp_with_result.shape
++    if n_candidates == 0 or future_horizon == 0:
++        raise ValueError("input matrices must not be empty")
++
++    # Compute normalized decreasing future-token weights (T01)
++    t = np.arange(future_horizon, dtype=float)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    weight_sum = np.sum(raw_weights)
++    if weight_sum <= 0:
++        raise ValueError("raw weights sum to zero (unexpected)")
++    weights = raw_weights / weight_sum
++
++    # Weighted log probabilities
++    weighted_with = logp_with_result @ weights
++    weighted_no = logp_no_call @ weights
++
++    margins = weighted_with - weighted_no
++    keep = margins > tau_filter
++    return keep, margins.astype(np.float64)

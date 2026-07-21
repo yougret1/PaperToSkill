@@ -1,0 +1,71 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++import scipy.sparse.linalg as sla
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,59 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    # Input validation
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D NumPy array")
++    if np.any(np.isnan(counts)) or np.any(np.isinf(counts)) or np.any(counts < 0):
++        raise ValueError("counts must be finite and nonnegative")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("counts cannot have all-zero cell rows")
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be between 1 and n_cells-1 inclusive")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # IDF scaling
++    df = np.count_nonzero(counts, axis=0)  # number of cells with feature
++    idf = np.log(n_cells / (1.0 + df))
++    scaled = counts * idf
++
++    # Row normalization
++    row_norms = np.linalg.norm(scaled, axis=1)
++    if np.any(row_norms == 0):
++        raise ValueError("Row cannot be normalized (zero norm after IDF scaling)")
++    X = scaled / row_norms[:, np.newaxis]
++
++    # Degree vector (matrix-free)
++    ones = np.ones(n_cells)
++    d = X @ (X.T @ ones) - 1.0
++    if np.any(d <= 0):
++        raise ValueError("Degrees must be positive")
++    D_inv = 1.0 / d
++    D_inv_sqrt = np.sqrt(D_inv)
++
++    # Normalized matrix-free operator
++    X_tilde = X * D_inv_sqrt[:, np.newaxis]  # D^{-1/2} X
++
++    def matvec(v):
++        # v: (n_cells,)
++        # X_tilde.T @ v -> (n_features,)
++        # X_tilde @ that -> (n_cells,)
++        # subtract D_inv * v
++        return X_tilde @ (X_tilde.T @ v) - D_inv * v
++
++    # Linear operator shape
++    A = sla.LinearOperator((n_cells, n_cells), matvec=matvec, dtype=np.float64)
++
++    # Compute leading eigenvalues
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells)
++
++    eigenvalues, eigenvectors = sla.eigsh(
++        A, k=n_components, which='LA', tol=1e-6, maxiter=1000, v0=v0
++    )
++    # eigenvalues are in ascending order; reverse for descending
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]  # reorder columns to match
++
++    return eigenvalues, eigenvectors
++

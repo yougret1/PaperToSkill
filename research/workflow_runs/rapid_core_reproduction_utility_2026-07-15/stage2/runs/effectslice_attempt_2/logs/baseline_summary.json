@@ -1,55 +1,120 @@
 {
-  "schema_version": "effectslice-stage2-baseline-summary.v1",
-  "overall_plan": "Require a positive paired full-artifact effect over the same-scaffold no-artifact baseline before any compact slice is searched.",
-  "analysis": "SNAP-MFSE and TOOLFORMER-FILTER passed frozen full-artifact eligibility. SWE-T2 abstained because the full artifact was ineligible; AIDE-T2 remained adaptive development evidence only.",
-  "metric": {
-    "name": "eligible_full_artifact_tasks",
-    "value": 2,
-    "direction": "descriptive"
-  },
-  "full_artifact_rows": [
+  "analysis": "B succeeds in 0/54 condition runs and F in 50/54. Counts are descriptive across sequential finite schedules; tasks and sessions are not pooled for inference.",
+  "baseline_operational_successes": 0,
+  "candidate_schedule_rows": [
     {
-      "task_id": "SNAP-MFSE",
-      "classification": "eligible_full_artifact",
-      "beneficial_cases": 21,
-      "total_cases": 21,
-      "aggregate_effect": 1.0,
-      "one_sided_cp_lower": 0.8030857221391514
+      "admission_decision": {
+        "checks": {
+          "baseline_ceiling": true,
+          "full_sufficiency": false,
+          "integrity_passed": true,
+          "outputs_complete": true,
+          "slice_shortfall": false,
+          "slice_sufficiency": false
+        },
+        "passed": false
+      },
+      "candidate_id": "snap_prefix_03",
+      "mean_task_score": {
+        "B": 0.0,
+        "F": 0.8767361111111112,
+        "S": 0.3211805555555556
+      },
+      "operational_success_counts": {
+        "B": 0,
+        "F": 15,
+        "S": 5
+      },
+      "paired_success_status": {
+        "full_failure_slice_success": 1,
+        "full_success_slice_failure": 11,
+        "matches": 6
+      },
+      "registered_blocks": 18,
+      "schedule": "confirmation_v4",
+      "selected_after_v4": false
     },
     {
-      "task_id": "TOOLFORMER-FILTER",
-      "classification": "eligible_full_artifact",
-      "beneficial_cases": 21,
-      "total_cases": 21,
-      "aggregate_effect": 1.0,
-      "one_sided_cp_lower": 0.8030857221391514
-    }
-  ],
-  "excluded_or_abstained": [
-    {
-      "task_id": "AIDE-T2",
-      "disposition": "development_only",
-      "selected_candidate": null
+      "admission_decision": {
+        "checks": {
+          "baseline_ceiling": true,
+          "full_sufficiency": true,
+          "integrity_passed": true,
+          "outputs_complete": true,
+          "slice_shortfall": false,
+          "slice_sufficiency": false
+        },
+        "passed": false
+      },
+      "candidate_id": "toolformer_prefix_01",
+      "mean_task_score": {
+        "B": 0.0,
+        "F": 0.9444444444444444,
+        "S": 0.4809027777777778
+      },
+      "operational_success_counts": {
+        "B": 0,
+        "F": 17,
+        "S": 8
+      },
+      "paired_success_status": {
+        "full_failure_slice_success": 0,
+        "full_success_slice_failure": 9,
+        "matches": 9
+      },
+      "registered_blocks": 18,
+      "schedule": "confirmation_v4",
+      "selected_after_v4": false
     },
     {
-      "task_id": "SWE-T2",
-      "disposition": "abstain",
-      "reason": "abstain_full_artifact_ineligible"
+      "admission_decision": {
+        "checks": {
+          "baseline_ceiling": true,
+          "full_sufficiency": true,
+          "integrity_passed": true,
+          "outputs_complete": true,
+          "slice_shortfall": true,
+          "slice_sufficiency": true
+        },
+        "passed": true
+      },
+      "candidate_id": "toolformer_prefix_04_v5",
+      "mean_task_score": {
+        "B": 0.0,
+        "F": 1.0,
+        "S": 0.9444444444444444
+      },
+      "operational_success_counts": {
+        "B": 0,
+        "F": 18,
+        "S": 17
+      },
+      "paired_success_status": {
+        "full_failure_slice_success": 0,
+        "full_success_slice_failure": 1,
+        "matches": 17
+      },
+      "registered_blocks": 18,
+      "schedule": "confirmation_v5_attempt_2",
+      "selected_after_v4": true
     }
   ],
-  "code": "run_*_effectslice.py and src/effectslice/*_scorer.py",
-  "plot_code": "build_stage2_figures.py",
-  "plot_analyses": [],
+  "code": "analyze_confirmation_v4.py and analyze_confirmation_v5_role_repair.py",
   "exp_results_data_files": [
-    "derived/aide_t2_development_summary.json",
-    "derived/swe_t2_development_summary.json",
-    "derived/snap_mfse_development_summary.json",
-    "derived/snap_mfse_eligibility_summary.json",
-    "derived/snap_mfse_discovery_summary.json",
-    "derived/snap_mfse_confirmation_summary.json",
-    "derived/toolformer_filter_development_summary.json",
-    "derived/toolformer_filter_eligibility_summary.json",
-    "derived/toolformer_filter_discovery_summary.json",
-    "derived/toolformer_filter_confirmation_summary.json"
-  ]
+    "D:/a_work/gitee/PaperToSkill/research/workflow_runs/rapid_core_reproduction_utility_2026-07-15/stage2/runs/effectslice_attempt_2/logs/confirmation_v4_summary.json",
+    "D:/a_work/gitee/PaperToSkill/research/workflow_runs/rapid_core_reproduction_utility_2026-07-15/stage2/runs/effectslice_attempt_2/derived/confirmation_v5r2/analysis.json",
+    "D:/a_work/gitee/PaperToSkill/research/workflow_runs/rapid_core_reproduction_utility_2026-07-15/stage2/runs/effectslice_attempt_2/derived/confirmation_v5r2/independent_crosscheck.json"
+  ],
+  "metric": {
+    "descriptive_denominator": 54,
+    "direction": "higher_is_better",
+    "name": "full_artifact_operational_successes",
+    "value": 50
+  },
+  "overall_plan": "Describe no-artifact and full-artifact operational success over the complete registered V4 and V5 schedules used by non-planted candidates.",
+  "plot_analyses": [],
+  "plot_code": "build_stage2_figures_v5.py",
+  "population_inference_used": false,
+  "schema_version": "effectslice-stage2-baseline-summary.v5",
+  "statistical_unit": "complete_registered_finite_schedule"
 }

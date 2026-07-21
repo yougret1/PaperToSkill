@@ -1,0 +1,43 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -12,4 +12,39 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    if not np.isfinite(counts).all():
++        raise ValueError("Input contains nonfinite values.")
++    if np.any(counts < 0):
++        raise ValueError("Input contains negative values.")
++    row_sums = counts.sum(axis=1)
++    if np.any(row_sums == 0):
++        raise ValueError("Input contains all-zero rows.")
++    n_cells = counts.shape[0]
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be between 1 and n_cells-1.")
++
++    # Compute diagonal scaling
++    D_half_inv = 1.0 / np.sqrt(row_sums)
++
++    # Define operator for D^{-1/2} A A^T D^{-1/2}
++    def matvec(x):
++        y = x * D_half_inv
++        z = counts.T @ y
++        w = counts @ z
++        return w * D_half_inv
++
++    from scipy.sparse.linalg import LinearOperator, eigsh
++    dtype = counts.dtype
++    n = n_cells
++    M_op = LinearOperator((n, n), matvec=matvec, dtype=dtype)
++
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n)
++    # Compute largest eigenvalues and eigenvectors
++    eigvals, eigvecs = eigsh(M_op, k=n_components, which='LM', v0=v0)
++    # eigsh returns eigenvalues in ascending order, so reverse
++    eigvals = eigvals[::-1]
++    eigvecs = eigvecs[:, ::-1]
++
++    return eigvals, eigvecs

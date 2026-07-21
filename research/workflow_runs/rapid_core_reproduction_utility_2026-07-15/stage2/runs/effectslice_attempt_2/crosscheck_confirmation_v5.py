@@ -51,6 +51,18 @@ def _public_test_counts(observations: list[dict[str, Any]]) -> tuple[int, int]:
     return requests, passes
 
 
+def _success_flags(
+    metric: dict[str, Any], score: float, case_scores: list[int]
+) -> tuple[bool, bool]:
+    exact_scorer_success = bool(all(case_scores))
+    operational_success = bool(
+        metric.get("contract_passed")
+        and metric.get("patch_applied")
+        and score >= SUCCESS_THRESHOLD
+    )
+    return exact_scorer_success, operational_success
+
+
 def _condition_result(condition_dir: Path) -> tuple[dict[str, Any], list[dict[str, str]], list[str]]:
     paths = {
         "candidate.patch": condition_dir / "candidate.patch",
@@ -83,13 +95,13 @@ def _condition_result(condition_dir: Path) -> tuple[dict[str, Any], list[dict[st
     passed_cases = sum(int(value) for value in case_scores)
     if total_cases != 64 or passed_cases != round(score * total_cases):
         raise ValueError(f"private case accounting changed: {condition_dir}")
-    operational_success = bool(
-        metric.get("contract_passed")
-        and metric.get("patch_applied")
-        and score >= SUCCESS_THRESHOLD
+    exact_scorer_success, operational_success = _success_flags(
+        metric, score, case_scores
     )
-    if bool(result.get("success")) != operational_success:
-        raise ValueError(f"operational success was not reproducible: {condition_dir}")
+    if bool(metric.get("success")) != exact_scorer_success:
+        raise ValueError(f"exact scorer success was not reproducible: {condition_dir}")
+    if bool(result.get("success")) != exact_scorer_success:
+        raise ValueError(f"top-level scorer success changed: {condition_dir}")
 
     observations = result.get("state", {}).get("observations", [])
     turns = result.get("turns", [])

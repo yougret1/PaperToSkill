@@ -1,0 +1,51 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,47 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    for arr, name in [(logp_with_result, "logp_with_result"),
++                      (logp_call_only, "logp_call_only"),
++                      (logp_no_call, "logp_no_call")]:
++        if not isinstance(arr, np.ndarray) or arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D numpy array")
++        if np.any(np.isnan(arr)) or np.any(np.isinf(arr)):
++            raise ValueError(f"{name} contains nonfinite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} contains positive values")
++        if arr.size == 0:
++            raise ValueError(f"{name} is empty")
++
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("Input matrices must have the same shape")
++
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter cannot be boolean")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
++
++    n_candidates, future_horizon = logp_with_result.shape
++
++    # Compute normalized decreasing weights
++    t = np.arange(future_horizon, dtype=float)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    sum_raw = np.sum(raw_weights)
++    if sum_raw == 0:
++        # Edge case: if future_horizon is 0 or all weights zero, set uniform
++        normalized_weights = np.ones(future_horizon) / future_horizon if future_horizon > 0 else np.array([])
++    else:
++        normalized_weights = raw_weights / sum_raw
++
++    # Weighted log-likelihoods
++    weighted_with = logp_with_result @ normalized_weights
++    weighted_call = logp_call_only @ normalized_weights
++    weighted_no = logp_no_call @ normalized_weights
++
++    # Margin: improvement over the best alternative
++    best_alternative = np.maximum(weighted_no, weighted_call)
++    margin = weighted_with - best_alternative
++    keep = margin > tau_filter
++
++    return keep, margin

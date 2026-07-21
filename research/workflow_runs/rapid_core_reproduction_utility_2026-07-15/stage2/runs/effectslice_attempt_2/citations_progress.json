@@ -1,231 +1,72 @@
 {
-  "schema_version": "effectslice-citation-progress.v1",
-  "status": "complete",
-  "completed_rounds": 3,
-  "entry_count": 19,
-  "retrieval_artifacts": [
-    "citation_search/stage1/retrieval/effectslice-citations-foundations.json",
-    "citation_search/stage1/retrieval/effectslice-citations-skills.json",
-    "citation_search/stage1/retrieval/effectslice-citations-reproduction.json",
-    "citation_search/arxiv_exact.xml"
+  "schema_version": "effectslice-citations-progress.v3",
+  "status": "passed_with_connector_degradation",
+  "completed_rounds": 5,
+  "bibliography": {
+    "path": "paper/effectslice_aaai/effectslice_refs.bib",
+    "sha256": "5df8150ef1e8ad1bfdd61820a94646a6b8c8fc8920d4914cfa9dce054bf0cd9c",
+    "entry_count": 23
+  },
+  "verified_categories": [
+    "paper reproduction and paper-derived agents",
+    "agent skills and context compilation",
+    "reduction and prompt compression",
+    "adaptive holdout reuse and limited exposure",
+    "source-paper mechanisms",
+    "exact binomial inference",
+    "skill compression and executor-capability decomposition"
   ],
-  "search_rounds": [
+  "verification_sources": [
     {
-      "query_id": "effectslice-citations-foundations",
-      "retrieved_at": "2026-07-17T07:32:30.350532+00:00",
-      "evidence_quality": "degraded",
-      "paper_count": 37,
-      "connector_status": {
-        "arxiv": "passed",
-        "dblp": "passed",
-        "open_alex": "failed",
-        "openreview": "passed",
-        "semantic_scholar": "passed",
-        "crossref": "passed"
-      }
+      "path": "citation_search/arxiv_exact.xml",
+      "sha256": "ee7ca17052852149dcd2771235e291c94a92b19c99ffacba79e5bf8d5288927b",
+      "role": "exact title, author, year, and arXiv identifier verification for recent paper-reproduction and agent-skill citations"
     },
     {
-      "query_id": "effectslice-citations-skills",
-      "retrieved_at": "2026-07-17T07:33:03.338184+00:00",
-      "evidence_quality": "degraded",
-      "paper_count": 85,
-      "connector_status": {
-        "arxiv": "passed",
-        "dblp": "passed",
-        "open_alex": "failed",
-        "openreview": "passed",
-        "semantic_scholar": "passed",
-        "crossref": "passed"
-      }
+      "path": "citation_search/stage1/retrieval/effectslice-citations-adaptive-evaluation.json",
+      "sha256": "7b1fc52b5560ca71ce68343d957cba47e608387477fb6f2e51537320c9726734",
+      "role": "retrieved evidence for reusable and limited-exposure holdout citations"
     },
     {
-      "query_id": "effectslice-citations-reproduction",
-      "retrieved_at": "2026-07-17T07:37:18.878010+00:00",
-      "evidence_quality": "verified",
-      "paper_count": 98,
-      "connector_status": {
-        "arxiv": "passed",
-        "semantic_scholar": "passed",
-        "crossref": "passed",
-        "open_alex": "passed"
-      }
+      "path": "citation_search/stage1/retrieval/effectslice-citations-foundations.json",
+      "role": "retrieved evidence for reduction, equivalence, and exact-inference foundations"
+    },
+    {
+      "path": "citation_search/stage1/retrieval/effectslice-citations-reproduction.json",
+      "role": "retrieved evidence for automated paper reproduction"
+    },
+    {
+      "path": "citation_search/stage1/retrieval/effectslice-citations-skills.json",
+      "role": "retrieved evidence for agent-skill generation, retrieval, compilation, and evaluation"
+    },
+    {
+      "path": "citation_search/downloads/skillreducer_2603.29919.pdf",
+      "sha256": "dc134643dc005c80890dc71d3a073fd5bfbc07d3179e1cdf33dbb115acb322a16",
+      "role": "full-text closest-work verification for SkillReducer"
+    },
+    {
+      "path": "citation_search/downloads/xu_wu_2607.03048.pdf",
+      "sha256": "905ec5bde8de703acdec29bffecc26bd1b44e7f1f8947209ee1a9e95cdff604c4",
+      "role": "full-text closest-work verification for controlled skill-compression decomposition"
     }
   ],
-  "citations": [
-    {
-      "key": "zeller2002simplifying",
-      "title": "Simplifying and Isolating Failure-Inducing Input",
-      "year": 2002,
-      "date": "2002-02",
-      "purpose": "Foundational delta debugging and input minimization.",
-      "source": "https://api.crossref.org/works/10.1109/32.988498",
-      "identifier": "doi:10.1109/32.988498"
-    },
-    {
-      "key": "regehr2012creduce",
-      "title": "Test-Case Reduction for C Compiler Bugs",
-      "year": 2012,
-      "date": "2012-06",
-      "purpose": "Structure-aware reduction and practical minimal test cases.",
-      "source": "https://api.crossref.org/works/10.1145/2254064.2254104",
-      "identifier": "doi:10.1145/2254064.2254104"
-    },
-    {
-      "key": "groce2016cause",
-      "title": "Cause Reduction: Delta Debugging, Even without Bugs",
-      "year": 2016,
-      "date": "2016-03",
-      "purpose": "Reduction for preserving a general observed effect rather than a crash.",
-      "source": "https://api.crossref.org/works/10.1002/stvr.1574",
-      "identifier": "doi:10.1002/stvr.1574"
-    },
-    {
-      "key": "wellek2002equivalence",
-      "title": "Testing Statistical Hypotheses of Equivalence",
-      "year": 2002,
-      "date": "2002-11-12",
-      "purpose": "Statistical basis for equivalence and noninferiority decisions.",
-      "source": "https://api.crossref.org/works/10.1201/9781420035964",
-      "identifier": "doi:10.1201/9781420035964"
-    },
-    {
-      "key": "jiang2023llmlingua",
-      "title": "LLMLingua: Compressing Prompts for Accelerated Inference of Large Language Models",
-      "year": 2023,
-      "date": "2023-10-09",
-      "purpose": "Prompt compression as a neighboring compact-context objective.",
-      "source": "citation_search/arxiv_exact.xml; https://arxiv.org/abs/2310.05736",
-      "identifier": "arxiv:2310.05736"
-    },
-    {
-      "key": "pan2024llmlingua2",
-      "title": "LLMLingua-2: Data Distillation for Efficient and Faithful Task-Agnostic Prompt Compression",
-      "year": 2024,
-      "date": "2024-03-19",
-      "purpose": "Faithfulness-oriented prompt compression and its evaluation boundary.",
-      "source": "citation_search/arxiv_exact.xml; https://api.crossref.org/works/10.18653/v1/2024.findings-acl.57",
-      "identifier": "doi:10.18653/v1/2024.findings-acl.57"
-    },
-    {
-      "key": "shaposhnikov2026agenticskills",
-      "title": "A Framework for Evaluating Agentic Skills at Scale",
-      "year": 2026,
-      "date": "2026-06-16",
-      "purpose": "Closest whole-skill marginal-utility evaluation framework.",
-      "source": "citation_search/arxiv_exact.xml; https://arxiv.org/abs/2606.17819",
-      "identifier": "arxiv:2606.17819"
-    },
-    {
-      "key": "shen2026skillfoundry",
-      "title": "SKILLFOUNDRY: Building Self-Evolving Agent Skill Libraries from Heterogeneous Scientific Resources",
-      "year": 2026,
-      "date": "2026-04-05",
-      "purpose": "Construction and validation of executable scientific skills.",
-      "source": "citation_search/arxiv_exact.xml; https://arxiv.org/abs/2604.03964",
-      "identifier": "arxiv:2604.03964"
-    },
-    {
-      "key": "pan2026anything2skill",
-      "title": "Anything2Skill: Compiling External Knowledge into Reusable Skills for Agents",
-      "year": 2026,
-      "date": "2026-06-08",
-      "purpose": "Compilation of external evidence into reusable procedural artifacts.",
-      "source": "citation_search/arxiv_exact.xml; https://arxiv.org/abs/2606.09316",
-      "identifier": "arxiv:2606.09316"
-    },
-    {
-      "key": "yuan2026clawtrace",
-      "title": "ClawTrace: Cost-Aware Tracing for LLM Agent Skill Distillation",
-      "year": 2026,
-      "date": "2026-04-26",
-      "purpose": "Trace-based, cost-aware skill distillation and pruning.",
-      "source": "citation_search/arxiv_exact.xml; https://arxiv.org/abs/2604.23853",
-      "identifier": "arxiv:2604.23853"
-    },
-    {
-      "key": "liu2026graphskills",
-      "title": "Graph-of-Skills: Dependency-Aware Structural Retrieval for Massive Agent Skills",
-      "year": 2026,
-      "date": "2026-04-07",
-      "purpose": "Dependency-aware retrieval of compact executable skill bundles.",
-      "source": "citation_search/arxiv_exact.xml; https://arxiv.org/abs/2604.05333",
-      "identifier": "arxiv:2604.05333"
-    },
-    {
-      "key": "meng2026skillrae",
-      "title": "SkillRAE: Agent Skill-Based Context Compilation for Retrieval-Augmented Execution",
-      "year": 2026,
-      "date": "2026-05-11",
-      "purpose": "Compact, grounded context compilation from skill libraries.",
-      "source": "citation_search/arxiv_exact.xml; https://arxiv.org/abs/2605.10114",
-      "identifier": "arxiv:2605.10114"
-    },
-    {
-      "key": "starace2025paperbench",
-      "title": "PaperBench: Evaluating AI's Ability to Replicate AI Research",
-      "year": 2025,
-      "date": "2025-04-02",
-      "purpose": "Execution-verified benchmark for full research-paper replication.",
-      "source": "citation_search/arxiv_exact.xml; https://arxiv.org/abs/2504.01848",
-      "identifier": "arxiv:2504.01848"
-    },
-    {
-      "key": "zhao2025autoreproduce",
-      "title": "AutoReproduce: Automatic AI Experiment Reproduction with Paper Lineage",
-      "year": 2025,
-      "date": "2025-05-27",
-      "purpose": "End-to-end agentic research reproduction with paper lineage.",
-      "source": "citation_search/arxiv_exact.xml; https://arxiv.org/abs/2505.20662",
-      "identifier": "arxiv:2505.20662"
-    },
-    {
-      "key": "miao2025paper2agent",
-      "title": "Paper2Agent: Reimagining Research Papers as Interactive and Reliable AI Agents",
-      "year": 2025,
-      "date": "2025-09-08",
-      "purpose": "Paper-to-agent compilation and reliability-oriented validation.",
-      "source": "citation_search/arxiv_exact.xml; https://arxiv.org/abs/2509.06917",
-      "identifier": "arxiv:2509.06917"
-    },
-    {
-      "key": "schick2023toolformer",
-      "title": "Toolformer: Language Models Can Teach Themselves to Use Tools",
-      "year": 2023,
-      "date": "2023-02-09",
-      "purpose": "Source paper for the API-call filtering reproduction task.",
-      "source": "citation_search/arxiv_exact.xml; https://arxiv.org/abs/2302.04761",
-      "identifier": "arxiv:2302.04761"
-    },
-    {
-      "key": "zhang2024snapatac2",
-      "title": "A Fast, Scalable and Versatile Tool for Analysis of Single-Cell Omics Data",
-      "year": 2024,
-      "date": "2024-01",
-      "purpose": "Source paper for the matrix-free spectral embedding reproduction task.",
-      "source": "https://api.crossref.org/works/10.1038/s41592-023-02139-9",
-      "identifier": "doi:10.1038/s41592-023-02139-9"
-    },
-    {
-      "key": "clopper1934binomial",
-      "title": "The Use of Confidence or Fiducial Limits Illustrated in the Case of the Binomial",
-      "year": 1934,
-      "date": "1934",
-      "purpose": "Exact binomial confidence bounds used by the admission gate.",
-      "source": "https://api.crossref.org/works/10.1093/biomet/26.4.404",
-      "identifier": "doi:10.1093/biomet/26.4.404"
-    },
-    {
-      "key": "holm1979sequential",
-      "title": "A Simple Sequentially Rejective Multiple Test Procedure",
-      "year": 1979,
-      "date": "1979",
-      "purpose": "Family-wise error control for registered multiple comparisons.",
-      "source": "https://www.jstor.org/stable/4615733",
-      "identifier": "jstor:4615733"
-    }
+  "verified_recent_entries": [
+    "PaperBench",
+    "AutoReproduce",
+    "Paper2Agent",
+    "A Framework for Evaluating Agentic Skills at Scale",
+    "SkillFoundry",
+    "Anything2Skill",
+    "ClawTrace",
+    "Graph-of-Skills",
+    "SkillRAE",
+    "SkillReducer",
+    "Compression, Structure, and Executor Capability"
   ],
   "limitations": [
-    "Some broad-search connectors were rate-limited or timed out; exact arXiv IDs and DOI metadata were independently resolved for cited records.",
-    "The bibliography supports a task-local methods paper and does not establish general EffectSlice effectiveness."
-  ]
+    "OpenAlex returned HTTP 504 for multiple searches.",
+    "Some connectors were rate-limited during the adaptive-evaluation query.",
+    "The affected recent entries were retained only when exact arXiv metadata or Crossref DOI evidence was available."
+  ],
+  "next_action": "Validate all 23 entries during the final BibTeX build; recompute the digest after any later citation edit."
 }

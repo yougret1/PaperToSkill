@@ -1,0 +1,40 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,36 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    for name, arr in [('logp_with_result', logp_with_result), ('logp_call_only', logp_call_only), ('logp_no_call', logp_no_call)]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(name + ' must be a numpy array')
++        if arr.ndim != 2:
++            raise ValueError(name + ' must be a 2D matrix')
++        if arr.shape[0] == 0 or arr.shape[1] == 0:
++            raise ValueError(name + ' must not be empty')
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(name + ' contains non-finite values')
++        if np.any(arr > 0):
++            raise ValueError(name + ' contains positive values')
++    # Check shapes match
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError('Input matrices must have the same shape')
++    # Validate tau_filter
++    if isinstance(tau_filter, bool):
++        raise ValueError('tau_filter must not be a boolean')
++    if not np.isfinite(tau_filter):
++        raise ValueError('tau_filter must be finite')
++    if tau_filter < 0:
++        raise ValueError('tau_filter must be nonnegative')
++    
++    # Compute per-step margins: improvement over best baseline
++    baseline = np.maximum(logp_call_only, logp_no_call)
++    margins = logp_with_result - baseline  # shape (n, h)
++    
++    # Aggregate over horizon: mean
++    per_candidate_margins = margins.mean(axis=1)  # shape (n,)
++    
++    keep = per_candidate_margins > tau_filter
++    
++    return keep, per_candidate_margins

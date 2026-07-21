@@ -1,0 +1,47 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,43 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    for arr in [logp_with_result, logp_call_only, logp_no_call]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError("Inputs must be numpy arrays")
++        if arr.ndim != 2:
++            raise ValueError("Inputs must be 2D matrices")
++        if arr.size == 0:
++            raise ValueError("Input matrices must not be empty")
++        if not np.issubdtype(arr.dtype, np.floating):
++            raise ValueError("Input matrices must have floating dtype")
++        if not np.isfinite(arr).all():
++            raise ValueError("Input matrices must contain finite values")
++        if np.any(arr > 0):
++            raise ValueError("Input matrices must be nonpositive")
++    if logp_with_result.shape != logp_call_only.shape or logp_with_result.shape != logp_no_call.shape:
++        raise ValueError("All input matrices must have the same shape")
++    if isinstance(tau_filter, (bool, np.bool_)) or np.ndim(tau_filter) != 0 or not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be a finite nonnegative scalar and not a boolean")
++
++    n_candidates, future_horizon = logp_with_result.shape
++
++    # Compute normalized weights (procedure Step T01)
++    t = np.arange(future_horizon)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    normalized_weights = raw_weights / raw_weights.sum()
++
++    # Compute weighted future-token loss (Step T02)
++    weighted_l_plus = -np.dot(logp_with_result, normalized_weights)
++    weighted_l_empty = -np.dot(logp_no_call, normalized_weights)
++    weighted_l_call_only = -np.dot(logp_call_only, normalized_weights)
++
++    # Use stronger counterfactual baseline (Step T03)
++    l_minus = np.minimum(weighted_l_empty, weighted_l_call_only)
++
++    # Compute margin and apply threshold (Step T04)
++    margin = l_minus - weighted_l_plus
++    keep = margin >= tau_filter
++
++    # Preserve order (Step T05)
++    return keep, margin

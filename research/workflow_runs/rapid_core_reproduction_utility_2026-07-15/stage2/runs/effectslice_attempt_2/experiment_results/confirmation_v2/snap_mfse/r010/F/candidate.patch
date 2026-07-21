@@ -1,0 +1,75 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,63 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate input
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("Input must be a 2D numpy array")
++    X = counts.astype(np.float64)
++    if np.any(~np.isfinite(X)):
++        raise ValueError("Input contains nonfinite values")
++    if np.any(X < 0):
++        raise ValueError("Input contains negative values")
++    n_cells, n_features = X.shape
++    if n_cells < 2:
++        raise ValueError("Need at least 2 cells")
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be between 1 and n_cells-1")
++    row_norms = np.linalg.norm(X, axis=1)
++    if np.any(row_norms == 0):
++        raise ValueError("Input contains all-zero rows")
++
++    # Step 1: IDF scaling
++    df = np.count_nonzero(X, axis=0)
++    idf = np.log(n_cells / (1 + df))
++    X_idf = X * idf
++
++    # Step 2: Row normalization
++    row_norms_idf = np.linalg.norm(X_idf, axis=1, keepdims=True)
++    if np.any(row_norms_idf == 0):
++        raise ValueError("Row became zero after IDF scaling")
++    X_norm = X_idf / row_norms_idf
++
++    # Step 3: Compute degree vector matrix-free
++    ones = np.ones(n_cells)
++    Xt_ones = X_norm.T @ ones
++    d = X_norm @ Xt_ones - 1
++    if np.any(d <= 0):
++        raise ValueError("Degrees are not all positive")
++
++    # Step 4: Normalize X
++    D_inv_sqrt = 1.0 / np.sqrt(d)
++    D_inv = 1.0 / d
++    X_tilde = X_norm * D_inv_sqrt[:, np.newaxis]
++
++    # Define linear operator for normalized similarity
++    def matvec(v):
++        temp = X_tilde.T @ v
++        return X_tilde @ temp - D_inv * v
++
++    n = n_cells
++    A = LinearOperator((n, n), matvec=matvec, dtype=np.float64)
++
++    # Step 5: Compute leading eigenpairs with reproducible seed
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n)
++    eigenvalues, eigenvectors = eigsh(A, k=n_components, which='LA', v0=v0)
++    # eigsh returns eigenvalues in ascending order for 'LA', reverse
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    if not np.all(np.isfinite(eigenvalues)):
++        raise RuntimeError("Nonfinite eigenvalues computed")
++
++    return eigenvalues, eigenvectors

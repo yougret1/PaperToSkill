@@ -1,0 +1,43 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -12,5 +12,39 @@
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
++    # Validate inputs
++    for mat, name in [(logp_no_call, 'logp_no_call'), (logp_call_only, 'logp_call_only'), (logp_with_result, 'logp_with_result')]:
++        if not isinstance(mat, np.ndarray) or mat.ndim != 2:
++            raise ValueError(f"{name} must be a 2D numpy array")
++        if mat.size == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.all(np.isfinite(mat)):
++            raise ValueError(f"{name} contains non-finite values")
++        if np.any(mat > 0):
++            raise ValueError(f"{name} contains positive values")
++    # Shapes must match
++    if not (logp_no_call.shape == logp_call_only.shape == logp_with_result.shape):
++        raise ValueError("All matrices must have the same shape")
++    # Validate tau_filter
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be boolean")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    n_candidates, horizon = logp_no_call.shape
++
++    # Compute decreasing future-token weights
++    t = np.arange(horizon)
++    raw_weights = np.maximum(0, 1 - 0.2 * t)
++    weights = raw_weights / raw_weights.sum()
++
++    # Weighted sums
++    L_no = np.dot(logp_no_call, weights)
++    L_call = np.dot(logp_call_only, weights)
++    L_result = np.dot(logp_with_result, weights)
++
++    best_alternative = np.maximum(L_no, L_call)
++    margin = L_result - best_alternative
++    keep_mask = margin > tau_filter
++
++    return keep_mask, margin

@@ -1,0 +1,89 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import eigsh, LinearOperator
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -10,6 +11,76 @@
+     n_components: int,
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+-    """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    """Return leading spectral coordinates for a cell-by-feature count matrix.
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    Parameters
++    ----------
++    counts : np.ndarray
++        Nonnegative cell-by-feature count matrix.
++    n_components : int
++        Number of embedding components.
++    random_state : int, optional
++        Random seed for initial vector.
++
++    Returns
++    -------
++    eigenvalues : np.ndarray
++        Leading eigenvalues in descending order.
++    eigenvectors : np.ndarray
++        Column eigenvectors in corresponding order, shape (n_cells, n_components).
++
++    Raises
++    ------
++    ValueError
++        If inputs are invalid.
++    """
++
++    if not np.all(np.isfinite(counts)) or np.any(counts < 0):
++        raise ValueError("Input matrix must be finite and nonnegative")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("All-zero rows are not allowed")
++    if not (1 <= n_components < counts.shape[0]):
++        raise ValueError("n_components must be between 1 and n_cells-1")
++
++    n_cells, n_features = counts.shape
++    # IDF scaling
++    df = np.count_nonzero(counts, axis=0)
++    idf = np.log(n_cells / (1.0 + df))
++    X = counts * idf
++
++    # Row normalization
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    X_norm = X / row_norms
++
++    # Degree vector
++    ones = np.ones(n_cells)
++    degree = X_norm @ (X_norm.T @ ones) - 1.0
++    if np.any(degree <= 0):
++        raise ValueError("Degrees must be positive")
++
++    D_inv = 1.0 / degree
++    D_inv_half = np.sqrt(D_inv)
++    X_tilde = X_norm * D_inv_half[:, np.newaxis]
++
++    # Linear operator for (X_tilde X_tilde^T - diag(D_inv))
++    def matvec(v):
++        return X_tilde @ (X_tilde.T @ v) - D_inv * v
++
++    n = n_cells
++    operator = LinearOperator((n, n), matvec=matvec, dtype=np.float64)
++
++    # Compute leading eigenvalues (ascending order with which='LA')
++    eigenvalues, eigenvectors = eigsh(
++        operator,
++        k=n_components,
++        which='LA',
++        v0=np.random.RandomState(random_state).randn(n),
++        tol=0,
++        maxiter=None,
++        return_eigenvectors=True
++    )
++    # Reverse to descending order
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    return eigenvalues, eigenvectors

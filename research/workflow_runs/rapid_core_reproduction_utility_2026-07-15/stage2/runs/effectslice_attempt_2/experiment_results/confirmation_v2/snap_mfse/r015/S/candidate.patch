@@ -1,0 +1,72 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -4,6 +4,9 @@
+ 
+ import numpy as np
+ 
++
++import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ def matrix_free_spectral_embedding(
+     counts: np.ndarray,
+@@ -12,4 +15,58 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    if not isinstance(counts, np.ndarray):
++        raise ValueError("counts must be an ndarray")
++    if counts.ndim != 2:
++        raise ValueError("counts must be 2-dimensional")
++    if not np.isfinite(counts).all():
++        raise ValueError("counts contains nonfinite values")
++    if np.any(counts < 0):
++        raise ValueError("counts contains negative values")
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be >= 1 and < n_cells")
++    row_sums = counts.sum(axis=1)
++    if np.any(row_sums == 0):
++        raise ValueError("counts contains all-zero rows")
++
++    # IDF scaling
++    df = np.count_nonzero(counts, axis=0)
++    idf = np.log(n_cells / (1.0 + df))
++    X = counts * idf
++
++    # Row normalization
++    norms = np.linalg.norm(X, axis=1, keepdims=True)
++    norms[norms == 0] = 1.0  # should not happen due to row check
++    X = X / norms
++
++    # Degree vector without materialising n_cells × n_cells
++    ones = np.ones(n_cells)
++    d = X @ (X.T @ ones) - ones
++    # safeguard against zero degree
++    inv_sqrt_d = 1.0 / np.sqrt(np.maximum(d, 1e-12))
++
++    # Matrix-free product: M v = D^{-1/2} (X X^T - I) D^{-1/2} v
++    def matvec(v):
++        v_scaled = v * inv_sqrt_d
++        temp = X.T @ v_scaled
++        result = X @ temp - v_scaled
++        return result * inv_sqrt_d
++
++    M_op = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=np.float64)
++
++    # Use a seeded starting vector for reproducibility
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells).astype(np.float64)
++    v0 = v0 / np.linalg.norm(v0)
++
++    eigenvalues, eigenvectors = eigsh(
++        M_op, k=n_components, which='LA', tol=1e-8,
++        maxiter=1000, v0=v0
++    )
++
++    # eigsh returns eigenvalues in ascending order -> reverse for descending
++    eigenvalues = eigenvalues[::-1].copy()
++    eigenvectors = eigenvectors[:, ::-1].copy()
++
++    return eigenvalues, eigenvectors

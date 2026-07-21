@@ -113,11 +113,14 @@ def finite_schedule_decision(
 ) -> dict[str, Any]:
     required = {"B", "F", "S"}
     if set(counts) != required or any(
-        isinstance(value, bool) or not isinstance(value, int) or value < 0
+        isinstance(value, bool)
+        or not isinstance(value, int)
+        or value < 0
+        or value > CONTRACT["registered_blocks"]
         for value in counts.values()
     ):
         raise ValueError(
-            "condition counts must contain nonnegative integer B/F/S values"
+            "condition counts must contain bounded integer B/F/S values"
         )
     if type(outputs_complete) is not bool or type(integrity_passed) is not bool:
         raise ValueError("completion and integrity flags must be bools")
@@ -132,7 +135,15 @@ def finite_schedule_decision(
         "outputs_complete": outputs_complete,
         "integrity_passed": integrity_passed,
     }
-    return {"checks": checks, "passed": all(checks.values())}
+    passed = all(checks.values())
+    status = (
+        "Invalid"
+        if not outputs_complete or not integrity_passed
+        else "Admit"
+        if passed
+        else "Reject"
+    )
+    return {"checks": checks, "passed": passed, "status": status}
 
 
 def identity_instrumentation_decision(

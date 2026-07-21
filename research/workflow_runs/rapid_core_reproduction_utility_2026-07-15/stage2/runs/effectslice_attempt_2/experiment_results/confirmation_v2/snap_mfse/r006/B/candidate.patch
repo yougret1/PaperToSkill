@@ -1,0 +1,50 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -11,5 +11,46 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    if not isinstance(counts, np.ndarray):
++        raise ValueError("counts must be a numpy array")
++    if counts.ndim != 2:
++        raise ValueError("counts must be a 2D array")
++    if not np.isfinite(counts).all():
++        raise ValueError("counts contains nonfinite values")
++    if np.any(counts < 0):
++        raise ValueError("counts contains negative values")
++    if np.any(counts.sum(axis=1) == 0):
++        raise ValueError("counts contains all-zero cell rows")
++    if not (1 <= n_components < counts.shape[0]):
++        raise ValueError("n_components must be in [1, n_cells)")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    n_cells, n_features = counts.shape
++    # row norms
++    row_norms = np.linalg.norm(counts, axis=1)
++    # column-sum of normalized rows
++    col_sum_normalized = np.sum(counts / row_norms[:, np.newaxis], axis=0)
++    # diagonal D = row sums of cosine similarity
++    D = (counts @ col_sum_normalized) / row_norms
++    # guard against possible round-off zeros
++    D = np.maximum(D, 1e-12)
++    sqrtD = np.sqrt(D)
++
++    # linear operator for M = D^{-1/2} S D^{-1/2}
++    def matvec(v):
++        # v is length n_cells
++        x = v / sqrtD
++        temp = counts.T @ (x / row_norms)
++        y = (counts @ temp) / row_norms
++        return y / sqrtD
++
++    import scipy.sparse.linalg as spla
++    np.random.seed(random_state)
++    M = spla.LinearOperator((n_cells, n_cells), matvec=matvec, dtype=float)
++
++    # compute leading eigenvalues/vectors
++    eigenvalues, eigenvectors = spla.eigsh(M, k=n_components, which='LM', v0=np.random.randn(n_cells))
++    # eigsh returns eigenvalues in ascending order; reverse to descending
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    return eigenvalues, eigenvectors

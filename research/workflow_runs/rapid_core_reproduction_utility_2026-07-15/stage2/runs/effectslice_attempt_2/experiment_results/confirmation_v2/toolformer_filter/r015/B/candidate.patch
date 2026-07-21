@@ -1,0 +1,53 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,49 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    for arr, name in [(logp_with_result, 'logp_with_result'),
++                       (logp_call_only, 'logp_call_only'),
++                       (logp_no_call, 'logp_no_call')]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a two-dimensional matrix")
++        if arr.size == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.isfinite(arr).all():
++            raise ValueError(f"{name} must contain only finite values")
++        if (arr > 0).any():
++            raise ValueError(f"{name} must contain only nonpositive values")
++    # Check shape consistency
++    shape = logp_with_result.shape
++    if logp_call_only.shape != shape or logp_no_call.shape != shape:
++        raise ValueError("All input matrices must have the same shape")
++    # Validate tau_filter
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be boolean")
++    if not np.isfinite(tau_filter) or isinstance(tau_filter, complex):
++        raise ValueError("tau_filter must be a finite and nonnegative")
++    if tau_filter < 0:
++        raise ValueError("tau_filter must be nonnegative")
++
++    # Compute losses (negative log probabilities)
++    loss_with_result = -logp_with_result
++    loss_call_only = -logp_call_only
++    loss_no_call = -logp_no_call
++
++    # Sum over future horizon to get total loss per candidate
++    loss_with_result_sum = np.sum(loss_with_result, axis=1)
++    loss_call_only_sum = np.sum(loss_call_only, axis=1)
++    loss_no_call_sum = np.sum(loss_no_call, axis=1)
++
++    # Baseline: the best alternative (lowest loss) among no call and call only
++    baseline = np.minimum(loss_no_call_sum, loss_call_only_sum)
++
++    # Margin: improvement over baseline
++    margins = baseline - loss_with_result_sum
++
++    # Keep if margin exceeds threshold
++    keep = margins > tau_filter
++
++    return keep, margins

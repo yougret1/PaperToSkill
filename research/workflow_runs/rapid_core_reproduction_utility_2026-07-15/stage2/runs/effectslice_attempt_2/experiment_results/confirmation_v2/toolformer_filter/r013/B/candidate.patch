@@ -1,0 +1,44 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,40 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    for arr in [logp_with_result, logp_call_only, logp_no_call]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError("Inputs must be numpy arrays")
++        if arr.ndim != 2:
++            raise ValueError("Inputs must be two-dimensional matrices")
++        if arr.size == 0:
++            raise ValueError("Inputs must not be empty")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError("All entries must be finite")
++        if not np.all(arr <= 0):
++            raise ValueError("All entries must be nonpositive")
++
++    if not np.isscalar(tau_filter) or isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must be a non-bool scalar")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
++
++    # Check shape consistency
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All matrices must have same shape")
++
++    # Compute total log probabilities per candidate
++    total_with = np.sum(logp_with_result, axis=1, dtype=float)
++    total_call = np.sum(logp_call_only, axis=1, dtype=float)
++    total_no = np.sum(logp_no_call, axis=1, dtype=float)
++
++    # Compute margins: improvement over no call
++    margin_with = total_with - total_no
++    margin_call = total_call - total_no
++    margin = np.minimum(margin_with, margin_call)
++
++    # Keep mask: both improvements must exceed threshold
++    keep_mask = margin > tau_filter
++
++    # Return mask and margin
++    return (keep_mask, margin)

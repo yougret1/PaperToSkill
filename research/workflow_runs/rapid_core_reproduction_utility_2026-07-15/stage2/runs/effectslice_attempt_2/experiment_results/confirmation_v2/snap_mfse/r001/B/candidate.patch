@@ -1,0 +1,65 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, svds, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,53 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not isinstance(counts, np.ndarray):
++        raise TypeError("counts must be a numpy array")
++    if counts.ndim != 2:
++        raise ValueError("counts must be 2-dimensional")
++    if not np.isfinite(counts).all():
++        raise ValueError("counts contains non-finite values")
++    if (counts < 0).any():
++        raise ValueError("counts contains negative values")
++    row_sums = counts.sum(axis=1)
++    if (row_sums == 0).any():
++        raise ValueError("counts contains all-zero cell rows")
++    if not isinstance(n_components, int) or n_components < 1 or n_components >= counts.shape[0]:
++        raise ValueError("n_components must be an integer in 1 <= n_components < n_cells")
++
++    # Precompute inverse square roots of row and column sums
++    d_c = row_sums.astype(float)
++    d_f = counts.sum(axis=0).astype(float)
++    inv_sqrt_dc = np.where(d_c > 0, 1.0 / np.sqrt(d_c), 0.0)
++    inv_sqrt_df = np.where(d_f > 0, 1.0 / np.sqrt(d_f), 0.0)
++
++    # Define matrix-free linear operator for N = D_c^{-1/2} C D_f^{-1/2}
++    class _NormalizedOp(LinearOperator):
++        def __init__(self, counts, inv_sqrt_dc, inv_sqrt_df):
++            self.counts = counts
++            self.inv_sqrt_dc = inv_sqrt_dc
++            self.inv_sqrt_df = inv_sqrt_df
++            self.shape = (counts.shape[0], counts.shape[1])
++            self.dtype = counts.dtype
++
++        def _matvec(self, x):
++            # x: (n_features,)
++            return self.inv_sqrt_dc * (self.counts @ (self.inv_sqrt_df * x))
++
++        def _rmatvec(self, y):
++            # y: (n_cells,)
++            return self.inv_sqrt_df * (self.counts.T @ (self.inv_sqrt_dc * y))
++
++    N_op = _NormalizedOp(counts, inv_sqrt_dc, inv_sqrt_df)
++
++    # Compute top singular values and left singular vectors
++    # svds returns singular values in descending order (largest first)
++    u, s, vt = svds(N_op, k=n_components, random_state=random_state)
++
++    # Ensure descending order
++    idx = np.argsort(s)[::-1]
++    s = s[idx]
++    u = u[:, idx]
++
++    return s, u

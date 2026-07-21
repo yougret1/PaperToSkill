@@ -1,0 +1,69 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++import scipy.sparse.linalg
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,57 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    if not isinstance(counts, np.ndarray):
++        counts = np.asarray(counts)
++    if not np.all(np.isfinite(counts)) or np.any(counts < 0):
++        raise ValueError("Counts must be finite and nonnegative")
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must satisfy 1 <= n_components < n_cells")
++
++    # Step 1: IDF scaling
++    df = np.count_nonzero(counts, axis=0)                 # document frequency per feature
++    scale = np.log(n_cells / (1.0 + df))                  # log(n / (1+df))
++    X = counts * scale[np.newaxis, :]                     # broadcast over columns
++
++    # Step 2: row normalization
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    if np.any(row_norms == 0):
++        raise ValueError("Rows that cannot be L2-normalized (all zero after IDF)")
++    X = X / row_norms                                    # unit L2 rows
++
++    # Step 3: degree vector (matrix-free)
++    ones = np.ones(n_cells)
++    degree = X @ (X.T @ ones) - 1.0                      # diag(XX^T - I)
++    if np.any(degree <= 0):
++        raise ValueError("Degrees must be positive")
++    D_inv = 1.0 / degree
++    D_inv_half = np.sqrt(D_inv)                          # 1/sqrt(degree)
++
++    # Step 4: linear operator for normalized similarity
++    # X_tilde = D^{-1/2} X
++    X_tilde = X * D_inv_half[:, np.newaxis]
++    def matvec(v):
++        # L_sym @ v = X_tilde (X_tilde^T v) - D_inv * v
++        inner = X_tilde.T @ v
++        return X_tilde @ inner - D_inv * v
++
++    op = scipy.sparse.linalg.LinearOperator(
++        (n_cells, n_cells), matvec=matvec, dtype=np.float64
++    )
++
++    # Step 5: Lanczos eigensolver (matrix-free)
++    # Use random_state for deterministic initial vector
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells).astype(np.float64)
++    v0 /= np.linalg.norm(v0)
++
++    evals, evecs = scipy.sparse.linalg.eigsh(
++        op, k=n_components, which='LM', v0=v0, tol=0, maxiter=None
++    )
++    # eigsh returns eigenvalues in ascending order; reverse to descending
++    evals = evals[::-1]
++    evecs = evecs[:, ::-1]
++
++    return evals, evecs

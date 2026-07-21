@@ -1,0 +1,50 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -11,5 +11,46 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    # Validate inputs
++    if not np.isfinite(counts).all():
++        raise ValueError("Input contains nonfinite values")
++    if (counts < 0).any():
++        raise ValueError("Input contains negative values")
++    if counts.ndim != 2:
++        raise ValueError("Input must be a 2D array")
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be in [1, n_cells)")
++    if (counts.sum(axis=1) == 0).any():
++        raise ValueError("Input contains all-zero cell rows")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # IDF scaling: multiply each feature by log(n / (1 + df))
++    df = (counts > 0).sum(axis=0)
++    scaling = np.log(n_cells / (1.0 + df))
++    scaled = counts * scaling
++
++    # Row normalization to unit L2 norm
++    row_norms = np.linalg.norm(scaled, axis=1)
++    X_norm = scaled / row_norms[:, np.newaxis]
++
++    # Define linear operator for W = X_norm @ X_norm.T - I
++    def matvec(v):
++        return X_norm.dot(X_norm.T.dot(v)) - v
++
++    from scipy.sparse.linalg import LinearOperator, eigsh
++    W_op = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=float)
++
++    # Set initial vector for reproducibility
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells)
++
++    # Compute leading eigenvalues and eigenvectors of W
++    eigenvalues, eigenvectors = eigsh(W_op, k=n_components, which='LA',
++                                      v0=v0, maxiter=1000, tol=0)
++
++    # Sort in descending order
++    idx = np.argsort(eigenvalues)[::-1]
++    eigenvalues = eigenvalues[idx]
++    eigenvectors = eigenvectors[:, idx]
++
++    return eigenvalues, eigenvectors

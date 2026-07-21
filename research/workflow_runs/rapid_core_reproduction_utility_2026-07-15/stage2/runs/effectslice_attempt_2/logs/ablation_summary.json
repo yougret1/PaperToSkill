@@ -1,41 +1,192 @@
 {
-  "schema_version": "effectslice-stage2-ablation-summary.v1",
-  "overall_plan": "Compare discovery selection with sealed confirmation to measure whether the confirmation gate rejects adaptive false discoveries.",
-  "analysis": "Toolformer prefix_01 matched F on all 16 discovery cases but failed 15 of 59 preservation comparisons in the sealed family. The confirmation gate rejected this apparently perfect discovery result. SNAP prefix_03 remained equivalent on all 59 sealed cases.",
-  "metric": {
-    "name": "sealed_false_discovery_rejections",
-    "value": 1,
-    "direction": "higher_is_better"
+  "analysis": "SNAP prefix 03 and Toolformer prefix 01 fail; non-planted Toolformer prefix 04 and planted T01-T05 pass. Identity instrumentation passes with 5/6 paired success matches. These are sequential task-local comparisons, not a causal atom ablation or reducer benchmark.",
+  "causal_ablation_claim_ready": false,
+  "code": "build_stage2_summaries_v5.py",
+  "exp_results_data_files": [
+    "D:/a_work/gitee/PaperToSkill/research/workflow_runs/rapid_core_reproduction_utility_2026-07-15/stage2/runs/effectslice_attempt_2/logs/confirmation_v4_summary.json",
+    "D:/a_work/gitee/PaperToSkill/research/workflow_runs/rapid_core_reproduction_utility_2026-07-15/stage2/runs/effectslice_attempt_2/derived/confirmation_v5r2/analysis.json",
+    "D:/a_work/gitee/PaperToSkill/research/workflow_runs/rapid_core_reproduction_utility_2026-07-15/stage2/runs/effectslice_attempt_2/derived/confirmation_v5r2/independent_crosscheck.json"
+  ],
+  "identity_instrumentation": {
+    "admission_decision": null,
+    "candidate_role": "identity_instrumentation_only",
+    "display_name": "Identity instrumentation",
+    "family_key": "toolformer_identity",
+    "full_minus_slice_success_gap": 1,
+    "identity_instrumentation": {
+      "checks": {
+        "paired_success_match": true,
+        "success_count_gap": true
+      },
+      "full_slice_success_count_gap": 1,
+      "full_slice_success_matches": 5,
+      "passed": true
+    },
+    "mean_task_score": {
+      "B": 0.0,
+      "F": 1.0,
+      "S": 0.8333333333333334
+    },
+    "operational_success_counts": {
+      "B": 0,
+      "F": 6,
+      "S": 5
+    },
+    "paired_success_status": {
+      "full_failure_slice_success": 0,
+      "full_success_slice_failure": 1,
+      "matches": 5
+    },
+    "registered_blocks": 6
   },
-  "rows": [
+  "metric": {
+    "descriptive_denominator": 3,
+    "direction": "descriptive",
+    "name": "non_planted_candidate_admissions",
+    "value": 1
+  },
+  "overall_plan": "Compare registered strict-subset boundaries and calibrate the harness with planted redundancy plus byte-identical identity instrumentation.",
+  "plot_analyses": [],
+  "plot_code": "build_stage2_figures_v5.py",
+  "population_inference_used": false,
+  "schema_version": "effectslice-stage2-ablation-summary.v5",
+  "statistical_unit": "complete_registered_finite_schedule",
+  "strict_subset_rows": [
     {
-      "task_id": "SNAP-MFSE",
-      "candidate_id": "prefix_03",
-      "discovery_mismatches": 0,
-      "confirmation_mismatches": 0,
-      "sealed_decision": "admit"
+      "admission_decision": {
+        "checks": {
+          "baseline_ceiling": true,
+          "full_sufficiency": false,
+          "integrity_passed": true,
+          "outputs_complete": true,
+          "slice_shortfall": false,
+          "slice_sufficiency": false
+        },
+        "passed": false
+      },
+      "candidate_id": "snap_prefix_03",
+      "mean_task_score": {
+        "B": 0.0,
+        "F": 0.8767361111111112,
+        "S": 0.3211805555555556
+      },
+      "operational_success_counts": {
+        "B": 0,
+        "F": 15,
+        "S": 5
+      },
+      "paired_success_status": {
+        "full_failure_slice_success": 1,
+        "full_success_slice_failure": 11,
+        "matches": 6
+      },
+      "registered_blocks": 18,
+      "schedule": "confirmation_v4",
+      "selected_after_v4": false
     },
     {
-      "task_id": "TOOLFORMER-FILTER",
-      "candidate_id": "prefix_01",
-      "discovery_mismatches": 0,
-      "confirmation_mismatches": 15,
-      "sealed_decision": "reject"
+      "admission_decision": {
+        "checks": {
+          "baseline_ceiling": true,
+          "full_sufficiency": true,
+          "integrity_passed": true,
+          "outputs_complete": true,
+          "slice_shortfall": false,
+          "slice_sufficiency": false
+        },
+        "passed": false
+      },
+      "candidate_id": "toolformer_prefix_01",
+      "mean_task_score": {
+        "B": 0.0,
+        "F": 0.9444444444444444,
+        "S": 0.4809027777777778
+      },
+      "operational_success_counts": {
+        "B": 0,
+        "F": 17,
+        "S": 8
+      },
+      "paired_success_status": {
+        "full_failure_slice_success": 0,
+        "full_success_slice_failure": 9,
+        "matches": 9
+      },
+      "registered_blocks": 18,
+      "schedule": "confirmation_v4",
+      "selected_after_v4": false
+    },
+    {
+      "admission_decision": {
+        "checks": {
+          "baseline_ceiling": true,
+          "full_sufficiency": true,
+          "integrity_passed": true,
+          "outputs_complete": true,
+          "slice_shortfall": true,
+          "slice_sufficiency": true
+        },
+        "passed": true
+      },
+      "candidate_id": "toolformer_prefix_04_v5",
+      "mean_task_score": {
+        "B": 0.0,
+        "F": 1.0,
+        "S": 0.9444444444444444
+      },
+      "operational_success_counts": {
+        "B": 0,
+        "F": 18,
+        "S": 17
+      },
+      "paired_success_status": {
+        "full_failure_slice_success": 0,
+        "full_success_slice_failure": 1,
+        "matches": 17
+      },
+      "registered_blocks": 18,
+      "schedule": "confirmation_v5_attempt_2",
+      "selected_after_v4": true
+    },
+    {
+      "admission_decision": {
+        "checks": {
+          "baseline_ceiling": true,
+          "full_sufficiency": true,
+          "integrity_passed": true,
+          "outputs_complete": true,
+          "slice_shortfall": true,
+          "slice_sufficiency": true
+        },
+        "passed": true
+      },
+      "candidate_id": "toolformer_planted_positive",
+      "mean_task_score": {
+        "B": 0.0,
+        "F": 1.0,
+        "S": 0.9444444444444444
+      },
+      "operational_success_counts": {
+        "B": 0,
+        "F": 18,
+        "S": 17
+      },
+      "paired_success_status": {
+        "full_failure_slice_success": 0,
+        "full_success_slice_failure": 1,
+        "matches": 17
+      },
+      "registered_blocks": 18,
+      "schedule": "confirmation_v4",
+      "selected_after_v4": false
     }
   ],
-  "code": "analyze_*_discovery.py and analyze_*_confirmation.py",
-  "plot_code": "build_stage2_figures.py",
-  "plot_analyses": [],
-  "exp_results_data_files": [
-    "derived/aide_t2_development_summary.json",
-    "derived/swe_t2_development_summary.json",
-    "derived/snap_mfse_development_summary.json",
-    "derived/snap_mfse_eligibility_summary.json",
-    "derived/snap_mfse_discovery_summary.json",
-    "derived/snap_mfse_confirmation_summary.json",
-    "derived/toolformer_filter_development_summary.json",
-    "derived/toolformer_filter_eligibility_summary.json",
-    "derived/toolformer_filter_discovery_summary.json",
-    "derived/toolformer_filter_confirmation_summary.json"
-  ]
+  "v4_calibration": {
+    "identity_instrumentation_passed": true,
+    "negative_control_expected_admission": false,
+    "negative_control_observed_admission": false,
+    "passed": true,
+    "positive_control_expected_admission": true,
+    "positive_control_observed_admission": true
+  }
 }

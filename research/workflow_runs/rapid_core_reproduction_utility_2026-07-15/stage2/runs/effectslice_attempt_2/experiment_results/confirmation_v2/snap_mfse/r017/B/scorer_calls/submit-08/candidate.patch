@@ -1,0 +1,39 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -11,5 +11,35 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    # Input validation
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D array")
++    if not np.all(np.isfinite(counts)):
++        raise ValueError("counts contains nonfinite values")
++    if np.any(counts < 0):
++        raise ValueError("counts contains negative values")
++    if np.any(counts.sum(axis=1) == 0):
++        raise ValueError("counts has all-zero cell rows")
++    if not (1 <= n_components < counts.shape[0]):
++        raise ValueError("n_components must be in [1, n_cells-1]")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    n_cells, n_features = counts.shape
++    # Compute degree diagonal: D_ii = sum_j (X X^T)_ij = X[i] dot col_sums
++    col_sums = counts.sum(axis=0)
++    degrees = counts @ col_sums  # shape (n_cells,)
++    # Avoid division by zero (already ensured no zero rows)
++    D_inv_sqrt = 1.0 / np.sqrt(degrees)
++    # Form Y = D^{-1/2} X
++    Y = counts * D_inv_sqrt[:, np.newaxis]  # element-wise multiply each row
++    # Compute SVD of Y
++    U, S, Vt = np.linalg.svd(Y, full_matrices=False)
++    # Eigenvalues of B = Y Y^T are S**2
++    eigenvalues = S ** 2
++    # Sort descending
++    idx = np.argsort(eigenvalues)[::-1]
++    eigenvalues = eigenvalues[idx]
++    U = U[:, idx]
++    # Take leading n_components
++    eigenvalues = eigenvalues[:n_components]
++    embedding = U[:, :n_components]
++    return (eigenvalues, embedding)

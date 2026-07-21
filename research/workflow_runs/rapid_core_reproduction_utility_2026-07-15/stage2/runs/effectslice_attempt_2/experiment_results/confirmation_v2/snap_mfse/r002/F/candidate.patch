@@ -1,0 +1,78 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++import scipy.sparse.linalg
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,66 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    if counts.ndim != 2:
++        raise ValueError("Input must be 2D")
++    if not np.all(np.isfinite(counts)) or np.any(counts < 0):
++        raise ValueError("Nonfinite or negative counts")
++    if not (1 <= n_components < counts.shape[0]):
++        raise ValueError("n_components must be between 1 and n_cells-1")
++    # Check for all-zero rows
++    if np.any(counts.sum(axis=1) == 0):
++        raise ValueError("All-zero cell rows not allowed")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    n, m = counts.shape
++    df = np.count_nonzero(counts, axis=0).astype(np.float64)
++    idf = np.log(n / (1.0 + df))
++    X = counts * idf  # IDF scaling
++
++    # Row normalization
++    row_norms = np.linalg.norm(X, axis=1)
++    if np.any(row_norms == 0):
++        raise ValueError("Row cannot be L2 normalized")
++    X = X / row_norms[:, np.newaxis]
++
++    # Degree computation
++    ones = np.ones(n)
++    deg = X @ (X.T @ ones) - 1.0
++    if np.any(deg <= 0):
++        raise ValueError("Non-positive degrees found")
++    D_inv = 1.0 / deg
++    D_inv_half = np.sqrt(D_inv)
++
++    # Define linear operator for normalized similarity S = D^{-1/2} W D^{-1/2}
++    class SimilarityOperator(scipy.sparse.linalg.LinearOperator):
++        def __init__(self, X, D_inv, D_inv_half):
++            self.shape = (n, n)
++            self.dtype = np.float64
++            self.X = X
++            self.D_inv = D_inv
++            self.D_inv_half = D_inv_half
++        def _matvec(self, v):
++            # S v = D_inv_half * (X @ (X.T @ (D_inv_half * v))) - D_inv * v
++            w = self.D_inv_half * v
++            tmp = self.X.T @ w
++            w2 = self.X @ tmp
++            result = self.D_inv_half * w2 - self.D_inv * v
++            return result
++        def _rmatvec(self, v):
++            # symmetric operator
++            return self._matvec(v)
++
++    linop = SimilarityOperator(X, D_inv, D_inv_half)
++
++    # Use deterministic initial vector
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n).astype(np.float64)
++
++    eigenvalues, eigenvectors = scipy.sparse.linalg.eigsh(
++        linop, k=n_components, which='LA', v0=v0
++    )
++
++    # eigsh returns eigenvalues in ascending order, reverse
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    return eigenvalues, eigenvectors

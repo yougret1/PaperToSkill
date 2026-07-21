@@ -1,26 +1,29 @@
 {
-  "schema_version": "effectslice-plot-aggregation-report.v1",
+  "schema_version": "effectslice-plot-aggregation-report.v3",
   "generated_figures": [
-    "effectslice_gate_evidence.png"
+    "effectslice_run_level_evidence.png"
   ],
   "data_sources": [
-    "derived/snap_mfse_confirmation_summary.json",
-    "derived/toolformer_filter_confirmation_summary.json",
-    "derived/snap_mfse_discovery_summary.json",
-    "derived/toolformer_filter_discovery_summary.json",
-    "experiment_results/snap_mfse_deepseek_confirmation_bfs_prefix03_001/run_report.json",
-    "experiment_results/toolformer_filter_confirmation_deepseek_v1/run_report.json"
+    "logs/ablation_summary.json",
+    "logs/research_summary.json"
   ],
+  "figure_data_sha256": "790c7f737604026619d73bb6b57903864b86a2fb4a473943881fa62446a429eb",
+  "real_task_statistical_unit": "independent_agent_run",
+  "calibration_analysis_unit": "registered_interleaved_BFS_block",
+  "replicate_denominator_per_task": 18,
+  "clustered_hidden_checks_per_run": 64,
+  "calibration_preregistration_sha256": "19638a627b5dfa3b81c730ed09bc57eca92a193b6baab3c0a822e2c301d7ac92",
+  "calibration_instrument_passed": false,
   "dpi": 300,
-  "figure_width_inches": 11.4,
-  "figure_height_inches": 3.6,
   "traceability_notes": [
-    "Every panel uses sealed confirmation or registered discovery values from accepted JSON artifacts.",
-    "Panel (b) exposes the Toolformer discovery false positive rather than hiding it behind aggregate success.",
-    "Action counts are API-agent interaction counts, not human completion time."
+    "All empirical values are loaded from v3 Stage 2 JSON summaries.",
+    "Panels (a) and (b) use independent fresh agent runs; hidden cases are clustered within-run checks.",
+    "Panel (c) reports the complete fixed interleaved calibration schedule without IID or population inference.",
+    "The open marker at 18/18 is the preregistered planted-positive requirement; 17/18 does not pass it."
   ],
   "excluded_figures": [
-    "No ordinary-user benefit or time-saving figure was produced because no user study exists.",
-    "No general cross-paper success-rate figure was produced because general_effectslice_claim_ready is false."
+    "Contaminated case-level confirmation plots are excluded.",
+    "The non-interleaved exploratory V3 calibration is excluded from the main empirical figure.",
+    "No user-benefit or cross-paper success figure is produced because those claims are untested."
   ]
 }

@@ -1,0 +1,59 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,46 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    if not isinstance(counts, np.ndarray):
++        counts = np.asarray(counts)
++    if counts.ndim != 2:
++        raise ValueError("counts must be 2D")
++    n_cells, n_features = counts.shape
++    if np.any(~np.isfinite(counts)):
++        raise ValueError("counts contains nonfinite values")
++    if np.any(counts < 0):
++        raise ValueError("counts contains negative values")
++    row_norms_before = np.linalg.norm(counts, axis=1)
++    if np.any(row_norms_before == 0):
++        raise ValueError("counts has zero rows that cannot be L2-normalized")
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be between 1 and n_cells-1 inclusive")
++    # Step A01: IDF scaling
++    df = np.sum(counts > 0, axis=0)
++    idf = np.log(n_cells / (1.0 + df))
++    scaled = counts * idf
++    # Step A02: Normalize rows to unit L2
++    row_norms = np.linalg.norm(scaled, axis=1)
++    X = scaled / row_norms[:, np.newaxis]
++    # Step A03: Compute degree vector matrix-free
++    ones = np.ones(n_cells)
++    degree = X @ (X.T @ ones) - 1.0
++    if np.any(degree <= 0):
++        raise ValueError("non-positive degrees encountered")
++    # Step A04: Prepare D^(-1/2) and D_inv
++    sqrt_inv_degree = 1.0 / np.sqrt(degree)
++    D_inv = 1.0 / degree
++    X_tilde = X * sqrt_inv_degree[:, np.newaxis]
++    # Step A05: Linear operator for normalized similarity
++    def matvec(v):
++        return X_tilde @ (X_tilde.T @ v) - D_inv * v
++    operator = LinearOperator((n_cells, n_cells), matvec=matvec, rmatvec=matvec, dtype=np.float64)
++    np.random.seed(random_state)
++    eigenvalues, eigenvectors = eigsh(operator, k=n_components, which='LA', tol=1e-8, maxiter=None)
++    # Reverse to descending order
++    values = eigenvalues[::-1].copy()
++    vectors = eigenvectors[:, ::-1].copy()
++    if not (np.isfinite(values).all() and np.isfinite(vectors).all()):
++        raise RuntimeError("nonfinite eigenvalues or eigenvectors")
++    return (values, vectors)

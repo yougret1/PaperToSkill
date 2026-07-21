@@ -1,0 +1,48 @@
+{
+  "schema_version": "effectslice-confirmation-v2-public-preregistration.v1",
+  "registered_at_utc": "2026-07-17T13:12:13.293Z",
+  "source_commit": "6463d31f8e0284dc9669325f895a934c0e7fe564",
+  "provider_label": "DeepSeek V3.2",
+  "request_model_alias": "deepseek-v4-flash",
+  "inference_setting": "vendor_api",
+  "local_compute_setting": "ordinary PC for orchestration, execution, scoring, and evidence storage; no local GPU required",
+  "experimental_unit": "independent API agent run",
+  "tasks": 2,
+  "replicates_per_task": 18,
+  "conditions_per_replicate": 3,
+  "condition_labels": [
+    "B",
+    "F",
+    "S"
+  ],
+  "private_scorer_policy": "one final-only call per condition; no private feedback returned to the model",
+  "success_rule": "hard constraints pass and within-run hidden-case pass rate is at least 0.95",
+  "inference_rule": "two-sided run-level Clopper-Pearson interval with alpha=0.02; minimum prevalence threshold 0.8",
+  "active_families": [
+    {
+      "task_key": "snap_mfse",
+      "sha256": "5645bca7847c8f165a311fa37beeb31d02ee7a2c7f3e2613971c42edadb1bf7c"
+    },
+    {
+      "task_key": "toolformer_filter",
+      "sha256": "1de8225a1029fa2e64451ddfc74437d4acceb8bc0bbc4553aaf2434ce94430a8"
+    }
+  ],
+  "active_case_registries": [
+    {
+      "task_key": "snap_mfse",
+      "sha256": "86488f49a50d4df2380bfa5eb737a8e5348366f050151941533b4002c2b77044"
+    },
+    {
+      "task_key": "toolformer_filter",
+      "sha256": "29a204c5848eeafd9528216c5d260b4515afda5b7ac62e53260a26f5a5710e71"
+    }
+  ],
+  "pre_run_checks": {
+    "tests_passed": 54,
+    "tests_failed": 0,
+    "offline_real_bundle_smoke": "passed",
+    "provider_calls_under_active_families": 0
+  },
+  "scope_note": "This minimal public object contains only protocol metadata and cryptographic digests. Source, task content, manuscript text, and raw research artifacts remain local."
+}

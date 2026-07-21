@@ -1,0 +1,53 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -11,5 +11,48 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    import scipy.sparse.linalg as spla
++    # Convert to float to handle integer inputs
++    if counts.dtype.kind in ('i', 'u'):
++        counts = counts.astype(np.float64)
++    # validation
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    if counts.dtype.kind not in ('f',):
++        raise ValueError("counts must be numeric floating point")
++    if not np.isfinite(counts).all():
++        raise ValueError("counts contains non-finite values")
++    if (counts < 0).any():
++        raise ValueError("counts contains negative values")
++    if (counts.sum(axis=1) == 0).any():
++        raise ValueError("counts contains all-zero row")
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be between 1 and n_cells-1")
++    # IDF scaling
++    df = np.count_nonzero(counts > 0, axis=0)
++    n = n_cells
++    idf = np.log(n / (1.0 + df))
++    counts_idf = counts * idf
++    # Row normalization
++    row_norms = np.linalg.norm(counts_idf, axis=1, keepdims=True)
++    if (row_norms == 0).any():
++        raise ValueError("Row norm zero after IDF scaling")
++    X = counts_idf / row_norms
++    # Degrees
++    ones = np.ones(n_cells)
++    degree = X @ (X.T @ ones) - 1.0
++    if (degree <= 0).any():
++        raise ValueError("Non-positive degree encountered")
++    D_inv = 1.0 / degree
++    D_inv_sqrt = np.sqrt(D_inv)
++    X_tilde = X * D_inv_sqrt[:, np.newaxis]
++    # Linear operator
++    def matvec(v):
++        return X_tilde @ (X_tilde.T @ v) - D_inv * v
++    A = spla.LinearOperator((n_cells, n_cells), matvec=matvec, dtype=float)
++    np.random.seed(random_state)
++    eigenvalues, eigenvectors = spla.eigsh(A, k=n_components, which='LA', tol=1e-8)
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++    return (eigenvalues, eigenvectors)

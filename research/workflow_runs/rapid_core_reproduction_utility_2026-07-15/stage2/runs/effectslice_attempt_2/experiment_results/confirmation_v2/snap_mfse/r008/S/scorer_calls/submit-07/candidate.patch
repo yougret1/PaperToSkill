@@ -1,0 +1,57 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++import scipy.sparse.linalg as sparla
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,45 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    # Input validation
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    if np.any(np.isnan(counts)) or np.any(np.isinf(counts)):
++        raise ValueError("counts contains non-finite values")
++    if np.any(counts < 0):
++        raise ValueError("counts contains negative values")
++    n_cells, n_features = counts.shape
++    if np.any(np.sum(counts, axis=1) == 0):
++        raise ValueError("counts contains all-zero cell rows")
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be between 1 and n_cells-1")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # IDF scaling
++    df = np.count_nonzero(counts, axis=0)
++    idf = np.log(n_cells / (1 + df))
++    idf_counts = counts * idf
++
++    # Row normalization
++    row_norms = np.linalg.norm(idf_counts, axis=1, keepdims=True)
++    X = idf_counts / row_norms
++
++    # Matrix-free linear operator for W = X X^T - I
++    def matvec(v):
++        return X @ (X.T @ v) - v
++
++    n = X.shape[0]
++    W_op = sparla.LinearOperator((n, n), matvec=matvec, rmatvec=matvec, dtype=X.dtype)
++
++    # Seed random state
++    rng = np.random.RandomState(random_state)
++    v0 = rng.uniform(size=n).astype(X.dtype)
++
++    # Compute leading eigenvalues and eigenvectors
++    eigenvalues, eigenvectors = sparla.eigsh(W_op, k=n_components, which='LA', v0=v0)
++
++    # Sort descending by eigenvalue
++    idx = np.argsort(eigenvalues)[::-1]
++    eigenvalues = eigenvalues[idx]
++    eigenvectors = eigenvectors[:, idx]
++
++    return eigenvalues, eigenvectors

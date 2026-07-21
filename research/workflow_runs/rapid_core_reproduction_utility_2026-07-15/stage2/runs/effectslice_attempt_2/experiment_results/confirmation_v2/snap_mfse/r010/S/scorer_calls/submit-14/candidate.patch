@@ -1,0 +1,63 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,50 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not np.isfinite(counts).all() or np.any(counts < 0):
++        raise ValueError("counts must be finite and nonnegative")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("counts cannot have all-zero rows")
++    if not (1 <= n_components < counts.shape[0]):
++        raise ValueError("n_components must satisfy 1 <= n_components < n_cells")
++    
++    n_cells, n_features = counts.shape
++    
++    # IDF scaling
++    df = np.count_nonzero(counts > 0, axis=0)
++    idf = np.log(n_cells / (1 + df))
++    X = counts * idf
++    
++    # Row normalization
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    X = X / row_norms
++    
++    # Compute degree vector matrix-free: d = X @ (X.T @ 1) - 1
++    ones = np.ones(n_cells)
++    degrees = X @ (X.T @ ones) - 1.0
++    degrees = np.maximum(degrees, 0.0)
++    
++    # Precompute D^{-1/2} and D^{-1}
++    d_inv_sqrt = np.where(degrees > 0, 1.0 / np.sqrt(degrees), 0.0)
++    d_inv = np.where(degrees > 0, 1.0 / degrees, 0.0)
++    
++    # Matrix-free operator for D^{-1/2} W D^{-1/2}
++    def matvec(v):
++        w = d_inv_sqrt * v
++        temp = X @ (X.T @ w)
++        result = d_inv_sqrt * temp - d_inv * v
++        return result
++    
++    A = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=X.dtype)
++    
++    # Generate random initial vector with given seed for reproducibility
++    rng = np.random.default_rng(random_state)
++    v0 = rng.standard_normal(n_cells)
++    
++    # Compute largest eigenvalues (in ascending order), then reverse for descending
++    eigenvalues, eigenvectors = eigsh(A, k=n_components, which='LA', v0=v0)
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++    
++    return eigenvalues, eigenvectors

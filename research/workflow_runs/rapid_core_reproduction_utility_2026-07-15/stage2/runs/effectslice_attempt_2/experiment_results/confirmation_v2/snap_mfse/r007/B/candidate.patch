@@ -1,0 +1,52 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -11,5 +11,48 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    import numpy as np
++    from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not np.all(np.isfinite(counts)) or np.any(counts < 0):
++        raise ValueError("Input contains nonfinite or negative values")
++    if (counts.sum(axis=1) == 0).any():
++        raise ValueError("Input contains all-zero cell rows")
++    n_cells = counts.shape[0]
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must satisfy 1 <= n_components < n_cells")
++
++    # Row normalisation and degree computation
++    row_norms = np.linalg.norm(counts, axis=1)
++    X = counts / row_norms[:, np.newaxis]               # unit row norm
++    feature_sums = X.sum(axis=0)                         # (n_features,)
++    degree = X @ feature_sums                            # (n_cells,), all > 0
++    D_inv_sqrt = 1.0 / np.sqrt(degree)
++
++    # Linear operator for the normalised similarity matrix P = D^{-1/2} W D^{-1/2}
++    # with W = X X^T  (cosine similarity)
++    n = n_cells
++    def matvec(v):
++        v_n = D_inv_sqrt * v
++        t = X.T @ v_n
++        s = X @ t
++        return D_inv_sqrt * s
++
++    P = LinearOperator((n, n), matvec=matvec, dtype=counts.dtype)
++
++    # Consistent initial vector for reproducibility
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n).astype(counts.dtype)
++
++    # Compute leading eigenvalues (largest magnitude)
++    eigenvalues, eigenvectors = eigsh(
++        P, k=n_components, which='LM', v0=v0
++    )
++
++    # Return in descending order (eigsh already returns ascending)
++    idx = np.argsort(eigenvalues)[::-1]
++    eigenvalues = eigenvalues[idx]
++    eigenvectors = eigenvectors[:, idx]
++
++    return eigenvalues, eigenvectors

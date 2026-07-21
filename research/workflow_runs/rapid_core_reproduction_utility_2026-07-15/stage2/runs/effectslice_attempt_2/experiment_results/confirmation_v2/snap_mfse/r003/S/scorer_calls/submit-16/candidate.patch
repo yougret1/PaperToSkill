@@ -1,0 +1,55 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,42 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # input validation
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    if not np.isfinite(counts).all():
++        raise ValueError("counts contains non-finite values")
++    if np.any(counts < 0):
++        raise ValueError("counts contains negative values")
++    row_sums = counts.sum(axis=1)
++    if np.any(row_sums == 0):
++        raise ValueError("counts contains all-zero rows")
++    n_cells, n_features = counts.shape
++    if not isinstance(n_components, int) or n_components < 1 or n_components >= n_cells:
++        raise ValueError(f"n_components must be an integer in 1 <= n_components < {n_cells}")
++    # IDF scaling
++    counts_float = counts.astype(np.float64)
++    df = np.count_nonzero(counts_float, axis=0)
++    scale = np.log(n_cells / (1.0 + df))
++    scaled = counts_float * scale[np.newaxis, :]
++    # Row normalization to unit L2
++    norms = np.linalg.norm(scaled, axis=1, keepdims=True)
++    X_norm = scaled / norms
++    # Matrix-free operator for W = X X^T - I
++    def matvec(v):
++        XTv = X_norm.T @ v
++        X_XTv = X_norm @ XTv
++        return X_XTv - v
++    W_op = LinearOperator((n_cells, n_cells), matvec=matvec, rmatvec=matvec, dtype=np.float64)
++    # Seed for reproducibility
++    v0 = None
++    if random_state is not None:
++        rng = np.random.RandomState(random_state)
++        v0 = rng.randn(n_cells)
++        v0 = v0 / np.linalg.norm(v0)
++    # Compute largest eigenvalues and eigenvectors
++    eigenvalues, eigenvectors = eigsh(W_op, k=n_components, which='LA', v0=v0)
++    # eigsh returns in ascending order, reverse to descending
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++    return eigenvalues, eigenvectors

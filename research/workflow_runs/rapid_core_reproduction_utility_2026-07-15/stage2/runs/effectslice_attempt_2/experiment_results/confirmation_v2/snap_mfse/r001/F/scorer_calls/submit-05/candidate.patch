@@ -1,0 +1,87 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -1,8 +1,9 @@
+-"""Starter module for the locked SNAP-MFSE reproduction task."""
++"""Implementation of matrix-free spectral embedding for SNAP-MFSE."""
+ 
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -10,6 +11,71 @@
+     n_components: int,
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+-    """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    """Return leading spectral coordinates for a cell-by-feature count matrix.
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    Implements the paper-core procedure without materializing an n_cells x n_cells
++    similarity matrix.
++    """
++    # Input validation
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D NumPy array")
++    n_cells, n_features = counts.shape
++    if n_cells < 2:
++        raise ValueError("need at least two cells")
++    if not np.issubdtype(counts.dtype, np.number):
++        raise ValueError("counts must be numeric")
++    if np.any(np.isnan(counts)) or np.any(np.isinf(counts)):
++        raise ValueError("nonfinite values in counts")
++    if np.any(counts < 0):
++        raise ValueError("negative values in counts")
++    # Reject all-zero rows
++    row_sums = counts.sum(axis=1)
++    if np.any(row_sums == 0):
++        raise ValueError("rows with zero total count cannot be normalized")
++
++    if not isinstance(n_components, (int, np.integer)) or n_components < 1 or n_components >= n_cells:
++        raise ValueError("n_components must be in 1 <= n_components < n_cells")
++
++    # Step A01: IDF scaling
++    df = (counts > 0).sum(axis=0)  # document frequency per feature
++    idf = np.log(n_cells / (1.0 + df))
++    X = counts * idf  # shape (n_cells, n_features)
++
++    # Step A02: row normalization for cosine similarity
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    X = X / row_norms
++
++    # Step A03: compute degrees matrix-free
++    # degree = (X X^T) diag - 1 = X @ (X.T @ ones) - 1
++    ones = np.ones(n_cells)
++    degree = X @ (X.T @ ones) - 1.0
++
++    if np.any(degree <= 0):
++        raise ValueError("non-positive degrees encountered")
++
++    # Step A04: build linear operator for normalized similarity
++    D_inv = 1.0 / degree
++    D_inv_sqrt = np.sqrt(D_inv)
++    # X_tilde = D^{-1/2} X
++    X_tilde = X * D_inv_sqrt[:, np.newaxis]
++
++    def matvec(v):
++        # (X_tilde @ X_tilde^T - D^{-1}) @ v
++        return X_tilde @ (X_tilde.T @ v) - D_inv * v
++
++    # Matrix-free operator of shape (n_cells, n_cells)
++    oper = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=X.dtype)
++
++    # Step A05: Lanczos eigendecomposition
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells).astype(X.dtype)
++    v0 /= np.linalg.norm(v0)
++
++    # Compute largest eigenvalues (returns in ascending order)
++    eigvals, eigvecs = eigsh(oper, k=n_components, which='LA', v0=v0)
++
++    # Reverse to descending order
++    eigvals = eigvals[::-1]
++    eigvecs = eigvecs[:, ::-1]
++
++    return eigvals, eigvecs

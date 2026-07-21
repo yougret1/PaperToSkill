@@ -1,0 +1,70 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -11,6 +11,65 @@
+     logp_no_call: np.ndarray,
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+-    """Return an ordered keep mask and one finite margin per proposed call."""
++    """Return an ordered keep mask and one finite margin per proposed call.
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    Implements the Toolformer loss-filter procedure:
++    1. Normalize decreasing future-token weights (max(0, 1-0.2*t)) per offset.
++    2. Compute weighted future-token loss for each conditioning.
++    3. Use the stronger counterfactual baseline: min(no_call, call_only).
++    4. Keep calls where margin = baseline - with_result >= tau_filter.
++
++    Raises ValueError for invalid inputs (empty, non-matrix, shape mismatch,
++    nonfinite, positive values, invalid threshold).
++    """
++    # Input validation
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean")
++    if not isinstance(tau_filter, (int, float)) or np.isnan(tau_filter) or np.isinf(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be a finite nonnegative float")
++
++    for name, mat in [("logp_with_result", logp_with_result),
++                      ("logp_call_only", logp_call_only),
++                      ("logp_no_call", logp_no_call)]:
++        if not isinstance(mat, np.ndarray) or mat.ndim != 2:
++            raise ValueError(f"{name} must be a 2D NumPy array")
++        if mat.size == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.all(np.isfinite(mat)):
++            raise ValueError(f"{name} contains nonfinite values")
++        if np.any(mat > 0):
++            raise ValueError(f"{name} contains positive log probabilities")
++
++    # Check shape consistency
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All input matrices must have the same shape")
++
++    n_candidates, horizon = logp_with_result.shape
++
++    # Compute normalized weights (same for all candidates)
++    # t = offset from 0 to horizon-1
++    t = np.arange(horizon, dtype=float)
++    raw = np.maximum(0.0, 1.0 - 0.2 * t)
++    weight_sum = np.sum(raw)
++    if weight_sum <= 0:
++        # Edge case: all weights zero (horizon too large? but horizon is finite)
++        # Should not happen with finite horizon; but handle gracefully.
++        weights = np.full(horizon, 1.0 / horizon)
++    else:
++        weights = raw / weight_sum
++
++    # Compute weighted future-token losses (negative weighted log probs)
++    L_plus   = -np.sum(weights * logp_with_result, axis=1)   # shape (n_candidates,)
++    L_call   = -np.sum(weights * logp_call_only,   axis=1)
++    L_no     = -np.sum(weights * logp_no_call,     axis=1)
++
++    # Baseline: minimum of L_no and L_call
++    L_minus = np.minimum(L_no, L_call)
++
++    # Margin = baseline - L_plus
++    margins = L_minus - L_plus
++
++    # Keep if margin >= threshold
++    keep_mask = margins >= tau_filter
++
++    return keep_mask, margins

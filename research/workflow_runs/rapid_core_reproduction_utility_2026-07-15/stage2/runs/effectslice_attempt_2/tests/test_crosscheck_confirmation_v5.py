@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 import pytest
@@ -7,7 +8,16 @@ import pytest
 
 RUN_ROOT = Path(__file__).resolve().parents[1]
 
-from crosscheck_confirmation_v5 import _admission_decision, _compare_summary
+from crosscheck_confirmation_v5 import (
+    DEFAULT_OUTPUT,
+    DEFAULT_PREREGISTRATION,
+    DEFAULT_RESULTS,
+    DEFAULT_SUMMARY,
+    _admission_decision,
+    _compare_summary,
+    _success_flags,
+    build_crosscheck,
+)
 
 
 def test_v5_crosscheck_is_independent_of_bound_analyzer_and_adapter():
@@ -63,3 +73,32 @@ def test_v5_crosscheck_recomputes_frozen_decision_and_matches_analysis():
     changed["natural_candidate_decision"] = {"passed": False}
     with pytest.raises(ValueError, match="natural-candidate"):
         _compare_summary(crosscheck, changed)
+
+
+def test_exact_scorer_and_operational_success_have_distinct_semantics():
+    metric = {"contract_passed": True, "patch_applied": True}
+    case_scores = [1] * 61 + [0] * 3
+
+    exact_scorer_success, operational_success = _success_flags(
+        metric, 61 / 64, case_scores
+    )
+
+    assert exact_scorer_success is False
+    assert operational_success is True
+
+
+def test_default_crosscheck_rebuilds_the_actual_198_file_bundle(tmp_path):
+    output = tmp_path / "independent_crosscheck.json"
+    build_crosscheck(
+        DEFAULT_PREREGISTRATION,
+        DEFAULT_RESULTS,
+        DEFAULT_SUMMARY,
+        output,
+    )
+
+    rebuilt = json.loads(output.read_text(encoding="utf-8"))
+    canonical = json.loads(DEFAULT_OUTPUT.read_text(encoding="utf-8"))
+    assert rebuilt["raw_file_count"] == 198
+    assert rebuilt["raw_evidence_digest"] == canonical["raw_evidence_digest"]
+    assert rebuilt["families"] == canonical["families"]
+    assert rebuilt["natural_candidate_admitted"] is True

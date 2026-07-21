@@ -1,0 +1,56 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -12,4 +12,52 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    from scipy.sparse.linalg import LinearOperator, eigsh
++
++    n_cells, n_features = counts.shape
++
++    # Validate
++    if not np.isfinite(counts).all():
++        raise ValueError("counts must be finite")
++    if (counts < 0).any():
++        raise ValueError("counts must be nonnegative")
++    if np.any(np.sum(counts, axis=1) == 0):
++        raise ValueError("All-zero cell rows not allowed")
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be between 1 and n_cells-1")
++
++    # IDF scaling
++    df = np.count_nonzero(counts, axis=0)
++    idf = np.log(n_cells / (1.0 + df))
++    X = counts * idf
++
++    # Row normalize
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    row_norms[row_norms == 0] = 1
++    X = X / row_norms
++
++    # Compute degree vector matrix-free: d = X @ (X.T @ 1) - 1
++    ones = np.ones(n_cells)
++    d = X @ (X.T @ ones) - 1.0
++    d = np.maximum(d, 1e-12)  # avoid division by zero
++    sqrt_d_inv = 1.0 / np.sqrt(d)
++
++    # Matrix-free operator for S = D^{-1/2} (X X^T - I) D^{-1/2}
++    def matvec(v):
++        u = sqrt_d_inv * v
++        temp = X @ (X.T @ u)
++        return sqrt_d_inv * (temp - u)
++
++    n = X.shape[0]
++    op = LinearOperator((n, n), matvec=matvec, dtype=X.dtype)
++
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n).astype(X.dtype)
++    eigenvalues, eigenvectors = eigsh(op, k=n_components, which='LM', v0=v0)
++
++    # Sort descending
++    idx = np.argsort(eigenvalues)[::-1]
++    eigenvalues = eigenvalues[idx]
++    eigenvectors = eigenvectors[:, idx]
++
++    return eigenvalues, eigenvectors

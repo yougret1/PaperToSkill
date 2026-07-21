@@ -1,0 +1,57 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,53 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate tau_filter
++    if isinstance(tau_filter, (bool, np.bool_)):
++        raise ValueError("tau_filter must not be a boolean")
++    if not isinstance(tau_filter, (int, float, np.integer, np.floating)):
++        raise ValueError("tau_filter must be a number")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
++
++    # Validate input arrays
++    for arr, name in [(logp_with_result, "logp_with_result"),
++                      (logp_call_only, "logp_call_only"),
++                      (logp_no_call, "logp_no_call")]:
++        if not isinstance(arr, np.ndarray):
++            raise ValueError(f"{name} must be a numpy array")
++        if arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D matrix")
++        if arr.size == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.isfinite(arr).all():
++            raise ValueError(f"{name} contains non-finite values")
++        if (arr > 0).any():
++            raise ValueError(f"{name} contains positive values")
++
++    # Check shape consistency
++    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):
++        raise ValueError("All input matrices must have the same shape")
++
++    n_candidates, horizon = logp_with_result.shape
++
++    # Compute normalized decreasing future-token weights (T01)
++    t = np.arange(horizon)
++    raw_w = np.maximum(0, 1 - 0.2 * t)
++    norm_w = raw_w / raw_w.sum()
++
++    # Weighted sums of log probabilities
++    weighted_with = logp_with_result @ norm_w
++    weighted_call_only = logp_call_only @ norm_w
++    weighted_no_call = logp_no_call @ norm_w
++
++    # Compute improvements over baselines
++    margin_no_call = weighted_with - weighted_no_call
++    margin_call_only = weighted_with - weighted_call_only
++
++    # Keep if both improvements exceed the threshold (paper: loss lower by at least tau)
++    keep = (margin_no_call > tau_filter) & (margin_call_only > tau_filter)
++
++    # Return the improvement over no-call as the margin
++    margin = margin_no_call
++
++    return keep.astype(np.bool_), margin.astype(np.float64)

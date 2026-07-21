@@ -1,0 +1,83 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -10,6 +11,70 @@
+     n_components: int,
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+-    """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    """Return leading spectral coordinates for a cell-by-feature count matrix.
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    Implementation of SnapATAC2 IDF scaling, row normalization, and
++    matrix-free truncated spectral decomposition.
++    """
++    # --- input validation ---
++    counts = np.asarray(counts, dtype=float)
++    if counts.ndim != 2:
++        raise ValueError("counts must be a 2-D array")
++    n_cells, n_features = counts.shape
++    if not np.all(np.isfinite(counts)):
++        raise ValueError("counts must be finite")
++    if np.any(counts < 0):
++        raise ValueError("counts must be nonnegative")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("counts has all-zero rows")
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must satisfy 1 <= n_components < n_cells")
++
++    # --- A01: IDF scaling ---
++    df = np.count_nonzero(counts > 0, axis=0).astype(float)
++    idf = np.log(n_cells / (1.0 + df))
++    X = counts * idf  # shape (n_cells, n_features)
++
++    # --- A02: row normalization to unit L2 norm ---
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    row_norms[row_norms == 0] = 1.0  # safe guard, should not happen
++    X = X / row_norms
++
++    # --- A03: compute degree vector matrix-free ---
++    ones = np.ones(n_cells)
++    # d = X @ (X.T @ ones) - ones
++    d = X @ (X.T @ ones) - ones
++    # ensure no negative degrees (numerical safety)
++    d = np.maximum(d, 0.0)
++
++    # prepare diagonal inverses for the linear operator
++    d_inv = np.divide(1.0, d, out=np.zeros_like(d), where=d > 1e-12)
++    d_half_inv = np.sqrt(d_inv)  # same condition, since 0 where d==0
++
++    # --- build linear operator for A = D^{-1/2} (X X^T - I) D^{-1/2} ---
++    def apply_A(v: np.ndarray) -> np.ndarray:
++        # v1 = D^{-1/2} v
++        v1 = d_half_inv * v
++        # v2 = X^T v1
++        v2 = X.T @ v1
++        # v3 = X v2
++        v3 = X @ v2
++        # v4 = D^{-1/2} v3
++        v4 = d_half_inv * v3
++        # v5 = v4 - D^{-1} v
++        v_div_d = d_inv * v
++        return v4 - v_div_d
++
++    A_op = LinearOperator((n_cells, n_cells), matvec=apply_A, dtype=float)
++
++    # --- truncated eigendecomposition (largest eigenvalues of A) ---
++    rng = np.random.RandomState(random_state)
++    # use 'LA' to get the largest algebraic eigenvalues; eigsh returns in ascending order
++    evals, evecs = eigsh(A_op, k=n_components, which='LA',
++                         tol=0, v0=rng.randn(n_cells), maxiter=1000)
++
++    # eigsh returns eigenvalues in ascending order -> reverse to descending
++    eigenvalues = evals[::-1].copy()
++    eigenvectors = evecs[:, ::-1].copy()
++
++    return eigenvalues, eigenvectors

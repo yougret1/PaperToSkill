@@ -1,0 +1,77 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,64 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate
++    if not isinstance(counts, np.ndarray):
++        raise ValueError("counts must be a numpy array")
++    if counts.ndim != 2:
++        raise ValueError("counts must be 2-dimensional")
++    if np.any(~np.isfinite(counts)):
++        raise ValueError("counts must be finite")
++    if np.any(counts < 0):
++        raise ValueError("counts must be nonnegative")
++    row_sums = counts.sum(axis=1)
++    if np.any(row_sums == 0):
++        raise ValueError("counts contains all-zero rows")
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be in [1, n_cells)")
++    
++    # IDF scaling
++    n = counts.shape[0]
++    df = np.count_nonzero(counts, axis=0)
++    idf = np.log(n / (1.0 + df))
++    X = counts * idf
++    
++    # Row normalization
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    X = X / row_norms
++    
++    # Degree vector: d = X @ (X.T @ ones) - 1
++    ones = np.ones(n_cells)
++    d = X @ (X.T @ ones) - 1.0
++    # Clamp to avoid division by zero
++    d = np.maximum(d, 1e-12)
++    d_sqrt_inv = 1.0 / np.sqrt(d)
++    D_inv = 1.0 / d
++    
++    # Linear operator for M = D^{-1/2} (X X^T - I) D^{-1/2}
++    def matvec(v):
++        t = d_sqrt_inv * v
++        Xt_t = X.T @ t
++        X_Xt_t = X @ Xt_t
++        result = d_sqrt_inv * X_Xt_t - D_inv * v
++        return result
++    
++    M_shape = (n_cells, n_cells)
++    M_op = LinearOperator(shape=M_shape, matvec=matvec, dtype=X.dtype)
++    
++    # Initial vector for reproducibility
++    if random_state is not None:
++        if isinstance(random_state, int):
++            rng = np.random.RandomState(random_state)
++        else:
++            rng = random_state
++        v0 = rng.randn(n_cells).astype(X.dtype)
++        v0 = v0 / np.linalg.norm(v0)
++    else:
++        v0 = None
++    
++    eigenvalues, eigenvectors = eigsh(M_op, k=n_components, which='LA', v0=v0)
++    # eigsh returns eigenvalues in ascending order; reverse for descending
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++    return eigenvalues, eigenvectors

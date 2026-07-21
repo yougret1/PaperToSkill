@@ -1,0 +1,75 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++import scipy.sparse.linalg as sp_linalg
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,63 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    # Input validation
++    if not isinstance(counts, np.ndarray):
++        raise ValueError("counts must be a numpy array")
++    if counts.ndim != 2:
++        raise ValueError("counts must be 2-dimensional")
++    n_cells, n_features = counts.shape
++    if not np.isfinite(counts).all():
++        raise ValueError("counts contains nonfinite values")
++    if (counts < 0).any():
++        raise ValueError("counts contains negative values")
++    if (counts.sum(axis=1) == 0).any():
++        raise ValueError("counts has all-zero rows")
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be between 1 and n_cells-1")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Step 1: IDF scaling
++    n = n_cells
++    df = np.count_nonzero(counts > 0, axis=0)  # feature document frequency
++    idf = np.log(n / (1 + df))
++    scaled = counts.astype(float) * idf  # element-wise multiplication
++
++    # Step 2: Row normalization to unit L2 norm
++    row_norms = np.linalg.norm(scaled, axis=1)
++    X = scaled / row_norms[:, np.newaxis]
++
++    # Step 3: Degree vector without building cell-cell matrix
++    ones_n = np.ones(n_cells)
++    degree = X @ (X.T @ ones_n) - ones_n
++    if np.any(degree <= 0):
++        raise ValueError("non-positive degree encountered")
++
++    # Step 4: Define normalized similarity linear operator
++    D_inv = 1.0 / degree
++    D_inv_sqrt = np.sqrt(D_inv)
++    X_tilde = X * D_inv_sqrt[:, np.newaxis]  # D^{-1/2} X
++
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells).astype(X.dtype)
++
++    def matvec(v):
++        return X_tilde @ (X_tilde.T @ v) - D_inv * v
++
++    A = sp_linalg.LinearOperator(
++        shape=(n_cells, n_cells),
++        matvec=matvec,
++        rmatvec=matvec,
++        dtype=X.dtype
++    )
++
++    # Step 5: Return leading eigenpairs
++    eigenvalues, eigenvectors = sp_linalg.eigsh(
++        A, k=n_components, which='LM', return_eigenvectors=True, v0=v0
++    )
++
++    # Sort eigenvalues in descending order
++    idx = np.argsort(eigenvalues)[::-1]
++    eigenvalues_desc = eigenvalues[idx]
++    eigenvectors_desc = eigenvectors[:, idx]
++
++    return eigenvalues_desc, eigenvectors_desc

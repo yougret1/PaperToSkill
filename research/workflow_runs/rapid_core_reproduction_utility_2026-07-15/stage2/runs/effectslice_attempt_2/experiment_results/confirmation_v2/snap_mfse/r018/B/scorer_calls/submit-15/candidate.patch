@@ -1,0 +1,37 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import svds
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,25 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    if not np.isfinite(counts).all():
++        raise ValueError("Input contains nonfinite values")
++    if np.any(counts < 0):
++        raise ValueError("Input contains negative values")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("All-zero cell rows present")
++    n_cells = counts.shape[0]
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be 1 <= n_components < n_cells")
++    # Normalize rows to unit length (cosine similarity)
++    row_norms = np.linalg.norm(counts, axis=1, keepdims=True)
++    # row_norms is guaranteed > 0 because all-zero rows already rejected
++    normalized = counts / row_norms
++    # SVD of the normalized matrix; svds is matrix-free
++    U, s, Vt = svds(normalized, k=n_components, random_state=random_state)
++    # svds returns singular values in ascending order, so sort descending
++    idx = np.argsort(s)[::-1]
++    s_desc = s[idx]
++    U_desc = U[:, idx]
++    eigenvalues = s_desc ** 2
++    return eigenvalues, U_desc

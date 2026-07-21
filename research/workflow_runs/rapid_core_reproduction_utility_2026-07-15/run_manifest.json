@@ -1,38 +1,74 @@
 {
+  "schema_version": "researchstudio-run-manifest.v2",
   "run_id": "rapid_core_reproduction_utility_2026-07-15",
   "workflow": "researchstudio-full-research-workflow",
-  "scope": "stage_1_only",
-  "status": "stage_2_in_progress",
-  "current_stage": "2.3",
+  "scope": "stages_1_and_2",
+  "status": "stage_2_passed",
+  "current_stage": "2",
   "created_at": "2026-07-15T00:00:00+08:00",
-  "completed_at": "2026-07-15T21:14:13.5690155+08:00",
+  "updated_at": "2026-07-21T15:00:35.6762872+08:00",
+  "completed_at": "2026-07-21T15:00:35.6762872+08:00",
   "workspace": "D:\\a_work\\gitee\\PaperToSkill",
   "constraints": {
-    "manuscript_changes": false,
-    "code_changes": false,
-    "experiment_changes": false,
-    "memory_updates": false,
-    "git_commit": false,
-    "git_push": false
+    "original_manuscript_read_only": "paper/aaai",
+    "final_manuscript": "paper/effectslice_aaai/main_v3.tex",
+    "v3_is_final_and_cannot_revert": true,
+    "provider_boundary": "trusted DeepSeek V3.2-compatible vendor API",
+    "local_gpu_used_for_model_inference": false,
+    "private_git_backup_required": true,
+    "exclude_from_git": [
+      "secrets and credentials",
+      "dependency environments",
+      "models",
+      "temporary directories",
+      "lock files",
+      "unrelated user changes"
+    ]
   },
-  "reuse_targets": [
-    "benchmarks/real_reuse",
-    "results/real_reuse",
-    "results/human_fidelity_packets",
-    "results/tables",
-    "scripts/papertoskill_extract.py",
-    "scripts/audit_skill_source_map.py"
-  ],
-  "selected_idea": "EffectSlice: Eligibility-Gated Certificates for Task-Local Procedural Effects",
+  "selected_idea": "EffectSlice: Candidate-Bound Evidence for Task-Local Procedural Admission",
   "stage_1_handoff": {
     "idea_json": "stage1/idea.json",
     "idea_markdown": "stage1/idea.md",
     "status": "passed",
-    "novelty_status": "provisional_scoop_check_revise"
+    "selected_claim": "A paper-derived strict subset should be reusable only with a candidate-bound, finite-schedule admission record that separates provenance from behavioral sufficiency."
   },
   "stage_2": {
-    "active_run": "stage2/runs/effectslice_attempt_1",
-    "route": "local_certificate_core_readiness_pilot",
-    "status": "in_progress"
+    "active_run": "stage2/runs/effectslice_attempt_2",
+    "route": "finite_schedule_candidate_admission",
+    "status": "passed",
+    "experiment_versions": [
+      "confirmation-v4",
+      "confirmation-v5r2"
+    ],
+    "evidence_snapshot": {
+      "provider_conversations": 234,
+      "provider_turns": 1760,
+      "registered_blocks": 78,
+      "non_planted_candidates": 3,
+      "non_planted_admissions": 1,
+      "v5_bfs_successes": "0/18/17",
+      "v5_raw_files": 198,
+      "v5_unique_response_ids": 381,
+      "v5_private_feedback_exposed": false
+    },
+    "required_summaries": [
+      "stage2/runs/effectslice_attempt_2/logs/baseline_summary.json",
+      "stage2/runs/effectslice_attempt_2/logs/research_summary.json",
+      "stage2/runs/effectslice_attempt_2/logs/ablation_summary.json",
+      "stage2/runs/effectslice_attempt_2/logs/confirmation_v5_summary.json"
+    ],
+    "figure": "stage2/runs/effectslice_attempt_2/figures/effectslice_v5_finite_schedule.png",
+    "bibliography": "stage2/runs/effectslice_attempt_2/cached_citations.bib",
+    "manuscript_source": "../../../paper/effectslice_aaai/main_v3.tex",
+    "rendered_manuscript": "../../../paper/effectslice_aaai/main.pdf",
+    "review_text": "stage2/runs/effectslice_attempt_2/review_text.txt",
+    "review_figure": "stage2/runs/effectslice_attempt_2/review_img_cap_ref.json"
+  },
+  "final_verification": {
+    "pytest": "passed: focused 26; full 678 passed and 6 skipped",
+    "latex_and_bibtex": "passed: 7 pages and no critical log findings",
+    "visual_pdf_review": "passed: all 7 pages inspected",
+    "stage_reports": "passed: 2.7, 2.8, and 2",
+    "git_push": "included in the Stage 2 completion commit"
   }
 }

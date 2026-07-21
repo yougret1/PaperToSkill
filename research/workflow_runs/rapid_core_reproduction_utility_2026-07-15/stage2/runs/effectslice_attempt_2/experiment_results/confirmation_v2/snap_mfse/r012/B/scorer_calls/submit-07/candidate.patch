@@ -1,0 +1,53 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++import scipy.sparse.linalg as spla
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,41 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    # Validate inputs
++    if not np.all(np.isfinite(counts)):
++        raise ValueError("Input contains nonfinite values.")
++    if np.any(counts < 0):
++        raise ValueError("Input contains negative values.")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("Input contains all-zero cell rows.")
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be 1 <= n_components < n_cells.")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Compute column sums and degree vector D = C * (C^T 1) = C @ col_sums
++    col_sums = counts.sum(axis=0)
++    d_vec = counts @ col_sums  # shape (n_cells,)
++    d_half_inv = 1.0 / np.sqrt(d_vec)
++
++    # Define matrix-free operator for S = D^{-1/2} C C^T D^{-1/2}
++    def matvec(v):
++        # v is of shape (n_cells,)
++        x = d_half_inv * v
++        y = counts.T @ x  # shape (n_features,)
++        z = counts @ y    # shape (n_cells,)
++        return d_half_inv * z
++
++    n = n_cells
++    S_op = spla.LinearOperator((n, n), matvec=matvec, dtype=float)
++
++    # Set random initial vector for reproducibility
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n)
++
++    # Compute largest eigenvalues and eigenvectors
++    eigenvalues, eigenvectors = spla.eigsh(S_op, k=n_components, which='LA', v0=v0)
++    # eigsh returns eigenvalues in ascending order; reverse to descending
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    return eigenvalues, eigenvectors

@@ -1,0 +1,61 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,49 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    # Validate input
++    if not np.isfinite(counts).all():
++        raise ValueError("Input contains nonfinite values")
++    if np.any(counts < 0):
++        raise ValueError("Input contains negative values")
++    n_cells, n_features = counts.shape
++    if n_components < 1 or n_components >= n_cells:
++        raise ValueError("n_components must be between 1 and n_cells-1")
++    cell_sums = counts.sum(axis=1)
++    if np.any(cell_sums == 0):
++        raise ValueError("Input contains all-zero cell rows")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Step A01: IDF scaling
++    df = np.count_nonzero(counts, axis=0)
++    idf = np.log(n_cells / (1.0 + df))
++    X = counts * idf
++
++    # Step A02: Row normalization for cosine similarity
++    row_norms = np.linalg.norm(X, axis=1)
++    X = X / row_norms[:, np.newaxis]
++
++    # Step A03: Degrees matrix-free
++    ones = np.ones(n_cells)
++    deg = X @ (X.T @ ones) - 1.0
++    if np.any(deg <= 0):
++        raise ValueError("Nonpositive degree encountered")
++    D_inv = 1.0 / deg
++    D_inv_sqrt = np.sqrt(D_inv)
++    X_tilde = X * D_inv_sqrt[:, np.newaxis]
++
++    # Step A04: Linear operator for normalized similarity
++    def matvec(v):
++        return X_tilde @ (X_tilde.T @ v) - D_inv * v
++
++    L_op = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=np.float64)
++
++    # Step A05: Lanczos symmetric eigensolver
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells)
++    eigenvalues, eigenvectors = eigsh(L_op, k=n_components, which='LA', tol=1e-6, v0=v0)
++
++    # eigsh returns ascending order -> reverse to descending
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    return eigenvalues, eigenvectors

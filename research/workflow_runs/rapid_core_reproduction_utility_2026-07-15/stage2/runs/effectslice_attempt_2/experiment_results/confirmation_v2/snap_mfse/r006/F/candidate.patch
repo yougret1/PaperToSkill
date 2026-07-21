@@ -1,0 +1,67 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -10,6 +11,54 @@
+     n_components: int,
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+-    """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    """Return leading spectral coordinates for a cell-by-feature count matrix
++    using the matrix-free cosine‑similarity procedure described in the paper.
++    """
++    # Validate inputs
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    if np.any(np.isnan(counts)) or np.any(np.isinf(counts)) or np.any(counts < 0):
++        raise ValueError("counts must be finite and nonnegative")
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must satisfy 1 <= n_components < n_cells")
++    if np.any(counts.sum(axis=1) == 0):
++        raise ValueError("rows with all zero entries are not allowed")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Step 1: IDF scaling
++    df = (counts > 0).sum(axis=0).astype(float)
++    idf = np.log(n_cells / (1.0 + df))
++    scaled = counts * idf
++
++    # Step 2: Row normalization to unit L2 norm
++    row_norms = np.linalg.norm(scaled, axis=1)
++    if np.any(row_norms == 0):
++        raise ValueError("zero norm row after IDF scaling")
++    X = scaled / row_norms[:, np.newaxis]
++
++    # Step 3: Compute degree vector without constructing W
++    ones = np.ones(n_cells)
++    d = X @ (X.T @ ones) - 1.0
++    if np.any(d <= 0):
++        raise ValueError("non-positive degree encountered")
++    D_inv = 1.0 / d
++    D_minus_half = np.sqrt(D_inv)
++    X_tilde = D_minus_half[:, np.newaxis] * X
++
++    # Step 4: Matrix-free operator A(v) = X_tilde (X_tilde^T v) - D_inv * v
++    def matvec(v):
++        return X_tilde @ (X_tilde.T @ v) - D_inv * v
++
++    A = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=float)
++
++    # Step 5: Leading eigenpairs via Lanczos (eigsh)
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells)
++    eigenvalues, eigenvectors = eigsh(
++        A, k=n_components, which='LA', tol=1e-6, maxiter=1000, v0=v0
++    )
++    # Ensure descending order (eigsh may return ascending)
++    idx = np.argsort(eigenvalues)[::-1]
++    eigenvalues = eigenvalues[idx]
++    eigenvectors = eigenvectors[:, idx]
++    return eigenvalues, eigenvectors

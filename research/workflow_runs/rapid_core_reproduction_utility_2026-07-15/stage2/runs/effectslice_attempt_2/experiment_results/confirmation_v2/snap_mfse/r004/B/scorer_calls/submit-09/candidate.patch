@@ -1,0 +1,41 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.linalg import svd
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,29 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not np.isfinite(counts).all():
++        raise ValueError("counts contains nonfinite values")
++    if (counts < 0).any():
++        raise ValueError("counts contains negative values")
++    row_sums = counts.sum(axis=1)
++    if (row_sums == 0).any():
++        raise ValueError("counts has all-zero cell rows")
++    if n_components < 1 or n_components >= counts.shape[0]:
++        raise ValueError("n_components must be 1 <= n_components < n_cells")
++
++    # Matrix-free spectral embedding via SVD on row-normalized count matrix
++    scaling = 1.0 / np.sqrt(row_sums)
++    X = counts * scaling[:, np.newaxis]
++
++    U, s, Vt = svd(X, full_matrices=False)
++
++    # Ensure we have enough singular values
++    min_dim = min(X.shape)
++    if n_components > min_dim:
++        raise ValueError(f"n_components {n_components} exceeds available dimensions {min_dim}")
++
++    eigenvalues = s[:n_components] ** 2
++    eigenvectors = U[:, :n_components]
++
++    return eigenvalues, eigenvectors

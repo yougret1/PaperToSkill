@@ -1,0 +1,68 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,56 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not np.isfinite(counts).all():
++        raise ValueError("counts must be finite")
++    if (counts < 0).any():
++        raise ValueError("counts must be nonnegative")
++    if (counts.sum(axis=1) == 0).any():
++        raise ValueError("all-zero rows not allowed")
++    n, m = counts.shape
++    if not (1 <= n_components < n):
++        raise ValueError("n_components must be between 1 and n_cells-1")
++
++    # IDF scaling (A01)
++    df = np.asarray((counts > 0).sum(axis=0)).flatten()
++    idf = np.log(n / (1.0 + df))
++    X = counts * idf
++
++    # Row normalization (A02)
++    row_norms = np.linalg.norm(X, axis=1)
++    mask = row_norms > 0
++    X[mask] = X[mask] / row_norms[mask, np.newaxis]
++
++    # Compute degree vector without forming W (A03)
++    ones = np.ones(n)
++    d = X @ (X.T @ ones) - 1.0
++    d = np.maximum(d, 0)  # numeric safety
++
++    # Prepare D^{-1/2}
++    D_inv_sqrt = np.where(d > 0, 1.0 / np.sqrt(d), 0.0)
++
++    # Linear operator for normalized adjacency A_sym = D^{-1/2} W D^{-1/2}
++    def matvec(v):
++        v1 = D_inv_sqrt * v
++        tmp1 = X.T @ v1
++        tmp2 = X @ tmp1
++        tmp3 = D_inv_sqrt * tmp2
++        tmp4 = np.divide(v, d, out=np.zeros_like(v), where=d > 0)
++        return tmp3 - tmp4
++
++    size = n
++    A = LinearOperator((size, size), matvec=matvec, dtype=np.float64)
++
++    # Random seed for v0
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n)
++
++    # Compute largest eigenvalues and eigenvectors
++    vals, vecs = eigsh(A, k=n_components, which='LA', v0=v0)
++
++    # Convert to descending order
++    evals = vals[::-1]
++    evecs = vecs[:, ::-1]
++
++    return evals, evecs

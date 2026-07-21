@@ -1,0 +1,28 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -12,4 +12,24 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    if not np.isfinite(counts).all() or (counts < 0).any():
++        raise ValueError("Counts must be finite and nonnegative")
++
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be 1 <= n_components < n_cells")
++
++    row_sums = counts.sum(axis=1)
++    if (row_sums <= 0).any():
++        raise ValueError("All-zero cell rows are not allowed")
++
++    from scipy.sparse.linalg import svds
++
++    D_inv_sqrt = np.reciprocal(np.sqrt(row_sums))
++    Y = counts * D_inv_sqrt[:, None]  # D^{-1/2} X
++
++    u, s, vt = svds(Y, k=n_components, random_state=random_state)
++    # svds returns singular values in descending order
++    eigenvalues = s ** 2
++    embedding = u
++    return eigenvalues, embedding

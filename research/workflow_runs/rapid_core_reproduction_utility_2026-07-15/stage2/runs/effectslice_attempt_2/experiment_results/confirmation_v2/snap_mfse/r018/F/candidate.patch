@@ -1,0 +1,73 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import LinearOperator, eigsh
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,60 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    if not np.issubdtype(counts.dtype, np.floating) and not np.issubdtype(counts.dtype, np.integer):
++        raise ValueError("counts must be numeric")
++    if np.any(np.isnan(counts)) or np.any(np.isinf(counts)) or np.any(counts < 0):
++        raise ValueError("Nonfinite or negative count values")
++    if counts.ndim != 2:
++        raise ValueError("counts must be 2D")
++    n_cells, n_features = counts.shape
++    if n_components < 1 or n_components >= n_cells:
++        raise ValueError("n_components must be between 1 and n_cells-1")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("All-zero cell rows are not allowed")
++    
++    # Step 1: IDF scaling (A01)
++    df = np.count_nonzero(counts, axis=0)
++    idf = np.log(n_cells / (1 + df))
++    X = counts.astype(np.float64) * idf
++    
++    # Step 2: Row normalization (A02)
++    row_norms = np.linalg.norm(X, axis=1, keepdims=True)
++    if np.any(row_norms == 0):
++        raise ValueError("Row cannot be L2-normalized (zero norm after IDF?)")
++    X = X / row_norms
++    
++    # Step 3: Compute degree vector (A03)
++    row_sums = X @ (X.T @ np.ones(n_cells))
++    d = row_sums - 1.0
++    if np.any(d <= 0):
++        raise ValueError("Degrees must be positive")
++    d_inv = 1.0 / d
++    sqrt_d_inv = np.sqrt(d_inv)
++    
++    # Step 4: Define linear operator for normalized similarity (A04)
++    def matvec(v):
++        v_scaled = v * sqrt_d_inv
++        temp = X @ (X.T @ v_scaled)
++        return temp * sqrt_d_inv - v * d_inv
++    
++    A = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=np.float64)
++    
++    # Use random_state to seed initial vector
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n_cells)
++    
++    # Step 5: Spectral decomposition (A05)
++    eigenvalues, eigenvectors = eigsh(A, k=n_components, which='LA', v0=v0)
++    
++    # eigsh returns eigenvalues in ascending order; we need descending
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++    
++    if not np.all(np.isfinite(eigenvalues)):
++        raise RuntimeError("Nonfinite eigenvalues returned")
++    if not np.all(np.isfinite(eigenvectors)):
++        raise RuntimeError("Nonfinite eigenvectors returned")
++    
++    return eigenvalues, eigenvectors

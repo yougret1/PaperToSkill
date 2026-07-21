@@ -1,0 +1,40 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++import scipy.sparse.linalg
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,27 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+-
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    if not np.isfinite(counts).all():
++        raise ValueError("Input contains non-finite values")
++    if np.any(counts < 0):
++        raise ValueError("Input contains negative values")
++    if counts.ndim != 2:
++        raise ValueError("Input must be 2D array")
++    n_cells, n_features = counts.shape
++    row_sums = counts.sum(axis=1)
++    if np.any(row_sums == 0):
++        raise ValueError("Input contains all-zero cell rows")
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be between 1 and n_cells - 1")
++    row_norms = np.linalg.norm(counts, axis=1)
++    X_norm = counts / row_norms[:, np.newaxis]
++    def matvec(v):
++        return X_norm @ (X_norm.T @ v)
++    n = n_cells
++    A = scipy.sparse.linalg.LinearOperator((n, n), matvec=matvec, dtype=np.float64)
++    np.random.seed(random_state)
++    v0 = np.random.randn(n)
++    eigenvalues, eigenvectors = scipy.sparse.linalg.eigsh(A, k=n_components, which='LM', v0=v0)
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++    return eigenvalues, eigenvectors

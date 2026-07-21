@@ -1,0 +1,60 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -12,5 +12,56 @@
+     tau_filter: float,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
++    # Validate inputs
++    for name, arr in [("logp_with_result", logp_with_result),
++                      ("logp_call_only", logp_call_only),
++                      ("logp_no_call", logp_no_call)]:
++        if not isinstance(arr, np.ndarray) or arr.ndim != 2:
++            raise ValueError(f"{name} must be a 2D NumPy array")
++        if arr.size == 0:
++            raise ValueError(f"{name} must not be empty")
++        if not np.all(np.isfinite(arr)):
++            raise ValueError(f"{name} contains nonfinite values")
++        if np.any(arr > 0):
++            raise ValueError(f"{name} contains positive values")
++    # Check consistent shape
++    n_candidates, future_horizon = logp_with_result.shape
++    if logp_call_only.shape != (n_candidates, future_horizon):
++        raise ValueError("Input shapes do not match")
++    if logp_no_call.shape != (n_candidates, future_horizon):
++        raise ValueError("Input shapes do not match")
++    # Validate tau_filter
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be boolean")
++    if not np.isfinite(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite and nonnegative")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Compute decreasing future-token weights (T01)
++    # t = j - i, so first future token uses t = 0
++    t = np.arange(future_horizon, dtype=float)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    weight_sum = np.sum(raw_weights)
++    if weight_sum == 0:
++        raise ValueError("All weights are zero (future_horizon too large)")
++    weights = raw_weights / weight_sum  # normalized, shape (future_horizon,)
++
++    # Compute weighted sums per candidate (dot product over last axis)
++    weighted_with = logp_with_result @ weights  # shape (n_candidates,)
++    weighted_call = logp_call_only @ weights
++    weighted_no = logp_no_call @ weights
++
++    # Compute margins: reduction in loss when using call with result
++    # Loss = -logp, so reduction = loss_no_call - loss_with_result
++    # = -weighted_no - (-weighted_with) = weighted_with - weighted_no
++    margins = weighted_with - weighted_no
++
++    # Keep condition: margin > tau and call-only not much worse than no-call
++    # call-only condition: loss_call_only - loss_no_call <= tau
++    # i.e., -weighted_call - (-weighted_no) <= tau
++    # -> weighted_no - weighted_call <= tau
++    # -> weighted_call >= weighted_no - tau
++    # Keep if improvement > tau and call-only does not increase loss by more than tau
++    keep = (margins > tau_filter) & (weighted_no - weighted_call <= tau_filter)
++
++    return keep, margins
++

@@ -1,0 +1,68 @@
+{
+  "schema_version": "effectslice-stage2-text-review.v6",
+  "status": "passed",
+  "manuscript": "paper/effectslice_aaai/main_v3.tex",
+  "review_mode": "three_independent_reviewers_plus_coordinator",
+  "reviewers": [
+    {
+      "role": "technical_correctness_and_methodology",
+      "rating": "8.5/10 Weak Accept",
+      "confidence": "4/5",
+      "judgment": "Tri-state terminal semantics, candidate/control vocabulary, exact canonical raw-set enumeration, and reproducibility tiers are technically coherent; no new blocker remained."
+    },
+    {
+      "role": "empirical_evidence_and_reproducibility",
+      "rating": "7/10 Weak Accept",
+      "confidence": "4/5",
+      "judgment": "The 1096-versus-858 disclosure, strict raw-set verifier, complete atom inventory, control semantics, and scoped reproducibility claims resolve the prior empirical blockers."
+    },
+    {
+      "role": "novelty_positioning_and_impact",
+      "rating": "7/10 Weak Accept",
+      "confidence": "4/5",
+      "judgment": "The proof-of-concept positioning, admission-not-slicing scope, novelty decomposition, prior-work distinctions, and post-selected-candidate RQ3 are honest and defensible."
+    }
+  ],
+  "coordinator_synthesis": {
+    "consensus_strengths": [
+      "V4 and V5 are separately registered finite schedules with complete raw evidence.",
+      "V5 uses a fresh private block after explicit post-V4 candidate selection.",
+      "The paper separates source provenance from behavioral sufficiency and limits all decisions to a registered task, provider, scorer, and registry.",
+      "Planted positive, registered negative, and byte-identical identity instrumentation exercise distinct sanity and integrity states.",
+      "Independent crosschecks reproduce outcomes and resources, while the release verifier enforces exact equality over 858 canonical raw files and rehashes 24 bound artifacts."
+    ],
+    "resolved_in_this_revision": [
+      "Replaced a single ambiguous manifest digest with pre-run commitment and post-run archival roots.",
+      "Reframed RQ3 around whether a post-selected candidate can earn valid local admission on a separately registered, nonoverlapping boundary.",
+      "Removed the aggregate one-of-three headline from the abstract and conclusion and retained it only as a limitation-qualified sequential count.",
+      "Separated exact scorer success from thresholded operational success in the V5 crosscheck and added a 61/64 regression test.",
+      "Clarified that expected_admission is expectation metadata and never enters the admission decision.",
+      "Strengthened disclosure that V5 repeated the known V4 analyzer role-field defect.",
+      "Implemented Invalid/No-record semantics for incomplete outputs and provider, transport, or scorer failures.",
+      "Added independent exact raw-set enumeration and archive-root binding to the release verifier."
+    ],
+    "residual_major_risks": [
+      "Atom boundaries, dependency graphs, full-artifact completeness, and private cases were author-constructed without independent domain review.",
+      "Evidence covers two paper-specific tasks, one provider, one action scaffold, and one non-planted admission.",
+      "The V5 candidate was selected after V4 and confirmed on one new registry; this is not a prospective population-level success estimate.",
+      "Crosschecks and the release verifier do not rerun the semantic scorer or guarantee an end-to-end provider-trajectory rerun."
+    ],
+    "reviewer_disagreement": "All reviewers return Weak Accept; technical review is stronger because the remaining risks concern external validity and contribution scale rather than internal correctness.",
+    "acceptance_risk": "Weak Accept for the current proof-of-concept protocol and evidence-package claim; risk rises if a reviewer expects broad automatic reduction, population rates, or human benefit."
+  },
+  "unsupported_claims": [],
+  "missing_experiments_for_stronger_claims": [
+    "A prospectively frozen candidate-selection rule across additional paper-task pairs.",
+    "An independently designed private registry with adversarial cases for omitted-atom semantics.",
+    "An actual output from an external reducer and a second provider.",
+    "A controlled user study before claiming faster reproduction, understanding, or human benefit."
+  ],
+  "final_verification": {
+    "focused_pytest": "26 passed",
+    "full_pytest": "678 passed, 6 skipped",
+    "release_verifier": "passed: 858 canonical raw files and 24 directly bound artifacts",
+    "latex_and_bibtex": "passed: 7 pages with no critical log findings",
+    "visual_pdf_review": "passed: all 7 pages inspected at 2x scale",
+    "claim_to_artifact_consistency": "passed"
+  }
+}

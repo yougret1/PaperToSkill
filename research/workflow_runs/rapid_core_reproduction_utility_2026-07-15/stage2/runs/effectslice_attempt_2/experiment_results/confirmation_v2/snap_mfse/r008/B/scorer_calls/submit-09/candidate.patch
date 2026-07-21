@@ -1,0 +1,33 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -12,4 +12,29 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    if not np.isfinite(counts).all():
++        raise ValueError("counts contains non-finite values")
++    if np.any(counts < 0):
++        raise ValueError("counts contains negative values")
++    row_sums = counts.sum(axis=1)
++    if np.any(row_sums == 0):
++        raise ValueError("counts has all-zero cell rows")
++    n_cells = counts.shape[0]
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be between 1 and n_cells-1 inclusive")
++    
++    # Compute row and column sums for normalization
++    col_sums = counts.sum(axis=0)
++    # Avoid division by zero
++    row_inv_sqrt = np.where(row_sums > 0, 1.0 / np.sqrt(row_sums), 0.0)
++    col_inv_sqrt = np.where(col_sums > 0, 1.0 / np.sqrt(col_sums), 0.0)
++    # Form normalized matrix Y = D_c^{-1/2} @ counts @ D_f^{-1/2}
++    Y = counts * row_inv_sqrt[:, np.newaxis] * col_inv_sqrt[np.newaxis, :]
++    # Compute full SVD of Y
++    U, s, Vt = np.linalg.svd(Y, full_matrices=False)
++    # s is descending; eigenvalues = s^2
++    values = s[:n_components] ** 2
++    # Left singular vectors are cell embeddings
++    vectors = U[:, :n_components]
++    return values, vectors

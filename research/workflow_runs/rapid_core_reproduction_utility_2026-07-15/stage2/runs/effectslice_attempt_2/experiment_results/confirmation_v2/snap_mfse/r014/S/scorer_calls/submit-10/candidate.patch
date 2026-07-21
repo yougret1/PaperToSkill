@@ -1,0 +1,54 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++import scipy.sparse.linalg as spla
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,42 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Input validation
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    if not np.isfinite(counts).all():
++        raise ValueError("counts contains nonfinite values")
++    if (counts < 0).any():
++        raise ValueError("counts contains negative values")
++    n_cells, n_features = counts.shape
++    if (counts.sum(axis=1) == 0).any():
++        raise ValueError("counts has all-zero cell rows")
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be 1 <= n_components < n_cells")
++
++    # IDF scaling
++    df = np.count_nonzero(counts, axis=0)  # feature document frequency
++    idf = np.log(n_cells / (1.0 + df))
++    counts_idf = counts * idf
++
++    # Row normalization to unit L2
++    row_norms = np.linalg.norm(counts_idf, axis=1, keepdims=True)
++    if (row_norms == 0).any():
++        raise ValueError("zero row norm after IDF scaling")
++    X = counts_idf / row_norms
++
++    # Matrix-free operator for W = X X^T - I
++    def matvec(v):
++        return X @ (X.T @ v) - v
++
++    n = n_cells
++    A = spla.LinearOperator((n, n), matvec=matvec, matmat=matvec, dtype=X.dtype)
++
++    # Compute leading eigenvalues/eigenvectors using eigsh
++    rng = np.random.RandomState(random_state)
++    v0 = rng.randn(n)
++    eigenvalues, eigenvectors = spla.eigsh(A, k=n_components, which='LA', v0=v0)
++    # eigenvalues are returned in ascending order; reverse to descending
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++    return eigenvalues, eigenvectors

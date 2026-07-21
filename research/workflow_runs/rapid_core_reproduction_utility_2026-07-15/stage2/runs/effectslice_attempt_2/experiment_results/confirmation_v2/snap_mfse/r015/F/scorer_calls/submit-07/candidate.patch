@@ -1,0 +1,66 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++from scipy.sparse.linalg import eigsh, LinearOperator
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,54 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    # Input validation
++    if np.any(np.isnan(counts)) or np.any(np.isinf(counts)):
++        raise ValueError("Non-finite values in counts matrix.")
++    if np.any(counts < 0):
++        raise ValueError("Negative values in counts matrix.")
++    if counts.ndim != 2:
++        raise ValueError("Counts must be a 2D array.")
++    n_cells, n_features = counts.shape
++    if n_components < 1 or n_components >= n_cells:
++        raise ValueError("n_components must be between 1 and n_cells-1.")
++    if np.any(np.all(counts == 0, axis=1)):
++        raise ValueError("All-zero cell rows are not allowed.")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Step A01: IDF scaling
++    df = np.count_nonzero(counts, axis=0)
++    idf = np.log(n_cells / (1 + df))
++    scaled = counts * idf
++
++    # Step A02: Row normalization to unit L2 norm
++    row_norms = np.linalg.norm(scaled, axis=1)
++    X = scaled / row_norms[:, np.newaxis]
++
++    # Step A03: Compute degree vector matrix-free
++    ones = np.ones(n_cells)
++    degrees = X @ (X.T @ ones) - 1
++    if np.any(degrees <= 0):
++        raise ValueError("Non-positive degrees encountered.")
++
++    # Step A04: Build linear operator for normalized similarity
++    D_inv = 1.0 / degrees
++    X_tilde = X * np.sqrt(D_inv)[:, np.newaxis]
++
++    def matvec(v):
++        return X_tilde @ (X_tilde.T @ v) - D_inv * v
++
++    T_op = LinearOperator((n_cells, n_cells), matvec=matvec, dtype=np.float64)
++
++    # Step A05: Use Lanczos (eigsh) to compute leading eigenpairs
++    rng = np.random.RandomState(seed=random_state)
++    eigenvalues, eigenvectors = eigsh(T_op, k=n_components, which='LM',
++                                      v0=rng.randn(n_cells))
++    idx = np.argsort(-eigenvalues)
++    eigenvalues = eigenvalues[idx]
++    eigenvectors = eigenvectors[:, idx]
++
++    if not np.all(np.isfinite(eigenvalues)):
++        raise ValueError("Non-finite eigenvalues produced.")
++    if not np.all(np.isfinite(eigenvectors)):
++        raise ValueError("Non-finite eigenvectors produced.")
++
++    return eigenvalues, eigenvectors

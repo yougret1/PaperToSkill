@@ -1,0 +1,45 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,41 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not isinstance(logp_with_result, np.ndarray) or not isinstance(logp_call_only, np.ndarray) or not isinstance(logp_no_call, np.ndarray):
++        raise ValueError("Inputs must be numpy arrays")
++    if logp_with_result.ndim != 2 or logp_call_only.ndim != 2 or logp_no_call.ndim != 2:
++        raise ValueError("Inputs must be 2D matrices")
++    n_candidates, future_horizon = logp_with_result.shape
++    if n_candidates == 0 or future_horizon == 0:
++        raise ValueError("Input matrices must not be empty")
++    if logp_call_only.shape != (n_candidates, future_horizon) or logp_no_call.shape != (n_candidates, future_horizon):
++        raise ValueError("Shape mismatch")
++    if np.any(np.isnan(logp_with_result)) or np.any(np.isinf(logp_with_result)) or \
++       np.any(np.isnan(logp_call_only)) or np.any(np.isinf(logp_call_only)) or \
++       np.any(np.isnan(logp_no_call)) or np.any(np.isinf(logp_no_call)):
++        raise ValueError("Inputs must be finite")
++    if np.any(logp_with_result > 0) or np.any(logp_call_only > 0) or np.any(logp_no_call > 0):
++        raise ValueError("Inputs must be nonpositive")
++    if isinstance(tau_filter, (bool, np.bool_)):
++        raise ValueError("tau_filter must be a finite nonnegative float")
++    if not isinstance(tau_filter, (int, float, np.integer, np.floating)):
++        raise ValueError("tau_filter must be a finite nonnegative float")
++    if np.isnan(tau_filter) or np.isinf(tau_filter) or tau_filter < 0:
++        raise ValueError("tau_filter must be finite nonnegative")
++
++    # Compute decreasing future-token weights
++    t = np.arange(future_horizon)
++    raw_weights = np.maximum(0.0, 1.0 - 0.2 * t)
++    normalized_weights = raw_weights / np.sum(raw_weights)
++
++    # Weighted differences
++    delta_with = normalized_weights * (logp_with_result - logp_no_call)
++    delta_call = normalized_weights * (logp_call_only - logp_no_call)
++
++    margins = np.sum(delta_with, axis=1)
++    call_benefit = np.sum(delta_call, axis=1)
++
++    keep_mask = (margins > tau_filter) & (call_benefit > 0.0)
++
++    return keep_mask, margins

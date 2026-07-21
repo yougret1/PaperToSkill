@@ -1,0 +1,60 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++import scipy.sparse.linalg as spla
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,48 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    # Input validation
++    if not isinstance(counts, np.ndarray) or counts.ndim != 2:
++        raise ValueError("counts must be a 2D numpy array")
++    if not np.isfinite(counts).all():
++        raise ValueError("counts contains non-finite values")
++    if (counts < 0).any():
++        raise ValueError("counts contains negative values")
++    row_sums = counts.sum(axis=1)
++    if (row_sums == 0).any():
++        raise ValueError("counts contains all-zero rows")
++    n_cells, n_features = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be in [1, n_cells)")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Normalize rows to unit L2 norm for cosine similarity
++    row_norm = counts / np.linalg.norm(counts, axis=1, keepdims=True)
++
++    # Compute degree vector: deg_i = row_norm_i dot col_sums
++    col_sums = row_norm.sum(axis=0)
++    deg = row_norm @ col_sums
++    if (deg == 0).any():
++        raise ValueError("some cell has zero similarity to all other cells")
++    D_inv_sqrt = 1.0 / np.sqrt(deg)
++
++    # Define matrix-free operator for M = D^{-1/2} X_norm X_norm^T D^{-1/2}
++    def matvec(v):
++        w = D_inv_sqrt * v
++        t = row_norm.T.dot(w)
++        u = row_norm.dot(t)
++        return D_inv_sqrt * u
++
++    M = spla.LinearOperator((n_cells, n_cells), matvec=matvec, dtype=float)
++
++    # Initial vector for iterative solver
++    rng = np.random.RandomState(random_state)
++    v0 = rng.normal(size=n_cells)
++
++    # Compute the largest eigenvalues of M
++    eigenvalues, eigenvectors = spla.eigsh(M, k=n_components, which='LM', v0=v0)
++
++    # Convert to descending order
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    return eigenvalues, eigenvectors

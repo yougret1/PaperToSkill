@@ -1,0 +1,471 @@
+\input{main_v3}
+\endinput
+\documentclass[letterpaper]{article} % Legacy pre-v2 draft retained below for audit.
+\usepackage[submission]{aaai2027} % DO NOT CHANGE THIS
+\usepackage[hyphens]{url} % DO NOT CHANGE THIS
+\usepackage{graphicx} % DO NOT CHANGE THIS
+\graphicspath{{images/}}
+\urlstyle{rm} % DO NOT CHANGE THIS
+\def\UrlFont{\rm} % DO NOT CHANGE THIS
+\usepackage{natbib} % DO NOT CHANGE THIS
+\usepackage{caption} % DO NOT CHANGE THIS
+\frenchspacing % DO NOT CHANGE THIS
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+
+\pdfinfo{
+/TemplateVersion (2027.1)
+}
+
+\setcounter{secnumdepth}{0}
+
+\title{EffectSlice: Run-Level Admission Tests for Paper-Derived Procedural Skills}
+\author{Anonymous Submission}
+\affiliations{}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+Paper-to-agent systems can turn a research paper into an executable skill, but a
+shorter skill is not necessarily a faithful or useful one.  We formulate skill
+reduction as an \emph{admission decision}: a compact candidate may be accepted
+only after the complete paper-derived artifact has demonstrated a positive
+effect on a locked task, the candidate is traceable to source-grounded
+procedures, and its behavior is preserved on an untouched confirmation family.
+EffectSlice is a reducer-agnostic protocol implementing this decision with four
+gates: full-artifact eligibility, deterministic source binding, retained-unit
+dependency-closure deletion audit, and sealed confirmation with explicit
+abstention.  We evaluate
+the protocol on two locked implementation tasks derived from SnapATAC2 and
+Toolformer, using DeepSeek V3.2 through a trusted vendor API while a commodity
+PC performs orchestration, execution, and deterministic scoring.  Both complete
+artifacts improve over the no-artifact scaffold on all 21 eligibility cases.
+On discovery cases, a 3-of-5-procedure SnapATAC2 slice and a
+1-of-5-procedure Toolformer slice each match the complete artifact on 16/16
+cases.  Sealed confirmation separates them: the former matches on 59/59 cases
+and is admitted, while the latter mismatches on 15/59 and is rejected.  Thus the
+case study supplies one task-local admission and one caught false discovery,
+not evidence of general cross-paper effectiveness.  It also shows that fewer
+procedures need not reduce agent interactions.  The result motivates treating
+compactness as a proposal and sealed behavioral evidence as the admission
+criterion.
+\end{abstract}
+
+\section{Introduction}
+
+Systems that compile papers into agents, code, or reusable skills are making
+research artifacts easier to execute \cite{miao2025paper2agent,
+zhao2025autoreproduce}.  Execution, however, does not answer a common downstream
+question: which parts of the artifact actually preserve its measured benefit
+for the task at hand?  Loading every recovered procedure may be unnecessary,
+whereas selecting an apparently relevant subset can silently remove a crucial
+condition.  This distinction matters for agent skills because textual
+compactness, retrieval relevance, and behavioral preservation are different
+objects.
+
+Recent systems attack adjacent parts of this problem.  Graph-of-Skills retrieves
+dependency-aware bundles \cite{liu2026graphskills}; SkillRAE compiles compact
+grounded contexts \cite{meng2026skillrae}; ClawTrace distills skills from
+cost-attributed traces \cite{yuan2026clawtrace}; Anything2Skill and SkillFoundry
+construct reusable skills from heterogeneous evidence
+\cite{pan2026anything2skill,shen2026skillfoundry}.  A large-scale evaluation
+framework estimates the marginal utility of whole skills
+\cite{shaposhnikov2026agenticskills}.  These advances provide candidates and
+scorers, but they do not by themselves establish that (i) the complete artifact
+helps on an independently locked task, or (ii) a selected subset preserves that
+benefit after selection.
+
+We propose \textbf{EffectSlice}, a protocol that treats a reducer's output as a
+hypothesis rather than a result.  Before subset search, the complete artifact
+must beat a same-scaffold no-artifact baseline on a frozen eligibility family.
+Candidates must consist of deterministic paper-source units.  Selection occurs
+on a discovery family; every retained-unit dependency-closure deletion is
+audited; then the selected candidate and confirmation family are sealed before
+an untouched run.
+The outcome is either a task-local admission record or a concrete rejection.
+The protocol is reducer-agnostic: retrieval, pruning, tracing, or manual
+selection may propose the candidate, but none bypasses the same gate.
+
+Our evaluation is deliberately a falsification-oriented case study rather than
+a broad benchmark.  We lock two code-implementation tasks around paper-specific
+mechanisms: SnapATAC2's matrix-free spectral embedding
+\cite{zhang2024snapatac2} and Toolformer's API-call filtering loss
+\cite{schick2023toolformer}.  The result contains both outcomes that an admission
+protocol must expose.  A three-procedure slice survives sealed confirmation; a
+one-procedure slice that looked perfect during discovery fails 15 confirmation
+cases and is rejected.  Reporting the rejection is central evidence for the
+gate, not a failed result to be discarded.
+
+Our contributions are:
+\begin{itemize}
+    \item We formulate compact paper-derived skill use as an
+    \emph{eligibility-conditioned task-local admission decision}, separating
+    candidate generation from evidence for accepting the candidate.
+    \item We instantiate a traceable protocol combining source-grounded units,
+    complete retained-unit dependency-closure deletion audit, immutable family
+    hashes, and sealed confirmation with explicit abstention.
+    \item We provide an executable two-task case study with one admission and
+    one sealed rejection, demonstrating that perfect discovery agreement can
+    fail on untouched cases and that procedural compression need not imply
+    interaction savings.
+\end{itemize}
+
+We do not claim that subset search, delta debugging, provenance, dependency
+closure, equivalence testing, or deletion minimality is individually new.  Nor
+do we claim cross-paper effectiveness or benefit to ordinary users.  The novel
+object is the combined admission decision and its evidence boundary.
+
+\section{Related Work}
+
+\paragraph{Paper reproduction and paper-derived agents.}
+PaperBench evaluates agents that recreate research code and execute it in a
+fresh environment \cite{starace2025paperbench}; AutoReproduce uses paper lineage
+and agents to automate experiment reproduction \cite{zhao2025autoreproduce};
+Paper2Agent compiles research papers into interactive agents
+\cite{miao2025paper2agent}.  These systems focus on constructing or evaluating
+a complete reproduction.  EffectSlice begins after a complete artifact exists
+and asks a narrower counterfactual question: does a strict subset preserve the
+complete artifact's task-local effect?
+
+\paragraph{Agent skills and compact context.}
+SkillFoundry and Anything2Skill construct validated procedural artifacts from
+heterogeneous sources \cite{shen2026skillfoundry,pan2026anything2skill}.
+Graph-of-Skills preserves prerequisite structure during retrieval
+\cite{liu2026graphskills}; SkillRAE compiles selected evidence into compact,
+grounded execution context \cite{meng2026skillrae}; and ClawTrace uses
+cost-aware traces to preserve, prune, or repair skill content
+\cite{yuan2026clawtrace}.  Whole-skill evaluation can measure marginal utility
+at scale \cite{shaposhnikov2026agenticskills}.  EffectSlice does not compete as
+another reducer.  It supplies a common downstream admission layer for any such
+candidate.  Direct matched runs of these reducers remain future work in the
+present case study.
+
+\paragraph{Reduction, compression, and equivalence.}
+Delta debugging isolates failure-inducing inputs \cite{zeller2002simplifying},
+and C-Reduce applies structure-aware reduction to compiler test cases
+\cite{regehr2012creduce}.  Cause reduction extends the objective from preserving
+a crash to preserving a general observed cause \cite{groce2016cause}.  Prompt
+compression methods such as LLMLingua and LLMLingua-2 optimize compactness while
+measuring retained task information
+\cite{jiang2023llmlingua,pan2024llmlingua2}.  EffectSlice shares the reduction
+motif, but conditions reduction on a beneficial complete artifact and separates
+adaptive discovery from sealed confirmation.  Its statistical decisions draw
+on equivalence testing \cite{wellek2002equivalence}, exact binomial bounds
+\cite{clopper1934binomial}, and registered family-wise error control
+\cite{holm1979sequential}.
+
+\section{Problem Formulation}
+
+Let $B$ be a same-scaffold baseline that receives the task but no paper-derived
+procedures, and let $F=\{a_1,\ldots,a_K\}$ be the complete artifact represented by
+deterministic source-grounded units.  A reducer proposes a strict nonempty
+candidate $S\subset F$.  For a locked case $x$, the bounded scorer returns
+$y(A,x)\in\{0,1\}$ for artifact condition $A\in\{B,F,S\}$.  Contracts and task
+guardrails are hard predicates, not soft score bonuses.
+
+The protocol answers a local question:
+\begin{quote}
+Given one paper-derived artifact, one task contract, one scorer, and one frozen
+case population, may candidate $S$ be admitted as behavior-preserving relative
+to an eligible $F$?
+\end{quote}
+It does not identify a globally minimal core, and an admission for one task says
+nothing about another task or paper.
+
+We separate three decisions.  \emph{Eligibility} asks whether $F$ has a positive
+casewise effect over $B$.  \emph{Discovery} searches for candidates that agree
+with $F$ on a development-isolated case block.  \emph{Confirmation} estimates
+preservation and benefit on an untouched block after the candidate and family
+have been sealed.  This separation prevents an adaptively selected candidate
+from treating the data that selected it as confirmatory evidence.
+
+\section{EffectSlice}
+
+\subsection{Gate 1: Beneficial Full-Artifact Eligibility}
+
+For eligibility cases $x_i$, define
+\begin{equation}
+e_i = \mathbb{1}\left[y(F,x_i)-y(B,x_i)\geq\delta_{\min}\right].
+\end{equation}
+The complete artifact proceeds only if the preregistered minimum case count is
+met, all contracts and guardrails pass, and the one-sided Clopper--Pearson lower
+bound on $\Pr(e_i=1)$ exceeds $p_{\min}$.  Our frozen values are
+$\delta_{\min}=0.05$, $p_{\min}=0.8$, $n_E=21$, and $\alpha_E=0.01$.
+Failure produces \texttt{no\_validated\_beneficial\_effect}; no slice search is
+allowed.  This prevents a reducer from ``preserving'' an artifact that never
+helped.
+
+\subsection{Gate 2: Source-Grounded Candidate Registry}
+
+Each unit stores an identifier, paper-derived text span, executable role, and
+artifact digest.  A candidate must be a strict nonempty subset, contain only
+registered units, satisfy dependency closure, and compile into the same task
+interface as $F$.  The general implementation condenses cyclic dependencies
+before search.  In the present case study, each five-unit source map is an
+acyclic chain, so condensation yields five singleton nodes and its four strict
+prefixes are exactly the nonempty dependency-closed strict subsets.  We register
+these prefixes in increasing-size order.  This simple reducer is intentional:
+the evaluation targets the admission gate, not search quality.
+
+\subsection{Gate 3: Discovery and Dependency-Closure Deletion Audit}
+
+On $n_D=16$ discovery cases, candidates are evaluated in the frozen order until
+one has zero casewise mismatches with $F$ and passes the hard contract.  The
+selected $S^\star$ is then locked.  For every retained unit $a$, we remove $a$
+and cascade the removal of retained units that transitively require it.  The
+resulting registered dependency-closed neighbor must fail to preserve $F$ on
+the discovery family.  The audit is local to this closure operator and the
+registered candidate family: it establishes indispensability under those
+neighbors, not atomwise necessity under arbitrary rewrites or global
+minimality.
+
+\subsection{Gate 4: Sealed Confirmation}
+
+Before any confirmation provider call, we persist a family record containing
+the candidate identifier and digest, source-map digest, case-registry digest,
+conditions, thresholds, and evidence boundary.  The confirmation runner refuses
+candidate or family mismatches.  Raw result bundles remain immutable.
+
+For $n_C=59$ untouched cases, define a preservation violation and a beneficial
+case:
+\begin{align}
+m_i &= \mathbb{1}[y(S^\star,x_i)\neq y(F,x_i)],\\
+b_i &= \mathbb{1}[y(S^\star,x_i)-y(B,x_i)\geq\delta_{\min}].
+\end{align}
+We report one-sided exact bounds at $\alpha_C=0.02$.  Admission requires (i)
+zero observed preservation violations, (ii) an upper bound on the violation
+rate no greater than $0.1$, (iii) a lower bound on beneficial prevalence at
+least $0.8$, and (iv) all hard contracts and guardrails.  The zero-violation
+rule is stricter than merely placing the estimate inside an equivalence band.
+The reusable implementation also contains a Holm-corrected registry for larger
+hypothesis families; the two empirical decisions reported here use the explicit
+casewise gate above.
+
+Any missing score, provider failure after bounded retries, digest mismatch,
+contract failure, or insufficient family returns a named abstention or
+rejection.  It is never silently removed from a denominator.
+
+\section{Experimental Setup}
+
+\subsection{Tasks and Conditions}
+
+\paragraph{SNAP-MFSE.}
+The task is to implement the paper-specific matrix-free spectral embedding core
+used in SnapATAC2 \cite{zhang2024snapatac2}: inverse-document-frequency feature
+scaling, row normalization, self-similarity removal and degree computation,
+linear-operator exposure, and leading spectral coordinates.  The scorer checks
+registered numerical cases, the function contract, and a matrix-free guard.
+The selected prefix retains the first three of five units.
+
+\paragraph{TOOLFORMER-FILTER.}
+The task is to implement Toolformer's rule for retaining proposed API calls
+\cite{schick2023toolformer}: normalized future-token weights, weighted losses,
+the stronger counterfactual baseline, thresholding, and ordered application to
+all proposals.  The selected prefix retains only weight normalization.  An
+initial development task omitted the $t=0$ convention and explicit rejection of
+Boolean thresholds.  That bundle is preserved as
+\texttt{task\_contract\_failure}; the task contract was corrected before the
+eligibility family was run, and the historical bundle is excluded from all
+reported gates.
+
+For each task, $B$, $F$, and $S$ use the same prompt, locked workspace, action
+interface, case block, and deterministic scorer.  The only intended difference
+is the injected artifact.  The action budget is 16.  Development, eligibility,
+discovery, and confirmation contain 4, 21, 16, and 59 cases, respectively.
+
+\subsection{API-First Commodity-Device Execution}
+
+We use DeepSeek V3.2 as the primary inference service through a trusted vendor
+API; the exact request alias recorded in artifacts is
+\texttt{deepseek-v4-flash}.  A local commodity PC performs orchestration,
+bounded tool execution, artifact persistence, scoring, and verification.  No
+local accelerator or local language-model deployment is required.  This is the
+API-assisted operational meaning of ``ordinary device'' in this study, not a
+claim of local model inference.  A GPT-family endpoint is used only for a
+development robustness check on the Toolformer task; it does not substitute for
+primary-model eligibility or sealed confirmation.
+
+Transient connection, timeout, HTTP 429, and HTTP 5xx failures are retried up to
+five times within the same statistical unit.  Exhausted failures count against
+the gate.  Provider credentials enter subprocess environments only and are not
+persisted in experiment artifacts.
+
+\subsection{Evidence Discipline}
+
+All task prompts, source maps, case registries, candidate registries, family
+records, run manifests, transcripts, candidate patches, scores, and derived
+summaries are stored with stable paths.  Confirmation families bind upstream
+files by SHA-256.  Development failures and superseded protocols remain in the
+run directory; summaries select accepted lineages explicitly rather than
+overwriting raw results.
+
+\section{Results}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\textwidth]{effectslice_gate_evidence.png}
+\caption{Evidence from frozen JSON artifacts.  (a) Registered-case pass rates
+at confirmation.  (b) Both slices have zero discovery mismatches, but the
+Toolformer slice incurs 15/59 confirmation violations.  (c) API-agent actions;
+compact slices consume the full 16-action budget, so procedure count is not a
+proxy for interaction cost.}
+\label{fig:evidence}
+\end{figure*}
+
+\begin{table*}[t]
+\centering
+\caption{Frozen gate results.  Counts are registered cases, not independent
+model generations.  $B$, $F$, and $S$ denote no artifact, complete artifact,
+and selected slice.  CP is the one-sided Clopper--Pearson bound.}
+\label{tab:results}
+\begin{tabular}{lcccccc}
+\toprule
+Task & $|S|/|F|$ & $E{:}F>B$ & $D{:}S=F$ & $C{:}B/F/S$ & $U_{.02}(m)$ & Gate \\
+\midrule
+SNAP-MFSE & 3/5 units & 21/21 & 16/16 & 0/59, 59/59, 59/59 & 0.0642 & Admit \\
+Toolformer & 1/5 units & 21/21 & 16/16 & 0/59, 59/59, 44/59 & 0.3905 & Reject \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\subsection{Both Complete Artifacts Pass Eligibility}
+
+For each task, $B$ fails all 21 eligibility cases and $F$ passes all 21.  The
+aggregate casewise effect is 1.0 and the one-sided 99\% exact lower bound on
+beneficial prevalence is 0.8031, just above the preregistered 0.8 threshold.
+Thus both complete artifacts are eligible for slice discovery.  This result is
+only an authorization to search; it is not evidence that a compact candidate
+will preserve the effect.
+
+\subsection{Discovery Selects Two Apparently Perfect Slices}
+
+On SNAP-MFSE, the one- and two-unit prefixes are inferior to $F$; the
+three-unit prefix is the first candidate to match $F$ on all 16 discovery cases.
+Removing any retained unit under dependency closure maps to the baseline or one
+of the two inferior prefixes, so all three registered closure-deletion
+neighbors fail preservation.  On the Toolformer task, the one-unit prefix
+already matches $F$ on 16/16 cases and its only closure-deletion neighbor, $B$,
+is inferior.  Both candidates therefore satisfy the same discovery and local
+dependency-closure deletion criteria.
+
+\subsection{Sealed Confirmation Separates Admission from False Discovery}
+
+Table~\ref{tab:results} and Figure~\ref{fig:evidence} show the untouched result.
+The SNAP-MFSE slice matches $F$ on every confirmation case and remains
+beneficial over $B$ on 59/59.  Its preservation-violation upper bound is 0.0642
+and beneficial-prevalence lower bound is 0.9358; the matrix-free and interface
+guards pass.  The task-local gate admits this candidate.
+
+The Toolformer slice passes only 44/59 confirmation cases, producing 15
+preservation violations.  Its upper bound is 0.3905 and beneficial-prevalence
+lower bound is 0.6095.  The interface contract passes, but the behavioral gate
+rejects the candidate.  Critically, discovery supplied no warning: both selected
+candidates had 0/16 mismatches.  The sealed family exposes a false discovery
+that a discovery-only evaluation would have reported as successful.
+
+\subsection{Compactness Does Not Imply Lower Execution Cost}
+
+The complete SNAP-MFSE and Toolformer artifacts finish in 7 and 5 API-agent
+actions, whereas both selected slices use all 16 actions.  The baseline also
+uses 16.  We therefore make no time-, token-, or cost-saving claim.  The
+SNAP-MFSE result supports behavioral preservation for a smaller procedural
+artifact, not operational efficiency.  This distinction is a second reason to
+place compact candidates behind an effect gate rather than treating artifact
+length as utility.
+
+\FloatBarrier
+
+\section{Discussion}
+
+\paragraph{What the case study establishes.}
+The evidence supports two task-local statements: one registered slice preserved
+its complete artifact on the locked confirmation family, and one seemingly
+perfect discovery candidate did not.  Together they demonstrate that the
+protocol can both admit and withhold.  The negative Toolformer result is
+especially informative because it directly tests the value of sealing: without
+confirmation, the selected one-unit slice would have been a false success.
+
+\paragraph{What remains unestablished.}
+Two tasks cannot estimate a cross-paper admission rate, compare reducers, or
+show that EffectSlice generally finds useful cores.  Our simple ordered-prefix
+reducer is not a baseline against Graph-of-Skills, ClawTrace, or SkillRAE.
+Likewise, the study does not show that nonexpert users reproduce papers faster
+or more accurately.  Those are separate empirical questions requiring a frozen
+paper-task population, direct matched reducer outputs, and a user study with
+time-to-correct-use, error adoption, and cognitive-load outcomes.
+
+\paragraph{Why API-first execution is the correct hardware boundary.}
+The research question concerns artifact admission, not local language-model
+serving.  Requiring a local quantized model would add a model-capability and
+quantization confound unrelated to the gate.  We therefore keep model inference
+at a trusted vendor endpoint and require only that local orchestration and
+verification run on an ordinary PC.  Vendor dependence remains a reproducibility
+threat and should be tested through additional endpoints, but an 80GB-class GPU
+is not part of the method.
+
+\section{Limitations and Threats to Validity}
+
+\paragraph{External validity.}
+The case study contains two code-generation tasks, one model family for sealed
+evidence, and two source papers.  Both task contracts reduce paper mechanisms to
+bounded implementation oracles rather than reproducing the papers' complete
+training or biological analyses.  No general EffectSlice claim is warranted.
+
+\paragraph{Statistical unit.}
+The 21, 16, and 59 counts refer to locked deterministic test cases evaluated
+against one generated candidate per condition; they are not 21, 16, or 59
+independent language-model generations.  Exact binomial bounds are meaningful
+relative to the preregistered case generator and its sampling assumptions, not
+as confidence intervals over models, prompts, papers, or users.  Correlated or
+unrepresentative cases can make those bounds optimistic.  Future evaluation
+must add independent agent runs and genuinely held-out paper-task pairs.
+
+\paragraph{Specification sensitivity.}
+The excluded Toolformer development bundle shows that a missing $t=0$
+convention and Boolean-threshold rule can dominate scores.  Source grounding
+does not eliminate ambiguity in translating prose into a task contract.  We
+preserve this failure and freeze the corrected task before eligibility, but
+independent contract review remains necessary.
+
+\paragraph{Selection and baseline coverage.}
+The ordered-prefix registry exercises the gate but not a complex reducer or
+dependency graph.  Direct outputs from Graph-of-Skills, ClawTrace, and SkillRAE
+were not run under matched budgets.  The current evidence therefore supports a
+protocol case study, not comparative superiority.
+
+\paragraph{Efficiency and user benefit.}
+Neither admitted nor rejected slices reduce API-agent actions; input and output
+tokens are also not lower in the sealed runs.  No human participants were
+studied.  We explicitly exclude savings, usability, and ``helping ordinary
+people'' from the empirical claims.
+
+\section{Broader Impact}
+
+Admission gates can reduce overconfident adoption of compact paper-derived
+instructions by making rejection an expected output and retaining negative
+evidence.  They can also create false assurance if users generalize a local
+certificate beyond its task, case generator, provider, or scorer.  Every
+certificate should therefore expose those boundaries and the raw evidence
+needed for audit.  The method executes generated code only in bounded workspaces
+and keeps credentials out of persisted artifacts; these controls reduce but do
+not remove software supply-chain and provider risks.
+
+\section{Conclusion}
+
+EffectSlice reframes reduction of paper-derived skills as a sealed task-local
+admission problem.  A reducer may propose a compact artifact, but eligibility of
+the complete artifact, source binding, dependency-closure deletion evidence,
+and untouched confirmation determine whether it may be used as a behavioral
+substitute.  In
+two locked tasks, discovery alone selects two perfect-looking candidates;
+confirmation admits one and rejects the other.  The result is intentionally
+narrow, yet it captures the protocol's central purpose: compactness is not
+evidence, and a credible workflow must be able to say no.
+
+\bibliography{effectslice_refs}
+
+\end{document}

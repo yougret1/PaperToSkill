@@ -1,0 +1,65 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++import scipy.sparse.linalg as spla
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -11,5 +12,53 @@
+     random_state: int = 0,
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
++    X = np.asarray(counts, dtype=float)
++    if np.any(np.isnan(X)) or np.any(np.isinf(X)):
++        raise ValueError("Nonfinite values in the count matrix")
++    if np.any(X < 0):
++        raise ValueError("Negative values in the count matrix")
++    n_cells, n_features = X.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must satisfy 1 <= n_components < n_cells")
++    row_sums = X.sum(axis=1)
++    if np.any(row_sums == 0):
++        raise ValueError("All-zero cell rows found; cannot normalize")
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # A01: IDF scaling
++    df = np.count_nonzero(X > 0, axis=0)
++    idf = np.log(n_cells / (1.0 + df))
++    X_idf = X * idf
++
++    # A02: Row L2 normalization
++    row_norms = np.linalg.norm(X_idf, axis=1, keepdims=True)
++    if np.any(row_norms == 0):
++        raise ValueError("Row norm zero after IDF scaling; cannot normalize")
++    X_norm = X_idf / row_norms
++
++    # A03: Degree vector matrix-free
++    ones = np.ones(n_features)
++    degree = X_norm @ (X_norm.T @ ones) - 1.0
++    if np.any(degree <= 0):
++        raise ValueError("Non-positive degree values")
++    D_inv = 1.0 / degree
++    D_inv_sqrt = np.sqrt(D_inv)
++
++    # A04: Linear operator for normalized similarity
++    def matvec(v):
++        v_tilde = D_inv_sqrt * v
++        temp = X_norm.T @ v_tilde
++        temp2 = X_norm @ temp
++        return D_inv_sqrt * temp2 - D_inv * v
++
++    A = spla.LinearOperator((n_cells, n_cells), matvec=matvec, rmatvec=matvec, dtype=float)
++
++    # A05: Lanczos eigensolver
++    try:
++        eigenvalues, eigenvectors = spla.eigsh(A, k=n_components, which='LA')
++    except spla.ArpackError as e:
++        raise ValueError("Eigenvalue computation failed") from e
++
++    eigenvalues = eigenvalues[::-1]
++    eigenvectors = eigenvectors[:, ::-1]
++
++    return eigenvalues, eigenvectors

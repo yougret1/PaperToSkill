@@ -1,0 +1,47 @@
+--- a/toolformer_filter.py
++++ b/toolformer_filter.py
+@@ -13,4 +13,43 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return an ordered keep mask and one finite margin per proposed call."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # Validate inputs
++    if not isinstance(logp_with_result, np.ndarray) or not isinstance(logp_call_only, np.ndarray) or not isinstance(logp_no_call, np.ndarray):
++        raise ValueError("Inputs must be numpy arrays.")
++    if logp_with_result.ndim != 2 or logp_call_only.ndim != 2 or logp_no_call.ndim != 2:
++        raise ValueError("Inputs must be 2-dimensional matrices.")
++    if logp_with_result.shape != logp_call_only.shape or logp_with_result.shape != logp_no_call.shape:
++        raise ValueError("All inputs must have the same shape.")
++    n_candidates, future_horizon = logp_with_result.shape
++    if n_candidates == 0 or future_horizon == 0:
++        raise ValueError("Input matrices cannot be empty.")
++    for arr in [logp_with_result, logp_call_only, logp_no_call]:
++        if not np.all(np.isfinite(arr)):
++            raise ValueError("Input matrices must contain only finite values.")
++        if np.any(arr > 0):
++            raise ValueError("Input matrices must be nonpositive.")
++    # Validate tau_filter
++    if isinstance(tau_filter, bool):
++        raise ValueError("tau_filter must not be a boolean.")
++    if not np.isscalar(tau_filter):
++        raise ValueError("tau_filter must be a scalar.")
++    tau = float(tau_filter)
++    if np.isnan(tau) or np.isinf(tau) or tau < 0:
++        raise ValueError("tau_filter must be a finite nonnegative number.")
++
++    # Compute per-candidate total loss (sum of log probabilities)
++    sum_with = np.sum(logp_with_result, axis=1)
++    sum_call = np.sum(logp_call_only, axis=1)
++    sum_no = np.sum(logp_no_call, axis=1)
++
++    # Compute improvements: reduction in loss (increase in log prob) when using the result / call only
++    imp_with = sum_with - sum_no
++    imp_call = sum_call - sum_no
++
++    # Margin is the minimum improvement
++    margin = np.minimum(imp_with, imp_call)
++
++    # Keep if margin > tau
++    keep = margin > tau
++
++    return keep, margin

@@ -39,16 +39,22 @@ def _resolve(raw: str) -> Path:
 
 
 def test_v5_decision_boundaries_are_frozen_from_v4():
-    assert builder.finite_schedule_decision({"B": 2, "F": 16, "S": 16})["passed"]
-    assert not builder.finite_schedule_decision({"B": 3, "F": 18, "S": 18})[
-        "passed"
-    ]
+    admitted = builder.finite_schedule_decision({"B": 2, "F": 16, "S": 16})
+    assert admitted["passed"] and admitted["status"] == "Admit"
+    rejected = builder.finite_schedule_decision({"B": 3, "F": 18, "S": 18})
+    assert not rejected["passed"] and rejected["status"] == "Reject"
     assert not builder.finite_schedule_decision({"B": 0, "F": 15, "S": 18})[
         "passed"
     ]
     assert not builder.finite_schedule_decision({"B": 0, "F": 18, "S": 15})[
         "passed"
     ]
+    invalid = builder.finite_schedule_decision(
+        {"B": 0, "F": 18, "S": 16}, outputs_complete=False
+    )
+    assert not invalid["passed"] and invalid["status"] == "Invalid"
+    with pytest.raises(ValueError):
+        builder.finite_schedule_decision({"B": 0, "F": 18, "S": 19})
 
 
 def test_v5_builder_registers_natural_candidate_and_fresh_cases(tmp_path):

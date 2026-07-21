@@ -1,0 +1,132 @@
+{
+  "schema_version": "effectslice-toolformer-filter-transcript.v1",
+  "evidence_boundary": "registered_final_only_confirmation",
+  "condition": "B",
+  "turns": [
+    {
+      "step": 1,
+      "retry_lineage_id": "toolformer_filter:confirmation-v2:r018:B:turn-001",
+      "prompt_sha256": "9a54d14e072d9b1ad30ac16d9c5c656808b3ff393f2ea7e07d8fd490657c6ea5",
+      "response_sha256": "b22cb729eab807c6a04f66fe32e5cccce9d1636043e09a697114f5d51218d131",
+      "response_text": "{\"action\":\"open\",\"path\":\"toolformer_filter.py\",\"start_line\":1,\"end_line\":100}",
+      "action": {
+        "action": "open",
+        "query": null,
+        "path": "toolformer_filter.py",
+        "max_results": null,
+        "start_line": 1,
+        "end_line": 100,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "1: \"\"\"Starter module for the locked Toolformer loss-filter task.\"\"\"\n2: \n3: from __future__ import annotations\n4: \n5: import numpy as np\n6: \n7: \n8: def filter_api_calls(\n9:     logp_with_result: np.ndarray,\n10:     logp_call_only: np.ndarray,\n11:     logp_no_call: np.ndarray,\n12:     tau_filter: float,\n13: ) -> tuple[np.ndarray, np.ndarray]:\n14:     \"\"\"Return an ordered keep mask and one finite margin per proposed call.\"\"\"\n15: \n16:     raise NotImplementedError(\"implement the paper-core reproduction task\")",
+      "transport_attempts": 1,
+      "input_tokens": 521,
+      "output_tokens": 1544,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "aaa344aa-c556-4484-a900-c931dc7e4666",
+      "provider_created": 1784305044
+    },
+    {
+      "step": 2,
+      "retry_lineage_id": "toolformer_filter:confirmation-v2:r018:B:turn-002",
+      "prompt_sha256": "7c5e9be70a878b56caecc340019edf26ffa2ee9875c126b3dbb8aa16f3e1d8c4",
+      "response_sha256": "adbe94a2546e7f23220fd53b7db1636c6fb0f2ab665c433aacf71d6b0d16709c",
+      "response_text": "{\"action\":\"edit\",\"path\":\"toolformer_filter.py\",\"old_text\":\"    raise NotImplementedError(\\\"implement the paper-core reproduction task\\\")\",\"new_text\":\"    # Validate inputs\\n    for name, arr in [('logp_with_result', logp_with_result), ('logp_call_only', logp_call_only), ('logp_no_call', logp_no_call)]:\\n        if not isinstance(arr, np.ndarray):\\n            raise ValueError(name + ' must be a numpy array')\\n        if arr.ndim != 2:\\n            raise ValueError(name + ' must be a 2D matrix')\\n        if arr.shape[0] == 0 or arr.shape[1] == 0:\\n            raise ValueError(name + ' must not be empty')\\n        if not np.all(np.isfinite(arr)):\\n            raise ValueError(name + ' contains non-finite values')\\n        if np.any(arr > 0):\\n            raise ValueError(name + ' contains positive values')\\n    # Check shapes match\\n    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):\\n        raise ValueError('Input matrices must have the same shape')\\n    # Validate tau_filter\\n    if isinstance(tau_filter, bool):\\n        raise ValueError('tau_filter must not be a boolean')\\n    if not np.isfinite(tau_filter):\\n        raise ValueError('tau_filter must be finite')\\n    if tau_filter < 0:\\n        raise ValueError('tau_filter must be nonnegative')\\n    \\n    # Compute per-step margins: improvement over best baseline\\n    baseline = np.maximum(logp_call_only, logp_no_call)\\n    margins = logp_with_result - baseline  # shape (n, h)\\n    \\n    # Aggregate over horizon: mean\\n    per_candidate_margins = margins.mean(axis=1)  # shape (n,)\\n    \\n    keep = per_candidate_margins > tau_filter\\n    \\n    return keep, per_candidate_margins\"}",
+      "action": {
+        "action": "edit",
+        "query": null,
+        "path": "toolformer_filter.py",
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": "    raise NotImplementedError(\"implement the paper-core reproduction task\")",
+        "new_text": "    # Validate inputs\n    for name, arr in [('logp_with_result', logp_with_result), ('logp_call_only', logp_call_only), ('logp_no_call', logp_no_call)]:\n        if not isinstance(arr, np.ndarray):\n            raise ValueError(name + ' must be a numpy array')\n        if arr.ndim != 2:\n            raise ValueError(name + ' must be a 2D matrix')\n        if arr.shape[0] == 0 or arr.shape[1] == 0:\n            raise ValueError(name + ' must not be empty')\n        if not np.all(np.isfinite(arr)):\n            raise ValueError(name + ' contains non-finite values')\n        if np.any(arr > 0):\n            raise ValueError(name + ' contains positive values')\n    # Check shapes match\n    if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):\n        raise ValueError('Input matrices must have the same shape')\n    # Validate tau_filter\n    if isinstance(tau_filter, bool):\n        raise ValueError('tau_filter must not be a boolean')\n    if not np.isfinite(tau_filter):\n        raise ValueError('tau_filter must be finite')\n    if tau_filter < 0:\n        raise ValueError('tau_filter must be nonnegative')\n    \n    # Compute per-step margins: improvement over best baseline\n    baseline = np.maximum(logp_call_only, logp_no_call)\n    margins = logp_with_result - baseline  # shape (n, h)\n    \n    # Aggregate over horizon: mean\n    per_candidate_margins = margins.mean(axis=1)  # shape (n,)\n    \n    keep = per_candidate_margins > tau_filter\n    \n    return keep, per_candidate_margins"
+      },
+      "observation_status": "ok",
+      "observation_message": "{\"changed\":true,\"path\":\"toolformer_filter.py\",\"replacements\":1}",
+      "transport_attempts": 1,
+      "input_tokens": 706,
+      "output_tokens": 7240,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "fcafebe1-32a5-4ac3-8bfa-c82efaa380f0",
+      "provider_created": 1784305061
+    },
+    {
+      "step": 3,
+      "retry_lineage_id": "toolformer_filter:confirmation-v2:r018:B:turn-003",
+      "prompt_sha256": "93d6a3d886d3adb279ad67dd6962f06f80290e5de6a92d340b9cdbcb454719fd",
+      "response_sha256": "b22cb729eab807c6a04f66fe32e5cccce9d1636043e09a697114f5d51218d131",
+      "response_text": "{\"action\":\"open\",\"path\":\"toolformer_filter.py\",\"start_line\":1,\"end_line\":100}",
+      "action": {
+        "action": "open",
+        "query": null,
+        "path": "toolformer_filter.py",
+        "max_results": null,
+        "start_line": 1,
+        "end_line": 100,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "ok",
+      "observation_message": "1: \"\"\"Starter module for the locked Toolformer loss-filter task.\"\"\"\n2: \n3: from __future__ import annotations\n4: \n5: import numpy as np\n6: \n7: \n8: def filter_api_calls(\n9:     logp_with_result: np.ndarray,\n10:     logp_call_only: np.ndarray,\n11:     logp_no_call: np.ndarray,\n12:     tau_filter: float,\n13: ) -> tuple[np.ndarray, np.ndarray]:\n14:     \"\"\"Return an ordered keep mask and one finite margin per proposed call.\"\"\"\n15: \n16:     # Validate inputs\n17:     for name, arr in [('logp_with_result', logp_with_result), ('logp_call_only', logp_call_only), ('logp_no_call', logp_no_call)]:\n18:         if not isinstance(arr, np.ndarray):\n19:             raise ValueError(name + ' must be a numpy array')\n20:         if arr.ndim != 2:\n21:             raise ValueError(name + ' must be a 2D matrix')\n22:         if arr.shape[0] == 0 or arr.shape[1] == 0:\n23:             raise ValueError(name + ' must not be empty')\n24:         if not np.all(np.isfinite(arr)):\n25:             raise ValueError(name + ' contains non-finite values')\n26:         if np.any(arr > 0):\n27:             raise ValueError(name + ' contains positive values')\n28:     # Check shapes match\n29:     if not (logp_with_result.shape == logp_call_only.shape == logp_no_call.shape):\n30:         raise ValueError('Input matrices must have the same shape')\n31:     # Validate tau_filter\n32:     if isinstance(tau_filter, bool):\n33:         raise ValueError('tau_filter must not be a boolean')\n34:     if not np.isfinite(tau_filter):\n35:         raise ValueError('tau_filter must be finite')\n36:     if tau_filter < 0:\n37:         raise ValueError('tau_filter must be nonnegative')\n38:     \n39:     # Compute per-step margins: improvement over best baseline\n40:     baseline = np.maximum(logp_call_only, logp_no_call)\n41:     margins = logp_with_result - baseline  # shape (n, h)\n42:     \n43:     # Aggregate over horizon: mean\n44:     per_candidate_margins = margins.mean(axis=1)  # shape (n,)\n45:     \n46:     keep = per_candidate_margins > tau_filter\n47:     \n48:     return keep, per_candidate_margins",
+      "transport_attempts": 1,
+      "input_tokens": 1193,
+      "output_tokens": 1420,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "52d45546-058c-4b41-8e12-b50ca7153fff",
+      "provider_created": 1784305127
+    },
+    {
+      "step": 4,
+      "retry_lineage_id": "toolformer_filter:confirmation-v2:r018:B:turn-004",
+      "prompt_sha256": "9516b31a3d11a24a921b1460db6c43a3f057cb084fd018ec69d3ac94c9ad55cc",
+      "response_sha256": "af062acbe3e64aa039672b0bc0197abeb443bf0cc9685e7d96ea67d18afdb7d7",
+      "response_text": "{\"action\":\"test\"}",
+      "action": {
+        "action": "test",
+        "query": null,
+        "path": null,
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "unavailable",
+      "observation_message": "private scoring is unavailable before final submission",
+      "transport_attempts": 1,
+      "input_tokens": 1801,
+      "output_tokens": 96,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "cf2be071-383b-4a65-9a23-f13b37f636b5",
+      "provider_created": 1784305143
+    },
+    {
+      "step": 5,
+      "retry_lineage_id": "toolformer_filter:confirmation-v2:r018:B:turn-005",
+      "prompt_sha256": "9d4f315e41aa301c9484a5984d784e3f04a1f2933b0635dd0c3d59011bdc79f2",
+      "response_sha256": "6831a7112fd0308595c6abaab94fbd4f05541fda862d0e6075e89ad1df53163b",
+      "response_text": "{\"action\":\"submit\"}",
+      "action": {
+        "action": "submit",
+        "query": null,
+        "path": null,
+        "max_results": null,
+        "start_line": null,
+        "end_line": null,
+        "old_text": null,
+        "new_text": null
+      },
+      "observation_status": "scored",
+      "observation_message": "{\"contract_passed\":true,\"failure_reason\":\"numerical_case_failed\",\"passed_cases\":0,\"status\":\"failed\",\"task_score\":0.0,\"total_cases\":64}",
+      "transport_attempts": 1,
+      "input_tokens": 1832,
+      "output_tokens": 2223,
+      "provider_model_id": "deepseek-v4-flash",
+      "provider_response_id": "b416b057-41f1-4294-8e24-ebc3f23d39f2",
+      "provider_created": 1784305145
+    }
+  ]
+}

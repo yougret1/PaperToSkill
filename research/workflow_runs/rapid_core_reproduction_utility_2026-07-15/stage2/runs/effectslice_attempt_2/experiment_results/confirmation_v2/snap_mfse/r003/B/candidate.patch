@@ -1,0 +1,62 @@
+--- a/snap_core.py
++++ b/snap_core.py
+@@ -3,6 +3,7 @@
+ from __future__ import annotations
+ 
+ import numpy as np
++import scipy.sparse.linalg as sp_sla
+ 
+ 
+ def matrix_free_spectral_embedding(
+@@ -12,4 +13,50 @@
+ ) -> tuple[np.ndarray, np.ndarray]:
+     """Return leading spectral coordinates for a cell-by-feature count matrix."""
+ 
+-    raise NotImplementedError("implement the paper-core reproduction task")
++    # input validation
++    if not np.isfinite(counts).all():
++        raise ValueError("Input contains nonfinite values.")
++    if np.any(counts < 0):
++        raise ValueError("Input contains negative values.")
++    row_sums = counts.sum(axis=1)
++    if np.any(row_sums == 0):
++        raise ValueError("Input contains an all-zero cell row.")
++    n_cells, _ = counts.shape
++    if not (1 <= n_components < n_cells):
++        raise ValueError("n_components must be in [1, n_cells).")
++
++    # scaling factors
++    R = row_sums.astype(np.float64)
++    C = counts.sum(axis=0).astype(np.float64)
++    R_sqrt = np.sqrt(R)
++    C_sqrt = np.sqrt(C)
++    R_inv_sqrt = np.where(R > 0, 1.0 / R_sqrt, 0.0)
++    C_inv_sqrt = np.where(C > 0, 1.0 / C_sqrt, 0.0)
++
++    # matrix-free linear operator for M = diag(R_inv_sqrt) @ counts @ diag(C_inv_sqrt)
++    def matvec(x):
++        # x: feature vector of length n_features
++        y = C_inv_sqrt * x
++        return R_inv_sqrt * (counts @ y)
++
++    def rmatvec(x):
++        # x: cell vector of length n_cells
++        y = R_inv_sqrt * x
++        return C_inv_sqrt * (counts.T @ y)
++
++    M = sp_sla.LinearOperator(
++        (n_cells, counts.shape[1]),
++        matvec=matvec,
++        rmatvec=rmatvec,
++        dtype=np.float64,
++    )
++
++    # truncated SVD (returns ascending singular values, we reverse)
++    u, s, _ = sp_sla.svds(M, k=n_components, which='LM', random_state=random_state)
++    # svds returns singular values in ascending order, reverse to descending
++    s = s[::-1]
++    u = u[:, ::-1]
++
++    eigenvalues = s ** 2
++    vectors = u
++    return eigenvalues, vectors
