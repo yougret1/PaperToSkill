@@ -1,3 +1,7 @@
+> Legacy compatibility snapshot. The canonical active context is
+> `memory/shortMemory.md`; authoritative workflow progress is under
+> `research/workflow_runs/paper_specific_epistemic_grounding_2026-07-14/`.
+
 # PaperToSkill Short-Term Memory
 
 Read this file after any context compaction or session resume. Also read

@@ -1,0 +1,217 @@
+[
+ {
+  "title": "Agent Skills for Large Language Models: Architecture, Acquisition, Security, and the Path Forward",
+  "title_norm": "agent skills for large language models architecture acquisition security and the",
+  "abstract": "The transition from monolithic language models to modular, skill-equipped agents marks a defining shift in how large language models (LLMs) are deployed in practice. Rather than encoding all procedural knowledge within model weights, agent skills -- composable packages of instructions, code, and resources that agents load on demand -- enable dynamic capability extension without retraining. It is formalized in a paradigm of progressive disclosure, portable skill definitions, and integration with the Model Context Protocol (MCP). This survey provides a comprehensive treatment of the agent skills landscape, as it has rapidly evolved during the last few months. We organize the field along four axes: (i) architectural foundations, examining the SKILL$.$md specification, progressive context loading, and the complementary roles of skills and MCP; (ii) skill acquisition, covering reinforcement learning with skill libraries, autonomous skill discovery (SEAgent), and compositional skill synthesis; (iii) deployment at scale, including the computer-use agent (CUA) stack, GUI grounding advances, and benchmark progress on OSWorld and SWE-bench; and (iv) security, where recent empirical analyses reveal that 26.1% of community-contributed skills contain vulnerabilities, motivating our proposed Skill Trust and Lifecycle Governance Framework -- a four-tier, gate-based permission model that maps skill provenance to graduated deployment capabilities. We identify seven open challenges -- from cross-platform skill portability to capability-based permission models -- and propose a research agenda for realizing trustworthy, self-improving skill ecosystems. Unlike prior surveys that broadly cover LLM agents or tool use, this work focuses specifically on the emerging skill abstraction layer and its implications for the next generation of agentic systems. Project repo: https://github.com/scienceaix/agentskills",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Renjun Xu",
+   "Yang Yan"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2602.12430v4",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2602.12430v4",
+  "published_iso": "2026-02-12T21:33:25Z"
+ },
+ {
+  "title": "Memento-Skills: Let Agents Design Agents",
+  "title_norm": "memento skills let agents design agents",
+  "abstract": "We introduce \\emph{Memento-Skills}, a generalist, continually-learnable LLM agent system that functions as an \\emph{agent-designing agent}: it autonomously constructs, adapts, and improves task-specific agents through experience. The system is built on a memory-based reinforcement learning framework with \\emph{stateful prompts}, where reusable skills (stored as structured markdown files) serve as persistent, evolving memory. These skills encode both behaviour and context, enabling the agent to carry forward knowledge across interactions.\n  Starting from simple elementary skills (like Web search and terminal operations), the agent continually improves via the \\emph{Read--Write Reflective Learning} mechanism introduced in \\emph{Memento~2}~\\cite{wang2025memento2}. In the \\emph{read} phase, a behaviour-trainable skill router selects the most relevant skill conditioned on the current stateful prompt; in the \\emph{write} phase, the agent updates and expands its skill library based on new experience. This closed-loop design enables \\emph{continual learning without updating LLM parameters}, as all adaptation is realised through the evolution of externalised skills and prompts.\n  Unlike prior approaches that rely on human-designed agents, Memento-Skills enables a generalist agent to \\emph{design agents end-to-end} for new tasks. Through iterative skill generation and refinement, the system progressively improves its own capabilities. Experiments on the \\emph{General AI Assistants} benchmark and \\emph{Humanity's Last Exam} demonstrate sustained gains, achieving 26.2\\% and 116.2\\% relative improvements in overall accuracy, respectively. Code is available at https://github.com/Memento-Teams/Memento-Skills.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Huichi Zhou",
+   "Siyuan Guo",
+   "Anjie Liu",
+   "Zhongwei Yu",
+   "Ziqin Gong",
+   "Bowen Zhao",
+   "Zhixun Chen",
+   "Menglong Zhang",
+   "Yihang Chen",
+   "Jinsong Li",
+   "Runyu Yang",
+   "Qiangbin Liu",
+   "Xinlei Yu",
+   "Jianmin Zhou",
+   "Na Wang",
+   "Chunyang Sun",
+   "Jun Wang"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2603.18743v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2603.18743v1",
+  "published_iso": "2026-03-19T10:45:22Z"
+ },
+ {
+  "title": "ClawTrace: Cost-Aware Tracing for LLM Agent Skill Distillation",
+  "title_norm": "clawtrace cost aware tracing for llm agent skill distillation",
+  "abstract": "Skill-distillation pipelines learn reusable rules from LLM agent trajectories, but they lack a key signal: how much each step costs. Without per-step cost, a pipeline cannot distinguish adding a missing step to fix a bug from removing an expensive step that never affected the outcome. We use the cost-attribution gap to ask whether the rule types inside a distilled skill transfer the same way to new tasks. ClawTrace records cost-attributed agent traces and compiles each session into a TraceCard; CostCraft reads TraceCards and writes three kinds of skill patches: preserve, prune, and repair. We find a pattern aggregate metrics hide. On 30 held-out SpreadsheetBench tasks across two seeds, removing prune patches roughly tripled the quality-regression count without lowering median cost. Across the full 84-task SkillsBench transfer, CostCraft saves no aggregate cost. All three quality regressions trace to the preserve lane, and both quality wins trace to the prune lane: prune patches act as quality guardrails while preserve patches drive regressions. We argue that reusable agent skills should be evaluated at the rule-type level, not as monolithic instruction packages. To support this, we release ClawTrace, the TraceCard schema, and the full set of typed skills.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Boqin Yuan",
+   "Yue Su",
+   "Renchu Song",
+   "Sen Yang",
+   "Jing Qin"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2604.23853v2",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2604.23853v2",
+  "published_iso": "2026-04-26T19:44:10Z"
+ },
+ {
+  "title": "SkCC: Portable and Secure Skill Compilation for Cross-Framework LLM Agents",
+  "title_norm": "skcc portable and secure skill compilation for cross framework llm agents",
+  "abstract": "LLM agents increasingly rely on reusable skills (e.g., SKILL markdown files) to execute complex tasks, yet these artifacts lack portability: agent frameworks are highly sensitive to prompt formatting, leading to a large performance variation for the same skill. Nevertheless, most skills are authored once as format-agnostic Markdown, necessitating costly per-framework rewrites and also leaving security largely unaddressed, with widespread vulnerabilities in practice. To address this, we present SkCC, a compiler for LLM agents that introduces classical compilation design into agent skill development. SkCC centers on SkIR, a strongly-typed intermediate representation that decouples skill semantics from framework-specific formatting, thus enabling portable deployment across agent frameworks. Atop of this IR, a static Optimizer enforces security constraints, blocking vulnerabilities before deployment. Implemented as a four-phase pipeline, SkCC effectively reduces adaptation complexity from $O(m \\times n)$ to $O(m + n)$ across $m$ skills and $n$ frameworks. Experiments on SkillsBench demonstrate that SkCC delivers consistent and substantial gains over original counterparts, with pass rate increases from 21.1% to 33.3% on Claude Code and from 35.1% to 48.7% on Kimi CLI. Further, the design achieves sub-10ms compilation latency, 94.8% proactive security trigger rate, and 10-46% runtime token savings across frameworks.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Yipeng Ouyang",
+   "Yi Xiao",
+   "Yuhao Gu",
+   "Xianwei Zhang"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2605.03353v4",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2605.03353v4",
+  "published_iso": "2026-05-05T04:15:48Z"
+ },
+ {
+  "title": "Graph-of-Skills: Dependency-Aware Structural Retrieval for Massive Agent Skills",
+  "title_norm": "graph of skills dependency aware structural retrieval for massive agent skills",
+  "abstract": "Modern LLM agents increasingly rely on reusable skills, and as they interact with personal applications, web browsers, and other interfaces, skill libraries can scale to thousands of skills. Scaling to larger skill sets introduces two key challenges. First, loading the full skill set saturates the context window, driving up token costs, hallucination, and latency. Second, semantic retrieval surfaces topically relevant skills but misses their prerequisite chain of upstream and downstream skills, creating a prerequisite gap that leaves the retrieved bundle execution-incomplete. In this paper, we present Graph-of-Skills (GoS), an inference-time structural retrieval layer for large skill libraries. GoS constructs an executable skill graph offline from skill packages, then at inference time retrieves a bounded, dependency-aware skill bundle through hybrid semantic-lexical seeding, reverse-aware Personalized PageRank, and context-budgeted hydration. On SkillsBench and ALFWorld, GoS consistently delivers substantial reward improvements and token savings across three model families (Claude Sonnet 4.5, MiniMax M2.7, and GPT-5.2 Codex). On SkillsBench, GoS achieves a peak reward increase of 25.55% while reducing total tokens by 56.72% over the vanilla full skill-loading baseline using GPT-5.2 Codex. Ablations confirm this pattern across skill libraries from 200 to 2,000 skills.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Dawei Liu",
+   "Zongxia Li",
+   "Hongyang Du",
+   "Xiyang Wu",
+   "Shihang Gui",
+   "Yongbei Kuang",
+   "Lichao Sun"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2604.05333v3",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2604.05333v3",
+  "published_iso": "2026-04-07T02:09:11Z"
+ },
+ {
+  "title": "Anything2Skill: Compiling External Knowledge into Reusable Skills for Agents",
+  "title_norm": "anything2skill compiling external knowledge into reusable skills for agents",
+  "abstract": "Retrieval-augmented generation (RAG) enables agents to access external knowledge at inference time, but it primarily retrieves fragmented declarative evidence, leaving agents to repeatedly infer task procedures from passages, manuals, examples, logs, or trajectories. This raises a fundamental question: can skills extracted from external knowledge bases be installed into an agent, enabling it to rapidly approximate domain expertise? In this paper, we propose Anything2Skill, a taxonomy-guided framework that compiles heterogeneous external knowledge into reusable, retrievable, and executable skills for agents. Given a corpus of knowledge records, \\textsc{Anything2Skill} first decomposes each record into evidence windows and performs plan-and-expand skill extraction under a skill-tree prior. The extracted candidates are then converted into structured skill contracts that specify invocation conditions, contraindications, action moves, workflow steps, constraints, output specifications, supporting evidence, and confidence scores. To construct a deployable procedural memory, Anything2Skill manages the extracted skills in a persistent SkillBank through taxonomy-aware compilation, registry-level reconciliation, lifecycle tracking, versioned updates, and visible skill-tree projection. At inference time, agents retrieve both task-specific passages from the original knowledge base and relevant procedural skills from the SkillBank, allowing RAG to provide declarative evidence while compiled skills provide reusable procedural guidance. Experiments on qsv and GitHub-CLI show that Anything2Skill combined with RAG achieves 98.85\\% and 94.10\\% success rates, respectively, substantially outperforming RAG-only agents. These results suggest that compiling latent procedural knowledge into explicit skills is an effective way to extend retrieval-augmented agents from knowledge access toward capability reuse.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Qianjun Pan",
+   "Yutao Yang",
+   "Junsong Li",
+   "Jie Zhou",
+   "Kai Chen",
+   "Xin Li",
+   "Qin Chen",
+   "Liang He"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2606.09316v3",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2606.09316v3",
+  "published_iso": "2026-06-08T10:24:32Z"
+ },
+ {
+  "title": "SkillWiki: A Living Knowledge Infrastructure for Agent Skills",
+  "title_norm": "skillwiki a living knowledge infrastructure for agent skills",
+  "abstract": "While knowledge is managed through Wikipedia and software through GitHub, agent skills still lack an infrastructure for large-scale production, governance, and evolution. SkillWiki is a living knowledge infrastructure that supports the organization, grounding, and continuous evolution of agent skills by transforming heterogeneous knowledge into reusable skill assets linked to their originating evidence. Our demonstration presents the complete skill lifecycle, from knowledge ingestion and skill production to provenance-aware exploration, governance, and execution-driven evolution. SkillWiki highlights a future in which knowledge, skills, and execution experience co-evolve within a shared infrastructure. The live demonstration and source code are publicly available at https://github.com/Huangdingcheng/SkillWiki.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Dingcheng Huang",
+   "Yuda Ding",
+   "Bingshuo Liu",
+   "Qingbin Liu",
+   "Xi Chen",
+   "Jiang Bian",
+   "Hongliang Sun",
+   "Zhiying Tu",
+   "Dianhui Chu",
+   "Xiaoyan Yu",
+   "Dianbo Sui"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2606.16523v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2606.16523v1",
+  "published_iso": "2026-06-15T10:24:40Z"
+ },
+ {
+  "title": "Automating Skill Acquisition through Large-Scale Mining of Open-Source Agentic Repositories: A Framework for Multi-Agent Procedural Knowledge Extraction",
+  "title_norm": "automating skill acquisition through large scale mining of open source agentic r",
+  "abstract": "The transition from monolithic large language models (LLMs) to modular, skill-equipped agents represents a fundamental architectural shift in artificial intelligence deployment. While general-purpose models demonstrate remarkable breadth in declarative knowledge, their utility in autonomous workflows is frequently constrained by insufficient specialized procedural expertise. This report investigates a systematic framework for automated acquisition of high-quality agent skills through mining of open-source repositories on platforms such as GitHub. We focus on the extraction of visualization and educational capabilities from state-of-the-art systems including TheoremExplainAgent and Code2Video, both utilizing the Manim mathematical animation engine. The framework encompasses repository structural analysis, semantic skill identification through dense retrieval, and translation to the standardized SKILL.md format. We demonstrate that systematic extraction from agentic repositories, combined with rigorous security governance and multi-dimensional evaluation metrics, enables scalable acquisition of procedural knowledge that augments LLM capabilities without requiring model retraining. Our analysis reveals that agent-generated educational content can achieve 40\\% gains in knowledge transfer efficiency while maintaining pedagogical quality comparable to human-crafted tutorials.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Shuzhen Bi",
+   "Mengsong Wu",
+   "Hao Hao",
+   "Keqian Li",
+   "Wentao Liu",
+   "Siyu Song",
+   "Hongbo Zhao",
+   "Aimin Zhou"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2603.11808v2",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2603.11808v2",
+  "published_iso": "2026-03-12T11:10:13Z"
+ },
+ {
+  "title": "Toward User Comprehension Supports for LLM Agent Skill Specifications",
+  "title_norm": "toward user comprehension supports for llm agent skill specifications",
+  "abstract": "Users often interpret and select agent skills through their SKILL markdown specifications. To protect users, existing audits mainly focus on malicious or unsafe skills. We study the complementary question of whether specifications help users form bounded expectations about what a skill consumes, produces, and covers. Across 878 cybersecurity skills, we used rule-based coding to measure textual cues for four comprehension anchors, namely operational basis, output contract, boundary disclosure, and example capability demonstration. Cues for operational basis were common, but only 19.0% of specifications exhibited cues for an example task, sample, or expected outcome, and only 2.3% exhibited cues for all four anchors. We further examined a small DNS/C2 telemetry subset (n$=$6) to illustrate why missing examples may matter. Examples appeared to make first local checks easier to construct, while no-example skills typically required helper code inspection to recover command arguments or output fields. We argue that agent-skill evaluation should treat specifications as user-facing capability disclosures, not merely as containers for executable instructions.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Zikai Alex Wen"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2605.19362v2",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2605.19362v2",
+  "published_iso": "2026-05-19T04:50:42Z"
+ },
+ {
+  "title": "Envisioning Sensemaking in Multi-Human, Multi-Agent Collaborative Knowledge Work",
+  "title_norm": "envisioning sensemaking in multi human multi agent collaborative knowledge work",
+  "abstract": "Sensemaking is central to knowledge work, where people search, evaluate, interpret, and use information over time to construct durable understanding. The rise of generative AI has begun to reshape this process: GenAI systems now perform interpretive functions such as summarization, synthesis, and thematic grouping that knowledge workers have traditionally carried out themselves. In collaborative settings, these shifts compound, complicating how teams divide interpretive labor, trust one another's contributions, and negotiate shared understanding. In this position paper, we examine how GenAI reshapes sensemaking in collaborative knowledge work and propose five design principles for multi-human, multi-agent collaborative sensemaking: dynamic multi-layer information representations, active identification and bridging of gaps in understanding, critical engagement with information, verifiability, and accountability. Building on these principles, we introduce a conceptual framework for a dynamic shared representational workspace in which knowledge workers and specialized AI agents jointly gather evidence, schematize, hypothesize, and pursue collaborative goals. Through a partner agent, a shared space agent, and an orchestrator agent, the framework preserves the provenance and authorship of contributions and traces the evolution of both individual and shared interpretations, supporting coherent, negotiated knowledge construction that current generative AI systems tend to obscure.",
+  "year": 2026,
+  "venue": "arXiv",
+  "authors": [
+   "Zhitong Guan",
+   "Soo Young Rieh"
+  ],
+  "citations": null,
+  "source": "arxiv",
+  "source_id": "2606.09840v1",
+  "doi": "",
+  "paper_url": "https://arxiv.org/abs/2606.09840v1",
+  "published_iso": "2026-04-23T15:55:24Z"
+ }
+]

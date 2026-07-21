@@ -1,3 +1,7 @@
+> Legacy compatibility snapshot. The canonical current memory is
+> `memory/summary.md`; authoritative workflow progress is under
+> `research/workflow_runs/paper_specific_epistemic_grounding_2026-07-14/`.
+
 # PaperToSkill Long-Term Memory
 
 Read this file after any context compaction or session resume before taking new

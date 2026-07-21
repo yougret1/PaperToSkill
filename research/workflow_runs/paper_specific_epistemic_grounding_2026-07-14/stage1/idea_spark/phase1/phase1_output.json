@@ -1,0 +1,326 @@
+{
+  "intake": {
+    "domain": "paper-to-agent research-workflow compilation with paper-specific epistemic grounding and edit-time validity management",
+    "venue": "top-tier machine learning or AI venue",
+    "time": "5-month research and falsification cycle",
+    "data": [
+      "held-out research papers with explicit methods and validation evidence",
+      "paper-derived workflow instructions with claim, assumption, and evidence annotations",
+      "typed workflow adaptations with expert-labeled invalidation and re-validation requirements"
+    ],
+    "compute": "80GB-class GPUs (A100/H100), up to 8 concurrent (one node), <=50 GPU-days over 5 months, plus ~$10k inference/API budget for the full falsification campaign",
+    "expertise": "agent systems, document parsing, provenance, and empirical evaluation, with basic domain context but not paper-specific method expertise",
+    "preference": "both",
+    "baseline": "a paper-to-skill compiler that attaches source spans or provenance links to extracted instructions but has no typed epistemic status or edit-time validity analysis",
+    "limitation": "Ordinary source links do not establish which paper evidence semantically supports each operational instruction, and they do not establish whether an adapted workflow remains valid after a user edit.",
+    "contribution_type": "method",
+    "_inferred_fields": [
+      "venue",
+      "time",
+      "data",
+      "compute",
+      "expertise",
+      "preference",
+      "baseline",
+      "contribution_type"
+    ]
+  },
+  "bottleneck_statement": "When a paper-derived workflow becomes an editable agent skill, provenance can survive while semantic validity is lost: the artifact cannot reliably distinguish source-supported instructions from extraction inferences, conflicts, or missing evidence, so a user edit leaves it unable to determine which dependent claims and assumptions are no longer justified or what evidence must be regenerated. Anything2Skill (arxiv:2606.09316v3) attaches evidence records and confidence to structured skill contracts and versions registry updates, but its method does not define instruction-level entailment states or edit-to-validation impact; SkillWiki (arxiv:2606.16523v1) links evolving skills to originating evidence without demonstrating dependency-aware re-validation; and ClawTrace (arxiv:2604.23853v2) shows that typed skill patches have divergent downstream quality effects while attributing cost and outcome rather than validity against paper claims. Consequently, a non-expert can inspect where an instruction came from yet still cannot tell whether the executable workflow remains epistemically justified after adaptation.",
+  "closest_adjacent": [
+    {
+      "paper_id": "arxiv:2606.09316v3",
+      "is_anchor": true,
+      "summary_and_residue": "Anything2Skill decomposes heterogeneous records into strict evidence windows, expands them into structured skill contracts with support relations and confidence, and reconciles them through a versioned SkillBank. Its method attaches evidence to a skill and records content deltas, but does not decide semantic support for each operational instruction or derive which claims, assumptions, and validations become invalid after an edit."
+    },
+    {
+      "paper_id": "arxiv:2606.16523v1",
+      "is_anchor": false,
+      "summary_and_residue": "SkillWiki presents an infrastructure in which skills remain linked to originating evidence and evolve through governance and execution experience. On the abstract-level evidence available in the cache, it does not specify or validate instruction-level support judgments or the re-validation obligations caused by a user adaptation."
+    },
+    {
+      "paper_id": "arxiv:2604.23853v2",
+      "is_anchor": false,
+      "summary_and_residue": "ClawTrace compiles cost-attributed traces into typed preserve, prune, and repair patches and evaluates their effects separately, exposing regressions hidden by aggregate metrics. Its trace attribution is tied to execution cost and task quality, not to whether a paper supports an edited research instruction or which scientific claims require re-validation."
+    }
+  ],
+  "what_phase_0_did_not_address": [
+    "No retrieved frontier paper establishes, at individual-instruction granularity, whether a paper-derived action is supported, inferred, conflicted, or missing evidence strongly enough for a non-expert to judge its operational validity.",
+    "After a user changes a workflow step, no retrieved frontier paper can identify which dependent claims or assumptions cease to be justified and which validation evidence is now missing.",
+    "No retrieved frontier paper tests whether storing an instruction as a reusable skill with source, provenance, or confidence metadata is sufficient to justify that instruction's operational validity.",
+    "No retrieved frontier paper establishes under matched information budgets that non-expert adapters can change a paper-derived workflow without increasing unsupported instructions or obscuring the boundary between the paper's findings and the adaptation."
+  ],
+  "method_lineage": {
+    "line": "provenance-aware compilation and lifecycle management of research evidence as executable agent workflows",
+    "nodes": [
+      {
+        "node_id": "n0",
+        "method": "scientific workflow systems with execution provenance (Kepler/Taverna era)",
+        "move": "Base formulation: represent multi-step analyses as executable workflows while recording data and execution derivations.",
+        "parent": null,
+        "provenance": "parametric",
+        "age_band": ">16y",
+        "confidence": "high",
+        "residual_problem": "Workflow provenance captures origin and execution history but not a portable semantics for whether natural-language instructions are evidentially justified.",
+        "is_frontier_leaf": false,
+        "is_collateral": false
+      },
+      {
+        "node_id": "n1",
+        "method": "W3C PROV entity-activity-agent model",
+        "move": "Standardize provenance relations so derivations can be exchanged across tools rather than remaining system-specific logs.",
+        "parent": "n0",
+        "provenance": "parametric",
+        "age_band": "8-16y",
+        "confidence": "high",
+        "residual_problem": "A derivation link states where an artifact came from, not whether its instruction is entailed, conflicted, or valid for execution.",
+        "is_frontier_leaf": false,
+        "is_collateral": false
+      },
+      {
+        "node_id": "n2",
+        "method": "retrieval-augmented generation",
+        "move": "Bring source passages into model inference so generated outputs can be conditioned on updateable external evidence.",
+        "parent": "n1",
+        "provenance": "parametric",
+        "age_band": "4-8y",
+        "confidence": "high",
+        "residual_problem": "Retrieved declarative evidence still requires the agent to reconstruct procedures repeatedly and does not by itself establish procedural support.",
+        "is_frontier_leaf": false,
+        "is_collateral": false
+      },
+      {
+        "node_id": "n3",
+        "method": "externalized LLM-agent skill libraries and procedural memory",
+        "move": "Store reusable action procedures outside model weights so agents can retrieve, compose, and update capabilities across tasks.",
+        "parent": "n2",
+        "provenance": "parametric",
+        "age_band": "2-4y",
+        "confidence": "medium",
+        "residual_problem": "A reusable skill package can preserve procedures while leaving the epistemic status and edit-induced validity of its instructions implicit.",
+        "is_frontier_leaf": false,
+        "is_collateral": false
+      },
+      {
+        "node_id": "n4",
+        "method": "Anything2Skill evidence-window compilation and SkillBank",
+        "move": "Compile heterogeneous knowledge through evidence windows and a taxonomy prior into evidence-linked skill contracts with registry reconciliation and versioning.",
+        "parent": "n3",
+        "provenance": "retrieved:arxiv:2606.09316v3",
+        "age_band": "0-2y",
+        "confidence": "high",
+        "residual_problem": "Evidence sets, support relations, confidence, and content deltas do not determine instruction-level semantic validity or the re-validation consequences of an edit.",
+        "is_frontier_leaf": true,
+        "is_collateral": false
+      },
+      {
+        "node_id": "n5",
+        "method": "SkillWiki evidence-linked living skill infrastructure",
+        "move": "Organize production, provenance-aware exploration, governance, and continuous skill evolution in a shared infrastructure.",
+        "parent": "n3",
+        "provenance": "retrieved:arxiv:2606.16523v1",
+        "age_band": "0-2y",
+        "confidence": "high",
+        "residual_problem": "The reported demonstration does not establish semantic evidence control or explicit re-validation duties when an evolving skill is adapted.",
+        "is_frontier_leaf": true,
+        "is_collateral": false
+      },
+      {
+        "node_id": "n6",
+        "method": "Memento-Skills reflective skill evolution",
+        "move": "Use stateful prompts and read-write reflection to update externalized skills continually without changing model parameters.",
+        "parent": "n3",
+        "provenance": "retrieved:arxiv:2603.18743v1",
+        "age_band": "0-2y",
+        "confidence": "high",
+        "residual_problem": "Reflective updates are not shown to preserve source-evidence boundaries or to expose which assumptions and validations an update invalidates.",
+        "is_frontier_leaf": true,
+        "is_collateral": false
+      },
+      {
+        "node_id": "n7",
+        "method": "ClawTrace cost-attributed TraceCards and typed patches",
+        "move": "Split skill updates into preserve, prune, and repair lanes using per-step cost traces and evaluate their transfer effects separately.",
+        "parent": "n3",
+        "provenance": "retrieved:arxiv:2604.23853v2",
+        "age_band": "0-2y",
+        "confidence": "high",
+        "residual_problem": "Typed patch effects reveal quality regressions but do not determine whether edited instructions remain supported by a paper or which scientific evidence must be rerun.",
+        "is_frontier_leaf": true,
+        "is_collateral": false
+      },
+      {
+        "node_id": "n8",
+        "method": "SkCC typed skill IR and static optimizer",
+        "move": "Compile format-agnostic skills into a typed intermediate representation with framework adapters and static security checks.",
+        "parent": "n3",
+        "provenance": "retrieved:arxiv:2605.03353v4",
+        "age_band": "0-2y",
+        "confidence": "high",
+        "residual_problem": "Type and security validity do not establish evidence entailment or change impact over paper claims, assumptions, and validation boundaries.",
+        "is_frontier_leaf": true,
+        "is_collateral": false
+      },
+      {
+        "node_id": "c0",
+        "method": "truth-maintenance systems with justification dependencies",
+        "move": "Track which beliefs depend on which assumptions and retract dependent conclusions when a justification changes.",
+        "parent": null,
+        "provenance": "parametric",
+        "age_band": ">16y",
+        "confidence": "high",
+        "residual_problem": "Symbolic dependency maintenance presumes formally represented propositions rather than evidence extracted from research prose.",
+        "is_frontier_leaf": false,
+        "is_collateral": true
+      },
+      {
+        "node_id": "c1",
+        "method": "Make-style incremental build dependency graphs",
+        "move": "Invalidate and rebuild downstream artifacts when declared inputs change.",
+        "parent": null,
+        "provenance": "parametric",
+        "age_band": ">16y",
+        "confidence": "high",
+        "residual_problem": "Declared file dependencies do not express semantic support, assumptions, or empirical validity.",
+        "is_frontier_leaf": false,
+        "is_collateral": true
+      },
+      {
+        "node_id": "c2",
+        "method": "program slicing and static change-impact analysis",
+        "move": "Compute which program statements and outputs can be affected by a changed variable or statement.",
+        "parent": null,
+        "provenance": "parametric",
+        "age_band": ">16y",
+        "confidence": "high",
+        "residual_problem": "Code-level dependence does not determine whether a natural-language methodological claim remains evidentially warranted.",
+        "is_frontier_leaf": false,
+        "is_collateral": true
+      },
+      {
+        "node_id": "c3",
+        "method": "database provenance semirings",
+        "move": "Represent how query outputs depend algebraically on input tuples so changes and explanations can propagate through queries.",
+        "parent": null,
+        "provenance": "parametric",
+        "age_band": ">16y",
+        "confidence": "high",
+        "residual_problem": "Tuple-level derivation assumes explicit query semantics and does not cover uncertain instruction extraction or scientific validation claims.",
+        "is_frontier_leaf": false,
+        "is_collateral": true
+      },
+      {
+        "node_id": "c4",
+        "method": "VisTrails-style scientific workflow versioning",
+        "move": "Capture workflow evolution and allow prior computational analyses to be compared and reproduced across edits.",
+        "parent": null,
+        "provenance": "parametric",
+        "age_band": ">16y",
+        "confidence": "high",
+        "residual_problem": "Workflow version histories expose structural changes but do not decide whether paper-derived instructions and claims remain semantically supported.",
+        "is_frontier_leaf": false,
+        "is_collateral": true
+      }
+    ],
+    "notes": "Retrieved nodes are grounded frontier evidence; all parametric nodes are awareness-only regression checks and are not cited as hard prior art. The ancestry is intentionally limited to named methods whose moves are known, with the 2-4y externalized-skill node marked medium confidence. Collateral recognition covered truth maintenance, incremental build invalidation, program impact analysis, database provenance, and scientific-workflow versioning; these sideline nodes are not gap sites or shared-ancestor evidence."
+  },
+  "domain_pattern_distribution": {
+    "n_total": 10,
+    "n_on_topic": 9,
+    "patterns": [
+      {
+        "pattern_id": "assumption_audit_and_pivot",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "architectural_operator_substitution",
+        "count": 1,
+        "share": 0.11,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "generative_process_redesign",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "controlled_diagnostic_design",
+        "count": 1,
+        "share": 0.11,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "unify_into_shared_representation",
+        "count": 5,
+        "share": 0.56,
+        "saturation_band": "saturated"
+      },
+      {
+        "pattern_id": "reframe_as_solvable_object",
+        "count": 2,
+        "share": 0.22,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "self_supervised_signal_engineering",
+        "count": 1,
+        "share": 0.11,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "structural_prior_encoding",
+        "count": 3,
+        "share": 0.33,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "algebraic_equivalence_unification",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "heterogeneous_decomposition",
+        "count": 3,
+        "share": 0.33,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "decompose_and_delegate",
+        "count": 1,
+        "share": 0.11,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "relax_discrete_search_to_continuous",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "adapt_via_conditioning",
+        "count": 2,
+        "share": 0.22,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "characterize_limit_then_surpass",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "targeted_self_supervised_objective",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      }
+    ],
+    "saturation_threshold_saturated": 0.5,
+    "saturation_threshold_untested_count": 1,
+    "notes": "unify_into_shared_representation is the most-used pattern (5/9), and its closest adjacent papers share the limitation that a unified, source-linked skill representation still does not determine semantic instruction validity or edit-induced re-validation obligations."
+  },
+  "state": "proceed"
+}

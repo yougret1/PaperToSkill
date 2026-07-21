@@ -1,0 +1,36 @@
+{
+  "stage": "1.2",
+  "stage_name": "Literature grounding and full-text fetch",
+  "status": "passed",
+  "handoff_mode": null,
+  "user_approved_degraded_route": false,
+  "user_approval_evidence": null,
+  "inputs_checked": [
+    "idea-spark setup and connector requirements",
+    "idea-spark Phase 0 intent-routing rules",
+    "D:/anaconda3/anaconda/python.exe package availability",
+    "Codex bundled Python package availability",
+    "OpenReview, Semantic Scholar, and OpenAlex credential presence",
+    "Project-local .venv connector verification",
+    "Six-query real Phase 0 retrieval",
+    "Ten-paper pattern summary",
+    "Four named user-reference registrations",
+    "Phase 0+ full-text cache"
+  ],
+  "outputs_produced": [
+    "stage1/idea_spark/phase0/lit_results.json",
+    "stage1/idea_spark/phase0/lit_table.md",
+    "stage1/idea_spark/phase0/user_refs.json",
+    "stage1/idea_spark/phase0/fulltext_cache.json"
+  ],
+  "traceability_notes": [
+    "The user approved a project-local .venv; feedparser, openreview-py, beautifulsoup4, pymupdf, and requests were installed there without modifying conda base.",
+    "The connector check reports arXiv, OpenAlex, Semantic Scholar, and OpenReview packages available, plus both full-text dependencies.",
+    "No connector credentials were present; OpenAlex may use its polite pool and Semantic Scholar may run anonymously at reduced reliability.",
+    "Phase 0 used real retrieval and produced ten arXiv papers; OpenAlex, Semantic Scholar, and OpenReview returned no retained records for these queries.",
+    "Full-text fetch succeeded for 4 of 10 candidates. Anything2Skill, Paper2Agent, and SkillWiki remain abstract-level and must constrain novelty confidence.",
+    "A permission-reviewed targeted top-up did not execute; no workaround was attempted."
+  ],
+  "blocking_issues": [],
+  "next_stage": "1.3"
+}

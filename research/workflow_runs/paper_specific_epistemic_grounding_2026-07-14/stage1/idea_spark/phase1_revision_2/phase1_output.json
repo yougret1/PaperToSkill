@@ -1,0 +1,301 @@
+{
+  "intake": {
+    "domain": "paper- and knowledge-to-skill compilation under a fixed context budget, centered on compact operational knowledge preservation",
+    "venue": "top-tier machine learning or AI venue",
+    "time": "5-month research and falsification cycle",
+    "data": [
+      "research papers and associated methodological resources",
+      "paper-derived procedural elements including prerequisites, actions, intermediate artifacts, validators, and failure guards",
+      "downstream paper-tasks whose successful execution depends on preserving the required procedural set"
+    ],
+    "compute": "80GB-class GPUs (A100/H100), up to 8 concurrent (one node), <=50 GPU-days over 5 months, plus ~$10k inference/API budget for the full falsification campaign",
+    "expertise": "agent systems, document extraction, context compression, and downstream task evaluation",
+    "preference": "both",
+    "baseline": "an Anything2Skill-style compiler that extracts independently supported procedural candidates into a structured skill contract and caps the resulting artifact to a fixed token or context budget",
+    "limitation": "The extraction-verification-edit-revalidation product sequence is explicitly rejected as the novelty claim. The technical limitation is that, under a fixed token or context budget, current compilers cannot determine which procedural elements jointly form the complete set required for downstream execution, so a compact skill can preserve sources and salient steps while omitting prerequisites, required artifacts, validators, or failure guards.",
+    "contribution_type": "method",
+    "_inferred_fields": [
+      "venue",
+      "time",
+      "data",
+      "compute",
+      "expertise",
+      "preference",
+      "baseline"
+    ]
+  },
+  "bottleneck_statement": "Under a fixed token or context budget, a paper-to-skill compiler must discard most source content, but current systems cannot determine whether the retained procedural elements are jointly sufficient for the downstream task: elements that look individually relevant, source-supported, or schema-valid may still omit a low-salience prerequisite, intermediate artifact, validator, or failure guard whose absence makes the workflow execution-incomplete. Anything2Skill (arxiv:2606.09316v3) extracts candidates from evidence windows and retains drafts that contain procedural content, but its candidate- and field-level validity conditions do not establish that the compiled contract preserves the complete task-required set; Graph-of-Skills (arxiv:2604.05333v3) shows directly that bounded semantic retrieval misses prerequisite chains and yields execution-incomplete bundles, yet assumes those dependencies have already been recovered from authored skill packages; and SkCC (arxiv:2605.03353v4) preserves typed skill semantics across frameworks without determining whether the source skill's operational content was complete before compilation. The resulting failure is therefore not missing provenance or missing workflow stages: a compact artifact can be grounded, typed, and portable while still lacking the combination of elements necessary to execute the paper's contribution.",
+  "closest_adjacent": [
+    {
+      "paper_id": "arxiv:2606.09316v3",
+      "is_anchor": true,
+      "summary_and_residue": "Anything2Skill decomposes records into strict evidence windows, plans and expands procedural candidates under a skill-tree prior, and compiles them into contracts containing invocation conditions, contraindications, actions, workflow steps, constraints, outputs, evidence, and confidence. Its method filters and canonicalizes candidates and fields, but does not establish whether the retained elements jointly constitute the complete set required for successful downstream execution under a fixed budget."
+    },
+    {
+      "paper_id": "arxiv:2604.05333v3",
+      "is_anchor": false,
+      "summary_and_residue": "Graph-of-Skills constructs an offline dependency graph over existing skill packages and retrieves a context-bounded bundle that includes prerequisite structure rather than semantic top-k matches alone. It addresses dependency-complete retrieval after skills exist, but does not determine which prerequisites, artifacts, validators, and failure guards must first be extracted from a raw paper into those skill packages."
+    },
+    {
+      "paper_id": "arxiv:2605.03353v4",
+      "is_anchor": false,
+      "summary_and_residue": "SkCC compiles format-agnostic skills through a strongly typed intermediate representation, framework-specific lowering, and static security checks to preserve semantics across agent frameworks. Its compiler assumes the input skill already contains the necessary operational semantics, so type correctness and portability do not reveal whether budgeted paper-to-skill extraction omitted a task-critical procedural element."
+    }
+  ],
+  "what_phase_0_did_not_address": [
+    "No retrieved frontier paper establishes whether the procedural elements retained within a fixed context budget jointly form the complete set required for successful downstream execution.",
+    "No retrieved frontier paper can distinguish an element that is safely redundant from a low-salience prerequisite, artifact, validator, or failure guard whose omission makes an otherwise plausible workflow fail.",
+    "No retrieved frontier paper tests whether independently source-supported and schema-valid procedural elements are sufficient to preserve a paper's operational capability.",
+    "No retrieved frontier paper establishes compactness against downstream completion of the paper's required operational set rather than against field presence, semantic relevance, portability, or aggregate task success alone."
+  ],
+  "method_lineage": {
+    "line": "budgeted selection and compilation of source knowledge into executable procedural context",
+    "nodes": [
+      {
+        "node_id": "n0",
+        "method": "query-focused extractive summarization",
+        "move": "Base formulation: select source passages judged relevant to an information need under a strict length budget.",
+        "parent": null,
+        "provenance": "parametric",
+        "age_band": ">16y",
+        "confidence": "high",
+        "residual_problem": "Relevance-ranked extracts can preserve salient statements while omitting relations needed to carry out a procedure.",
+        "is_frontier_leaf": false,
+        "is_collateral": false
+      },
+      {
+        "node_id": "n1",
+        "method": "budgeted submodular extractive summarization",
+        "move": "Optimize coverage and diversity jointly so a fixed-size summary avoids redundant selections and represents more source content.",
+        "parent": "n0",
+        "provenance": "parametric",
+        "age_band": "8-16y",
+        "confidence": "high",
+        "residual_problem": "Semantic coverage and diversity do not identify which source elements are jointly necessary for an executable workflow.",
+        "is_frontier_leaf": false,
+        "is_collateral": false
+      },
+      {
+        "node_id": "n2",
+        "method": "top-k retrieval-augmented generation",
+        "move": "Select a small query-relevant context from a large corpus at inference time rather than compressing the whole source in advance.",
+        "parent": "n1",
+        "provenance": "parametric",
+        "age_band": "4-8y",
+        "confidence": "high",
+        "residual_problem": "Individually relevant chunks can exclude prerequisites and cross-chunk procedural dependencies needed for execution.",
+        "is_frontier_leaf": false,
+        "is_collateral": false
+      },
+      {
+        "node_id": "n3",
+        "method": "externalized LLM-agent skill libraries and procedural memory",
+        "move": "Convert recurring procedures into reusable skill artifacts that agents load selectively instead of reconstructing them from retrieved passages.",
+        "parent": "n2",
+        "provenance": "parametric",
+        "age_band": "2-4y",
+        "confidence": "medium",
+        "residual_problem": "A compact skill artifact can be valid element by element while leaving the joint sufficiency of its operational content untested.",
+        "is_frontier_leaf": false,
+        "is_collateral": false
+      },
+      {
+        "node_id": "n4",
+        "method": "Anything2Skill evidence-window extraction and SkillBank compilation",
+        "move": "Compile heterogeneous knowledge into evidence-linked procedural contracts through window-level planning, expansion, taxonomy constraints, reconciliation, and versioning.",
+        "parent": "n3",
+        "provenance": "retrieved:arxiv:2606.09316v3",
+        "age_band": "0-2y",
+        "confidence": "high",
+        "residual_problem": "Candidate validity, evidence support, and structured fields do not establish that the retained contract contains every element jointly required for downstream execution under budget.",
+        "is_frontier_leaf": true,
+        "is_collateral": false
+      },
+      {
+        "node_id": "n5",
+        "method": "Graph-of-Skills dependency-aware structural retrieval",
+        "move": "Retrieve context-bounded skill bundles with prerequisite structure so semantic top-k selection does not return execution-incomplete packages.",
+        "parent": "n3",
+        "provenance": "retrieved:arxiv:2604.05333v3",
+        "age_band": "0-2y",
+        "confidence": "high",
+        "residual_problem": "Dependency-aware hydration presumes that the skill packages and their dependencies already encode the complete operational set extracted from the source.",
+        "is_frontier_leaf": true,
+        "is_collateral": false
+      },
+      {
+        "node_id": "n6",
+        "method": "SkCC typed skill IR and cross-framework compilation",
+        "move": "Preserve skill semantics through a strongly typed intermediate representation while lowering the artifact into framework-specific formats and enforcing static security checks.",
+        "parent": "n3",
+        "provenance": "retrieved:arxiv:2605.03353v4",
+        "age_band": "0-2y",
+        "confidence": "high",
+        "residual_problem": "Typed preservation cannot expose operational information that was absent from the source skill before compilation.",
+        "is_frontier_leaf": true,
+        "is_collateral": false
+      },
+      {
+        "node_id": "c0",
+        "method": "STRIPS-style causal planning",
+        "move": "Represent actions through explicit preconditions and effects so a plan is executable only when its causal requirements are satisfied.",
+        "parent": null,
+        "provenance": "parametric",
+        "age_band": ">16y",
+        "confidence": "high",
+        "residual_problem": "Causal planning assumes a formal action model rather than discovering the required operational content from research prose.",
+        "is_frontier_leaf": false,
+        "is_collateral": true
+      },
+      {
+        "node_id": "c1",
+        "method": "Make-style build dependency graphs",
+        "move": "Declare prerequisites for each target so all required upstream artifacts are available before the target is built.",
+        "parent": null,
+        "provenance": "parametric",
+        "age_band": ">16y",
+        "confidence": "high",
+        "residual_problem": "Build dependencies are author-declared and do not identify implicit scientific prerequisites, validators, or failure conditions in a paper.",
+        "is_frontier_leaf": false,
+        "is_collateral": true
+      },
+      {
+        "node_id": "c2",
+        "method": "program slicing and static dependence analysis",
+        "move": "Retain statements that can affect a target computation while excluding code that is irrelevant to that target.",
+        "parent": null,
+        "provenance": "parametric",
+        "age_band": ">16y",
+        "confidence": "high",
+        "residual_problem": "Code-level dependence requires an executable program and target variable, neither of which is guaranteed for paper-only procedural knowledge.",
+        "is_frontier_leaf": false,
+        "is_collateral": true
+      },
+      {
+        "node_id": "c3",
+        "method": "workflow-net soundness analysis",
+        "move": "Check whether a modeled process can reach proper completion without dead transitions, deadlocks, or leftover tokens.",
+        "parent": null,
+        "provenance": "parametric",
+        "age_band": ">16y",
+        "confidence": "high",
+        "residual_problem": "Soundness analysis assumes the workflow model is already complete and does not detect source procedures omitted during compilation.",
+        "is_frontier_leaf": false,
+        "is_collateral": true
+      },
+      {
+        "node_id": "c4",
+        "method": "information bottleneck",
+        "move": "Compress an input while preserving information relevant to a specified downstream target.",
+        "parent": null,
+        "provenance": "parametric",
+        "age_band": ">16y",
+        "confidence": "high",
+        "residual_problem": "The target-relevant variable is not given when a compiler must infer an executable procedure and its failure boundaries from a paper.",
+        "is_frontier_leaf": false,
+        "is_collateral": true
+      }
+    ],
+    "notes": "Retrieved nodes ground the recent frontier; all parametric nodes are awareness-only and are not cited as hard prior art. The 2-4y externalized-skill node is medium confidence because that young line has diffuse ancestry. Collateral recognition covered causal planning, build dependencies, static dependence, workflow soundness, and target-aware compression; these named sideline methods prevent regression but are neither gap sites nor shared-ancestor evidence. Paper2Agent was read only as local awareness of an executable paper-agent branch and is excluded from closest_adjacent and retrieved lineage nodes because its paper_id is absent from lit_table.md."
+  },
+  "domain_pattern_distribution": {
+    "n_total": 10,
+    "n_on_topic": 9,
+    "patterns": [
+      {
+        "pattern_id": "assumption_audit_and_pivot",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "architectural_operator_substitution",
+        "count": 1,
+        "share": 0.11,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "generative_process_redesign",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "controlled_diagnostic_design",
+        "count": 1,
+        "share": 0.11,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "unify_into_shared_representation",
+        "count": 5,
+        "share": 0.56,
+        "saturation_band": "saturated"
+      },
+      {
+        "pattern_id": "reframe_as_solvable_object",
+        "count": 2,
+        "share": 0.22,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "self_supervised_signal_engineering",
+        "count": 1,
+        "share": 0.11,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "structural_prior_encoding",
+        "count": 3,
+        "share": 0.33,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "algebraic_equivalence_unification",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "heterogeneous_decomposition",
+        "count": 3,
+        "share": 0.33,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "decompose_and_delegate",
+        "count": 1,
+        "share": 0.11,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "relax_discrete_search_to_continuous",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "adapt_via_conditioning",
+        "count": 2,
+        "share": 0.22,
+        "saturation_band": "mid_frequency"
+      },
+      {
+        "pattern_id": "characterize_limit_then_surpass",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      },
+      {
+        "pattern_id": "targeted_self_supervised_objective",
+        "count": 0,
+        "share": 0.0,
+        "saturation_band": "untested"
+      }
+    ],
+    "saturation_threshold_saturated": 0.5,
+    "saturation_threshold_untested_count": 1,
+    "notes": "unify_into_shared_representation is the most-used pattern (5/9), and the closest adjacent papers using it preserve structured or typed skill content without establishing that the budgeted procedural set is jointly sufficient for downstream execution."
+  },
+  "state": "proceed"
+}

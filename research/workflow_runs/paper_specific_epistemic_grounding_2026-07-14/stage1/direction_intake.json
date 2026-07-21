@@ -1,0 +1,71 @@
+{
+  "schema_version": "researchstudio.stage1.direction.v1",
+  "stage": "1.1",
+  "user_direction_source": "适用于普通人快速对一篇论文的核心研究进行提取，验证以及快速修改",
+  "interpreted_direction": "Help non-expert researchers and agent builders extract, verify, adapt, and re-validate a paper's core research workflow while preserving its evidence boundaries.",
+  "research_problem": "Existing paper-to-agent and knowledge-to-skill systems can package procedures, but ordinary source links do not establish which paper evidence supports each operational instruction or whether a later adaptation remains valid.",
+  "contribution_type": "method_and_system",
+  "target_users": {
+    "primary": "Users with basic task or domain context who are not experts in the paper's specific method.",
+    "excluded_claim": "The project does not assume that a user with no domain background can safely redesign arbitrary scientific methods."
+  },
+  "claimed_novelty_normalized": "Paper-specific epistemic grounding that aligns claims, method actions, assumptions, validation evidence, and failure boundaries, then propagates the effect of typed user edits into explicit re-validation requirements.",
+  "required_capabilities": [
+    "extract a claim-method-assumption-evidence representation from a paper",
+    "label content as supported, inferred, conflicted, or missing",
+    "keep original evidence immutable while recording editable adaptations separately",
+    "classify adaptation deltas and identify invalidated claims or assumptions",
+    "produce concrete re-validation requirements after an edit"
+  ],
+  "claim_boundaries": [
+    "Do not call the system portable without matched cross-harness evidence.",
+    "Do not claim robust arbitrary-PDF understanding from a smoke path.",
+    "Do not treat line-span validity as semantic evidence entailment.",
+    "Do not use hidden curated notes as an unmeasured treatment in the main evaluation.",
+    "Do not describe adaptations as changes to the original paper's facts or results."
+  ],
+  "closest_adjacent_leads": [
+    {
+      "title": "Anything2Skill: Compiling External Knowledge into Reusable Skills for Agents",
+      "identifier": "arXiv:2606.09316",
+      "risk": "high",
+      "evidence_level": "retrieved abstract"
+    },
+    {
+      "title": "Paper2Agent: Reimagining Research Papers As Interactive and Reliable AI Agents",
+      "identifier": "arXiv:2509.06917",
+      "risk": "high",
+      "evidence_level": "retrieved abstract"
+    },
+    {
+      "title": "SkCC: Portable and Secure Skill Compilation for Cross-Framework LLM Agents",
+      "identifier": "arXiv:2605.03353",
+      "risk": "high for portability claims",
+      "evidence_level": "retrieved abstract"
+    },
+    {
+      "title": "SkillWiki: A Living Knowledge Infrastructure for Agent Skills",
+      "identifier": "arXiv:2606.16523",
+      "risk": "medium for provenance claims",
+      "evidence_level": "retrieved abstract"
+    }
+  ],
+  "preliminary_falsification_seed": "On held-out papers and matched information budgets, removing edit-time epistemic re-validation should cause post-edit unsupported-instruction rate to return toward a source-map-only baseline while downstream adaptation correctness also declines.",
+  "resource_constraints": [
+    "Reuse current local artifacts before commissioning new experiments.",
+    "Do not install dependencies or modify environments without user approval.",
+    "Treat external provider failures as availability evidence, not model-quality evidence."
+  ],
+  "legacy_inputs": [
+    "paper/aaai/main.pdf",
+    "paper/aaai/src/",
+    "memory/long_term_memory.md",
+    "memory/short_term_memory.md",
+    "research/run_logs/",
+    "research/related_paper_search_snapshot_2026-07-14.md",
+    "research/review_report.md",
+    "research/claim_evidence_matrix.md"
+  ],
+  "routing": "proceed_to_1.2"
+}
+
