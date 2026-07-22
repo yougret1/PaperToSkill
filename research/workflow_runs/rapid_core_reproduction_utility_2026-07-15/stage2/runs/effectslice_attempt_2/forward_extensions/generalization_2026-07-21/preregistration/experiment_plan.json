@@ -1,10 +1,11 @@
 {
-  "schema_version": "effectslice-forward-experiment-plan.v1",
-  "registration_status": "frozen_before_provider_calls",
+  "schema_version": "effectslice-fg1-experiment-plan.v2",
+  "registration_status": "stage_2_2_design_registered_materialization_pending",
   "stage": "2.2",
+  "study_id": "EffectSlice-FG1",
   "forward_only_scope": {
-    "statement": "This registration adds new evidence after V4/V5 and cannot rewrite, reopen, pool into, or supersede either accepted schedule.",
-    "parent_commit": "bb0cfe5d091d1072a7a08d8ba20de3944105d298",
+    "statement": "EffectSlice-FG1 is a new SLA instance after V4/V5. It shares protocol structure but does not rewrite, reopen, pool into, supersede, or statistically reuse either accepted schedule.",
+    "design_checkpoint_commit": "aedd758e5e6ab1bac924a84e52e5d77550d7b208",
     "immutable_inputs": [
       {
         "path": "artifacts/confirmation_v4/preregistration.json",
@@ -16,185 +17,749 @@
       },
       {
         "path": "forward_extensions/generalization_2026-07-21/stage_report_2_6.json",
-        "role": "passed literature and venue evidence"
+        "role": "passed literature and venue evidence",
+        "sha256": "eefa5d736c86ee451d2b2449a82ff8e98f5ec912bc42738d84b44e8b0cf753d4"
       }
-    ]
+    ],
+    "no_provider_calls_before_final_anchor": true
   },
   "research_questions": [
     {
       "id": "RQ1",
-      "question": "Does the frozen B/F/S admission protocol produce complete, calibrated task-local decisions across 24 paper-task clusters in four mechanism domains?"
+      "question": "Can the registered B/F/S protocol issue complete task-local decisions across 12 papers and four mechanism domains?"
     },
     {
       "id": "RQ2",
-      "question": "How heterogeneous are paired F-S operational-success and private-score differences across papers, tasks, and domains?"
+      "question": "How heterogeneous are paired F-B, S-B, and S-F effects when tasks are nested within papers?"
     },
     {
       "id": "RQ3",
-      "question": "How do dependency-closed atom restoration, retained atom/token ratio, and measured execution cost trade against reliability on a frozen four-cluster subset?"
+      "question": "How do structural restoration, reducer choice, compression, reliability, and cost trade off on four frozen tasks?"
     },
     {
       "id": "RQ4",
-      "question": "Do the local decisions remain qualitatively stable across registered model families and SLA perturbations without claiming deterministic closed-model reproduction?"
+      "question": "What exact candidate-state agreement and F/I repeatability are observed across required models on four prespecified sentinel tasks?"
+    },
+    {
+      "id": "RQ5",
+      "question": "How stable are primary task decisions and identified bounds under the registered SLA grid, leave-one-block-out, and leave-one-paper-out sensitivity analyses?"
     }
   ],
   "hypotheses": {
-    "protocol_calibration": "At least three of four planted-redundancy positive controls are admitted and all four destructive-core negative controls are rejected.",
-    "decision_coverage": "At least 20 of 24 natural paper-task clusters yield a valid Admit or Reject decision rather than Invalid.",
-    "natural_admission": "At least 8 of 24 frozen natural strict subsets are admitted, with at least one natural admission in three of four domains.",
-    "generalization_boundary": "Failure of any threshold is a reportable falsification or limitation, not a reason to edit tasks, atoms, scorers, models, or private registries."
+    "control_sanity": "At least three of four planted-redundancy controls and all four byte-identical controls produce SanityPass; all four destructive-core controls produce SanityPass under their negative-control rule. Controls are sanity states, not admission or calibration data.",
+    "decision_coverage": "At least 20 of 24 natural task decisions are valid Admit or Reject states rather than Invalid.",
+    "natural_admission": "At least 8 of 24 natural strict subsets are admitted, with one or more admissions in at least three domains.",
+    "forward_boundary": "Failure is reported and cannot trigger edits to frozen tasks, atoms, reducers, scorers, models, registries, or thresholds.",
+    "benchmark_target_rationale": "The 20/24 valid and 8/24 primary-admission targets are finite-benchmark engineering stress targets (83.3% coverage and 33.3% candidate yield), not significance, power, or population-generalization criteria."
   },
   "primary_design": {
     "paper_registry": "preregistration/paper_registry.json",
     "papers": 12,
+    "independent_aggregate_unit": "paper",
+    "independent_papers": 12,
     "tasks_per_paper": 2,
-    "paper_task_clusters": 24,
-    "blocks_per_cluster": 6,
-    "conditions": ["B", "F", "S"],
-    "condition_meanings": {
-      "B": "same action scaffold and task with no paper-derived artifact",
-      "F": "complete source-grounded task artifact",
-      "S": "frozen dependency-closed strict subset produced without private outcomes"
+    "nested_task_decisions": 24,
+    "blocks_per_task": 6,
+    "registries_per_task": 2,
+    "blocks_per_registry": 3,
+    "conditions": [
+      "B",
+      "F",
+      "S"
+    ],
+    "primary_model_slot_id": "deepseek_primary",
+    "condition_payload_contract": {
+      "shared": "Within a registered block, B/F/S use the same model slot, task scaffold, fixture, scorer, action budget, and decoding settings.",
+      "B": "B uses the canonical empty paper-artifact bytes and differs from F/S only in the registered artifact attachment.",
+      "F": "F attaches the complete rendered paper artifact.",
+      "S": "S attaches the primary reducer output.",
+      "hash_binding": "Hash both canonical model-visible payload and serialized wire request for every row before execution."
     },
-    "provider_conversations": 432,
+    "remote_conversations": 432,
+    "arithmetic": "12 * 2 * 6 * 3 = 432",
     "fresh_conversation_per_condition": true,
     "private_cases_per_block": 64,
+    "private_cases_are_scorer_fixtures_not_independent_observations": true,
     "public_private_overlap_allowed": false,
     "maximum_parallel_workers": 2,
-    "independent_inference_unit": "paper-task cluster; the six blocks are paired repeated measurements, not 144 independent tasks"
+    "nesting_statement": "Paper is the independent aggregate unit (n=12); two tasks are nested within paper and six paired blocks repeat within task."
   },
   "candidate_construction": {
-    "atom_count_range": [5, 16],
-    "full_artifact": "F contains every atom registered as necessary to implement the bounded task, including hard contracts and guardrails.",
-    "primary_reducer": "deterministic_dependency_closed_leaf_drop_v1",
-    "primary_slice_rule": [
-      "Build the source-addressed atom DAG and reject cycles or unresolved locators.",
-      "Identify dependency-maximal atoms that are not marked hard-contract, guardrail, or scorer-interface atoms.",
-      "Choose the last eligible atom by canonical source locator, then atom ID.",
-      "Remove that atom and any dependent atoms required by closure; S must remain nonempty and strict.",
-      "If no eligible strict subset exists, the cluster fails the static eligibility gate before provider execution."
+    "atom_count_range": [
+      5,
+      16
     ],
-    "private_outcome_access": "forbidden",
-    "required_bindings_before_pilot": [
-      "full-text sha256",
-      "source span and byte locator for each atom",
-      "atom DAG and topological order",
-      "F and S rendered artifact sha256",
-      "public/private fixture registry sha256",
-      "scorer source and configuration sha256"
+    "full_artifact": "F contains every registered paper-claim, implementation-guardrail, and scorer-interface atom needed for the bounded task.",
+    "canonical_atom_identity": {
+      "formula": "a_ + first_16_lower_hex(sha256(document_sha256 + NUL + ascii_decimal(byte_start) + NUL + ascii_decimal(byte_end) + NUL + ascii_decimal(split_index)))",
+      "semantic_names_forbidden": true,
+      "unique_and_opaque_audit_required": true,
+      "canonical_order": "document_sha256, byte_start, byte_end, split_index, atom_id"
+    },
+    "canonical_renderer": {
+      "id": "effectslice_atom_renderer_v1",
+      "encoding": "UTF-8 without BOM",
+      "newline": "LF",
+      "atom_separator": "two LF bytes",
+      "artifact_only_ratio": true,
+      "implementation_sha256_bound_at_materialization": true
+    },
+    "canonical_tokenizer": {
+      "library": "tiktoken",
+      "library_version": "0.12.0",
+      "encoding_name": "cl100k_base",
+      "tokenizer_asset_sha256_bound_at_materialization": true
+    },
+    "token_ratio_definition": "token_count(canonical_render(candidate)) / token_count(canonical_render(F)); common task scaffold is excluded",
+    "dag_static_validation": [
+      "unique opaque atom IDs",
+      "every dependency references a registered atom",
+      "directed graph is acyclic",
+      "registered canonical topological order is valid",
+      "every retained candidate is nonempty, strict, and dependency closed"
+    ],
+    "primary_reducer": {
+      "id": "dag_ratio_60_v1",
+      "visible_fields": [
+        "atom_id",
+        "dependency_ids",
+        "rendered_token_count"
+      ],
+      "forbidden_fields": [
+        "paper_claim_label",
+        "hard_contract_label",
+        "guardrail_label",
+        "scorer_interface_label",
+        "public_outcome",
+        "private_outcome",
+        "model_output"
+      ],
+      "closure_definition": "If retained atom a depends on atom b, b is retained.",
+      "enumeration": "Enumerate all nonempty dependency-closed strict subsets of F.",
+      "target_token_retention": 0.6,
+      "eligible_token_retention_interval": [
+        0.45,
+        0.75
+      ],
+      "tie_break_order": [
+        "minimum_absolute_distance_to_0.60",
+        "fewer_rendered_tokens",
+        "lexicographic_canonical_atom_id_list"
+      ],
+      "outcome_access": "forbidden",
+      "input_manifest_sha256_bound_at_materialization": true,
+      "enumeration_log_sha256_bound_at_materialization": true,
+      "selected_output_sha256_bound_at_materialization": true
+    },
+    "static_ineligibility": "No eligible subset blocks this materialization anchor. Any same-domain replacement requires a separately committed successor registration before materialization resumes; the current registry and schedules are never amended in place.",
+    "required_bindings_before_final_anchor": [
+      "legal full-text source and sha256",
+      "at least two central source spans per task with byte locators",
+      "task-to-span matrix and task-specificity audit",
+      "atom registry, dependency DAG, and topological order",
+      "canonical renderer, tokenizer assets, and reducer manifests",
+      "F and all candidate artifact sha256 values",
+      "public and private registry A/B sha256 values",
+      "adapter, reference implementation, scorer and config sha256 values",
+      "builder/auditor identities and resolution ledger"
     ]
   },
   "schedule": {
-    "within_cluster_orders": ["BFS", "BSF", "FBS", "FSB", "SBF", "SFB"],
-    "rule": "Each paper-task cluster uses every B/F/S order exactly once across its six blocks.",
+    "registry_A": {
+      "orders": [
+        "BFS",
+        "FSB",
+        "SBF"
+      ],
+      "blocks": 3
+    },
+    "registry_B": {
+      "orders": [
+        "BSF",
+        "FBS",
+        "SFB"
+      ],
+      "blocks": 3
+    },
+    "all_orders": [
+      "BFS",
+      "BSF",
+      "FBS",
+      "FSB",
+      "SBF",
+      "SFB"
+    ],
+    "rule": "Every task uses each order exactly once; both total and per-registry sufficiency must pass.",
     "block_seed_base": 2026072100,
     "global_interleave_seed": 20260721,
-    "global_interleave": "Round-robin domains, then a deterministic hash order over paper_id, task_id, and block_id; no two tasks from one paper are adjacent when another domain remains available.",
-    "freeze_artifact": "Stage 2.3 must materialize the complete global schedule and its sha256 before the first provider conversation."
+    "global_interleave": "Use materialization_contract.schedule_row_schema.global_sequence_order exactly: family, registered task, variant, model slot, block, then within-block order position. The registered primary task order cycles domains between task rows.",
+    "secondary_pair_contemporaneity": {
+      "adjacent_rows_required": true,
+      "unrelated_row_between_pair_forbidden": true,
+      "order_codes_by_block": [
+        "FC",
+        "CF",
+        "FC",
+        "CF",
+        "FC",
+        "CF"
+      ],
+      "failure_resume": "Exhaust the first row's registered transport attempts before its paired row. Run the paired row unless the model slot is unavailable; a terminally missing member makes the pair Invalid."
+    },
+    "model_BFSI_orders_by_block": [
+      "BFIS",
+      "IFSB",
+      "SBFI",
+      "BSIF",
+      "FIBS",
+      "SIFB"
+    ],
+    "materialization": "Stage 2.3 hash-binds complete required remote and local schedules before any experimental provider call."
   },
   "scoring": {
-    "private_score_range": [0.0, 1.0],
+    "private_score_range": [
+      0.0,
+      1.0
+    ],
     "operational_success": "All hard contracts pass and private_score >= 0.90.",
     "admission_sla": {
-      "maximum_B_successes": 1,
-      "minimum_F_successes": 5,
-      "minimum_S_successes": 5,
-      "minimum_paired_margin_blocks": 5,
-      "paired_margin_rule": "S private_score >= F private_score - 0.05 within the matched block",
+      "total_six_blocks": {
+        "maximum_B_successes": 1,
+        "minimum_F_successes": 5,
+        "minimum_S_successes": 5,
+        "minimum_valid_paired_margin_blocks": 5
+      },
+      "each_three_block_registry": {
+        "maximum_B_successes": 1,
+        "minimum_F_successes": 2,
+        "minimum_S_successes": 2,
+        "minimum_valid_paired_margin_blocks": 2
+      },
+      "paired_margin_rule": "S private_score >= F private_score - 0.05 in the same block",
+      "all_registered_rows_terminal": true,
       "all_outputs_complete": true,
       "all_integrity_checks_pass": true
     },
     "decision_states": {
-      "Admit": "All SLA, completeness, source, dependency, and integrity fields pass.",
-      "Reject": "The run is complete and valid but one or more B/F/S sufficiency or paired-margin fields fail.",
-      "Invalid": "A required input, output, scorer call, digest, schedule binding, or terminal provider result is missing or corrupt after the registered retry policy."
+      "Admit": "All total, per-registry, margin, and integrity gates pass.",
+      "Reject": "Rows are complete and valid but one or more SLA gates fail.",
+      "Invalid": "A required input, output, digest, scorer call, schedule binding, or terminal model result is missing or corrupt after retries."
     },
-    "invalid_is_orthogonal": "Invalid is not a quadrant of F sufficiency by S sufficiency and is excluded from neither denominators nor failure reporting."
+    "two_arm_pair_rule": {
+      "states": [
+        "PairPass",
+        "PairFail",
+        "Invalid"
+      ],
+      "scope": "Structural ladder and alternate-reducer F/C pairs only; these states are never called Admit or Reject.",
+      "total_six_blocks": {
+        "minimum_reference_F_successes": 5,
+        "minimum_candidate_successes": 5,
+        "minimum_valid_margin_pairs": 5
+      },
+      "each_three_block_registry": {
+        "minimum_reference_F_successes": 2,
+        "minimum_candidate_successes": 2,
+        "minimum_valid_margin_pairs": 2
+      },
+      "margin_rule": "candidate private_score >= reference_F private_score - 0.05",
+      "PairPass": "All total, registry, terminal, and integrity gates pass.",
+      "PairFail": "Every row is valid but one or more pair gates fail.",
+      "Invalid": "One or more required pair rows or bindings are invalid."
+    },
+    "control_sanity_rules": {
+      "states": [
+        "SanityPass",
+        "SanityFail",
+        "Invalid"
+      ],
+      "planted_redundancy_positive": {
+        "reference": "F_plus_registered_restatement_atom",
+        "candidate": "primary_F_bytes_after_only_restatement_removal",
+        "rule": "Apply the registered two_arm_pair_rule."
+      },
+      "destructive_core_negative": {
+        "reference": "primary_F",
+        "candidate": "F_without_registered_destructive_target_closure",
+        "total": {
+          "minimum_reference_F_successes": 5,
+          "maximum_candidate_successes": 1,
+          "minimum_targeted_hard_contract_failures": 5
+        },
+        "each_registry": {
+          "minimum_reference_F_successes": 2,
+          "maximum_candidate_successes": 1,
+          "minimum_targeted_hard_contract_failures": 2
+        }
+      },
+      "byte_identical_identity": {
+        "reference": "primary_F",
+        "candidate": "byte_identical_primary_F",
+        "input_digest_matches_required": 6,
+        "minimum_valid_pairs": 5,
+        "minimum_operational_success_agreements": 5,
+        "minimum_hard_contract_vector_agreements": 5,
+        "minimum_score_delta_within_0.05": 5,
+        "raw_or_canonical_output_equality": "reported_descriptively"
+      },
+      "SanityPass": "The control-specific frozen rule passes.",
+      "SanityFail": "Rows are valid but the control-specific rule fails.",
+      "Invalid": "A required row, digest, or binding is invalid."
+    },
+    "reject_reason_precedence": [
+      "full-insufficient",
+      "baseline-sensitive",
+      "slice-insufficient",
+      "margin-shortfall"
+    ],
+    "reject_reason_rule": "Use the first failed reason as primary_reject_reason and preserve all failed gates as secondary flags.",
+    "invalid_is_orthogonal": "Invalid is outside the F-by-S state space and remains in every registered denominator.",
+    "condition_success_is_not_candidate_admission": true,
+    "admit_reject_reserved_for_complete_BFS": true
   },
-  "control_subset": {
-    "paper_task_ids": ["NLP-LLM-01", "SE-PE-01", "DATA-HDB-01", "AGENT-TF-01"],
-    "positive_control": "Add one source-addressed restatement atom that has no executable effect, then remove only that atom in S_positive.",
-    "negative_control": "Remove the lowest-ID hard-contract or core-computation atom and all closure dependents in S_negative.",
-    "additional_slice_conversations": 48,
-    "reuse": "The matched primary B and F conversations are reused; each control S receives a fresh conversation.",
-    "calibration_scope": "Four independent positive and four independent negative task-level controls; block-level repetitions are not counted as independent labels.",
-    "confusion_matrix_policy": "Report exact task-level counts and binomial intervals in a table. Do not draw a confusion matrix or claim calibrated error rates unless a later forward amendment registers at least eight independent controls per class before outcomes."
-  },
-  "atom_ladder_subset": {
-    "paper_task_ids": ["NLP-LLM-01", "SE-PE-01", "DATA-HDB-01", "AGENT-TF-01"],
-    "candidate_levels": ["drop_4", "drop_3", "drop_2", "drop_1_primary"],
-    "construction": "Starting from F, remove dependency-maximal eligible atoms in reverse canonical order. Each level is dependency closed, nonempty, and strictly nested; drop_1_primary is the primary S used in the main design.",
-    "additional_levels_beyond_primary": 3,
-    "additional_slice_conversations": 72,
-    "reuse": "The matched primary B and F conversations are reused; every additional S level receives a fresh conversation.",
-    "claim_scope": "Secondary causal/mechanistic evidence on four registered clusters only; ladder results cannot replace or select the primary S."
-  },
-  "model_ablation": {
-    "registry": "preregistration/model_ablation_registry.json",
-    "paper_task_ids": ["NLP-LLM-01", "SE-PE-01", "DATA-HDB-01", "AGENT-TF-01"],
-    "closed_model_blocks_per_cluster": 6,
-    "conditions_per_block": 3,
-    "conversations_per_closed_model": 72,
-    "required_additional_closed_models": 4,
-    "required_additional_provider_conversations": 288,
-    "primary_deepseek_rows_reused": true,
-    "claim_scope": "Robustness across registered model slots; no general model ranking or deterministic equality claim."
+  "secondary_experiments": {
+    "paper_task_ids": [
+      "NLP-LLM-01",
+      "SE-PE-01",
+      "DATA-HDB-01",
+      "AGENT-TF-01"
+    ],
+    "controls": {
+      "conditions": [
+        "planted_redundancy_positive",
+        "destructive_core_negative",
+        "byte_identical_identity"
+      ],
+      "pair": [
+        "fresh_reference_F",
+        "fresh_control_candidate"
+      ],
+      "pair_orders_by_block": [
+        "FC",
+        "CF",
+        "FC",
+        "CF",
+        "FC",
+        "CF"
+      ],
+      "pair_rows_are_adjacent": true,
+      "blocks_per_condition_task": 6,
+      "remote_conversations": 144,
+      "arithmetic": "4 * 3 * 6 * 2 = 144",
+      "reuse_primary_rows": false,
+      "interpretation": "Control-specific SanityPass/SanityFail/Invalid only; no admission, confusion matrix, or calibration-rate claim."
+    },
+    "structural_restoration_ladder": {
+      "levels": [
+        "L0_primary_slice",
+        "L1_mid_restore",
+        "L2_near_full_strict"
+      ],
+      "construction": "Enumerate all chains S=L0 strict-subset L1 strict-subset L2 strict-subset F in which every level is dependency closed. Choose the chain by maximum L2 tokens, then minimum L1 distance to the S/L2 token midpoint, fewer L1 tokens, lexicographic L1 IDs, then lexicographic L2 IDs.",
+      "feasibility_gate": "At least one such three-level strict chain must exist before the final anchor; otherwise block this materialization and create an outcome-blind successor registration. Never reduce the registered three-level design.",
+      "pair": [
+        "fresh_F",
+        "fresh_ladder_candidate"
+      ],
+      "pair_orders_by_block": [
+        "FC",
+        "CF",
+        "FC",
+        "CF",
+        "FC",
+        "CF"
+      ],
+      "pair_rows_are_adjacent": true,
+      "blocks_per_level_task": 6,
+      "remote_conversations": 144,
+      "arithmetic": "4 * 3 * 6 * 2 = 144",
+      "reuse_primary_rows": false,
+      "interpretation": "PairPass/PairFail/Invalid structural response, not admission, causality, or primary-S selection."
+    },
+    "alternate_candidate_reducers": {
+      "reducers": [
+        {
+          "id": "dag_greedy_ratio_60_v1",
+          "rule": "Start current=F. Visit atoms once in reverse registered canonical topological order. At each visit remove that atom, if still present, and every currently present transitive dependent; continue from the result even when it is outside the ratio interval. Record every unique nonempty strict dependency-closed state in the 0.45-0.75 interval, then select by absolute 0.60 target error, fewer rendered tokens, and lexicographic atom IDs."
+        },
+        {
+          "id": "source_window_ratio_60_v1",
+          "rule": "Enumerate every half-open nonempty contiguous [start,end) interval in registered canonical source order, add the complete transitive dependency closure, deduplicate by canonical atom-ID tuple, discard full or out-of-0.45-0.75 states, then select by absolute 0.60 target error, fewer rendered tokens, and lexicographic atom IDs."
+        }
+      ],
+      "semantic_label_access": "forbidden",
+      "no_candidate_policy": "Static task ineligibility blocks this materialization before the final anchor. Any replacement is registered only in a separately committed successor; no post-anchor reducer edit.",
+      "pair": [
+        "fresh_F",
+        "fresh_alternate_S"
+      ],
+      "pair_orders_by_block": [
+        "FC",
+        "CF",
+        "FC",
+        "CF",
+        "FC",
+        "CF"
+      ],
+      "pair_rows_are_adjacent": true,
+      "blocks_per_reducer_task": 6,
+      "remote_conversations": 96,
+      "arithmetic": "4 * 2 * 6 * 2 = 96",
+      "reuse_primary_rows": false,
+      "interpretation": "PairPass/PairFail/Invalid only, never admission."
+    },
+    "model_robustness": {
+      "registry": "preregistration/model_ablation_registry.json",
+      "conditions": [
+        "B",
+        "F",
+        "S",
+        "I"
+      ],
+      "I_meaning": "A fresh conversation whose model-visible payload is byte-identical to F; only non-visible ledger metadata differs.",
+      "condition_orders_by_block": [
+        "BFIS",
+        "IFSB",
+        "SBFI",
+        "BSIF",
+        "FIBS",
+        "SIFB"
+      ],
+      "F_I_adjacent": true,
+      "F_before_I_blocks": 3,
+      "I_before_F_blocks": 3,
+      "blocks_per_task_model": 6,
+      "remote_conversations_per_required_model": 96,
+      "required_closed_models": 4,
+      "required_remote_conversations": 384,
+      "arithmetic": "4 * 4 * 6 * 4 = 384",
+      "reuse_primary_rows": false,
+      "candidate_state": "B/F/S alone produces Admit/Reject/Invalid under the primary SLA; I is excluded from admission.",
+      "repeatability_metrics": [
+        "model_visible_input_sha256_agreement",
+        "valid_pairs/registered_pairs",
+        "operational_success_agreement",
+        "hard_contract_vector_agreement",
+        "absolute_private_score_delta",
+        "canonical_output_sha256_agreement",
+        "raw_response_sha256_agreement"
+      ],
+      "repeatability_reduction": {
+        "unit": "task_model",
+        "registered_pairs": 6,
+        "boolean_endpoints": [
+          "model_visible_input_sha256_agreement",
+          "operational_success_agreement",
+          "hard_contract_vector_agreement",
+          "canonical_output_sha256_agreement",
+          "raw_response_sha256_agreement"
+        ],
+        "boolean_summary": {
+          "raw_values": "Six block-ordered values in {true,false,null}.",
+          "valid_pair_count": "Count of non-null values in the six registered pairs.",
+          "agreement_count": "Count of true values among valid pairs.",
+          "agreement_rate_registered": "agreement_count / 6",
+          "agreement_rate_valid": "agreement_count / valid_pair_count; undefined when valid_pair_count is zero"
+        },
+        "score_delta_summary": {
+          "raw_absolute_private_score_deltas": "Six block-ordered values in [0,1] or null when the F/I pair is Invalid.",
+          "valid_pair_count": "Count of non-null score deltas.",
+          "median_absolute_delta": "Median of non-null absolute deltas; undefined when valid_pair_count is zero.",
+          "maximum_absolute_delta": "Maximum of non-null absolute deltas; undefined when valid_pair_count is zero."
+        },
+        "missingness_rule": "Invalid F/I pairs remain null and are counted in registered denominator 6; they are never imputed as agreements or disagreements.",
+        "aggregation_boundary": "Never pool model slots or sentinel tasks. Cross-model displays retain one task-model cell per endpoint and show unavailable slots explicitly."
+      },
+      "cross_model_summary": "Exact candidate-state agreement count across four sentinel tasks; no global stability pass threshold or model ranking."
+    },
+    "open_deterministic_anchor": {
+      "model": "Qwen/Qwen2.5-Coder-7B-Instruct",
+      "conditions": [
+        "B",
+        "F",
+        "S",
+        "I"
+      ],
+      "local_executions": 96,
+      "arithmetic": "4 * 6 * 4 = 96",
+      "purpose": "Repeated identical F/I reproducibility, not seed sensitivity.",
+      "deterministic_F_I_gate": {
+        "required_valid_pairs": 6,
+        "required_model_visible_input_matches": 6,
+        "required_generated_token_id_matches": 6,
+        "required_canonical_output_sha256_matches": 6,
+        "required_score_and_contract_vector_matches": 6
+      }
+    }
   },
   "resource_budget": {
-    "primary_provider_conversations": 432,
-    "required_model_ablation_provider_conversations": 288,
-    "atom_ladder_provider_conversations": 72,
-    "control_provider_conversations": 48,
-    "required_provider_conversation_cap": 840,
-    "optional_model_provider_conversation_cap": 144,
-    "open_seed_anchor_local_conversations": 72,
+    "primary_remote_conversations": 432,
+    "control_remote_conversations": 144,
+    "structural_ladder_remote_conversations": 144,
+    "alternate_reducer_remote_conversations": 96,
+    "required_model_robustness_remote_conversations": 384,
+    "required_remote_conversation_cap": 1200,
+    "open_anchor_local_execution_cap": 96,
+    "required_execution_cap": 1296,
+    "optional_closed_model_remote_conversation_cap": 192,
     "observed_v4_seconds_per_conversation": 127.2,
-    "required_nominal_provider_hours": 29.7,
-    "required_realistic_provider_hours": [36, 48],
-    "optional_models_realistic_additional_hours": [6, 13],
-    "budget_rule": "Required experiments finish before optional model slots. Exhaustion produces budget_infeasible; it cannot change tasks, thresholds, seeds, or hypotheses."
+    "required_nominal_remote_hours": 42.4,
+    "required_realistic_remote_hours": [
+      51,
+      70
+    ],
+    "remote_hours_meaning": "Serial-equivalent remote call-hours including queue/network allowance; not total project time and not guaranteed wall-clock time.",
+    "ideal_two_worker_remote_wall_clock_lower_bound_hours": [
+      25.5,
+      35.0
+    ],
+    "excluded_from_remote_hour_estimate": [
+      "96 local anchor executions",
+      "24-task source and semantic materialization",
+      "independent audits and differential tests",
+      "scoring, aggregation, figures, manuscript revision, and review"
+    ],
+    "optional_models_realistic_additional_hours": [
+      8,
+      14
+    ],
+    "budget_rule": "Required conditions finish before optional models; budget exhaustion cannot change the registration."
   },
   "transport_and_failure_policy": {
     "timeout_seconds": 240,
+    "normalized_max_output_tokens": 1024,
+    "output_limit_binding": "Every decoding config contains normalized_max_output_tokens=1024. Each hash-bound request template maps that normalized key to the exact provider-native JSON pointer; no provider default is used.",
     "maximum_transport_attempts": 5,
-    "retry_delays_seconds": [2, 4, 8, 16],
-    "retryable": ["connection reset", "DNS or TLS transport failure", "HTTP 408", "HTTP 429", "HTTP 500", "HTTP 502", "HTTP 503", "HTTP 504", "read timeout"],
-    "non_retryable": ["authentication rejected", "model alias absent from provider registry", "malformed frozen request", "deterministic scorer or contract failure"],
-    "semantic_rerun": "forbidden; a completed provider response is never rerun because its score is low",
-    "attempt_logging": "Persist every transport attempt, elapsed time, HTTP/status class, provider request ID when available, and whether the terminal response was recovered.",
-    "failure_taxonomy": [
-      "no_patch_or_no_submission",
+    "retry_delays_seconds": [
+      2,
+      4,
+      8,
+      16
+    ],
+    "retry_delay_rule": "For HTTP 429 use max(registered_delay, Retry-After when valid); add deterministic 0-1000 ms jitter derived from execution_id and attempt.",
+    "retryable": [
+      "connection reset",
+      "DNS or TLS transport failure",
+      "HTTP 408",
+      "HTTP 429",
+      "HTTP 500",
+      "HTTP 502",
+      "HTTP 503",
+      "HTTP 504",
+      "read timeout"
+    ],
+    "non_retryable": [
+      "authentication rejected",
+      "model alias absent from model registry",
+      "malformed frozen request",
+      "deterministic scorer or contract failure"
+    ],
+    "semantic_rerun": "forbidden; a terminal model response is never rerun because its score is low",
+    "attempt_logging": "Persist every attempt, elapsed time, status class, request ID when available, and recovery state without credentials.",
+    "duplicate_response_rule": "Use a stable client execution_id and provider idempotency key when supported. Preserve every late/duplicate response; the first received response that passes request-ID, schema, and digest validation is the only terminal row. Later responses are duplicate annotations.",
+    "transport_retry_recovered_is_annotation": true,
+    "termination_reason_contract": {
+      "required_values": [
+        "eos",
+        "length",
+        "provider_stop",
+        "transport_failure",
+        "not_dispatched"
+      ],
+      "provider_finish_reason": "Persist the exact provider-returned finish/stop reason string when available, otherwise null.",
+      "normalization": {
+        "eos": "Local anchor generated a registered EOS token.",
+        "length": "The normalized 1024-token cap or a provider-native length/max-token finish reason ended generation.",
+        "provider_stop": "A completed provider response stopped for any non-length provider reason, including a provider stop sequence.",
+        "transport_failure": "A request was dispatched but no valid body completed.",
+        "not_dispatched": "Preflight/model unavailability prevented dispatch."
+      },
+      "length_is_reported_separately_from_terminal_outcome": true
+    },
+    "mutually_exclusive_terminal_outcomes_in_precedence_order": [
+      "provider_or_model_unavailable",
+      "transport_terminal_failure",
+      "integrity_or_digest_failure",
+      "malformed_or_no_submission",
+      "action_budget_exhausted",
       "hard_contract_failure",
       "score_shortfall",
-      "public_test_only_failure",
-      "action_budget_exhausted",
-      "transport_retry_recovered",
-      "transport_terminal_failure",
-      "provider_or_model_unavailable",
-      "integrity_or_digest_failure"
-    ]
+      "operational_success"
+    ],
+    "terminal_truth_table": {
+      "provider_or_model_unavailable": {
+        "row_valid": false,
+        "condition_success": null,
+        "pair_valid": false,
+        "private_score_rule": "null"
+      },
+      "transport_terminal_failure": {
+        "row_valid": false,
+        "condition_success": null,
+        "pair_valid": false,
+        "private_score_rule": "null"
+      },
+      "integrity_or_digest_failure": {
+        "row_valid": false,
+        "condition_success": null,
+        "pair_valid": false,
+        "private_score_rule": "null"
+      },
+      "malformed_or_no_submission": {
+        "row_valid": true,
+        "condition_success": false,
+        "pair_valid": true,
+        "private_score_rule": "exactly 0.0"
+      },
+      "action_budget_exhausted": {
+        "row_valid": true,
+        "condition_success": false,
+        "pair_valid": true,
+        "private_score_rule": "Run the frozen scorer on the terminal workspace and use its finite [0,1] assertion fraction; scorer inability is integrity_or_digest_failure."
+      },
+      "hard_contract_failure": {
+        "row_valid": true,
+        "condition_success": false,
+        "pair_valid": true,
+        "private_score_rule": "frozen scorer's finite [0,1] assertion fraction"
+      },
+      "score_shortfall": {
+        "row_valid": true,
+        "condition_success": false,
+        "pair_valid": true,
+        "private_score_rule": "frozen scorer's finite [0,1] assertion fraction"
+      },
+      "operational_success": {
+        "row_valid": true,
+        "condition_success": true,
+        "pair_valid": true,
+        "private_score_rule": "frozen scorer's finite [0,1] assertion fraction"
+      }
+    },
+    "private_score_totality": "Every row_valid=true terminal row has exactly one finite [0,1] private_score. Every row_valid=false row has private_score=null. Each task differential test must exercise all five valid terminal score rules before the final anchor."
   },
   "analysis_contract": {
-    "primary_counts": ["Admit", "Reject", "Invalid"],
-    "paired_effects": ["F_minus_S operational-success difference", "S_minus_F private-score difference"],
-    "domain_weighting": "Equal weight to each of four domains, equal weight to papers within domain, and preserve both tasks when a paper is resampled.",
-    "cluster_bootstrap": {
+    "registered_state_denominators": "Report Admit/Reject/Invalid over all registered decisions; never delete Invalid.",
+    "paired_effects": [
+      "F-B operational-success and private-score difference",
+      "S-B operational-success and private-score difference",
+      "S-F operational-success and private-score difference"
+    ],
+    "paired_denominator": "Report valid_pairs/registered_pairs; a missing member makes the pair Invalid.",
+    "partial_identification": "Report best/worst bounds for Invalid binary outcomes and bounded [0,1] scores.",
+    "contrast_orientation": {
+      "F_minus_B": [
+        "F",
+        "B"
+      ],
+      "S_minus_B": [
+        "S",
+        "B"
+      ],
+      "S_minus_F": [
+        "S",
+        "F"
+      ]
+    },
+    "registered_estimator": {
+      "block_value": "For contrast X-Y and valid rows, d_ptb = outcome_X - outcome_Y, computed separately for binary success and [0,1] private score.",
+      "block_bounds": {
+        "both_valid": "[x-y, x-y]",
+        "X_valid_Y_invalid": "[x-1, x]",
+        "X_invalid_Y_valid": "[-y, 1-y]",
+        "both_invalid": "[-1, 1]"
+      },
+      "task_observed": "Arithmetic mean of valid block differences; undefined if zero valid pairs, always accompanied by valid_pairs/6.",
+      "task_identified_bounds": "Arithmetic mean of the six registered block lower endpoints and of the six upper endpoints, using denominator 6.",
+      "paper_observed": "Equal 0.5/0.5 mean of the two task_observed values only when both are defined; otherwise undefined.",
+      "paper_identified_bounds": "Equal 0.5/0.5 mean of the two task lower bounds and upper bounds.",
+      "domain_identified_bounds": "Equal 1/3 mean of the three registered paper bounds in the domain.",
+      "overall_identified_bounds": "Equal 1/4 mean of the four domain bounds.",
+      "observed_summary": "Descriptive mean over defined paper_observed values with k/12 reported; it never replaces the registered identified bounds."
+    },
+    "aggregate_unit": "paper",
+    "domain_weighting": "Report exact domain counts and an equal-domain-weighted summary; keep both tasks nested within a sampled paper.",
+    "paper_bootstrap_sensitivity": {
       "replicates": 10000,
       "seed": 20260721,
-      "resampling_unit": "paper within domain, carrying both tasks and all six paired blocks",
-      "interpretation": "registered-benchmark sensitivity interval, not a population or distribution-free guarantee"
+      "resampling_unit": "paper within domain, carrying both tasks and all paired blocks",
+      "interpretation": "registered-benchmark sensitivity only, not a population CI",
+      "estimator_reuse": "Recompute the same task, paper, domain, and overall lower/upper estimators in every resample; never resample tasks or blocks."
     },
-    "per_task_display": "Show all six paired block outcomes; any whisker is descriptive and cannot turn six blocks into six independent paper-task units.",
-    "multiple_comparisons": "The primary S is the only candidate used for main admission claims. Atom ladders, model slots, SLA grids, and control diagnostics are secondary and cannot select the main result.",
-    "missingness": "Invalid and missing terminal outcomes remain visible in denominators. No complete-case deletion."
+    "leave_one_paper_out": "Repeat the same registered estimator after removing each paper, renormalizing only the remaining paper weights within its domain.",
+    "leave_one_block_out": "Descriptive five-block recomputation uses B<=1, F>=4, S>=4, and margin>=4 over the remaining blocks; per-registry gates are not applied after an unbalanced omission. Any remaining Invalid row makes the five-block state Invalid. Omitting the sole Invalid row may yield a labeled recovered five-block state, but it cannot replace the six-block admission decision.",
+    "per_task_display": "Show six raw paired points, valid/Invalid counts, median, and range; no per-task Clopper-Pearson or six-block bootstrap interval.",
+    "controls": "Exact sanity outcomes only; no confusion matrix or calibration rate.",
+    "multiple_comparisons": "Only dag_ratio_60_v1 supplies primary S; secondary analyses cannot select or rescue it.",
+    "cost_measurement": {
+      "scope": "descriptive registered-benchmark resource use; not a model ranking",
+      "raw_unit": "one registered execution row",
+      "deterministic_artifact_endpoints": {
+        "candidate_artifact_bytes": "Exact byte length of the frozen candidate artifact.",
+        "candidate_artifact_cl100k_tokens": "Exact tiktoken==0.12.0 cl100k_base count of the canonical rendered candidate artifact; the common task scaffold is excluded.",
+        "canonical_model_visible_payload_bytes": "Exact byte length of the frozen canonical model-visible payload."
+      },
+      "provider_reported_token_endpoints": {
+        "input_tokens": "Provider-returned input-token usage for the terminal response.",
+        "output_tokens": "Provider-returned output-token usage for the terminal response.",
+        "total_tokens": "Provider-returned total-token usage for the terminal response.",
+        "cached_input_tokens": "Provider-returned cached-input count when separately exposed; otherwise null.",
+        "validation": "Counts must be nonnegative integers. When input, output, and total are all reported, total must equal input plus output under the endpoint's frozen provider semantics. Otherwise input, output, and total are all null and provider_usage_missing_reason records why; partial-null tuples are invalid. Cached-input tokens are independently nullable."
+      },
+      "latency_endpoints_ms": {
+        "terminal_attempt_elapsed_ms": "Monotonic elapsed time from dispatch of the final attempted request to complete response-body receipt or terminal transport classification, rounded once to the nearest millisecond.",
+        "total_execution_elapsed_ms": "Monotonic elapsed time from dispatch of the first attempted request to the terminal classification, including prior attempts and registered retry waits.",
+        "retry_sleep_elapsed_ms": "Sum of measured registered backoff, Retry-After, and deterministic-jitter waits, rounded once to the nearest millisecond.",
+        "retry_overhead_ms": "max(0, total_execution_elapsed_ms - terminal_attempt_elapsed_ms); this contains prior-attempt time plus retry waits and is never pooled with model latency. For dispatched rows total time must be at least terminal-attempt time. Because total, terminal, and sleep durations are independently rounded once, retry overhead must be at least retry sleep minus one millisecond.",
+        "clock": "one process-local monotonic_ns clock; UTC timestamps are audit metadata only"
+      },
+      "attempt_fields": [
+        "attempt_index",
+        "attempt_status_class",
+        "attempt_elapsed_ms",
+        "retry_sleep_after_attempt_ms"
+      ],
+      "missingness": {
+        "artifact_endpoints": "Never missing after materialization; a mismatch is Invalid.",
+        "provider_tokens": "Null when the terminal response does not expose a valid usage tuple; never impute with cl100k_base or another model's tokenizer.",
+        "latency": "Null only when no request was dispatched, such as preflight unavailability. Once any attempt is dispatched, attempt and total timings are mandatory even for terminal transport failure.",
+        "paired_comparison": "A blockwise S-F resource delta is valid only when both endpoints are non-null; report valid_pairs/6 and do not impute missing members."
+      },
+      "task_level_reduction": {
+        "cell": "task x model slot x candidate",
+        "registered_blocks": 6,
+        "raw_display": "Show all six block-ordered values including nulls.",
+        "summary": "For each endpoint report non-null count/6, median, minimum, maximum, and sum over non-null values; undefined statistics remain null at count zero.",
+        "paired_S_minus_F": "For each resource endpoint report six block-ordered S-F deltas and the same valid-count, median, range, and sum reduction over valid pairs.",
+        "aggregation_boundary": "Never pool model slots, tasks, or structurally unrun cells; cross-task panels retain task-model-candidate cells.",
+        "missing_usage_reason_counts": "Report counts for every frozen provider_usage_missing_reason code in each task-model-candidate cell; null denotes a complete reported usage tuple."
+      },
+      "monetary_cost": {
+        "default": "not_reported",
+        "conditional_rule": "Report estimated USD cost only if a dated public price table, currency, input and output rates, original billing units, normalized USD-per-token rates, and its content hash are frozen in the final materialization anchor before calls.",
+        "formula": "input_tokens * input_rate_usd_per_token + output_tokens * output_rate_usd_per_token",
+        "missingness": "Null when token usage or a frozen price input is absent.",
+        "role": "appendix descriptive endpoint only; never a primary success criterion"
+      }
+    }
   },
-  "success_condition": "The protocol-calibration, decision-coverage, and natural-admission hypotheses all pass under the frozen registry, while integrity checks pass and no destructive negative control is admitted.",
-  "falsification_condition": "The forward claim is falsified or materially weakened if control calibration fails, fewer than 20 natural clusters yield valid decisions, fewer than 8 natural subsets are admitted, natural admissions cover fewer than three domains, or any post-outcome mutation occurs.",
+  "success_conditions": {
+    "protocol_integrity": "Every materialization, audit, hash, schedule, terminal, and control sanity gate passes.",
+    "decision_coverage": "At least 20/24 primary decisions are valid.",
+    "candidate_yield": "At least 8/24 primary dag_ratio_60_v1 candidates are admitted across at least three domains; this is an engineering benchmark target.",
+    "reporting_rule": "Report the three conclusions separately; one cannot rescue another."
+  },
+  "falsification_condition": "Any sanity failure, fewer than 20 valid natural decisions, fewer than 8 admissions, fewer than three admission domains, or post-anchor mutation.",
   "stage_2_3_entry_gate": [
-    "This plan, the paper registry, model registry, and figure/statistical plan pass the deterministic verifier.",
-    "All Stage 2.2 artifacts are committed and pushed.",
-    "Every selected full text, adapter, atom DAG, F/S artifact, fixture registry, scorer, and global schedule has a recorded digest.",
-    "Provider aliases are preflighted without substituting unregistered aliases.",
-    "No provider experiment conversation has started."
+    "The Stage 2.2 bundle, SLA analysis, verifier, and tests pass.",
+    "The Stage 2.2 report and artifacts are committed and pushed.",
+    "No experimental provider call has started."
+  ],
+  "stage_2_3_final_anchor_gate": [
+    "All sources, spans, audits, DAGs, candidates, fixtures, scorers, adapters, tests, and schedules have immutable hashes.",
+    "Builder/auditor identities and disagreement resolutions are recorded.",
+    "Independent auditors pass source review of the result parser, analysis implementation, and open-anchor preflight implementation.",
+    "Exact aliases pass format-only preflight without fallback.",
+    "The final anchor is verified, committed, and pushed before experiments."
   ]
 }

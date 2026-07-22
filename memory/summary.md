@@ -22,11 +22,12 @@ core research workflow.
 - Active paper: `EffectSlice: Evidence-Carrying Admission for Paper-Derived
   Procedural Cores`.
 - Manuscript source: `paper/effectslice_aaai/main_v3.tex`.
-- Rendered artifact: `paper/effectslice_aaai/main_v3.pdf` (8 pages).
+- Current verified layout: 8 pages, inspected at 144 DPI.
 - Stages `2.1` through `2.8`: passed.
 - Major Stage `2`: passed with `handoff_mode: normal`.
 - Forward Stage `2.6`: passed with 33 bibliography entries, 30 main-text
   citations, and 7 DOI-verified AAAI papers.
+- Forward Stage `2.2`: passed and pending private commit/push.
 - Current branch: `codex/effectslice-v3`.
 
 ## EffectSlice Evidence State
@@ -35,8 +36,7 @@ core research workflow.
   files and checks 24 directly bound artifacts.
 - Final reviewer ratings are 8.5/10, 7/10, and 7/10, all Weak Accept, with no
   unsupported manuscript claims or remaining scientific blocker.
-- Focused high-risk tests pass 26/26; the authoritative `tests/` suite passes
-  678 tests with 6 skips.
+- The authoritative frozen parent suite passes 678 tests with 6 skips.
 - The latest LaTeX build has no critical log findings, and all 8 rendered pages
   passed visual inspection.
 - The user has prohibited workflow-stage rollback. New experiments must be
@@ -46,13 +46,17 @@ core research workflow.
 ## Forward Generalization Extension
 
 - Root: `research/workflow_runs/rapid_core_reproduction_utility_2026-07-15/stage2/runs/effectslice_attempt_2/forward_extensions/generalization_2026-07-21/`.
-- Citation gate: 33 unique bibliography entries, 30 unique main-text citations,
-  7 AAAI citations, and 13 official or retrieved metadata records.
-- Added admission-risk positioning from SelectiveNet and Conformal Risk Control,
-  fine-grained agent-evaluation positioning from AgentBoard, and the ICML 2025
-  PaperBench venue record.
-- Next forward stage: `2.2`, preregistering a 12-paper by 2-task experiment over
-  NLP, software engineering, data analysis, and agent/tool-use domains.
+- Stage `2.2` bundle SHA:
+  `277bab0fba66a4144346d472ef3deadc010168353d47f939dc812501a2eff9b4`.
+- Registered benchmark: 12 papers, 24 nested task decisions, and four domains
+  (NLP, software engineering, data analysis, agent/tool-use).
+- Required schedule cap: 1200 remote conversations plus 96 fixed-seed local Qwen
+  executions, for 1296 required executions.
+- Required closed slots are DeepSeek primary, GPT-5.5, GPT-5.6 Sol, and GPT-5.6
+  Terra; the fixed-seed anchor is Qwen2.5-Coder-7B-Instruct.
+- Verification passed in normal and optimized modes, with 109 FG1 tests and three
+  independent PASS verdicts containing no P0/P1.
+- No provider/model API call has occurred in this forward extension.
 
 ## Legacy Evidence Policy
 
@@ -81,6 +85,19 @@ thesis. Reuse requires an explicit Stage 2 evidence audit.
 - Do not claim arbitrary-PDF understanding from a smoke path.
 - Do not claim portability without matched cross-harness evidence.
 - Treat provider availability separately from method quality.
+- Keep paper as the independent statistical unit and restrict forward inference
+  to the purposefully registered, domain-stratified benchmark.
+- Do not begin a forward stage until the preceding stage is verified, committed,
+  and pushed to the private remote.
+
+## Stage 2.3 Audit Priorities
+
+- Retain readable implementation-source evidence with distinct builder and
+  auditor identities.
+- Independently verify the Qwen generate-twice token comparison.
+- Add a forward-only token-ID vocabulary-bound check and mutation test.
+- Do not treat four controls as a calibrated confusion matrix or error-rate
+  estimate.
 
 ## Environment Policy
 
@@ -89,3 +106,5 @@ thesis. Reuse requires an explicit Stage 2 evidence audit.
 - Independent or dependency-heavy experiment projects may use separately named
   conda environments. Keep conda `base` unchanged and record each environment's
   name, Python version, dependency lock, and reproduction command in Stage 2.
+- Keep credentials outside source, logs, fixtures, manifests, hashes, manuscript,
+  and Git history.

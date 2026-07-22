@@ -6,7 +6,12 @@
     "target_papers": 12,
     "tasks_per_paper": 2,
     "target_paper_task_clusters": 24,
-    "domains": ["nlp", "software_engineering", "data_analysis", "agent_tool_use"],
+    "domains": [
+      "nlp",
+      "software_engineering",
+      "data_analysis",
+      "agent_tool_use"
+    ],
     "papers_per_domain": 3,
     "selection_rules": [
       "The paper has a formally published or proceedings-backed identity.",
@@ -16,15 +21,18 @@
       "Provider outcomes, V4/V5 private cases, and future private cases cannot influence paper or task selection."
     ],
     "replacement_policy": {
-      "allowed_until": "before the Stage 2.3 final materialization anchor is committed and before the first forward provider conversation",
-      "allowed_reasons": [
-        "full text cannot be legally acquired",
-        "source spans cannot support a 5-16 atom registry",
-        "a deterministic private scorer cannot be constructed",
-        "the task requires unavailable proprietary data or foundation-model retraining"
+      "reason_codes": [
+        "full_text_unavailable",
+        "source_span_atomization_infeasible",
+        "deterministic_private_scorer_infeasible",
+        "proprietary_data_or_retraining_required",
+        "primary_reducer_no_eligible_subset",
+        "structural_ladder_no_three_level_chain",
+        "alternate_reducer_no_candidate"
       ],
-      "procedure": "Use the lowest-ranked eligible reserve from the same domain, write an immutable amendment with the reason and new hashes, verify it, commit it, and push it before any provider call.",
-      "forbidden": "No replacement or paper/task target rewrite after the Stage 2.3 final materialization anchor. No atom, artifact, fixture, scorer, registry, or schedule rewrite after that anchor, regardless of whether a private outcome has already been observed."
+      "procedure": "A static-ineligibility reason blocks this materialization with amendments=[]. Without outcome access, use the lowest-ranked eligible reserve from the same domain only in a separately committed successor Stage 2.2 registration. The successor must update complete paper/task/sentinel foreign keys, regenerate and verify every schedule, and be pushed before materialization resumes.",
+      "sentinel_task_update_rule": "Any affected sentinel is rebound only in the successor registration; the current materialization amendment list remains empty.",
+      "forbidden": "No in-place task rewrite, no nonempty materialization amendment, and no replacement after outcome access or the final anchor."
     }
   },
   "implementation_policy": {
@@ -34,7 +42,8 @@
     "atom_gate": "Each F must contain 5-16 source-addressed atoms; every dependency edge and primary strict subset S must pass closure and digest checks.",
     "independent_semantic_audit": "Before the Stage 2.3 final anchor, a source auditor who did not construct S must review the task-to-span matrix, atom roles, DAG, F completeness, and scorer semantics. Builder and auditor identities plus disagreements and resolutions are recorded.",
     "task_specificity_gate": "Every task must separate paper claims, implementation guardrails, and scorer-interface atoms; bind at least two central paper spans; show that its two tasks have distinct central source boundaries; and pass a reference-implementation differential test before provider use.",
-    "private_registry_gate": "Each task has registry_A and registry_B, three blocks each. Registry B must have a builder or auditor different from the candidate builder, disjoint cases/seeds/payloads, and a separate digest."
+    "private_registry_gate": "Each task has registry_A and registry_B, three blocks each. Registry B must have a builder or auditor different from the candidate builder, disjoint cases/seeds/payloads, and a separate digest.",
+    "canonical_reducer_runtime_gate": "Bind the opaque atom-ID derivation, DAG validator, EffectSlice renderer v1, tiktoken 0.12.0 cl100k_base assets, and complete reducer input/enumeration/output hashes before the Stage 2.3 final anchor."
   },
   "papers": [
     {
@@ -44,7 +53,10 @@
       "year": 2023,
       "venue": "EMNLP 2023",
       "persistent_id": "doi:10.18653/v1/2023.emnlp-main.825",
-      "metadata_evidence": ["citation_search/official_metadata.json", "stage1/retrieval/generalization-nlp-procedures.json"],
+      "metadata_evidence": [
+        "citation_search/official_metadata.json",
+        "stage1/retrieval/generalization-nlp-procedures.json"
+      ],
       "tasks": [
         {
           "task_id": "NLP-LLM-01",
@@ -53,7 +65,12 @@
           "mechanism_boundary": "LLMLingua coarse-to-fine budget control only; no language-model training or live perplexity service.",
           "private_scorer": "Exact segment budgets, global budget conservation, protected-token retention, deterministic ties, and malformed-input rejection.",
           "primary_metric": "fraction of weighted scorer assertions passed",
-          "hard_contracts": ["exact_total_budget", "minimum_segment_quota", "stable_tie_break", "no_input_mutation"]
+          "hard_contracts": [
+            "exact_total_budget",
+            "minimum_segment_quota",
+            "stable_tie_break",
+            "no_input_mutation"
+          ]
         },
         {
           "task_id": "NLP-LLM-02",
@@ -62,7 +79,12 @@
           "mechanism_boundary": "Token-level iterative compression with supplied model scores; distribution-alignment training is excluded.",
           "private_scorer": "Exact retained indices by round, recomputed masks, order preservation, force-token handling, and budget feasibility.",
           "primary_metric": "fraction of weighted scorer assertions passed",
-          "hard_contracts": ["iterative_mask_update", "forced_tokens", "stable_order", "budget_feasible"]
+          "hard_contracts": [
+            "iterative_mask_update",
+            "forced_tokens",
+            "stable_order",
+            "budget_feasible"
+          ]
         }
       ]
     },
@@ -73,7 +95,10 @@
       "year": 2024,
       "venue": "Findings of ACL 2024",
       "persistent_id": "doi:10.18653/v1/2024.findings-acl.57",
-      "metadata_evidence": ["stage1/retrieval/candidate-llmlingua2.json", "paper/effectslice_aaai/effectslice_refs.bib"],
+      "metadata_evidence": [
+        "stage1/retrieval/candidate-llmlingua2.json",
+        "paper/effectslice_aaai/effectslice_refs.bib"
+      ],
       "tasks": [
         {
           "task_id": "NLP-LL2-01",
@@ -82,7 +107,12 @@
           "mechanism_boundary": "Data-distillation label alignment and inference preparation; teacher generation and classifier training are excluded.",
           "private_scorer": "Exact span alignment, repeated-token disambiguation, punctuation behavior, Unicode-safe offsets, and complete label coverage.",
           "primary_metric": "fraction of weighted scorer assertions passed",
-          "hard_contracts": ["complete_alignment", "offset_integrity", "stable_order", "no_unlabeled_tokens"]
+          "hard_contracts": [
+            "complete_alignment",
+            "offset_integrity",
+            "stable_order",
+            "no_unlabeled_tokens"
+          ]
         },
         {
           "task_id": "NLP-LL2-02",
@@ -91,7 +121,12 @@
           "mechanism_boundary": "Task-agnostic token-classifier inference and reconstruction with supplied probabilities; model training is excluded.",
           "private_scorer": "Budget adherence, force-token precedence, sentence-boundary policy, deterministic score ties, and faithful text reconstruction.",
           "primary_metric": "fraction of weighted scorer assertions passed",
-          "hard_contracts": ["exact_budget", "force_token_precedence", "deterministic_ties", "faithful_reconstruction"]
+          "hard_contracts": [
+            "exact_budget",
+            "force_token_precedence",
+            "deterministic_ties",
+            "faithful_reconstruction"
+          ]
         }
       ]
     },
@@ -102,7 +137,10 @@
       "year": 2025,
       "venue": "AAAI 2025",
       "persistent_id": "doi:10.1609/aaai.v39i23.34639",
-      "metadata_evidence": ["citation_search/official_metadata.json", "stage1/retrieval/candidate-context-sentence-compression.json"],
+      "metadata_evidence": [
+        "citation_search/official_metadata.json",
+        "stage1/retrieval/candidate-context-sentence-compression.json"
+      ],
       "tasks": [
         {
           "task_id": "NLP-CSE-01",
@@ -111,7 +149,12 @@
           "mechanism_boundary": "Sentence-level contextual scoring with frozen embeddings; representation-model training is excluded.",
           "private_scorer": "Exact contextual aggregation, mask handling, normalization, boundary cases, and deterministic numeric tolerance.",
           "primary_metric": "fraction of weighted scorer assertions passed",
-          "hard_contracts": ["context_aggregation", "mask_integrity", "finite_scores", "deterministic_tolerance"]
+          "hard_contracts": [
+            "context_aggregation",
+            "mask_integrity",
+            "finite_scores",
+            "deterministic_tolerance"
+          ]
         },
         {
           "task_id": "NLP-CSE-02",
@@ -120,7 +163,12 @@
           "mechanism_boundary": "Budgeted sentence selection and reconstruction; upstream embedding generation is supplied.",
           "private_scorer": "Selected sentence IDs, exact budget behavior, query-context retention, stable ties, and order-preserving reconstruction.",
           "primary_metric": "fraction of weighted scorer assertions passed",
-          "hard_contracts": ["budget_feasible", "query_context_retained", "stable_ties", "document_order"]
+          "hard_contracts": [
+            "budget_feasible",
+            "query_context_retained",
+            "stable_ties",
+            "document_order"
+          ]
         }
       ]
     },
@@ -131,7 +179,9 @@
       "year": 2002,
       "venue": "IEEE Transactions on Software Engineering",
       "persistent_id": "doi:10.1109/32.988498",
-      "metadata_evidence": ["paper/effectslice_aaai/effectslice_refs.bib"],
+      "metadata_evidence": [
+        "paper/effectslice_aaai/effectslice_refs.bib"
+      ],
       "tasks": [
         {
           "task_id": "SE-DD-01",
@@ -140,7 +190,12 @@
           "mechanism_boundary": "The ddmin procedure and outcome semantics; external test execution is replaced by a deterministic oracle fixture.",
           "private_scorer": "Minimal result, oracle-call trace, granularity changes, complement checks, unresolved handling, and deterministic ordering.",
           "primary_metric": "fraction of weighted scorer assertions passed",
-          "hard_contracts": ["one_minimal_result", "unresolved_semantics", "registered_call_order", "termination"]
+          "hard_contracts": [
+            "one_minimal_result",
+            "unresolved_semantics",
+            "registered_call_order",
+            "termination"
+          ]
         },
         {
           "task_id": "SE-DD-02",
@@ -149,7 +204,12 @@
           "mechanism_boundary": "Difference isolation between c_pass and c_fail; source-code transformation is excluded.",
           "private_scorer": "Invariant preservation, exact isolated difference, PASS/FAIL endpoints, call accounting, and unresolved branches.",
           "primary_metric": "fraction of weighted scorer assertions passed",
-          "hard_contracts": ["endpoint_invariant", "minimal_difference", "call_accounting", "termination"]
+          "hard_contracts": [
+            "endpoint_invariant",
+            "minimal_difference",
+            "call_accounting",
+            "termination"
+          ]
         }
       ]
     },
@@ -160,7 +220,9 @@
       "year": 2012,
       "venue": "PLDI 2012",
       "persistent_id": "doi:10.1145/2254064.2254104",
-      "metadata_evidence": ["paper/effectslice_aaai/effectslice_refs.bib"],
+      "metadata_evidence": [
+        "paper/effectslice_aaai/effectslice_refs.bib"
+      ],
       "tasks": [
         {
           "task_id": "SE-CR-01",
@@ -169,7 +231,12 @@
           "mechanism_boundary": "C-Reduce pass orchestration; real compilers and external reducers are excluded.",
           "private_scorer": "Exact transformation trace, restart points, cache hits, interestingness preservation, and final fixed point.",
           "primary_metric": "fraction of weighted scorer assertions passed",
-          "hard_contracts": ["interestingness_preserved", "restart_policy", "cache_semantics", "fixed_point"]
+          "hard_contracts": [
+            "interestingness_preserved",
+            "restart_policy",
+            "cache_semantics",
+            "fixed_point"
+          ]
         },
         {
           "task_id": "SE-CR-02",
@@ -178,7 +245,12 @@
           "mechanism_boundary": "Chunk-based reduction and pass refinement on registered token trees; compiler execution is supplied by fixtures.",
           "private_scorer": "Final token tree, oracle-call order, syntax validity, granularity progression, and no stale-cache reuse.",
           "primary_metric": "fraction of weighted scorer assertions passed",
-          "hard_contracts": ["syntax_valid", "interestingness_preserved", "granularity_progression", "no_stale_cache"]
+          "hard_contracts": [
+            "syntax_valid",
+            "interestingness_preserved",
+            "granularity_progression",
+            "no_stale_cache"
+          ]
         }
       ]
     },
@@ -189,7 +261,9 @@
       "year": 2018,
       "venue": "ICSE 2018",
       "persistent_id": "doi:10.1145/3180155.3180236",
-      "metadata_evidence": ["stage1/retrieval/candidate-perses.json"],
+      "metadata_evidence": [
+        "stage1/retrieval/candidate-perses.json"
+      ],
       "tasks": [
         {
           "task_id": "SE-PE-01",
@@ -198,7 +272,12 @@
           "mechanism_boundary": "Perses syntax-guided reduction on a miniature grammar; parser generation and real compiler execution are excluded.",
           "private_scorer": "Final tree, grammar validity, candidate order, interestingness calls, and deterministic tie breaks.",
           "primary_metric": "fraction of weighted scorer assertions passed",
-          "hard_contracts": ["grammar_valid", "interestingness_preserved", "registered_candidate_order", "stable_ties"]
+          "hard_contracts": [
+            "grammar_valid",
+            "interestingness_preserved",
+            "registered_candidate_order",
+            "stable_ties"
+          ]
         },
         {
           "task_id": "SE-PE-02",
@@ -207,7 +286,12 @@
           "mechanism_boundary": "Queue, invalidation, and normalization behavior around grammar-guided reduction; external build systems are excluded.",
           "private_scorer": "Queue trace, invalidation correctness, normalized output, oracle calls, and termination.",
           "primary_metric": "fraction of weighted scorer assertions passed",
-          "hard_contracts": ["no_invalidated_revisit", "queue_order", "normalized_output", "termination"]
+          "hard_contracts": [
+            "no_invalidated_revisit",
+            "queue_order",
+            "normalized_output",
+            "termination"
+          ]
         }
       ]
     },
@@ -218,7 +302,10 @@
       "year": 2024,
       "venue": "Nature Methods",
       "persistent_id": "doi:10.1038/s41592-023-02139-9",
-      "metadata_evidence": ["paper/effectslice_aaai/effectslice_refs.bib", "papers/extracted/snapatac2.txt"],
+      "metadata_evidence": [
+        "paper/effectslice_aaai/effectslice_refs.bib",
+        "papers/extracted/snapatac2.txt"
+      ],
       "tasks": [
         {
           "task_id": "DATA-SNAP-01",
@@ -227,7 +314,12 @@
           "mechanism_boundary": "SnapATAC2 spectral preprocessing through degree construction; eigensolving is excluded.",
           "private_scorer": "Sparse numeric output, degree vector, zero-row behavior, no dense allocation, and tolerance-bounded equality.",
           "primary_metric": "fraction of weighted scorer assertions passed",
-          "hard_contracts": ["sparse_only", "self_similarity_removed", "finite_degree", "numeric_tolerance"]
+          "hard_contracts": [
+            "sparse_only",
+            "self_similarity_removed",
+            "finite_degree",
+            "numeric_tolerance"
+          ]
         },
         {
           "task_id": "DATA-SNAP-02",
@@ -236,7 +328,12 @@
           "mechanism_boundary": "Matrix-free operator, eigensolver interface, sign/order normalization, and no-materialization guard.",
           "private_scorer": "Operator products, sign/order normalization, shape, sparse guard, and numerical tolerance.",
           "primary_metric": "fraction of weighted scorer assertions passed",
-          "hard_contracts": ["matrix_free", "coordinate_order", "sign_normalized", "numeric_tolerance"]
+          "hard_contracts": [
+            "matrix_free",
+            "coordinate_order",
+            "sign_normalized",
+            "numeric_tolerance"
+          ]
         }
       ]
     },
@@ -247,7 +344,9 @@
       "year": 2019,
       "venue": "Scientific Reports",
       "persistent_id": "doi:10.1038/s41598-019-41695-z",
-      "metadata_evidence": ["stage1/retrieval/candidate-leiden.json"],
+      "metadata_evidence": [
+        "stage1/retrieval/candidate-leiden.json"
+      ],
       "tasks": [
         {
           "task_id": "DATA-LEI-01",
@@ -256,7 +355,12 @@
           "mechanism_boundary": "Leiden local moving and partition bookkeeping; large-scale graph I/O is excluded.",
           "private_scorer": "Community assignments, gain updates, node order, empty-community handling, and objective monotonicity.",
           "primary_metric": "fraction of weighted scorer assertions passed",
-          "hard_contracts": ["objective_nondecreasing", "partition_valid", "stable_ties", "complete_assignment"]
+          "hard_contracts": [
+            "objective_nondecreasing",
+            "partition_valid",
+            "stable_ties",
+            "complete_assignment"
+          ]
         },
         {
           "task_id": "DATA-LEI-02",
@@ -265,7 +369,12 @@
           "mechanism_boundary": "Leiden refinement and aggregation phases on registered miniature graphs; stochastic node order is replaced by a frozen permutation.",
           "private_scorer": "Refined partition, connectivity predicates, aggregate edge weights, parent constraints, and deterministic mapping.",
           "primary_metric": "fraction of weighted scorer assertions passed",
-          "hard_contracts": ["parent_constraint", "refined_connectivity", "weight_conservation", "deterministic_mapping"]
+          "hard_contracts": [
+            "parent_constraint",
+            "refined_connectivity",
+            "weight_conservation",
+            "deterministic_mapping"
+          ]
         }
       ]
     },
@@ -276,7 +385,9 @@
       "year": 2015,
       "venue": "ACM Transactions on Knowledge Discovery from Data",
       "persistent_id": "doi:10.1145/2733381",
-      "metadata_evidence": ["stage1/retrieval/candidate-hdbscan.json"],
+      "metadata_evidence": [
+        "stage1/retrieval/candidate-hdbscan.json"
+      ],
       "tasks": [
         {
           "task_id": "DATA-HDB-01",
@@ -285,7 +396,12 @@
           "mechanism_boundary": "HDBSCAN mutual-reachability graph construction and MST; approximate nearest-neighbor search is excluded.",
           "private_scorer": "Core distances, edge weights, MST edge multiset/order, disconnected cases, and numeric tolerance.",
           "primary_metric": "fraction of weighted scorer assertions passed",
-          "hard_contracts": ["correct_core_distance", "mutual_reachability", "valid_mst", "stable_edge_ties"]
+          "hard_contracts": [
+            "correct_core_distance",
+            "mutual_reachability",
+            "valid_mst",
+            "stable_edge_ties"
+          ]
         },
         {
           "task_id": "DATA-HDB-02",
@@ -294,7 +410,12 @@
           "mechanism_boundary": "Condensed-tree construction, cluster stability, and flat selection; metric learning is excluded.",
           "private_scorer": "Condensed-tree events, stability values, selected clusters, noise labels, and deterministic ties.",
           "primary_metric": "fraction of weighted scorer assertions passed",
-          "hard_contracts": ["valid_condensed_tree", "stability_accounting", "noise_semantics", "stable_ties"]
+          "hard_contracts": [
+            "valid_condensed_tree",
+            "stability_accounting",
+            "noise_semantics",
+            "stable_ties"
+          ]
         }
       ]
     },
@@ -305,7 +426,10 @@
       "year": 2023,
       "venue": "NeurIPS 2023",
       "persistent_id": "dblp:conf/nips/SchickDDRLHZCS23",
-      "metadata_evidence": ["citation_search/official_metadata.json", "papers/extracted/toolformer.txt"],
+      "metadata_evidence": [
+        "citation_search/official_metadata.json",
+        "papers/extracted/toolformer.txt"
+      ],
       "tasks": [
         {
           "task_id": "AGENT-TF-01",
@@ -314,7 +438,12 @@
           "mechanism_boundary": "Toolformer API-call filtering with supplied token losses; call generation and language-model training are excluded.",
           "private_scorer": "Exact weighted losses, counterfactual choice, inclusive boundary, candidate retention, and stable input order.",
           "primary_metric": "fraction of weighted scorer assertions passed",
-          "hard_contracts": ["normalized_weights", "stronger_counterfactual", "inclusive_threshold", "stable_order"]
+          "hard_contracts": [
+            "normalized_weights",
+            "stronger_counterfactual",
+            "inclusive_threshold",
+            "stable_order"
+          ]
         },
         {
           "task_id": "AGENT-TF-02",
@@ -323,7 +452,12 @@
           "mechanism_boundary": "Post-filter call interleaving and serialization; API execution outputs are supplied by fixtures.",
           "private_scorer": "Serialized output, overlap policy, all-candidate handling, offsets after insertion, and malformed-call rejection.",
           "primary_metric": "fraction of weighted scorer assertions passed",
-          "hard_contracts": ["no_overlap", "all_eligible_calls", "stable_offsets", "valid_serialization"]
+          "hard_contracts": [
+            "no_overlap",
+            "all_eligible_calls",
+            "stable_offsets",
+            "valid_serialization"
+          ]
         }
       ]
     },
@@ -333,8 +467,11 @@
       "title": "Reflexion: Language Agents with Verbal Reinforcement Learning",
       "year": 2023,
       "venue": "NeurIPS 2023",
-      "persistent_id": "arxiv:2303.11366",
-      "metadata_evidence": ["stage1/retrieval/candidate-reflexion.json", "papers/extracted/reflexion.txt"],
+      "persistent_id": "neurips:1b44b878bb782e6954cd888628510e90",
+      "metadata_evidence": [
+        "stage1/retrieval/candidate-reflexion.json",
+        "papers/extracted/reflexion.txt"
+      ],
       "tasks": [
         {
           "task_id": "AGENT-RF-01",
@@ -343,7 +480,12 @@
           "mechanism_boundary": "Reflexion episodic memory bookkeeping and prompt assembly; free-form reflection generation is supplied.",
           "private_scorer": "Memory contents/order, truncation, feedback provenance, duplicate policy, and next-trial prompt assembly.",
           "primary_metric": "fraction of weighted scorer assertions passed",
-          "hard_contracts": ["feedback_provenance", "memory_bound", "stable_order", "no_weight_update"]
+          "hard_contracts": [
+            "feedback_provenance",
+            "memory_bound",
+            "stable_order",
+            "no_weight_update"
+          ]
         },
         {
           "task_id": "AGENT-RF-02",
@@ -352,9 +494,15 @@
           "mechanism_boundary": "Reflexion control flow and state isolation; base-agent and evaluator model calls are supplied as deterministic fixtures.",
           "private_scorer": "State trace, retry/termination decisions, reflection insertion timing, budget accounting, and success short-circuit.",
           "primary_metric": "fraction of weighted scorer assertions passed",
-          "hard_contracts": ["registered_state_machine", "reflection_after_feedback", "budget_accounting", "success_terminates"]
+          "hard_contracts": [
+            "registered_state_machine",
+            "reflection_after_feedback",
+            "budget_accounting",
+            "success_terminates"
+          ]
         }
-      ]
+      ],
+      "formal_identity_note": "The hash is the NeurIPS 2023 proceedings identifier present in the DBLP retrieval URL; the arXiv identifier is not the selected identity."
     },
     {
       "paper_id": "agent_react",
@@ -363,7 +511,9 @@
       "year": 2023,
       "venue": "ICLR 2023",
       "persistent_id": "openreview:WE_vluYUL-X",
-      "metadata_evidence": ["stage1/retrieval/candidate-react.json"],
+      "metadata_evidence": [
+        "stage1/retrieval/candidate-react.json"
+      ],
       "tasks": [
         {
           "task_id": "AGENT-RA-01",
@@ -372,7 +522,12 @@
           "mechanism_boundary": "ReAct trajectory representation and action validation; reasoning text quality and live tools are excluded.",
           "private_scorer": "Exact turn records, schema validation, malformed-action recovery, observation binding, and stop handling.",
           "primary_metric": "fraction of weighted scorer assertions passed",
-          "hard_contracts": ["valid_turn_order", "tool_schema", "observation_binding", "stop_semantics"]
+          "hard_contracts": [
+            "valid_turn_order",
+            "tool_schema",
+            "observation_binding",
+            "stop_semantics"
+          ]
         },
         {
           "task_id": "AGENT-RA-02",
@@ -381,7 +536,12 @@
           "mechanism_boundary": "ReAct tool-loop orchestration with supplied model emissions; model prompting and real web environments are excluded.",
           "private_scorer": "Tool call trace, observation context, invalid-action retry, action budget, final answer, and no post-terminal calls.",
           "primary_metric": "fraction of weighted scorer assertions passed",
-          "hard_contracts": ["tool_trace", "observation_accumulation", "bounded_retry", "terminal_is_final"]
+          "hard_contracts": [
+            "tool_trace",
+            "observation_accumulation",
+            "bounded_retry",
+            "terminal_is_final"
+          ]
         }
       ]
     }

@@ -95,8 +95,8 @@ digest.
 
 The evidence addresses three questions: whether realized B/F/S runs distinguish
 full-artifact insufficiency from subset-only insufficiency (RQ1); whether positive,
-negative, and identity controls exercise admission, rejection, and session-noise
-sanity states (RQ2); and whether a post-selected candidate can earn a valid local
+negative, and identity controls exercise their control-specific pass/fail and
+session-noise sanity states (RQ2); and whether a post-selected candidate can earn a valid local
 admission on a separately registered, nonoverlapping boundary (RQ3).
 
 Our contributions are:
@@ -254,7 +254,9 @@ A threshold of 0.95 over 64 deterministic cases requires at least
 The raw scorer's \texttt{success} flag means exact 64/64 success; every success
 count in our tables and decisions instead uses the operational definition above.
 Candidate rows use \emph{Admit/Reject}; control and integrity checks use
-\emph{Pass/Fail}.  Provider or transport exhaustion, scorer failure, an empty
+distinct state vocabularies: controls use \emph{SanityPass/SanityFail}, while
+integrity checks use \emph{Pass/Fail}.
+Provider or transport exhaustion, scorer failure, an empty
 submission, or a missing or malformed registered output makes the schedule
 Invalid/No record and supplies neither admission nor rejection evidence.  When a
 valid scorer result exists but the terminal patch was not applied or the hard
@@ -396,9 +398,9 @@ from all earlier private cases by ID, seed, and payload digest.  It is new evide
 for a post-V4 candidate, not an extension of the V4 preregistration.
 
 The planted family is a pipeline smoke test, not evidence of useful compression
-or naturally redundant paper text.  The registered internal checks pass only if it is admitted,
-the real negative
-is rejected, identity instrumentation passes, all outputs exist, and integrity
+or naturally redundant paper text.  The registered internal checks pass only if
+the planted positive, destructive-core negative, and identity instrument each
+produce a control-specific SanityPass, all outputs exist, and integrity
 holds.  Identity passes when at least five of six F/S success indicators match
 and the aggregate F/S success-count gap is at most one.  At six pairs the latter
 is implied by the former and is retained as a registered consistency field, not
@@ -493,10 +495,11 @@ Identity instrument & \IdentityControlBlocks & \IdentityControlBSuccesses &
 \IdentityControlFullSliceGap & \IdentityControlDecision \\
 \bottomrule
 \end{tabular}
-\caption{Registered outcomes across sequential V4 and V5 schedules.  Admission
-uses the frozen count-level SLA plus complete output and integrity.  The F--S
-field is retained but redundant at these thresholds.  Identity is not an
-admission and uses its separate 5/6 match rule.}
+\caption{Registered outcomes across sequential V4 and V5 schedules.  Natural
+candidates use the frozen count-level admission SLA plus complete output and
+integrity.  The F--S field is retained but redundant at these thresholds.
+Control rows use their separate SanityPass/SanityFail/Invalid rules; identity
+uses its registered 5/6 match rule.}
 \label{tab:results}
 \end{table*}
 
@@ -519,8 +522,9 @@ their registered schedules.
 
 \paragraph{RQ2: Do the controls exercise the intended sanity states?}
 The planted-positive control is
-admitted, this registered negative control is rejected, and byte-identical identity
-instrumentation passes despite one fresh-session mismatch.  Thus all three intended
+SanityPass under its positive-control rule, this destructive-core negative is
+SanityPass under its negative-control rule, and byte-identical identity
+instrumentation is SanityPass despite one fresh-session mismatch.  Thus all three intended
 internal sanity states are exercised; they are not estimates of population-level
 operating characteristics.
 
@@ -550,10 +554,11 @@ expectations for other candidates.  They never enter the admission decision,
 which is recomputed solely from registered outputs and SLA fields.
 
 The planted family removes only redundant T06.  It yields B/F/S counts 0/18/17,
-an F--S gap of one, and passes every registered field.  The same scorer and
-Toolformer task reject the real one-atom candidate at 0/17/8.  Thus the protocol
-does not reject every strict subset, and its registered positive and negative
-expectations are both observed.  This is a harness smoke test, not evidence that
+an F--S gap of one, and is SanityPass under the positive-control rule.  The same
+scorer and Toolformer task give the real one-atom candidate a natural B/F/S
+decision of Reject at 0/17/8 and a SanityPass under the destructive-core-negative
+rule.  Thus the registered positive and negative sanity expectations are both
+observed.  This is a harness smoke test, not evidence that
 a non-planted compact core has been found.  That stronger, still task-local
 evidence comes from V5 prefix 04: it was present in the reducer registry before
 V4, selected after V4, frozen before V5, and admitted on new private cases.  This
@@ -566,8 +571,8 @@ single mismatch is important: artifact identity does not imply trajectory or
 patch identity under fresh provider sessions.  This motivates a tolerance-based
 finite SLA rather than exact per-pair equality.
 
-Together, planted-positive admission, real-negative rejection, and identity
-instrumentation make the registered internal-check status
+Together, the planted-positive SanityPass, destructive-core-negative SanityPass,
+and identity SanityPass make the registered internal-check status
 \VFourCalibrationDecision{} (the macro retains the historical field name).  This
 is a task-local sanity and integrity check of the measurement stack, not
 sensitivity or specificity over a population of skills.

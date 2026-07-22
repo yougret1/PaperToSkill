@@ -1,161 +1,100 @@
-# EffectSlice Forward Generalization Preregistration
+# EffectSlice-FG1 Forward Generalization Preregistration
 
-## Scope
+## Scope and status
 
-This is a forward-only Stage 2.2 registration. It does not edit, reopen, pool
-into, or supersede V4 or V5. The V4 and V5 preregistration hashes are bound in
-`experiment_plan.json`. No forward provider conversation may begin until this
-bundle passes its verifier, is committed, and is pushed.
+EffectSlice-FG1 is a new forward-only SLA instance after V4 and V5. It shares protocol structure but does not edit, reopen, pool into, supersede, or statistically reuse either accepted schedule. Stage 2.2 registers the design; task materialization and immutable hashes remain pending for Stage 2.3. No experimental model call may begin before the final Stage 2.3 anchor is verified, committed, and pushed.
 
-The study asks whether one fixed admission protocol can issue auditable local
-decisions across heterogeneous paper-derived procedures. It does not claim that
-the registered papers are a random sample, that EffectSlice finds a globally
-minimal core, or that an admission transfers to users, other tasks, or an entire
-paper.
+The study asks whether one fixed admission protocol can issue auditable task-local decisions across heterogeneous paper-derived procedures. It does not claim random sampling, a globally minimal core, or transfer from one task to users, other tasks, or a whole paper.
 
-## Registered Sampling Frame
+## Research questions
 
-The primary frame contains 12 formally identified papers, three in each of four
-domains, and two distinct bounded tasks per paper.
+- RQ1: Can the registered B/F/S protocol issue complete task-local decisions across 12 papers and four mechanism domains?
+- RQ2: How heterogeneous are paired F-B, S-B, and S-F effects when tasks are nested within papers?
+- RQ3: How do structural restoration, reducer choice, compression, reliability, and cost trade off on four frozen tasks?
+- RQ4: What exact candidate-state agreement and F/I repeatability are observed across required models on four prespecified sentinel tasks?
+- RQ5: How stable are primary task decisions and identified bounds under the registered SLA grid, leave-one-block-out, and leave-one-paper-out sensitivity analyses?
 
-| Domain | Papers | Registered tasks |
-|---|---|---:|
-| NLP | LLMLingua; LLMLingua-2; Context-Aware Sentence Compression | 6 |
-| Software engineering | Delta Debugging; C-Reduce; Perses | 6 |
-| Data analysis | SnapATAC2; Leiden; HDBSCAN | 6 |
-| Agent/tool use | Toolformer; Reflexion; ReAct | 6 |
+## Sampling frame and unit
 
-The 24 paper-task clusters, mechanism boundaries, deterministic scorer
-contracts, reserves, and rejection reasons are frozen in `paper_registry.json`.
-Every selected task excludes foundation-model training and live external data.
-Model scores, embeddings, tool outputs, compiler outcomes, and oracles are
-supplied as deterministic fixtures when the task would otherwise depend on an
-external service.
+The primary frame has 12 papers, three in each of NLP, software engineering, data analysis, and agent/tool use, with two bounded tasks per paper. The independent aggregate unit is the paper (`n=12`). Tasks are nested within papers, and six blocks are paired repeated measurements within tasks; neither 24 tasks nor 432 conversations are independent papers.
 
-Before a Stage 2.3 pilot, each cluster must bind a legal local full text, exact
-source spans, a 5-16 atom DAG, F and S digests, disjoint public/private fixture
-digests, scorer code, and a task-specific adapter. Clean-room implementation is
-the default. External code is not copied until its revision and license are
-recorded.
+Before the final Stage 2.3 anchor, every task binds a legal full text, at least two central spans, a 5-16 atom DAG, F and candidate digests, disjoint public/private registries, scorer and adapter code, a reference differential test, and an independent semantic audit. A registered static-ineligibility reason blocks the current materialization before that anchor.
 
-## Primary B/F/S Design
+The only static-ineligibility reasons are unavailable full text, infeasible source-span atomization, infeasible deterministic private scoring, required proprietary data or retraining, no eligible primary subset, no three-level structural ladder, or no alternate-reducer candidate. Any such case blocks the current materialization with `amendments=[]`. A same-domain replacement may proceed only in a separately committed successor Stage 2.2 registration that rebinds every paper/task/sentinel foreign key and regenerates all schedules before materialization resumes. Outcome-driven replacement and in-place task rewriting are forbidden.
 
-Each paper-task cluster receives six matched private blocks. Each block runs B,
-F, and S in a fresh provider conversation. The six permutations `BFS`, `BSF`,
-`FBS`, `FSB`, `SBF`, and `SFB` occur exactly once per cluster. The global
-schedule is deterministically interleaved across domains and hash-bound before
-the first provider call.
+## Primary B/F/S design
 
-- B: task and common action scaffold, with no paper-derived artifact.
-- F: complete source-grounded task artifact.
-- S: one frozen dependency-closed strict subset.
+Every task receives six matched blocks and fresh B, F, and S conversations on the exact `deepseek_primary` slot. Registry A uses `BFS`, `FSB`, and `SBF`; Registry B uses `BSF`, `FBS`, and `SFB`. Every order occurs once. The 2/3 registry checks are explicit materialization/reporting audits; at the registered 5/6 total threshold they do not add independent admission strength.
 
-The primary reducer is outcome independent. It removes the last canonical
-dependency-maximal atom that is not a hard contract, guardrail, or scorer
-interface, then restores dependency closure. A cluster with no eligible strict
-subset fails its static gate before provider execution. Private results can
-never choose a paper, task, atom, scorer, or candidate.
+- B is the bounded task and common scaffold with a zero-length canonical artifact whose
+  SHA-256 is `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855`.
+- F is the complete source-grounded artifact.
+- S is the dependency-closed strict subset from `dag_ratio_60_v1`.
 
-The primary design contains `24 x 6 x 3 = 432` provider conversations. The
-paper-task cluster is the independent unit; 432 conversations are not 432
-independent scientific units.
+The reducer reads only opaque source-locator-derived atom IDs, dependency IDs, and rendered token counts. It cannot read paper-claim, hard-contract, guardrail, scorer-interface, outcome, or model-output labels. `effectslice_atom_renderer_v1` uses UTF-8/LF and a pinned `tiktoken==0.12.0` `cl100k_base` encoding; the ratio is artifact-only `tokens(S)/tokens(F)`. The reducer enumerates every nonempty dependency-closed strict subset, retains candidates at 45-75%, targets 60%, and breaks ties by absolute target error, fewer tokens, then canonical opaque IDs. DAG acyclicity, dependency references, renderer/tokenizer bytes, the enumeration log, and reducer input/output hashes are bound before the final anchor. No eligible subset is a pre-anchor static failure, never a post-outcome repair.
 
-## Frozen Admission Rule
+The primary design contains `12 * 2 * 6 * 3 = 432` remote conversations.
 
-Operational success requires every hard contract and private score at least
-0.90. A natural S is admitted only when all of the following hold:
+## Admission rule
 
-1. B succeeds in at most 1 of 6 blocks.
-2. F succeeds in at least 5 of 6 blocks.
-3. S succeeds in at least 5 of 6 blocks.
-4. In at least 5 of 6 matched blocks, `score(S) >= score(F) - 0.05`.
-5. Every required output and integrity check is complete.
+Operational success requires every hard contract and private score at least 0.90. Across six blocks, B succeeds at most once, F and S each succeed at least five times, and at least five valid F/S pairs satisfy `score(S) >= score(F) - 0.05`. Within each three-block registry, B succeeds at most once, F and S each succeed at least twice, and at least two valid pairs satisfy the margin. Every row must be terminal and all integrity checks must pass.
 
-Complete runs that fail one or more sufficiency fields are Reject. Missing or
-corrupt terminal evidence after the retry policy is Invalid. Invalid is
-orthogonal to F/S sufficiency and remains visible in every registered
-denominator.
+Complete valid B/F/S runs that fail a gate are Reject. The primary reason follows `full-insufficient`, `baseline-sensitive`, `slice-insufficient`, `margin-shortfall`; all failed gates remain flags. Missing transport/integrity evidence is Invalid and stays in every denominator. A completed malformed/no-submission, budget-exhausted, hard-contract-failed, or score-short response is a valid condition failure. Block-level condition success is not candidate-level admission.
 
-The forward claim passes its preregistered benchmark target only if at least
-three of four positive controls are admitted, all four destructive negative
-controls are rejected, at least 20 of 24 natural clusters yield valid decisions,
-at least 8 natural S candidates are admitted, and admissions cover at least
-three domains. Failure is reported; thresholds and tasks are not edited.
+Every valid terminal row has exactly one finite private score in `[0,1]`: malformed/no-submission is exactly `0.0`; budget exhaustion is scored from the terminal workspace; hard-contract failure, score shortfall, and operational success retain the frozen scorer's assertion fraction. Invalid rows have a null score. Each task's differential test exercises all five valid terminal-score cases before the anchor.
 
-## Registered Secondary Experiments
+## Secondary experiments
 
-Four clusters, one per domain (`NLP-LLM-01`, `SE-PE-01`, `DATA-HDB-01`, and
-`AGENT-TF-01`), support all secondary experiments.
+All secondary experiments use `NLP-LLM-01`, `SE-PE-01`, `DATA-HDB-01`, and `AGENT-TF-01`. Every two-arm candidate gets a fresh adjacent F/C pair, with `FC, CF, FC, CF, FC, CF` across blocks; primary rows are not reused. Ladder and alternate reducers use `PairPass/PairFail/Invalid`, never Admit/Reject. Controls use control-specific `SanityPass/SanityFail/Invalid`: positive requires F/C sufficiency and margin, negative requires sufficient F plus repeated targeted candidate failure, and identity requires input-digest equality plus operational/contract/score agreement.
 
-Controls add a redundant source-addressed atom for the positive S and delete a
-core or hard-contract atom for the negative S. They reuse the matched primary B
-and F but use 48 fresh S conversations. Four controls per class are too few for
-a calibrated confusion matrix, so only exact task-level counts and intervals
-are reported.
+| Component | Remote conversations |
+|---|---:|
+| Primary B/F/S | 432 |
+| Positive, destructive, and identity controls | 144 |
+| Three structural restoration levels | 144 |
+| Two alternate blind reducers | 96 |
+| GPT-5.5, GPT-5.6 Sol, GPT-5.6 Terra, Claude Opus 4.7 with B/F/S/I | 384 |
+| **Required remote total** | **1200** |
 
-The atom ladder contains four nested dependency-closed levels, from `drop_4` to
-the primary `drop_1`. Three levels beyond primary add 72 fresh S conversations.
-These rows produce the restore/drop and compression-reliability Pareto analyses
-but cannot select or rescue the primary S.
+Controls are sanity states, not calibration data; no confusion matrix or error-rate claim is allowed. Restoration levels are selected by a complete deterministic chain enumeration and require `S=L0` strict-subset `L1` strict-subset `L2` strict-subset `F` before the anchor. They provide structural response evidence, not causality. Alternate reducers and model slots cannot select or rescue primary S.
 
-The closed-model robustness panel adds GPT-5.5, GPT-5.6 Sol, GPT-5.6 Terra, and
-Claude Opus 4.7: 72 conversations each, 288 total. The primary DeepSeek rows are
-reused. GPT-5.6 Luna and Claude Opus 4.6 are optional separate conditions after
-all required runs; they are not silent fallbacks. A local
-`Qwen/Qwen2.5-Coder-7B-Instruct` slot supplies the fixed-seed reproducibility
-anchor after its exact weights, tokenizer, quantization, runtime, and hashes are
-bound in Stage 2.3.
+The alternate DAG-greedy reducer removes atoms in reverse canonical topological order together with their present transitive dependents and retains every unique eligible trajectory state. The source-window reducer enumerates every half-open contiguous source-order window, adds transitive dependency closure, and deduplicates the eligible states. Both select by distance to 60%, fewer rendered tokens, then lexicographic atom IDs; the verifier independently recomputes their complete enumerations and selections.
 
-Closed endpoints run at temperature zero, but no closed model is claimed to be
-seed deterministic. Returned seed/fingerprint fields are recorded when present.
+I is a fresh repeat with a model-visible payload byte-identical to F. B/F/S/I orders keep F/I adjacent, balance F-before-I and I-before-F three times each, and preserve all six B/F/S projections. B/F/S alone determines candidate state. F/I reports valid pairs, success and contract-vector agreement, score delta, canonical-output equality, and raw equality. Closed slots are descriptive; the frozen local `Qwen/Qwen2.5-Coder-7B-Instruct` anchor requires 6/6 input, token-ID, canonical-output, contract, and score equality under an exact big-endian seed derivation with golden vectors. GPT-5.6 Luna and Claude Opus 4.6 are optional after required work and add 192 conversations.
 
-## Statistics and Figures
+The final anchor binds the Qwen revision, absolute snapshot root, index-complete weight/tokenizer/config file inventory, dtype and quantization, software and hardware evidence, greedy generation settings, and deterministic Torch/cuDNN/cuBLAS/Python flags. Generation uses `max_new_tokens=1024`, EOS IDs `[151645,151643]`, pad ID `151643`, and stops on the first EOS inclusively or the length cap. The verifier runs a frozen offline load/tokenize/generate-twice preflight and requires repeat token and canonical-output equality. Generated token IDs exclude prompt and post-EOS padding and include the first EOS. This is the only seed-controlled model claim; closed API seed fields are recorded if returned but are not relied upon.
 
-The main report shows exact Admit/Reject/Invalid counts and all six paired block
-outcomes per cluster. Aggregate sensitivity intervals use 10,000 bootstrap
-replicates with seed 20260721, resampling papers within domain and carrying both
-tasks and all blocks together. They describe this registered benchmark and do
-not establish a population guarantee.
+Canonical model-visible payloads use a length-prefixed byte format over the exact task scaffold, fixture payload, and candidate artifact. Per-slot request templates reconstruct canonical non-streaming JSON wire bytes from registered JSON pointers. Raw responses are the exact post-transfer body bytes before parsing. Canonical output is extracted by a frozen slot-specific selector from strict UTF-8 JSON, newline-normalized, NFC-normalized, and UTF-8 encoded without a trailing-newline edit. Parser and analysis implementations, schemas, and golden fixtures/results are hash-bound before calls. The verifier executes both implementations in isolated Python processes with frozen JSON on stdin, requires exact canonical JSON bytes on stdout, validates the registered schemas, and rejects timeouts, stderr, nonzero exits, or byte differences.
 
-Four figure groups are preregistered:
+Every primary and required model uses the same normalized 1024-token output cap. The request template maps it to `/max_tokens` for DeepSeek Chat Completions and Claude Messages, `/max_output_tokens` for OpenAI Responses, and `/max_new_tokens` for the local Qwen adapter; provider defaults are forbidden. Slot response contracts freeze the standard protocol assumption, output selector, raw finish-reason selector and normalization, and usage selectors before calls. A format-only preflight validates both request and response shape for every available exact alias. The parser golden suite separately covers every required slot, EOS, length, provider stop, a null finish reason, malformed completion, terminal transport failure, and not-dispatched unavailability. Length-capped completions keep the same frozen scorer and terminal-outcome rule.
 
-1. Protocol audit: real source span, atom DAG, F/S boundary, freeze timeline,
-   information flow, and admission state machine.
-2. Cross-paper effects: paper-task forest/dot-whisker plot and faceted
-   Admit/Reject/Invalid heatmap.
-3. Compression and mechanism: reliability/cost Pareto and atom restore/drop
-   trajectories.
-4. Robustness: SLA and leave-one-block-out sensitivity plus failure-mode
-   decomposition with recovered transport retries separated from semantic
-   failures.
+The result parser, analysis implementation, and open-anchor preflight each record a builder identity and receive an independent source audit by a different identity. The audit evidence and exact implementation hashes are bound by the final anchor; an implementation cannot self-certify only by shipping matching golden fixtures.
 
-No empirical figure is generated from placeholders. A control confusion matrix
-is explicitly prohibited with the current four independent controls per class.
+At the V4 mean of 127.2 seconds, required remote work is 42.4 nominal serial call-hours and 51-70 planned call-hours with queues and network retries. This excludes the local anchor, source/task materialization, audits, scoring, plots, writing, and review; two workers give only an ideal 25.5-35 hour lower bound. Optional models add about 8-14 call-hours.
 
-## Compute, Retry, and Failure Policy
+Resource reporting is descriptive and never ranks models. Every execution records frozen candidate bytes and `cl100k_base` tokens, canonical payload bytes, provider-reported input/output/total/cached tokens when valid, final-attempt and total elapsed milliseconds, retry sleep, and retry overhead. Each task-model-candidate cell shows all six registered values plus non-null count, median, range, and sum; S-F deltas require both members. Monetary cost is appendix-only and is omitted unless a dated public price table and its hash are frozen before calls.
 
-The required provider cap is 840 conversations: 432 primary, 288 required model
-ablation, 72 atom ladder, and 48 controls. At the V4 observed mean of 127.2
-seconds per conversation this is 29.7 nominal provider-hours; the planning band
-is 36-48 hours with queue and network retries. The two optional closed models
-add at most 144 conversations after required work.
+## Statistics and figures
 
-Transport failures, HTTP 408/429/5xx, and timeouts receive at most five attempts
-with 2/4/8/16-second delays. Authentication rejection, absent model aliases,
-malformed frozen requests, and deterministic scorer failures are not retried as
-network failures. A completed semantic result is never rerun because its score
-is low. Every attempt and recovery is preserved.
+State counts use registered denominators. For each F-B, S-B, and S-F contrast, block differences are averaged over valid blocks only as a descriptive task value, while fixed-denominator lower/upper endpoints assign missing bounded outcomes to their extrema and average all six blocks. The two task endpoints receive fixed 0.5/0.5 paper weights, three papers receive 1/3 domain weights, and four domains receive 1/4 overall weights. Every level reports `valid_pairs/registered_pairs`. Per-task displays show six raw points, counts, median, and range, with no per-task Clopper-Pearson or six-block bootstrap intervals. Bootstrap and leave-one-paper-out recompute this same estimator.
 
-## Stage 2.3 Gate
+Aggregate analysis is paper-level. Exact domain counts, leave-one-paper-out results, an equal-domain summary, and a paper-within-domain bootstrap sensitivity analysis are mandatory. The bootstrap describes this registered benchmark, not a population guarantee.
 
-Stage 2.3 cannot start until:
+Leave-one-block-out uses the registered five-block thresholds and never deletes remaining Invalid rows. If omitting the sole Invalid row yields a complete five-block state, that recovery is labeled only as sensitivity evidence and cannot replace the six-block decision.
 
-- every file in this registration bundle passes `verify_forward_preregistration.py`;
-- the bundle is committed and pushed;
-- selected full texts, source spans, atom DAGs, F/S artifacts, fixtures,
-  scorers, adapters, and the global schedule have immutable hashes; and
-- exact provider aliases pass non-private format preflight without fallback.
+The required figure groups are: (1) an end-to-end real example from source span through opaque atoms, dependency DAG, F/S retained boundary, rendered payload, and terminal admission fields, plus the freeze timeline and full B/F/S/margin/integrity admission gate; (2) paper-level effect forest and a primary-only state matrix; (3) separate primary compression and two-arm Pair/Sanity panels with structural missing cells; and (4) model-by-sentinel-task candidate/F-I results, SLA sensitivity, and terminal-failure decomposition. The primary, paired-secondary, and model designs are never shown as a nonexistent full factorial. Recovered retries are annotations, not semantic failures. Empirical panels cannot use placeholders.
 
-No page-count optimization is applied during evidence construction. Main-paper
-and appendix placement is decided only after real plots and review evidence
-exist.
+## Retry and forward gates
+
+Connection resets, DNS/TLS failures, HTTP 408/429/5xx, and read timeouts receive at most five attempts with 2/4/8/16-second delays; 429 honors a larger valid `Retry-After` and deterministic execution-ID jitter. Authentication failure, absent exact aliases, malformed frozen requests, and deterministic scorer failures are not network retries. Stable execution IDs and idempotency keys are used when available; the first cryptographically valid terminal response wins and all late duplicates remain annotations. A terminal response is never rerun because its score is low. Every attempt is preserved without credentials.
+
+Stage 2.3 starts only after the design bundle, deterministic SLA analysis, verifier, and tests pass; the Stage 2.2 report and artifacts are committed and pushed; and no experimental provider call has started. The first experiment remains prohibited until every source, span, audit, DAG, candidate, registry, scorer, adapter, test, request template, and schedule is hash-bound, exact aliases pass format-only preflight, independent implementation source audits pass, identities are recorded, and the final anchor is committed and pushed. API credentials are injected only from the environment or a secret store and never enter source, logs, fixtures, manifests, hashes, or the manuscript.
+
+The final anchor also binds the exact 1296-row family/task/variant/model/block/condition
+sequence. A normalized, sorted-unique value manifest for execution IDs, pair IDs,
+private case IDs, derived seeds, fixture payload hashes, and wire-request hashes is
+recomputed from the complete registered FG1/V4/V5 glob expansions with fixed extractors;
+the manifest cannot choose its own source set, and every registered intersection must be zero. Only the
+ordered FG1 execution-ID allowlist may enter FG1 estimators.
+
+No page-count optimization is applied while evidence is being built.

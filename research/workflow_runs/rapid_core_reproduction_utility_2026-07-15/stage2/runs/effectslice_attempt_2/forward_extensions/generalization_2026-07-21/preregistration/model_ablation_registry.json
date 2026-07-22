@@ -1,77 +1,191 @@
 {
-  "schema_version": "effectslice-forward-model-ablation-registry.v1",
-  "registration_status": "frozen_before_provider_calls",
-  "paper_task_ids": ["NLP-LLM-01", "SE-PE-01", "DATA-HDB-01", "AGENT-TF-01"],
+  "schema_version": "effectslice-fg1-model-registry.v2",
+  "registration_status": "stage_2_2_design_registered_materialization_pending",
+  "paper_task_ids": [
+    "NLP-LLM-01",
+    "SE-PE-01",
+    "DATA-HDB-01",
+    "AGENT-TF-01"
+  ],
   "design": {
-    "blocks_per_paper_task": 6,
-    "conditions": ["B", "F", "S"],
-    "conversations_per_model": 72,
-    "same_frozen_inputs_across_models": true,
+    "blocks_per_task": 6,
+    "conditions": [
+      "B",
+      "F",
+      "S",
+      "I"
+    ],
+    "I_meaning": "I is a fresh conversation with a model-visible payload byte-identical to F.",
+    "remote_conversations_per_closed_model": 96,
+    "local_executions_for_open_anchor": 96,
+    "condition_orders_by_block": [
+      "BFIS",
+      "IFSB",
+      "SBFI",
+      "BSIF",
+      "FIBS",
+      "SIFB"
+    ],
+    "F_I_adjacent_in_every_block": true,
     "fresh_conversation_per_condition": true,
+    "same_frozen_inputs_across_models": true,
     "temperature": 0,
-    "closed_model_seed_claim": "No closed-model slot is claimed bitwise or seed deterministic. A provider seed is recorded if supported but is not treated as a reproducibility guarantee.",
-    "comparison_scope": "Secondary robustness analysis only; no best-model selection and no pooling with the 24-cluster primary DeepSeek result."
+    "normalized_max_output_tokens": 1024,
+    "output_budget_scope": "Every primary, required closed-model, and open-anchor execution uses the same 1024-token output cap through a provider-native request-field mapping.",
+    "closed_model_seed_claim": "Closed slots are not claimed bitwise or seed deterministic; returned seed or fingerprint fields are logged but not relied upon.",
+    "comparison_scope": "Secondary robustness only; no model ranking, primary-row reuse, or pooling with the 24-task result; conclusions are limited to the four prespecified sentinel tasks.",
+    "candidate_state_rule": "B/F/S use the primary admission SLA; I is excluded.",
+    "repeatability_metrics": [
+      "model_visible_input_sha256_agreement",
+      "valid_pairs/registered_pairs",
+      "operational_success_agreement",
+      "hard_contract_vector_agreement",
+      "absolute_private_score_delta",
+      "canonical_output_sha256_agreement",
+      "raw_response_sha256_agreement"
+    ],
+    "repeatability_reduction": {
+      "unit": "task_model",
+      "registered_pairs": 6,
+      "boolean_endpoints": [
+        "model_visible_input_sha256_agreement",
+        "operational_success_agreement",
+        "hard_contract_vector_agreement",
+        "canonical_output_sha256_agreement",
+        "raw_response_sha256_agreement"
+      ],
+      "boolean_summary": {
+        "raw_values": "Six block-ordered values in {true,false,null}.",
+        "valid_pair_count": "Count of non-null values in the six registered pairs.",
+        "agreement_count": "Count of true values among valid pairs.",
+        "agreement_rate_registered": "agreement_count / 6",
+        "agreement_rate_valid": "agreement_count / valid_pair_count; undefined when valid_pair_count is zero"
+      },
+      "score_delta_summary": {
+        "raw_absolute_private_score_deltas": "Six block-ordered values in [0,1] or null when the F/I pair is Invalid.",
+        "valid_pair_count": "Count of non-null score deltas.",
+        "median_absolute_delta": "Median of non-null absolute deltas; undefined when valid_pair_count is zero.",
+        "maximum_absolute_delta": "Maximum of non-null absolute deltas; undefined when valid_pair_count is zero."
+      },
+      "missingness_rule": "Invalid F/I pairs remain null and are counted in registered denominator 6; they are never imputed as agreements or disagreements.",
+      "aggregation_boundary": "Never pool model slots or sentinel tasks. Cross-model displays retain one task-model cell per endpoint and show unavailable slots explicitly."
+    }
+  },
+  "primary_model_reference": {
+    "slot_id": "deepseek_primary",
+    "role": "primary_24_task_BFS_only",
+    "model_alias": "deepseek-v4-flash",
+    "paper_label": "DeepSeek V3.2",
+    "alias_label_mapping_status": "The exact request alias is frozen; the provider/user-facing paper label is reported, but their deployment mapping is not independently attested.",
+    "required_for_primary_schedule": true,
+    "conditions": [
+      "B",
+      "F",
+      "S"
+    ],
+    "remote_conversations": 432,
+    "robustness_rows_reused": false,
+    "decoding": {
+      "temperature": 0,
+      "normalized_max_output_tokens": 1024
+    }
   },
   "model_slots": [
     {
-      "slot_id": "deepseek_primary",
-      "role": "primary_rows_reused",
-      "required": true,
-      "provider_family": "DeepSeek",
-      "model_alias": "deepseek-v4-flash",
-      "provider_label": "DeepSeek V3.2",
-      "wire_api": "openai_chat_completions",
-      "seed_support": "not_relied_upon",
-      "additional_conversations": 0,
-      "availability_gate": "Must match the primary forward provider manifest."
-    },
-    {
       "slot_id": "gpt_5_5",
-      "role": "required_closed_ablation",
+      "role": "required_closed_robustness",
       "required": true,
       "provider_family": "OpenAI",
       "model_alias": "gpt-5.5",
-      "wire_api": "openai_responses",
-      "seed_support": "not_relied_upon",
-      "additional_conversations": 72,
-      "planning_hours": [2.0, 3.5],
-      "availability_gate": "The experiment endpoint must advertise or successfully preflight this exact alias; no fallback alias is pooled."
+      "seed_support": "record_if_returned_not_relied_upon",
+      "conditions": [
+        "B",
+        "F",
+        "S",
+        "I"
+      ],
+      "remote_conversations": 96,
+      "planning_hours": [
+        2.7,
+        4.7
+      ],
+      "decoding": {
+        "temperature": 0,
+        "normalized_max_output_tokens": 1024
+      },
+      "availability_gate": "The exact alias must pass format-only preflight; no fallback alias is substituted or pooled."
     },
     {
       "slot_id": "gpt_5_6_sol",
-      "role": "required_closed_ablation",
+      "role": "required_closed_robustness",
       "required": true,
       "provider_family": "OpenAI",
       "model_alias": "gpt-5.6-sol",
-      "wire_api": "openai_responses",
-      "seed_support": "not_relied_upon",
-      "additional_conversations": 72,
-      "planning_hours": [3.0, 5.5],
-      "availability_gate": "The experiment endpoint must advertise or successfully preflight this exact alias; no fallback alias is pooled."
+      "seed_support": "record_if_returned_not_relied_upon",
+      "conditions": [
+        "B",
+        "F",
+        "S",
+        "I"
+      ],
+      "remote_conversations": 96,
+      "planning_hours": [
+        4.0,
+        7.3
+      ],
+      "decoding": {
+        "temperature": 0,
+        "normalized_max_output_tokens": 1024
+      },
+      "availability_gate": "The exact alias must pass format-only preflight; no fallback alias is substituted or pooled."
     },
     {
       "slot_id": "gpt_5_6_terra",
-      "role": "required_closed_ablation",
+      "role": "required_closed_robustness",
       "required": true,
       "provider_family": "OpenAI",
       "model_alias": "gpt-5.6-terra",
-      "wire_api": "openai_responses",
-      "seed_support": "not_relied_upon",
-      "additional_conversations": 72,
-      "planning_hours": [2.0, 4.0],
-      "availability_gate": "The experiment endpoint must advertise or successfully preflight this exact alias; no fallback alias is pooled."
+      "seed_support": "record_if_returned_not_relied_upon",
+      "conditions": [
+        "B",
+        "F",
+        "S",
+        "I"
+      ],
+      "remote_conversations": 96,
+      "planning_hours": [
+        2.7,
+        5.3
+      ],
+      "decoding": {
+        "temperature": 0,
+        "normalized_max_output_tokens": 1024
+      },
+      "availability_gate": "The exact alias must pass format-only preflight; no fallback alias is substituted or pooled."
     },
     {
       "slot_id": "claude_opus_4_7",
-      "role": "required_closed_ablation",
+      "role": "required_closed_robustness",
       "required": true,
       "provider_family": "Anthropic",
       "model_alias": "claude-opus-4-7",
-      "wire_api": "anthropic_messages",
-      "seed_support": "not_relied_upon",
-      "additional_conversations": 72,
-      "planning_hours": [3.0, 7.0],
-      "availability_gate": "The experiment endpoint must advertise or successfully preflight this exact alias. Historical 502s are transport failures and follow the registered retry policy."
+      "seed_support": "record_if_returned_not_relied_upon",
+      "conditions": [
+        "B",
+        "F",
+        "S",
+        "I"
+      ],
+      "remote_conversations": 96,
+      "planning_hours": [
+        4.0,
+        9.3
+      ],
+      "decoding": {
+        "temperature": 0,
+        "normalized_max_output_tokens": 1024
+      },
+      "availability_gate": "The exact alias must pass format-only preflight; no fallback alias is substituted or pooled."
     },
     {
       "slot_id": "open_seed_anchor",
@@ -79,17 +193,75 @@
       "required": true,
       "provider_family": "local_open_weights",
       "model_alias": "Qwen/Qwen2.5-Coder-7B-Instruct",
-      "wire_api": "local_frozen_runtime",
       "seed_support": "required",
-      "generation_seeds": [6201, 6202, 6203, 6204, 6205, 6206],
+      "conditions": [
+        "B",
+        "F",
+        "S",
+        "I"
+      ],
+      "local_executions": 96,
       "decoding": {
         "do_sample": false,
         "temperature": 0,
-        "top_p": 1.0
+        "top_p": 1.0,
+        "normalized_max_output_tokens": 1024
       },
-      "local_conversations": 72,
-      "revision_gate": "Before execution, bind an immutable weight revision, file hashes, tokenizer hash, quantization, inference-runtime version, device, and deterministic-kernel settings in a committed Stage 2.3 manifest.",
-      "interpretation": "A reproducibility anchor and sensitivity condition, not a capability-matched substitute for the closed models."
+      "seed_derivation": {
+        "formula": "uint32_big_endian(sha256(preimage_bytes)[0:4])",
+        "preimage_fields": [
+          "study_id",
+          "task_id",
+          "ascii_decimal_block_id",
+          "condition_seed_group",
+          "ascii_decimal_turn_id"
+        ],
+        "preimage_encoding": "UTF-8 without BOM, fields joined by one NUL byte, no trailing NUL",
+        "condition_seed_groups": {
+          "B": "baseline",
+          "F": "full_identity_pair",
+          "S": "slice",
+          "I": "full_identity_pair"
+        },
+        "F_I_same_seed": true,
+        "golden_test_vectors": [
+          {
+            "fields": [
+              "EffectSlice-FG1",
+              "NLP-LLM-01",
+              "1",
+              "full_identity_pair",
+              "0"
+            ],
+            "uint32_seed": 2490612457
+          },
+          {
+            "fields": [
+              "EffectSlice-FG1",
+              "AGENT-TF-01",
+              "6",
+              "slice",
+              "1"
+            ],
+            "uint32_seed": 3699213122
+          }
+        ],
+        "frameworks_seeded": [
+          "python_random",
+          "numpy",
+          "torch_cpu",
+          "torch_cuda_all"
+        ]
+      },
+      "revision_gate": "Bind weight revision and file hashes, tokenizer hash, quantization, runtime, device, CUDA stack, deterministic algorithms, TF32 state, and CUBLAS_WORKSPACE_CONFIG before execution.",
+      "interpretation": "Identical F/I reproducibility, not seed sensitivity or a capability-matched closed-model substitute.",
+      "deterministic_F_I_gate": {
+        "required_valid_pairs": 6,
+        "required_model_visible_input_matches": 6,
+        "required_generated_token_id_matches": 6,
+        "required_canonical_output_sha256_matches": 6,
+        "required_score_and_contract_vector_matches": 6
+      }
     },
     {
       "slot_id": "gpt_5_6_luna",
@@ -97,29 +269,53 @@
       "required": false,
       "provider_family": "OpenAI",
       "model_alias": "gpt-5.6-luna",
-      "wire_api": "openai_responses",
-      "seed_support": "not_relied_upon",
-      "additional_conversations": 72,
-      "planning_hours": [2.0, 4.0],
-      "availability_gate": "Run only after all required experiments and only if the exact alias is exposed. Unavailability is reported; it does not trigger alias substitution."
+      "seed_support": "record_if_returned_not_relied_upon",
+      "conditions": [
+        "B",
+        "F",
+        "S",
+        "I"
+      ],
+      "remote_conversations": 96,
+      "planning_hours": [
+        2.7,
+        5.3
+      ],
+      "decoding": {
+        "temperature": 0,
+        "normalized_max_output_tokens": 1024
+      },
+      "availability_gate": "The exact alias must pass format-only preflight; no fallback alias is substituted or pooled."
     },
     {
       "slot_id": "claude_opus_4_6",
-      "role": "optional_version_control",
+      "role": "optional_secondary",
       "required": false,
       "provider_family": "Anthropic",
       "model_alias": "claude-opus-4-6",
-      "wire_api": "anthropic_messages",
-      "seed_support": "not_relied_upon",
-      "additional_conversations": 72,
-      "planning_hours": [3.0, 6.0],
-      "availability_gate": "Run only after all required experiments. It is a separate version condition and may not silently replace or be pooled with Claude Opus 4.7."
+      "seed_support": "record_if_returned_not_relied_upon",
+      "conditions": [
+        "B",
+        "F",
+        "S",
+        "I"
+      ],
+      "remote_conversations": 96,
+      "planning_hours": [
+        4.0,
+        8.0
+      ],
+      "decoding": {
+        "temperature": 0,
+        "normalized_max_output_tokens": 1024
+      },
+      "availability_gate": "The exact alias must pass format-only preflight; no fallback alias is substituted or pooled."
     }
   ],
   "preflight_contract": {
-    "provider_registry_snapshot": "Persist the model-list response or exact preflight status without credentials.",
-    "dry_run_scope": "At most one non-experimental format-only request per model alias; no paper-task private payload is used.",
-    "unavailable_required_slot": "Record provider_or_model_unavailable and keep the primary experiment valid, but mark cross-model robustness incomplete.",
+    "registry_snapshot": "Persist exact alias discovery or format-only preflight status without credentials or paper-task private payloads.",
+    "maximum_format_only_requests_per_alias": 1,
+    "unavailable_required_slot": "Record provider_or_model_unavailable and mark cross-model robustness incomplete without invalidating the primary FG1 design.",
     "no_alias_fallback": true,
     "no_post_outcome_model_addition": true
   }

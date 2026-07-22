@@ -2,37 +2,43 @@
 
 ## Active Iteration
 
-Run a forward-only EffectSlice generalization extension from the accepted V4/V5
-parent evidence. The current boundary is Stage `2.6` citation completion followed
-by a new Stage `2.2` preregistration; no parent experiment is reopened.
+Complete and privately back up the forward-only EffectSlice Stage `2.2`
+generalization preregistration. The accepted V4/V5 evidence is immutable and no
+parent stage is reopened.
 
 ## Completed This Iteration
 
-- Expanded the bibliography to 33 unique entries and the manuscript to 30
-  unique cited works, including 7 DOI-verified AAAI papers.
-- Added SelectiveNet, Conformal Risk Control, and AgentBoard positioning and
-  upgraded PaperBench to its ICML 2025 publication record.
-- Preserved structured retrieval envelopes, a citation-role matrix, official
-  metadata, SHA-256 digests, and a forward citation verifier.
-- Passed the forward citation audit, 2 forward tests, and 15 existing manuscript
-  and citation contract tests.
-- Rebuilt `paper/effectslice_aaai/main_v3.pdf` as a valid 8-page PDF and visually
-  inspected all pages at 144 DPI.
+- Froze a 12-paper by 2-task benchmark across four domains, including B/F/S
+  candidates, controls, schedules, provider identities, retries, statistical
+  units, resource endpoints, and four required figure contracts.
+- Added exact response selectors, twelve parser golden-case contracts, structured
+  result-row cross-field semantics, and implementation-source audit gates.
+- Bound the fixed-seed Qwen2.5-Coder-7B anchor, offline preflight, file inventory,
+  EOS/length semantics, and deterministic runtime requirements.
+- Generated bundle SHA
+  `277bab0fba66a4144346d472ef3deadc010168353d47f939dc812501a2eff9b4`.
+- Passed normal and optimized verification, 109 FG1 tests, and the frozen parent
+  regression (`678 passed, 6 skipped`).
+- Received three independent PASS verdicts with no P0/P1 findings.
+- Rebuilt and visually inspected all 8 paper pages at 144 DPI. No provider API
+  was called.
 
 ## Current State
 
-- The accepted parent Stage `2` and V4/V5 evidence remain unchanged.
-- Forward Stage `2.6` is passed and ready for private Git backup.
-- The current manuscript is `paper/effectslice_aaai/main_v3.pdf`.
-- The next stage is a new `2.2` experiment preregistration; provider execution
-  is not authorized until that stage is frozen and backed up.
+- Forward Stage `2.2` is passed but is not anchored until commit and private push
+  succeed.
+- The source manuscript is `paper/effectslice_aaai/main_v3.tex`.
+- The standard `main_v3.pdf` was held open externally; the current-source verified
+  build is `main_v3_build.pdf` until the clean copy is completed.
+- Stage `2.3` is forbidden before the Stage `2.2` push succeeds.
 
 ## Residual Risk
 
-- Atom boundaries and private cases remain author-constructed.
-- Evidence covers two paper-specific tasks, one provider, one action scaffold,
-  and one non-planted admission.
-- The V5 result is a local post-selection confirmation, not a prospective
-  population-level estimate.
-- Crosschecks and release verification do not rerun the semantic scorer or the
-  complete provider trajectory.
+- The registered papers are a purposeful benchmark, not a random population
+  sample; paper remains the independent statistical unit.
+- Source-audit identities are process evidence rather than externally
+  authenticated identities.
+- Stage `2.3` must independently inspect the Qwen generate-twice comparison and
+  add a forward-only token-ID vocabulary-bound mutation test.
+- Provider availability and descriptive resource endpoints remain separate from
+  method-quality evidence.

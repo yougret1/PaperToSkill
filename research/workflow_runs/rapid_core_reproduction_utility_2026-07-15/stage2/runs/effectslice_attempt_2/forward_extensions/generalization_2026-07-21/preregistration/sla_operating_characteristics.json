@@ -1,0 +1,32 @@
+{
+  "analysis_type": "deterministic engineering-rule enumeration",
+  "classification_counts": {
+    "Admit": 81,
+    "baseline-sensitive": 9984,
+    "full-insufficient": 53248,
+    "margin-shortfall": 351,
+    "slice-insufficient": 1872
+  },
+  "count_state_definition": "Eight counts: B/F/S/margin passes in each three-block registry; every count ranges from 0 to 3.",
+  "invalid_policy": "Invalid rows are not enumerated as failures here; any missing registered row makes the empirical candidate decision Invalid.",
+  "logical_note": "At the registered 5-of-6 total and 2-of-3 per-registry thresholds, the per-registry count gates are logically entailed by the total gate. They remain explicit audit checks for registry materialization and reporting.",
+  "passing_count_states": 81,
+  "probability_model": "None registered. B/F/S success and paired-margin counts are dependent within blocks, so no factorized admission probability is reported.",
+  "registered_rule": {
+    "each_three_block_registry": {
+      "maximum_B_successes": 1,
+      "minimum_F_successes": 2,
+      "minimum_S_successes": 2,
+      "minimum_valid_paired_margin_blocks": 2
+    },
+    "total_six_blocks": {
+      "maximum_B_successes": 1,
+      "minimum_F_successes": 5,
+      "minimum_S_successes": 5,
+      "minimum_valid_paired_margin_blocks": 5
+    }
+  },
+  "schema_version": "effectslice-fg1-sla-operating-characteristics.v1",
+  "source_plan": "preregistration/experiment_plan.json",
+  "total_count_states": 65536
+}
