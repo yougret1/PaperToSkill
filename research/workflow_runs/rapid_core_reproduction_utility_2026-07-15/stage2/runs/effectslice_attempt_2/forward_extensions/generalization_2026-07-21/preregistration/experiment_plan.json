@@ -1,0 +1,200 @@
+{
+  "schema_version": "effectslice-forward-experiment-plan.v1",
+  "registration_status": "frozen_before_provider_calls",
+  "stage": "2.2",
+  "forward_only_scope": {
+    "statement": "This registration adds new evidence after V4/V5 and cannot rewrite, reopen, pool into, or supersede either accepted schedule.",
+    "parent_commit": "bb0cfe5d091d1072a7a08d8ba20de3944105d298",
+    "immutable_inputs": [
+      {
+        "path": "artifacts/confirmation_v4/preregistration.json",
+        "sha256": "b5970f270d500fa526d478ba77774ab6095232f4573d092663efb9061d816fbb"
+      },
+      {
+        "path": "artifacts/confirmation_v5r2/preregistration.json",
+        "sha256": "6083729477053feeee328f79f9fddfcb83acdaae7410debdab5218b4e18e24eb"
+      },
+      {
+        "path": "forward_extensions/generalization_2026-07-21/stage_report_2_6.json",
+        "role": "passed literature and venue evidence"
+      }
+    ]
+  },
+  "research_questions": [
+    {
+      "id": "RQ1",
+      "question": "Does the frozen B/F/S admission protocol produce complete, calibrated task-local decisions across 24 paper-task clusters in four mechanism domains?"
+    },
+    {
+      "id": "RQ2",
+      "question": "How heterogeneous are paired F-S operational-success and private-score differences across papers, tasks, and domains?"
+    },
+    {
+      "id": "RQ3",
+      "question": "How do dependency-closed atom restoration, retained atom/token ratio, and measured execution cost trade against reliability on a frozen four-cluster subset?"
+    },
+    {
+      "id": "RQ4",
+      "question": "Do the local decisions remain qualitatively stable across registered model families and SLA perturbations without claiming deterministic closed-model reproduction?"
+    }
+  ],
+  "hypotheses": {
+    "protocol_calibration": "At least three of four planted-redundancy positive controls are admitted and all four destructive-core negative controls are rejected.",
+    "decision_coverage": "At least 20 of 24 natural paper-task clusters yield a valid Admit or Reject decision rather than Invalid.",
+    "natural_admission": "At least 8 of 24 frozen natural strict subsets are admitted, with at least one natural admission in three of four domains.",
+    "generalization_boundary": "Failure of any threshold is a reportable falsification or limitation, not a reason to edit tasks, atoms, scorers, models, or private registries."
+  },
+  "primary_design": {
+    "paper_registry": "preregistration/paper_registry.json",
+    "papers": 12,
+    "tasks_per_paper": 2,
+    "paper_task_clusters": 24,
+    "blocks_per_cluster": 6,
+    "conditions": ["B", "F", "S"],
+    "condition_meanings": {
+      "B": "same action scaffold and task with no paper-derived artifact",
+      "F": "complete source-grounded task artifact",
+      "S": "frozen dependency-closed strict subset produced without private outcomes"
+    },
+    "provider_conversations": 432,
+    "fresh_conversation_per_condition": true,
+    "private_cases_per_block": 64,
+    "public_private_overlap_allowed": false,
+    "maximum_parallel_workers": 2,
+    "independent_inference_unit": "paper-task cluster; the six blocks are paired repeated measurements, not 144 independent tasks"
+  },
+  "candidate_construction": {
+    "atom_count_range": [5, 16],
+    "full_artifact": "F contains every atom registered as necessary to implement the bounded task, including hard contracts and guardrails.",
+    "primary_reducer": "deterministic_dependency_closed_leaf_drop_v1",
+    "primary_slice_rule": [
+      "Build the source-addressed atom DAG and reject cycles or unresolved locators.",
+      "Identify dependency-maximal atoms that are not marked hard-contract, guardrail, or scorer-interface atoms.",
+      "Choose the last eligible atom by canonical source locator, then atom ID.",
+      "Remove that atom and any dependent atoms required by closure; S must remain nonempty and strict.",
+      "If no eligible strict subset exists, the cluster fails the static eligibility gate before provider execution."
+    ],
+    "private_outcome_access": "forbidden",
+    "required_bindings_before_pilot": [
+      "full-text sha256",
+      "source span and byte locator for each atom",
+      "atom DAG and topological order",
+      "F and S rendered artifact sha256",
+      "public/private fixture registry sha256",
+      "scorer source and configuration sha256"
+    ]
+  },
+  "schedule": {
+    "within_cluster_orders": ["BFS", "BSF", "FBS", "FSB", "SBF", "SFB"],
+    "rule": "Each paper-task cluster uses every B/F/S order exactly once across its six blocks.",
+    "block_seed_base": 2026072100,
+    "global_interleave_seed": 20260721,
+    "global_interleave": "Round-robin domains, then a deterministic hash order over paper_id, task_id, and block_id; no two tasks from one paper are adjacent when another domain remains available.",
+    "freeze_artifact": "Stage 2.3 must materialize the complete global schedule and its sha256 before the first provider conversation."
+  },
+  "scoring": {
+    "private_score_range": [0.0, 1.0],
+    "operational_success": "All hard contracts pass and private_score >= 0.90.",
+    "admission_sla": {
+      "maximum_B_successes": 1,
+      "minimum_F_successes": 5,
+      "minimum_S_successes": 5,
+      "minimum_paired_margin_blocks": 5,
+      "paired_margin_rule": "S private_score >= F private_score - 0.05 within the matched block",
+      "all_outputs_complete": true,
+      "all_integrity_checks_pass": true
+    },
+    "decision_states": {
+      "Admit": "All SLA, completeness, source, dependency, and integrity fields pass.",
+      "Reject": "The run is complete and valid but one or more B/F/S sufficiency or paired-margin fields fail.",
+      "Invalid": "A required input, output, scorer call, digest, schedule binding, or terminal provider result is missing or corrupt after the registered retry policy."
+    },
+    "invalid_is_orthogonal": "Invalid is not a quadrant of F sufficiency by S sufficiency and is excluded from neither denominators nor failure reporting."
+  },
+  "control_subset": {
+    "paper_task_ids": ["NLP-LLM-01", "SE-PE-01", "DATA-HDB-01", "AGENT-TF-01"],
+    "positive_control": "Add one source-addressed restatement atom that has no executable effect, then remove only that atom in S_positive.",
+    "negative_control": "Remove the lowest-ID hard-contract or core-computation atom and all closure dependents in S_negative.",
+    "additional_slice_conversations": 48,
+    "reuse": "The matched primary B and F conversations are reused; each control S receives a fresh conversation.",
+    "calibration_scope": "Four independent positive and four independent negative task-level controls; block-level repetitions are not counted as independent labels.",
+    "confusion_matrix_policy": "Report exact task-level counts and binomial intervals in a table. Do not draw a confusion matrix or claim calibrated error rates unless a later forward amendment registers at least eight independent controls per class before outcomes."
+  },
+  "atom_ladder_subset": {
+    "paper_task_ids": ["NLP-LLM-01", "SE-PE-01", "DATA-HDB-01", "AGENT-TF-01"],
+    "candidate_levels": ["drop_4", "drop_3", "drop_2", "drop_1_primary"],
+    "construction": "Starting from F, remove dependency-maximal eligible atoms in reverse canonical order. Each level is dependency closed, nonempty, and strictly nested; drop_1_primary is the primary S used in the main design.",
+    "additional_levels_beyond_primary": 3,
+    "additional_slice_conversations": 72,
+    "reuse": "The matched primary B and F conversations are reused; every additional S level receives a fresh conversation.",
+    "claim_scope": "Secondary causal/mechanistic evidence on four registered clusters only; ladder results cannot replace or select the primary S."
+  },
+  "model_ablation": {
+    "registry": "preregistration/model_ablation_registry.json",
+    "paper_task_ids": ["NLP-LLM-01", "SE-PE-01", "DATA-HDB-01", "AGENT-TF-01"],
+    "closed_model_blocks_per_cluster": 6,
+    "conditions_per_block": 3,
+    "conversations_per_closed_model": 72,
+    "required_additional_closed_models": 4,
+    "required_additional_provider_conversations": 288,
+    "primary_deepseek_rows_reused": true,
+    "claim_scope": "Robustness across registered model slots; no general model ranking or deterministic equality claim."
+  },
+  "resource_budget": {
+    "primary_provider_conversations": 432,
+    "required_model_ablation_provider_conversations": 288,
+    "atom_ladder_provider_conversations": 72,
+    "control_provider_conversations": 48,
+    "required_provider_conversation_cap": 840,
+    "optional_model_provider_conversation_cap": 144,
+    "open_seed_anchor_local_conversations": 72,
+    "observed_v4_seconds_per_conversation": 127.2,
+    "required_nominal_provider_hours": 29.7,
+    "required_realistic_provider_hours": [36, 48],
+    "optional_models_realistic_additional_hours": [6, 13],
+    "budget_rule": "Required experiments finish before optional model slots. Exhaustion produces budget_infeasible; it cannot change tasks, thresholds, seeds, or hypotheses."
+  },
+  "transport_and_failure_policy": {
+    "timeout_seconds": 240,
+    "maximum_transport_attempts": 5,
+    "retry_delays_seconds": [2, 4, 8, 16],
+    "retryable": ["connection reset", "DNS or TLS transport failure", "HTTP 408", "HTTP 429", "HTTP 500", "HTTP 502", "HTTP 503", "HTTP 504", "read timeout"],
+    "non_retryable": ["authentication rejected", "model alias absent from provider registry", "malformed frozen request", "deterministic scorer or contract failure"],
+    "semantic_rerun": "forbidden; a completed provider response is never rerun because its score is low",
+    "attempt_logging": "Persist every transport attempt, elapsed time, HTTP/status class, provider request ID when available, and whether the terminal response was recovered.",
+    "failure_taxonomy": [
+      "no_patch_or_no_submission",
+      "hard_contract_failure",
+      "score_shortfall",
+      "public_test_only_failure",
+      "action_budget_exhausted",
+      "transport_retry_recovered",
+      "transport_terminal_failure",
+      "provider_or_model_unavailable",
+      "integrity_or_digest_failure"
+    ]
+  },
+  "analysis_contract": {
+    "primary_counts": ["Admit", "Reject", "Invalid"],
+    "paired_effects": ["F_minus_S operational-success difference", "S_minus_F private-score difference"],
+    "domain_weighting": "Equal weight to each of four domains, equal weight to papers within domain, and preserve both tasks when a paper is resampled.",
+    "cluster_bootstrap": {
+      "replicates": 10000,
+      "seed": 20260721,
+      "resampling_unit": "paper within domain, carrying both tasks and all six paired blocks",
+      "interpretation": "registered-benchmark sensitivity interval, not a population or distribution-free guarantee"
+    },
+    "per_task_display": "Show all six paired block outcomes; any whisker is descriptive and cannot turn six blocks into six independent paper-task units.",
+    "multiple_comparisons": "The primary S is the only candidate used for main admission claims. Atom ladders, model slots, SLA grids, and control diagnostics are secondary and cannot select the main result.",
+    "missingness": "Invalid and missing terminal outcomes remain visible in denominators. No complete-case deletion."
+  },
+  "success_condition": "The protocol-calibration, decision-coverage, and natural-admission hypotheses all pass under the frozen registry, while integrity checks pass and no destructive negative control is admitted.",
+  "falsification_condition": "The forward claim is falsified or materially weakened if control calibration fails, fewer than 20 natural clusters yield valid decisions, fewer than 8 natural subsets are admitted, natural admissions cover fewer than three domains, or any post-outcome mutation occurs.",
+  "stage_2_3_entry_gate": [
+    "This plan, the paper registry, model registry, and figure/statistical plan pass the deterministic verifier.",
+    "All Stage 2.2 artifacts are committed and pushed.",
+    "Every selected full text, adapter, atom DAG, F/S artifact, fixture registry, scorer, and global schedule has a recorded digest.",
+    "Provider aliases are preflighted without substituting unregistered aliases.",
+    "No provider experiment conversation has started."
+  ]
+}

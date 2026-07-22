@@ -1,0 +1,157 @@
+{
+  "schema_version": "effectslice-forward-figure-statistical-plan.v1",
+  "registration_status": "frozen_before_provider_calls",
+  "evidence_rule": "No empirical panel may be rendered from placeholder, simulated, hand-entered, or selectively filtered outcomes. Every panel must bind its aggregation code and source artifact hashes.",
+  "figures": [
+    {
+      "figure_id": "F1_protocol_audit",
+      "priority": "main_required",
+      "panels": [
+        {
+          "id": "a",
+          "content": "One real source-span to atom-DAG worked example with dependencies and F/S retain/drop coloring."
+        },
+        {
+          "id": "b",
+          "content": "Forward information-flow timeline from source/task freeze through public development, private terminal scoring, analysis, and release; V3, V4, V5, and the forward extension remain visibly separate."
+        },
+        {
+          "id": "c",
+          "content": "Compact admission state machine showing F sufficient/insufficient, S sufficient/insufficient, orthogonal Invalid checks, and control roles."
+        }
+      ],
+      "data_sources": ["preregistration/paper_registry.json", "preregistration/experiment_plan.json", "Stage 2.3 atom and schedule manifests"],
+      "claim": "Protocol transparency and leakage control, not an empirical effectiveness result."
+    },
+    {
+      "figure_id": "F2_cross_paper_effects",
+      "priority": "main_required",
+      "panels": [
+        {
+          "id": "a",
+          "content": "Paper-task forest/dot-whisker display of paired S-F private-score differences, six raw paired blocks, and descriptive paired-block intervals."
+        },
+        {
+          "id": "b",
+          "content": "Paper-task by condition/model faceted heatmap with Admit, Reject, and Invalid kept distinct; provider/model facets are never collapsed into a five-dimensional cell."
+        }
+      ],
+      "data_sources": ["Stage 2.4 research summary", "Stage 2.4 model-ablation summary", "immutable run-level analysis rows"],
+      "claim": "Registered-benchmark heterogeneity and coverage; no random-sample population claim."
+    },
+    {
+      "figure_id": "F3_compression_reliability",
+      "priority": "main_required",
+      "panels": [
+        {
+          "id": "a",
+          "content": "Compression-reliability-cost Pareto scatter using retained atom ratio, retained token ratio, operational success, private score, input/output tokens, and elapsed time."
+        },
+        {
+          "id": "b",
+          "content": "Dependency-respecting atom restore/drop trajectories for the four frozen ladder clusters, with each registered level shown even when Invalid."
+        }
+      ],
+      "data_sources": ["Stage 2.4 ablation summary", "atom ladder manifests", "provider usage and elapsed-time rows"],
+      "claim": "Secondary mechanism evidence on four clusters only. Cross-task points are normalized within cluster before aggregation."
+    },
+    {
+      "figure_id": "F4_robustness_and_failures",
+      "priority": "main_or_appendix_required",
+      "panels": [
+        {
+          "id": "a",
+          "content": "SLA threshold grid and leave-one-block-out decision stability; baseline, sufficiency, and paired-margin thresholds vary only over the registered grid."
+        },
+        {
+          "id": "b",
+          "content": "Failure-mode decomposition separating no submission, hard-contract failure, score shortfall, budget exhaustion, recovered transport retry, terminal transport failure, unavailable model, and integrity failure."
+        }
+      ],
+      "data_sources": ["Stage 2.4 summaries", "transport-attempt ledger", "integrity audit"],
+      "claim": "Robustness and operational diagnosis; recovered transport retries are not counted as semantic failures."
+    }
+  ],
+  "conditional_outputs": [
+    {
+      "name": "control_confusion_matrix",
+      "default": "do_not_render",
+      "render_gate": "At least eight independent task-level positive controls and eight independent task-level negative controls must be registered before outcomes.",
+      "current_independent_controls_per_class": 4,
+      "current_output": "Exact task-level control table with binomial intervals and no calibrated-error-rate claim."
+    }
+  ],
+  "statistics": {
+    "primary_unit": "paper-task cluster",
+    "nesting": "six paired blocks within task, two tasks within paper, three papers within each of four domains",
+    "primary_outcomes": [
+      "finite-schedule Admit/Reject/Invalid state",
+      "paired operational-success difference F-S",
+      "paired private-score difference S-F"
+    ],
+    "reporting": [
+      "Exact counts and denominators for every state.",
+      "All six raw paired block outcomes for every paper-task cluster.",
+      "Equal-domain-weighted aggregate effects.",
+      "10,000-replicate paper-cluster bootstrap sensitivity intervals with both tasks and all blocks carried together."
+    ],
+    "cluster_bootstrap": {
+      "seed": 20260721,
+      "replicates": 10000,
+      "resample": "papers with replacement independently within each domain",
+      "preserve": "both tasks and all matched blocks for a sampled paper",
+      "interval": "percentile 95%",
+      "scope_label": "registered benchmark sensitivity interval"
+    },
+    "per_task_intervals": {
+      "success_counts": "Clopper-Pearson interval shown only as six-block descriptive uncertainty",
+      "score_differences": "paired bootstrap over the six registered blocks with raw points always visible",
+      "forbidden_interpretation": "Neither interval supports IID paper, task, model, or user population inference."
+    },
+    "sla_sensitivity_grid": {
+      "maximum_B_successes": [0, 1, 2],
+      "minimum_F_successes": [4, 5, 6],
+      "minimum_S_successes": [4, 5, 6],
+      "paired_margin": [0.0, 0.05, 0.1],
+      "leave_one_block_out": "For each omission, scale count thresholds by ceiling(5*n/6) and keep the registered paired margin."
+    },
+    "model_analysis": {
+      "method": "Report each model slot separately with the same paper-task rows, state counts, and paired effects.",
+      "no_superiority_tests": true,
+      "unavailable_models": "Visible as unavailable, never deleted or replaced post hoc."
+    },
+    "multiple_testing": {
+      "primary": "No candidate selection from private outcomes; one primary S per cluster.",
+      "secondary": "Model, atom-ladder, control, and threshold analyses are explicitly secondary and cannot rescue a failed primary result.",
+      "p_values": "No null-hypothesis p-value is required for the finite admission rule; any exploratory p-value must be labeled and multiplicity adjusted."
+    },
+    "missing_data": "Invalid or unavailable rows remain in registered denominators; no complete-case analysis may replace the primary report."
+  },
+  "figure_precedent_map": [
+    {
+      "planned_element": "method pipeline and atom boundary",
+      "adjacent_precedents": ["Toolformer", "Delta Debugging", "C-Reduce", "Perses"],
+      "positioning": "Direct precedent for showing procedural steps and reductions, not for the exact EffectSlice DAG."
+    },
+    {
+      "planned_element": "risk/SLA sensitivity",
+      "adjacent_precedents": ["SelectiveNet", "Conformal Risk Control"],
+      "positioning": "Direct threshold and reject-option precedent; EffectSlice does not inherit distribution-free guarantees."
+    },
+    {
+      "planned_element": "task/model heatmap and failure analysis",
+      "adjacent_precedents": ["AgentBoard", "MCP-AgentBench", "PaperBench"],
+      "positioning": "Direct benchmark-analysis precedent; the exact five-factor decomposition is new to this experiment."
+    },
+    {
+      "planned_element": "compression-reliability Pareto",
+      "adjacent_precedents": ["LLMLingua", "LLMLingua-2", "Prompt Compression with Context-Aware Sentence Encoding"],
+      "positioning": "Direct compression/performance trade-off precedent."
+    },
+    {
+      "planned_element": "forest and atom restore/drop curves",
+      "adjacent_precedents": ["multi-task dot-whisker reporting", "component ablations", "program reduction traces"],
+      "positioning": "Methodologically standard adjacent practice but not claimed as a universal paper-to-skill convention."
+    }
+  ]
+}

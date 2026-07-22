@@ -1,0 +1,126 @@
+{
+  "schema_version": "effectslice-forward-model-ablation-registry.v1",
+  "registration_status": "frozen_before_provider_calls",
+  "paper_task_ids": ["NLP-LLM-01", "SE-PE-01", "DATA-HDB-01", "AGENT-TF-01"],
+  "design": {
+    "blocks_per_paper_task": 6,
+    "conditions": ["B", "F", "S"],
+    "conversations_per_model": 72,
+    "same_frozen_inputs_across_models": true,
+    "fresh_conversation_per_condition": true,
+    "temperature": 0,
+    "closed_model_seed_claim": "No closed-model slot is claimed bitwise or seed deterministic. A provider seed is recorded if supported but is not treated as a reproducibility guarantee.",
+    "comparison_scope": "Secondary robustness analysis only; no best-model selection and no pooling with the 24-cluster primary DeepSeek result."
+  },
+  "model_slots": [
+    {
+      "slot_id": "deepseek_primary",
+      "role": "primary_rows_reused",
+      "required": true,
+      "provider_family": "DeepSeek",
+      "model_alias": "deepseek-v4-flash",
+      "provider_label": "DeepSeek V3.2",
+      "wire_api": "openai_chat_completions",
+      "seed_support": "not_relied_upon",
+      "additional_conversations": 0,
+      "availability_gate": "Must match the primary forward provider manifest."
+    },
+    {
+      "slot_id": "gpt_5_5",
+      "role": "required_closed_ablation",
+      "required": true,
+      "provider_family": "OpenAI",
+      "model_alias": "gpt-5.5",
+      "wire_api": "openai_responses",
+      "seed_support": "not_relied_upon",
+      "additional_conversations": 72,
+      "planning_hours": [2.0, 3.5],
+      "availability_gate": "The experiment endpoint must advertise or successfully preflight this exact alias; no fallback alias is pooled."
+    },
+    {
+      "slot_id": "gpt_5_6_sol",
+      "role": "required_closed_ablation",
+      "required": true,
+      "provider_family": "OpenAI",
+      "model_alias": "gpt-5.6-sol",
+      "wire_api": "openai_responses",
+      "seed_support": "not_relied_upon",
+      "additional_conversations": 72,
+      "planning_hours": [3.0, 5.5],
+      "availability_gate": "The experiment endpoint must advertise or successfully preflight this exact alias; no fallback alias is pooled."
+    },
+    {
+      "slot_id": "gpt_5_6_terra",
+      "role": "required_closed_ablation",
+      "required": true,
+      "provider_family": "OpenAI",
+      "model_alias": "gpt-5.6-terra",
+      "wire_api": "openai_responses",
+      "seed_support": "not_relied_upon",
+      "additional_conversations": 72,
+      "planning_hours": [2.0, 4.0],
+      "availability_gate": "The experiment endpoint must advertise or successfully preflight this exact alias; no fallback alias is pooled."
+    },
+    {
+      "slot_id": "claude_opus_4_7",
+      "role": "required_closed_ablation",
+      "required": true,
+      "provider_family": "Anthropic",
+      "model_alias": "claude-opus-4-7",
+      "wire_api": "anthropic_messages",
+      "seed_support": "not_relied_upon",
+      "additional_conversations": 72,
+      "planning_hours": [3.0, 7.0],
+      "availability_gate": "The experiment endpoint must advertise or successfully preflight this exact alias. Historical 502s are transport failures and follow the registered retry policy."
+    },
+    {
+      "slot_id": "open_seed_anchor",
+      "role": "required_reproducibility_anchor",
+      "required": true,
+      "provider_family": "local_open_weights",
+      "model_alias": "Qwen/Qwen2.5-Coder-7B-Instruct",
+      "wire_api": "local_frozen_runtime",
+      "seed_support": "required",
+      "generation_seeds": [6201, 6202, 6203, 6204, 6205, 6206],
+      "decoding": {
+        "do_sample": false,
+        "temperature": 0,
+        "top_p": 1.0
+      },
+      "local_conversations": 72,
+      "revision_gate": "Before execution, bind an immutable weight revision, file hashes, tokenizer hash, quantization, inference-runtime version, device, and deterministic-kernel settings in a committed Stage 2.3 manifest.",
+      "interpretation": "A reproducibility anchor and sensitivity condition, not a capability-matched substitute for the closed models."
+    },
+    {
+      "slot_id": "gpt_5_6_luna",
+      "role": "optional_secondary",
+      "required": false,
+      "provider_family": "OpenAI",
+      "model_alias": "gpt-5.6-luna",
+      "wire_api": "openai_responses",
+      "seed_support": "not_relied_upon",
+      "additional_conversations": 72,
+      "planning_hours": [2.0, 4.0],
+      "availability_gate": "Run only after all required experiments and only if the exact alias is exposed. Unavailability is reported; it does not trigger alias substitution."
+    },
+    {
+      "slot_id": "claude_opus_4_6",
+      "role": "optional_version_control",
+      "required": false,
+      "provider_family": "Anthropic",
+      "model_alias": "claude-opus-4-6",
+      "wire_api": "anthropic_messages",
+      "seed_support": "not_relied_upon",
+      "additional_conversations": 72,
+      "planning_hours": [3.0, 6.0],
+      "availability_gate": "Run only after all required experiments. It is a separate version condition and may not silently replace or be pooled with Claude Opus 4.7."
+    }
+  ],
+  "preflight_contract": {
+    "provider_registry_snapshot": "Persist the model-list response or exact preflight status without credentials.",
+    "dry_run_scope": "At most one non-experimental format-only request per model alias; no paper-task private payload is used.",
+    "unavailable_required_slot": "Record provider_or_model_unavailable and keep the primary experiment valid, but mark cross-model robustness incomplete.",
+    "no_alias_fallback": true,
+    "no_post_outcome_model_addition": true
+  }
+}
