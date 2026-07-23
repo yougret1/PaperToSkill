@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    threshold = case['threshold']\n    calls = case['calls']\n    # Filter parseable calls\n    parseable_calls = [c for c in calls if c['parseable']]\n    total_tokens = sum(c['prediction_tokens'] for c in parseable_calls)\n    if total_tokens == 0:\n        return []\n    retained = []\n    for c in parseable_calls:\n        weight = c['prediction_tokens'] / total_tokens\n        improvement = c['loss_without_call'] - c['loss_with_call']\n        weighted_improvement = weight * improvement\n        if weighted_improvement >= threshold:\n            retained.append(c['call_id'])\n    return retained"
+}
