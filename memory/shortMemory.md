@@ -2,9 +2,9 @@
 
 ## Active Iteration
 
-Commit and privately back up the verified Stage `2.3` immutable remote-only
-materialization anchor. The accepted V4/V5 evidence, frozen parent Stage `2.2`
-bundle, and remote-only successor are immutable; no parent stage is reopened.
+Commit and privately back up the verified Stage `2.3` remote executor contract.
+The accepted V4/V5 evidence, frozen parent Stage `2.2` bundle, remote-only
+successor, and materialization anchor are immutable; no parent stage is reopened.
 
 ## Completed This Iteration
 
@@ -23,21 +23,21 @@ bundle, and remote-only successor are immutable; no parent stage is reopened.
   `e2615ea65ecc0c1145aa3e0f2fb7a36b8bc91a914bb94821b5cee40be9da99958`.
 - Materialized and verified one 1,296-row remote schedule across 24 tasks.
 - Bound 3,672 immutable files under bundle SHA
-  `1f12dfdba63b1ddc65bd57fa8b1b625ba4259050e93ab4f108786c2023c55ccd7`.
-- Added anchor mutation tests and a Windows extended-path operational verifier;
-  the complete forward suite passes (`130 passed`). No credential was read and
-  no provider API was called.
+  `1f12dfdba63b1ddc65bd57fa8b1b625ba4259050e93ab4f108786c2023c5ccd7`.
+- Added and verified the isolated remote executor and immutable execution
+  contract; the complete forward suite passes (`141 passed`). Credential
+  documents were audited without persisting values; no provider API was called.
 
 ## Current State
 
 - The remote-only Stage `2.2` successor is committed and pushed at `6262956f`.
-- The Stage `2.3` materialization anchor is verified but is not released until
-  its commit and private push succeed.
+- The Stage `2.3` materialization anchor is committed and privately pushed at
+  `b4a8605f`.
 - The source manuscript is `paper/effectslice_aaai/main_v3.tex`.
 - The standard `main_v3.pdf` was held open externally; the current-source verified
   build is `main_v3_build.pdf` until the clean copy is completed.
-- Credential inspection and provider calls are forbidden until the anchor push
-  succeeds.
+- Provider calls are forbidden until the executor contract checkpoint is
+  committed and privately pushed.
 
 ## Residual Risk
 

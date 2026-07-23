@@ -29,8 +29,8 @@ core research workflow.
   citations, and 7 DOI-verified AAAI papers.
 - Frozen parent Stage `2.2`: committed and pushed.
 - Remote-only Stage `2.2` successor: committed and pushed at `6262956f`.
-- Remote-only Stage `2.3` immutable materialization anchor: passed and pending
-  private commit/push.
+- Remote-only Stage `2.3` immutable materialization anchor: passed, committed,
+  and privately pushed at `b4a8605f`.
 - Current branch: `codex/effectslice-v3`.
 
 ## EffectSlice Evidence State
@@ -63,9 +63,12 @@ core research workflow.
 - Luna F/I repeats measure observed remote repeatability only; there is no model
   seed-control or deterministic closed-model claim.
 - Immutable Stage `2.3` anchor bundle SHA:
-  `1f12dfdba63b1ddc65bd57fa8b1b625ba4259050e93ab4f108786c2023c55ccd7`.
+  `1f12dfdba63b1ddc65bd57fa8b1b625ba4259050e93ab4f108786c2023c5ccd7`.
 - The anchor binds 3,672 files and one 1,296-row remote schedule; its full V3
-  audit and complete forward suite pass (`130 passed`).
+  audit and complete forward suite pass (`141 passed`).
+- The remote executor contract and isolated worker pass focused and full tests;
+  the frozen scorer two-component versus four-ID mismatch is preserved and
+  explicitly audited.
 - No provider/model API call has occurred in this forward extension.
 
 ## Legacy Evidence Policy
@@ -105,8 +108,8 @@ thesis. Reuse requires an explicit Stage 2 evidence audit.
 
 ## Stage 2.3 Current Gate
 
-- Commit and push the verified immutable materialization anchor before reading
-  credentials or sending any provider request.
+- Commit and push the verified remote executor contract before sending any
+  provider request.
 - Then perform format-only alias preflight and preserve redacted evidence.
 - Execute only the frozen 1,296-row remote schedule with registered retry
   classification and raw/canonical artifact retention.

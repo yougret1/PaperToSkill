@@ -5,16 +5,19 @@ forward-only generalization extension required by the user.
 
 ## Immediate Gate
 
-1. Inspect the immutable Stage `2.3` anchor diff and Git boundary.
-2. Commit and push anchor bundle SHA
-   `1f12dfdba63b1ddc65bd57fa8b1b625ba4259050e93ab4f108786c2023c55ccd7`.
-3. Do not read credentials or call a provider unless the private push succeeds.
+1. Inspect the remote executor contract diff and Git boundary.
+2. Commit and push the executor contract checkpoint after anchor commit
+   `b4a8605f`.
+3. Do not call a provider unless this private push succeeds.
 
 ## Stage 2.3 Materialization
 
-1. The complete materialization anchor is generated and independently verified.
-2. After private push, parse API documentation without persisting credentials.
-3. Run at most one format-only preflight per exact alias and preserve redacted
+1. The complete materialization anchor is generated, verified, committed, and
+   privately pushed.
+2. The executor contract is frozen and verified; API documentation was parsed
+   at runtime without persisting credential values.
+3. After the executor checkpoint push, run at most one format-only preflight per
+   exact alias and preserve redacted
    request/response evidence.
 4. Dispatch the frozen schedule with classified retries, raw responses,
    canonical outputs, scoring artifacts, and resumable progress.

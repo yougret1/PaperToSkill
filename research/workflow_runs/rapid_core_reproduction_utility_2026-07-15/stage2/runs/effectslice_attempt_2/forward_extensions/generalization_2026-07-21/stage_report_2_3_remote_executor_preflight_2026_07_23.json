@@ -1,0 +1,61 @@
+{
+  "stage": "2.3",
+  "stage_name": "Remote executor contract and preflight gate",
+  "status": "passed",
+  "stage_scope_status": "preflight_ready_provider_calls_not_started",
+  "handoff_mode": "normal",
+  "forward_only": true,
+  "prior_anchor_preserved": true,
+  "inputs_checked": [
+    "materialization_remote_only_2026-07-23/final_anchor_manifest.json",
+    "materialization_remote_only_2026-07-23/immutable_file_manifest.json",
+    "materialization_remote_only_2026-07-23/global_remote_schedule.json",
+    "remote_execution_runner.py",
+    "remote_execution_worker.py"
+  ],
+  "outputs_produced": [
+    "remote_execution_contract_2026-07-23/execution_contract.json",
+    "remote_execution_contract_2026-07-23/scorer_contract_audit.json",
+    "remote_execution_contract_2026-07-23/contract_manifest.json",
+    "remote_execution_runner.py",
+    "remote_execution_worker.py",
+    "tests/test_remote_execution_runner.py"
+  ],
+  "frozen_anchor": {
+    "bundle_sha256": "1f12dfdba63b1ddc65bd57fa8b1b625ba4259050e93ab4f108786c2023c5ccd7",
+    "immutable_file_manifest_sha256": "0a09e4b7a54f9cf64471427e11b7f8ca3027e5b841ee710550ee12ca95400ee8a",
+    "registered_remote_rows": 1296,
+    "registered_local_rows": 0
+  },
+  "contract": {
+    "schema_version": "effectslice-fg1-remote-executor.v1",
+    "timeout_seconds": 240,
+    "maximum_transport_attempts": 5,
+    "retry_delays_seconds": [2, 4, 8, 16],
+    "fresh_request_and_conversation_per_row": true,
+    "semantic_rerun_after_terminal_response": false,
+    "raw_response_bytes_preserved": true,
+    "credentials_persisted_or_logged": false,
+    "worker_isolated_and_seed_free": true
+  },
+  "verification": {
+    "focused_executor_tests": "11 passed",
+    "complete_forward_extension_tests": "141 passed",
+    "remote_only_successor_verifier": "passed",
+    "materialization_anchor_verifier": "passed; 1296 rows",
+    "executor_contract_verify": "passed",
+    "api_credential_audit": "passed; values not recorded",
+    "forbidden_local_model_scan": "passed",
+    "credential_pattern_scan": "passed"
+  },
+  "known_limitation": {
+    "scorer_contract_length_mismatch_count": 24,
+    "registered_hard_contract_ids_per_task": 4,
+    "frozen_scorer_vector_components_per_task": 2,
+    "policy": "preserve the frozen two-component scorer output; do not relabel it as four IDs; report the limitation transparently; operational admission remains all 64 exact outputs at the 0.99 threshold"
+  },
+  "provider_calls_started": false,
+  "blocking_issues": [],
+  "next_stage": "2.3 format-only provider preflight",
+  "next_stage_gate": "Commit and push this checkpoint before dispatching any registered provider request."
+}

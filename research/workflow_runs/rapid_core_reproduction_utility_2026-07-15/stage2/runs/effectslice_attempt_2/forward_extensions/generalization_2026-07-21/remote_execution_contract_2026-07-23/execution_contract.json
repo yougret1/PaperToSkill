@@ -1,0 +1,101 @@
+{
+  "anchor_bundle_sha256": "1f12dfdba63b1ddc65bd57fa8b1b625ba4259050e93ab4f108786c2023c5ccd7",
+  "created_at_utc": "2026-07-23T07:19:32.947044Z",
+  "credential_policy": {
+    "runtime_memory_only": true,
+    "shell_argument_contains_credential": false,
+    "source_document_values_never_logged": true,
+    "tracked_credential_value": false
+  },
+  "execution_isolation": {
+    "ast_safety_gate": true,
+    "fresh_http_connection_per_attempt": true,
+    "fresh_model_conversation_per_row": true,
+    "no_worker_network_or_secret_access": true,
+    "restricted_builtins": true,
+    "sanitized_worker_environment": true,
+    "worker_python_isolated_mode": true,
+    "worker_timeout_seconds": 30
+  },
+  "provider_calls_started": false,
+  "provider_slots": [
+    {
+      "endpoint": "https://api.deepseek.com/chat/completions",
+      "exact_alias": "deepseek-v4-flash",
+      "model_slot_id": "deepseek_primary",
+      "protocol": "openai_chat_completions_v1"
+    },
+    {
+      "endpoint": "https://coderxiaoc.com/v1/responses",
+      "exact_alias": "gpt-5.5",
+      "model_slot_id": "gpt_5_5",
+      "protocol": "openai_responses_v1"
+    },
+    {
+      "endpoint": "https://coderxiaoc.com/v1/responses",
+      "exact_alias": "gpt-5.6-sol",
+      "model_slot_id": "gpt_5_6_sol",
+      "protocol": "openai_responses_v1"
+    },
+    {
+      "endpoint": "https://coderxiaoc.com/v1/responses",
+      "exact_alias": "gpt-5.6-terra",
+      "model_slot_id": "gpt_5_6_terra",
+      "protocol": "openai_responses_v1"
+    },
+    {
+      "endpoint": "https://coderxiaoc.com/v1/messages",
+      "exact_alias": "claude-opus-4-7",
+      "model_slot_id": "claude_opus_4_7",
+      "protocol": "anthropic_messages_v1"
+    },
+    {
+      "endpoint": "https://coderxiaoc.com/v1/responses",
+      "exact_alias": "gpt-5.6-luna",
+      "model_slot_id": "gpt_5_6_luna",
+      "protocol": "openai_responses_v1"
+    }
+  ],
+  "registered_rows": 1296,
+  "schedule_sha256": "7e53b587a6bc4c9ee8762503f8424a1bf6499acc963068c1af19599e50f99c6e",
+  "schema_version": "effectslice-fg1-remote-executor.v1",
+  "scorer_contract_audit_path": "scorer_contract_audit.json",
+  "scorer_contract_audit_sha256": "c71618fdddbe06e3af385fca57d2a5a56decc9bfe899d112dd6b505481069587",
+  "source_records": [
+    {
+      "path": "remote_execution_runner.py",
+      "sha256": "acaec23eff161c45e1d86fbdff0b5f292e39adfe9593493676d6a009e33bd10b"
+    },
+    {
+      "path": "remote_execution_worker.py",
+      "sha256": "5b1ab5ce9afd8242d3673bafca3bed0b9b50353ed16d131e8d404dbbeeba5aa3"
+    },
+    {
+      "path": "tests/test_remote_execution_runner.py",
+      "sha256": "b7abcfea65cb94b46b5b440886213fb3928a721fbf43a053ca4aebfa5fd36dff"
+    }
+  ],
+  "transport_policy": {
+    "deterministic_jitter_ms": [
+      0,
+      1000
+    ],
+    "maximum_transport_attempts": 5,
+    "retry_delays_seconds": [
+      2,
+      4,
+      8,
+      16
+    ],
+    "retryable_http_statuses": [
+      408,
+      429,
+      500,
+      502,
+      503,
+      504
+    ],
+    "semantic_rerun": "forbidden",
+    "timeout_seconds": 240
+  }
+}
