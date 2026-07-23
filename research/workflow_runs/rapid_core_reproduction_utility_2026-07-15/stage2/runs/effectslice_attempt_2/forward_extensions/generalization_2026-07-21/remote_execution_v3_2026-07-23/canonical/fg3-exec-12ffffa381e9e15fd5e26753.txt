@@ -1,0 +1,1 @@
+{"implementation": "def solve(case):\n    nodes = case['nodes']\n    core = case['core_distance']\n    dists = case['distances']\n    edges = []\n    for a,b,d in dists:\n        md = max(core[a], core[b], d)\n        edges.append([a, b, md])\n    edges.sort(key=lambda x: x[2])\n    return edges"}

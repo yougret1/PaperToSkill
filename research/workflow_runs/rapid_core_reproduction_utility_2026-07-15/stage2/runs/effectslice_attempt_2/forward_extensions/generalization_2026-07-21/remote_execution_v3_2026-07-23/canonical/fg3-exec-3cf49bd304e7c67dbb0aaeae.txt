@@ -1,0 +1,1 @@
+{"implementation":"def solve(case):\n    nodes = case['nodes']\n    core = case['core_distance']\n    distances = case['distances']\n    mutual = []\n    for u,v,d in distances:\n        mr = max(core[u], core[v], d)\n        mutual.append((u,v,mr))\n    mutual.sort(key=lambda x: (x[0], x[1]))\n    return mutual"}
