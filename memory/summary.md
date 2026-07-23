@@ -69,7 +69,9 @@ core research workflow.
 - The remote executor contract and isolated worker pass focused and full tests;
   the frozen scorer two-component versus four-ID mismatch is preserved and
   explicitly audited.
-- No provider/model API call has occurred in this forward extension.
+- The executor checkpoint was privately pushed at `579fc90f`.
+- Six exact-alias format preflights passed on their first transport attempts;
+  zero registered experiment rows have been consumed.
 
 ## Legacy Evidence Policy
 
@@ -108,9 +110,8 @@ thesis. Reuse requires an explicit Stage 2 evidence audit.
 
 ## Stage 2.3 Current Gate
 
-- Commit and push the verified remote executor contract before sending any
-  provider request.
-- Then perform format-only alias preflight and preserve redacted evidence.
+- Commit and push the verified exact-alias preflight evidence before dispatching
+  any registered experiment row.
 - Execute only the frozen 1,296-row remote schedule with registered retry
   classification and raw/canonical artifact retention.
 - Keep generated token IDs and local runtime evidence out of all successor work.

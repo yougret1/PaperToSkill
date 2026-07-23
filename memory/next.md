@@ -5,21 +5,20 @@ forward-only generalization extension required by the user.
 
 ## Immediate Gate
 
-1. Inspect the remote executor contract diff and Git boundary.
-2. Commit and push the executor contract checkpoint after anchor commit
-   `b4a8605f`.
-3. Do not call a provider unless this private push succeeds.
+1. Inspect the exact-alias provider preflight evidence and Git boundary.
+2. Commit and push the complete preflight checkpoint after executor commit
+   `579fc90f`.
+3. Do not dispatch a registered experiment row unless this private push succeeds.
 
 ## Stage 2.3 Materialization
 
 1. The complete materialization anchor is generated, verified, committed, and
    privately pushed.
-2. The executor contract is frozen and verified; API documentation was parsed
-   at runtime without persisting credential values.
-3. After the executor checkpoint push, run at most one format-only preflight per
-   exact alias and preserve redacted
-   request/response evidence.
-4. Dispatch the frozen schedule with classified retries, raw responses,
+2. The executor contract is frozen, verified, committed, and privately pushed.
+3. One format-only preflight per exact alias passed with six first-attempt
+   successes and no credential persistence.
+4. After the preflight checkpoint push, dispatch the frozen schedule with
+   classified retries, raw responses,
    canonical outputs, scoring artifacts, and resumable progress.
 
 ## Preservation Rules

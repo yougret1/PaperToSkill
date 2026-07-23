@@ -2,7 +2,7 @@
 
 ## Active Iteration
 
-Commit and privately back up the verified Stage `2.3` remote executor contract.
+Commit and privately back up the verified Stage `2.3` provider preflight.
 The accepted V4/V5 evidence, frozen parent Stage `2.2` bundle, remote-only
 successor, and materialization anchor are immutable; no parent stage is reopened.
 
@@ -26,7 +26,11 @@ successor, and materialization anchor are immutable; no parent stage is reopened
   `1f12dfdba63b1ddc65bd57fa8b1b625ba4259050e93ab4f108786c2023c5ccd7`.
 - Added and verified the isolated remote executor and immutable execution
   contract; the complete forward suite passes (`141 passed`). Credential
-  documents were audited without persisting values; no provider API was called.
+  documents were audited without persisting values; no provider API had been
+  called at that checkpoint.
+- Committed and privately pushed the executor contract at `579fc90f`.
+- Completed one format-only preflight for each of six exact aliases: all six
+  succeeded on the first transport attempt, with no credential reflection.
 
 ## Current State
 
@@ -36,8 +40,8 @@ successor, and materialization anchor are immutable; no parent stage is reopened
 - The source manuscript is `paper/effectslice_aaai/main_v3.tex`.
 - The standard `main_v3.pdf` was held open externally; the current-source verified
   build is `main_v3_build.pdf` until the clean copy is completed.
-- Provider calls are forbidden until the executor contract checkpoint is
-  committed and privately pushed.
+- Registered experiment rows are forbidden until the provider preflight
+  checkpoint is committed and privately pushed.
 
 ## Residual Risk
 
