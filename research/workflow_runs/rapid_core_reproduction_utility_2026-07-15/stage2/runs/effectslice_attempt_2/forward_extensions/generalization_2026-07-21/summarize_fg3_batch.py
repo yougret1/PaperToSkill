@@ -72,7 +72,7 @@ def safe_error_signature(error: dict[str, Any]) -> str:
     return f"{error_type}:sha256-{digest}"
 
 
-def summarize(successor: Path, run_dir: Path) -> dict[str, Any]:
+def summarize(successor: Path, run_dir: Path, start_row: int = 1) -> dict[str, Any]:
     successor = runner.windows_extended_path(successor)
     run_dir = runner.windows_extended_path(run_dir)
     schedule = runner.load_json(successor / "global_remote_schedule.json")["rows"]
@@ -93,6 +93,11 @@ def summarize(successor: Path, run_dir: Path) -> dict[str, Any]:
         {path.stem for path in all_row_files} == completed_ids,
         "row directory contains an out-of-prefix execution",
     )
+    require(
+        1 <= start_row <= len(completed),
+        "start row must select at least one completed schedule row",
+    )
+    batch = completed[start_row - 1 :]
 
     outcomes: Counter[str] = Counter()
     model_slots: Counter[str] = Counter()
@@ -111,7 +116,7 @@ def summarize(successor: Path, run_dir: Path) -> dict[str, Any]:
     total_errors = 0
     groups: dict[tuple[str, ...], dict[str, Any]] = {}
 
-    for row, result in completed:
+    for row, result in batch:
         execution_id = str(row["execution_id"])
         require(result.get("execution_id") == execution_id, "row execution ID changed")
         outcome = str(result["terminal_outcome"])
@@ -214,11 +219,14 @@ def summarize(successor: Path, run_dir: Path) -> dict[str, Any]:
     manifest = runner.load_json(run_dir / "run_manifest.json")
     pilot = runner.load_json(run_dir / "pilot_summary.json")
     return {
-        "schema_version": "effectslice-fg3-batch-summary.v1",
+        "schema_version": "effectslice-fg3-batch-summary.v2",
         "successor_bundle_sha256": manifest["successor_bundle_sha256"],
         "format_contract_version": fg3.FORMAT_VERSION,
         "registered_rows": len(schedule),
-        "terminal_rows": len(completed),
+        "terminal_rows": len(batch),
+        "cumulative_terminal_rows": len(completed),
+        "batch_start_row_1_based": start_row,
+        "batch_end_row_1_based": start_row + len(batch) - 1,
         "remaining_rows": len(schedule) - len(completed),
         "contiguous_schedule_prefix": True,
         "pilot_all_slots_available": pilot.get("all_slots_available") is True,
@@ -231,9 +239,9 @@ def summarize(successor: Path, run_dir: Path) -> dict[str, Any]:
         "total_worker_errors": total_errors,
         "error_types": sorted_counts(error_types),
         "safe_error_signatures": sorted_counts(safe_error_signatures),
-        "logical_request_count": len(completed),
+        "logical_request_count": len(batch),
         "transport_attempt_count": total_attempts,
-        "transport_retry_count": total_attempts - len(completed),
+        "transport_retry_count": total_attempts - len(batch),
         "attempt_status_classes": sorted_counts(attempt_statuses),
         "provider_reported_input_tokens": numeric_summary(input_tokens),
         "provider_reported_output_tokens": numeric_summary(output_tokens),
@@ -249,13 +257,14 @@ def parse_args(argv: Iterable[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--successor", type=Path, default=fg3.DEFAULT_SUCCESSOR)
     parser.add_argument("--run-dir", type=Path, default=fg3.DEFAULT_RUN_DIR)
+    parser.add_argument("--start-row", type=int, default=1)
     parser.add_argument("--output", type=Path)
     return parser.parse_args(argv)
 
 
 def main(argv: Iterable[str] | None = None) -> int:
     args = parse_args(argv)
-    summary = summarize(args.successor, args.run_dir)
+    summary = summarize(args.successor, args.run_dir, args.start_row)
     if args.output is not None:
         output = runner.windows_extended_path(args.output)
         if output.exists():

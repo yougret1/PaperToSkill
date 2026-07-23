@@ -104,6 +104,20 @@ core research workflow.
 - The batch summary proves an exact contiguous schedule prefix. Its complete
   611-file safety scan found no credential reflection, generic credential
   pattern, or forbidden local-model design; 1,224 FG3 rows remain undispatched.
+- FG3 batch 001 was committed and privately pushed at `eea9cf56` before row 73
+  was dispatched.
+- FG3 batch 002 consumed rows 73-144, again spanning four paper-task units with
+  24 B, 24 F, and 24 S rows. Its 72 logical requests used 75 transports because
+  three registered TLS failures were retried; no terminal semantic response was
+  rerun.
+- Batch 002 produced 66 hard-contract failures, five malformed/no-submission
+  outcomes, and one operational success in AGENT-TF-02 under S. The private-score
+  sum is 1.0 across 72 rows; this single success is not an early conclusion.
+- The complete 1,189-file execution-tree safety scan passed with zero credential
+  reflection, generic credential-pattern matches, or forbidden local-model
+  design. Cumulative FG3 outcomes across rows 1-144 are 136 hard-contract
+  failures, seven malformed/no-submission outcomes, and one operational success;
+  1,152 rows remain undispatched.
 
 ## Legacy Evidence Policy
 
@@ -142,11 +156,12 @@ thesis. Reuse requires an explicit Stage 2 evidence audit.
 
 ## Stage 2.3 Current Gate
 
-- Commit and privately push the complete FG3 batch-001 evidence, summary, audit,
-  report, and memory update before dispatching row 73.
-- The frozen plan contains no outcome-driven early-stopping rule. Batch 001's
-  zero-success result remains adverse evidence in the registered denominators;
-  it cannot trigger a semantic rerun or an in-place protocol change.
+- Commit and privately push the complete FG3 batch-002 evidence, summaries,
+  audit, report, and memory update before dispatching row 145.
+- The frozen plan contains no outcome-driven early-stopping rule. Batch 002's
+  single operational success and all condition failures remain in the registered
+  denominators; neither can trigger a semantic rerun or an in-place protocol
+  change.
 - Execute only the frozen 1,296-row remote schedule with registered retry
   classification and raw/canonical artifact retention.
 - Keep generated token IDs and local runtime evidence out of all successor work.

@@ -1,0 +1,3 @@
+{
+"implementation": "def solve(case):\n    matrix = case['matrix']\n    idf = case['idf']\n    vector = case['vector']\n    n_docs = len(matrix)\n    n_terms = len(idf)\n    result = []\n    for j in range(n_terms):\n        total = 0.0\n        for i in range(n_docs):\n            total += matrix[i][j] * vector[i]\n        result.append(total * idf[j])\n    return result"
+}

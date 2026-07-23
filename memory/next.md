@@ -5,12 +5,13 @@ forward-only generalization extension required by the user.
 
 ## Immediate Gate
 
-1. Commit and privately push the complete FG3 batch-001 evidence, summary, audit,
-   stage report, and memory update.
-2. Do not dispatch row 73 until the push succeeds.
-3. Continue only the frozen schedule in batches of at most 72 rows, with an
+1. The authoritative suite passes (`156 passed in 111.92s`).
+2. Commit and privately push the complete batch-002 evidence, summaries, audit,
+   stage report, summarizer update, and memory update.
+3. Do not dispatch row 145 until the push succeeds.
+4. Continue only the frozen schedule in batches of at most 72 rows, with an
    audit, summary, commit, and push between batches.
-4. Preserve the pilot as unscored format evidence; do not include it in any
+5. Preserve the pilot as unscored format evidence; do not include it in any
    experiment estimate or rerun a terminal semantic response.
 
 ## Stage 2.3 Materialization
@@ -35,6 +36,12 @@ forward-only generalization extension required by the user.
    operational successes, and no transport retries. These are valid condition
    failures under the frozen plan, not reasons for semantic reruns.
 9. The complete 611-file batch audit passes; 1,224 FG3 rows remain undispatched.
+10. Batch 001 was privately pushed at `eea9cf56`. Batch 002 then consumed rows
+    73-144 with 66 hard-contract failures, five malformed/no-submission outcomes,
+    and one operational success. Three registered TLS failures caused three
+    transport retries; no completed semantic response was rerun.
+11. The complete batch-002 execution tree contains 1,189 files and passes all
+    credential and forbidden-local-design safety gates; 1,152 rows remain.
 
 ## Preservation Rules
 

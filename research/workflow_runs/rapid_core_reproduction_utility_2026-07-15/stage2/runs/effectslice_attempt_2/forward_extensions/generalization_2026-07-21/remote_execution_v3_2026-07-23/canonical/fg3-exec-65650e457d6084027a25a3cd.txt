@@ -1,0 +1,1 @@
+{"implementation": "def solve(case):\n    matrix = case['matrix']\n    idf = case['idf']\n    vector = case['vector']\n    num_terms = len(idf)\n    result = [0.0] * num_terms\n    for i, row in enumerate(matrix):\n        weight = vector[i]\n        for j, val in enumerate(row):\n            result[j] += weight * val * idf[j]\n    return result"}
