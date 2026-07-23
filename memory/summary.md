@@ -75,6 +75,10 @@ core research workflow.
 - FG1 batch 001 executed 72 DeepSeek primary rows, but all exhausted the
   registered 1,024-token output budget and were invalid. The remaining 1,224
   FG1 rows are undispatched.
+- FG1 invalid batch 001 was privately pushed at `e9bdbeda`.
+- FG2 is a new 1,296-row versioned execution with an 8,192-token output budget;
+  its frozen bundle is
+  `917fa2d4a722e3b05b3b2fc5d97ebe9f6ee36b888a03844f2a1334e326045411`.
 
 ## Legacy Evidence Policy
 
@@ -113,8 +117,8 @@ thesis. Reuse requires an explicit Stage 2 evidence audit.
 
 ## Stage 2.3 Current Gate
 
-- Preserve and push FG1 invalid batch 001, then create a new versioned successor
-  with a preregistered output-budget adequacy pilot.
+- Commit and push the frozen FG2 successor, then run its six marked, unscored
+  output-budget adequacy requests before any registered FG2 row.
 - Execute only the frozen 1,296-row remote schedule with registered retry
   classification and raw/canonical artifact retention.
 - Keep generated token IDs and local runtime evidence out of all successor work.

@@ -1,0 +1,49 @@
+{
+  "stage": "2.3",
+  "stage_name": "FG2 versioned output-budget successor anchor",
+  "status": "passed",
+  "stage_scope_status": "successor_frozen_budget_pilot_pending",
+  "handoff_mode": "normal",
+  "forward_only": true,
+  "invalid_fg1_batch_commit": "e9bdbeda",
+  "parent_anchor_bundle_sha256": "1f12dfdba63b1ddc65bd57fa8b1b625ba4259050e93ab4f108786c2023c5ccd7",
+  "successor": {
+    "output_budget_version": "fg2-output-budget-8192-v1",
+    "bundle_sha256": "917fa2d4a722e3b05b3b2fc5d97ebe9f6ee36b888a03844f2a1334e326045411",
+    "bound_file_count": 1311,
+    "bound_bytes": 9461369,
+    "registered_rows": 1296,
+    "budget_pilot_rows": 6,
+    "parent_output_budget": 1024,
+    "successor_output_budget": 8192
+  },
+  "allowed_change": {
+    "request_fields": ["/max_tokens", "/max_output_tokens"],
+    "execution_ids_versioned": true,
+    "decoding_hashes_versioned": true,
+    "task_changed": false,
+    "candidate_changed": false,
+    "registry_changed": false,
+    "scorer_changed": false,
+    "model_alias_changed": false
+  },
+  "post_failure_policy": {
+    "fg1_terminal_rows_rerun_within_fg1": false,
+    "fg1_rows_pooled_with_fg2": false,
+    "fg2_reported_as_new_versioned_execution": true,
+    "output_budget_choice_informed_by_fg1_failure": true,
+    "pilot_excluded_from_experiment_estimates": true
+  },
+  "verification": {
+    "successor_verifier": "passed",
+    "focused_successor_tests": "5 passed",
+    "complete_forward_extension_tests": "146 passed",
+    "exact_credential_reflection_count": 0,
+    "generic_credential_pattern_match_count": 0,
+    "forbidden_local_model_scan": "passed"
+  },
+  "provider_calls_started": false,
+  "blocking_issues": [],
+  "next_stage": "FG2 output-budget adequacy pilot",
+  "next_stage_gate": "Commit and push the frozen FG2 successor before dispatching its six unscored pilot requests."
+}

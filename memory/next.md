@@ -5,11 +5,10 @@ forward-only generalization extension required by the user.
 
 ## Immediate Gate
 
-1. Inspect and privately back up FG1 invalid batch 001.
-2. Preserve all 72 terminal rows and leave the remaining 1,224 FG1 rows
-   undispatched.
-3. After the invalid-batch push, create a versioned forward successor with a
-   preregistered output-budget adequacy pilot.
+1. Inspect and privately back up the frozen FG2 successor.
+2. Preserve FG1 and exclude its 72 invalid rows from FG2 estimates.
+3. After the FG2 successor push, run its six marked, unscored output-budget
+   pilot requests.
 
 ## Stage 2.3 Materialization
 
@@ -20,8 +19,8 @@ forward-only generalization extension required by the user.
    successes and no credential persistence.
 4. FG1 batch 001 then failed systematically: all 72 rows exhausted the 1,024
    output-token budget and were malformed. Do not continue FG1.
-5. Freeze and run an output-budget adequacy pilot in a new successor before any
-   new full schedule.
+5. FG2 is frozen at an 8,192-token output budget. Commit and push it, then run
+   the six-request adequacy pilot before any registered FG2 row.
 
 ## Preservation Rules
 
