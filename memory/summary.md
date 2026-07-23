@@ -130,6 +130,16 @@ core research workflow.
   design. Cumulative FG3 outcomes across rows 1-216 are 197 hard-contract
   failures, 18 malformed/no-submission outcomes, and one operational success;
   1,080 rows remain undispatched.
+- FG3 batch 004 consumed rows 217-288 across AGENT-RF-02, DATA-LEI-02,
+  NLP-LL2-02, and SE-CR-02, with 24 B, 24 F, and 24 S rows. All 72 transports
+  completed on their first registered attempts.
+- Batch 004 produced 68 hard-contract failures and four malformed/no-submission
+  outcomes, zero operational successes, and a private-score sum of 0.0.
+- The complete 2,347-file execution-tree safety scan passed with zero credential
+  reflection, generic credential-pattern matches, or forbidden local-model
+  design. Cumulative FG3 outcomes across rows 1-288 are 265 hard-contract
+  failures, 22 malformed/no-submission outcomes, and one operational success;
+  1,008 rows remain undispatched.
 
 ## Legacy Evidence Policy
 
@@ -168,8 +178,8 @@ thesis. Reuse requires an explicit Stage 2 evidence audit.
 
 ## Stage 2.3 Current Gate
 
-- Commit and privately push the complete FG3 batch-003 evidence, summaries,
-  audit, report, and memory update before dispatching row 217.
+- Commit and privately push the complete FG3 batch-004 evidence, summaries,
+  audit, report, and memory update before dispatching row 289.
 - The frozen plan contains no outcome-driven early-stopping rule. Batch 003's
   zero-success interval and all condition failures remain in the registered
   denominators; neither can trigger a semantic rerun or an in-place protocol

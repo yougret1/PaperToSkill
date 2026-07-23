@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    items = case['items']\n    required = set(case['required_failure_items'])\n    others = [item for item in items if item not in required]\n    tests = []\n    if others:\n        for o in others:\n            tests.append(list(required) + [o])\n    else:\n        if required:\n            tests.append(list(required))\n    return tests"
+}

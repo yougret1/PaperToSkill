@@ -1,0 +1,128 @@
+{
+  "stage": "2.3",
+  "stage_name": "FG3 registered remote execution batch 004",
+  "status": "passed",
+  "stage_scope_status": "batch_checkpoint_passed_experiment_execution_in_progress",
+  "handoff_mode": null,
+  "user_approved_degraded_route": false,
+  "user_approval_evidence": null,
+  "forward_only": true,
+  "fg3_successor_commit": "f03d0ce4",
+  "fg3_pilot_commit": "b388845c",
+  "fg3_batch_001_commit": "eea9cf56",
+  "fg3_batch_002_commit": "78b447ca",
+  "fg3_batch_003_commit": "a000375e",
+  "successor_bundle_sha256": "1a5212ee09f43b4e97737f83fc1365e0181942b790bd0a54920609d35b24766d",
+  "inputs_checked": [
+    "format_conformance_successor_2026-07-23/global_remote_schedule.json",
+    "remote_execution_v3_2026-07-23/run_manifest.json",
+    "remote_execution_v3_2026-07-23/progress.json",
+    "remote_execution_v3_2026-07-23/rows",
+    "remote_execution_v3_2026-07-23/scoring"
+  ],
+  "outputs_produced": [
+    "remote_execution_v3_2026-07-23/batch_004_summary.json",
+    "remote_execution_v3_2026-07-23/batch_004_cumulative_summary.json",
+    "remote_execution_v3_2026-07-23/batch_004_safety_audit.json",
+    "72 registered terminal row records plus their raw, canonical, dispatch, attempt-body, attempt, and scoring evidence"
+  ],
+  "batch": {
+    "batch_id": "004",
+    "batch_start_row_1_based": 217,
+    "batch_end_row_1_based": 288,
+    "registered_schedule_rows": 1296,
+    "terminal_rows": 72,
+    "cumulative_terminal_rows": 288,
+    "remaining_rows": 1008,
+    "contiguous_schedule_prefix": true,
+    "model_slot": "deepseek_primary",
+    "paper_task_units": 4,
+    "rows_per_paper_task_unit": 18,
+    "rows_by_condition": {
+      "B": 24,
+      "F": 24,
+      "S": 24
+    },
+    "logical_requests": 72,
+    "transport_attempts": 72,
+    "transport_retries": 0,
+    "terminal_outcomes": {
+      "hard_contract_failure": 68,
+      "malformed_or_no_submission": 4,
+      "operational_success": 0
+    },
+    "private_score": {
+      "count": 72,
+      "min": 0.0,
+      "median": 0.0,
+      "max": 0.0,
+      "sum": 0.0
+    },
+    "hard_contract_vectors": {
+      "[false,false]": 42,
+      "[true,false]": 26,
+      "null": 4
+    },
+    "worker_statuses": {
+      "completed": 66,
+      "invalid_submission": 1,
+      "safety_policy_violation": 2,
+      "unknown": 3
+    },
+    "rows_with_worker_errors": 40,
+    "rows_with_zero_worker_outputs": 45,
+    "total_worker_errors": 2506,
+    "safe_error_signatures": {
+      "KeyError:payload": 2176,
+      "ValueError:sha256-05dd904a13be475b": 64,
+      "ValueError:sha256-3c6e946c907049c2": 128,
+      "ValueError:sha256-56a55c5b0583669d": 64,
+      "ValueError:sha256-6b2eaa2fa8914502": 10,
+      "ValueError:sha256-c74cb501e01e6ab6": 64
+    },
+    "provider_reported_input_tokens": 67275,
+    "provider_reported_output_tokens": 251412,
+    "total_execution_elapsed_ms": 2500985
+  },
+  "cumulative": {
+    "terminal_rows": 288,
+    "remaining_rows": 1008,
+    "transport_attempts": 291,
+    "transport_retries": 3,
+    "terminal_outcomes": {
+      "hard_contract_failure": 265,
+      "malformed_or_no_submission": 22,
+      "operational_success": 1
+    },
+    "private_score_sum": 1.0
+  },
+  "safety_audit": {
+    "files_scanned": 2347,
+    "minimum_files_required": 2347,
+    "complete_enumeration": true,
+    "exact_credential_reflection_count": 0,
+    "generic_credential_pattern_match_count": 0,
+    "forbidden_local_model_design_match_count": 0,
+    "credential_values_recorded": false
+  },
+  "verification": {
+    "json_artifacts_parsed": true,
+    "batch_summary_recomputed_from_raw_evidence": true,
+    "batch_interval_assertions": "passed",
+    "authoritative_forward_extension_tests": "156 passed in 114.90s",
+    "commit_boundary_safety_files_scanned": 2353,
+    "commit_boundary_safety_status": "passed"
+  },
+  "traceability_notes": [
+    "The interval summarizer verified that rows 217 through 288 are the next exact contiguous segment of the frozen 1,296-row FG3 schedule.",
+    "The four paper-task units are AGENT-RF-02, DATA-LEI-02, NLP-LL2-02, and SE-CR-02; each contributes six registered blocks for B, F, and S.",
+    "All 72 provider transports completed on their first registered attempt. No completed semantic response was rerun.",
+    "Completed malformed/no-submission and hard-contract responses remain valid condition failures; none is relabeled Invalid or rerun.",
+    "The frozen plan contains no outcome-driven early-stopping rule. It requires audit, summary, commit, and private push before any later batch.",
+    "Zero operational successes in this interval are adverse experiment evidence and remain in the registered denominator.",
+    "This report passes only the execution-integrity checkpoint. The scientific hypothesis remains unresolved while 1,008 registered rows are undispatched."
+  ],
+  "blocking_issues": [],
+  "next_stage": "FG3 registered remote execution batch 005",
+  "next_stage_gate": "Commit and privately push the complete batch-004 evidence, summaries, audit, report, and memory update before dispatching row 289."
+}
