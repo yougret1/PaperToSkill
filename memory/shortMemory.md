@@ -2,8 +2,7 @@
 
 ## Active Iteration
 
-Commit and privately back up the frozen FG2 Stage `2.3` output-budget
-successor.
+Commit and privately back up the invalid FG2 Stage `2.3` output-budget pilot.
 The accepted V4/V5 evidence, frozen parent Stage `2.2` bundle, remote-only
 successor, and materialization anchor are immutable; no parent stage is reopened.
 
@@ -38,6 +37,10 @@ successor, and materialization anchor are immutable; no parent stage is reopened
 - Committed and privately pushed FG1 invalid batch 001 at `e9bdbeda`.
 - Froze a new 1,296-row FG2 request overlay that changes only the output budget
   from 1,024 to 8,192 and requires six unscored pilot requests before execution.
+- Committed and privately pushed FG2 at `3ed3a533`.
+- Ran six FG2 pilot requests: all were nontruncated, but Claude Opus 4.7 and
+  DeepSeek V4 Flash wrapped output in Markdown, so only four strict submissions
+  passed and no registered FG2 row was dispatched.
 
 ## Current State
 
@@ -47,8 +50,8 @@ successor, and materialization anchor are immutable; no parent stage is reopened
 - The source manuscript is `paper/effectslice_aaai/main_v3.tex`.
 - The standard `main_v3.pdf` was held open externally; the current-source verified
   build is `main_v3_build.pdf` until the clean copy is completed.
-- FG1 must not continue. FG2 pilot calls may begin only after the frozen
-  successor is committed and privately pushed.
+- FG1 and FG2 must not continue. FG3 may be frozen only after the invalid FG2
+  pilot is committed and privately pushed.
 
 ## Residual Risk
 

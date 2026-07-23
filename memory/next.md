@@ -5,10 +5,11 @@ forward-only generalization extension required by the user.
 
 ## Immediate Gate
 
-1. Inspect and privately back up the frozen FG2 successor.
-2. Preserve FG1 and exclude its 72 invalid rows from FG2 estimates.
-3. After the FG2 successor push, run its six marked, unscored output-budget
-   pilot requests.
+1. Inspect and privately back up the invalid FG2 pilot.
+2. Preserve FG1 and FG2 evidence; neither contributes rows to the final
+   experiment estimates.
+3. After the FG2 pilot push, freeze an FG3 successor that retains the 8,192
+   budget and adds a uniform bare-JSON format instruction.
 
 ## Stage 2.3 Materialization
 
@@ -19,8 +20,8 @@ forward-only generalization extension required by the user.
    successes and no credential persistence.
 4. FG1 batch 001 then failed systematically: all 72 rows exhausted the 1,024
    output-token budget and were malformed. Do not continue FG1.
-5. FG2 is frozen at an 8,192-token output budget. Commit and push it, then run
-   the six-request adequacy pilot before any registered FG2 row.
+5. FG2 pilot showed 8,192 is adequate but two providers violated the bare-JSON
+   contract. Do not run registered FG2 rows; create and pilot FG3.
 
 ## Preservation Rules
 

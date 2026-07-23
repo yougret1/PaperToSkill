@@ -1,0 +1,48 @@
+{
+  "stage": "2.3",
+  "stage_name": "FG2 output-budget adequacy pilot",
+  "status": "invalid",
+  "stage_scope_status": "budget_adequate_format_contract_inadequate_successor_required",
+  "handoff_mode": "normal",
+  "forward_only": true,
+  "fg2_successor_commit": "3ed3a533",
+  "fg2_successor_bundle_sha256": "917fa2d4a722e3b05b3b2fc5d97ebe9f6ee36b888a03844f2a1334e326045411",
+  "pilot": {
+    "logical_request_count": 6,
+    "transport_attempt_count": 9,
+    "transport_retry_count": 3,
+    "registered_experiment_rows_consumed": 0,
+    "nontruncated_response_count": 6,
+    "strict_submission_pass_count": 4,
+    "strict_submission_fail_count": 2
+  },
+  "passed_model_slots": [
+    "gpt_5_5",
+    "gpt_5_6_luna",
+    "gpt_5_6_sol",
+    "gpt_5_6_terra"
+  ],
+  "failed_model_slots": {
+    "claude_opus_4_7": "nontruncated response contained Markdown fence and fence-external text",
+    "deepseek_primary": "nontruncated response wrapped the JSON submission in a Markdown fence"
+  },
+  "inference": {
+    "output_budget_8192_observed_adequate": true,
+    "cross_provider_strict_json_instruction_observed_adequate": false,
+    "parser_failure": false,
+    "network_failure": false,
+    "semantic_rerun_of_terminal_pilot": false
+  },
+  "evidence": {
+    "root": "remote_execution_v2_2026-07-23",
+    "file_count_before_diagnostic": 32,
+    "exact_credential_reflection_count": 0,
+    "generic_credential_pattern_match_count": 0,
+    "raw_content_copied_into_diagnostic": false
+  },
+  "blocking_issues": [
+    "FG2 cannot begin registered execution because two of six exact aliases violated the strict bare-JSON submission contract."
+  ],
+  "next_stage": "FG3 versioned format-conformance successor",
+  "next_stage_gate": "Commit and push the complete FG2 pilot before freezing a uniform format-only instruction successor."
+}
