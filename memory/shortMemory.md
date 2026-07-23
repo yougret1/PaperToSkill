@@ -2,10 +2,10 @@
 
 ## Active Iteration
 
-Commit and privately back up the passed FG3 Stage `2.3` format-conformance pilot
-before any registered FG3 row. The accepted V4/V5 evidence, frozen parent Stage
-`2.2` bundle, remote-only successor, materialization anchor, FG1, and FG2 are
-immutable; no parent stage is reopened.
+Commit and privately back up FG3 registered batch 001 before row 73. The accepted
+V4/V5 evidence, frozen parent Stage `2.2` bundle, remote-only successor,
+materialization anchor, FG1, FG2, and FG3 pilot are immutable; no parent stage is
+reopened.
 
 ## Completed This Iteration
 
@@ -55,6 +55,14 @@ immutable; no parent stage is reopened.
   nontruncated strict submissions on their first transport attempt.
 - Scanned all 32 pilot evidence files with zero credential reflections, zero
   generic credential-pattern matches, and no forbidden local-model design.
+- Committed and privately pushed the passed FG3 pilot at `b388845c`.
+- Executed exactly the first 72 registered FG3 rows: four paper-task units with
+  24 B, 24 F, and 24 S rows. All 72 transports completed on their first attempt.
+- Observed 70 hard-contract failures and two malformed/no-submission outcomes,
+  zero operational successes, and 72 private scores of 0.0. These are valid
+  frozen condition failures and no terminal response is rerun.
+- Verified the exact contiguous schedule prefix and passed a fixed-minimum
+  611-file safety scan; 1,224 registered rows remain undispatched.
 
 ## Current State
 
@@ -66,8 +74,8 @@ immutable; no parent stage is reopened.
   build is `main_v3_build.pdf` until the clean copy is completed.
 - FG1 and FG2 must not continue. The frozen FG3 successor is committed and
   privately pushed.
-- The FG3 pilot passes 6/6 but is not yet committed or pushed. Registered batch
-  001 may start only after that backup and remains capped at 72 new rows.
+- The FG3 pilot is committed and pushed. Batch 001 is complete but not yet
+  committed or pushed; row 73 is prohibited until that backup succeeds.
 
 ## Residual Risk
 

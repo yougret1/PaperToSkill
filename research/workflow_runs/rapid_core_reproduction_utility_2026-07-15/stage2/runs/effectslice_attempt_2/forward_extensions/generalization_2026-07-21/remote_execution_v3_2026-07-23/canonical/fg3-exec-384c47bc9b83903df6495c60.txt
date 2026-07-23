@@ -1,0 +1,1 @@
+{"implementation":"def solve(case):\n    payload = case['payload']\n    threshold = payload['threshold']\n    calls = payload['calls']\n    selected = []\n    for call in calls:\n        delta = call['loss_without_call'] - call['loss_with_call']\n        if delta >= threshold and call['parseable']:\n            selected.append(call['call_id'])\n    return selected"}

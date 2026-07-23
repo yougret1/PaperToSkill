@@ -93,8 +93,17 @@ core research workflow.
   scan passed before any FG3 provider call started.
 - The FG3 successor was privately pushed at `f03d0ce4`. Its six-request unscored
   pilot then passed 6/6 strict submissions with six first-attempt transport
-  successes. All 32 evidence files passed the safety scan; no registered FG3 row
-  has started.
+  successes. All 32 evidence files passed the safety scan. The pilot checkpoint
+  was privately pushed at `b388845c`.
+- FG3 batch 001 then consumed the exact first 72 registered rows: four
+  paper-task units with 24 B, 24 F, and 24 S rows. All provider transports
+  completed on their first attempt, with no network retry.
+- Batch 001 produced 70 hard-contract failures and two malformed/no-submission
+  outcomes, zero operational successes, and 72 private scores of 0.0. These are
+  valid frozen condition failures rather than Invalid rows and are never rerun.
+- The batch summary proves an exact contiguous schedule prefix. Its complete
+  611-file safety scan found no credential reflection, generic credential
+  pattern, or forbidden local-model design; 1,224 FG3 rows remain undispatched.
 
 ## Legacy Evidence Policy
 
@@ -133,9 +142,11 @@ thesis. Reuse requires an explicit Stage 2 evidence audit.
 
 ## Stage 2.3 Current Gate
 
-- Commit and push the passed FG3 pilot evidence before registered batch 001.
-  Batch 001 is capped at 72 new rows and must be audited and backed up before any
-  later batch.
+- Commit and privately push the complete FG3 batch-001 evidence, summary, audit,
+  report, and memory update before dispatching row 73.
+- The frozen plan contains no outcome-driven early-stopping rule. Batch 001's
+  zero-success result remains adverse evidence in the registered denominators;
+  it cannot trigger a semantic rerun or an in-place protocol change.
 - Execute only the frozen 1,296-row remote schedule with registered retry
   classification and raw/canonical artifact retention.
 - Keep generated token IDs and local runtime evidence out of all successor work.

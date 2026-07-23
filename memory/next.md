@@ -5,12 +5,13 @@ forward-only generalization extension required by the user.
 
 ## Immediate Gate
 
-1. Commit and privately push the passed FG3 pilot evidence and stage report.
-2. Start registered FG3 batch 001 with at most 72 new rows only after the push
-   succeeds.
-3. Audit, summarize, commit, and push batch 001 before any later batch.
+1. Commit and privately push the complete FG3 batch-001 evidence, summary, audit,
+   stage report, and memory update.
+2. Do not dispatch row 73 until the push succeeds.
+3. Continue only the frozen schedule in batches of at most 72 rows, with an
+   audit, summary, commit, and push between batches.
 4. Preserve the pilot as unscored format evidence; do not include it in any
-   experiment estimate.
+   experiment estimate or rerun a terminal semantic response.
 
 ## Stage 2.3 Materialization
 
@@ -28,7 +29,12 @@ forward-only generalization extension required by the user.
    its verifier, 156-test suite, and 1,308-file safety scan pass. No FG3 provider
    call had started at that frozen-successor checkpoint.
 7. The six-request FG3 format pilot passes 6/6 with six first-attempt transport
-   successes and a clean 32-file safety scan. No registered FG3 row has started.
+   successes and a clean 32-file safety scan.
+8. FG3 batch 001 consumed the exact first 72 schedule rows. It produced 70
+   hard-contract failures and two malformed/no-submission outcomes, zero
+   operational successes, and no transport retries. These are valid condition
+   failures under the frozen plan, not reasons for semantic reruns.
+9. The complete 611-file batch audit passes; 1,224 FG3 rows remain undispatched.
 
 ## Preservation Rules
 

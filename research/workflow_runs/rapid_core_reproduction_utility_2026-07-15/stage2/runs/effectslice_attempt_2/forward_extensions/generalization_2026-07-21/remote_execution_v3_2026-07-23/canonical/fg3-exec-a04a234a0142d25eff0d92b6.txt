@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    segments = case[\"segments\"]\n    budget = case[\"budget\"]\n    segs = [dict(s) for s in segments]\n    for s in segs:\n        s[\"allocated\"] = s[\"minimum\"]\n    remaining = budget - sum(s[\"minimum\"] for s in segs)\n    sorted_segs = sorted(segs, key=lambda s: (-s[\"importance\"], s[\"name\"]))\n    for s in sorted_segs:\n        if remaining <= 0:\n            break\n        max_extra = s[\"capacity\"] - s[\"minimum\"]\n        alloc_extra = min(max_extra, remaining)\n        s[\"allocated\"] += alloc_extra\n        remaining -= alloc_extra\n    return [{\"name\": s[\"name\"], \"allocated\": s[\"allocated\"]} for s in segs]"
+}
