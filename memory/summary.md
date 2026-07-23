@@ -196,6 +196,12 @@ core research workflow.
   DeepSeek primary, 24 GPT-5.5, and 24 GPT-5.6 Sol rows produced 68 hard-contract
   failures, one malformed outcome, three operational successes, no retries, and
   score sum 3.0. The 8,285-file scan passed; 432 rows remain.
+- FG3 batch 013 consumed rows 865-936 across NLP-LLM-01 and SE-PE-01, with 24
+  rows each for GPT-5.5, GPT-5.6 Terra, and Claude Opus 4.7. Seventeen registered
+  HTTP failures were retried; one terminal HTTP 524 became an integrity/digest
+  failure. The batch otherwise produced 68 hard-contract failures, three
+  malformed outcomes, no operational success, and score sum 0.0 across 71 scored
+  rows. The 8,879-file scan passed; 360 rows remain.
 
 ## Legacy Evidence Policy
 
@@ -234,7 +240,7 @@ thesis. Reuse requires an explicit Stage 2 evidence audit.
 
 ## Stage 2.3 Current Gate
 
-- Commit and privately push FG3 batch 012 before dispatching row 865.
+- Commit and privately push FG3 batch 013 before dispatching row 937.
 - The frozen plan contains no outcome-driven early-stopping rule. Batch 003's
   zero-success interval and all condition failures remain in the registered
   denominators; neither can trigger a semantic rerun or an in-place protocol
