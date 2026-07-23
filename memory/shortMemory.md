@@ -2,7 +2,7 @@
 
 ## Active Iteration
 
-Commit and privately back up FG3 registered batch 005 before row 361. The accepted
+Commit and privately back up FG3 registered batch 006 before row 433. The accepted
 V4/V5 evidence, frozen parent Stage `2.2` bundle, remote-only successor,
 materialization anchor, FG1, FG2, and FG3 pilot are immutable; no parent stage is
 reopened.
@@ -93,6 +93,12 @@ reopened.
   outcomes, zero operational successes, and a private-score sum of 0.0.
 - Verified rows 1-360 as the exact contiguous prefix and passed a fixed-minimum
   2,926-file execution-tree safety scan; 936 rows remain undispatched.
+- Executed exactly rows 361-432 as FG3 batch 006. All 72 logical requests
+  completed on their first transport attempts; no semantic response was rerun.
+- Batch 006 produced 56 hard-contract failures, 16 malformed/no-submission
+  outcomes, zero operational successes, and a private-score sum of 0.0.
+- Verified rows 1-432 as the exact contiguous prefix and passed a fixed-minimum
+  3,505-file execution-tree safety scan; 864 rows remain undispatched.
 
 ## Current State
 
@@ -104,8 +110,8 @@ reopened.
   build is `main_v3_build.pdf` until the clean copy is completed.
 - FG1 and FG2 must not continue. The frozen FG3 successor is committed and
   privately pushed.
-- The FG3 pilot and batches 001-004 are committed and pushed. Batch 005 is
-  complete but not yet committed or pushed; row 361 is prohibited until that
+- The FG3 pilot and batches 001-005 are committed and pushed. Batch 006 is
+  complete but not yet committed or pushed; row 433 is prohibited until that
   backup succeeds.
 
 ## Residual Risk

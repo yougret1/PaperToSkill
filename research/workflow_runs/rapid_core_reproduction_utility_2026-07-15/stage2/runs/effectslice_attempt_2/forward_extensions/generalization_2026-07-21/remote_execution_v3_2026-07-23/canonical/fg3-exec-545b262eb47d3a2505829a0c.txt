@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    payload = case['payload']\n    nodes = payload['nodes']\n    threshold = payload['utility_threshold']\n    node_map = {n['id']: n for n in nodes}\n    children = {}\n    for n in nodes:\n        parent = n['parent']\n        if parent is not None:\n            children.setdefault(parent, []).append(n['id'])\n    removed = set()\n    def dfs(node_id):\n        node = node_map[node_id]\n        total = node['utility']\n        for child_id in children.get(node_id, []):\n            total += dfs(child_id)\n        if node['removable'] and total < threshold:\n            removed.add(node_id)\n            return 0.0\n        else:\n            return total\n    dfs('root')\n    return list(removed)"
+}
