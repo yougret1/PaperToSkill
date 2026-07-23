@@ -1,0 +1,248 @@
+{
+  "schema_version": "effectslice-fg1-figure-statistical-plan.remote-only.v1",
+  "registration_status": "stage_2_2_1_remote_only_successor_registered_materialization_pending",
+  "evidence_rule": "Empirical panels use only hash-bound real outcomes and aggregation code; placeholder, simulated, hand-entered, or selectively filtered outcomes are forbidden.",
+  "figures": [
+    {
+      "figure_id": "F1_protocol_audit",
+      "priority": "main_required",
+      "panels": [
+        {
+          "id": "a",
+          "content": "One end-to-end real case: paper span, opaque atoms, dependency edges, F/S retain/drop boundary, canonical rendered artifact, model-visible payload digest, and terminal admission fields."
+        },
+        {
+          "id": "b",
+          "content": "V3 development, V4 freeze/run, prefix-04 selection, V5 freeze/run, and FG1 design/materialization/run timeline with public/private visibility."
+        },
+        {
+          "id": "c",
+          "content": "Complete admission gate showing B sensitivity, F/S sufficiency, paired margin, integrity, ordered Reject reasons, and orthogonal Invalid. Controls are outside it."
+        }
+      ],
+      "claim": "Protocol transparency and leakage control, not efficacy."
+    },
+    {
+      "figure_id": "F2_cross_paper_effects",
+      "priority": "main_required",
+      "panels": [
+        {
+          "id": "a",
+          "content": "Twelve paper-level F-B, S-B, and S-F effect rows with nested task/block points, valid/registered pairs, and partial-identification bounds."
+        },
+        {
+          "id": "b",
+          "content": "Primary 12-paper x 2-task Admit/Reject/Invalid matrix with registry-stratified raw counts; no reducer/model cells are implied for combinations that were not run."
+        }
+      ],
+      "claim": "Registered-benchmark heterogeneity and coverage; no random-sample population claim."
+    },
+    {
+      "figure_id": "F3_compression_reliability",
+      "priority": "main_required",
+      "panels": [
+        {
+          "id": "a",
+          "content": "Primary S compression versus admission plus a separate two-arm secondary panel using PairPass/PairFail/Invalid; the two state types are never pooled."
+        },
+        {
+          "id": "b",
+          "content": "All registered structural restoration levels on four tasks, including Invalid levels."
+        },
+        {
+          "id": "c",
+          "content": "Four-task matrix for control SanityPass/SanityFail/Invalid and ladder/alternate PairPass/PairFail/Invalid. Structural missing cells are hatched and never encoded as failure."
+        },
+        {
+          "id": "d",
+          "content": "Separate task-model-candidate resource cells for frozen artifact bytes/tokens, provider-reported input/output tokens, terminal-attempt latency, and retry overhead, with six raw values and non-null/6. Paired S-F deltas are shown only when both members exist; monetary cost is appendix-only and conditional on a pre-anchor hashed price table."
+        }
+      ],
+      "claim": "Secondary compression, reliability, and resource-use trade-off plus structural dose response, not causality or model ranking."
+    },
+    {
+      "figure_id": "F4_robustness_and_failures",
+      "priority": "appendix_required",
+      "panels": [
+        {
+          "id": "a",
+          "content": "Required model x four sentinel-task exact B/F/S candidate states and F/I repeatability metrics; unavailable slots stay visible."
+        },
+        {
+          "id": "b",
+          "content": "Registered SLA-grid task-state stability, fixed five-block leave-one-out task-state stability, and leave-one-paper-out identified-bound summaries."
+        },
+        {
+          "id": "c",
+          "content": "Mutually exclusive terminal outcome decomposition; recovered transport retries are annotations, not semantic failures. Show normalized length-cap termination separately so truncation is not confounded with malformed output or hard-contract failure."
+        }
+      ],
+      "claim": "Robustness and operational diagnosis."
+    }
+  ],
+  "conditional_outputs": [
+    {
+      "name": "control_confusion_matrix",
+      "default": "do_not_render",
+      "reason": "Four tasks per sanity state cannot support calibrated error rates.",
+      "current_independent_controls_per_state": 4,
+      "current_output": "Exact task-level sanity table only."
+    }
+  ],
+  "statistics": {
+    "primary_unit": "paper",
+    "independent_n": 12,
+    "nesting": "six paired blocks within task, two tasks within paper, three papers within each domain",
+    "primary_outcomes": [
+      "registered Admit/Reject/Invalid state",
+      "paired F-B operational-success and private-score difference",
+      "paired S-B operational-success and private-score difference",
+      "paired S-F operational-success and private-score difference"
+    ],
+    "secondary_resource_outcomes": {
+      "scope": "descriptive registered-benchmark resource use; not a model ranking",
+      "raw_unit": "one registered execution row",
+      "deterministic_artifact_endpoints": {
+        "candidate_artifact_bytes": "Exact byte length of the frozen candidate artifact.",
+        "candidate_artifact_cl100k_tokens": "Exact tiktoken==0.12.0 cl100k_base count of the canonical rendered candidate artifact; the common task scaffold is excluded.",
+        "canonical_model_visible_payload_bytes": "Exact byte length of the frozen canonical model-visible payload."
+      },
+      "provider_reported_token_endpoints": {
+        "input_tokens": "Provider-returned input-token usage for the terminal response.",
+        "output_tokens": "Provider-returned output-token usage for the terminal response.",
+        "total_tokens": "Provider-returned total-token usage for the terminal response.",
+        "cached_input_tokens": "Provider-returned cached-input count when separately exposed; otherwise null.",
+        "validation": "Counts must be nonnegative integers. When input, output, and total are all reported, total must equal input plus output under the endpoint's frozen provider semantics. Otherwise input, output, and total are all null and provider_usage_missing_reason records why; partial-null tuples are invalid. Cached-input tokens are independently nullable."
+      },
+      "latency_endpoints_ms": {
+        "terminal_attempt_elapsed_ms": "Monotonic elapsed time from dispatch of the final attempted request to complete response-body receipt or terminal transport classification, rounded once to the nearest millisecond.",
+        "total_execution_elapsed_ms": "Monotonic elapsed time from dispatch of the first attempted request to the terminal classification, including prior attempts and registered retry waits.",
+        "retry_sleep_elapsed_ms": "Sum of measured registered backoff, Retry-After, and deterministic-jitter waits, rounded once to the nearest millisecond.",
+        "retry_overhead_ms": "max(0, total_execution_elapsed_ms - terminal_attempt_elapsed_ms); this contains prior-attempt time plus retry waits and is never pooled with model latency. For dispatched rows total time must be at least terminal-attempt time. Because total, terminal, and sleep durations are independently rounded once, retry overhead must be at least retry sleep minus one millisecond.",
+        "clock": "one process-local monotonic_ns clock; UTC timestamps are audit metadata only"
+      },
+      "attempt_fields": [
+        "attempt_index",
+        "attempt_status_class",
+        "attempt_elapsed_ms",
+        "retry_sleep_after_attempt_ms"
+      ],
+      "missingness": {
+        "artifact_endpoints": "Never missing after materialization; a mismatch is Invalid.",
+        "provider_tokens": "Null when the terminal response does not expose a valid usage tuple; never impute with cl100k_base or another model's tokenizer.",
+        "latency": "Null only when no request was dispatched, such as preflight unavailability. Once any attempt is dispatched, attempt and total timings are mandatory even for terminal transport failure.",
+        "paired_comparison": "A blockwise S-F resource delta is valid only when both endpoints are non-null; report valid_pairs/6 and do not impute missing members."
+      },
+      "task_level_reduction": {
+        "cell": "task x model slot x candidate",
+        "registered_blocks": 6,
+        "raw_display": "Show all six block-ordered values including nulls.",
+        "summary": "For each endpoint report non-null count/6, median, minimum, maximum, and sum over non-null values; undefined statistics remain null at count zero.",
+        "paired_S_minus_F": "For each resource endpoint report six block-ordered S-F deltas and the same valid-count, median, range, and sum reduction over valid pairs.",
+        "aggregation_boundary": "Never pool model slots, tasks, or structurally unrun cells; cross-task panels retain task-model-candidate cells.",
+        "missing_usage_reason_counts": "Report counts for every frozen provider_usage_missing_reason code in each task-model-candidate cell; null denotes a complete reported usage tuple."
+      },
+      "monetary_cost": {
+        "default": "not_reported",
+        "conditional_rule": "Report estimated USD cost only if a dated public price table, currency, input and output rates, original billing units, normalized USD-per-token rates, and its content hash are frozen in the final materialization anchor before calls.",
+        "formula": "input_tokens * input_rate_usd_per_token + output_tokens * output_rate_usd_per_token",
+        "missingness": "Null when token usage or a frozen price input is absent.",
+        "role": "appendix descriptive endpoint only; never a primary success criterion"
+      }
+    },
+    "registered_denominators": true,
+    "valid_pair_reporting": "valid_pairs/registered_pairs",
+    "invalid_partial_identification_bounds": true,
+    "estimator_source": "experiment_plan.json analysis_contract.registered_estimator",
+    "per_task_display": {
+      "required": [
+        "six raw paired points",
+        "valid and Invalid counts",
+        "median",
+        "range"
+      ],
+      "forbidden": [
+        "per-task Clopper-Pearson interval",
+        "six-block bootstrap interval"
+      ]
+    },
+    "paper_bootstrap_sensitivity": {
+      "seed": 20260721,
+      "replicates": 10000,
+      "resample": "papers within domain",
+      "preserve": "both tasks and all matched blocks",
+      "interval": "percentile 95%",
+      "scope_label": "registered-benchmark sensitivity interval"
+    },
+    "mandatory_sensitivity": [
+      "leave_one_paper_out",
+      "exact_domain_counts",
+      "equal_domain_weighted_summary"
+    ],
+    "sla_sensitivity_grid": {
+      "maximum_B_successes": [
+        0,
+        1,
+        2
+      ],
+      "minimum_F_successes": [
+        4,
+        5,
+        6
+      ],
+      "minimum_S_successes": [
+        4,
+        5,
+        6
+      ],
+      "paired_margin": [
+        0.0,
+        0.05,
+        0.1
+      ],
+      "leave_one_block_out": "Over five remaining blocks use B<=1, F>=4, S>=4, margin>=4; omit per-registry gates and never replace the six-block rule. Any remaining Invalid row makes the five-block state Invalid; omitting the sole Invalid row may be labeled recovered sensitivity only."
+    },
+    "controls": "Sanity states only; no calibration, sensitivity, specificity, or confusion matrix.",
+    "model_analysis": "Report every slot separately on four prespecified sentinel tasks, including exact candidate state and all registered F/I metrics; unavailable slots remain visible and are never replaced post hoc.",
+    "nonfactorial_display_rule": "Primary, paired-secondary, and model subdesigns use separate matrices; unrun combinations are structural missing, never Reject or Invalid.",
+    "multiple_testing": "One primary S per task; every other candidate/model/SLA analysis is secondary and cannot rescue the primary result."
+  },
+  "figure_precedent_map": [
+    {
+      "planned_element": "method pipeline and atom boundary",
+      "adjacent_precedents": [
+        "Toolformer",
+        "Delta Debugging",
+        "C-Reduce",
+        "Perses"
+      ],
+      "positioning": "Procedural and reduction diagrams are standard adjacent practice."
+    },
+    {
+      "planned_element": "risk and SLA sensitivity",
+      "adjacent_precedents": [
+        "SelectiveNet",
+        "Conformal Risk Control"
+      ],
+      "positioning": "Threshold/reject-option precedent without inheriting distribution-free guarantees."
+    },
+    {
+      "planned_element": "heatmap and failure analysis",
+      "adjacent_precedents": [
+        "AgentBoard",
+        "MCP-AgentBench",
+        "PaperBench"
+      ],
+      "positioning": "Benchmark-analysis precedent, not an identical design."
+    },
+    {
+      "planned_element": "compression-reliability Pareto",
+      "adjacent_precedents": [
+        "LLMLingua",
+        "LLMLingua-2",
+        "Prompt Compression with Context-Aware Sentence Encoding"
+      ],
+      "positioning": "Compression/performance trade-off precedent."
+    }
+  ]
+}

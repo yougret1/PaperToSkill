@@ -1,0 +1,307 @@
+{
+  "schema_version": "effectslice-fg1-candidate-matrix.remote-only.v1",
+  "decision_time": "Stage 2.2 design selection; final materialization eligibility remains pending",
+  "columns": [
+    "paper_id",
+    "status",
+    "domain",
+    "venue",
+    "task_ids",
+    "mechanism_boundary",
+    "source_status",
+    "scorer_feasibility",
+    "dependency_risk",
+    "license_risk",
+    "rationale"
+  ],
+  "entries": [
+    {
+      "paper_id": "nlp_llmlingua",
+      "status": "selected",
+      "domain": "nlp",
+      "venue": "EMNLP 2023",
+      "task_ids": [
+        "NLP-LLM-01",
+        "NLP-LLM-02"
+      ],
+      "mechanism_boundary": "Budget allocation and iterative token compression using supplied scores; no model training.",
+      "source_status": "formal metadata verified; full text and official code URL identified; local span extraction pending",
+      "scorer_feasibility": "high: exact budgets, masks, indices, and order",
+      "dependency_risk": "low: numeric fixtures replace live language-model scoring",
+      "license_risk": "low for clean-room implementation; capture repository license before any code reuse",
+      "rationale": "Two distinct deterministic stages in a widely cited compression pipeline."
+    },
+    {
+      "paper_id": "nlp_llmlingua2",
+      "status": "selected",
+      "domain": "nlp",
+      "venue": "Findings of ACL 2024",
+      "task_ids": [
+        "NLP-LL2-01",
+        "NLP-LL2-02"
+      ],
+      "mechanism_boundary": "Label alignment and budgeted classifier-output reconstruction; no teacher or classifier training.",
+      "source_status": "DOI and multi-source metadata verified; local span extraction pending",
+      "scorer_feasibility": "high: exact span masks and reconstructed text",
+      "dependency_risk": "low: probabilities and alignments are fixtures",
+      "license_risk": "low for clean-room implementation; repository license must be captured before reuse",
+      "rationale": "Separates distillation preprocessing from deterministic compression inference."
+    },
+    {
+      "paper_id": "nlp_context_sentence_compression",
+      "status": "selected",
+      "domain": "nlp",
+      "venue": "AAAI 2025",
+      "task_ids": [
+        "NLP-CSE-01",
+        "NLP-CSE-02"
+      ],
+      "mechanism_boundary": "Context-aware sentence scoring and budgeted selection with frozen embeddings.",
+      "source_status": "AAAI DOI verified; exact retrieval envelope saved; local span extraction pending",
+      "scorer_feasibility": "medium-high: numeric aggregation and exact sentence selection",
+      "dependency_risk": "medium: paper-specific scoring formula must be verified from full text before adapter freeze",
+      "license_risk": "low for clean-room implementation; no external code assumed",
+      "rationale": "Adds sentence-level rather than token-only compression and an AAAI-accepted mechanism."
+    },
+    {
+      "paper_id": "se_delta_debugging",
+      "status": "selected",
+      "domain": "software_engineering",
+      "venue": "IEEE TSE 2002",
+      "task_ids": [
+        "SE-DD-01",
+        "SE-DD-02"
+      ],
+      "mechanism_boundary": "ddmin and difference isolation under deterministic PASS/FAIL/UNRESOLVED oracles.",
+      "source_status": "DOI and bibliography verified; full-text span extraction pending",
+      "scorer_feasibility": "high: exact result and oracle-call trace",
+      "dependency_risk": "low: no external compiler or network required",
+      "license_risk": "low for a clean-room algorithm implementation",
+      "rationale": "Canonical reduction mechanism with two formally distinct procedures."
+    },
+    {
+      "paper_id": "se_creduce",
+      "status": "selected",
+      "domain": "software_engineering",
+      "venue": "PLDI 2012",
+      "task_ids": [
+        "SE-CR-01",
+        "SE-CR-02"
+      ],
+      "mechanism_boundary": "Pass scheduling and chunk reduction on registered miniature program states.",
+      "source_status": "DOI and bibliography verified; full-text span extraction pending",
+      "scorer_feasibility": "high: exact pass trace, fixed point, syntax, and oracle calls",
+      "dependency_risk": "low-medium: compiler behavior is replaced by deterministic fixtures",
+      "license_risk": "capture the official implementation license before code reuse; clean-room path is available",
+      "rationale": "Industrial-strength reducer whose orchestration and reduction schedule can be separated."
+    },
+    {
+      "paper_id": "se_perses",
+      "status": "selected",
+      "domain": "software_engineering",
+      "venue": "ICSE 2018",
+      "task_ids": [
+        "SE-PE-01",
+        "SE-PE-02"
+      ],
+      "mechanism_boundary": "Grammar-guided rewrites and reduction-queue invalidation on a miniature grammar.",
+      "source_status": "DOI verified in DBLP/Crossref retrieval; full-text span extraction pending",
+      "scorer_feasibility": "high: parse validity, final tree, queue trace, and oracle calls",
+      "dependency_risk": "medium: grammar and canonical rewrite order must be frozen",
+      "license_risk": "capture repository revision/license before reuse; clean-room path is available",
+      "rationale": "Adds syntax-aware reduction beyond unstructured delta debugging."
+    },
+    {
+      "paper_id": "data_snapatac2",
+      "status": "selected",
+      "domain": "data_analysis",
+      "venue": "Nature Methods 2024",
+      "task_ids": [
+        "DATA-SNAP-01",
+        "DATA-SNAP-02"
+      ],
+      "mechanism_boundary": "Sparse normalization/degree and matrix-free spectral operator/coordinate handling.",
+      "source_status": "DOI verified and extracted full text already local",
+      "scorer_feasibility": "high: sparse numeric reference outputs and allocation guards",
+      "dependency_risk": "low-medium: eigensolver outputs are frozen fixtures",
+      "license_risk": "existing task is clean-room; capture package license before external code reuse",
+      "rationale": "Preserves continuity with V4 while splitting preprocessing from operator mechanics."
+    },
+    {
+      "paper_id": "data_leiden",
+      "status": "selected",
+      "domain": "data_analysis",
+      "venue": "Scientific Reports 2019",
+      "task_ids": [
+        "DATA-LEI-01",
+        "DATA-LEI-02"
+      ],
+      "mechanism_boundary": "Local moving and refinement/aggregation on deterministic weighted graphs.",
+      "source_status": "DOI verified by targeted retrieval; local full-text span extraction pending",
+      "scorer_feasibility": "high: exact partitions, gains, weights, and mappings",
+      "dependency_risk": "medium: stochastic order is replaced by a registered permutation",
+      "license_risk": "clean-room implementation; do not import library code until license is recorded",
+      "rationale": "A graph-analysis mechanism with explicit multi-phase dependencies and connectivity guarantees."
+    },
+    {
+      "paper_id": "data_hdbscan",
+      "status": "selected",
+      "domain": "data_analysis",
+      "venue": "ACM TKDD 2015",
+      "task_ids": [
+        "DATA-HDB-01",
+        "DATA-HDB-02"
+      ],
+      "mechanism_boundary": "Mutual-reachability MST and condensed-tree stability selection.",
+      "source_status": "DOI verified by targeted retrieval; local full-text span extraction pending",
+      "scorer_feasibility": "high: exact graph/tree events, labels, and numeric tolerance",
+      "dependency_risk": "low-medium: approximate neighbors are excluded",
+      "license_risk": "clean-room implementation; capture implementation license before reuse",
+      "rationale": "Two substantial, deterministic stages with different graph/tree contracts."
+    },
+    {
+      "paper_id": "agent_toolformer",
+      "status": "selected",
+      "domain": "agent_tool_use",
+      "venue": "NeurIPS 2023",
+      "task_ids": [
+        "AGENT-TF-01",
+        "AGENT-TF-02"
+      ],
+      "mechanism_boundary": "API-call loss filtering and ordered interleaving with supplied model losses/results.",
+      "source_status": "formal DBLP metadata verified and extracted full text already local",
+      "scorer_feasibility": "high: exact losses, thresholds, spans, and serialization",
+      "dependency_risk": "low: no model training or live API execution",
+      "license_risk": "clean-room implementation already used; no external code assumed",
+      "rationale": "Preserves V4/V5 continuity and adds a second non-overlapping bounded mechanism."
+    },
+    {
+      "paper_id": "agent_reflexion",
+      "status": "selected",
+      "domain": "agent_tool_use",
+      "venue": "NeurIPS 2023",
+      "task_ids": [
+        "AGENT-RF-01",
+        "AGENT-RF-02"
+      ],
+      "mechanism_boundary": "Episodic reflection memory and trial-control state machine with supplied model emissions.",
+      "source_status": "NeurIPS DBLP record verified and extracted full text already local",
+      "scorer_feasibility": "medium-high: exact memory and state traces; reflection text quality is excluded",
+      "dependency_risk": "medium: task must not drift into evaluating free-form reflection content",
+      "license_risk": "capture official repository license before any code reuse; clean-room controller is feasible",
+      "rationale": "A non-tool-selection agent mechanism with explicit feedback and memory dependencies."
+    },
+    {
+      "paper_id": "agent_react",
+      "status": "selected",
+      "domain": "agent_tool_use",
+      "venue": "ICLR 2023",
+      "task_ids": [
+        "AGENT-RA-01",
+        "AGENT-RA-02"
+      ],
+      "mechanism_boundary": "Interleaved reason/action/observation representation and bounded tool-loop orchestration.",
+      "source_status": "ICLR OpenReview identity verified; local full-text span extraction pending",
+      "scorer_feasibility": "medium-high: exact parse and tool trace; reasoning quality is excluded",
+      "dependency_risk": "medium: scorer must remain paper-specific rather than a generic parser benchmark",
+      "license_risk": "capture official repository license before reuse; clean-room path is available",
+      "rationale": "Provides a canonical interleaved acting mechanism distinct from Toolformer and Reflexion."
+    },
+    {
+      "paper_id": "reserve_longllmlingua",
+      "status": "reserve",
+      "domain": "nlp",
+      "venue": "arXiv 2023 canonical record",
+      "task_ids": [],
+      "mechanism_boundary": "Long-context prompt compression.",
+      "source_status": "retrieval saved",
+      "scorer_feasibility": "medium-high",
+      "dependency_risk": "medium",
+      "license_risk": "pending",
+      "rationale": "Reserve because a comparably clear formal proceedings record was not retrieved."
+    },
+    {
+      "paper_id": "reserve_cause_reduction",
+      "status": "reserve",
+      "domain": "software_engineering",
+      "venue": "IEEE TSE 2016",
+      "task_ids": [],
+      "mechanism_boundary": "Cause reduction beyond failure-only delta debugging.",
+      "source_status": "bibliography verified",
+      "scorer_feasibility": "high",
+      "dependency_risk": "low",
+      "license_risk": "low for clean-room implementation",
+      "rationale": "Same-domain reserve; not primary to avoid overrepresenting delta-debugging variants."
+    },
+    {
+      "paper_id": "reserve_umap",
+      "status": "reserve",
+      "domain": "data_analysis",
+      "venue": "arXiv/method record ambiguous in current retrieval",
+      "task_ids": [],
+      "mechanism_boundary": "Graph construction and low-dimensional optimization.",
+      "source_status": "targeted retrieval degraded",
+      "scorer_feasibility": "high",
+      "dependency_risk": "medium",
+      "license_risk": "pending",
+      "rationale": "Reserve because the method's formal identity was less clear than Leiden and HDBSCAN."
+    },
+    {
+      "paper_id": "reserve_autotool",
+      "status": "reserve",
+      "domain": "agent_tool_use",
+      "venue": "AAAI 2026",
+      "task_ids": [],
+      "mechanism_boundary": "Tool-transition graph construction and efficient traversal.",
+      "source_status": "AAAI DOI verified; full text not locally extracted",
+      "scorer_feasibility": "high from abstracted mechanism, pending source-span audit",
+      "dependency_risk": "medium",
+      "license_risk": "pending",
+      "rationale": "First agent-domain reserve; complete source audit is required before promotion."
+    },
+    {
+      "paper_id": "reject_confucius",
+      "status": "rejected",
+      "domain": "agent_tool_use",
+      "venue": "AAAI 2024",
+      "task_ids": [],
+      "mechanism_boundary": "Iterative tool learning curriculum.",
+      "source_status": "AAAI DOI verified",
+      "scorer_feasibility": "low under the no-training rule",
+      "dependency_risk": "high: foundation-model training or adaptation",
+      "license_risk": "not evaluated",
+      "rationale": "Rejected because the central mechanism conflicts with the no-foundation-model-retraining gate."
+    },
+    {
+      "paper_id": "reject_reusable_toolsets",
+      "status": "rejected",
+      "domain": "agent_tool_use",
+      "venue": "AAAI 2025",
+      "task_ids": [],
+      "mechanism_boundary": "Open-ended reusable tool synthesis.",
+      "source_status": "AAAI DOI verified",
+      "scorer_feasibility": "low without human semantic labels",
+      "dependency_risk": "high: open-ended tool quality and LLM judging",
+      "license_risk": "not evaluated",
+      "rationale": "Rejected because a deterministic private scorer for synthesized-tool quality is not yet defensible."
+    }
+  ],
+  "registration_status": "stage_2_2_1_remote_only_successor_registered_materialization_pending",
+  "audit_contract": {
+    "selected_rows_are_not_materialized": true,
+    "required_before_final_anchor": [
+      "legal full-text digest",
+      "task-to-source-span matrix",
+      "two distinct task boundaries per paper",
+      "reference differential test",
+      "candidate builder identity",
+      "independent source auditor identity",
+      "registry A/B builder and auditor identities",
+      "disagreement and resolution ledger"
+    ],
+    "source_auditor_must_differ_from_candidate_builder": true,
+    "current_registration_is_immutable": true,
+    "replacement_requires_committed_successor_registration": true,
+    "outcome_access_during_selection_or_replacement": "forbidden"
+  }
+}

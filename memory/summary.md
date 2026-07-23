@@ -27,7 +27,8 @@ core research workflow.
 - Major Stage `2`: passed with `handoff_mode: normal`.
 - Forward Stage `2.6`: passed with 33 bibliography entries, 30 main-text
   citations, and 7 DOI-verified AAAI papers.
-- Forward Stage `2.2`: passed and pending private commit/push.
+- Frozen parent Stage `2.2`: committed and pushed.
+- Remote-only Stage `2.2` successor: passed and pending private commit/push.
 - Current branch: `codex/effectslice-v3`.
 
 ## EffectSlice Evidence State
@@ -50,12 +51,17 @@ core research workflow.
   `277bab0fba66a4144346d472ef3deadc010168353d47f939dc812501a2eff9b4`.
 - Registered benchmark: 12 papers, 24 nested task decisions, and four domains
   (NLP, software engineering, data analysis, agent/tool-use).
-- Required schedule cap: 1200 remote conversations plus 96 fixed-seed local Qwen
-  executions, for 1296 required executions.
-- Required closed slots are DeepSeek primary, GPT-5.5, GPT-5.6 Sol, and GPT-5.6
-  Terra; the fixed-seed anchor is Qwen2.5-Coder-7B-Instruct.
-- Verification passed in normal and optimized modes, with 109 FG1 tests and three
-  independent PASS verdicts containing no P0/P1.
+- Frozen parent bundle SHA:
+  `277bab0fba66a4144346d472ef3deadc010168353d47f939dc812501a2eff9b4`.
+- Remote-only successor bundle SHA:
+  `e2615ea65ecc0c1145aa3e0f2fb7a36b8bc91a914bb94821b5cee40be9da99958`.
+- Required schedule cap: 1296 remote conversations and zero local executions.
+- Required robustness slots are GPT-5.5, GPT-5.6 Sol, GPT-5.6 Terra,
+  Claude Opus 4.7, and GPT-5.6 Luna. Claude Opus 4.6 remains optional.
+- Luna F/I repeats measure observed remote repeatability only; there is no model
+  seed-control or deterministic closed-model claim.
+- The remote-only successor verifier and the full forward suite pass
+  (`125 passed`).
 - No provider/model API call has occurred in this forward extension.
 
 ## Legacy Evidence Policy
@@ -89,13 +95,18 @@ thesis. Reuse requires an explicit Stage 2 evidence audit.
   to the purposefully registered, domain-stratified benchmark.
 - Do not begin a forward stage until the preceding stage is verified, committed,
   and pushed to the private remote.
+- Do not design, download, install, materialize, or run local-model experiments.
+  Historical frozen parent records may mention the superseded local anchor, but
+  no successor experiment or manuscript claim may rely on it.
 
 ## Stage 2.3 Audit Priorities
 
+- Materialize one 1296-row remote schedule from the remote-only successor.
 - Retain readable implementation-source evidence with distinct builder and
   auditor identities.
-- Independently verify the Qwen generate-twice token comparison.
-- Add a forward-only token-ID vocabulary-bound check and mutation test.
+- Verify exact remote aliases, request/response selectors, retry classification,
+  and F/I byte-identity before provider calls.
+- Keep generated token IDs and local runtime evidence out of the successor.
 - Do not treat four controls as a calibrated confusion matrix or error-rate
   estimate.
 
