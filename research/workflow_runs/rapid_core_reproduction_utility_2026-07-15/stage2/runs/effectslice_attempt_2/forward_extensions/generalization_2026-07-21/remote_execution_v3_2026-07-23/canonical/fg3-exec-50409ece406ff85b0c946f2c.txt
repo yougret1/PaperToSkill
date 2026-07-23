@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    threshold = case['threshold']\n    calls = case['calls']\n    accepted_ids = []\n    diagnostics = []\n    for call in calls:\n        parseable = call['parseable']\n        loss_without = call['loss_without_call']\n        loss_with = call['loss_with_call']\n        tokens = call['prediction_tokens']\n        gain = loss_without - loss_with\n        norm_gain = gain / tokens\n        if parseable and norm_gain >= threshold:\n            accepted_ids.append(call['call_id'])\n            diagnostics.append(round(norm_gain, 2))\n    return {'accepted_ids': accepted_ids, 'diagnostics': diagnostics}"
+}

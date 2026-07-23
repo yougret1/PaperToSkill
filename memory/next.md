@@ -5,10 +5,10 @@ forward-only generalization extension required by the user.
 
 ## Immediate Gate
 
-1. The authoritative suite passes (`156 passed in 122.13s`).
-2. Commit and privately push batch-011 evidence, summaries, audit,
+1. The authoritative suite passes (`156 passed in 101.71s`).
+2. Commit and privately push batch-012 evidence, summaries, audit,
    stage report, and memory update.
-3. Do not dispatch row 793 until the push succeeds.
+3. Do not dispatch row 865 until the push succeeds.
 4. Continue only the frozen schedule in batches of at most 72 rows, with an
    audit, summary, commit, and push between batches.
 5. Preserve the pilot as unscored format evidence; do not include it in any
@@ -78,6 +78,10 @@ forward-only generalization extension required by the user.
 21. Batch 011 consumed rows 721-792 with 68 hard-contract failures, four
     malformed outcomes, zero operational successes, and no transport retries.
     Its 7,706-file execution-tree safety scan passes; 504 rows remain.
+22. Batch 012 consumed rows 793-864 with 68 hard-contract failures, one
+    malformed outcome, three operational successes, and no transport retries.
+    It includes 24 DeepSeek primary, 24 GPT-5.5, and 24 GPT-5.6 Sol rows. Its
+    8,285-file execution-tree safety scan passes; 432 rows remain.
 
 ## Preservation Rules
 

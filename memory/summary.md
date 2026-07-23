@@ -192,6 +192,10 @@ core research workflow.
   SE-PE-01: 68 hard-contract failures, four malformed outcomes, zero operational
   successes, no retries, and score sum 0.0. The 7,706-file scan passed; 504 rows
   remain.
+- FG3 batch 012 consumed rows 793-864 across AGENT-TF-01 and NLP-LLM-01. Its 24
+  DeepSeek primary, 24 GPT-5.5, and 24 GPT-5.6 Sol rows produced 68 hard-contract
+  failures, one malformed outcome, three operational successes, no retries, and
+  score sum 3.0. The 8,285-file scan passed; 432 rows remain.
 
 ## Legacy Evidence Policy
 
@@ -230,7 +234,7 @@ thesis. Reuse requires an explicit Stage 2 evidence audit.
 
 ## Stage 2.3 Current Gate
 
-- Commit and privately push FG3 batch 011 before dispatching row 793.
+- Commit and privately push FG3 batch 012 before dispatching row 865.
 - The frozen plan contains no outcome-driven early-stopping rule. Batch 003's
   zero-success interval and all condition failures remain in the registered
   denominators; neither can trigger a semantic rerun or an in-place protocol
