@@ -82,6 +82,13 @@ core research workflow.
 - FG2 was privately pushed at `3ed3a533`; its unscored pilot found all six
   responses nontruncated, but Claude Opus 4.7 and DeepSeek V4 Flash violated the
   bare-JSON submission format. No registered FG2 row was dispatched.
+- The invalid FG2 pilot evidence was privately pushed at `13d027ce`.
+- FG3 keeps the 8,192-token budget and adds one uniform bare-JSON submission
+  instruction. Its frozen bundle SHA is
+  `1a5212ee09f43b4e97737f83fc1365e0181942b790bd0a54920609d35b24766d`.
+- FG3 contains 1,296 new registered execution IDs and six marked, unscored pilot
+  requests. Its verifier, 156-test forward suite, and complete 1,308-file safety
+  scan pass; no FG3 provider call has started.
 
 ## Legacy Evidence Policy
 
@@ -120,8 +127,9 @@ thesis. Reuse requires an explicit Stage 2 evidence audit.
 
 ## Stage 2.3 Current Gate
 
-- Commit and push the invalid FG2 pilot, then freeze an FG3 successor that keeps
-  the 8,192 budget and adds one uniform no-fence, no-preamble JSON instruction.
+- Commit and push the frozen FG3 successor before its six marked, unscored pilot
+  requests. Registered execution requires all six aliases to pass the strict
+  nontruncated bare-JSON gate.
 - Execute only the frozen 1,296-row remote schedule with registered retry
   classification and raw/canonical artifact retention.
 - Keep generated token IDs and local runtime evidence out of all successor work.

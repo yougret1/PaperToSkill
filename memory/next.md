@@ -5,11 +5,12 @@ forward-only generalization extension required by the user.
 
 ## Immediate Gate
 
-1. Inspect and privately back up the invalid FG2 pilot.
-2. Preserve FG1 and FG2 evidence; neither contributes rows to the final
-   experiment estimates.
-3. After the FG2 pilot push, freeze an FG3 successor that retains the 8,192
-   budget and adds a uniform bare-JSON format instruction.
+1. Commit and privately push the frozen FG3 successor and its audit records.
+2. Run six marked, unscored FG3 format-conformance pilot requests only after the
+   push succeeds.
+3. Preserve and audit the pilot evidence, then commit and push it separately.
+4. Start registered FG3 execution only if all six exact aliases pass the strict
+   nontruncated bare-JSON gate.
 
 ## Stage 2.3 Materialization
 
@@ -22,6 +23,10 @@ forward-only generalization extension required by the user.
    output-token budget and were malformed. Do not continue FG1.
 5. FG2 pilot showed 8,192 is adequate but two providers violated the bare-JSON
    contract. Do not run registered FG2 rows; create and pilot FG3.
+6. FG3 is frozen under bundle
+   `1a5212ee09f43b4e97737f83fc1365e0181942b790bd0a54920609d35b24766d`;
+   its verifier, 156-test suite, and 1,308-file safety scan pass. No FG3 provider
+   call has started.
 
 ## Preservation Rules
 

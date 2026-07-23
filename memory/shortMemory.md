@@ -2,9 +2,10 @@
 
 ## Active Iteration
 
-Commit and privately back up the invalid FG2 Stage `2.3` output-budget pilot.
-The accepted V4/V5 evidence, frozen parent Stage `2.2` bundle, remote-only
-successor, and materialization anchor are immutable; no parent stage is reopened.
+Commit and privately back up the frozen FG3 Stage `2.3` format-conformance
+successor before any FG3 provider call. The accepted V4/V5 evidence, frozen
+parent Stage `2.2` bundle, remote-only successor, materialization anchor, FG1,
+and FG2 are immutable; no parent stage is reopened.
 
 ## Completed This Iteration
 
@@ -41,6 +42,14 @@ successor, and materialization anchor are immutable; no parent stage is reopened
 - Ran six FG2 pilot requests: all were nontruncated, but Claude Opus 4.7 and
   DeepSeek V4 Flash wrapped output in Markdown, so only four strict submissions
   passed and no registered FG2 row was dispatched.
+- Committed and privately pushed the invalid FG2 pilot at `13d027ce`.
+- Froze FG3 with the same 8,192-token budget and one uniform bare-JSON format
+  instruction. Its bundle SHA is
+  `1a5212ee09f43b4e97737f83fc1365e0181942b790bd0a54920609d35b24766d`.
+- Generated 1,296 new FG3 execution IDs plus six marked, unscored pilot
+  requests; no FG3 provider call has started.
+- Passed the FG3 verifier, 10 focused tests, the complete forward suite
+  (`156 passed`), and a complete 1,308-file safety scan.
 
 ## Current State
 
@@ -50,8 +59,9 @@ successor, and materialization anchor are immutable; no parent stage is reopened
 - The source manuscript is `paper/effectslice_aaai/main_v3.tex`.
 - The standard `main_v3.pdf` was held open externally; the current-source verified
   build is `main_v3_build.pdf` until the clean copy is completed.
-- FG1 and FG2 must not continue. FG3 may be frozen only after the invalid FG2
-  pilot is committed and privately pushed.
+- FG1 and FG2 must not continue. FG3 is frozen but not yet committed or pushed.
+- The six FG3 pilot calls may start only after the frozen successor is committed
+  and privately pushed. Registered FG3 execution requires a 6/6 pilot pass.
 
 ## Residual Risk
 
