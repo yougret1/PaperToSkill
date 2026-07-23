@@ -5,10 +5,10 @@ forward-only generalization extension required by the user.
 
 ## Immediate Gate
 
-1. The authoritative suite passes (`156 passed in 117.40s`).
-2. Commit and privately push the complete batch-009 evidence, summaries, audit,
+1. The authoritative suite passes (`156 passed in 88.17s`).
+2. Commit and privately push batch-010 evidence, summaries, audit,
    stage report, and memory update.
-3. Do not dispatch row 649 until the push succeeds.
+3. Do not dispatch row 721 until the push succeeds.
 4. Continue only the frozen schedule in batches of at most 72 rows, with an
    audit, summary, commit, and push between batches.
 5. Preserve the pilot as unscored format evidence; do not include it in any
