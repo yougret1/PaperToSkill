@@ -1,0 +1,3 @@
+{
+"implementation": "from collections import defaultdict, deque\ndef solve(case):\n    cap = case['capacity']\n    trials = case['trials']\n    memory = defaultdict(lambda: deque(maxlen=cap))\n    for t in trials:\n        sig = t['signature']\n        memory[sig].append(t['success'])\n    return {sig: list(memory[sig]) for sig in memory}"
+}

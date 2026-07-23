@@ -1,0 +1,1 @@
+{"implementation": "def solve(case):\n    from collections import defaultdict\n    counts = defaultdict(int)\n    for trial in case['trials']:\n        if trial['success']:\n            counts[trial['signature']] += 1\n    sorted_counts = sorted(counts.values(), reverse=True)\n    capacity = case['capacity']\n    return sum(sorted_counts[:capacity])"}

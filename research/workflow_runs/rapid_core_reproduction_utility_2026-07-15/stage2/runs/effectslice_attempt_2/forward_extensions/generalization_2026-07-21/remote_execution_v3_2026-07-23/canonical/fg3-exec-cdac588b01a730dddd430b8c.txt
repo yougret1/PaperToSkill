@@ -1,0 +1,2 @@
+{
+  "implementation": "def solve(case):\n    import math\n    edges = case['edges']\n    init_comm = case['communities']\n    gamma = case['resolution']\n    # Build adjacency\n    adj = {}\n    nodes = set()\n    for u, v, w in edges:\n        nodes.add(u)\n        nodes.add(v)\n        adj.setdefault(u, []).append((v, w))\n        adj.setdefault(v, []).append((u, w))\n    # Compute degrees\n    degree = {node: sum(w for _,
