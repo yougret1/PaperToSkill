@@ -1,0 +1,145 @@
+EFFECTSLICE_MODEL_VISIBLE_PAYLOAD_V1
+task_scaffold:432
+# Registered procedure task AGENT-RA-02
+
+Return one JSON object with exactly one key, `implementation`. Its value must be Python source defining `solve(case)`. The function must return a JSON-serializable object, must not mutate `case`, and may use only the Python standard library. Do not access files, the network, environment variables, subprocesses, randomness, or clocks. The attached public fixtures define input shapes only.
+
+fixture_payload:2838
+{
+  "schema_version": "effectslice-fg1-public-inputs.v1",
+  "task_id": "AGENT-RA-02",
+  "registry_id": "A",
+  "cases": [
+    {
+      "case_id": "fg1-agent-ra-02-a-000",
+      "payload": {
+        "initial_state": "s0",
+        "max_steps": 4,
+        "tool_observations": {
+          "lookup": "ok",
+          "check": "yes"
+        },
+        "transitions": {
+          "s0": {
+            "kind": "action",
+            "action": "lookup",
+            "next_by_observation": {
+              "ok": "s1"
+            },
+            "default_next": "bad"
+          },
+          "s1": {
+            "kind": "action",
+            "action": "check",
+            "next_by_observation": {
+              "yes": "done"
+            },
+            "default_next": "bad"
+          },
+          "done": {
+            "kind": "final",
+            "value": "accepted"
+          },
+          "bad": {
+            "kind": "final",
+            "value": "rejected"
+          }
+        },
+        "_case_nonce": "6283b18712488616"
+      }
+    },
+    {
+      "case_id": "fg1-agent-ra-02-a-001",
+      "payload": {
+        "initial_state": "s0",
+        "max_steps": 4,
+        "tool_observations": {
+          "lookup": "ok",
+          "check": "yes"
+        },
+        "transitions": {
+          "s0": {
+            "kind": "action",
+            "action": "lookup",
+            "next_by_observation": {
+              "ok": "s1"
+            },
+            "default_next": "bad"
+          },
+          "s1": {
+            "kind": "action",
+            "action": "check",
+            "next_by_observation": {
+              "yes": "done"
+            },
+            "default_next": "bad"
+          },
+          "done": {
+            "kind": "final",
+            "value": "accepted"
+          },
+          "bad": {
+            "kind": "final",
+            "value": "rejected"
+          }
+        },
+        "_case_nonce": "b2752d87500d34f5"
+      }
+    },
+    {
+      "case_id": "fg1-agent-ra-02-a-002",
+      "payload": {
+        "initial_state": "s0",
+        "max_steps": 4,
+        "tool_observations": {
+          "lookup": "ok",
+          "check": "yes"
+        },
+        "transitions": {
+          "s0": {
+            "kind": "action",
+            "action": "lookup",
+            "next_by_observation": {
+              "ok": "s1"
+            },
+            "default_next": "bad"
+          },
+          "s1": {
+            "kind": "action",
+            "action": "check",
+            "next_by_observation": {
+              "yes": "done"
+            },
+            "default_next": "bad"
+          },
+          "done": {
+            "kind": "final",
+            "value": "accepted"
+          },
+          "bad": {
+            "kind": "final",
+            "value": "rejected"
+          }
+        },
+        "_case_nonce": "911b8d4ce159ee26"
+      }
+    }
+  ]
+}
+
+candidate_artifact:941
+Implement `react_tool_loop_controller` through `solve(case)` for this bounded objective: Execute a bounded ReAct loop over deterministic tool fixtures with invalid-action feedback, observation accumulation, and final-answer termination.
+
+Stay inside this mechanism boundary: ReAct tool-loop orchestration with supplied model emissions; model prompting and real web environments are excluded. Validate every required field before computing a result.
+
+Start at the registered initial state.
+
+A final state terminates without a tool call.
+
+An action state dispatches its named tool and records the exact observation.
+
+Select the observation-specific successor or the default; distinguish missing tools and states.
+
+Stop on completion or max steps and return status, final value, and trace.
+
+Treat these registered properties as hard contracts rather than soft preferences: tool_trace, observation_accumulation, bounded_retry, terminal_is_final.

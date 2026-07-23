@@ -1,0 +1,520 @@
+{
+  "schema_version": "effectslice-fg1-result-canonicalization.v2",
+  "parser_implementation_path": "support/result_canonicalizer.py",
+  "parser_implementation_sha256": "ee0e916b945b74557cb282af8275d71c866de711fdf3239af012a22fbab46ab9",
+  "implementation_builder_identity": "codex-stage23-result-canonicalizer-builder-v1",
+  "result_row_schema_path": "support/result_row_schema.json",
+  "result_row_schema_sha256": "1011f42f3dd9ab31f95cbd381b7f3f2ded6178ad757013e7411f521174c216b0",
+  "slot_response_contracts": [
+    {
+      "model_slot_id": "deepseek_primary",
+      "exact_alias": "deepseek-v4-flash",
+      "provider_protocol": "openai_chat_completions_v1",
+      "canonical_output_selector": {
+        "kind": "json_pointer",
+        "pointer": "/choices/0/message/content",
+        "required_type": "string"
+      },
+      "provider_finish_reason_selector": {
+        "kind": "json_pointer_nullable",
+        "pointer": "/choices/0/finish_reason",
+        "accepted_types": [
+          "string",
+          "null"
+        ]
+      },
+      "usage_selectors": {
+        "input_tokens": {
+          "kind": "json_pointer",
+          "pointer": "/usage/prompt_tokens"
+        },
+        "output_tokens": {
+          "kind": "json_pointer",
+          "pointer": "/usage/completion_tokens"
+        },
+        "total_tokens": {
+          "kind": "json_pointer",
+          "pointer": "/usage/total_tokens"
+        },
+        "cached_input_tokens": {
+          "kind": "json_pointer_nullable",
+          "pointer": "/usage/prompt_tokens_details/cached_tokens"
+        }
+      },
+      "finish_reason_normalization": {
+        "exact_string_map": {
+          "length": "length",
+          "stop": "provider_stop",
+          "content_filter": "provider_stop",
+          "function_call": "provider_stop",
+          "tool_calls": "provider_stop"
+        },
+        "unknown_string": "provider_stop",
+        "null_or_missing": "provider_stop",
+        "dispatch_state_map": {
+          "transport_terminal_failure": "transport_failure",
+          "provider_or_model_unavailable": "not_dispatched"
+        }
+      }
+    },
+    {
+      "model_slot_id": "gpt_5_5",
+      "exact_alias": "gpt-5.5",
+      "provider_protocol": "openai_responses_v1",
+      "canonical_output_selector": {
+        "kind": "first_matching_nested_array_value_v1",
+        "outer_array_pointer": "/output",
+        "outer_match": {
+          "field": "type",
+          "equals": "message"
+        },
+        "inner_array_field": "content",
+        "inner_match": {
+          "field": "type",
+          "equals": "output_text"
+        },
+        "value_field": "text",
+        "required_type": "string",
+        "selection": "first_in_provider_order"
+      },
+      "provider_finish_reason_selector": {
+        "kind": "first_non_null_json_pointer_v1",
+        "pointers_in_precedence_order": [
+          "/incomplete_details/reason",
+          "/status"
+        ],
+        "accepted_types": [
+          "string",
+          "null"
+        ]
+      },
+      "usage_selectors": {
+        "input_tokens": {
+          "kind": "json_pointer",
+          "pointer": "/usage/input_tokens"
+        },
+        "output_tokens": {
+          "kind": "json_pointer",
+          "pointer": "/usage/output_tokens"
+        },
+        "total_tokens": {
+          "kind": "json_pointer",
+          "pointer": "/usage/total_tokens"
+        },
+        "cached_input_tokens": {
+          "kind": "json_pointer_nullable",
+          "pointer": "/usage/input_tokens_details/cached_tokens"
+        }
+      },
+      "finish_reason_normalization": {
+        "exact_string_map": {
+          "completed": "provider_stop",
+          "max_output_tokens": "length"
+        },
+        "unknown_string": "provider_stop",
+        "null_or_missing": "provider_stop",
+        "dispatch_state_map": {
+          "transport_terminal_failure": "transport_failure",
+          "provider_or_model_unavailable": "not_dispatched"
+        }
+      }
+    },
+    {
+      "model_slot_id": "gpt_5_6_sol",
+      "exact_alias": "gpt-5.6-sol",
+      "provider_protocol": "openai_responses_v1",
+      "canonical_output_selector": {
+        "kind": "first_matching_nested_array_value_v1",
+        "outer_array_pointer": "/output",
+        "outer_match": {
+          "field": "type",
+          "equals": "message"
+        },
+        "inner_array_field": "content",
+        "inner_match": {
+          "field": "type",
+          "equals": "output_text"
+        },
+        "value_field": "text",
+        "required_type": "string",
+        "selection": "first_in_provider_order"
+      },
+      "provider_finish_reason_selector": {
+        "kind": "first_non_null_json_pointer_v1",
+        "pointers_in_precedence_order": [
+          "/incomplete_details/reason",
+          "/status"
+        ],
+        "accepted_types": [
+          "string",
+          "null"
+        ]
+      },
+      "usage_selectors": {
+        "input_tokens": {
+          "kind": "json_pointer",
+          "pointer": "/usage/input_tokens"
+        },
+        "output_tokens": {
+          "kind": "json_pointer",
+          "pointer": "/usage/output_tokens"
+        },
+        "total_tokens": {
+          "kind": "json_pointer",
+          "pointer": "/usage/total_tokens"
+        },
+        "cached_input_tokens": {
+          "kind": "json_pointer_nullable",
+          "pointer": "/usage/input_tokens_details/cached_tokens"
+        }
+      },
+      "finish_reason_normalization": {
+        "exact_string_map": {
+          "completed": "provider_stop",
+          "max_output_tokens": "length"
+        },
+        "unknown_string": "provider_stop",
+        "null_or_missing": "provider_stop",
+        "dispatch_state_map": {
+          "transport_terminal_failure": "transport_failure",
+          "provider_or_model_unavailable": "not_dispatched"
+        }
+      }
+    },
+    {
+      "model_slot_id": "gpt_5_6_terra",
+      "exact_alias": "gpt-5.6-terra",
+      "provider_protocol": "openai_responses_v1",
+      "canonical_output_selector": {
+        "kind": "first_matching_nested_array_value_v1",
+        "outer_array_pointer": "/output",
+        "outer_match": {
+          "field": "type",
+          "equals": "message"
+        },
+        "inner_array_field": "content",
+        "inner_match": {
+          "field": "type",
+          "equals": "output_text"
+        },
+        "value_field": "text",
+        "required_type": "string",
+        "selection": "first_in_provider_order"
+      },
+      "provider_finish_reason_selector": {
+        "kind": "first_non_null_json_pointer_v1",
+        "pointers_in_precedence_order": [
+          "/incomplete_details/reason",
+          "/status"
+        ],
+        "accepted_types": [
+          "string",
+          "null"
+        ]
+      },
+      "usage_selectors": {
+        "input_tokens": {
+          "kind": "json_pointer",
+          "pointer": "/usage/input_tokens"
+        },
+        "output_tokens": {
+          "kind": "json_pointer",
+          "pointer": "/usage/output_tokens"
+        },
+        "total_tokens": {
+          "kind": "json_pointer",
+          "pointer": "/usage/total_tokens"
+        },
+        "cached_input_tokens": {
+          "kind": "json_pointer_nullable",
+          "pointer": "/usage/input_tokens_details/cached_tokens"
+        }
+      },
+      "finish_reason_normalization": {
+        "exact_string_map": {
+          "completed": "provider_stop",
+          "max_output_tokens": "length"
+        },
+        "unknown_string": "provider_stop",
+        "null_or_missing": "provider_stop",
+        "dispatch_state_map": {
+          "transport_terminal_failure": "transport_failure",
+          "provider_or_model_unavailable": "not_dispatched"
+        }
+      }
+    },
+    {
+      "model_slot_id": "claude_opus_4_7",
+      "exact_alias": "claude-opus-4-7",
+      "provider_protocol": "anthropic_messages_v1",
+      "canonical_output_selector": {
+        "kind": "first_matching_array_value_v1",
+        "array_pointer": "/content",
+        "match": {
+          "field": "type",
+          "equals": "text"
+        },
+        "value_field": "text",
+        "required_type": "string",
+        "selection": "first_in_provider_order"
+      },
+      "provider_finish_reason_selector": {
+        "kind": "json_pointer_nullable",
+        "pointer": "/stop_reason",
+        "accepted_types": [
+          "string",
+          "null"
+        ]
+      },
+      "usage_selectors": {
+        "input_tokens": {
+          "kind": "json_pointer",
+          "pointer": "/usage/input_tokens"
+        },
+        "output_tokens": {
+          "kind": "json_pointer",
+          "pointer": "/usage/output_tokens"
+        },
+        "total_tokens": {
+          "kind": "sum_nonnegative_integer_json_pointers_v1",
+          "pointers": [
+            "/usage/input_tokens",
+            "/usage/output_tokens"
+          ]
+        },
+        "cached_input_tokens": {
+          "kind": "json_pointer_nullable",
+          "pointer": "/usage/cache_read_input_tokens"
+        }
+      },
+      "finish_reason_normalization": {
+        "exact_string_map": {
+          "max_tokens": "length",
+          "end_turn": "provider_stop",
+          "pause_turn": "provider_stop",
+          "refusal": "provider_stop",
+          "stop_sequence": "provider_stop",
+          "tool_use": "provider_stop"
+        },
+        "unknown_string": "provider_stop",
+        "null_or_missing": "provider_stop",
+        "dispatch_state_map": {
+          "transport_terminal_failure": "transport_failure",
+          "provider_or_model_unavailable": "not_dispatched"
+        }
+      }
+    },
+    {
+      "model_slot_id": "gpt_5_6_luna",
+      "exact_alias": "gpt-5.6-luna",
+      "provider_protocol": "openai_responses_v1",
+      "canonical_output_selector": {
+        "kind": "first_matching_nested_array_value_v1",
+        "outer_array_pointer": "/output",
+        "outer_match": {
+          "field": "type",
+          "equals": "message"
+        },
+        "inner_array_field": "content",
+        "inner_match": {
+          "field": "type",
+          "equals": "output_text"
+        },
+        "value_field": "text",
+        "required_type": "string",
+        "selection": "first_in_provider_order"
+      },
+      "provider_finish_reason_selector": {
+        "kind": "first_non_null_json_pointer_v1",
+        "pointers_in_precedence_order": [
+          "/incomplete_details/reason",
+          "/status"
+        ],
+        "accepted_types": [
+          "string",
+          "null"
+        ]
+      },
+      "usage_selectors": {
+        "input_tokens": {
+          "kind": "json_pointer",
+          "pointer": "/usage/input_tokens"
+        },
+        "output_tokens": {
+          "kind": "json_pointer",
+          "pointer": "/usage/output_tokens"
+        },
+        "total_tokens": {
+          "kind": "json_pointer",
+          "pointer": "/usage/total_tokens"
+        },
+        "cached_input_tokens": {
+          "kind": "json_pointer_nullable",
+          "pointer": "/usage/input_tokens_details/cached_tokens"
+        }
+      },
+      "finish_reason_normalization": {
+        "exact_string_map": {
+          "completed": "provider_stop",
+          "max_output_tokens": "length"
+        },
+        "unknown_string": "provider_stop",
+        "null_or_missing": "provider_stop",
+        "dispatch_state_map": {
+          "transport_terminal_failure": "transport_failure",
+          "provider_or_model_unavailable": "not_dispatched"
+        }
+      }
+    }
+  ],
+  "slot_response_contracts_sha256": "0cb537d73182c389624489c94822694617de226c029fe90cbe4e0c4711af67a8",
+  "golden_cases": [
+    {
+      "case_id": "deepseek_provider_stop",
+      "model_slot_id": "deepseek_primary",
+      "dispatch_state": "completed_body",
+      "terminal_outcome": "operational_success",
+      "termination_reason": "provider_stop",
+      "provider_finish_reason": "stop",
+      "fixture_path": "golden/result_canonicalizer/g00.fixture.json",
+      "fixture_sha256": "4670354d0bb50831b33b117774886a44f3a25c77749ca7599a72136d27cb46af",
+      "result_path": "golden/result_canonicalizer/g00.result.json",
+      "result_sha256": "dd799a6a37dd2f964b8fa73524671cf34377a790019a6398b34bd35b82988a2b"
+    },
+    {
+      "case_id": "deepseek_length_scored",
+      "model_slot_id": "deepseek_primary",
+      "dispatch_state": "completed_body",
+      "terminal_outcome": "operational_success",
+      "termination_reason": "length",
+      "provider_finish_reason": "length",
+      "fixture_path": "golden/result_canonicalizer/g01.fixture.json",
+      "fixture_sha256": "1219dd866eefb7bf7e89f0f783dbf544934be253937a00c1c5c3957e013d5cb6",
+      "result_path": "golden/result_canonicalizer/g01.result.json",
+      "result_sha256": "c4f561f97ff0814529a936fb3e9709bda9f9b2bf7244ebdbcd83bef435fbaaba"
+    },
+    {
+      "case_id": "gpt_5_5_completed",
+      "model_slot_id": "gpt_5_5",
+      "dispatch_state": "completed_body",
+      "terminal_outcome": "operational_success",
+      "termination_reason": "provider_stop",
+      "provider_finish_reason": "completed",
+      "fixture_path": "golden/result_canonicalizer/g02.fixture.json",
+      "fixture_sha256": "611770d5143a66e7996af9bbd772d3f9c4121627b5e4c7aee9b3dfb3ea91984f",
+      "result_path": "golden/result_canonicalizer/g02.result.json",
+      "result_sha256": "8f3c55877e913d15a70bf1f9ca4ad0d8b7bebe3ead7f3707840eb9bc12232f6f"
+    },
+    {
+      "case_id": "gpt_5_6_sol_length_scored",
+      "model_slot_id": "gpt_5_6_sol",
+      "dispatch_state": "completed_body",
+      "terminal_outcome": "operational_success",
+      "termination_reason": "length",
+      "provider_finish_reason": "max_output_tokens",
+      "fixture_path": "golden/result_canonicalizer/g03.fixture.json",
+      "fixture_sha256": "0cc1acc76a0a8c0092cf84d26072ede5f102600cf3f0ad0dcc74c4ea4f1afefa",
+      "result_path": "golden/result_canonicalizer/g03.result.json",
+      "result_sha256": "b384d9848269a2c7522960bada7101a7f91965ab4c4b9e33cdf3a3e2702524de"
+    },
+    {
+      "case_id": "gpt_5_6_terra_null_finish",
+      "model_slot_id": "gpt_5_6_terra",
+      "dispatch_state": "completed_body",
+      "terminal_outcome": "operational_success",
+      "termination_reason": "provider_stop",
+      "provider_finish_reason": null,
+      "fixture_path": "golden/result_canonicalizer/g04.fixture.json",
+      "fixture_sha256": "e9488ea3c33fd2314c6a24bbef4870bb52adfb8d9af4fac6d372acbac7d713ec",
+      "result_path": "golden/result_canonicalizer/g04.result.json",
+      "result_sha256": "f944e6711385215522135856ae1d8c8e86b6a5a53c127b5f2b14be5dd79203f3"
+    },
+    {
+      "case_id": "claude_provider_stop",
+      "model_slot_id": "claude_opus_4_7",
+      "dispatch_state": "completed_body",
+      "terminal_outcome": "operational_success",
+      "termination_reason": "provider_stop",
+      "provider_finish_reason": "end_turn",
+      "fixture_path": "golden/result_canonicalizer/g05.fixture.json",
+      "fixture_sha256": "64e030ce5336ac5bcd16b3f81c762741e53ec9026fa9225854b68588d86f1ee3",
+      "result_path": "golden/result_canonicalizer/g05.result.json",
+      "result_sha256": "297e425e92caef49cd001e89bbf52701dbc02837ad799fc8c9aae2377f954abe"
+    },
+    {
+      "case_id": "claude_length_scored",
+      "model_slot_id": "claude_opus_4_7",
+      "dispatch_state": "completed_body",
+      "terminal_outcome": "operational_success",
+      "termination_reason": "length",
+      "provider_finish_reason": "max_tokens",
+      "fixture_path": "golden/result_canonicalizer/g06.fixture.json",
+      "fixture_sha256": "6082ec26ac50a359b310f32d68986319fda59a1b66d7f2498e66cf784a80cb62",
+      "result_path": "golden/result_canonicalizer/g06.result.json",
+      "result_sha256": "7ef6b25e0961db22752170d5855aa84f8a883bd99f956cc9c5909565130dea4a"
+    },
+    {
+      "case_id": "gpt_5_6_luna_completed",
+      "model_slot_id": "gpt_5_6_luna",
+      "dispatch_state": "completed_body",
+      "terminal_outcome": "operational_success",
+      "termination_reason": "provider_stop",
+      "provider_finish_reason": "completed",
+      "fixture_path": "golden/result_canonicalizer/g07.fixture.json",
+      "fixture_sha256": "98833e2e8fa1a3ec65e0de6664df7fcb372b754f8512d3216496386b6c58889a",
+      "result_path": "golden/result_canonicalizer/g07.result.json",
+      "result_sha256": "c0c0dd82161e069efc1a3d96f0b135d037011962cd7a201c4806b5d1dd04a24e"
+    },
+    {
+      "case_id": "gpt_5_6_luna_length_scored",
+      "model_slot_id": "gpt_5_6_luna",
+      "dispatch_state": "completed_body",
+      "terminal_outcome": "operational_success",
+      "termination_reason": "length",
+      "provider_finish_reason": "max_output_tokens",
+      "fixture_path": "golden/result_canonicalizer/g08.fixture.json",
+      "fixture_sha256": "f08668be601ae94f3137b3b669641005d6a1c2726642d9c29325fe5fa00d9648",
+      "result_path": "golden/result_canonicalizer/g08.result.json",
+      "result_sha256": "35e3f93add05fe630a7fb9e8cf57d572485e5af9191d8dffe7b6f652d8149d4e"
+    },
+    {
+      "case_id": "completed_malformed_body",
+      "model_slot_id": "deepseek_primary",
+      "dispatch_state": "completed_body",
+      "terminal_outcome": "malformed_or_no_submission",
+      "termination_reason": "provider_stop",
+      "provider_finish_reason": null,
+      "fixture_path": "golden/result_canonicalizer/g09.fixture.json",
+      "fixture_sha256": "d03c86c9acb0ce6d38ce404b1c731646a9d99ac452aa9b74053a677f579fc9f6",
+      "result_path": "golden/result_canonicalizer/g09.result.json",
+      "result_sha256": "d5ce388f05bc3166cbc1f243e28bec9d7d39a8d3d669db2ede62297330e1ae2b"
+    },
+    {
+      "case_id": "terminal_transport_failure",
+      "model_slot_id": "deepseek_primary",
+      "dispatch_state": "transport_terminal_failure",
+      "terminal_outcome": "transport_terminal_failure",
+      "termination_reason": "transport_failure",
+      "provider_finish_reason": null,
+      "fixture_path": "golden/result_canonicalizer/g10.fixture.json",
+      "fixture_sha256": "b395318f658021e4a4f115e734c15c54935f14f93e11e6382942c9992d6545c8",
+      "result_path": "golden/result_canonicalizer/g10.result.json",
+      "result_sha256": "39f9799498d546e7b93561a77ecfbdd3e2870dbac692a0807ee280ef88959956"
+    },
+    {
+      "case_id": "model_unavailable_not_dispatched",
+      "model_slot_id": "gpt_5_5",
+      "dispatch_state": "provider_or_model_unavailable",
+      "terminal_outcome": "provider_or_model_unavailable",
+      "termination_reason": "not_dispatched",
+      "provider_finish_reason": null,
+      "fixture_path": "golden/result_canonicalizer/g11.fixture.json",
+      "fixture_sha256": "2f7aba65389b856a3836b7c994c67925cc5ff3e2f60ed20defb171581139d6f8",
+      "result_path": "golden/result_canonicalizer/g11.result.json",
+      "result_sha256": "05df69449138dad17c184dda5c397c24cc017ff26c9062fab641ae798ff3ca2f"
+    }
+  ],
+  "golden_tests_passed": true,
+  "golden_execution_protocol": "python_isolated_json_stdin_stdout_canonical_v1",
+  "golden_timeout_seconds": 120
+}

@@ -1,0 +1,15 @@
+Implement `grammar_guided_node_reduction` through `solve(case)` for this bounded objective: Reduce a registered parse tree through grammar-valid deletion and replacement candidates while preserving an interestingness oracle.
+
+Stay inside this mechanism boundary: Perses syntax-guided reduction on a miniature grammar; parser generation and real compiler execution are excluded. Validate every required field before computing a result.
+
+Consider deeper parse-tree nodes before shallower nodes.
+
+Never remove the root, a required symbol, or a node with retained children.
+
+Tentatively remove a node only if all required symbols remain represented.
+
+Use node ID as the stable tie break at equal depth.
+
+Return sorted retained IDs and the actual removal order.
+
+Treat these registered properties as hard contracts rather than soft preferences: grammar_valid, interestingness_preserved, registered_candidate_order, stable_ties.

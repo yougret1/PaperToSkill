@@ -1,0 +1,78 @@
+{
+  "stage": "2.3",
+  "stage_name": "Remote-only immutable materialization anchor checkpoint",
+  "status": "passed",
+  "stage_scope_status": "checkpoint_passed_experiment_execution_pending",
+  "handoff_mode": "normal",
+  "user_approved_degraded_route": false,
+  "user_approval_evidence": null,
+  "inputs_checked": [
+    "preregistration_remote_only_2026-07-22/bundle_hash_manifest.json",
+    "materialization_verifier_v3.py",
+    "verify_stage_2_3_remote_materialization.py",
+    "stage23_task_runtime.py",
+    "stage23_task_specs.py",
+    "stage23_result_canonicalizer.py",
+    "stage23_analysis.py"
+  ],
+  "outputs_produced": [
+    "materialization_remote_only_2026-07-23/final_anchor_manifest.json",
+    "materialization_remote_only_2026-07-23/immutable_file_manifest.json",
+    "materialization_remote_only_2026-07-23/global_remote_schedule.json",
+    "materialization_remote_only_2026-07-23/request_template_manifest.json",
+    "materialization_remote_only_2026-07-23/model_preflight_manifest.json",
+    "materialization_remote_only_2026-07-23/result_canonicalization_manifest.json",
+    "materialization_remote_only_2026-07-23/analysis_implementation_manifest.json",
+    "materialization_remote_only_2026-07-23/implementation_source_audit_manifest.json",
+    "build_stage_2_3_materialization.py",
+    "verify_stage_2_3_materialization_anchor.py",
+    "tests/test_remote_materialization_anchor.py"
+  ],
+  "traceability_notes": [
+    "The frozen Stage 2.2 parent and remote-only successor files remain byte-unchanged.",
+    "The immutable manifest binds 3672 files totaling 20429565 bytes.",
+    "One remote schedule contains all 1296 registered rows: 432 primary, 144 controls, 144 structural-ladder, 96 alternate-reducer, 384 required closed-model, and 96 Luna remote-anchor rows.",
+    "GPT-5.6 Luna owns all remote-anchor rows; no local schedule, local runtime, generated-token-ID, model snapshot, CUDA, or local-model evidence is present.",
+    "derived_seed remains orchestration metadata only; no closed-model seed-control or deterministic-output claim is made.",
+    "The result canonicalizer and analysis implementation are the only implementation-source audit components.",
+    "No provider API call or credential lookup occurred while building and verifying this anchor.",
+    "This report passes only the immutable materialization checkpoint; Stage 2.3 experiment execution remains pending."
+  ],
+  "frozen_anchor": {
+    "successor_bundle_sha256": "e2615ea65ecc0c1145aa3e0f2fb7a36b8bc91a914bb94821b5cee40be9da99958",
+    "immutable_file_manifest_sha256": "0a09e4b7a54f9cf64471427e11b7f8ca3027e5b841ee710550ee12ca95400ee8a",
+    "bundle_sha256": "1f12dfdba63b1ddc65bd57fa8b1b625ba4259050e93ab4f108786c2023c55ccd7",
+    "registered_remote_rows": 1296,
+    "registered_local_rows": 0,
+    "provider_calls_started": false
+  },
+  "classified_build_failures": [
+    {
+      "class": "environment_failure",
+      "cause": "The active conda base interpreter lacked the frozen tiktoken 0.12.0 dependency.",
+      "resolution": "Reused the approved project .venv containing tiktoken 0.12.0; no package installation occurred."
+    },
+    {
+      "class": "execution_failure",
+      "cause": "Windows legacy path-length handling rejected deep materialization and pytest paths.",
+      "resolution": "Used Windows extended-length paths in new Stage 2.3 operational code and a short pytest basetemp; frozen verifier bytes were restored unchanged."
+    },
+    {
+      "class": "invalid_format",
+      "cause": "Initial golden result fixtures used indented JSON instead of registered canonical JSON bytes.",
+      "resolution": "Wrote golden results with the registered canonical serializer and rebuilt only the failed, uncommitted anchor."
+    }
+  ],
+  "validation": {
+    "remote_only_successor_verifier": "passed; e2615ea65ecc0c1145aa3e0f2fb7a36b8bc91a914bb94821b5cee40be9da99958",
+    "materialization_anchor_verifier": "passed; 1296 rows",
+    "focused_remote_tests": "14 passed",
+    "complete_forward_extension_tests": "130 passed",
+    "forbidden_local_design_scan": "passed",
+    "credential_pattern_scan": "passed",
+    "frozen_successor_files_modified": false
+  },
+  "blocking_issues": [],
+  "next_stage": "2.3",
+  "next_stage_gate": "Commit and push this immutable anchor to the private remote before reading credentials, sending a format-only preflight, or dispatching any registered provider request."
+}

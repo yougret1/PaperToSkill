@@ -1,0 +1,138 @@
+{
+  "schema_version": "effectslice-fg1-atom-registry.v1",
+  "task_id": "NLP-LLM-01",
+  "atoms": [
+    {
+      "atom_id": "a_ef84b15111a60040",
+      "source_locator": {
+        "document_sha256": "d14ed709b264b10b733f4a3a8f3790b34372ca90815278a56622c502c18c86ce",
+        "byte_start": 472,
+        "byte_end": 570,
+        "split_index": 0
+      },
+      "rendered_text": "Implement `coarse_budget_controller` through `solve(case)` for this bounded objective: Allocate an exact token budget across instruction, demonstration, and question segments from registered importance statistics, minimum quotas, and stable tie breaks.",
+      "rendered_text_sha256": "946ccc6ac87c2782072db3112c48f5f1e11a9a62210e61a92453316e37805781"
+    },
+    {
+      "atom_id": "a_b679f5fdbb67e54a",
+      "source_locator": {
+        "document_sha256": "d14ed709b264b10b733f4a3a8f3790b34372ca90815278a56622c502c18c86ce",
+        "byte_start": 472,
+        "byte_end": 570,
+        "split_index": 1
+      },
+      "rendered_text": "Stay inside this mechanism boundary: LLMLingua coarse-to-fine budget control only; no language-model training or live perplexity service. Validate every required field before computing a result.",
+      "rendered_text_sha256": "360856346d197394dc405b2f194128bb195c9e929dbd305c4d808a68ebb11ba1"
+    },
+    {
+      "atom_id": "a_f3fa98e0f2eb4211",
+      "source_locator": {
+        "document_sha256": "d14ed709b264b10b733f4a3a8f3790b34372ca90815278a56622c502c18c86ce",
+        "byte_start": 472,
+        "byte_end": 570,
+        "split_index": 2
+      },
+      "rendered_text": "Initialize every segment at its minimum quota.",
+      "rendered_text_sha256": "ed725885bfbb5c2cd51bcc9ff625ed4c3fcaf4b9fdc64b470968bfdf408a504c"
+    },
+    {
+      "atom_id": "a_3b96fe6196e7eb69",
+      "source_locator": {
+        "document_sha256": "d14ed709b264b10b733f4a3a8f3790b34372ca90815278a56622c502c18c86ce",
+        "byte_start": 472,
+        "byte_end": 570,
+        "split_index": 3
+      },
+      "rendered_text": "Reject budgets below the quota sum or above total capacity.",
+      "rendered_text_sha256": "8f97abc73ccfe9378ed253c6bf4304cebbd615124a6e978317deb45c0a8b27ab"
+    },
+    {
+      "atom_id": "a_36ff177c81fafe83",
+      "source_locator": {
+        "document_sha256": "d14ed709b264b10b733f4a3a8f3790b34372ca90815278a56622c502c18c86ce",
+        "byte_start": 472,
+        "byte_end": 570,
+        "split_index": 4
+      },
+      "rendered_text": "While budget remains, give one token to the segment maximizing importance divided by its next allocated position.",
+      "rendered_text_sha256": "95b066034b720e374769790a31b0b1604c4337684769c1ea55a4422659e88ef9"
+    },
+    {
+      "atom_id": "a_df5f7de8d13f5961",
+      "source_locator": {
+        "document_sha256": "d14ed709b264b10b733f4a3a8f3790b34372ca90815278a56622c502c18c86ce",
+        "byte_start": 472,
+        "byte_end": 570,
+        "split_index": 5
+      },
+      "rendered_text": "Break equal priorities by original segment order.",
+      "rendered_text_sha256": "c8f703f616d91dcc3dba1a93d18f081089b5c8363e46b4c77d9c5773a29824ed"
+    },
+    {
+      "atom_id": "a_7a46a1dcadcf9a02",
+      "source_locator": {
+        "document_sha256": "d14ed709b264b10b733f4a3a8f3790b34372ca90815278a56622c502c18c86ce",
+        "byte_start": 587,
+        "byte_end": 665,
+        "split_index": 6
+      },
+      "rendered_text": "Return allocations, the name mapping, and the conserved total.",
+      "rendered_text_sha256": "17f574a1bfcd466cb13d38aa747be3cb83624423980957c837dd724714f5e889"
+    },
+    {
+      "atom_id": "a_06320c211d1a0d49",
+      "source_locator": {
+        "document_sha256": "d14ed709b264b10b733f4a3a8f3790b34372ca90815278a56622c502c18c86ce",
+        "byte_start": 587,
+        "byte_end": 665,
+        "split_index": 7
+      },
+      "rendered_text": "Treat these registered properties as hard contracts rather than soft preferences: exact_total_budget, minimum_segment_quota, stable_tie_break, no_input_mutation.",
+      "rendered_text_sha256": "b70de01ccf2e8ae26a23a74a688f21f2ee6d90709987e68881a3b48aace2bfb3"
+    },
+    {
+      "atom_id": "a_4ae001845568c03d",
+      "source_locator": {
+        "document_sha256": "d14ed709b264b10b733f4a3a8f3790b34372ca90815278a56622c502c18c86ce",
+        "byte_start": 587,
+        "byte_end": 665,
+        "split_index": 8
+      },
+      "rendered_text": "Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.",
+      "rendered_text_sha256": "bb651964decf660706e6b02a72268f4df8c9cfde1515a5b2325af47505fa92df"
+    },
+    {
+      "atom_id": "a_7664a1351581c19a",
+      "source_locator": {
+        "document_sha256": "d14ed709b264b10b733f4a3a8f3790b34372ca90815278a56622c502c18c86ce",
+        "byte_start": 587,
+        "byte_end": 665,
+        "split_index": 9
+      },
+      "rendered_text": "Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.",
+      "rendered_text_sha256": "d6b67e3cd654a61b271920e037938dc07550072b2334416f32ed86b0bd787362"
+    },
+    {
+      "atom_id": "a_a54fb718c24e7b56",
+      "source_locator": {
+        "document_sha256": "d14ed709b264b10b733f4a3a8f3790b34372ca90815278a56622c502c18c86ce",
+        "byte_start": 587,
+        "byte_end": 665,
+        "split_index": 10
+      },
+      "rendered_text": "Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.",
+      "rendered_text_sha256": "67186a43fcf39ec73132c8ab7ad1387670a6fd7d5e511075a50faf835be9e19a"
+    },
+    {
+      "atom_id": "a_b937df7e1506a9ad",
+      "source_locator": {
+        "document_sha256": "d14ed709b264b10b733f4a3a8f3790b34372ca90815278a56622c502c18c86ce",
+        "byte_start": 587,
+        "byte_end": 665,
+        "split_index": 11
+      },
+      "rendered_text": "Return only JSON-serializable values with the exact named fields. Raise ValueError for an infeasible or structurally invalid case instead of silently repairing it.",
+      "rendered_text_sha256": "5f164e6574e6f249d67514f65fc480435c9b737c31ea45311cd04552b1d13fcb"
+    }
+  ]
+}

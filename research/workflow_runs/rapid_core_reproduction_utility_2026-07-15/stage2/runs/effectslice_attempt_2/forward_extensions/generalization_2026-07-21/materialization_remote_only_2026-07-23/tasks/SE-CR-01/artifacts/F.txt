@@ -1,0 +1,23 @@
+Implement `pass_scheduler_fixed_point` through `solve(case)` for this bounded objective: Run an ordered transformation-pass schedule to a fixed point with registered restart, cache, and interestingness rules over a miniature program state.
+
+Stay inside this mechanism boundary: C-Reduce pass orchestration; real compilers and external reducers are excluded. Validate every required field before computing a result.
+
+Apply passes in their registered order.
+
+Each pass performs at most its first eligible rewrite per sweep.
+
+Record only passes that change the artifact.
+
+Repeat full sweeps until none changes or the round budget is consumed.
+
+Return the artifact, application trace, and fixed-point flag.
+
+Treat these registered properties as hard contracts rather than soft preferences: interestingness_preserved, restart_policy, cache_semantics, fixed_point.
+
+Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.
+
+Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.
+
+Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.
+
+Return only JSON-serializable values with the exact named fields. Raise ValueError for an infeasible or structurally invalid case instead of silently repairing it.

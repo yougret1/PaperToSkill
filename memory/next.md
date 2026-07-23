@@ -5,23 +5,19 @@ forward-only generalization extension required by the user.
 
 ## Immediate Gate
 
-1. Run a repository secret scan and inspect the remote-only successor diff.
-2. Commit and push successor bundle SHA
-   `e2615ea65ecc0c1145aa3e0f2fb7a36b8bc91a914bb94821b5cee40be9da99958`.
-3. Do not generate the Stage `2.3` materialization anchor unless the private push
-   succeeds.
+1. Inspect the immutable Stage `2.3` anchor diff and Git boundary.
+2. Commit and push anchor bundle SHA
+   `1f12dfdba63b1ddc65bd57fa8b1b625ba4259050e93ab4f108786c2023c55ccd7`.
+3. Do not read credentials or call a provider unless the private push succeeds.
 
 ## Stage 2.3 Materialization
 
-1. Materialize every registered task, candidate, registry, schedule, request and
-   response contract, parser golden, scorer manifest, and analysis allowlist
-   without changing Stage `2.2`.
-2. Generate one 1296-row remote schedule containing the required GPT and Claude
-   model slots, including Luna observed-repeatability rows.
-3. Retain readable source-audit evidence with distinct builder and auditor
-   identities; verify exact aliases, response selectors, and retry semantics.
-4. Freeze, verify, commit, and push the materialization anchor before any provider
-   experiment call.
+1. The complete materialization anchor is generated and independently verified.
+2. After private push, parse API documentation without persisting credentials.
+3. Run at most one format-only preflight per exact alias and preserve redacted
+   request/response evidence.
+4. Dispatch the frozen schedule with classified retries, raw responses,
+   canonical outputs, scoring artifacts, and resumable progress.
 
 ## Preservation Rules
 

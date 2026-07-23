@@ -1,0 +1,232 @@
+{
+  "type": "object",
+  "required": [
+    "execution_id",
+    "terminal_outcome",
+    "termination_reason",
+    "provider_finish_reason",
+    "row_valid",
+    "condition_success",
+    "private_score",
+    "raw_response_path",
+    "raw_response_sha256",
+    "canonical_output_path",
+    "canonical_output_sha256",
+    "hard_contract_vector",
+    "attempts",
+    "candidate_artifact_bytes",
+    "candidate_artifact_cl100k_tokens",
+    "canonical_model_visible_payload_bytes",
+    "provider_reported_input_tokens",
+    "provider_reported_output_tokens",
+    "provider_reported_total_tokens",
+    "provider_reported_cached_input_tokens",
+    "provider_usage_missing_reason",
+    "terminal_attempt_elapsed_ms",
+    "total_execution_elapsed_ms",
+    "retry_sleep_elapsed_ms",
+    "retry_overhead_ms"
+  ],
+  "properties": {
+    "execution_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "terminal_outcome": {
+      "type": "string",
+      "enum": [
+        "provider_or_model_unavailable",
+        "transport_terminal_failure",
+        "integrity_or_digest_failure",
+        "malformed_or_no_submission",
+        "action_budget_exhausted",
+        "hard_contract_failure",
+        "score_shortfall",
+        "operational_success"
+      ]
+    },
+    "termination_reason": {
+      "type": "string",
+      "enum": [
+        "eos",
+        "length",
+        "provider_stop",
+        "transport_failure",
+        "not_dispatched"
+      ]
+    },
+    "provider_finish_reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "row_valid": {
+      "type": "boolean"
+    },
+    "condition_success": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "private_score": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "raw_response_path": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "raw_response_sha256": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "canonical_output_path": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "canonical_output_sha256": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "hard_contract_vector": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "items": {
+        "type": "boolean"
+      }
+    },
+    "attempts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "attempt_index",
+          "attempt_status_class",
+          "attempt_elapsed_ms",
+          "retry_sleep_after_attempt_ms"
+        ],
+        "properties": {
+          "attempt_index": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "attempt_status_class": {
+            "type": "string",
+            "minLength": 1
+          },
+          "attempt_elapsed_ms": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "retry_sleep_after_attempt_ms": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "additionalProperties": true
+      }
+    },
+    "candidate_artifact_bytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "candidate_artifact_cl100k_tokens": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "canonical_model_visible_payload_bytes": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "provider_reported_input_tokens": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "provider_reported_output_tokens": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "provider_reported_total_tokens": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "provider_reported_cached_input_tokens": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "provider_usage_missing_reason": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "enum": [
+        "not_dispatched",
+        "transport_failure_no_usage",
+        "provider_omitted_usage",
+        "malformed_usage_tuple_or_integrity_failure",
+        null
+      ]
+    },
+    "terminal_attempt_elapsed_ms": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "total_execution_elapsed_ms": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "retry_sleep_elapsed_ms": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    },
+    "retry_overhead_ms": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 0
+    }
+  },
+  "additionalProperties": false
+}

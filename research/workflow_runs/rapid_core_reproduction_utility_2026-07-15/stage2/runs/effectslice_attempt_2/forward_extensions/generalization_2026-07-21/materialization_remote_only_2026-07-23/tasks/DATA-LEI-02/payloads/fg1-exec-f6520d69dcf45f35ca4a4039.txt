@@ -1,0 +1,169 @@
+EFFECTSLICE_MODEL_VISIBLE_PAYLOAD_V1
+task_scaffold:432
+# Registered procedure task DATA-LEI-02
+
+Return one JSON object with exactly one key, `implementation`. Its value must be Python source defining `solve(case)`. The function must return a JSON-serializable object, must not mutate `case`, and may use only the Python standard library. Do not access files, the network, environment variables, subprocesses, randomness, or clocks. The attached public fixtures define input shapes only.
+
+fixture_payload:2433
+{
+  "schema_version": "effectslice-fg1-public-inputs.v1",
+  "task_id": "DATA-LEI-02",
+  "registry_id": "B",
+  "cases": [
+    {
+      "case_id": "fg1-data-lei-02-b-000",
+      "payload": {
+        "edges": [
+          [
+            "v0",
+            "v1",
+            3
+          ],
+          [
+            "v1",
+            "v2",
+            3
+          ],
+          [
+            "v2",
+            "v3",
+            2
+          ],
+          [
+            "v3",
+            "v4",
+            1
+          ],
+          [
+            "v4",
+            "v5",
+            3
+          ],
+          [
+            "v5",
+            "v0",
+            2
+          ]
+        ],
+        "refinement": {
+          "v0": "g0",
+          "v1": "g0",
+          "v2": "g1",
+          "v3": "g1",
+          "v4": "g2",
+          "v5": "g2"
+        },
+        "_case_nonce": "d8847e309da6424e"
+      }
+    },
+    {
+      "case_id": "fg1-data-lei-02-b-001",
+      "payload": {
+        "edges": [
+          [
+            "v0",
+            "v1",
+            2
+          ],
+          [
+            "v1",
+            "v2",
+            3
+          ],
+          [
+            "v2",
+            "v3",
+            2
+          ],
+          [
+            "v3",
+            "v4",
+            2
+          ],
+          [
+            "v4",
+            "v5",
+            3
+          ],
+          [
+            "v5",
+            "v0",
+            1
+          ]
+        ],
+        "refinement": {
+          "v0": "g0",
+          "v1": "g0",
+          "v2": "g1",
+          "v3": "g1",
+          "v4": "g2",
+          "v5": "g2"
+        },
+        "_case_nonce": "daa215683bbb5efe"
+      }
+    },
+    {
+      "case_id": "fg1-data-lei-02-b-002",
+      "payload": {
+        "edges": [
+          [
+            "v0",
+            "v1",
+            3
+          ],
+          [
+            "v1",
+            "v2",
+            2
+          ],
+          [
+            "v2",
+            "v3",
+            1
+          ],
+          [
+            "v3",
+            "v4",
+            2
+          ],
+          [
+            "v4",
+            "v5",
+            2
+          ],
+          [
+            "v5",
+            "v0",
+            2
+          ]
+        ],
+        "refinement": {
+          "v0": "g0",
+          "v1": "g0",
+          "v2": "g1",
+          "v3": "g1",
+          "v4": "g2",
+          "v5": "g2"
+        },
+        "_case_nonce": "79e697dee0dcb349"
+      }
+    }
+  ]
+}
+
+candidate_artifact:910
+Implement `refinement_and_aggregation` through `solve(case)` for this bounded objective: Refine communities and construct the aggregated graph while preserving parent-community constraints and edge weights.
+
+Stay inside this mechanism boundary: Leiden refinement and aggregation phases on registered miniature graphs; stochastic node order is replaced by a frozen permutation. Validate every required field before computing a result.
+
+Map each original node to exactly one refined community.
+
+Map every edge endpoint through that refinement.
+
+Canonicalize each aggregate endpoint pair so undirected duplicates coincide.
+
+Sum all weights for each aggregate pair including self-loops.
+
+Return sorted aggregate edges and sorted membership lists.
+
+Treat these registered properties as hard contracts rather than soft preferences: parent_constraint, refined_connectivity, weight_conservation, deterministic_mapping.

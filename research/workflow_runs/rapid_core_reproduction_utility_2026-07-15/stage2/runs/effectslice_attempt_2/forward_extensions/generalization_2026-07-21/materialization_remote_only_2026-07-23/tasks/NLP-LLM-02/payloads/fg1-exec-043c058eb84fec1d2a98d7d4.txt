@@ -1,0 +1,136 @@
+EFFECTSLICE_MODEL_VISIBLE_PAYLOAD_V1
+task_scaffold:431
+# Registered procedure task NLP-LLM-02
+
+Return one JSON object with exactly one key, `implementation`. Its value must be Python source defining `solve(case)`. The function must return a JSON-serializable object, must not mutate `case`, and may use only the Python standard library. Do not access files, the network, environment variables, subprocesses, randomness, or clocks. The attached public fixtures define input shapes only.
+
+fixture_payload:2213
+{
+  "schema_version": "effectslice-fg1-public-inputs.v1",
+  "task_id": "NLP-LLM-02",
+  "registry_id": "A",
+  "cases": [
+    {
+      "case_id": "fg1-nlp-llm-02-a-000",
+      "payload": {
+        "round_scores": [
+          [
+            0.44799538,
+            0.88373271,
+            0.48037242,
+            0.3104939,
+            0.99600231,
+            0.51643342,
+            0.68752286,
+            0.33943666
+          ],
+          [
+            0.07094129,
+            0.34602012,
+            0.53826085,
+            0.26734445,
+            0.39865641,
+            0.60305915,
+            0.70890049,
+            0.77082382
+          ]
+        ],
+        "round_targets": [
+          6,
+          4
+        ],
+        "forced": [
+          5
+        ],
+        "_case_nonce": "51dc0bd8e0173c92"
+      }
+    },
+    {
+      "case_id": "fg1-nlp-llm-02-a-001",
+      "payload": {
+        "round_scores": [
+          [
+            0.58482146,
+            0.25387482,
+            0.36588365,
+            0.34092968,
+            0.63029736,
+            0.91947849,
+            0.01083105,
+            0.95819389
+          ],
+          [
+            0.79689086,
+            0.29370625,
+            0.6018288,
+            0.55233644,
+            0.41927424,
+            0.89150234,
+            0.56496823,
+            0.08045208
+          ]
+        ],
+        "round_targets": [
+          6,
+          4
+        ],
+        "forced": [
+          0
+        ],
+        "_case_nonce": "b7491b3860b0b476"
+      }
+    },
+    {
+      "case_id": "fg1-nlp-llm-02-a-002",
+      "payload": {
+        "round_scores": [
+          [
+            0.10820081,
+            0.36212531,
+            0.36833219,
+            0.3708257,
+            0.01395794,
+            0.81883133,
+            0.90270452,
+            0.69993518
+          ],
+          [
+            0.69774889,
+            0.12857627,
+            0.56693375,
+            0.71413925,
+            0.60340571,
+            0.37246883,
+            0.40608007,
+            0.19731215
+          ]
+        ],
+        "round_targets": [
+          6,
+          4
+        ],
+        "forced": [
+          7
+        ],
+        "_case_nonce": "fc86a984fb61ce61"
+      }
+    }
+  ]
+}
+
+candidate_artifact:931
+Implement `iterative_token_compression` through `solve(case)` for this bounded objective: Select token indices over multiple registered pruning rounds from supplied conditional log-probability tensors while preserving forced tokens and original order.
+
+Stay inside this mechanism boundary: Token-level iterative compression with supplied model scores; distribution-alignment training is excluded. Validate every required field before computing a result.
+
+Begin with all original token indices active.
+
+At each round, rank only currently active indices by descending supplied score.
+
+Insert forced indices before filling remaining positions.
+
+Preserve original order in every retained mask and reject infeasible targets.
+
+Return the per-round masks and the final retained indices.
+
+Treat these registered properties as hard contracts rather than soft preferences: iterative_mask_update, forced_tokens, stable_order, budget_feasible.

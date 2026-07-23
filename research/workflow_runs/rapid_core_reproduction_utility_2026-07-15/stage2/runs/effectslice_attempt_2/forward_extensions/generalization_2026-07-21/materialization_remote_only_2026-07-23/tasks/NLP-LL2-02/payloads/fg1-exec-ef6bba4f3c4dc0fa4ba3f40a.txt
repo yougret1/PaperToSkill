@@ -1,0 +1,173 @@
+EFFECTSLICE_MODEL_VISIBLE_PAYLOAD_V1
+task_scaffold:431
+# Registered procedure task NLP-LL2-02
+
+Return one JSON object with exactly one key, `implementation`. Its value must be Python source defining `solve(case)`. The function must return a JSON-serializable object, must not mutate `case`, and may use only the Python standard library. Do not access files, the network, environment variables, subprocesses, randomness, or clocks. The attached public fixtures define input shapes only.
+
+fixture_payload:2355
+{
+  "schema_version": "effectslice-fg1-public-inputs.v1",
+  "task_id": "NLP-LL2-02",
+  "registry_id": "A",
+  "cases": [
+    {
+      "case_id": "fg1-nlp-ll2-02-a-000",
+      "payload": {
+        "word_token_indices": [
+          [
+            0,
+            1,
+            2
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            5
+          ],
+          [
+            6
+          ],
+          [
+            7
+          ],
+          [
+            8,
+            9
+          ]
+        ],
+        "word_scores": [
+          0.4803517,
+          0.04840438,
+          0.82787318,
+          0.71670836,
+          0.92366889,
+          0.50878605
+        ],
+        "forced_words": [
+          0
+        ],
+        "token_budget": 5,
+        "_case_nonce": "2aaedc4590608801"
+      }
+    },
+    {
+      "case_id": "fg1-nlp-ll2-02-a-001",
+      "payload": {
+        "word_token_indices": [
+          [
+            0,
+            1,
+            2
+          ],
+          [
+            3,
+            4,
+            5
+          ],
+          [
+            6,
+            7,
+            8
+          ],
+          [
+            9,
+            10
+          ],
+          [
+            11,
+            12,
+            13
+          ],
+          [
+            14,
+            15
+          ]
+        ],
+        "word_scores": [
+          0.90099775,
+          0.94939899,
+          0.34573417,
+          0.26415245,
+          0.4542425,
+          0.27283708
+        ],
+        "forced_words": [
+          0
+        ],
+        "token_budget": 8,
+        "_case_nonce": "0e655fd3c12f31df"
+      }
+    },
+    {
+      "case_id": "fg1-nlp-ll2-02-a-002",
+      "payload": {
+        "word_token_indices": [
+          [
+            0,
+            1
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            6,
+            7,
+            8
+          ],
+          [
+            9,
+            10
+          ],
+          [
+            11
+          ]
+        ],
+        "word_scores": [
+          0.8552287,
+          0.83257781,
+          0.62302677,
+          0.6519003,
+          0.21848529,
+          0.21772356
+        ],
+        "forced_words": [
+          0
+        ],
+        "token_budget": 6,
+        "_case_nonce": "3573346ced756511"
+      }
+    }
+  ]
+}
+
+candidate_artifact:1599
+Implement `budgeted_token_reconstruction` through `solve(case)` for this bounded objective: Construct a compressed prompt from supplied keep probabilities, force-token constraints, sentence boundaries, and an exact global budget.
+
+Stay inside this mechanism boundary: Task-agnostic token-classifier inference and reconstruction with supplied probabilities; model training is excluded. Validate every required field before computing a result.
+
+Treat a word group as indivisible when accounting token cost.
+
+Select forced words first and reject an infeasible forced set.
+
+Rank remaining words by descending supplied score and then source position.
+
+Accept a word only when its entire token group fits the residual budget.
+
+Return words and tokens in original order with exact token usage.
+
+Treat these registered properties as hard contracts rather than soft preferences: exact_budget, force_token_precedence, deterministic_ties, faithful_reconstruction.
+
+Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.
+
+Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.
+
+Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.
+
+Return only JSON-serializable values with the exact named fields. Raise ValueError for an infeasible or structurally invalid case instead of silently repairing it.

@@ -1,0 +1,15 @@
+Implement `condensed_tree_stability` through `solve(case)` for this bounded objective: Condense a supplied hierarchy under a minimum cluster size and select stable clusters with deterministic tie handling.
+
+Stay inside this mechanism boundary: Condensed-tree construction, cluster stability, and flat selection; metric learning is excluded. Validate every required field before computing a result.
+
+Drop clusters smaller than the minimum cluster size.
+
+For each retained cluster sum max(0, exit_lambda - birth_lambda) over its points.
+
+Rank clusters by decreasing stability and cluster ID.
+
+Select a cluster only when no already selected descendant blocks it, then block its ancestors.
+
+Return all retained stability rows and sorted selected IDs.
+
+Treat these registered properties as hard contracts rather than soft preferences: valid_condensed_tree, stability_accounting, noise_semantics, stable_ties.

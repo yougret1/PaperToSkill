@@ -1,0 +1,15 @@
+Implement `trial_reflect_retry_controller` through `solve(case)` for this bounded objective: Drive a bounded trial loop through act, evaluate, reflect, retry, and terminate states from supplied agent outputs and feedback signals.
+
+Stay inside this mechanism boundary: Reflexion control flow and state isolation; base-agent and evaluator model calls are supplied as deterministic fixtures. Validate every required field before computing a result.
+
+With no prior attempt request attempt one.
+
+Stop immediately after success.
+
+Stop on the registered attempt budget or a repeated failure signature.
+
+Otherwise request exactly the next attempt.
+
+Append a nonempty reflection with its signature and return decision, next index, and memory update.
+
+Treat these registered properties as hard contracts rather than soft preferences: registered_state_machine, reflection_after_feedback, budget_accounting, success_terminates.

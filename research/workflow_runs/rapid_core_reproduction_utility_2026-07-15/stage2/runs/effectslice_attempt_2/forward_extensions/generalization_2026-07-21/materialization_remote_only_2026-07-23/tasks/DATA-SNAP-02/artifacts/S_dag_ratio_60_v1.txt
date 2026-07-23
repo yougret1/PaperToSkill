@@ -1,0 +1,15 @@
+Implement `matrix_free_spectral_operator` through `solve(case)` for this bounded objective: Apply the normalized matrix-free spectral operator and return deterministically ordered leading coordinates from a supplied eigensolver fixture.
+
+Stay inside this mechanism boundary: Matrix-free operator, eigensolver interface, sign/order normalization, and no-materialization guard. Validate every required field before computing a result.
+
+Multiply each feature column by its supplied IDF.
+
+Define each row degree as the squared norm with a positive numerical floor.
+
+Apply inverse square-root degree scaling to the input vector.
+
+Compute X times X-transpose through two sparse-style matrix-vector products and rescale rows.
+
+Return the rounded operator result and degrees without constructing a pairwise matrix.
+
+Treat these registered properties as hard contracts rather than soft preferences: matrix_free, coordinate_order, sign_normalized, numeric_tolerance.

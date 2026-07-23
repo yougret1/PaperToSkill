@@ -1,0 +1,192 @@
+EFFECTSLICE_MODEL_VISIBLE_PAYLOAD_V1
+task_scaffold:432
+# Registered procedure task AGENT-TF-01
+
+Return one JSON object with exactly one key, `implementation`. Its value must be Python source defining `solve(case)`. The function must return a JSON-serializable object, must not mutate `case`, and may use only the Python standard library. Do not access files, the network, environment variables, subprocesses, randomness, or clocks. The attached public fixtures define input shapes only.
+
+fixture_payload:4447
+{
+  "schema_version": "effectslice-fg1-public-inputs.v1",
+  "task_id": "AGENT-TF-01",
+  "registry_id": "B",
+  "cases": [
+    {
+      "case_id": "fg1-agent-tf-01-b-000",
+      "payload": {
+        "threshold": 0.05,
+        "calls": [
+          {
+            "call_id": "call0",
+            "loss_without_call": 1.48911432,
+            "loss_with_call": 0.30132987,
+            "prediction_tokens": 5,
+            "parseable": true
+          },
+          {
+            "call_id": "call1",
+            "loss_without_call": 1.37006381,
+            "loss_with_call": 0.10127803,
+            "prediction_tokens": 5,
+            "parseable": true
+          },
+          {
+            "call_id": "call2",
+            "loss_without_call": 1.07992348,
+            "loss_with_call": 0.04054692,
+            "prediction_tokens": 5,
+            "parseable": true
+          },
+          {
+            "call_id": "call3",
+            "loss_without_call": 1.76582941,
+            "loss_with_call": 0.57732788,
+            "prediction_tokens": 3,
+            "parseable": true
+          },
+          {
+            "call_id": "call4",
+            "loss_without_call": 1.70674574,
+            "loss_with_call": 0.40289862,
+            "prediction_tokens": 6,
+            "parseable": true
+          },
+          {
+            "call_id": "call5",
+            "loss_without_call": 1.98682122,
+            "loss_with_call": 0.89260518,
+            "prediction_tokens": 4,
+            "parseable": false
+          }
+        ],
+        "_case_nonce": "ad215d8ca8f0f4bb"
+      }
+    },
+    {
+      "case_id": "fg1-agent-tf-01-b-001",
+      "payload": {
+        "threshold": 0.05,
+        "calls": [
+          {
+            "call_id": "call0",
+            "loss_without_call": 1.36764237,
+            "loss_with_call": 0.73067089,
+            "prediction_tokens": 3,
+            "parseable": true
+          },
+          {
+            "call_id": "call1",
+            "loss_without_call": 1.55380786,
+            "loss_with_call": 0.78234806,
+            "prediction_tokens": 3,
+            "parseable": false
+          },
+          {
+            "call_id": "call2",
+            "loss_without_call": 1.66268305,
+            "loss_with_call": 0.34997262,
+            "prediction_tokens": 4,
+            "parseable": true
+          },
+          {
+            "call_id": "call3",
+            "loss_without_call": 1.98825559,
+            "loss_with_call": 0.29587251,
+            "prediction_tokens": 5,
+            "parseable": false
+          },
+          {
+            "call_id": "call4",
+            "loss_without_call": 1.71365839,
+            "loss_with_call": 0.09495959,
+            "prediction_tokens": 2,
+            "parseable": true
+          },
+          {
+            "call_id": "call5",
+            "loss_without_call": 1.15223508,
+            "loss_with_call": 0.86356396,
+            "prediction_tokens": 6,
+            "parseable": false
+          }
+        ],
+        "_case_nonce": "bdefb3ccbcbba616"
+      }
+    },
+    {
+      "case_id": "fg1-agent-tf-01-b-002",
+      "payload": {
+        "threshold": 0.05,
+        "calls": [
+          {
+            "call_id": "call0",
+            "loss_without_call": 1.16573456,
+            "loss_with_call": 0.38447424,
+            "prediction_tokens": 5,
+            "parseable": true
+          },
+          {
+            "call_id": "call1",
+            "loss_without_call": 1.31961346,
+            "loss_with_call": 0.10004193,
+            "prediction_tokens": 2,
+            "parseable": true
+          },
+          {
+            "call_id": "call2",
+            "loss_without_call": 1.95536758,
+            "loss_with_call": 0.44659408,
+            "prediction_tokens": 6,
+            "parseable": true
+          },
+          {
+            "call_id": "call3",
+            "loss_without_call": 1.29764071,
+            "loss_with_call": 0.978432,
+            "prediction_tokens": 5,
+            "parseable": true
+          },
+          {
+            "call_id": "call4",
+            "loss_without_call": 1.91348117,
+            "loss_with_call": 0.88407266,
+            "prediction_tokens": 6,
+            "parseable": true
+          },
+          {
+            "call_id": "call5",
+            "loss_without_call": 1.2515065,
+            "loss_with_call": 0.60014613,
+            "prediction_tokens": 3,
+            "parseable": true
+          }
+        ],
+        "_case_nonce": "5ea04e459990c621"
+      }
+    }
+  ]
+}
+
+candidate_artifact:1530
+Implement `api_call_loss_filter` through `solve(case)` for this bounded objective: Retain API-call candidates using normalized future-token weights, weighted losses, the stronger counterfactual, and an inclusive threshold.
+
+Stay inside this mechanism boundary: Toolformer API-call filtering with supplied token losses; call generation and language-model training are excluded. Validate every required field before computing a result.
+
+For each call subtract loss with the call from loss without it.
+
+Normalize gain by at least one prediction token.
+
+Require both parseability and normalized gain at or above threshold.
+
+Keep diagnostics in supplied call order.
+
+Return accepted call IDs and rounded per-call diagnostics.
+
+Treat these registered properties as hard contracts rather than soft preferences: normalized_weights, stronger_counterfactual, inclusive_threshold, stable_order.
+
+Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.
+
+Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.
+
+Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.
+
+Return only JSON-serializable values with the exact named fields. Raise ValueError for an infeasible or structurally invalid case instead of silently repairing it.

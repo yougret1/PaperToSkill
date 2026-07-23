@@ -1,0 +1,138 @@
+{
+  "schema_version": "effectslice-fg1-atom-registry.v1",
+  "task_id": "NLP-LLM-02",
+  "atoms": [
+    {
+      "atom_id": "a_86f8137058ef44ec",
+      "source_locator": {
+        "document_sha256": "c567021314800a866fe6530b15c9593a0782f076f07576de4be2a4ded48981ae",
+        "byte_start": 472,
+        "byte_end": 574,
+        "split_index": 0
+      },
+      "rendered_text": "Implement `iterative_token_compression` through `solve(case)` for this bounded objective: Select token indices over multiple registered pruning rounds from supplied conditional log-probability tensors while preserving forced tokens and original order.",
+      "rendered_text_sha256": "bd694cfe51ac85ce730beb6cb16334523c90f746fffaa57a9763f28235dccf53"
+    },
+    {
+      "atom_id": "a_ce024fc6ffa484ca",
+      "source_locator": {
+        "document_sha256": "c567021314800a866fe6530b15c9593a0782f076f07576de4be2a4ded48981ae",
+        "byte_start": 472,
+        "byte_end": 574,
+        "split_index": 1
+      },
+      "rendered_text": "Stay inside this mechanism boundary: Token-level iterative compression with supplied model scores; distribution-alignment training is excluded. Validate every required field before computing a result.",
+      "rendered_text_sha256": "8cd63f591c72e870feef2e4b8f22e00e8ab370fb9a530d296f85d0ef2306c55c"
+    },
+    {
+      "atom_id": "a_730abcfc71b7af00",
+      "source_locator": {
+        "document_sha256": "c567021314800a866fe6530b15c9593a0782f076f07576de4be2a4ded48981ae",
+        "byte_start": 472,
+        "byte_end": 574,
+        "split_index": 2
+      },
+      "rendered_text": "Begin with all original token indices active.",
+      "rendered_text_sha256": "2813fee72402b786cbdac81f9497eeab7026e8cddd5c6ea9ead8a27540e582ee"
+    },
+    {
+      "atom_id": "a_f6deb6df4627358b",
+      "source_locator": {
+        "document_sha256": "c567021314800a866fe6530b15c9593a0782f076f07576de4be2a4ded48981ae",
+        "byte_start": 472,
+        "byte_end": 574,
+        "split_index": 3
+      },
+      "rendered_text": "At each round, rank only currently active indices by descending supplied score.",
+      "rendered_text_sha256": "1a558762c99c934505b1c99cb20260798ade64ebec60f848e1be958ef4036a58"
+    },
+    {
+      "atom_id": "a_35a254f2ccef2ccc",
+      "source_locator": {
+        "document_sha256": "c567021314800a866fe6530b15c9593a0782f076f07576de4be2a4ded48981ae",
+        "byte_start": 472,
+        "byte_end": 574,
+        "split_index": 4
+      },
+      "rendered_text": "Insert forced indices before filling remaining positions.",
+      "rendered_text_sha256": "2b42b59be966a852561c48202fccac2043c3605f1fc73431632a43a2f7a55eca"
+    },
+    {
+      "atom_id": "a_bb2286db5732f60d",
+      "source_locator": {
+        "document_sha256": "c567021314800a866fe6530b15c9593a0782f076f07576de4be2a4ded48981ae",
+        "byte_start": 472,
+        "byte_end": 574,
+        "split_index": 5
+      },
+      "rendered_text": "Preserve original order in every retained mask and reject infeasible targets.",
+      "rendered_text_sha256": "2e4c05c97ce4a3ab433fd39106e8ec5ce2f23da56c6a2508e0abc56c239dcea9"
+    },
+    {
+      "atom_id": "a_09d930f9ebf676c3",
+      "source_locator": {
+        "document_sha256": "c567021314800a866fe6530b15c9593a0782f076f07576de4be2a4ded48981ae",
+        "byte_start": 591,
+        "byte_end": 676,
+        "split_index": 6
+      },
+      "rendered_text": "Return the per-round masks and the final retained indices.",
+      "rendered_text_sha256": "345a99b72ef196e8e2e36923a13db77cbf393fe468321dfa2b223e2d44df130a"
+    },
+    {
+      "atom_id": "a_6cb44966cd8651e2",
+      "source_locator": {
+        "document_sha256": "c567021314800a866fe6530b15c9593a0782f076f07576de4be2a4ded48981ae",
+        "byte_start": 591,
+        "byte_end": 676,
+        "split_index": 7
+      },
+      "rendered_text": "Treat these registered properties as hard contracts rather than soft preferences: iterative_mask_update, forced_tokens, stable_order, budget_feasible.",
+      "rendered_text_sha256": "a361dfde4f55dc15e8db0a4cfb892ccc88c8dda02724ae8226ff3c8e50cad4f3"
+    },
+    {
+      "atom_id": "a_d12144748f10511a",
+      "source_locator": {
+        "document_sha256": "c567021314800a866fe6530b15c9593a0782f076f07576de4be2a4ded48981ae",
+        "byte_start": 591,
+        "byte_end": 676,
+        "split_index": 8
+      },
+      "rendered_text": "Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.",
+      "rendered_text_sha256": "bb651964decf660706e6b02a72268f4df8c9cfde1515a5b2325af47505fa92df"
+    },
+    {
+      "atom_id": "a_00f7e8260249a623",
+      "source_locator": {
+        "document_sha256": "c567021314800a866fe6530b15c9593a0782f076f07576de4be2a4ded48981ae",
+        "byte_start": 591,
+        "byte_end": 676,
+        "split_index": 9
+      },
+      "rendered_text": "Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.",
+      "rendered_text_sha256": "d6b67e3cd654a61b271920e037938dc07550072b2334416f32ed86b0bd787362"
+    },
+    {
+      "atom_id": "a_caff0e125da8cfdf",
+      "source_locator": {
+        "document_sha256": "c567021314800a866fe6530b15c9593a0782f076f07576de4be2a4ded48981ae",
+        "byte_start": 591,
+        "byte_end": 676,
+        "split_index": 10
+      },
+      "rendered_text": "Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.",
+      "rendered_text_sha256": "67186a43fcf39ec73132c8ab7ad1387670a6fd7d5e511075a50faf835be9e19a"
+    },
+    {
+      "atom_id": "a_8a70b06a1ea78c4a",
+      "source_locator": {
+        "document_sha256": "c567021314800a866fe6530b15c9593a0782f076f07576de4be2a4ded48981ae",
+        "byte_start": 591,
+        "byte_end": 676,
+        "split_index": 11
+      },
+      "rendered_text": "Return only JSON-serializable values with the exact named fields. Raise ValueError for an infeasible or structurally invalid case instead of silently repairing it.",
+      "rendered_text_sha256": "5f164e6574e6f249d67514f65fc480435c9b737c31ea45311cd04552b1d13fcb"
+    }
+  ]
+}

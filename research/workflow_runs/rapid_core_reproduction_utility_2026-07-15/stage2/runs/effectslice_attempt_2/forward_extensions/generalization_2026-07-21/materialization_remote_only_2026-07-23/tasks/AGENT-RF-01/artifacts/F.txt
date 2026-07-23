@@ -1,0 +1,23 @@
+Implement `episodic_reflection_memory` through `solve(case)` for this bounded objective: Update and truncate an episodic reflection memory from registered trial outcomes, feedback, and reflection records without changing model weights.
+
+Stay inside this mechanism boundary: Reflexion episodic memory bookkeeping and prompt assembly; free-form reflection generation is supplied. Validate every required field before computing a result.
+
+Process trials in chronological order.
+
+Deduplicate memory by failure signature, retaining the newest reflection.
+
+When capacity binds, prioritize failures before successes, then recency and signature.
+
+Restore chronological order in the final memory.
+
+Return complete retained entries and their signatures.
+
+Treat these registered properties as hard contracts rather than soft preferences: feedback_provenance, memory_bound, stable_order, no_weight_update.
+
+Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.
+
+Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.
+
+Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.
+
+Return only JSON-serializable values with the exact named fields. Raise ValueError for an infeasible or structurally invalid case instead of silently repairing it.

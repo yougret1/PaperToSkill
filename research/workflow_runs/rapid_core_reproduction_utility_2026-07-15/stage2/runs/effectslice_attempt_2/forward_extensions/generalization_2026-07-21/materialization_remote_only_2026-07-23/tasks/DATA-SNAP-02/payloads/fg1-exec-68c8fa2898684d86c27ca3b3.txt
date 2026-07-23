@@ -1,0 +1,234 @@
+EFFECTSLICE_MODEL_VISIBLE_PAYLOAD_V1
+task_scaffold:433
+# Registered procedure task DATA-SNAP-02
+
+Return one JSON object with exactly one key, `implementation`. Its value must be Python source defining `solve(case)`. The function must return a JSON-serializable object, must not mutate `case`, and may use only the Python standard library. Do not access files, the network, environment variables, subprocesses, randomness, or clocks. The attached public fixtures define input shapes only.
+
+fixture_payload:3272
+{
+  "schema_version": "effectslice-fg1-public-inputs.v1",
+  "task_id": "DATA-SNAP-02",
+  "registry_id": "A",
+  "cases": [
+    {
+      "case_id": "fg1-data-snap-02-a-000",
+      "payload": {
+        "matrix": [
+          [
+            1,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            1
+          ]
+        ],
+        "idf": [
+          1.0942937,
+          1.28889476,
+          0.85356494,
+          0.758795,
+          1.35313324
+        ],
+        "vector": [
+          -0.67012183,
+          0.2674734,
+          0.4048414,
+          0.03586903,
+          0.07731263,
+          0.66783524
+        ],
+        "_case_nonce": "f77bd8ebfbce2ce3"
+      }
+    },
+    {
+      "case_id": "fg1-data-snap-02-a-001",
+      "payload": {
+        "matrix": [
+          [
+            0,
+            1,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            0,
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            0
+          ]
+        ],
+        "idf": [
+          0.60474751,
+          0.77728201,
+          0.97285309,
+          0.89127324,
+          0.68973602
+        ],
+        "vector": [
+          -0.69081861,
+          -0.73904276,
+          0.44024671,
+          -0.18628633,
+          0.67470708,
+          0.69302574
+        ],
+        "_case_nonce": "cd013964f3ab43a9"
+      }
+    },
+    {
+      "case_id": "fg1-data-snap-02-a-002",
+      "payload": {
+        "matrix": [
+          [
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            1,
+            0,
+            1,
+            0,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            0
+          ]
+        ],
+        "idf": [
+          0.81242774,
+          0.75928577,
+          0.68765147,
+          0.59333809,
+          0.58029742
+        ],
+        "vector": [
+          0.63326825,
+          0.76535633,
+          -0.12303136,
+          -0.6404129,
+          0.89582071,
+          -0.26192057
+        ],
+        "_case_nonce": "2815c4328cf8bb13"
+      }
+    }
+  ]
+}
+
+candidate_artifact:1603
+Implement `matrix_free_spectral_operator` through `solve(case)` for this bounded objective: Apply the normalized matrix-free spectral operator and return deterministically ordered leading coordinates from a supplied eigensolver fixture.
+
+Stay inside this mechanism boundary: Matrix-free operator, eigensolver interface, sign/order normalization, and no-materialization guard. Validate every required field before computing a result.
+
+Multiply each feature column by its supplied IDF.
+
+Define each row degree as the squared norm with a positive numerical floor.
+
+Apply inverse square-root degree scaling to the input vector.
+
+Compute X times X-transpose through two sparse-style matrix-vector products and rescale rows.
+
+Return the rounded operator result and degrees without constructing a pairwise matrix.
+
+Treat these registered properties as hard contracts rather than soft preferences: matrix_free, coordinate_order, sign_normalized, numeric_tolerance.
+
+Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.
+
+Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.
+
+Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.
+
+Return only JSON-serializable values with the exact named fields. Raise ValueError for an infeasible or structurally invalid case instead of silently repairing it.

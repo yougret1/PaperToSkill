@@ -1,0 +1,23 @@
+Implement `idf_normalization_and_degree` through `solve(case)` for this bounded objective: Apply the registered sparse IDF scaling, row normalization, self-similarity removal, and degree construction without dense materialization.
+
+Stay inside this mechanism boundary: SnapATAC2 spectral preprocessing through degree construction; eigensolving is excluded. Validate every required field before computing a result.
+
+Validate a nonempty rectangular matrix.
+
+For each feature count rows with a nonzero entry.
+
+Compute IDF as log(1 + number_of_rows / (1 + document_frequency)).
+
+Multiply every entry by its feature IDF and sum weighted rows for degree.
+
+Round and return IDF, weighted matrix, and row degrees.
+
+Treat these registered properties as hard contracts rather than soft preferences: sparse_only, self_similarity_removed, finite_degree, numeric_tolerance.
+
+Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.
+
+Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.
+
+Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.
+
+Return only JSON-serializable values with the exact named fields. Raise ValueError for an infeasible or structurally invalid case instead of silently repairing it.

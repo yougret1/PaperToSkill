@@ -1,0 +1,15 @@
+Implement `word_label_alignment` through `solve(case)` for this bounded objective: Project word-level keep/drop labels onto registered subword spans and recover a faithful ordered token mask across punctuation and repeated substrings.
+
+Stay inside this mechanism boundary: Data-distillation label alignment and inference preparation; teacher generation and classifier training are excluded. Validate every required field before computing a result.
+
+Require one word label for every registered word group.
+
+Broadcast each word label to every token index in that group.
+
+Reject overlapping, out-of-range, or uncovered token indices.
+
+Keep token indices whose broadcast label equals one.
+
+Return the full token-label vector and retained indices.
+
+Treat these registered properties as hard contracts rather than soft preferences: complete_alignment, offset_integrity, stable_order, no_unlabeled_tokens.

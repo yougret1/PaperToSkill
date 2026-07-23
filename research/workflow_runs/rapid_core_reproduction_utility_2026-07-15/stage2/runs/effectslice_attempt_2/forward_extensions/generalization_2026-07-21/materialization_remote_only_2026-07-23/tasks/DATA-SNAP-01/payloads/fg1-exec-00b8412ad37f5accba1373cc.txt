@@ -1,0 +1,181 @@
+EFFECTSLICE_MODEL_VISIBLE_PAYLOAD_V1
+task_scaffold:433
+# Registered procedure task DATA-SNAP-01
+
+Return one JSON object with exactly one key, `implementation`. Its value must be Python source defining `solve(case)`. The function must return a JSON-serializable object, must not mutate `case`, and may use only the Python standard library. Do not access files, the network, environment variables, subprocesses, randomness, or clocks. The attached public fixtures define input shapes only.
+
+fixture_payload:2374
+{
+  "schema_version": "effectslice-fg1-public-inputs.v1",
+  "task_id": "DATA-SNAP-01",
+  "registry_id": "B",
+  "cases": [
+    {
+      "case_id": "fg1-data-snap-01-b-000",
+      "payload": {
+        "matrix": [
+          [
+            1,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            0,
+            0,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            1,
+            1,
+            1,
+            0
+          ]
+        ],
+        "_case_nonce": "e17b380edcd64669"
+      }
+    },
+    {
+      "case_id": "fg1-data-snap-01-b-001",
+      "payload": {
+        "matrix": [
+          [
+            0,
+            1,
+            0,
+            1,
+            0
+          ],
+          [
+            0,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            0,
+            1,
+            1,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            1,
+            0
+          ]
+        ],
+        "_case_nonce": "dd492be7a1f7f82f"
+      }
+    },
+    {
+      "case_id": "fg1-data-snap-01-b-002",
+      "payload": {
+        "matrix": [
+          [
+            1,
+            0,
+            1,
+            1,
+            0
+          ],
+          [
+            1,
+            1,
+            0,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            1,
+            1,
+            1
+          ],
+          [
+            1,
+            1,
+            0,
+            0,
+            1
+          ],
+          [
+            1,
+            0,
+            0,
+            0,
+            1
+          ],
+          [
+            0,
+            1,
+            0,
+            0,
+            1
+          ]
+        ],
+        "_case_nonce": "93f3364f817083ca"
+      }
+    }
+  ]
+}
+
+candidate_artifact:860
+Implement `idf_normalization_and_degree` through `solve(case)` for this bounded objective: Apply the registered sparse IDF scaling, row normalization, self-similarity removal, and degree construction without dense materialization.
+
+Stay inside this mechanism boundary: SnapATAC2 spectral preprocessing through degree construction; eigensolving is excluded. Validate every required field before computing a result.
+
+Validate a nonempty rectangular matrix.
+
+For each feature count rows with a nonzero entry.
+
+Compute IDF as log(1 + number_of_rows / (1 + document_frequency)).
+
+Multiply every entry by its feature IDF and sum weighted rows for degree.
+
+Round and return IDF, weighted matrix, and row degrees.
+
+Treat these registered properties as hard contracts rather than soft preferences: sparse_only, self_similarity_removed, finite_degree, numeric_tolerance.

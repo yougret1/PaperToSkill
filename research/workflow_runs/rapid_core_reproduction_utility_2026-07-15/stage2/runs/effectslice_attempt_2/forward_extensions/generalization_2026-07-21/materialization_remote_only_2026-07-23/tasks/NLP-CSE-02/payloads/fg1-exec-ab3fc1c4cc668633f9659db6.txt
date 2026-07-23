@@ -1,0 +1,108 @@
+EFFECTSLICE_MODEL_VISIBLE_PAYLOAD_V1
+task_scaffold:431
+# Registered procedure task NLP-CSE-02
+
+Return one JSON object with exactly one key, `implementation`. Its value must be Python source defining `solve(case)`. The function must return a JSON-serializable object, must not mutate `case`, and may use only the Python standard library. Do not access files, the network, environment variables, subprocesses, randomness, or clocks. The attached public fixtures define input shapes only.
+
+fixture_payload:1370
+{
+  "schema_version": "effectslice-fg1-public-inputs.v1",
+  "task_id": "NLP-CSE-02",
+  "registry_id": "B",
+  "cases": [
+    {
+      "case_id": "fg1-nlp-cse-02-b-000",
+      "payload": {
+        "lengths": [
+          3,
+          4,
+          1,
+          4,
+          2,
+          3
+        ],
+        "scores": [
+          0.73228615,
+          0.96960856,
+          0.88660497,
+          0.76811522,
+          0.24532398,
+          0.29822346
+        ],
+        "budget": 11,
+        "_case_nonce": "62cdea27bf7174ad"
+      }
+    },
+    {
+      "case_id": "fg1-nlp-cse-02-b-001",
+      "payload": {
+        "lengths": [
+          4,
+          1,
+          1,
+          5,
+          3
+        ],
+        "scores": [
+          1.02493096,
+          0.52246123,
+          0.57890011,
+          0.52672489,
+          0.8805806
+        ],
+        "budget": 12,
+        "_case_nonce": "08803e84253159d1"
+      }
+    },
+    {
+      "case_id": "fg1-nlp-cse-02-b-002",
+      "payload": {
+        "lengths": [
+          4,
+          3,
+          4,
+          1,
+          1,
+          4,
+          5
+        ],
+        "scores": [
+          0.9654041,
+          0.99600802,
+          0.36793639,
+          0.34961612,
+          0.23604191,
+          0.42916832,
+          0.51820978
+        ],
+        "budget": 8,
+        "_case_nonce": "4bcd05d9e52d9896"
+      }
+    }
+  ]
+}
+
+candidate_artifact:1499
+Implement `sentence_budget_selection` through `solve(case)` for this bounded objective: Select and reconstruct context-scored sentences under an exact token budget while preserving document order and required query context.
+
+Stay inside this mechanism boundary: Budgeted sentence selection and reconstruction; upstream embedding generation is supplied. Validate every required field before computing a result.
+
+Enumerate sentence inclusion with a zero-one dynamic program over token cost.
+
+Never split a sentence or exceed the budget.
+
+Maximize summed salience.
+
+Break equal utility by fewer used tokens and then lexicographic source indices.
+
+Return selected indices, used tokens, and summed score.
+
+Treat these registered properties as hard contracts rather than soft preferences: budget_feasible, query_context_retained, stable_ties, document_order.
+
+Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.
+
+Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.
+
+Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.
+
+Return only JSON-serializable values with the exact named fields. Raise ValueError for an infeasible or structurally invalid case instead of silently repairing it.

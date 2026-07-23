@@ -1,0 +1,157 @@
+EFFECTSLICE_MODEL_VISIBLE_PAYLOAD_V1
+task_scaffold:432
+# Registered procedure task DATA-HDB-02
+
+Return one JSON object with exactly one key, `implementation`. Its value must be Python source defining `solve(case)`. The function must return a JSON-serializable object, must not mutate `case`, and may use only the Python standard library. Do not access files, the network, environment variables, subprocesses, randomness, or clocks. The attached public fixtures define input shapes only.
+
+fixture_payload:2832
+{
+  "schema_version": "effectslice-fg1-public-inputs.v1",
+  "task_id": "DATA-HDB-02",
+  "registry_id": "B",
+  "cases": [
+    {
+      "case_id": "fg1-data-hdb-02-b-000",
+      "payload": {
+        "min_cluster_size": 3,
+        "clusters": [
+          {
+            "cluster_id": "c0",
+            "size": 7,
+            "birth_lambda": 0.2,
+            "point_exit_lambdas": [
+              0.4,
+              0.6,
+              0.9
+            ]
+          },
+          {
+            "cluster_id": "c1",
+            "size": 4,
+            "birth_lambda": 0.5,
+            "point_exit_lambdas": [
+              0.7,
+              1.0,
+              1.2
+            ]
+          },
+          {
+            "cluster_id": "c2",
+            "size": 2,
+            "birth_lambda": 0.8,
+            "point_exit_lambdas": [
+              1.1
+            ]
+          }
+        ],
+        "parent": {
+          "c0": null,
+          "c1": "c0",
+          "c2": "c0"
+        },
+        "_case_nonce": "1be39e16c3557260"
+      }
+    },
+    {
+      "case_id": "fg1-data-hdb-02-b-001",
+      "payload": {
+        "min_cluster_size": 3,
+        "clusters": [
+          {
+            "cluster_id": "c0",
+            "size": 7,
+            "birth_lambda": 0.2,
+            "point_exit_lambdas": [
+              0.4,
+              0.6,
+              0.9
+            ]
+          },
+          {
+            "cluster_id": "c1",
+            "size": 4,
+            "birth_lambda": 0.5,
+            "point_exit_lambdas": [
+              0.7,
+              1.0,
+              1.2
+            ]
+          },
+          {
+            "cluster_id": "c2",
+            "size": 2,
+            "birth_lambda": 0.8,
+            "point_exit_lambdas": [
+              1.1
+            ]
+          }
+        ],
+        "parent": {
+          "c0": null,
+          "c1": "c0",
+          "c2": "c0"
+        },
+        "_case_nonce": "d198206398773ec1"
+      }
+    },
+    {
+      "case_id": "fg1-data-hdb-02-b-002",
+      "payload": {
+        "min_cluster_size": 3,
+        "clusters": [
+          {
+            "cluster_id": "c0",
+            "size": 7,
+            "birth_lambda": 0.2,
+            "point_exit_lambdas": [
+              0.4,
+              0.6,
+              0.9
+            ]
+          },
+          {
+            "cluster_id": "c1",
+            "size": 4,
+            "birth_lambda": 0.5,
+            "point_exit_lambdas": [
+              0.7,
+              1.0,
+              1.2
+            ]
+          },
+          {
+            "cluster_id": "c2",
+            "size": 2,
+            "birth_lambda": 0.8,
+            "point_exit_lambdas": [
+              1.1
+            ]
+          }
+        ],
+        "parent": {
+          "c0": null,
+          "c1": "c0",
+          "c2": "c0"
+        },
+        "_case_nonce": "8e973d489259621a"
+      }
+    }
+  ]
+}
+
+candidate_artifact:903
+Implement `condensed_tree_stability` through `solve(case)` for this bounded objective: Condense a supplied hierarchy under a minimum cluster size and select stable clusters with deterministic tie handling.
+
+Stay inside this mechanism boundary: Condensed-tree construction, cluster stability, and flat selection; metric learning is excluded. Validate every required field before computing a result.
+
+Drop clusters smaller than the minimum cluster size.
+
+For each retained cluster sum max(0, exit_lambda - birth_lambda) over its points.
+
+Rank clusters by decreasing stability and cluster ID.
+
+Select a cluster only when no already selected descendant blocks it, then block its ancestors.
+
+Return all retained stability rows and sorted selected IDs.
+
+Treat these registered properties as hard contracts rather than soft preferences: valid_condensed_tree, stability_accounting, noise_semantics, stable_ties.

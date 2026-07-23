@@ -1,0 +1,114 @@
+EFFECTSLICE_MODEL_VISIBLE_PAYLOAD_V1
+task_scaffold:429
+# Registered procedure task SE-CR-01
+
+Return one JSON object with exactly one key, `implementation`. Its value must be Python source defining `solve(case)`. The function must return a JSON-serializable object, must not mutate `case`, and may use only the Python standard library. Do not access files, the network, environment variables, subprocesses, randomness, or clocks. The attached public fixtures define input shapes only.
+
+fixture_payload:1671
+{
+  "schema_version": "effectslice-fg1-public-inputs.v1",
+  "task_id": "SE-CR-01",
+  "registry_id": "A",
+  "cases": [
+    {
+      "case_id": "fg1-se-cr-01-a-000",
+      "payload": {
+        "text": "aaaa bb cc",
+        "passes": [
+          {
+            "name": "halve-a",
+            "old": "aa",
+            "new": "a"
+          },
+          {
+            "name": "drop-b",
+            "old": "bb",
+            "new": "b"
+          },
+          {
+            "name": "drop-c",
+            "old": " cc",
+            "new": ""
+          }
+        ],
+        "max_rounds": 8,
+        "_case_nonce": "f20581221f4d341e"
+      }
+    },
+    {
+      "case_id": "fg1-se-cr-01-a-001",
+      "payload": {
+        "text": "aaaa bb cc",
+        "passes": [
+          {
+            "name": "halve-a",
+            "old": "aa",
+            "new": "a"
+          },
+          {
+            "name": "drop-b",
+            "old": "bb",
+            "new": "b"
+          },
+          {
+            "name": "drop-c",
+            "old": " cc",
+            "new": ""
+          }
+        ],
+        "max_rounds": 8,
+        "_case_nonce": "a240f471026e09ac"
+      }
+    },
+    {
+      "case_id": "fg1-se-cr-01-a-002",
+      "payload": {
+        "text": "aaaa bb cc",
+        "passes": [
+          {
+            "name": "halve-a",
+            "old": "aa",
+            "new": "a"
+          },
+          {
+            "name": "drop-b",
+            "old": "bb",
+            "new": "b"
+          },
+          {
+            "name": "drop-c",
+            "old": " cc",
+            "new": ""
+          }
+        ],
+        "max_rounds": 8,
+        "_case_nonce": "0f156f193fee6979"
+      }
+    }
+  ]
+}
+
+candidate_artifact:1505
+Implement `pass_scheduler_fixed_point` through `solve(case)` for this bounded objective: Run an ordered transformation-pass schedule to a fixed point with registered restart, cache, and interestingness rules over a miniature program state.
+
+Stay inside this mechanism boundary: C-Reduce pass orchestration; real compilers and external reducers are excluded. Validate every required field before computing a result.
+
+Apply passes in their registered order.
+
+Each pass performs at most its first eligible rewrite per sweep.
+
+Record only passes that change the artifact.
+
+Repeat full sweeps until none changes or the round budget is consumed.
+
+Return the artifact, application trace, and fixed-point flag.
+
+Treat these registered properties as hard contracts rather than soft preferences: interestingness_preserved, restart_policy, cache_semantics, fixed_point.
+
+Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.
+
+Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.
+
+Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.
+
+Return only JSON-serializable values with the exact named fields. Raise ValueError for an infeasible or structurally invalid case instead of silently repairing it.

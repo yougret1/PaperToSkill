@@ -1,0 +1,253 @@
+EFFECTSLICE_MODEL_VISIBLE_PAYLOAD_V1
+task_scaffold:432
+# Registered procedure task DATA-HDB-01
+
+Return one JSON object with exactly one key, `implementation`. Its value must be Python source defining `solve(case)`. The function must return a JSON-serializable object, must not mutate `case`, and may use only the Python standard library. Do not access files, the network, environment variables, subprocesses, randomness, or clocks. The attached public fixtures define input shapes only.
+
+fixture_payload:3972
+{
+  "schema_version": "effectslice-fg1-public-inputs.v1",
+  "task_id": "DATA-HDB-01",
+  "registry_id": "B",
+  "cases": [
+    {
+      "case_id": "fg1-data-hdb-01-b-000",
+      "payload": {
+        "nodes": [
+          "p0",
+          "p1",
+          "p2",
+          "p3",
+          "p4"
+        ],
+        "core_distance": {
+          "p0": 0.59758611,
+          "p1": 0.29832545,
+          "p2": 0.32441726,
+          "p3": 0.2190618,
+          "p4": 0.30615121
+        },
+        "distances": [
+          [
+            "p0",
+            "p1",
+            0.52032781
+          ],
+          [
+            "p0",
+            "p2",
+            0.60152561
+          ],
+          [
+            "p0",
+            "p3",
+            0.21559005
+          ],
+          [
+            "p0",
+            "p4",
+            0.95480124
+          ],
+          [
+            "p1",
+            "p2",
+            0.66387815
+          ],
+          [
+            "p1",
+            "p3",
+            1.00022354
+          ],
+          [
+            "p1",
+            "p4",
+            0.12610702
+          ],
+          [
+            "p2",
+            "p3",
+            0.48060368
+          ],
+          [
+            "p2",
+            "p4",
+            0.22578605
+          ],
+          [
+            "p3",
+            "p4",
+            1.07142342
+          ]
+        ],
+        "_case_nonce": "9ae7b8c19214396c"
+      }
+    },
+    {
+      "case_id": "fg1-data-hdb-01-b-001",
+      "payload": {
+        "nodes": [
+          "p0",
+          "p1",
+          "p2",
+          "p3",
+          "p4"
+        ],
+        "core_distance": {
+          "p0": 0.27040971,
+          "p1": 0.20523039,
+          "p2": 0.68684056,
+          "p3": 0.33869111,
+          "p4": 0.51180747
+        },
+        "distances": [
+          [
+            "p0",
+            "p1",
+            0.88779309
+          ],
+          [
+            "p0",
+            "p2",
+            0.42985164
+          ],
+          [
+            "p0",
+            "p3",
+            0.95527366
+          ],
+          [
+            "p0",
+            "p4",
+            0.73182298
+          ],
+          [
+            "p1",
+            "p2",
+            0.39800576
+          ],
+          [
+            "p1",
+            "p3",
+            1.04537249
+          ],
+          [
+            "p1",
+            "p4",
+            0.14109333
+          ],
+          [
+            "p2",
+            "p3",
+            1.06559529
+          ],
+          [
+            "p2",
+            "p4",
+            0.16278033
+          ],
+          [
+            "p3",
+            "p4",
+            0.86940353
+          ]
+        ],
+        "_case_nonce": "2415bfd2ca5e2e5d"
+      }
+    },
+    {
+      "case_id": "fg1-data-hdb-01-b-002",
+      "payload": {
+        "nodes": [
+          "p0",
+          "p1",
+          "p2",
+          "p3",
+          "p4"
+        ],
+        "core_distance": {
+          "p0": 0.51019794,
+          "p1": 0.38508723,
+          "p2": 0.44094391,
+          "p3": 0.50342866,
+          "p4": 0.2751974
+        },
+        "distances": [
+          [
+            "p0",
+            "p1",
+            0.80303801
+          ],
+          [
+            "p0",
+            "p2",
+            0.18407539
+          ],
+          [
+            "p0",
+            "p3",
+            0.32906307
+          ],
+          [
+            "p0",
+            "p4",
+            1.04996834
+          ],
+          [
+            "p1",
+            "p2",
+            0.93312687
+          ],
+          [
+            "p1",
+            "p3",
+            0.49515805
+          ],
+          [
+            "p1",
+            "p4",
+            0.32609991
+          ],
+          [
+            "p2",
+            "p3",
+            0.7026337
+          ],
+          [
+            "p2",
+            "p4",
+            0.77281069
+          ],
+          [
+            "p3",
+            "p4",
+            0.68884407
+          ]
+        ],
+        "_case_nonce": "18a0a5a6ea1efc88"
+      }
+    }
+  ]
+}
+
+candidate_artifact:1372
+Implement `mutual_reachability_mst` through `solve(case)` for this bounded objective: Compute core distances, mutual-reachability edge weights, and a deterministic minimum spanning tree for registered distance matrices.
+
+Stay inside this mechanism boundary: HDBSCAN mutual-reachability graph construction and MST; approximate nearest-neighbor search is excluded. Validate every required field before computing a result.
+
+For each pair compute mutual reachability as max(core_left, core_right, distance).
+
+Canonicalize undirected endpoints.
+
+Sort by reachability then endpoint IDs.
+
+Run Kruskal with deterministic union-find until n minus one edges are selected.
+
+Reject disconnected inputs and return selected edges plus total weight.
+
+Treat these registered properties as hard contracts rather than soft preferences: correct_core_distance, mutual_reachability, valid_mst, stable_edge_ties.
+
+Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.
+
+Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.
+
+Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.

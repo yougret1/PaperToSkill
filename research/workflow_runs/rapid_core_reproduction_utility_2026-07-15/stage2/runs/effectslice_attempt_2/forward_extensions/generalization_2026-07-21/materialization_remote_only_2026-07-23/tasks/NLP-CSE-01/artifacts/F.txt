@@ -1,0 +1,23 @@
+Implement `context_aware_sentence_scoring` through `solve(case)` for this bounded objective: Compute registered context-aware sentence scores from supplied sentence embeddings, masks, and neighborhood context without invoking an encoder model.
+
+Stay inside this mechanism boundary: Sentence-level contextual scoring with frozen embeddings; representation-model training is excluded. Validate every required field before computing a result.
+
+Compute cosine similarity between each sentence vector and the query.
+
+Use zero similarity if either norm is zero.
+
+For each position average the available immediate-neighbor similarities.
+
+Blend own and neighbor scores using the registered context weight.
+
+Round scores and rank by descending score then source index.
+
+Treat these registered properties as hard contracts rather than soft preferences: context_aggregation, mask_integrity, finite_scores, deterministic_tolerance.
+
+Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.
+
+Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.
+
+Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.
+
+Return only JSON-serializable values with the exact named fields. Raise ValueError for an infeasible or structurally invalid case instead of silently repairing it.

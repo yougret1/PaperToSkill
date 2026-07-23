@@ -1,0 +1,15 @@
+Implement `ddmin_with_unresolved` through `solve(case)` for this bounded objective: Minimize a failure-inducing ordered configuration using the registered PASS, FAIL, and UNRESOLVED semantics and exact subset/complement schedule.
+
+Stay inside this mechanism boundary: The ddmin procedure and outcome semantics; external test execution is replaced by a deterministic oracle fixture. Validate every required field before computing a result.
+
+Require the initial configuration to produce FAIL.
+
+Partition at the current granularity and test subsets before complements.
+
+Only FAIL permits reduction; PASS and UNRESOLVED do not.
+
+Decrease granularity after reduction and otherwise double it up to current size.
+
+Return the 1-minimal failure, test count, and terminal outcome.
+
+Treat these registered properties as hard contracts rather than soft preferences: one_minimal_result, unresolved_semantics, registered_call_order, termination.

@@ -1,0 +1,15 @@
+Implement `reason_action_observation_parser` through `solve(case)` for this bounded objective: Parse and validate interleaved Thought, Action, Action Input, and Observation records under a registered tool schema and stop grammar.
+
+Stay inside this mechanism boundary: ReAct trajectory representation and action validation; reasoning text quality and live tools are excluded. Validate every required field before computing a result.
+
+Parse only complete Thought, Action, Observation, or Final records.
+
+Require Thought then Action then Observation for each nonterminal cycle.
+
+Permit Final only at the end and only at a reasoning boundary.
+
+On the first violation return its one-based line and the valid prefix.
+
+Return lowercase typed trajectory records and an explicit validity flag.
+
+Treat these registered properties as hard contracts rather than soft preferences: valid_turn_order, tool_schema, observation_binding, stop_semantics.

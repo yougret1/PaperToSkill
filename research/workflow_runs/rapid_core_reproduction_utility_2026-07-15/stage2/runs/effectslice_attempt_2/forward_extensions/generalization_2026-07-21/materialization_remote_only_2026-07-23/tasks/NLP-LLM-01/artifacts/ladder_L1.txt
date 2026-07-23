@@ -1,0 +1,17 @@
+Implement `coarse_budget_controller` through `solve(case)` for this bounded objective: Allocate an exact token budget across instruction, demonstration, and question segments from registered importance statistics, minimum quotas, and stable tie breaks.
+
+Stay inside this mechanism boundary: LLMLingua coarse-to-fine budget control only; no language-model training or live perplexity service. Validate every required field before computing a result.
+
+Initialize every segment at its minimum quota.
+
+Reject budgets below the quota sum or above total capacity.
+
+While budget remains, give one token to the segment maximizing importance divided by its next allocated position.
+
+Break equal priorities by original segment order.
+
+Return allocations, the name mapping, and the conserved total.
+
+Treat these registered properties as hard contracts rather than soft preferences: exact_total_budget, minimum_segment_quota, stable_tie_break, no_input_mutation.
+
+Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.

@@ -1,0 +1,104 @@
+EFFECTSLICE_MODEL_VISIBLE_PAYLOAD_V1
+task_scaffold:429
+# Registered procedure task SE-DD-01
+
+Return one JSON object with exactly one key, `implementation`. Its value must be Python source defining `solve(case)`. The function must return a JSON-serializable object, must not mutate `case`, and may use only the Python standard library. Do not access files, the network, environment variables, subprocesses, randomness, or clocks. The attached public fixtures define input shapes only.
+
+fixture_payload:1317
+{
+  "schema_version": "effectslice-fg1-public-inputs.v1",
+  "task_id": "SE-DD-01",
+  "registry_id": "A",
+  "cases": [
+    {
+      "case_id": "fg1-se-dd-01-a-000",
+      "payload": {
+        "items": [
+          "d0",
+          "d1",
+          "d2",
+          "d3",
+          "d4",
+          "d5",
+          "d6",
+          "d7"
+        ],
+        "required_failure_items": [
+          "d1",
+          "d4"
+        ],
+        "unresolved_without": [],
+        "_case_nonce": "460e299fc4ba77b8"
+      }
+    },
+    {
+      "case_id": "fg1-se-dd-01-a-001",
+      "payload": {
+        "items": [
+          "d0",
+          "d1",
+          "d2",
+          "d3",
+          "d4",
+          "d5",
+          "d6",
+          "d7"
+        ],
+        "required_failure_items": [
+          "d0",
+          "d7"
+        ],
+        "unresolved_without": [],
+        "_case_nonce": "82a1599f554e7e3c"
+      }
+    },
+    {
+      "case_id": "fg1-se-dd-01-a-002",
+      "payload": {
+        "items": [
+          "d0",
+          "d1",
+          "d2",
+          "d3",
+          "d4",
+          "d5",
+          "d6",
+          "d7"
+        ],
+        "required_failure_items": [
+          "d4",
+          "d7"
+        ],
+        "unresolved_without": [
+          "d0"
+        ],
+        "_case_nonce": "f37d7d80596181ac"
+      }
+    }
+  ]
+}
+
+candidate_artifact:1578
+Implement `ddmin_with_unresolved` through `solve(case)` for this bounded objective: Minimize a failure-inducing ordered configuration using the registered PASS, FAIL, and UNRESOLVED semantics and exact subset/complement schedule.
+
+Stay inside this mechanism boundary: The ddmin procedure and outcome semantics; external test execution is replaced by a deterministic oracle fixture. Validate every required field before computing a result.
+
+Require the initial configuration to produce FAIL.
+
+Partition at the current granularity and test subsets before complements.
+
+Only FAIL permits reduction; PASS and UNRESOLVED do not.
+
+Decrease granularity after reduction and otherwise double it up to current size.
+
+Return the 1-minimal failure, test count, and terminal outcome.
+
+Treat these registered properties as hard contracts rather than soft preferences: one_minimal_result, unresolved_semantics, registered_call_order, termination.
+
+Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.
+
+Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.
+
+Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.
+
+Return only JSON-serializable values with the exact named fields. Raise ValueError for an infeasible or structurally invalid case instead of silently repairing it.

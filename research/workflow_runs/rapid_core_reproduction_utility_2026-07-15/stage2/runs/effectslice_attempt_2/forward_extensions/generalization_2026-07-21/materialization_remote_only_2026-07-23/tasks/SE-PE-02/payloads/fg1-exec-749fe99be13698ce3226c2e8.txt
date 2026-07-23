@@ -1,0 +1,234 @@
+EFFECTSLICE_MODEL_VISIBLE_PAYLOAD_V1
+task_scaffold:429
+# Registered procedure task SE-PE-02
+
+Return one JSON object with exactly one key, `implementation`. Its value must be Python source defining `solve(case)`. The function must return a JSON-serializable object, must not mutate `case`, and may use only the Python standard library. Do not access files, the network, environment variables, subprocesses, randomness, or clocks. The attached public fixtures define input shapes only.
+
+fixture_payload:4773
+{
+  "schema_version": "effectslice-fg1-public-inputs.v1",
+  "task_id": "SE-PE-02",
+  "registry_id": "A",
+  "cases": [
+    {
+      "case_id": "fg1-se-pe-02-a-000",
+      "payload": {
+        "nodes": [
+          {
+            "id": "root",
+            "parent": null,
+            "symbol": "root",
+            "depth": 0,
+            "removable": false,
+            "utility": 1.0
+          },
+          {
+            "id": "n1",
+            "parent": "root",
+            "symbol": "s1",
+            "depth": 1,
+            "removable": false,
+            "utility": 0.07705193
+          },
+          {
+            "id": "n2",
+            "parent": "root",
+            "symbol": "s2",
+            "depth": 1,
+            "removable": true,
+            "utility": 0.41004611
+          },
+          {
+            "id": "n3",
+            "parent": "root",
+            "symbol": "s0",
+            "depth": 1,
+            "removable": false,
+            "utility": 0.46332319
+          },
+          {
+            "id": "n4",
+            "parent": "n2",
+            "symbol": "s1",
+            "depth": 2,
+            "removable": true,
+            "utility": 0.17723022
+          },
+          {
+            "id": "n5",
+            "parent": "n3",
+            "symbol": "s2",
+            "depth": 2,
+            "removable": false,
+            "utility": 0.92864821
+          },
+          {
+            "id": "n6",
+            "parent": "n1",
+            "symbol": "s0",
+            "depth": 2,
+            "removable": true,
+            "utility": 0.33212355
+          }
+        ],
+        "utility_threshold": 0.55,
+        "_case_nonce": "a70b898ca52e204e"
+      }
+    },
+    {
+      "case_id": "fg1-se-pe-02-a-001",
+      "payload": {
+        "nodes": [
+          {
+            "id": "root",
+            "parent": null,
+            "symbol": "root",
+            "depth": 0,
+            "removable": false,
+            "utility": 1.0
+          },
+          {
+            "id": "n1",
+            "parent": "root",
+            "symbol": "s1",
+            "depth": 1,
+            "removable": false,
+            "utility": 0.58225047
+          },
+          {
+            "id": "n2",
+            "parent": "root",
+            "symbol": "s2",
+            "depth": 1,
+            "removable": true,
+            "utility": 0.44387487
+          },
+          {
+            "id": "n3",
+            "parent": "root",
+            "symbol": "s0",
+            "depth": 1,
+            "removable": false,
+            "utility": 0.05757486
+          },
+          {
+            "id": "n4",
+            "parent": "n2",
+            "symbol": "s1",
+            "depth": 2,
+            "removable": true,
+            "utility": 0.47774404
+          },
+          {
+            "id": "n5",
+            "parent": "n3",
+            "symbol": "s2",
+            "depth": 2,
+            "removable": false,
+            "utility": 0.76949065
+          },
+          {
+            "id": "n6",
+            "parent": "n1",
+            "symbol": "s0",
+            "depth": 2,
+            "removable": true,
+            "utility": 0.50917714
+          }
+        ],
+        "utility_threshold": 0.55,
+        "_case_nonce": "c27dbb45d3b7bf69"
+      }
+    },
+    {
+      "case_id": "fg1-se-pe-02-a-002",
+      "payload": {
+        "nodes": [
+          {
+            "id": "root",
+            "parent": null,
+            "symbol": "root",
+            "depth": 0,
+            "removable": false,
+            "utility": 1.0
+          },
+          {
+            "id": "n1",
+            "parent": "root",
+            "symbol": "s1",
+            "depth": 1,
+            "removable": false,
+            "utility": 0.07268869
+          },
+          {
+            "id": "n2",
+            "parent": "root",
+            "symbol": "s2",
+            "depth": 1,
+            "removable": true,
+            "utility": 0.94139688
+          },
+          {
+            "id": "n3",
+            "parent": "root",
+            "symbol": "s0",
+            "depth": 1,
+            "removable": false,
+            "utility": 0.20837383
+          },
+          {
+            "id": "n4",
+            "parent": "n2",
+            "symbol": "s1",
+            "depth": 2,
+            "removable": true,
+            "utility": 0.09533308
+          },
+          {
+            "id": "n5",
+            "parent": "n3",
+            "symbol": "s2",
+            "depth": 2,
+            "removable": false,
+            "utility": 0.58881072
+          },
+          {
+            "id": "n6",
+            "parent": "n1",
+            "symbol": "s0",
+            "depth": 2,
+            "removable": true,
+            "utility": 0.96833372
+          }
+        ],
+        "utility_threshold": 0.55,
+        "_case_nonce": "7bf2eb8d15d589d1"
+      }
+    }
+  ]
+}
+
+candidate_artifact:1520
+Implement `parse_tree_reduction_queue` through `solve(case)` for this bounded objective: Maintain and update the syntax-guided reduction work queue across accepted and rejected tree rewrites without revisiting invalidated nodes.
+
+Stay inside this mechanism boundary: Queue, invalidation, and normalization behavior around grammar-guided reduction; external build systems are excluded. Validate every required field before computing a result.
+
+Initialize a queue in descending depth and stable node-ID order.
+
+Skip nodes already removed.
+
+Remove only a removable leaf whose utility is at most the threshold.
+
+After removal enqueue its retained parent for reconsideration.
+
+Return retained IDs and the complete visit order.
+
+Treat these registered properties as hard contracts rather than soft preferences: no_invalidated_revisit, queue_order, normalized_output, termination.
+
+Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.
+
+Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.
+
+Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.
+
+Return only JSON-serializable values with the exact named fields. Raise ValueError for an infeasible or structurally invalid case instead of silently repairing it.

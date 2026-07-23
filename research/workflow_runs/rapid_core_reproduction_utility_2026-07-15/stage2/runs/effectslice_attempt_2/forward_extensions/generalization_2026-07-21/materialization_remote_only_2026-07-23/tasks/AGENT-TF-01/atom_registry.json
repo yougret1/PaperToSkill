@@ -1,0 +1,138 @@
+{
+  "schema_version": "effectslice-fg1-atom-registry.v1",
+  "task_id": "AGENT-TF-01",
+  "atoms": [
+    {
+      "atom_id": "a_821201e02b14a697",
+      "source_locator": {
+        "document_sha256": "52f275377e343fe3bf59584d1ee258a354f21d8ace55e60ce8bda4e191c5660a",
+        "byte_start": 436,
+        "byte_end": 518,
+        "split_index": 0
+      },
+      "rendered_text": "Implement `api_call_loss_filter` through `solve(case)` for this bounded objective: Retain API-call candidates using normalized future-token weights, weighted losses, the stronger counterfactual, and an inclusive threshold.",
+      "rendered_text_sha256": "40083c068c9d94417ddd5108b826be0bb41733a4c8e17ebad27e3824e5929b0e"
+    },
+    {
+      "atom_id": "a_1886a5eb627dc5ca",
+      "source_locator": {
+        "document_sha256": "52f275377e343fe3bf59584d1ee258a354f21d8ace55e60ce8bda4e191c5660a",
+        "byte_start": 436,
+        "byte_end": 518,
+        "split_index": 1
+      },
+      "rendered_text": "Stay inside this mechanism boundary: Toolformer API-call filtering with supplied token losses; call generation and language-model training are excluded. Validate every required field before computing a result.",
+      "rendered_text_sha256": "89fbc65aee7cde53942e2531dd7959c39880b59441ad4e86c1b301f42851aec9"
+    },
+    {
+      "atom_id": "a_f5f94f4f6128d2a6",
+      "source_locator": {
+        "document_sha256": "52f275377e343fe3bf59584d1ee258a354f21d8ace55e60ce8bda4e191c5660a",
+        "byte_start": 436,
+        "byte_end": 518,
+        "split_index": 2
+      },
+      "rendered_text": "For each call subtract loss with the call from loss without it.",
+      "rendered_text_sha256": "b4c3b19cdb5f9a5a480d0dd9e58260c4907733de75716faa1300ad738c8969db"
+    },
+    {
+      "atom_id": "a_7221f27804e7b5f4",
+      "source_locator": {
+        "document_sha256": "52f275377e343fe3bf59584d1ee258a354f21d8ace55e60ce8bda4e191c5660a",
+        "byte_start": 436,
+        "byte_end": 518,
+        "split_index": 3
+      },
+      "rendered_text": "Normalize gain by at least one prediction token.",
+      "rendered_text_sha256": "101af3a78493bbfe21a249ba365e19242b67b284aa5a451cc21f5e8ca9890c63"
+    },
+    {
+      "atom_id": "a_ce8863f9e4b3950b",
+      "source_locator": {
+        "document_sha256": "52f275377e343fe3bf59584d1ee258a354f21d8ace55e60ce8bda4e191c5660a",
+        "byte_start": 436,
+        "byte_end": 518,
+        "split_index": 4
+      },
+      "rendered_text": "Require both parseability and normalized gain at or above threshold.",
+      "rendered_text_sha256": "c52b1a97c211ad6e255dc5c818c85405883bc75f0a0d28ffea7eaeffb4c4221e"
+    },
+    {
+      "atom_id": "a_0bf58ad9f3a98394",
+      "source_locator": {
+        "document_sha256": "52f275377e343fe3bf59584d1ee258a354f21d8ace55e60ce8bda4e191c5660a",
+        "byte_start": 436,
+        "byte_end": 518,
+        "split_index": 5
+      },
+      "rendered_text": "Keep diagnostics in supplied call order.",
+      "rendered_text_sha256": "1edc71812c051c658d74baeaa715f1d3aa1d7ef49db9ec651ab24d7b19bf89cd"
+    },
+    {
+      "atom_id": "a_940ecd444b120e64",
+      "source_locator": {
+        "document_sha256": "52f275377e343fe3bf59584d1ee258a354f21d8ace55e60ce8bda4e191c5660a",
+        "byte_start": 535,
+        "byte_end": 630,
+        "split_index": 6
+      },
+      "rendered_text": "Return accepted call IDs and rounded per-call diagnostics.",
+      "rendered_text_sha256": "8938a17fedd62bfa89d8e2743a08c41e45be2bfe361e6516959fde60542a117c"
+    },
+    {
+      "atom_id": "a_c9c8f75c77221069",
+      "source_locator": {
+        "document_sha256": "52f275377e343fe3bf59584d1ee258a354f21d8ace55e60ce8bda4e191c5660a",
+        "byte_start": 535,
+        "byte_end": 630,
+        "split_index": 7
+      },
+      "rendered_text": "Treat these registered properties as hard contracts rather than soft preferences: normalized_weights, stronger_counterfactual, inclusive_threshold, stable_order.",
+      "rendered_text_sha256": "0a42455040af0e43b3fc13c8f75c90db62462dffb172d1686fe65f29f6f77071"
+    },
+    {
+      "atom_id": "a_da8ce8af3758f6de",
+      "source_locator": {
+        "document_sha256": "52f275377e343fe3bf59584d1ee258a354f21d8ace55e60ce8bda4e191c5660a",
+        "byte_start": 535,
+        "byte_end": 630,
+        "split_index": 8
+      },
+      "rendered_text": "Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.",
+      "rendered_text_sha256": "bb651964decf660706e6b02a72268f4df8c9cfde1515a5b2325af47505fa92df"
+    },
+    {
+      "atom_id": "a_388b25ba39dbd1a2",
+      "source_locator": {
+        "document_sha256": "52f275377e343fe3bf59584d1ee258a354f21d8ace55e60ce8bda4e191c5660a",
+        "byte_start": 535,
+        "byte_end": 630,
+        "split_index": 9
+      },
+      "rendered_text": "Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.",
+      "rendered_text_sha256": "d6b67e3cd654a61b271920e037938dc07550072b2334416f32ed86b0bd787362"
+    },
+    {
+      "atom_id": "a_e54e9e4f88a4a0bb",
+      "source_locator": {
+        "document_sha256": "52f275377e343fe3bf59584d1ee258a354f21d8ace55e60ce8bda4e191c5660a",
+        "byte_start": 535,
+        "byte_end": 630,
+        "split_index": 10
+      },
+      "rendered_text": "Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.",
+      "rendered_text_sha256": "67186a43fcf39ec73132c8ab7ad1387670a6fd7d5e511075a50faf835be9e19a"
+    },
+    {
+      "atom_id": "a_a2cbfb58a5b9dd3f",
+      "source_locator": {
+        "document_sha256": "52f275377e343fe3bf59584d1ee258a354f21d8ace55e60ce8bda4e191c5660a",
+        "byte_start": 535,
+        "byte_end": 630,
+        "split_index": 11
+      },
+      "rendered_text": "Return only JSON-serializable values with the exact named fields. Raise ValueError for an infeasible or structurally invalid case instead of silently repairing it.",
+      "rendered_text_sha256": "5f164e6574e6f249d67514f65fc480435c9b737c31ea45311cd04552b1d13fcb"
+    }
+  ]
+}

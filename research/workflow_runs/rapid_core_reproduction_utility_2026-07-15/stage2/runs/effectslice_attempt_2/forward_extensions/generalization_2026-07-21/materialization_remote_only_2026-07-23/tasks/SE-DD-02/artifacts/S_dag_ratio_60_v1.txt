@@ -1,0 +1,15 @@
+Implement `difference_isolation` through `solve(case)` for this bounded objective: Isolate a minimal causal difference between passing and failing configurations under the paper's delta-debugging invariant.
+
+Stay inside this mechanism boundary: Difference isolation between c_pass and c_fail; source-code transformation is excluded. Validate every required field before computing a result.
+
+Compute the ordered change set present in failing but absent from passing.
+
+Run ddmin only on this difference.
+
+Preserve the registered PASS/FAIL/UNRESOLVED oracle semantics.
+
+Retain source order through every subset and complement.
+
+Return the isolated difference and number of tests.
+
+Treat these registered properties as hard contracts rather than soft preferences: endpoint_invariant, minimal_difference, call_accounting, termination.

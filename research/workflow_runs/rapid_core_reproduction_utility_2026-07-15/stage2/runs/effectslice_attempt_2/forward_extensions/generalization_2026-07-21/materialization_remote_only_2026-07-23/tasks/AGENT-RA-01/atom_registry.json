@@ -1,0 +1,138 @@
+{
+  "schema_version": "effectslice-fg1-atom-registry.v1",
+  "task_id": "AGENT-RA-01",
+  "atoms": [
+    {
+      "atom_id": "a_1d805232f7f4b51d",
+      "source_locator": {
+        "document_sha256": "edeb65de5681ad7ad92070accc5db8a9c7852a158d26993510be5ed976d16b9f",
+        "byte_start": 419,
+        "byte_end": 515,
+        "split_index": 0
+      },
+      "rendered_text": "Implement `reason_action_observation_parser` through `solve(case)` for this bounded objective: Parse and validate interleaved Thought, Action, Action Input, and Observation records under a registered tool schema and stop grammar.",
+      "rendered_text_sha256": "0b02f50947f2a959d1dae6162dc92bf2e68a943d3e17b602c1981b0249774316"
+    },
+    {
+      "atom_id": "a_9c02429f9f85ff70",
+      "source_locator": {
+        "document_sha256": "edeb65de5681ad7ad92070accc5db8a9c7852a158d26993510be5ed976d16b9f",
+        "byte_start": 419,
+        "byte_end": 515,
+        "split_index": 1
+      },
+      "rendered_text": "Stay inside this mechanism boundary: ReAct trajectory representation and action validation; reasoning text quality and live tools are excluded. Validate every required field before computing a result.",
+      "rendered_text_sha256": "03979f4f42f70716fb389add7cd461d630409e8823de9189cdf25db531ef8735"
+    },
+    {
+      "atom_id": "a_bed12ed4d03591e1",
+      "source_locator": {
+        "document_sha256": "edeb65de5681ad7ad92070accc5db8a9c7852a158d26993510be5ed976d16b9f",
+        "byte_start": 419,
+        "byte_end": 515,
+        "split_index": 2
+      },
+      "rendered_text": "Parse only complete Thought, Action, Observation, or Final records.",
+      "rendered_text_sha256": "30d48ac38e942a3c5bb7aa2a999a77930f698068dce2b88c843a325b94ab9da8"
+    },
+    {
+      "atom_id": "a_9521f7157432532d",
+      "source_locator": {
+        "document_sha256": "edeb65de5681ad7ad92070accc5db8a9c7852a158d26993510be5ed976d16b9f",
+        "byte_start": 419,
+        "byte_end": 515,
+        "split_index": 3
+      },
+      "rendered_text": "Require Thought then Action then Observation for each nonterminal cycle.",
+      "rendered_text_sha256": "6a5e721a739acb990a03cee4cae80b81340ab92134f6139eca9839cf9df74906"
+    },
+    {
+      "atom_id": "a_6f1550ab0d3e1198",
+      "source_locator": {
+        "document_sha256": "edeb65de5681ad7ad92070accc5db8a9c7852a158d26993510be5ed976d16b9f",
+        "byte_start": 419,
+        "byte_end": 515,
+        "split_index": 4
+      },
+      "rendered_text": "Permit Final only at the end and only at a reasoning boundary.",
+      "rendered_text_sha256": "a73fefcc574eb7fe277b51b377d39888f3f12f4a39655875f1017159e93eb3b4"
+    },
+    {
+      "atom_id": "a_e788705850cabe44",
+      "source_locator": {
+        "document_sha256": "edeb65de5681ad7ad92070accc5db8a9c7852a158d26993510be5ed976d16b9f",
+        "byte_start": 419,
+        "byte_end": 515,
+        "split_index": 5
+      },
+      "rendered_text": "On the first violation return its one-based line and the valid prefix.",
+      "rendered_text_sha256": "279508d4efe4239db8478138a7105cff6c0bab296e1a8b3379341e1d09472121"
+    },
+    {
+      "atom_id": "a_9e6c65695bfd0a6c",
+      "source_locator": {
+        "document_sha256": "edeb65de5681ad7ad92070accc5db8a9c7852a158d26993510be5ed976d16b9f",
+        "byte_start": 532,
+        "byte_end": 609,
+        "split_index": 6
+      },
+      "rendered_text": "Return lowercase typed trajectory records and an explicit validity flag.",
+      "rendered_text_sha256": "f751febf5a419cab092a7d6e23880c0147c48b7063d27f300ee0e49b621ce5f7"
+    },
+    {
+      "atom_id": "a_0b063680ae79c66c",
+      "source_locator": {
+        "document_sha256": "edeb65de5681ad7ad92070accc5db8a9c7852a158d26993510be5ed976d16b9f",
+        "byte_start": 532,
+        "byte_end": 609,
+        "split_index": 7
+      },
+      "rendered_text": "Treat these registered properties as hard contracts rather than soft preferences: valid_turn_order, tool_schema, observation_binding, stop_semantics.",
+      "rendered_text_sha256": "efad131f1238a20f323be63fd1920348cb53be43082a525ed899ca47efe5999d"
+    },
+    {
+      "atom_id": "a_6654d0e704aa50d4",
+      "source_locator": {
+        "document_sha256": "edeb65de5681ad7ad92070accc5db8a9c7852a158d26993510be5ed976d16b9f",
+        "byte_start": 532,
+        "byte_end": 609,
+        "split_index": 8
+      },
+      "rendered_text": "Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.",
+      "rendered_text_sha256": "bb651964decf660706e6b02a72268f4df8c9cfde1515a5b2325af47505fa92df"
+    },
+    {
+      "atom_id": "a_7e9f1ea485c699c4",
+      "source_locator": {
+        "document_sha256": "edeb65de5681ad7ad92070accc5db8a9c7852a158d26993510be5ed976d16b9f",
+        "byte_start": 532,
+        "byte_end": 609,
+        "split_index": 9
+      },
+      "rendered_text": "Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.",
+      "rendered_text_sha256": "d6b67e3cd654a61b271920e037938dc07550072b2334416f32ed86b0bd787362"
+    },
+    {
+      "atom_id": "a_808d8326f6d24117",
+      "source_locator": {
+        "document_sha256": "edeb65de5681ad7ad92070accc5db8a9c7852a158d26993510be5ed976d16b9f",
+        "byte_start": 532,
+        "byte_end": 609,
+        "split_index": 10
+      },
+      "rendered_text": "Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.",
+      "rendered_text_sha256": "67186a43fcf39ec73132c8ab7ad1387670a6fd7d5e511075a50faf835be9e19a"
+    },
+    {
+      "atom_id": "a_454182b0ef33973f",
+      "source_locator": {
+        "document_sha256": "edeb65de5681ad7ad92070accc5db8a9c7852a158d26993510be5ed976d16b9f",
+        "byte_start": 532,
+        "byte_end": 609,
+        "split_index": 11
+      },
+      "rendered_text": "Return only JSON-serializable values with the exact named fields. Raise ValueError for an infeasible or structurally invalid case instead of silently repairing it.",
+      "rendered_text_sha256": "5f164e6574e6f249d67514f65fc480435c9b737c31ea45311cd04552b1d13fcb"
+    }
+  ]
+}

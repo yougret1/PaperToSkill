@@ -1,0 +1,23 @@
+Implement `trial_reflect_retry_controller` through `solve(case)` for this bounded objective: Drive a bounded trial loop through act, evaluate, reflect, retry, and terminate states from supplied agent outputs and feedback signals.
+
+Stay inside this mechanism boundary: Reflexion control flow and state isolation; base-agent and evaluator model calls are supplied as deterministic fixtures. Validate every required field before computing a result.
+
+With no prior attempt request attempt one.
+
+Stop immediately after success.
+
+Stop on the registered attempt budget or a repeated failure signature.
+
+Otherwise request exactly the next attempt.
+
+Append a nonempty reflection with its signature and return decision, next index, and memory update.
+
+Treat these registered properties as hard contracts rather than soft preferences: registered_state_machine, reflection_after_feedback, budget_accounting, success_terminates.
+
+Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.
+
+Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.
+
+Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.
+
+Return only JSON-serializable values with the exact named fields. Raise ValueError for an infeasible or structurally invalid case instead of silently repairing it.

@@ -1,0 +1,210 @@
+EFFECTSLICE_MODEL_VISIBLE_PAYLOAD_V1
+task_scaffold:432
+# Registered procedure task DATA-LEI-01
+
+Return one JSON object with exactly one key, `implementation`. Its value must be Python source defining `solve(case)`. The function must return a JSON-serializable object, must not mutate `case`, and may use only the Python standard library. Do not access files, the network, environment variables, subprocesses, randomness, or clocks. The attached public fixtures define input shapes only.
+
+fixture_payload:2949
+{
+  "schema_version": "effectslice-fg1-public-inputs.v1",
+  "task_id": "DATA-LEI-01",
+  "registry_id": "A",
+  "cases": [
+    {
+      "case_id": "fg1-data-lei-01-a-000",
+      "payload": {
+        "edges": [
+          [
+            "v0",
+            "v1",
+            2
+          ],
+          [
+            "v1",
+            "v2",
+            1
+          ],
+          [
+            "v2",
+            "v3",
+            3
+          ],
+          [
+            "v3",
+            "v4",
+            3
+          ],
+          [
+            "v4",
+            "v5",
+            2
+          ],
+          [
+            "v5",
+            "v0",
+            1
+          ],
+          [
+            "v0",
+            "v2",
+            2
+          ],
+          [
+            "v3",
+            "v5",
+            2
+          ]
+        ],
+        "communities": {
+          "v0": "0",
+          "v1": "0",
+          "v2": "1",
+          "v3": "1",
+          "v4": "2",
+          "v5": "2"
+        },
+        "resolution": 1.0,
+        "_case_nonce": "8e7125040ea22c1b"
+      }
+    },
+    {
+      "case_id": "fg1-data-lei-01-a-001",
+      "payload": {
+        "edges": [
+          [
+            "v0",
+            "v1",
+            2
+          ],
+          [
+            "v1",
+            "v2",
+            3
+          ],
+          [
+            "v2",
+            "v3",
+            3
+          ],
+          [
+            "v3",
+            "v4",
+            3
+          ],
+          [
+            "v4",
+            "v5",
+            2
+          ],
+          [
+            "v5",
+            "v0",
+            1
+          ],
+          [
+            "v0",
+            "v2",
+            2
+          ],
+          [
+            "v3",
+            "v5",
+            2
+          ]
+        ],
+        "communities": {
+          "v0": "0",
+          "v1": "0",
+          "v2": "1",
+          "v3": "1",
+          "v4": "2",
+          "v5": "2"
+        },
+        "resolution": 1.0,
+        "_case_nonce": "4065ec2ea299e950"
+      }
+    },
+    {
+      "case_id": "fg1-data-lei-01-a-002",
+      "payload": {
+        "edges": [
+          [
+            "v0",
+            "v1",
+            1
+          ],
+          [
+            "v1",
+            "v2",
+            1
+          ],
+          [
+            "v2",
+            "v3",
+            2
+          ],
+          [
+            "v3",
+            "v4",
+            1
+          ],
+          [
+            "v4",
+            "v5",
+            2
+          ],
+          [
+            "v5",
+            "v0",
+            2
+          ],
+          [
+            "v0",
+            "v2",
+            2
+          ],
+          [
+            "v3",
+            "v5",
+            2
+          ]
+        ],
+        "communities": {
+          "v0": "0",
+          "v1": "0",
+          "v2": "1",
+          "v3": "1",
+          "v4": "2",
+          "v5": "2"
+        },
+        "resolution": 1.0,
+        "_case_nonce": "45028a8c294cbc51"
+      }
+    }
+  ]
+}
+
+candidate_artifact:1535
+Implement `local_moving_phase` through `solve(case)` for this bounded objective: Execute a deterministic local moving phase over a weighted graph using supplied quality gains and a registered node/tie order.
+
+Stay inside this mechanism boundary: Leiden local moving and partition bookkeeping; large-scale graph I/O is excluded. Validate every required field before computing a result.
+
+Build symmetric weighted adjacency and node degrees.
+
+Visit nodes in stable node-ID order.
+
+Evaluate the registered resolution-adjusted gain for neighboring communities plus the current one.
+
+Move only on a strictly positive improvement and break ties by community ID.
+
+Update labels immediately and return labels plus the ordered move ledger.
+
+Treat these registered properties as hard contracts rather than soft preferences: objective_nondecreasing, partition_valid, stable_ties, complete_assignment.
+
+Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.
+
+Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.
+
+Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.
+
+Return only JSON-serializable values with the exact named fields. Raise ValueError for an infeasible or structurally invalid case instead of silently repairing it.

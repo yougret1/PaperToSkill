@@ -1,0 +1,23 @@
+Implement `budgeted_token_reconstruction` through `solve(case)` for this bounded objective: Construct a compressed prompt from supplied keep probabilities, force-token constraints, sentence boundaries, and an exact global budget.
+
+Stay inside this mechanism boundary: Task-agnostic token-classifier inference and reconstruction with supplied probabilities; model training is excluded. Validate every required field before computing a result.
+
+Treat a word group as indivisible when accounting token cost.
+
+Select forced words first and reject an infeasible forced set.
+
+Rank remaining words by descending supplied score and then source position.
+
+Accept a word only when its entire token group fits the residual budget.
+
+Return words and tokens in original order with exact token usage.
+
+Treat these registered properties as hard contracts rather than soft preferences: exact_budget, force_token_precedence, deterministic_ties, faithful_reconstruction.
+
+Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.
+
+Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.
+
+Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.
+
+Return only JSON-serializable values with the exact named fields. Raise ValueError for an infeasible or structurally invalid case instead of silently repairing it.

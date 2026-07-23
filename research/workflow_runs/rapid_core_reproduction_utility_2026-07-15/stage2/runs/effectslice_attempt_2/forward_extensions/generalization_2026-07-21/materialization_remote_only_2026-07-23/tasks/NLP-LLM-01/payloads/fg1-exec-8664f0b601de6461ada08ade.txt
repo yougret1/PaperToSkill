@@ -1,0 +1,116 @@
+EFFECTSLICE_MODEL_VISIBLE_PAYLOAD_V1
+task_scaffold:431
+# Registered procedure task NLP-LLM-01
+
+Return one JSON object with exactly one key, `implementation`. Its value must be Python source defining `solve(case)`. The function must return a JSON-serializable object, must not mutate `case`, and may use only the Python standard library. Do not access files, the network, environment variables, subprocesses, randomness, or clocks. The attached public fixtures define input shapes only.
+
+fixture_payload:2237
+{
+  "schema_version": "effectslice-fg1-public-inputs.v1",
+  "task_id": "NLP-LLM-01",
+  "registry_id": "B",
+  "cases": [
+    {
+      "case_id": "fg1-nlp-llm-01-b-000",
+      "payload": {
+        "segments": [
+          {
+            "name": "s0",
+            "importance": 9,
+            "minimum": 1,
+            "capacity": 6
+          },
+          {
+            "name": "s1",
+            "importance": 5,
+            "minimum": 1,
+            "capacity": 3
+          },
+          {
+            "name": "s2",
+            "importance": 4,
+            "minimum": 1,
+            "capacity": 4
+          },
+          {
+            "name": "s3",
+            "importance": 2,
+            "minimum": 1,
+            "capacity": 5
+          }
+        ],
+        "budget": 9,
+        "_case_nonce": "a31d58d3f32ed2db"
+      }
+    },
+    {
+      "case_id": "fg1-nlp-llm-01-b-001",
+      "payload": {
+        "segments": [
+          {
+            "name": "s0",
+            "importance": 1,
+            "minimum": 1,
+            "capacity": 4
+          },
+          {
+            "name": "s1",
+            "importance": 6,
+            "minimum": 1,
+            "capacity": 7
+          },
+          {
+            "name": "s2",
+            "importance": 3,
+            "minimum": 1,
+            "capacity": 7
+          },
+          {
+            "name": "s3",
+            "importance": 6,
+            "minimum": 1,
+            "capacity": 4
+          }
+        ],
+        "budget": 8,
+        "_case_nonce": "96bb300fa5f766e6"
+      }
+    },
+    {
+      "case_id": "fg1-nlp-llm-01-b-002",
+      "payload": {
+        "segments": [
+          {
+            "name": "s0",
+            "importance": 8,
+            "minimum": 1,
+            "capacity": 5
+          },
+          {
+            "name": "s1",
+            "importance": 3,
+            "minimum": 1,
+            "capacity": 4
+          },
+          {
+            "name": "s2",
+            "importance": 9,
+            "minimum": 1,
+            "capacity": 7
+          },
+          {
+            "name": "s3",
+            "importance": 8,
+            "minimum": 1,
+            "capacity": 3
+          }
+        ],
+        "budget": 8,
+        "_case_nonce": "440da9003f940457"
+      }
+    }
+  ]
+}
+
+candidate_artifact:252
+Implement `coarse_budget_controller` through `solve(case)` for this bounded objective: Allocate an exact token budget across instruction, demonstration, and question segments from registered importance statistics, minimum quotas, and stable tie breaks.

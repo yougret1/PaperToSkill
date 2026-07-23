@@ -1,0 +1,41 @@
+{
+  "schema_version": "effectslice-fg1-implementation-source-audit.v1",
+  "audits": [
+    {
+      "component_id": "result_canonicalizer",
+      "implementation_path": "support/result_canonicalizer.py",
+      "implementation_sha256": "ee0e916b945b74557cb282af8275d71c866de711fdf3239af012a22fbab46ab9",
+      "builder_identity": "codex-stage23-result-canonicalizer-builder-v1",
+      "auditor_identity": "codex-stage23-result_canonicalizer-auditor-v1",
+      "review_status": "pass",
+      "checks": [
+        "slot_response_contracts_exact",
+        "finish_reason_normalization_exact",
+        "usage_extraction_exact",
+        "terminal_truth_table_enforced",
+        "no_network_or_secret_access"
+      ],
+      "evidence_path": "audits/result_canonicalizer.md",
+      "evidence_sha256": "2253f2e6be5d33a27e878a86f7eae3f80c527ef34a5b985b358910dbad4b1857",
+      "reviewed_at_utc": "2026-07-23T00:00:00Z"
+    },
+    {
+      "component_id": "analysis_implementation",
+      "implementation_path": "support/analysis.py",
+      "implementation_sha256": "1bd97aecc6df9849549ac9b71a588972cb7c90bdf9dc7a411f53d387ae91e80d",
+      "builder_identity": "codex-stage23-analysis-builder-v1",
+      "auditor_identity": "codex-stage23-analysis_implementation-auditor-v1",
+      "review_status": "pass",
+      "checks": [
+        "analysis_allowlist_only",
+        "registered_estimators_exact",
+        "invalid_denominators_preserved",
+        "figure_sources_traceable",
+        "no_network_or_secret_access"
+      ],
+      "evidence_path": "audits/analysis_implementation.md",
+      "evidence_sha256": "43285dac8c70312c1ea027bdeceb7f53e57fa8ad4df9a1f0cb8f94a8627ca69d",
+      "reviewed_at_utc": "2026-07-23T00:00:00Z"
+    }
+  ]
+}

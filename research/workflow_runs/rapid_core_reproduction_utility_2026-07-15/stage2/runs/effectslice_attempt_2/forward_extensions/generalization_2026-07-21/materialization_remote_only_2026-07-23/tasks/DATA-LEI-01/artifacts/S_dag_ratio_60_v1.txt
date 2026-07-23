@@ -1,0 +1,15 @@
+Implement `local_moving_phase` through `solve(case)` for this bounded objective: Execute a deterministic local moving phase over a weighted graph using supplied quality gains and a registered node/tie order.
+
+Stay inside this mechanism boundary: Leiden local moving and partition bookkeeping; large-scale graph I/O is excluded. Validate every required field before computing a result.
+
+Build symmetric weighted adjacency and node degrees.
+
+Visit nodes in stable node-ID order.
+
+Evaluate the registered resolution-adjusted gain for neighboring communities plus the current one.
+
+Move only on a strictly positive improvement and break ties by community ID.
+
+Update labels immediately and return labels plus the ordered move ledger.
+
+Treat these registered properties as hard contracts rather than soft preferences: objective_nondecreasing, partition_valid, stable_ties, complete_assignment.

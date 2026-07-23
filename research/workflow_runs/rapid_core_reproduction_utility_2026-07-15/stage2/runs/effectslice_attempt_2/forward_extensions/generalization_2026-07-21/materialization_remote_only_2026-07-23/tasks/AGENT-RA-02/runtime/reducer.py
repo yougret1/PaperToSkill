@@ -1,0 +1,2 @@
+REDUCER_ID = 'dag_ratio_60_v1'
+TARGET_RATIO = 0.60

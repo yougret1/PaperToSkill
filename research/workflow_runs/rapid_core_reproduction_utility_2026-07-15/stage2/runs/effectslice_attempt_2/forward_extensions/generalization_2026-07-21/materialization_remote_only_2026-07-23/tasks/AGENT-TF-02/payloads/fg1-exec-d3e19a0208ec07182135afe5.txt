@@ -1,0 +1,180 @@
+EFFECTSLICE_MODEL_VISIBLE_PAYLOAD_V1
+task_scaffold:432
+# Registered procedure task AGENT-TF-02
+
+Return one JSON object with exactly one key, `implementation`. Its value must be Python source defining `solve(case)`. The function must return a JSON-serializable object, must not mutate `case`, and may use only the Python standard library. Do not access files, the network, environment variables, subprocesses, randomness, or clocks. The attached public fixtures define input shapes only.
+
+fixture_payload:2910
+{
+  "schema_version": "effectslice-fg1-public-inputs.v1",
+  "task_id": "AGENT-TF-02",
+  "registry_id": "B",
+  "cases": [
+    {
+      "case_id": "fg1-agent-tf-02-b-000",
+      "payload": {
+        "tokens": [
+          "t0",
+          "t1",
+          "t2",
+          "t3",
+          "t4",
+          "t5",
+          "t6",
+          "t7",
+          "t8",
+          "t9"
+        ],
+        "calls": [
+          {
+            "call_id": "a",
+            "start": 1,
+            "end": 3,
+            "score": 0.8,
+            "replacement_tokens": [
+              "<a>"
+            ]
+          },
+          {
+            "call_id": "b",
+            "start": 2,
+            "end": 5,
+            "score": 0.9,
+            "replacement_tokens": [
+              "<b>"
+            ]
+          },
+          {
+            "call_id": "c",
+            "start": 7,
+            "end": 9,
+            "score": 0.7,
+            "replacement_tokens": [
+              "<c>"
+            ]
+          }
+        ],
+        "_case_nonce": "8f1c7877782c7fed"
+      }
+    },
+    {
+      "case_id": "fg1-agent-tf-02-b-001",
+      "payload": {
+        "tokens": [
+          "t0",
+          "t1",
+          "t2",
+          "t3",
+          "t4",
+          "t5",
+          "t6",
+          "t7",
+          "t8",
+          "t9"
+        ],
+        "calls": [
+          {
+            "call_id": "a",
+            "start": 1,
+            "end": 3,
+            "score": 0.8,
+            "replacement_tokens": [
+              "<a>"
+            ]
+          },
+          {
+            "call_id": "b",
+            "start": 2,
+            "end": 5,
+            "score": 0.9,
+            "replacement_tokens": [
+              "<b>"
+            ]
+          },
+          {
+            "call_id": "c",
+            "start": 7,
+            "end": 9,
+            "score": 0.7,
+            "replacement_tokens": [
+              "<c>"
+            ]
+          }
+        ],
+        "_case_nonce": "d973792a3e9aa0ac"
+      }
+    },
+    {
+      "case_id": "fg1-agent-tf-02-b-002",
+      "payload": {
+        "tokens": [
+          "t0",
+          "t1",
+          "t2",
+          "t3",
+          "t4",
+          "t5",
+          "t6",
+          "t7",
+          "t8",
+          "t9"
+        ],
+        "calls": [
+          {
+            "call_id": "a",
+            "start": 1,
+            "end": 3,
+            "score": 0.8,
+            "replacement_tokens": [
+              "<a>"
+            ]
+          },
+          {
+            "call_id": "b",
+            "start": 2,
+            "end": 5,
+            "score": 0.9,
+            "replacement_tokens": [
+              "<b>"
+            ]
+          },
+          {
+            "call_id": "c",
+            "start": 7,
+            "end": 9,
+            "score": 0.7,
+            "replacement_tokens": [
+              "<c>"
+            ]
+          }
+        ],
+        "_case_nonce": "33cc2fdd9678ab14"
+      }
+    }
+  ]
+}
+
+candidate_artifact:1522
+Implement `accepted_call_interleaving` through `solve(case)` for this bounded objective: Apply accepted API calls to text while preserving registered span order, rejecting overlaps, and keeping all eligible calls.
+
+Stay inside this mechanism boundary: Post-filter call interleaving and serialization; API execution outputs are supplied by fixtures. Validate every required field before computing a result.
+
+Rank candidates by descending score, start position, then call ID.
+
+Greedily reject any span overlapping an already selected span.
+
+Order accepted calls by source start for reporting.
+
+Apply replacements from right to left so earlier offsets do not shift.
+
+Return selected IDs and the exact interleaved token stream.
+
+Treat these registered properties as hard contracts rather than soft preferences: no_overlap, all_eligible_calls, stable_offsets, valid_serialization.
+
+Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.
+
+Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.
+
+Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.
+
+Return only JSON-serializable values with the exact named fields. Raise ValueError for an infeasible or structurally invalid case instead of silently repairing it.

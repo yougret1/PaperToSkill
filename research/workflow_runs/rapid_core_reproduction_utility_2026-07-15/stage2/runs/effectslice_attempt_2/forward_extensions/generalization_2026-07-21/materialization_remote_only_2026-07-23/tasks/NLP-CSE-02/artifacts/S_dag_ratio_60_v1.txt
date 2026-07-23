@@ -1,0 +1,15 @@
+Implement `sentence_budget_selection` through `solve(case)` for this bounded objective: Select and reconstruct context-scored sentences under an exact token budget while preserving document order and required query context.
+
+Stay inside this mechanism boundary: Budgeted sentence selection and reconstruction; upstream embedding generation is supplied. Validate every required field before computing a result.
+
+Enumerate sentence inclusion with a zero-one dynamic program over token cost.
+
+Never split a sentence or exceed the budget.
+
+Maximize summed salience.
+
+Break equal utility by fewer used tokens and then lexicographic source indices.
+
+Return selected indices, used tokens, and summed score.
+
+Treat these registered properties as hard contracts rather than soft preferences: budget_feasible, query_context_retained, stable_ties, document_order.

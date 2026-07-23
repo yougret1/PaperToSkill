@@ -28,7 +28,9 @@ core research workflow.
 - Forward Stage `2.6`: passed with 33 bibliography entries, 30 main-text
   citations, and 7 DOI-verified AAAI papers.
 - Frozen parent Stage `2.2`: committed and pushed.
-- Remote-only Stage `2.2` successor: passed and pending private commit/push.
+- Remote-only Stage `2.2` successor: committed and pushed at `6262956f`.
+- Remote-only Stage `2.3` immutable materialization anchor: passed and pending
+  private commit/push.
 - Current branch: `codex/effectslice-v3`.
 
 ## EffectSlice Evidence State
@@ -60,8 +62,10 @@ core research workflow.
   Claude Opus 4.7, and GPT-5.6 Luna. Claude Opus 4.6 remains optional.
 - Luna F/I repeats measure observed remote repeatability only; there is no model
   seed-control or deterministic closed-model claim.
-- The remote-only successor verifier and the full forward suite pass
-  (`125 passed`).
+- Immutable Stage `2.3` anchor bundle SHA:
+  `1f12dfdba63b1ddc65bd57fa8b1b625ba4259050e93ab4f108786c2023c55ccd7`.
+- The anchor binds 3,672 files and one 1,296-row remote schedule; its full V3
+  audit and complete forward suite pass (`130 passed`).
 - No provider/model API call has occurred in this forward extension.
 
 ## Legacy Evidence Policy
@@ -99,14 +103,14 @@ thesis. Reuse requires an explicit Stage 2 evidence audit.
   Historical frozen parent records may mention the superseded local anchor, but
   no successor experiment or manuscript claim may rely on it.
 
-## Stage 2.3 Audit Priorities
+## Stage 2.3 Current Gate
 
-- Materialize one 1296-row remote schedule from the remote-only successor.
-- Retain readable implementation-source evidence with distinct builder and
-  auditor identities.
-- Verify exact remote aliases, request/response selectors, retry classification,
-  and F/I byte-identity before provider calls.
-- Keep generated token IDs and local runtime evidence out of the successor.
+- Commit and push the verified immutable materialization anchor before reading
+  credentials or sending any provider request.
+- Then perform format-only alias preflight and preserve redacted evidence.
+- Execute only the frozen 1,296-row remote schedule with registered retry
+  classification and raw/canonical artifact retention.
+- Keep generated token IDs and local runtime evidence out of all successor work.
 - Do not treat four controls as a calibrated confusion matrix or error-rate
   estimate.
 

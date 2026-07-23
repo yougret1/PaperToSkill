@@ -1,0 +1,70 @@
+EFFECTSLICE_MODEL_VISIBLE_PAYLOAD_V1
+task_scaffold:432
+# Registered procedure task AGENT-RA-01
+
+Return one JSON object with exactly one key, `implementation`. Its value must be Python source defining `solve(case)`. The function must return a JSON-serializable object, must not mutate `case`, and may use only the Python standard library. Do not access files, the network, environment variables, subprocesses, randomness, or clocks. The attached public fixtures define input shapes only.
+
+fixture_payload:1025
+{
+  "schema_version": "effectslice-fg1-public-inputs.v1",
+  "task_id": "AGENT-RA-01",
+  "registry_id": "B",
+  "cases": [
+    {
+      "case_id": "fg1-agent-ra-01-b-000",
+      "payload": {
+        "lines": [
+          "Thought: inspect",
+          "Action: lookup",
+          "Observation: found",
+          "Thought: answer",
+          "Final: done"
+        ],
+        "_case_nonce": "b319df15f664fb64"
+      }
+    },
+    {
+      "case_id": "fg1-agent-ra-01-b-001",
+      "payload": {
+        "lines": [
+          "Thought: inspect",
+          "Action: lookup",
+          "Thought: invalid order",
+          "Thought: answer",
+          "Final: done"
+        ],
+        "_case_nonce": "c296cdbd13b83a18"
+      }
+    },
+    {
+      "case_id": "fg1-agent-ra-01-b-002",
+      "payload": {
+        "lines": [
+          "Thought: inspect",
+          "Action: lookup",
+          "Thought: invalid order",
+          "Thought: answer",
+          "Final: done"
+        ],
+        "_case_nonce": "1e1400b624d65260"
+      }
+    }
+  ]
+}
+
+candidate_artifact:935
+Implement `reason_action_observation_parser` through `solve(case)` for this bounded objective: Parse and validate interleaved Thought, Action, Action Input, and Observation records under a registered tool schema and stop grammar.
+
+Stay inside this mechanism boundary: ReAct trajectory representation and action validation; reasoning text quality and live tools are excluded. Validate every required field before computing a result.
+
+Parse only complete Thought, Action, Observation, or Final records.
+
+Require Thought then Action then Observation for each nonterminal cycle.
+
+Permit Final only at the end and only at a reasoning boundary.
+
+On the first violation return its one-based line and the valid prefix.
+
+Return lowercase typed trajectory records and an explicit validity flag.
+
+Treat these registered properties as hard contracts rather than soft preferences: valid_turn_order, tool_schema, observation_binding, stop_semantics.

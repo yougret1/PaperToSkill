@@ -1,0 +1,122 @@
+EFFECTSLICE_MODEL_VISIBLE_PAYLOAD_V1
+task_scaffold:431
+# Registered procedure task NLP-LL2-01
+
+Return one JSON object with exactly one key, `implementation`. Its value must be Python source defining `solve(case)`. The function must return a JSON-serializable object, must not mutate `case`, and may use only the Python standard library. Do not access files, the network, environment variables, subprocesses, randomness, or clocks. The attached public fixtures define input shapes only.
+
+fixture_payload:1577
+{
+  "schema_version": "effectslice-fg1-public-inputs.v1",
+  "task_id": "NLP-LL2-01",
+  "registry_id": "A",
+  "cases": [
+    {
+      "case_id": "fg1-nlp-ll2-01-a-000",
+      "payload": {
+        "word_token_indices": [
+          [
+            0
+          ],
+          [
+            1
+          ],
+          [
+            2
+          ],
+          [
+            3,
+            4
+          ]
+        ],
+        "word_labels": [
+          0,
+          0,
+          1,
+          1
+        ],
+        "token_count": 5,
+        "_case_nonce": "dd402736752acc52"
+      }
+    },
+    {
+      "case_id": "fg1-nlp-ll2-01-a-001",
+      "payload": {
+        "word_token_indices": [
+          [
+            0,
+            1
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            4,
+            5,
+            6
+          ],
+          [
+            7,
+            8
+          ]
+        ],
+        "word_labels": [
+          0,
+          1,
+          0,
+          1
+        ],
+        "token_count": 9,
+        "_case_nonce": "d8cbbfc84d5e68e5"
+      }
+    },
+    {
+      "case_id": "fg1-nlp-ll2-01-a-002",
+      "payload": {
+        "word_token_indices": [
+          [
+            0,
+            1,
+            2
+          ],
+          [
+            3
+          ],
+          [
+            4,
+            5,
+            6
+          ],
+          [
+            7
+          ]
+        ],
+        "word_labels": [
+          0,
+          0,
+          1,
+          0
+        ],
+        "token_count": 8,
+        "_case_nonce": "97084fed6f01d36d"
+      }
+    }
+  ]
+}
+
+candidate_artifact:898
+Implement `word_label_alignment` through `solve(case)` for this bounded objective: Project word-level keep/drop labels onto registered subword spans and recover a faithful ordered token mask across punctuation and repeated substrings.
+
+Stay inside this mechanism boundary: Data-distillation label alignment and inference preparation; teacher generation and classifier training are excluded. Validate every required field before computing a result.
+
+Require one word label for every registered word group.
+
+Broadcast each word label to every token index in that group.
+
+Reject overlapping, out-of-range, or uncovered token indices.
+
+Keep token indices whose broadcast label equals one.
+
+Return the full token-label vector and retained indices.
+
+Treat these registered properties as hard contracts rather than soft preferences: complete_alignment, offset_integrity, stable_order, no_unlabeled_tokens.

@@ -1,0 +1,15 @@
+Implement `iterative_token_compression` through `solve(case)` for this bounded objective: Select token indices over multiple registered pruning rounds from supplied conditional log-probability tensors while preserving forced tokens and original order.
+
+Stay inside this mechanism boundary: Token-level iterative compression with supplied model scores; distribution-alignment training is excluded. Validate every required field before computing a result.
+
+Begin with all original token indices active.
+
+At each round, rank only currently active indices by descending supplied score.
+
+Insert forced indices before filling remaining positions.
+
+Preserve original order in every retained mask and reject infeasible targets.
+
+Return the per-round masks and the final retained indices.
+
+Treat these registered properties as hard contracts rather than soft preferences: iterative_mask_update, forced_tokens, stable_order, budget_feasible.

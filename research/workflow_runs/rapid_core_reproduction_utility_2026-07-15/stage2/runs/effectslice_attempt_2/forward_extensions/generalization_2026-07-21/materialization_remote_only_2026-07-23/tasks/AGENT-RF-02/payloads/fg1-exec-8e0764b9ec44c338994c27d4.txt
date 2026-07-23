@@ -1,0 +1,106 @@
+EFFECTSLICE_MODEL_VISIBLE_PAYLOAD_V1
+task_scaffold:432
+# Registered procedure task AGENT-RF-02
+
+Return one JSON object with exactly one key, `implementation`. Its value must be Python source defining `solve(case)`. The function must return a JSON-serializable object, must not mutate `case`, and may use only the Python standard library. Do not access files, the network, environment variables, subprocesses, randomness, or clocks. The attached public fixtures define input shapes only.
+
+fixture_payload:1722
+{
+  "schema_version": "effectslice-fg1-public-inputs.v1",
+  "task_id": "AGENT-RF-02",
+  "registry_id": "B",
+  "cases": [
+    {
+      "case_id": "fg1-agent-rf-02-b-000",
+      "payload": {
+        "attempts": [
+          {
+            "success": true,
+            "failure_signature": "e0",
+            "reflection": "adjust-0"
+          }
+        ],
+        "max_attempts": 4,
+        "_case_nonce": "d604e677db16288f"
+      }
+    },
+    {
+      "case_id": "fg1-agent-rf-02-b-001",
+      "payload": {
+        "attempts": [
+          {
+            "success": false,
+            "failure_signature": "e0",
+            "reflection": "adjust-0"
+          },
+          {
+            "success": false,
+            "failure_signature": "e1",
+            "reflection": "adjust-1"
+          },
+          {
+            "success": false,
+            "failure_signature": "e2",
+            "reflection": "adjust-2"
+          }
+        ],
+        "max_attempts": 4,
+        "_case_nonce": "a51f4ce4eeaca192"
+      }
+    },
+    {
+      "case_id": "fg1-agent-rf-02-b-002",
+      "payload": {
+        "attempts": [
+          {
+            "success": false,
+            "failure_signature": "e0",
+            "reflection": "adjust-0"
+          },
+          {
+            "success": false,
+            "failure_signature": "e1",
+            "reflection": "adjust-1"
+          },
+          {
+            "success": false,
+            "failure_signature": "e2",
+            "reflection": "adjust-2"
+          },
+          {
+            "success": false,
+            "failure_signature": "e0",
+            "reflection": "adjust-3"
+          }
+        ],
+        "max_attempts": 4,
+        "_case_nonce": "5de0e6e5b69ee605"
+      }
+    }
+  ]
+}
+
+candidate_artifact:1562
+Implement `trial_reflect_retry_controller` through `solve(case)` for this bounded objective: Drive a bounded trial loop through act, evaluate, reflect, retry, and terminate states from supplied agent outputs and feedback signals.
+
+Stay inside this mechanism boundary: Reflexion control flow and state isolation; base-agent and evaluator model calls are supplied as deterministic fixtures. Validate every required field before computing a result.
+
+With no prior attempt request attempt one.
+
+Stop immediately after success.
+
+Stop on the registered attempt budget or a repeated failure signature.
+
+Otherwise request exactly the next attempt.
+
+Append a nonempty reflection with its signature and return decision, next index, and memory update.
+
+Treat these registered properties as hard contracts rather than soft preferences: registered_state_machine, reflection_after_feedback, budget_accounting, success_terminates.
+
+Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.
+
+Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.
+
+Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.
+
+Return only JSON-serializable values with the exact named fields. Raise ValueError for an infeasible or structurally invalid case instead of silently repairing it.
