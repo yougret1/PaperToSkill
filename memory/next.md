@@ -5,10 +5,11 @@ forward-only generalization extension required by the user.
 
 ## Immediate Gate
 
-1. Inspect the exact-alias provider preflight evidence and Git boundary.
-2. Commit and push the complete preflight checkpoint after executor commit
-   `579fc90f`.
-3. Do not dispatch a registered experiment row unless this private push succeeds.
+1. Inspect and privately back up FG1 invalid batch 001.
+2. Preserve all 72 terminal rows and leave the remaining 1,224 FG1 rows
+   undispatched.
+3. After the invalid-batch push, create a versioned forward successor with a
+   preregistered output-budget adequacy pilot.
 
 ## Stage 2.3 Materialization
 
@@ -17,9 +18,10 @@ forward-only generalization extension required by the user.
 2. The executor contract is frozen, verified, committed, and privately pushed.
 3. One format-only preflight per exact alias passed with six first-attempt
    successes and no credential persistence.
-4. After the preflight checkpoint push, dispatch the frozen schedule with
-   classified retries, raw responses,
-   canonical outputs, scoring artifacts, and resumable progress.
+4. FG1 batch 001 then failed systematically: all 72 rows exhausted the 1,024
+   output-token budget and were malformed. Do not continue FG1.
+5. Freeze and run an output-budget adequacy pilot in a new successor before any
+   new full schedule.
 
 ## Preservation Rules
 

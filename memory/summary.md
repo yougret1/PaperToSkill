@@ -71,7 +71,10 @@ core research workflow.
   explicitly audited.
 - The executor checkpoint was privately pushed at `579fc90f`.
 - Six exact-alias format preflights passed on their first transport attempts;
-  zero registered experiment rows have been consumed.
+  zero registered experiment rows were consumed by preflight.
+- FG1 batch 001 executed 72 DeepSeek primary rows, but all exhausted the
+  registered 1,024-token output budget and were invalid. The remaining 1,224
+  FG1 rows are undispatched.
 
 ## Legacy Evidence Policy
 
@@ -110,8 +113,8 @@ thesis. Reuse requires an explicit Stage 2 evidence audit.
 
 ## Stage 2.3 Current Gate
 
-- Commit and push the verified exact-alias preflight evidence before dispatching
-  any registered experiment row.
+- Preserve and push FG1 invalid batch 001, then create a new versioned successor
+  with a preregistered output-budget adequacy pilot.
 - Execute only the frozen 1,296-row remote schedule with registered retry
   classification and raw/canonical artifact retention.
 - Keep generated token IDs and local runtime evidence out of all successor work.

@@ -1,0 +1,18 @@
+```python
+import math
+
+def solve(case):
+    payload = case["payload"]
+    matrix = payload["matrix"]
+    # Validate nonempty rectangular matrix with entries 0 or 1
+    if not matrix or not all(isinstance(row, list) for row in matrix):
+        raise ValueError("matrix must be a non-empty list of lists")
+    n_rows = len(matrix)
+    n_cols = len(matrix[0])
+    if n_cols == 0:
+        raise ValueError("matrix must have at least one column")
+    for row in matrix:
+        if len(row) != n_cols:
+            raise ValueError("all rows must have the same length")
+        for val in row:
+            if val not in (

@@ -2,7 +2,7 @@
 
 ## Active Iteration
 
-Commit and privately back up the verified Stage `2.3` provider preflight.
+Commit and privately back up the invalid FG1 Stage `2.3` execution batch 001.
 The accepted V4/V5 evidence, frozen parent Stage `2.2` bundle, remote-only
 successor, and materialization anchor are immutable; no parent stage is reopened.
 
@@ -31,6 +31,9 @@ successor, and materialization anchor are immutable; no parent stage is reopened
 - Committed and privately pushed the executor contract at `579fc90f`.
 - Completed one format-only preflight for each of six exact aliases: all six
   succeeded on the first transport attempt, with no credential reflection.
+- Executed 72 FG1 rows; every response exhausted the registered 1,024-token
+  output budget and was classified malformed_or_no_submission.
+- Stopped FG1 with 1,224 rows undispatched and preserved all terminal evidence.
 
 ## Current State
 
@@ -40,8 +43,8 @@ successor, and materialization anchor are immutable; no parent stage is reopened
 - The source manuscript is `paper/effectslice_aaai/main_v3.tex`.
 - The standard `main_v3.pdf` was held open externally; the current-source verified
   build is `main_v3_build.pdf` until the clean copy is completed.
-- Registered experiment rows are forbidden until the provider preflight
-  checkpoint is committed and privately pushed.
+- FG1 must not continue. A new versioned successor may begin only after the
+  invalid batch is committed and privately pushed.
 
 ## Residual Risk
 

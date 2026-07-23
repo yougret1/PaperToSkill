@@ -1,0 +1,55 @@
+{
+  "stage": "2.3",
+  "stage_name": "Registered remote execution batch 001",
+  "status": "invalid",
+  "stage_scope_status": "systematic_output_budget_failure_successor_required",
+  "handoff_mode": "normal",
+  "forward_only": true,
+  "preflight_checkpoint_commit": "5dd7674d",
+  "anchor_bundle_sha256": "1f12dfdba63b1ddc65bd57fa8b1b625ba4259050e93ab4f108786c2023c5ccd7",
+  "batch": {
+    "new_terminal_rows": 72,
+    "cumulative_terminal_rows": 72,
+    "registered_rows": 1296,
+    "remaining_unexecuted_rows": 1224,
+    "complete_paper_task_units": 4,
+    "model_slot_id": "deepseek_primary",
+    "exact_alias": "deepseek-v4-flash",
+    "execution_family": "primary"
+  },
+  "outcomes": {
+    "malformed_or_no_submission": 72,
+    "condition_success": 0,
+    "finish_reason_length": 72,
+    "reported_output_tokens_equal_1024": 72,
+    "canonical_nonempty": 3,
+    "canonical_empty": 69
+  },
+  "root_cause": {
+    "class": "registered_execution_design_failure",
+    "registered_max_output_tokens": 1024,
+    "observation": "All terminal responses exhausted the registered output budget; reasoning_content consumed the budget while the answer content was empty or insufficient.",
+    "transport_failure": false,
+    "parser_failure": false,
+    "network_retry_applicable": false
+  },
+  "preservation_policy": {
+    "semantic_rerun_of_terminal_rows": false,
+    "terminal_rows_modified_or_deleted": false,
+    "remaining_fg1_rows_dispatched": false,
+    "failure_reported_as_invalid": true,
+    "required_next_step": "Create a new versioned forward successor with an explicitly preregistered output-budget adequacy pilot and independently frozen execution package."
+  },
+  "evidence": {
+    "root": "remote_execution_2026-07-23",
+    "file_count_after_batch": 609,
+    "credential_values_recorded": false,
+    "exact_credential_reflection_count": 0,
+    "generic_credential_pattern_match_count": 0
+  },
+  "blocking_issues": [
+    "The FG1 request contract is not output-budget adequate for the observed reasoning model behavior."
+  ],
+  "next_stage": "2.3 forward execution successor",
+  "next_stage_gate": "Commit and push the complete invalid batch before creating or executing a versioned successor."
+}
