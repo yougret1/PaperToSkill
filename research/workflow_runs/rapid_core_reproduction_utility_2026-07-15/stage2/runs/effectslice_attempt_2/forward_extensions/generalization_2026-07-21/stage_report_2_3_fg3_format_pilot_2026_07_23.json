@@ -1,0 +1,75 @@
+{
+  "stage": "2.3",
+  "stage_name": "FG3 bare-JSON format-conformance pilot",
+  "status": "passed",
+  "stage_scope_status": "format_gate_passed_registered_execution_pending",
+  "handoff_mode": "normal",
+  "user_approved_degraded_route": false,
+  "user_approval_evidence": null,
+  "forward_only": true,
+  "fg3_successor_commit": "f03d0ce4",
+  "fg3_successor_bundle_sha256": "1a5212ee09f43b4e97737f83fc1365e0181942b790bd0a54920609d35b24766d",
+  "pilot": {
+    "logical_request_count": 6,
+    "transport_attempt_count": 6,
+    "transport_retry_count": 0,
+    "registered_experiment_rows_consumed": 0,
+    "nontruncated_response_count": 6,
+    "strict_submission_pass_count": 6,
+    "strict_submission_fail_count": 0
+  },
+  "passed_model_slots": [
+    "claude_opus_4_7",
+    "deepseek_primary",
+    "gpt_5_5",
+    "gpt_5_6_luna",
+    "gpt_5_6_sol",
+    "gpt_5_6_terra"
+  ],
+  "failed_model_slots": {},
+  "finish_reasons": {
+    "claude_opus_4_7": "end_turn",
+    "deepseek_primary": "stop",
+    "gpt_5_5": "completed",
+    "gpt_5_6_luna": "completed",
+    "gpt_5_6_sol": "completed",
+    "gpt_5_6_terra": "completed"
+  },
+  "inference": {
+    "output_budget_8192_observed_adequate": true,
+    "cross_provider_strict_json_instruction_observed_adequate": true,
+    "parser_failure": false,
+    "network_failure": false,
+    "semantic_rerun_of_terminal_pilot": false,
+    "pilot_used_as_method_quality_estimate": false
+  },
+  "inputs_checked": [
+    "FG3 successor commit f03d0ce4 on the private remote",
+    "FG3 successor bundle 1a5212ee09f43b4e97737f83fc1365e0181942b790bd0a54920609d35b24766d",
+    "six marked, unscored exact-alias pilot requests"
+  ],
+  "outputs_produced": [
+    "remote_execution_v3_2026-07-23/run_manifest.json",
+    "remote_execution_v3_2026-07-23/pilot_summary.json",
+    "remote_execution_v3_2026-07-23/pilot/"
+  ],
+  "traceability_notes": [
+    "The pilot is excluded from every experiment estimate.",
+    "No FG1 or FG2 row is pooled with FG3.",
+    "All six terminal pilot responses were executed exactly once at the logical-request level."
+  ],
+  "evidence": {
+    "root": "remote_execution_v3_2026-07-23",
+    "file_count": 32,
+    "artifact_scan_complete_enumeration": true,
+    "exact_credential_reflection_count": 0,
+    "generic_credential_pattern_match_count": 0,
+    "forbidden_local_model_design_match_count": 0,
+    "credential_values_recorded": false
+  },
+  "provider_calls_started": true,
+  "registered_provider_calls_started": false,
+  "blocking_issues": [],
+  "next_stage": "FG3 registered execution batch 001",
+  "next_stage_gate": "Commit and push the complete FG3 pilot evidence before dispatching at most 72 registered rows."
+}

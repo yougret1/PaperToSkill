@@ -5,12 +5,12 @@ forward-only generalization extension required by the user.
 
 ## Immediate Gate
 
-1. Commit and privately push the frozen FG3 successor and its audit records.
-2. Run six marked, unscored FG3 format-conformance pilot requests only after the
-   push succeeds.
-3. Preserve and audit the pilot evidence, then commit and push it separately.
-4. Start registered FG3 execution only if all six exact aliases pass the strict
-   nontruncated bare-JSON gate.
+1. Commit and privately push the passed FG3 pilot evidence and stage report.
+2. Start registered FG3 batch 001 with at most 72 new rows only after the push
+   succeeds.
+3. Audit, summarize, commit, and push batch 001 before any later batch.
+4. Preserve the pilot as unscored format evidence; do not include it in any
+   experiment estimate.
 
 ## Stage 2.3 Materialization
 
@@ -26,7 +26,9 @@ forward-only generalization extension required by the user.
 6. FG3 is frozen under bundle
    `1a5212ee09f43b4e97737f83fc1365e0181942b790bd0a54920609d35b24766d`;
    its verifier, 156-test suite, and 1,308-file safety scan pass. No FG3 provider
-   call has started.
+   call had started at that frozen-successor checkpoint.
+7. The six-request FG3 format pilot passes 6/6 with six first-attempt transport
+   successes and a clean 32-file safety scan. No registered FG3 row has started.
 
 ## Preservation Rules
 

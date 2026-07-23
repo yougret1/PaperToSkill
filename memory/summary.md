@@ -22,6 +22,8 @@ core research workflow.
 - Active paper: `EffectSlice: Evidence-Carrying Admission for Paper-Derived
   Procedural Cores`.
 - Manuscript source: `paper/effectslice_aaai/main_v3.tex`.
+- Current overview figure: V3-derived `SkillAudit_Main_Figure_v3_2`; it is verified
+  but not yet inserted into the manuscript source.
 - Current verified layout: 8 pages, inspected at 144 DPI.
 - Stages `2.1` through `2.8`: passed.
 - Major Stage `2`: passed with `handoff_mode: normal`.
@@ -88,7 +90,11 @@ core research workflow.
   `1a5212ee09f43b4e97737f83fc1365e0181942b790bd0a54920609d35b24766d`.
 - FG3 contains 1,296 new registered execution IDs and six marked, unscored pilot
   requests. Its verifier, 156-test forward suite, and complete 1,308-file safety
-  scan pass; no FG3 provider call has started.
+  scan passed before any FG3 provider call started.
+- The FG3 successor was privately pushed at `f03d0ce4`. Its six-request unscored
+  pilot then passed 6/6 strict submissions with six first-attempt transport
+  successes. All 32 evidence files passed the safety scan; no registered FG3 row
+  has started.
 
 ## Legacy Evidence Policy
 
@@ -127,9 +133,9 @@ thesis. Reuse requires an explicit Stage 2 evidence audit.
 
 ## Stage 2.3 Current Gate
 
-- Commit and push the frozen FG3 successor before its six marked, unscored pilot
-  requests. Registered execution requires all six aliases to pass the strict
-  nontruncated bare-JSON gate.
+- Commit and push the passed FG3 pilot evidence before registered batch 001.
+  Batch 001 is capped at 72 new rows and must be audited and backed up before any
+  later batch.
 - Execute only the frozen 1,296-row remote schedule with registered retry
   classification and raw/canonical artifact retention.
 - Keep generated token IDs and local runtime evidence out of all successor work.

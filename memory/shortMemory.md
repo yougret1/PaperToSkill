@@ -2,10 +2,10 @@
 
 ## Active Iteration
 
-Commit and privately back up the frozen FG3 Stage `2.3` format-conformance
-successor before any FG3 provider call. The accepted V4/V5 evidence, frozen
-parent Stage `2.2` bundle, remote-only successor, materialization anchor, FG1,
-and FG2 are immutable; no parent stage is reopened.
+Commit and privately back up the passed FG3 Stage `2.3` format-conformance pilot
+before any registered FG3 row. The accepted V4/V5 evidence, frozen parent Stage
+`2.2` bundle, remote-only successor, materialization anchor, FG1, and FG2 are
+immutable; no parent stage is reopened.
 
 ## Completed This Iteration
 
@@ -50,6 +50,11 @@ and FG2 are immutable; no parent stage is reopened.
   requests; no FG3 provider call has started.
 - Passed the FG3 verifier, 10 focused tests, the complete forward suite
   (`156 passed`), and a complete 1,308-file safety scan.
+- Committed and privately pushed the frozen FG3 successor at `f03d0ce4`.
+- Ran six marked, unscored FG3 pilot requests. All six exact aliases returned
+  nontruncated strict submissions on their first transport attempt.
+- Scanned all 32 pilot evidence files with zero credential reflections, zero
+  generic credential-pattern matches, and no forbidden local-model design.
 
 ## Current State
 
@@ -59,9 +64,10 @@ and FG2 are immutable; no parent stage is reopened.
 - The source manuscript is `paper/effectslice_aaai/main_v3.tex`.
 - The standard `main_v3.pdf` was held open externally; the current-source verified
   build is `main_v3_build.pdf` until the clean copy is completed.
-- FG1 and FG2 must not continue. FG3 is frozen but not yet committed or pushed.
-- The six FG3 pilot calls may start only after the frozen successor is committed
-  and privately pushed. Registered FG3 execution requires a 6/6 pilot pass.
+- FG1 and FG2 must not continue. The frozen FG3 successor is committed and
+  privately pushed.
+- The FG3 pilot passes 6/6 but is not yet committed or pushed. Registered batch
+  001 may start only after that backup and remains capped at 72 new rows.
 
 ## Residual Risk
 
