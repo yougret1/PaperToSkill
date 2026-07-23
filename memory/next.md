@@ -5,10 +5,10 @@ forward-only generalization extension required by the user.
 
 ## Immediate Gate
 
-1. The authoritative suite passes (`156 passed in 98.40s`).
-2. Commit and privately push the complete batch-008 evidence, summaries, audit,
+1. The authoritative suite passes (`156 passed in 117.40s`).
+2. Commit and privately push the complete batch-009 evidence, summaries, audit,
    stage report, and memory update.
-3. Do not dispatch row 577 until the push succeeds.
+3. Do not dispatch row 649 until the push succeeds.
 4. Continue only the frozen schedule in batches of at most 72 rows, with an
    audit, summary, commit, and push between batches.
 5. Preserve the pilot as unscored format evidence; do not include it in any
@@ -69,6 +69,9 @@ forward-only generalization extension required by the user.
     private-score sum of 0.71875 belongs to a hard-contract failure. The complete
     4,663-file execution tree passes all credential and forbidden-local-design
     safety gates; 720 rows remain.
+19. Batch 009 consumed rows 577-648 with 68 hard-contract failures, four
+    malformed outcomes, zero operational successes, and no transport retries.
+    Its 5,242-file safety scan passes; 648 rows remain.
 
 ## Preservation Rules
 
