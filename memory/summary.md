@@ -210,6 +210,10 @@ core research workflow.
   GPT-5.5, GPT-5.6 Sol, and GPT-5.6 Terra. It produced 71 hard-contract
   failures, one operational success, no malformed outcomes, no retries, and
   score sum 6.25. The 10,036-file scan passed; 216 rows remain.
+- FG3 batch 016 consumed rows 1081-1152 across DATA-HDB-01 and AGENT-TF-01,
+  with 24 rows each for GPT-5.5, GPT-5.6 Sol, and Claude Opus 4.7. It produced
+  71 hard-contract failures, one malformed outcome, no operational success, no
+  retries, and score sum 1.4375. The 10,615-file scan passed; 144 rows remain.
 
 ## Legacy Evidence Policy
 
@@ -248,7 +252,7 @@ thesis. Reuse requires an explicit Stage 2 evidence audit.
 
 ## Stage 2.3 Current Gate
 
-- Commit and privately push FG3 batch 015 before dispatching row 1081.
+- Commit and privately push FG3 batch 016 before dispatching row 1153.
 - The frozen plan contains no outcome-driven early-stopping rule. Batch 003's
   zero-success interval and all condition failures remain in the registered
   denominators; neither can trigger a semantic rerun or an in-place protocol
