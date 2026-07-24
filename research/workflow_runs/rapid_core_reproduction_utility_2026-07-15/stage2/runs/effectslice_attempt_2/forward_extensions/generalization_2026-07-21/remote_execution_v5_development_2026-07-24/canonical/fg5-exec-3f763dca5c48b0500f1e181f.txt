@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    threshold = case['threshold']\n    calls = case['calls']\n    accepted_call_ids = []\n    diagnostics = []\n    for call in calls:\n        diff = call['loss_without_call'] - call['loss_with_call']\n        normalized_gain = diff / call['prediction_tokens']\n        if call['parseable'] and normalized_gain >= threshold:\n            accepted = True\n            accepted_call_ids.append(call['call_id'])\n        else:\n            accepted = False\n        diagnostics.append({\n            'accepted': accepted,\n            'call_id': call['call_id'],\n            'normalized_gain': normalized_gain\n        })\n    return {\n        'accepted_call_ids': accepted_call_ids,\n        'diagnostics': diagnostics\n    }"
+}

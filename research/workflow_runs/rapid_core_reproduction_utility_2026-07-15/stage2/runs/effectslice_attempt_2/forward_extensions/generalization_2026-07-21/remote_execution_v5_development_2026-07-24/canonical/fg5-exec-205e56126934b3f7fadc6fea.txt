@@ -1,0 +1,1 @@
+{"implementation":"def solve(case):\n edges=case[\"edges\"]; ref=case[\"refinement\"]\n mem={}\n for v,g in ref.items(): mem.setdefault(g,[]).append(v)\n agg={}\n for s,t,w in edges: k=(ref[s],ref[t]); agg[k]=agg.get(k,0)+w\n agg_edges=[[a,b,c] for (a,b),c in agg.items()]\n return {\"members\":mem,\"aggregate_edges\":agg_edges}"}

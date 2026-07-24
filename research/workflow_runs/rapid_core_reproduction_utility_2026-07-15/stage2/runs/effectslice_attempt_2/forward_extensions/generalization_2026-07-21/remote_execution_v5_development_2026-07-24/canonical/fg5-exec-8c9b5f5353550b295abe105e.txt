@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    edges = case['edges']\n    refinement = case['refinement']\n    from collections import defaultdict\n    agg = defaultdict(float)\n    for u, v, w in edges:\n        cu = refinement[u]\n        cv = refinement[v]\n        if cu == cv:\n            key = (cu, cv)\n        else:\n            key = tuple(sorted([cu, cv]))\n        agg[key] += w\n    aggregate_edges = sorted([[c1, c2, w] for (c1, c2), w in agg.items()])\n    members = defaultdict(list)\n    for v, c in refinement.items():\n        members[c].append(v)\n    for c in members:\n        members[c].sort()\n    members_dict = {c: members[c] for c in sorted(members.keys())}\n    return {\"aggregate_edges\": aggregate_edges, \"members\": members_dict}"
+}

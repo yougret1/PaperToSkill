@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    memory = []\n    signatures = []\n    seen = set()\n    for i, trial in enumerate(case['trials']):\n        entry = {\n            'last_trial': i,\n            'reflection': trial['reflection'],\n            'signature': trial['signature'],\n            'success': trial['success']\n        }\n        memory.append(entry)\n        if len(memory) > case['capacity']:\n            memory.pop(0)\n        if trial['signature'] not in seen:\n            seen.add(trial['signature'])\n            signatures.append(trial['signature'])\n    return {\n        'memory': memory,\n        'signatures': signatures\n    }"
+}

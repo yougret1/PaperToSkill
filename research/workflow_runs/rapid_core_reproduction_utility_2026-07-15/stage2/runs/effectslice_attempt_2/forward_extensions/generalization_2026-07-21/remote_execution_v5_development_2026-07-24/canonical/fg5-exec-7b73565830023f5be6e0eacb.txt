@@ -1,0 +1,3 @@
+{
+  "implementation": "import json\n\ndef solve(case):\n    edges = case[\"edges\"]\n    refinement = case[\"refinement\"]\n    members = {}\n    for node, group in refinement.items():\n        members.setdefault(group, []).append(node)\n    agg = {}\n    for u, v, w in edges:\n        gu = refinement[u]\n        gv = refinement[v]\n        if gu != gv:\n            key = (gu, gv)\n            agg[key] = agg.get(key, 0) + w\n    aggregate_edges = sorted([[k[0], k[1], v] for k, v in agg.items()])\n    return {\"members\": members, \"aggregate_edges\": aggregate_edges}"
+}

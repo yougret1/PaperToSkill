@@ -1,5 +1,27 @@
 # Next Actions
 
+## Authoritative Immediate Gate
+
+1. Commit and privately push the frozen FG5 exact-output-contract checkpoint.
+2. Verify the committed tree excludes credentials, caches, and temporary test
+   directories.
+3. Build a separate forward-only response-format successor for 104 unique rows:
+   77 original FG3 rows plus 27 routed FG5 malformed rows.
+4. Partition concrete malformed signatures, sample across task/provider/condition,
+   register new execution IDs, run the sample, then expand only after validation.
+5. Do not unfreeze or append calls to the exact-output successor; do not replay a
+   completed semantic response to select a better model answer.
+6. After response-format completion, freeze, test, commit, privately push, and
+   report its handled count, current operational successes over 1,296, and the
+   remaining technical-class count.
+
+Remaining work after response format is 129 integrity/digest workload rows (120
+original plus nine routed) and one original provider-availability row. Routed
+counts are workloads, not additions to the registered 1,296 rows.
+
+Everything below this notice is retained historical planning context and is not
+the active execution boundary.
+
 The accepted Stage `2` remains complete. The active work is a separate,
 forward-only generalization extension required by the user.
 

@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    capacity = case['capacity']\n    trials = case['trials']\n    memory = []\n    signatures = []\n    for i, trial in enumerate(trials):\n        obj = {\n            'last_trial': i,\n            'reflection': trial['reflection'],\n            'signature': trial['signature'],\n            'success': trial['success']\n        }\n        memory.append(obj)\n        signatures.append(trial['signature'])\n    if len(memory) > capacity:\n        memory = memory[-capacity:]\n    return {'memory': memory, 'signatures': signatures}"
+}

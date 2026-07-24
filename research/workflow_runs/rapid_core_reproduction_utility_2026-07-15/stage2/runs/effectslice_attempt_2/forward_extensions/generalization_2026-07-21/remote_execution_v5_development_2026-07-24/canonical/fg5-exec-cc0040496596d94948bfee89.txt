@@ -1,0 +1,3 @@
+{
+  "implementation": "import math\n\ndef solve(case):\n    matrix = case[\"matrix\"]\n    N = len(matrix)\n    if N == 0:\n        M = 0\n    else:\n        M = len(matrix[0])\n    df = [0] * M\n    for row in matrix:\n        for col, val in enumerate(row):\n            if val:\n                df[col] += 1\n    idf = [0.0] * M\n    for i in range(M):\n        if df[i] > 0:\n            idf[i] = math.log(N / df[i])\n        else:\n            idf[i] = 0.0\n    weighted_matrix = []\n    for row in matrix:\n        wrow = [idf[col] if val else 0.0 for col, val in enumerate(row)]\n        weighted_matrix.append(wrow)\n    row_degree = [sum(wrow) for wrow in weighted_matrix]\n    return {\"idf\": idf, \"row_degree\": row_degree, \"weighted_matrix\": weighted_matrix}"
+}

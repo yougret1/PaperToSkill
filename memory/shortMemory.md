@@ -1,5 +1,40 @@
 # Short-Term Memory
 
+## Authoritative Current Checkpoint
+
+- Active boundary: commit and privately push the frozen FG5
+  exact-output-contract class, then move forward to response-format handling.
+- Branch: `codex/effectslice-v3`; latest pushed commit before this checkpoint is
+  `3879b79e`.
+- FG3 remains frozen with 1,296 terminal rows. Its exclusive classification is
+  268 payload-interface, 684 exact-output contract, 77 response-format, 120
+  integrity/digest, one provider availability, 141 experimental outcomes, and
+  five operational successes.
+- All 684 exact-output-contract rows have terminal FG5 successors across 24
+  tasks. Independent validation checked 40,896 returned values from 639 rows;
+  every value conforms to its frozen public structural contract.
+- The 684-row outcomes are 224 operational successes, 424 experimental
+  hard-contract failures, 27 response-format deferrals, and nine
+  integrity/digest deferrals.
+- Nine experimental rows produced no shape-evaluable output: six scorer safety
+  policy violations, one worker timeout, and two completed candidates with 64
+  case errors. They were not semantically rerun.
+- The output-contract registry SHA is
+  `9d1d21600a0a99c1c00928b0da592d790dd63a531db65dd2c76e4b35cbdc9350`.
+- The exact-output final report passes and the successor is frozen under bundle
+  SHA `8ec345c120d8aa4ae432ba77e5a120f81c3ce727bca8a7a94800cade9344779a6`.
+- FG5 currently contains 691/1,296 terminal rows and 226 operational successes;
+  the forward-extension suite passes `191` tests.
+- Next worklist: 77 original response-format rows plus 27 routed FG5 malformed
+  rows, followed by 120 original plus nine routed integrity/digest rows, then one
+  provider-availability row.
+- FG3, FG4, and the frozen FG5 successor are immutable. Do not replay completed
+  semantic responses, and keep credentials, caches, and temporary outputs out of
+  Git.
+
+Everything below this notice is retained historical context and is not the active
+execution boundary.
+
 ## Active Iteration
 
 Complete and privately back up the final FG3 registered batch 018. The accepted

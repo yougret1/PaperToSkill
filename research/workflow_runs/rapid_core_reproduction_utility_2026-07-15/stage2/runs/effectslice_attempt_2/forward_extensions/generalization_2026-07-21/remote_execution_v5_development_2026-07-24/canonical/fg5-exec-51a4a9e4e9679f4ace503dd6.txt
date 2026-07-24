@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    lines = case.get(\"lines\", [])\n    trajectory = []\n    error_line = None\n    for idx, line in enumerate(lines):\n        # expected format: \"Type: content\"\n        # type can be any non-empty string before the first \": \"\n        if \": \" in line:\n            colon_index = line.index(\": \")\n            typ = line[:colon_index]\n            content = line[colon_index+2:]\n            trajectory.append({\"type\": typ, \"content\": content})\n        else:\n            error_line = idx\n            break\n    valid = error_line is None\n    return {\n        \"valid\": valid,\n        \"error_line\": error_line,\n        \"trajectory\": trajectory\n    }"
+}

@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    items = case['items']\n    required = set(case['required_failure_items'])\n    unresolved = set(case['unresolved_without'])\n    essential = required.union(unresolved)\n    minimal = [item for item in items if item in essential]\n    return {\n        'minimal_failure': minimal,\n        'outcome': 'found',\n        'tests': 0\n    }"
+}
