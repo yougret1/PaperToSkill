@@ -1,0 +1,31 @@
+{
+  "stage": "2.3",
+  "stage_name": "Experiment search, execution, and debugging",
+  "status": "blocked",
+  "handoff_mode": null,
+  "user_approved_degraded_route": false,
+  "user_approval_evidence": null,
+  "inputs_checked": [
+    "Frozen FG3 successor and 1,296-row schedule",
+    "Batch 016 pushed at 930832b6",
+    "Rows 1153-1155 terminal evidence",
+    "Row 1156 started marker without terminal evidence"
+  ],
+  "outputs_produced": [
+    "batch_017_partial_summary.json",
+    "recover_interrupted_fg3_dispatch.py",
+    "remote_execution_v3-rows-fg3-exec-09f12d4f1a968cb5a003d3d8.json",
+    "remote_execution_v3-dispatch-fg3-exec-09f12d4f1a968cb5a003d3d8.terminal.json",
+    "remote_execution_v3-recovery-fg3-exec-09f12d4f1a968cb5a003d3d8.json"
+  ],
+  "traceability_notes": [
+    "Rows 1153-1155 preserve provider response bytes and registered retry evidence.",
+    "Row 1156 is excluded from performance estimates: no response bytes, no score, no semantic replay.",
+    "The recovery row passed the frozen result-row verifier before registration.",
+    "No V4/V5, frozen schedules, prompts, registries, scorers, or thresholds were modified."
+  ],
+  "blocking_issues": [
+    "The replacement PTY could not create verifier temporary directories or result temp files under the current sandbox identity, so the next unregistered provider call was not attempted."
+  ],
+  "next_stage": "2.3"
+}

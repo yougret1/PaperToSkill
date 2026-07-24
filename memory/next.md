@@ -6,9 +6,10 @@ forward-only generalization extension required by the user.
 ## Immediate Gate
 
 1. The authoritative suite passes (`156 passed in 110.10s`).
-2. Commit and privately push batch-016 evidence, summaries, audit,
-   stage report, and memory update.
-3. Do not dispatch row 1153 until the push succeeds.
+2. Commit and privately push the interrupted batch-017 checkpoint, including
+   rows 1153-1155 and the row-1156 recovery/terminal evidence.
+3. Restore a writable TEMP/TMP and result workspace, then resume at row 1157;
+   never replay rows 1153-1156.
 4. Continue only the frozen schedule in batches of at most 72 rows, with an
    audit, summary, commit, and push between batches.
 5. Preserve the pilot as unscored format evidence; do not include it in any
@@ -99,6 +100,10 @@ forward-only generalization extension required by the user.
     71 hard-contract failures, one malformed outcome, no operational success,
     and no transport retries. Its GPT-5.5, GPT-5.6 Sol, and Claude Opus 4.7 rows
     passed the 10,615-file execution-tree safety scan; 144 rows remain.
+27. Batch 017 began rows 1153-1224. Rows 1153-1155 are terminal
+    hard-contract failures; row 1156 has only a started marker and an explicit
+    provider/model-unavailable recovery record, with no semantic response
+    replayed. Rows 1157-1224 remain open pending writable execution context.
 
 ## Preservation Rules
 
