@@ -6,9 +6,9 @@ forward-only generalization extension required by the user.
 ## Immediate Gate
 
 1. The authoritative suite passes (`156 passed in 110.10s`).
-2. Commit and privately push batch-014 evidence, summaries, audit,
+2. Commit and privately push batch-015 evidence, summaries, audit,
    stage report, and memory update.
-3. Do not dispatch row 1009 until the push succeeds.
+3. Do not dispatch row 1081 until the push succeeds.
 4. Continue only the frozen schedule in batches of at most 72 rows, with an
    audit, summary, commit, and push between batches.
 5. Preserve the pilot as unscored format evidence; do not include it in any
@@ -91,6 +91,10 @@ forward-only generalization extension required by the user.
     11 malformed outcomes, no operational success, and no transport retries. Its
     GPT-5.6 Sol, GPT-5.6 Terra, and Claude Opus 4.7 rows passed the 9,457-file
     execution-tree safety scan; 288 rows remain.
+25. Batch 015 consumed rows 1009-1080 for DATA-HDB-01 with 71 hard-contract
+    failures, one operational success, no malformed outcome, and no transport
+    retries. Its GPT-5.5, GPT-5.6 Sol, and GPT-5.6 Terra rows passed the
+    10,036-file execution-tree safety scan; 216 rows remain.
 
 ## Preservation Rules
 
