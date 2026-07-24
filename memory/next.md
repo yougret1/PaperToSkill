@@ -5,13 +5,12 @@ forward-only generalization extension required by the user.
 
 ## Immediate Gate
 
-1. The authoritative suite passes (`156 passed in 110.10s`).
-2. Commit and privately push the interrupted batch-017 checkpoint, including
-   rows 1153-1155 and the row-1156 recovery/terminal evidence.
-3. Restore a writable TEMP/TMP and result workspace, then resume at row 1157;
-   never replay rows 1153-1156.
-4. Continue only the frozen schedule in batches of at most 72 rows, with an
-   audit, summary, commit, and push between batches.
+1. The authoritative suite passes (`158 passed in 85.98s`).
+2. Commit and privately push completed batch 017, covering rows 1153-1224.
+3. Run the final frozen Batch 018 only from row 1225 through row 1296; never
+   replay any terminal row or semantic response.
+4. Audit, summarize, test, commit, and privately push Batch 018 before any
+   aggregate analysis or manuscript change.
 5. Preserve the pilot as unscored format evidence; do not include it in any
    experiment estimate or rerun a terminal semantic response.
 
@@ -100,10 +99,12 @@ forward-only generalization extension required by the user.
     71 hard-contract failures, one malformed outcome, no operational success,
     and no transport retries. Its GPT-5.5, GPT-5.6 Sol, and Claude Opus 4.7 rows
     passed the 10,615-file execution-tree safety scan; 144 rows remain.
-27. Batch 017 began rows 1153-1224. Rows 1153-1155 are terminal
-    hard-contract failures; row 1156 has only a started marker and an explicit
-    provider/model-unavailable recovery record, with no semantic response
-    replayed. Rows 1157-1224 remain open pending writable execution context.
+27. Batch 017 consumed rows 1153-1224 across AGENT-TF-01 and NLP-LLM-01 with 24
+    rows each for GPT-5.6 Terra, GPT-5.6 Luna, and Claude Opus 4.7. It produced
+    24 hard-contract failures, 47 integrity/digest failures, and one
+    provider/model-unavailable recovery. Its 248 transports include 177
+    registered retries; no terminal semantic response was replayed. The current
+    9,967-file safety audit and 158-test suite pass; 72 rows remain.
 
 ## Preservation Rules
 

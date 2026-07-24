@@ -2,8 +2,8 @@
 
 ## Active Iteration
 
-Preserve and privately back up the interrupted FG3 registered batch 017 checkpoint
-before resuming at row 1157. The accepted
+Privately back up the completed FG3 registered batch 017 before starting the
+final Batch 018 at row 1225. The accepted
 V4/V5 evidence, frozen parent Stage `2.2` bundle, remote-only successor,
 materialization anchor, FG1, FG2, and FG3 pilot are immutable; no parent stage is
 reopened.
@@ -143,11 +143,11 @@ reopened.
   retries, and score sum 1.4375. Its GPT-5.5, GPT-5.6 Sol, and Claude Opus 4.7
   rows passed the 10,615-file execution-tree safety scan and 156-test suite; 144
   rows remain.
-- Batch 017 started rows 1153-1224. Rows 1153-1155 reached terminal
-  hard-contract failures; row 1156 persisted only a started marker plus an
-  explicit provider/model-unavailable recovery record, and no semantic response
-  was replayed. The first three rows and recovery evidence are pending the
-  checkpoint commit; rows 1157-1224 remain undispatched.
+- Batch 017 consumed rows 1153-1224: 24 hard-contract failures, 47
+  integrity/digest failures, one provider/model-unavailable recovery, 248
+  transport attempts, and 177 registered retries. Row 1156 was not replayed.
+  The recomputed summary is byte-identical, the 9,967-file safety audit is clean,
+  and the authoritative suite passes 158 tests; 72 rows remain.
 
 ## Current State
 
@@ -160,8 +160,8 @@ reopened.
 - FG1 and FG2 must not continue. The frozen FG3 successor is committed and
   privately pushed.
 - The FG3 pilot and batches 001-016 are committed and pushed. Batch 017 is
-  interrupted after rows 1153-1156 evidence; checkpoint commit/push must happen
-  before resuming row 1157.
+  complete through row 1224 and must be committed and privately pushed before
+  Batch 018 starts at row 1225.
 
 ## Residual Risk
 

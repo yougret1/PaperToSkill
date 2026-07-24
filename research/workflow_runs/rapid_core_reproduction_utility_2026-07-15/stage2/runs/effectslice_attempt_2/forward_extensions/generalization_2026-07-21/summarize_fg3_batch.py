@@ -72,6 +72,22 @@ def safe_error_signature(error: dict[str, Any]) -> str:
     return f"{error_type}:sha256-{digest}"
 
 
+def validated_attempts(result: dict[str, Any], outcome: str) -> list[dict[str, Any]]:
+    attempts = result.get("attempts", [])
+    require(isinstance(attempts, list), "row attempts must be a list")
+    if attempts:
+        require(all(isinstance(item, dict) for item in attempts), "invalid attempt record")
+        return attempts
+    require(
+        outcome == "provider_or_model_unavailable",
+        "row has no attempts outside provider/model unavailability",
+    )
+    require(result.get("termination_reason") == "not_dispatched", "transportless row was dispatched")
+    require(result.get("raw_response_path") is None, "transportless row has a raw response")
+    require(result.get("private_score") is None, "transportless row has a private score")
+    return []
+
+
 def summarize(successor: Path, run_dir: Path, start_row: int = 1) -> dict[str, Any]:
     successor = runner.windows_extended_path(successor)
     run_dir = runner.windows_extended_path(run_dir)
@@ -111,6 +127,8 @@ def summarize(successor: Path, run_dir: Path, start_row: int = 1) -> dict[str, A
     elapsed_ms: list[int] = []
     private_scores: list[float] = []
     total_attempts = 0
+    transport_retries = 0
+    transportless_terminal_rows = 0
     rows_with_errors = 0
     rows_with_zero_outputs = 0
     total_errors = 0
@@ -125,9 +143,10 @@ def summarize(successor: Path, run_dir: Path, start_row: int = 1) -> dict[str, A
         vector = result.get("hard_contract_vector")
         vector_key = "null" if vector is None else json.dumps(vector, separators=(",", ":"))
         increment(hard_vectors, vector_key)
-        attempts = result.get("attempts", [])
-        require(isinstance(attempts, list) and attempts, "row has no attempts")
+        attempts = validated_attempts(result, outcome)
         total_attempts += len(attempts)
+        transport_retries += max(0, len(attempts) - 1)
+        transportless_terminal_rows += int(not attempts)
         for attempt in attempts:
             increment(attempt_statuses, attempt.get("attempt_status_class"))
         for key, target in (
@@ -241,7 +260,8 @@ def summarize(successor: Path, run_dir: Path, start_row: int = 1) -> dict[str, A
         "safe_error_signatures": sorted_counts(safe_error_signatures),
         "logical_request_count": len(batch),
         "transport_attempt_count": total_attempts,
-        "transport_retry_count": total_attempts - len(batch),
+        "transport_retry_count": transport_retries,
+        "transportless_terminal_rows": transportless_terminal_rows,
         "attempt_status_classes": sorted_counts(attempt_statuses),
         "provider_reported_input_tokens": numeric_summary(input_tokens),
         "provider_reported_output_tokens": numeric_summary(output_tokens),
