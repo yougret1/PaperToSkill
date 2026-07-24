@@ -1,0 +1,10 @@
+\begin{abstract}
+\label{abs}
+
+Large Language Model (LLM) agents can convert method descriptions in research papers into executable agent skill specifications, but simplifying these specifications may remove information required for method reproduction. Existing approaches to this task mainly focus on extracting method content and generating executable specifications, whereas methods for compressing prompts or skill specifications primarily optimize text length, execution cost, or downstream performance.
+However, these two lines of work rarely jointly record which source passages were removed, whether the remaining steps preserve all required dependencies, and which experimental results support the decision to accept or reject a simplified specification. 
+In this paper, we present SkillAudit, a traceable post-compression validation protocol for candidate specifications produced by upstream simplification methods. 
+It links procedural steps to their source passages and prerequisites, compares performance across three conditions (a no-specification baseline, the full specification, and a simplified candidate specification) on prespecified tasks, applies prespecified acceptance criteria, and produces an auditable record containing source provenance, the experimental configuration, test results, and the decision rationale. 
+We construct code-based method-reproduction tasks from algorithmic mechanisms selected from different papers to evaluate SkillAudit. The results show that SkillAudit distinguishes failures due to an insufficient full specification, failures due to missing critical information in a simplified candidate specification, and invalid experimental runs.
+
+\end{abstract}
