@@ -2,7 +2,7 @@
 
 ## Active Iteration
 
-Commit and privately back up FG3 registered batch 013 before row 937. The accepted
+Commit and privately back up FG3 registered batch 014 before row 1009. The accepted
 V4/V5 evidence, frozen parent Stage `2.2` bundle, remote-only successor,
 materialization anchor, FG1, FG2, and FG3 pilot are immutable; no parent stage is
 reopened.
@@ -129,6 +129,10 @@ reopened.
   score sum 0.0 across 71 scored rows. Its 72 logical requests used 89 transports
   because 16 HTTP 429 and one HTTP 502 failure were registered retries. The
   8,879-file execution-tree safety scan and 156-test suite passed; 360 rows remain.
+- Batch 014 consumed rows 937-1008 for SE-PE-01: 61 hard-contract failures, 11
+  malformed outcomes, no operational success, no retries, and score sum 0.0.
+  Its GPT-5.6 Sol, GPT-5.6 Terra, and Claude Opus 4.7 rows passed the 9,457-file
+  execution-tree safety scan and 156-test suite; 288 rows remain.
 
 ## Current State
 
@@ -140,8 +144,8 @@ reopened.
   build is `main_v3_build.pdf` until the clean copy is completed.
 - FG1 and FG2 must not continue. The frozen FG3 successor is committed and
   privately pushed.
-- The FG3 pilot and batches 001-012 are committed and pushed. Batch 013 is
-  complete but not yet pushed; row 937 is prohibited until that
+- The FG3 pilot and batches 001-013 are committed and pushed. Batch 014 is
+  complete but not yet pushed; row 1009 is prohibited until that
   backup succeeds.
 
 ## Residual Risk

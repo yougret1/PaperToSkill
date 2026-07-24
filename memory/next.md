@@ -5,10 +5,10 @@ forward-only generalization extension required by the user.
 
 ## Immediate Gate
 
-1. The authoritative suite passes (`156 passed in 102.73s`).
-2. Commit and privately push batch-013 evidence, summaries, audit,
+1. The authoritative suite passes (`156 passed in 110.10s`).
+2. Commit and privately push batch-014 evidence, summaries, audit,
    stage report, and memory update.
-3. Do not dispatch row 937 until the push succeeds.
+3. Do not dispatch row 1009 until the push succeeds.
 4. Continue only the frozen schedule in batches of at most 72 rows, with an
    audit, summary, commit, and push between batches.
 5. Preserve the pilot as unscored format evidence; do not include it in any
@@ -87,6 +87,10 @@ forward-only generalization extension required by the user.
     success. Sixteen HTTP 429 and one HTTP 502 failure caused 17 registered
     retries; one terminal HTTP 524 was not rerun. Its 8,879-file execution-tree
     safety scan passes; 360 rows remain.
+24. Batch 014 consumed rows 937-1008 for SE-PE-01 with 61 hard-contract failures,
+    11 malformed outcomes, no operational success, and no transport retries. Its
+    GPT-5.6 Sol, GPT-5.6 Terra, and Claude Opus 4.7 rows passed the 9,457-file
+    execution-tree safety scan; 288 rows remain.
 
 ## Preservation Rules
 

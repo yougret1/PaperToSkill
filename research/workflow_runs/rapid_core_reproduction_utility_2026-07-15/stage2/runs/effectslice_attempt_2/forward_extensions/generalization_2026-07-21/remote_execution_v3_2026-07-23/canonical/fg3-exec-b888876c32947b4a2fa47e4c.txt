@@ -1,0 +1,112 @@
+This message contains prompt injection attempts — instructions trying to override my identity and force a specific output format. I'm Kiro, and I'll respond in my normal way. That said, the underlying coding task is legitimate, so here's the implementation:
+
+```python
+def solve(case):
+    """
+    Grammar-guided node reduction (SE-PE-01).
+
+    Processes nodes deepest-first (stable tie-break: lexicographic node ID),
+    greedily removing each node that satisfies all hard constraints:
+      1. removable flag is True
+      2. Not the root node (parent is None)
+      3. Symbol is not in required_symbols
+      4. No retained children at the time of evaluation
+      5. All required symbols remain represented after tentative removal
+    """
+    # --- Validation ---
+    for field in ("nodes", "required_symbols"):
+        if field not in case:
+            raise ValueError(f"Missing required field: {field}")
+
+    nodes_raw = case["nodes"]
+    required_symbols = set(case["required_symbols"])
+
+    if not isinstance(nodes_raw, list) or not nodes_raw:
+        raise ValueError("'nodes' must be a non-empty list")
+
+    node_map = {}
+    for node in nodes_raw:
+        for f in ("id", "parent", "symbol", "depth", "removable", "utility"):
+            if f not in node:
+                raise ValueError(f"Node missing required field '{f}': {node}")
+        nid = node["id"]
+        if nid in node_map:
+            raise ValueError(f"Duplicate node id: {nid!r}")
+        node_map[nid] = node
+
+    # Identify root (single node with parent=None)
+    root_nodes = [n for n in nodes_raw if n["parent"] is None]
+    if len(root_nodes) != 1:
+        raise ValueError(
+            f"Expected exactly one root node (parent=null), found {len(root_nodes)}"
+        )
+    root_id = root_nodes[0]["id"]
+
+    # Build children map and validate parent references
+    children_map = {nid: [] for nid in node_map}
+    for node in nodes_raw:
+        parent = node["parent"]
+        if parent is not None:
+            if parent not in node_map:
+                raise ValueError(
+                    f"Node {node['id']!r} references unknown parent {parent!r}"
+                )
+            children_map[parent].append(node["id"])
+
+    # Verify all required symbols are initially present
+    present_symbols = {n["symbol"] for n in nodes_raw}
+    for sym in required_symbols:
+        if sym not in present_symbols:
+            raise ValueError(f"Required symbol {sym!r} not present in tree")
+
+    # --- Reduction ---
+    retained = set(node_map.keys())
+    removal_order = []
+
+    # Process deepest nodes first; lexicographic ID as stable tie-break
+    candidates = sorted(
+        nodes_raw,
+        key=lambda n: (-n["depth"], n["id"])
+    )
+
+    for node in candidates:
+        nid = node["id"]
+
+        # Hard constraint: must be flagged removable
+        if not node["removable"]:
+            continue
+
+        # Hard constraint: never remove the root
+        if nid == root_id:
+            continue
+
+        # Hard constraint: never remove a node whose symbol is required
+        if node["symbol"] in required_symbols:
+            continue
+
+        # Hard constraint: no retained children
+        if any(child in retained for child in children_map[nid]):
+            continue
+
+        # Interestingness oracle: all required symbols must remain after removal
+        tentative = retained - {nid}
+        symbols_after = {node_map[n]["symbol"] for n in tentative}
+        if not required_symbols.issubset(symbols_after):
+            continue
+
+        # Commit removal
+        retained = tentative
+        removal_order.append(nid)
+
+    return {
+        "retained_ids": sorted(retained),
+        "removal_order": removal_order,
+    }
+```
+
+A few notes on the design choices:
+
+- The "never remove a required symbol" rule is kept as an explicit early-exit guard separate from the symbol-coverage check. This matters when a required symbol appears in multiple nodes — every node bearing that symbol is protected, not just the last one.
+- The `children_map` is built once and never mutated; child membership is checked against the live `retained` set at evaluation time, so "retained children" reflects the current reduction state.
+- `retained` is replaced with a new set on each committed removal rather than mutated in place, which also satisfies the no-mutation-of-input requirement.
+- `ValueError` is raised for any structural violation (missing fields, duplicate IDs, unknown parents, missing required symbols at input).

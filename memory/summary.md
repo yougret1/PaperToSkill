@@ -202,6 +202,10 @@ core research workflow.
   failure. The batch otherwise produced 68 hard-contract failures, three
   malformed outcomes, no operational success, and score sum 0.0 across 71 scored
   rows. The 8,879-file scan passed; 360 rows remain.
+- FG3 batch 014 consumed rows 937-1008 for SE-PE-01, with 24 rows each for
+  GPT-5.6 Sol, GPT-5.6 Terra, and Claude Opus 4.7. It produced 61 hard-contract
+  failures, 11 malformed outcomes, no operational success, no retries, and score
+  sum 0.0. The 9,457-file scan passed; 288 rows remain.
 
 ## Legacy Evidence Policy
 
@@ -240,7 +244,7 @@ thesis. Reuse requires an explicit Stage 2 evidence audit.
 
 ## Stage 2.3 Current Gate
 
-- Commit and privately push FG3 batch 013 before dispatching row 937.
+- Commit and privately push FG3 batch 014 before dispatching row 1009.
 - The frozen plan contains no outcome-driven early-stopping rule. Batch 003's
   zero-success interval and all condition failures remain in the registered
   denominators; neither can trigger a semantic rerun or an in-place protocol
