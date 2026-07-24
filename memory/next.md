@@ -5,14 +5,17 @@ forward-only generalization extension required by the user.
 
 ## Immediate Gate
 
-1. The authoritative suite passes (`158 passed in 85.98s`).
-2. Commit and privately push completed batch 017, covering rows 1153-1224.
-3. Run the final frozen Batch 018 only from row 1225 through row 1296; never
-   replay any terminal row or semantic response.
-4. Audit, summarize, test, commit, and privately push Batch 018 before any
-   aggregate analysis or manuscript change.
-5. Preserve the pilot as unscored format evidence; do not include it in any
-   experiment estimate or rerun a terminal semantic response.
+1. FG3 rows 1-1296 are terminal and preserve the exact frozen schedule prefix.
+2. Batch 018 (rows 1225-1296) is summarized, safety-audited, and tested; commit
+   and privately push it before aggregate analysis or manuscript changes.
+3. The authoritative forward-extension suite passes in the project `.venv`
+   (`158 passed`); the broader attempt-root suite passes (`678 passed, 6
+   skipped`).
+4. Preserve all pilot and batch evidence; never replay a terminal semantic
+   response or alter the frozen registry, scorer, threshold, prompt, or retry
+   semantics.
+5. Proceed forward to Stage 2.4 aggregation, then figures, citation audit,
+   manuscript revision, and three-reviewer review.
 
 ## Stage 2.3 Materialization
 

@@ -2,8 +2,7 @@
 
 ## Active Iteration
 
-Privately back up the completed FG3 registered batch 017 before starting the
-final Batch 018 at row 1225. The accepted
+Complete and privately back up the final FG3 registered batch 018. The accepted
 V4/V5 evidence, frozen parent Stage `2.2` bundle, remote-only successor,
 materialization anchor, FG1, FG2, and FG3 pilot are immutable; no parent stage is
 reopened.
@@ -148,6 +147,19 @@ reopened.
   transport attempts, and 177 registered retries. Row 1156 was not replayed.
   The recomputed summary is byte-identical, the 9,967-file safety audit is clean,
   and the authoritative suite passes 158 tests; 72 rows remain.
+- Batch 018 consumed rows 1225-1296. All 72 rows ended as
+  `integrity_or_digest_failure` for `gpt_5_6_luna`; 360 transport attempts and
+  288 transport retries were recorded, with HTTP 503 on every attempt and no
+  valid private score. The cumulative 1,296-row outcomes are 1,093
+  `hard_contract_failure`, 120 `integrity_or_digest_failure`, 77
+  `malformed_or_no_submission`, five `operational_success`, and one
+  `provider_or_model_unavailable`.
+- Batch 018 has a 10,690-file safety audit with zero credential reflections,
+  zero generic credential patterns, and zero forbidden local-model markers.
+  The forward-extension suite passes 158 tests in the project `.venv`.
+- The full registered FG3 schedule is complete. Only five rows are operational
+  successes, so the result is process/availability evidence and a bounded
+  benchmark, not a broad claim of method effectiveness.
 
 ## Current State
 

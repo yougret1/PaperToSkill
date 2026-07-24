@@ -256,6 +256,22 @@ thesis. Reuse requires an explicit Stage 2 evidence audit.
   Historical frozen parent records may mention the superseded local anchor, but
   no successor experiment or manuscript claim may rely on it.
 
+## FG3 Registered Execution Completion (2026-07-24)
+
+- The forward-only remote FG3 schedule is complete: 1,296/1,296 registered
+  rows, six remote model slots, 12 papers, two tasks per paper, and four domains.
+- Cumulative terminal outcomes are 1,093 hard-contract failures, 120
+  integrity/digest failures, 77 malformed/no-submission outcomes, five
+  operational successes, and one provider/model-unavailable recovery.
+- Batch 018 (rows 1225-1296) is an all-Luna availability failure: 72 terminal
+  integrity/digest failures, 360 HTTP-503 transport attempts, and 288 retries.
+- The full execution tree passes the safety audit (10,690 files; no credential
+  reflection, generic credential pattern, or forbidden local-model marker).
+- The forward-extension test suite passes 158 tests in the project `.venv`.
+- The five operational successes are too sparse for a population-level
+  effectiveness claim. Subsequent figures and manuscript text must separate
+  availability, contract conformance, integrity, and method-quality evidence.
+
 ## Stage 2.3 Current Gate
 
 - Commit and privately push FG3 batch 017 before dispatching row 1225.
