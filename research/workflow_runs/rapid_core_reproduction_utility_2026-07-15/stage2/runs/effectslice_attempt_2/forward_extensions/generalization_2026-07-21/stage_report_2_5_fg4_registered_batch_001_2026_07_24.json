@@ -1,0 +1,53 @@
+{
+  "schema_version": "effectslice-stage-report-2.5-fg4-registered-batch-001.v1",
+  "stage": "2.5",
+  "status": "forward_stop_after_diagnostic_batch",
+  "completed_at_utc": "2026-07-24T07:51:00.702081Z",
+  "fg4_bundle_sha256": "223f73a98c258c5340b812a8529a802e12b5162c741dff332115996ca2b30024a",
+  "registered_rows_total": 1296,
+  "terminal_rows": 6,
+  "remaining_rows_not_dispatched": 1290,
+  "model_slot_id": "deepseek_primary",
+  "task_id": "NLP-LLM-01",
+  "candidate_counts": {
+    "B_empty_artifact": 2,
+    "F": 2,
+    "S_dag_ratio_60_v1": 2
+  },
+  "terminal_outcomes": {
+    "hard_contract_failure": 6
+  },
+  "transport": {
+    "completed_body": 6,
+    "one_attempt_rows": 6,
+    "transport_terminal_failure": 0
+  },
+  "worker_evidence": {
+    "private_cases_attempted": 384,
+    "outputs_produced": 384,
+    "worker_error_cases": 0,
+    "payload_key_error_cases": 0,
+    "mutated_case_count": 0,
+    "hard_contract_vector_distribution": {
+      "[true,false]": 6
+    },
+    "private_score_distribution": {
+      "0.0": 6
+    }
+  },
+  "diagnosis": {
+    "fact": "The explicit inner-payload interface removed the FG3 failure mode: every private case executed without a worker exception or input mutation.",
+    "fact_2": "Both F submissions returned output objects whose keys or value structures differed from the frozen reference output fields allocations, by_name, and total.",
+    "inference": "The pre-existing artifact phrase 'allocations, the name mapping, and the conserved total' is insufficient to identify the exact scorer-facing output schema.",
+    "causal_limit": "This six-row batch establishes removal of the payload KeyError for one task and one provider; it does not establish general task success.",
+    "forward_action": "Leave all FG4 rows immutable and register a new successor with task-specific exact output contracts before further provider dispatch."
+  },
+  "safety_audit": {
+    "status": "passed",
+    "files_scanned": 81,
+    "exact_credential_reflection_count": 0,
+    "generic_credential_pattern_match_count": 0,
+    "forbidden_local_model_design_match_count": 0
+  },
+  "credential_values_recorded": false
+}
