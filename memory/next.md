@@ -126,3 +126,14 @@ forward-only generalization extension required by the user.
   or accepted stage reports; every new artifact lives under `forward_extensions`.
 - Do not design or run local-model experiments. The remote-only successor has
   1296 remote rows and zero local rows.
+
+## Stage 2.4 Consolidation
+
+- Primary states are `Reject=24`, `Admit=0`, `Invalid=0`; decision coverage is
+  24/24 and candidate yield is 0/24.
+- Interface diagnosis finds 17,152 exact `KeyError('payload')` cases across
+  268 rows; all affected rows fail all 64 private cases and all have detected
+  wrapper access in the generated implementation.
+- Commit and privately push the Stage 2.4 checkpoint before Stage 2.5 figures.
+- Register the separate FG4 interface-clarification successor before any
+  corrected-contract provider calls; do not reinterpret FG3.
