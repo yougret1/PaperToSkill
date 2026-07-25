@@ -115,3 +115,31 @@
 - Artifact safety audit passed over all 373 current run files: zero credential
   reflections, zero generic credential-pattern matches, and zero forbidden
   local model-design files.
+
+## 2026-07-25: Recursive-writer stop and terminal-row successor v2 freeze
+
+- The next parallel launch was stopped after progress reached 22 started
+  Controls-v2 rows and 28 started FG6 rows while terminal progress remained
+  12 and 18 respectively. FG7 and FG8 remained untouched.
+- Root cause was deterministic and local. Successor v1 replaced
+  `fg1.write_row`, but its helper reached that same patched symbol again instead
+  of a captured base writer, causing recursion before result-row persistence.
+- Both assistant-created launchers were stopped and confirmed exited before
+  repair. No previously terminal row or frozen FG3-FG5 artifact was changed.
+- The 20 newly affected rows comprise 10 Controls-v2 and 10 FG6 semantic rows:
+  16 have persisted response/scoring evidence and 4 have only a started marker.
+- Terminal-row successor v2 captures the unpatched base writer before installing
+  the live patch, calls it exactly once, and keeps repeat/control ownership in
+  hash-bound metadata sidecars. Retryable transport states remain pending and
+  cannot be written as terminal experimental outcomes.
+- Three v2 root-cause tests passed: nonrecursive single base-writer invocation,
+  rejection of retryable transport as a terminal row, and frozen registration
+  counts of 96 Controls-v2 plus exactly 1,296 rows in each full-grid repeat.
+- The combined test directory produced 15 passes and one expected stale-state
+  assertion from the immutable v1 test, which still encodes its earlier 12/18
+  started-row boundary. The v1 freeze verifier itself passed unchanged.
+- Terminal-row successor v2 freeze:
+  `6f9cfaa00304176190681df71b59a01d704b67aff892b3c61dcf80a64b3e17aef`
+- The v2 freeze binds the 20 new affected execution IDs, their evidence
+  manifests or started-marker hashes, the v1 freeze, the v2 source, and the v2
+  tests. Formal v2 freeze verification passed before recovery.

@@ -32,6 +32,10 @@ succeed. Unfavorable semantic results remain in the registered denominator.
 - [x] Treat transient network and retryable HTTP states as transport retries,
       not final experimental outcomes. Continue with the same execution ID and
       idempotency key until a non-network terminal result is available.
+- [x] Freeze terminal-row successor v2 after the first successor's patched
+      writer recursed through the patched symbol. Bind the additional 10
+      Controls-v2 and 10 FG6 nonterminal rows, and call the captured unpatched
+      base writer exactly once for every strict terminal row.
 
 ## Experiments
 
