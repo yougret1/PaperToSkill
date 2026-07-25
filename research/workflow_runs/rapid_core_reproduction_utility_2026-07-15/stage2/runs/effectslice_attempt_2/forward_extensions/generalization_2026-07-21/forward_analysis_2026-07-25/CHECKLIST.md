@@ -15,8 +15,8 @@ artifacts, verification record, log, commit, and private push all succeed.
    - Status: independently rerun, hash-verified, committed as `e547d1fc`, and privately pushed.
    - Separate the 24-task DeepSeek primary analysis from the four-anchor, six-model analysis.
    - Report domain, model, task, registry, and reducer effects without overstating coverage.
-3. [ ] Registered controls audit
-   - Status: scratch audit exists; repository migration and independent rerun pending.
+3. [x] Registered controls audit
+   - Status: all 144 source rows re-extracted, independently rerun, byte-for-byte verified, committed as `44882131`, and privately pushed.
    - Report exact SanityPass/SanityFail/Invalid states and destructive-target binding validity.
 4. [ ] Failure decomposition
    - Status: scratch results exist; repository migration and independent rerun pending.
