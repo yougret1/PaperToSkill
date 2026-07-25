@@ -52,6 +52,12 @@ CONTRASTS = (
     },
 )
 
+SEMANTIC_OUTCOMES = {
+    "operational_success",
+    "hard_contract_failure",
+    "score_shortfall",
+}
+
 
 def write_csv(
     path: Path, fieldnames: list[str], rows: list[dict[str, Any]]
@@ -67,6 +73,10 @@ def write_csv(
 
 def success(row: dict[str, Any]) -> int:
     return int(row["terminal_outcome"] == "operational_success")
+
+
+def semantic_valid(row: dict[str, Any]) -> bool:
+    return row["terminal_outcome"] in SEMANTIC_OUTCOMES
 
 
 def safe_mean(values: list[float]) -> float | None:
@@ -115,12 +125,7 @@ def summarize_rows(rows: list[dict[str, Any]]) -> dict[str, Any]:
             row["terminal_outcome"] == "score_shortfall" for row in rows
         ),
         "technical_or_invalid": sum(
-            row["terminal_outcome"]
-            not in {
-                "operational_success",
-                "hard_contract_failure",
-                "score_shortfall",
-            }
+            not semantic_valid(row)
             for row in rows
         ),
         "success_rate": round(
@@ -172,11 +177,14 @@ def analyze(run_dir: Path, output_dir: Path) -> dict[str, Any]:
                 "execution_order": row["execution_order"],
                 "execution_id": row["execution_id"],
                 "terminal_outcome": row["terminal_outcome"],
+                "semantic_valid": semantic_valid(row),
                 "operational_success": bool(success(row)),
                 "private_score": row.get("private_score"),
                 "hard_vector_0": vector[0] if vector is not None else None,
                 "hard_vector_1": vector[1] if vector is not None else None,
                 "transport_attempts": len(row.get("attempts", [])),
+                "provider_finish_reason": row.get("provider_finish_reason"),
+                "termination_reason": row.get("termination_reason"),
                 "elapsed_ms": row.get("total_execution_elapsed_ms"),
                 "provider_input_tokens": row.get(
                     "provider_reported_input_tokens"
@@ -218,6 +226,7 @@ def analyze(run_dir: Path, output_dir: Path) -> dict[str, Any]:
     contrast_units: list[dict[str, Any]] = []
     contrast_summary: list[dict[str, Any]] = []
     contrast_deltas: dict[tuple[str, str, str], float] = {}
+    contrast_validity: dict[tuple[str, str, str], bool] = {}
     units = sorted({(row["task_id"], row["registry_id"]) for row in results})
     for contrast in CONTRASTS:
         selected_rows: list[dict[str, Any]] = []
@@ -248,6 +257,7 @@ def analyze(run_dir: Path, output_dir: Path) -> dict[str, Any]:
                 if positive_vector is not None and negative_vector is not None
                 else None
             )
+            pair_valid = semantic_valid(positive) and semantic_valid(negative)
             item = {
                 "contrast_id": contrast["contrast_id"],
                 "task_id": task_id,
@@ -257,6 +267,9 @@ def analyze(run_dir: Path, output_dir: Path) -> dict[str, Any]:
                 "negative_arm": contrast["negative_arm"],
                 "positive_outcome": positive["terminal_outcome"],
                 "negative_outcome": negative["terminal_outcome"],
+                "positive_semantic_valid": semantic_valid(positive),
+                "negative_semantic_valid": semantic_valid(negative),
+                "pair_valid": pair_valid,
                 "delta_operational_success": delta_success,
                 "delta_private_score": delta_score,
                 "delta_hard_vector_0": delta_vector_0,
@@ -265,39 +278,90 @@ def analyze(run_dir: Path, output_dir: Path) -> dict[str, Any]:
             contrast_deltas[
                 (contrast["contrast_id"], task_id, registry_id)
             ] = float(delta_success)
+            contrast_validity[
+                (contrast["contrast_id"], task_id, registry_id)
+            ] = pair_valid
             selected_rows.append(item)
             contrast_units.append(item)
 
-        improved = sum(
+        itt_improved = sum(
             row["delta_operational_success"] > 0 for row in selected_rows
         )
-        worsened = sum(
+        itt_worsened = sum(
             row["delta_operational_success"] < 0 for row in selected_rows
         )
-        score_deltas = [
+        valid_rows = [row for row in selected_rows if row["pair_valid"]]
+        valid_improved = sum(
+            row["delta_operational_success"] > 0 for row in valid_rows
+        )
+        valid_worsened = sum(
+            row["delta_operational_success"] < 0 for row in valid_rows
+        )
+        itt_score_deltas = [
             float(row["delta_private_score"])
             for row in selected_rows
             if row["delta_private_score"] is not None
         ]
+        valid_score_deltas = [
+            float(row["delta_private_score"])
+            for row in valid_rows
+            if row["delta_private_score"] is not None
+        ]
+        itt_mean_delta = round(
+            mean(
+                row["delta_operational_success"]
+                for row in selected_rows
+            ),
+            6,
+        )
+        valid_mean_delta = (
+            round(
+                mean(
+                    row["delta_operational_success"]
+                    for row in valid_rows
+                ),
+                6,
+            )
+            if valid_rows
+            else None
+        )
         contrast_summary.append(
             {
                 "contrast_id": contrast["contrast_id"],
                 "positive_arm": contrast["positive_arm"],
                 "negative_arm": contrast["negative_arm"],
                 "units": len(selected_rows),
-                "improved_units": improved,
-                "worsened_units": worsened,
-                "unchanged_units": len(selected_rows) - improved - worsened,
-                "mean_delta_operational_success": round(
-                    mean(
-                        row["delta_operational_success"]
-                        for row in selected_rows
-                    ),
-                    6,
+                "itt_units": len(selected_rows),
+                "valid_units": len(valid_rows),
+                "excluded_invalid_units": len(selected_rows) - len(valid_rows),
+                "improved_units": itt_improved,
+                "worsened_units": itt_worsened,
+                "unchanged_units": (
+                    len(selected_rows) - itt_improved - itt_worsened
                 ),
-                "mean_delta_private_score": safe_mean(score_deltas),
+                "itt_improved_units": itt_improved,
+                "itt_worsened_units": itt_worsened,
+                "itt_unchanged_units": (
+                    len(selected_rows) - itt_improved - itt_worsened
+                ),
+                "valid_improved_units": valid_improved,
+                "valid_worsened_units": valid_worsened,
+                "valid_unchanged_units": (
+                    len(valid_rows) - valid_improved - valid_worsened
+                ),
+                "mean_delta_operational_success": itt_mean_delta,
+                "itt_mean_delta_operational_success": itt_mean_delta,
+                "valid_pair_mean_delta_operational_success": valid_mean_delta,
+                "mean_delta_private_score": safe_mean(itt_score_deltas),
+                "itt_mean_delta_private_score": safe_mean(itt_score_deltas),
+                "valid_pair_mean_delta_private_score": safe_mean(
+                    valid_score_deltas
+                ),
                 "two_sided_exact_sign_p": sign_test_two_sided(
-                    improved, worsened
+                    itt_improved, itt_worsened
+                ),
+                "valid_pair_two_sided_exact_sign_p": sign_test_two_sided(
+                    valid_improved, valid_worsened
                 ),
                 "interpretation": contrast["interpretation"],
             }
@@ -317,12 +381,22 @@ def analyze(run_dir: Path, output_dir: Path) -> dict[str, Any]:
         noncritical_rescue = contrast_deltas[
             ("noncritical_rescue", task_id, registry_id)
         ]
+        all_contrasts_valid = all(
+            contrast_validity[(contrast_id, task_id, registry_id)]
+            for contrast_id in (
+                "critical_necessity",
+                "noncritical_necessity",
+                "critical_rescue",
+                "noncritical_rescue",
+            )
+        )
         domain = by_unit_arm[(task_id, registry_id, "F")]["domain"]
         selectivity_rows.append(
             {
                 "task_id": task_id,
                 "domain": domain,
                 "registry_id": registry_id,
+                "all_contrasts_valid": all_contrasts_valid,
                 "necessity_delta_of_deltas": (
                     critical_necessity - noncritical_necessity
                 ),
@@ -368,15 +442,39 @@ def analyze(run_dir: Path, output_dir: Path) -> dict[str, Any]:
     technical_or_invalid = sum(
         outcome_counts[outcome]
         for outcome in outcome_counts
-        if outcome
-        not in {
-            "operational_success",
-            "hard_contract_failure",
-            "score_shortfall",
-        }
+        if outcome not in SEMANTIC_OUTCOMES
     )
+    technical_invalid_details = []
+    for row in results:
+        if semantic_valid(row):
+            continue
+        canonical_path = run_dir / row["canonical_output_path"]
+        canonical_bytes = extended(canonical_path).stat().st_size
+        technical_invalid_details.append(
+            {
+                "execution_id": row["execution_id"],
+                "task_id": row["task_id"],
+                "domain": row["domain"],
+                "registry_id": row["registry_id"],
+                "arm_id": row["arm_id"],
+                "terminal_outcome": row["terminal_outcome"],
+                "provider_finish_reason": row.get("provider_finish_reason"),
+                "termination_reason": row.get("termination_reason"),
+                "provider_output_tokens": row.get(
+                    "provider_reported_output_tokens"
+                ),
+                "canonical_output_bytes": canonical_bytes,
+                "response_exhausted_before_submission": (
+                    row.get("provider_finish_reason") == "length"
+                    and canonical_bytes == 0
+                ),
+            }
+        )
+    valid_selectivity_rows = [
+        row for row in selectivity_rows if row["all_contrasts_valid"]
+    ]
     analysis = {
-        "schema_version": "effectslice-s07-atom-intervention-analysis.v1",
+        "schema_version": "effectslice-s07-atom-intervention-analysis.v2",
         "status": "verified_focused_atom_intervention_analysis",
         "scope": {
             "tasks": 4,
@@ -391,6 +489,7 @@ def analyze(run_dir: Path, output_dir: Path) -> dict[str, Any]:
         "terminal_outcomes": dict(sorted(outcome_counts.items())),
         "complete_scored_grid": technical_or_invalid == 0,
         "technical_or_invalid_rows": technical_or_invalid,
+        "technical_or_invalid_details": technical_invalid_details,
         "arm_summaries": arm_summary,
         "contrast_summaries": contrast_summary,
         "selectivity": {
@@ -408,13 +507,43 @@ def analyze(run_dir: Path, output_dir: Path) -> dict[str, Any]:
                 ),
                 6,
             ),
+            "valid_complete_contrast_units": len(valid_selectivity_rows),
+            "excluded_incomplete_contrast_units": (
+                len(selectivity_rows) - len(valid_selectivity_rows)
+            ),
+            "valid_mean_necessity_delta_of_deltas": (
+                round(
+                    mean(
+                        row["necessity_delta_of_deltas"]
+                        for row in valid_selectivity_rows
+                    ),
+                    6,
+                )
+                if valid_selectivity_rows
+                else None
+            ),
+            "valid_mean_rescue_delta_of_deltas": (
+                round(
+                    mean(
+                        row["rescue_delta_of_deltas"]
+                        for row in valid_selectivity_rows
+                    ),
+                    6,
+                )
+                if valid_selectivity_rows
+                else None
+            ),
             "units": selectivity_rows,
         },
         "claim_boundary": (
             "This is a focused 4-task by 2-registry singleton intervention with "
-            "one completed semantic response per cell. It tests local necessity, "
+            "one terminal provider response per cell and no replay of completed "
+            "responses. It tests local necessity, "
             "rescue, and selectivity; it does not establish broad multi-seed "
-            "repeatability, and closure-breaking singleton arms are not reducer outputs."
+            "repeatability, and closure-breaking singleton arms are not reducer outputs. "
+            "Fixed-grid ITT estimates count malformed/no-submission rows as non-success; "
+            "valid-pair estimates exclude any contrast whose endpoint is not a semantic "
+            "success, hard-contract failure, or score shortfall."
         ),
     }
 
@@ -460,7 +589,7 @@ def analyze(run_dir: Path, output_dir: Path) -> dict[str, Any]:
         "token_balance.csv",
     )
     manifest = {
-        "schema_version": "effectslice-s07-atom-intervention-analysis-manifest.v1",
+        "schema_version": "effectslice-s07-atom-intervention-analysis-manifest.v2",
         "inputs": {
             "registration/manifest.json": sha256_file(
                 REGISTRATION / "manifest.json"
