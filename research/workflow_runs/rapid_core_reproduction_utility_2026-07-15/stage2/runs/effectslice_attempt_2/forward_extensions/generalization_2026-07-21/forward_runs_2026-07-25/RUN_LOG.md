@@ -96,3 +96,22 @@
   FG7, and FG8. It binds all 30 affected execution IDs, 26 complete evidence
   manifests, 4 started markers, the successor source, its tests, and the
   original joint freeze.
+
+## 2026-07-25: Terminal-row recovery completion
+
+- Confirmed the stale lock owners (PIDs 40944 and 39276) no longer existed,
+  then removed only those two assistant-created lock files.
+- Recovered all 30 affected rows. The 26 persisted responses were locally
+  reprojected with byte-identical source evidence; the 4 started-marker-only
+  rows completed by continuing transport with their original execution IDs.
+- No row remained deferred due to transport. Network or retryable HTTP states
+  were not accepted as final experiment outcomes.
+- Recovery-subset outcomes were 4 operational successes, 25 hard-contract
+  failures, and 1 malformed/no-submission. These are only the 30 recovered
+  rows and are not an estimate for any complete experiment.
+- A full registration and result-binding verification passed in the project
+  environment. Exact progress after recovery:
+  Controls-v2 12/96, FG6 18/1,296, FG7 0/1,296, and FG8 0/1,296.
+- Artifact safety audit passed over all 373 current run files: zero credential
+  reflections, zero generic credential-pattern matches, and zero forbidden
+  local model-design files.

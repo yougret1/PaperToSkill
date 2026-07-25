@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    items = case[\"items\"]\n    required = set(case[\"required_failure_items\"])\n    unresolved = set(case[\"unresolved_without\"])\n    minimal_set = required | unresolved\n    minimal_failure = [item for item in items if item in minimal_set]\n    outcome = \"fail\" if minimal_set else \"pass\"\n    tests = 1 + len(items) - len(minimal_set)\n    return {\"minimal_failure\": minimal_failure, \"outcome\": outcome, \"tests\": tests}\n"
+}
