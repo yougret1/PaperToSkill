@@ -8,11 +8,11 @@ artifacts, verification record, log, commit, and private push all succeed.
 
 ## Active Work
 
-1. [ ] F/S/B paper-task effects
-   - Status: independently rerun and hash-verified in commit `582bba5c`; private push pending after repeated GitHub connection failures.
+1. [x] F/S/B paper-task effects
+   - Status: independently rerun, hash-verified, committed as `582bba5c`, and privately pushed through `e547d1fc`.
    - Deliver paper-level effects, paper-stratified intervals, task effects, and forest-plot data.
-2. [ ] Generalization and interactions
-   - Status: independently rerun and hash-verified; section commit and private push pending.
+2. [x] Generalization and interactions
+   - Status: independently rerun, hash-verified, committed as `e547d1fc`, and privately pushed.
    - Separate the 24-task DeepSeek primary analysis from the four-anchor, six-model analysis.
    - Report domain, model, task, registry, and reducer effects without overstating coverage.
 3. [ ] Registered controls audit
