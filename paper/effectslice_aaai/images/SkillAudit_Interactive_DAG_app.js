@@ -3,7 +3,7 @@
 
   const SVG_NS = "http://www.w3.org/2000/svg";
   const NODE_RADIUS = 42;
-  const ARROW_CLEARANCE = 14;
+  const ARROW_CLEARANCE = 20;
   const DRAG_THRESHOLD = 10;
 
   const nodes = [
