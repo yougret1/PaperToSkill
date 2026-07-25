@@ -59,3 +59,40 @@
   `origin/codex/effectslice-v3` branch. The commit excludes credentials,
   `.venv-forward/`, caches, temporary directories, the unrelated `s08/`, and
   all other unrelated changes.
+
+## 2026-07-25: First live-run stop and terminal-row successor freeze
+
+- All live preflights passed: 1/1 Controls-v2 route and all 18 full-grid
+  repeat/model slots were available. No credential value was recorded.
+- The first parallel invocation was stopped after detecting 12 Controls-v2 and
+  18 FG6 started markers with zero terminal rows. FG7 and FG8 had not started.
+- Root cause was deterministic and local: the live model calls and scoring
+  completed, but the new runners appended repeat/control metadata to the
+  frozen strict result row before calling its schema validator. The validator
+  correctly rejected those extra fields before terminal-row persistence.
+- Audit classified the 30 affected semantic rows as follows:
+  26 have complete attempts, raw response, canonical output, and scoring
+  evidence; 4 have only a started marker because they were in flight when the
+  faulty launchers were stopped.
+- Added a forward-only terminal-row successor. It leaves the original frozen
+  runners unchanged, writes only the original 25-field strict result schema,
+  and stores repeat/control ownership in a separately hash-bound metadata
+  sidecar used by progress verification and later analysis.
+- The 26 complete responses are reconstructed locally from persisted transport
+  bodies. The successor verifies regenerated attempts/raw/canonical/scoring
+  hashes byte-for-byte before writing a result row and makes no HTTP call for
+  those rows.
+- The 4 started-marker-only rows are continued with their original execution ID
+  and idempotency key. Transient network and retryable HTTP states are not
+  accepted as final experiment rows; each invocation permits three transport
+  cycles (up to nine underlying attempts) and leaves the row pending if all
+  remain retryable.
+- Added six successor tests. Together with the seven original protocol tests,
+  all 13 tests passed. One test performs a real persisted-response local
+  reprojection and verifies that all source evidence hashes remain unchanged.
+- Terminal-row successor freeze:
+  `a6b4d581968e098693ba3ef94fd3d359f2e283477c239fe85670ce44ce7809bd6`
+- The freeze binds 96 Controls-v2 rows and exactly 1,296 rows in each of FG6,
+  FG7, and FG8. It binds all 30 affected execution IDs, 26 complete evidence
+  manifests, 4 started markers, the successor source, its tests, and the
+  original joint freeze.

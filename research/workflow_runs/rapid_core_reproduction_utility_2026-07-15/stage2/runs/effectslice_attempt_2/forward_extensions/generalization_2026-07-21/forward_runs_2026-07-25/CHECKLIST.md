@@ -23,6 +23,15 @@ succeed. Unfavorable semantic results remain in the registered denominator.
       confounded with provider time.
 - [x] Verify all registrations and write a no-call verification record.
 - [x] Commit and privately push the complete pre-call freeze.
+- [x] Freeze a forward terminal-row successor after the first live-run writer
+      rejected extension metadata. Keep result rows on the original strict
+      schema and store repeat/control bindings in hash-bound sidecars.
+- [x] Require exactly 1,296 unique terminal rows in each of FG6, FG7, and FG8.
+      Locally recovered rows remain part of that count; transport attempts do
+      not add or remove semantic rows.
+- [x] Treat transient network and retryable HTTP states as transport retries,
+      not final experimental outcomes. Continue with the same execution ID and
+      idempotency key until a non-network terminal result is available.
 
 ## Experiments
 
@@ -52,6 +61,8 @@ succeed. Unfavorable semantic results remain in the registered denominator.
 - Controls-v2 model-mediated layer: 96 calls.
 - FG6-FG8: 3 x 1,296 = 3,888 calls.
 - Total: 3,984 calls before transport retries.
+- Completion accounting: Controls-v2 must have 96 unique terminal result rows;
+  FG6, FG7, and FG8 must each have exactly 1,296 unique terminal result rows.
 
 ## Final Gate
 
