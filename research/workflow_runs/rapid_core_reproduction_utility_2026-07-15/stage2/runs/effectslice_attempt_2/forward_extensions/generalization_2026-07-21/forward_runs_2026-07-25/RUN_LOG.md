@@ -193,3 +193,6 @@
   analysis, verification, source, and log files selected for backup: zero exact
   credential reflections, zero generic credential-pattern matches, and zero
   forbidden local-model-design markers.
+- Controls-v2 evidence commit `912edd61` was pushed to the private
+  `origin/codex/effectslice-v3` branch. The push also synchronized the preceding
+  terminal-row successor v2 freeze commit `b874ac08`.
