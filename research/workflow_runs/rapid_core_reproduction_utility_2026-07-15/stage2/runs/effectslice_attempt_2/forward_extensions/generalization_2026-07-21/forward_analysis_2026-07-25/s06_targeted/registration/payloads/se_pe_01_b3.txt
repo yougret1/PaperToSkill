@@ -1,0 +1,275 @@
+[EXPLICIT CASE INTERFACE]
+The evaluator invokes solve(case) once for each fixture row. The argument is exactly the inner object stored in that row's payload field. Do not expect case_id, seed, or any outer fixture-row keys; use only fields present in the payload object. Return the result for that payload.
+
+[EXACT OUTPUT CONTRACT]
+For task SE-PE-01, solve(case) must return a JSON value matching the structural schema below. This is a schema, not an example and not a set of expected answers. Every name under properties is a literal output key. Every key listed under required must be present. additionalProperties=false forbids unlisted keys at that object level. dynamicKeysFrom means the object keys are arbitrary JSON strings that must be copied verbatim from the indicated input location; never parse, coerce, numerically validate, or impose a naming pattern on those keys. anyOf denotes the allowed JSON types. Do not rename fields or change their nesting.
+OUTPUT STRUCTURAL SCHEMA:
+{
+  "additionalProperties": false,
+  "properties": {
+    "removed_node_ids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "retained_node_ids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "removed_node_ids",
+    "retained_node_ids"
+  ],
+  "type": "object"
+}
+
+[STRICT SUBMISSION ENVELOPE]
+Your entire response must be exactly one valid JSON object with the single key "implementation". The first non-whitespace character must be { and the last non-whitespace character must be }. Do not use Markdown code fences. Do not add a preamble, explanation, or trailing text. Encode the Python source as a JSON string, escaping newlines, backslashes, and quotes as required by JSON.
+
+EFFECTSLICE_MODEL_VISIBLE_PAYLOAD_V1
+task_scaffold:429
+# Registered procedure task SE-PE-01
+
+Return one JSON object with exactly one key, `implementation`. Its value must be Python source defining `solve(case)`. The function must return a JSON-serializable object, must not mutate `case`, and may use only the Python standard library. Do not access files, the network, environment variables, subprocesses, randomness, or clocks. The attached public fixtures define input shapes only.
+
+fixture_payload:4887
+{
+  "schema_version": "effectslice-fg1-public-inputs.v1",
+  "task_id": "SE-PE-01",
+  "registry_id": "A",
+  "cases": [
+    {
+      "case_id": "fg1-se-pe-01-a-000",
+      "payload": {
+        "nodes": [
+          {
+            "id": "root",
+            "parent": null,
+            "symbol": "root",
+            "depth": 0,
+            "removable": false,
+            "utility": 1.0
+          },
+          {
+            "id": "n1",
+            "parent": "root",
+            "symbol": "s1",
+            "depth": 1,
+            "removable": false,
+            "utility": 0.87578184
+          },
+          {
+            "id": "n2",
+            "parent": "root",
+            "symbol": "s2",
+            "depth": 1,
+            "removable": true,
+            "utility": 0.54663808
+          },
+          {
+            "id": "n3",
+            "parent": "root",
+            "symbol": "s0",
+            "depth": 1,
+            "removable": false,
+            "utility": 0.43607337
+          },
+          {
+            "id": "n4",
+            "parent": "n2",
+            "symbol": "s1",
+            "depth": 2,
+            "removable": true,
+            "utility": 0.66557814
+          },
+          {
+            "id": "n5",
+            "parent": "n3",
+            "symbol": "s2",
+            "depth": 2,
+            "removable": false,
+            "utility": 0.70145921
+          },
+          {
+            "id": "n6",
+            "parent": "n1",
+            "symbol": "s0",
+            "depth": 2,
+            "removable": true,
+            "utility": 0.19506725
+          }
+        ],
+        "required_symbols": [
+          "root",
+          "s1"
+        ],
+        "_case_nonce": "a5e459b5ce767fe4"
+      }
+    },
+    {
+      "case_id": "fg1-se-pe-01-a-001",
+      "payload": {
+        "nodes": [
+          {
+            "id": "root",
+            "parent": null,
+            "symbol": "root",
+            "depth": 0,
+            "removable": false,
+            "utility": 1.0
+          },
+          {
+            "id": "n1",
+            "parent": "root",
+            "symbol": "s1",
+            "depth": 1,
+            "removable": false,
+            "utility": 0.5001194
+          },
+          {
+            "id": "n2",
+            "parent": "root",
+            "symbol": "s2",
+            "depth": 1,
+            "removable": true,
+            "utility": 0.61476677
+          },
+          {
+            "id": "n3",
+            "parent": "root",
+            "symbol": "s0",
+            "depth": 1,
+            "removable": false,
+            "utility": 0.1003797
+          },
+          {
+            "id": "n4",
+            "parent": "n2",
+            "symbol": "s1",
+            "depth": 2,
+            "removable": true,
+            "utility": 0.27270442
+          },
+          {
+            "id": "n5",
+            "parent": "n3",
+            "symbol": "s2",
+            "depth": 2,
+            "removable": false,
+            "utility": 0.9180168
+          },
+          {
+            "id": "n6",
+            "parent": "n1",
+            "symbol": "s0",
+            "depth": 2,
+            "removable": true,
+            "utility": 0.29875731
+          }
+        ],
+        "required_symbols": [
+          "root",
+          "s1"
+        ],
+        "_case_nonce": "a9d71c00aa4496c2"
+      }
+    },
+    {
+      "case_id": "fg1-se-pe-01-a-002",
+      "payload": {
+        "nodes": [
+          {
+            "id": "root",
+            "parent": null,
+            "symbol": "root",
+            "depth": 0,
+            "removable": false,
+            "utility": 1.0
+          },
+          {
+            "id": "n1",
+            "parent": "root",
+            "symbol": "s1",
+            "depth": 1,
+            "removable": false,
+            "utility": 0.41651069
+          },
+          {
+            "id": "n2",
+            "parent": "root",
+            "symbol": "s2",
+            "depth": 1,
+            "removable": true,
+            "utility": 0.97660242
+          },
+          {
+            "id": "n3",
+            "parent": "root",
+            "symbol": "s0",
+            "depth": 1,
+            "removable": false,
+            "utility": 0.39042735
+          },
+          {
+            "id": "n4",
+            "parent": "n2",
+            "symbol": "s1",
+            "depth": 2,
+            "removable": true,
+            "utility": 0.80397101
+          },
+          {
+            "id": "n5",
+            "parent": "n3",
+            "symbol": "s2",
+            "depth": 2,
+            "removable": false,
+            "utility": 0.37272604
+          },
+          {
+            "id": "n6",
+            "parent": "n1",
+            "symbol": "s0",
+            "depth": 2,
+            "removable": true,
+            "utility": 0.57371477
+          }
+        ],
+        "required_symbols": [
+          "root",
+          "s1"
+        ],
+        "_case_nonce": "489581c70efca96d"
+      }
+    }
+  ]
+}
+
+candidate_artifact:1569
+Implement `grammar_guided_node_reduction` through `solve(case)` for this bounded objective: Reduce a registered parse tree through grammar-valid deletion and replacement candidates while preserving an interestingness oracle.
+
+Stay inside this mechanism boundary: Perses syntax-guided reduction on a miniature grammar; parser generation and real compiler execution are excluded. Validate every required field before computing a result.
+
+Consider deeper parse-tree nodes before shallower nodes.
+
+Never remove the root, a required symbol, or a node with retained children.
+
+Tentatively remove a node only if all required symbols remain represented.
+
+Use node ID as the stable tie break at equal depth.
+
+Return sorted retained IDs and the actual removal order.
+
+Treat these registered properties as hard contracts rather than soft preferences: grammar_valid, interestingness_preserved, registered_candidate_order, stable_ties.
+
+Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.
+
+Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.
+
+Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.
+
+Return only JSON-serializable values with the exact named fields. Raise ValueError for an infeasible or structurally invalid case instead of silently repairing it.
