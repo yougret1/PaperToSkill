@@ -25,7 +25,8 @@ artifacts, verification record, log, commit, and private push all succeed.
    - Status: frozen decisions plus 81 total-grid, 9 registry, 5 margin, and 144 block-omission profiles independently rerun and verified; committed as `0ce9126a` and privately pushed.
    - Apply the frozen six-block and registered block-omission rules.
    - Report threshold sensitivity separately from registered decisions.
-6. [ ] Targeted anomaly review and reruns
+6. [x] Targeted anomaly review and reruns
+   - Status: 8/8 registered DeepSeek calls completed with first-attempt transport success; 3 operational successes and 5 hard-contract failures were independently verified, committed as `f988426a`, and privately pushed.
    - Identify ambiguous transport failures and repeatability anomalies.
    - Rerun only cases whose cause remains ambiguous, under a frozen successor registry.
 7. [ ] Focused Atom restore/drop intervention
