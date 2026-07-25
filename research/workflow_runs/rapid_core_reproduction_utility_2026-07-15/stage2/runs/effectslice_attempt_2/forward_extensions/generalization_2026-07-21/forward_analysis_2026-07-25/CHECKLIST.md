@@ -8,8 +8,8 @@ artifacts, verification record, log, commit, and private push all succeed.
 
 ## Active Work
 
-1. [ ] F/S/B paper-task effects
-   - Status: scratch results exist; repository migration and independent rerun pending.
+1. [x] F/S/B paper-task effects
+   - Status: independently rerun, hash-verified, and ready for the section checkpoint.
    - Deliver paper-level effects, paper-stratified intervals, task effects, and forest-plot data.
 2. [ ] Generalization and interactions
    - Status: scratch results exist; repository migration and independent rerun pending.
