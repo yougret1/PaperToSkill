@@ -18,8 +18,8 @@ artifacts, verification record, log, commit, and private push all succeed.
 3. [x] Registered controls audit
    - Status: all 144 source rows re-extracted, independently rerun, byte-for-byte verified, committed as `44882131`, and privately pushed.
    - Report exact SanityPass/SanityFail/Invalid states and destructive-target binding validity.
-4. [ ] Failure decomposition
-   - Status: scratch results exist; repository migration and independent rerun pending.
+4. [x] Failure decomposition
+   - Status: all 1,296 source rows re-extracted, independently rerun, byte-for-byte verified, committed as `3454d116`, and privately pushed.
    - Separate original routing class, final result source, and final experimental endpoint.
 5. [ ] SLA sensitivity and leave-one-block-out
    - Apply the frozen six-block and registered block-omission rules.
