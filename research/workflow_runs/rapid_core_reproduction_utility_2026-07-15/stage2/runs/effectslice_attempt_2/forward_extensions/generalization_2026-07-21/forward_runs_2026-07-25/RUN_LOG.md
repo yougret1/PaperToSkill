@@ -157,8 +157,10 @@
 - The continuation launchers were detached from the interactive session so a
   later session transition could not terminate registered work in flight.
 - Controls-v2 and the full grid remained logically independent. Controls-v2
-  completed while the full-grid launcher continued FG6; FG7 and FG8 could not
-  begin before FG6 completed.
+  completed while the full-grid launcher continued the frozen 18-wave,
+  block-balanced schedule. Full-grid blocks are interleaved across repetitions;
+  a later repeat can begin a 216-row block before an earlier repeat reaches its
+  complete 1,296-row denominator.
 
 ## 2026-07-25: Controls-v2 completion, analysis, and verification
 
