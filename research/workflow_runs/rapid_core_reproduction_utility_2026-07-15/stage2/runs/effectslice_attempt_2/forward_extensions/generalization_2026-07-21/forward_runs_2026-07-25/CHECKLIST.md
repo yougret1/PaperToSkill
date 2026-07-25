@@ -39,7 +39,7 @@ succeed. Unfavorable semantic results remain in the registered denominator.
 
 ## Experiments
 
-1. [ ] Controls-v2
+1. [x] Controls-v2
    - Deterministic label layer: zero provider calls.
    - Model-mediated layer: 4 domain anchors x 2 registries x 4 arms x 3
      independent repetitions = 96 registered calls.
@@ -47,6 +47,15 @@ succeed. Unfavorable semantic results remain in the registered denominator.
      `mutation_id -> atom IDs -> contract ID -> private case IDs -> scorer key`.
    - Report deterministic confusion results separately from model-mediated
      retention, localization, and repeatability.
+   - Completed with exactly 96 unique terminal result rows, 96 metadata
+     sidecars, and 96 terminal markers; all 96 rows are valid.
+   - Terminal outcomes: 23 operational successes, 71 hard-contract failures,
+     and 2 malformed/no-submission results.
+   - Deterministic layer: all 40 registered cells passed (24 Admit, 8 Reject,
+     and 8 Invalid). The exact-contract-removal negative matched its registered
+     direction in 24/24 rows and produced 0/24 operational successes.
+   - Completion verification passed and confirmed that no retryable transport
+     state was persisted as a terminal experimental result.
 
 2. [ ] FG6 full-grid independent exact-protocol repetition
    - 1,296 registered calls across all frozen execution families and model

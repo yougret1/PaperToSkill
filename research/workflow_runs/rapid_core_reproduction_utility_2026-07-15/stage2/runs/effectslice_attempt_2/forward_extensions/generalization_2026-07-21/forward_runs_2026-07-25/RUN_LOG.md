@@ -143,3 +143,53 @@
 - The v2 freeze binds the 20 new affected execution IDs, their evidence
   manifests or started-marker hashes, the v1 freeze, the v2 source, and the v2
   tests. Formal v2 freeze verification passed before recovery.
+
+## 2026-07-25: Nonterminal-row recovery and detached continuation
+
+- A later launcher exit left eight additional registered executions without
+  terminal rows: two Controls-v2 rows and six FG6 rows. All eight had only their
+  original started markers; no conflicting terminal row existed.
+- Terminal-row successor v2 continued those eight executions under their
+  original execution IDs and idempotency keys. The recovery produced exactly
+  eight terminal rows and no deferred transport row.
+- Exact progress after this recovery was Controls-v2 85/96, FG6 127/1,296,
+  FG7 0/1,296, and FG8 0/1,296.
+- The continuation launchers were detached from the interactive session so a
+  later session transition could not terminate registered work in flight.
+- Controls-v2 and the full grid remained logically independent. Controls-v2
+  completed while the full-grid launcher continued FG6; FG7 and FG8 could not
+  begin before FG6 completed.
+
+## 2026-07-25: Controls-v2 completion, analysis, and verification
+
+- Controls-v2 completed with exactly 96 unique terminal result rows. The strict
+  result-row set, hash-bound metadata-sidecar set, and terminal-marker set each
+  exactly equal the 96-row frozen registration; all 96 rows are valid.
+- Terminal outcomes are 23 operational successes, 71 hard-contract failures,
+  and 2 malformed/no-submission results. Retryable transport states are absent
+  from the terminal-result set.
+- The deterministic layer passed all 40 registered cells. Its confusion matrix
+  contains only matching cells: 24 Admit/Admit, 8 Reject/Reject, and
+  8 Invalid/Invalid.
+- Model-mediated arm results over 24 registered rows per arm are:
+  `F_reference` 8 successes and 8 direction matches; `F_identity` 8 and 8;
+  `P_redundancy_removed` 7 and 7; and `N_exact_contract_removed` 0 successes
+  with 24/24 direction matches.
+- `F_reference` and `F_identity` have identical valid-row mean private score
+  (0.532552) and success rate (8/24). The nonidentical redundancy-removal arm is
+  slightly lower at 7/24 and mean private score 0.490885. These descriptive
+  differences are retained without favorable-case deletion.
+- The destructive exact-contract-removal negative behaves as preregistered:
+  all 24 rows fail operationally and all 24 match the negative direction.
+- The post-hoc completion verifier passed. It checks the exact denominator,
+  execution-ID uniqueness, strict schema, registration/result/metadata/marker
+  bindings, and absence of retryable transport terminal states.
+- Primary artifacts:
+  `runs/controls_v2/`, `analysis/controls_v2/analysis.json`, and
+  `verification/controls_v2.json`.
+- Analysis SHA-256:
+  `f11f01f5ed4fedbdf08e3574faa75ec1491e735b40a82a3bcdaded60c9a039b52`.
+- A scoped artifact-safety audit passed over all 877 Controls-v2 evidence,
+  analysis, verification, source, and log files selected for backup: zero exact
+  credential reflections, zero generic credential-pattern matches, and zero
+  forbidden local-model-design markers.
