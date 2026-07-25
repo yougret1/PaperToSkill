@@ -11,6 +11,12 @@
   privately pushed in commit `640ad272`; slide 2 now presents the full
   `F=R(A)` path above the upstream-produced `S=R(A_S)` path with manuscript
   notation aligned through the frozen boundary.
+- A forward-only third slide was added as an editable DAG component library and
+  privately pushed in commit `64d5ede5`. Slides 1-2 retained identical rendered
+  hashes; slide 3 contains 106 native PowerPoint shapes, zero raster assets, and
+  copy-ready chain, branch, merge, and dependency-closure patterns. The desktop
+  and repository PPTX copies share SHA-256
+  `882507035972718344042843E2F448194AB4B0D8D2EA1DC9231B725D88B5EE57`.
 - FG3 remains frozen with 1,296 terminal rows. Its exclusive classification is
   268 payload-interface, 684 exact-output contract, 77 response-format, 120
   integrity/digest, one provider availability, 141 experimental outcomes, and
