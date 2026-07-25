@@ -17,6 +17,13 @@
   copy-ready chain, branch, merge, and dependency-closure patterns. The desktop
   and repository PPTX copies share SHA-256
   `882507035972718344042843E2F448194AB4B0D8D2EA1DC9231B725D88B5EE57`.
+- A standalone fixed-layout five-node interactive DAG asset was privately pushed
+  in commit `dec5bad1`. It uses the V3.3 blue/cyan/red palette, adds new
+  dependencies as dashed edges, rejects duplicate/self/cycle-forming edges, and
+  passed headless Edge interaction checks plus 1600x900 and 800x450 visual QA.
+  The delivered source and previews are under
+  `C:/Users/Z/Desktop/论文/SelfPaper/toSkill/makeImage` and mirrored in
+  `paper/effectslice_aaai/images/SkillAudit_Interactive_DAG_*`.
 - FG3 remains frozen with 1,296 terminal rows. Its exclusive classification is
   268 payload-interface, 684 exact-output contract, 77 response-format, 120
   integrity/digest, one provider availability, 141 experimental outcomes, and
