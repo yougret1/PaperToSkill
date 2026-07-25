@@ -22,7 +22,7 @@ succeed. Unfavorable semantic results remain in the registered denominator.
 - [x] Freeze a globally interleaved schedule so repetition ID is not
       confounded with provider time.
 - [x] Verify all registrations and write a no-call verification record.
-- [ ] Commit and privately push the complete pre-call freeze.
+- [x] Commit and privately push the complete pre-call freeze.
 
 ## Experiments
 

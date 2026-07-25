@@ -55,3 +55,7 @@
 - The recorded no-call verifier passed with provider calls started `false`,
   1,296 rows per full-grid repeat, 3,888 full-grid rows, 96 Controls-v2 rows,
   and 3,984 total registered rows. Operational preflights are excluded.
+- Pre-call freeze commit `cb5a758e` was pushed successfully to the private
+  `origin/codex/effectslice-v3` branch. The commit excludes credentials,
+  `.venv-forward/`, caches, temporary directories, the unrelated `s08/`, and
+  all other unrelated changes.
