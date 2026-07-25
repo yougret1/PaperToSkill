@@ -21,7 +21,8 @@ artifacts, verification record, log, commit, and private push all succeed.
 4. [x] Failure decomposition
    - Status: all 1,296 source rows re-extracted, independently rerun, byte-for-byte verified, committed as `3454d116`, and privately pushed.
    - Separate original routing class, final result source, and final experimental endpoint.
-5. [ ] SLA sensitivity and leave-one-block-out
+5. [x] SLA sensitivity and leave-one-block-out
+   - Status: frozen decisions plus 81 total-grid, 9 registry, 5 margin, and 144 block-omission profiles independently rerun and verified; committed as `0ce9126a` and privately pushed.
    - Apply the frozen six-block and registered block-omission rules.
    - Report threshold sensitivity separately from registered decisions.
 6. [ ] Targeted anomaly review and reruns
