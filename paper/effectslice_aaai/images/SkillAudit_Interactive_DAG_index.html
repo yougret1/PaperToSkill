@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SkillAudit Interactive DAG</title>
+    <link rel="stylesheet" href="SkillAudit_Interactive_DAG_styles.css" />
+  </head>
+  <body>
+    <main class="stage" aria-label="Interactive directed acyclic graph">
+      <svg
+        id="dag"
+        viewBox="0 0 1600 900"
+        role="img"
+        aria-labelledby="dag-title dag-description"
+      >
+        <title id="dag-title">Five-node directed acyclic graph</title>
+        <desc id="dag-description">
+          Select a node or drag from one node to another to add a dashed directed edge.
+        </desc>
+
+        <defs>
+          <pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse">
+            <path d="M 80 0 L 0 0 0 80" class="grid-line" />
+          </pattern>
+          <marker
+            id="arrow-solid"
+            markerWidth="16"
+            markerHeight="16"
+            refX="14"
+            refY="8"
+            orient="auto"
+            markerUnits="userSpaceOnUse"
+          >
+            <path d="M 0 1 L 15 8 L 0 15 Z" class="arrow-solid" />
+          </marker>
+          <marker
+            id="arrow-dashed"
+            markerWidth="16"
+            markerHeight="16"
+            refX="14"
+            refY="8"
+            orient="auto"
+            markerUnits="userSpaceOnUse"
+          >
+            <path d="M 0 1 L 15 8 L 0 15 Z" class="arrow-dashed" />
+          </marker>
+        </defs>
+
+        <rect class="canvas" width="1600" height="900" />
+        <rect class="grid" x="40" y="40" width="1520" height="820" />
+        <g id="edges" aria-hidden="true"></g>
+        <g id="draft-edge" aria-hidden="true"></g>
+        <g id="nodes"></g>
+      </svg>
+      <p id="status" class="sr-only" aria-live="polite"></p>
+    </main>
+    <script src="SkillAudit_Interactive_DAG_app.js"></script>
+  </body>
+</html>
