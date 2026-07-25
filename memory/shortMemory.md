@@ -21,6 +21,9 @@
   in commit `dec5bad1`. It uses the V3.3 blue/cyan/red palette, adds new
   dependencies as dashed edges, rejects duplicate/self/cycle-forming edges, and
   passed headless Edge interaction checks plus 1600x900 and 800x450 visual QA.
+  Its solid and dashed arrowheads were enlarged from 16x16 to 24x24 in the
+  forward-only Stage 2.5.3 iteration and privately pushed in commit `0fe5c444`;
+  the updated asset passed the same interaction and two-viewport visual checks.
   The delivered source and previews are under
   `C:/Users/Z/Desktop/论文/SelfPaper/toSkill/makeImage` and mirrored in
   `paper/effectslice_aaai/images/SkillAudit_Interactive_DAG_*`.
