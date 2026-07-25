@@ -1,0 +1,23 @@
+Implement `mutual_reachability_mst` through `solve(case)` for this bounded objective: Compute core distances, mutual-reachability edge weights, and a deterministic minimum spanning tree for registered distance matrices.
+
+Stay inside this mechanism boundary: HDBSCAN mutual-reachability graph construction and MST; approximate nearest-neighbor search is excluded. Validate every required field before computing a result.
+
+For each pair compute mutual reachability as max(core_left, core_right, distance).
+
+Canonicalize undirected endpoints.
+
+Sort by reachability then endpoint IDs.
+
+Run Kruskal with deterministic union-find until n minus one edges are selected.
+
+Reject disconnected inputs and return selected edges plus total weight.
+
+Treat these registered properties as hard contracts rather than soft preferences: correct_core_distance, mutual_reachability, valid_mst, stable_edge_ties.
+
+Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.
+
+Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.
+
+Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.
+
+Return only JSON-serializable values with the exact named fields. Raise ValueError for an infeasible or structurally invalid case instead of silently repairing it.

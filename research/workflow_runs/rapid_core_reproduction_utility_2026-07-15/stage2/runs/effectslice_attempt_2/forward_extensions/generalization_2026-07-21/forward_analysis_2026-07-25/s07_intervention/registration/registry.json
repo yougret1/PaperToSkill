@@ -1,0 +1,759 @@
+{
+  "design": {
+    "api_seed": "unsupported by the registered DeepSeek route; temperature=0 and top_p=1",
+    "closure_policy": "F and S retain registered closure. Singleton causal edits are allowed to break the chain closure and are never described as reducer outputs.",
+    "necessity_contrasts": [
+      "F_vs_F_drop_critical",
+      "F_vs_F_drop_noncritical"
+    ],
+    "randomization": "deterministic SHA-256 ordering over task, registry, and arm",
+    "rescue_contrasts": [
+      "S_restore_critical_vs_S",
+      "S_restore_noncritical_vs_S"
+    ],
+    "technical_retry_policy": "up to five transport attempts; never replay a completed semantic response"
+  },
+  "frozen_inputs": {
+    "fg5_schedule_sha256": "60f89b79211aadd2a271e43e378de9ec45559081392f2a364e9e0c24b601e77f",
+    "fg5_successor_manifest_sha256": "b9da9b7ce013a7b6e3d8575a1d3853f5aaa2bb65891c2cedc35c091184d7dc3c",
+    "materialization_manifest_sha256": "0a09e4b7a54f9cf64471427e11b7f8ca3027e5b841e710550ee12ca95400ee8a"
+  },
+  "purpose": "four-domain singleton atom necessity and rescue intervention",
+  "schema_version": "effectslice-s07-atom-intervention-registry.v1",
+  "scope": {
+    "arms_per_task_registry": 6,
+    "domains": 4,
+    "model_slot_id": "deepseek_primary",
+    "provider_calls": 48,
+    "registries_per_task": 2,
+    "tasks": 4
+  },
+  "status": "frozen_before_provider_calls",
+  "tasks": [
+    {
+      "arms": [
+        {
+          "arm_id": "F",
+          "artifact_bytes": 1597,
+          "artifact_path": "registration/candidates/NLP-LLM-01/F.txt",
+          "artifact_sha256": "df86e02a4539411b48ef506ac7131cf263b8646a3e3d2fa0451c404a60b34a9a",
+          "atom_ids": [
+            "a_ef84b15111a60040",
+            "a_b679f5fdbb67e54a",
+            "a_f3fa98e0f2eb4211",
+            "a_3b96fe6196e7eb69",
+            "a_36ff177c81fafe83",
+            "a_df5f7de8d13f5961",
+            "a_7a46a1dcadcf9a02",
+            "a_06320c211d1a0d49",
+            "a_4ae001845568c03d",
+            "a_7664a1351581c19a",
+            "a_a54fb718c24e7b56",
+            "a_b937df7e1506a9ad"
+          ],
+          "contrast_role": "full_information_baseline",
+          "dependency_closed": true,
+          "rendered_token_count": 285,
+          "retained_token_ratio": 1.0,
+          "singleton_intervention": false
+        },
+        {
+          "arm_id": "S",
+          "artifact_bytes": 950,
+          "artifact_path": "registration/candidates/NLP-LLM-01/S.txt",
+          "artifact_sha256": "9fa0624b040b8486f0308974afae94c1bebb5dbe3b8e1337ac8cfb461eeee5cb",
+          "atom_ids": [
+            "a_ef84b15111a60040",
+            "a_b679f5fdbb67e54a",
+            "a_f3fa98e0f2eb4211",
+            "a_3b96fe6196e7eb69",
+            "a_36ff177c81fafe83",
+            "a_df5f7de8d13f5961",
+            "a_7a46a1dcadcf9a02",
+            "a_06320c211d1a0d49"
+          ],
+          "contrast_role": "registered_slice_baseline",
+          "dependency_closed": true,
+          "rendered_token_count": 170,
+          "retained_token_ratio": 0.59649122807,
+          "singleton_intervention": false
+        },
+        {
+          "arm_id": "F_drop_critical",
+          "artifact_bytes": 1449,
+          "artifact_path": "registration/candidates/NLP-LLM-01/F_drop_critical.txt",
+          "artifact_sha256": "8c7df5640efc601f78bcbe95728c1477e3b4eac71233dbc4c30b471affd98721",
+          "atom_ids": [
+            "a_ef84b15111a60040",
+            "a_b679f5fdbb67e54a",
+            "a_f3fa98e0f2eb4211",
+            "a_3b96fe6196e7eb69",
+            "a_36ff177c81fafe83",
+            "a_df5f7de8d13f5961",
+            "a_7a46a1dcadcf9a02",
+            "a_06320c211d1a0d49",
+            "a_4ae001845568c03d",
+            "a_7664a1351581c19a",
+            "a_b937df7e1506a9ad"
+          ],
+          "contrast_role": "critical_atom_necessity",
+          "dependency_closed": false,
+          "rendered_token_count": 258,
+          "retained_token_ratio": 0.905263157895,
+          "singleton_intervention": true
+        },
+        {
+          "arm_id": "F_drop_noncritical",
+          "artifact_bytes": 1435,
+          "artifact_path": "registration/candidates/NLP-LLM-01/F_drop_noncritical.txt",
+          "artifact_sha256": "0fc88838f82d7afdfc5ab869d7b9b7cd9e255a6da5986851009d88003b4fec84",
+          "atom_ids": [
+            "a_ef84b15111a60040",
+            "a_b679f5fdbb67e54a",
+            "a_f3fa98e0f2eb4211",
+            "a_3b96fe6196e7eb69",
+            "a_36ff177c81fafe83",
+            "a_df5f7de8d13f5961",
+            "a_7a46a1dcadcf9a02",
+            "a_06320c211d1a0d49",
+            "a_7664a1351581c19a",
+            "a_a54fb718c24e7b56",
+            "a_b937df7e1506a9ad"
+          ],
+          "contrast_role": "noncritical_comparator_necessity",
+          "dependency_closed": false,
+          "rendered_token_count": 255,
+          "retained_token_ratio": 0.894736842105,
+          "singleton_intervention": true
+        },
+        {
+          "arm_id": "S_restore_critical",
+          "artifact_bytes": 1098,
+          "artifact_path": "registration/candidates/NLP-LLM-01/S_restore_critical.txt",
+          "artifact_sha256": "63302ada49fd3b87a7503d4b89fa125fbf69d856b6b19470a93d997e6477a0e1",
+          "atom_ids": [
+            "a_ef84b15111a60040",
+            "a_b679f5fdbb67e54a",
+            "a_f3fa98e0f2eb4211",
+            "a_3b96fe6196e7eb69",
+            "a_36ff177c81fafe83",
+            "a_df5f7de8d13f5961",
+            "a_7a46a1dcadcf9a02",
+            "a_06320c211d1a0d49",
+            "a_a54fb718c24e7b56"
+          ],
+          "contrast_role": "critical_atom_rescue",
+          "dependency_closed": false,
+          "rendered_token_count": 197,
+          "retained_token_ratio": 0.691228070175,
+          "singleton_intervention": true
+        },
+        {
+          "arm_id": "S_restore_noncritical",
+          "artifact_bytes": 1112,
+          "artifact_path": "registration/candidates/NLP-LLM-01/S_restore_noncritical.txt",
+          "artifact_sha256": "b06fed9bb2bfb0a51bb8ab2ad7ba79bdce18bbaf065b85f8c6dc921128980ca3",
+          "atom_ids": [
+            "a_ef84b15111a60040",
+            "a_b679f5fdbb67e54a",
+            "a_f3fa98e0f2eb4211",
+            "a_3b96fe6196e7eb69",
+            "a_36ff177c81fafe83",
+            "a_df5f7de8d13f5961",
+            "a_7a46a1dcadcf9a02",
+            "a_06320c211d1a0d49",
+            "a_4ae001845568c03d"
+          ],
+          "contrast_role": "noncritical_comparator_rescue",
+          "dependency_closed": true,
+          "rendered_token_count": 200,
+          "retained_token_ratio": 0.701754385965,
+          "singleton_intervention": true
+        }
+      ],
+      "atom_count": 12,
+      "chain_constraint": {
+        "all_atoms_form_one_chain": true,
+        "interpretation": "closure-breaking arms are deliberate singleton causal interventions, not reducer outputs",
+        "singleton_deletions_may_break_dependency_closure": true
+      },
+      "critical_atom": {
+        "atom_id": "a_a54fb718c24e7b56",
+        "direct_hard_contract_ids": [
+          "no_input_mutation",
+          "stable_tie_break"
+        ],
+        "index": 10,
+        "rendered_text": "Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.",
+        "rendered_text_sha256": "67186a43fcf39ec73132c8ab7ad1387670a6fd7d5e511075a50faf835be9e19a",
+        "selection_basis": "direct operational rule for registered mutation/tie-order hard contracts"
+      },
+      "domain": "nlp",
+      "hard_contract_ids": [
+        "exact_total_budget",
+        "minimum_segment_quota",
+        "no_input_mutation",
+        "stable_tie_break"
+      ],
+      "noncritical_comparator_atom": {
+        "atom_id": "a_4ae001845568c03d",
+        "direct_hard_contract_ids": [],
+        "index": 8,
+        "rendered_text": "Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.",
+        "rendered_text_sha256": "bb651964decf660706e6b02a72268f4df8c9cfde1515a5b2325af47505fa92df",
+        "selection_basis": "registered execution-boundary constraint with no direct scorer hard-contract identifier"
+      },
+      "registered_slice_atom_count": 8,
+      "source_hashes": {
+        "atom_dag.json": "e353946ff87ca2fe7497b7469c0ad5972325acf39fc8a499944fc629e32d9475",
+        "atom_registry.json": "bb6451f674bfd9790329d0b600318e1ce8580207435385345caa2317cf009973",
+        "candidate_manifest.json": "97750edfda851068239434466094b260415b1d1f88b240e427ca3dd515b1e8ea",
+        "scorer_manifest.json": "23245e231ac39f5fdb6a717e6ffcf426236b692e1be3d05ab9a783260a6f7c79"
+      },
+      "task_id": "NLP-LLM-01"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "F",
+          "artifact_bytes": 1569,
+          "artifact_path": "registration/candidates/SE-PE-01/F.txt",
+          "artifact_sha256": "802a8d560aab1a36e70d23b6271142cbbf87cc78069429c5b80478fc0bf3ac23",
+          "atom_ids": [
+            "a_1b1886e02e07bd35",
+            "a_9fce5d8a70efc3ed",
+            "a_1c10b5e0ec1653a2",
+            "a_ec3c36c26587310f",
+            "a_0f7d5692075695e9",
+            "a_ff2040fbed15a94f",
+            "a_269073ecbdad93bb",
+            "a_04f146b11c38407d",
+            "a_fe8ddfc5fcd41acf",
+            "a_bd768b9769b482d4",
+            "a_1a0c44331d856713",
+            "a_2789c20edaf16fcb"
+          ],
+          "contrast_role": "full_information_baseline",
+          "dependency_closed": true,
+          "rendered_token_count": 278,
+          "retained_token_ratio": 1.0,
+          "singleton_intervention": false
+        },
+        {
+          "arm_id": "S",
+          "artifact_bytes": 922,
+          "artifact_path": "registration/candidates/SE-PE-01/S.txt",
+          "artifact_sha256": "e9fcfb85a0fd23354408b7f49e2d9b9a31747a6410b0809c1d10bedcfe421e7e",
+          "atom_ids": [
+            "a_1b1886e02e07bd35",
+            "a_9fce5d8a70efc3ed",
+            "a_1c10b5e0ec1653a2",
+            "a_ec3c36c26587310f",
+            "a_0f7d5692075695e9",
+            "a_ff2040fbed15a94f",
+            "a_269073ecbdad93bb",
+            "a_04f146b11c38407d"
+          ],
+          "contrast_role": "registered_slice_baseline",
+          "dependency_closed": true,
+          "rendered_token_count": 163,
+          "retained_token_ratio": 0.586330935252,
+          "singleton_intervention": false
+        },
+        {
+          "arm_id": "F_drop_critical",
+          "artifact_bytes": 1421,
+          "artifact_path": "registration/candidates/SE-PE-01/F_drop_critical.txt",
+          "artifact_sha256": "19cc490c6ddcfc27a2ff7de86a2fa12ad480b7d4ad81241057bf265e6c59dd8a",
+          "atom_ids": [
+            "a_1b1886e02e07bd35",
+            "a_9fce5d8a70efc3ed",
+            "a_1c10b5e0ec1653a2",
+            "a_ec3c36c26587310f",
+            "a_0f7d5692075695e9",
+            "a_ff2040fbed15a94f",
+            "a_269073ecbdad93bb",
+            "a_04f146b11c38407d",
+            "a_fe8ddfc5fcd41acf",
+            "a_bd768b9769b482d4",
+            "a_2789c20edaf16fcb"
+          ],
+          "contrast_role": "critical_atom_necessity",
+          "dependency_closed": false,
+          "rendered_token_count": 251,
+          "retained_token_ratio": 0.902877697842,
+          "singleton_intervention": true
+        },
+        {
+          "arm_id": "F_drop_noncritical",
+          "artifact_bytes": 1407,
+          "artifact_path": "registration/candidates/SE-PE-01/F_drop_noncritical.txt",
+          "artifact_sha256": "61983a14d10176c7853d34eaa5948dd779df5e4910d435d93fe1734db10bcbbb",
+          "atom_ids": [
+            "a_1b1886e02e07bd35",
+            "a_9fce5d8a70efc3ed",
+            "a_1c10b5e0ec1653a2",
+            "a_ec3c36c26587310f",
+            "a_0f7d5692075695e9",
+            "a_ff2040fbed15a94f",
+            "a_269073ecbdad93bb",
+            "a_04f146b11c38407d",
+            "a_bd768b9769b482d4",
+            "a_1a0c44331d856713",
+            "a_2789c20edaf16fcb"
+          ],
+          "contrast_role": "noncritical_comparator_necessity",
+          "dependency_closed": false,
+          "rendered_token_count": 248,
+          "retained_token_ratio": 0.892086330935,
+          "singleton_intervention": true
+        },
+        {
+          "arm_id": "S_restore_critical",
+          "artifact_bytes": 1070,
+          "artifact_path": "registration/candidates/SE-PE-01/S_restore_critical.txt",
+          "artifact_sha256": "1026eb9a88fb25404c49d33d28a0df89d0e1f8d58b678b47a46faefbdfc9c3cb",
+          "atom_ids": [
+            "a_1b1886e02e07bd35",
+            "a_9fce5d8a70efc3ed",
+            "a_1c10b5e0ec1653a2",
+            "a_ec3c36c26587310f",
+            "a_0f7d5692075695e9",
+            "a_ff2040fbed15a94f",
+            "a_269073ecbdad93bb",
+            "a_04f146b11c38407d",
+            "a_1a0c44331d856713"
+          ],
+          "contrast_role": "critical_atom_rescue",
+          "dependency_closed": false,
+          "rendered_token_count": 190,
+          "retained_token_ratio": 0.68345323741,
+          "singleton_intervention": true
+        },
+        {
+          "arm_id": "S_restore_noncritical",
+          "artifact_bytes": 1084,
+          "artifact_path": "registration/candidates/SE-PE-01/S_restore_noncritical.txt",
+          "artifact_sha256": "927101d348eac1b3b35305e110f6c1e174941acde7f57d93321c0489f3b4b152",
+          "atom_ids": [
+            "a_1b1886e02e07bd35",
+            "a_9fce5d8a70efc3ed",
+            "a_1c10b5e0ec1653a2",
+            "a_ec3c36c26587310f",
+            "a_0f7d5692075695e9",
+            "a_ff2040fbed15a94f",
+            "a_269073ecbdad93bb",
+            "a_04f146b11c38407d",
+            "a_fe8ddfc5fcd41acf"
+          ],
+          "contrast_role": "noncritical_comparator_rescue",
+          "dependency_closed": true,
+          "rendered_token_count": 193,
+          "retained_token_ratio": 0.694244604317,
+          "singleton_intervention": true
+        }
+      ],
+      "atom_count": 12,
+      "chain_constraint": {
+        "all_atoms_form_one_chain": true,
+        "interpretation": "closure-breaking arms are deliberate singleton causal interventions, not reducer outputs",
+        "singleton_deletions_may_break_dependency_closure": true
+      },
+      "critical_atom": {
+        "atom_id": "a_1a0c44331d856713",
+        "direct_hard_contract_ids": [
+          "stable_ties"
+        ],
+        "index": 10,
+        "rendered_text": "Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.",
+        "rendered_text_sha256": "67186a43fcf39ec73132c8ab7ad1387670a6fd7d5e511075a50faf835be9e19a",
+        "selection_basis": "direct operational rule for registered mutation/tie-order hard contracts"
+      },
+      "domain": "software_engineering",
+      "hard_contract_ids": [
+        "grammar_valid",
+        "interestingness_preserved",
+        "registered_candidate_order",
+        "stable_ties"
+      ],
+      "noncritical_comparator_atom": {
+        "atom_id": "a_fe8ddfc5fcd41acf",
+        "direct_hard_contract_ids": [],
+        "index": 8,
+        "rendered_text": "Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.",
+        "rendered_text_sha256": "bb651964decf660706e6b02a72268f4df8c9cfde1515a5b2325af47505fa92df",
+        "selection_basis": "registered execution-boundary constraint with no direct scorer hard-contract identifier"
+      },
+      "registered_slice_atom_count": 8,
+      "source_hashes": {
+        "atom_dag.json": "bdd62ca367f16ab05674e7f18c66e83698929f9ec2e53a49cfe1336a28451d2a",
+        "atom_registry.json": "df68cac06f546ae8577bdb296cc1717ee13bf4d4ff511695d8aa3d940a32bc9e",
+        "candidate_manifest.json": "8205e7e2501539ce8bca0ee7eb9ddd6353a958ba8a4995187f930e26252c14b8",
+        "scorer_manifest.json": "61dbb1fea4968b887bab52ddaea223800632b2a9fb64c40bbe1d57ad0b6f7ed5"
+      },
+      "task_id": "SE-PE-01"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "F",
+          "artifact_bytes": 1537,
+          "artifact_path": "registration/candidates/DATA-HDB-01/F.txt",
+          "artifact_sha256": "b2ce1c8d1321d0854a3e2346c6bb5b8444fe8929df936ef1b1e760788719861e",
+          "atom_ids": [
+            "a_50cd263a0de61976",
+            "a_b201c87a86ff3c37",
+            "a_3e310f34a98c5e62",
+            "a_2a2de3046519598f",
+            "a_d349455ef9a3e241",
+            "a_4834a167f67ca515",
+            "a_9fddce8a16a10db8",
+            "a_fcc609b64a66a1fb",
+            "a_b5f651c6771b091f",
+            "a_71a1e7e1dd58430a",
+            "a_143b9e6590f9d491",
+            "a_64076523a232c832"
+          ],
+          "contrast_role": "full_information_baseline",
+          "dependency_closed": true,
+          "rendered_token_count": 281,
+          "retained_token_ratio": 1.0,
+          "singleton_intervention": false
+        },
+        {
+          "arm_id": "S",
+          "artifact_bytes": 890,
+          "artifact_path": "registration/candidates/DATA-HDB-01/S.txt",
+          "artifact_sha256": "da99dd46083d2ce00b1ada19598df772465c482a70513edf66dcfa436d0b8243",
+          "atom_ids": [
+            "a_50cd263a0de61976",
+            "a_b201c87a86ff3c37",
+            "a_3e310f34a98c5e62",
+            "a_2a2de3046519598f",
+            "a_d349455ef9a3e241",
+            "a_4834a167f67ca515",
+            "a_9fddce8a16a10db8",
+            "a_fcc609b64a66a1fb"
+          ],
+          "contrast_role": "registered_slice_baseline",
+          "dependency_closed": true,
+          "rendered_token_count": 166,
+          "retained_token_ratio": 0.590747330961,
+          "singleton_intervention": false
+        },
+        {
+          "arm_id": "F_drop_critical",
+          "artifact_bytes": 1389,
+          "artifact_path": "registration/candidates/DATA-HDB-01/F_drop_critical.txt",
+          "artifact_sha256": "88fc923d2423c824aa95809bc0b195c321691a522279e20b6403d5bca3deb6cc",
+          "atom_ids": [
+            "a_50cd263a0de61976",
+            "a_b201c87a86ff3c37",
+            "a_3e310f34a98c5e62",
+            "a_2a2de3046519598f",
+            "a_d349455ef9a3e241",
+            "a_4834a167f67ca515",
+            "a_9fddce8a16a10db8",
+            "a_fcc609b64a66a1fb",
+            "a_b5f651c6771b091f",
+            "a_71a1e7e1dd58430a",
+            "a_64076523a232c832"
+          ],
+          "contrast_role": "critical_atom_necessity",
+          "dependency_closed": false,
+          "rendered_token_count": 254,
+          "retained_token_ratio": 0.903914590747,
+          "singleton_intervention": true
+        },
+        {
+          "arm_id": "F_drop_noncritical",
+          "artifact_bytes": 1375,
+          "artifact_path": "registration/candidates/DATA-HDB-01/F_drop_noncritical.txt",
+          "artifact_sha256": "6d165d1e863a4100a0fd64178faaf1a982d6838a52e9172794b11d6408a5fe48",
+          "atom_ids": [
+            "a_50cd263a0de61976",
+            "a_b201c87a86ff3c37",
+            "a_3e310f34a98c5e62",
+            "a_2a2de3046519598f",
+            "a_d349455ef9a3e241",
+            "a_4834a167f67ca515",
+            "a_9fddce8a16a10db8",
+            "a_fcc609b64a66a1fb",
+            "a_71a1e7e1dd58430a",
+            "a_143b9e6590f9d491",
+            "a_64076523a232c832"
+          ],
+          "contrast_role": "noncritical_comparator_necessity",
+          "dependency_closed": false,
+          "rendered_token_count": 251,
+          "retained_token_ratio": 0.893238434164,
+          "singleton_intervention": true
+        },
+        {
+          "arm_id": "S_restore_critical",
+          "artifact_bytes": 1038,
+          "artifact_path": "registration/candidates/DATA-HDB-01/S_restore_critical.txt",
+          "artifact_sha256": "02552ebc5f6c98ee04c9049e5263368aff9c0a6c9de82e3a9d07143be41d472d",
+          "atom_ids": [
+            "a_50cd263a0de61976",
+            "a_b201c87a86ff3c37",
+            "a_3e310f34a98c5e62",
+            "a_2a2de3046519598f",
+            "a_d349455ef9a3e241",
+            "a_4834a167f67ca515",
+            "a_9fddce8a16a10db8",
+            "a_fcc609b64a66a1fb",
+            "a_143b9e6590f9d491"
+          ],
+          "contrast_role": "critical_atom_rescue",
+          "dependency_closed": false,
+          "rendered_token_count": 193,
+          "retained_token_ratio": 0.686832740214,
+          "singleton_intervention": true
+        },
+        {
+          "arm_id": "S_restore_noncritical",
+          "artifact_bytes": 1052,
+          "artifact_path": "registration/candidates/DATA-HDB-01/S_restore_noncritical.txt",
+          "artifact_sha256": "6af8b15a3ec52fc0af6e020078731d00fb9709c0fed0e9054fafb9094bdf3c5a",
+          "atom_ids": [
+            "a_50cd263a0de61976",
+            "a_b201c87a86ff3c37",
+            "a_3e310f34a98c5e62",
+            "a_2a2de3046519598f",
+            "a_d349455ef9a3e241",
+            "a_4834a167f67ca515",
+            "a_9fddce8a16a10db8",
+            "a_fcc609b64a66a1fb",
+            "a_b5f651c6771b091f"
+          ],
+          "contrast_role": "noncritical_comparator_rescue",
+          "dependency_closed": true,
+          "rendered_token_count": 196,
+          "retained_token_ratio": 0.697508896797,
+          "singleton_intervention": true
+        }
+      ],
+      "atom_count": 12,
+      "chain_constraint": {
+        "all_atoms_form_one_chain": true,
+        "interpretation": "closure-breaking arms are deliberate singleton causal interventions, not reducer outputs",
+        "singleton_deletions_may_break_dependency_closure": true
+      },
+      "critical_atom": {
+        "atom_id": "a_143b9e6590f9d491",
+        "direct_hard_contract_ids": [
+          "stable_edge_ties"
+        ],
+        "index": 10,
+        "rendered_text": "Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.",
+        "rendered_text_sha256": "67186a43fcf39ec73132c8ab7ad1387670a6fd7d5e511075a50faf835be9e19a",
+        "selection_basis": "direct operational rule for registered mutation/tie-order hard contracts"
+      },
+      "domain": "data_analysis",
+      "hard_contract_ids": [
+        "correct_core_distance",
+        "mutual_reachability",
+        "stable_edge_ties",
+        "valid_mst"
+      ],
+      "noncritical_comparator_atom": {
+        "atom_id": "a_b5f651c6771b091f",
+        "direct_hard_contract_ids": [],
+        "index": 8,
+        "rendered_text": "Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.",
+        "rendered_text_sha256": "bb651964decf660706e6b02a72268f4df8c9cfde1515a5b2325af47505fa92df",
+        "selection_basis": "registered execution-boundary constraint with no direct scorer hard-contract identifier"
+      },
+      "registered_slice_atom_count": 8,
+      "source_hashes": {
+        "atom_dag.json": "223e771d7b3855c838bed4cd73f45cf1ae57600352384df0093a05aedeb819eb",
+        "atom_registry.json": "0600e8866494eeed6767443eccd3992aea94a9112801777e4838c5a5968201b8",
+        "candidate_manifest.json": "2ffa46ebae2c33ea5babeaa8b45fe470c1915448e15f9b8a88db5bf829515b57",
+        "scorer_manifest.json": "b172e376352db4783b012a4bf89f85944d5edbe5fee1a08ef914ec2ab204b0c0"
+      },
+      "task_id": "DATA-HDB-01"
+    },
+    {
+      "arms": [
+        {
+          "arm_id": "F",
+          "artifact_bytes": 1530,
+          "artifact_path": "registration/candidates/AGENT-TF-01/F.txt",
+          "artifact_sha256": "7ee6a589f2296404c1b9ef6ddcdfab7bd54c67b21dd659d6bd87bc6e0a73fdaf",
+          "atom_ids": [
+            "a_821201e02b14a697",
+            "a_1886a5eb627dc5ca",
+            "a_f5f94f4f6128d2a6",
+            "a_7221f27804e7b5f4",
+            "a_ce8863f9e4b3950b",
+            "a_0bf58ad9f3a98394",
+            "a_940ecd444b120e64",
+            "a_c9c8f75c77221069",
+            "a_da8ce8af3758f6de",
+            "a_388b25ba39dbd1a2",
+            "a_e54e9e4f88a4a0bb",
+            "a_a2cbfb58a5b9dd3f"
+          ],
+          "contrast_role": "full_information_baseline",
+          "dependency_closed": true,
+          "rendered_token_count": 269,
+          "retained_token_ratio": 1.0,
+          "singleton_intervention": false
+        },
+        {
+          "arm_id": "S",
+          "artifact_bytes": 883,
+          "artifact_path": "registration/candidates/AGENT-TF-01/S.txt",
+          "artifact_sha256": "f724e025c02d885112eaeb9a8e86a6fc337e219a29d6335f05e12c1b49c0adaf",
+          "atom_ids": [
+            "a_821201e02b14a697",
+            "a_1886a5eb627dc5ca",
+            "a_f5f94f4f6128d2a6",
+            "a_7221f27804e7b5f4",
+            "a_ce8863f9e4b3950b",
+            "a_0bf58ad9f3a98394",
+            "a_940ecd444b120e64",
+            "a_c9c8f75c77221069"
+          ],
+          "contrast_role": "registered_slice_baseline",
+          "dependency_closed": true,
+          "rendered_token_count": 154,
+          "retained_token_ratio": 0.57249070632,
+          "singleton_intervention": false
+        },
+        {
+          "arm_id": "F_drop_critical",
+          "artifact_bytes": 1382,
+          "artifact_path": "registration/candidates/AGENT-TF-01/F_drop_critical.txt",
+          "artifact_sha256": "77da3e9ab3d38ff84e031929c173f0d44b277cb125e66ce6f14939687bd7575b",
+          "atom_ids": [
+            "a_821201e02b14a697",
+            "a_1886a5eb627dc5ca",
+            "a_f5f94f4f6128d2a6",
+            "a_7221f27804e7b5f4",
+            "a_ce8863f9e4b3950b",
+            "a_0bf58ad9f3a98394",
+            "a_940ecd444b120e64",
+            "a_c9c8f75c77221069",
+            "a_da8ce8af3758f6de",
+            "a_388b25ba39dbd1a2",
+            "a_a2cbfb58a5b9dd3f"
+          ],
+          "contrast_role": "critical_atom_necessity",
+          "dependency_closed": false,
+          "rendered_token_count": 242,
+          "retained_token_ratio": 0.899628252788,
+          "singleton_intervention": true
+        },
+        {
+          "arm_id": "F_drop_noncritical",
+          "artifact_bytes": 1368,
+          "artifact_path": "registration/candidates/AGENT-TF-01/F_drop_noncritical.txt",
+          "artifact_sha256": "fd4ac6e99321c96cbd34f93c6796dd93d1639371e83664a06e72258301237381",
+          "atom_ids": [
+            "a_821201e02b14a697",
+            "a_1886a5eb627dc5ca",
+            "a_f5f94f4f6128d2a6",
+            "a_7221f27804e7b5f4",
+            "a_ce8863f9e4b3950b",
+            "a_0bf58ad9f3a98394",
+            "a_940ecd444b120e64",
+            "a_c9c8f75c77221069",
+            "a_388b25ba39dbd1a2",
+            "a_e54e9e4f88a4a0bb",
+            "a_a2cbfb58a5b9dd3f"
+          ],
+          "contrast_role": "noncritical_comparator_necessity",
+          "dependency_closed": false,
+          "rendered_token_count": 239,
+          "retained_token_ratio": 0.888475836431,
+          "singleton_intervention": true
+        },
+        {
+          "arm_id": "S_restore_critical",
+          "artifact_bytes": 1031,
+          "artifact_path": "registration/candidates/AGENT-TF-01/S_restore_critical.txt",
+          "artifact_sha256": "a1be4875e95c2e85260da36590405fcd8c5fa8dcc9212d68b731b940601fa715",
+          "atom_ids": [
+            "a_821201e02b14a697",
+            "a_1886a5eb627dc5ca",
+            "a_f5f94f4f6128d2a6",
+            "a_7221f27804e7b5f4",
+            "a_ce8863f9e4b3950b",
+            "a_0bf58ad9f3a98394",
+            "a_940ecd444b120e64",
+            "a_c9c8f75c77221069",
+            "a_e54e9e4f88a4a0bb"
+          ],
+          "contrast_role": "critical_atom_rescue",
+          "dependency_closed": false,
+          "rendered_token_count": 181,
+          "retained_token_ratio": 0.672862453532,
+          "singleton_intervention": true
+        },
+        {
+          "arm_id": "S_restore_noncritical",
+          "artifact_bytes": 1045,
+          "artifact_path": "registration/candidates/AGENT-TF-01/S_restore_noncritical.txt",
+          "artifact_sha256": "d89554e997017ceb7cc7bb0127407665895d1960e11e5327093ca96bcc6a3e6c",
+          "atom_ids": [
+            "a_821201e02b14a697",
+            "a_1886a5eb627dc5ca",
+            "a_f5f94f4f6128d2a6",
+            "a_7221f27804e7b5f4",
+            "a_ce8863f9e4b3950b",
+            "a_0bf58ad9f3a98394",
+            "a_940ecd444b120e64",
+            "a_c9c8f75c77221069",
+            "a_da8ce8af3758f6de"
+          ],
+          "contrast_role": "noncritical_comparator_rescue",
+          "dependency_closed": true,
+          "rendered_token_count": 184,
+          "retained_token_ratio": 0.684014869888,
+          "singleton_intervention": true
+        }
+      ],
+      "atom_count": 12,
+      "chain_constraint": {
+        "all_atoms_form_one_chain": true,
+        "interpretation": "closure-breaking arms are deliberate singleton causal interventions, not reducer outputs",
+        "singleton_deletions_may_break_dependency_closure": true
+      },
+      "critical_atom": {
+        "atom_id": "a_e54e9e4f88a4a0bb",
+        "direct_hard_contract_ids": [
+          "stable_order"
+        ],
+        "index": 10,
+        "rendered_text": "Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.",
+        "rendered_text_sha256": "67186a43fcf39ec73132c8ab7ad1387670a6fd7d5e511075a50faf835be9e19a",
+        "selection_basis": "direct operational rule for registered mutation/tie-order hard contracts"
+      },
+      "domain": "agent_tool_use",
+      "hard_contract_ids": [
+        "inclusive_threshold",
+        "normalized_weights",
+        "stable_order",
+        "stronger_counterfactual"
+      ],
+      "noncritical_comparator_atom": {
+        "atom_id": "a_da8ce8af3758f6de",
+        "direct_hard_contract_ids": [],
+        "index": 8,
+        "rendered_text": "Use only quantities present in the case payload. Do not call a language model, network service, random generator, wall clock, or environment-dependent resource.",
+        "rendered_text_sha256": "bb651964decf660706e6b02a72268f4df8c9cfde1515a5b2325af47505fa92df",
+        "selection_basis": "registered execution-boundary constraint with no direct scorer hard-contract identifier"
+      },
+      "registered_slice_atom_count": 8,
+      "source_hashes": {
+        "atom_dag.json": "7392fa11ee83ee48da752347980f05ba4f7562245ac89f349dadd4353c28c53a",
+        "atom_registry.json": "aa6cda92c2632fd84d4f785d1e13ae53d965703c13f6762e3f4c599b9309c787",
+        "candidate_manifest.json": "802be0458b3152038553235faa19f0eddde39e1f6c941de1f42e999735e4484b",
+        "scorer_manifest.json": "4a92eb63f0774f53fe3e413216cd3645f330c6ffe77a870fb04b7306c7bcd1ca"
+      },
+      "task_id": "AGENT-TF-01"
+    }
+  ]
+}

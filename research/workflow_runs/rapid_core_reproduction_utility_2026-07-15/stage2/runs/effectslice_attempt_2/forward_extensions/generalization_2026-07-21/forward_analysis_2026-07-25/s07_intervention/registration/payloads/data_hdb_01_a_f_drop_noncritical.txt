@@ -1,0 +1,296 @@
+[EXPLICIT CASE INTERFACE]
+The evaluator invokes solve(case) once for each fixture row. The argument is exactly the inner object stored in that row's payload field. Do not expect case_id, seed, or any outer fixture-row keys; use only fields present in the payload object. Return the result for that payload.
+
+[EXACT OUTPUT CONTRACT]
+For task DATA-HDB-01, solve(case) must return a JSON value matching the structural schema below. This is a schema, not an example and not a set of expected answers. Every name under properties is a literal output key. Every key listed under required must be present. additionalProperties=false forbids unlisted keys at that object level. dynamicKeysFrom means the object keys are arbitrary JSON strings that must be copied verbatim from the indicated input location; never parse, coerce, numerically validate, or impose a naming pattern on those keys. anyOf denotes the allowed JSON types. Do not rename fields or change their nesting.
+OUTPUT STRUCTURAL SCHEMA:
+{
+  "additionalProperties": false,
+  "properties": {
+    "mst_edges": {
+      "items": {
+        "items": false,
+        "maxItems": 3,
+        "minItems": 3,
+        "prefixItems": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          }
+        ],
+        "type": "array"
+      },
+      "type": "array"
+    },
+    "total_weight": {
+      "type": "number"
+    }
+  },
+  "required": [
+    "mst_edges",
+    "total_weight"
+  ],
+  "type": "object"
+}
+
+[STRICT SUBMISSION ENVELOPE]
+Your entire response must be exactly one valid JSON object with the single key "implementation". The first non-whitespace character must be { and the last non-whitespace character must be }. Do not use Markdown code fences. Do not add a preamble, explanation, or trailing text. Encode the Python source as a JSON string, escaping newlines, backslashes, and quotes as required by JSON.
+
+EFFECTSLICE_MODEL_VISIBLE_PAYLOAD_V1
+task_scaffold:432
+# Registered procedure task DATA-HDB-01
+
+Return one JSON object with exactly one key, `implementation`. Its value must be Python source defining `solve(case)`. The function must return a JSON-serializable object, must not mutate `case`, and may use only the Python standard library. Do not access files, the network, environment variables, subprocesses, randomness, or clocks. The attached public fixtures define input shapes only.
+
+fixture_payload:3970
+{
+  "schema_version": "effectslice-fg1-public-inputs.v1",
+  "task_id": "DATA-HDB-01",
+  "registry_id": "A",
+  "cases": [
+    {
+      "case_id": "fg1-data-hdb-01-a-000",
+      "payload": {
+        "nodes": [
+          "p0",
+          "p1",
+          "p2",
+          "p3",
+          "p4"
+        ],
+        "core_distance": {
+          "p0": 0.23243377,
+          "p1": 0.50398147,
+          "p2": 0.55673811,
+          "p3": 0.66828478,
+          "p4": 0.43968915
+        },
+        "distances": [
+          [
+            "p0",
+            "p1",
+            0.89672724
+          ],
+          [
+            "p0",
+            "p2",
+            0.73968893
+          ],
+          [
+            "p0",
+            "p3",
+            0.77270596
+          ],
+          [
+            "p0",
+            "p4",
+            0.87376631
+          ],
+          [
+            "p1",
+            "p2",
+            1.08418122
+          ],
+          [
+            "p1",
+            "p3",
+            0.82719237
+          ],
+          [
+            "p1",
+            "p4",
+            0.61293041
+          ],
+          [
+            "p2",
+            "p3",
+            1.00286271
+          ],
+          [
+            "p2",
+            "p4",
+            0.5322912
+          ],
+          [
+            "p3",
+            "p4",
+            0.51351834
+          ]
+        ],
+        "_case_nonce": "5d3858101b39d7b0"
+      }
+    },
+    {
+      "case_id": "fg1-data-hdb-01-a-001",
+      "payload": {
+        "nodes": [
+          "p0",
+          "p1",
+          "p2",
+          "p3",
+          "p4"
+        ],
+        "core_distance": {
+          "p0": 0.64206388,
+          "p1": 0.59450996,
+          "p2": 0.56834383,
+          "p3": 0.69121738,
+          "p4": 0.35811891
+        },
+        "distances": [
+          [
+            "p0",
+            "p1",
+            0.91273658
+          ],
+          [
+            "p0",
+            "p2",
+            1.02437869
+          ],
+          [
+            "p0",
+            "p3",
+            1.0933304
+          ],
+          [
+            "p0",
+            "p4",
+            0.86030696
+          ],
+          [
+            "p1",
+            "p2",
+            1.0940778
+          ],
+          [
+            "p1",
+            "p3",
+            0.14723591
+          ],
+          [
+            "p1",
+            "p4",
+            0.43118236
+          ],
+          [
+            "p2",
+            "p3",
+            0.36560824
+          ],
+          [
+            "p2",
+            "p4",
+            1.01773021
+          ],
+          [
+            "p3",
+            "p4",
+            0.82695638
+          ]
+        ],
+        "_case_nonce": "0ed301f18c39caab"
+      }
+    },
+    {
+      "case_id": "fg1-data-hdb-01-a-002",
+      "payload": {
+        "nodes": [
+          "p0",
+          "p1",
+          "p2",
+          "p3",
+          "p4"
+        ],
+        "core_distance": {
+          "p0": 0.43947253,
+          "p1": 0.45000465,
+          "p2": 0.43863449,
+          "p3": 0.43840589,
+          "p4": 0.56516132
+        },
+        "distances": [
+          [
+            "p0",
+            "p1",
+            0.10924216
+          ],
+          [
+            "p0",
+            "p2",
+            0.85107637
+          ],
+          [
+            "p0",
+            "p3",
+            0.8509243
+          ],
+          [
+            "p0",
+            "p4",
+            0.30201104
+          ],
+          [
+            "p1",
+            "p2",
+            0.22263255
+          ],
+          [
+            "p1",
+            "p3",
+            0.17457878
+          ],
+          [
+            "p1",
+            "p4",
+            0.9853752
+          ],
+          [
+            "p2",
+            "p3",
+            0.64537626
+          ],
+          [
+            "p2",
+            "p4",
+            0.52535742
+          ],
+          [
+            "p3",
+            "p4",
+            0.93228331
+          ]
+        ],
+        "_case_nonce": "f64ec216e2ce0a64"
+      }
+    }
+  ]
+}
+
+candidate_artifact:1375
+Implement `mutual_reachability_mst` through `solve(case)` for this bounded objective: Compute core distances, mutual-reachability edge weights, and a deterministic minimum spanning tree for registered distance matrices.
+
+Stay inside this mechanism boundary: HDBSCAN mutual-reachability graph construction and MST; approximate nearest-neighbor search is excluded. Validate every required field before computing a result.
+
+For each pair compute mutual reachability as max(core_left, core_right, distance).
+
+Canonicalize undirected endpoints.
+
+Sort by reachability then endpoint IDs.
+
+Run Kruskal with deterministic union-find until n minus one edges are selected.
+
+Reject disconnected inputs and return selected edges plus total weight.
+
+Treat these registered properties as hard contracts rather than soft preferences: correct_core_distance, mutual_reachability, valid_mst, stable_edge_ties.
+
+Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.
+
+Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.
+
+Return only JSON-serializable values with the exact named fields. Raise ValueError for an infeasible or structurally invalid case instead of silently repairing it.

@@ -1,0 +1,21 @@
+Implement `api_call_loss_filter` through `solve(case)` for this bounded objective: Retain API-call candidates using normalized future-token weights, weighted losses, the stronger counterfactual, and an inclusive threshold.
+
+Stay inside this mechanism boundary: Toolformer API-call filtering with supplied token losses; call generation and language-model training are excluded. Validate every required field before computing a result.
+
+For each call subtract loss with the call from loss without it.
+
+Normalize gain by at least one prediction token.
+
+Require both parseability and normalized gain at or above threshold.
+
+Keep diagnostics in supplied call order.
+
+Return accepted call IDs and rounded per-call diagnostics.
+
+Treat these registered properties as hard contracts rather than soft preferences: normalized_weights, stronger_counterfactual, inclusive_threshold, stable_order.
+
+Preserve every source identifier needed to audit the decision, and compute aggregate values from the returned primitive decisions rather than from a second approximation.
+
+Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.
+
+Return only JSON-serializable values with the exact named fields. Raise ValueError for an infeasible or structurally invalid case instead of silently repairing it.

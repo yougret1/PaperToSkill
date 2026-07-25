@@ -1,0 +1,235 @@
+[EXPLICIT CASE INTERFACE]
+The evaluator invokes solve(case) once for each fixture row. The argument is exactly the inner object stored in that row's payload field. Do not expect case_id, seed, or any outer fixture-row keys; use only fields present in the payload object. Return the result for that payload.
+
+[EXACT OUTPUT CONTRACT]
+For task AGENT-TF-01, solve(case) must return a JSON value matching the structural schema below. This is a schema, not an example and not a set of expected answers. Every name under properties is a literal output key. Every key listed under required must be present. additionalProperties=false forbids unlisted keys at that object level. dynamicKeysFrom means the object keys are arbitrary JSON strings that must be copied verbatim from the indicated input location; never parse, coerce, numerically validate, or impose a naming pattern on those keys. anyOf denotes the allowed JSON types. Do not rename fields or change their nesting.
+OUTPUT STRUCTURAL SCHEMA:
+{
+  "additionalProperties": false,
+  "properties": {
+    "accepted_call_ids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "diagnostics": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "accepted": {
+            "type": "boolean"
+          },
+          "call_id": {
+            "type": "string"
+          },
+          "normalized_gain": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "accepted",
+          "call_id",
+          "normalized_gain"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "accepted_call_ids",
+    "diagnostics"
+  ],
+  "type": "object"
+}
+
+[STRICT SUBMISSION ENVELOPE]
+Your entire response must be exactly one valid JSON object with the single key "implementation". The first non-whitespace character must be { and the last non-whitespace character must be }. Do not use Markdown code fences. Do not add a preamble, explanation, or trailing text. Encode the Python source as a JSON string, escaping newlines, backslashes, and quotes as required by JSON.
+
+EFFECTSLICE_MODEL_VISIBLE_PAYLOAD_V1
+task_scaffold:432
+# Registered procedure task AGENT-TF-01
+
+Return one JSON object with exactly one key, `implementation`. Its value must be Python source defining `solve(case)`. The function must return a JSON-serializable object, must not mutate `case`, and may use only the Python standard library. Do not access files, the network, environment variables, subprocesses, randomness, or clocks. The attached public fixtures define input shapes only.
+
+fixture_payload:4445
+{
+  "schema_version": "effectslice-fg1-public-inputs.v1",
+  "task_id": "AGENT-TF-01",
+  "registry_id": "A",
+  "cases": [
+    {
+      "case_id": "fg1-agent-tf-01-a-000",
+      "payload": {
+        "threshold": 0.05,
+        "calls": [
+          {
+            "call_id": "call0",
+            "loss_without_call": 1.94835097,
+            "loss_with_call": 0.38569502,
+            "prediction_tokens": 5,
+            "parseable": true
+          },
+          {
+            "call_id": "call1",
+            "loss_without_call": 1.06116273,
+            "loss_with_call": 0.68319969,
+            "prediction_tokens": 4,
+            "parseable": true
+          },
+          {
+            "call_id": "call2",
+            "loss_without_call": 1.21810502,
+            "loss_with_call": 0.47260371,
+            "prediction_tokens": 6,
+            "parseable": true
+          },
+          {
+            "call_id": "call3",
+            "loss_without_call": 1.05721833,
+            "loss_with_call": 0.29767903,
+            "prediction_tokens": 5,
+            "parseable": true
+          },
+          {
+            "call_id": "call4",
+            "loss_without_call": 1.06717367,
+            "loss_with_call": 0.85733566,
+            "prediction_tokens": 5,
+            "parseable": true
+          },
+          {
+            "call_id": "call5",
+            "loss_without_call": 1.66191711,
+            "loss_with_call": 0.89798497,
+            "prediction_tokens": 4,
+            "parseable": true
+          }
+        ],
+        "_case_nonce": "2f934a6ace63b9ac"
+      }
+    },
+    {
+      "case_id": "fg1-agent-tf-01-a-001",
+      "payload": {
+        "threshold": 0.05,
+        "calls": [
+          {
+            "call_id": "call0",
+            "loss_without_call": 1.34235018,
+            "loss_with_call": 0.06925593,
+            "prediction_tokens": 2,
+            "parseable": true
+          },
+          {
+            "call_id": "call1",
+            "loss_without_call": 1.26111872,
+            "loss_with_call": 0.47345931,
+            "prediction_tokens": 5,
+            "parseable": true
+          },
+          {
+            "call_id": "call2",
+            "loss_without_call": 1.68957745,
+            "loss_with_call": 0.64081991,
+            "prediction_tokens": 6,
+            "parseable": true
+          },
+          {
+            "call_id": "call3",
+            "loss_without_call": 1.59298572,
+            "loss_with_call": 0.27884912,
+            "prediction_tokens": 5,
+            "parseable": true
+          },
+          {
+            "call_id": "call4",
+            "loss_without_call": 1.02050478,
+            "loss_with_call": 0.7852636,
+            "prediction_tokens": 6,
+            "parseable": true
+          },
+          {
+            "call_id": "call5",
+            "loss_without_call": 1.62525043,
+            "loss_with_call": 0.41429661,
+            "prediction_tokens": 2,
+            "parseable": true
+          }
+        ],
+        "_case_nonce": "75529deef5efc9f8"
+      }
+    },
+    {
+      "case_id": "fg1-agent-tf-01-a-002",
+      "payload": {
+        "threshold": 0.05,
+        "calls": [
+          {
+            "call_id": "call0",
+            "loss_without_call": 1.54394258,
+            "loss_with_call": 0.36855776,
+            "prediction_tokens": 3,
+            "parseable": true
+          },
+          {
+            "call_id": "call1",
+            "loss_without_call": 1.69942703,
+            "loss_with_call": 0.61963208,
+            "prediction_tokens": 2,
+            "parseable": true
+          },
+          {
+            "call_id": "call2",
+            "loss_without_call": 1.1444751,
+            "loss_with_call": 0.92771867,
+            "prediction_tokens": 2,
+            "parseable": true
+          },
+          {
+            "call_id": "call3",
+            "loss_without_call": 1.72467293,
+            "loss_with_call": 0.68156155,
+            "prediction_tokens": 2,
+            "parseable": true
+          },
+          {
+            "call_id": "call4",
+            "loss_without_call": 1.35899862,
+            "loss_with_call": 0.11897463,
+            "prediction_tokens": 4,
+            "parseable": false
+          },
+          {
+            "call_id": "call5",
+            "loss_without_call": 1.70750275,
+            "loss_with_call": 0.67249155,
+            "prediction_tokens": 6,
+            "parseable": true
+          }
+        ],
+        "_case_nonce": "f7ec1d0e3baa7c54"
+      }
+    }
+  ]
+}
+
+candidate_artifact:1031
+Implement `api_call_loss_filter` through `solve(case)` for this bounded objective: Retain API-call candidates using normalized future-token weights, weighted losses, the stronger counterfactual, and an inclusive threshold.
+
+Stay inside this mechanism boundary: Toolformer API-call filtering with supplied token losses; call generation and language-model training are excluded. Validate every required field before computing a result.
+
+For each call subtract loss with the call from loss without it.
+
+Normalize gain by at least one prediction token.
+
+Require both parseability and normalized gain at or above threshold.
+
+Keep diagnostics in supplied call order.
+
+Return accepted call IDs and rounded per-call diagnostics.
+
+Treat these registered properties as hard contracts rather than soft preferences: normalized_weights, stronger_counterfactual, inclusive_threshold, stable_order.
+
+Do not mutate the input. All ranking and traversal ties use the source position or identifier specified above; never depend on hash-map iteration.
