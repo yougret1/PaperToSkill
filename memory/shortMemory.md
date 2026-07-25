@@ -6,6 +6,11 @@
   exact-output-contract class, then move forward to response-format handling.
 - Branch: `codex/effectslice-v3`; latest pushed commit before this checkpoint is
   `3879b79e`.
+- The editable SkillAudit main figure V3.3 is backed up at
+  `paper/effectslice_aaai/images/SkillAudit_Main_Figure_v3_3.pptx` and was
+  privately pushed in commit `640ad272`; slide 2 now presents the full
+  `F=R(A)` path above the upstream-produced `S=R(A_S)` path with manuscript
+  notation aligned through the frozen boundary.
 - FG3 remains frozen with 1,296 terminal rows. Its exclusive classification is
   268 payload-interface, 684 exact-output contract, 77 response-format, 120
   integrity/digest, one provider availability, 141 experimental outcomes, and
