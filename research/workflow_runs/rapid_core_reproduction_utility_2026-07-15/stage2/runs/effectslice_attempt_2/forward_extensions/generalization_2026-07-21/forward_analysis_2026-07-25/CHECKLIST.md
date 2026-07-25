@@ -29,7 +29,8 @@ artifacts, verification record, log, commit, and private push all succeed.
    - Status: 8/8 registered DeepSeek calls completed with first-attempt transport success; 3 operational successes and 5 hard-contract failures were independently verified, committed as `f988426a`, and privately pushed.
    - Identify ambiguous transport failures and repeatability anomalies.
    - Rerun only cases whose cause remains ambiguous, under a frozen successor registry.
-7. [ ] Focused Atom restore/drop intervention
+7. [x] Focused Atom restore/drop intervention
+   - Status: all 48 registered cells reached terminal results, ITT and valid-pair analyses were independently reproduced, and artifacts were committed as `5cf6e48f` and privately pushed.
    - Use one representative task per domain.
    - Compare critical-atom drop, noncritical-atom drop, and incremental restore arms.
    - Freeze and privately push the successor before any provider call.
