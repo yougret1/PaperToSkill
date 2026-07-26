@@ -57,11 +57,12 @@ succeed. Unfavorable semantic results remain in the registered denominator.
    - Completion verification passed and confirmed that no retryable transport
      state was persisted as a terminal experimental result.
 
-2. [ ] FG6 full-grid independent exact-protocol repetition
+2. [x] FG6 full-grid independent exact-protocol repetition
    - 1,296 registered calls across all frozen execution families and model
      slots.
-   - Execution, completion verification, single-repeat analysis, and scoped
-     artifact-safety audit passed; private Git backup is pending.
+   - Execution, completion verification, single-repeat analysis, scoped
+     artifact-safety audit, and private Git backup passed. Evidence commit:
+     `ac6228a5`.
    - Exact terminal outcomes: 388 operational successes, 668 hard-contract
      failures, 160 integrity/digest failures, and 80 malformed/no-submission
      results.
