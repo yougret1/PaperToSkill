@@ -3,12 +3,15 @@
 ## GPT-5.6 Sol Migration Follow-up
 
 1. Use the reports under `research/workflow_runs/gpt_5.6_sol/ex_1` as the
-   authoritative replacement-number source.
-2. Locate the actual manuscript body, appendix, and table/figure sources before
-   replacing any DeepSeek claim or number.
-3. Do not claim a measured 699 active-request peak or stable 699 throughput;
+   authoritative replacement-number source; the current total is 2,688 calls.
+2. Synchronize the located `SelfPaper/toSkill/paper` focused appendix from 48 to
+   144 rows and update its transport-body deletion disclosure after the required
+   local two-confirmation gate.
+3. Keep the 1,296-row primary B/F/S denominator separate from six-model anchors,
+   alternate reducers, structural ladder, controls, and focused evidence.
+4. Do not claim a measured 699 active-request peak or stable 699 throughput;
    only the scheduler cap is known.
-4. Keep third-party provider identity explicit and do not describe this run as
+5. Keep third-party provider identity explicit and do not describe this run as
    an official OpenAI API result.
 
 ## Authoritative Immediate Gate

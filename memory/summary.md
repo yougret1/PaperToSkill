@@ -237,19 +237,22 @@ thesis. Reuse requires an explicit Stage 2 evidence audit.
 
 ## GPT-5.6 Sol Primary Migration (2026-07-26)
 
-- The isolated `research/workflow_runs/gpt_5.6_sol/ex_1` migration is complete
-  with 2,592/2,592 terminal rows resolved as `gpt-5.6-sol`.
-- New-call scope is 2,448 full-grid primary rows, 48 focused rows, and 96
-  Controls-v2 rows. The full-grid report also reuses 1,440 frozen cross-model
-  anchors for a 3,888-row combined view.
+- The isolated `research/workflow_runs/gpt_5.6_sol/ex_1` run is complete with
+  2,688/2,688 terminal rows resolved as `gpt-5.6-sol`.
+- Current-call scope is 2,448 full-grid rows, 144 focused rows across SOL1/SOL2/SOL3,
+  and 96 Controls-v2 rows. The original 2,592-row registration remains frozen;
+  focused SOL2/SOL3 are bound by a separate append-only 96-row extension.
+- The full-grid report also reuses 1,440 frozen cross-model anchors for a
+  3,888-row comparison view. These anchors are not current Sol calls.
 - Final canonical HTTP terminal failures are zero after operator-authorized
   deletion and reduced-concurrency reruns of failed network rows. Failed
   contents were not archived.
 - Reports and analysis outputs are authoritative under the isolated run. The
   provider is a third-party proxy, and 699 is a configured semaphore cap rather
   than an observed peak-concurrency measurement.
-- The specified API-document directory did not contain manuscript sources, so
-  the paper itself was not modified.
+- The manuscript source was located under the separate SelfPaper `toSkill/paper`
+  tree. Its current primary 1,296-row B/F/S denominator remains correct; focused
+  and transport-deviation text requires synchronization with the completed run.
 
 ## Persistent Boundaries
 
