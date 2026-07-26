@@ -103,8 +103,8 @@ succeed. Unfavorable semantic results remain in the registered denominator.
 
 ## Final Gate
 
-- [ ] Each of the four items has a verifier-passing report and run log.
-- [ ] Cross-repetition analysis uses paper-task as the independent unit and
+- [x] Each of the four items has a verifier-passing report and run log.
+- [x] Cross-repetition analysis uses paper-task as the independent unit and
       reports effect stability, decision agreement, technical failures, and
       terminal outcome decomposition without selective deletion.
 - [ ] All task artifacts are committed and privately pushed; secrets, caches,

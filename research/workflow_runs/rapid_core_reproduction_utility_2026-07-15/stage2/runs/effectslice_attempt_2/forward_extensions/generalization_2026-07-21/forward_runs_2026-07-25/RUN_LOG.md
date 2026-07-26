@@ -299,3 +299,42 @@
   forbidden local-model-design markers.
 - FG8 evidence commit `6be61703f` was pushed to the private
   `origin/codex/effectslice-v3` branch.
+
+## 2026-07-26: Joint FG6-FG8 analysis and final interpretation
+
+- Re-verified exact result, metadata-sidecar, and terminal-marker sets for all
+  three repetitions before joint analysis. FG6, FG7, and FG8 each contain
+  exactly 1,296 registered terminal rows, for a combined denominator of 3,888.
+- Aggregate terminal outcomes are 1,158 operational successes, 2,074
+  hard-contract failures, 388 integrity/digest failures, and 268
+  malformed/no-submission outcomes. Technical Invalid rows remain in the
+  registered denominator.
+- Repetitions were averaged inside each paper-task before computing intervals
+  over the 24 independent paper-task units. The pooled effects are F-B 0.262297
+  (approximate 95% CI [0.142371, 0.382224]), S-B 0.297779
+  ([0.160973, 0.434585]), and S-F 0.035482
+  ([-0.000777, 0.071741]). No S-over-F advantage claim is made.
+- The primary Admit/Reject state agrees in all three repetitions for 20/24
+  paper-task units. The four unstable units are NLP-LL2-01, NLP-LLM-01,
+  NLP-LLM-02, and SE-CR-01; their full state sequences are retained in the
+  analysis and final report.
+- Across 1,296 logical cells, condition-success agreement is 919/1,296
+  (70.91%) and terminal-outcome agreement is 780/1,296 (60.19%).
+- Model-slot stability is reported only as within-cell repeatability. It is not
+  used as a model leaderboard because DeepSeek covers 816 logical cells and
+  every other model covers 96, with unequal execution-family coverage.
+- The final report explicitly distinguishes independent exact-protocol
+  repetitions from API-controlled random-seed runs and records all limitations,
+  unfavorable results, evidence paths, and paper-facing analysis guidance.
+- Joint artifacts are `successor_full_grid_analysis.py`,
+  `analysis/full_grid/analysis.json`, `analysis/full_grid/REPORT.md`, and
+  `FINAL_REPORT.md`.
+- Final verification reran all four completion verifiers after terminal work
+  ended. All passed exact registration/result/metadata/marker equality, strict
+  result binding, and the prohibition on retryable transport terminal states.
+- The joint analysis was regenerated after verifier completion and reproduced
+  the same 3,888-row denominator, effects, and stability results.
+- All seven focused artifact-safety tests passed. A final scoped audit then
+  enumerated 35,200 experiment, analysis, verification, source, and report files:
+  zero exact credential reflections, zero generic credential-pattern matches
+  outside opaque ciphertext, and zero forbidden local-model-design markers.
