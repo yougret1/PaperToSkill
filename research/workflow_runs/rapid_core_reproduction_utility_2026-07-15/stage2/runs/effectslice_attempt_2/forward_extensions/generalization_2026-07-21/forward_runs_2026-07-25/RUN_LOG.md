@@ -263,3 +263,5 @@
   verification, source, and log files: zero exact credential reflections, zero
   generic credential-pattern matches outside opaque ciphertext, and zero
   forbidden local-model-design markers.
+- FG7 evidence commit `6904601e` was pushed to the private
+  `origin/codex/effectslice-v3` branch.

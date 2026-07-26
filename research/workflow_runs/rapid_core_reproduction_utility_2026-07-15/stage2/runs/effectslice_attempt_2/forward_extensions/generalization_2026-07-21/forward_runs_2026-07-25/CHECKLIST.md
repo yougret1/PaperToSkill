@@ -69,11 +69,12 @@ succeed. Unfavorable semantic results remain in the registered denominator.
    - The 24 primary paper-task decisions contain 3 Admit and 21 Reject states.
      Mean effects are F-B 0.263346, S-B 0.311198, and S-F 0.047852.
 
-3. [ ] FG7 full-grid independent exact-protocol repetition
+3. [x] FG7 full-grid independent exact-protocol repetition
    - 1,296 registered calls across all frozen execution families and model
      slots.
-   - Execution, completion verification, single-repeat analysis, and scoped
-     artifact-safety audit passed; private Git backup is pending.
+   - Execution, completion verification, single-repeat analysis, scoped
+     artifact-safety audit, and private Git backup passed. Evidence commit:
+     `6904601e`.
    - Exact terminal outcomes: 365 operational successes, 681 hard-contract
      failures, 160 integrity/digest failures, and 90 malformed/no-submission
      results.
