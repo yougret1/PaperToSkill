@@ -84,6 +84,13 @@ succeed. Unfavorable semantic results remain in the registered denominator.
 4. [ ] FG8 full-grid independent exact-protocol repetition
    - 1,296 registered calls across all frozen execution families and model
      slots.
+   - Execution, completion verification, single-repeat analysis, and scoped
+     artifact-safety audit passed; private Git backup is pending.
+   - Exact terminal outcomes: 405 operational successes, 725 hard-contract
+     failures, 68 integrity/digest failures, and 98 malformed/no-submission
+     results.
+   - The 24 primary paper-task decisions contain 3 Admit and 21 Reject states.
+     Mean effects are F-B 0.252713, S-B 0.286784, and S-F 0.034071.
 
 ## Registered Call Accounting
 

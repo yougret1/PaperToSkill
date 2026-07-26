@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    attempts = case['attempts']\n    max_attempts = case['max_attempts']\n    num = len(attempts)\n    if num == 0:\n        return {\"decision\": \"retry\", \"memory_append\": None, \"next_attempt\": 0}\n    last = attempts[-1]\n    if last['success']:\n        return {\"decision\": \"accept\", \"memory_append\": None, \"next_attempt\": num}\n    if num >= max_attempts:\n        return {\"decision\": \"give_up\", \"memory_append\": None, \"next_attempt\": num}\n    return {\n        \"decision\": \"retry\",\n        \"memory_append\": {\"reflection\": last['reflection'], \"signature\": last['failure_signature']},\n        \"next_attempt\": num + 1\n    }"
+}

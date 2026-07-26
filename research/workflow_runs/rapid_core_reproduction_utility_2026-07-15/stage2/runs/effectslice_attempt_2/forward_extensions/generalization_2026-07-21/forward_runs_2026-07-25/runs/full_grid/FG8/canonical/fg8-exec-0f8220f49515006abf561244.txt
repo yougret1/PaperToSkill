@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    matrix = case['matrix']\n    idf = case['idf']\n    vector = case['vector']\n    M = len(matrix)\n    N = len(idf) if matrix else 0\n    degree = [0.0] * M\n    result = [0.0] * N\n    for i in range(M):\n        row = matrix[i]\n        deg_i = 0.0\n        for j in range(N):\n            if row[j]:\n                w = idf[j]\n                deg_i += w\n                result[j] += vector[i] * w\n        degree[i] = deg_i\n    return {'degree': degree, 'result': result}\n"
+}

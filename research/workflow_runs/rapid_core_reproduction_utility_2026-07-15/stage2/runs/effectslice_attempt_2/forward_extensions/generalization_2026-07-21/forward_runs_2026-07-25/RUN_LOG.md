@@ -265,3 +265,35 @@
   forbidden local-model-design markers.
 - FG7 evidence commit `6904601e` was pushed to the private
   `origin/codex/effectslice-v3` branch.
+
+## 2026-07-26: FG8 completion, analysis, and verification
+
+- The detached full-grid launcher exited naturally with state `complete` after
+  FG8 reached exactly 1,296 terminal rows. Its stderr log remained empty.
+- The registered execution-ID set, strict result-row set, hash-bound
+  metadata-sidecar set, and terminal-marker set are identical and contain no
+  extra or missing IDs.
+- All 1,296 strict result schemas and schedule/metadata/result-hash bindings
+  passed. No retryable transport state is present in the terminal denominator.
+- Terminal outcomes are 405 operational successes, 725 hard-contract failures,
+  68 integrity/digest failures, and 98 malformed/no-submission results. There
+  are 1,228 valid rows and 68 technical-invalid rows; all remain in the frozen
+  denominator.
+- The post-hoc single-repeat analysis uses the same verified in-memory metadata
+  overlay and frozen score/decision functions as FG6 and FG7. It does not
+  rewrite any strict result row or persist a global overlay.
+- The 24 primary paper-task units yield 3 Admit and 21 Reject decisions.
+  Mean paper-task effects are F-B 0.252713 (approximate 95% CI
+  [0.124492, 0.380934]), S-B 0.286784 ([0.147568, 0.426000]), and
+  S-F 0.034071 ([-0.006750, 0.074893]). The S-F interval crosses zero and is
+  retained without an advantage claim.
+- Primary artifacts are `runs/full_grid/FG8/`, `verification/fg8.json`, and
+  `analysis/full_grid/fg8.json`.
+- Verification SHA-256:
+  `a419c713d38c9d893810b4d8bd542586681047d8d07272c814f68624c499c36d`.
+- Analysis SHA-256:
+  `e0afac04c2468e70f68f9a46b9ca84ce04a1571a545b543d50d450192caa5d79`.
+- A scoped artifact-safety audit passed over 11,566 FG8 evidence, analysis,
+  verification, source, and log files: zero exact credential reflections, zero
+  generic credential-pattern matches outside opaque ciphertext, and zero
+  forbidden local-model-design markers.

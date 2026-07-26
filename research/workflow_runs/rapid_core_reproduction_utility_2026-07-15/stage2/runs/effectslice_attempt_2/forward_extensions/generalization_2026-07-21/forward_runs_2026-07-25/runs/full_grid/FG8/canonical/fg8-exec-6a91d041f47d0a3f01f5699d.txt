@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    matrix = case['matrix']\n    idf = case['idf']\n    vector = case['vector']\n    nrows = len(matrix)\n    ncols = len(idf)\n    degree = []\n    result = []\n    for i in range(nrows):\n        row = matrix[i]\n        deg = sum(row)\n        weighted = sum(row[j] * idf[j] for j in range(ncols))\n        res = weighted * vector[i]\n        degree.append(deg)\n        result.append(res)\n    return {'degree': degree, 'result': result}\n"
+}
