@@ -107,7 +107,7 @@ succeed. Unfavorable semantic results remain in the registered denominator.
 - [x] Cross-repetition analysis uses paper-task as the independent unit and
       reports effect stability, decision agreement, technical failures, and
       terminal outcome decomposition without selective deletion.
-- [ ] All task artifacts are committed and privately pushed; secrets, caches,
+- [x] All task artifacts are committed and privately pushed; secrets, caches,
       environments, unrelated changes, and `s08/` are absent from commits.
-- [ ] Final report records exact commit IDs, pushed branch, artifact paths,
+- [x] Final report records exact commit IDs, pushed branch, artifact paths,
       limitations, and any unverified residual risk.

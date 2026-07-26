@@ -338,3 +338,5 @@
   enumerated 35,200 experiment, analysis, verification, source, and report files:
   zero exact credential reflections, zero generic credential-pattern matches
   outside opaque ciphertext, and zero forbidden local-model-design markers.
+- Joint analysis and final-report evidence commit `cbc27422f` was pushed to the
+  private `origin/codex/effectslice-v3` branch.

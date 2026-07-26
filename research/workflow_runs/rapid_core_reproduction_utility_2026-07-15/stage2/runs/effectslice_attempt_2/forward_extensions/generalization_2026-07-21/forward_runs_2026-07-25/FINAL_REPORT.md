@@ -202,6 +202,6 @@ reported together with the failure decomposition.
 | FG6 | `ac6228a5` | `396a8d08` |
 | FG7 | `6904601e` | `2624e05a` |
 | FG8 | `6be61703f` | `2e5747ae9` |
-| Joint analysis and final report | `PENDING_FINAL_EVIDENCE_COMMIT` | current branch head after closure |
+| Joint analysis and final report | `cbc27422f` | current branch head after closure |
 
 All listed commits are on the private `origin/codex/effectslice-v3` branch.
