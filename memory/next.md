@@ -1,5 +1,16 @@
 # Next Actions
 
+## GPT-5.6 Sol Migration Follow-up
+
+1. Use the reports under `research/workflow_runs/gpt_5.6_sol/ex_1` as the
+   authoritative replacement-number source.
+2. Locate the actual manuscript body, appendix, and table/figure sources before
+   replacing any DeepSeek claim or number.
+3. Do not claim a measured 699 active-request peak or stable 699 throughput;
+   only the scheduler cap is known.
+4. Keep third-party provider identity explicit and do not describe this run as
+   an official OpenAI API result.
+
 ## Authoritative Immediate Gate
 
 1. Commit and privately push the frozen FG5 exact-output-contract checkpoint.

@@ -235,6 +235,22 @@ thesis. Reuse requires an explicit Stage 2 evidence audit.
 - SkCC: direct challenge to unverified portability claims.
 - SkillWiki: overlap in evidence-linked skill infrastructure.
 
+## GPT-5.6 Sol Primary Migration (2026-07-26)
+
+- The isolated `research/workflow_runs/gpt_5.6_sol/ex_1` migration is complete
+  with 2,592/2,592 terminal rows resolved as `gpt-5.6-sol`.
+- New-call scope is 2,448 full-grid primary rows, 48 focused rows, and 96
+  Controls-v2 rows. The full-grid report also reuses 1,440 frozen cross-model
+  anchors for a 3,888-row combined view.
+- Final canonical HTTP terminal failures are zero after operator-authorized
+  deletion and reduced-concurrency reruns of failed network rows. Failed
+  contents were not archived.
+- Reports and analysis outputs are authoritative under the isolated run. The
+  provider is a third-party proxy, and 699 is a configured semaphore cap rather
+  than an observed peak-concurrency measurement.
+- The specified API-document directory did not contain manuscript sources, so
+  the paper itself was not modified.
+
 ## Persistent Boundaries
 
 - EffectSlice is an admission protocol, not a slicing or reduction algorithm.

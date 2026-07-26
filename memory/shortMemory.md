@@ -1,5 +1,18 @@
 # Short-Term Memory
 
+## GPT-5.6 Sol Migration Checkpoint (2026-07-26)
+
+- The isolated run at `research/workflow_runs/gpt_5.6_sol/ex_1` is complete.
+- All 2,592 registered new rows have terminal results and resolve to
+  `gpt-5.6-sol`; final canonical HTTP terminal failures are zero.
+- The full-grid analysis combines 2,448 new primary rows with 1,440 frozen
+  cross-model anchors for 3,888 rows.
+- Four Markdown reports and traceable JSON/CSV outputs are ready. The specified
+  API-document directory did not contain manuscript source, so no paper text was
+  edited.
+- Failed HTTP row contents were deleted rather than archived at operator
+  direction before reduced-concurrency reruns.
+
 ## Authoritative Current Checkpoint
 
 - Active boundary: commit and privately push the frozen FG5
