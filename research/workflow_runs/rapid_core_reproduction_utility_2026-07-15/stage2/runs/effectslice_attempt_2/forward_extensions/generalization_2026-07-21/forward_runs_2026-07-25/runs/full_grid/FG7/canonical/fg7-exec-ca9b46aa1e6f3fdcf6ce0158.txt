@@ -1,0 +1,5 @@
+```json
+{
+  "implementation": "def solve(case):\n    segments = case['segments']\n    budget = case['budget']\n    n = len(segments)\n    alloc = [seg['minimum'] for seg in segments]\n    remaining = budget - sum(alloc)\n    while remaining > 0:\n        eligible = [i for i in range(n) if alloc[i] < segments[i]['capacity']]\n        if not eligible:\n            break\n        best_idx = max(eligible, key=lambda i: (segments[i]['importance'] / (alloc[i] + 1), -i))\n        alloc[best_idx] += 1\n        remaining -= 1\n    by_name = {segments[i]['name']: alloc[i] for i in range(n)}\n    return {\"allocations\": alloc, \"by_name\": by_name, \"total\": budget}\n"
+}
+```

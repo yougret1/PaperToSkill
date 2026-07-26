@@ -1,0 +1,5 @@
+```json
+{
+  "implementation": "def solve(case):\n    segs = case['segments']\n    budget = case['budget']\n    n = len(segs)\n    min_sum = sum(s['minimum'] for s in segs)\n    cap_sum = sum(s['capacity'] for s in segs)\n    if budget < min_sum or budget > cap_sum:\n        raise ValueError('Budget out of feasible range')\n    alloc = [s['minimum'] for s in segs]\n    remaining = budget - min_sum\n    while remaining > 0:\n        best_idx = -1\n        best_priority = -1.0\n        for i in range(n):\n            if alloc[i] < segs[i]['capacity']:\n                priority = segs[i]['importance'] / (alloc[i] + 1)\n                if priority > best_priority:\n                    best_priority = priority\n                    best_idx = i\n        if best_idx == -1:\n            raise ValueError('Capacity limit reached unexpectedly')\n        alloc[best_idx] += 1\n        remaining -= 1\n    by_name = {segs[i]['name']: alloc[i] for i in range(n)}\n    return {'allocations': alloc, 'by_name': by_name, 'total': budget}\n"
+}
+```

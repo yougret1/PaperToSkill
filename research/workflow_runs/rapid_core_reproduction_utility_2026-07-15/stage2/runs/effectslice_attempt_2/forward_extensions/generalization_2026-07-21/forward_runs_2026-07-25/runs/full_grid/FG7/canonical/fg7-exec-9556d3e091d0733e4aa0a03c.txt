@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    word_token_indices = case['word_token_indices']\n    word_labels = case['word_labels']\n    token_count = case['token_count']\n    \n    # Initialize token labels with zeros\n    token_labels = [0] * token_count\n    \n    # Broadcast word labels to each token index\n    for i, indices in enumerate(word_token_indices):\n        label = word_labels[i]\n        for idx in indices:\n            token_labels[idx] = label\n    \n    # Gather indices where label == 1\n    kept_indices = [i for i, lbl in enumerate(token_labels) if lbl == 1]\n    \n    return {\n        'kept_indices': kept_indices,\n        'token_labels': token_labels\n    }"
+}

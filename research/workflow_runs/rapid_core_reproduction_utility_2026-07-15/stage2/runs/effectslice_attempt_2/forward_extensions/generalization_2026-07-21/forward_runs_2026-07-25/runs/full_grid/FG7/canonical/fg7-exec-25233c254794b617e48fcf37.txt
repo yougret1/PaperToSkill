@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    text = case[\"text\"]\n    passes = case[\"passes\"]\n    max_rounds = case[\"max_rounds\"]\n    current = text\n    applications = []\n    changed = True\n    rounds = 0\n    while changed and rounds < max_rounds:\n        changed = False\n        for p in passes:\n            old = p[\"old\"]\n            new = p[\"new\"]\n            idx = current.find(old)\n            if idx != -1:\n                current = current[:idx] + new + current[idx+len(old):]\n                changed = True\n                applications.append(p[\"name\"])\n        rounds += 1\n    fixed_point = not changed\n    return {\"text\": current, \"applications\": applications, \"fixed_point\": fixed_point}\n"
+}

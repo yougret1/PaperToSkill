@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    word_tokens = case[\"word_token_indices\"]\n    word_labels = case[\"word_labels\"]\n    kept_indices = []\n    token_labels = []\n    for indices, label in zip(word_tokens, word_labels):\n        if label == 1:\n            kept_indices.extend(indices)\n            token_labels.extend([label] * len(indices))\n    return {\"kept_indices\": kept_indices, \"token_labels\": token_labels}"
+}

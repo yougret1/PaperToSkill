@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    text = case['text']\n    passes = case['passes']\n    max_rounds = case['max_rounds']\n    applications = []\n    for _ in range(max_rounds):\n        changed = False\n        for p in passes:\n            new_text = text.replace(p['old'], p['new'])\n            if new_text != text:\n                text = new_text\n                applications.append(p['name'])\n                changed = True\n        if not changed:\n            fixed_point = True\n            break\n    else:\n        fixed_point = False\n    return {'applications': applications, 'fixed_point': fixed_point, 'text': text}"
+}

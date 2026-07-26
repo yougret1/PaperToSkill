@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    matrix = case['matrix']\n    idf = case['idf']\n    vector = case['vector']\n    n_docs = len(matrix)\n    n_terms = len(matrix[0])\n    degree = [sum(matrix[i][j] * idf[j] for j in range(n_terms)) for i in range(n_docs)]\n    result = [sum(matrix[i][j] * vector[i] for i in range(n_docs)) for j in range(n_terms)]\n    return {'degree': degree, 'result': result}\n"
+}

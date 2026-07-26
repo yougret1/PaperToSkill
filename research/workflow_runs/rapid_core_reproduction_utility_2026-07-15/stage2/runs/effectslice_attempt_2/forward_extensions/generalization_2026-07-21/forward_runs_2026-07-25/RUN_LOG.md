@@ -233,3 +233,33 @@
   forbidden local-model-design markers.
 - FG6 evidence commit `ac6228a5` was pushed to the private
   `origin/codex/effectslice-v3` branch.
+
+## 2026-07-26: FG7 completion, analysis, and verification
+
+- FG7 completed with exactly 1,296 unique terminal result rows. The registered
+  execution-ID set, strict result-row set, hash-bound metadata-sidecar set, and
+  terminal-marker set are identical and contain no extra or missing IDs.
+- All 1,296 strict result schemas and schedule/metadata/result-hash bindings
+  passed. No retryable transport state is present in the terminal denominator.
+- Terminal outcomes are 365 operational successes, 681 hard-contract failures,
+  160 integrity/digest failures, and 90 malformed/no-submission results. There
+  are 1,136 valid rows and 160 technical-invalid rows; all remain in the frozen
+  denominator.
+- The post-hoc single-repeat analysis uses the same verified in-memory metadata
+  overlay and frozen score/decision functions as FG6. It does not rewrite any
+  strict result row or persist a global overlay.
+- The 24 primary paper-task units yield 6 Admit and 18 Reject decisions.
+  Mean paper-task effects are F-B 0.270833 (approximate 95% CI
+  [0.140312, 0.401355]), S-B 0.295356 ([0.146536, 0.444176]), and
+  S-F 0.024523 ([-0.022710, 0.071755]). The S-F interval crosses zero and is
+  retained without an advantage claim.
+- Primary artifacts are `runs/full_grid/FG7/`, `verification/fg7.json`, and
+  `analysis/full_grid/fg7.json`.
+- Verification SHA-256:
+  `317323bb96ea1ee235d364ccfddee48249ac605035b8928b3506553b08515795`.
+- Analysis SHA-256:
+  `8c8a457483949aa2e3646cccb79d9b11e1bf2c8d9fecc04fc399dc9040ac33ae`.
+- A scoped artifact-safety audit passed over 11,382 FG7 evidence, analysis,
+  verification, source, and log files: zero exact credential reflections, zero
+  generic credential-pattern matches outside opaque ciphertext, and zero
+  forbidden local-model-design markers.

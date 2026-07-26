@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    items = case[\"items\"]\n    required = set(case[\"required_failure_items\"])\n    reduced = list(items)\n    attempts = 0\n    i = 0\n    while i < len(reduced):\n        item = reduced[i]\n        temp = reduced[:i] + reduced[i+1:]\n        attempts += 1\n        if required.issubset(set(temp)):\n            reduced = temp\n        else:\n            i += 1\n    one_minimal = (set(reduced) == required)\n    return {\n        \"attempts\": attempts,\n        \"one_minimal\": one_minimal,\n        \"reduced_items\": reduced\n    }"
+}

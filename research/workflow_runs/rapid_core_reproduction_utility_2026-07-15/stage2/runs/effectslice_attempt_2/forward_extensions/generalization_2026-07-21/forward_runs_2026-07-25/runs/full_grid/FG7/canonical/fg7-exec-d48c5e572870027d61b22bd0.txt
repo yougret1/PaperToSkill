@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    matrix = case['matrix']\n    idf = case['idf']\n    vector = case['vector']\n    degree = [sum(idf[j] for j, val in enumerate(row) if val != 0) for row in matrix]\n    result = [sum(vector[i] for i, row in enumerate(matrix) if row[j] != 0) for j in range(len(idf))]\n    return {'degree': degree, 'result': result}\n"
+}
