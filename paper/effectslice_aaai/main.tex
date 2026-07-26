@@ -14,12 +14,10 @@
 % These are recommended to typeset algorithms but not required. See the subsubsection on algorithms. Remove them if you don't have algorithms in your paper.
 \usepackage{algorithm}
 \usepackage{algorithmic}
-\usepackage{subcaption}
 \usepackage{amsmath}
 \usepackage{multirow}
 \usepackage{amssymb}
 \usepackage{array}
-\usepackage{graphicx}
 \usepackage[T1]{fontenc}
 %
 % These are recommended to typeset listings but not required. See the subsubsection on listing. Remove this block if you don't have listings in your paper.
@@ -128,6 +126,12 @@
 
 
 \bibliography{src/references}
+
+% The appendix remains hidden in the default working build. Define
+% \IncludeAppendix for a separate validation build.
+\ifdefined\IncludeAppendix
+\input{src/7.appendix}
+\fi
 
 % Check whether the conference requires a reproducibility checklist to be included in the paper.
 % If so, you can uncomment the following line and ajust the path to include it.

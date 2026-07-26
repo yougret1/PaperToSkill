@@ -1,142 +1,93 @@
 \section{Experiments}
 
-\subsection{Research Questions}
+\subsection{Questions and Design}
 
-We organize the evaluation by the claim each experiment tests rather than by the order in which artifacts were produced.
-\begin{itemize}
-    \item \textbf{RQ1: Diagnostic validity.} Can matched $B/F/S$ execution distinguish an insufficient full specification from information lost only by the simplified candidate?
-    \item \textbf{RQ2: Decision sanity.} Do strict-subset, negative, and byte-identical controls exercise the intended acceptance, rejection, and invariance states?
-    \item \textbf{RQ3: Scale and failure localization.} What happens when the protocol is expanded across papers, tasks, domains, registries, reducers, and models, and can it separate task failures from interface failures?
-\end{itemize}
+The experiments separate utility, local substitutability, and audit validity. \textbf{RQ1} asks whether the full and simplified paper-derived specifications improve task outcomes over a no-specification baseline. \textbf{RQ2} asks whether $S$ is distinguishable from $F$ in aggregate and whether the answer changes across executions, papers, or domains. \textbf{RQ3} asks whether the registered decision logic and model-facing evaluation distinguish known-truth preserving and destructive transformations. Finally, offline component ablations and bounded reducer, structural, and model comparisons probe which observations generalize beyond the primary construction. This organization follows evidence function rather than run chronology.
 
-\subsection{Experimental Setup}
+\paragraph{Cross-paper benchmark.}
+The benchmark contains \PrimaryPapers{} papers, two tasks per paper, and four mechanism domains: NLP, software engineering, data analysis, and agent/tool use. The mechanisms are LLMLingua, LLMLingua-2, context-aware sentence compression, delta debugging, C-Reduce, Perses, HDBSCAN, Leiden, SnapATAC2, ReAct, Reflexion, and Toolformer \cite{jiang2023llmlingua,pan2024llmlingua2,liskavets2025contextcompression,zeller2002simplifying,regehr2012creduce,sun2018perses,campello2015hdbscan,traag2019leiden,zhang2024snapatac2,yao2023react,shinn2023reflexion,schick2023toolformer}. Each paper-task has a full specification, a dependency-closed strict-subset candidate, a starter workspace, public tests, two private registries, and hard output contracts. The registered primary family \texttt{S\_dag\_ratio\_60\_v1} applies the same deterministic DAG-ratio rule to every task: $F$ contains 12 atoms and $S$ contains 8, retaining 56.1--59.8\% of specification tokens (58.0\% pooled, a 42.0\% reduction). The evaluation-package builder constructs the atoms, dependencies, tasks, and scorers from the cited methods; Section~\ref{sec:limitations} treats this shared construction process as a validity limitation.
 
-\paragraph{Focused validation suite.}
-The focused suite contains two code-based method-reproduction tasks. SNAP-MFSE isolates the matrix-free spectral-embedding mechanism in SnapATAC2, including normalization, degree construction, operator application, and the eigensolver guard \cite{zhang2024snapatac2}. Toolformer filtering implements the rule for retaining candidate API calls, including future-token weights, weighted losses, the stronger counterfactual, inclusive thresholding, and ordered application \cite{schick2023toolformer}. Each strict-subset family uses 18 matched blocks; every private block contains 64 deterministic cases and hard interface checks. We set $\tau=0.95$, so at least 61/64 cases must pass, and use $(b_{\max},f_{\min},s_{\min},\epsilon)=(2,16,16,2)$. Identity instrumentation uses six paired blocks and a separately frozen 5/6 agreement rule.
+\paragraph{Primary execution.}
+We perform three fresh schedule-matched repetitions (SOL1--SOL3), each with six balanced $B/F/S$ blocks per paper-task. The homogeneous primary view contains \PrimaryRows{} valid terminal rows: \PrimaryTasks{} tasks $\times$ \PrimaryRepeats{} repetitions $\times$ \PrimaryBlocksPerRepeat{} blocks $\times$ three conditions. Every response identifies the executor as \texttt{gpt-5.6-sol}; requests use temperature 0, top-$p$ 1.0, at most 8,192 output tokens, and the registered private-score threshold $\tau=0.99$. Each condition receives a fresh workspace and conversation, private feedback is terminal, and the registered schedules fix condition order and registry assignment. Because the executor exposes no enforceable sampling seed, the three repetitions are independent executions rather than controlled random-seed trials.
 
-The evaluated candidates are deliberately interpretable. The SNAP candidate retains the first three of five atoms and removes the matrix-free operator and solver/guard units. Toolformer prefix 01 retains only the first of five atoms and acts as a real negative. Prefix 04 retains four of five atoms and removes the all-candidate/order unit. A planted-positive control removes a redundant sixth atom, while identity instrumentation presents byte-identical $F$ and $S$. The focused suite uses DeepSeek V3.2 with temperature zero; the provider does not expose an enforceable sampling seed.
+\paragraph{Endpoints and statistical units.}
+The binary endpoint is operational success from Equation~\ref{eq:success}; the continuous endpoint is private score. Contrasts are paired within registered blocks. For cross-paper summaries, we aggregate both tasks and all repetitions within each paper, then draw 10,000 fixed-seed percentile-bootstrap samples over the \PrimaryPapers{} papers. These intervals describe sensitivity within the registered benchmark, not uncertainty over an unlimited population of papers. Private cases jointly score one patch and are not independent observations. A completed response that fails a hard contract remains a valid zero; a completed response alone is not task success.
 
-\paragraph{Cross-paper stress test.}
-The broader registered schedule contains \FGThreePapers{} papers and two tasks per paper across NLP, software engineering, data analysis, and agent/tool use. Its mechanisms include LLMLingua, LLMLingua-2, context-aware sentence compression, delta debugging, C-Reduce, Perses, HDBSCAN, Leiden, SnapATAC2, ReAct, Reflexion, and Toolformer \cite{jiang2023llmlingua,pan2024llmlingua2,liskavets2025contextcompression,zeller2002simplifying,regehr2012creduce,sun2018perses,campello2015hdbscan,traag2019leiden,zhang2024snapatac2,yao2023react,shinn2023reflexion,schick2023toolformer}. The primary candidate retains a mean token ratio of \FGThreeMeanSliceRatio{} (range \FGThreeMinimumSliceRatio{}--\FGThreeMaximumSliceRatio{}). Two disjoint private registries, A and B, receive 648 rows each.
+\paragraph{Controls and auxiliary suites.}
+Controls-v2 crosses four tasks, two registries, four arms, and three independent executions, yielding \ControlRows{} valid model rows plus \ControlDeterministicCells{} deterministic known-truth fixtures. The four model arms are the full reference, an identity rendering, removal of registered redundancy, and removal of an exact-output contract. Offline component replay removes individual deterministic gates without new model calls. Separate four-anchor suites compare alternate reducers, a three-level structural ladder, and six model slots. Because those suites reuse paper-task observations, differ in repetition depth, or alter candidate content, we report them as descriptive robustness evidence rather than independent causal effects or a model leaderboard.
 
-Table~\ref{tab:fg3-design} reports the full \FGThreeRegisteredRows-row schedule. The primary family contains the 24 task-level $B/F/S$ comparisons. Additional families test controls, structural retention levels, alternate reducers, closed-model sentinels, and a remote execution anchor. DeepSeek V3.2 contributes 816 rows; GPT-5.5, GPT-5.6 Sol, GPT-5.6 Terra, GPT-5.6 Luna, and Claude Opus 4.7 contribute 96 rows each. The schedule records deterministic seeds for case generation, registry assignment, and ordering. These seeds do not control opaque provider-side sampling, so we make no claim of backend determinism.
+\subsection{RQ1: Paper-Derived Specifications Improve Outcomes}
+
+Table~\ref{tab:sol-primary} reports the homogeneous Sol experiment. Across \PrimaryRowsPerCondition{} rows per condition, $B$, $F$, and $S$ achieve \PrimaryBSuccess{}, \PrimaryFSuccess{}, and \PrimarySSuccess{} operational successes, with mean private scores \PrimaryBScore{}, \PrimaryFScore{}, and \PrimarySScore{}. Relative to $B$, $F$ improves operational success by \FBSuccessEffect{} and private score by \FBScoreEffect{}; $S$ improves the endpoints by \SBSuccessEffect{} and \SBScoreEffect{}. All four paper-clustered intervals are positive.
+
+\begin{table*}[t]
+\centering
+\small
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{llrrcc}
+\toprule
+Panel & Condition or contrast & Rows / papers & Successes & Operational success or effect & Private score or effect \\
+\midrule
+\multirow{3}{*}{Absolute} & $B$ & \PrimaryRowsPerCondition{} rows & \PrimaryBSuccess{} & \PrimaryBRate{} & \PrimaryBScore{} \\
+& $F$ & \PrimaryRowsPerCondition{} rows & \PrimaryFSuccess{} & \PrimaryFRate{} & \PrimaryFScore{} \\
+& $S$ & \PrimaryRowsPerCondition{} rows & \PrimarySSuccess{} & \PrimarySRate{} & \PrimarySScore{} \\
+\midrule
+\multirow{3}{*}{Paired effect} & $F-B$ & \PrimaryPapers{} papers & -- & \FBSuccessEffect{} [\FBSuccessCILow{}, \FBSuccessCIHigh{}] & \FBScoreEffect{} [\FBScoreCILow{}, \FBScoreCIHigh{}] \\
+& $S-B$ & \PrimaryPapers{} papers & -- & \SBSuccessEffect{} [\SBSuccessCILow{}, \SBSuccessCIHigh{}] & \SBScoreEffect{} [\SBScoreCILow{}, \SBScoreCIHigh{}] \\
+& $S-F$ & \PrimaryPapers{} papers & -- & \SFSuccessEffect{} [\SFSuccessCILow{}, \SFSuccessCIHigh{}] & \SFScoreEffect{} [\SFScoreCILow{}, \SFScoreCIHigh{}] \\
+\bottomrule
+\end{tabular}
+\caption{Primary GPT-5.6 Sol results over \PrimaryPapers{} papers, \PrimaryTasks{} paper-tasks, and three fresh repetitions. Absolute rows use the frozen scorers over \PrimaryRowsPerCondition{} terminal outputs per condition. Effect rows aggregate both tasks within each paper; brackets are 95\% percentile paper-bootstrap sensitivity intervals. Both paper-derived artifacts improve over $B$, while $S-F$ remains near zero. These effects are not task-level admission rates.}
+\label{tab:sol-primary}
+\end{table*}
+
+The direction is not produced by one repetition. SOL1 gives $B/F/S=\SolOneBSuccess{}/\SolOneFSuccess{}/\SolOneSSuccess{}$, SOL2 gives \SolTwoBSuccess{}/\SolTwoFSuccess{}/\SolTwoSSuccess{}, and SOL3 gives \SolThreeBSuccess{}/\SolThreeFSuccess{}/\SolThreeSSuccess{} out of 144 rows per condition. Absolute trajectories vary, but $F$ and $S$ exceed $B$ in every repetition. RQ1 is therefore supported within the registered paper set: paper-derived procedural information improves both endpoints on average.
+
+\subsection{RQ2: Aggregate Similarity Masks Local Heterogeneity}
+
+The $S-F$ contrast is much smaller than either baseline contrast. Its operational-success effect is \SFSuccessEffect{} [\SFSuccessCILow{}, \SFSuccessCIHigh{}], and its private-score effect is \SFScoreEffect{} [\SFScoreCILow{}, \SFScoreCIHigh{}]. Both intervals cross zero. The pooled analysis therefore detects no aggregate difference between $S$ and $F$; it does not establish superiority, equivalence, or task-level admissibility.
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=0.80\textwidth]{images/primary_generalization_effects.png}
+\caption{GPT-5.6 Sol effect heterogeneity. (a) Paper-level $F-B$ (circles) and $S-B$ (squares), aggregating two tasks and three repetitions per paper. (b) Domain means for operational-success and private-score effects. Zero denotes no aggregate effect; both artifact-versus-baseline effects are positive in every domain. The panels do not encode task-level admission.}
+\label{fig:primary-effects}
+\end{figure*}
+
+Figure~\ref{fig:primary-effects}(a) shows paper-level effects ranging from negative values to gains above 0.8. The largest improvements occur for Perses, C-Reduce, Reflexion, LLMLingua, ReAct, and Leiden, whereas HDBSCAN remains difficult even with paper-derived information. At the domain level, $F-B$ and $S-B$ are positive for both endpoints in all four domains. Software engineering has the largest effects; data analysis has the smallest operational gains despite positive score gains. The $S-F$ direction is positive in NLP and software engineering but negative in data analysis and agent/tool use. RQ2 therefore has a bounded answer: the aggregate analysis does not resolve a difference between $S$ and $F$, while their ordering remains paper- and domain-dependent.
+
+\subsection{RQ3: Known-Truth Controls Validate Bounded Audit Behavior}
+
+The deterministic layer recovers all \ControlDeterministicCells{} registered labels: \ControlAdmitTruth{} Admit, \ControlRejectTruth{} Reject, and \ControlInvalidTruth{} Invalid. Table~\ref{tab:controls-main} then tests whether model-facing execution respects the intended transformation direction. The identity and redundancy arms remain close to $F$ in aggregate, whereas deleting the exact-output contract produces zero operational successes. Among the \ControlFSuccess{} matched pairs in which $F$ succeeds, every destructive counterpart fails (exact two-sided McNemar $p=\ControlExactP{}$).
 
 \begin{table}[t]
 \centering
-\small
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{lr}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabular}{lrrr}
 \toprule
-Registered family & Rows \\
+Layer / arm & Correct or success & F only & Arm only \\
 \midrule
-Primary $B/F/S$ comparisons & 432 \\
-Controls & 144 \\
-Structural retention ladder & 144 \\
-Alternate reducers & 96 \\
-Closed-model sentinels & 384 \\
-Remote execution anchor & 96 \\
+Full deterministic gate & \AblationFullGateCorrect{}/\AblationTotalFixtures{} & -- & -- \\
+Binary contract gate & \AblationBinaryContractCorrect{}/\AblationTotalFixtures{} & -- & -- \\
+Digest-only gate & \AblationDigestOnlyCorrect{}/\AblationTotalFixtures{} & -- & -- \\
 \midrule
-Total & \FGThreeRegisteredRows{} \\
+$F$ reference & \ControlFSuccess{}/\ControlRowsPerArm{} & -- & -- \\
+Identity & \ControlIdentitySuccess{}/\ControlRowsPerArm{} & 1 & 2 \\
+Redundancy delete & \ControlRedundancySuccess{}/\ControlRowsPerArm{} & 1 & 0 \\
+Exact-contract delete & \ControlNegativeSuccess{}/\ControlRowsPerArm{} & 13 & 0 \\
 \bottomrule
 \end{tabular}
-\caption{Composition of the cross-paper registered stress test. The 432 primary rows are 24 tasks $\times$ 6 blocks $\times$ 3 artifact conditions. The remaining rows test the measurement boundary rather than increase the primary task denominator.}
-\label{tab:fg3-design}
+\caption{Known-truth and model-facing controls. Deterministic rows report exact-state correctness; model rows report operational success over matched executions. ``F only'' and ``Arm only'' expose discordant pairs. The destructive arm validates sensitivity to one registered contract family, not population-wide calibration.}
+\label{tab:controls-main}
 \end{table}
 
-\paragraph{Metrics and evidence units.}
-The unit of model execution is a fresh conversation; the unit of private evaluation is a terminal patch scored over one 64-case block. Cases within a block characterize the patch and are not treated as independent agent runs. We report private score $q$, operational success $z$, condition success counts $k_C$, the finite-schedule decision in Equation~\ref{eq:decision}, terminal failure categories, candidate token ratio, and evidence cost. All reported counts are recomputed from terminal rows, not from a provider's textual self-assessment.
+The controls also expose the boundary of this result. Identity has three discordant pairs, so representation-preserving changes do not make stochastic trajectories row-wise invariant; redundancy deletion changes one matched outcome and supports no directional benefit. Terminal outcomes agree across all three executions for \ControlStableUnits{}/\ControlTotalUnits{} task--registry--arm units, and the fluctuating units remain in the denominator. RQ3 supports deterministic label mechanics and sensitivity to one destructive contract family, but not broad false-admit or false-reject rates.
 
-\subsection{RQ1: Distinguishing Full and Candidate Insufficiency}
+\subsection{Component and Generality Checks}
 
-Table~\ref{tab:focused-results} and Figure~\ref{fig:focused-results} report the complete focused schedules. SNAP produces $B/F/S$ success counts of 0/15/5. Because $F$ misses the 16/18 full-sufficiency requirement, the protocol rejects the substitution claim without attributing the failure solely to simplification. This is the intended ``full insufficient'' state: improving $S$ alone would not repair the reference artifact or evaluation package.
+The retrospective six-state replay admits no natural task: among \PrimaryTasks{} paper-task units it yields \SolStrictAccept{} \textsc{Accept}, \SolBaselineInconclusive{} baseline-inconclusive, \SolFullInconclusive{} full-inconclusive, and \SolEvidenceInconclusive{} evidence-inconclusive states, with no reject-candidate or invalid states. This distribution exposes task and package limitations: seven scaffolds are already too capable, 14 full references miss the diagnostic minimum, and three paired intervals remain unresolved. It is therefore diagnostic evidence about where the current registry cannot support substitution, not validation of admission accuracy.
 
-Toolformer prefix 01 produces 0/17/8. Here $F$ clears the full-sufficiency gate, but the one-atom candidate misses candidate sufficiency by eight blocks and trails $F$ by nine. SkillAudit therefore isolates candidate-specific insufficiency under the same task and scorer. Prefix 04 produces 0/18/17 and satisfies every acceptance field. It is a non-planted strict subset accepted for this task and boundary. Because prefix 04 was selected after inspecting the earlier focused result and then evaluated on a separately frozen, nonoverlapping registry, its conclusion is explicitly local rather than a prospectively estimated admission rate.
+Offline ablation shows why the audit is more than a marginal $F/S$ comparison. Removing $B$ changes \AblationBChangedTasks{}/\PrimaryTasks{} retrospective task states. On the known-truth fixtures, binary contract-only and digest-only gates each recover \AblationBinaryContractCorrect{}/\AblationTotalFixtures{} states, whereas contract tri-state and the full integrity-aware gate recover \AblationTriStateCorrect{}/\AblationTotalFixtures{}. Thus the baseline changes diagnosis, and the distinction between failed and missing contract evidence is necessary on the registered fixture suite. Because the natural tasks lack known admission truth and the pooled policy is retrospective, these are component-sensitivity results rather than calibrated accuracy estimates.
 
-\begin{table*}[t]
-\centering
-\small
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{lcccccl}
-\toprule
-Family & Blocks & $B$ success & $F$ success (mean $q$) & $S$ success (mean $q$) & $F-S$ gap & Status \\
-\midrule
-SNAP 3/5 candidate & \SnapRealBlocks & \SnapRealBSuccesses &
-\SnapRealFSuccesses\ (\SnapRealFMeanScore) &
-\SnapRealSSuccesses\ (\SnapRealSMeanScore) &
-\SnapRealFullSliceGap & Reject: full insufficient \\
-Toolformer 1/5 candidate & \ToolformerRealBlocks & \ToolformerRealBSuccesses &
-\ToolformerRealFSuccesses\ (\ToolformerRealFMeanScore) &
-\ToolformerRealSSuccesses\ (\ToolformerRealSMeanScore) &
-\ToolformerRealFullSliceGap & Reject: candidate insufficient \\
-Toolformer 4/5 candidate & \ToolformerNaturalBlocks & \ToolformerNaturalBSuccesses &
-\ToolformerNaturalFSuccesses\ (\ToolformerNaturalFMeanScore) &
-\ToolformerNaturalSSuccesses\ (\ToolformerNaturalSMeanScore) &
-\ToolformerNaturalFullSliceGap & Accept \\
-Planted-positive control & \PlantedPositiveBlocks & \PlantedPositiveBSuccesses &
-\PlantedPositiveFSuccesses\ (\PlantedPositiveFMeanScore) &
-\PlantedPositiveSSuccesses\ (\PlantedPositiveSMeanScore) &
-\PlantedPositiveFullSliceGap & Pass \\
-Identity instrumentation & \IdentityControlBlocks & \IdentityControlBSuccesses &
-\IdentityControlFSuccesses\ (\IdentityControlFMeanScore) &
-\IdentityControlSSuccesses\ (\IdentityControlSMeanScore) &
-\IdentityControlFullSliceGap & Pass \\
-\bottomrule
-\end{tabular}
-\caption{Exact outcomes for the focused validation suite. Admission uses the frozen count-level rule for 18-block strict-subset families. The planted-positive and identity rows are measurement controls with separate pass criteria. Mean private scores summarize complete blocks; they are not population estimates.}
-\label{tab:focused-results}
-\end{table*}
-
-\begin{figure*}[t]
-\centering
-\includegraphics[width=\textwidth]{images/effectslice_v5_finite_schedule.png}
-\caption{Focused finite-schedule evidence. (a) Exact operational-success fractions for $B$, $F$, and $S$; the dashed line marks the 16/18 sufficiency threshold for strict-subset families. (b) Every registered block-level $S-F$ private-score difference, with black segments denoting finite-schedule means. (c) Field-level acceptance checks and resulting status. Toolformer prefix 04 was selected after the earlier focused comparison and evaluated on a separately frozen boundary; identity uses its separate paired-agreement rule.}
-\label{fig:focused-results}
-\end{figure*}
-
-\subsection{RQ2: Decision and Measurement Sanity}
-
-The controls exercise three distinct properties. First, the planted-positive candidate removes only a registered redundant atom and passes at 0/18/17, showing that the gate does not reject every strict subset. Second, the real Toolformer 1/5 negative is rejected at 0/17/8, showing that the same task and scorer can expose a severe omission. Third, byte-identical $F$ and $S$ succeed in 6/6 and 5/6 fresh conversations. Five paired success indicators agree and the aggregate gap is one, so identity instrumentation passes, while the single mismatch demonstrates that identical instructions do not imply identical stochastic trajectories. These controls validate the exercised decision states; they are not a sensitivity/specificity estimate over a population of skills.
-
-The baseline is also essential. A candidate cannot be credited when $B$ already solves the task frequently. In the focused suite, all baseline counts are zero. In the broader stress test, one of the five operational successes occurs under $B$, illustrating why isolated successful rows cannot be interpreted as evidence for the candidate.
-
-\subsection{RQ3: Cross-Paper Scale and Failure Localization}
-
-The cross-paper execution produced all \FGThreeRegisteredRows{} terminal rows. At the primary task level, the frozen analysis yields \FGThreePrimaryRejects{} \textsc{Reject}, \FGThreePrimaryAdmissions{} \textsc{Accept}, and 0 \textsc{Invalid} decisions. Candidate yield is therefore 0/24. This result is not a clean estimate of candidate efficacy: the terminal distribution in Figure~\ref{fig:fg3-failures} is dominated by hard interface and integrity failures. SkillAudit's useful output here is a diagnosis of the evidence boundary, not a claim that all 24 simplified specifications are semantically inadequate.
-
-Only \FGThreeOperationalSuccesses{} individual rows meet the operational-success definition. Table~\ref{tab:five-successes} reports all five. Four are $S$ rows and one is a $B$ row; none is an $F$ row. All have private score 1.0 and pass both hard-contract components. Three successes repeat the same LLMLingua task and model across different blocks. Consequently, these rows do not form matched $B/F/S$ triples, and no defensible $F-S$ effect can be computed from them alone. Reporting a difference would confound artifact condition with task, block, registry, and model.
-
-\begin{table*}[t]
-\centering
-\small
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{lllllrr}
-\toprule
-Task & Domain & Cond. & Model & Block/registry & Candidate tokens & $q$ \\
-\midrule
-AGENT-TF-02 & Agent/tool use & $S$ & DeepSeek V3.2 & 3/A & 157 & 1.000 \\
-NLP-LLM-01 & NLP & $S$ & GPT-5.6 Sol & 2/A & 170 & 1.000 \\
-NLP-LLM-01 & NLP & $S$ & GPT-5.6 Sol & 4/B & 170 & 1.000 \\
-NLP-LLM-01 & NLP & $S$ & GPT-5.6 Sol & 5/B & 170 & 1.000 \\
-DATA-HDB-01 & Data analysis & $B$ & GPT-5.6 Sol & 2/A & 0 & 1.000 \\
-\bottomrule
-\end{tabular}
-\caption{All operationally successful rows in the 1,296-row cross-paper stress test. These five rows are terminal execution units, not complete task-level comparisons. In particular, their conditions are unbalanced (four $S$, one $B$, zero $F$), so they support protocol diagnosis but not a paired substitution effect.}
-\label{tab:five-successes}
-\end{table*}
-
-\begin{figure*}[t]
-\centering
-\includegraphics[width=\textwidth]{images/fg3_failure_decomposition.pdf}
-\caption{Failure decomposition for the cross-paper stress test. (a) Exact terminal outcomes over 1,296 registered rows; a log axis keeps the five successes and one unavailable-model row visible beside 1,093 hard-contract failures. (b) Interface diagnosis: 268 rows attempted to access a nonexistent outer \texttt{payload} wrapper and failed all 64 private cases, producing 17,152 exact \texttt{KeyError('payload')} cases. A forward wrapper clarification eliminated worker errors in six successor rows, but all six still failed the separately underspecified exact output-field contract.}
-\label{fig:fg3-failures}
-\end{figure*}
-
-The dominant terminal category is \FGThreeHardContractFailures{} hard-contract failures, followed by \FGThreeIntegrityFailures{} integrity/digest failures, \FGThreeMalformedRows{} malformed or missing submissions, and \FGThreeUnavailableRows{} unavailable-model row. The interface audit reads \FGThreeScoringDocuments{} scoring documents and finds \FGThreePayloadAffectedRows{} affected execution rows with \FGThreePayloadKeyErrors{} exact \texttt{KeyError('payload')} cases. Every affected row fails 64/64 cases, and all 24 task scaffolds are ambiguous about whether \texttt{solve(case)} receives an outer wrapper or its inner payload.
-
-We test this diagnosis with a forward-only interface clarification, without rewriting the 1,296 terminal rows. In six registered successor rows, the task scaffold explicitly states that \texttt{solve(case)} receives the inner payload. All \FGFourForwardRows{} rows then produce \FGFourOutputsPerRow{} outputs with \FGFourWorkerErrors{} worker errors, zero \texttt{KeyError('payload')}, and zero input mutations. They nevertheless receive private score zero because exact output field names remain underspecified. The models return semantically related fields such as \texttt{total\_allocated} or list-valued allocations where the scorer requires \texttt{allocations}, \texttt{by\_name}, and \texttt{total}. This successive localization is precisely why protocol validity and task success must be reported separately.
-
-\subsection{Robustness and Evidence Cost}
-
-Several design choices reduce avoidable confounding. Conditions are interleaved and order-balanced within the focused schedules; starter workspaces are isolated; private cases are terminal; output directories are write-once; and response identifiers, retries, patches, scores, and digests are retained. The cross-paper suite duplicates private registries and varies reducer, retention level, model, and execution family. However, the interface defect prevents those dimensions from serving as a valid model-effect ablation. In particular, the four successes from GPT-5.6 Sol versus one from DeepSeek V3.2 cannot be interpreted as a model ranking.
-
-The focused schedules contain \AllProviderConversations{} conversations, \AllProviderTurns{} provider turns, \AllActions{} recorded actions, and \AllTransportAttempts{} transport attempts. They use \AllInputTokens{} reported input tokens and \AllOutputTokens{} reported output tokens. The cross-paper run invokes a frozen retry policy and records 485 transport retries; only one terminal row remains unavailable. These totals document the cost of evidence generation. SkillAudit does not claim that validation itself is free or that shorter artifacts necessarily reduce end-to-end cost.
+The supplementary checks reinforce this cautious interpretation. On four Sol anchors, alternate reducers each succeed in \ReducerDAGSuccess{}/\ReducerCandidateRows{} rows versus \ReducerFSuccess{}/\ReducerFRows{} separately paired $F$ rows, while ladder success changes from \LadderLZeroSuccess{}/\LadderCandidateRows{} and \LadderLOneSuccess{}/\LadderCandidateRows{} to \LadderLTwoSuccess{}/\LadderCandidateRows{}. Across \RobustnessModelSlots{} model slots, $F-B$ and $S-B$ remain positive but $S-F$ changes sign. On the four shared anchors, Sol $S$ uses \SolSTokenReduction{} fewer executor-reported total tokens per request and has \SolSLatencyReduction{} lower median wall time than $F$. Shared anchors, fixed-scaffold tokens, and unequal repetitions make these descriptive robustness and system-cost results, not causal reducer effects or a model leaderboard.

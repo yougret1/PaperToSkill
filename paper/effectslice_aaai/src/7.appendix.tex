@@ -1,0 +1,206 @@
+\appendix
+
+\section{Protocol Pseudocode}
+\label{app:pseudocode}
+
+\begin{algorithm}[h]
+\caption{SkillAudit for one fixed candidate}
+\label{alg:skillaudit}
+\begin{algorithmic}[1]
+\REQUIRE Paper $P$, registry $(A,G)$, candidate $A_S$, task $t$, boundary $\Omega$
+\STATE Verify source identity, locators, DAG validity, and closure of $A_S$
+\STATE Render and freeze $B$, $F=R(A)$, $S=R(A_S)$, and policy $\gamma$
+\FOR{each registered block and condition $C\in\{B,F,S\}$}
+    \STATE Execute a fresh session and retain its terminal evidence
+    \STATE Validate evidence and record the hard-contract outcome
+\ENDFOR
+\STATE Compute matched outcomes and apply Equation~\ref{eq:decision}
+\STATE Emit the evidence record and field-level rationale
+\end{algorithmic}
+\end{algorithm}
+
+\begin{center}
+\captionof{table}{Decision semantics. Inconclusive states diagnose why a substitution claim cannot be evaluated; they are not aliases for candidate rejection.}
+\label{tab:decision-semantics}
+\footnotesize
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.25\columnwidth}>{\raggedright\arraybackslash}p{0.29\columnwidth}>{\raggedright\arraybackslash}p{0.34\columnwidth}}
+\toprule
+State & Evidence pattern & Required action \\
+\midrule
+Invalid & Uninterpretable run & Repair evidence \\
+Baseline-inconclusive & $B$ exceeds ceiling & Make task diagnostic \\
+Full-inconclusive & $F$ misses minimum & Repair $F$ or package \\
+Reject-candidate & $S$ fails or is inferior & Revise candidate \\
+Evidence-inconclusive & Margin unresolved & Gather evidence \\
+Accept & All gates pass & Permit local substitution \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Retrospective Decision-State Replay}
+\label{app:decision-replay}
+
+The Sol execution registration fixes requests, model slot, schedules, tasks, and scorers, but it does not bind the pooled six-state policy in Equation~\ref{eq:decision}. We therefore report a post-run diagnostic replay rather than a preregistered admission result. The replay pools 18 valid blocks per paper-task, uses $(b_{\max},f_{\min},s_{\min})=(2,16,16)$ and $(\epsilon_z,\epsilon_q)=(2/18,0.05)$, and obtains paired descriptive bounds from 10,000 fixed-seed block-bootstrap replicates.
+
+\begin{center}
+\captionof{table}{Diagnostic states for the 24 GPT-5.6 Sol paper-task units. The values characterize a retrospective pooled policy and are not calibrated false-admit or false-reject estimates.}
+\label{tab:sol-diagnostic-states}
+\footnotesize
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lr}
+\toprule
+State & Paper-tasks \\
+\midrule
+Accept & \SolStrictAccept{} \\
+Baseline-inconclusive & \SolBaselineInconclusive{} \\
+Full-inconclusive & \SolFullInconclusive{} \\
+Reject-candidate & 0 \\
+Evidence-inconclusive & \SolEvidenceInconclusive{} \\
+Invalid & 0 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+No task is admitted by this diagnostic rule. Seven tasks have a baseline above the diagnostic ceiling, 14 do not meet the full-reference minimum, and three pass the marginal count gates but have paired bounds too wide for admission. The distribution identifies where the current benchmark cannot support a substitution conclusion; it does not imply that the 24 terminal ledgers are invalid. A prospective admission study must freeze the policy and interval construction before new held-out execution.
+
+\section{Offline Component Replay}
+\label{app:component-ablation}
+
+The component analysis replays the completed Sol ledger and deterministic fixtures without new model calls. On the natural tasks, an $F/S$-only rule yields \AblationFSAccept{} Accept, \AblationFSReject{} Reject-candidate, \AblationFSInconclusiveFull{} full-inconclusive, and \AblationFSInconclusiveEvidence{} evidence-inconclusive states. Adding $B$ changes \AblationBChangedTasks{}/\PrimaryTasks{} task states and yields the distribution in Table~\ref{tab:sol-diagnostic-states}. Because these tasks have no known admission truth and the policy is retrospective, the comparison measures decision sensitivity rather than accuracy.
+
+The deterministic fixtures isolate the integrity logic. A binary contract gate and a digest-only gate each recover \AblationBinaryContractCorrect{}/\AblationTotalFixtures{} exact states. A contract tri-state gate, which distinguishes pass, fail, and missing evidence, recovers \AblationTriStateCorrect{}/\AblationTotalFixtures{}; the full deterministic gate also recovers \AblationFullGateCorrect{}/\AblationTotalFixtures{}. The fixtures therefore show that tri-state contract semantics are necessary for exact state recovery in this suite. Because the tri-state gate already matches every label, these fixtures do not isolate an incremental benefit from the additional digest check or estimate population error rates.
+
+\section{GPT-5.6 Sol Known-Truth Controls}
+\label{app:controls}
+
+Controls-v2 tests registered label mechanics and sensitivity to a bounded contract mutation rather than the main $B/F/S$ effect. It contains four tasks, two registries, four arms, and three independent executions per task--registry--arm cell, for \ControlRows{} valid model rows. A separate deterministic layer contains \ControlDeterministicCells{} fixtures with known three-state labels. Its confusion matrix is exactly diagonal: \ControlAdmitTruth{}/\ControlAdmitTruth{} registered \textsc{Admit}, \ControlRejectTruth{}/\ControlRejectTruth{} \textsc{Reject}, and \ControlInvalidTruth{}/\ControlInvalidTruth{} \textsc{Invalid} fixtures are recovered.
+
+\begin{center}
+\captionof{table}{Matched GPT-5.6 Sol controls. ``F only'' and ``arm only'' count discordant operational-success pairs. Exact $p$ values use a two-sided McNemar test and do not estimate population calibration.}
+\label{tab:controls-v2}
+\scriptsize
+\setlength{\tabcolsep}{2pt}
+\begin{tabular}{lrrrr}
+\toprule
+Arm & Success & Mean $q$ & Discordant F/arm & Exact $p$ \\
+\midrule
+$F$ reference & \ControlFSuccess{}/\ControlRowsPerArm{} & \ControlFScore{} & -- & -- \\
+Identity & \ControlIdentitySuccess{}/\ControlRowsPerArm{} & \ControlIdentityScore{} & 1/2 & 1.000 \\
+Redundancy delete & \ControlRedundancySuccess{}/\ControlRowsPerArm{} & \ControlRedundancyScore{} & 1/0 & 1.000 \\
+Exact-contract delete & \ControlNegativeSuccess{}/\ControlRowsPerArm{} & \ControlNegativeScore{} & 13/0 & \ControlExactP{} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Across all arms, the model layer contains \ControlOperationalSuccess{} operational successes and \ControlContractFailure{} hard-contract failures. Identity is close to the reference in aggregate but not row-wise invariant: three matched outcomes disagree. Removing registered redundancy changes one matched outcome and supports no directional claim. Removing the exact-output contract yields no operational success and follows its registered failure direction in all \ControlRowsPerArm{} executions; among the \ControlFSuccess{} pairs in which $F$ succeeds, every destructive counterpart fails. Terminal outcomes agree across all three executions for \ControlStableUnits{}/\ControlTotalUnits{} task--registry--arm units, and the four fluctuating units are retained. These controls validate the registered fixtures and sensitivity to one destructive contract family; they do not establish broad task solvability, paper fidelity, or population error rates.
+
+\section{Reducer, Structural, and Model Robustness}
+\label{app:robustness}
+
+Three auxiliary suites reuse four anchors spanning the four domains. They are separated from the 24-task primary analysis because they change candidate construction, model, or execution depth. Table~\ref{tab:auxiliary-robustness} reports row summaries; rows share paper-task units and must not be read as independent samples.
+
+\begin{center}
+\captionof{table}{GPT-5.6 Sol candidate-construction checks over four anchors and three independent executions. Each alternate or ladder candidate has its own matched $F$ executions, so the displayed $F$ denominators are larger. These summaries do not identify causal reducer or atom effects.}
+\label{tab:auxiliary-robustness}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{llrr}
+\toprule
+Suite & Candidate & Rows & Success \\
+\midrule
+\multirow{3}{*}{Reducer} & $F$ & \ReducerFRows{} & \ReducerFSuccess{} \\
+& DAG-greedy & \ReducerCandidateRows{} & \ReducerDAGSuccess{} \\
+& Source-window & \ReducerCandidateRows{} & \ReducerSourceSuccess{} \\
+\midrule
+\multirow{4}{*}{Ladder} & $F$ & \LadderFRows{} & \LadderFSuccess{} \\
+& L0 & \LadderCandidateRows{} & \LadderLZeroSuccess{} \\
+& L1 & \LadderCandidateRows{} & \LadderLOneSuccess{} \\
+& L2 & \LadderCandidateRows{} & \LadderLTwoSuccess{} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The two alternate reducers both achieve \ReducerDAGSuccess{}/\ReducerCandidateRows{} operational successes, while the separately paired $F$ rows achieve \ReducerFSuccess{}/\ReducerFRows{}. The structural ladder shows \LadderLZeroSuccess{}/\LadderCandidateRows{}, \LadderLOneSuccess{}/\LadderCandidateRows{}, and \LadderLTwoSuccess{}/\LadderCandidateRows{} successes from L0 through L2. The stronger L2 construction is lower descriptively, but candidate identity also changes content and order, so the comparison does not isolate an atom-level mechanism.
+
+\begin{center}
+\captionof{table}{Operational-success effects on four common anchors. Sol pools 18 matched blocks per task; each external comparator has six. Model identity and execution depth both change, so rows are descriptive bundles rather than a leaderboard.}
+\label{tab:model-anchors}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{lrrr}
+\toprule
+Model slot & $F-B$ & $S-B$ & $S-F$ \\
+\midrule
+GPT-5.6 Sol & \SolAnchorFBEffect{} & \SolAnchorSBEffect{} & \SolAnchorSFEffect{} \\
+Claude Opus 4.7 & \ClaudeAnchorFBEffect{} & \ClaudeAnchorSBEffect{} & \ClaudeAnchorSFEffect{} \\
+DeepSeek V3.2 & \DeepSeekAnchorFBEffect{} & \DeepSeekAnchorSBEffect{} & \DeepSeekAnchorSFEffect{} \\
+GPT-5.5 & \GPTFiveFiveAnchorFBEffect{} & \GPTFiveFiveAnchorSBEffect{} & \GPTFiveFiveAnchorSFEffect{} \\
+GPT-5.6 Luna & \LunaAnchorFBEffect{} & \LunaAnchorSBEffect{} & \LunaAnchorSFEffect{} \\
+GPT-5.6 Terra & \TerraAnchorFBEffect{} & \TerraAnchorSBEffect{} & \TerraAnchorSFEffect{} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Both specification-versus-baseline effects are positive in all six bundles, whereas $S-F$ is positive, negative, or zero depending on the bundle. This pattern supports the main claim that candidate adequacy is local; unequal repetition depth and execution settings preclude a general model effect.
+
+\section{End-to-End Request Cost}
+\label{app:request-cost}
+
+The common-anchor ledger records executor-reported total tokens for every Sol row and wall time for all 72 rows per condition. Table~\ref{tab:request-cost} summarizes these measurements. Total tokens include the fixed task scaffold, tool protocol, and generated output in addition to the artifact; they are not a pure token count of $F$ or $S$. Wall time is an end-to-end system measure and is not decomposed into inference and orchestration components.
+
+\begin{center}
+\captionof{table}{End-to-end GPT-5.6 Sol request cost on four common anchors. Tokens are means and wall times are medians over 72 rows per condition.}
+\label{tab:request-cost}
+\footnotesize
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lrr}
+\toprule
+Condition & Reported total tokens & Wall time (s) \\
+\midrule
+$B$ & \SolBRequestTokens{} & \SolBMedianSeconds{} \\
+$F$ & \SolFRequestTokens{} & \SolFMedianSeconds{} \\
+$S$ & \SolSRequestTokens{} & \SolSMedianSeconds{} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Relative to $F$, $S$ uses \SolSTokenReduction{} fewer executor-reported total tokens per request and has \SolSLatencyReduction{} lower median wall time on these anchors. This is a bounded system-level observation, not a monetary-cost estimate or an intrinsic compression ratio.
+
+\section{Focused Restore/Drop Probe}
+\label{app:focused}
+
+The focused suite spans four tasks, two registries, six arms, and \FocusedRepeats{} independent executions (\FocusedRows{} valid rows). The three executions yield \FocusedSolOneSuccess{}/\FocusedRowsPerRepeat{}, \FocusedSolTwoSuccess{}/\FocusedRowsPerRepeat{}, and \FocusedSolThreeSuccess{}/\FocusedRowsPerRepeat{} operational successes. With no provider-controlled seed, these are fresh API calls, not controlled random-seed trials.
+
+\begin{center}
+\captionof{table}{Focused GPT-5.6 Sol restore/drop outcomes pooled over three independent executions.}
+\label{tab:focused-restore-drop}
+\footnotesize
+\setlength{\tabcolsep}{5pt}
+\begin{tabular}{lrr}
+\toprule
+Arm & Rows & Operational success \\
+\midrule
+$F$ & 24 & \FocusedFSuccess{}/24 \\
+$F$ drop critical & 24 & \FocusedFDropCriticalSuccess{}/24 \\
+$F$ drop noncritical & 24 & \FocusedFDropNoncriticalSuccess{}/24 \\
+$S$ & 24 & \FocusedSSuccess{}/24 \\
+$S$ restore critical & 24 & \FocusedSRestoreCriticalSuccess{}/24 \\
+$S$ restore noncritical & 24 & \FocusedSRestoreNoncriticalSuccess{}/24 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+This four-task ordering does not isolate an atom-specific causal effect: the critical intervention has no stable repeated advantage over its noncritical comparator. We therefore treat it as exploratory boundary evidence, not evidence that an atom causes success.
+
+\section{Reproducibility Details}
+\label{app:reproducibility}
+
+Primary requests use GPT-5.6 Sol with temperature 0, top-$p$ 1.0, an 8,192-token output ceiling, fresh workspaces, and the registered balanced schedules. The API exposes no enforceable sampling seed. Deterministic case-generation, registry-assignment, schedule, and analysis seeds are retained, and the paper-level bootstrap uses 10,000 fixed-seed resamples. The three reported Sol repetitions are therefore independent calls under the same recorded configuration.
+
+Execution orchestration and analysis were run on Windows 11 (build 26200) with an AMD Ryzen 9 7945HX CPU, 32 logical processors, and 31.7 GB RAM; model inference was remote and used no local GPU. The analysis environment used Python 3.12.7 and Matplotlib 3.9.2. The supplementary artifact includes the canonical ledgers, generated summaries, analysis scripts, source manifests, and SHA-256 checks needed to reproduce the tables and figures from retained terminal rows. Private API credentials are not included.
+
+\section{Terminal-Ledger Scope}
+\label{app:terminal-ledger}
+
+All 2,688 retained canonical rows across the full-grid, Controls-v2, and focused suites have complete response bodies, registry bindings, and frozen scorer outcomes; primary claims use only the 1,296 $B/F/S$ rows. The release defines its analysis boundary at this terminal ledger. Earlier nonterminal attempts are outside the retained artifact, so it supports exact reconstruction of the reported summaries but not attempt-level or intention-to-treat analyses beyond the retained rows. Completed hard-contract failures remain in the ledger as valid experimental outcomes.

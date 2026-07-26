@@ -1,90 +1,80 @@
-\section{Problem Formulation and SkillAudit}
+\section{Problem Formulation}
 
-\subsection{Problem Formulation}
+Let a paper $P$ describe a bounded procedure that an LLM agent must reuse for a task $t$. An upstream extractor produces a \emph{full specification} $F$, and an upstream reducer produces a shorter \emph{candidate specification} $S$. Neither artifact is treated as an oracle: $F$ may omit an operational requirement, while $S$ may remove information needed by $t$. We ask a local substitution question under a fixed evaluation boundary $\Omega$: can $S$ replace $F$ for $(t,\Omega)$? A no-specification baseline $B$ completes the comparison set $C\in\{B,F,S\}$. It reveals tasks that the model can solve from the scaffold alone, whereas $F$ tests whether the reference specification and evaluation package are sufficiently informative.
 
-Let a paper $P$ describe a bounded procedure to be reused by an LLM agent. An upstream extraction system produces a \emph{full specification} $F$, and an upstream reducer produces a shorter \emph{candidate specification} $S$. We do not assume that $F$ is complete or that $S$ is faithful. Given a task $t$ and an evaluation boundary $\Omega$, our question is whether $S$ can substitute for $F$ without making the task solvable from the task statement alone. We therefore compare three artifact conditions: $B$, a no-specification baseline; $F$, the full specification; and $S$, the simplified candidate.
-
-The paper procedure is represented by source-addressed atoms $A=\{a_1,\ldots,a_K\}$ and a directed acyclic dependency graph $G=(A,E)$. Each atom is
+SkillAudit makes the candidate boundary inspectable by representing the paper procedure as source-addressed atoms $A=\{a_1,\ldots,a_K\}$ and a directed dependency graph $G=(A,E)$. Each atom is a typed, executable unit
 \begin{equation}
 a_i=(\mathrm{id}_i,\ell_i,u_i,r_i,D_i),
 \label{eq:atom}
 \end{equation}
-where $\ell_i$ is an exact locator in the identified paper, $u_i$ is an executable instruction, $r_i$ records its procedural role, and $D_i$ contains the identifiers of its direct prerequisites. A candidate atom set $A_S\subsetneq A$ is admissible for evaluation only if it is nonempty, acyclic, and dependency closed: $D_i\subseteq\{\mathrm{id}_j:a_j\in A_S\}$ for every $a_i\in A_S$. A deterministic renderer $R$ then produces $F=R(A)$ and $S=R(A_S)$. This representation proves which source content was retained or removed; it does not prove that either artifact is behaviorally sufficient.
+where $\ell_i$ is an exact source locator, $u_i$ is the model-facing instruction, $r_i$ is its procedural role, and $D_i$ contains direct prerequisites. A retained set $A_S\subsetneq A$ is structurally admissible only if it is nonempty, acyclic, and dependency closed. A deterministic renderer $R$ then produces $F=R(A)$ and $S=R(A_S)$. This representation identifies what was retained and removed; it does not by itself establish behavioral sufficiency.
+The dependency edges are induced by the prerequisite sets, $E=\{(a_j,a_i):a_j\in D_i\}$. Dependency closure therefore requires $a_i\in A_S\Rightarrow D_i\subseteq A_S$.
 
-For each registered block $r\in\{1,\ldots,n\}$ and condition $C\in\{B,F,S\}$, an agent receives the same task, starter workspace, tools, public test, action budget, and private scorer. Only the assigned artifact changes. The resulting terminal row contains a validity bit $v_{C,r}$, a hard-contract bit $h_{C,r}$, a patch-present bit $p_{C,r}$, and a private score $q_{C,r}\in[0,1]$. With a prespecified score threshold $\tau$, operational success is
+For registered block $r\in\{1,\ldots,n\}$ and condition $C$, a fresh agent session yields a validity bit $v_{C,r}$, contract-pass bit $c_{C,r}$, patch-present bit $p_{C,r}$, and private score $q_{C,r}\in[0,1]$. Here $c_{C,r}=1$ means that every registered hard contract passed. Given a prespecified score threshold $\tau$, operational success is
 \begin{equation}
-z_{C,r}=\mathbb{1}\!\left[v_{C,r}=1\land h_{C,r}=1\land p_{C,r}=1\land q_{C,r}\ge\tau\right].
+\begin{aligned}
+z_{C,r}&=\mathbb{1}\!\left[v_{C,r}=1\land c_{C,r}=1\land p_{C,r}=1\right.\\[-2pt]
+&\hspace{45mm}\left.{}\land q_{C,r}\ge\tau\right],\\
+k_C&=\sum_{r=1}^{n}z_{C,r}.
+\end{aligned}
 \label{eq:success}
 \end{equation}
-The block count $k_C=\sum_{r=1}^{n}z_{C,r}$ is descriptive evidence for this finite schedule, not an estimate of a universal success probability.
+Private cases evaluate one submitted patch and are not independent agent runs. Likewise, two tasks derived from one paper are related observations; our cross-paper inference therefore aggregates tasks within a paper and treats the paper as the resampling unit.
+
+\section{SkillAudit}
+
+SkillAudit is a post-compression validator rather than a reducer. It receives a fixed candidate, binds that candidate to its paper and task, executes matched $B/F/S$ blocks, validates the resulting evidence, and emits a bounded decision with a field-level rationale. Figure~\ref{fig:overview} separates upstream candidate construction from SkillAudit's validation path. Passing source and closure checks establishes an inspectable, structurally well-formed boundary; it does not establish behavioral sufficiency. A compliant prospective audit seals the candidate, $\Omega$, and $\gamma$ before held-out execution begins. In this study, the $B/F/S$ executions are fresh, whereas the pooled six-state policy was constructed afterward and is therefore reported only as a retrospective diagnostic replay.
 
 \begin{figure*}[t]
 \centering
-\includegraphics[width=\textwidth]{images/skillaudit_overview.pdf}
-\caption{End-to-end SkillAudit protocol. A paper is decomposed into source-addressed atoms and explicit dependencies; green atoms are retained by the candidate and red atoms are removed. The full specification $F$, simplified candidate $S$, and no-specification baseline $B$ are frozen and run under matched task and execution conditions. Validity and integrity are checked before the finite-schedule gate produces \textsc{Accept}, \textsc{Reject}, or \textsc{Invalid}. The evidence record binds provenance, the frozen boundary, terminal outputs, and the decision rationale.}
+\includegraphics[width=\textwidth]{images/skillaudit_overview.png}
+\caption{SkillAudit separates upstream candidate construction from validation. Source-addressed atoms and dependencies render $F$ and a closed strict subset $S$; the audit then seals $B/F/S$, $\Omega$, and $\gamma$, executes matched blocks, validates terminal evidence, and binds the resulting diagnostic state to its source, boundary, checks, and rationale.}
 \label{fig:overview}
 \end{figure*}
 
-\subsection{SkillAudit Overview}
+\subsection{Source Binding and Candidate Construction}
 
-Figure~\ref{fig:overview} shows the complete information flow. SkillAudit is a post-compression validator rather than a reducer: it accepts candidates generated by a heuristic, learned, or interactive upstream method, but never edits a candidate after held-out evaluation begins. The protocol first verifies the source map and dependency closure, then freezes the artifacts and experimental boundary, executes matched $B/F/S$ blocks, validates every terminal row, applies a prespecified decision rule, and emits an evidence record. Algorithm~\ref{alg:skillaudit} states the same procedure operationally.
+The evaluation-package builder registers atoms from quoted paper passages. Document digests and page, line, or byte spans identify the source; role labels distinguish operations, parameters, guards, ordering constraints, and output contracts. Dependencies are explicit because a prerequisite may occur in another paragraph, caption, or equation. Before rendering, the closure auditor rejects unknown identifiers, cycles, a non-strict candidate, and retained atoms whose prerequisites are absent. A fixed topological order with atom-identifier tie breaking makes repeated rendering byte stable.
 
-\begin{algorithm}[t]
-\caption{SkillAudit for one fixed candidate}
-\label{alg:skillaudit}
-\begin{algorithmic}[1]
-\REQUIRE Paper $P$, atoms $(A,G)$, candidate $A_S$, task $t$, boundary $\Omega$
-\STATE Verify paper identity, source locators, DAG validity, and closure of $A_S$
-\STATE Render and freeze $F=R(A)$, $S=R(A_S)$, and baseline $B$
-\FOR{each registered block $r$ and condition $C\in\{B,F,S\}$}
-    \STATE Execute a fresh agent session and retain the complete terminal output
-    \STATE Validate digests, submission, patch, scorer, and hard task contract
-\ENDFOR
-\IF{the registered schedule or an integrity check is incomplete}
-    \STATE $\delta\leftarrow\textsc{Invalid}$
-\ELSE
-    \STATE Compute $k_B,k_F,k_S$ and apply the frozen acceptance rule
-    \STATE $\delta\leftarrow\textsc{Accept}$ if all fields pass; otherwise $\textsc{Reject}$
-\ENDIF
-\STATE Emit source links, $\Omega$, terminal outputs, field-level checks, and $\delta$
-\end{algorithmic}
-\end{algorithm}
-
-\subsection{Source-Addressed Candidate Construction}
-
-The atom registry is constructed from quoted paper passages. Exact document digests and page, line, or byte spans make the mapping inspectable, while $r_i$ distinguishes operations, parameters, guards, ordering constraints, and output contracts. Dependencies are recorded separately from prose order because a prerequisite may be stated in another paragraph, caption, or equation. The closure auditor rejects unknown identifiers, graph cycles, a non-strict subset, or a retained atom whose prerequisite is absent. Rendering uses a fixed topological order with atom-identifier tie breaking, so the same registry produces byte-identical artifacts.
-
-The candidate boundary remains explicit. For example, if $a_4$ implements a solver and depends on preprocessing atoms $a_1$--$a_3$, retaining $a_4$ while removing $a_2$ is a structural failure before any model call. Removing $a_4$ while retaining $a_1$--$a_3$ can be structurally valid but behaviorally insufficient. This separation prevents a dependency check from being overinterpreted as a reproduction guarantee. It also permits failure analysis to point back from a rejected candidate to the exact source units that were omitted.
+Structural validity and behavioral sufficiency answer different questions. Keeping a solver instruction while dropping its preprocessing prerequisite violates closure before any model call. Dropping the solver together with its dependent steps can remain structurally valid while making the candidate behaviorally insufficient. SkillAudit preserves this distinction: the graph explains the candidate boundary, while held-out execution tests whether that boundary is adequate for the registered task.
 
 \subsection{Frozen Evaluation Boundary}
 
-The evaluation boundary binds every factor that may change the interpretation of a comparison:
+The evaluation boundary contains every factor that can change the interpretation of a comparison:
 \begin{equation}
-\Omega=(P,A,G,F,S,t,W,M,T,U,Q,\sigma,\tau,\gamma),
+\Omega=(P,A,G,B,F,S,t,W,M,T,U,Q,\sigma,\tau,\gamma),
 \label{eq:boundary}
 \end{equation}
-where $W$ is the starter workspace, $M$ the model and decoding configuration, $T$ the tool interface, $U$ the action budget, $Q$ the public and private tests plus scorer, $\sigma$ the blocked condition schedule, $\tau$ the operational-success threshold, and $\gamma$ the acceptance thresholds. Digests bind the concrete files associated with these symbols. The block order is balanced when the schedule permits, and every condition starts from an isolated workspace and fresh conversation.
+where $W$ is the starter workspace, $M$ the model and decoding configuration, $T$ the tool interface, $U$ the action budget, $Q$ the public tests, private cases, and scorer, $\sigma$ the blocked condition schedule, and $\gamma$ the decision policy. Cryptographic digests bind each concrete file to these symbols. Every condition begins from an isolated copy of $W$ and a fresh conversation, and the registered schedule balances condition order and private-registry assignment.
 
-Public tests are visible development feedback: the agent may run them before submission. The private scorer is terminal and one-way. Once the agent submits a patch, the patch is frozen, the private cases are executed once, and no private result is returned to the agent. This boundary limits direct adaptation to hidden cases while preserving a realistic development loop. Case-generation seeds, registry assignments, and condition order are recorded. When a provider does not expose an enforceable sampling seed, the record explicitly distinguishes deterministic orchestration from nondeterministic model execution.
+Public tests provide visible development feedback, but the private scorer is terminal and one-way. Once the agent submits, its patch is frozen and scored without returning private results to the session. Case-generation seeds, registry assignment, schedule order, prompts, and model identifiers are recorded. When the executor does not expose an enforceable sampling seed, the evidence record distinguishes deterministic orchestration from nondeterministic model execution instead of claiming backend determinism.
 
-\subsection{Validity Before Performance}
+\subsection{Matched Execution and Evidence Validity}
 
-SkillAudit separates execution validity from task failure. A valid scored failure includes a submitted patch that violates the hard output contract or falls below $\tau$; it contributes $z_{C,r}=0$ to the registered denominator. A row is invalid when the registered request was not executed as specified, an expected output or digest is missing, the scorer did not complete, or the provider/model was unavailable after the retry policy. Malformed or empty submissions are recorded as their own terminal category and are interpreted according to the frozen row-validity rule. This taxonomy prevents network, wrapper, serialization, and scoring defects from being silently counted as evidence that a skill is insufficient.
+SkillAudit interprets validity before performance. A completed submission that violates a hard contract or scores below $\tau$ is a valid experimental failure and contributes $z_{C,r}=0$ to the registered denominator. A row is invalid only when the registered execution cannot be interpreted, for example because a required digest or terminal output is absent or the scorer does not produce a registered result. Thus missing execution evidence cannot silently become evidence against $S$.
 
-Let $V=1$ only when all required rows and schedule-level integrity checks are complete. With a baseline ceiling $b_{\max}$, minimum full and candidate counts $f_{\min}$ and $s_{\min}$, and maximum allowed shortfall $\epsilon$, the decision is
+Let $V=1$ only when every registered row and schedule-level integrity check is complete. Because $F$ and $S$ are matched within a block, SkillAudit retains the paired differences $d^z_r=z_{S,r}-z_{F,r}$ and $d^q_r=q_{S,r}-q_{F,r}$. Denote their interval bounds by $[L_z,U_z]$ and $[L_q,U_q]$. These paired quantities test candidate noninferiority; marginal totals alone cannot reveal whether $F$ and $S$ succeeded on different blocks.
+
+\subsection{Evidence-Aware Decision}
+
+The policy $\gamma$ specifies a baseline ceiling $b_{\max}$, minimum full and candidate counts $f_{\min}$ and $s_{\min}$, and noninferiority margins $\epsilon_z$ and $\epsilon_q$. Let $g_B=[k_B\le b_{\max}]$, $g_F=[k_F\ge f_{\min}]$, and $g_S=[k_S\ge s_{\min}]$. Paired noninferiority is $N=[L_z\ge-\epsilon_z\land L_q\ge-\epsilon_q]$, while clear inferiority is $R=[U_z<-\epsilon_z\lor U_q<-\epsilon_q]$. SkillAudit applies the ordered rule
 \begin{equation}
 \delta_{t,\Omega}(S)=
 \begin{cases}
-\textsc{Invalid}, & V=0,\\
-\textsc{Accept}, & \begin{aligned}
-&V=1,\ k_B\le b_{\max},\ k_F\ge f_{\min},\\[-2pt]
-&k_S\ge s_{\min},\ k_F-k_S\le\epsilon,
-\end{aligned}\\
-\textsc{Reject}, & \text{otherwise.}
+\mathsf{Invalid}, & V=0,\\
+\mathsf{I_B}, & V\land\neg g_B,\\
+\mathsf{I_F}, & V\land g_B\land\neg g_F,\\
+\mathsf{R_C}, & V\land g_B\land g_F\land(\neg g_S\lor R),\\
+\mathsf{Accept}, & V\land g_B\land g_F\land g_S\land N,\\
+\mathsf{I_E}, & \text{otherwise.}
 \end{cases}
 \label{eq:decision}
 \end{equation}
-The baseline ceiling checks that the task is not already easy without a specification. Full sufficiency checks that the reference artifact and evaluation package can support the task. Candidate sufficiency and the $F-S$ shortfall test the substitution claim. A rejection is local: it withholds permission to substitute under $(t,\Omega)$ and does not declare the candidate semantically wrong for every task or model.
+Here $\mathsf{I_B}$, $\mathsf{I_F}$, $\mathsf{R_C}$, and $\mathsf{I_E}$ denote baseline-inconclusive, full-inconclusive, reject-candidate, and evidence-inconclusive. The ordering matters: a strong baseline makes the task nondiagnostic; an insufficient $F$ invalidates the reference comparison; and a wide paired interval withholds admission without asserting inferiority. Only \textsc{Accept} authorizes substitution, and only for $(t,\Omega)$.
+
+The numerical policy is application-level: its thresholds, margins, interval construction, and minimum block count must be calibrated and sealed before an audit used for admission. Our primary experiment evaluates the matched endpoints rather than instantiate a confirmatory admission policy. For transparency, the supplementary material gives the exact values used in a separately labeled retrospective replay.
+
+The supplementary material provides compact pseudocode for the ordered validation and recording procedure.
 
 \subsection{Auditable Evidence Record}
 
@@ -93,4 +83,4 @@ The output is not only a label. SkillAudit emits
 \mathcal{E}=(d_P,d_A,d_F,d_S,d_{\Omega},\mathcal{O},\mathcal{C},\delta,\rho),
 \label{eq:evidence}
 \end{equation}
-where the $d$ terms identify the paper, atom registry, artifacts, and boundary; $\mathcal{O}$ is the immutable set of requests, trajectories, patches, scores, and transport attempts; $\mathcal{C}$ contains field-level validity and acceptance checks; and $\rho$ is a human-readable rationale. Consequently, an accepted candidate can be distributed with the exact task and evidence that support its use, while a rejected or invalid candidate carries a diagnosis rather than an unqualified failure label.
+where the digest terms identify the paper, registry, rendered artifacts, and boundary; $\mathcal{O}$ contains the retained requests, trajectories, patches, and scores; $\mathcal{C}$ contains field-level integrity and decision checks; and $\rho$ is a human-readable rationale. The record declares its retained evidence scope and cannot claim provenance beyond that scope. Accepted candidates can therefore be distributed with the exact task and evidence that authorize their use. Rejected, inconclusive, and invalid candidates retain a concrete repair path rather than an undifferentiated failure label.
