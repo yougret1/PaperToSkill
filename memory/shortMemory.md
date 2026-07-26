@@ -219,6 +219,11 @@ reopened.
 
 ## Current State
 
+- Forward figure Stage `2.5.4` is complete: V3.4 preserves V3.3, splits upstream
+  input preparation onto slide 1 and the SkillAudit protocol plus outputs onto
+  slide 2, and passes native PowerPoint rendering, overflow, and template-
+  fidelity checks. The tracked deliverable is
+  `paper/effectslice_aaai/images/SkillAudit_Main_Figure_v3_4.pptx`.
 - The remote-only Stage `2.2` successor is committed and pushed at `6262956f`.
 - The Stage `2.3` materialization anchor is committed and privately pushed at
   `b4a8605f`.
