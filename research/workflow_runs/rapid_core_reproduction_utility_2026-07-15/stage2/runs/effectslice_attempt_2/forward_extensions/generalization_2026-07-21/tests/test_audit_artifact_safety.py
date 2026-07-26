@@ -61,3 +61,27 @@ def test_safety_markers_fail_closed(
     result, passed = safety.audit(tmp_path, [tmp_path], minimum_files=1)
     assert passed is False
     assert result[result_key] == 1
+
+
+def test_opaque_response_ciphertext_is_not_a_generic_credential_hit(
+    tmp_path: Path, credentials: bytes
+) -> None:
+    content = b'{"encrypted_content":"sk-' + (b"a" * 64) + b'","output":"clean"}'
+    (tmp_path / "response.json").write_bytes(content)
+
+    result, passed = safety.audit(tmp_path, [tmp_path], minimum_files=1)
+
+    assert passed is True
+    assert result["generic_credential_pattern_match_count"] == 0
+
+
+def test_exact_credential_in_opaque_response_field_still_fails(
+    tmp_path: Path, credentials: bytes
+) -> None:
+    content = b'{"encrypted_content":"' + credentials + b'"}'
+    (tmp_path / "response.json").write_bytes(content)
+
+    result, passed = safety.audit(tmp_path, [tmp_path], minimum_files=1)
+
+    assert passed is False
+    assert result["exact_credential_reflection_count"] == 1

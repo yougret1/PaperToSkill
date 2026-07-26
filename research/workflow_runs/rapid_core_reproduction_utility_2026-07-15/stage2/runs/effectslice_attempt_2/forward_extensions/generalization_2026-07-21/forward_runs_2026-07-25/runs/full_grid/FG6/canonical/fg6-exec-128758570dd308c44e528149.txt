@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    edges = case['edges']\n    refinement = case['refinement']\n    members = {}\n    for node, comm in refinement.items():\n        members.setdefault(comm, []).append(node)\n    for comm in members:\n        members[comm].sort()\n    agg = {}\n    for u, v, w in edges:\n        cu = refinement[u]\n        cv = refinement[v]\n        if cu > cv:\n            cu, cv = cv, cu\n        key = (cu, cv)\n        agg[key] = agg.get(key, 0) + w\n    aggregate_edges = sorted([[k[0], k[1], v] for k, v in agg.items()], key=lambda x: (x[0], x[1]))\n    return {'members': members, 'aggregate_edges': aggregate_edges}"
+}

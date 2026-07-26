@@ -1,0 +1,3 @@
+{
+  "implementation": "import math\ndef solve(case):\n    sentence_vectors = case[\"sentence_vectors\"]\n    query_vector = case[\"query_vector\"]\n    scores = []\n    for v in sentence_vectors:\n        dot = sum(a*b for a,b in zip(v, query_vector))\n        norm_v = math.sqrt(sum(a*a for a in v))\n        norm_q = math.sqrt(sum(b*b for b in query_vector))\n        if norm_v == 0 or norm_q == 0:\n            s = 0.0\n        else:\n            s = dot / (norm_v * norm_q)\n        scores.append(s)\n    indexed = [(s, i) for i, s in enumerate(scores)]\n    indexed.sort(key=lambda x: (-x[0], x[1]))\n    ranking = [i for _, i in indexed]\n    sorted_scores = [s for s, _ in indexed]\n    return {\"ranking\": ranking, \"scores\": sorted_scores}"
+}

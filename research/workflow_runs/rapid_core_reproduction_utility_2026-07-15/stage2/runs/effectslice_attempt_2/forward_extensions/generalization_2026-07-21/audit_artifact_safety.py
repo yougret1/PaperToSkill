@@ -16,6 +16,9 @@ GENERIC_CREDENTIAL_PATTERNS = (
         rb"\s*[\"']?[A-Za-z0-9_./+=-]{16,}"
     ),
 )
+OPAQUE_RESPONSE_FIELD = re.compile(
+    rb'("encrypted_content"\s*:\s*")[^"]*(")'
+)
 FORBIDDEN_LOCAL_MODEL_MARKERS = (
     b"Qwen/Qwen2.5-Coder-7B-Instruct",
     b"open_seed_anchor",
@@ -29,6 +32,11 @@ FORBIDDEN_LOCAL_MODEL_MARKERS = (
 
 class AuditError(RuntimeError):
     pass
+
+
+def generic_scan_content(content: bytes) -> bytes:
+    """Remove opaque response ciphertext only from heuristic-pattern scanning."""
+    return OPAQUE_RESPONSE_FIELD.sub(rb'\1<opaque-response-field>\2', content)
 
 
 def iter_files(roots: Iterable[Path]) -> list[Path]:
@@ -59,7 +67,11 @@ def audit(
         content = path.read_bytes()
         if any(value in content for value in credential_values):
             exact_hits.append(str(path))
-        if any(pattern.search(content) for pattern in GENERIC_CREDENTIAL_PATTERNS):
+        heuristic_content = generic_scan_content(content)
+        if any(
+            pattern.search(heuristic_content)
+            for pattern in GENERIC_CREDENTIAL_PATTERNS
+        ):
             generic_hits.append(str(path))
         if any(marker in content for marker in FORBIDDEN_LOCAL_MODEL_MARKERS):
             local_design_hits.append(str(path))

@@ -198,3 +198,36 @@
 - Controls-v2 evidence commit `912edd61` was pushed to the private
   `origin/codex/effectslice-v3` branch. The push also synchronized the preceding
   terminal-row successor v2 freeze commit `b874ac08`.
+
+## 2026-07-26: FG6 completion, analysis, and verification
+
+- FG6 completed with exactly 1,296 unique terminal result rows. The registered
+  execution-ID set, strict result-row set, hash-bound metadata-sidecar set, and
+  terminal-marker set are identical and contain no extra or missing IDs.
+- All 1,296 strict result schemas and schedule/metadata/result-hash bindings
+  passed. No retryable transport state is present in the terminal denominator.
+- Terminal outcomes are 388 operational successes, 668 hard-contract failures,
+  160 integrity/digest failures, and 80 malformed/no-submission results. There
+  are 1,136 valid rows and 160 technical-invalid rows; all remain in the frozen
+  denominator.
+- The post-hoc single-repeat analysis reuses the frozen score and decision
+  functions. It materializes schedule bindings from verified metadata sidecars
+  in memory and does not rewrite strict result rows or persist a global overlay.
+- The 24 primary paper-task units yield 3 Admit and 21 Reject decisions.
+  Mean paper-task effects are F-B 0.263346 (approximate 95% CI
+  [0.140534, 0.386159]), S-B 0.311198 ([0.174108, 0.448288]), and
+  S-F 0.047852 ([-0.023870, 0.119573]).
+- Primary artifacts are `runs/full_grid/FG6/`, `verification/fg6.json`, and
+  `analysis/full_grid/fg6.json`.
+- Verification SHA-256:
+  `3e13c2f053d3caf7701b482a00338b7949e0cfe6d6ff8805764581264604a831`.
+- Analysis SHA-256:
+  `5cfea836f66bee17f14e14ef44c3ceccd6377eb040a24d46cd1f435ece521bdd`.
+- The heuristic credential scanner now excludes only opaque
+  `encrypted_content` ciphertext from generic-pattern matching; exact configured
+  credential matching still scans every original byte. Seven focused safety
+  tests pass, including an exact-credential-in-ciphertext fail-closed case.
+- A scoped artifact-safety audit passed over 11,383 FG6 evidence, analysis,
+  verification, source, and log files: zero exact credential reflections, zero
+  generic credential-pattern matches outside opaque ciphertext, and zero
+  forbidden local-model-design markers.

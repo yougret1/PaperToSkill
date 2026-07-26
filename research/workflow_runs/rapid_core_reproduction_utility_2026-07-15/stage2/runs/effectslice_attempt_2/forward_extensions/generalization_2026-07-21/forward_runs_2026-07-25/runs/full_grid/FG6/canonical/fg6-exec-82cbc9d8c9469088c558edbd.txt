@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    refinement = case['refinement']\n    edges = case['edges']\n    members = {}\n    for vertex, group in refinement.items():\n        members.setdefault(group, []).append(vertex)\n    agg = {}\n    for v1, v2, w in edges:\n        g1 = refinement[v1]\n        g2 = refinement[v2]\n        key = tuple(sorted((g1, g2)))\n        agg[key] = agg.get(key, 0) + w\n    aggregate_edges = [list(key) + [w] for key, w in agg.items()]\n    return {'aggregate_edges': aggregate_edges, 'members': members}\n"
+}

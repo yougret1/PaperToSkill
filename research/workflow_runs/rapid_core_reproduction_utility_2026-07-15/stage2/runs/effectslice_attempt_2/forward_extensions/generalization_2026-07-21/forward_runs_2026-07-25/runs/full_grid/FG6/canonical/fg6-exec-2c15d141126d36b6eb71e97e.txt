@@ -1,0 +1,1 @@
+{"implementation": "def solve(case):\n    required = set(case['required_failure_items'])\n    unresolved = set(case['unresolved_without'])\n    minimal = sorted(required | unresolved)\n    return {\n        \"minimal_failure\": minimal,\n        \"outcome\": \"PASS\" if not unresolved else \"FAIL\",\n        \"tests\": len(minimal)\n    }"}

@@ -1,0 +1,3 @@
+{
+  "implementation": "def solve(case):\n    from collections import defaultdict\n    edges = case['edges']\n    refinement = case['refinement']\n    # Build members\n    members = defaultdict(list)\n    for vertex, group in refinement.items():\n        members[group].append(vertex)\n    # Build aggregate edges\n    agg = defaultdict(int)\n    for src, tgt, w in edges:\n        src_g = refinement[src]\n        tgt_g = refinement[tgt]\n        agg[(src_g, tgt_g)] += w\n    aggregate_edges = [[src_g, tgt_g, total] for (src_g, tgt_g), total in agg.items()]\n    return {'members': dict(members), 'aggregate_edges': aggregate_edges}\n"
+}
