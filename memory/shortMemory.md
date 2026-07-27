@@ -1,5 +1,31 @@
 # Short-Term Memory
 
+## SkillAudit AAAI Iteration Checkpoint (2026-07-27)
+
+- The AAAI paper iteration objective is complete at Round 2. Three entirely new
+  `cs-paper-read` Reviewer Mode agents independently returned 6/10 PASS with 4/5
+  confidence for technical correctness, empirical reproducibility, and novelty.
+- The reviewed submission is `SkillAudit_AAAI2027_Submission_v2.pdf`, SHA-256
+  `C64E032AFC5E72B4EF961A00DCB8ED362A71F45F54259B40F284DAF72FB596BF`.
+  Reviews and coordinator synthesis are under `toSkill/R/reviewEX2`.
+- The paper/review repository records this Round 2 snapshot in commit `ac23238`
+  (`feat: 迭代2`); no push was performed.
+- The prospective experiment remains frozen at bundle
+  `cb9c20e67211366dcdf7afd4e1f572d0e589c83a9d5b86ecd4b96a681cbde1e3`.
+  Its 56-row pilot and 378-row confirmation contain 167 confirmatory successes,
+  211 valid hard-contract failures, and 15 decisions: 2 Accept, 10
+  RejectCandidate, and 3 Evidence-inconclusive.
+- The formal artifact contains 4,878 ZIP entries, 1,296 primary rows, and 434
+  prospective rows. All manifest hashes and CRC checks pass; the focused builder
+  suite passes 13 tests and the public prospective package passes all six gates.
+- Residual reviewer priorities are specification consistency between paired and
+  independently resampled intervals, an exact primary-analysis reproduction
+  command, and independent/non-chain validation. These are post-acceptance risks,
+  not reasons to open Round 3 under the completed 3/3 gate.
+- Raw experiment roots remain ignored under `research/workflow_runs/*`. Do not
+  rebuild EX3, rerun terminal semantic rows, commit raw results, or push either
+  repository.
+
 ## GPT-5.6 Sol Migration Checkpoint (2026-07-26)
 
 - The isolated run at `research/workflow_runs/gpt_5.6_sol/ex_1` is complete.

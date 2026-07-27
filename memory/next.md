@@ -1,5 +1,24 @@
 # Next Actions
 
+## SkillAudit AAAI Iteration Completed (2026-07-27)
+
+1. Treat `SkillAudit_AAAI2027_Submission_v2.pdf` as the current reviewed
+   submission. Its SHA-256 is
+   `C64E032AFC5E72B4EF961A00DCB8ED362A71F45F54259B40F284DAF72FB596BF`.
+2. Round 2 reached the stopping gate with three fresh Reviewer Mode verdicts:
+   technical 6/10 PASS, empirical 6/10 PASS, and novelty 6/10 PASS. Do not open
+   Round 3 for the completed iteration objective.
+3. Before a later camera-ready revision, reconcile the paired method notation
+   with the registered independent registry-stratified prospective bootstrap,
+   package an exact one-command primary analysis reproduction path, and narrow
+   the positive-arm terminology. Any changed PDF requires a new hash-bound review
+   if the same acceptance gate is reused.
+4. Preserve the single-builder, all-chain, task-contract scope and the limited
+   2/6 positive-arm acceptance result. Do not promote the result to source
+   fidelity, equivalence, or population-calibrated admission.
+5. Do not rebuild EX3, rerun its 434 completed semantic rows, commit raw experiment
+   data, or push either repository.
+
 ## GPT-5.6 Sol Migration Follow-up
 
 1. Use the reports under `research/workflow_runs/gpt_5.6_sol/ex_1` as the
