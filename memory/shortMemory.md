@@ -287,3 +287,13 @@ reopened.
   and retry semantics.
 - Provider availability and descriptive resource endpoints remain separate from
   method-quality evidence.
+
+## Round 3 Manuscript Gate (2026-07-27)
+
+- v3 main PDF is 9 pages with SHA-256
+  `5DF8FC25CBF7A3330EB39EE7685665B974DAC96D22E7C4CA49980FB231923880`.
+- Three fresh restricted reviews are in `SelfPaper/toSkill/R/reviewEX3`;
+  technical 4/10 Fail, empirical 3/10 Weak Reject, novelty 3/5 Reject.
+- Round 4 must repair boundary interval coverage, independent/component
+  evidence, non-chain/non-prefix fixtures, and main-paper replayability before
+  the next review gate.

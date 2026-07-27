@@ -192,3 +192,16 @@ forward-only generalization extension required by the user.
 - Commit and privately push the Stage 2.4 checkpoint before Stage 2.5 figures.
 - Register the separate FG4 interface-clarification successor before any
   corrected-contract provider calls; do not reinterpret FG3.
+
+## Round 4 manuscript and review
+
+1. Build a finite-sample prospective interval operator with valid all-success
+   boundary behavior; use a small fixture check before changing reported
+   decisions and record the method in the main paper.
+2. Add deterministic known-truth component comparisons and non-chain/non-prefix
+   fixtures under `dataDetail` or an ignored workflow-run directory; do not add
+   raw data to Git.
+3. Add a compact worked evidence-record example to the main body and narrow
+   construction/generalization language.
+4. Rebuild and visually inspect the v4 main PDF, then run three fresh restricted
+   reviewers in `reviewEX4` and commit both repositories as `feat: 迭代4`.
